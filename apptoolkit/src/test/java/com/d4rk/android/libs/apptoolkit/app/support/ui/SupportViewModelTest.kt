@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.support.ui
 
 import android.app.Activity
+import app.cash.turbine.cancelAndIgnoreRemainingEvents
 import app.cash.turbine.test
 import com.android.billingclient.api.ProductDetails
 import com.d4rk.android.libs.apptoolkit.R
@@ -74,6 +75,7 @@ class SupportViewModelTest {
             assertThat(snackbar.isError).isFalse()
             val msg = snackbar.message as UiTextHelper.StringResource
             assertThat(msg.resourceId).isEqualTo(R.string.purchase_pending)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -92,6 +94,7 @@ class SupportViewModelTest {
             assertThat(snackbar.isError).isFalse()
             val msg = snackbar.message as UiTextHelper.StringResource
             assertThat(msg.resourceId).isEqualTo(R.string.purchase_thank_you)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -113,6 +116,7 @@ class SupportViewModelTest {
             assertThat(snackbar.isError).isTrue()
             val msg = snackbar.message as UiTextHelper.DynamicString
             assertThat(msg.content).isEqualTo(error)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -131,6 +135,7 @@ class SupportViewModelTest {
             assertThat(snackbar.isError).isFalse()
             val msg = snackbar.message as UiTextHelper.StringResource
             assertThat(msg.resourceId).isEqualTo(R.string.purchase_cancelled)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
