@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
@@ -25,6 +27,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.CustomSnackbarVisua
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun DefaultSnackbarHost(snackbarState : SnackbarHostState , modifier : Modifier = Modifier) {
     val hapticFeedback : HapticFeedback = LocalHapticFeedback.current
@@ -41,7 +44,7 @@ fun DefaultSnackbarHost(snackbarState : SnackbarHostState , modifier : Modifier 
                         view.playSoundEffect(SoundEffectConstants.CLICK)
                         hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                         snackbarData.dismiss()
-                    }, modifier = modifier.bounceClick()) {
+                    }, modifier = modifier.bounceClick(), shapes = IconButtonDefaults.shapes()) {
                         Icon(
                             modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
                             imageVector =  Icons.Outlined.Close,

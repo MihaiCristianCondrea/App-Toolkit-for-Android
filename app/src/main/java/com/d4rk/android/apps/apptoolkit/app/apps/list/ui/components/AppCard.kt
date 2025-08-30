@@ -45,8 +45,10 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.AppInfoHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import kotlinx.coroutines.launch
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 
 @Composable
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 fun AppCard(
     appInfo: AppInfo,
     isFavorite: Boolean,

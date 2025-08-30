@@ -8,8 +8,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -45,6 +47,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
  *  AnimatedButtonDirection(
  *      modifier = Modifier.padding(16.dp),
  *      visible = is */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AnimatedIconButtonDirection(
     modifier: Modifier = Modifier,
@@ -85,7 +88,7 @@ fun AnimatedIconButtonDirection(
                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
             }
             onClick()
-        }) {
+        }, shapes = IconButtonDefaults.shapes()) {
             Icon(imageVector = icon, contentDescription = contentDescription)
         }
     }
