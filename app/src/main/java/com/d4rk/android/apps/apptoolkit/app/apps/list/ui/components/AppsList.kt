@@ -18,27 +18,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppListItem
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScreen
-import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.AdBanner
 import com.d4rk.android.libs.apptoolkit.core.ui.components.animations.rememberAnimatedVisibilityStateForGrids
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ScreenHelper
-import org.koin.compose.getKoin
-import org.koin.core.Koin
-import org.koin.core.qualifier.named
 
 @Composable
 fun AppsList(
     uiHomeScreen: UiHomeScreen,
     favorites: Set<String>,
     paddingValues: PaddingValues,
-    onFavoriteToggle: (String) -> Unit
+    adsConfig: AdsConfig,
+    adsEnabled: Boolean,
+    onFavoriteToggle: (String) -> Unit,
 ) {
     val apps: List<AppInfo> = uiHomeScreen.apps
     val context = LocalContext.current
@@ -48,18 +45,8 @@ fun AppsList(
     val columnCount by remember(isTabletOrLandscape) {
         derivedStateOf { if (isTabletOrLandscape) 4 else 2 }
     }
-    val bannerType by remember(isTabletOrLandscape) {
-        derivedStateOf {
-            if (isTabletOrLandscape) "full_banner" else "banner_medium_rectangle"
-        }
-    }
-    val koin = getKoin()
-    val adsConfig: AdsConfig = rememberAdsConfig(koin = koin, bannerType = bannerType)
     val listState = rememberLazyGridState()
     val adFrequency = 4
-    val dataStore: DataStore = remember { koin.get() }
-    val adsEnabled: Boolean by remember { dataStore.ads(default = true) }
-        .collectAsStateWithLifecycle(initialValue = true)
     val items by remember(apps, adsEnabled) {
         derivedStateOf { buildAppListItems(apps, adsEnabled, adFrequency) }
     }
@@ -173,7 +160,3 @@ private fun buildAppListItems(
     }
 }
 
-@Composable
-private fun rememberAdsConfig(koin: Koin, bannerType: String): AdsConfig {
-    return remember(bannerType) { koin.get(qualifier = named(bannerType)) }
-}
