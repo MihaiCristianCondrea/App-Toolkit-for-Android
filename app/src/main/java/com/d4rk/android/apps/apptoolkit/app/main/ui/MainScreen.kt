@@ -16,6 +16,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -28,8 +30,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -50,7 +55,6 @@ import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHost
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ScreenHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -59,15 +63,16 @@ import org.koin.core.qualifier.named
 
 @Composable
 fun MainScreen() {
+    val windowWidthSizeClass: WindowWidthSizeClass = rememberWindowWidthSizeClass()
     val viewModel: MainViewModel = koinViewModel()
     val screenState: UiStateScreen<UiMainScreen> by viewModel.uiState.collectAsStateWithLifecycle()
-    val context: Context = LocalContext.current
-    val isTabletOrLandscape: Boolean = ScreenHelper.isLandscapeOrTablet(context = context)
-
-    if (isTabletOrLandscape) {
-        MainScaffoldTabletContent()
-    } else {
+    if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
         NavigationDrawer(screenState = screenState)
+    } else {
+        MainScaffoldTabletContent(
+            screenState = screenState,
+            windowWidthSizeClass = windowWidthSizeClass,
+        )
     }
 }
 
@@ -117,9 +122,14 @@ fun MainScaffoldContent(drawerState: DrawerState) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScaffoldTabletContent() {
+fun MainScaffoldTabletContent(
+    screenState: UiStateScreen<UiMainScreen>,
+    windowWidthSizeClass: WindowWidthSizeClass,
+) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    var isRailExpanded by rememberSaveable { mutableStateOf(value = false) }
+    var isRailExpanded by rememberSaveable(windowWidthSizeClass) {
+        mutableStateOf(value = windowWidthSizeClass == WindowWidthSizeClass.Expanded)
+    }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -128,8 +138,6 @@ fun MainScaffoldTabletContent() {
     val dispatchers: DispatcherProvider = koinInject()
     var showChangelog by rememberSaveable { mutableStateOf(false) }
 
-    val viewModel: MainViewModel = koinViewModel()
-    val screenState: UiStateScreen<UiMainScreen> by viewModel.uiState.collectAsStateWithLifecycle()
     val uiState: UiMainScreen = screenState.data ?: UiMainScreen()
     val navController: NavHostController = rememberNavController()
 
@@ -160,7 +168,8 @@ fun MainScaffoldTabletContent() {
     Scaffold(
         modifier = Modifier
             .imePadding()
-            .nestedScroll(connection = scrollBehavior.nestedScrollConnection), topBar = {
+            .nestedScroll(connection = scrollBehavior.nestedScrollConnection),
+        topBar = {
             MainTopAppBar(
                 navigationIcon = if (isRailExpanded) Icons.AutoMirrored.Outlined.MenuOpen else Icons.Default.Menu,
                 onNavigationIconClick = {
@@ -169,8 +178,10 @@ fun MainScaffoldTabletContent() {
                         isRailExpanded = !isRailExpanded
                     }
                 },
-                scrollBehavior = scrollBehavior)
-        }) { paddingValues ->
+                scrollBehavior = scrollBehavior,
+            )
+        },
+    ) { paddingValues ->
         LeftNavigationRail(
             drawerItems = uiState.navigationDrawerItems,
             bottomItems = bottomItems,
@@ -191,11 +202,13 @@ fun MainScaffoldTabletContent() {
                 )
             },
             content = {
-                  AppNavigationHost(
-                      navController = navController,
-                      snackbarHostState = snackBarHostState,
-                      paddingValues = PaddingValues())
-            })
+                AppNavigationHost(
+                    navController = navController,
+                    snackbarHostState = snackBarHostState,
+                    paddingValues = PaddingValues(),
+                )
+            },
+        )
     }
 
     if (showChangelog) {
@@ -205,5 +218,18 @@ fun MainScaffoldTabletContent() {
             onDismiss = { showChangelog = false },
             dispatchers = dispatchers
         )
+    }
+}
+
+@Composable
+private fun rememberWindowWidthSizeClass(): WindowWidthSizeClass {
+    val configuration = LocalConfiguration.current
+    return remember(configuration) {
+        WindowSizeClass.calculateFromSize(
+            size = DpSize(
+                width = configuration.screenWidthDp.dp,
+                height = configuration.screenHeightDp.dp,
+            ),
+        ).widthSizeClass
     }
 }
