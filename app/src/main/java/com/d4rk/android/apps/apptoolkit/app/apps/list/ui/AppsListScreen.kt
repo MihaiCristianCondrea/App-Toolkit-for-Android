@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,7 +37,10 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppsListRoute(paddingValues: PaddingValues) {
+fun AppsListRoute(
+    paddingValues: PaddingValues,
+    windowWidthSizeClass: WindowWidthSizeClass,
+) {
     val viewModel: AppsListViewModel = koinViewModel()
     val screenState: UiStateScreen<UiHomeScreen> by viewModel.uiState.collectAsStateWithLifecycle()
     val favorites by viewModel.favorites.collectAsStateWithLifecycle()
@@ -116,7 +120,8 @@ fun AppsListRoute(paddingValues: PaddingValues) {
         onFavoriteToggle = onFavoriteToggle,
         onAppClick = { app -> selectedApp = app },
         onShareClick = onShareClick,
-        onRetry = onRetry
+        onRetry = onRetry,
+        windowWidthSizeClass = windowWidthSizeClass,
     )
 }
 
@@ -130,10 +135,16 @@ fun AppsListScreen(
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
     onRetry: () -> Unit,
+    windowWidthSizeClass: WindowWidthSizeClass,
 ) {
     ScreenStateHandler(
         screenState = screenState,
-        onLoading = { HomeLoadingScreen(paddingValues = paddingValues) },
+        onLoading = {
+            HomeLoadingScreen(
+                paddingValues = paddingValues,
+                windowWidthSizeClass = windowWidthSizeClass,
+            )
+        },
         onEmpty = { NoDataScreen() },
         onSuccess = { uiHomeScreen ->
             AppsList(
@@ -143,7 +154,8 @@ fun AppsListScreen(
                 adsEnabled = adsEnabled,
                 onFavoriteToggle = onFavoriteToggle,
                 onAppClick = onAppClick,
-                onShareClick = onShareClick
+                onShareClick = onShareClick,
+                windowWidthSizeClass = windowWidthSizeClass,
             )
         },
         onError = {
