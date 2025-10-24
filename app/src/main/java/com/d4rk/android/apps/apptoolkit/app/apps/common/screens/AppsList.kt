@@ -16,7 +16,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.apps.common.AppCard
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
@@ -26,7 +26,6 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.AdBanner
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ScreenHelper
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
@@ -40,14 +39,17 @@ fun AppsList(
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
     adFrequency: Int = BuildConfig.APPS_LIST_AD_FREQUENCY,
+    windowWidthSizeClass: WindowWidthSizeClass,
 ) {
     val apps: List<AppInfo> = uiHomeScreen.apps
-    val context = LocalContext.current
-    val isTabletOrLandscape = remember(context) {
-        ScreenHelper.isLandscapeOrTablet(context = context)
-    }
-    val columnCount by remember(isTabletOrLandscape) {
-        derivedStateOf { if (isTabletOrLandscape) 4 else 2 }
+    val columnCount by remember(windowWidthSizeClass) {
+        derivedStateOf {
+            when (windowWidthSizeClass) {
+                WindowWidthSizeClass.Compact -> 2
+                WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> 4
+                else -> 2
+            }
+        }
     }
     val listState = rememberLazyGridState()
     val items by remember(apps, adsEnabled, adFrequency) {

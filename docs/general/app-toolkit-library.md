@@ -15,6 +15,11 @@ The `core` package provides foundational helpers and models:
 - Domain models for results, errors, navigation drawer items and reusable UI elements.
 - Composable UI components such as dialogs, text fields, carousels, snackbars and preference items.
 
+## Adaptive layout support
+
+- Material 3 window size classes are re-exported as API dependencies so host apps automatically inherit responsive UI primitives.
+- Use `rememberWindowWidthSizeClass()` from `core.utils.window` to obtain the current width class inside composables and swap between phone and tablet layouts without relying on orientation heuristics.
+
 ## Feature packages
 
 Each feature lives in its own package with actions, events, repositories, UI state and composables:

@@ -6,6 +6,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +30,10 @@ import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
 @Composable
-fun NavigationDrawer(screenState : UiStateScreen<UiMainScreen>) {
+fun NavigationDrawer(
+    screenState: UiStateScreen<UiMainScreen>,
+    windowWidthSizeClass: WindowWidthSizeClass,
+) {
     val drawerState : DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope : CoroutineScope = rememberCoroutineScope()
     val context : Context = LocalContext.current
@@ -56,7 +60,10 @@ fun NavigationDrawer(screenState : UiStateScreen<UiMainScreen>) {
                 }
             }
         }) {
-        MainScaffoldContent(drawerState = drawerState)
+        MainScaffoldContent(
+            drawerState = drawerState,
+            windowWidthSizeClass = windowWidthSizeClass,
+        )
     }
 
     if (showChangelog) {

@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -61,7 +62,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVertical
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ScreenHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -104,16 +105,17 @@ fun SettingsScreenContent(
     settingsConfig: SettingsConfig,
     contentProvider: GeneralSettingsContentProvider,
 ) {
-    if (ScreenHelper.isLandscapeOrTablet(context = LocalContext.current)) {
+    val windowWidthSizeClass = rememberWindowWidthSizeClass()
+    if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
+        PhoneSettingsScreen(
+            paddingValues = paddingValues,
+            settingsConfig = settingsConfig,
+        )
+    } else {
         TabletSettingsScreen(
             paddingValues = paddingValues,
             settingsConfig = settingsConfig,
             contentProvider = contentProvider,
-        )
-    } else {
-        PhoneSettingsScreen(
-            paddingValues = paddingValues,
-            settingsConfig = settingsConfig,
         )
     }
 }

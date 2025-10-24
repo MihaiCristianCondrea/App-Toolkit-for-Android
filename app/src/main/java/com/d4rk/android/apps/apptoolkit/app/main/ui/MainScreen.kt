@@ -16,7 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -30,11 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -55,6 +51,7 @@ import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHost
+import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -67,7 +64,10 @@ fun MainScreen() {
     val viewModel: MainViewModel = koinViewModel()
     val screenState: UiStateScreen<UiMainScreen> by viewModel.uiState.collectAsStateWithLifecycle()
     if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
-        NavigationDrawer(screenState = screenState)
+        NavigationDrawer(
+            screenState = screenState,
+            windowWidthSizeClass = windowWidthSizeClass,
+        )
     } else {
         MainScaffoldTabletContent(
             screenState = screenState,
@@ -78,7 +78,10 @@ fun MainScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScaffoldContent(drawerState: DrawerState) {
+fun MainScaffoldContent(
+    drawerState: DrawerState,
+    windowWidthSizeClass: WindowWidthSizeClass,
+) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -116,7 +119,9 @@ fun MainScaffoldContent(drawerState: DrawerState) {
         AppNavigationHost(
             navController = navController,
             snackbarHostState = snackBarHostState,
-            paddingValues = paddingValues)
+            paddingValues = paddingValues,
+            windowWidthSizeClass = windowWidthSizeClass,
+        )
     }
 }
 
@@ -206,6 +211,7 @@ fun MainScaffoldTabletContent(
                     navController = navController,
                     snackbarHostState = snackBarHostState,
                     paddingValues = PaddingValues(),
+                    windowWidthSizeClass = windowWidthSizeClass,
                 )
             },
         )
@@ -218,18 +224,5 @@ fun MainScaffoldTabletContent(
             onDismiss = { showChangelog = false },
             dispatchers = dispatchers
         )
-    }
-}
-
-@Composable
-private fun rememberWindowWidthSizeClass(): WindowWidthSizeClass {
-    val configuration = LocalConfiguration.current
-    return remember(configuration) {
-        WindowSizeClass.calculateFromSize(
-            size = DpSize(
-                width = configuration.screenWidthDp.dp,
-                height = configuration.screenHeightDp.dp,
-            ),
-        ).widthSizeClass
     }
 }

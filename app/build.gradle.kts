@@ -162,7 +162,6 @@ android {
 
 dependencies {
     implementation(dependencyNotation = project(path = ":apptoolkit"))
-    implementation(dependencyNotation = libs.androidx.material3.window.size)
 
     // Unit Tests
     testImplementation(dependencyNotation = libs.bundles.unitTest)
