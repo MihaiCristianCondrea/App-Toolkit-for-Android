@@ -24,7 +24,8 @@ import kotlinx.serialization.json.Json
  */
 object KtorClient {
 
-    private const val requestTimeout: Long = 10_000L
+    // Using a 30s timeout gives GitHub's API enough time to respond on slower networks.
+    private const val requestTimeout: Long = 30_000L
     private var client: HttpClient? = null
 
     /**
