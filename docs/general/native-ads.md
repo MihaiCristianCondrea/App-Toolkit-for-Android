@@ -28,7 +28,7 @@ component performs the following common steps:
 
 This pattern is implemented in every native ad composable, e.g. `AppDetailsNativeAd`,
 `AppsListNativeAdCard`,
-`HelpNativeAdCard`, `SupportNativeAdCard`, `NoDataNativeAdCard`, and `BottomAppBarNativeAdBanner`.
+`HelpNativeAdCard`, `SupportNativeAdCard`, `NoDataNativeAdCard`, and `BottomNavigationNativeAdBanner`.
 【F:
 apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/core/ui/components/ads/AppDetailsNativeAd.kt†L18-L106】【F:
 apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/core/ui/components/ads/SupportNativeAdCard.kt†L46-L117】
@@ -86,7 +86,7 @@ composable expects an
   【F:
   apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/core/ui/components/layouts/NoDataScreen.kt†L50-L112】【F:
   apptoolkit/src/main/res/layout/native_ad_no_data_card.xml†L1-L125】
-- `BottomAppBarNativeAdBanner` – slides into the bottom navigation bar container and uses a
+- `BottomNavigationNativeAdBanner` – slides into the bottom navigation bar container and uses a
   horizontal layout optimized for the
   app chrome. Layout: `native_ad_bottom_bar.xml`.
   【F:

@@ -5,6 +5,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,7 +31,8 @@ import org.koin.compose.koinInject
 fun AppNavigationHost(
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    windowWidthSizeClass: WindowWidthSizeClass,
 ) {
     val dataStore: DataStore = koinInject()
     val startupRoute by dataStore.startupDestinationFlow()
@@ -41,10 +43,16 @@ fun AppNavigationHost(
         startDestination = startupRoute.ifBlank { NavigationRoutes.ROUTE_APPS_LIST }
     ) {
         composable(route = NavigationRoutes.ROUTE_APPS_LIST) {
-            AppsListRoute(paddingValues = paddingValues)
+            AppsListRoute(
+                paddingValues = paddingValues,
+                windowWidthSizeClass = windowWidthSizeClass,
+            )
         }
         composable(route = NavigationRoutes.ROUTE_FAVORITE_APPS) {
-            FavoriteAppsRoute(paddingValues = paddingValues)
+            FavoriteAppsRoute(
+                paddingValues = paddingValues,
+                windowWidthSizeClass = windowWidthSizeClass,
+            )
         }
     }
 }
@@ -83,3 +91,4 @@ fun handleNavigationItemClick(
         coroutineScope.launch { drawerState.close() }
     }
 }
+

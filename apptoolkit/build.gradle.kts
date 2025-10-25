@@ -66,6 +66,7 @@ dependencies {
     // Compose
     api(dependencyNotation = platform(libs.androidx.compose.bom))
     api(dependencyNotation = libs.bundles.androidx.compose)
+    api(dependencyNotation = libs.androidx.material3.window.size)
 
     // Lifecycle
     api(dependencyNotation = libs.bundles.androidx.lifecycle)

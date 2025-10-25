@@ -5,26 +5,30 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ScreenHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.WindowItemFit
 
 @Composable
-fun HomeLoadingScreen(paddingValues: PaddingValues, itemAspectRatio: Float = 1f) {
-
-    val context = LocalContext.current
-    val isTabletOrLandscape: Boolean = remember(context) {
-        ScreenHelper.isLandscapeOrTablet(context = context)
-    }
-    val numberOfColumns: Int by remember(isTabletOrLandscape) {
-        derivedStateOf { if (isTabletOrLandscape) 4 else 2 }
+fun HomeLoadingScreen(
+    paddingValues: PaddingValues,
+    windowWidthSizeClass: WindowWidthSizeClass,
+    itemAspectRatio: Float = 1f,
+) {
+    val numberOfColumns: Int by remember(windowWidthSizeClass) {
+        derivedStateOf {
+            when (windowWidthSizeClass) {
+                WindowWidthSizeClass.Compact -> 2
+                WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> 4
+                else -> 2
+            }
+        }
     }
 
     val fittedRows: Int = WindowItemFit.count(

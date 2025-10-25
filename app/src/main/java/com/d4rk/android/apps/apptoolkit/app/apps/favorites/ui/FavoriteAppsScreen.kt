@@ -7,6 +7,7 @@ import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,7 +42,10 @@ import org.koin.core.qualifier.named
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoriteAppsRoute(paddingValues: PaddingValues) {
+fun FavoriteAppsRoute(
+    paddingValues: PaddingValues,
+    windowWidthSizeClass: WindowWidthSizeClass,
+) {
     val viewModel: FavoriteAppsViewModel = koinViewModel()
     val screenState: UiStateScreen<UiHomeScreen> by viewModel.uiState.collectAsStateWithLifecycle()
     val favorites by viewModel.favorites.collectAsStateWithLifecycle()
@@ -123,7 +127,8 @@ fun FavoriteAppsRoute(paddingValues: PaddingValues) {
         onFavoriteToggle = onFavoriteToggle,
         onAppClick = { app -> selectedApp = app },
         onShareClick = onShareClick,
-        onRetry = onRetry
+        onRetry = onRetry,
+        windowWidthSizeClass = windowWidthSizeClass,
     )
 }
 
@@ -137,10 +142,16 @@ fun FavoriteAppsScreen(
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
     onRetry: () -> Unit,
+    windowWidthSizeClass: WindowWidthSizeClass,
 ) {
     ScreenStateHandler(
         screenState = screenState,
-        onLoading = { HomeLoadingScreen(paddingValues = paddingValues) },
+        onLoading = {
+            HomeLoadingScreen(
+                paddingValues = paddingValues,
+                windowWidthSizeClass = windowWidthSizeClass,
+            )
+        },
         onEmpty = {
             NoDataScreen(
                 textMessage = R.string.no_apps_added_to_favorites,
@@ -156,7 +167,8 @@ fun FavoriteAppsScreen(
                 adsEnabled = adsEnabled,
                 onFavoriteToggle = onFavoriteToggle,
                 onAppClick = onAppClick,
-                onShareClick = onShareClick
+                onShareClick = onShareClick,
+                windowWidthSizeClass = windowWidthSizeClass,
             )
         },
         onError = {
