@@ -28,7 +28,7 @@ fun LicensesScreen(activity : Activity) {
 
         LibrariesContainer(
             libraries = libraries,
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues = paddingValues),
             padding = LibraryDefaults.libraryPadding(),
