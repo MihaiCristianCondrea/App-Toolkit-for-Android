@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.d4rk.android.apps.apptoolkit.app.main.domain.model.ui.UiMainScreen
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainScaffoldContent
+import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.NavigationDrawerItemContent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
@@ -33,6 +34,7 @@ import org.koin.core.qualifier.named
 fun NavigationDrawer(
     screenState: UiStateScreen<UiMainScreen>,
     windowWidthSizeClass: WindowWidthSizeClass,
+    bottomItems: List<BottomBarItem>
 ) {
     val drawerState : DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope : CoroutineScope = rememberCoroutineScope()
@@ -63,6 +65,7 @@ fun NavigationDrawer(
         MainScaffoldContent(
             drawerState = drawerState,
             windowWidthSizeClass = windowWidthSizeClass,
+            bottomItems = bottomItems,
         )
     }
 

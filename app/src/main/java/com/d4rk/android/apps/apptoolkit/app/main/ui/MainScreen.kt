@@ -63,29 +63,7 @@ fun MainScreen() {
     val windowWidthSizeClass: WindowWidthSizeClass = rememberWindowWidthSizeClass()
     val viewModel: MainViewModel = koinViewModel()
     val screenState: UiStateScreen<UiMainScreen> by viewModel.uiState.collectAsStateWithLifecycle()
-    if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
-        NavigationDrawer(
-            screenState = screenState,
-            windowWidthSizeClass = windowWidthSizeClass,
-        )
-    } else {
-        MainScaffoldTabletContent(
-            screenState = screenState,
-            windowWidthSizeClass = windowWidthSizeClass,
-        )
-    }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MainScaffoldContent(
-    drawerState: DrawerState,
-    windowWidthSizeClass: WindowWidthSizeClass,
-) {
-    val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val navController: NavHostController = rememberNavController()
     val bottomItems: List<BottomBarItem> = remember {
         listOf(
             BottomBarItem(
@@ -102,6 +80,33 @@ fun MainScaffoldContent(
             )
         )
     }
+
+    if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
+        NavigationDrawer(
+            screenState = screenState,
+            windowWidthSizeClass = windowWidthSizeClass,
+            bottomItems = bottomItems,
+        )
+    } else {
+        MainScaffoldTabletContent(
+            screenState = screenState,
+            windowWidthSizeClass = windowWidthSizeClass,
+            bottomItems = bottomItems
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainScaffoldContent(
+    drawerState: DrawerState,
+    windowWidthSizeClass: WindowWidthSizeClass,
+    bottomItems: List<BottomBarItem>
+) {
+    val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val navController: NavHostController = rememberNavController()
 
     Scaffold(
         modifier = Modifier
@@ -130,6 +135,7 @@ fun MainScaffoldContent(
 fun MainScaffoldTabletContent(
     screenState: UiStateScreen<UiMainScreen>,
     windowWidthSizeClass: WindowWidthSizeClass,
+    bottomItems: List<BottomBarItem>
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var isRailExpanded by rememberSaveable(windowWidthSizeClass) {
@@ -149,23 +155,6 @@ fun MainScaffoldTabletContent(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute by remember(backStackEntry) {
         derivedStateOf { backStackEntry?.destination?.route ?: navController.currentDestination?.route }
-    }
-
-    val bottomItems: List<BottomBarItem> = remember {
-        listOf(
-            BottomBarItem(
-                route = NavigationRoutes.ROUTE_APPS_LIST,
-                icon = Icons.Outlined.Apps,
-                selectedIcon = Icons.Rounded.Apps,
-                title = R.string.all_apps
-            ),
-            BottomBarItem(
-                route = NavigationRoutes.ROUTE_FAVORITE_APPS,
-                icon = Icons.Outlined.StarOutline,
-                selectedIcon = Icons.Rounded.Star,
-                title = R.string.favorite_apps
-            )
-        )
     }
 
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
