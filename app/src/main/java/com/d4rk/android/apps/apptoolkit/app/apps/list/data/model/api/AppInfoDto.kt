@@ -1,5 +1,6 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api
 
+import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppCategory
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.utils.constants.PlayStoreUrls
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.sanitizeUrlOrNull
@@ -11,6 +12,7 @@ data class AppInfoDto(
     @SerialName("name") val name: String,
     @SerialName("packageName") val packageName: String,
     @SerialName("iconLogo") val iconUrl: String,
+    @SerialName("category") val category: AppCategoryDto? = null,
     @SerialName("description") val description: String? = null,
     @SerialName("screenshots") val screenshots: List<String>? = null
 )
@@ -22,5 +24,17 @@ fun AppInfoDto.toDomain(): AppInfo = AppInfo(
     description = description ?: "",
     screenshots = screenshots
         ?.mapNotNull { it.sanitizeUrlOrNull() }
-        ?: emptyList()
+        ?: emptyList(),
+    category = category?.toDomain(),
+)
+
+@Serializable
+data class AppCategoryDto(
+    @SerialName("label") val label: String,
+    @SerialName("category_id") val categoryId: String,
+)
+
+fun AppCategoryDto.toDomain(): AppCategory = AppCategory(
+    label = label,
+    id = categoryId,
 )

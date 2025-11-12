@@ -9,4 +9,11 @@ data class AppInfo(
     val iconUrl: String,
     val description: String,
     val screenshots: List<String>,
+    val category: AppCategory? = null,
+)
+
+@Immutable
+data class AppCategory(
+    val label: String,
+    val id: String,
 )
