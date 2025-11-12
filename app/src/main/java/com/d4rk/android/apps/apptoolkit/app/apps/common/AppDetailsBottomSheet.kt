@@ -141,10 +141,10 @@ fun AppDetailsBottomSheet(
             }
         }
 
-        LargeVerticalSpacer()
         AppDetailsNativeAd(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(top = SizeConstants.LargeSize),
             adsConfig = adsConfig
         )
 
