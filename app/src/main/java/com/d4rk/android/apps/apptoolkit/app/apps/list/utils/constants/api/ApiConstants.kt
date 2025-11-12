@@ -8,7 +8,7 @@ object ApiHost {
 }
 
 object ApiVersions {
-    const val V1: String = "v1"
+    const val V2: String = "v2"
 }
 
 object ApiEnvironments {
@@ -22,5 +22,5 @@ object ApiPaths {
 
 object ApiConstants {
     const val BASE_REPOSITORY_URL: String =
-        "${GithubConstants.GITHUB_PAGES}/${ApiHost.API_REPO}/${ApiHost.API_BASE_PATH}/${ApiVersions.V1}"
+        "${GithubConstants.GITHUB_PAGES}/${ApiHost.API_REPO}/${ApiHost.API_BASE_PATH}/${ApiVersions.V2}"
 }

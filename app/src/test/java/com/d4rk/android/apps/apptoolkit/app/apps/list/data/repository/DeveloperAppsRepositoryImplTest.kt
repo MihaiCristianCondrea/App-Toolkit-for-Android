@@ -3,7 +3,9 @@ package com.d4rk.android.apps.apptoolkit.app.apps.list.data.repository
 import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.ApiResponse
 import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.AppDataWrapper
 import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.AppInfoDto
+import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.AppCategoryDto
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppCategory
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import io.ktor.client.HttpClient
@@ -50,6 +52,39 @@ class DeveloperAppsRepositoryImplTest {
         val result = repository.fetchDeveloperApps().first()
         val success = result as DataState.Success
         assertEquals(apps, success.data)
+    }
+
+    @Test
+    fun `fetchDeveloperApps maps category information`() = runTest {
+        val expectedCategory = AppCategory(label = "Education", id = "education")
+        val response = ApiResponse(
+            AppDataWrapper(
+                listOf(
+                    AppInfoDto(
+                        name = "App",
+                        packageName = "pkg",
+                        iconUrl = "icon",
+                        category = AppCategoryDto(label = expectedCategory.label, categoryId = expectedCategory.id),
+                    )
+                )
+            )
+        )
+        val json = Json.encodeToString(response)
+        val client = HttpClient(MockEngine { request ->
+            respond(
+                content = json,
+                status = HttpStatusCode.OK,
+                headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            )
+        }) {
+            install(ContentNegotiation) { json() }
+        }
+        val repository = DeveloperAppsRepositoryImpl(client, "https://example.com")
+
+        val result = repository.fetchDeveloperApps().first() as DataState.Success
+        val category = result.data.first().category
+
+        assertEquals(expectedCategory, category)
     }
 
     @Test
