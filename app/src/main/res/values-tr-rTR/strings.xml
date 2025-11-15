@@ -17,6 +17,7 @@
     <string name="error_failed_to_load_apps">Uygulamalar yüklenemedi</string>
     <string name="error_an_error_occurred">Bir hata oluştu</string>
     <string name="error_failed_to_update_favorite">Favori güncellenemedi</string>
+    <string name="open_random_app">Rastgele uygulamayı aç</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Uygulamayı paylaş</string>

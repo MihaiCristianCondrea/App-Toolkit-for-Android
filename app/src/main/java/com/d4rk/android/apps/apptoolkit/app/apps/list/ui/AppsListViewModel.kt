@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -49,6 +50,14 @@ class AppsListViewModel(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = emptySet()
     )
+
+    val canOpenRandomApp = screenState
+        .map { state -> state.data?.apps.orEmpty().isNotEmpty() }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false
+        )
 
     init {
         viewModelScope.launch {
@@ -94,6 +103,10 @@ class AppsListViewModel(
     override fun onEvent(event: HomeEvent) {
         when (event) {
             HomeEvent.FetchApps -> fetchAppsTrigger.tryEmit(Unit)
+            HomeEvent.OpenRandomApp -> {
+                val randomApp = screenData?.apps.orEmpty().randomOrNull() ?: return
+                sendAction(HomeAction.OpenRandomApp(randomApp))
+            }
         }
     }
 

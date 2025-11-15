@@ -17,6 +17,7 @@
     <string name="error_failed_to_load_apps">Échec du chargement des applications</string>
     <string name="error_an_error_occurred">Une erreur s\'est produite</string>
     <string name="error_failed_to_update_favorite">Échec de la mise à jour du favori</string>
+    <string name="open_random_app">Ouvrir une application aléatoire</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Partager l\'application</string>

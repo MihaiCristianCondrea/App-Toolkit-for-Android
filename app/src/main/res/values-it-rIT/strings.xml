@@ -17,6 +17,7 @@
     <string name="error_failed_to_load_apps">Impossibile caricare le app</string>
     <string name="error_an_error_occurred">Si è verificato un errore</string>
     <string name="error_failed_to_update_favorite">Impossibile aggiornare il preferito</string>
+    <string name="open_random_app">Apri l\'app casuale</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Condividi l\'app</string>

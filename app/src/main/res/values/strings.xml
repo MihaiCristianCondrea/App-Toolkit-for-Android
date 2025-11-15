@@ -17,6 +17,7 @@
     <string name="error_failed_to_load_apps">Failed to load apps</string>
     <string name="error_an_error_occurred">An error occurred</string>
     <string name="error_failed_to_update_favorite">Failed to update favorite</string>
+    <string name="open_random_app">Open random app</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Share app</string>

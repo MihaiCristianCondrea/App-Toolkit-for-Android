@@ -17,6 +17,7 @@
     <string name="error_failed_to_load_apps">Nie udało się wczytać aplikacji</string>
     <string name="error_an_error_occurred">Wystąpił błąd</string>
     <string name="error_failed_to_update_favorite">Nie udało się zaktualizować ulubionego</string>
+    <string name="open_random_app">Otwórz losową aplikację</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Udostępnij aplikację</string>

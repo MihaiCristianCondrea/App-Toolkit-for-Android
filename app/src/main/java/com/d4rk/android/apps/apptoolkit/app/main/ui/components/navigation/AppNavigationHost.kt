@@ -27,12 +27,15 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
+typealias RandomAppHandler = () -> Unit
+
 @Composable
 fun AppNavigationHost(
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
     paddingValues: PaddingValues,
     windowWidthSizeClass: WindowWidthSizeClass,
+    onRandomAppHandlerChanged: (route: String, RandomAppHandler?) -> Unit,
 ) {
     val dataStore: DataStore = koinInject()
     val startupRoute by dataStore.startupDestinationFlow()
@@ -46,12 +49,18 @@ fun AppNavigationHost(
             AppsListRoute(
                 paddingValues = paddingValues,
                 windowWidthSizeClass = windowWidthSizeClass,
+                onRegisterRandomAppHandler = { handler ->
+                    onRandomAppHandlerChanged(NavigationRoutes.ROUTE_APPS_LIST, handler)
+                },
             )
         }
         composable(route = NavigationRoutes.ROUTE_FAVORITE_APPS) {
             FavoriteAppsRoute(
                 paddingValues = paddingValues,
                 windowWidthSizeClass = windowWidthSizeClass,
+                onRegisterRandomAppHandler = { handler ->
+                    onRandomAppHandlerChanged(NavigationRoutes.ROUTE_FAVORITE_APPS, handler)
+                },
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.list.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -7,6 +8,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,9 +23,12 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.buildOnAppClick
 import com.d4rk.android.apps.apptoolkit.app.apps.common.buildOnShareClick
 import com.d4rk.android.apps.apptoolkit.app.apps.common.screens.AppsList
 import com.d4rk.android.apps.apptoolkit.app.apps.common.screens.loading.HomeLoadingScreen
+import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.actions.HomeAction
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.actions.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScreen
+import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
@@ -32,20 +37,25 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.AppInfoHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
+
+private const val APPS_LIST_LOG_TAG = "AppsListRoute"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppsListRoute(
     paddingValues: PaddingValues,
     windowWidthSizeClass: WindowWidthSizeClass,
+    onRegisterRandomAppHandler: (RandomAppHandler?) -> Unit,
 ) {
     val viewModel: AppsListViewModel = koinViewModel()
     val screenState: UiStateScreen<UiHomeScreen> by viewModel.uiState.collectAsStateWithLifecycle()
     val favorites by viewModel.favorites.collectAsStateWithLifecycle()
+    val canOpenRandomApp by viewModel.canOpenRandomApp.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val adsEnabled = rememberAdsEnabled()
     val appDetailsAdsConfig: AdsConfig = koinInject(qualifier = named("app_details_native_ad"))
@@ -113,6 +123,45 @@ fun AppsListRoute(
                 },
                 adsConfig = appDetailsAdsConfig
             )
+        }
+    }
+
+    val randomAppHandler = remember(viewModel) {
+        { viewModel.onEvent(HomeEvent.OpenRandomApp) }
+    }
+
+    DisposableEffect(onRegisterRandomAppHandler) {
+        onDispose {
+            Log.d(APPS_LIST_LOG_TAG, "Disposing random handler registration")
+            onRegisterRandomAppHandler(null)
+        }
+    }
+
+    LaunchedEffect(canOpenRandomApp, randomAppHandler) {
+        val handler = if (canOpenRandomApp) randomAppHandler else null
+        Log.d(
+            APPS_LIST_LOG_TAG,
+            "canOpenRandomApp=$canOpenRandomApp -> handlerRegistered=${handler != null}"
+        )
+        Log.d(
+            APPS_LIST_LOG_TAG,
+            "Requesting handler update route=${NavigationRoutes.ROUTE_APPS_LIST}"
+        )
+        onRegisterRandomAppHandler(handler)
+    }
+
+    LaunchedEffect(viewModel) {
+        viewModel.actionEvent.collectLatest { action ->
+            when (action) {
+                is HomeAction.OpenRandomApp -> {
+                    if (sheetState.isVisible) {
+                        sheetState.hide()
+                    }
+                    selectedApp = null
+                    isSelectedAppInstalled = null
+                    openApp(action.app)
+                }
+            }
         }
     }
 

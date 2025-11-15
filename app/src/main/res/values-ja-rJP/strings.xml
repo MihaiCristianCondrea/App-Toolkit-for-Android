@@ -17,6 +17,7 @@
     <string name="error_failed_to_load_apps">アプリの読み込みに失敗しました</string>
     <string name="error_an_error_occurred">エラーが発生しました</string>
     <string name="error_failed_to_update_favorite">お気に入りの更新に失敗しました</string>
+    <string name="open_random_app">ランダムなアプリを開く</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">アプリを共有</string>

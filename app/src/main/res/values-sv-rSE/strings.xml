@@ -17,6 +17,7 @@
     <string name="error_failed_to_load_apps">Det gick inte att läsa in appar</string>
     <string name="error_an_error_occurred">Ett fel inträffade</string>
     <string name="error_failed_to_update_favorite">Det gick inte att uppdatera favoriten</string>
+    <string name="open_random_app">Öppna slumpmässig app</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Dela appen</string>

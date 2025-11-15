@@ -1,6 +1,7 @@
 package com.d4rk.android.apps.apptoolkit.app.main.ui
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material.icons.Icons
@@ -18,8 +19,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,8 +40,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.main.domain.model.ui.UiMainScreen
+import com.d4rk.android.apps.apptoolkit.app.main.ui.components.fab.MainFloatingActionButton
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.AppNavigationHost
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.NavigationDrawer
+import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.handleNavigationItemClick
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
@@ -57,6 +62,18 @@ import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
+
+private const val FAB_LOG_TAG = "MainFabState"
+
+private val FabSupportedRoutes = setOf(
+    NavigationRoutes.ROUTE_APPS_LIST,
+    NavigationRoutes.ROUTE_FAVORITE_APPS
+)
+
+private fun String?.normalizeRoute(): String? = this
+    ?.substringBefore('?')
+    ?.substringBefore('/')
+    ?.takeIf { it.isNotBlank() }
 
 @Composable
 fun MainScreen() {
@@ -91,7 +108,7 @@ fun MainScreen() {
         MainScaffoldTabletContent(
             screenState = screenState,
             windowWidthSizeClass = windowWidthSizeClass,
-            bottomItems = bottomItems
+            bottomItems = bottomItems,
         )
     }
 }
@@ -101,31 +118,87 @@ fun MainScreen() {
 fun MainScaffoldContent(
     drawerState: DrawerState,
     windowWidthSizeClass: WindowWidthSizeClass,
-    bottomItems: List<BottomBarItem>
+    bottomItems: List<BottomBarItem>,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val navController: NavHostController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute: String? = navBackStackEntry?.destination?.route
+    val normalizedRoute: String? = currentRoute.normalizeRoute()
+    val isFabVisible: Boolean = normalizedRoute in FabSupportedRoutes
+    var isFabExtended by remember { mutableStateOf(true) }
+    val randomAppHandlers = remember { mutableStateMapOf<String, RandomAppHandler>() }
+    val randomAppHandler: RandomAppHandler? = normalizedRoute?.let(randomAppHandlers::get)
+
+    LaunchedEffect(scrollBehavior.state.contentOffset) {
+        val shouldExtend = scrollBehavior.state.contentOffset >= 0f
+        if (isFabExtended != shouldExtend) {
+            isFabExtended = shouldExtend
+        }
+    }
+
+    LaunchedEffect(isFabVisible, normalizedRoute) {
+        if (isFabVisible) {
+            isFabExtended = true
+        }
+        Log.d(
+            FAB_LOG_TAG,
+            "[Phone] visibility update raw=$currentRoute normalized=$normalizedRoute visible=$isFabVisible handlerPresent=${randomAppHandler != null}"
+        )
+    }
+    LaunchedEffect(currentRoute, randomAppHandler) {
+        Log.d(
+            FAB_LOG_TAG,
+            "[Phone] routeChanged raw=$currentRoute normalized=$normalizedRoute handlerForRoute=${randomAppHandler != null} registeredRoutes=${randomAppHandlers.keys}"
+        )
+    }
 
     Scaffold(
         modifier = Modifier
             .imePadding()
-            .nestedScroll(connection = scrollBehavior.nestedScrollConnection), topBar = {
-        MainTopAppBar(
-            navigationIcon = if (drawerState.isOpen) Icons.AutoMirrored.Outlined.MenuOpen else Icons.Default.Menu,
-            onNavigationIconClick = { coroutineScope.launch { drawerState.open() } },
-            scrollBehavior = scrollBehavior)
-    }, snackbarHost = {
-        DefaultSnackbarHost(snackbarState = snackBarHostState)
-    }, bottomBar = {
-        BottomNavigationBar(navController = navController, items = bottomItems)
-    }) { paddingValues ->
+            .nestedScroll(connection = scrollBehavior.nestedScrollConnection),
+        topBar = {
+            MainTopAppBar(
+                navigationIcon = if (drawerState.isOpen) Icons.AutoMirrored.Outlined.MenuOpen else Icons.Default.Menu,
+                onNavigationIconClick = { coroutineScope.launch { drawerState.open() } },
+                scrollBehavior = scrollBehavior
+            )
+        },
+        snackbarHost = {
+            DefaultSnackbarHost(snackbarState = snackBarHostState)
+        },
+        bottomBar = {
+            BottomNavigationBar(navController = navController, items = bottomItems)
+        },
+        floatingActionButton = {
+            MainFloatingActionButton(
+                visible = isFabVisible && randomAppHandler != null,
+                expanded = isFabExtended,
+                onClick = { randomAppHandler?.invoke() },
+            )
+        }
+    ) { paddingValues ->
         AppNavigationHost(
             navController = navController,
             snackbarHostState = snackBarHostState,
             paddingValues = paddingValues,
             windowWidthSizeClass = windowWidthSizeClass,
+            onRandomAppHandlerChanged = { route, handler ->
+                Log.d(
+                    FAB_LOG_TAG,
+                    "[Phone] handler update requestedBy=$route currentRoute=$currentRoute hasHandler=${handler != null}"
+                )
+                val normalized = route.normalizeRoute()
+                if (handler == null) {
+                    if (normalized != null) {
+                        randomAppHandlers.remove(normalized)
+                    }
+                } else if (normalized != null) {
+                    randomAppHandlers[normalized] = handler
+                }
+            },
         )
     }
 }
@@ -135,7 +208,7 @@ fun MainScaffoldContent(
 fun MainScaffoldTabletContent(
     screenState: UiStateScreen<UiMainScreen>,
     windowWidthSizeClass: WindowWidthSizeClass,
-    bottomItems: List<BottomBarItem>
+    bottomItems: List<BottomBarItem>,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var isRailExpanded by rememberSaveable(windowWidthSizeClass) {
@@ -156,13 +229,42 @@ fun MainScaffoldTabletContent(
     val currentRoute by remember(backStackEntry) {
         derivedStateOf { backStackEntry?.destination?.route ?: navController.currentDestination?.route }
     }
+    val normalizedRoute = currentRoute.normalizeRoute()
+    val isFabVisible: Boolean = normalizedRoute in FabSupportedRoutes
+    var isFabExtended by remember { mutableStateOf(true) }
 
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
+    val randomAppHandlers = remember { mutableStateMapOf<String, RandomAppHandler>() }
+    val randomAppHandler: RandomAppHandler? = normalizedRoute?.let(randomAppHandlers::get)
+
+    LaunchedEffect(scrollBehavior.state.contentOffset) {
+        val shouldExtend = scrollBehavior.state.contentOffset >= 0f
+        if (isFabExtended != shouldExtend) {
+            isFabExtended = shouldExtend
+        }
+    }
+
+    LaunchedEffect(isFabVisible, normalizedRoute) {
+        if (isFabVisible) {
+            isFabExtended = true
+        }
+        Log.d(
+            FAB_LOG_TAG,
+            "[Tablet] visibility update raw=$currentRoute normalized=$normalizedRoute visible=$isFabVisible handlerPresent=${randomAppHandler != null}"
+        )
+    }
+    LaunchedEffect(currentRoute, randomAppHandler) {
+        Log.d(
+            FAB_LOG_TAG,
+            "[Tablet] routeChanged raw=$currentRoute normalized=$normalizedRoute handlerForRoute=${randomAppHandler != null} registeredRoutes=${randomAppHandlers.keys}"
+        )
+    }
 
     Scaffold(
         modifier = Modifier
             .imePadding()
-            .nestedScroll(connection = scrollBehavior.nestedScrollConnection), topBar = {
+            .nestedScroll(connection = scrollBehavior.nestedScrollConnection),
+        topBar = {
             MainTopAppBar(
                 navigationIcon = if (isRailExpanded) Icons.AutoMirrored.Outlined.MenuOpen else Icons.Default.Menu,
                 onNavigationIconClick = {
@@ -171,8 +273,17 @@ fun MainScaffoldTabletContent(
                         isRailExpanded = !isRailExpanded
                     }
                 },
-                scrollBehavior = scrollBehavior)
-        }) { paddingValues ->
+                scrollBehavior = scrollBehavior
+            )
+        },
+        floatingActionButton = {
+            MainFloatingActionButton(
+                visible = isFabVisible && randomAppHandler != null,
+                expanded = isFabExtended,
+                onClick = { randomAppHandler?.invoke() },
+            )
+        }
+    ) { paddingValues ->
         LeftNavigationRail(
             drawerItems = uiState.navigationDrawerItems,
             bottomItems = bottomItems,
@@ -198,6 +309,20 @@ fun MainScaffoldTabletContent(
                     snackbarHostState = snackBarHostState,
                     paddingValues = PaddingValues(),
                     windowWidthSizeClass = windowWidthSizeClass,
+                    onRandomAppHandlerChanged = { route, handler ->
+                        Log.d(
+                            FAB_LOG_TAG,
+                            "[Tablet] handler update requestedBy=$route currentRoute=$currentRoute hasHandler=${handler != null}"
+                        )
+                        val normalized = route.normalizeRoute()
+                        if (handler == null) {
+                            if (normalized != null) {
+                                randomAppHandlers.remove(normalized)
+                            }
+                        } else if (normalized != null) {
+                            randomAppHandlers[normalized] = handler
+                        }
+                    },
                 )
             })
     }

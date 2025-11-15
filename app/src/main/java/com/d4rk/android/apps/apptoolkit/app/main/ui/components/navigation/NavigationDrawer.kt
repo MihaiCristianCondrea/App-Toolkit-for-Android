@@ -34,7 +34,7 @@ import org.koin.core.qualifier.named
 fun NavigationDrawer(
     screenState: UiStateScreen<UiMainScreen>,
     windowWidthSizeClass: WindowWidthSizeClass,
-    bottomItems: List<BottomBarItem>
+    bottomItems: List<BottomBarItem>,
 ) {
     val drawerState : DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope : CoroutineScope = rememberCoroutineScope()

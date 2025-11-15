@@ -26,6 +26,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -49,6 +50,14 @@ class FavoriteAppsViewModel(
             scope = viewModelScope,
             started = WhileSubscribed(5_000),
             initialValue = emptySet()
+        )
+
+    val canOpenRandomApp = screenState
+        .map { state -> state.data?.apps.orEmpty().isNotEmpty() }
+        .stateIn(
+            scope = viewModelScope,
+            started = WhileSubscribed(5_000),
+            initialValue = false
         )
 
 
@@ -110,6 +119,10 @@ class FavoriteAppsViewModel(
     override fun onEvent(event: FavoriteAppsEvent) {
         when (event) {
             FavoriteAppsEvent.LoadFavorites -> loadFavoritesTrigger.tryEmit(Unit)
+            FavoriteAppsEvent.OpenRandomApp -> {
+                val randomApp = screenData?.apps.orEmpty().randomOrNull() ?: return
+                sendAction(FavoriteAppsAction.OpenRandomApp(randomApp))
+            }
         }
     }
 

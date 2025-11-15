@@ -17,6 +17,7 @@
     <string name="error_failed_to_load_apps">فشل تحميل التطبيقات</string>
     <string name="error_an_error_occurred">حدث خطأ</string>
     <string name="error_failed_to_update_favorite">فشل تحديث المفضلة</string>
+    <string name="open_random_app">افتح التطبيق العشوائي</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">مشاركة التطبيق</string>

@@ -17,6 +17,7 @@
     <string name="error_failed_to_load_apps">ایپس لوڈ کرنے میں ناکامی</string>
     <string name="error_an_error_occurred">ایک خرابی پیش آگئی</string>
     <string name="error_failed_to_update_favorite">پسندیدہ کو اپ ڈیٹ کرنے میں ناکامی</string>
+    <string name="open_random_app">بے ترتیب ایپ کھولیں</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">ایپ شیئر کریں</string>

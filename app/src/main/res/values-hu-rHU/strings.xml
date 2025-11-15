@@ -17,6 +17,7 @@
     <string name="error_failed_to_load_apps">Az alkalmazások betöltése sikertelen</string>
     <string name="error_an_error_occurred">Hiba történt</string>
     <string name="error_failed_to_update_favorite">A kedvenc frissítése nem sikerült</string>
+    <string name="open_random_app">Nyissa meg a véletlenszerű alkalmazást</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Alkalmazás megosztása</string>

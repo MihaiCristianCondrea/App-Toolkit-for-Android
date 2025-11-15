@@ -17,6 +17,7 @@
     <string name="error_failed_to_load_apps">Gagal memuat aplikasi</string>
     <string name="error_an_error_occurred">Terjadi kesalahan</string>
     <string name="error_failed_to_update_favorite">Gagal memperbarui favorit</string>
+    <string name="open_random_app">Buka aplikasi acak</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Bagikan aplikasi</string>
