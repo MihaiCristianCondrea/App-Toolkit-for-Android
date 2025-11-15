@@ -14,7 +14,7 @@ data class AppInfoDto(
     @SerialName("iconLogo") val iconUrl: String,
     @SerialName("category") val category: AppCategoryDto? = null,
     @SerialName("description") val description: String? = null,
-    @SerialName("screenshots") val screenshots: List<String>? = null
+    @SerialName("screenshots") val screenshots: List<AppScreenshotDto>? = null
 )
 
 fun AppInfoDto.toDomain(): AppInfo = AppInfo(
@@ -23,9 +23,19 @@ fun AppInfoDto.toDomain(): AppInfo = AppInfo(
     iconUrl = iconUrl.sanitizeUrlOrNull() ?: PlayStoreUrls.DEFAULT_ICON_URL,
     description = description ?: "",
     screenshots = screenshots
-        ?.mapNotNull { it.sanitizeUrlOrNull() }
+        ?.mapNotNull { screenshot ->
+            val aspectRatio = screenshot.aspectRatio?.trim()
+            val sanitizedUrl = screenshot.url?.sanitizeUrlOrNull()
+            if (aspectRatio == "9:16") sanitizedUrl else null
+        }
         ?: emptyList(),
     category = category?.toDomain(),
+)
+
+@Serializable
+data class AppScreenshotDto(
+    @SerialName("url") val url: String? = null,
+    @SerialName("aspectRatio") val aspectRatio: String? = null,
 )
 
 @Serializable

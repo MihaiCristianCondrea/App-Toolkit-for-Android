@@ -15,9 +15,22 @@ class AppInfoDtoTest {
             iconUrl = "  https://example.com/icon.png  ",
             description = "Test description",
             screenshots = listOf(
-                " https://example.com/screenshot1.png ",
-                "\t\n  ",
-                "https://example.com/screenshot2.png"
+                AppScreenshotDto(
+                    url = " https://example.com/screenshot1.png ",
+                    aspectRatio = "9:16"
+                ),
+                AppScreenshotDto(
+                    url = "\t\n  ",
+                    aspectRatio = "9:16"
+                ),
+                AppScreenshotDto(
+                    url = "https://example.com/screenshot2.png",
+                    aspectRatio = "16:9"
+                ),
+                AppScreenshotDto(
+                    url = " https://example.com/screenshot3.png ",
+                    aspectRatio = " 9:16 "
+                )
             )
         )
 
@@ -27,7 +40,7 @@ class AppInfoDtoTest {
         assertEquals(
             listOf(
                 "https://example.com/screenshot1.png",
-                "https://example.com/screenshot2.png"
+                "https://example.com/screenshot3.png"
             ),
             domain.screenshots
         )
@@ -40,7 +53,7 @@ class AppInfoDtoTest {
             packageName = "com.d4rk.apptoolkit",
             iconUrl = "   ",
             description = null,
-            screenshots = listOf("  ")
+            screenshots = listOf(AppScreenshotDto(url = "  ", aspectRatio = "9:16"))
         )
 
         val domain = dto.toDomain()
