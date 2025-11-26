@@ -7,7 +7,6 @@ import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
-import kotlinx.coroutines.tasks.await
 
 /**
  * Helper object for performing in-app updates using the Play Core library.
@@ -20,21 +19,45 @@ object InAppUpdateHelper {
      * @param appUpdateManager The [AppUpdateManager] instance used to query and start updates.
      * @param updateResultLauncher Launcher used to start the update flow.
      */
-    suspend fun performUpdate(
+    fun performUpdate(
         appUpdateManager: AppUpdateManager,
         updateResultLauncher: ActivityResultLauncher<IntentSenderRequest>,
     ) {
-        runCatching {
-            val appUpdateInfo: AppUpdateInfo = appUpdateManager.appUpdateInfo.await()
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-                val appUpdateOptions: AppUpdateOptions =
-                    AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
-                appUpdateManager.startUpdateFlowForResult(
-                    appUpdateInfo,
-                    updateResultLauncher,
-                    appUpdateOptions,
-                )
+        appUpdateManager.appUpdateInfo
+            .addOnSuccessListener { appUpdateInfo ->
+                val updateAvailability = appUpdateInfo.updateAvailability()
+                val isImmediateAllowed = appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+
+                when (updateAvailability) {
+                    UpdateAvailability.UPDATE_AVAILABLE if isImmediateAllowed
+                        -> {
+                        startImmediateUpdate(appUpdateManager, appUpdateInfo, updateResultLauncher)
+                    }
+
+                    UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS if isImmediateAllowed
+                        -> {
+                        startImmediateUpdate(appUpdateManager, appUpdateInfo, updateResultLauncher)
+                    }
+
+                    else -> {}
+                }
             }
+    }
+
+    private fun startImmediateUpdate(
+        appUpdateManager: AppUpdateManager,
+        appUpdateInfo: AppUpdateInfo,
+        updateResultLauncher: ActivityResultLauncher<IntentSenderRequest>,
+    ) {
+        val appUpdateOptions: AppUpdateOptions =
+            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+
+        runCatching {
+            appUpdateManager.startUpdateFlowForResult(
+                appUpdateInfo,
+                updateResultLauncher,
+                appUpdateOptions,
+            )
         }
     }
 }

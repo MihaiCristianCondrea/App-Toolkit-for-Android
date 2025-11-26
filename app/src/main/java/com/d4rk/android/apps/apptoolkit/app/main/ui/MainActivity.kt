@@ -128,13 +128,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkForUpdates() {
-        lifecycleScope.launch {
-            withContext(dispatchers.io) {
-                InAppUpdateHelper.performUpdate(
-                    appUpdateManager = AppUpdateManagerFactory.create(this@MainActivity),
-                    updateResultLauncher = updateResultLauncher,
-                )
-            }
-        }
+        InAppUpdateHelper.performUpdate(
+            appUpdateManager = AppUpdateManagerFactory.create(this@MainActivity),
+            updateResultLauncher = updateResultLauncher,
+        )
     }
 }
