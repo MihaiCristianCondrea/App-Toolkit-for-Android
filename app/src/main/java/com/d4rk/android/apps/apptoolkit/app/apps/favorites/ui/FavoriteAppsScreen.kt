@@ -10,7 +10,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -131,13 +130,6 @@ fun FavoriteAppsRoute(
 
     val randomAppHandler = remember(viewModel) {
         { viewModel.onEvent(FavoriteAppsEvent.OpenRandomApp) }
-    }
-
-    DisposableEffect(onRegisterRandomAppHandler) {
-        onDispose {
-            Log.d(FAVORITES_LOG_TAG, "Disposing random handler registration")
-            onRegisterRandomAppHandler(null)
-        }
     }
 
     LaunchedEffect(canOpenRandomApp, randomAppHandler) {
