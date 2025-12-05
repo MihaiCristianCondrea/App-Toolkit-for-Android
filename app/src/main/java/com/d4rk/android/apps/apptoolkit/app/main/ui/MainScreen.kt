@@ -39,6 +39,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.d4rk.android.apps.apptoolkit.R
+import com.d4rk.android.apps.apptoolkit.app.logging.FAB_LOG_TAG
 import com.d4rk.android.apps.apptoolkit.app.main.domain.model.ui.UiMainScreen
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.fab.MainFloatingActionButton
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.AppNavigationHost
@@ -62,8 +63,6 @@ import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
-
-private const val FAB_LOG_TAG = "MainFabState"
 
 private val FabSupportedRoutes = setOf(
     NavigationRoutes.ROUTE_APPS_LIST,

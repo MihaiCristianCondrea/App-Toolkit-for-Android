@@ -29,6 +29,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.actions.Favori
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.actions.FavoriteAppsEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScreen
+import com.d4rk.android.apps.apptoolkit.app.logging.FAVORITES_LOG_TAG
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
@@ -44,8 +45,6 @@ import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
-
-private const val FAVORITES_LOG_TAG = "FavoriteAppsRoute"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

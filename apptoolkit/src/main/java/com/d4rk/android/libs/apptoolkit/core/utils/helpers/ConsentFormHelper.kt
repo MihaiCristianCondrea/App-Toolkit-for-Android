@@ -3,6 +3,7 @@ package com.d4rk.android.libs.apptoolkit.core.utils.helpers
 import android.app.Activity
 import android.util.Log
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.core.logging.CONSENT_FORM_HELPER_LOG_TAG
 import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
@@ -48,15 +49,18 @@ object ConsentFormHelper {
                                 if (continuation.isActive) continuation.resume(Unit)
                             }
                         }.onFailure {
-                            Log.e("ConsentFormHelper", "Failed to load consent form", it)
+                            Log.e(CONSENT_FORM_HELPER_LOG_TAG, "Failed to load consent form", it)
                             if (continuation.isActive) continuation.resume(Unit)
                         }
                     }, { t ->
-                        Log.e("ConsentFormHelper", "Failed to load consent form: ${t.message}")
+                        Log.e(
+                            CONSENT_FORM_HELPER_LOG_TAG,
+                            "Failed to load consent form: ${t.message}"
+                        )
                         if (continuation.isActive) continuation.resume(Unit)
                     })
                 }.onFailure {
-                    Log.e("ConsentFormHelper", "Failed to load consent form", it)
+                    Log.e(CONSENT_FORM_HELPER_LOG_TAG, "Failed to load consent form", it)
                     if (continuation.isActive) continuation.resume(Unit)
                 }
             }, {
