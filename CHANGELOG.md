@@ -1,3 +1,10 @@
+# Version 1.1.4:
+
+- **New**: Introduced an "Open Random App" button for spontaneous app discovery.
+- **Minor**: Refined UI components for a more expressive and intuitive user experience.
+- **Patch**: Implemented various under-the-hood improvements to enhance app performance and
+  stability.
+
 # Version 1.1.3:
 
 - **New**: Added app preview.
