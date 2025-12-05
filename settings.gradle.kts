@@ -9,6 +9,10 @@ pluginManagement {
         }
         gradlePluginPortal()
         mavenCentral()
+        // Additional mirror to mitigate transient Maven Central outages (e.g., Groovy artifacts)
+        maven {
+            url = uri("https://repo.grails.org/grails/core")
+        }
         maven {
             setUrl("https://jitpack.io")
         }
@@ -20,6 +24,10 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        // Additional mirror to mitigate transient Maven Central outages (e.g., Groovy artifacts)
+        maven {
+            url = uri("https://repo.grails.org/grails/core")
+        }
         maven {
             setUrl("https://jitpack.io")
         }
