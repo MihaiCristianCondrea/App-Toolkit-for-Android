@@ -33,7 +33,6 @@
         <package android:name="com.d4rk.android.apps.weddix" />
     </queries>
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -104,6 +103,14 @@
             <meta-data
                 android:name="autoStoreLocales"
                 android:value="true" />
+        </service>
+
+        <service
+            android:name=".core.services.FirebaseNotificationsService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
         </service>
 
         <meta-data
