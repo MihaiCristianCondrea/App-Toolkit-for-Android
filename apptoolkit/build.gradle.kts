@@ -23,7 +23,12 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            // Disable minification for the library module so that downstream applications
+            // (including the :app module in this repo) retain all public Compose UI and
+            // helper classes. R8 will still run for the application itself, ensuring the
+            // final APK is optimized without stripping library classes that are only
+            // referenced outside this module.
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile(name = "proguard-android-optimize.txt"),
                 "proguard-rules.pro"
