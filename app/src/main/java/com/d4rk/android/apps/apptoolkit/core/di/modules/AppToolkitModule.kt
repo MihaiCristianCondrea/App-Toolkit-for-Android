@@ -20,6 +20,7 @@ import com.d4rk.android.libs.apptoolkit.app.support.ui.SupportViewModel
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.github.GithubConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.helpers.Base64Decoder.parseBase64String
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
@@ -73,7 +74,7 @@ val appToolkitModule : Module = module {
         GithubConstants.githubChangelog(get<String>(named("github_repository")))
     }
 
-    single(githubTokenQualifier) { BuildConfig.GITHUB_TOKEN }
+    single(githubTokenQualifier) { parseBase64String(BuildConfig.GITHUB_TOKEN) }
 
     single<HelpScreenConfig> { HelpScreenConfig(versionName = BuildConfig.VERSION_NAME , versionCode = BuildConfig.VERSION_CODE) }
 }

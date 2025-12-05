@@ -21,7 +21,7 @@ android {
         applicationIdSuffix = ".apptoolkit"
         minSdk = 23
         targetSdk = 36
-        versionCode = 79
+        versionCode = 80
         versionName = "1.1.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         @Suppress("UnstableApiUsage")
@@ -101,6 +101,8 @@ android {
                 null
             }
             isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             buildConfigField(
                 "String",
                 "DEVELOPER_APPS_BASE_URL",
@@ -109,6 +111,8 @@ android {
         }
         debug {
             isDebuggable = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             buildConfigField(
                 "String",
                 "DEVELOPER_APPS_BASE_URL",
@@ -120,8 +124,6 @@ android {
     buildTypes.forEach { buildType ->
         with(receiver = buildType) {
             multiDexEnabled = true
-            isMinifyEnabled = false
-            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile(name = "proguard-android-optimize.txt"),
                 "proguard-rules.pro"

@@ -8,20 +8,20 @@ coil = "3.3.0"
 lottie = "6.7.1"
 datastorePreferences = "1.2.0"
 firebaseBom = "34.6.0"
-composeBom = "2025.11.01"
+composeBom = "2025.12.00"
 integrity = "1.6.0"
 konfettiCompose = "2.0.5"
 lifecycle = "2.10.0"
 kotlinxSerializationJson = "1.9.0"
 kotlinxCoroutinesAndroid = "1.10.2"
-ktorBom = "3.3.2"
+ktorBom = "3.3.3"
 coreSplashscreen = "1.2.0"
 koin = "4.1.1"
 appUpdateKtx = "2.1.0"
 kotlin = "2.2.21"
 coreKtx = "1.17.0"
-activityCompose = "1.12.0"
-composeMaterial3 = "1.5.0-alpha09"
+activityCompose = "1.12.1"
+composeMaterial3 = "1.5.0-alpha10"
 composeMaterial3WindowSizeClass = "1.4.0"
 reviewKtx = "2.0.2"
 billing = "8.1.0"
@@ -40,7 +40,7 @@ jupiter = "6.0.1"
 testCorutines = "1.10.2"
 testTurbine = "1.2.1"
 truth = "1.7.0"
-testManifestTestJunit4Android = "1.9.5"
+testManifestTestJunit4Android = "1.10.0"
 slf4j = "2.0.17"
 robolectric = "4.16"
 junit4 = "4.13.2"
@@ -53,6 +53,7 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "composeMarkdown" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 
@@ -179,6 +180,7 @@ firebase = [
     "firebase-crashlytics",
     "firebase-perf",
     "firebase-appcheck-playintegrity",
+    "firebase-messaging"
 ]
 
 google-play = [
