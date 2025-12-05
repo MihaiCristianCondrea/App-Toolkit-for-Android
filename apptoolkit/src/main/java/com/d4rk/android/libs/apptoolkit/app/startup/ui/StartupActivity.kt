@@ -16,6 +16,7 @@ import com.d4rk.android.libs.apptoolkit.app.startup.domain.actions.StartupAction
 import com.d4rk.android.libs.apptoolkit.app.startup.domain.actions.StartupEvent
 import com.d4rk.android.libs.apptoolkit.app.startup.utils.interfaces.providers.StartupProvider
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppTheme
+import com.d4rk.android.libs.apptoolkit.core.logging.STARTUP_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ConsentFormHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import com.google.android.ump.ConsentInformation
@@ -25,8 +26,6 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
-private const val STARTUP_LOG_TAG : String = "StartupActivity"
 
 class StartupActivity : AppCompatActivity() {
     private val provider : StartupProvider by inject()

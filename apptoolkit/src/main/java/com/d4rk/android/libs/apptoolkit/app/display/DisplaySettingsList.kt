@@ -28,6 +28,7 @@ import androidx.core.os.LocaleListCompat
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.display.components.dialogs.SelectLanguageAlertDialog
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.DisplaySettingsProvider
+import com.d4rk.android.libs.apptoolkit.core.logging.DISPLAY_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.SwitchPreferenceItem
@@ -42,8 +43,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-private const val DISPLAY_SETTINGS_TAG : String = "DisplaySettings"
-
 @Composable
 fun DisplaySettingsList(paddingValues : PaddingValues = PaddingValues() , provider : DisplaySettingsProvider) {
     val coroutineScope : CoroutineScope = rememberCoroutineScope()
@@ -56,7 +55,7 @@ fun DisplaySettingsList(paddingValues : PaddingValues = PaddingValues() , provid
         initialValue = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
     ) { cause : Throwable? ->
         if (cause != null && cause !is CancellationException) {
-            Log.w(DISPLAY_SETTINGS_TAG , "Theme mode flow completed with an error." , cause)
+            Log.w(DISPLAY_SETTINGS_LOG_TAG , "Theme mode flow completed with an error." , cause)
             dataStore.themeModeState.value = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
         }
     }
@@ -79,17 +78,17 @@ fun DisplaySettingsList(paddingValues : PaddingValues = PaddingValues() , provid
 
     val isDynamicColors : Boolean by dataStore.dynamicColors.collectWithLifecycleOnCompletion(initialValue = true) { cause : Throwable? ->
         if (cause != null && cause !is CancellationException) {
-            Log.w(DISPLAY_SETTINGS_TAG , "Dynamic color flow completed with an error." , cause)
+            Log.w(DISPLAY_SETTINGS_LOG_TAG , "Dynamic color flow completed with an error." , cause)
         }
     }
     val bouncyButtons : Boolean by dataStore.bouncyButtons.collectWithLifecycleOnCompletion(initialValue = true) { cause : Throwable? ->
         if (cause != null && cause !is CancellationException) {
-            Log.w(DISPLAY_SETTINGS_TAG , "Bouncy buttons flow completed with an error." , cause)
+            Log.w(DISPLAY_SETTINGS_LOG_TAG , "Bouncy buttons flow completed with an error." , cause)
         }
     }
     val showLabelsOnBottomBar : Boolean by dataStore.getShowBottomBarLabels().collectWithLifecycleOnCompletion(initialValue = true) { cause : Throwable? ->
         if (cause != null && cause !is CancellationException) {
-            Log.w(DISPLAY_SETTINGS_TAG , "Bottom bar label flow completed with an error." , cause)
+            Log.w(DISPLAY_SETTINGS_LOG_TAG , "Bottom bar label flow completed with an error." , cause)
         }
     }
 

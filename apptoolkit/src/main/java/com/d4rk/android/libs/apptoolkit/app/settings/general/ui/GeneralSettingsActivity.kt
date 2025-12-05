@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.actions.GeneralSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppTheme
+import com.d4rk.android.libs.apptoolkit.core.logging.GENERAL_SETTINGS_LOG_TAG
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -31,7 +32,7 @@ class GeneralSettingsActivity : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.resolveActivity(context.packageManager)?.let {
                 runCatching { context.startActivity(intent) }
-            } ?: Log.e("GeneralSettingsActivity" , "Unable to resolve activity to handle intent")
+            } ?: Log.e(GENERAL_SETTINGS_LOG_TAG , "Unable to resolve activity to handle intent")
         }
     }
 

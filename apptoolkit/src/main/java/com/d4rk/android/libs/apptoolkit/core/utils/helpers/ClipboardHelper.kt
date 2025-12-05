@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
 
 /**
  *  A helper object for managing clipboard operations.
@@ -34,7 +35,7 @@ object ClipboardHelper {
                 onShowSnackbar()
             }
         } else {
-            Log.w("ClipboardHelper" , "Clipboard service unavailable")
+            Log.w(CLIPBOARD_HELPER_LOG_TAG , "Clipboard service unavailable")
         }
     }
 }
