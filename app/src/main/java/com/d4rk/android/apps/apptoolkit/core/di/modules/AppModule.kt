@@ -28,7 +28,8 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val appModule : Module = module {
-    single<CommonDataStore> { DataStore(context = get(), dispatchers = get()) }
+    single { DataStore(context = get(), dispatchers = get()) }
+    single<CommonDataStore> { get<DataStore>() }
     single<AdsCoreManager> { AdsCoreManager(context = get(), buildInfoProvider = get(), dispatchers = get()) }
     single { KtorClient.createClient(enableLogging = BuildConfig.DEBUG) }
 
