@@ -21,6 +21,7 @@
             <data android:scheme="https" />
         </intent>
 
+        <package android:name="com.mihaicristiancondrea.android.apps.budgeta" />
         <package android:name="com.d4rk.cartcalculator" />
         <package android:name="com.d4rk.cleaner" />
         <package android:name="com.d4rk.androidtutorials" />
