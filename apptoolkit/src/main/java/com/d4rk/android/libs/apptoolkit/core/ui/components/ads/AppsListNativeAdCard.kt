@@ -58,7 +58,11 @@ fun AppsListNativeAdCard(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
 
     val adRequest: AdRequest = remember { AdRequest.Builder().build() }
 
-    var nativeAdView by remember { mutableStateOf<NativeAdView?>(null) }
+    var isAdLoaded by remember(adsConfig.bannerAdUnitId) { mutableStateOf(false) }
+    val nativeAdView = remember {
+        LayoutInflater.from(context)
+            .inflate(R.layout.native_ad_apps_list_card, null) as NativeAdView
+    }
     var currentNativeAd by remember { mutableStateOf<NativeAd?>(null) }
 
     DisposableEffect(Unit) {
@@ -68,35 +72,20 @@ fun AppsListNativeAdCard(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
         }
     }
 
-    Card(
-        modifier = modifier
-            .fillMaxSize()
-            .aspectRatio(1f),
-        shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize)
-    ) {
-        AndroidView(
-            modifier = Modifier.fillMaxSize(),
-            factory = { ctx ->
-                LayoutInflater.from(ctx)
-                    .inflate(R.layout.native_ad_apps_list_card, null) as NativeAdView
-            },
-            update = { view ->
-                if (nativeAdView !== view) {
-                    nativeAdView = view
-                }
-            }
-        )
-    }
+    LaunchedEffect(adsConfig.bannerAdUnitId, adRequest, showAds) {
+        if (!showAds || adsConfig.bannerAdUnitId.isBlank()) {
+            isAdLoaded = false
+            return@LaunchedEffect
+        }
 
-    LaunchedEffect(nativeAdView, adsConfig.bannerAdUnitId, adRequest) {
-        val view: NativeAdView = nativeAdView ?: return@LaunchedEffect
-
+        isAdLoaded = false
         val adLoader: AdLoader = AdLoader.Builder(context, adsConfig.bannerAdUnitId)
             .forNativeAd { nativeAd ->
                 currentNativeAd?.destroy()
                 currentNativeAd = nativeAd
-                bindAppsListNativeAd(adView = view, nativeAd = nativeAd)
-                view.isVisible = true
+                bindAppsListNativeAd(adView = nativeAdView, nativeAd = nativeAd)
+                nativeAdView.isVisible = true
+                isAdLoaded = true
             }
             .withNativeAdOptions(
                 NativeAdOptions.Builder()
@@ -105,13 +94,28 @@ fun AppsListNativeAdCard(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
             )
             .withAdListener(object : AdListener() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    view.isVisible = false
+                    nativeAdView.isVisible = false
+                    isAdLoaded = false
                 }
             })
             .build()
 
-        view.isVisible = false
+        nativeAdView.isVisible = false
         adLoader.loadAd(adRequest)
+    }
+
+    if (isAdLoaded) {
+        Card(
+            modifier = modifier
+                .fillMaxSize()
+                .aspectRatio(1f),
+            shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize)
+        ) {
+            AndroidView(
+                modifier = Modifier.fillMaxSize(),
+                factory = { nativeAdView },
+            )
+        }
     }
 }
 

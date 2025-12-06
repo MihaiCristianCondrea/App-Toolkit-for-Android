@@ -40,6 +40,7 @@ val Context.commonDataStore : DataStore<Preferences> by preferencesDataStore(nam
 open class CommonDataStore(
     context : Context,
     dispatchers: DispatcherProvider = StandardDispatchers(),
+    private val defaultAdsEnabled: Boolean = true,
 ) : OnboardingPreferencesDataSource, UsageAndDiagnosticsPreferencesDataSource {
     val dataStore : DataStore<Preferences> = context.commonDataStore
     private val scope = CoroutineScope(SupervisorJob() + dispatchers.io)
@@ -48,9 +49,15 @@ open class CommonDataStore(
         @Volatile
         private var instance : CommonDataStore? = null
 
-        fun getInstance(context : Context) : CommonDataStore {
+        fun getInstance(
+            context: Context,
+            defaultAdsEnabled: Boolean = true,
+        ): CommonDataStore {
             return instance ?: synchronized(lock = this) {
-                instance ?: CommonDataStore(context.applicationContext).also { instance = it }
+                instance ?: CommonDataStore(
+                    context = context.applicationContext,
+                    defaultAdsEnabled = defaultAdsEnabled,
+                ).also { instance = it }
             }
         }
     }
@@ -228,10 +235,10 @@ open class CommonDataStore(
         prefs[adsKey] ?: default
     }
     val adsEnabledFlow: StateFlow<Boolean> =
-        ads(default = true).stateIn(
+        ads(default = defaultAdsEnabled).stateIn(
             scope = scope,
             started = SharingStarted.Eagerly,
-            initialValue = true
+            initialValue = defaultAdsEnabled
         )
 
     suspend fun saveAds(isChecked : Boolean) {
