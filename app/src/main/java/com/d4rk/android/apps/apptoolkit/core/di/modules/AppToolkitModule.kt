@@ -45,7 +45,15 @@ val appToolkitModule : Module = module {
     }
     viewModel { StartupViewModel() }
 
-    single<HelpRepository> { DefaultHelpRepository(context = get(), dispatchers = get()) }
+    single<HelpRepository> {
+        DefaultHelpRepository(
+            context = get(),
+            dispatchers = get(),
+            client = get(),
+            catalogUrl = BuildConfig.FAQ_CATALOG_URL,
+            productId = BuildConfig.FAQ_PRODUCT_ID,
+        )
+    }
     viewModel { HelpViewModel(helpRepository = get()) }
 
     single<DeviceInfoProvider> { DeviceInfoProviderImpl(get(), get()) }

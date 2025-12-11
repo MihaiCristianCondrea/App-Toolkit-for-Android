@@ -18,9 +18,10 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageTyp
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 
 class HelpViewModel(
     private val helpRepository: HelpRepository,
@@ -36,35 +37,36 @@ class HelpViewModel(
     }
 
     private fun loadFaq() {
-        viewModelScope.launch {
-            var latestQuestions: List<UiHelpQuestion> = emptyList()
+        var latestQuestions: List<UiHelpQuestion> = emptyList()
 
-            helpRepository.fetchFaq()
-                .onStart { screenState.updateState(ScreenState.IsLoading()) }
-                .onCompletion { cause ->
-                    when {
-                        cause is CancellationException -> return@onCompletion
-                        cause != null -> screenState.updateState(ScreenState.Error())
-                        latestQuestions.isEmpty() -> screenState.updateState(ScreenState.NoData())
-                        else -> screenState.updateState(ScreenState.Success())
-                    }
+        helpRepository.fetchFaq()
+            .onStart { screenState.updateState(ScreenState.IsLoading()) }
+            .onEach { questions ->
+                latestQuestions = questions
+                screenState.copyData { copy(questions = questions) }
+            }
+            .onCompletion { cause ->
+                when {
+                    cause is CancellationException -> return@onCompletion
+                    cause != null -> screenState.updateState(ScreenState.Error())
+                    latestQuestions.isEmpty() -> screenState.updateState(ScreenState.NoData())
+                    else -> screenState.updateState(ScreenState.Success())
                 }
-                .catch { error ->
-                    if (error is CancellationException) throw error
-                    screenState.showSnackbar(
-                        UiSnackbar(
-                            message = UiTextHelper.DynamicString(error.message ?: "Failed to load FAQs"),
-                            type = ScreenMessageType.SNACKBAR,
-                            isError = true,
-                            timeStamp = System.currentTimeMillis(),
-                        )
+            }
+            .catch { error ->
+                if (error is CancellationException) throw error
+                screenState.showSnackbar(
+                    UiSnackbar(
+                        message = UiTextHelper.DynamicString(
+                            error.message ?: "Failed to load FAQs"
+                        ),
+                        type = ScreenMessageType.SNACKBAR,
+                        isError = true,
+                        timeStamp = System.currentTimeMillis(),
                     )
-                }
-                .collect { questions ->
-                    latestQuestions = questions
-                    screenState.copyData { copy(questions = questions) }
-                }
-        }
+                )
+            }
+            .launchIn(viewModelScope)
     }
 }
 
