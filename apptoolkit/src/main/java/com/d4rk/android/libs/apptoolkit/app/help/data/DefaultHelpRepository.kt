@@ -2,7 +2,6 @@ package com.d4rk.android.libs.apptoolkit.app.help.data
 
 import android.content.Context
 import android.util.Log
-import androidx.core.text.HtmlCompat
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.FaqCatalog
 import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.FaqQuestion
@@ -78,10 +77,7 @@ class DefaultHelpRepository(
                 UiHelpQuestion(
                     id = index,
                     question = question.question,
-                    answer = HtmlCompat.fromHtml(
-                        question.answer,
-                        HtmlCompat.FROM_HTML_MODE_COMPACT
-                    ).toString().trim(),
+                    answer = question.answer.trim(),
                 )
             }.filter { it.question.isNotBlank() && it.answer.isNotBlank() }
 
