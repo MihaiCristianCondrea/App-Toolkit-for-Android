@@ -13,7 +13,11 @@ class IssueReporterActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                IssueReporterScreen(activity = this@IssueReporterActivity)
+                IssueReporterScreen(
+                    onBackClicked = {
+                        this.finish()
+                    }
+                )
             }
         }
     }

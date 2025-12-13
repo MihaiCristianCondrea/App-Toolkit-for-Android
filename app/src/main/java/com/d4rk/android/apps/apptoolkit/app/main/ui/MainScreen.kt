@@ -56,8 +56,6 @@ import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.Changelog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.BottomNavigationBar
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.LeftNavigationRail
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.MainTopAppBar
-import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHost
@@ -224,12 +222,9 @@ fun MainScaffoldTabletContent(
     var isRailExpanded by rememberSaveable(windowWidthSizeClass) {
         mutableStateOf(value = windowWidthSizeClass == WindowWidthSizeClass.Expanded)
     }
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val changelogUrl: String = koinInject(qualifier = named("github_changelog"))
-    val buildInfoProvider: BuildInfoProvider = koinInject()
-    val dispatchers: DispatcherProvider = koinInject()
     var showChangelog by rememberSaveable { mutableStateOf(false) }
 
     val uiState: UiMainScreen = screenState.data ?: UiMainScreen()
@@ -279,9 +274,7 @@ fun MainScaffoldTabletContent(
                 navigationIcon = if (isRailExpanded) Icons.AutoMirrored.Outlined.MenuOpen else Icons.Default.Menu,
                 onNavigationIconClick = {
                     hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                    coroutineScope.launch {
-                        isRailExpanded = !isRailExpanded // FIXME: Assigned value is never read
-                    }
+                    isRailExpanded = !isRailExpanded
                 },
                 scrollBehavior = scrollBehavior
             )
@@ -340,9 +333,7 @@ fun MainScaffoldTabletContent(
     if (showChangelog) {
         ChangelogDialog(
             changelogUrl = changelogUrl,
-            buildInfoProvider = buildInfoProvider,
-            onDismiss = { showChangelog = false }, // FIXME: Assigned value is never read
-            dispatchers = dispatchers
+            onDismiss = { showChangelog = false }
         )
     }
 }

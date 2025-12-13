@@ -20,8 +20,6 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.MainScaffoldContent
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.NavigationDrawerItemContent
-import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.hapticDrawerSwipe
@@ -32,16 +30,14 @@ import org.koin.core.qualifier.named
 
 @Composable
 fun NavigationDrawer(
-    screenState: UiStateScreen<UiMainScreen>,
+    screenState: UiStateScreen<UiMainScreen>, // FIXME: Unstable parameter 'screenState' prevents composable from being skippable
     windowWidthSizeClass: WindowWidthSizeClass,
-    bottomItems: List<BottomBarItem>,
+    bottomItems: List<BottomBarItem>, // FIXME: Unstable parameter 'bottomItems' prevents composable from being skippable
 ) {
     val drawerState : DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope : CoroutineScope = rememberCoroutineScope()
     val context : Context = LocalContext.current
     val changelogUrl: String = koinInject(qualifier = named("github_changelog"))
-    val buildInfoProvider: BuildInfoProvider = koinInject()
-    val dispatchers: DispatcherProvider = koinInject()
     var showChangelog by rememberSaveable { mutableStateOf(false) }
     val uiState : UiMainScreen = screenState.data ?: UiMainScreen()
 
@@ -72,9 +68,7 @@ fun NavigationDrawer(
     if (showChangelog) {
         ChangelogDialog(
             changelogUrl = changelogUrl,
-            buildInfoProvider = buildInfoProvider,
-            onDismiss = { showChangelog = false },
-            dispatchers = dispatchers
+            onDismiss = { showChangelog = false }, // FIXME: Assigned value is never read
         )
     }
 }

@@ -12,7 +12,11 @@ class LicensesActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                LicensesScreen(activity = this@LicensesActivity)
+                LicensesScreen(
+                    onBackClicked = {
+                        this.finish()
+                    }
+                )
             }
         }
     }

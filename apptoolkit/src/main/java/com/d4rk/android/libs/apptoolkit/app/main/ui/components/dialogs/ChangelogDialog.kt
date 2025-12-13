@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
@@ -34,11 +33,11 @@ import org.koin.compose.koinInject
 @Composable
 fun ChangelogDialog(
     changelogUrl: String,
-    buildInfoProvider: BuildInfoProvider, // FIXME: Parameter 'buildInfoProvider' has runtime-determined stability
     onDismiss: () -> Unit,
-    dispatchers: DispatcherProvider, // FIXME: Parameter 'dispatchers' has runtime-determined stability
 ) {
-    val context = LocalContext.current
+    val dispatchers: DispatcherProvider = koinInject()
+    val buildInfoProvider: BuildInfoProvider = koinInject()
+    val noNewUpdatesText = stringResource(id = R.string.no_new_updates_message)
     val changelogText: MutableState<String?> = remember {
         mutableStateOf(null)
     }
@@ -51,8 +50,7 @@ fun ChangelogDialog(
             runCatching {
                 val content: String = httpClient.get(changelogUrl).body()
                 val section = extractChangesForVersion(content, buildInfoProvider.appVersion)
-                changelogText.value =
-                    section.ifBlank { context.getString(R.string.no_new_updates_message) } // FIXME: Querying resource values using LocalContext.current
+                changelogText.value = section.ifBlank { noNewUpdatesText }
             }.onFailure {
                 isError.value = true
             }

@@ -1,8 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.issuereporter.ui
 
-import android.app.Activity
 import android.view.SoundEffectConstants
 import android.view.View
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -39,13 +39,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedback
@@ -80,45 +78,54 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeHorizont
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IssueReporterScreen(activity: Activity) { // FIXME: Unstable parameter 'activity' prevents composable from being skippable
+fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
+    val context = LocalContext.current
+    val activity = LocalActivity.current
+
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-    val isFabExtended: MutableState<Boolean> = remember { mutableStateOf(value = true) }
+
+    val isFabExtended by remember {
+        derivedStateOf { scrollBehavior.state.contentOffset >= 0f }
+    }
+
     val viewModel: IssueReporterViewModel = koinViewModel()
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val uiStateScreen: UiStateScreen<UiIssueReporterScreen> by viewModel.uiState.collectAsStateWithLifecycle()
     val target: GithubTarget = koinInject()
 
-    LaunchedEffect(key1 = scrollBehavior.state.contentOffset) {
-        isFabExtended.value = scrollBehavior.state.contentOffset >= 0f
+    val defaultBackClicked: () -> Unit = remember(activity) { { activity?.finish() } }
+    val backClicked: () -> Unit = onBackClicked ?: defaultBackClicked
+
+    val issuesUrl = remember(target) {
+        "https://github.com/${target.username}/${target.repository}/issues"
     }
 
     LargeTopAppBarWithScaffold(
         title = stringResource(id = R.string.bug_report),
-        onBackClicked = { activity.finish() },
+        onBackClicked = backClicked,
         snackbarHostState = snackBarHostState,
         scrollBehavior = scrollBehavior,
         floatingActionButton = {
-            val context = LocalContext.current
             Column(horizontalAlignment = Alignment.End) {
                 SmallFloatingActionButton(
                     modifier = Modifier.padding(bottom = SizeConstants.MediumSize),
                     isVisible = true,
                     isExtended = true,
                     icon = Icons.Outlined.Link,
-                    onClick = {
-                        IntentsHelper.openUrl(
-                            context = context,
-                            url = "https://github.com/${target.username}/${target.repository}/issues"
-                        )
-                    })
+                    onClick = { IntentsHelper.openUrl(context = context, url = issuesUrl) }
+                )
+
                 AnimatedExtendedFloatingActionButton(
                     visible = true,
+                    expanded = isFabExtended,
                     onClick = { viewModel.onEvent(IssueReporterEvent.Send) },
                     text = { Text(text = stringResource(id = R.string.issue_send)) },
                     icon = {
@@ -126,11 +133,12 @@ fun IssueReporterScreen(activity: Activity) { // FIXME: Unstable parameter 'acti
                             imageVector = Icons.Outlined.BugReport,
                             contentDescription = null
                         )
-                    },
-                    expanded = isFabExtended.value
+                    }
                 )
             }
-        }) { paddingValues: PaddingValues ->
+        }
+    ) { paddingValues: PaddingValues ->
+
         ScreenStateHandler(
             screenState = uiStateScreen,
             onLoading = { LoadingScreen() },
@@ -139,25 +147,43 @@ fun IssueReporterScreen(activity: Activity) { // FIXME: Unstable parameter 'acti
             onSuccess = { data: UiIssueReporterScreen ->
                 IssueReporterScreenContent(
                     paddingValues = paddingValues,
-                    viewModel = viewModel,
-                    data = data,
+                    onEvent = viewModel::onEvent,
+                    data = data
                 )
             }
         )
+
         DefaultSnackbarHandler(
             screenState = uiStateScreen,
             snackbarHostState = snackBarHostState,
             getDismissEvent = { IssueReporterEvent.DismissSnackbar },
-            onEvent = { viewModel.onEvent(it) })
+            onEvent = viewModel::onEvent
+        )
     }
 }
 
 @Composable
 fun IssueReporterScreenContent(
     paddingValues: PaddingValues,
-    viewModel: IssueReporterViewModel, // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+    onEvent: (IssueReporterEvent) -> Unit,
     data: UiIssueReporterScreen,
 ) {
+    val uriHandler = LocalUriHandler.current
+    val context = LocalContext.current
+    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
+    val view: View = LocalView.current
+
+    val deviceExpanded = rememberSaveable { mutableStateOf(false) }
+    val deviceInfoText = rememberSaveable { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(deviceExpanded.value) {
+        if (deviceExpanded.value && deviceInfoText.value == null) {
+            deviceInfoText.value = withContext(Dispatchers.Default) {
+                DeviceInfo.create(context).toString()
+            }
+        }
+    }
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(
@@ -168,7 +194,6 @@ fun IssueReporterScreenContent(
         ),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
     ) {
-
         item {
             if (!data.issueUrl.isNullOrEmpty()) {
                 Card(
@@ -200,10 +225,8 @@ fun IssueReporterScreenContent(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.End
                         ) {
-                            val uriHandler = LocalUriHandler.current
-
                             OutlinedIconButtonWithText(
-                                onClick = { uriHandler.openUri(data.issueUrl) },
+                                onClick = { data.issueUrl.let(uriHandler::openUri) },
                                 icon = Icons.AutoMirrored.Outlined.OpenInNew,
                                 iconContentDescription = stringResource(R.string.open_issue_in_browser),
                                 label = stringResource(R.string.open_button_label)
@@ -222,9 +245,7 @@ fun IssueReporterScreenContent(
         }
 
         item {
-            Card(
-                shape = MaterialTheme.shapes.medium, modifier = Modifier.fillMaxWidth()
-            ) {
+            Card(shape = MaterialTheme.shapes.medium, modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -233,7 +254,7 @@ fun IssueReporterScreenContent(
                 ) {
                     OutlinedTextField(
                         value = data.title,
-                        onValueChange = { viewModel.onEvent(IssueReporterEvent.UpdateTitle(it)) },
+                        onValueChange = { onEvent(IssueReporterEvent.UpdateTitle(it)) },
                         label = { Text(stringResource(id = R.string.issue_title_label)) },
                         leadingIcon = { Icon(Icons.Outlined.Title, contentDescription = null) },
                         modifier = Modifier.fillMaxWidth(),
@@ -243,7 +264,7 @@ fun IssueReporterScreenContent(
 
                     OutlinedTextField(
                         value = data.description,
-                        onValueChange = { viewModel.onEvent(IssueReporterEvent.UpdateDescription(it)) },
+                        onValueChange = { onEvent(IssueReporterEvent.UpdateDescription(it)) },
                         label = { Text(stringResource(id = R.string.issue_description_label)) },
                         leadingIcon = { Icon(Icons.Outlined.Info, contentDescription = null) },
                         modifier = Modifier.fillMaxWidth(),
@@ -252,7 +273,7 @@ fun IssueReporterScreenContent(
 
                     OutlinedTextField(
                         value = data.email,
-                        onValueChange = { viewModel.onEvent(IssueReporterEvent.UpdateEmail(it)) },
+                        onValueChange = { onEvent(IssueReporterEvent.UpdateEmail(it)) },
                         label = { Text(stringResource(id = R.string.issue_email_label)) },
                         placeholder = { Text(stringResource(id = R.string.optional_placeholder)) },
                         leadingIcon = { Icon(Icons.Outlined.Email, contentDescription = null) },
@@ -272,23 +293,23 @@ fun IssueReporterScreenContent(
         }
 
         item {
-            Card(
-                shape = MaterialTheme.shapes.medium, modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier.padding(SizeConstants.LargeSize)
-                ) {
+            Card(shape = MaterialTheme.shapes.medium, modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(SizeConstants.LargeSize)) {
+
                     RadioButtonPreferenceItem(
                         text = stringResource(id = R.string.use_github_account),
                         isChecked = !data.anonymous,
-                        onCheckedChange = { },
+                        onCheckedChange = { /* disabled */ },
                         enabled = false
                     )
+
                     RadioButtonPreferenceItem(
                         text = stringResource(id = R.string.send_anonymously),
                         isChecked = data.anonymous,
-                        onCheckedChange = {
-                            viewModel.onEvent(event = IssueReporterEvent.SetAnonymous(anonymous = true))
+                        onCheckedChange = { checked ->
+                            if (checked) {
+                                onEvent(IssueReporterEvent.SetAnonymous(anonymous = true))
+                            }
                         }
                     )
                 }
@@ -296,25 +317,22 @@ fun IssueReporterScreenContent(
         }
 
         item {
-            val context = LocalContext.current
-            val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-            val view: View = LocalView.current
-            var deviceExpanded by rememberSaveable { mutableStateOf(false) }
-
             Card(shape = MaterialTheme.shapes.medium, modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     LargeHorizontalSpacer()
+
                     Row(
                         modifier = Modifier
                             .bounceClick()
                             .clickable {
                                 view.playSoundEffect(SoundEffectConstants.CLICK)
-                                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                                deviceExpanded = !deviceExpanded
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
+                                deviceExpanded.value = !deviceExpanded.value
                             }
                             .fillMaxWidth()
                             .padding(vertical = SizeConstants.LargeSize),
-                        verticalAlignment = Alignment.CenterVertically) {
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
                             text = stringResource(id = R.string.device_info),
                             style = MaterialTheme.typography.titleMedium,
@@ -324,16 +342,14 @@ fun IssueReporterScreenContent(
                         )
                         Icon(
                             modifier = Modifier.padding(end = SizeConstants.LargeSize),
-                            imageVector = if (deviceExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
+                            imageVector = if (deviceExpanded.value) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
                             contentDescription = stringResource(id = R.string.cd_expand_device_info)
                         )
                     }
-                    AnimatedVisibility(visible = deviceExpanded) {
-                        val info = produceState(initialValue = "") {
-                            value = DeviceInfo.create(context).toString()
-                        }
+
+                    AnimatedVisibility(visible = deviceExpanded.value) {
                         Text(
-                            text = info.value,
+                            text = deviceInfoText.value.orEmpty(),
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier
                                 .padding(SizeConstants.LargeSize)
@@ -343,8 +359,9 @@ fun IssueReporterScreenContent(
                 }
             }
 
-            ExtraExtraLargeVerticalSpacer()
-            ExtraExtraLargeVerticalSpacer()
+            repeat(2) {
+                ExtraExtraLargeVerticalSpacer()
+            }
         }
     }
 }
