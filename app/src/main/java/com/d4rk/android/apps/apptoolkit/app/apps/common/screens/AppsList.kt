@@ -66,7 +66,7 @@ fun AppsList(
         onFavoriteToggle = onFavoriteToggle,
         onAppClick = onAppClick,
         onShareClick = onShareClick,
-        adsConfig = adsConfig
+        adUnitId = adsConfig.bannerAdUnitId
     )
 }
 
@@ -81,7 +81,7 @@ private fun AppsGrid(
     onFavoriteToggle: (String) -> Unit,
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
-    adsConfig: AdsConfig, // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
+    adUnitId: String,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = columnCount),
@@ -133,7 +133,7 @@ private fun AppsGrid(
                     modifier = Modifier
                         .animateItem()
                         .animateVisibility(index = index),
-                    adsConfig = adsConfig
+                    adUnitId = adUnitId
                 )
             }
         }
@@ -163,10 +163,10 @@ private fun AppCardItem(
 @Composable
 private fun AdListItem(
     modifier: Modifier = Modifier,
-    adsConfig: AdsConfig, // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
+    adUnitId: String,
 ) {
     AppsListNativeAdCard(
-        adsConfig = adsConfig,
+        adUnitId = adUnitId,
         modifier = modifier
     )
 }

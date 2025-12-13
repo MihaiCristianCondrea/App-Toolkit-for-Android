@@ -27,7 +27,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import com.google.android.gms.ads.AdListener
@@ -68,8 +67,8 @@ import com.google.android.gms.ads.nativead.NativeAdView
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 fun AppsListNativeAdCard(
     modifier: Modifier = Modifier,
-    adsConfig: AdsConfig
-) { // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
+    adUnitId: String
+) {
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
     val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }
@@ -80,17 +79,14 @@ fun AppsListNativeAdCard(
         return
     }
 
-    if (!showAds || adsConfig.bannerAdUnitId.isBlank()) {
+    if (!showAds || adUnitId.isBlank()) {
         return
     }
 
     val adRequest: AdRequest = remember { AdRequest.Builder().build() }
 
-    var isAdLoaded by remember(adsConfig.bannerAdUnitId) { mutableStateOf(false) }
-    val nativeAdView = remember {
-        LayoutInflater.from(context)
-            .inflate(R.layout.native_ad_apps_list_card, null) as NativeAdView
-    }
+    var isAdLoaded by remember(adUnitId) { mutableStateOf(false) }
+    var nativeAdView by remember { mutableStateOf<NativeAdView?>(null) }
     var currentNativeAd by remember { mutableStateOf<NativeAd?>(null) }
 
     DisposableEffect(Unit) {
@@ -101,22 +97,24 @@ fun AppsListNativeAdCard(
     }
 
     LaunchedEffect(
-        adsConfig.bannerAdUnitId,
+        adUnitId,
         adRequest,
         showAds
-    ) { // FIXME: Value of 'showAds' is always true
-        if (!showAds || adsConfig.bannerAdUnitId.isBlank()) { // FIXME: Condition '!showAds' is always false
+    ) {
+        if (!showAds || adUnitId.isBlank()) {
             isAdLoaded = false
             return@LaunchedEffect
         }
 
         isAdLoaded = false
-        val adLoader: AdLoader = AdLoader.Builder(context, adsConfig.bannerAdUnitId)
+        val adLoader: AdLoader = AdLoader.Builder(context, adUnitId)
             .forNativeAd { nativeAd ->
                 currentNativeAd?.destroy()
                 currentNativeAd = nativeAd
-                bindAppsListNativeAd(adView = nativeAdView, nativeAd = nativeAd)
-                nativeAdView.isVisible = true
+                nativeAdView?.let { view ->
+                    bindAppsListNativeAd(adView = view, nativeAd = nativeAd)
+                    view.isVisible = true
+                }
                 isAdLoaded = true
             }
             .withNativeAdOptions(
@@ -126,13 +124,13 @@ fun AppsListNativeAdCard(
             )
             .withAdListener(object : AdListener() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    nativeAdView.isVisible = false
+                    nativeAdView?.isVisible = false
                     isAdLoaded = false
                 }
             })
             .build()
 
-        nativeAdView.isVisible = false
+        nativeAdView?.isVisible = false
         adLoader.loadAd(adRequest)
     }
 
@@ -144,9 +142,22 @@ fun AppsListNativeAdCard(
             shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize)
         ) {
             AndroidView(
-                // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
                 modifier = Modifier.fillMaxSize(),
-                factory = { nativeAdView },
+                factory = {
+                    LayoutInflater.from(context)
+                        .inflate(R.layout.native_ad_apps_list_card, null)
+                        .also { createdView ->
+                            nativeAdView = createdView as NativeAdView
+                        }
+                },
+                update = { view ->
+                    view.isVisible = isAdLoaded
+                    if (isAdLoaded) {
+                        currentNativeAd?.let { nativeAd ->
+                            bindAppsListNativeAd(adView = view as NativeAdView, nativeAd = nativeAd)
+                        }
+                    }
+                }
             )
         }
     }
