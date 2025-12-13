@@ -1,7 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components.pages
 
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +19,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -43,36 +43,63 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun FinalOnboardingPageTab() {
 
-    var showKonfettiAnimationForThisInstance : Boolean by remember { mutableStateOf(value = false) }
-    var iconVisible : Boolean by remember { mutableStateOf(value = false) }
+    val iconVisible = remember { mutableStateOf(false) }
+    val showKonfetti = remember { mutableStateOf(false) }
 
-    val party = Party(speed = 0f , maxSpeed = 30f , damping = 0.9f , spread = Spread.ROUND , position = Position.Relative(0.5 , 0.3) , emitter = Emitter(duration = 200 , TimeUnit.MILLISECONDS).max(amount = 100))
-    val partyRain =
-            Party(emitter = Emitter(duration = 3 , TimeUnit.SECONDS).perSecond(amount = 60) , angle = Angle.BOTTOM , spread = Spread.SMALL , speed = 5f , maxSpeed = 15f , timeToLive = 3000L , position = Position.Relative(x = 0.0 , y = 0.0).between(value = Position.Relative(x = 1.0 , y = 0.0)))
+    val parties = remember {
+        val party = Party(
+            speed = 0f,
+            maxSpeed = 30f,
+            damping = 0.9f,
+            spread = Spread.ROUND,
+            position = Position.Relative(0.5, 0.3),
+            emitter = Emitter(duration = 200, TimeUnit.MILLISECONDS).max(amount = 100)
+        )
 
-    val iconSettleScale : Float by animateFloatAsState(
-        targetValue = if (iconVisible) 1f else 1.2f , animationSpec = tween(durationMillis = 200 , delayMillis = 400) , label = "Icon Settle Scale"
+        val partyRain = Party(
+            emitter = Emitter(duration = 3, TimeUnit.SECONDS).perSecond(amount = 60),
+            angle = Angle.BOTTOM,
+            spread = Spread.SMALL,
+            speed = 5f,
+            maxSpeed = 15f,
+            timeToLive = 3000L,
+            position = Position.Relative(x = 0.0, y = 0.0)
+                .between(value = Position.Relative(x = 1.0, y = 0.0))
+        )
+
+        listOf(party, partyRain)
+    }
+
+    val transition = updateTransition(
+        targetState = iconVisible.value,
+        label = "FinalOnboardingIconTransition"
     )
 
-    val iconAlpha : Float by animateFloatAsState(
-        targetValue = if (iconVisible) 1f else 0f , animationSpec = tween(durationMillis = 300) , label = "Icon Alpha"
-    )
+    val iconSettleScale by transition.animateFloat(
+        transitionSpec = { tween(durationMillis = 200, delayMillis = 400) },
+        label = "Icon Settle Scale"
+    ) { visible -> if (visible) 1f else 1.2f }
 
-    val iconTranslateY : Float by animateFloatAsState(
-        targetValue = if (iconVisible) 0f else 30f , animationSpec = tween(durationMillis = 400 , delayMillis = 200) , label = "Icon TranslateY"
-    )
+    val iconAlpha by transition.animateFloat(
+        transitionSpec = { tween(durationMillis = 300) },
+        label = "Icon Alpha"
+    ) { visible -> if (visible) 1f else 0f }
 
-    LaunchedEffect(key1 = Unit) {
-        if (! FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally) {
-            iconVisible = true // FIXME: Assigned value is never read
+    val iconTranslateY by transition.animateFloat(
+        transitionSpec = { tween(durationMillis = 400, delayMillis = 200) },
+        label = "Icon TranslateY"
+    ) { visible -> if (visible) 0f else 30f }
+
+    LaunchedEffect(Unit) {
+        // Always show the icon with its enter animation
+        iconVisible.value = true
+
+        if (!FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally) {
             delay(300)
-            showKonfettiAnimationForThisInstance = true
+            showKonfetti.value = true
             FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally = true
-            delay(4000)
-        }
-        else {
-
-            iconVisible = true // FIXME: Assigned value is never read
+            delay(4_000)
+            showKonfetti.value = false // optional: removes KonfettiView from composition
         }
     }
 
@@ -83,31 +110,51 @@ fun FinalOnboardingPageTab() {
                 .padding(
                     horizontal = SizeConstants.MediumSize * 2,
                     vertical = SizeConstants.ExtraLargeIncreasedSize
-                ) , horizontalAlignment = Alignment.CenterHorizontally , verticalArrangement = Arrangement.Center
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Icon(imageVector = Icons.Filled.CheckCircle , contentDescription = stringResource(id = R.string.onboarding_complete_icon_desc) , modifier = Modifier
-                .size(size = SizeConstants.ExtraExtraLargeSize + SizeConstants.ExtraLargeIncreasedSize)
-                .graphicsLayer {
-                    scaleX = iconSettleScale
-                    scaleY = iconSettleScale
-                    translationY = iconTranslateY
-                    alpha = iconAlpha
-                } , tint = MaterialTheme.colorScheme.primary)
-
-            ExtraLargeIncreasedVerticalSpacer()
-            Text(text = stringResource(id = R.string.onboarding_final_title) , style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold , fontSize = 30.sp , textAlign = TextAlign.Center) , color = MaterialTheme.colorScheme.onSurface)
-
-            LargeVerticalSpacer()
-            Text(
-                text = stringResource(id = R.string.onboarding_final_description) , style = MaterialTheme.typography.bodyLarge , textAlign = TextAlign.Center , color = MaterialTheme.colorScheme.onSurfaceVariant , modifier = Modifier.padding(horizontal = SizeConstants.LargeSize)
+            Icon(
+                imageVector = Icons.Filled.CheckCircle,
+                contentDescription = stringResource(id = R.string.onboarding_complete_icon_desc),
+                modifier = Modifier
+                    .size(size = SizeConstants.ExtraExtraLargeSize + SizeConstants.ExtraLargeIncreasedSize)
+                    .graphicsLayer {
+                        scaleX = iconSettleScale
+                        scaleY = iconSettleScale
+                        translationY = iconTranslateY
+                        alpha = iconAlpha
+                    },
+                tint = MaterialTheme.colorScheme.primary
             )
 
+            ExtraLargeIncreasedVerticalSpacer()
+
+            Text(
+                text = stringResource(id = R.string.onboarding_final_title),
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 30.sp,
+                    textAlign = TextAlign.Center
+                ),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            LargeVerticalSpacer()
+
+            Text(
+                text = stringResource(id = R.string.onboarding_final_description),
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = SizeConstants.LargeSize)
+            )
         }
 
-        if (showKonfettiAnimationForThisInstance) {
+        if (showKonfetti.value) {
             KonfettiView(
-                modifier = Modifier.fillMaxSize() ,
-                parties = listOf(party , partyRain) ,
+                modifier = Modifier.fillMaxSize(),
+                parties = parties
             )
         }
     }

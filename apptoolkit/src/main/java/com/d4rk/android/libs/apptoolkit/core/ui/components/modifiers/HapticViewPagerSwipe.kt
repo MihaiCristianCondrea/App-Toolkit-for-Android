@@ -2,29 +2,33 @@ package com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers
 
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.runningFold
 
-fun Modifier.hapticPagerSwipe(pagerState : PagerState) : Modifier = composed {
-    val hapticFeedback : HapticFeedback = LocalHapticFeedback.current
-    var hasVibrated : Boolean by remember { mutableStateOf(value = false) }
+fun Modifier.hapticPagerSwipe(pagerState: PagerState): Modifier = composed {
+    val haptics = rememberUpdatedState(LocalHapticFeedback.current)
 
-    LaunchedEffect(key1 = pagerState.isScrollInProgress) {
-        if (pagerState.isScrollInProgress && ! hasVibrated) {
-            hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.SegmentTick)
-            hasVibrated = true // FIXME: Assigned value is never read
-        }
-        else if (! pagerState.isScrollInProgress) {
-            hasVibrated = false // FIXME: Assigned value is never read
-        }
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.isScrollInProgress }
+            .distinctUntilChanged()
+            .runningFold(false) { vibrated, isScrolling ->
+                if (!isScrolling) {
+                    false
+                } else {
+                    if (!vibrated) {
+                        haptics.value.performHapticFeedback(HapticFeedbackType.SegmentTick)
+                    }
+                    true
+                }
+            }
+            .collect { /* state already handled */ }
     }
 
-    return@composed this
+    this
 }

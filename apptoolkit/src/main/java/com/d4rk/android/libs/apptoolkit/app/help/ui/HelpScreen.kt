@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.help.ui
 
 import android.content.Context
+import android.content.ContextWrapper
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,10 +17,12 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -44,40 +47,56 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraLargeVer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ReviewHelper
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
+
+
+// TODO: Move in helper class:
+private tailrec fun Context.findActivity(): ComponentActivity? = when (this) {
+    is ComponentActivity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HelpScreen(
-    activity: ComponentActivity,
     config: HelpScreenConfig,
-    scope: CoroutineScope,
-    viewModel: HelpViewModel
-) { // FIXME: Unstable parameter 'activity' prevents composable from being skippable && Parameter 'scope' has runtime-determined stability && Parameter 'viewModel' has runtime-determined stability
-    val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(state = rememberTopAppBarState())
-    val context: Context = LocalContext.current
-    val isFabExtended: MutableState<Boolean> = remember { mutableStateOf(value = true) }
+    viewModel: HelpViewModel // FIXME: Parameter 'viewModel' has runtime-determined stability
+) {
+    val context = LocalContext.current
+    val activity = remember(context) { context.findActivity() } // may be null in preview
+    val scope = rememberCoroutineScope()
+
+    val scrollBehavior: TopAppBarScrollBehavior =
+        TopAppBarDefaults.enterAlwaysScrollBehavior(state = rememberTopAppBarState())
+
+    val isFabExtended = rememberSaveable { mutableStateOf(true) }
+    val showDialog = rememberSaveable { mutableStateOf(false) }
+
     val screenState: UiStateScreen<UiHelpScreen> by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.onEvent(HelpEvent.LoadFaq)
     }
 
-    LaunchedEffect(key1 = scrollBehavior.state.contentOffset) {
-        isFabExtended.value = scrollBehavior.state.contentOffset >= 0f
+    LaunchedEffect(scrollBehavior) {
+        snapshotFlow { scrollBehavior.state.contentOffset >= 0f }
+            .distinctUntilChanged()
+            .collect { extended ->
+                isFabExtended.value = extended
+            }
     }
 
     LargeTopAppBarWithScaffold(
         title = stringResource(id = R.string.help),
-        onBackClicked = { activity.finish() },
+        onBackClicked = { activity?.finish() },
         actions = {
             HelpScreenMenuActions(
-                context = context,
-                activity = activity,
-                showDialog = remember { mutableStateOf(value = false) },
-                config = config
+                config = config,
+                showDialog = showDialog.value,
+                onShowDialogChange = { showDialog.value = it }
             )
         },
         scrollBehavior = scrollBehavior,
@@ -86,7 +105,10 @@ fun HelpScreen(
                 visible = true,
                 expanded = isFabExtended.value,
                 onClick = {
-                    ReviewHelper.forceLaunchInAppReview(activity = activity, scope = scope)
+                    // In previews activity can be null.
+                    activity?.let {
+                        ReviewHelper.forceLaunchInAppReview(activity = it, scope = scope)
+                    }
                 },
                 text = { Text(text = stringResource(id = R.string.feedback)) },
                 icon = { Icon(Icons.Outlined.RateReview, contentDescription = null) }
@@ -112,7 +134,10 @@ fun HelpScreen(
                 )
             },
             onSuccess = { data: UiHelpScreen ->
-                HelpScreenContent(questions = data.questions, paddingValues = paddingValues, activity = activity)
+                HelpScreenContent(
+                    questions = data.questions,
+                    paddingValues = paddingValues
+                )
             }
         )
     }
@@ -120,36 +145,47 @@ fun HelpScreen(
 
 @Composable
 fun HelpScreenContent(
-    questions: List<UiHelpQuestion>,
-    paddingValues: PaddingValues,
-    activity: ComponentActivity
-) { // FIXME: Unstable parameter 'activity' prevents composable from being skippable && Parameter 'questions' has runtime-determined stability
+    questions: List<UiHelpQuestion>, // FIXME: Parameter 'questions' has runtime-determined stability
+    paddingValues: PaddingValues
+) {
+    val context = LocalContext.current
     val adsConfig: AdsConfig = koinInject(qualifier = named("help_large_banner_ad"))
+
     LazyColumn(
-        modifier = Modifier.fillMaxSize() , contentPadding = PaddingValues(
-            top = paddingValues.calculateTopPadding() , bottom = paddingValues.calculateBottomPadding() , start = SizeConstants.LargeSize , end = SizeConstants.LargeSize
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(
+            top = paddingValues.calculateTopPadding(),
+            bottom = paddingValues.calculateBottomPadding(),
+            start = SizeConstants.LargeSize,
+            end = SizeConstants.LargeSize
         ),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
     ) {
         item {
             Text(text = stringResource(id = R.string.popular_help_resources))
         }
+
         item {
             HelpQuestionsList(questions = questions)
         }
+
         item {
             HelpNativeAdCard(
                 adsConfig = adsConfig,
                 modifier = Modifier.animateItem()
             )
         }
+
         item {
-            ContactUsCard(onClick = {
-                IntentsHelper.sendEmailToDeveloper(context = activity , applicationNameRes = R.string.app_name)
-            })
-            repeat(3) {
-                ExtraLargeVerticalSpacer()
-            }
+            ContactUsCard(
+                onClick = {
+                    IntentsHelper.sendEmailToDeveloper(
+                        context = context,
+                        applicationNameRes = R.string.app_name
+                    )
+                }
+            )
+            repeat(3) { ExtraLargeVerticalSpacer() }
         }
     }
 }

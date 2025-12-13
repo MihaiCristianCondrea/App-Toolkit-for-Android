@@ -60,7 +60,7 @@ fun AppsListRoute(
     val onFavoriteToggle: (String) -> Unit = remember(viewModel) { { pkg -> viewModel.toggleFavorite(pkg) } }
     val onRetry: () -> Unit = remember(viewModel) { { viewModel.onEvent(HomeEvent.FetchApps) } }
     val dispatchers: DispatcherProvider = koinInject()
-    val openApp: (AppInfo) -> Unit = buildOnAppClick(dispatchers, context)
+    val openApp: (AppInfo) -> Unit = buildOnAppClick(dispatchers)
     val appInfoHelper = remember(dispatchers) { AppInfoHelper(dispatchers) }
     val onOpenInPlayStore: (AppInfo) -> Unit = remember(context) {
         { appInfo ->
@@ -69,7 +69,7 @@ fun AppsListRoute(
             }
         }
     }
-    val onShareClick: (AppInfo) -> Unit = buildOnShareClick(context)
+    val onShareClick: (AppInfo) -> Unit = buildOnShareClick()
     var selectedApp: AppInfo? by remember { mutableStateOf(null) }
     var isSelectedAppInstalled: Boolean? by remember { mutableStateOf(null) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)

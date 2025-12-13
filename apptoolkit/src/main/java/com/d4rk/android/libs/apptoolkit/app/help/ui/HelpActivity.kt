@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.HelpScreenConfig
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppTheme
 import org.koin.android.ext.android.inject
@@ -19,7 +18,7 @@ class HelpActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                HelpScreen(activity = this@HelpActivity , config = config, scope = lifecycleScope, viewModel = viewModel)
+                HelpScreen(config = config, viewModel = viewModel)
             }
         }
     }

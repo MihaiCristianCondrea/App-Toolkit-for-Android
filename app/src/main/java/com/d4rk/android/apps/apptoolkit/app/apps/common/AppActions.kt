@@ -1,33 +1,38 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.common
 
-import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.platform.LocalContext
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.AppInfoHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
 @Composable
 fun buildOnAppClick(
-    dispatchers: DispatcherProvider,
-    context: Context
-): (AppInfo) -> Unit { // FIXME: Parameter 'dispatchers' has runtime-determined stability && Parameter 'context' has runtime-determined stability
-    val appInfoHelper = remember { AppInfoHelper(dispatchers) }
+    dispatchers: DispatcherProvider = koinInject(),
+): (AppInfo) -> Unit {
+    val context = LocalContext.current
+    val currentContext by rememberUpdatedState(newValue = context)
+    val appInfoHelper = remember(dispatchers) { AppInfoHelper(dispatchers) }
     val coroutineScope = rememberCoroutineScope()
-    return remember(context, coroutineScope) {
+    return remember(appInfoHelper, coroutineScope) {
         { appInfo ->
             coroutineScope.launch {
+                val ctx = currentContext
                 if (appInfo.packageName.isNotEmpty()) {
-                    if (appInfoHelper.isAppInstalled(context, appInfo.packageName)) {
-                        if (!appInfoHelper.openApp(context, appInfo.packageName)) {
-                            IntentsHelper.openPlayStoreForApp(context, appInfo.packageName)
+                    if (appInfoHelper.isAppInstalled(ctx, appInfo.packageName)) {
+                        if (!appInfoHelper.openApp(ctx, appInfo.packageName)) {
+                            IntentsHelper.openPlayStoreForApp(ctx, appInfo.packageName)
                         }
                     } else {
-                        IntentsHelper.openPlayStoreForApp(context, appInfo.packageName)
+                        IntentsHelper.openPlayStoreForApp(ctx, appInfo.packageName)
                     }
                 }
             }
@@ -36,14 +41,16 @@ fun buildOnAppClick(
 }
 
 @Composable
-fun buildOnShareClick(context: Context): (AppInfo) -> Unit =
-    // FIXME: Parameter 'context' has runtime-determined stability
-    remember(context) {
+fun buildOnShareClick(): (AppInfo) -> Unit {
+    val context = LocalContext.current
+    val currentContext by rememberUpdatedState(newValue = context)
+    return remember(currentContext) {
         { appInfo ->
             IntentsHelper.shareApp(
-                context = context,
+                context = currentContext,
                 shareMessageFormat = R.string.summary_share_message,
                 packageName = appInfo.packageName
             )
         }
     }
+}
