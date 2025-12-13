@@ -3,6 +3,7 @@ package com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers
 import android.content.Context
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.offset
@@ -21,55 +22,55 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d4rk.android.libs.apptoolkit.core.domain.model.animations.button.ButtonState
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import kotlinx.coroutines.delay
 import kotlin.math.min
 
+
 /**
- * A modifier that adds a bounce effect to a composable when it's clicked.
+ * Applies a bouncy click effect to a composable.
  *
- * This modifier uses a scale animation to simulate a "bounce" effect when the composable
- * is pressed. The animation is only applied if bouncy buttons are enabled in the [CommonDataStore] and
- * animationEnabled is true.
+ * This modifier scales the composable down to 96% of its size when pressed and
+ * animates it back to its original size upon release. The animation can be
+ * globally disabled via a `CommonDataStore` setting (`bouncyButtonsEnabled`) or
+ * on a per-composable basis using the [animationEnabled] parameter.
  *
- * @param animationEnabled Whether the animation is enabled. Default is true.
- * @return A [Modifier] that applies the bounce effect on click.
+ * @param animationEnabled A boolean flag to enable or disable the bounce effect
+ * for this specific composable. Defaults to `true`.
+ * @return A [Modifier] that applies the bounce click animation.
  */
 @Composable
 fun Modifier.bounceClick(
-    animationEnabled : Boolean = true ,
-) : Modifier = composed {
-    var buttonState : ButtonState by remember { mutableStateOf(value = ButtonState.Idle) }
+    animationEnabled: Boolean = true,
+): Modifier = composed {
     val context: Context = LocalContext.current
-    val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
-    val bouncyButtonsEnabled : Boolean by dataStore.bouncyButtons.collectAsStateWithLifecycle(initialValue = true)
-    val scale : Float by animateFloatAsState(
-        if (buttonState == ButtonState.Pressed && animationEnabled && bouncyButtonsEnabled) 0.96f else 1f , label = "Button Press Scale Animation"
+    val dataStore: CommonDataStore = remember(context) { CommonDataStore.getInstance(context) }
+
+    val bouncyButtonsEnabled: Boolean by dataStore.bouncyButtons
+        .collectAsStateWithLifecycle(initialValue = true)
+
+    if (!animationEnabled || !bouncyButtonsEnabled) return@composed this
+
+    val pressed = remember { mutableStateOf(false) }
+
+    val scale: Float by animateFloatAsState(
+        targetValue = if (pressed.value) 0.96f else 1f,
+        label = "Button Press Scale Animation"
     )
 
-    if (bouncyButtonsEnabled) {
-        return@composed this
-            .graphicsLayer {
-                scaleX = scale
-                scaleY = scale
+    this
+        .graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+        }
+        .pointerInput(Unit) {
+            awaitEachGesture {
+                awaitFirstDown(requireUnconsumed = false)
+                pressed.value = true
+                waitForUpOrCancellation()
+                pressed.value = false
             }
-            .pointerInput(key1 = buttonState) {
-                awaitPointerEventScope {
-                    buttonState =
-                        if (buttonState == ButtonState.Pressed) { // FIXME: Assigned value is never read
-                            waitForUpOrCancellation()
-                            ButtonState.Idle
-                        } else {
-                            awaitFirstDown(requireUnconsumed = false)
-                            ButtonState.Pressed
-                        }
-                }
-            }
-    }
-    else {
-        return@composed this
-    }
+        }
 }
 
 /**
@@ -90,31 +91,31 @@ fun Modifier.bounceClick(
  * animation starts. Defaults to 64.
  */
 fun Modifier.animateVisibility(
-    index : Int = 0 ,
-    invisibleOffsetY : Int = 50 ,
-    animationDuration : Int = 300 ,
-    staggerDelay : Int = 64 ,
-    maxStaggeredItems : Int = 20 ,
+    index: Int = 0,
+    invisibleOffsetY: Int = 50,
+    animationDuration: Int = 300,
+    staggerDelay: Int = 64,
+    maxStaggeredItems: Int = 20,
 ) = composed {
     var visible by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         if (!visible) {
-            val delayMillis : Int = min(index , maxStaggeredItems) * staggerDelay
+            val delayMillis: Int = min(index, maxStaggeredItems) * staggerDelay
             delay(timeMillis = delayMillis.toLong())
             visible = true
         }
     }
 
-    val alpha : State<Float> = animateFloatAsState(
-        targetValue = if (visible) 1f else 0f ,
-        animationSpec = tween(durationMillis = animationDuration) ,
+    val alpha: State<Float> = animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = tween(durationMillis = animationDuration),
         label = "Alpha"
     )
 
-    val offsetState : State<Float> = animateFloatAsState(
-        targetValue = if (visible) 0f else invisibleOffsetY.toFloat() ,
-        animationSpec = tween(durationMillis = animationDuration) ,
+    val offsetState: State<Float> = animateFloatAsState(
+        targetValue = if (visible) 0f else invisibleOffsetY.toFloat(),
+        animationSpec = tween(durationMillis = animationDuration),
         label = "OffsetY"
     )
 

@@ -37,18 +37,21 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.onCompletion
 
 @Composable
-fun SelectLanguageAlertDialog(onDismiss : () -> Unit , onLanguageSelected : (String) -> Unit) {
+fun SelectLanguageAlertDialog(onDismiss: () -> Unit, onLanguageSelected: (String) -> Unit) {
     val context: Context = LocalContext.current
     val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
     val selectedLanguage = remember { mutableStateOf(value = "") }
-    val languageEntries : List<String> = stringArrayResource(id = R.array.preference_language_entries).toList()
-    val languageValues : List<String> = stringArrayResource(id = R.array.preference_language_values).toList()
+    val languageEntries: List<String> =
+        stringArrayResource(id = R.array.preference_language_entries).toList()
+    val languageValues: List<String> =
+        stringArrayResource(id = R.array.preference_language_values).toList()
 
-    val currentLanguage by dataStore.getLanguage().collectWithLifecycleOnCompletion(initialValue = "") { cause : Throwable? ->
-        if (cause != null && cause !is CancellationException) {
-            selectedLanguage.value = ""
+    val currentLanguage by dataStore.getLanguage()
+        .collectWithLifecycleOnCompletion(initialValue = "") { cause: Throwable? ->
+            if (cause != null && cause !is CancellationException) {
+                selectedLanguage.value = ""
+            }
         }
-    }
 
     LaunchedEffect(currentLanguage) {
         selectedLanguage.value = currentLanguage
@@ -60,35 +63,43 @@ fun SelectLanguageAlertDialog(onDismiss : () -> Unit , onLanguageSelected : (Str
         snapshotFlow { selectedLanguage.value }
             .distinctUntilChanged()
             .drop(count = 1)
-            .onCompletion { cause : Throwable? ->
+            .onCompletion { cause: Throwable? ->
                 if (cause != null && cause !is CancellationException) {
                     selectedLanguage.value = latestLanguage
                 }
             }
-            .collectLatest { language : String ->
+            .collectLatest { language: String ->
                 if (language.isNotBlank()) {
                     dataStore.saveLanguage(language = language)
                 }
             }
     }
 
-    BasicAlertDialog(onDismiss = onDismiss , onConfirm = {
-        onLanguageSelected(selectedLanguage.value)
-        onDismiss()
-    } , onCancel = {
-        onDismiss()
-    } , icon = Icons.Outlined.Language , title = stringResource(id = R.string.select_language_title) , content = {
-        SelectLanguageAlertDialogContent(
-            selectedLanguage = selectedLanguage , languageEntries = languageEntries , languageValues = languageValues
-        )
-    })
+    BasicAlertDialog(
+        onDismiss = onDismiss,
+        onConfirm = {
+            onLanguageSelected(selectedLanguage.value)
+            onDismiss()
+        },
+        onCancel = {
+            onDismiss()
+        },
+        icon = Icons.Outlined.Language,
+        title = stringResource(id = R.string.select_language_title),
+        content = {
+            SelectLanguageAlertDialogContent(
+                selectedLanguage = selectedLanguage,
+                languageEntries = languageEntries,
+                languageValues = languageValues
+            )
+        })
 }
 
 @Composable
 fun SelectLanguageAlertDialogContent(
     selectedLanguage: MutableState<String>,
-    languageEntries: List<String>,
-    languageValues: List<String>
+    languageEntries: List<String>, // FIXME: Parameter 'languageEntries' has runtime-determined stability
+    languageValues: List<String> // FIXME: Parameter 'languageValues' has runtime-determined stability
 ) { // FIXME: Parameter 'languageEntries' has runtime-determined stability && Parameter 'languageValues' has runtime-determined stability
 
     Column {
@@ -99,8 +110,12 @@ fun SelectLanguageAlertDialogContent(
                 .weight(weight = 1f)
         ) {
             LazyColumn {
-                items(count = languageEntries.size) { index : Int ->
-                    Row(Modifier.fillMaxWidth() , verticalAlignment = Alignment.CenterVertically , horizontalArrangement = Arrangement.Start) {
+                items(count = languageEntries.size) { index: Int ->
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
                         RadioButtonPreferenceItem(
                             text = languageEntries[index],
                             isChecked = selectedLanguage.value == languageValues[index],
