@@ -1,7 +1,9 @@
 package com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 
+@Immutable
 data class SettingsPreference(
     val key: String? = null,
     val icon: ImageVector? = null,

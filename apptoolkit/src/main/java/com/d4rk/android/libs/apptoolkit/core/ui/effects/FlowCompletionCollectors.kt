@@ -17,18 +17,19 @@ import kotlinx.coroutines.flow.onCompletion
 @Composable
 internal fun <T> Flow<T>.collectWithLifecycleOnCompletion(
     initialValue: T, // FIXME: Parameter 'initialValue' has runtime-determined stability
-    onCompletion : (Throwable?) -> Unit = {}
+    onCompletion: (Throwable?) -> Unit = {},
 ) : State<T> {
     val lifecycleOwner = LocalLifecycleOwner.current
+    val latestInitialValue by rememberUpdatedState(newValue = initialValue)
     val completionHandler by rememberUpdatedState(newValue = onCompletion)
     val state = remember { mutableStateOf(initialValue) }
 
-    LaunchedEffect(this , lifecycleOwner , initialValue) {
+    LaunchedEffect(this, lifecycleOwner) {
         this@collectWithLifecycleOnCompletion
             .flowWithLifecycle(lifecycleOwner.lifecycle , Lifecycle.State.STARTED)
             .onCompletion { cause : Throwable? ->
                 if (cause != null && cause !is CancellationException) {
-                    state.value = initialValue
+                    state.value = latestInitialValue
                 }
                 completionHandler(cause)
             }
@@ -39,4 +40,3 @@ internal fun <T> Flow<T>.collectWithLifecycleOnCompletion(
 
     return state
 }
-

@@ -1,5 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.core.domain.model.navigation
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
@@ -10,6 +11,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * @property route The unique identifier used for handling navigation actions.
  * @property badgeText An optional string to display as a badge on the item, defaults to an empty string.
  */
+@Immutable
 data class NavigationDrawerItem(
     val title: Int,
     val selectedIcon: ImageVector,

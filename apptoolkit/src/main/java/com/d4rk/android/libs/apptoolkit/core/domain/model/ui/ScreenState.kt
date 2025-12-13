@@ -1,5 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.core.domain.model.ui
 
+import androidx.compose.runtime.Immutable
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.RootError
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiState
@@ -22,8 +23,12 @@ import kotlinx.coroutines.flow.update
  * @property snackbar A single [UiSnackbar] to be shown immediately. This is nullable; a non-null value triggers the display. Defaults to null.
  * @property data The actual data of type [T] to be displayed on the screen. This is nullable and will typically be populated on a successful data fetch. Defaults to null.
  */
+@Immutable
 data class UiStateScreen<T>(
-    val screenState : ScreenState = ScreenState.IsLoading() , var errors : List<UiSnackbar> = emptyList() , val snackbar : UiSnackbar? = null , val data : T? = null
+    val screenState: ScreenState = ScreenState.IsLoading(),
+    val errors: List<UiSnackbar> = emptyList(),
+    val snackbar: UiSnackbar? = null,
+    val data: T? = null
 
 ) : UiState
 
@@ -40,8 +45,9 @@ data class UiStateScreen<T>(
  * @property timeStamp A timestamp indicating when the snackbar was created. Can be used
  *                     to prevent showing the same message multiple times in quick succession.
  */
+@Immutable
 data class UiSnackbar(
-    var type : String = ScreenMessageType.NONE ,
+    val type: String = ScreenMessageType.NONE,
     val message : UiTextHelper = UiTextHelper.DynamicString(content = "") ,
     val isError : Boolean = true ,
     val timeStamp : Long = 0 ,

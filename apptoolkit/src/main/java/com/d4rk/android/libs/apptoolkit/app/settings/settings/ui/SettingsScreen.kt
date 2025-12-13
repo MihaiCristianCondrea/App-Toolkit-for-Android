@@ -103,7 +103,7 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreenContent(
     paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig, // FIXME: Parameter 'settingsConfig' has runtime-determined stability
+    settingsConfig: SettingsConfig,
     contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
 ) {
     val windowWidthSizeClass: WindowWidthSizeClass = rememberWindowWidthSizeClass()

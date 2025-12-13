@@ -45,7 +45,7 @@ import com.google.android.gms.ads.AdView
 fun AdBanner(
     modifier: Modifier = Modifier,
     adsConfig: AdsConfig
-) { // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
+) {
     if (LocalInspectionMode.current) return
 
     val context: Context = LocalContext.current
