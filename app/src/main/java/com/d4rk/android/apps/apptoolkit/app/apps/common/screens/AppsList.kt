@@ -26,13 +26,32 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.AppsListNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
+/**
+ * A composable that displays a grid of applications.
+ * This function is responsible for determining the grid layout based on the window size,
+ * injecting ads into the list at a specified frequency, and passing the data to the
+ * underlying `AppsGrid` composable for rendering.
+ *
+ * @param uiHomeScreen The state object containing the list of apps to display.
+ * @param favorites A set of package names for the apps marked as favorite.
+ * @param paddingValues Padding to be applied from the outside, typically from a Scaffold.
+ * @param adsEnabled A boolean flag to determine if ads should be displayed in the list.
+ * @param onFavoriteToggle A lambda function to be invoked when the favorite icon on an app card is toggled. It receives the package name.
+ * @param onAppClick A lambda function to be invoked when an app card is clicked. It receives the [AppInfo] of the clicked app.
+ * @param onShareClick A lambda function to be invoked when the share icon on an app card is clicked. It receives the [AppInfo] of the app to be shared.
+ * @param adFrequency The frequency at which ads are inserted into the list (e.g., an ad every `adFrequency` items).
+ * @param windowWidthSizeClass The current window width size class, used to determine the number of columns in the grid.
+ */
 @Composable
 fun AppsList(
-    uiHomeScreen: UiHomeScreen, // FIXME: Parameter 'uiHomeScreen' has runtime-determined stability
-    favorites: Set<String>, // FIXME: Parameter 'favorites' has runtime-determined stability
+    uiHomeScreen: UiHomeScreen,
+    favorites: ImmutableSet<String>,
     paddingValues: PaddingValues,
     adsEnabled: Boolean,
     onFavoriteToggle: (String) -> Unit,
@@ -41,7 +60,8 @@ fun AppsList(
     adFrequency: Int = BuildConfig.APPS_LIST_AD_FREQUENCY,
     windowWidthSizeClass: WindowWidthSizeClass,
 ) {
-    val apps: List<AppInfo> = uiHomeScreen.apps
+    val apps: ImmutableList<AppInfo> = uiHomeScreen.apps
+
     val columnCount by remember(windowWidthSizeClass) {
         derivedStateOf {
             when (windowWidthSizeClass) {
@@ -51,10 +71,13 @@ fun AppsList(
             }
         }
     }
+
     val listState = rememberLazyGridState()
-    val items by remember(apps, adsEnabled, adFrequency) {
+
+    val items: ImmutableList<AppListItem> by remember(apps, adsEnabled, adFrequency) {
         derivedStateOf { buildAppListItems(apps, adsEnabled, adFrequency) }
     }
+
     val adsConfig: AdsConfig = koinInject(qualifier = named("apps_list_native_ad"))
 
     AppsGrid(
@@ -70,11 +93,27 @@ fun AppsList(
     )
 }
 
-@Composable
+/**
+ * A composable that displays a grid of applications and ads.
+ * It uses a [LazyVerticalGrid] to efficiently display a potentially large list of items.
+ *
+ * This function is responsible for the layout and rendering of individual app cards and ad cards within the grid.
+ *
+ * @param items The list of [AppListItem]s to display, which can be either an app or an ad.
+ * @param favorites A set of package names for the apps that are marked as favorites.
+ * @param paddingValues Padding to be applied from the parent composable, typically from a Scaffold.
+ * @param columnCount The number of columns in the grid.
+ * @param listState The state object to be used for the [LazyVerticalGrid], allowing for observation and control of the scroll position.
+ * @param onFavoriteToggle A callback lambda that is invoked when the favorite icon on an app card is toggled. It receives the package name of the app.
+ * @param onAppClick A callback lambda that is invoked when an app card is clicked. It receives the [AppInfo] of the clicked app.
+ * @param onShareClick A callback lambda that is invoked when the share icon on an app card is clicked. It receives the [AppInfo] of the app to be shared.
+ * @param adUnitId The ad unit ID for the native ads to be displayed in the grid.
+ */
 @OptIn(ExperimentalFoundationApi::class)
+@Composable
 private fun AppsGrid(
-    items: List<AppListItem>, // FIXME: Parameter 'items' has runtime-determined stability
-    favorites: Set<String>, // FIXME: Parameter 'favorites' has runtime-determined stability
+    items: ImmutableList<AppListItem>,
+    favorites: ImmutableSet<String>,
     paddingValues: PaddingValues,
     columnCount: Int,
     listState: LazyGridState,
@@ -90,8 +129,8 @@ private fun AppsGrid(
             .fillMaxSize()
             .padding(paddingValues),
         contentPadding = PaddingValues(SizeConstants.LargeSize),
-        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.LargeSize),
-        horizontalArrangement = Arrangement.spacedBy(space = SizeConstants.LargeSize)
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
+        horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize)
     ) {
         itemsIndexed(
             items = items,
@@ -101,8 +140,11 @@ private fun AppsGrid(
                     AppListItem.Ad -> "ad_$index"
                 }
             },
-            span = { _, item -> // FIXME: Parameter "item" is never used
-                GridItemSpan(1)
+            span = { _, item ->
+                when (item) {
+                    AppListItem.Ad -> GridItemSpan(columnCount)
+                    is AppListItem.App -> GridItemSpan(1)
+                }
             },
             contentType = { _, item ->
                 when (item) {
@@ -110,7 +152,7 @@ private fun AppsGrid(
                     AppListItem.Ad -> "ad"
                 }
             }
-        ) { index, item: AppListItem ->
+        ) { index, item ->
             when (item) {
                 is AppListItem.App -> {
                     val packageName = item.appInfo.packageName
@@ -129,17 +171,31 @@ private fun AppsGrid(
                     )
                 }
 
-                AppListItem.Ad -> AdListItem(
-                    modifier = Modifier
-                        .animateItem()
-                        .animateVisibility(index = index),
-                    adUnitId = adUnitId
-                )
+                AppListItem.Ad -> {
+                    AdListItem(
+                        modifier = Modifier
+                            .animateItem()
+                            .animateVisibility(index = index),
+                        adUnitId = adUnitId
+                    )
+                }
             }
         }
     }
 }
 
+/**
+ * A composable that wraps the [AppCard] and provides it with the necessary data and callbacks.
+ * This function acts as a bridge, extracting the [AppInfo] from the [AppListItem.App]
+ * and passing it along with other parameters to the [AppCard].
+ *
+ * @param item The app item data, containing the [AppInfo].
+ * @param isFavorite A boolean indicating whether the app is marked as a favorite.
+ * @param modifier A [Modifier] for this composable.
+ * @param onFavoriteToggle A lambda function to be invoked when the favorite icon is toggled. It receives the package name.
+ * @param onAppClick A lambda function to be invoked when the app card is clicked. It receives the [AppInfo] of the clicked app.
+ * @param onShareClick A lambda function to be invoked when the share icon is clicked. It receives the [AppInfo] of the app to be shared.
+ */
 @Composable
 private fun AppCardItem(
     item: AppListItem.App,
@@ -160,6 +216,13 @@ private fun AppCardItem(
     )
 }
 
+/**
+ * A composable that displays a native ad card within the app list.
+ * It wraps the [AppsListNativeAdCard] and passes the necessary ad unit ID and modifier.
+ *
+ * @param modifier A [Modifier] for this composable, often used for animations.
+ * @param adUnitId The ad unit ID for the native ad to be displayed.
+ */
 @Composable
 private fun AdListItem(
     modifier: Modifier = Modifier,
@@ -171,21 +234,21 @@ private fun AdListItem(
     )
 }
 
-internal fun buildAppListItems(
-    apps: List<AppInfo>,
+// TODO: Move to helper
+fun buildAppListItems(
+    apps: ImmutableList<AppInfo>,
     adsEnabled: Boolean,
     adFrequency: Int
-): List<AppListItem> {
-    return buildList {
-        apps.forEachIndexed { index, appInfo ->
-            add(AppListItem.App(appInfo))
-            if (adsEnabled && (index + 1) % adFrequency == 0) {
-                add(AppListItem.Ad)
-            }
-        }
-        if (adsEnabled && apps.isNotEmpty() && apps.size % adFrequency != 0) {
-            add(AppListItem.Ad)
-        }
+): ImmutableList<AppListItem> {
+    if (!adsEnabled || adFrequency <= 0) {
+        return apps.map { AppListItem.App(it) }.toImmutableList()
     }
-}
 
+    val listItems = ArrayList<AppListItem>(apps.size + (apps.size / adFrequency))
+    apps.forEachIndexed { index, app ->
+        listItems += AppListItem.App(app)
+        val isTimeForAd = (index + 1) % adFrequency == 0
+        if (isTimeForAd) listItems += AppListItem.Ad
+    }
+    return listItems.toImmutableList()
+}

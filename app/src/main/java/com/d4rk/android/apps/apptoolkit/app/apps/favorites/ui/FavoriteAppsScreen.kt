@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,12 +41,26 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.AppInfoHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
 
+/**
+ * A composable that represents the "Favorite Apps" screen.
+ * It displays a list of apps that the user has marked as favorites.
+ * This route also manages the state for showing app details in a bottom sheet
+ * and handles the logic for opening a random favorite app.
+ *
+ * @param paddingValues The padding values to be applied to the content, typically from a [Scaffold].
+ * @param windowWidthSizeClass The width size class of the window to adapt the layout.
+ * @param onRegisterRandomAppHandler A callback to register or unregister the "open random app" action.
+ * This is used to enable or disable the random app feature in the main UI based on whether there
+ * are any favorite apps available.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteAppsRoute(
@@ -54,16 +69,28 @@ fun FavoriteAppsRoute(
     onRegisterRandomAppHandler: (RandomAppHandler?) -> Unit,
 ) {
     val viewModel: FavoriteAppsViewModel = koinViewModel()
+
     val screenState: UiStateScreen<UiHomeScreen> by viewModel.uiState.collectAsStateWithLifecycle()
-    val favorites by viewModel.favorites.collectAsStateWithLifecycle()
-    val canOpenRandomApp by viewModel.canOpenRandomApp.collectAsStateWithLifecycle()
+    val favoritesRaw: Set<String> by viewModel.favorites.collectAsStateWithLifecycle()
+    val favorites: ImmutableSet<String> =
+        remember(favoritesRaw) { favoritesRaw.toImmutableSet() } // stable :contentReference[oaicite:3]{index=3}
+    val canOpenRandomApp: Boolean by viewModel.canOpenRandomApp.collectAsStateWithLifecycle()
+
     val context = LocalContext.current
     val adsEnabled = rememberAdsEnabled()
+
     val appDetailsAdsConfig: AdsConfig = koinInject(qualifier = named("app_details_native_ad"))
+    val dispatchers: DispatcherProvider = koinInject()
+
     val onFavoriteToggle: (String) -> Unit = remember(viewModel) { { pkg -> viewModel.toggleFavorite(pkg) } }
     val onRetry: () -> Unit = remember(viewModel) { { viewModel.onEvent(FavoriteAppsEvent.LoadFavorites) } }
-    val dispatchers: DispatcherProvider = koinInject()
-    val openApp: (AppInfo) -> Unit = buildOnAppClick(dispatchers)
+
+    val buildAppClick = buildOnAppClick(dispatchers)
+    val buildShareClick = buildOnShareClick()
+
+    val openApp: (AppInfo) -> Unit = remember(dispatchers) { buildAppClick }
+    val onShareClick: (AppInfo) -> Unit = remember { buildShareClick }
+
     val appInfoHelper = remember(dispatchers) { AppInfoHelper(dispatchers) }
     val onOpenInPlayStore: (AppInfo) -> Unit = remember(context) {
         { appInfo ->
@@ -72,20 +99,19 @@ fun FavoriteAppsRoute(
             }
         }
     }
-    val onShareClick: (AppInfo) -> Unit = buildOnShareClick()
+
     var selectedApp: AppInfo? by remember { mutableStateOf(null) }
     var isSelectedAppInstalled: Boolean? by remember { mutableStateOf(null) }
+
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(selectedApp?.packageName, context) {
-        isSelectedAppInstalled = null
+    LaunchedEffect(selectedApp?.packageName) {
         isSelectedAppInstalled = selectedApp?.let { app ->
-            if (app.packageName.isNotEmpty()) {
-                appInfoHelper.isAppInstalled(context, app.packageName)
-            } else {
-                false
-            }
+            if (app.packageName.isNotEmpty()) appInfoHelper.isAppInstalled(
+                context,
+                app.packageName
+            ) else false
         }
     }
 
@@ -117,21 +143,19 @@ fun FavoriteAppsRoute(
                         onOpenInPlayStore(app)
                     }
                 },
-                onFavoriteClick = {
-                    coroutineScope.launch {
-                        onFavoriteToggle(app.packageName)
-                    }
-                },
+                onFavoriteClick = { onFavoriteToggle(app.packageName) },
                 adsConfig = appDetailsAdsConfig
             )
         }
     }
 
-    val randomAppHandler = remember(viewModel) {
+    val randomAppHandler: RandomAppHandler = remember(viewModel) {
         { viewModel.onEvent(FavoriteAppsEvent.OpenRandomApp) }
     }
 
-    LaunchedEffect(canOpenRandomApp, randomAppHandler) {
+    val registerHandler by rememberUpdatedState(onRegisterRandomAppHandler)
+
+    LaunchedEffect(canOpenRandomApp) {
         val handler = if (canOpenRandomApp) randomAppHandler else null
         Log.d(
             FAVORITES_LOG_TAG,
@@ -141,16 +165,14 @@ fun FavoriteAppsRoute(
             FAVORITES_LOG_TAG,
             "Requesting handler update route=${NavigationRoutes.ROUTE_FAVORITE_APPS}"
         )
-        onRegisterRandomAppHandler(handler)
+        registerHandler(handler)
     }
 
     LaunchedEffect(viewModel) {
         viewModel.actionEvent.collectLatest { action ->
             when (action) {
                 is FavoriteAppsAction.OpenRandomApp -> {
-                    if (sheetState.isVisible) {
-                        sheetState.hide()
-                    }
+                    if (sheetState.isVisible) sheetState.hide()
                     selectedApp = null
                     isSelectedAppInstalled = null
                     openApp(action.app)
@@ -159,31 +181,6 @@ fun FavoriteAppsRoute(
         }
     }
 
-    FavoriteAppsScreen(
-        screenState = screenState,
-        favorites = favorites,
-        paddingValues = paddingValues,
-        adsEnabled = adsEnabled,
-        onFavoriteToggle = onFavoriteToggle,
-        onAppClick = { app -> selectedApp = app },
-        onShareClick = onShareClick,
-        onRetry = onRetry,
-        windowWidthSizeClass = windowWidthSizeClass,
-    )
-}
-
-@Composable
-fun FavoriteAppsScreen(
-    screenState: UiStateScreen<UiHomeScreen>, // FIXME: Unstable parameter 'screenState' prevents composable from being skippable
-    favorites: Set<String>, // FIXME: Parameter 'favorites' has runtime-determined stability
-    paddingValues: PaddingValues,
-    adsEnabled: Boolean,
-    onFavoriteToggle: (String) -> Unit,
-    onAppClick: (AppInfo) -> Unit,
-    onShareClick: (AppInfo) -> Unit,
-    onRetry: () -> Unit,
-    windowWidthSizeClass: WindowWidthSizeClass,
-) {
     ScreenStateHandler(
         screenState = screenState,
         onLoading = {
@@ -199,6 +196,14 @@ fun FavoriteAppsScreen(
                 paddingValues = paddingValues
             )
         },
+        onError = {
+            NoDataScreen(
+                showRetry = true,
+                onRetry = onRetry,
+                isError = true,
+                paddingValues = paddingValues
+            )
+        },
         onSuccess = { uiHomeScreen ->
             AppsList(
                 uiHomeScreen = uiHomeScreen,
@@ -206,17 +211,9 @@ fun FavoriteAppsScreen(
                 paddingValues = paddingValues,
                 adsEnabled = adsEnabled,
                 onFavoriteToggle = onFavoriteToggle,
-                onAppClick = onAppClick,
+                onAppClick = { app -> selectedApp = app },
                 onShareClick = onShareClick,
                 windowWidthSizeClass = windowWidthSizeClass,
-            )
-        },
-        onError = {
-            NoDataScreen(
-                showRetry = true,
-                onRetry = onRetry,
-                isError = true,
-                paddingValues = paddingValues
             )
         }
     )

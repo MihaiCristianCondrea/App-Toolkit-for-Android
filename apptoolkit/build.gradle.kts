@@ -83,6 +83,7 @@ dependencies {
 
     // Kotlin Coroutines & Serialization
     api(dependencyNotation = libs.bundles.kotlinx)
+    api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0")
 
     // Networking (Ktor)
     api(dependencyNotation = platform(libs.ktor.bom))

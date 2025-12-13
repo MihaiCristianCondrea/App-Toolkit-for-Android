@@ -1,6 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.ads.ui
 
-import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,9 +10,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
@@ -29,23 +31,28 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.SwitchCar
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ConsentFormHelper
-import com.google.android.ump.ConsentInformation
 import com.google.android.ump.UserMessagingPlatform
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 /** Compose screen displaying ad preferences. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdsSettingsScreen(
-    activity: Activity,
-    viewModel: AdsSettingsViewModel
-) { // FIXME: Unstable parameter 'activity' prevents composable from being skippable && Parameter 'viewModel' has runtime-determined stability
+fun AdsSettingsScreen() {
+    val viewModel: AdsSettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<UiAdsSettingsScreen> by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val activity = LocalActivity.current
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
+    val consentInfo = remember(context) {
+        UserMessagingPlatform.getConsentInformation(context)
+    }
 
     LargeTopAppBarWithScaffold(
         title = stringResource(id = R.string.ads),
-        onBackClicked = { activity.finish() }
+        onBackClicked = remember(activity) { { activity?.finish() } }
     ) { paddingValues: PaddingValues ->
         ScreenStateHandler(
             screenState = screenState,
@@ -61,7 +68,7 @@ fun AdsSettingsScreen(
                     item {
                         SwitchCardItem(
                             title = stringResource(id = R.string.display_ads),
-                            switchState = rememberUpdatedState(newValue = data.adsEnabled)
+                            switchState = rememberUpdatedState(data.adsEnabled)
                         ) { isChecked: Boolean ->
                             viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(isChecked))
                         }
@@ -74,9 +81,13 @@ fun AdsSettingsScreen(
                                 enabled = data.adsEnabled,
                                 summary = stringResource(id = R.string.summary_ads_personalized_ads),
                                 onClick = {
-                                    coroutineScope.launch {
-                                        val consentInfo: ConsentInformation = UserMessagingPlatform.getConsentInformation(activity)
-                                        ConsentFormHelper.showConsentForm(activity = activity , consentInfo = consentInfo)
+                                    activity?.let {
+                                        coroutineScope.launch {
+                                            ConsentFormHelper.showConsentForm(
+                                                activity = activity,
+                                                consentInfo = consentInfo
+                                            )
+                                        }
                                     }
                                 }
                             )
