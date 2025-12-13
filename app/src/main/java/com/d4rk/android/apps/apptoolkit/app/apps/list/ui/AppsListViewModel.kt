@@ -6,6 +6,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.Obser
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ToggleFavoriteUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.actions.HomeAction
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.actions.HomeEvent
+import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScreen
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.usecases.FetchDeveloperAppsUseCase
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
@@ -19,6 +20,8 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.updateState
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -52,7 +55,7 @@ class AppsListViewModel(
     )
 
     val canOpenRandomApp = screenState
-        .map { state -> state.data?.apps.orEmpty().isNotEmpty() }
+        .map { state -> state.data?.apps?.isNotEmpty() == true }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -75,12 +78,13 @@ class AppsListViewModel(
                 .collect { result ->
                     when (result) {
                         is DataState.Success -> {
-                            val apps = result.data
+                            val apps = result.data.toImmutableList()
+
                             if (apps.isEmpty()) {
                                 screenState.update { current ->
                                     current.copy(
                                         screenState = ScreenState.NoData(),
-                                        data = UiHomeScreen(apps = emptyList())
+                                        data = UiHomeScreen(apps = persistentListOf<AppInfo>())
                                     )
                                 }
                             } else {
@@ -104,7 +108,7 @@ class AppsListViewModel(
         when (event) {
             HomeEvent.FetchApps -> fetchAppsTrigger.tryEmit(Unit)
             HomeEvent.OpenRandomApp -> {
-                val randomApp = screenData?.apps.orEmpty().randomOrNull() ?: return
+                val randomApp = screenData?.apps?.randomOrNull() ?: return
                 sendAction(HomeAction.OpenRandomApp(randomApp))
             }
         }

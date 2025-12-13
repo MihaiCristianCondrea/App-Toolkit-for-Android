@@ -7,6 +7,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.actions.Favori
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ObserveFavoriteAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ToggleFavoriteUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScreen
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
@@ -22,6 +23,8 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.updateState
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
@@ -53,13 +56,12 @@ class FavoriteAppsViewModel(
         )
 
     val canOpenRandomApp = screenState
-        .map { state -> state.data?.apps.orEmpty().isNotEmpty() }
+        .map { state -> state.data?.apps?.isNotEmpty() == true }
         .stateIn(
             scope = viewModelScope,
             started = WhileSubscribed(5_000),
             initialValue = false
         )
-
 
     init {
         viewModelScope.launch {
@@ -71,7 +73,8 @@ class FavoriteAppsViewModel(
                                 screenState.update { current ->
                                     current.copy(
                                         screenState = NoData(),
-                                        data = current.data ?: UiHomeScreen(apps = emptyList())
+                                        data = current.data
+                                            ?: UiHomeScreen(apps = persistentListOf<AppInfo>())
                                     )
                                 }
                             }
@@ -80,12 +83,13 @@ class FavoriteAppsViewModel(
                 .collect { result ->
                     when (result) {
                         is DataState.Success -> {
-                            val apps = result.data
+                            val apps = result.data.toImmutableList()
+
                             if (apps.isEmpty()) {
                                 screenState.update { current ->
                                     current.copy(
                                         screenState = NoData(),
-                                        data = UiHomeScreen(apps = emptyList())
+                                        data = UiHomeScreen(apps = persistentListOf<AppInfo>())
                                     )
                                 }
                             } else {
@@ -113,6 +117,7 @@ class FavoriteAppsViewModel(
                     }
                 }
         }
+
         loadFavoritesTrigger.tryEmit(Unit)
     }
 
@@ -120,7 +125,7 @@ class FavoriteAppsViewModel(
         when (event) {
             FavoriteAppsEvent.LoadFavorites -> loadFavoritesTrigger.tryEmit(Unit)
             FavoriteAppsEvent.OpenRandomApp -> {
-                val randomApp = screenData?.apps.orEmpty().randomOrNull() ?: return
+                val randomApp = screenData?.apps?.randomOrNull() ?: return
                 sendAction(FavoriteAppsAction.OpenRandomApp(randomApp))
             }
         }
@@ -131,9 +136,7 @@ class FavoriteAppsViewModel(
             runCatching { toggleFavoriteUseCase(packageName) }
                 .onFailure { error ->
                     error.printStackTrace()
-                    screenState.update { current ->
-                        current.copy(screenState = Error())
-                    }
+                    screenState.update { current -> current.copy(screenState = Error()) }
                     screenState.showSnackbar(
                         UiSnackbar(
                             message = UiTextHelper.StringResource(R.string.error_failed_to_update_favorite),
@@ -146,4 +149,3 @@ class FavoriteAppsViewModel(
         }
     }
 }
-
