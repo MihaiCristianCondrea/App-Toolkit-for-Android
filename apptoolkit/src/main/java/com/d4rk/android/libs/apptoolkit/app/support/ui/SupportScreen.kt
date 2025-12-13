@@ -48,8 +48,8 @@ import org.koin.core.qualifier.named
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SupportComposable(
-    viewModel: SupportViewModel,
-    activity: Activity,
+    viewModel: SupportViewModel, // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+    activity: Activity, // FIXME: Unstable parameter 'activity' prevents composable from being skippable
 ) {
     val screenState: UiStateScreen<SupportScreenUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -91,9 +91,9 @@ fun SupportComposable(
 @Composable
 fun SupportScreenContent(
     paddingValues: PaddingValues,
-    activity: Activity,
-    viewModel: SupportViewModel,
-    data: SupportScreenUiState,
+    activity: Activity, // FIXME: Unstable parameter 'activity' prevents composable from being skippable
+    viewModel: SupportViewModel, // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+    data: SupportScreenUiState, // FIXME:Unstable parameter 'data' prevents composable from being skippable
 ) {
     val context: Context = LocalContext.current
     val nativeAdsConfig: AdsConfig = koinInject(qualifier = named(name = "support_native_ad"))

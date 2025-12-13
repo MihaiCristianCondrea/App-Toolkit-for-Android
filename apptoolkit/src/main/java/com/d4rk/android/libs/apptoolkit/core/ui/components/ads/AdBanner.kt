@@ -25,8 +25,27 @@ import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 
+/**
+ * A Composable function that displays a banner ad from Google AdMob.
+ *
+ * This component handles the entire lifecycle of an `AdView`. It observes whether ads are
+ * enabled (via a `CommonDataStore`) and only attempts to load an ad if they are. The banner's
+ * visibility is animated, expanding when an ad is loaded and shrinking when it's hidden or fails
+ * to load.
+ *
+ * The ad view's lifecycle (resume, pause, destroy) is automatically managed in sync with the
+ * Composable's lifecycle.
+ *
+ * @param modifier The [Modifier] to be applied to the ad container. The height is determined
+ * by the `adsConfig.adSize`, but the width will fill the maximum available space.
+ * @param adsConfig The [AdsConfig] object containing the necessary ad unit ID and ad size
+ * for the banner ad.
+ */
 @Composable
-fun AdBanner(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
+fun AdBanner(
+    modifier: Modifier = Modifier,
+    adsConfig: AdsConfig
+) { // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
     if (LocalInspectionMode.current) return
 
     val context: Context = LocalContext.current

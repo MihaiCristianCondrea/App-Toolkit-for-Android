@@ -85,7 +85,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IssueReporterScreen(activity: Activity) {
+fun IssueReporterScreen(activity: Activity) { // FIXME: Unstable parameter 'activity' prevents composable from being skippable
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val isFabExtended: MutableState<Boolean> = remember { mutableStateOf(value = true) }
@@ -155,7 +155,7 @@ fun IssueReporterScreen(activity: Activity) {
 @Composable
 fun IssueReporterScreenContent(
     paddingValues: PaddingValues,
-    viewModel: IssueReporterViewModel,
+    viewModel: IssueReporterViewModel, // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
     data: UiIssueReporterScreen,
 ) {
     LazyColumn(

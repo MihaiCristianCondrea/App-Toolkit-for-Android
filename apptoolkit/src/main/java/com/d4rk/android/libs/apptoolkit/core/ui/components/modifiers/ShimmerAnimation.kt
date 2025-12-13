@@ -37,6 +37,6 @@ fun Modifier.shimmerEffect() : Modifier = composed {
             ) , start = Offset(startOffsetX , 0f) , end = Offset(startOffsetX + size.width.toFloat() , size.height.toFloat())
         )
     ).onGloballyPositioned {
-        size = it.size
+        size = it.size // FIXME: Assigned value is never read
     }
 }

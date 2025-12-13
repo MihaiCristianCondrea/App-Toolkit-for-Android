@@ -17,7 +17,12 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.LargeTopAp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeneralSettingsScreen(title : String , viewModel : GeneralSettingsViewModel , contentProvider : GeneralSettingsContentProvider , onBackClicked : () -> Unit) {
+fun GeneralSettingsScreen(
+    title: String,
+    viewModel: GeneralSettingsViewModel,
+    contentProvider: GeneralSettingsContentProvider,
+    onBackClicked: () -> Unit
+) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable && Parameter 'contentProvider' has runtime-determined stability
     val snackbarHostState : SnackbarHostState = remember { SnackbarHostState() }
     LargeTopAppBarWithScaffold(title = title , onBackClicked = onBackClicked , snackbarHostState = snackbarHostState) { paddingValues : PaddingValues ->
         GeneralSettingsContent(viewModel = viewModel , contentProvider = contentProvider , paddingValues = paddingValues , snackbarHostState = snackbarHostState)
@@ -25,7 +30,12 @@ fun GeneralSettingsScreen(title : String , viewModel : GeneralSettingsViewModel 
 }
 
 @Composable
-fun GeneralSettingsContent(viewModel : GeneralSettingsViewModel , contentProvider : GeneralSettingsContentProvider , paddingValues : PaddingValues , snackbarHostState : SnackbarHostState) {
+fun GeneralSettingsContent(
+    viewModel: GeneralSettingsViewModel,
+    contentProvider: GeneralSettingsContentProvider,
+    paddingValues: PaddingValues,
+    snackbarHostState: SnackbarHostState
+) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable && Parameter 'contentProvider' has runtime-determined stability
     val screenState : UiStateScreen<UiGeneralSettingsScreen> by viewModel.uiState.collectAsStateWithLifecycle()
     ScreenStateHandler(
         screenState = screenState,

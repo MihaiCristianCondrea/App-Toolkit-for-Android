@@ -31,8 +31,8 @@ import org.koin.core.qualifier.named
 
 @Composable
 fun AppsList(
-    uiHomeScreen: UiHomeScreen,
-    favorites: Set<String>,
+    uiHomeScreen: UiHomeScreen, // FIXME: Parameter 'uiHomeScreen' has runtime-determined stability
+    favorites: Set<String>, // FIXME: Parameter 'favorites' has runtime-determined stability
     paddingValues: PaddingValues,
     adsEnabled: Boolean,
     onFavoriteToggle: (String) -> Unit,
@@ -73,15 +73,15 @@ fun AppsList(
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun AppsGrid(
-    items: List<AppListItem>,
-    favorites: Set<String>,
+    items: List<AppListItem>, // FIXME: Parameter 'items' has runtime-determined stability
+    favorites: Set<String>, // FIXME: Parameter 'favorites' has runtime-determined stability
     paddingValues: PaddingValues,
     columnCount: Int,
     listState: LazyGridState,
     onFavoriteToggle: (String) -> Unit,
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
-    adsConfig: AdsConfig,
+    adsConfig: AdsConfig, // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = columnCount),
@@ -101,7 +101,7 @@ private fun AppsGrid(
                     AppListItem.Ad -> "ad_$index"
                 }
             },
-            span = { _, item ->
+            span = { _, item -> // FIXME: Parameter "item" is never used
                 GridItemSpan(1)
             },
             contentType = { _, item ->
@@ -163,7 +163,7 @@ private fun AppCardItem(
 @Composable
 private fun AdListItem(
     modifier: Modifier = Modifier,
-    adsConfig: AdsConfig,
+    adsConfig: AdsConfig, // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
 ) {
     AppsListNativeAdCard(
         adsConfig = adsConfig,

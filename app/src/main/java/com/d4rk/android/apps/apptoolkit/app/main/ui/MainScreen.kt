@@ -3,7 +3,9 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.MenuOpen
 import androidx.compose.material.icons.filled.Menu
@@ -11,6 +13,8 @@ import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -117,9 +121,10 @@ fun MainScreen() {
 fun MainScaffoldContent(
     drawerState: DrawerState,
     windowWidthSizeClass: WindowWidthSizeClass,
-    bottomItems: List<BottomBarItem>,
+    bottomItems: List<BottomBarItem>, // FIXME: Parameter 'bottomItems' has runtime-determined stability
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val navController: NavHostController = rememberNavController()
@@ -157,6 +162,7 @@ fun MainScaffoldContent(
     Scaffold(
         modifier = Modifier
             .imePadding()
+            .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
             .nestedScroll(connection = scrollBehavior.nestedScrollConnection),
         topBar = {
             MainTopAppBar(
@@ -169,7 +175,12 @@ fun MainScaffoldContent(
             DefaultSnackbarHost(snackbarState = snackBarHostState)
         },
         bottomBar = {
-            BottomNavigationBar(navController = navController, items = bottomItems)
+            BottomAppBar(
+                windowInsets = WindowInsets.navigationBars,
+                scrollBehavior = bottomAppBarScrollBehavior,
+            ) {
+                BottomNavigationBar(navController = navController, items = bottomItems)
+            }
         },
         floatingActionButton = {
             MainFloatingActionButton(
@@ -205,9 +216,9 @@ fun MainScaffoldContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScaffoldTabletContent(
-    screenState: UiStateScreen<UiMainScreen>,
+    screenState: UiStateScreen<UiMainScreen>, // FIXME: Unstable parameter 'screenState' prevents composable from being skippable
     windowWidthSizeClass: WindowWidthSizeClass,
-    bottomItems: List<BottomBarItem>,
+    bottomItems: List<BottomBarItem>, // FIXME: Parameter 'bottomItems' has runtime-determined stability
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var isRailExpanded by rememberSaveable(windowWidthSizeClass) {
@@ -269,7 +280,7 @@ fun MainScaffoldTabletContent(
                 onNavigationIconClick = {
                     hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                     coroutineScope.launch {
-                        isRailExpanded = !isRailExpanded
+                        isRailExpanded = !isRailExpanded // FIXME: Assigned value is never read
                     }
                 },
                 scrollBehavior = scrollBehavior
@@ -330,7 +341,7 @@ fun MainScaffoldTabletContent(
         ChangelogDialog(
             changelogUrl = changelogUrl,
             buildInfoProvider = buildInfoProvider,
-            onDismiss = { showChangelog = false },
+            onDismiss = { showChangelog = false }, // FIXME: Assigned value is never read
             dispatchers = dispatchers
         )
     }

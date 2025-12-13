@@ -33,8 +33,8 @@ import org.koin.core.qualifier.named
 
 @Composable
 fun BottomNavigationBar(
-    navController: NavController,
-    items: List<BottomBarItem>,
+    navController: NavController, // FIXME: Unstable parameter 'navController' prevents composable from being skippable
+    items: List<BottomBarItem>, // FIXME: Parameter 'items' has runtime-determined stability
     modifier: Modifier = Modifier,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current

@@ -22,7 +22,10 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 
 @Composable
-fun PrivacySettingsList(paddingValues : PaddingValues = PaddingValues() , provider : PrivacySettingsProvider) {
+fun PrivacySettingsList(
+    paddingValues: PaddingValues = PaddingValues(),
+    provider: PrivacySettingsProvider
+) { // FIXME: Parameter 'provider' has runtime-determined stability
     val context : Context = LocalContext.current
 
     LazyColumn(
@@ -33,8 +36,8 @@ fun PrivacySettingsList(paddingValues : PaddingValues = PaddingValues() , provid
             SmallVerticalSpacer()
             Column(
                 modifier = Modifier
-                        .padding(horizontal = SizeConstants.LargeSize)
-                        .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
+                    .padding(horizontal = SizeConstants.LargeSize)
+                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
             ) {
                 SettingsPreferenceItem(title = stringResource(id = R.string.privacy_policy) , summary = stringResource(id = R.string.summary_preference_settings_privacy_policy) , onClick = { IntentsHelper.openUrl(context , provider.privacyPolicyUrl) })
                 ExtraTinyVerticalSpacer()
@@ -54,8 +57,8 @@ fun PrivacySettingsList(paddingValues : PaddingValues = PaddingValues() , provid
             SmallVerticalSpacer()
             Column(
                 modifier = Modifier
-                        .padding(horizontal = SizeConstants.LargeSize)
-                        .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
+                    .padding(horizontal = SizeConstants.LargeSize)
+                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
             ) {
                 SettingsPreferenceItem(title = stringResource(id = R.string.legal_notices) , summary = stringResource(id = R.string.summary_preference_settings_legal_notices) , onClick = { IntentsHelper.openUrl(context , provider.legalNoticesUrl) })
                 ExtraTinyVerticalSpacer()

@@ -46,10 +46,30 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 
+/**
+ * A Composable that displays a native ad in a card format, specifically designed for "no data" or empty states.
+ *
+ * This component fetches and displays a native ad from Google AdMob. It handles the ad loading lifecycle,
+ * including requesting, binding, and destroying the ad. It also respects the user's ad preference
+ * stored in `CommonDataStore`.
+ *
+ * If the app is running in preview mode (via `LocalInspectionMode`), a placeholder UI is shown instead of a real ad.
+ * The ad will not be displayed if the user has disabled ads or if the provided `adsConfig` does not contain a valid ad unit ID.
+ *
+ * The ad's visibility is managed internally; it's hidden during loading and on failure, and shown only upon successful ad retrieval.
+ *
+ * The layout for the native ad is inflated from the `R.layout.native_ad_no_data_card` XML file.
+ *
+ * @param modifier The modifier to be applied to the ad card.
+ * @param adsConfig Configuration object containing ad-related settings, including the `bannerAdUnitId` for this native ad.
+ */
 @SuppressLint("InflateParams")
 @Composable
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
-fun NoDataNativeAdCard(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
+fun NoDataNativeAdCard(
+    modifier: Modifier = Modifier,
+    adsConfig: AdsConfig
+) { // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
     val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }
@@ -83,7 +103,7 @@ fun NoDataNativeAdCard(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(SizeConstants.ExtraTinySize)
         )
     ) {
-        AndroidView(
+        AndroidView( // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
             modifier = Modifier
                 .fillMaxWidth(),
             factory = { ctx ->

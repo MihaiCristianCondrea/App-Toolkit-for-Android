@@ -39,9 +39,29 @@ import com.google.android.gms.ads.nativead.NativeAdView
 
 private const val PREVIEW_NATIVE_AD_HEIGHT = 120
 
+/**
+ * A Composable that displays a native ad styled to fit in a bottom app bar.
+ *
+ * This component handles the entire lifecycle of loading and displaying a native ad from Google AdMob.
+ * It uses an [AndroidView] to inflate a traditional XML layout (`R.layout.native_ad_bottom_bar`)
+ * and populates it with the native ad content.
+ *
+ * The ad visibility is controlled by a value from [CommonDataStore], allowing users to disable ads.
+ * If the ad fails to load, the view's visibility is set to false, effectively hiding it.
+ * When the Composable is disposed, any active [NativeAd] is destroyed to prevent memory leaks.
+ *
+ * In Compose Preview mode (`LocalInspectionMode`), a placeholder [NativeAdPreview] is shown instead of a real ad.
+ *
+ * @param modifier The [Modifier] to be applied to the ad banner container.
+ * @param adsConfig The configuration object containing ad-related settings, including the `bannerAdUnitId`.
+ *                  The ad will not be displayed if the `bannerAdUnitId` is blank.
+ */
 @SuppressLint("InflateParams")
 @Composable
-fun BottomAppBarNativeAdBanner(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
+fun BottomAppBarNativeAdBanner(
+    modifier: Modifier = Modifier,
+    adsConfig: AdsConfig
+) { // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
     val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }

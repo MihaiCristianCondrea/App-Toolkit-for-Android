@@ -50,7 +50,12 @@ import org.koin.core.qualifier.named
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HelpScreen(activity: ComponentActivity, config: HelpScreenConfig, scope: CoroutineScope, viewModel: HelpViewModel) {
+fun HelpScreen(
+    activity: ComponentActivity,
+    config: HelpScreenConfig,
+    scope: CoroutineScope,
+    viewModel: HelpViewModel
+) { // FIXME: Unstable parameter 'activity' prevents composable from being skippable && Parameter 'scope' has runtime-determined stability && Parameter 'viewModel' has runtime-determined stability
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(state = rememberTopAppBarState())
     val context: Context = LocalContext.current
     val isFabExtended: MutableState<Boolean> = remember { mutableStateOf(value = true) }
@@ -114,7 +119,11 @@ fun HelpScreen(activity: ComponentActivity, config: HelpScreenConfig, scope: Cor
 }
 
 @Composable
-fun HelpScreenContent(questions : List<UiHelpQuestion> , paddingValues : PaddingValues , activity : ComponentActivity) {
+fun HelpScreenContent(
+    questions: List<UiHelpQuestion>,
+    paddingValues: PaddingValues,
+    activity: ComponentActivity
+) { // FIXME: Unstable parameter 'activity' prevents composable from being skippable && Parameter 'questions' has runtime-determined stability
     val adsConfig: AdsConfig = koinInject(qualifier = named("help_large_banner_ad"))
     LazyColumn(
         modifier = Modifier.fillMaxSize() , contentPadding = PaddingValues(

@@ -68,8 +68,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel,
-    contentProvider: GeneralSettingsContentProvider,
+    viewModel: SettingsViewModel, // FIXME: Parameter 'viewModel' has runtime-determined stability
+    contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
 ) {
     val screenState: UiStateScreen<SettingsConfig> by viewModel.uiState.collectAsStateWithLifecycle()
     val context: Context = LocalContext.current
@@ -103,8 +103,8 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreenContent(
     paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig,
-    contentProvider: GeneralSettingsContentProvider,
+    settingsConfig: SettingsConfig, // FIXME: Parameter 'settingsConfig' has runtime-determined stability
+    contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
 ) {
     val windowWidthSizeClass: WindowWidthSizeClass = rememberWindowWidthSizeClass()
     if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
@@ -124,7 +124,7 @@ fun SettingsScreenContent(
 @Composable
 fun PhoneSettingsScreen(
     paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig,
+    settingsConfig: SettingsConfig, // FIXME: Parameter 'settingsConfig' has runtime-determined stability
 ) {
     SettingsList(
         paddingValues = paddingValues,
@@ -136,8 +136,8 @@ fun PhoneSettingsScreen(
 @Composable
 fun TabletSettingsScreen(
     paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig,
-    contentProvider: GeneralSettingsContentProvider,
+    settingsConfig: SettingsConfig, // FIXME: Parameter 'settingsConfig' has runtime-determined stability
+    contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
 ) {
     var selected: SettingsPreference? by remember { mutableStateOf(null) }
 
@@ -226,7 +226,7 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
 fun SettingsDetail(
     preference: SettingsPreference,
     paddingValues: PaddingValues,
-    contentProvider: GeneralSettingsContentProvider,
+    contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
 ) {
     val viewModel: GeneralSettingsViewModel = koinViewModel()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -248,7 +248,7 @@ fun SettingsDetail(
 @Composable
 fun SettingsList(
     paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig,
+    settingsConfig: SettingsConfig, // FIXME: Parameter 'settingsConfig' has runtime-determined stability
     onPreferenceClick: (SettingsPreference) -> Unit = {},
 ) {
     LazyColumn(

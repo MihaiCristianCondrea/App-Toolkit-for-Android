@@ -40,11 +40,11 @@ fun Modifier.hapticDrawerSwipe(state : DrawerState) : Modifier = composed {
     LaunchedEffect(key1 = state.currentValue , key2 = state.targetValue) {
         if (state.isAnimationRunning && ! hasFeedbackTriggered) {
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.GestureThresholdActivate)
-            hasFeedbackTriggered = true
+            hasFeedbackTriggered = true // FIXME: Assigned value is never read
         }
 
         if (! state.isAnimationRunning) {
-            hasFeedbackTriggered = false
+            hasFeedbackTriggered = false // FIXME: Assigned value is never read
         }
     }
 

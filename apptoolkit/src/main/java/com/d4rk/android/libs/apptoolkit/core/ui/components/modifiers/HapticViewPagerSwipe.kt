@@ -19,10 +19,10 @@ fun Modifier.hapticPagerSwipe(pagerState : PagerState) : Modifier = composed {
     LaunchedEffect(key1 = pagerState.isScrollInProgress) {
         if (pagerState.isScrollInProgress && ! hasVibrated) {
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.SegmentTick)
-            hasVibrated = true
+            hasVibrated = true // FIXME: Assigned value is never read
         }
         else if (! pagerState.isScrollInProgress) {
-            hasVibrated = false
+            hasVibrated = false // FIXME: Assigned value is never read
         }
     }
 

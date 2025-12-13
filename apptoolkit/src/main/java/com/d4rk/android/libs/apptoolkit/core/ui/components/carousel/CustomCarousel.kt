@@ -18,7 +18,10 @@ import kotlin.math.absoluteValue
 
 @Composable
 fun <T> CustomCarousel(
-    items : List<T> , sidePadding : Dp , pagerState : PagerState , itemContent : @Composable (item : T) -> Unit
+    items: List<T>,
+    sidePadding: Dp,
+    pagerState: PagerState,
+    itemContent: @Composable (item: T) -> Unit // FIXME: Function "CustomCarousel" is never used && Parameter 'items' has runtime-determined stability
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -26,8 +29,8 @@ fun <T> CustomCarousel(
         HorizontalPager(
             state = pagerState ,
             modifier = Modifier
-                    .fillMaxWidth()
-                    .hapticPagerSwipe(pagerState = pagerState) ,
+                .fillMaxWidth()
+                .hapticPagerSwipe(pagerState = pagerState) ,
             contentPadding = PaddingValues(horizontal = sidePadding) ,
         ) { page ->
             val pageOffset = remember(pagerState.currentPage , page) {
@@ -40,8 +43,8 @@ fun <T> CustomCarousel(
 
         DotsIndicator(
             modifier = Modifier
-                    .align(alignment = Alignment.CenterHorizontally)
-                    .padding(bottom = SizeConstants.SmallSize) ,
+                .align(alignment = Alignment.CenterHorizontally)
+                .padding(bottom = SizeConstants.SmallSize) ,
             totalDots = items.size ,
             selectedIndex = pagerState.currentPage ,
             dotSize = SizeConstants.MediumSize / 2 ,

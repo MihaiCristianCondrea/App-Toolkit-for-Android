@@ -29,7 +29,10 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerTextField(date : Date , onDateSelected : (Date) -> Unit) {
+fun DatePickerTextField(
+    date: Date,
+    onDateSelected: (Date) -> Unit
+) { // FIXME: Unstable parameter 'date' prevents composable from being skippable
     val formatter : SimpleDateFormat = remember { SimpleDateFormat("dd.MM.yyyy" , Locale.getDefault()) }
     var showDialog : Boolean by remember { mutableStateOf(value = false) }
     val hapticFeedback : HapticFeedback = LocalHapticFeedback.current
@@ -38,17 +41,18 @@ fun DatePickerTextField(date : Date , onDateSelected : (Date) -> Unit) {
         DatePickerDialog(onDateSelected = { dateString : String ->
             val parsed : Date = SimpleDateFormat("yyyy-MM-dd" , Locale.getDefault()).parse(dateString) ?: date
             onDateSelected(parsed)
-            showDialog = false
-        } , onDismiss = { showDialog = false })
+            showDialog = false // FIXME: Assigned value is never read
+        }, onDismiss = { showDialog = false }) // FIXME: Assigned value is never read
     }
     OutlinedTextField(value = formatter.format(date) , onValueChange = {} , readOnly = true , enabled = false , modifier = Modifier
-            .fillMaxWidth()
-            .bounceClick()
-            .clickable {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                showDialog = true
-            } , trailingIcon = {
+        .fillMaxWidth()
+        .bounceClick()
+        .clickable {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+            showDialog = true // FIXME: Assigned value is never read
+        },
+        trailingIcon = {
         Icon(imageVector = Icons.Default.CalendarToday , contentDescription = null)
     } , colors = OutlinedTextFieldDefaults.colors(
         disabledTextColor = MaterialTheme.colorScheme.onSurface , disabledBorderColor = MaterialTheme.colorScheme.outline , disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant , disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant

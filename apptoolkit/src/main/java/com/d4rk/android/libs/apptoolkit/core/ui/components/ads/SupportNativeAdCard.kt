@@ -44,10 +44,35 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 
+/**
+ * A Composable that displays a native ad from Google AdMob within a card.
+ *
+ * This component handles the entire lifecycle of loading and displaying a native ad. It uses
+ * an `AndroidView` to inflate a traditional XML layout (`R.layout.native_ad_support_card`)
+ * which serves as the `NativeAdView`.
+ *
+ * - It respects the user's ad preference stored in `CommonDataStore`. If ads are disabled,
+ *   the component will not render anything.
+ * - If the provided `adsConfig` has a blank `bannerAdUnitId`, it will also not render.
+ * - In Jetpack Compose preview mode (i.e., in the IDE), it shows a `SupportNativeAdPreview`
+ *   placeholder instead of a real ad.
+ * - It manages the `NativeAd` object's lifecycle, ensuring it is destroyed when the
+ *   composable leaves the composition to prevent memory leaks.
+ * - The ad loading process is triggered via a `LaunchedEffect`. If the ad fails to load,
+ *   the view's visibility is set to false. If successful, the ad content is bound to the
+ *   `NativeAdView` using the `bindSupportNativeAd` helper function.
+ *
+ * @param modifier The modifier to be applied to the `OutlinedCard` that contains the ad.
+ * @param adsConfig The configuration object containing ad-related settings, primarily the
+ *   `bannerAdUnitId` used for loading the native ad.
+ */
 @SuppressLint("InflateParams")
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun SupportNativeAdCard(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
+fun SupportNativeAdCard(
+    modifier: Modifier = Modifier,
+    adsConfig: AdsConfig
+) { // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
     val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }
@@ -78,7 +103,7 @@ fun SupportNativeAdCard(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
         modifier = modifier,
         shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
     ) {
-        AndroidView(
+        AndroidView( // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
             modifier = Modifier.fillMaxWidth(),
             factory = { ctx ->
                 LayoutInflater.from(ctx)

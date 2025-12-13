@@ -25,19 +25,23 @@ import androidx.compose.ui.platform.LocalView
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 
 @Composable
-fun DropdownMenuBox(selectedText : String , options : List<String> , onOptionSelected : (String) -> Unit) {
+fun DropdownMenuBox(
+    selectedText: String,
+    options: List<String>,
+    onOptionSelected: (String) -> Unit
+) { // FIXME: Parameter 'options' has runtime-determined stability
     var expanded : Boolean by remember { mutableStateOf(value = false) }
     val hapticFeedback : HapticFeedback = LocalHapticFeedback.current
     val view : View = LocalView.current
     Box(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(value = selectedText , onValueChange = {} , modifier = Modifier
-                .fillMaxWidth()
-                .bounceClick()
-                .clickable {
-                    view.playSoundEffect(SoundEffectConstants.CLICK)
-                    hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.VirtualKey)
-                    expanded = true
-                } , readOnly = true , trailingIcon = { Icon(imageVector = Icons.Default.ArrowDropDown , contentDescription = null) })
+            .fillMaxWidth()
+            .bounceClick()
+            .clickable {
+                view.playSoundEffect(SoundEffectConstants.CLICK)
+                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.VirtualKey)
+                expanded = true
+            } , readOnly = true , trailingIcon = { Icon(imageVector = Icons.Default.ArrowDropDown , contentDescription = null) })
         DropdownMenu(expanded = expanded , onDismissRequest = { expanded = false }) {
             options.forEach { option : String ->
                 DropdownMenuItem(text = { Text(text = option) } , onClick = {

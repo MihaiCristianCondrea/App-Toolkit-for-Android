@@ -36,7 +36,10 @@ import kotlinx.coroutines.launch
 /** Compose screen displaying ad preferences. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdsSettingsScreen(activity: Activity, viewModel: AdsSettingsViewModel) {
+fun AdsSettingsScreen(
+    activity: Activity,
+    viewModel: AdsSettingsViewModel
+) { // FIXME: Unstable parameter 'activity' prevents composable from being skippable && Parameter 'viewModel' has runtime-determined stability
     val screenState: UiStateScreen<UiAdsSettingsScreen> by viewModel.uiState.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
 

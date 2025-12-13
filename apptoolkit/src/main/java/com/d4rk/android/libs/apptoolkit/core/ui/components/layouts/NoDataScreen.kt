@@ -62,7 +62,7 @@ fun NoDataScreen(
     showAd: Boolean = true,
     isError: Boolean = false,
     paddingValues: PaddingValues = PaddingValues(),
-    adsConfig: AdsConfig = koinInject(qualifier = named(name = "no_data_native_ad")),
+    adsConfig: AdsConfig = koinInject(qualifier = named(name = "no_data_native_ad")), // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
 ) {
     Column(
         modifier = Modifier

@@ -171,8 +171,8 @@ fun AppsListRoute(
 
 @Composable
 fun AppsListScreen(
-    screenState: UiStateScreen<UiHomeScreen>,
-    favorites: Set<String>,
+    screenState: UiStateScreen<UiHomeScreen>, // FIXME: Unstable parameter 'screenState' prevents composable from being skippable
+    favorites: Set<String>, // FIXME: Parameter 'favorites' has runtime-determined stability
     paddingValues: PaddingValues,
     adsEnabled: Boolean,
     onFavoriteToggle: (String) -> Unit,

@@ -27,7 +27,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
  */
 @Composable
 fun <T , E : UiEvent> DefaultSnackbarHandler(
-    screenState : UiStateScreen<T> ,
+    screenState: UiStateScreen<T>, // FIXME: Unstable parameter 'screenState' prevents composable from being skippable
     snackbarHostState : SnackbarHostState ,
     getDismissEvent : (() -> E)? = null ,
     onEvent : ((E) -> Unit)? = null

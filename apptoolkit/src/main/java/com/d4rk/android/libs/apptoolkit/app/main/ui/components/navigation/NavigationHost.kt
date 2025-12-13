@@ -17,7 +17,9 @@ import androidx.navigation.compose.NavHost
 
 @Composable
 fun NavigationHost(
-    navController : NavHostController , startDestination : String , navGraphBuilder : NavGraphBuilder.() -> Unit
+    navController: NavHostController,
+    startDestination: String,
+    navGraphBuilder: NavGraphBuilder.() -> Unit // FIXME: Unstable parameter 'navController' prevents composable from being skippable
 ) {
     NavHost(
         navController = navController ,

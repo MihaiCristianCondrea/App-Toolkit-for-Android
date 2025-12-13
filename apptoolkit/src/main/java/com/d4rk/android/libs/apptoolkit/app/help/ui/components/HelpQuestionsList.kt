@@ -16,7 +16,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.animateVisi
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable
-fun HelpQuestionsList(questions : List<UiHelpQuestion>) {
+fun HelpQuestionsList(questions: List<UiHelpQuestion>) { // FIXME: Parameter 'questions' has runtime-determined stability
     val expandedStates : SnapshotStateMap<Int , Boolean> = remember { mutableStateMapOf() }
     val cardShape = RoundedCornerShape(
         topStart = SizeConstants.LargeIncreasedSize,

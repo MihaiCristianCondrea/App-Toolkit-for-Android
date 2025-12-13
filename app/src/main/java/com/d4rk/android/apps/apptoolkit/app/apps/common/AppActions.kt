@@ -12,7 +12,10 @@ import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import kotlinx.coroutines.launch
 
 @Composable
-fun buildOnAppClick(dispatchers: DispatcherProvider, context: Context): (AppInfo) -> Unit {
+fun buildOnAppClick(
+    dispatchers: DispatcherProvider,
+    context: Context
+): (AppInfo) -> Unit { // FIXME: Parameter 'dispatchers' has runtime-determined stability && Parameter 'context' has runtime-determined stability
     val appInfoHelper = remember { AppInfoHelper(dispatchers) }
     val coroutineScope = rememberCoroutineScope()
     return remember(context, coroutineScope) {
@@ -34,6 +37,7 @@ fun buildOnAppClick(dispatchers: DispatcherProvider, context: Context): (AppInfo
 
 @Composable
 fun buildOnShareClick(context: Context): (AppInfo) -> Unit =
+    // FIXME: Parameter 'context' has runtime-determined stability
     remember(context) {
         { appInfo ->
             IntentsHelper.shareApp(

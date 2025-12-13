@@ -64,7 +64,7 @@ fun FinalOnboardingPageTab() {
 
     LaunchedEffect(key1 = Unit) {
         if (! FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally) {
-            iconVisible = true
+            iconVisible = true // FIXME: Assigned value is never read
             delay(300)
             showKonfettiAnimationForThisInstance = true
             FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally = true
@@ -72,24 +72,27 @@ fun FinalOnboardingPageTab() {
         }
         else {
 
-            iconVisible = true
+            iconVisible = true // FIXME: Assigned value is never read
         }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = SizeConstants.MediumSize * 2 , vertical = SizeConstants.ExtraLargeIncreasedSize) , horizontalAlignment = Alignment.CenterHorizontally , verticalArrangement = Arrangement.Center
+                .fillMaxSize()
+                .padding(
+                    horizontal = SizeConstants.MediumSize * 2,
+                    vertical = SizeConstants.ExtraLargeIncreasedSize
+                ) , horizontalAlignment = Alignment.CenterHorizontally , verticalArrangement = Arrangement.Center
         ) {
             Icon(imageVector = Icons.Filled.CheckCircle , contentDescription = stringResource(id = R.string.onboarding_complete_icon_desc) , modifier = Modifier
-                    .size(size = SizeConstants.ExtraExtraLargeSize + SizeConstants.ExtraLargeIncreasedSize)
-                    .graphicsLayer {
-                        scaleX = iconSettleScale
-                        scaleY = iconSettleScale
-                        translationY = iconTranslateY
-                        alpha = iconAlpha
-                    } , tint = MaterialTheme.colorScheme.primary)
+                .size(size = SizeConstants.ExtraExtraLargeSize + SizeConstants.ExtraLargeIncreasedSize)
+                .graphicsLayer {
+                    scaleX = iconSettleScale
+                    scaleY = iconSettleScale
+                    translationY = iconTranslateY
+                    alpha = iconAlpha
+                } , tint = MaterialTheme.colorScheme.primary)
 
             ExtraLargeIncreasedVerticalSpacer()
             Text(text = stringResource(id = R.string.onboarding_final_title) , style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold , fontSize = 30.sp , textAlign = TextAlign.Center) , color = MaterialTheme.colorScheme.onSurface)

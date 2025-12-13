@@ -39,7 +39,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable
 fun StartupScreen(
-    screenState : UiStateScreen<UiStartupScreen> ,
+    screenState: UiStateScreen<UiStartupScreen>, // FIXME: Unstable parameter 'screenState' prevents composable from being skippable
     onContinueClick : () -> Unit
 ) {
     ScreenStateHandler(

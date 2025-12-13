@@ -38,10 +38,38 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 
+/**
+ * A Composable that displays a native ad from Google AdMob within a card,
+ * styled to fit into a grid or list of applications.
+ *
+ * This function handles the entire ad loading and display lifecycle. It observes
+ * the user's ad preferences from [CommonDataStore] and will only request and show
+ * an ad if ads are enabled and a valid ad unit ID is provided in the [adsConfig].
+ *
+ * The ad is loaded using an [AdLoader] and displayed in a [NativeAdView] which is
+ * embedded in the composition using the [AndroidView] composable. The ad's visibility
+ * is managed by the `isAdLoaded` state, ensuring the card is only composed when the ad
+ * is successfully fetched.
+ *
+ * In preview mode (e.g., in Android Studio's Composable preview), a placeholder
+ * [AppsListNativeAdPreview] is shown instead of a real ad.
+ *
+ * The [DisposableEffect] is used to properly destroy the [NativeAd] object when the
+ * composable leaves the composition to prevent memory leaks.
+ *
+ * @param modifier The [Modifier] to be applied to the ad card.
+ * @param adsConfig The configuration object containing ad-related settings,
+ *                  including the `bannerAdUnitId` for the native ad. Note that the
+ *                  parameter name is `bannerAdUnitId` for consistency with other ad
+ *                  components, but it's used for a native ad here.
+ */
 @SuppressLint("InflateParams")
 @Composable
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
-fun AppsListNativeAdCard(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
+fun AppsListNativeAdCard(
+    modifier: Modifier = Modifier,
+    adsConfig: AdsConfig
+) { // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
     val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }
@@ -72,8 +100,12 @@ fun AppsListNativeAdCard(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
         }
     }
 
-    LaunchedEffect(adsConfig.bannerAdUnitId, adRequest, showAds) {
-        if (!showAds || adsConfig.bannerAdUnitId.isBlank()) {
+    LaunchedEffect(
+        adsConfig.bannerAdUnitId,
+        adRequest,
+        showAds
+    ) { // FIXME: Value of 'showAds' is always true
+        if (!showAds || adsConfig.bannerAdUnitId.isBlank()) { // FIXME: Condition '!showAds' is always false
             isAdLoaded = false
             return@LaunchedEffect
         }
@@ -112,6 +144,7 @@ fun AppsListNativeAdCard(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
             shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize)
         ) {
             AndroidView(
+                // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
                 modifier = Modifier.fillMaxSize(),
                 factory = { nativeAdView },
             )

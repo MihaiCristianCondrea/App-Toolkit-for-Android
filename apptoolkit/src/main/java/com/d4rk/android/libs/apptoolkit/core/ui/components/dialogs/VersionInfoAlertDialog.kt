@@ -65,7 +65,7 @@ fun VersionInfoAlertDialogContent(copyrightString : Int , appName : Int , versio
         AsyncImage(model = appIcon , contentDescription = null , modifier = Modifier.size(size = SizeConstants.ExtraExtraLargeSize) , imageLoader = imageLoader)
         LargeHorizontalSpacer()
         Column {
-            Text(text = context.getString(appName) , style = MaterialTheme.typography.titleLarge)
+            Text(text = stringResource(appName), style = MaterialTheme.typography.titleLarge)
             Text(text = stringResource(versionString , versionName) , style = MaterialTheme.typography.bodyMedium)
             LargeVerticalSpacer()
             Text(text = stringResource(id = copyrightString) , style = MaterialTheme.typography.bodyMedium)

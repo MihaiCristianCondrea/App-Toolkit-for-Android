@@ -34,9 +34,9 @@ import org.koin.compose.koinInject
 @Composable
 fun ChangelogDialog(
     changelogUrl: String,
-    buildInfoProvider: BuildInfoProvider,
+    buildInfoProvider: BuildInfoProvider, // FIXME: Parameter 'buildInfoProvider' has runtime-determined stability
     onDismiss: () -> Unit,
-    dispatchers: DispatcherProvider,
+    dispatchers: DispatcherProvider, // FIXME: Parameter 'dispatchers' has runtime-determined stability
 ) {
     val context = LocalContext.current
     val changelogText: MutableState<String?> = remember {
@@ -52,7 +52,7 @@ fun ChangelogDialog(
                 val content: String = httpClient.get(changelogUrl).body()
                 val section = extractChangesForVersion(content, buildInfoProvider.appVersion)
                 changelogText.value =
-                    section.ifBlank { context.getString(R.string.no_new_updates_message) }
+                    section.ifBlank { context.getString(R.string.no_new_updates_message) } // FIXME: Querying resource values using LocalContext.current
             }.onFailure {
                 isError.value = true
             }

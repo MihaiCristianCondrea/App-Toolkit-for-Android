@@ -38,10 +38,10 @@ fun Modifier.hapticSwipeToDismissBox(swipeToDismissBoxState : SwipeToDismissBoxS
     LaunchedEffect(swipeToDismissBoxState.currentValue) {
         if (swipeToDismissBoxState.currentValue != SwipeToDismissBoxValue.Settled && ! hasVibrated) {
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.GestureThresholdActivate)
-            hasVibrated = true
+            hasVibrated = true // FIXME: Assigned value is never read
         }
         else if (swipeToDismissBoxState.currentValue == SwipeToDismissBoxValue.Settled) {
-            hasVibrated = false
+            hasVibrated = false // FIXME: Assigned value is never read
         }
     }
 

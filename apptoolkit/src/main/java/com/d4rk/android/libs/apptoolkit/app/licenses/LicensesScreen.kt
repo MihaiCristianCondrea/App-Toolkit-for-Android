@@ -20,7 +20,7 @@ import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LicensesScreen(activity : Activity) {
+fun LicensesScreen(activity: Activity) { // FIXME: Unstable parameter 'activity' prevents composable from being skippable
     val scrollBehavior : TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(state = rememberTopAppBarState())
 
     LargeTopAppBarWithScaffold(title = stringResource(id = R.string.oss_license_title) , onBackClicked = { activity.finish() } , scrollBehavior = scrollBehavior) { paddingValues ->

@@ -39,10 +39,37 @@ import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 
+/**
+ * A Composable that displays a vertical navigation rail on the left side of the screen,
+ * typically used for top-level destinations in larger screen layouts like tablets.
+ * It can be in an expanded or collapsed state and contains a list of primary (bottom)
+ * and secondary (drawer) navigation items. The main content of the screen is displayed
+ * to the right of the rail.
+ *
+ * The rail's width animates between a collapsed state (icon only) and an expanded
+ * state (icon and label). The visibility of the labels also animates accordingly.
+ *
+ * @param bottomItems A list of [BottomBarItem]s to be displayed as primary navigation
+ *   destinations at the top of the rail.
+ * @param drawerItems A list of [NavigationDrawerItem]s to be displayed as secondary
+ *   navigation items at the bottom of the rail.
+ * @param currentRoute The route of the currently displayed screen, used to highlight
+ *   the selected [BottomBarItem].
+ * @param isRailExpanded A boolean to control the expanded/collapsed state of the navigation rail.
+ *   `true` for expanded (shows labels), `false` for collapsed (shows only icons).
+ * @param paddingValues Padding to be applied around the entire component, typically from a [Scaffold].
+ * @param onBottomItemClick A lambda function to be invoked when a [BottomBarItem] is clicked.
+ *   It is only called if the item is not already selected.
+ * @param onDrawerItemClick A lambda function to be invoked when a [NavigationDrawerItem] is clicked.
+ * @param centerContent A float value between 0.0 and 1.0 that specifies the width fraction
+ *   the main content should occupy within its available space. Defaults to `1f` (100%).
+ * @param content The main screen content to be displayed to the right of the navigation rail.
+ *   This is a Composable lambda that will be placed inside a `BoxScope`.
+ */
 @Composable
 fun LeftNavigationRail(
-    bottomItems: List<BottomBarItem> = emptyList(),
-    drawerItems: List<NavigationDrawerItem> = emptyList(),
+    bottomItems: List<BottomBarItem> = emptyList(), // FIXME: Parameter 'bottomItems' has runtime-determined stability
+    drawerItems: List<NavigationDrawerItem> = emptyList(), // FIXME: Parameter 'drawerItems' has runtime-determined stability
     currentRoute: String?,
     isRailExpanded: Boolean = false,
     paddingValues: PaddingValues,

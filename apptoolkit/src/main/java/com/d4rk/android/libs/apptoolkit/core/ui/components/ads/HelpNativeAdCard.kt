@@ -52,10 +52,31 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 
+/**
+ * A Composable that displays a native ad in a card format, specifically styled for a "help" or "discovery" context.
+ *
+ * This function handles the entire ad loading and display lifecycle. It checks for user preferences
+ * (whether ads are enabled) and the validity of the ad configuration before attempting to load an ad.
+ *
+ * Features:
+ * - Fetches ad enabled status from `CommonDataStore`.
+ * - Uses `AndroidView` to inflate a traditional XML layout (`R.layout.native_ad_help_card`) for the native ad.
+ * - Loads a native ad using the Google Mobile Ads SDK.
+ * - Binds the loaded `NativeAd` data to the corresponding views within the inflated layout.
+ * - Manages the ad's lifecycle, destroying it when the composable leaves the composition.
+ * - Shows a `HelpNativeAdPreview` placeholder in Jetpack Compose preview mode.
+ * - The ad will not be displayed if ads are disabled by the user or if the ad unit ID is missing.
+ *
+ * @param modifier The modifier to be applied to the ad card.
+ * @param adsConfig Configuration object containing the necessary ad unit IDs, in this case, `bannerAdUnitId` is used for the native ad.
+ */
 @SuppressLint("InflateParams")
 @Composable
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
-fun HelpNativeAdCard(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
+fun HelpNativeAdCard(
+    modifier: Modifier = Modifier,
+    adsConfig: AdsConfig
+) { // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
     val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }
@@ -86,7 +107,7 @@ fun HelpNativeAdCard(modifier: Modifier = Modifier, adsConfig: AdsConfig) {
         modifier = modifier,
         shape = RoundedCornerShape(size = SizeConstants.ExtraSmallSize),
     ) {
-        AndroidView(
+        AndroidView( // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
             modifier = Modifier.fillMaxWidth(),
             factory = { ctx ->
                 LayoutInflater.from(ctx)

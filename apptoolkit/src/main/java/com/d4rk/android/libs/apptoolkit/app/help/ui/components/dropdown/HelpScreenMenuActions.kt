@@ -30,7 +30,10 @@ import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 
 @Composable
 fun HelpScreenMenuActions(
-    context : Context , activity : Activity , showDialog : MutableState<Boolean> , config : HelpScreenConfig
+    context: Context,
+    activity: Activity,
+    showDialog: MutableState<Boolean>,
+    config: HelpScreenConfig // FIXME: Unstable parameter 'activity' prevents composable from being skippable && Parameter 'context' has runtime-determined stability
 ) {
     var showMenu : Boolean by remember { mutableStateOf(value = false) }
 
@@ -41,7 +44,7 @@ fun HelpScreenMenuActions(
         expanded = showMenu ,
         shape = RoundedCornerShape(SizeConstants.LargeIncreasedSize),
         onDismissRequest = {
-        showMenu = false
+            showMenu = false // FIXME: Assigned value is never read
     }) {
         CommonDropdownMenuItem(
             textResId = R.string.view_in_google_play_store,

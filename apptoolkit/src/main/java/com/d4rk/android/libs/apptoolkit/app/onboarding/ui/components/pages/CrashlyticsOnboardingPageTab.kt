@@ -79,7 +79,7 @@ import org.koin.compose.koinInject
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun CrashlyticsOnboardingPageTab(configProvider: BuildInfoProvider = koinInject()) {
+fun CrashlyticsOnboardingPageTab(configProvider: BuildInfoProvider = koinInject()) { // FIXME: Parameter 'configProvider' has runtime-determined stability
     val context: Context = LocalContext.current
     val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -219,7 +219,7 @@ fun UsageAndDiagnosticsToggleCard(
 }
 
 @Composable
-fun LearnMoreSection(context: Context) {
+fun LearnMoreSection(context: Context) { // FIXME: Parameter 'context' has runtime-determined stability
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         HorizontalDivider(
             modifier = Modifier.padding(vertical = SizeConstants.LargeSize), thickness = SizeConstants.ExtraTinySize / 4
@@ -256,7 +256,7 @@ fun LearnMoreSection(context: Context) {
 fun CrashlyticsConsentDialog(
     onDismissRequest: () -> Unit,
     onAcknowledge: () -> Unit,
-    configProvider: BuildInfoProvider = koinInject()
+    configProvider: BuildInfoProvider = koinInject() // FIXME: Parameter 'configProvider' has runtime-determined stability
 ) {
     val context: Context = LocalContext.current
     val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)

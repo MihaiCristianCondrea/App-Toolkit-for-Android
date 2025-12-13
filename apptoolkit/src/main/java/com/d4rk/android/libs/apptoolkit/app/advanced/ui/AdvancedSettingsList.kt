@@ -33,14 +33,15 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun AdvancedSettingsList(
     paddingValues: PaddingValues = PaddingValues(),
-    viewModel: AdvancedSettingsViewModel = koinViewModel(),
+    viewModel: AdvancedSettingsViewModel = koinViewModel(), // FIXME: Parameter 'viewModel' has runtime-determined stability
 ) {
     val context: Context = LocalContext.current
     val screenState: UiStateScreen<UiAdvancedSettingsScreen> = viewModel.uiState.collectAsStateWithLifecycle().value
 
     LaunchedEffect(screenState.data?.cacheClearMessage) {
         screenState.data?.cacheClearMessage?.let { messageRes ->
-            Toast.makeText(context, context.getString(messageRes), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(messageRes), Toast.LENGTH_SHORT)
+                .show() // FIXME: Querying resource values using LocalContext.current
             viewModel.onEvent(AdvancedSettingsEvent.MessageShown)
         }
     }

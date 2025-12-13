@@ -31,7 +31,7 @@ import kotlinx.coroutines.delay
  */
 @Composable
 fun <T> ScreenStateHandler(
-    screenState : UiStateScreen<T> ,
+    screenState: UiStateScreen<T>, // FIXME: Unstable parameter 'screenState' prevents composable from being skippable
     onLoading : @Composable () -> Unit ,
     onEmpty : @Composable () -> Unit ,
     onSuccess : @Composable (T) -> Unit ,

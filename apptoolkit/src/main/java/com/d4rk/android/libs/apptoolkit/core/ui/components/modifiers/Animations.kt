@@ -50,22 +50,22 @@ fun Modifier.bounceClick(
 
     if (bouncyButtonsEnabled) {
         return@composed this
-                .graphicsLayer {
-                    scaleX = scale
-                    scaleY = scale
-                }
-                .pointerInput(key1 = buttonState) {
-                    awaitPointerEventScope {
-                        buttonState = if (buttonState == ButtonState.Pressed) {
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+            }
+            .pointerInput(key1 = buttonState) {
+                awaitPointerEventScope {
+                    buttonState =
+                        if (buttonState == ButtonState.Pressed) { // FIXME: Assigned value is never read
                             waitForUpOrCancellation()
                             ButtonState.Idle
-                        }
-                        else {
+                        } else {
                             awaitFirstDown(requireUnconsumed = false)
                             ButtonState.Pressed
                         }
-                    }
                 }
+            }
     }
     else {
         return@composed this
@@ -119,10 +119,10 @@ fun Modifier.animateVisibility(
     )
 
     this
-            .offset {
-                IntOffset(x = 0 , y = offsetState.value.toInt())
-            }
-            .graphicsLayer {
-                this.alpha = alpha.value
-            }
+        .offset {
+            IntOffset(x = 0, y = offsetState.value.toInt())
+        }
+        .graphicsLayer {
+            this.alpha = alpha.value
+        }
 }

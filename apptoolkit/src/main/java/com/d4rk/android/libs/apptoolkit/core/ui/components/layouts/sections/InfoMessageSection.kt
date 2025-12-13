@@ -101,17 +101,15 @@ fun InfoMessageSection(
                 val annotatedString = buildAnnotatedString {
                     append("$message ")
 
-                    val linkInteraction = object : LinkInteractionListener {
-                        override fun onClick(link: LinkAnnotation) {
-                            view.playSoundEffect(SoundEffectConstants.CLICK)
-                            hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                            when {
-                                learnMoreAction != null -> learnMoreAction()
-                                !learnMoreUrl.isNullOrEmpty() -> IntentsHelper.openUrl(
-                                    context,
-                                    learnMoreUrl
-                                )
-                            }
+                    val linkInteraction = LinkInteractionListener {
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                        when {
+                            learnMoreAction != null -> learnMoreAction()
+                            !learnMoreUrl.isNullOrEmpty() -> IntentsHelper.openUrl(
+                                context,
+                                learnMoreUrl
+                            )
                         }
                     }
 

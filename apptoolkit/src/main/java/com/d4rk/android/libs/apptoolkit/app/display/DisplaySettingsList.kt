@@ -44,7 +44,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun DisplaySettingsList(paddingValues : PaddingValues = PaddingValues() , provider : DisplaySettingsProvider) {
+fun DisplaySettingsList(
+    paddingValues: PaddingValues = PaddingValues(),
+    provider: DisplaySettingsProvider
+) { // FIXME: Parameter 'provider' has runtime-determined stability
     val coroutineScope : CoroutineScope = rememberCoroutineScope()
     val context : Context = LocalContext.current
     val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
@@ -236,7 +239,8 @@ fun DisplaySettingsList(paddingValues : PaddingValues = PaddingValues() , provid
             }
 
             if (showLanguageDialog) {
-                SelectLanguageAlertDialog(onDismiss = { showLanguageDialog = false } , onLanguageSelected = { newLanguageCode : String ->
+                SelectLanguageAlertDialog(onDismiss = { showLanguageDialog = false },
+                    onLanguageSelected = { newLanguageCode: String -> // FIXME: Assigned value is never read
                     AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(newLanguageCode))
                 })
             }

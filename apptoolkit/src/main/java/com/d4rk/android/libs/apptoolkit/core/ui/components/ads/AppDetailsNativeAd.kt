@@ -34,11 +34,32 @@ import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.material.button.MaterialButton
 
+/**
+ * A Composable function that displays a Google AdMob Native Ad, styled for an "app details" context.
+ *
+ * This function handles the entire lifecycle of loading and displaying a native ad. It uses
+ * `AndroidView` to embed a traditional Android XML layout (`R.layout.native_ad_app_details`)
+ * which is then populated with the ad's content.
+ *
+ * The ad will only be displayed if:
+ * 1. The user has not disabled ads (checked via `CommonDataStore`).
+ * 2. A valid ad unit ID is provided in the `adsConfig`.
+ *
+ * In Jetpack Compose preview mode (i.e., `LocalInspectionMode.current` is true), it shows
+ * a placeholder `AppDetailsNativeAdPreview` instead of attempting to load a real ad.
+ *
+ * The function manages the ad's lifecycle using `DisposableEffect` to ensure the `NativeAd`
+ * object is properly destroyed when the Composable leaves the composition, preventing memory leaks.
+ *
+ * @param modifier The modifier to be applied to the ad container.
+ * @param adsConfig The configuration object containing ad-related settings, specifically the
+ *   `bannerAdUnitId` which is used here for the native ad.
+ */
 @SuppressLint("InflateParams")
 @Composable
 fun AppDetailsNativeAd(
     modifier: Modifier = Modifier,
-    adsConfig: AdsConfig
+    adsConfig: AdsConfig // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
 ) {
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current

@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.onCompletion
 
 @Composable
 internal fun <T> Flow<T>.collectWithLifecycleOnCompletion(
-    initialValue : T,
+    initialValue: T, // FIXME: Parameter 'initialValue' has runtime-determined stability
     onCompletion : (Throwable?) -> Unit = {}
 ) : State<T> {
     val lifecycleOwner = LocalLifecycleOwner.current

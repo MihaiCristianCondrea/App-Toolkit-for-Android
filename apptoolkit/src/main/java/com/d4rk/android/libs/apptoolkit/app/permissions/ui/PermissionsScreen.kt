@@ -34,7 +34,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PermissionsScreen(viewModel : PermissionsViewModel) {
+fun PermissionsScreen(viewModel: PermissionsViewModel) { // FIXME: Parameter 'viewModel' has runtime-determined stability
     val screenState: UiStateScreen<SettingsConfig> by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
@@ -58,7 +58,10 @@ fun PermissionsScreen(viewModel : PermissionsViewModel) {
 }
 
 @Composable
-fun PermissionsContent(paddingValues : PaddingValues , settingsConfig : SettingsConfig) {
+fun PermissionsContent(
+    paddingValues: PaddingValues,
+    settingsConfig: SettingsConfig
+) { // FIXME: Parameter 'settingsConfig' has runtime-determined stability
     LazyColumn(contentPadding = paddingValues , modifier = Modifier.fillMaxHeight()) {
         settingsConfig.categories.forEach { category ->
             item {

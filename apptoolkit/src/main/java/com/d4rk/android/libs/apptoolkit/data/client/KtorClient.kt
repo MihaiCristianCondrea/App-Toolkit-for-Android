@@ -62,6 +62,16 @@ object KtorClient {
         }.also { client = it }
     }
 
+    /**
+     * Configures the [Logging] plugin for the [HttpClient] if logging is enabled.
+     *
+     * This function is an extension on [HttpClientConfig] and is called during the client's setup.
+     * If `enableLogging` is true, it installs the [Logging] plugin with a custom logger that prints
+     * logs to the console, prefixed with "KtorClient:". The log level is set to [LogLevel.ALL]
+     * to capture all request and response details.
+     *
+     * @param enableLogging A boolean flag to determine whether to enable logging.
+     */
     private fun HttpClientConfig<AndroidEngineConfig>.configureLogging(enableLogging: Boolean) {
         if (!enableLogging) return
         install(plugin = Logging) {

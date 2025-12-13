@@ -85,14 +85,18 @@ fun SelectLanguageAlertDialog(onDismiss : () -> Unit , onLanguageSelected : (Str
 }
 
 @Composable
-fun SelectLanguageAlertDialogContent(selectedLanguage : MutableState<String>, languageEntries : List<String> , languageValues : List<String>) {
+fun SelectLanguageAlertDialogContent(
+    selectedLanguage: MutableState<String>,
+    languageEntries: List<String>,
+    languageValues: List<String>
+) { // FIXME: Parameter 'languageEntries' has runtime-determined stability && Parameter 'languageValues' has runtime-determined stability
 
     Column {
         Text(text = stringResource(id = R.string.dialog_language_subtitle))
         Box(
             modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(weight = 1f)
+                .fillMaxWidth()
+                .weight(weight = 1f)
         ) {
             LazyColumn {
                 items(count = languageEntries.size) { index : Int ->

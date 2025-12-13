@@ -25,6 +25,18 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.dropdown.CommonDropdo
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 
+/**
+ * A top app bar for the main screen of the application.
+ *
+ * It includes the application title, a navigation icon, and an actions menu.
+ * The actions menu currently contains a "Support Us" item that opens the [SupportActivity].
+ * The navigation icon's action is configurable.
+ *
+ * @param navigationIcon The [ImageVector] to be displayed as the navigation icon.
+ * @param onNavigationIconClick A lambda to be executed when the navigation icon is clicked.
+ * @param scrollBehavior A [TopAppBarScrollBehavior] to be applied to the top app bar,
+ * which defines its behavior when content is scrolled.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopAppBar(

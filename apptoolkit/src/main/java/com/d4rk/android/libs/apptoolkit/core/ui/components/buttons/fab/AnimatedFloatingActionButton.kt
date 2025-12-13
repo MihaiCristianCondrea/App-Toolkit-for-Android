@@ -24,6 +24,17 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 
+/**
+ * A Composable function that displays a Floating Action Button with an animated appearance.
+ * The button animates in and out of view based on the `isVisible` parameter.
+ * It also includes haptic feedback and a click sound effect on interaction.
+ *
+ * @param modifier The [Modifier] to be applied to the button.
+ * @param isVisible A boolean that controls the visibility of the FAB. If true, the button animates in; if false, it animates out.
+ * @param icon The [ImageVector] to be displayed inside the FAB.
+ * @param contentDescription Text used by accessibility services to describe what the icon represents.
+ * @param onClick A lambda function to be invoked when the button is clicked.
+ */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AnimatedFloatingActionButton(modifier : Modifier = Modifier , isVisible : Boolean , icon : ImageVector , contentDescription : String? = null , onClick : () -> Unit) {
@@ -37,7 +48,7 @@ fun AnimatedFloatingActionButton(modifier : Modifier = Modifier , isVisible : Bo
             onCheckedChange = {
                 view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                checked = it
+                checked = it // FIXME: Assigned value is never read
                 onClick()
             },
             modifier = modifier.bounceClick()

@@ -41,7 +41,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun UsageAndDiagnosticsList(
     paddingValues: PaddingValues,
-    viewModel: UsageAndDiagnosticsViewModel = koinViewModel(),
+    viewModel: UsageAndDiagnosticsViewModel = koinViewModel(), // FIXME: Parameter 'viewModel' has runtime-determined stability
 ) {
     val screenState: UiStateScreen<UiUsageAndDiagnosticsScreen> =
         viewModel.uiState.collectAsStateWithLifecycle().value

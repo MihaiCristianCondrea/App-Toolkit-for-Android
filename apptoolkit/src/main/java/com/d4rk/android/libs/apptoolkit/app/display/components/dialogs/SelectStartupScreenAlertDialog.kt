@@ -69,9 +69,9 @@ fun SelectStartupScreenAlertDialog(onDismiss: () -> Unit, onStartupSelected: (St
 @Composable
 fun SelectStartupScreenAlertDialogContent(
     selectedPage: MutableState<String>,
-    dataStore: CommonDataStore,
-    startupEntries: List<String>,
-    startupValues: List<String>,
+    dataStore: CommonDataStore, // FIXME: Unstable parameter 'dataStore' prevents composable from being skippable
+    startupEntries: List<String>, // FIXME: Parameter 'startupEntries' has runtime-determined stability
+    startupValues: List<String>, // FIXME: Parameter 'startupValues' has runtime-determined stability
     startupRoute: String
 ) {
 
