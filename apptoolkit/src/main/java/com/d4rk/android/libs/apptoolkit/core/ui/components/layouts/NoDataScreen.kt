@@ -27,7 +27,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.NoDataNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.IconButtonWithText
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
@@ -49,7 +48,6 @@ import org.koin.core.qualifier.named
  * @param onRetry Callback invoked when the retry button is pressed.
  * @param showAd Whether a [NoDataNativeAdCard] should be displayed.
  * @param isError Shows the indicator with error styling when true.
- * @param adsConfig Configuration used for the native ad instance.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -62,8 +60,10 @@ fun NoDataScreen(
     showAd: Boolean = true,
     isError: Boolean = false,
     paddingValues: PaddingValues = PaddingValues(),
-    adsConfig: AdsConfig = koinInject(qualifier = named(name = "no_data_native_ad")), // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
 ) {
+    val adUnitId = koinInject<com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig>(
+        qualifier = named(name = "no_data_native_ad")
+    ).bannerAdUnitId
     Column(
         modifier = Modifier
             .padding(paddingValues)
@@ -108,7 +108,7 @@ fun NoDataScreen(
 
         if (showAd) {
             NoDataNativeAdCard(
-                adsConfig = adsConfig,
+                adUnitId = adUnitId,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(all = SizeConstants.MediumSize),

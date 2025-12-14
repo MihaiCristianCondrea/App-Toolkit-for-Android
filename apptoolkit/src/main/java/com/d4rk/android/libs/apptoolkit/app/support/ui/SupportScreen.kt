@@ -209,7 +209,7 @@ fun SupportScreenContent(
                 modifier = Modifier
                     .padding(all = SizeConstants.LargeSize)
                     .animateItem(),
-                adsConfig = nativeAdsConfig
+                adUnitId = nativeAdsConfig.bannerAdUnitId
             )
         }
     }

@@ -41,7 +41,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import com.google.android.gms.ads.AdListener
@@ -75,8 +74,8 @@ import com.google.android.gms.ads.nativead.NativeAdView
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 fun HelpNativeAdCard(
     modifier: Modifier = Modifier,
-    adsConfig: AdsConfig
-) { // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
+    adUnitId: String
+) {
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
     val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }
@@ -87,7 +86,7 @@ fun HelpNativeAdCard(
         return
     }
 
-    if (!showAds || adsConfig.bannerAdUnitId.isBlank()) {
+    if (!showAds || adUnitId.isBlank()) {
         return
     }
 
@@ -121,10 +120,10 @@ fun HelpNativeAdCard(
         )
     }
 
-    LaunchedEffect(nativeAdView, adsConfig.bannerAdUnitId, adRequest) {
+    LaunchedEffect(nativeAdView, adUnitId, adRequest) {
         val view: NativeAdView = nativeAdView ?: return@LaunchedEffect
 
-        val adLoader: AdLoader = AdLoader.Builder(context, adsConfig.bannerAdUnitId)
+        val adLoader: AdLoader = AdLoader.Builder(context, adUnitId)
             .forNativeAd { nativeAd ->
                 currentNativeAd?.destroy()
                 currentNativeAd = nativeAd

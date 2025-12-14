@@ -57,7 +57,7 @@ fun BottomNavigationBar(
         key("bottom_ad") {
             BottomAppBarNativeAdBanner(
                 modifier = Modifier.fillMaxWidth(),
-                adsConfig = adsConfig
+                adUnitId = adsConfig.bannerAdUnitId
             )
         }
 

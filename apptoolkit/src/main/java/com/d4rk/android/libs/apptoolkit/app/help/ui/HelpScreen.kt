@@ -171,7 +171,7 @@ fun HelpScreenContent(
 
         item {
             HelpNativeAdCard(
-                adsConfig = adsConfig,
+                adUnitId = adsConfig.bannerAdUnitId,
                 modifier = Modifier.animateItem()
             )
         }
