@@ -19,7 +19,7 @@ android {
     defaultConfig {
         applicationId = "com.d4rk.android.apps"
         applicationIdSuffix = ".apptoolkit"
-        minSdk = 23
+        minSdk = 26
         targetSdk = 36
         versionCode = 81
         versionName = "1.1.4"
