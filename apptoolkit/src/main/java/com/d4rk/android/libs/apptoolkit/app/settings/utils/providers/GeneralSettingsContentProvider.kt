@@ -12,7 +12,6 @@ import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsCon
 import com.d4rk.android.libs.apptoolkit.app.theme.ThemeSettingsList
 
 class GeneralSettingsContentProvider(
-    private val displayProvider: DisplaySettingsProvider,
     private val privacyProvider: PrivacySettingsProvider,
     private val customScreens: Map<String, @Composable (PaddingValues) -> Unit> = emptyMap(),
 ) {
@@ -21,7 +20,7 @@ class GeneralSettingsContentProvider(
         when (contentKey) {
             SettingsContent.ABOUT -> AboutSettingsList(paddingValues = paddingValues, snackbarHostState = snackbarHostState)
             SettingsContent.ADVANCED -> AdvancedSettingsList(paddingValues = paddingValues)
-            SettingsContent.DISPLAY -> DisplaySettingsList(paddingValues = paddingValues, provider = displayProvider)
+            SettingsContent.DISPLAY -> DisplaySettingsList(paddingValues = paddingValues)
             SettingsContent.SECURITY_AND_PRIVACY -> PrivacySettingsList(paddingValues = paddingValues, provider = privacyProvider)
             SettingsContent.THEME -> ThemeSettingsList(paddingValues = paddingValues)
             SettingsContent.USAGE_AND_DIAGNOSTICS -> UsageAndDiagnosticsList(paddingValues = paddingValues)

@@ -54,7 +54,7 @@ fun SelectStartupScreenAlertDialog(
     val defaultRoute: String = values.firstOrNull().orEmpty()
     val startupRoute by dataStore
         .getStartupPage(default = defaultRoute)
-        .collectWithLifecycleOnCompletion(initialValue = defaultRoute) { cause: Throwable? -> }
+        .collectWithLifecycleOnCompletion(initialValueProvider = { defaultRoute }) { _: Throwable? -> }
 
     var selectedPage by rememberSaveable { mutableStateOf(defaultRoute) }
 

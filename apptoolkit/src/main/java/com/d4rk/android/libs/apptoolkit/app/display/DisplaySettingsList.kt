@@ -42,12 +42,13 @@ import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
 @Composable
 fun DisplaySettingsList(
     paddingValues: PaddingValues = PaddingValues(),
-    provider: DisplaySettingsProvider
-) { // FIXME: Parameter 'provider' has runtime-determined stability
+    provider: DisplaySettingsProvider = koinInject() // FIXME: Parameter 'provider' has runtime-determined stability
+) {
     val coroutineScope : CoroutineScope = rememberCoroutineScope()
     val context : Context = LocalContext.current
     val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
@@ -55,7 +56,7 @@ fun DisplaySettingsList(
     var showStartupDialog : Boolean by remember { mutableStateOf(value = false) }
 
     val currentThemeModeKey : String by dataStore.themeMode.collectWithLifecycleOnCompletion(
-        initialValue = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
+        initialValueProvider = { DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM }
     ) { cause : Throwable? ->
         if (cause != null && cause !is CancellationException) {
             Log.w(DISPLAY_SETTINGS_LOG_TAG, "Theme mode flow completed with an error.", cause)
@@ -79,17 +80,20 @@ fun DisplaySettingsList(
             stringResource(id = R.string.will_turn_on_automatically_by_system)
     }
 
-    val isDynamicColors : Boolean by dataStore.dynamicColors.collectWithLifecycleOnCompletion(initialValue = true) { cause : Throwable? ->
+    val isDynamicColors: Boolean by dataStore.dynamicColors.collectWithLifecycleOnCompletion(
+        initialValueProvider = { true }) { cause: Throwable? ->
         if (cause != null && cause !is CancellationException) {
             Log.w(DISPLAY_SETTINGS_LOG_TAG, "Dynamic color flow completed with an error.", cause)
         }
     }
-    val bouncyButtons : Boolean by dataStore.bouncyButtons.collectWithLifecycleOnCompletion(initialValue = true) { cause : Throwable? ->
+    val bouncyButtons: Boolean by dataStore.bouncyButtons.collectWithLifecycleOnCompletion(
+        initialValueProvider = { true }) { cause: Throwable? ->
         if (cause != null && cause !is CancellationException) {
             Log.w(DISPLAY_SETTINGS_LOG_TAG, "Bouncy buttons flow completed with an error.", cause)
         }
     }
-    val showLabelsOnBottomBar : Boolean by dataStore.getShowBottomBarLabels().collectWithLifecycleOnCompletion(initialValue = true) { cause : Throwable? ->
+    val showLabelsOnBottomBar: Boolean by dataStore.getShowBottomBarLabels()
+        .collectWithLifecycleOnCompletion(initialValueProvider = { true }) { cause: Throwable? ->
         if (cause != null && cause !is CancellationException) {
             Log.w(DISPLAY_SETTINGS_LOG_TAG, "Bottom bar label flow completed with an error.", cause)
         }
@@ -239,9 +243,17 @@ fun DisplaySettingsList(
             }
 
             if (showLanguageDialog) {
-                SelectLanguageAlertDialog(onDismiss = { showLanguageDialog = false },
-                    onLanguageSelected = { newLanguageCode: String -> // FIXME: Assigned value is never read
-                    AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(newLanguageCode))
+                SelectLanguageAlertDialog(
+                    onDismiss = {
+                        showLanguageDialog = false
+                    }, // FIXME: Assigned value is never read
+                    onLanguageSelected = { newLanguageCode: String ->
+                        showLanguageDialog = false // FIXME: Assigned value is never read
+                        AppCompatDelegate.setApplicationLocales(
+                            LocaleListCompat.forLanguageTags(
+                                newLanguageCode
+                            )
+                        )
                 })
             }
         }

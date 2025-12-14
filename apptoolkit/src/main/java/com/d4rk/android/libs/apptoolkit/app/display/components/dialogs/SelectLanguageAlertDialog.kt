@@ -30,6 +30,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.RadioButt
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.MediumVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectWithLifecycleOnCompletion
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -41,13 +43,20 @@ fun SelectLanguageAlertDialog(onDismiss: () -> Unit, onLanguageSelected: (String
     val context: Context = LocalContext.current
     val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
     val selectedLanguage = remember { mutableStateOf(value = "") }
-    val languageEntries: List<String> =
-        stringArrayResource(id = R.array.preference_language_entries).toList()
-    val languageValues: List<String> =
-        stringArrayResource(id = R.array.preference_language_values).toList()
+
+    val preferenceLanguageEntries =
+        stringArrayResource(id = R.array.preference_language_entries).toList().toImmutableList()
+    val preferenceLanguageValues =
+        stringArrayResource(id = R.array.preference_language_values).toList().toImmutableList()
+    val languageEntries: ImmutableList<String> = remember {
+        preferenceLanguageEntries
+    }
+    val languageValues: ImmutableList<String> = remember {
+        preferenceLanguageValues
+    }
 
     val currentLanguage by dataStore.getLanguage()
-        .collectWithLifecycleOnCompletion(initialValue = "") { cause: Throwable? ->
+        .collectWithLifecycleOnCompletion(initialValueProvider = { "" }) { cause: Throwable? ->
             if (cause != null && cause !is CancellationException) {
                 selectedLanguage.value = ""
             }
@@ -98,10 +107,9 @@ fun SelectLanguageAlertDialog(onDismiss: () -> Unit, onLanguageSelected: (String
 @Composable
 fun SelectLanguageAlertDialogContent(
     selectedLanguage: MutableState<String>,
-    languageEntries: List<String>, // FIXME: Parameter 'languageEntries' has runtime-determined stability
-    languageValues: List<String> // FIXME: Parameter 'languageValues' has runtime-determined stability
-) { // FIXME: Parameter 'languageEntries' has runtime-determined stability && Parameter 'languageValues' has runtime-determined stability
-
+    languageEntries: ImmutableList<String>,
+    languageValues: ImmutableList<String>
+) {
     Column {
         Text(text = stringResource(id = R.string.dialog_language_subtitle))
         Box(
