@@ -31,10 +31,12 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.SettingsP
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PermissionsScreen(viewModel: PermissionsViewModel) { // FIXME: Parameter 'viewModel' has runtime-determined stability
+fun PermissionsScreen() {
+    val viewModel: PermissionsViewModel = koinViewModel()
     val screenState: UiStateScreen<SettingsConfig> by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
@@ -61,7 +63,7 @@ fun PermissionsScreen(viewModel: PermissionsViewModel) { // FIXME: Parameter 'vi
 fun PermissionsContent(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig
-) { // FIXME: Parameter 'settingsConfig' has runtime-determined stability
+) {
     LazyColumn(contentPadding = paddingValues , modifier = Modifier.fillMaxHeight()) {
         settingsConfig.categories.forEach { category ->
             item {

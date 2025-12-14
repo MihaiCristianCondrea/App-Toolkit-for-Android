@@ -20,12 +20,13 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraTinyVert
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import org.koin.compose.koinInject
 
 @Composable
 fun PrivacySettingsList(
     paddingValues: PaddingValues = PaddingValues(),
-    provider: PrivacySettingsProvider
-) { // FIXME: Parameter 'provider' has runtime-determined stability
+    provider: PrivacySettingsProvider = koinInject(), // FIXME: Parameter 'provider' has runtime-determined stability
+) {
     val context : Context = LocalContext.current
 
     LazyColumn(

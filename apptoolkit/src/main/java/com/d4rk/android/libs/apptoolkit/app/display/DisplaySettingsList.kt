@@ -47,8 +47,8 @@ import org.koin.compose.koinInject
 @Composable
 fun DisplaySettingsList(
     paddingValues: PaddingValues = PaddingValues(),
-    provider: DisplaySettingsProvider = koinInject() // FIXME: Parameter 'provider' has runtime-determined stability
 ) {
+    val provider: DisplaySettingsProvider = koinInject()
     val coroutineScope : CoroutineScope = rememberCoroutineScope()
     val context : Context = LocalContext.current
     val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
@@ -245,8 +245,8 @@ fun DisplaySettingsList(
             if (showLanguageDialog) {
                 SelectLanguageAlertDialog(
                     onDismiss = {
-                        showLanguageDialog = false
-                    }, // FIXME: Assigned value is never read
+                        showLanguageDialog = false // FIXME: Assigned value is never read
+                    },
                     onLanguageSelected = { newLanguageCode: String ->
                         showLanguageDialog = false // FIXME: Assigned value is never read
                         AppCompatDelegate.setApplicationLocales(
