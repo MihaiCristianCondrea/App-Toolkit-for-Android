@@ -10,24 +10,31 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 
+// TODO: Move in a more fitting file in the code library
+@Stable
+class StableNavController(
+    val navController: NavHostController
+)
+
 @Composable
 fun NavigationHost(
-    navController: NavHostController,
+    navController: StableNavController,
     startDestination: String,
-    navGraphBuilder: NavGraphBuilder.() -> Unit // FIXME: Unstable parameter 'navController' prevents composable from being skippable
+    navGraphBuilder: NavGraphBuilder.() -> Unit
 ) {
     NavHost(
-        navController = navController ,
-        startDestination = startDestination ,
-        enterTransition = NavigationTransitions.DefaultEnter ,
-        exitTransition = NavigationTransitions.DefaultExit ,
-        popEnterTransition = NavigationTransitions.DefaultEnter ,
-        popExitTransition = NavigationTransitions.DefaultExit ,
+        navController = navController.navController,
+        startDestination = startDestination,
+        enterTransition = NavigationTransitions.DefaultEnter,
+        exitTransition = NavigationTransitions.DefaultExit,
+        popEnterTransition = NavigationTransitions.DefaultEnter,
+        popExitTransition = NavigationTransitions.DefaultExit,
         builder = navGraphBuilder
     )
 }

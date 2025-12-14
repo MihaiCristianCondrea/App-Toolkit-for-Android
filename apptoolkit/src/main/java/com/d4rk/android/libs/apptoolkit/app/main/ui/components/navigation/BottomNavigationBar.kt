@@ -1,5 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation
 
+import android.content.Context
 import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.basicMarquee
@@ -21,31 +22,36 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.BottomAppBarNativeAdBanner
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import kotlinx.collections.immutable.ImmutableList
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
 @Composable
 fun BottomNavigationBar(
-    navController: NavController, // FIXME: Unstable parameter 'navController' prevents composable from being skippable
-    items: List<BottomBarItem>, // FIXME: Parameter 'items' has runtime-determined stability
+    navController: StableNavController,
+    items: ImmutableList<BottomBarItem>,
     modifier: Modifier = Modifier,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
-    val context = LocalContext.current
-    val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
+    val context: Context = LocalContext.current
+
+    val dataStore: CommonDataStore = CommonDataStore.getInstance(context)
     val adsConfig: AdsConfig = koinInject(qualifier = named("bottom_nav_bar_native_ad"))
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = backStackEntry?.destination?.route ?: navController.currentDestination?.route
-    val showLabels: Boolean =
-        dataStore.getShowBottomBarLabels().collectAsStateWithLifecycle(initialValue = true).value
+
+    val nav = navController.navController
+    val backStackEntry by nav.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route ?: nav.currentDestination?.route
+
+    val showLabels: Boolean by dataStore
+        .getShowBottomBarLabels()
+        .collectAsStateWithLifecycle(initialValue = true)
 
     Column(modifier = modifier) {
         key("bottom_ad") {
@@ -57,30 +63,34 @@ fun BottomNavigationBar(
 
         NavigationBar {
             items.forEach { item ->
+                val selected = currentRoute == item.route
+
                 NavigationBarItem(
+                    selected = selected,
+                    alwaysShowLabel = showLabels,
                     icon = {
                         Icon(
-                            imageVector = if (currentRoute == item.route) item.selectedIcon else item.icon,
+                            imageVector = if (selected) item.selectedIcon else item.icon,
                             contentDescription = stringResource(id = item.title),
                             modifier = Modifier.bounceClick()
                         )
                     },
                     label = {
                         Text(
-                            text = stringResource(id = item.title) , overflow = TextOverflow.Ellipsis , modifier = Modifier.basicMarquee()
+                            text = stringResource(id = item.title),
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.basicMarquee()
                         )
                     },
-                    alwaysShowLabel = showLabels,
-                    selected = currentRoute == item.route,
                     onClick = {
                         view.playSoundEffect(SoundEffectConstants.CLICK)
-                        hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                        hapticFeedback.performHapticFeedback(
+                            hapticFeedbackType = HapticFeedbackType.ContextClick
+                        )
 
-                        if (currentRoute != item.route) {
-                            navController.navigate(item.route) {
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = false
-                                }
+                        if (!selected) {
+                            nav.navigate(item.route) {
+                                popUpTo(nav.graph.startDestinationId) { saveState = false }
                                 launchSingleTop = true
                             }
                         }

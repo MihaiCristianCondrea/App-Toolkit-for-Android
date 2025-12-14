@@ -57,6 +57,7 @@ import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.Changelog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.BottomNavigationBar
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.LeftNavigationRail
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.MainTopAppBar
+import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.StableNavController
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHost
 import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
@@ -161,6 +162,7 @@ fun MainScaffoldContent(
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val navController: NavHostController = rememberNavController()
+    val stableNavController = remember(navController) { StableNavController(navController) }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute: String? = navBackStackEntry?.destination?.route
@@ -206,7 +208,10 @@ fun MainScaffoldContent(
                 windowInsets = WindowInsets.navigationBars,
                 scrollBehavior = bottomAppBarScrollBehavior,
             ) {
-                BottomNavigationBar(navController = navController, items = bottomItems)
+                BottomNavigationBar(
+                    navController = stableNavController,
+                    items = bottomItems
+                )
             }
         },
         floatingActionButton = {
@@ -218,7 +223,7 @@ fun MainScaffoldContent(
         }
     ) { paddingValues ->
         AppNavigationHost(
-            navController = navController,
+            navController = stableNavController,
             snackbarHostState = snackBarHostState,
             paddingValues = paddingValues,
             windowWidthSizeClass = windowWidthSizeClass,
@@ -268,6 +273,7 @@ fun MainScaffoldTabletContent(
     val showChangelog = rememberSaveable { mutableStateOf(false) }
 
     val navController: NavHostController = rememberNavController()
+    val stableNavController = remember(navController) { StableNavController(navController) }
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute by remember(backStackEntry) {
         derivedStateOf {
@@ -342,7 +348,7 @@ fun MainScaffoldTabletContent(
             },
             content = {
                 AppNavigationHost(
-                    navController = navController,
+                    navController = stableNavController,
                     snackbarHostState = snackBarHostState,
                     paddingValues = PaddingValues(),
                     windowWidthSizeClass = windowWidthSizeClass,

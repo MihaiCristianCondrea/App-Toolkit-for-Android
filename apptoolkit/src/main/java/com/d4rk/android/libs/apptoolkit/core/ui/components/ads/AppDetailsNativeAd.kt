@@ -59,7 +59,7 @@ import com.google.android.material.button.MaterialButton
 @Composable
 fun AppDetailsNativeAd(
     modifier: Modifier = Modifier,
-    adsConfig: AdsConfig // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
+    adsConfig: AdsConfig
 ) {
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current

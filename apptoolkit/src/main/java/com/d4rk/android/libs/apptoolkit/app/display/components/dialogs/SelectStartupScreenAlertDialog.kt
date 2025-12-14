@@ -9,11 +9,12 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +26,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.RadioButt
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.MediumVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectWithLifecycleOnCompletion
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -32,28 +35,54 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.onCompletion
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
+import kotlin.math.min
 
 @Composable
-fun SelectStartupScreenAlertDialog(onDismiss: () -> Unit, onStartupSelected: (String) -> Unit) {
+fun SelectStartupScreenAlertDialog(
+    onDismiss: () -> Unit,
+    onStartupSelected: (String) -> Unit
+) {
     val context = LocalContext.current
     val dataStore = CommonDataStore.getInstance(context)
-    val selectedPage = remember { mutableStateOf("") }
-    val entries: List<String> = koinInject(qualifier = named("startup_entries"))
-    val values: List<String> = koinInject(qualifier = named("startup_values"))
-    val startupRoute by dataStore.getStartupPage(default = values.first()).collectWithLifecycleOnCompletion(initialValue = values.first()) { cause : Throwable? ->
-        if (cause != null && cause !is CancellationException) {
-            selectedPage.value = values.first()
-        }
-    }
+
+    val entriesRaw: List<String> = koinInject(qualifier = named("startup_entries"))
+    val valuesRaw: List<String> = koinInject(qualifier = named("startup_values"))
+
+    val entries: ImmutableList<String> = remember(entriesRaw) { entriesRaw.toImmutableList() }
+    val values: ImmutableList<String> = remember(valuesRaw) { valuesRaw.toImmutableList() }
+
+    val defaultRoute: String = values.firstOrNull().orEmpty()
+    val startupRoute by dataStore
+        .getStartupPage(default = defaultRoute)
+        .collectWithLifecycleOnCompletion(initialValue = defaultRoute) { cause: Throwable? -> }
+
+    var selectedPage by rememberSaveable { mutableStateOf(defaultRoute) }
 
     LaunchedEffect(startupRoute) {
-        selectedPage.value = startupRoute
+        selectedPage = startupRoute
+    }
+
+    val latestStartupRoute by rememberUpdatedState(startupRoute)
+    LaunchedEffect(dataStore) {
+        snapshotFlow { selectedPage }
+            .distinctUntilChanged()
+            .drop(1)
+            .onCompletion { cause: Throwable? ->
+                if (cause != null && cause !is CancellationException) {
+                    selectedPage = latestStartupRoute
+                }
+            }
+            .collectLatest { route: String ->
+                if (route.isNotBlank() && route != latestStartupRoute) {
+                    dataStore.saveStartupPage(route)
+                }
+            }
     }
 
     BasicAlertDialog(
         onDismiss = onDismiss,
         onConfirm = {
-            onStartupSelected(selectedPage.value)
+            onStartupSelected(selectedPage)
             onDismiss()
         },
         icon = Icons.Outlined.Home,
@@ -61,55 +90,40 @@ fun SelectStartupScreenAlertDialog(onDismiss: () -> Unit, onStartupSelected: (St
         confirmButtonText = stringResource(id = R.string.done_button_content_description),
         title = stringResource(id = R.string.startup_page),
         content = {
-            SelectStartupScreenAlertDialogContent(selectedPage, dataStore, entries, values, startupRoute)
+            SelectStartupScreenAlertDialogContent(
+                selectedPage = selectedPage,
+                onSelectedPageChange = { selectedPage = it },
+                startupEntries = entries,
+                startupValues = values,
+            )
         }
     )
 }
 
 @Composable
 fun SelectStartupScreenAlertDialogContent(
-    selectedPage: MutableState<String>,
-    dataStore: CommonDataStore, // FIXME: Unstable parameter 'dataStore' prevents composable from being skippable
-    startupEntries: List<String>, // FIXME: Parameter 'startupEntries' has runtime-determined stability
-    startupValues: List<String>, // FIXME: Parameter 'startupValues' has runtime-determined stability
-    startupRoute: String
+    selectedPage: String,
+    onSelectedPageChange: (String) -> Unit,
+    startupEntries: ImmutableList<String>,
+    startupValues: ImmutableList<String>,
 ) {
+    val count = min(startupEntries.size, startupValues.size)
 
     Column {
         Text(text = stringResource(id = R.string.dialog_startup_subtitle))
         Box(modifier = Modifier.fillMaxWidth()) {
             LazyColumn {
-                items(count = startupEntries.size) { index ->
+                items(count) { index ->
                     val currentValue = startupValues[index]
                     RadioButtonPreferenceItem(
                         text = startupEntries[index],
-                        isChecked = selectedPage.value == currentValue,
-                        onCheckedChange = {
-                            selectedPage.value = currentValue
-                        }
+                        isChecked = selectedPage == currentValue,
+                        onCheckedChange = { onSelectedPageChange(currentValue) }
                     )
                 }
             }
         }
         MediumVerticalSpacer()
         InfoMessageSection(message = stringResource(id = R.string.dialog_info_startup))
-    }
-
-    val latestStartupRoute by rememberUpdatedState(newValue = startupRoute)
-
-    LaunchedEffect(Unit) {
-        snapshotFlow { selectedPage.value }
-            .distinctUntilChanged()
-            .drop(count = 1)
-            .onCompletion { cause : Throwable? ->
-                if (cause != null && cause !is CancellationException) {
-                    selectedPage.value = latestStartupRoute
-                }
-            }
-            .collectLatest { route : String ->
-                if (route.isNotBlank() && route != latestStartupRoute) {
-                    dataStore.saveStartupPage(route)
-                }
-            }
     }
 }

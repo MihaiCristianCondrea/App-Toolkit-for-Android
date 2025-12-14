@@ -8,8 +8,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.FavoriteAppsRoute
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListRoute
@@ -17,6 +17,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoute
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpActivity
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.NavigationHost
+import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.StableNavController
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
@@ -27,40 +28,54 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
+// TODO: Move to another file that is more fitting
 typealias RandomAppHandler = () -> Unit
 
 @Composable
 fun AppNavigationHost(
-    navController: NavHostController,
+    navController: StableNavController,
     snackbarHostState: SnackbarHostState,
     paddingValues: PaddingValues,
     windowWidthSizeClass: WindowWidthSizeClass,
     onRandomAppHandlerChanged: (route: String, RandomAppHandler?) -> Unit,
 ) {
     val dataStore: DataStore = koinInject()
-    val startupRoute by dataStore.startupDestinationFlow()
+
+    val startupRoute: String by dataStore
+        .startupDestinationFlow()
         .collectAsStateWithLifecycle(initialValue = NavigationRoutes.ROUTE_APPS_LIST)
+
+    val startDestination: String = remember(startupRoute) {
+        startupRoute.ifBlank { NavigationRoutes.ROUTE_APPS_LIST }
+    }
+
+    val registerAppsListHandler = remember(onRandomAppHandlerChanged) {
+        { handler: RandomAppHandler? ->
+            onRandomAppHandlerChanged(NavigationRoutes.ROUTE_APPS_LIST, handler)
+        }
+    }
+    val registerFavoritesHandler = remember(onRandomAppHandlerChanged) {
+        { handler: RandomAppHandler? ->
+            onRandomAppHandlerChanged(NavigationRoutes.ROUTE_FAVORITE_APPS, handler)
+        }
+    }
 
     NavigationHost(
         navController = navController,
-        startDestination = startupRoute.ifBlank { NavigationRoutes.ROUTE_APPS_LIST }
+        startDestination = startDestination
     ) {
         composable(route = NavigationRoutes.ROUTE_APPS_LIST) {
             AppsListRoute(
                 paddingValues = paddingValues,
                 windowWidthSizeClass = windowWidthSizeClass,
-                onRegisterRandomAppHandler = { handler ->
-                    onRandomAppHandlerChanged(NavigationRoutes.ROUTE_APPS_LIST, handler)
-                },
+                onRegisterRandomAppHandler = registerAppsListHandler,
             )
         }
         composable(route = NavigationRoutes.ROUTE_FAVORITE_APPS) {
             FavoriteAppsRoute(
                 paddingValues = paddingValues,
                 windowWidthSizeClass = windowWidthSizeClass,
-                onRegisterRandomAppHandler = { handler ->
-                    onRandomAppHandlerChanged(NavigationRoutes.ROUTE_FAVORITE_APPS, handler)
-                },
+                onRegisterRandomAppHandler = registerFavoritesHandler,
             )
         }
     }

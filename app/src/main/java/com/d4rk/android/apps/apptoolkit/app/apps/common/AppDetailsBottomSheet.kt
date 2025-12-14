@@ -62,7 +62,7 @@ fun AppDetailsBottomSheet(
     onFavoriteClick: () -> Unit,
     onOpenAppClick: () -> Unit,
     onOpenInPlayStoreClick: () -> Unit,
-    adsConfig: AdsConfig, // FIXME: Unstable parameter 'adsConfig' prevents composable from being skippable
+    adsConfig: AdsConfig,
     modifier: Modifier = Modifier,
 ) {
     Column(
