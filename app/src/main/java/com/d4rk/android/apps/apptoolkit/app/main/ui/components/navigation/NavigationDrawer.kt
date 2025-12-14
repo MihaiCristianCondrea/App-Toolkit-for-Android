@@ -8,11 +8,9 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.d4rk.android.apps.apptoolkit.app.main.domain.model.ui.UiMainScreen
@@ -21,43 +19,49 @@ import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.NavigationDrawerItemContent
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.hapticDrawerSwipe
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
 @Composable
 fun NavigationDrawer(
-    screenState: UiStateScreen<UiMainScreen>, // FIXME: Unstable parameter 'screenState' prevents composable from being skippable
+    uiState: UiMainScreen,
     windowWidthSizeClass: WindowWidthSizeClass,
-    bottomItems: List<BottomBarItem>, // FIXME: Unstable parameter 'bottomItems' prevents composable from being skippable
+    bottomItems: ImmutableList<BottomBarItem>,
 ) {
-    val drawerState : DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val coroutineScope : CoroutineScope = rememberCoroutineScope()
-    val context : Context = LocalContext.current
+    val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val context: Context = LocalContext.current
     val changelogUrl: String = koinInject(qualifier = named("github_changelog"))
-    var showChangelog by rememberSaveable { mutableStateOf(false) }
-    val uiState : UiMainScreen = screenState.data ?: UiMainScreen()
+
+    val showChangelog = rememberSaveable { mutableStateOf(false) }
 
     ModalNavigationDrawer(
-        modifier = Modifier.hapticDrawerSwipe(state = drawerState) , drawerState = drawerState , drawerContent = {
+        modifier = Modifier.hapticDrawerSwipe(state = drawerState),
+        drawerState = drawerState,
+        drawerContent = {
             ModalDrawerSheet {
                 LargeVerticalSpacer()
-                uiState.navigationDrawerItems.forEach { item : NavigationDrawerItem ->
-                    NavigationDrawerItemContent(item = item , handleNavigationItemClick = {
-                        handleNavigationItemClick(
-                            context = context,
-                            item = item,
-                            drawerState = drawerState,
-                            coroutineScope = coroutineScope,
-                            onChangelogRequested = { showChangelog = true }
-                        )
-                    })
+                uiState.navigationDrawerItems.forEach { item: NavigationDrawerItem ->
+                    NavigationDrawerItemContent(
+                        item = item,
+                        handleNavigationItemClick = {
+                            handleNavigationItemClick(
+                                context = context,
+                                item = item,
+                                drawerState = drawerState,
+                                coroutineScope = coroutineScope,
+                                onChangelogRequested = { showChangelog.value = true }
+                            )
+                        }
+                    )
                 }
             }
-        }) {
+        }
+    ) {
         MainScaffoldContent(
             drawerState = drawerState,
             windowWidthSizeClass = windowWidthSizeClass,
@@ -65,10 +69,10 @@ fun NavigationDrawer(
         )
     }
 
-    if (showChangelog) {
+    if (showChangelog.value) {
         ChangelogDialog(
             changelogUrl = changelogUrl,
-            onDismiss = { showChangelog = false }, // FIXME: Assigned value is never read
+            onDismiss = { showChangelog.value = false }
         )
     }
 }

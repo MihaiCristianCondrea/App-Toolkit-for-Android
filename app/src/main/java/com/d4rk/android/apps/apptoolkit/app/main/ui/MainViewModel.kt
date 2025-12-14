@@ -5,23 +5,28 @@ import com.d4rk.android.apps.apptoolkit.app.main.domain.action.MainAction
 import com.d4rk.android.apps.apptoolkit.app.main.domain.action.MainEvent
 import com.d4rk.android.apps.apptoolkit.app.main.domain.model.ui.UiMainScreen
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
+import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.successData
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
+
 class MainViewModel(
     private val navigationRepository: NavigationRepository
-) : ScreenViewModel<UiMainScreen , MainEvent , MainAction>(initialState = UiStateScreen(data = UiMainScreen())) {
+) : ScreenViewModel<UiMainScreen, MainEvent, MainAction>(
+    initialState = UiStateScreen(data = UiMainScreen())
+) {
 
     init {
-        onEvent(event = MainEvent.LoadNavigation)
+        onEvent(MainEvent.LoadNavigation)
     }
 
-    override fun onEvent(event : MainEvent) {
+    override fun onEvent(event: MainEvent) {
         when (event) {
-            is MainEvent.LoadNavigation -> loadNavigationItems()
+            MainEvent.LoadNavigation -> loadNavigationItems()
         }
     }
 
@@ -36,8 +41,10 @@ class MainViewModel(
                         )
                     }
                 }
-                .collect { items ->
-                    screenState.successData { copy(navigationDrawerItems = items) }
+                .collect { items: List<NavigationDrawerItem> ->
+                    screenState.successData {
+                        copy(navigationDrawerItems = items.toImmutableList())
+                    }
                 }
         }
     }
