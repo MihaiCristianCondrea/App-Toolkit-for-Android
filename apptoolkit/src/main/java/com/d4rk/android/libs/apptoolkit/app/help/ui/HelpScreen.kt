@@ -47,8 +47,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraLargeVer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ReviewHelper
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
 
 
@@ -63,10 +65,10 @@ private tailrec fun Context.findActivity(): ComponentActivity? = when (this) {
 @Composable
 fun HelpScreen(
     config: HelpScreenConfig,
-    viewModel: HelpViewModel // FIXME: Parameter 'viewModel' has runtime-determined stability
+    viewModel: HelpViewModel = koinViewModel() // FIXME: Parameter 'viewModel' has runtime-determined stability
 ) {
     val context = LocalContext.current
-    val activity = remember(context) { context.findActivity() } // may be null in preview
+    val activity = remember(context) { context.findActivity() }
     val scope = rememberCoroutineScope()
 
     val scrollBehavior: TopAppBarScrollBehavior =
@@ -145,7 +147,7 @@ fun HelpScreen(
 
 @Composable
 fun HelpScreenContent(
-    questions: List<UiHelpQuestion>, // FIXME: Parameter 'questions' has runtime-determined stability
+    questions: ImmutableList<UiHelpQuestion>,
     paddingValues: PaddingValues
 ) {
     val context = LocalContext.current

@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Policy
 import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.Campaign
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material3.AlertDialog
@@ -38,6 +39,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,8 +81,9 @@ import org.koin.compose.koinInject
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun CrashlyticsOnboardingPageTab(configProvider: BuildInfoProvider = koinInject()) { // FIXME: Parameter 'configProvider' has runtime-determined stability
+fun CrashlyticsOnboardingPageTab() {
     val context: Context = LocalContext.current
+    val configProvider = koinInject<BuildInfoProvider>()
     val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val switchState: State<Boolean> =
@@ -146,7 +149,7 @@ fun CrashlyticsOnboardingPageTab(configProvider: BuildInfoProvider = koinInject(
 
             LargeVerticalSpacer()
 
-            LearnMoreSection(context = context)
+            LearnMoreSection()
         }
     }
 
@@ -219,29 +222,37 @@ fun UsageAndDiagnosticsToggleCard(
 }
 
 @Composable
-fun LearnMoreSection(context: Context) { // FIXME: Parameter 'context' has runtime-determined stability
+fun LearnMoreSection() {
+    val context: Context = LocalContext.current
+    val appContext = remember(context) { context.applicationContext }
+
+    // ✅ Compose-native resource read (fixes the lint)
+    val errorText: String = stringResource(id = R.string.error)
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         HorizontalDivider(
-            modifier = Modifier.padding(vertical = SizeConstants.LargeSize), thickness = SizeConstants.ExtraTinySize / 4
+            modifier = Modifier.padding(vertical = SizeConstants.LargeSize),
+            thickness = SizeConstants.ExtraTinySize / 4
         )
+
         Text(
             text = stringResource(R.string.onboarding_crashlytics_privacy_info),
             style = MaterialTheme.typography.bodySmall,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-
             modifier = Modifier.padding(horizontal = SizeConstants.LargeIncreasedSize + SizeConstants.ExtraSmallSize)
         )
 
         MediumVerticalSpacer()
+
         OutlinedIconButtonWithText(
             onClick = {
                 val intent = Intent(Intent.ACTION_VIEW, AppLinks.PRIVACY_POLICY.toUri())
                 intent.resolveActivity(context.packageManager)?.let {
                     runCatching { context.startActivity(intent) }
                 } ?: Toast.makeText(
-                    context,
-                    context.getString(R.string.error),
+                    appContext,
+                    errorText, // ✅ no LocalContext.getString()
                     Toast.LENGTH_SHORT
                 ).show()
             },
@@ -252,13 +263,14 @@ fun LearnMoreSection(context: Context) { // FIXME: Parameter 'context' has runti
     }
 }
 
+
 @Composable
 fun CrashlyticsConsentDialog(
     onDismissRequest: () -> Unit,
     onAcknowledge: () -> Unit,
-    configProvider: BuildInfoProvider = koinInject() // FIXME: Parameter 'configProvider' has runtime-determined stability
 ) {
     val context: Context = LocalContext.current
+    val configProvider: BuildInfoProvider = koinInject()
     val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
@@ -401,7 +413,8 @@ fun CrashlyticsConsentDialog(
                     }
                     onAcknowledge()
                 },
-                label = stringResource(id = R.string.button_acknowledge_consents)
+                label = stringResource(id = R.string.button_acknowledge_consents),
+                icon = Icons.Outlined.Check,
             )
         },
         containerColor = MaterialTheme.colorScheme.surface,

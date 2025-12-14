@@ -14,9 +14,10 @@ import androidx.compose.ui.draw.clip
 import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.UiHelpQuestion
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun HelpQuestionsList(questions: List<UiHelpQuestion>) { // FIXME: Parameter 'questions' has runtime-determined stability
+fun HelpQuestionsList(questions: ImmutableList<UiHelpQuestion>) {
     val expandedStates : SnapshotStateMap<Int , Boolean> = remember { mutableStateMapOf() }
     val cardShape = RoundedCornerShape(
         topStart = SizeConstants.LargeIncreasedSize,

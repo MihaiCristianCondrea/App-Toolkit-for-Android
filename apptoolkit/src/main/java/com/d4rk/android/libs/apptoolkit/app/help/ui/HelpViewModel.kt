@@ -3,7 +3,6 @@ package com.d4rk.android.libs.apptoolkit.app.help.ui
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.app.help.domain.actions.HelpAction
 import com.d4rk.android.libs.apptoolkit.app.help.domain.actions.HelpEvent
-import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.UiHelpQuestion
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.ui.UiHelpScreen
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
@@ -16,6 +15,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.updateState
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -37,13 +37,14 @@ class HelpViewModel(
     }
 
     private fun loadFaq() {
-        var latestQuestions: List<UiHelpQuestion> = emptyList()
+        var latestQuestions = UiHelpScreen().questions
 
         helpRepository.fetchFaq()
             .onStart { screenState.updateState(ScreenState.IsLoading()) }
             .onEach { questions ->
-                latestQuestions = questions
-                screenState.copyData { copy(questions = questions) }
+                val immutableQuestions = questions.toImmutableList()
+                latestQuestions = immutableQuestions
+                screenState.copyData { copy(questions = immutableQuestions) }
             }
             .onCompletion { cause ->
                 when {
