@@ -1,6 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.app.settings.settings.ui
 
-import android.app.Activity
 import android.content.Context
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
@@ -63,20 +62,24 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVertical
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(
-    viewModel: SettingsViewModel, // FIXME: Parameter 'viewModel' has runtime-determined stability
-    contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
-) {
+fun SettingsScreen() {
+    val viewModel: SettingsViewModel = koinViewModel()
+    val contentProvider: GeneralSettingsContentProvider = koinInject()
     val screenState: UiStateScreen<SettingsConfig> by viewModel.uiState.collectAsStateWithLifecycle()
     val context: Context = LocalContext.current
 
+    LaunchedEffect(Unit) {
+        viewModel.onEvent(event = SettingsEvent.Load(context = context))
+    }
+
     LargeTopAppBarWithScaffold(
         title = stringResource(id = R.string.settings),
-        onBackClicked = { (context as Activity).finish() },
+        onBackClicked = { (context as? android.app.Activity)?.finish() },
     ) { paddingValues ->
         ScreenStateHandler(
             screenState = screenState,
@@ -104,7 +107,7 @@ fun SettingsScreen(
 fun SettingsScreenContent(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
-    contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
+    contentProvider: GeneralSettingsContentProvider,
 ) {
     val windowWidthSizeClass: WindowWidthSizeClass = rememberWindowWidthSizeClass()
     if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
@@ -124,7 +127,7 @@ fun SettingsScreenContent(
 @Composable
 fun PhoneSettingsScreen(
     paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig, // FIXME: Parameter 'settingsConfig' has runtime-determined stability
+    settingsConfig: SettingsConfig,
 ) {
     SettingsList(
         paddingValues = paddingValues,
@@ -136,8 +139,8 @@ fun PhoneSettingsScreen(
 @Composable
 fun TabletSettingsScreen(
     paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig, // FIXME: Parameter 'settingsConfig' has runtime-determined stability
-    contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
+    settingsConfig: SettingsConfig,
+    contentProvider: GeneralSettingsContentProvider,
 ) {
     var selected: SettingsPreference? by remember { mutableStateOf(null) }
 
@@ -226,7 +229,7 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
 fun SettingsDetail(
     preference: SettingsPreference,
     paddingValues: PaddingValues,
-    contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
+    contentProvider: GeneralSettingsContentProvider,
 ) {
     val viewModel: GeneralSettingsViewModel = koinViewModel()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -248,7 +251,7 @@ fun SettingsDetail(
 @Composable
 fun SettingsList(
     paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig, // FIXME: Parameter 'settingsConfig' has runtime-determined stability
+    settingsConfig: SettingsConfig,
     onPreferenceClick: (SettingsPreference) -> Unit = {},
 ) {
     LazyColumn(

@@ -65,8 +65,8 @@ private tailrec fun Context.findActivity(): ComponentActivity? = when (this) {
 @Composable
 fun HelpScreen(
     config: HelpScreenConfig,
-    viewModel: HelpViewModel = koinViewModel() // FIXME: Parameter 'viewModel' has runtime-determined stability
 ) {
+    val viewModel: HelpViewModel = koinViewModel()
     val context = LocalContext.current
     val activity = remember(context) { context.findActivity() }
     val scope = rememberCoroutineScope()

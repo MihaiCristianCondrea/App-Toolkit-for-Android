@@ -5,17 +5,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppTheme
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SupportActivity : AppCompatActivity() {
-    private val viewModel : SupportViewModel by viewModel()
-
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                SupportComposable(viewModel = viewModel , activity = this@SupportActivity)
+                SupportComposable()
             }
         }
     }

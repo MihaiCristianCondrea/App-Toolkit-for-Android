@@ -27,9 +27,9 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 @Composable
 fun DropdownMenuBox(
     selectedText: String,
-    options: List<String>,
+    options: List<String>, // FIXME: Parameter 'options' has runtime-determined stability
     onOptionSelected: (String) -> Unit
-) { // FIXME: Parameter 'options' has runtime-determined stability
+) {
     var expanded : Boolean by remember { mutableStateOf(value = false) }
     val hapticFeedback : HapticFeedback = LocalHapticFeedback.current
     val view : View = LocalView.current

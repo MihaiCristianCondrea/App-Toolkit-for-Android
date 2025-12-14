@@ -13,7 +13,7 @@ import androidx.compose.ui.util.lerp
 fun <T> CarouselItem(
     item: T,
     pageOffset: Float,
-    itemContent: @Composable (item: T) -> Unit // FIXME: Parameter 'item' has runtime-determined stability
+    itemContent: @Composable (item: T) -> Unit
 ) {
     val scale = animateFloatAsState(
         targetValue = lerp(0.95f , 1f , 1f - pageOffset.coerceIn(0f , 1f)) , animationSpec = tween(250) , label = "Carousel Item Scale for Page $pageOffset"

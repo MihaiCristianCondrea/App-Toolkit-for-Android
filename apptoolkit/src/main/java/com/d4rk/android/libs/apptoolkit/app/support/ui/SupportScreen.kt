@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -42,21 +43,35 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.LargeTopAp
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHandler
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SupportComposable(
-    viewModel: SupportViewModel, // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
-    activity: Activity, // FIXME: Unstable parameter 'activity' prevents composable from being skippable
 ) {
+    val viewModel: SupportViewModel = koinViewModel()
+    val activity = LocalContext.current as? Activity
     val screenState: UiStateScreen<SupportScreenUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    val currentViewModel = rememberUpdatedState(newValue = viewModel)
+
+    val onDonateClick: (Activity, com.android.billingclient.api.ProductDetails) -> Unit =
+        remember(currentViewModel) {
+            { hostActivity, productDetails ->
+                currentViewModel.value.onDonateClicked(
+                    activity = hostActivity,
+                    productDetails = productDetails
+                )
+            }
+        }
 
     LargeTopAppBarWithScaffold(
         title = stringResource(id = R.string.support_us),
-        onBackClicked = { activity.finish() },
+        onBackClicked = { activity?.finish() },
         snackbarHostState = snackbarHostState
     ) { paddingValues ->
         ScreenStateHandler(
@@ -74,9 +89,8 @@ fun SupportComposable(
             onSuccess = { data: SupportScreenUiState ->
                 SupportScreenContent(
                     paddingValues = paddingValues,
-                    activity = activity,
-                    viewModel = viewModel,
-                    data = data,
+                    products = data.products.toImmutableList(),
+                    onDonateClick = onDonateClick
                 )
             })
         DefaultSnackbarHandler(
@@ -91,14 +105,14 @@ fun SupportComposable(
 @Composable
 fun SupportScreenContent(
     paddingValues: PaddingValues,
-    activity: Activity, // FIXME: Unstable parameter 'activity' prevents composable from being skippable
-    viewModel: SupportViewModel, // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
-    data: SupportScreenUiState, // FIXME:Unstable parameter 'data' prevents composable from being skippable
+    products: ImmutableList<com.android.billingclient.api.ProductDetails>, // FIXME: Unstable parameter 'products' prevents composable from being skippable
+    onDonateClick: (Activity, com.android.billingclient.api.ProductDetails) -> Unit,
 ) {
     val context: Context = LocalContext.current
+    val activity = context as? Activity ?: return
     val nativeAdsConfig: AdsConfig = koinInject(qualifier = named(name = "support_native_ad"))
 
-    val productDetailsMap = data.products.associateBy { it.productId }
+    val productDetailsMap = products.associateBy { it.productId }
     LazyColumn(
         modifier = Modifier.padding(paddingValues),
     ) {
@@ -131,7 +145,12 @@ fun SupportScreenContent(
                             TonalIconButtonWithText(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
-                                    productDetailsMap[DonationProductIds.LOW_DONATION]?.let { viewModel.onDonateClicked(activity, it) }
+                                    productDetailsMap[DonationProductIds.LOW_DONATION]?.let {
+                                        onDonateClick(
+                                            activity,
+                                            it
+                                        )
+                                    }
                                 },
                                 icon = Icons.Outlined.Paid,
                                 label = productDetailsMap[DonationProductIds.LOW_DONATION]?.primaryFormattedPrice()
@@ -142,7 +161,12 @@ fun SupportScreenContent(
                             TonalIconButtonWithText(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
-                                    productDetailsMap[DonationProductIds.NORMAL_DONATION]?.let { viewModel.onDonateClicked(activity, it) }
+                                    productDetailsMap[DonationProductIds.NORMAL_DONATION]?.let {
+                                        onDonateClick(
+                                            activity,
+                                            it
+                                        )
+                                    }
                                 },
                                 icon = Icons.Outlined.Paid,
                                 label = productDetailsMap[DonationProductIds.NORMAL_DONATION]?.primaryFormattedPrice()
@@ -160,7 +184,12 @@ fun SupportScreenContent(
                             TonalIconButtonWithText(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
-                                    productDetailsMap[DonationProductIds.HIGH_DONATION]?.let { viewModel.onDonateClicked(activity, it) }
+                                    productDetailsMap[DonationProductIds.HIGH_DONATION]?.let {
+                                        onDonateClick(
+                                            activity,
+                                            it
+                                        )
+                                    }
                                 },
                                 icon = Icons.Outlined.Paid,
                                 label = productDetailsMap[DonationProductIds.HIGH_DONATION]?.primaryFormattedPrice()
@@ -171,7 +200,12 @@ fun SupportScreenContent(
                             TonalIconButtonWithText(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
-                                    productDetailsMap[DonationProductIds.EXTREME_DONATION]?.let { viewModel.onDonateClicked(activity, it) }
+                                    productDetailsMap[DonationProductIds.EXTREME_DONATION]?.let {
+                                        onDonateClick(
+                                            activity,
+                                            it
+                                        )
+                                    }
                                 },
                                 icon = Icons.Outlined.Paid,
                                 label = productDetailsMap[DonationProductIds.EXTREME_DONATION]?.primaryFormattedPrice()

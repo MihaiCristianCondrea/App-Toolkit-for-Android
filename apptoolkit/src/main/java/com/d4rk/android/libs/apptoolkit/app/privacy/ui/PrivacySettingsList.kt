@@ -25,8 +25,8 @@ import org.koin.compose.koinInject
 @Composable
 fun PrivacySettingsList(
     paddingValues: PaddingValues = PaddingValues(),
-    provider: PrivacySettingsProvider = koinInject(), // FIXME: Parameter 'provider' has runtime-determined stability
 ) {
+    val provider: PrivacySettingsProvider = koinInject()
     val context : Context = LocalContext.current
 
     LazyColumn(

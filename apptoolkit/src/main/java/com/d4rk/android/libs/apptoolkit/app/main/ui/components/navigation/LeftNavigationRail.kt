@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * A Composable that displays a vertical navigation rail on the left side of the screen,
@@ -57,7 +59,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
  *   the selected [BottomBarItem].
  * @param isRailExpanded A boolean to control the expanded/collapsed state of the navigation rail.
  *   `true` for expanded (shows labels), `false` for collapsed (shows only icons).
- * @param paddingValues Padding to be applied around the entire component, typically from a [Scaffold].
  * @param onBottomItemClick A lambda function to be invoked when a [BottomBarItem] is clicked.
  *   It is only called if the item is not already selected.
  * @param onDrawerItemClick A lambda function to be invoked when a [NavigationDrawerItem] is clicked.
@@ -68,8 +69,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
  */
 @Composable
 fun LeftNavigationRail(
-    bottomItems: List<BottomBarItem> = emptyList(), // FIXME: Parameter 'bottomItems' has runtime-determined stability
-    drawerItems: List<NavigationDrawerItem> = emptyList(), // FIXME: Parameter 'drawerItems' has runtime-determined stability
+    bottomItems: ImmutableList<BottomBarItem> = persistentListOf(),
+    drawerItems: ImmutableList<NavigationDrawerItem> = persistentListOf(),
     currentRoute: String?,
     isRailExpanded: Boolean = false,
     paddingValues: PaddingValues,

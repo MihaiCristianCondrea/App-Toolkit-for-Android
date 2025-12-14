@@ -21,7 +21,7 @@ fun <T> CustomCarousel(
     items: List<T>,
     sidePadding: Dp,
     pagerState: PagerState,
-    itemContent: @Composable (item: T) -> Unit // FIXME: Function "CustomCarousel" is never used && Parameter 'items' has runtime-determined stability
+    itemContent: @Composable (item: T) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
