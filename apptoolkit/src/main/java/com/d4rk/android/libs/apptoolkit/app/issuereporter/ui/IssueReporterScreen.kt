@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
@@ -46,6 +47,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
@@ -293,16 +295,18 @@ fun IssueReporterScreenContent(
         }
 
         item {
-            Card(shape = MaterialTheme.shapes.medium, modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(SizeConstants.LargeSize)) {
-
-                    RadioButtonPreferenceItem(
-                        text = stringResource(id = R.string.use_github_account),
-                        isChecked = !data.anonymous,
-                        onCheckedChange = { /* disabled */ },
-                        enabled = false
-                    )
-
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize)),
+                verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
+            ) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(size = SizeConstants.ExtraTinySize)),
+                    shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
+                ) {
                     RadioButtonPreferenceItem(
                         text = stringResource(id = R.string.send_anonymously),
                         isChecked = data.anonymous,
@@ -311,6 +315,19 @@ fun IssueReporterScreenContent(
                                 onEvent(IssueReporterEvent.SetAnonymous(anonymous = true))
                             }
                         }
+                    )
+                }
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(size = SizeConstants.ExtraTinySize)),
+                    shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
+                ) {
+                    RadioButtonPreferenceItem(
+                        text = stringResource(id = R.string.use_github_account),
+                        isChecked = !data.anonymous,
+                        onCheckedChange = { /* disabled */ },
+                        enabled = false
                     )
                 }
             }
