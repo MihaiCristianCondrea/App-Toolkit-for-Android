@@ -1,4 +1,4 @@
-package com.example.compose
+package com.d4rk.android.libs.apptoolkit.app.theme.style.colors.monochrome
 
 import androidx.compose.ui.graphics.Color
 

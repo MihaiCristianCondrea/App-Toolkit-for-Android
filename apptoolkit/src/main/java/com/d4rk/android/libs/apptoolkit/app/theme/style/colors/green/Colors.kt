@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.theme.style.colors
+package com.d4rk.android.libs.apptoolkit.app.theme.style.colors.green
 
 import androidx.compose.ui.graphics.Color
 
