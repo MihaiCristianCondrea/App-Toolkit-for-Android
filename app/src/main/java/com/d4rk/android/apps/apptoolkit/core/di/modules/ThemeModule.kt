@@ -17,5 +17,5 @@ val themeModule: Module = module {
     single(named("redPalette")) { redPalette }
     single(named("yellowPalette")) { yellowPalette }
 
-    single<ColorPalette> { get(named("monochromePalette")) }
+    single<ColorPalette> { get(named("bluePalette")) }
 }
