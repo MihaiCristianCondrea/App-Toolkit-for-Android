@@ -10,13 +10,25 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+
+// TODO: Move to helper
+private fun PackageManager.hasPackage(packageName: String): Boolean =
+    runCatching {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
+        } else {
+            @Suppress("DEPRECATION")
+            getPackageInfo(packageName, 0)
+        }
+    }.isSuccess
+
 /**
  * Helper for launching the Google Play in-app review flow.
  *
  * The helper exposes convenience methods that encapsulate the eligibility
  * checks and coroutine handling required to show the review dialog.
  */
-object ReviewHelper {
+object ReviewHelper { // TODO: Review this full class and the functions from here
 
     private const val PLAY_STORE_PACKAGE = "com.android.vending"
 
@@ -58,21 +70,35 @@ object ReviewHelper {
      *
      * The Play In-App Review API requires the Play Store app to be installed on the device.
      */
-    fun isInAppReviewAvailable(context: Context): Boolean {
-        val packageManager = context.packageManager
+    suspend fun isInAppReviewAvailable(activity: Activity): Boolean {
+        val context = activity.applicationContext
+
+        if (!hasPlayStore(context)) return false
+        if (!isInstalledFromPlayStore(context)) return false
+
+        val manager = ReviewManagerFactory.create(context)
         return runCatching {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                packageManager.getPackageInfo(
-                    PLAY_STORE_PACKAGE,
-                    PackageManager.PackageInfoFlags.of(0)
-                )
-            } else {
-                @Suppress("DEPRECATION")
-                packageManager.getPackageInfo(PLAY_STORE_PACKAGE, 0)
-            }
+            manager.requestReviewFlow().await()
             true
         }.getOrDefault(false)
     }
+
+    fun hasPlayStore(context: Context): Boolean =
+        context.packageManager.hasPackage(PLAY_STORE_PACKAGE)
+
+    private fun Context.installingPackageNameOrNull(): String? =
+        runCatching {
+            val pm = packageManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                pm.getInstallSourceInfo(packageName).installingPackageName
+            } else {
+                @Suppress("DEPRECATION")
+                pm.getInstallerPackageName(packageName)
+            }
+        }.getOrNull()
+
+    fun isInstalledFromPlayStore(context: Context): Boolean =
+        context.installingPackageNameOrNull() == PLAY_STORE_PACKAGE
 
     /**
      * Requests and launches the review flow.

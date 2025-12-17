@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.LiveHelp
+import androidx.compose.material.icons.automirrored.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -82,7 +82,8 @@ fun HelpScreen(
     val screenState: UiStateScreen<UiHelpScreen> by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        isInAppReviewAvailable.value = ReviewHelper.isInAppReviewAvailable(context)
+        isInAppReviewAvailable.value =
+            activity?.let { ReviewHelper.isInAppReviewAvailable(it) } ?: false
         viewModel.onEvent(HelpEvent.LoadFaq)
     }
 
@@ -136,7 +137,7 @@ fun HelpScreen(
                     val icon = if (isInAppReviewAvailable.value) {
                         Icons.Outlined.RateReview
                     } else {
-                        Icons.AutoMirrored.Outlined.LiveHelp
+                        Icons.AutoMirrored.Outlined.ContactSupport
                     }
                     Icon(icon, contentDescription = null)
                 }
