@@ -63,7 +63,6 @@ import com.google.android.gms.ads.nativead.NativeAdView
  */
 @SuppressLint("InflateParams")
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@androidx.compose.ui.UiComposable
 @Composable
 fun NoDataNativeAdCard(
     modifier: Modifier = Modifier,
@@ -71,7 +70,9 @@ fun NoDataNativeAdCard(
 ) {
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
-    val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }
+    val appContext = context.applicationContext
+    val dataStore: CommonDataStore =
+        remember(appContext) { CommonDataStore.getInstance(context = appContext) }
     val showAds: Boolean by dataStore.adsEnabledFlow.collectAsStateWithLifecycle(initialValue = true)
 
     if (inspectionMode) {
@@ -95,14 +96,14 @@ fun NoDataNativeAdCard(
         }
     }
 
-    Card( // FIXME: Calling a androidx.compose.ui.UiComposable composable function where a UI Composable composable was expected
+    Card(
         modifier = modifier,
         shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(SizeConstants.ExtraTinySize)
         )
     ) {
-        AndroidView(
+        AndroidView( // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
             factory = { ctx ->
                 LayoutInflater.from(ctx)
                     .inflate(R.layout.native_ad_no_data_card, null) as NativeAdView

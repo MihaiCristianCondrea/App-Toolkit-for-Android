@@ -70,7 +70,6 @@ import com.google.android.gms.ads.nativead.NativeAdView
  */
 @SuppressLint("InflateParams")
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@androidx.compose.ui.UiComposable
 @Composable
 fun HelpNativeAdCard(
     modifier: Modifier = Modifier,
@@ -78,7 +77,10 @@ fun HelpNativeAdCard(
 ) {
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
-    val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }
+    val appContext = context.applicationContext
+    val dataStore: CommonDataStore = remember(appContext) {
+        CommonDataStore.getInstance(context = appContext)
+    }
     val showAds: Boolean by dataStore.adsEnabledFlow.collectAsStateWithLifecycle(initialValue = true)
 
     if (inspectionMode) {
@@ -103,11 +105,10 @@ fun HelpNativeAdCard(
     }
 
     Card(
-        // FIXME: Calling a androidx.compose.ui.UiComposable composable function where a UI Composable composable was expected
         modifier = modifier,
         shape = RoundedCornerShape(size = SizeConstants.ExtraSmallSize),
     ) {
-        AndroidView(
+        AndroidView( // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
             modifier = Modifier.fillMaxWidth(),
             factory = { ctx ->
                 LayoutInflater.from(ctx)

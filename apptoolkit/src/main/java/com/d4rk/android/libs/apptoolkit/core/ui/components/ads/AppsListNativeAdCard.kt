@@ -46,15 +46,13 @@ fun AppsListNativeAdCard(
 ) {
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
-    val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }
+    val appContext = context.applicationContext
+    val dataStore: CommonDataStore =
+        remember(appContext) { CommonDataStore.getInstance(context = appContext) }
     val showAds: Boolean by dataStore.adsEnabledFlow.collectAsStateWithLifecycle(initialValue = true)
 
     if (inspectionMode) {
         AppsListNativeAdPreview(modifier = modifier)
-        return
-    }
-
-    if (!showAds || adUnitId.isBlank()) {
         return
     }
 
@@ -71,12 +69,11 @@ fun AppsListNativeAdCard(
         }
     }
 
-    LaunchedEffect(
-        adUnitId,
-        adRequest,
-        showAds // FIXME: Value of 'showAds' is always true
-    ) {
-        if (!showAds || adUnitId.isBlank()) { // FIXME: Condition '!showAds' is always false
+    LaunchedEffect(adUnitId, adRequest, showAds) {
+        if (!showAds || adUnitId.isBlank()) {
+            nativeAdView?.isVisible = false
+            currentNativeAd?.destroy()
+            currentNativeAd = null
             isAdLoaded = false
             return@LaunchedEffect
         }
