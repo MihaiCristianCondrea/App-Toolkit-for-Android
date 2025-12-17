@@ -1,6 +1,9 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.helpers
 
 import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -14,6 +17,8 @@ import kotlinx.coroutines.tasks.await
  * checks and coroutine handling required to show the review dialog.
  */
 object ReviewHelper {
+
+    private const val PLAY_STORE_PACKAGE = "com.android.vending"
 
     /**
      * Triggers the in-app review dialog if the user meets the eligibility criteria.
@@ -46,6 +51,27 @@ object ReviewHelper {
         scope.launch(start = CoroutineStart.UNDISPATCHED) {
             launchReview(activity)
         }
+    }
+
+    /**
+     * Returns `true` when Google Play Store is available to handle the in-app review flow.
+     *
+     * The Play In-App Review API requires the Play Store app to be installed on the device.
+     */
+    fun isInAppReviewAvailable(context: Context): Boolean {
+        val packageManager = context.packageManager
+        return runCatching {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                packageManager.getPackageInfo(
+                    PLAY_STORE_PACKAGE,
+                    PackageManager.PackageInfoFlags.of(0)
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                packageManager.getPackageInfo(PLAY_STORE_PACKAGE, 0)
+            }
+            true
+        }.getOrDefault(false)
     }
 
     /**

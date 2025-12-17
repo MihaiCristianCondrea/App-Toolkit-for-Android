@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.LiveHelp
 import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -70,6 +71,7 @@ fun HelpScreen(
     val context = LocalContext.current
     val activity = remember(context) { context.findActivity() }
     val scope = rememberCoroutineScope()
+    val isInAppReviewAvailable = rememberSaveable { mutableStateOf(false) }
 
     val scrollBehavior: TopAppBarScrollBehavior =
         TopAppBarDefaults.enterAlwaysScrollBehavior(state = rememberTopAppBarState())
@@ -80,6 +82,7 @@ fun HelpScreen(
     val screenState: UiStateScreen<UiHelpScreen> by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        isInAppReviewAvailable.value = ReviewHelper.isInAppReviewAvailable(context)
         viewModel.onEvent(HelpEvent.LoadFaq)
     }
 
@@ -107,13 +110,36 @@ fun HelpScreen(
                 visible = true,
                 expanded = isFabExtended.value,
                 onClick = {
-                    // In previews activity can be null.
-                    activity?.let {
-                        ReviewHelper.forceLaunchInAppReview(activity = it, scope = scope)
+                    activity?.let { componentActivity ->
+                        if (isInAppReviewAvailable.value) {
+                            ReviewHelper.forceLaunchInAppReview(
+                                activity = componentActivity,
+                                scope = scope
+                            )
+                        } else {
+                            IntentsHelper.openUrl(
+                                context = context,
+                                url = "https://mihaicristiancondrea.github.io/profile/#faqs"
+                            )
+                        }
                     }
                 },
-                text = { Text(text = stringResource(id = R.string.feedback)) },
-                icon = { Icon(Icons.Outlined.RateReview, contentDescription = null) }
+                text = {
+                    val textRes = if (isInAppReviewAvailable.value) {
+                        R.string.feedback
+                    } else {
+                        R.string.online_help
+                    }
+                    Text(text = stringResource(id = textRes))
+                },
+                icon = {
+                    val icon = if (isInAppReviewAvailable.value) {
+                        Icons.Outlined.RateReview
+                    } else {
+                        Icons.AutoMirrored.Outlined.LiveHelp
+                    }
+                    Icon(icon, contentDescription = null)
+                }
             )
         }
     ) { paddingValues ->
