@@ -10,6 +10,8 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.apps.apptoolkit.core.di.initializeKoin
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
+import com.d4rk.android.libs.apptoolkit.app.theme.style.AppThemeConfig
+import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
 import com.d4rk.android.libs.apptoolkit.data.core.BaseCoreManager
 import com.d4rk.android.libs.apptoolkit.data.core.ads.AdsCoreManager
 import kotlinx.coroutines.async
@@ -25,6 +27,7 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
 
     override fun onCreate() {
         initializeKoin(context = this)
+        applyDefaultColorPalette()
         super<BaseCoreManager>.onCreate()
         registerActivityLifecycleCallbacks(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(observer = this)
@@ -36,6 +39,12 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
 
     private suspend fun initializeAds() {
         adsCoreManager.initializeAds(AdsConstants.APP_OPEN_UNIT_ID)
+    }
+
+    private fun applyDefaultColorPalette() {
+        val colorPalette: ColorPalette = getKoin().get()
+        AppThemeConfig.customLightScheme = colorPalette.lightColorScheme
+        AppThemeConfig.customDarkScheme = colorPalette.darkColorScheme
     }
 
     override fun onStart(owner: LifecycleOwner) {
