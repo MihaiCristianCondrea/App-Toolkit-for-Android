@@ -9,10 +9,6 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.MenuOpen
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.outlined.Apps
-import androidx.compose.material.icons.outlined.StarOutline
-import androidx.compose.material.icons.rounded.Apps
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,7 +40,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.logging.FAB_LOG_TAG
 import com.d4rk.android.apps.apptoolkit.app.main.domain.model.ui.UiMainScreen
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.fab.MainFloatingActionButton
@@ -52,7 +47,6 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.AppNav
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.NavigationDrawer
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.handleNavigationItemClick
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.BottomNavigationBar
@@ -63,41 +57,12 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHost
 import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
-
-// TODO: Move to helper or specific class
-private val FabSupportedRoutes = setOf(
-    NavigationRoutes.ROUTE_APPS_LIST,
-    NavigationRoutes.ROUTE_FAVORITE_APPS
-)
-
-// TODO: Move to helper or specific class
-private fun String?.normalizeRoute(): String? = this
-    ?.substringBefore('?')
-    ?.substringBefore('/')
-    ?.takeIf { it.isNotBlank() }
-
-// TODO: Move to helper or specific class
-private val MAIN_BOTTOM_ITEMS: ImmutableList<BottomBarItem> = persistentListOf(
-    BottomBarItem(
-        route = NavigationRoutes.ROUTE_APPS_LIST,
-        icon = Icons.Outlined.Apps,
-        selectedIcon = Icons.Rounded.Apps,
-        title = R.string.all_apps
-    ),
-    BottomBarItem(
-        route = NavigationRoutes.ROUTE_FAVORITE_APPS,
-        icon = Icons.Outlined.StarOutline,
-        selectedIcon = Icons.Rounded.Star,
-        title = R.string.favorite_apps
-    )
-)
 
 /**
  * The main entry point composable for the application's UI.
@@ -120,7 +85,7 @@ fun MainScreen() {
     val viewModel: MainViewModel = koinViewModel()
     val screenState: UiStateScreen<UiMainScreen> by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val bottomItems: ImmutableList<BottomBarItem> = MAIN_BOTTOM_ITEMS
+    val bottomItems: ImmutableList<BottomBarItem> = MainNavigationDefaults.bottomBarItems
 
     if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
         NavigationDrawer(
@@ -169,7 +134,7 @@ fun MainScaffoldContent(
     val currentRoute: String? = navBackStackEntry?.destination?.route
     val normalizedRoute: String? = currentRoute.normalizeRoute()
 
-    val isFabVisible: Boolean = normalizedRoute in FabSupportedRoutes
+    val isFabVisible: Boolean = normalizedRoute in MainNavigationDefaults.fabSupportedRoutes
     var isFabExtended by remember { mutableStateOf(true) }
 
     val randomAppHandlers = remember { mutableStateMapOf<String, RandomAppHandler>() }
@@ -283,7 +248,7 @@ fun MainScaffoldTabletContent(
     }
 
     val normalizedRoute = currentRoute.normalizeRoute()
-    val isFabVisible: Boolean = normalizedRoute in FabSupportedRoutes
+    val isFabVisible: Boolean = normalizedRoute in MainNavigationDefaults.fabSupportedRoutes
     var isFabExtended by remember { mutableStateOf(true) }
 
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current

@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.apps.common.AppCard
+import com.d4rk.android.apps.apptoolkit.app.apps.common.utils.buildAppListItems
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppListItem
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScreen
@@ -28,7 +29,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.animateVisi
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
@@ -216,21 +216,3 @@ private fun AppCardItem(
     )
 }
 
-// TODO: Move to helper
-fun buildAppListItems(
-    apps: ImmutableList<AppInfo>,
-    adsEnabled: Boolean,
-    adFrequency: Int
-): ImmutableList<AppListItem> {
-    if (!adsEnabled || adFrequency <= 0) {
-        return apps.map { AppListItem.App(it) }.toImmutableList()
-    }
-
-    val listItems = ArrayList<AppListItem>(apps.size + (apps.size / adFrequency))
-    apps.forEachIndexed { index, app ->
-        listItems += AppListItem.App(app)
-        val isTimeForAd = (index + 1) % adFrequency == 0
-        if (isTimeForAd) listItems += AppListItem.Ad
-    }
-    return listItems.toImmutableList()
-}

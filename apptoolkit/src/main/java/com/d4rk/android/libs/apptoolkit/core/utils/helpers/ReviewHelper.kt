@@ -2,25 +2,13 @@ package com.d4rk.android.libs.apptoolkit.core.utils.helpers
 
 import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Build
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.hasPackage
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-
-
-// TODO: Move to helper
-private fun PackageManager.hasPackage(packageName: String): Boolean =
-    runCatching {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
-        } else {
-            @Suppress("DEPRECATION")
-            getPackageInfo(packageName, 0)
-        }
-    }.isSuccess
 
 /**
  * Helper for launching the Google Play in-app review flow.
@@ -28,7 +16,7 @@ private fun PackageManager.hasPackage(packageName: String): Boolean =
  * The helper exposes convenience methods that encapsulate the eligibility
  * checks and coroutine handling required to show the review dialog.
  */
-object ReviewHelper { // TODO: Review this full class and the functions from here
+object ReviewHelper {
 
     private const val PLAY_STORE_PACKAGE = "com.android.vending"
 

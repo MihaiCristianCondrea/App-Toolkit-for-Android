@@ -28,9 +28,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
-// TODO: Move to another file that is more fitting
-typealias RandomAppHandler = () -> Unit
-
 @Composable
 fun AppNavigationHost(
     navController: StableNavController,
