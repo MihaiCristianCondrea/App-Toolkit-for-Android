@@ -68,21 +68,22 @@ import com.google.android.gms.ads.nativead.NativeAdView
 @Composable
 fun SupportNativeAdCard(
     modifier: Modifier = Modifier,
-    adUnitId: String
+    adUnitId: String,
 ) {
     val context = LocalContext.current
+    val appContext = remember(context) { context.applicationContext }
     val inspectionMode = LocalInspectionMode.current
-    val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }
+
+    val dataStore: CommonDataStore = remember(appContext) {
+        CommonDataStore.getInstance(context = appContext)
+    }
     val showAds: Boolean by dataStore.adsEnabledFlow.collectAsStateWithLifecycle(initialValue = true)
 
     if (inspectionMode) {
         SupportNativeAdPreview(modifier = modifier)
         return
     }
-
-    if (!showAds || adUnitId.isBlank()) {
-        return
-    }
+    if (!showAds || adUnitId.isBlank()) return
 
     val adRequest: AdRequest = remember { AdRequest.Builder().build() }
 
@@ -100,27 +101,27 @@ fun SupportNativeAdCard(
         modifier = modifier,
         shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
     ) {
-        AndroidView( // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
+        AndroidView(
             modifier = Modifier.fillMaxWidth(),
             factory = { ctx ->
-                LayoutInflater.from(ctx)
-                    .inflate(R.layout.native_ad_support_card, null) as NativeAdView
+                (LayoutInflater.from(ctx)
+                    .inflate(R.layout.native_ad_support_card, null) as NativeAdView)
+                    .also { it.isVisible = false }
             },
             update = { view ->
-                if (nativeAdView !== view) {
-                    nativeAdView = view
-                }
+                if (nativeAdView !== view) nativeAdView = view
             }
         )
     }
 
-    LaunchedEffect(nativeAdView, adUnitId, adRequest) {
+    LaunchedEffect(nativeAdView, adUnitId) {
         val view: NativeAdView = nativeAdView ?: return@LaunchedEffect
 
-        val adLoader: AdLoader = AdLoader.Builder(context, adUnitId)
+        val adLoader: AdLoader = AdLoader.Builder(appContext, adUnitId)
             .forNativeAd { nativeAd ->
                 currentNativeAd?.destroy()
                 currentNativeAd = nativeAd
+
                 bindSupportNativeAd(adView = view, nativeAd = nativeAd)
                 view.isVisible = true
             }

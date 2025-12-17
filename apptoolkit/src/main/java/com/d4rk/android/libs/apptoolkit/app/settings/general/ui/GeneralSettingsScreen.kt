@@ -39,8 +39,9 @@ fun GeneralSettingsScreen(
         onBackClicked = onBackClicked,
         snackbarHostState = snackbarHostState
     ) { paddingValues: PaddingValues ->
+        val screenState: UiStateScreen<UiGeneralSettingsScreen> by viewModel.uiState.collectAsStateWithLifecycle()
         GeneralSettingsContent(
-            viewModel = viewModel,
+            screenState = screenState,
             contentProvider = contentProvider,
             paddingValues = paddingValues,
             snackbarHostState = snackbarHostState
@@ -50,12 +51,11 @@ fun GeneralSettingsScreen(
 
 @Composable
 fun GeneralSettingsContent(
-    viewModel: GeneralSettingsViewModel, // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+    screenState: UiStateScreen<UiGeneralSettingsScreen>,
     contentProvider: GeneralSettingsContentProvider,
     paddingValues: PaddingValues,
     snackbarHostState: SnackbarHostState
 ) {
-    val screenState: UiStateScreen<UiGeneralSettingsScreen> by viewModel.uiState.collectAsStateWithLifecycle()
     ScreenStateHandler(
         screenState = screenState,
         onLoading = { LoadingScreen() },

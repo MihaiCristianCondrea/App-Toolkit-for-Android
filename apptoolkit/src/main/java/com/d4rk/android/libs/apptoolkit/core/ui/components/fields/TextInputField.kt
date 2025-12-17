@@ -23,11 +23,12 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun DropdownMenuBox(
     selectedText: String,
-    options: List<String>, // FIXME: Parameter 'options' has runtime-determined stability
+    options: ImmutableList<String>,
     onOptionSelected: (String) -> Unit
 ) {
     var expanded : Boolean by remember { mutableStateOf(value = false) }

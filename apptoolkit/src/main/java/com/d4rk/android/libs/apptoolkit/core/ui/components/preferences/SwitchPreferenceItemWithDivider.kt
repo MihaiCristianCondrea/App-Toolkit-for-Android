@@ -49,45 +49,66 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param onClick A callback function that is called when the entire preference item is clicked. If no action is needed on click, this can be left empty.
  */
 @Composable
-fun SwitchPreferenceItemWithDivider(icon : ImageVector? = null , title : String , summary : String , checked : Boolean , onCheckedChange : (Boolean) -> Unit , onClick : () -> Unit , onSwitchClick : (Boolean) -> Unit) {
-    val hapticFeedback : HapticFeedback = LocalHapticFeedback.current
-    val view : View = LocalView.current
+fun SwitchPreferenceItemWithDivider(
+    icon: ImageVector? = null,
+    title: String,
+    summary: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    onClick: () -> Unit,
+    onSwitchClick: (Boolean) -> Unit
+) {
+    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
+    val view: View = LocalView.current
 
     Card(
         modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(size = SizeConstants.ExtraTinySize)) ,
-        shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize) ,
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(size = SizeConstants.ExtraTinySize)),
+        shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
     ) {
         Row(
             modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = {
-                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                        hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                        onClick()
-                    }) , verticalAlignment = Alignment.CenterVertically
+                .fillMaxWidth()
+                .clickable(onClick = {
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                    hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                    onClick()
+                }), verticalAlignment = Alignment.CenterVertically
         ) {
             icon?.let {
                 LargeHorizontalSpacer()
-                Icon(imageVector = it , contentDescription = null)
+                Icon(imageVector = it, contentDescription = null)
                 LargeHorizontalSpacer()
             }
             Column(
                 modifier = Modifier
-                        .padding(all = SizeConstants.LargeSize)
-                        .weight(weight = 1f)
+                    .padding(all = SizeConstants.LargeSize)
+                    .weight(weight = 1f)
             ) {
-                Text(text = title , style = MaterialTheme.typography.titleMedium , fontWeight = FontWeight.Bold , maxLines = 1 , overflow = TextOverflow.Ellipsis)
-                Text(text = summary , style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(text = summary, style = MaterialTheme.typography.bodyMedium)
             }
             ExtraSmallHorizontalSpacer()
-            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos , contentDescription = null , modifier = Modifier.size(size = SizeConstants.MediumSize) , tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                contentDescription = null,
+                modifier = Modifier.size(size = SizeConstants.MediumSize),
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            )
             ExtraSmallHorizontalSpacer()
             VerticalDivider(
                 modifier = Modifier
-                        .height(height = SizeConstants.MediumSize * 3)
-                        .align(alignment = Alignment.CenterVertically) , color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f) , thickness = SizeConstants.ExtraTinySize / 2
+                    .height(height = SizeConstants.MediumSize * 3)
+                    .align(alignment = Alignment.CenterVertically),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                thickness = SizeConstants.ExtraTinySize / 2
             )
             CustomSwitch(
                 checked = checked,

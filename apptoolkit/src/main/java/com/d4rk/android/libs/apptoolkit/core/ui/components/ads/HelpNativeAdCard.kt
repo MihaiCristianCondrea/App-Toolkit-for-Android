@@ -67,11 +67,11 @@ import com.google.android.gms.ads.nativead.NativeAdView
  * - The ad will not be displayed if ads are disabled by the user or if the ad unit ID is missing.
  *
  * @param modifier The modifier to be applied to the ad card.
- * @param adsConfig Configuration object containing the necessary ad unit IDs, in this case, `bannerAdUnitId` is used for the native ad.
  */
 @SuppressLint("InflateParams")
-@Composable
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@androidx.compose.ui.UiComposable
+@Composable
 fun HelpNativeAdCard(
     modifier: Modifier = Modifier,
     adUnitId: String
@@ -103,10 +103,11 @@ fun HelpNativeAdCard(
     }
 
     Card(
+        // FIXME: Calling a androidx.compose.ui.UiComposable composable function where a UI Composable composable was expected
         modifier = modifier,
         shape = RoundedCornerShape(size = SizeConstants.ExtraSmallSize),
     ) {
-        AndroidView( // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
+        AndroidView(
             modifier = Modifier.fillMaxWidth(),
             factory = { ctx ->
                 LayoutInflater.from(ctx)

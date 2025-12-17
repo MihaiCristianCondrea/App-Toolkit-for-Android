@@ -60,11 +60,11 @@ import com.google.android.gms.ads.nativead.NativeAdView
  * The layout for the native ad is inflated from the `R.layout.native_ad_no_data_card` XML file.
  *
  * @param modifier The modifier to be applied to the ad card.
- * @param adsConfig Configuration object containing ad-related settings, including the `bannerAdUnitId` for this native ad.
  */
 @SuppressLint("InflateParams")
-@Composable
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@androidx.compose.ui.UiComposable
+@Composable
 fun NoDataNativeAdCard(
     modifier: Modifier = Modifier,
     adUnitId: String
@@ -95,16 +95,14 @@ fun NoDataNativeAdCard(
         }
     }
 
-    Card(
+    Card( // FIXME: Calling a androidx.compose.ui.UiComposable composable function where a UI Composable composable was expected
         modifier = modifier,
         shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(SizeConstants.ExtraTinySize)
         )
     ) {
-        AndroidView( // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
-            modifier = Modifier
-                .fillMaxWidth(),
+        AndroidView(
             factory = { ctx ->
                 LayoutInflater.from(ctx)
                     .inflate(R.layout.native_ad_no_data_card, null) as NativeAdView

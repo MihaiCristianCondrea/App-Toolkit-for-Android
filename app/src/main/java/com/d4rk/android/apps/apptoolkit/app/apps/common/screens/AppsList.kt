@@ -172,11 +172,11 @@ private fun AppsGrid(
                 }
 
                 AppListItem.Ad -> {
-                    AdListItem(
+                    AppsListNativeAdCard(
+                        adUnitId = adUnitId,
                         modifier = Modifier
                             .animateItem()
                             .animateVisibility(index = index),
-                        adUnitId = adUnitId
                     )
                 }
             }
@@ -212,24 +212,6 @@ private fun AppCardItem(
         onFavoriteToggle = { onFavoriteToggle(appInfo.packageName) },
         onAppClick = onAppClick,
         onShareClick = onShareClick,
-        modifier = modifier
-    )
-}
-
-/**
- * A composable that displays a native ad card within the app list.
- * It wraps the [AppsListNativeAdCard] and passes the necessary ad unit ID and modifier.
- *
- * @param modifier A [Modifier] for this composable, often used for animations.
- * @param adUnitId The ad unit ID for the native ad to be displayed.
- */
-@Composable
-private fun AdListItem(
-    modifier: Modifier = Modifier,
-    adUnitId: String,
-) {
-    AppsListNativeAdCard(
-        adUnitId = adUnitId,
         modifier = modifier
     )
 }

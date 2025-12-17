@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -238,9 +239,11 @@ fun SettingsDetail(
         viewModel.onEvent(event = GeneralSettingsEvent.Load(contentKey = preference.key))
     }
 
+    val uiStateScreen = viewModel.uiState.collectAsState().value
+
     Box(modifier = Modifier.fillMaxSize()) {
         GeneralSettingsContent(
-            viewModel = viewModel,
+            screenState = uiStateScreen,
             contentProvider = contentProvider,
             paddingValues = paddingValues,
             snackbarHostState = snackbarHostState,

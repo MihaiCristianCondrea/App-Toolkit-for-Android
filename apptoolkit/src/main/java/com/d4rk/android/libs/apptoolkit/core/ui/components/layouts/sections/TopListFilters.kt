@@ -17,17 +17,18 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.chip.CommonFilterChip
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallHorizontalSpacer
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun TopListFilters(
     modifier: Modifier = Modifier,
-    filters: List<String>,
+    filters: ImmutableList<String>,
     selectedFilter: String,
     onFilterSelected: (String) -> Unit,
     label: String = stringResource(id = R.string.sort_by)
-) { // FIXME: Parameter 'filters' has runtime-determined stability
+) {
     val listState : LazyListState = rememberLazyListState()
     val scope : CoroutineScope = rememberCoroutineScope()
     Row(modifier = modifier.fillMaxWidth() , verticalAlignment = Alignment.CenterVertically) {

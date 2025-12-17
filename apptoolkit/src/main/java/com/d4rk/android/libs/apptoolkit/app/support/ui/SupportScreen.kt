@@ -43,16 +43,13 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.LargeTopAp
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHandler
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SupportComposable(
-) {
+fun SupportComposable() {
     val viewModel: SupportViewModel = koinViewModel()
     val activity = LocalContext.current as? Activity
     val screenState: UiStateScreen<SupportScreenUiState> by viewModel.uiState.collectAsStateWithLifecycle()
@@ -87,10 +84,20 @@ fun SupportComposable(
                 )
             },
             onSuccess = { data: SupportScreenUiState ->
+                val productDetailsMap = data.products.associateBy { it.productId }
+                val currentProducts = rememberUpdatedState(newValue = productDetailsMap)
                 SupportScreenContent(
                     paddingValues = paddingValues,
-                    products = data.products.toImmutableList(),
-                    onDonateClick = onDonateClick
+                    getPriceLabel = { productId ->
+                        currentProducts.value[productId]?.primaryFormattedPrice().orEmpty()
+                    },
+                    onDonateClick = { productId ->
+                        val productDetails =
+                            currentProducts.value[productId] ?: return@SupportScreenContent
+                        activity?.let { hostActivity ->
+                            onDonateClick(hostActivity, productDetails)
+                        }
+                    }
                 )
             })
         DefaultSnackbarHandler(
@@ -105,14 +112,12 @@ fun SupportComposable(
 @Composable
 fun SupportScreenContent(
     paddingValues: PaddingValues,
-    products: ImmutableList<com.android.billingclient.api.ProductDetails>, // FIXME: Unstable parameter 'products' prevents composable from being skippable
-    onDonateClick: (Activity, com.android.billingclient.api.ProductDetails) -> Unit,
+    getPriceLabel: (String) -> String,
+    onDonateClick: (String) -> Unit,
 ) {
     val context: Context = LocalContext.current
-    val activity = context as? Activity ?: return
     val nativeAdsConfig: AdsConfig = koinInject(qualifier = named(name = "support_native_ad"))
 
-    val productDetailsMap = products.associateBy { it.productId }
     LazyColumn(
         modifier = Modifier.padding(paddingValues),
     ) {
@@ -145,32 +150,20 @@ fun SupportScreenContent(
                             TonalIconButtonWithText(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
-                                    productDetailsMap[DonationProductIds.LOW_DONATION]?.let {
-                                        onDonateClick(
-                                            activity,
-                                            it
-                                        )
-                                    }
+                                    onDonateClick(DonationProductIds.LOW_DONATION)
                                 },
                                 icon = Icons.Outlined.Paid,
-                                label = productDetailsMap[DonationProductIds.LOW_DONATION]?.primaryFormattedPrice()
-                                    .orEmpty()
+                                label = getPriceLabel(DonationProductIds.LOW_DONATION)
                             )
                         }
                         item {
                             TonalIconButtonWithText(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
-                                    productDetailsMap[DonationProductIds.NORMAL_DONATION]?.let {
-                                        onDonateClick(
-                                            activity,
-                                            it
-                                        )
-                                    }
+                                    onDonateClick(DonationProductIds.NORMAL_DONATION)
                                 },
                                 icon = Icons.Outlined.Paid,
-                                label = productDetailsMap[DonationProductIds.NORMAL_DONATION]?.primaryFormattedPrice()
-                                    .orEmpty()
+                                label = getPriceLabel(DonationProductIds.NORMAL_DONATION)
                             )
                         }
                     }
@@ -184,32 +177,20 @@ fun SupportScreenContent(
                             TonalIconButtonWithText(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
-                                    productDetailsMap[DonationProductIds.HIGH_DONATION]?.let {
-                                        onDonateClick(
-                                            activity,
-                                            it
-                                        )
-                                    }
+                                    onDonateClick(DonationProductIds.HIGH_DONATION)
                                 },
                                 icon = Icons.Outlined.Paid,
-                                label = productDetailsMap[DonationProductIds.HIGH_DONATION]?.primaryFormattedPrice()
-                                    .orEmpty()
+                                label = getPriceLabel(DonationProductIds.HIGH_DONATION)
                             )
                         }
                         item {
                             TonalIconButtonWithText(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
-                                    productDetailsMap[DonationProductIds.EXTREME_DONATION]?.let {
-                                        onDonateClick(
-                                            activity,
-                                            it
-                                        )
-                                    }
+                                    onDonateClick(DonationProductIds.EXTREME_DONATION)
                                 },
                                 icon = Icons.Outlined.Paid,
-                                label = productDetailsMap[DonationProductIds.EXTREME_DONATION]?.primaryFormattedPrice()
-                                    .orEmpty()
+                                label = getPriceLabel(DonationProductIds.EXTREME_DONATION)
                             )
                         }
                     }

@@ -9,7 +9,6 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.IconButtonShapes
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
@@ -40,7 +39,6 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param iconContentDescription Text used by accessibility services to describe what the icon
  * represents. This is recommended for usability.
  * @param icon The [ImageVector] to be displayed inside the button.
- * @param shapes The shapes to be used for this icon button. Defaults to [IconButtonDefaults.shapes].
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -50,7 +48,6 @@ fun IconButton(
     enabled: Boolean = true,
     iconContentDescription: String? = null,
     icon: ImageVector,
-    shapes: IconButtonShapes = IconButtonDefaults.shapes() // FIXME: Parameter 'shapes' has runtime-determined stability
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -63,7 +60,7 @@ fun IconButton(
         },
         enabled = enabled,
         modifier = modifier.bounceClick(),
-        shapes = shapes
+        shapes = IconButtonDefaults.shapes()
     ) {
         Icon(
             modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
@@ -86,7 +83,6 @@ fun IconButton(
  * represents. This text should be provided if the icon is used for an action, but not if it is
  * purely decorative.
  * @param icon The icon to be displayed inside the button, as an [ImageVector].
- * @param shapes The [IconButtonShapes] that defines the shape of this button's container.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -96,7 +92,6 @@ fun FilledIconButton(
     enabled: Boolean = true,
     iconContentDescription: String? = null,
     icon: ImageVector,
-    shapes: IconButtonShapes = IconButtonDefaults.shapes() // FIXME: Parameter 'shapes' has runtime-determined stability
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -109,7 +104,7 @@ fun FilledIconButton(
         },
         enabled = enabled,
         modifier = modifier.bounceClick(),
-        shapes = shapes
+        shapes = IconButtonDefaults.shapes()
     ) {
         Icon(
             modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
@@ -131,7 +126,6 @@ fun FilledIconButton(
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
  * @param iconContentDescription Text used by accessibility services to describe the icon's action.
  * @param icon The [ImageVector] to be displayed as the icon.
- * @param shapes Defines the shape of this button's container.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -141,7 +135,6 @@ fun FilledTonalIconButton(
     enabled: Boolean = true,
     iconContentDescription: String? = null,
     icon: ImageVector,
-    shapes: IconButtonShapes = IconButtonDefaults.shapes() // FIXME: Parameter 'shapes' has runtime-determined stability
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -154,7 +147,7 @@ fun FilledTonalIconButton(
         },
         enabled = enabled,
         modifier = modifier.bounceClick(),
-        shapes = shapes
+        shapes = IconButtonDefaults.shapes()
     ) {
         Icon(
             modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
@@ -262,7 +255,6 @@ fun TonalIconButtonWithText(
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
  * @param iconContentDescription Text used by accessibility services to describe what the icon represents.
  * @param icon The [ImageVector] to be displayed inside the button.
- * @param shapes The shapes to be used for this icon button, which defines the shape of its container.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -272,7 +264,6 @@ fun OutlinedIconButton(
     enabled: Boolean = true,
     iconContentDescription: String? = null,
     icon: ImageVector,
-    shapes: IconButtonShapes = IconButtonDefaults.shapes() // FIXME: Parameter 'shapes' has runtime-determined stability
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -285,7 +276,7 @@ fun OutlinedIconButton(
         },
         enabled = enabled,
         modifier = modifier.bounceClick(),
-        shapes = shapes
+        shapes = IconButtonDefaults.shapes()
     ) {
         Icon(
             modifier = Modifier.size(size = SizeConstants.ButtonIconSize),

@@ -19,7 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -49,31 +49,33 @@ fun DisplaySettingsList(
     paddingValues: PaddingValues = PaddingValues(),
 ) {
     val provider: DisplaySettingsProvider = koinInject()
-    val coroutineScope : CoroutineScope = rememberCoroutineScope()
-    val context : Context = LocalContext.current
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val context: Context = LocalContext.current
     val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
-    var showLanguageDialog : Boolean by remember { mutableStateOf(value = false) }
-    var showStartupDialog : Boolean by remember { mutableStateOf(value = false) }
 
-    val currentThemeModeKey : String by dataStore.themeMode.collectWithLifecycleOnCompletion(
+    val showLanguageDialog = rememberSaveable { mutableStateOf(false) }
+    val showStartupDialog = rememberSaveable { mutableStateOf(false) }
+
+    val currentThemeModeKey: String by dataStore.themeMode.collectWithLifecycleOnCompletion(
         initialValueProvider = { DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM }
-    ) { cause : Throwable? ->
+    ) { cause: Throwable? ->
         if (cause != null && cause !is CancellationException) {
             Log.w(DISPLAY_SETTINGS_LOG_TAG, "Theme mode flow completed with an error.", cause)
             dataStore.themeModeState.value = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
         }
     }
-    val isSystemDarkTheme : Boolean = isSystemInDarkTheme()
 
-    val isDarkThemeActive : Boolean = when (currentThemeModeKey) {
+    val isSystemDarkTheme: Boolean = isSystemInDarkTheme()
+
+    val isDarkThemeActive: Boolean = when (currentThemeModeKey) {
         DataStoreNamesConstants.THEME_MODE_DARK -> true
         DataStoreNamesConstants.THEME_MODE_LIGHT -> false
-
         else -> isSystemDarkTheme
     }
 
-    val themeSummary : String = when (currentThemeModeKey) {
-        DataStoreNamesConstants.THEME_MODE_DARK , DataStoreNamesConstants.THEME_MODE_LIGHT ->
+    val themeSummary: String = when (currentThemeModeKey) {
+        DataStoreNamesConstants.THEME_MODE_DARK,
+        DataStoreNamesConstants.THEME_MODE_LIGHT ->
             stringResource(id = R.string.will_never_turn_on_automatically)
 
         else ->
@@ -81,25 +83,51 @@ fun DisplaySettingsList(
     }
 
     val isDynamicColors: Boolean by dataStore.dynamicColors.collectWithLifecycleOnCompletion(
-        initialValueProvider = { true }) { cause: Throwable? ->
+        initialValueProvider = { true }
+    ) { cause: Throwable? ->
         if (cause != null && cause !is CancellationException) {
             Log.w(DISPLAY_SETTINGS_LOG_TAG, "Dynamic color flow completed with an error.", cause)
         }
     }
+
     val bouncyButtons: Boolean by dataStore.bouncyButtons.collectWithLifecycleOnCompletion(
-        initialValueProvider = { true }) { cause: Throwable? ->
+        initialValueProvider = { true }
+    ) { cause: Throwable? ->
         if (cause != null && cause !is CancellationException) {
             Log.w(DISPLAY_SETTINGS_LOG_TAG, "Bouncy buttons flow completed with an error.", cause)
         }
     }
+
     val showLabelsOnBottomBar: Boolean by dataStore.getShowBottomBarLabels()
         .collectWithLifecycleOnCompletion(initialValueProvider = { true }) { cause: Throwable? ->
-        if (cause != null && cause !is CancellationException) {
-            Log.w(DISPLAY_SETTINGS_LOG_TAG, "Bottom bar label flow completed with an error.", cause)
+            if (cause != null && cause !is CancellationException) {
+                Log.w(
+                    DISPLAY_SETTINGS_LOG_TAG,
+                    "Bottom bar label flow completed with an error.",
+                    cause
+                )
+            }
+        }
+
+    val setThemeMode: (String) -> Unit = remember(coroutineScope, dataStore) {
+        { mode: String ->
+            coroutineScope.launch {
+                dataStore.saveThemeMode(mode = mode)
+                dataStore.themeModeState.value = mode
+            }
         }
     }
 
-    LazyColumn(contentPadding = paddingValues , modifier = Modifier.fillMaxHeight()) {
+    val onDarkThemeChanged: (Boolean) -> Unit = remember(setThemeMode) {
+        { isChecked: Boolean ->
+            setThemeMode(
+                if (isChecked) DataStoreNamesConstants.THEME_MODE_DARK
+                else DataStoreNamesConstants.THEME_MODE_LIGHT
+            )
+        }
+    }
+
+    LazyColumn(contentPadding = paddingValues, modifier = Modifier.fillMaxHeight()) {
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.appearance))
             SmallVerticalSpacer()
@@ -109,51 +137,29 @@ fun DisplaySettingsList(
                     .padding(horizontal = SizeConstants.LargeSize)
                     .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
             ) {
-                SwitchPreferenceItemWithDivider(title = stringResource(id = R.string.dark_theme) , summary = themeSummary , checked = isDarkThemeActive , onCheckedChange = { isChecked ->
-                    coroutineScope.launch {
-                        if (isChecked) {
-                            dataStore.saveThemeMode(mode = DataStoreNamesConstants.THEME_MODE_DARK)
-                            dataStore.themeModeState.value = DataStoreNamesConstants.THEME_MODE_DARK
-
-                        }
-                        else {
-                            dataStore.saveThemeMode(mode = DataStoreNamesConstants.THEME_MODE_LIGHT)
-                            dataStore.themeModeState.value = DataStoreNamesConstants.THEME_MODE_LIGHT
-
-                        }
-                    }
-                } , onSwitchClick = { isChecked : Boolean ->
-                    coroutineScope.launch {
-                        if (isChecked) {
-                            dataStore.saveThemeMode(mode = DataStoreNamesConstants.THEME_MODE_DARK)
-                            dataStore.themeModeState.value = DataStoreNamesConstants.THEME_MODE_DARK
-
-                        }
-                        else {
-                            dataStore.saveThemeMode(mode = DataStoreNamesConstants.THEME_MODE_LIGHT)
-                            dataStore.themeModeState.value = DataStoreNamesConstants.THEME_MODE_LIGHT
-
-                        }
-                    }
-                } , onClick = {
-                    provider.openThemeSettings()
-                })
+                SwitchPreferenceItemWithDivider(
+                    title = stringResource(id = R.string.dark_theme),
+                    summary = themeSummary,
+                    checked = isDarkThemeActive,
+                    onCheckedChange = onDarkThemeChanged,
+                    onSwitchClick = onDarkThemeChanged,
+                    onClick = { provider.openThemeSettings() }
+                )
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     ExtraTinyVerticalSpacer()
 
                     SwitchPreferenceItem(
-                        title = stringResource(id = R.string.dynamic_colors) ,
-                        summary = stringResource(id = R.string.summary_preference_settings_dynamic_colors) ,
-                        checked = isDynamicColors ,
+                        title = stringResource(id = R.string.dynamic_colors),
+                        summary = stringResource(id = R.string.summary_preference_settings_dynamic_colors),
+                        checked = isDynamicColors,
                     ) { isChecked ->
-                        coroutineScope.launch {
-                            dataStore.saveDynamicColors(isChecked = isChecked)
-                        }
+                        coroutineScope.launch { dataStore.saveDynamicColors(isChecked = isChecked) }
                     }
                 }
             }
         }
+
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.app_behavior))
             SmallVerticalSpacer()
@@ -164,13 +170,11 @@ fun DisplaySettingsList(
                     .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
             ) {
                 SwitchPreferenceItem(
-                    title = stringResource(id = R.string.bounce_buttons) ,
-                    summary = stringResource(id = R.string.summary_preference_settings_bounce_buttons) ,
-                    checked = bouncyButtons ,
+                    title = stringResource(id = R.string.bounce_buttons),
+                    summary = stringResource(id = R.string.summary_preference_settings_bounce_buttons),
+                    checked = bouncyButtons,
                 ) { isChecked ->
-                    coroutineScope.launch {
-                        dataStore.saveBouncyButtons(isChecked = isChecked)
-                    }
+                    coroutineScope.launch { dataStore.saveBouncyButtons(isChecked = isChecked) }
                 }
             }
         }
@@ -185,23 +189,26 @@ fun DisplaySettingsList(
                         .padding(horizontal = SizeConstants.LargeSize)
                         .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
                 ) {
-                    SettingsPreferenceItem(title = stringResource(id = R.string.startup_page) , summary = stringResource(id = R.string.summary_preference_settings_startup_page) , onClick = { showStartupDialog = true })
-                    if (showStartupDialog) {
-                        provider.StartupPageDialog(onDismiss = {
-                            showStartupDialog = false
-                        }) { }
+                    SettingsPreferenceItem(
+                        title = stringResource(id = R.string.startup_page),
+                        summary = stringResource(id = R.string.summary_preference_settings_startup_page),
+                        onClick = { showStartupDialog.value = true }
+                    )
+
+                    if (showStartupDialog.value) {
+                        provider.StartupPageDialog(
+                            onDismiss = { showStartupDialog.value = false }
+                        ) { }
                     }
 
                     ExtraTinyVerticalSpacer()
 
                     SwitchPreferenceItem(
-                        title = stringResource(id = R.string.show_labels_on_bottom_bar) ,
-                        summary = stringResource(id = R.string.summary_preference_settings_show_labels_on_bottom_bar) ,
-                        checked = showLabelsOnBottomBar ,
+                        title = stringResource(id = R.string.show_labels_on_bottom_bar),
+                        summary = stringResource(id = R.string.summary_preference_settings_show_labels_on_bottom_bar),
+                        checked = showLabelsOnBottomBar,
                     ) { isChecked ->
-                        coroutineScope.launch {
-                            dataStore.saveShowLabelsOnBottomBar(isChecked = isChecked)
-                        }
+                        coroutineScope.launch { dataStore.saveShowLabelsOnBottomBar(isChecked = isChecked) }
                     }
                 }
             }
@@ -216,45 +223,44 @@ fun DisplaySettingsList(
                     .padding(horizontal = SizeConstants.LargeSize)
                     .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
             ) {
-                SettingsPreferenceItem(title = stringResource(id = R.string.language) , summary = stringResource(id = R.string.summary_preference_settings_language) , onClick = {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        val localeIntent : Intent = Intent(Settings.ACTION_APP_LOCALE_SETTINGS).setData(
-                            Uri.fromParts(
-                                "package" , context.packageName , null
-                            )
-                        )
-                        val detailsIntent : Intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(
-                            Uri.fromParts(
-                                "package" , context.packageName , null
-                            )
-                        )
-                        localeIntent.resolveActivity(context.packageManager)?.let {
-                            runCatching { context.startActivity(localeIntent) }
-                        } ?: detailsIntent.resolveActivity(context.packageManager)?.let {
-                            runCatching { context.startActivity(detailsIntent) }
-                        } ?: run {
-                            showLanguageDialog = true
+                SettingsPreferenceItem(
+                    title = stringResource(id = R.string.language),
+                    summary = stringResource(id = R.string.summary_preference_settings_language),
+                    onClick = {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            val localeIntent: Intent =
+                                Intent(Settings.ACTION_APP_LOCALE_SETTINGS).setData(
+                                    Uri.fromParts("package", context.packageName, null)
+                                )
+                            val detailsIntent: Intent =
+                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(
+                                    Uri.fromParts("package", context.packageName, null)
+                                )
+
+                            localeIntent.resolveActivity(context.packageManager)?.let {
+                                runCatching { context.startActivity(localeIntent) }
+                            } ?: detailsIntent.resolveActivity(context.packageManager)?.let {
+                                runCatching { context.startActivity(detailsIntent) }
+                            } ?: run {
+                                showLanguageDialog.value = true
+                            }
+                        } else {
+                            showLanguageDialog.value = true
                         }
                     }
-                    else {
-                        showLanguageDialog = true
-                    }
-                })
+                )
             }
 
-            if (showLanguageDialog) {
+            if (showLanguageDialog.value) {
                 SelectLanguageAlertDialog(
-                    onDismiss = {
-                        showLanguageDialog = false // FIXME: Assigned value is never read
-                    },
+                    onDismiss = { showLanguageDialog.value = false },
                     onLanguageSelected = { newLanguageCode: String ->
-                        showLanguageDialog = false // FIXME: Assigned value is never read
+                        showLanguageDialog.value = false
                         AppCompatDelegate.setApplicationLocales(
-                            LocaleListCompat.forLanguageTags(
-                                newLanguageCode
-                            )
+                            LocaleListCompat.forLanguageTags(newLanguageCode)
                         )
-                })
+                    }
+                )
             }
         }
     }
