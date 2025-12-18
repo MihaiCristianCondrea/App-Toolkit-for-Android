@@ -3,8 +3,13 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.MenuOpen
 import androidx.compose.material.icons.filled.Menu
@@ -174,7 +179,6 @@ fun MainScaffoldContent(
             val adsConfig: AdsConfig = koinInject(qualifier = named("bottom_nav_bar_native_ad"))
             HideOnScrollBottomBar(scrollBehavior = bottomAppBarScrollBehavior) {
                 BottomAppBarNativeAdBanner(
-                    modifier = Modifier.fillMaxWidth(),
                     adUnitId = adsConfig.bannerAdUnitId
                 )
                 BottomNavigationBar(
@@ -184,14 +188,27 @@ fun MainScaffoldContent(
             }
         },
         floatingActionButton = {
+            val limit = bottomAppBarScrollBehavior.state.heightOffsetLimit
             MainFloatingActionButton(
+                modifier = if (limit != 0f && bottomAppBarScrollBehavior.state.heightOffset <= limit) {
+                    Modifier.windowInsetsPadding(
+                        WindowInsets.navigationBars.only(
+                            WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal
+                        )
+                    )
+                } else {
+                    Modifier
+                },
                 visible = isFabVisible && randomAppHandler != null,
                 expanded = isFabExtended,
                 onClick = { randomAppHandler?.invoke() },
             )
         }
+
     ) { paddingValues ->
         AppNavigationHost(
+            modifier = Modifier
+                .consumeWindowInsets(paddingValues),
             navController = stableNavController,
             snackbarHostState = snackBarHostState,
             paddingValues = paddingValues,

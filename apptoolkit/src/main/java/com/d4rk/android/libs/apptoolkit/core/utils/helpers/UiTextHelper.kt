@@ -2,7 +2,7 @@ package com.d4rk.android.libs.apptoolkit.core.utils.helpers
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 
 /**
  * UiTextHelper is a sealed class that represents text that can be either a dynamic string or a string resource.
@@ -61,10 +61,9 @@ sealed class UiTextHelper {
     */
     @Composable
     fun asString() : String {
-        val context : Context = LocalContext.current
         return when (this) {
             is DynamicString -> content
-            is StringResource -> context.getString(resourceId , *arguments.toTypedArray())
+            is StringResource -> stringResource(resourceId, *arguments.toTypedArray())
         }
     }
 }

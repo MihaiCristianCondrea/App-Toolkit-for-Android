@@ -10,17 +10,20 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 
 @Composable
 fun NavigationHost(
+    modifier: Modifier = Modifier,
     navController: StableNavController,
     startDestination: String,
     navGraphBuilder: NavGraphBuilder.() -> Unit
 ) {
     NavHost(
+        modifier = modifier,
         navController = navController.navController,
         startDestination = startDestination,
         enterTransition = NavigationTransitions.DefaultEnter,

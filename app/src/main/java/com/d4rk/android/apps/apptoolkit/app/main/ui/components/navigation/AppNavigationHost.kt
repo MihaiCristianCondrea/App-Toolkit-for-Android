@@ -9,6 +9,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.composable
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.FavoriteAppsRoute
@@ -30,6 +31,7 @@ import org.koin.compose.koinInject
 
 @Composable
 fun AppNavigationHost(
+    modifier: Modifier = Modifier,
     navController: StableNavController,
     snackbarHostState: SnackbarHostState,
     paddingValues: PaddingValues,
@@ -58,6 +60,7 @@ fun AppNavigationHost(
     }
 
     NavigationHost(
+        modifier = modifier,
         navController = navController,
         startDestination = startDestination
     ) {
