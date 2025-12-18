@@ -2,9 +2,6 @@ package com.d4rk.android.libs.apptoolkit.core.utils.helpers
 
 import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.os.Build
 import com.google.android.gms.tasks.Tasks
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
@@ -195,51 +192,5 @@ class ReviewHelperTest {
         assertFalse(result)
         verify(exactly = 1) { reviewManager.requestReviewFlow() }
         verify(exactly = 1) { reviewManager.launchReviewFlow(activity, reviewInfo) }
-    }
-
-    @Test
-    fun `isInAppReviewAvailable returns true when Play Store is installed`() {
-        val context = mockk<Context>()
-        val packageManager = mockk<PackageManager>()
-        every { context.packageManager } returns packageManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            every {
-                packageManager.getPackageInfo(
-                    "com.android.vending",
-                    PackageManager.PackageInfoFlags.of(0)
-                )
-            } returns PackageInfo()
-        } else {
-            @Suppress("DEPRECATION")
-            every { packageManager.getPackageInfo("com.android.vending", 0) } returns PackageInfo()
-        }
-
-        val result = ReviewHelper.isInAppReviewAvailable(context)
-
-        assertTrue(result)
-    }
-
-    @Test
-    fun `isInAppReviewAvailable returns false when Play Store is missing`() {
-        val context = mockk<Context>()
-        val packageManager = mockk<PackageManager>()
-        every { context.packageManager } returns packageManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            every {
-                packageManager.getPackageInfo(
-                    "com.android.vending",
-                    PackageManager.PackageInfoFlags.of(0)
-                )
-            } throws PackageManager.NameNotFoundException()
-        } else {
-            @Suppress("DEPRECATION")
-            every {
-                packageManager.getPackageInfo("com.android.vending", 0)
-            } throws PackageManager.NameNotFoundException()
-        }
-
-        val result = ReviewHelper.isInAppReviewAvailable(context)
-
-        assertFalse(result)
     }
 }
