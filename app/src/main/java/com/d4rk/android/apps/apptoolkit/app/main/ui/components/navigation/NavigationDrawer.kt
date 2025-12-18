@@ -13,8 +13,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.d4rk.android.apps.apptoolkit.app.main.domain.model.ui.UiMainScreen
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainScaffoldContent
+import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.NavigationDrawerItemContent
@@ -28,7 +28,7 @@ import org.koin.core.qualifier.named
 
 @Composable
 fun NavigationDrawer(
-    uiState: UiMainScreen,
+    uiState: MainUiState,
     windowWidthSizeClass: WindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem>,
 ) {

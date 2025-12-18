@@ -3,8 +3,8 @@ package com.d4rk.android.libs.apptoolkit.app.help.ui
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.app.help.domain.actions.HelpAction
 import com.d4rk.android.libs.apptoolkit.app.help.domain.actions.HelpEvent
-import com.d4rk.android.libs.apptoolkit.app.help.domain.model.ui.UiHelpScreen
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepository
+import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
@@ -25,8 +25,8 @@ import kotlinx.coroutines.flow.onStart
 
 class HelpViewModel(
     private val helpRepository: HelpRepository,
-) : ScreenViewModel<UiHelpScreen, HelpEvent, HelpAction>(
-    initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = UiHelpScreen())
+) : ScreenViewModel<HelpUiState, HelpEvent, HelpAction>(
+    initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = HelpUiState())
 ) {
 
     override fun onEvent(event: HelpEvent) {
@@ -37,7 +37,7 @@ class HelpViewModel(
     }
 
     private fun loadFaq() {
-        var latestQuestions = UiHelpScreen().questions
+        var latestQuestions = HelpUiState().questions
 
         helpRepository.fetchFaq()
             .onStart { screenState.updateState(ScreenState.IsLoading()) }

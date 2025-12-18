@@ -4,9 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.about.domain.actions.AboutAction
 import com.d4rk.android.libs.apptoolkit.app.about.domain.actions.AboutEvent
-import com.d4rk.android.libs.apptoolkit.app.about.domain.model.ui.UiAboutScreen
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.ObserveAboutInfoUseCase
+import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
@@ -27,7 +27,7 @@ open class AboutViewModel(
     private val observeAboutInfo: ObserveAboutInfoUseCase,
     private val copyDeviceInfo: CopyDeviceInfoUseCase,
 ) :
-    ScreenViewModel<UiAboutScreen, AboutEvent, AboutAction>(initialState = UiStateScreen(data = UiAboutScreen())) {
+    ScreenViewModel<AboutUiState, AboutEvent, AboutAction>(initialState = UiStateScreen(data = AboutUiState())) {
 
     init {
         loadAboutInfo()

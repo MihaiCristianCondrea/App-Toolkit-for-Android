@@ -11,13 +11,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.UiHelpQuestion
+import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun HelpQuestionsList(questions: ImmutableList<UiHelpQuestion>) {
+fun HelpQuestionsList(questions: ImmutableList<FaqItem>) {
     val expandedStates : SnapshotStateMap<Int , Boolean> = remember { mutableStateMapOf() }
     val cardShape = RoundedCornerShape(
         topStart = SizeConstants.LargeIncreasedSize,
@@ -32,7 +32,7 @@ fun HelpQuestionsList(questions: ImmutableList<UiHelpQuestion>) {
         shape = cardShape
         ) {
         Column {
-            questions.forEachIndexed { index : Int , question : UiHelpQuestion ->
+            questions.forEachIndexed { index: Int, question: FaqItem ->
                 key(question.id) {
                     val isExpanded = expandedStates[question.id] == true
                     QuestionCard(title = question.question , summary = question.answer , isExpanded = isExpanded , onToggleExpand = {

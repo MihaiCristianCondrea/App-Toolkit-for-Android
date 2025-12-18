@@ -2,10 +2,10 @@ package com.d4rk.android.libs.apptoolkit.app.about.ui
 
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.about.domain.actions.AboutEvent
-import com.d4rk.android.libs.apptoolkit.app.about.domain.model.ui.UiAboutScreen
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.ObserveAboutInfoUseCase
+import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
@@ -39,10 +39,10 @@ class TestAboutViewModel {
 
     private fun createViewModel(): AboutViewModel {
         val repository = object : AboutRepository {
-            override fun getAboutInfoStream(): Flow<UiAboutScreen> =
+            override fun getAboutInfoStream(): Flow<AboutUiState> =
                 flow {
                     emit(
-                        UiAboutScreen(
+                        AboutUiState(
                             appVersion = buildInfoProvider.appVersion,
                             appVersionCode = buildInfoProvider.appVersionCode,
                             deviceInfo = deviceProvider.deviceInfo,
@@ -60,7 +60,7 @@ class TestAboutViewModel {
 
     private fun createFailingViewModel(): AboutViewModel {
         val repository = object : AboutRepository {
-            override fun getAboutInfoStream(): Flow<UiAboutScreen> =
+            override fun getAboutInfoStream(): Flow<AboutUiState> =
                 flow { throw Exception("fail") }
 
             override suspend fun copyDeviceInfo(label: String, deviceInfo: String) { /* no-op */ }
@@ -144,9 +144,9 @@ class TestAboutViewModel {
 
     @Test
     fun `repository updates propagate to ui state`() = runTest(dispatcherExtension.testDispatcher) {
-        val updates = MutableSharedFlow<UiAboutScreen>()
+        val updates = MutableSharedFlow<AboutUiState>()
         val repository = object : AboutRepository {
-            override fun getAboutInfoStream(): Flow<UiAboutScreen> = updates
+            override fun getAboutInfoStream(): Flow<AboutUiState> = updates
             override suspend fun copyDeviceInfo(label: String, deviceInfo: String) { /* no-op */ }
         }
         val viewModel = AboutViewModel(
@@ -155,11 +155,11 @@ class TestAboutViewModel {
         )
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-        updates.emit(UiAboutScreen(deviceInfo = "one"))
+        updates.emit(AboutUiState(deviceInfo = "one"))
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
         assertThat(viewModel.uiState.value.data?.deviceInfo).isEqualTo("one")
 
-        updates.emit(UiAboutScreen(deviceInfo = "two"))
+        updates.emit(AboutUiState(deviceInfo = "two"))
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
         assertThat(viewModel.uiState.value.data?.deviceInfo).isEqualTo("two")
     }

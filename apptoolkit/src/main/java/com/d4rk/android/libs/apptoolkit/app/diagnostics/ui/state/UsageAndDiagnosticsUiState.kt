@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.model.ui
+package com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state
 
 /**
  * Represents the state for [com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsViewModel].
@@ -9,7 +9,7 @@ package com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.model.ui
  * @param adUserDataConsent user consent for ad user data
  * @param adPersonalizationConsent user consent for ad personalization
  */
-data class UiUsageAndDiagnosticsScreen(
+data class UsageAndDiagnosticsUiState(
     val usageAndDiagnostics: Boolean = false,
     val analyticsConsent: Boolean = false,
     val adStorageConsent: Boolean = false,

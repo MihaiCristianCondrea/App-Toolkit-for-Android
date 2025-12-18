@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 
 /** Simple representation of a FAQ item */
 @Immutable
-data class UiHelpQuestion(
+data class FaqItem(
     val id: Int,
     val question: String,
     val answer: String,

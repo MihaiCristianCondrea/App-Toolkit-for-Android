@@ -5,7 +5,7 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.advanced.data.CacheRepository
 import com.d4rk.android.libs.apptoolkit.app.advanced.domain.actions.AdvancedSettingsAction
 import com.d4rk.android.libs.apptoolkit.app.advanced.domain.actions.AdvancedSettingsEvent
-import com.d4rk.android.libs.apptoolkit.app.advanced.domain.model.ui.UiAdvancedSettingsScreen
+import com.d4rk.android.libs.apptoolkit.app.advanced.ui.state.AdvancedSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
@@ -20,10 +20,10 @@ import kotlinx.coroutines.flow.onEach
 
 class AdvancedSettingsViewModel(
     private val repository: CacheRepository,
-) : ScreenViewModel<UiAdvancedSettingsScreen, AdvancedSettingsEvent, AdvancedSettingsAction>(
+) : ScreenViewModel<AdvancedSettingsUiState, AdvancedSettingsEvent, AdvancedSettingsAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
-        data = UiAdvancedSettingsScreen()
+        data = AdvancedSettingsUiState()
     ),
 ) {
 

@@ -1,7 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.help.ui
 
 import com.d4rk.android.libs.apptoolkit.app.help.domain.actions.HelpEvent
-import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.UiHelpQuestion
+import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
@@ -28,7 +28,7 @@ class HelpViewModelTest {
     @Test
     fun `loadFaq sets NoData when repository returns empty`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = object : HelpRepository {
-            override fun fetchFaq() = flowOf(emptyList<UiHelpQuestion>())
+            override fun fetchFaq() = flowOf(emptyList<FaqItem>())
         }
         val viewModel = HelpViewModel(repo)
 
@@ -42,7 +42,7 @@ class HelpViewModelTest {
     @Test
     fun `loadFaq sets error state and shows snackbar`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = object : HelpRepository {
-            override fun fetchFaq() = flow<List<UiHelpQuestion>> { throw IOException("boom") }
+            override fun fetchFaq() = flow<List<FaqItem>> { throw IOException("boom") }
         }
         val viewModel = HelpViewModel(repo)
 
@@ -57,7 +57,7 @@ class HelpViewModelTest {
     @Test
     fun `dismiss snackbar clears snackbar`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = object : HelpRepository {
-            override fun fetchFaq() = flow<List<UiHelpQuestion>> { throw IOException("boom") }
+            override fun fetchFaq() = flow<List<FaqItem>> { throw IOException("boom") }
         }
         val viewModel = HelpViewModel(repo)
 
@@ -72,19 +72,19 @@ class HelpViewModelTest {
 
     @Test
     fun `additional emissions update questions`() = runTest(dispatcherExtension.testDispatcher) {
-        val faqFlow = MutableSharedFlow<List<UiHelpQuestion>>()
+        val faqFlow = MutableSharedFlow<List<FaqItem>>()
         val repo = object : HelpRepository {
             override fun fetchFaq() = faqFlow
         }
         val viewModel = HelpViewModel(repo)
 
         viewModel.onEvent(HelpEvent.LoadFaq)
-        faqFlow.emit(listOf(UiHelpQuestion(id = 0 , question = "Q1" , answer = "A1")))
+        faqFlow.emit(listOf(FaqItem(id = 0, question = "Q1", answer = "A1")))
         advanceUntilIdle()
         assertThat(viewModel.uiState.value.data?.questions?.single()?.question)
             .isEqualTo("Q1")
 
-        faqFlow.emit(listOf(UiHelpQuestion(id = 1 , question = "Q2" , answer = "A2")))
+        faqFlow.emit(listOf(FaqItem(id = 1, question = "Q2", answer = "A2")))
         advanceUntilIdle()
         assertThat(viewModel.uiState.value.data?.questions?.single()?.question)
             .isEqualTo("Q2")

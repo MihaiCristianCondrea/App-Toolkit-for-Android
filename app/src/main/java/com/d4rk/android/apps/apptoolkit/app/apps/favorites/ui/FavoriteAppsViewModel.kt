@@ -8,7 +8,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.Obser
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ToggleFavoriteUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScreen
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState.Error
@@ -41,8 +41,8 @@ class FavoriteAppsViewModel(
     private val observeFavoritesUseCase: ObserveFavoritesUseCase,
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
     private val dispatchers: DispatcherProvider,
-) : ScreenViewModel<UiHomeScreen, FavoriteAppsEvent, FavoriteAppsAction>(
-    initialState = UiStateScreen(screenState = IsLoading(), data = UiHomeScreen())
+) : ScreenViewModel<AppListUiState, FavoriteAppsEvent, FavoriteAppsAction>(
+    initialState = UiStateScreen(screenState = IsLoading(), data = AppListUiState())
 ) {
 
     private val loadFavoritesTrigger = MutableSharedFlow<Unit>(replay = 1)
@@ -74,7 +74,7 @@ class FavoriteAppsViewModel(
                                     current.copy(
                                         screenState = NoData(),
                                         data = current.data
-                                            ?: UiHomeScreen(apps = persistentListOf<AppInfo>())
+                                            ?: AppListUiState(apps = persistentListOf<AppInfo>())
                                     )
                                 }
                             }
@@ -89,7 +89,7 @@ class FavoriteAppsViewModel(
                                 screenState.update { current ->
                                     current.copy(
                                         screenState = NoData(),
-                                        data = UiHomeScreen(apps = persistentListOf<AppInfo>())
+                                        data = AppListUiState(apps = persistentListOf<AppInfo>())
                                     )
                                 }
                             } else {

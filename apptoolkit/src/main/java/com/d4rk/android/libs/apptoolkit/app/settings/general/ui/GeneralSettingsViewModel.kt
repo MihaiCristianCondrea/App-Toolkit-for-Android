@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.actions.GeneralSettingsAction
 import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.actions.GeneralSettingsEvent
-import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.model.ui.UiGeneralSettingsScreen
 import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.GeneralSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.state.GeneralSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
@@ -23,8 +23,8 @@ import kotlinx.coroutines.launch
 
 class GeneralSettingsViewModel(
     private val repository: GeneralSettingsRepository
-) : ScreenViewModel<UiGeneralSettingsScreen, GeneralSettingsEvent, GeneralSettingsAction>(
-    initialState = UiStateScreen(data = UiGeneralSettingsScreen())
+) : ScreenViewModel<GeneralSettingsUiState, GeneralSettingsEvent, GeneralSettingsAction>(
+    initialState = UiStateScreen(data = GeneralSettingsUiState())
 ) {
 
     override fun onEvent(event : GeneralSettingsEvent) {

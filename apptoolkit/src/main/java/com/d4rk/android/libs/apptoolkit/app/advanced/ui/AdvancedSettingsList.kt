@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.advanced.domain.actions.AdvancedSettingsEvent
-import com.d4rk.android.libs.apptoolkit.app.advanced.domain.model.ui.UiAdvancedSettingsScreen
+import com.d4rk.android.libs.apptoolkit.app.advanced.ui.state.AdvancedSettingsUiState
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.IssueReporterActivity
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
@@ -50,7 +50,7 @@ fun AdvancedSettingsList(
     paddingValues: PaddingValues = PaddingValues(),
 ) {
     val viewModel: AdvancedSettingsViewModel = koinViewModel()
-    val screenState: UiStateScreen<UiAdvancedSettingsScreen> by viewModel.uiState.collectAsStateWithLifecycle()
+    val screenState: UiStateScreen<AdvancedSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val appContext = remember(context) { context.applicationContext }

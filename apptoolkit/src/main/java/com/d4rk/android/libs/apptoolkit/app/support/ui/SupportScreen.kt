@@ -28,8 +28,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.support.billing.SupportScreenUiState
 import com.d4rk.android.libs.apptoolkit.app.support.domain.actions.SupportEvent
+import com.d4rk.android.libs.apptoolkit.app.support.ui.state.SupportScreenUiState
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.ShortenLinkConstants
 import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.primaryFormattedPrice

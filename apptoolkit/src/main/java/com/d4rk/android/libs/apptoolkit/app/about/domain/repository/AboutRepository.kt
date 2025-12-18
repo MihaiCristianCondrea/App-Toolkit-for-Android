@@ -1,6 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.about.domain.repository
 
-import com.d4rk.android.libs.apptoolkit.app.about.domain.model.ui.UiAboutScreen
+import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -10,9 +10,9 @@ interface AboutRepository {
     /**
      * Retrieve information displayed on the about screen.
      *
-     * @return A [UiAboutScreen] data object.
+     * @return A [AboutUiState] data object.
      */
-    fun getAboutInfoStream(): Flow<UiAboutScreen>
+    fun getAboutInfoStream(): Flow<AboutUiState>
 
     /**
      * Copy the provided [deviceInfo] string to the clipboard with the given [label].

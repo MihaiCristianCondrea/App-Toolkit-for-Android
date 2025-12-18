@@ -7,8 +7,8 @@ import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.Toggl
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.actions.HomeAction
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.actions.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScreen
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.usecases.FetchDeveloperAppsUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
@@ -42,8 +42,8 @@ class AppsListViewModel(
     observeFavoritesUseCase: ObserveFavoritesUseCase,
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
     private val dispatchers: DispatcherProvider,
-) : ScreenViewModel<UiHomeScreen, HomeEvent, HomeAction>(
-    initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = UiHomeScreen())
+) : ScreenViewModel<AppListUiState, HomeEvent, HomeAction>(
+    initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = AppListUiState())
 ) {
 
     private val fetchAppsTrigger = MutableSharedFlow<Unit>(replay = 1)
@@ -84,7 +84,7 @@ class AppsListViewModel(
                                 screenState.update { current ->
                                     current.copy(
                                         screenState = ScreenState.NoData(),
-                                        data = UiHomeScreen(apps = persistentListOf<AppInfo>())
+                                        data = AppListUiState(apps = persistentListOf<AppInfo>())
                                     )
                                 }
                             } else {

@@ -22,7 +22,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.AppCard
 import com.d4rk.android.apps.apptoolkit.app.apps.common.utils.buildAppListItems
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppListItem
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScreen
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.AppsListNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.animateVisibility
@@ -51,7 +51,7 @@ import org.koin.core.qualifier.named
  */
 @Composable
 fun AppsList(
-    uiHomeScreen: UiHomeScreen,
+    uiHomeScreen: AppListUiState,
     favorites: ImmutableSet<String>,
     paddingValues: PaddingValues,
     adsEnabled: Boolean,

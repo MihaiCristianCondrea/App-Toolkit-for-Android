@@ -27,12 +27,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.help.domain.actions.HelpEvent
+import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.HelpScreenConfig
-import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.UiHelpQuestion
-import com.d4rk.android.libs.apptoolkit.app.help.domain.model.ui.UiHelpScreen
 import com.d4rk.android.libs.apptoolkit.app.help.ui.components.ContactUsCard
 import com.d4rk.android.libs.apptoolkit.app.help.ui.components.HelpQuestionsList
 import com.d4rk.android.libs.apptoolkit.app.help.ui.components.dropdown.HelpScreenMenuActions
+import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.HelpNativeAdCard
@@ -69,7 +69,7 @@ fun HelpScreen(
     val isFabExtended = rememberSaveable { mutableStateOf(true) }
     val showDialog = rememberSaveable { mutableStateOf(false) }
 
-    val screenState: UiStateScreen<UiHelpScreen> by viewModel.uiState.collectAsStateWithLifecycle()
+    val screenState: UiStateScreen<HelpUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         isInAppReviewAvailable.value =
@@ -152,7 +152,7 @@ fun HelpScreen(
                     paddingValues = paddingValues
                 )
             },
-            onSuccess = { data: UiHelpScreen ->
+            onSuccess = { data: HelpUiState ->
                 HelpScreenContent(
                     questions = data.questions,
                     paddingValues = paddingValues
@@ -164,7 +164,7 @@ fun HelpScreen(
 
 @Composable
 fun HelpScreenContent(
-    questions: ImmutableList<UiHelpQuestion>,
+    questions: ImmutableList<FaqItem>,
     paddingValues: PaddingValues
 ) {
     val context = LocalContext.current

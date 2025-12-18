@@ -1,6 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.help.domain.repository
 
-import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.UiHelpQuestion
+import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.FaqItem
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -10,5 +10,5 @@ interface HelpRepository {
     /**
      * Fetches the frequently asked questions as a cold [Flow].
      */
-    fun fetchFaq(): Flow<List<UiHelpQuestion>>
+    fun fetchFaq(): Flow<List<FaqItem>>
 }

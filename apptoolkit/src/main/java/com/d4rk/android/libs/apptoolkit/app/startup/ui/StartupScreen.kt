@@ -25,7 +25,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.startup.domain.model.ui.UiStartupScreen
+import com.d4rk.android.libs.apptoolkit.app.startup.ui.state.StartupUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
@@ -39,14 +39,14 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable
 fun StartupScreen(
-    screenState: UiStateScreen<UiStartupScreen>,
+    screenState: UiStateScreen<StartupUiState>,
     onContinueClick : () -> Unit
 ) {
     ScreenStateHandler(
         screenState = screenState,
         onLoading = { LoadingScreen() },
         onEmpty = { NoDataScreen() },
-        onSuccess = { data: UiStartupScreen ->
+        onSuccess = { data: StartupUiState ->
         TopAppBarScaffold(
             title = stringResource(R.string.welcome) ,
             content = { paddingValues ->

@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.actions.AdsSettingsEvent
-import com.d4rk.android.libs.apptoolkit.app.ads.domain.model.ui.UiAdsSettingsScreen
+import com.d4rk.android.libs.apptoolkit.app.ads.ui.state.AdsSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.NoDataScreen
@@ -40,7 +40,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun AdsSettingsScreen() {
     val viewModel: AdsSettingsViewModel = koinViewModel()
-    val screenState: UiStateScreen<UiAdsSettingsScreen> by viewModel.uiState.collectAsStateWithLifecycle()
+    val screenState: UiStateScreen<AdsSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
     val activity = LocalActivity.current
     val context = LocalContext.current
@@ -59,7 +59,7 @@ fun AdsSettingsScreen() {
             onLoading = { LoadingScreen() },
             onEmpty = { NoDataScreen(paddingValues = paddingValues) },
             onError = { NoDataScreen(isError = true, paddingValues = paddingValues) },
-            onSuccess = { data: UiAdsSettingsScreen ->
+            onSuccess = { data: AdsSettingsUiState ->
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()

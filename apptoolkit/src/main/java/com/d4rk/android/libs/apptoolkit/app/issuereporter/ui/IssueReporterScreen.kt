@@ -63,7 +63,7 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.actions.IssueReporterEvent
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
-import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.ui.UiIssueReporterScreen
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.state.IssueReporterUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.OutlinedIconButtonWithText
 import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.fab.AnimatedExtendedFloatingActionButton
@@ -100,7 +100,7 @@ fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
 
     val viewModel: IssueReporterViewModel = koinViewModel()
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
-    val uiStateScreen: UiStateScreen<UiIssueReporterScreen> by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiStateScreen: UiStateScreen<IssueReporterUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val target: GithubTarget = koinInject()
 
     val defaultBackClicked: () -> Unit = remember(activity) { { activity?.finish() } }
@@ -146,7 +146,7 @@ fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
             onLoading = { LoadingScreen() },
             onEmpty = { NoDataScreen(paddingValues = paddingValues) },
             onError = { NoDataScreen(isError = true, paddingValues = paddingValues) },
-            onSuccess = { data: UiIssueReporterScreen ->
+            onSuccess = { data: IssueReporterUiState ->
                 IssueReporterScreenContent(
                     paddingValues = paddingValues,
                     onEvent = viewModel::onEvent,
@@ -168,7 +168,7 @@ fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
 fun IssueReporterScreenContent(
     paddingValues: PaddingValues,
     onEvent: (IssueReporterEvent) -> Unit,
-    data: UiIssueReporterScreen,
+    data: IssueReporterUiState,
 ) {
     val uriHandler = LocalUriHandler.current
     val context = LocalContext.current

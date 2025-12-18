@@ -73,11 +73,11 @@ class CommonDataStoreTest {
         val scope = dataStore.extractScope()
         val job = scope.coroutineContext[Job]
 
-        assertTrue(job?.isActive == true)
+        assertEquals(job?.isActive, true)
 
         dataStore.close()
 
-        assertTrue(job?.isCancelled == true)
+        assertEquals(job?.isCancelled, true)
     }
 
     @Test

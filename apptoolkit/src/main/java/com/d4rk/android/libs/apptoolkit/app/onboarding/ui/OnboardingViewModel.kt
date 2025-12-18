@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +23,7 @@ import kotlinx.coroutines.flow.update
  */
 class OnboardingViewModel(
     private val repository: OnboardingRepository
-) : ViewModel() {
+) : ViewModel() { // FIXME: Use the view model state like the other view models
 
     private val _uiState = MutableStateFlow(OnboardingUiState())
     val uiState: StateFlow<OnboardingUiState> = _uiState.asStateFlow()

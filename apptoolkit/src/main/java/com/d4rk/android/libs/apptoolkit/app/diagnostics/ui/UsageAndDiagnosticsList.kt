@@ -26,10 +26,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.actions.UsageAndDiagnosticsEvent
-import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.model.ui.UiUsageAndDiagnosticsScreen
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.components.ConsentSectionHeader
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.components.ConsentToggleCard
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.components.ExpandableConsentSectionHeader
+import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnosticsUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.SwitchCardItem
@@ -43,9 +43,9 @@ fun UsageAndDiagnosticsList(
     paddingValues: PaddingValues,
 ) {
     val viewModel: UsageAndDiagnosticsViewModel = koinViewModel()
-    val screenState: UiStateScreen<UiUsageAndDiagnosticsScreen> =
+    val screenState: UiStateScreen<UsageAndDiagnosticsUiState> =
         viewModel.uiState.collectAsStateWithLifecycle().value
-    val uiState = screenState.data ?: UiUsageAndDiagnosticsScreen()
+    val uiState = screenState.data ?: UsageAndDiagnosticsUiState()
 
     var advancedSettingsExpanded by remember { mutableStateOf(false) }
 

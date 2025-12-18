@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.actions.UsageAndDiagnosticsAction
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.actions.UsageAndDiagnosticsEvent
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.model.UsageAndDiagnosticsSettings
-import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.model.ui.UiUsageAndDiagnosticsScreen
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageAndDiagnosticsRepository
+import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnosticsUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
@@ -26,8 +26,8 @@ import kotlinx.coroutines.launch
 
 class UsageAndDiagnosticsViewModel(
     private val repository: UsageAndDiagnosticsRepository,
-) : ScreenViewModel<UiUsageAndDiagnosticsScreen, UsageAndDiagnosticsEvent, UsageAndDiagnosticsAction>(
-    initialState = UiStateScreen(data = UiUsageAndDiagnosticsScreen()),
+) : ScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent, UsageAndDiagnosticsAction>(
+    initialState = UiStateScreen(data = UsageAndDiagnosticsUiState()),
 ) {
 
     init {
@@ -49,7 +49,7 @@ class UsageAndDiagnosticsViewModel(
             .onStart { screenState.setLoading() }
             .onEach { settings ->
                 screenState.successData {
-                    UiUsageAndDiagnosticsScreen(
+                    UsageAndDiagnosticsUiState(
                         usageAndDiagnostics = settings.usageAndDiagnostics,
                         analyticsConsent = settings.analyticsConsent,
                         adStorageConsent = settings.adStorageConsent,

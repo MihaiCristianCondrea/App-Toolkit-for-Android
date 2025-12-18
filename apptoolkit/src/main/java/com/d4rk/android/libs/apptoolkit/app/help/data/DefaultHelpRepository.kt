@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.Log
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.FaqCatalog
+import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.FaqQuestion
-import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.UiHelpQuestion
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepository
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.logging.FAQ_LOG_TAG
@@ -25,7 +25,7 @@ class DefaultHelpRepository(
     private val productId: String,
 ) : HelpRepository {
 
-    override fun fetchFaq(): Flow<List<UiHelpQuestion>> = flow {
+    override fun fetchFaq(): Flow<List<FaqItem>> = flow {
         val remoteQuestions = fetchRemoteQuestions()
         if (remoteQuestions.isNotEmpty()) {
             emit(remoteQuestions)
@@ -35,7 +35,7 @@ class DefaultHelpRepository(
         emit(loadLocalQuestions())
     }.flowOn(dispatchers.io)
 
-    private suspend fun fetchRemoteQuestions(): List<UiHelpQuestion> {
+    private suspend fun fetchRemoteQuestions(): List<FaqItem> {
         return try {
             Log.d(FAQ_LOG_TAG, "Fetching FAQ catalog from $catalogUrl for productId=$productId")
             val catalog = client.get(catalogUrl).body<FaqCatalog>()
@@ -74,7 +74,7 @@ class DefaultHelpRepository(
             }
 
             val sanitizedQuestions = remoteQuestions.mapIndexed { index, question ->
-                UiHelpQuestion(
+                FaqItem(
                     id = index,
                     question = question.question,
                     answer = question.answer.trim(),
@@ -94,7 +94,7 @@ class DefaultHelpRepository(
         }
     }
 
-    private fun loadLocalQuestions(): List<UiHelpQuestion> {
+    private fun loadLocalQuestions(): List<FaqItem> {
         val faq = listOf(
             R.string.question_1 to R.string.summary_preference_faq_1,
             R.string.question_2 to R.string.summary_preference_faq_2,
@@ -106,7 +106,7 @@ class DefaultHelpRepository(
             R.string.question_8 to R.string.summary_preference_faq_8,
             R.string.question_9 to R.string.summary_preference_faq_9
         ).mapIndexed { index, (questionRes, answerRes) ->
-            UiHelpQuestion(
+            FaqItem(
                 id = index,
                 question = context.getString(questionRes),
                 answer = context.getString(answerRes),

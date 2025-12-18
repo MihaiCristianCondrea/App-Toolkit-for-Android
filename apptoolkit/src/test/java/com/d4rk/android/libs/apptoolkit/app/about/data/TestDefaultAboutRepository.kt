@@ -1,7 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.about.data
 
 import android.content.Context
-import com.d4rk.android.libs.apptoolkit.app.about.domain.model.ui.UiAboutScreen
+import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
@@ -48,7 +48,7 @@ class TestDefaultAboutRepository {
     @Test
     fun `getAboutInfoStream emits expected info`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = repository()
-        val result: UiAboutScreen = repo.getAboutInfoStream().first()
+        val result: AboutUiState = repo.getAboutInfoStream().first()
         assertThat(result.appVersion).isEqualTo(buildInfoProvider.appVersion)
         assertThat(result.appVersionCode).isEqualTo(buildInfoProvider.appVersionCode)
         assertThat(result.deviceInfo).isEqualTo(deviceProvider.deviceInfo)

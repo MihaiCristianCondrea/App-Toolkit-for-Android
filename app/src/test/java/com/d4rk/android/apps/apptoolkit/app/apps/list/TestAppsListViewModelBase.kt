@@ -6,9 +6,9 @@ import com.d4rk.android.apps.apptoolkit.app.apps.favorites.FakeFavoritesReposito
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ToggleFavoriteUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScreen
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.usecases.FetchDeveloperAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
@@ -48,7 +48,7 @@ open class TestAppsListViewModelBase {
         println("\u2705 [SETUP] ViewModel initialized")
     }
 
-    protected suspend fun Flow<UiStateScreen<UiHomeScreen>>.testSuccess(
+    protected suspend fun Flow<UiStateScreen<AppListUiState>>.testSuccess(
         expectedSize: Int
     ) {
         println("\uD83D\uDE80 [TEST START] testSuccess expecting $expectedSize items")

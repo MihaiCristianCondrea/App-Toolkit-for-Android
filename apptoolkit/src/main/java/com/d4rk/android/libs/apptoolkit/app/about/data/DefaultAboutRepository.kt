@@ -1,8 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.about.data
 
 import android.content.Context
-import com.d4rk.android.libs.apptoolkit.app.about.domain.model.ui.UiAboutScreen
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
+import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
@@ -23,10 +23,10 @@ class DefaultAboutRepository(
     private val dispatchers: DispatcherProvider,
 ) : AboutRepository {
 
-    override fun getAboutInfoStream(): Flow<UiAboutScreen> =
+    override fun getAboutInfoStream(): Flow<AboutUiState> =
         flow {
             emit(
-                UiAboutScreen(
+                AboutUiState(
                     appVersion = configProvider.appVersion,
                     appVersionCode = configProvider.appVersionCode,
                     deviceInfo = deviceProvider.deviceInfo,

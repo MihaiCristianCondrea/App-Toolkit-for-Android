@@ -3,7 +3,7 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.apps.apptoolkit.app.main.domain.action.MainAction
 import com.d4rk.android.apps.apptoolkit.app.main.domain.action.MainEvent
-import com.d4rk.android.apps.apptoolkit.app.main.domain.model.ui.UiMainScreen
+import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val navigationRepository: NavigationRepository
-) : ScreenViewModel<UiMainScreen, MainEvent, MainAction>(
-    initialState = UiStateScreen(data = UiMainScreen())
+) : ScreenViewModel<MainUiState, MainEvent, MainAction>(
+    initialState = UiStateScreen(data = MainUiState())
 ) {
 
     init {

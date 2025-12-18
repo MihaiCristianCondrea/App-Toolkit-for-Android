@@ -3,7 +3,7 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
-import com.d4rk.android.apps.apptoolkit.app.main.domain.model.ui.UiMainScreen
+import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import io.mockk.clearAllMocks
@@ -66,7 +66,7 @@ class MainViewModelTest {
             advanceUntilIdle()
 
             assertEquals(
-                UiMainScreen(navigationDrawerItems = expectedItems.toImmutableList()),
+                MainUiState(navigationDrawerItems = expectedItems.toImmutableList()),
                 viewModel.uiState.value.data
             )
             assertEquals(1, repo.callCount)
@@ -86,7 +86,7 @@ class MainViewModelTest {
         advanceUntilIdle()
 
         assertEquals(
-            UiMainScreen(showSnackbar = true, snackbarMessage = "boom"),
+            MainUiState(showSnackbar = true, snackbarMessage = "boom"),
             viewModel.uiState.value.data
         )
         assertEquals(1, repo.callCount)

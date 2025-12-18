@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.support.billing
+package com.d4rk.android.libs.apptoolkit.app.support.ui.state
 
 import com.android.billingclient.api.ProductDetails
 

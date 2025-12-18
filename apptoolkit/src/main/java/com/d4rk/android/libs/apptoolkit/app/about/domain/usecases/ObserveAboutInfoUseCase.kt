@@ -1,7 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.about.domain.usecases
 
-import com.d4rk.android.libs.apptoolkit.app.about.domain.model.ui.UiAboutScreen
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
+import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -17,6 +17,6 @@ class ObserveAboutInfoUseCase(
     /**
      * Invoke the use case to receive updates for the about screen.
      */
-    operator fun invoke(): Flow<UiAboutScreen> = repository.getAboutInfoStream()
+    operator fun invoke(): Flow<AboutUiState> = repository.getAboutInfoStream()
 }
 

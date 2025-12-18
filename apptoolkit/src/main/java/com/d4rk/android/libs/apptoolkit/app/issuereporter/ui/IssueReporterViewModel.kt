@@ -8,9 +8,9 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.IssueRepo
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.Report
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.ExtraInfo
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
-import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.ui.UiIssueReporterScreen
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.state.IssueReporterUiState
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiSnackbar
@@ -35,10 +35,10 @@ class IssueReporterViewModel(
     private val githubTarget: GithubTarget,
     @param:GithubToken private val githubToken: String,
     private val deviceInfoProvider: DeviceInfoProvider,
-) : ScreenViewModel<UiIssueReporterScreen, IssueReporterEvent, IssueReporterAction>(
+) : ScreenViewModel<IssueReporterUiState, IssueReporterEvent, IssueReporterAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
-        data = UiIssueReporterScreen()
+        data = IssueReporterUiState()
     )
 ) {
     private var sendJob: Job? = null
@@ -53,7 +53,7 @@ class IssueReporterViewModel(
         }
     }
 
-    private fun update(mutator: (UiIssueReporterScreen) -> UiIssueReporterScreen) {
+    private fun update(mutator: (IssueReporterUiState) -> IssueReporterUiState) {
         screenState.updateData(newState = screenState.value.screenState) { current ->
             mutator(current)
         }

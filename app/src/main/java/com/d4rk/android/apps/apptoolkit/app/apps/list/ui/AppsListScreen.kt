@@ -24,7 +24,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.screens.loading.HomeLoad
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.actions.HomeAction
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.actions.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScreen
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
@@ -70,7 +70,7 @@ fun AppsListRoute(
 ) {
     val viewModel: AppsListViewModel = koinViewModel()
 
-    val screenState: UiStateScreen<UiHomeScreen> by viewModel.uiState.collectAsStateWithLifecycle()
+    val screenState: UiStateScreen<AppListUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val favoritesRaw: Set<String> by viewModel.favorites.collectAsStateWithLifecycle()
     val favorites = remember(favoritesRaw) { favoritesRaw.toImmutableSet() } // ✅ stable
     val canOpenRandomApp by viewModel.canOpenRandomApp.collectAsStateWithLifecycle()

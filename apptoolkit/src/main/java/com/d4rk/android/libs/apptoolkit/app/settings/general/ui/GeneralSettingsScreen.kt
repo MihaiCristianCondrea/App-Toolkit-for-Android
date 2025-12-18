@@ -9,7 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.actions.GeneralSettingsEvent
-import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.model.ui.UiGeneralSettingsScreen
+import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.state.GeneralSettingsUiState
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
@@ -39,7 +39,7 @@ fun GeneralSettingsScreen(
         onBackClicked = onBackClicked,
         snackbarHostState = snackbarHostState
     ) { paddingValues: PaddingValues ->
-        val screenState: UiStateScreen<UiGeneralSettingsScreen> by viewModel.uiState.collectAsStateWithLifecycle()
+        val screenState: UiStateScreen<GeneralSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
         GeneralSettingsContent(
             screenState = screenState,
             contentProvider = contentProvider,
@@ -51,7 +51,7 @@ fun GeneralSettingsScreen(
 
 @Composable
 fun GeneralSettingsContent(
-    screenState: UiStateScreen<UiGeneralSettingsScreen>,
+    screenState: UiStateScreen<GeneralSettingsUiState>,
     contentProvider: GeneralSettingsContentProvider,
     paddingValues: PaddingValues,
     snackbarHostState: SnackbarHostState
@@ -60,7 +60,7 @@ fun GeneralSettingsContent(
         screenState = screenState,
         onLoading = { LoadingScreen() },
         onEmpty = { NoDataScreen(paddingValues = paddingValues) },
-        onSuccess = { data: UiGeneralSettingsScreen ->
+        onSuccess = { data: GeneralSettingsUiState ->
             contentProvider.ProvideContent(
                 contentKey = data.contentKey,
                 paddingValues = paddingValues,

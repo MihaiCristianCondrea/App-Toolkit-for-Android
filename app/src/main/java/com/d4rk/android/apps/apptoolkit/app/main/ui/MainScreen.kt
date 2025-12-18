@@ -47,12 +47,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.d4rk.android.apps.apptoolkit.app.logging.FAB_LOG_TAG
-import com.d4rk.android.apps.apptoolkit.app.main.domain.model.ui.UiMainScreen
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.fab.MainFloatingActionButton
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.AppNavigationHost
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.NavigationDrawer
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.handleNavigationItemClick
+import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.BottomNavigationBar
@@ -92,19 +92,19 @@ import org.koin.core.qualifier.named
 fun MainScreen() {
     val windowWidthSizeClass: WindowWidthSizeClass = rememberWindowWidthSizeClass()
     val viewModel: MainViewModel = koinViewModel()
-    val screenState: UiStateScreen<UiMainScreen> by viewModel.uiState.collectAsStateWithLifecycle()
+    val screenState: UiStateScreen<MainUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
     val bottomItems: ImmutableList<BottomBarItem> = MainNavigationDefaults.bottomBarItems
 
     if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
         NavigationDrawer(
-            uiState = screenState.data ?: UiMainScreen(),
+            uiState = screenState.data ?: MainUiState(),
             windowWidthSizeClass = windowWidthSizeClass,
             bottomItems = bottomItems,
         )
     } else {
         MainScaffoldTabletContent(
-            uiState = screenState.data ?: UiMainScreen(),
+            uiState = screenState.data ?: MainUiState(),
             windowWidthSizeClass = windowWidthSizeClass,
             bottomItems = bottomItems,
         )
@@ -249,7 +249,7 @@ fun MainScaffoldContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScaffoldTabletContent(
-    uiState: UiMainScreen,
+    uiState: MainUiState,
     windowWidthSizeClass: WindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem>,
 ) {

@@ -3,8 +3,8 @@ package com.d4rk.android.libs.apptoolkit.app.ads.ui
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.actions.AdsSettingsAction
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.actions.AdsSettingsEvent
-import com.d4rk.android.libs.apptoolkit.app.ads.domain.model.ui.UiAdsSettingsScreen
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.ads.ui.state.AdsSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
@@ -20,10 +20,10 @@ import kotlinx.coroutines.launch
 /** ViewModel for Ads settings screen. */
 class AdsSettingsViewModel(
     private val repository: AdsSettingsRepository,
-) : ScreenViewModel<UiAdsSettingsScreen, AdsSettingsEvent, AdsSettingsAction>(
+) : ScreenViewModel<AdsSettingsUiState, AdsSettingsEvent, AdsSettingsAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.IsLoading(),
-        data = UiAdsSettingsScreen()
+        data = AdsSettingsUiState()
     )
 ) {
 

@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.about.domain.actions.AboutEvent
-import com.d4rk.android.libs.apptoolkit.app.about.domain.model.ui.UiAboutScreen
+import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.app.licenses.LicensesActivity
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit
 fun AboutSettingsList(paddingValues: PaddingValues = PaddingValues(), snackbarHostState: SnackbarHostState) {
     val context: Context = LocalContext.current
     val viewModel: AboutViewModel = koinViewModel()
-    val screenState: UiStateScreen<UiAboutScreen> by viewModel.uiState.collectAsStateWithLifecycle()
+    val screenState: UiStateScreen<AboutUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val deviceInfo: String = stringResource(id = R.string.device_info)
 
     var showKonfettiAnimationForThisInstance: Boolean by rememberSaveable { mutableStateOf(value = false) }
@@ -89,7 +89,7 @@ fun AboutSettingsList(paddingValues: PaddingValues = PaddingValues(), snackbarHo
             screenState = screenState,
             onLoading = { LoadingScreen() },
             onEmpty = { NoDataScreen(paddingValues = paddingValues) },
-            onSuccess = { data: UiAboutScreen ->
+            onSuccess = { data: AboutUiState ->
                 LazyColumn(modifier = Modifier.fillMaxHeight(), contentPadding = paddingValues) {
                     item {
                         PreferenceCategoryItem(title = stringResource(id = R.string.app_info))

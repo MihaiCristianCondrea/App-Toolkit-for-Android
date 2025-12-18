@@ -29,7 +29,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.screens.loading.HomeLoad
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.actions.FavoriteAppsAction
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.actions.FavoriteAppsEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScreen
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.logging.FAVORITES_LOG_TAG
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
@@ -70,7 +70,7 @@ fun FavoriteAppsRoute(
 ) {
     val viewModel: FavoriteAppsViewModel = koinViewModel()
 
-    val screenState: UiStateScreen<UiHomeScreen> by viewModel.uiState.collectAsStateWithLifecycle()
+    val screenState: UiStateScreen<AppListUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val favoritesRaw: Set<String> by viewModel.favorites.collectAsStateWithLifecycle()
     val favorites: ImmutableSet<String> =
         remember(favoritesRaw) { favoritesRaw.toImmutableSet() } // stable :contentReference[oaicite:3]{index=3}

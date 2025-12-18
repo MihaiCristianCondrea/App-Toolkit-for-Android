@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.about.domain.model.ui
+package com.d4rk.android.libs.apptoolkit.app.about.ui.state
 
 import androidx.compose.runtime.Immutable
 
@@ -9,7 +9,7 @@ import androidx.compose.runtime.Immutable
  * exposed as immutable properties to the UI layer.
  */
 @Immutable
-data class UiAboutScreen(
+data class AboutUiState(
     val appVersion: String = "",
     val appVersionCode: Int = 0,
     val deviceInfo: String = "",

@@ -24,6 +24,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ButtonIconSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
+// TODO: MAKE ALL BUTTONS ACCEPT BOTH PAINTER AND VECTOR IMAGE, If both are given use the vector image. defaults = null for all buttons with icons
+
 /**
  * A custom [IconButton] composable that adds a bounce click effect, sound feedback,
  * and haptic feedback to the standard Material Design icon button.
