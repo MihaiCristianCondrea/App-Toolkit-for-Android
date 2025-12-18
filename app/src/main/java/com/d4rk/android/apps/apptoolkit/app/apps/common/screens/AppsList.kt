@@ -149,7 +149,7 @@ private fun AppsGrid(
             contentType = { _, item ->
                 when (item) {
                     is AppListItem.App -> "app"
-                    AppListItem.Ad -> "ad"
+                    is AppListItem.Ad -> "ad"
                 }
             }
         ) { index, item ->
