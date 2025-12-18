@@ -26,6 +26,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.ui.UiHomeScre
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.AppsListNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.animateVisibility
+import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
@@ -179,6 +180,12 @@ private fun AppsGrid(
                             .animateVisibility(index = index),
                     )
                 }
+            }
+        }
+
+        repeat(4) {
+            item(span = { GridItemSpan(columnCount) }) {
+                LargeVerticalSpacer()
             }
         }
     }
