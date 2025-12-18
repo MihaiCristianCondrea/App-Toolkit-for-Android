@@ -2,6 +2,7 @@ package com.d4rk.android.libs.apptoolkit.app.support.ui
 
 import android.app.Activity
 import android.content.Context
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -51,7 +52,7 @@ import org.koin.core.qualifier.named
 @Composable
 fun SupportComposable() {
     val viewModel: SupportViewModel = koinViewModel()
-    val activity = LocalContext.current as? Activity
+    val activity = LocalActivity.current
     val screenState: UiStateScreen<SupportScreenUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val currentViewModel = rememberUpdatedState(newValue = viewModel)

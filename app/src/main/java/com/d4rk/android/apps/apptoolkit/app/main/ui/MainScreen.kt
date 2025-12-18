@@ -3,9 +3,8 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.MenuOpen
 import androidx.compose.material.icons.filled.Menu
@@ -13,7 +12,6 @@ import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FlexibleBottomAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
@@ -50,10 +48,13 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.handle
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.BottomNavigationBar
+import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.HideOnScrollBottomBar
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.LeftNavigationRail
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.MainTopAppBar
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.StableNavController
+import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.BottomAppBarNativeAdBanner
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHost
 import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableList
@@ -170,10 +171,12 @@ fun MainScaffoldContent(
         },
         snackbarHost = { DefaultSnackbarHost(snackbarState = snackBarHostState) },
         bottomBar = {
-            FlexibleBottomAppBar(
-                windowInsets = WindowInsets.navigationBars,
-                scrollBehavior = bottomAppBarScrollBehavior,
-            ) {
+            val adsConfig: AdsConfig = koinInject(qualifier = named("bottom_nav_bar_native_ad"))
+            HideOnScrollBottomBar(scrollBehavior = bottomAppBarScrollBehavior) {
+                BottomAppBarNativeAdBanner(
+                    modifier = Modifier.fillMaxWidth(),
+                    adUnitId = adsConfig.bannerAdUnitId
+                )
                 BottomNavigationBar(
                     navController = stableNavController,
                     items = bottomItems
