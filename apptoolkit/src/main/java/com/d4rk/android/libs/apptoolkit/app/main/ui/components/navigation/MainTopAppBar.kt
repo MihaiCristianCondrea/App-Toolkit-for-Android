@@ -11,10 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -45,35 +43,37 @@ fun MainTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior
 ) {
     val context: Context = LocalContext.current
+
     TopAppBar(
         title = { Text(text = stringResource(id = R.string.app_name)) },
         navigationIcon = {
             AnimatedIconButtonDirection(
                 icon = navigationIcon,
                 contentDescription = stringResource(id = R.string.go_back),
-                onClick = { onNavigationIconClick() },
+                onClick = onNavigationIconClick,
                 vibrate = false
             )
         },
         actions = {
-            var expandedMenu by remember { mutableStateOf(value = false) }
+            val (expandedMenu, setExpandedMenu) = remember { mutableStateOf(false) }
 
             AnimatedIconButtonDirection(
                 fromRight = true,
                 icon = Icons.Outlined.MoreVert,
                 contentDescription = stringResource(id = R.string.content_description_more_options),
-                onClick = { expandedMenu = true },
+                onClick = { setExpandedMenu(true) },
             )
 
             DropdownMenu(
                 expanded = expandedMenu,
                 shape = RoundedCornerShape(SizeConstants.LargeIncreasedSize),
-                onDismissRequest = { expandedMenu = false }) {
+                onDismissRequest = { setExpandedMenu(false) }
+            ) {
                 CommonDropdownMenuItem(
                     textResId = R.string.support_us,
                     icon = Icons.Outlined.VolunteerActivism,
                     onClick = {
-                        expandedMenu = false
+                        setExpandedMenu(false)
                         IntentsHelper.openActivity(context, SupportActivity::class.java)
                     }
                 )

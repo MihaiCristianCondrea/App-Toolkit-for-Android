@@ -142,7 +142,7 @@ private fun AppsGrid(
             },
             span = { _, item ->
                 when (item) {
-                    AppListItem.Ad -> GridItemSpan(columnCount)
+                    is AppListItem.Ad -> GridItemSpan(1)
                     is AppListItem.App -> GridItemSpan(1)
                 }
             },

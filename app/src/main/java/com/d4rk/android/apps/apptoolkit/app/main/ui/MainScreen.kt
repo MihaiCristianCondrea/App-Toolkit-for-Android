@@ -5,11 +5,12 @@ import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.MenuOpen
 import androidx.compose.material.icons.filled.Menu
@@ -39,6 +40,8 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -188,23 +191,27 @@ fun MainScaffoldContent(
             }
         },
         floatingActionButton = {
-            val limit = bottomAppBarScrollBehavior.state.heightOffsetLimit
+            val navPads =
+                WindowInsets.navigationBars.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)
+                    .asPaddingValues()
+            val layoutDir = LocalLayoutDirection.current
+            val state = bottomAppBarScrollBehavior.state
+            val collapseFraction =
+                if (state.heightOffsetLimit == 0f) 0f else (state.heightOffset / state.heightOffsetLimit).coerceIn(
+                    0f,
+                    1f
+                )
             MainFloatingActionButton(
-                modifier = if (limit != 0f && bottomAppBarScrollBehavior.state.heightOffset <= limit) {
-                    Modifier.windowInsetsPadding(
-                        WindowInsets.navigationBars.only(
-                            WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal
-                        )
-                    )
-                } else {
-                    Modifier
-                },
+                modifier = Modifier.padding(
+                    start = (navPads.calculateLeftPadding(layoutDir).value * collapseFraction).dp,
+                    end = (navPads.calculateRightPadding(layoutDir).value * collapseFraction).dp,
+                    bottom = (navPads.calculateBottomPadding().value * collapseFraction).dp
+                ),
                 visible = isFabVisible && randomAppHandler != null,
                 expanded = isFabExtended,
                 onClick = { randomAppHandler?.invoke() },
             )
         }
-
     ) { paddingValues ->
         AppNavigationHost(
             modifier = Modifier
