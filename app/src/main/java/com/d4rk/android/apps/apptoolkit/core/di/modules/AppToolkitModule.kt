@@ -53,12 +53,11 @@ val appToolkitModule : Module = module {
         DefaultHelpRepository(
             localDataSource = get(),
             remoteDataSource = get(),
-            dispatchers = get(),
             catalogUrl = BuildConfig.FAQ_CATALOG_URL,
             productId = BuildConfig.FAQ_PRODUCT_ID,
         )
     }
-    viewModel { HelpViewModel(helpRepository = get()) }
+    viewModel { HelpViewModel(helpRepository = get() , dispatchers = get()) }
 
     single<DeviceInfoProvider> { DeviceInfoProviderImpl(get(), get()) }
     single<IssueReporterRepository> { DefaultIssueReporterRepository(get(), get()) }
