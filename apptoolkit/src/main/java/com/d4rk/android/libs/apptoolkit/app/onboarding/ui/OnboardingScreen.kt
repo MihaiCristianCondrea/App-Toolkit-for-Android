@@ -30,8 +30,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository.DefaultOnboardingRepository
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.data.model.ui.OnboardingPage
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components.OnboardingBottomNavigation
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components.pages.OnboardingDefaultPageLayout
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
 import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.OutlinedIconButtonWithText
@@ -51,17 +54,24 @@ fun OnboardingScreen() {
     val dispatchers: DispatcherProvider = koinInject()
     val repository = remember { DefaultOnboardingRepository(CommonDataStore.getInstance(context), dispatchers) }
     val viewModel: OnboardingViewModel = viewModel(factory = OnboardingViewModel.provideFactory(repository))
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val screenState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState = screenState.data ?: OnboardingUiState()
     val pagerState: PagerState = rememberPagerState(initialPage = uiState.currentTabIndex) { pages.size }
 
     LaunchedEffect(pagerState.currentPage) {
-        viewModel.updateCurrentTab(pagerState.currentPage)
+        viewModel.onEvent(OnboardingEvent.UpdateCurrentTab(pagerState.currentPage))
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.actionEvent.collect { action ->
+            when (action) {
+                OnboardingAction.OnboardingCompleted -> onboardingProvider.onOnboardingFinished(context)
+            }
+        }
     }
 
     val onSkipRequested = {
-        viewModel.completeOnboarding {
-            onboardingProvider.onOnboardingFinished(context)
-        }
+        viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
     }
 
     Scaffold(
@@ -94,9 +104,7 @@ fun OnboardingScreen() {
                                 pagerState.animateScrollToPage(pagerState.currentPage + 1)
                             }
                         } else {
-                            viewModel.completeOnboarding {
-                                onboardingProvider.onOnboardingFinished(context)
-                            }
+                            viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
                         }
                     },
                     onBackClicked = {

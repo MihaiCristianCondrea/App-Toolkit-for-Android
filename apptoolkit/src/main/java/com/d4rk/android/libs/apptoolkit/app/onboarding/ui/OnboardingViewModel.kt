@@ -1,67 +1,77 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
+import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.copyData
+import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.onStart
 
 /**
  * ViewModel for handling onboarding state and actions.
  *
- * Exposes [uiState] as a [StateFlow] following unidirectional data flow
- * and delegates data operations to an [OnboardingRepository].
+ * Follows the common ScreenViewModel pattern used in the toolkit by exposing
+ * [UiStateScreen] data and responding to [OnboardingEvent]s.
  */
 class OnboardingViewModel(
     private val repository: OnboardingRepository
-) : ViewModel() { // FIXME: Use the view model state like the other view models
-
-    private val _uiState = MutableStateFlow(OnboardingUiState())
-    val uiState: StateFlow<OnboardingUiState> = _uiState.asStateFlow()
+) : ScreenViewModel<OnboardingUiState, OnboardingEvent, OnboardingAction>(
+    initialState = UiStateScreen(data = OnboardingUiState())
+) {
 
     init {
         repository
             .observeOnboardingCompletion()
             .onEach { completed ->
-                _uiState.update { it.copy(isOnboardingCompleted = completed) }
+                screenState.copyData { copy(isOnboardingCompleted = completed) }
             }
             .onCompletion { cause ->
                 if (cause != null) {
-                    _uiState.update { it.copy(isOnboardingCompleted = false) }
+                    screenState.copyData { copy(isOnboardingCompleted = false) }
                 }
             }
             .catch { _ ->
-                _uiState.update { it.copy(isOnboardingCompleted = false) }
+                screenState.copyData { copy(isOnboardingCompleted = false) }
             }
             .launchIn(viewModelScope)
     }
 
-    fun updateCurrentTab(index: Int) {
-        _uiState.update { it.copy(currentTabIndex = index) }
+    override fun onEvent(event: OnboardingEvent) {
+        when (event) {
+            is OnboardingEvent.UpdateCurrentTab -> updateCurrentTab(event.index)
+            OnboardingEvent.CompleteOnboarding -> completeOnboarding()
+        }
     }
 
-    fun completeOnboarding(onFinished: () -> Unit) {
-        flow<Unit> {
+    private fun updateCurrentTab(index: Int) {
+        screenState.copyData { copy(currentTabIndex = index) }
+    }
+
+    private fun completeOnboarding() {
+        flow {
             repository.setOnboardingCompleted()
+            emit(Unit)
         }
+            .onStart { screenState.copyData { copy(isOnboardingCompleted = false) } }
+            .onEach { screenState.copyData { copy(isOnboardingCompleted = true) } }
             .onCompletion { cause ->
                 if (cause == null) {
-                    onFinished()
+                    sendAction(OnboardingAction.OnboardingCompleted)
                 } else {
-                    _uiState.update { it.copy(isOnboardingCompleted = false) }
+                    screenState.copyData { copy(isOnboardingCompleted = false) }
                 }
             }
             .catch { _ ->
-                // Failure is already handled in onCompletion above.
+                screenState.copyData { copy(isOnboardingCompleted = false) }
             }
             .launchIn(viewModelScope)
     }
@@ -70,7 +80,7 @@ class OnboardingViewModel(
         fun provideFactory(repository: OnboardingRepository): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                     return OnboardingViewModel(repository) as T
                 }
             }

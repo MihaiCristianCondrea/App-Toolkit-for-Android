@@ -1,5 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui
 
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
@@ -51,7 +52,7 @@ class TestOnboardingViewModel {
     @Test
     fun `initial state is not completed`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = OnboardingViewModel(repository = FakeOnboardingRepository())
-        assertThat(viewModel.uiState.value.isOnboardingCompleted).isFalse()
+        assertThat(viewModel.uiState.value.data?.isOnboardingCompleted).isFalse()
     }
 
     @Test
@@ -59,23 +60,23 @@ class TestOnboardingViewModel {
         val viewModel = OnboardingViewModel(repository = FakeOnboardingRepository())
 
         // Default value
-        assertThat(viewModel.uiState.value.currentTabIndex).isEqualTo(0)
+        assertThat(viewModel.uiState.value.data?.currentTabIndex).isEqualTo(0)
 
         // Changing the index updates the state
-        viewModel.updateCurrentTab(1)
-        assertThat(viewModel.uiState.value.currentTabIndex).isEqualTo(1)
+        viewModel.onEvent(OnboardingEvent.UpdateCurrentTab(1))
+        assertThat(viewModel.uiState.value.data?.currentTabIndex).isEqualTo(1)
 
         // Negative values are also accepted
-        viewModel.updateCurrentTab(-1)
-        assertThat(viewModel.uiState.value.currentTabIndex).isEqualTo(-1)
+        viewModel.onEvent(OnboardingEvent.UpdateCurrentTab(-1))
+        assertThat(viewModel.uiState.value.data?.currentTabIndex).isEqualTo(-1)
 
         // Extremely large values do not break the model
-        viewModel.updateCurrentTab(Int.MAX_VALUE)
-        assertThat(viewModel.uiState.value.currentTabIndex).isEqualTo(Int.MAX_VALUE)
+        viewModel.onEvent(OnboardingEvent.UpdateCurrentTab(Int.MAX_VALUE))
+        assertThat(viewModel.uiState.value.data?.currentTabIndex).isEqualTo(Int.MAX_VALUE)
 
         // Reset back to default
-        viewModel.updateCurrentTab(0)
-        assertThat(viewModel.uiState.value.currentTabIndex).isEqualTo(0)
+        viewModel.onEvent(OnboardingEvent.UpdateCurrentTab(0))
+        assertThat(viewModel.uiState.value.data?.currentTabIndex).isEqualTo(0)
     }
 
     @Test
@@ -100,7 +101,7 @@ class TestOnboardingViewModel {
         repository.emit(true)
         advanceUntilIdle()
 
-        assertThat(viewModel.uiState.value.isOnboardingCompleted).isTrue()
+        assertThat(viewModel.uiState.value.data?.isOnboardingCompleted).isTrue()
     }
 
     @Test
@@ -110,34 +111,30 @@ class TestOnboardingViewModel {
 
             advanceUntilIdle()
 
-            assertThat(viewModel.uiState.value.isOnboardingCompleted).isFalse()
+            assertThat(viewModel.uiState.value.data?.isOnboardingCompleted).isFalse()
         }
 
     @Test
-    fun `completeOnboarding sets completion and calls callback`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `completeOnboarding sets completion state`() = runTest(dispatcherExtension.testDispatcher) {
         val repository = FakeOnboardingRepository()
         val viewModel = OnboardingViewModel(repository = repository)
-        var callbackInvoked = false
 
-        viewModel.completeOnboarding { callbackInvoked = true }
+        viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
         advanceUntilIdle()
 
         assertThat(repository.completed).isTrue()
-        assertThat(callbackInvoked).isTrue()
-        assertThat(viewModel.uiState.value.isOnboardingCompleted).isTrue()
+        assertThat(viewModel.uiState.value.data?.isOnboardingCompleted).isTrue()
     }
 
     @Test
     fun `completeOnboarding failure resets completion`() = runTest(dispatcherExtension.testDispatcher) {
         val repository = FakeOnboardingRepository().apply { shouldFail = true }
         val viewModel = OnboardingViewModel(repository = repository)
-        var callbackInvoked = false
 
-        viewModel.completeOnboarding { callbackInvoked = true }
+        viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
         advanceUntilIdle()
 
         assertThat(repository.completed).isFalse()
-        assertThat(callbackInvoked).isFalse()
-        assertThat(viewModel.uiState.value.isOnboardingCompleted).isFalse()
+        assertThat(viewModel.uiState.value.data?.isOnboardingCompleted).isFalse()
     }
 }
