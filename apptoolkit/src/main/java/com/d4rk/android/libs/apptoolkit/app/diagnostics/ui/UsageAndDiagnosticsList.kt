@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.actions.UsageAndDiagnosticsEvent
+import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsEvent
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.components.ConsentSectionHeader
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.components.ConsentToggleCard
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.components.ExpandableConsentSectionHeader

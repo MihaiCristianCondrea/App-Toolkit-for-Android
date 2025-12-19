@@ -2,8 +2,8 @@ package com.d4rk.android.libs.apptoolkit.app.issuereporter.ui
 
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.actions.IssueReporterAction
-import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.actions.IssueReporterEvent
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterAction
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.IssueReportResult
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.Report
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.ExtraInfo

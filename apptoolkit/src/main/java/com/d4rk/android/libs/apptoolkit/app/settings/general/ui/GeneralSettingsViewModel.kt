@@ -2,8 +2,8 @@ package com.d4rk.android.libs.apptoolkit.app.settings.general.ui
 
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.actions.GeneralSettingsAction
-import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.actions.GeneralSettingsEvent
+import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsAction
+import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.GeneralSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.state.GeneralSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState

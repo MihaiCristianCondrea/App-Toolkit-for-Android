@@ -21,8 +21,8 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.buildOnAppClick
 import com.d4rk.android.apps.apptoolkit.app.apps.common.buildOnShareClick
 import com.d4rk.android.apps.apptoolkit.app.apps.common.screens.AppsList
 import com.d4rk.android.apps.apptoolkit.app.apps.common.screens.loading.HomeLoadingScreen
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.actions.HomeAction
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.actions.HomeEvent
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler

@@ -6,8 +6,8 @@ import com.android.billingclient.api.ProductDetails
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.support.billing.BillingRepository
 import com.d4rk.android.libs.apptoolkit.app.support.billing.PurchaseResult
-import com.d4rk.android.libs.apptoolkit.app.support.domain.actions.SupportAction
-import com.d4rk.android.libs.apptoolkit.app.support.domain.actions.SupportEvent
+import com.d4rk.android.libs.apptoolkit.app.support.ui.contract.SupportAction
+import com.d4rk.android.libs.apptoolkit.app.support.ui.contract.SupportEvent
 import com.d4rk.android.libs.apptoolkit.app.support.ui.state.SupportScreenUiState
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
 import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.primaryOfferToken

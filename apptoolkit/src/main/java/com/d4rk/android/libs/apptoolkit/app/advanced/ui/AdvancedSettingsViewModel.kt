@@ -3,8 +3,8 @@ package com.d4rk.android.libs.apptoolkit.app.advanced.ui
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.advanced.data.CacheRepository
-import com.d4rk.android.libs.apptoolkit.app.advanced.domain.actions.AdvancedSettingsAction
-import com.d4rk.android.libs.apptoolkit.app.advanced.domain.actions.AdvancedSettingsEvent
+import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsAction
+import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.state.AdvancedSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState

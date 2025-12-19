@@ -1,7 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.startup.ui
 
-import com.d4rk.android.libs.apptoolkit.app.startup.domain.actions.StartupAction
-import com.d4rk.android.libs.apptoolkit.app.startup.domain.actions.StartupEvent
+import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
+import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat

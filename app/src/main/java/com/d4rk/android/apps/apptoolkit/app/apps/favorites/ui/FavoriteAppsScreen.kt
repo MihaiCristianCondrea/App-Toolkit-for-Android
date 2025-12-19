@@ -26,8 +26,8 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.buildOnAppClick
 import com.d4rk.android.apps.apptoolkit.app.apps.common.buildOnShareClick
 import com.d4rk.android.apps.apptoolkit.app.apps.common.screens.AppsList
 import com.d4rk.android.apps.apptoolkit.app.apps.common.screens.loading.HomeLoadingScreen
-import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.actions.FavoriteAppsAction
-import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.actions.FavoriteAppsEvent
+import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.contract.FavoriteAppsAction
+import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.contract.FavoriteAppsEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.logging.FAVORITES_LOG_TAG

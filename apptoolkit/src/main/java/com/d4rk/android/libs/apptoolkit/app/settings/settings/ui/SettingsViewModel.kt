@@ -3,8 +3,8 @@ package com.d4rk.android.libs.apptoolkit.app.settings.settings.ui
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.actions.SettingsAction
-import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.actions.SettingsEvent
+import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsAction
+import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider

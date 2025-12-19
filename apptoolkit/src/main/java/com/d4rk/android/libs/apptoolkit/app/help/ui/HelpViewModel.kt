@@ -1,8 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.help.ui
 
 import androidx.lifecycle.viewModelScope
-import com.d4rk.android.libs.apptoolkit.app.help.domain.actions.HelpAction
-import com.d4rk.android.libs.apptoolkit.app.help.domain.actions.HelpEvent
+import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpAction
+import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepository
 import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState

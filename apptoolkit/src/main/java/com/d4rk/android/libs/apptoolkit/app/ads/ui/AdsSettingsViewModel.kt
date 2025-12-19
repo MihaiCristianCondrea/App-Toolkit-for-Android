@@ -1,8 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.ads.ui
 
 import androidx.lifecycle.viewModelScope
-import com.d4rk.android.libs.apptoolkit.app.ads.domain.actions.AdsSettingsAction
-import com.d4rk.android.libs.apptoolkit.app.ads.domain.actions.AdsSettingsEvent
+import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsAction
+import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.state.AdsSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result

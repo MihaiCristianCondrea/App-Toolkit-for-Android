@@ -2,8 +2,8 @@ package com.d4rk.android.libs.apptoolkit.app.about.ui
 
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.about.domain.actions.AboutAction
-import com.d4rk.android.libs.apptoolkit.app.about.domain.actions.AboutEvent
+import com.d4rk.android.libs.apptoolkit.app.about.ui.contract.AboutAction
+import com.d4rk.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.ObserveAboutInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState

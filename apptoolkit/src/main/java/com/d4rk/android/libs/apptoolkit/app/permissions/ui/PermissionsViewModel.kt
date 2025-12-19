@@ -1,8 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.permissions.ui
 
 import androidx.lifecycle.viewModelScope
-import com.d4rk.android.libs.apptoolkit.app.permissions.domain.actions.PermissionsAction
-import com.d4rk.android.libs.apptoolkit.app.permissions.domain.actions.PermissionsEvent
+import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsAction
+import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
 import com.d4rk.android.libs.apptoolkit.app.permissions.domain.repository.PermissionsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState

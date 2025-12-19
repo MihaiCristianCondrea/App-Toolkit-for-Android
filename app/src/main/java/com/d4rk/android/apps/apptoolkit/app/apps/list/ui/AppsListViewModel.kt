@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ToggleFavoriteUseCase
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.actions.HomeAction
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.actions.HomeEvent
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.usecases.FetchDeveloperAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
