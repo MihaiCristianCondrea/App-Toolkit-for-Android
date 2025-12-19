@@ -1,6 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.help.domain.repository
 
-import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.FaqItem
+import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 import kotlinx.coroutines.flow.Flow
 
 /**

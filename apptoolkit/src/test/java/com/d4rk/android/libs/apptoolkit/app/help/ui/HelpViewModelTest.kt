@@ -1,7 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.help.ui
 
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
-import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.FaqItem
+import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
@@ -90,4 +90,3 @@ class HelpViewModelTest {
             .isEqualTo("Q2")
     }
 }
-

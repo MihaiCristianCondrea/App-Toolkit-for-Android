@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.help.domain.data.model
+package com.d4rk.android.libs.apptoolkit.app.help.ui.model
 
 /** Holds version information for the Help screen */
 data class HelpScreenConfig(

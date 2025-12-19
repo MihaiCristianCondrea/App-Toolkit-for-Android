@@ -3,9 +3,11 @@ package com.d4rk.android.apps.apptoolkit.core.di.modules
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.startup.utils.interfaces.providers.AppStartupProvider
 import com.d4rk.android.libs.apptoolkit.app.help.data.DefaultHelpRepository
-import com.d4rk.android.libs.apptoolkit.app.help.domain.data.model.HelpScreenConfig
+import com.d4rk.android.libs.apptoolkit.app.help.data.local.HelpLocalDataSource
+import com.d4rk.android.libs.apptoolkit.app.help.data.remote.HelpRemoteDataSource
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepository
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpViewModel
+import com.d4rk.android.libs.apptoolkit.app.help.ui.model.HelpScreenConfig
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.DefaultIssueReporterRepository
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
@@ -45,11 +47,13 @@ val appToolkitModule : Module = module {
     }
     viewModel { StartupViewModel() }
 
+    single { HelpLocalDataSource(context = get()) }
+    single { HelpRemoteDataSource(client = get()) }
     single<HelpRepository> {
         DefaultHelpRepository(
-            context = get(),
+            localDataSource = get(),
+            remoteDataSource = get(),
             dispatchers = get(),
-            client = get(),
             catalogUrl = BuildConfig.FAQ_CATALOG_URL,
             productId = BuildConfig.FAQ_PRODUCT_ID,
         )
