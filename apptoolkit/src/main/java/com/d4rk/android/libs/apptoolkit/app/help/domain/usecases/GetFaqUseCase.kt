@@ -16,31 +16,37 @@ class GetFaqUseCase(
 
     operator fun invoke(): Flow<DataState<UiStateScreen<HelpUiState>, Errors>> {
         return repository.fetchFaq()
-                .map { result ->
-                    when (result) {
-                        is DataState.Success -> {
-                            val sanitized = result.data
-                                    .asSequence()
-                                    .map { it.copy(question = it.question.trim(), answer = it.answer.trim()) }
-                                    .filter { it.question.isNotBlank() && it.answer.isNotBlank() }
-                                    .distinctBy { it.question }
-                                    .toList()
-                                    .toImmutableList()
-
-                            val screenState =
-                                    if (sanitized.isEmpty()) ScreenState.NoData() else ScreenState.Success()
-
-                            DataState.Success(
-                                data = UiStateScreen(
-                                    screenState = screenState,
-                                    data = HelpUiState(questions = sanitized),
+            .map { result ->
+                when (result) {
+                    is DataState.Success -> {
+                        val sanitized = result.data
+                            .asSequence()
+                            .map {
+                                it.copy(
+                                    question = it.question.trim(),
+                                    answer = it.answer.trim()
                                 )
-                            )
-                        }
+                            }
+                            .filter { it.question.isNotBlank() && it.answer.isNotBlank() }
+                            .distinctBy { it.question }
+                            .toList()
+                            .toImmutableList()
 
-                        is DataState.Error -> DataState.Error(data = result.error)
-                        is DataState.Loading -> DataState.Loading()
+                        val screenState =
+                            if (sanitized.isEmpty()) ScreenState.NoData() else ScreenState.Success()
+
+                        DataState.Success(
+                            data = UiStateScreen(
+                                screenState = screenState,
+                                data = HelpUiState(questions = sanitized),
+                            )
+                        )
                     }
+
+                    is DataState.Error -> DataState.Error(error = result.error)
+
+                    is DataState.Loading -> DataState.Loading()
                 }
+            }
     }
 }

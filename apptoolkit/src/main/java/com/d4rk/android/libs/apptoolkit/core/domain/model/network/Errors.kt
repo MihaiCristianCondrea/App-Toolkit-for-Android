@@ -32,7 +32,7 @@ sealed interface Errors : Error {
      * - [SERIALIZATION]: Occurs when there is an error parsing the network response (e.g., malformed JSON).
      */
     enum class Network : Errors {
-        REQUEST_TIMEOUT , NO_INTERNET , SERIALIZATION
+        REQUEST_TIMEOUT, NO_INTERNET, SERIALIZATION
     }
 
     /**
@@ -47,7 +47,7 @@ sealed interface Errors : Error {
      * - [FAILED_TO_LOAD_CONSENT_INFO] - Failed to load user consent information (e.g., for GDPR).
      */
     enum class UseCase : Errors {
-        NO_DATA , FAILED_TO_LAUNCH_REVIEW , FAILED_TO_LOAD_FAQS , FAILED_TO_REQUEST_REVIEW , FAILED_TO_UPDATE_APP , FAILED_TO_LOAD_SKU_DETAILS , FAILED_TO_LOAD_CONSENT_INFO
+        NO_DATA, FAILED_TO_LAUNCH_REVIEW, FAILED_TO_LOAD_FAQS, FAILED_TO_REQUEST_REVIEW, FAILED_TO_UPDATE_APP, FAILED_TO_LOAD_SKU_DETAILS, FAILED_TO_LOAD_CONSENT_INFO, FAILED_TO_LOAD_FAQ
     }
 
     /**

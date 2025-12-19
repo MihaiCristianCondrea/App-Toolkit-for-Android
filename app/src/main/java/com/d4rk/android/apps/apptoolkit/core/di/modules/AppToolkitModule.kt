@@ -6,6 +6,7 @@ import com.d4rk.android.libs.apptoolkit.app.help.data.DefaultHelpRepository
 import com.d4rk.android.libs.apptoolkit.app.help.data.local.HelpLocalDataSource
 import com.d4rk.android.libs.apptoolkit.app.help.data.remote.HelpRemoteDataSource
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepository
+import com.d4rk.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpViewModel
 import com.d4rk.android.libs.apptoolkit.app.help.ui.model.HelpScreenConfig
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.DefaultIssueReporterRepository
@@ -58,7 +59,8 @@ val appToolkitModule : Module = module {
             productId = BuildConfig.FAQ_PRODUCT_ID,
         )
     }
-    viewModel { HelpViewModel(helpRepository = get() , dispatchers = get()) }
+    single { GetFaqUseCase(repository = get()) }
+    viewModel { HelpViewModel(getFaqUseCase = get(), dispatchers = get()) }
 
     single { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }

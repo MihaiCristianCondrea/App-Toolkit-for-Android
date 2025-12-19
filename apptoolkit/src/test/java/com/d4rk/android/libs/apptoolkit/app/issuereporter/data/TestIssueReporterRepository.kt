@@ -41,7 +41,10 @@ class TestIssueReporterRepository {
         val client = HttpClient(engine) {
             install(ContentNegotiation) { json() }
         }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
+            client,
+            testDispatchers(testScheduler)
+        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
         val report = Report("title", "desc", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), "me@test.com")
         val target = GithubTarget("user", "repo")
         val result = repository.sendReport(report, target, token = "token123")
@@ -57,7 +60,10 @@ class TestIssueReporterRepository {
         println("\uD83D\uDE80 [TEST] repository error")
         val engine = MockEngine { respond("fail", HttpStatusCode.BadRequest) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
+            client,
+            testDispatchers(testScheduler)
+        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
         val result = repository.sendReport(report, target)
@@ -77,7 +83,10 @@ class TestIssueReporterRepository {
             respond("""{"html_url":"https://example.com/issue/2"}""", HttpStatusCode.Created)
         }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
+            client,
+            testDispatchers(testScheduler)
+        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -91,7 +100,10 @@ class TestIssueReporterRepository {
     fun `sendReport network exception`() = runTest {
         val engine = MockEngine { throw SocketTimeoutException("timeout") }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
+            client,
+            testDispatchers(testScheduler)
+        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -117,7 +129,10 @@ class TestIssueReporterRepository {
     fun `sendReport unsupported status`() = runTest {
         val engine = MockEngine { respond("weird", HttpStatusCode.PaymentRequired) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
+            client,
+            testDispatchers(testScheduler)
+        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -136,7 +151,10 @@ class TestIssueReporterRepository {
             respond("""{"html_url":"https://ex.com/1"}""", HttpStatusCode.Created)
         }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
+            client,
+            testDispatchers(testScheduler)
+        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -234,7 +252,10 @@ class TestIssueReporterRepository {
     fun `sendReport created without url`() = runTest {
         val engine = MockEngine { respond("{}", HttpStatusCode.Created) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
+            client,
+            testDispatchers(testScheduler)
+        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
