@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 
-class DeviceInfo(context: Context) {
+class DeviceInfo() {
     private var versionCode: Int = -1
     private var versionName: String? = null
     private val buildVersion: String = Build.VERSION.INCREMENTAL ?: Build.UNKNOWN
@@ -30,7 +30,7 @@ class DeviceInfo(context: Context) {
 
     companion object {
         fun create(context: Context): DeviceInfo {
-            val info = DeviceInfo(context)
+            val info = DeviceInfo()
             val packageInfo = runCatching {
                 context.packageManager.getPackageInfo(context.packageName, 0)
             }.getOrNull()
