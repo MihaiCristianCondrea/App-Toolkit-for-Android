@@ -16,11 +16,11 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
-import java.io.IOException
-import java.net.SocketTimeoutException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 class DefaultHelpRepository(
     private val localDataSource: HelpLocalDataSource,
@@ -63,8 +63,6 @@ class DefaultHelpRepository(
                 emit(DataState.Success(remoteItems))
                 return@flow
             }
-
-            // Fallback local
             val localItems = localDataSource.loadLocalQuestions()
             if (localItems.isNotEmpty()) {
                 Log.i(FAQ_LOG_TAG, "Remote empty/unavailable, using local FAQs")
