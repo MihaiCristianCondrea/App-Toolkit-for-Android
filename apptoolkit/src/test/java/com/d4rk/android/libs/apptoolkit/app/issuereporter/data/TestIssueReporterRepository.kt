@@ -1,5 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.issuereporter.data
 
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.remote.IssueReporterRemoteDataSource
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.IssueReportResult
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.Report
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.ExtraInfo
@@ -29,6 +30,14 @@ class TestIssueReporterRepository {
     private fun testDispatchers(scheduler: TestCoroutineScheduler) =
         TestDispatchers(StandardTestDispatcher(scheduler))
 
+    private fun createRepository(
+        client: HttpClient,
+        scheduler: TestCoroutineScheduler,
+    ): IssueReporterRepository = DefaultIssueReporterRepository(
+        remoteDataSource = IssueReporterRemoteDataSource(client),
+        dispatchers = testDispatchers(scheduler)
+    )
+
     @Test
     fun `sendReport returns success`() = runTest {
         println("\uD83D\uDE80 [TEST] repository success")
@@ -41,10 +50,10 @@ class TestIssueReporterRepository {
         val client = HttpClient(engine) {
             install(ContentNegotiation) { json() }
         }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
-            client,
-            testDispatchers(testScheduler)
-        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
+        val repository: IssueReporterRepository = createRepository(
+            client = client,
+            scheduler = testScheduler
+        )
         val report = Report("title", "desc", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), "me@test.com")
         val target = GithubTarget("user", "repo")
         val result = repository.sendReport(report, target, token = "token123")
@@ -60,10 +69,10 @@ class TestIssueReporterRepository {
         println("\uD83D\uDE80 [TEST] repository error")
         val engine = MockEngine { respond("fail", HttpStatusCode.BadRequest) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
-            client,
-            testDispatchers(testScheduler)
-        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
+        val repository: IssueReporterRepository = createRepository(
+            client = client,
+            scheduler = testScheduler
+        )
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
         val result = repository.sendReport(report, target)
@@ -83,10 +92,10 @@ class TestIssueReporterRepository {
             respond("""{"html_url":"https://example.com/issue/2"}""", HttpStatusCode.Created)
         }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
-            client,
-            testDispatchers(testScheduler)
-        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
+        val repository: IssueReporterRepository = createRepository(
+            client = client,
+            scheduler = testScheduler
+        )
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -100,10 +109,10 @@ class TestIssueReporterRepository {
     fun `sendReport network exception`() = runTest {
         val engine = MockEngine { throw SocketTimeoutException("timeout") }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
-            client,
-            testDispatchers(testScheduler)
-        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
+        val repository: IssueReporterRepository = createRepository(
+            client = client,
+            scheduler = testScheduler
+        )
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -116,7 +125,7 @@ class TestIssueReporterRepository {
     fun `sendReport malformed json`() = runTest {
         val engine = MockEngine { respond("{", HttpStatusCode.Created) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = createRepository(client, testScheduler)
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -129,10 +138,7 @@ class TestIssueReporterRepository {
     fun `sendReport unsupported status`() = runTest {
         val engine = MockEngine { respond("weird", HttpStatusCode.PaymentRequired) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
-            client,
-            testDispatchers(testScheduler)
-        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
+        val repository: IssueReporterRepository = createRepository(client, testScheduler)
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -151,10 +157,7 @@ class TestIssueReporterRepository {
             respond("""{"html_url":"https://ex.com/1"}""", HttpStatusCode.Created)
         }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
-            client,
-            testDispatchers(testScheduler)
-        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
+        val repository: IssueReporterRepository = createRepository(client, testScheduler)
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -166,7 +169,7 @@ class TestIssueReporterRepository {
     fun `sendReport handles bad gateway`() = runTest {
         val engine = MockEngine { respond("broke", HttpStatusCode.BadGateway) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = createRepository(client, testScheduler)
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -181,7 +184,7 @@ class TestIssueReporterRepository {
     fun `sendReport handles teapot`() = runTest {
         val engine = MockEngine { respond("hot", HttpStatusCode.fromValue(418)) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = createRepository(client, testScheduler)
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -196,7 +199,7 @@ class TestIssueReporterRepository {
     fun `sendReport null pointer exception`() = runTest {
         val engine = MockEngine { throw NullPointerException("boom") }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = createRepository(client, testScheduler)
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -209,7 +212,7 @@ class TestIssueReporterRepository {
     fun `sendReport illegal state exception`() = runTest {
         val engine = MockEngine { throw IllegalStateException("illegal") }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = createRepository(client, testScheduler)
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -222,7 +225,7 @@ class TestIssueReporterRepository {
     fun `sendReport unauthorized`() = runTest {
         val engine = MockEngine { respond("unauth", HttpStatusCode.Unauthorized) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = createRepository(client, testScheduler)
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -237,7 +240,7 @@ class TestIssueReporterRepository {
     fun `sendReport forbidden`() = runTest {
         val engine = MockEngine { respond("stop", HttpStatusCode.Forbidden) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(client, testDispatchers(testScheduler))
+        val repository: IssueReporterRepository = createRepository(client, testScheduler)
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -252,10 +255,10 @@ class TestIssueReporterRepository {
     fun `sendReport created without url`() = runTest {
         val engine = MockEngine { respond("{}", HttpStatusCode.Created) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = DefaultIssueReporterRepository(
-            client,
-            testDispatchers(testScheduler)
-        ) // FIXME: Argument type mismatch: actual type is 'HttpClient', but 'IssueReporterRemoteDataSource' was expected.
+        val repository: IssueReporterRepository = createRepository(
+            client = client,
+            scheduler = testScheduler
+        )
         val report = Report("t", "d", com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(android.app.Application()), ExtraInfo(), null)
         val target = GithubTarget("user", "repo")
 
@@ -265,4 +268,3 @@ class TestIssueReporterRepository {
         assertThat(success.url).isEmpty()
     }
 }
-

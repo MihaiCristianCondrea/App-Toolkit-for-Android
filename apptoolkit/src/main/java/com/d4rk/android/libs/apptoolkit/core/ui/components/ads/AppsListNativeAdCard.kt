@@ -38,8 +38,8 @@ import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 
 @SuppressLint("InflateParams")
-@Composable
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
 fun AppsListNativeAdCard(
     modifier: Modifier = Modifier,
     adUnitId: String

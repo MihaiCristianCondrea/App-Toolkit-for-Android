@@ -16,7 +16,7 @@ import org.koin.compose.koinInject
 
 @Composable
 fun buildOnAppClick(
-    dispatchers: DispatcherProvider = koinInject(), // FIXME: Parameter 'dispatchers' has runtime-determined stability
+    dispatchers: DispatcherProvider = koinInject(),
 ): (AppInfo) -> Unit {
     val context = LocalContext.current
     val currentContext by rememberUpdatedState(newValue = context)

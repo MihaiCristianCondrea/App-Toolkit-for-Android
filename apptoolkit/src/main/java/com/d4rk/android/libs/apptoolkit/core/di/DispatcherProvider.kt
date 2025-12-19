@@ -1,5 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.core.di
 
+import androidx.compose.runtime.Stable
 import kotlinx.coroutines.CoroutineDispatcher
 
 /**
@@ -8,6 +9,7 @@ import kotlinx.coroutines.CoroutineDispatcher
  * Having an interface allows production code to use the standard dispatchers
  * while tests can supply their own implementations to control threading.
  */
+@Stable
 interface DispatcherProvider {
     /** Dispatcher for work on the main thread. */
     val main : CoroutineDispatcher
@@ -21,4 +23,3 @@ interface DispatcherProvider {
     /** Dispatcher that is not confined to any specific thread. */
     val unconfined : CoroutineDispatcher
 }
-

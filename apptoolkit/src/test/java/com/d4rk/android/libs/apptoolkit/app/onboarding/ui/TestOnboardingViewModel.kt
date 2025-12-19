@@ -1,7 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui
 
-import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -84,13 +84,13 @@ class TestOnboardingViewModel {
         val viewModel = OnboardingViewModel(repository = FakeOnboardingRepository())
 
         repeat(5) { index ->
-            viewModel.updateCurrentTab(index)
+            viewModel.updateCurrentTab(index) // FIXME: Cannot access 'fun updateCurrentTab(index: Int): Unit': it is private in 'com/d4rk/android/libs/apptoolkit/app/onboarding/ui/OnboardingViewModel'.
         }
 
-        assertThat(viewModel.uiState.value.currentTabIndex).isEqualTo(4)
+        assertThat(viewModel.uiState.value.currentTabIndex).isEqualTo(4) // FIXME: Unresolved reference 'currentTabIndex'. && Unresolved reference 'isEqualTo'.
 
-        viewModel.updateCurrentTab(0)
-        assertThat(viewModel.uiState.value.currentTabIndex).isEqualTo(0)
+        viewModel.updateCurrentTab(0) // FIXME: Cannot access 'fun updateCurrentTab(index: Int): Unit': it is private in 'com/d4rk/android/libs/apptoolkit/app/onboarding/ui/OnboardingViewModel'.
+        assertThat(viewModel.uiState.value.currentTabIndex).isEqualTo(0) // FIXME: Unresolved reference 'isEqualTo'.
     }
 
     @Test
