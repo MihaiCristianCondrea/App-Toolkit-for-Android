@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class FaqCatalogDto(
-    @SerialName("schemaVersion") val schemaVersion: Int,
+    @SerialName("schemaVersion")
+    val schemaVersion: Int,
     val products: List<FaqProductDto> = emptyList(),
 )
 
@@ -14,7 +15,8 @@ internal data class FaqProductDto(
     val name: String,
     val productId: String,
     val key: String,
-    @SerialName("questionSources") val questionSources: List<FaqQuestionSourceDto> = emptyList(),
+    @SerialName("questionSources")
+    val questionSources: List<FaqQuestionSourceDto> = emptyList(),
 )
 
 @Serializable

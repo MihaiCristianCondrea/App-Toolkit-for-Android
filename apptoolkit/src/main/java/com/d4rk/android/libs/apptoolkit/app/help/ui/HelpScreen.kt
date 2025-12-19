@@ -74,7 +74,6 @@ fun HelpScreen(
     LaunchedEffect(Unit) {
         isInAppReviewAvailable.value =
             activity?.let { ReviewHelper.isInAppReviewAvailable(it) } ?: false
-        viewModel.onEvent(HelpEvent.LoadFaq)
     }
 
     LaunchedEffect(scrollBehavior) {
