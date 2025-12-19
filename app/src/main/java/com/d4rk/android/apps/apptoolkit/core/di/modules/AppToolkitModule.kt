@@ -9,9 +9,10 @@ import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepositor
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpViewModel
 import com.d4rk.android.libs.apptoolkit.app.help.ui.model.HelpScreenConfig
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.DefaultIssueReporterRepository
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.local.DeviceInfoLocalDataSource
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.remote.IssueReporterRemoteDataSource
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
-import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProviderImpl
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.IssueReporterViewModel
@@ -59,7 +60,8 @@ val appToolkitModule : Module = module {
     }
     viewModel { HelpViewModel(helpRepository = get() , dispatchers = get()) }
 
-    single<DeviceInfoProvider> { DeviceInfoProviderImpl(get(), get()) }
+    single { IssueReporterRemoteDataSource(client = get()) }
+    single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
     single<IssueReporterRepository> { DefaultIssueReporterRepository(get(), get()) }
     single { SendIssueReportUseCase(get(), get()) }
 

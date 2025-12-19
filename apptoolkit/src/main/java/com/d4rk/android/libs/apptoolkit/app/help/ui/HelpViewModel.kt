@@ -46,6 +46,7 @@ class HelpViewModel(
         }
     }
 
+    // TODO: We can make the repository a ause case that will call the
     private fun loadFaq() {
         helpRepository.fetchFaq()
                 .flowOn(dispatchers.io)

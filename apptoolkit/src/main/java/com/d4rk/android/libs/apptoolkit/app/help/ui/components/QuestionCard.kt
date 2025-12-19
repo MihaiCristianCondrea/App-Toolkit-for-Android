@@ -101,6 +101,7 @@ fun QuestionCard(title : String , summary : String , isExpanded : Boolean , onTo
     }
 }
 
+// TODO: Move in the common composables from core
 @Composable
 private fun HtmlText(text : String , modifier : Modifier = Modifier , style : TextStyle) {
     val context = LocalContext.current
