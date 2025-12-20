@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.domain.model.ui
+package com.d4rk.android.libs.apptoolkit.core.ui.state
 
 import androidx.compose.runtime.Immutable
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState

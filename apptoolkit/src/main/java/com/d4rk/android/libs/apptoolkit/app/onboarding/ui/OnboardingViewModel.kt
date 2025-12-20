@@ -2,15 +2,15 @@ package com.d4rk.android.libs.apptoolkit.app.onboarding.ui
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
-import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.copyData
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import kotlinx.coroutines.flow.flow
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach

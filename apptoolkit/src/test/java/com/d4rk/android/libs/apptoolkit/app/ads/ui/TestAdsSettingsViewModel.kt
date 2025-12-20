@@ -1,9 +1,9 @@
 package com.d4rk.android.libs.apptoolkit.app.ads.ui
 
-import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi

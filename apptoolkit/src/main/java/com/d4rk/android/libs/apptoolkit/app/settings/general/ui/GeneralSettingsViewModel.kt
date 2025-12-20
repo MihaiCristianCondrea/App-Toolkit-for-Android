@@ -2,18 +2,18 @@ package com.d4rk.android.libs.apptoolkit.app.settings.general.ui
 
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.GeneralSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsAction
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsEvent
-import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.GeneralSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.state.GeneralSettingsUiState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiSnackbar
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.copyData
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.setErrors
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.setLoading
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.updateState
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
+import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch

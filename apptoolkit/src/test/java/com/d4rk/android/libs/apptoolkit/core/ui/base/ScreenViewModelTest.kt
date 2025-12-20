@@ -1,9 +1,9 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.base
 
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.Test

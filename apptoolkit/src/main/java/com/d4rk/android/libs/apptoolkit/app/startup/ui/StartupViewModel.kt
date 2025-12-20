@@ -3,10 +3,10 @@ package com.d4rk.android.libs.apptoolkit.app.startup.ui
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.state.StartupUiState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.updateData
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 
 class StartupViewModel : ScreenViewModel<StartupUiState, StartupEvent, StartupAction>(
     initialState = UiStateScreen(data = StartupUiState())

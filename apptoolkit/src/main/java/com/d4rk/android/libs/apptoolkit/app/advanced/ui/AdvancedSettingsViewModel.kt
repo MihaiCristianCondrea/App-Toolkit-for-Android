@@ -7,12 +7,12 @@ import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSetting
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.state.AdvancedSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.copyData
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.setLoading
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.updateState
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
+import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion

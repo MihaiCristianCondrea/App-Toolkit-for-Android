@@ -7,15 +7,6 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.sanitizeUrlOrNull
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class AppInfoDto(
-    @SerialName("name") val name: String,
-    @SerialName("packageName") val packageName: String,
-    @SerialName("iconLogo") val iconUrl: String,
-    @SerialName("category") val category: AppCategoryDto? = null,
-    @SerialName("description") val description: String? = null,
-    @SerialName("screenshots") val screenshots: List<AppScreenshotDto>? = null
-)
 
 fun AppInfoDto.toDomain(): AppInfo = AppInfo(
     name = name,
@@ -30,6 +21,16 @@ fun AppInfoDto.toDomain(): AppInfo = AppInfo(
         }
         ?: emptyList(),
     category = category?.toDomain(),
+)
+
+@Serializable
+data class AppInfoDto(
+    @SerialName("name") val name: String,
+    @SerialName("packageName") val packageName: String,
+    @SerialName("iconLogo") val iconUrl: String,
+    @SerialName("category") val category: AppCategoryDto? = null,
+    @SerialName("description") val description: String? = null,
+    @SerialName("screenshots") val screenshots: List<AppScreenshotDto>? = null
 )
 
 @Serializable

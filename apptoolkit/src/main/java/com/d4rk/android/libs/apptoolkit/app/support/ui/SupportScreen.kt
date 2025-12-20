@@ -34,7 +34,6 @@ import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.DonationProd
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.ShortenLinkConstants
 import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.primaryFormattedPrice
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.SupportNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.TonalIconButtonWithText
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
@@ -42,6 +41,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import org.koin.compose.koinInject

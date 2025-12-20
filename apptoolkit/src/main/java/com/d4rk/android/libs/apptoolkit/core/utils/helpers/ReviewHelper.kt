@@ -58,6 +58,7 @@ object ReviewHelper {
      *
      * The Play In-App Review API requires the Play Store app to be installed on the device.
      */
+    // TODO: Move it to extensions bool
     suspend fun isInAppReviewAvailable(activity: Activity): Boolean {
         val context = activity.applicationContext
 

@@ -20,6 +20,7 @@ object PermissionsHelper {
      * @param context The application context.
      * @return True if the permission is granted, false otherwise.
      */
+    // TODO: Move it to extensions bool
     fun hasNotificationPermission(context : Context) : Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ContextCompat.checkSelfPermission(

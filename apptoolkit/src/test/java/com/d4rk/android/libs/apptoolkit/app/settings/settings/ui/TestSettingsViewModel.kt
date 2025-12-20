@@ -1,12 +1,12 @@
 package com.d4rk.android.libs.apptoolkit.app.settings.settings.ui
 
 import android.content.Context
-import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsCategory
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
+import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
@@ -17,6 +17,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+
 @OptIn(ExperimentalCoroutinesApi::class)
 
 class TestSettingsViewModel {

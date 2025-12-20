@@ -23,8 +23,8 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.CustomSnackbarVisuals
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
+import com.d4rk.android.libs.apptoolkit.core.ui.model.CustomSnackbarVisuals
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 /**

@@ -1,18 +1,18 @@
 package com.d4rk.android.libs.apptoolkit.app.permissions.ui
 
 import androidx.lifecycle.viewModelScope
+import com.d4rk.android.libs.apptoolkit.app.permissions.domain.repository.PermissionsRepository
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsAction
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
-import com.d4rk.android.libs.apptoolkit.app.permissions.domain.repository.PermissionsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiSnackbar
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.setErrors
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.setLoading
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.successData
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.updateState
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
+import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
+import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch

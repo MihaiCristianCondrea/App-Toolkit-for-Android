@@ -12,8 +12,8 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel

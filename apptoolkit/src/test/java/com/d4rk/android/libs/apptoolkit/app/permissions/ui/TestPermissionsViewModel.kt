@@ -1,10 +1,10 @@
 package com.d4rk.android.libs.apptoolkit.app.permissions.ui
 
-import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
 import com.d4rk.android.libs.apptoolkit.app.permissions.domain.repository.PermissionsRepository
+import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsCategory
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
