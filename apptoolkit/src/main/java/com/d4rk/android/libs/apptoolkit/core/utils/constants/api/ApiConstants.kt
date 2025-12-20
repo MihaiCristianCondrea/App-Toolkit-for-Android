@@ -35,7 +35,4 @@ object ApiConstants {
             ApiEnvironments.ENV_RELEASE -> "$BASE_REPOSITORY_URL/${ApiEnvironments.ENV_RELEASE}"
             else -> "$BASE_REPOSITORY_URL/${ApiEnvironments.ENV_RELEASE}"
         }
-
-    fun developerAppsBaseUrl(isDebugBuild: Boolean): String =
-        developerAppsBaseUrl(ApiEnvironments.fromBuildType(isDebugBuild))
 }
