@@ -67,11 +67,6 @@ android {
         }
         buildConfigField("String", "GITHUB_TOKEN", "\"$githubToken\"")
         buildConfigField("int", "APPS_LIST_AD_FREQUENCY", "4")
-        buildConfigField(
-            "String",
-            "FAQ_PRODUCT_ID",
-            "\"com.d4rk.toolkit\""
-        ) // FIXME: Make it a constant in
     }
 
     signingConfigs {
@@ -94,10 +89,6 @@ android {
         }
     }
 
-    // FIXME: Use it inside the
-    val faqBaseUrl =
-        "https://mihaicristiancondrea.github.io/com.d4rk.apis/api/faq/v1" // Move to lib constants
-
     buildTypes {
         release {
             val signingFile = rootProject.file("signing.properties")
@@ -109,21 +100,11 @@ android {
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
-            buildConfigField(
-                "String",
-                "FAQ_CATALOG_URL",
-                "\"$faqBaseUrl/release/catalog.json\"", // Move to lib constants
-            )
         }
         debug {
             isDebuggable = true
             isMinifyEnabled = false
             isShrinkResources = false
-            buildConfigField(
-                "String",
-                "FAQ_CATALOG_URL",
-                "\"$faqBaseUrl/debug/catalog.json\"", // Move to lib constants
-            )
         }
     }
 

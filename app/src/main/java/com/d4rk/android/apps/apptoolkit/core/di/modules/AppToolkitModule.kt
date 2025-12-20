@@ -24,6 +24,7 @@ import com.d4rk.android.libs.apptoolkit.app.support.ui.SupportViewModel
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.github.GithubConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.Base64Decoder.parseBase64String
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -55,8 +56,8 @@ val appToolkitModule : Module = module {
         DefaultHelpRepository(
             localDataSource = get(),
             remoteDataSource = get(),
-            catalogUrl = BuildConfig.FAQ_CATALOG_URL,
-            productId = BuildConfig.FAQ_PRODUCT_ID,
+            catalogUrl = HelpConstants.faqCatalogUrl(isDebugBuild = BuildConfig.DEBUG),
+            productId = HelpConstants.FAQ_PRODUCT_ID,
         )
     }
     single { GetFaqUseCase(repository = get()) }

@@ -7,6 +7,10 @@ object AppLinks {
     const val PLAY_STORE_APP : String = "${PLAY_STORE_MAIN}store/apps/details?id="
     const val PLAY_STORE_BETA : String = "${PLAY_STORE_MAIN}apps/testing/"
     const val MARKET_APP_PAGE : String = "market://details?id="
+    const val PLAY_STORE_DEVELOPER: String = "${PLAY_STORE_MAIN}store/apps/dev?id="
+    const val DEFAULT_DEVELOPER_ID: String = "5390214922640123642"
+
+    const val DEVELOPER_PAGE = "${PLAY_STORE_DEVELOPER}${DEFAULT_DEVELOPER_ID}&hl=en"
 
     // Legal & Policy
     private const val AUTHOR_WEBSITE_BASE : String = "https://mihaicristiancondrea.github.io/profile/"
