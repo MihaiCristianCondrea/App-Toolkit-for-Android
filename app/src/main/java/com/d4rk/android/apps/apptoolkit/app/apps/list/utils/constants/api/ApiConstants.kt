@@ -3,21 +3,21 @@ package com.d4rk.android.apps.apptoolkit.app.apps.list.utils.constants.api
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.github.GithubConstants
 
 object ApiHost {
-    const val API_REPO: String = "com.d4rk.apis"
+    const val API_REPO: String = "com.d4rk.apis" // Move to lib constants
     const val API_BASE_PATH: String = "api/app_toolkit"
 }
 
 object ApiVersions {
-    const val V2: String = "v2"
+    const val V2: String = "v2" // Move to lib constntss
 }
 
-object ApiEnvironments {
-    const val ENV_DEBUG: String = "debug"
-    const val ENV_RELEASE: String = "release"
+object ApiEnvironments { // Move to lib constants
+    const val ENV_DEBUG: String = "debug" // Move to lib constants
+    const val ENV_RELEASE: String = "release" // Move to lib constants
 }
 
 object ApiPaths {
-    const val DEVELOPER_APPS_API: String = "/en/home/api_android_apps.json"
+    const val DEVELOPER_APPS_API: String = "/en/home/api_android_apps.json" // Move to lib constants
 }
 
 object ApiConstants {

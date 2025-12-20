@@ -94,8 +94,9 @@ android {
         }
     }
 
+    // FIXME: Use it inside the
     val faqBaseUrl =
-        "https://mihaicristiancondrea.github.io/com.d4rk.apis/api/faq/v1"
+        "https://mihaicristiancondrea.github.io/com.d4rk.apis/api/faq/v1" // Move to lib constants
 
     buildTypes {
         release {
@@ -111,7 +112,7 @@ android {
             buildConfigField(
                 "String",
                 "FAQ_CATALOG_URL",
-                "\"$faqBaseUrl/release/catalog.json\"",
+                "\"$faqBaseUrl/release/catalog.json\"", // Move to lib constants
             )
         }
         debug {
@@ -121,7 +122,7 @@ android {
             buildConfigField(
                 "String",
                 "FAQ_CATALOG_URL",
-                "\"$faqBaseUrl/debug/catalog.json\"",
+                "\"$faqBaseUrl/debug/catalog.json\"", // Move to lib constants
             )
         }
     }
