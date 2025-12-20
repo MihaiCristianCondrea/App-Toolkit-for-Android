@@ -1,7 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.components.ads
 
 import android.annotation.SuppressLint
-import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -30,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
@@ -103,12 +101,10 @@ fun NoDataNativeAdCard(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(SizeConstants.ExtraTinySize)
         )
     ) {
-        AndroidView( // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
-            factory = { ctx ->
-                LayoutInflater.from(ctx)
-                    .inflate(R.layout.native_ad_no_data_card, null) as NativeAdView
-            },
-            update = { view ->
+        NativeAdViewHost(
+            modifier = Modifier.fillMaxWidth(),
+            layoutResId = R.layout.native_ad_no_data_card,
+            onNativeAdViewReady = { view ->
                 if (nativeAdView !== view) {
                     nativeAdView = view
                 }

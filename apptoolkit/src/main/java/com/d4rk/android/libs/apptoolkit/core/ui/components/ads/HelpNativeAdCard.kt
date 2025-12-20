@@ -1,7 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.components.ads
 
 import android.annotation.SuppressLint
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -37,7 +36,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
@@ -108,13 +106,10 @@ fun HelpNativeAdCard(
         modifier = modifier,
         shape = RoundedCornerShape(size = SizeConstants.ExtraSmallSize),
     ) {
-        AndroidView( // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
+        NativeAdViewHost(
             modifier = Modifier.fillMaxWidth(),
-            factory = { ctx ->
-                LayoutInflater.from(ctx)
-                    .inflate(R.layout.native_ad_help_card, null) as NativeAdView
-            },
-            update = { view ->
+            layoutResId = R.layout.native_ad_help_card,
+            onNativeAdViewReady = { view ->
                 if (nativeAdView !== view) {
                     nativeAdView = view
                 }

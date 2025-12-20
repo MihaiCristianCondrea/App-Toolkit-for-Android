@@ -1,7 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.components.ads
 
 import android.annotation.SuppressLint
-import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.compose.foundation.layout.Box
@@ -23,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
@@ -113,20 +111,19 @@ fun AppsListNativeAdCard(
                 .aspectRatio(1f),
             shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize)
         ) {
-            AndroidView( // FIXME: Calling a UI Composable composable function where a androidx.compose.ui.UiComposable composable was expected
+            NativeAdViewHost(
                 modifier = Modifier.fillMaxSize(),
-                factory = {
-                    LayoutInflater.from(context)
-                        .inflate(R.layout.native_ad_apps_list_card, null)
-                        .also { createdView ->
-                            nativeAdView = createdView as NativeAdView
-                        }
+                layoutResId = R.layout.native_ad_apps_list_card,
+                onNativeAdViewReady = { adView ->
+                    if (nativeAdView !== adView) {
+                        nativeAdView = adView
+                    }
                 },
-                update = { view ->
+                onUpdate = { view ->
                     view.isVisible = isAdLoaded
                     if (isAdLoaded) {
                         currentNativeAd?.let { nativeAd ->
-                            bindAppsListNativeAd(adView = view as NativeAdView, nativeAd = nativeAd)
+                            bindAppsListNativeAd(adView = view, nativeAd = nativeAd)
                         }
                     }
                 }
