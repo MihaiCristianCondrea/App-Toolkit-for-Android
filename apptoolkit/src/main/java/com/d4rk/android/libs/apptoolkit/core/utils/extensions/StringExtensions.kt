@@ -5,10 +5,6 @@ import androidx.core.net.toUri
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiEnvironments
 
-// TODO: Move to boolean extensions
-fun Boolean.toApiEnvironment(): String =
-    if (this) ApiEnvironments.ENV_DEBUG else ApiEnvironments.ENV_RELEASE
-
 fun String.developerAppsBaseUrl(
     baseRepositoryUrl: String = ApiConstants.BASE_REPOSITORY_URL,
 ): String =
