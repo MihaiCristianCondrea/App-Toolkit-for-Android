@@ -4,9 +4,9 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.ApiResponse
 import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.toDomain
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.repository.DeveloperAppsRepository
-import com.d4rk.android.apps.apptoolkit.app.apps.list.utils.constants.api.ApiPaths
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiPaths
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
