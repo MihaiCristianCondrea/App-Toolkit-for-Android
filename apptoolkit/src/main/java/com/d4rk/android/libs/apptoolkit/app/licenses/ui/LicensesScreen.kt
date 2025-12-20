@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.licenses
+package com.d4rk.android.libs.apptoolkit.app.licenses.ui
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.fillMaxSize

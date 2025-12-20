@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.display.components.dialogs
+package com.d4rk.android.libs.apptoolkit.app.display.ui.components.dialogs
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
