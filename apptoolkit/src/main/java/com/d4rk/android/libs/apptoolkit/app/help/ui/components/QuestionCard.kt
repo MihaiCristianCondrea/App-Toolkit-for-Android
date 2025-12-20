@@ -1,9 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.help.ui.components
 
-import android.text.method.LinkMovementMethod
 import android.view.SoundEffectConstants
 import android.view.View
-import android.widget.TextView
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -30,20 +28,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.isSpecified
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.text.HtmlCompat
 import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.OutlinedIconButton
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.components.text.HtmlText
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -53,16 +46,16 @@ fun QuestionCard(title : String , summary : String , isExpanded : Boolean , onTo
     val view : View = LocalView.current
     val expandIconRotation by animateFloatAsState(targetValue = if (isExpanded) 180f else 0f , label = "ExpandIconRotation")
     Card(modifier = modifier
-            .bounceClick()
-            .clip(shape = RoundedCornerShape(size = SizeConstants.MediumSize))
-            .clickable {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                onToggleExpand()
-            }
-            .padding(all = SizeConstants.LargeSize)
-            .animateContentSize()
-            .fillMaxWidth()) {
+        .bounceClick()
+        .clip(shape = RoundedCornerShape(size = SizeConstants.MediumSize))
+        .clickable {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+            onToggleExpand()
+        }
+        .padding(all = SizeConstants.LargeSize)
+        .animateContentSize()
+        .fillMaxWidth()) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -71,11 +64,11 @@ fun QuestionCard(title : String , summary : String , isExpanded : Boolean , onTo
             ) {
                 Icon(
                     imageVector = Icons.Outlined.QuestionAnswer , contentDescription = null , tint = MaterialTheme.colorScheme.primary , modifier = Modifier
-                            .size(size = SizeConstants.ExtraExtraLargeSize)
-                            .background(
-                                color = MaterialTheme.colorScheme.primaryContainer , shape = CircleShape
-                            )
-                            .padding(all = SizeConstants.SmallSize)
+                        .size(size = SizeConstants.ExtraExtraLargeSize)
+                        .background(
+                            color = MaterialTheme.colorScheme.primaryContainer, shape = CircleShape
+                        )
+                        .padding(all = SizeConstants.SmallSize)
                 )
 
                 LargeHorizontalSpacer()
@@ -99,25 +92,4 @@ fun QuestionCard(title : String , summary : String , isExpanded : Boolean , onTo
             }
         }
     }
-}
-
-// TODO: Move in the common composables from core
-@Composable
-private fun HtmlText(text : String , modifier : Modifier = Modifier , style : TextStyle) {
-    val context = LocalContext.current
-    val color = MaterialTheme.colorScheme.onSurface
-    val fontSize = if (style.fontSize.isSpecified) style.fontSize.value else MaterialTheme.typography.bodyMedium.fontSize.value
-    AndroidView(
-        modifier = modifier.fillMaxWidth() ,
-        factory = {
-            TextView(context).apply {
-                movementMethod = LinkMovementMethod.getInstance()
-            }
-        } ,
-        update = { textView : TextView ->
-            textView.text = HtmlCompat.fromHtml(text , HtmlCompat.FROM_HTML_MODE_COMPACT)
-            textView.setTextColor(color.toArgb())
-            textView.textSize = fontSize
-        }
-    )
 }

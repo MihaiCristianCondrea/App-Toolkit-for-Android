@@ -7,13 +7,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -24,7 +23,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ButtonIconSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
-// TODO: MAKE ALL BUTTONS ACCEPT BOTH PAINTER AND VECTOR IMAGE, If both are given use the vector image. defaults = null for all buttons with icons
+private const val IconRequirementMessage: String = "Either icon or painter must be provided"
 
 /**
  * A custom [IconButton] composable that adds a bounce click effect, sound feedback,
@@ -41,6 +40,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param iconContentDescription Text used by accessibility services to describe what the icon
  * represents. This is recommended for usability.
  * @param icon The [ImageVector] to be displayed inside the button.
+ * @param painter The [Painter] to be displayed if an [ImageVector] is not provided.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -49,12 +49,13 @@ fun IconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     iconContentDescription: String? = null,
-    icon: ImageVector,
+    icon: ImageVector? = null,
+    painter: Painter? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
 
-    IconButton(
+    androidx.compose.material3.IconButton(
         onClick = {
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
@@ -64,9 +65,9 @@ fun IconButton(
         modifier = modifier.bounceClick(),
         shapes = IconButtonDefaults.shapes()
     ) {
-        Icon(
-            modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
-            imageVector = icon,
+        IconContent(
+            icon = icon,
+            painter = painter,
             contentDescription = iconContentDescription
         )
     }
@@ -85,6 +86,7 @@ fun IconButton(
  * represents. This text should be provided if the icon is used for an action, but not if it is
  * purely decorative.
  * @param icon The icon to be displayed inside the button, as an [ImageVector].
+ * @param painter The [Painter] to be displayed when no vector icon is provided.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -93,7 +95,8 @@ fun FilledIconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     iconContentDescription: String? = null,
-    icon: ImageVector,
+    icon: ImageVector? = null,
+    painter: Painter? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -108,9 +111,9 @@ fun FilledIconButton(
         modifier = modifier.bounceClick(),
         shapes = IconButtonDefaults.shapes()
     ) {
-        Icon(
-            modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
-            imageVector = icon,
+        IconContent(
+            icon = icon,
+            painter = painter,
             contentDescription = iconContentDescription
         )
     }
@@ -128,6 +131,7 @@ fun FilledIconButton(
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
  * @param iconContentDescription Text used by accessibility services to describe the icon's action.
  * @param icon The [ImageVector] to be displayed as the icon.
+ * @param painter The [Painter] to be displayed if no vector icon is provided.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -136,7 +140,8 @@ fun FilledTonalIconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     iconContentDescription: String? = null,
-    icon: ImageVector,
+    icon: ImageVector? = null,
+    painter: Painter? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -151,9 +156,9 @@ fun FilledTonalIconButton(
         modifier = modifier.bounceClick(),
         shapes = IconButtonDefaults.shapes()
     ) {
-        Icon(
-            modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
-            imageVector = icon,
+        IconContent(
+            icon = icon,
+            painter = painter,
             contentDescription = iconContentDescription
         )
     }
@@ -170,6 +175,7 @@ fun FilledTonalIconButton(
  * @param iconContentDescription Text used by accessibility services to describe the icon.
  * @param label The text to be displayed on the button.
  * @param icon The [ImageVector] to be displayed as the leading icon.
+ * @param painter The [Painter] to be displayed when no vector icon is provided.
  */
 @Composable
 fun IconButtonWithText(
@@ -178,7 +184,8 @@ fun IconButtonWithText(
     enabled: Boolean = true,
     iconContentDescription: String? = null,
     label: String,
-    icon: ImageVector
+    icon: ImageVector? = null,
+    painter: Painter? = null
 ) {
     val hapticFeedback : HapticFeedback = LocalHapticFeedback.current
     val view : View = LocalView.current
@@ -188,9 +195,9 @@ fun IconButtonWithText(
         hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
         onClick()
     }, enabled = enabled, modifier = modifier.bounceClick()) {
-        Icon(
-            modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
-            imageVector = icon,
+        IconContent(
+            icon = icon,
+            painter = painter,
             contentDescription = iconContentDescription
         )
         ButtonIconSpacer()
@@ -213,6 +220,7 @@ fun IconButtonWithText(
  * @param iconContentDescription A textual description of the icon for accessibility purposes.
  * @param label The text to be displayed on the button.
  * @param icon The [ImageVector] to be displayed as an icon at the start of the button.
+ * @param painter The [Painter] to be displayed when a vector icon is not provided.
  */
 @Composable
 fun TonalIconButtonWithText(
@@ -221,7 +229,8 @@ fun TonalIconButtonWithText(
     enabled: Boolean = true,
     iconContentDescription: String? = null,
     label: String,
-    icon: ImageVector
+    icon: ImageVector? = null,
+    painter: Painter? = null
 ) {
     val hapticFeedback : HapticFeedback = LocalHapticFeedback.current
     val view : View = LocalView.current
@@ -231,9 +240,9 @@ fun TonalIconButtonWithText(
         hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
         onClick()
     }, enabled = enabled, modifier = modifier.bounceClick()) {
-        Icon(
-            modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
-            imageVector = icon,
+        IconContent(
+            icon = icon,
+            painter = painter,
             contentDescription = iconContentDescription
         )
         ButtonIconSpacer()
@@ -257,6 +266,7 @@ fun TonalIconButtonWithText(
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
  * @param iconContentDescription Text used by accessibility services to describe what the icon represents.
  * @param icon The [ImageVector] to be displayed inside the button.
+ * @param painter The [Painter] to be displayed when no vector icon is provided.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -265,12 +275,13 @@ fun OutlinedIconButton(
     onClick: () -> Unit = {},
     enabled: Boolean = true,
     iconContentDescription: String? = null,
-    icon: ImageVector,
+    icon: ImageVector? = null,
+    painter: Painter? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
 
-    OutlinedIconButton(
+    androidx.compose.material3.OutlinedIconButton(
         onClick = {
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
@@ -280,14 +291,25 @@ fun OutlinedIconButton(
         modifier = modifier.bounceClick(),
         shapes = IconButtonDefaults.shapes()
     ) {
-        Icon(
-            modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
-            imageVector = icon,
+        IconContent(
+            icon = icon,
+            painter = painter,
             contentDescription = iconContentDescription
         )
     }
 }
 
+/**
+ * An outlined button that includes a leading icon and text label with consistent feedback effects.
+ *
+ * @param modifier The [Modifier] to be applied to this button.
+ * @param onClick The lambda to be executed when the button is clicked.
+ * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
+ * @param iconContentDescription Text used by accessibility services to describe what the icon represents.
+ * @param label The text to be displayed on the button.
+ * @param icon The [ImageVector] to be displayed inside the button.
+ * @param painter The [Painter] to be displayed when no vector icon is provided.
+ */
 @Composable
 fun OutlinedIconButtonWithText(
     modifier: Modifier = Modifier,
@@ -295,7 +317,8 @@ fun OutlinedIconButtonWithText(
     enabled: Boolean = true,
     iconContentDescription: String? = null,
     label: String,
-    icon: ImageVector
+    icon: ImageVector? = null,
+    painter: Painter? = null
 ) {
     val hapticFeedback : HapticFeedback = LocalHapticFeedback.current
     val view : View = LocalView.current
@@ -305,12 +328,36 @@ fun OutlinedIconButtonWithText(
         hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
         onClick()
     }, enabled = enabled, modifier = modifier.bounceClick()) {
-        Icon(
-            modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
-            imageVector = icon,
+        IconContent(
+            icon = icon,
+            painter = painter,
             contentDescription = iconContentDescription
         )
         ButtonIconSpacer()
         Text(text = label, maxLines = 1, overflow = TextOverflow.Ellipsis)
+    }
+}
+
+@Composable
+private fun IconContent(
+    icon: ImageVector?,
+    painter: Painter?,
+    contentDescription: String?,
+) {
+    require(icon != null || painter != null) { IconRequirementMessage }
+
+    val iconModifier: Modifier = Modifier.size(size = SizeConstants.ButtonIconSize)
+    when {
+        icon != null -> Icon(
+            modifier = iconModifier,
+            imageVector = icon,
+            contentDescription = contentDescription
+        )
+
+        painter != null -> Icon(
+            modifier = iconModifier,
+            painter = painter,
+            contentDescription = contentDescription
+        )
     }
 }

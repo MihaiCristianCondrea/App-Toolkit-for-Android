@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
+import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.StableNavController
 
 @Composable
 fun NavigationHost(

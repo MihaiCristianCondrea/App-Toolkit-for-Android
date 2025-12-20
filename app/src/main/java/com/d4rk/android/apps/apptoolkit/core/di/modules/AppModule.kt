@@ -58,7 +58,7 @@ val appModule : Module = module {
 
     viewModel { MainViewModel(navigationRepository = get()) }
 
-    single<String>(qualifier = named(name = "developer_apps_base_url")) { BuildConfig.DEVELOPER_APPS_BASE_URL }
+    single<String>(qualifier = named(name = "developer_apps_base_url")) { BuildConfig.DEVELOPER_APPS_BASE_URL } // TODO FIXME: fix the url
 
     single<DeveloperAppsRepository> {
         DeveloperAppsRepositoryImpl(

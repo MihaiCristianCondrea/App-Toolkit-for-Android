@@ -32,9 +32,3 @@ internal object MainNavigationDefaults {
         )
     )
 }
-
-// TODO: Make strings helper extensions in library and add in there
-internal fun String?.normalizeRoute(): String? = this
-    ?.substringBefore('?')
-    ?.substringBefore('/')
-    ?.takeIf { it.isNotBlank() }

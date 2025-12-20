@@ -17,10 +17,10 @@ import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoute
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpActivity
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.NavigationHost
-import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.StableNavController
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
+import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.StableNavController
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow

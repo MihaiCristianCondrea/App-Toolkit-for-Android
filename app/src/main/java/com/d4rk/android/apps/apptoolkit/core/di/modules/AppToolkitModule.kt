@@ -26,6 +26,7 @@ import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.github.GithubConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.Base64Decoder.parseBase64String
+import com.d4rk.android.libs.apptoolkit.core.utils.helpers.HelpUrlHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
@@ -56,7 +57,7 @@ val appToolkitModule : Module = module {
         DefaultHelpRepository(
             localDataSource = get(),
             remoteDataSource = get(),
-            catalogUrl = HelpConstants.faqCatalogUrl(isDebugBuild = BuildConfig.DEBUG),
+            catalogUrl = HelpUrlHelper.faqCatalogUrl(isDebugBuild = BuildConfig.DEBUG),
             productId = HelpConstants.FAQ_PRODUCT_ID,
         )
     }

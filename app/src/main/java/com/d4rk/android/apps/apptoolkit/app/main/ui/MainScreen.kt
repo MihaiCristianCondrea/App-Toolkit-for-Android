@@ -59,11 +59,12 @@ import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.Bottom
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.HideOnScrollBottomBar
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.LeftNavigationRail
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.MainTopAppBar
-import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.StableNavController
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ui.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.BottomAppBarNativeAdBanner
+import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.StableNavController
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHost
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.normalizeRoute
 import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
