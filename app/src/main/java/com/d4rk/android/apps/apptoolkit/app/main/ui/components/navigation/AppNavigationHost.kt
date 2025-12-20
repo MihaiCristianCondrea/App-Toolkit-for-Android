@@ -33,7 +33,7 @@ import org.koin.compose.koinInject
 fun AppNavigationHost(
     modifier: Modifier = Modifier,
     navController: StableNavController,
-    snackbarHostState: SnackbarHostState,
+    snackbarHostState: SnackbarHostState, // FIXME | TODO: Parameter "snackbarHostState" is never used (Not used yet)
     paddingValues: PaddingValues,
     windowWidthSizeClass: WindowWidthSizeClass,
     onRandomAppHandlerChanged: (route: String, RandomAppHandler?) -> Unit,

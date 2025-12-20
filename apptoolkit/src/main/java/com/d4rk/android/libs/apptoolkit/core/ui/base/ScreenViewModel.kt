@@ -21,7 +21,7 @@ abstract class ScreenViewModel<T , E : UiEvent , A : ActionEvent>(
 ) : BaseViewModel<UiStateScreen<T> , E , A>(initialState) {
     /** Mutable state backing the screen. */
     protected val screenState : MutableStateFlow<UiStateScreen<T>>
-        get() = _uiState
+        get() = uiStateFlow
 
     /** Convenience accessor for the current data stored in the state. */
     protected val screenData : T?

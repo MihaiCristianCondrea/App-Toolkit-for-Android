@@ -69,7 +69,8 @@ private class TestViewModel(initialState: TestState = TestState(message = "idle"
 
     override fun onEvent(event: TestEvent) {
         when (event) {
-            is TestEvent.SetMessage -> _uiState.value = currentState.copy(message = event.message)
+            is TestEvent.SetMessage -> uiStateFlow.value =
+                currentState.copy(message = event.message)
         }
     }
 

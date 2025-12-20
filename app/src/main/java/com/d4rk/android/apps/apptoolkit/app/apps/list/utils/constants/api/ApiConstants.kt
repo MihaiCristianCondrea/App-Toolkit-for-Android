@@ -20,6 +20,8 @@ object ApiPaths {
     const val DEVELOPER_APPS_API: String = "/en/home/api_android_apps.json"
 }
 
+// FIXME: use this one instead of the one added in gradle
+// TODO: Add all APIs from Gradle to here
 object ApiConstants {
     const val BASE_REPOSITORY_URL: String =
         "${GithubConstants.GITHUB_PAGES}/${ApiHost.API_REPO}/${ApiHost.API_BASE_PATH}/${ApiVersions.V2}"

@@ -36,6 +36,6 @@ package com.d4rk.android.libs.apptoolkit.core.utils.constants.error
  * @brief A generic error that doesn't fit into the other defined categories. Should be avoided if possible,
  *        and more specific error types should be created instead to provide better error context.
  */
-enum class ErrorType {
+enum class ErrorType {  // FIXME: Unused
     SECURITY_EXCEPTION , IO_EXCEPTION , ACTIVITY_NOT_FOUND , ILLEGAL_ARGUMENT , SQLITE_EXCEPTION , FILE_NOT_FOUND , UNKNOWN_ERROR ,
 }

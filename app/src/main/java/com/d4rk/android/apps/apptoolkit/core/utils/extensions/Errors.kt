@@ -9,6 +9,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.sql.SQLException
 
+// FIXME: I'll have to think abou tthis
 fun Errors.asUiText() : UiTextHelper {
     return when (this) {
         // Network errors
@@ -17,6 +18,7 @@ fun Errors.asUiText() : UiTextHelper {
     }
 }
 
+// FIXME: This too
 fun Throwable.toError(default : Errors = Errors.UseCase.NO_DATA) : Errors {
     return when (this) {
         is UnknownHostException -> Errors.Network.NO_INTERNET
