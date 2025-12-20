@@ -2,6 +2,7 @@ package com.d4rk.android.apps.apptoolkit.core.di.modules
 
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.startup.utils.interfaces.providers.AppStartupProvider
+import com.d4rk.android.apps.apptoolkit.core.utils.constants.HelpConstants
 import com.d4rk.android.libs.apptoolkit.app.help.data.DefaultHelpRepository
 import com.d4rk.android.libs.apptoolkit.app.help.data.local.HelpLocalDataSource
 import com.d4rk.android.libs.apptoolkit.app.help.data.remote.HelpRemoteDataSource
@@ -24,7 +25,6 @@ import com.d4rk.android.libs.apptoolkit.app.support.ui.SupportViewModel
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.github.GithubConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.Base64Decoder.parseBase64String
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.HelpUrlHelper
 import kotlinx.coroutines.CoroutineScope

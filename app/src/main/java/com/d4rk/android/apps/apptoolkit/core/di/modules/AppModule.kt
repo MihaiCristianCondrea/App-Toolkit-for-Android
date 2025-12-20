@@ -19,8 +19,8 @@ import com.d4rk.android.apps.apptoolkit.core.data.favorites.FavoritesRepositoryI
 import com.d4rk.android.libs.apptoolkit.app.main.data.repository.MainRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiEnvironments
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.developerAppsBaseUrl
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.toApiEnvironment
 import com.d4rk.android.libs.apptoolkit.data.client.KtorClient
 import com.d4rk.android.libs.apptoolkit.data.core.ads.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
@@ -61,8 +61,8 @@ val appModule : Module = module {
     viewModel { MainViewModel(navigationRepository = get()) }
 
     single<String>(qualifier = named(name = "developer_apps_base_url")) {
-        val environment = ApiEnvironments.fromBuildType(isDebugBuild = BuildConfig.DEBUG)
-        ApiConstants.developerAppsBaseUrl(environment = environment)
+        val environment = BuildConfig.DEBUG.toApiEnvironment()
+        environment.developerAppsBaseUrl()
     }
 
     single<DeveloperAppsRepository> {
