@@ -54,7 +54,7 @@ class IssueReporterViewModelTest {
             val snackbar = viewModel.uiState.value.snackbar!!
             val msg = snackbar.message as UiTextHelper.StringResource
             assertThat(msg.resourceId).isEqualTo(R.string.error_invalid_report)
-            verify(exactly = 0) { useCase.invoke(any()) } // FIXME: Flow is constructed but not used
+            verify(exactly = 0) { useCase.invoke(any()) }
         } finally {
             Dispatchers.resetMain()
         }
@@ -139,7 +139,7 @@ class IssueReporterViewModelTest {
             assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
             assertThat((snackbar.message as UiTextHelper.StringResource).resourceId)
                 .isEqualTo(R.string.snack_report_failed)
-            verify(exactly = 0) { useCase.invoke(any()) } // FIXME: Flow is constructed but not used
+            verify(exactly = 0) { useCase.invoke(any()) }
         } finally {
             Dispatchers.resetMain()
         }

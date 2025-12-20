@@ -9,6 +9,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -46,23 +47,22 @@ class FetchDeveloperAppsUseCaseTest {
         expected.addAll(repositoryEmissions)
 
         assertEquals(expected, result)
-        verify(exactly = 1) { repository.fetchDeveloperApps() } // FIXME: Flow is constructed but not used
+        verify(exactly = 1) { repository.fetchDeveloperApps() }
     }
 
     @Test
     fun `use case propagates synchronous repository exceptions`() = runTest {
         val exception = IllegalStateException("boom")
         val repository = mockk<DeveloperAppsRepository> {
-            every { fetchDeveloperApps() } throws exception
+            every { fetchDeveloperApps() } returns flow { throw exception }
         }
         val useCase = FetchDeveloperAppsUseCase(repository)
 
         val thrown = assertFailsWith<IllegalStateException> {
-            useCase() // FIXME: Flow is constructed but not used
+            useCase().toList()
         }
 
         assertSame(exception, thrown)
-        verify(exactly = 1) { repository.fetchDeveloperApps() } // FIXME: Flow is constructed but not used
+        verify(exactly = 1) { repository.fetchDeveloperApps() }
     }
 }
-

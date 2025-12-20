@@ -217,7 +217,6 @@ fun MainScaffoldContent(
             modifier = Modifier
                 .consumeWindowInsets(paddingValues),
             navController = stableNavController,
-            snackbarHostState = snackBarHostState,
             paddingValues = paddingValues,
             windowWidthSizeClass = windowWidthSizeClass,
             onRandomAppHandlerChanged = { route, handler ->
@@ -260,7 +259,7 @@ fun MainScaffoldTabletContent(
     }
 
     val context: Context = LocalContext.current
-    val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    remember { SnackbarHostState() }
     val changelogUrl: String = koinInject(qualifier = named("github_changelog"))
 
     val showChangelog = rememberSaveable { mutableStateOf(false) }
@@ -342,7 +341,6 @@ fun MainScaffoldTabletContent(
             content = {
                 AppNavigationHost(
                     navController = stableNavController,
-                    snackbarHostState = snackBarHostState,
                     paddingValues = PaddingValues(),
                     windowWidthSizeClass = windowWidthSizeClass,
                     onRandomAppHandlerChanged = { route, handler ->

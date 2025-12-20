@@ -31,7 +31,7 @@ class AppNavigationHostTest {
         val startDestination = dataStore.startupDestinationFlow().first()
 
         assertEquals(NavigationRoutes.ROUTE_APPS_LIST, startDestination)
-        verify(exactly = 1) { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) } // FIXME: Flow is constructed but not used
+        verify(exactly = 1) { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) }
     }
 
     @Test
@@ -43,6 +43,6 @@ class AppNavigationHostTest {
         val startDestination = dataStore.startupDestinationFlow().first()
 
         assertEquals(NavigationRoutes.ROUTE_FAVORITE_APPS, startDestination)
-        verify(exactly = 1) { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) } // FIXME: Flow is constructed but not used
+        verify(exactly = 1) { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) }
     }
 }

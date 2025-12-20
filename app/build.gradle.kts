@@ -67,7 +67,11 @@ android {
         }
         buildConfigField("String", "GITHUB_TOKEN", "\"$githubToken\"")
         buildConfigField("int", "APPS_LIST_AD_FREQUENCY", "4")
-        buildConfigField("String", "FAQ_PRODUCT_ID", "\"com.d4rk.toolkit\"")
+        buildConfigField(
+            "String",
+            "FAQ_PRODUCT_ID",
+            "\"com.d4rk.toolkit\""
+        ) // FIXME: Make it a constant in
     }
 
     signingConfigs {
@@ -90,8 +94,6 @@ android {
         }
     }
 
-    val developerAppsBaseUrl =
-        "https://mihaicristiancondrea.github.io/com.d4rk.apis/api/app_toolkit/v2"
     val faqBaseUrl =
         "https://mihaicristiancondrea.github.io/com.d4rk.apis/api/faq/v1"
 
@@ -108,11 +110,6 @@ android {
             isShrinkResources = true
             buildConfigField(
                 "String",
-                "DEVELOPER_APPS_BASE_URL",
-                "\"$developerAppsBaseUrl/release\"",
-            )
-            buildConfigField(
-                "String",
                 "FAQ_CATALOG_URL",
                 "\"$faqBaseUrl/release/catalog.json\"",
             )
@@ -121,11 +118,6 @@ android {
             isDebuggable = true
             isMinifyEnabled = false
             isShrinkResources = false
-            buildConfigField(
-                "String",
-                "DEVELOPER_APPS_BASE_URL",
-                "\"$developerAppsBaseUrl/debug\"",
-            )
             buildConfigField(
                 "String",
                 "FAQ_CATALOG_URL",

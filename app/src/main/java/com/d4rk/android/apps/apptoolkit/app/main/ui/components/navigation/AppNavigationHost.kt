@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +32,6 @@ import org.koin.compose.koinInject
 fun AppNavigationHost(
     modifier: Modifier = Modifier,
     navController: StableNavController,
-    snackbarHostState: SnackbarHostState, // FIXME | TODO: Parameter "snackbarHostState" is never used (Not used yet)
     paddingValues: PaddingValues,
     windowWidthSizeClass: WindowWidthSizeClass,
     onRandomAppHandlerChanged: (route: String, RandomAppHandler?) -> Unit,
@@ -115,4 +113,3 @@ fun handleNavigationItemClick(
         coroutineScope.launch { drawerState.close() }
     }
 }
-

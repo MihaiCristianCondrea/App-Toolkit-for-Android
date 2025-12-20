@@ -15,6 +15,10 @@ fun String?.sanitizeUrlOrNull(): String? {
 /**
  * Produces a [Uri] from a sanitized string, or `null` when the input is blank or invalid.
  */
-fun String?.sanitizeUriOrNull(): Uri? = sanitizeUrlOrNull()?.let { url -> // FIXME: use it
-    runCatching { url.toUri() }.getOrNull()
-}
+fun String?.sanitizeUriOrNull(): Uri? =
+    sanitizeUrlOrNull()
+        ?.let { url ->
+            runCatching { url.toUri() }
+                .getOrNull()
+                ?.takeIf { uri -> !uri.scheme.isNullOrBlank() }
+        }
