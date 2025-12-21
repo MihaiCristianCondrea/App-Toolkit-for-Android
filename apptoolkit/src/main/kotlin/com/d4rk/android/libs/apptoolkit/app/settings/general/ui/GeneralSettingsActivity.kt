@@ -7,8 +7,11 @@ import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.logging.GENERAL_SETTINGS_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import kotlinx.coroutines.launch
 
 class GeneralSettingsActivity : AppCompatActivity() {
 
@@ -32,6 +35,9 @@ class GeneralSettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        lifecycleScope.launch {
+            CommonDataStore.getInstance(applicationContext).markSettingsInteracted()
+        }
 
         val title: String = intent.getStringExtra(EXTRA_TITLE)
             ?: getString(com.d4rk.android.libs.apptoolkit.R.string.settings)

@@ -24,6 +24,7 @@ open class DataStoreNamesConstants {
         const val DATA_STORE_DYNAMIC_PALETTE_VARIANT = "data_store_dynamic_palette_variant"
         const val DATA_STORE_STATIC_PALETTE_ID = "data_store_static_palette_id"
         const val DATA_STORE_DYNAMIC_COLORS = "dynamic_colors"
+        const val DATA_STORE_SETTINGS_INTERACTED = "settings_interacted"
         const val DATA_STORE_BOUNCY_BUTTONS = "bouncy_buttons"
         const val DATA_STORE_SHOW_BOTTOM_BAR_LABELS = "show_bottom_bar_labels"
         const val DATA_STORE_LANGUAGE = "language"

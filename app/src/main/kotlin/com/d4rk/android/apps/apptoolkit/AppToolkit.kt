@@ -15,11 +15,16 @@ import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
 import com.d4rk.android.libs.apptoolkit.data.core.BaseCoreManager
 import com.d4rk.android.libs.apptoolkit.data.core.ads.AdsCoreManager
+import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.supervisorScope
 import org.koin.android.ext.android.getKoin
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
+import com.d4rk.android.libs.apptoolkit.core.utils.helpers.SeasonalHelper
 
 class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     private var currentActivity: Activity? = null
@@ -43,10 +48,30 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     }
 
     private fun applyDefaultColorPalette() {
-        val colorPalette: ColorPalette = getKoin().get()
+        val colorPalette: ColorPalette = resolveDefaultColorPalette()
         AppThemeConfig.customLightScheme = colorPalette.lightColorScheme
         AppThemeConfig.customDarkScheme = colorPalette.darkColorScheme
         ThemePaletteProvider.defaultPalette = colorPalette
+    }
+
+    private fun resolveDefaultColorPalette(): ColorPalette {
+        val dataStore: CommonDataStore = CommonDataStore.getInstance(context = this)
+
+        val hasInteractedWithSettings: Boolean = runBlocking {
+            dataStore.settingsInteracted.first()
+        }
+
+        if (!hasInteractedWithSettings) {
+            val staticPaletteId: String = runBlocking { dataStore.staticPaletteId.first() }
+            val shouldUseSeasonalPalette: Boolean =
+                staticPaletteId == StaticPaletteIds.DEFAULT && SeasonalHelper.isChristmasSeason()
+
+            if (shouldUseSeasonalPalette) {
+                return ThemePaletteProvider.paletteById(StaticPaletteIds.CHRISTMAS)
+            }
+        }
+
+        return getKoin().get()
     }
 
     override fun onStart(owner: LifecycleOwner) {
