@@ -63,9 +63,11 @@ TextField(
 Arrange UI elements with layout composables such as `Column`, `Row`, and `Box`.
 
 ```kotlin
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+
 Column(
-    modifier = Modifier.padding(16.dp),
-    verticalArrangement = Arrangement.spacedBy(8.dp)
+    modifier = Modifier.padding(SizeConstants.LargeSize),
+    verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)
 ) {
     Text("Header", style = MaterialTheme.typography.titleLarge)
     Button(onClick = { /* action */ }) { Text("Tap") }

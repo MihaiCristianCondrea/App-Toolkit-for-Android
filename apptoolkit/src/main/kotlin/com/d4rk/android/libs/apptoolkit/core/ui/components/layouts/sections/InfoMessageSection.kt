@@ -43,9 +43,11 @@ import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
  *
  * Example Usage:
  * ```
+ * import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+ *
  * InfoMessageSection(
  *     message = "This is an important information message.",
- *     modifier = Modifier.padding(16.dp),
+ *     modifier = Modifier.padding(SizeConstants.LargeSize),
  *     learnMoreText = "Learn More",
  *     learnMoreUrl = "https://www.example.com"
  * )

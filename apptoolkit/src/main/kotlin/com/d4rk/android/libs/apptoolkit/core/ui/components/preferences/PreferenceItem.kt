@@ -101,7 +101,7 @@ fun PreferenceItem(
  * @param summary The optional [String] to display as the summary of the preference item.
  *               If null, no summary will be displayed.
  * @param rippleEffectDp The [Dp] value to control the size of the ripple effect when the item is clicked.
- *                      Defaults to 2.dp.
+ *                      Defaults to [SizeConstants.ExtraTinySize].
  * @param onClick The lambda function to execute when the preference item is clicked.
  *                Defaults to an empty lambda, meaning no action will be performed by default.
  */

@@ -44,8 +44,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
  *
  * Example Usage:
  * ```
+ * import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+ *
  *  AnimatedButtonDirection(
- *      modifier = Modifier.padding(16.dp),
+ *      modifier = Modifier.padding(SizeConstants.LargeSize),
  *      visible = is */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
