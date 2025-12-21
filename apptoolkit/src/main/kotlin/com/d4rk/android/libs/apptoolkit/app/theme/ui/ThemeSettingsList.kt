@@ -51,6 +51,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.DynamicPaletteVari
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.applyDynamicVariant
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.helpers.SeasonalHelper
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -127,6 +128,8 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
     }
 
     val staticOptions: List<String> = remember { StaticPaletteIds.withDefault }
+
+    val isChristmasSeason: Boolean = remember { SeasonalHelper.isChristmasSeason() }
 
     val staticSwatches: List<WallpaperSwatchColors> =
         remember(staticOptions, isSystemInDarkThemeNow) {
@@ -242,6 +245,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                         WallpaperColorOptionCard(
                                             colors = staticSwatches[index],
                                             selected = !isDynamicColors && id == staticPaletteId,
+                                            showSeasonalBadge = isChristmasSeason && id == StaticPaletteIds.CHRISTMAS,
                                             onClick = {
                                                 coroutineScope.launch {
                                                     dataStore.saveDynamicColors(false)
@@ -271,6 +275,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                             WallpaperColorOptionCard(
                                 colors = staticSwatches[index],
                                 selected = id == staticPaletteId,
+                                showSeasonalBadge = isChristmasSeason && id == StaticPaletteIds.CHRISTMAS,
                                 onClick = {
                                     coroutineScope.launch {
                                         dataStore.saveDynamicColors(false)

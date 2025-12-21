@@ -31,6 +31,7 @@ object StaticPaletteIds {
     const val YELLOW = "yellow"
 
     const val ROSE = "rose"
+    const val CHRISTMAS = "christmas"
 
     const val DEFAULT = "default"
 
@@ -41,6 +42,7 @@ object StaticPaletteIds {
         RED,
         YELLOW,
         ROSE,
+        CHRISTMAS,
     )
 
     val withDefault: List<String> = listOf(DEFAULT) + supportedOrder

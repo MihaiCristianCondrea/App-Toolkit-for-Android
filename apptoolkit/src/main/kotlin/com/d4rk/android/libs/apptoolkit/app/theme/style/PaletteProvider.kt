@@ -2,6 +2,7 @@ package com.d4rk.android.libs.apptoolkit.app.theme.style
 
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.blue.bluePalette
+import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.christmas.christmasPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.green.greenPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.monochrome.monochromePalette
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.red.redPalette
@@ -19,6 +20,7 @@ object ThemePaletteProvider {
         StaticPaletteIds.RED -> redPalette
         StaticPaletteIds.YELLOW -> yellowPalette
         StaticPaletteIds.ROSE -> rosePalette
+        StaticPaletteIds.CHRISTMAS -> christmasPalette
         StaticPaletteIds.DEFAULT -> defaultPalette
         else -> defaultPalette
     }
