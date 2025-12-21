@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">將由系統自動啟用</string>
     <string name="will_never_turn_on_automatically">永遠不會自動啟用</string>
     <string name="amoled_mode">AMOLED 模式</string>
+    <string name="wallpaper_colors">桌布顏色</string>
+    <string name="other_colors">其他顏色</string>
     <string name="follow_system">跟隨系統模式</string>
     <string name="light_mode">淺色模式</string>
     <string name="dark_mode">深色模式</string>

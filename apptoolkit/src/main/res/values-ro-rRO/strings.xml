@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">Se va activa automat prin setările sistemului</string>
     <string name="will_never_turn_on_automatically">Nu se va activa niciodată automat</string>
     <string name="amoled_mode">Mod AMOLED</string>
+    <string name="wallpaper_colors">Culorile fundalului</string>
+    <string name="other_colors">Alte culori</string>
     <string name="follow_system">Urmărește setările sistemului</string>
     <string name="light_mode">Mod luminos</string>
     <string name="dark_mode">Mod întunecat</string>

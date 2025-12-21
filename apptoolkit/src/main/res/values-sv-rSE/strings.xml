@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">Kommer att aktiveras automatiskt av systemet</string>
     <string name="will_never_turn_on_automatically">Kommer aldrig att aktiveras automatiskt</string>
     <string name="amoled_mode">AMOLED-läge</string>
+    <string name="wallpaper_colors">Bakgrundsfärger</string>
+    <string name="other_colors">Andra färger</string>
     <string name="follow_system">Följ systeminställningar</string>
     <string name="light_mode">Ljust läge</string>
     <string name="dark_mode">Mörkt läge</string>

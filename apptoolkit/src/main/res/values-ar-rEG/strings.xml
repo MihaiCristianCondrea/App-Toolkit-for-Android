@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">سيتم تشغيله تلقائيًا بواسطة النظام</string>
     <string name="will_never_turn_on_automatically">لن يتم تشغيله تلقائيًا أبدًا</string>
     <string name="amoled_mode">وضع AMOLED</string>
+    <string name="wallpaper_colors">ألوان خلفية الشاشة</string>
+    <string name="other_colors">ألوان أخرى</string>
     <string name="follow_system">اتباع وضع النظام</string>
     <string name="light_mode">الوضع الفاتح</string>
     <string name="dark_mode">الوضع الداكن</string>

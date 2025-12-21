@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">सिस्टम द्वारा स्वचालित रूप से चालू हो जाएगी</string>
     <string name="will_never_turn_on_automatically">स्वचालित रूप से कभी चालू नहीं होगी</string>
     <string name="amoled_mode">AMOLED मोड</string>
+    <string name="wallpaper_colors">वॉलपेपर के रंग</string>
+    <string name="other_colors">अन्य रंग</string>
     <string name="follow_system">सिस्टम मोड का अनुसरण करें</string>
     <string name="light_mode">लाइट मोड</string>
     <string name="dark_mode">डार्क मोड</string>
