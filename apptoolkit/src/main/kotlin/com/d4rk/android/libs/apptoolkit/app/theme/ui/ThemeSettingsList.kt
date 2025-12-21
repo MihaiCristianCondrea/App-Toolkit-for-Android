@@ -126,17 +126,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
         }
     }
 
-    val staticOptions: List<String> = remember {
-        listOf(
-            StaticPaletteIds.DEFAULT,
-            StaticPaletteIds.MONOCHROME,
-            StaticPaletteIds.BLUE,
-            StaticPaletteIds.GREEN,
-            StaticPaletteIds.RED,
-            StaticPaletteIds.YELLOW,
-            StaticPaletteIds.ROSE,
-        )
-    }
+    val staticOptions: List<String> = remember { StaticPaletteIds.withDefault }
 
     val staticSwatches: List<WallpaperSwatchColors> =
         remember(staticOptions, isSystemInDarkThemeNow) {

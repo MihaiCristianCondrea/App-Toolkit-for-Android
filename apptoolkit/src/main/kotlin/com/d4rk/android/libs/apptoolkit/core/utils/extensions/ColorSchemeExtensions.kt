@@ -33,6 +33,23 @@ object StaticPaletteIds {
     const val ROSE = "rose"
 
     const val DEFAULT = "default"
+
+    private val supportedOrder = listOf(
+        MONOCHROME,
+        BLUE,
+        GREEN,
+        RED,
+        YELLOW,
+        ROSE,
+    )
+
+    val withDefault: List<String> = listOf(DEFAULT) + supportedOrder
+
+    fun sanitize(id: String): String = when (id) {
+        DEFAULT -> DEFAULT
+        in supportedOrder -> id
+        else -> DEFAULT
+    }
 }
 
 fun ColorScheme.applyDynamicVariant(variant: Int): ColorScheme =
