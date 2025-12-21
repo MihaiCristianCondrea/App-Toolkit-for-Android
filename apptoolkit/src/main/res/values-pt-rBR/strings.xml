@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">Será ativado automaticamente pelo sistema</string>
     <string name="will_never_turn_on_automatically">Nunca será ativado automaticamente</string>
     <string name="amoled_mode">Modo AMOLED</string>
+    <string name="wallpaper_colors">Cores do papel de parede</string>
+    <string name="other_colors">Outras cores</string>
     <string name="follow_system">Seguir o sistema</string>
     <string name="light_mode">Modo claro</string>
     <string name="dark_mode">Modo escuro</string>

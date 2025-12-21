@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">Zostanie automatycznie włączony przez system</string>
     <string name="will_never_turn_on_automatically">Nigdy nie włączy się automatycznie</string>
     <string name="amoled_mode">Tryb AMOLED</string>
+    <string name="wallpaper_colors">Kolory tapety</string>
+    <string name="other_colors">Inne kolory</string>
     <string name="follow_system">Podążaj za ustawieniami systemu</string>
     <string name="light_mode">Tryb jasny</string>
     <string name="dark_mode">Tryb ciemny</string>

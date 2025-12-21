@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">Sistem tarafından otomatik olarak açılacak</string>
     <string name="will_never_turn_on_automatically">Hiçbir zaman otomatik olarak açılmayacak</string>
     <string name="amoled_mode">AMOLED modu</string>
+    <string name="wallpaper_colors">Duvar kâğıdı renkleri</string>
+    <string name="other_colors">Diğer renkler</string>
     <string name="follow_system">Sistem modunu takip et</string>
     <string name="light_mode">Aydınlık mod</string>
     <string name="dark_mode">Koyu mod</string>

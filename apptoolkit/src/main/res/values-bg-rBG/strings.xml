@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">Ще се включи автоматично от системата</string>
     <string name="will_never_turn_on_automatically">Никога няма да се включи автоматично</string>
     <string name="amoled_mode">AMOLED режим</string>
+    <string name="wallpaper_colors">Цветове на тапета</string>
+    <string name="other_colors">Други цветове</string>
     <string name="follow_system">Следвай системния режим</string>
     <string name="light_mode">Светъл режим</string>
     <string name="dark_mode">Тъмен режим</string>

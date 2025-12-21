@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">Akan diaktifkan secara otomatis oleh sistem</string>
     <string name="will_never_turn_on_automatically">Tidak akan pernah diaktifkan secara otomatis</string>
     <string name="amoled_mode">Mode AMOLED</string>
+    <string name="wallpaper_colors">Warna wallpaper</string>
+    <string name="other_colors">Warna lainnya</string>
     <string name="follow_system">Ikuti mode sistem</string>
     <string name="light_mode">Mode terang</string>
     <string name="dark_mode">Mode gelap</string>

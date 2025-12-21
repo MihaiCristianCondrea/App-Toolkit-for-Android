@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">Автоматично увімкнеться системою</string>
     <string name="will_never_turn_on_automatically">Ніколи не буде ввімкнено автоматично</string>
     <string name="amoled_mode">Режим AMOLED</string>
+    <string name="wallpaper_colors">Кольори шпалер</string>
+    <string name="other_colors">Інші кольори</string>
     <string name="follow_system">Дотримуватися системного режиму</string>
     <string name="light_mode">Світла тема</string>
     <string name="dark_mode">Темна тема</string>

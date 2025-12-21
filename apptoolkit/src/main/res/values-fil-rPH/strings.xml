@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">Awtomatikong mag-o-on sa pamamagitan ng system</string>
     <string name="will_never_turn_on_automatically">Hindi kailanman awtomatikong mag-o-on</string>
     <string name="amoled_mode">AMOLED mode</string>
+    <string name="wallpaper_colors">Mga kulay ng wallpaper</string>
+    <string name="other_colors">Ibang mga kulay</string>
     <string name="follow_system">Sundin ang system mode</string>
     <string name="light_mode">Light mode</string>
     <string name="dark_mode">Dark mode</string>

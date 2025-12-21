@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">ระบบจะเปิดใช้งานโดยอัตโนมัติ</string>
     <string name="will_never_turn_on_automatically">จะไม่มีการเปิดใช้งานอัตโนมัติ</string>
     <string name="amoled_mode">โหมด AMOLED</string>
+    <string name="wallpaper_colors">สีของวอลเปเปอร์</string>
+    <string name="other_colors">สีอื่นๆ</string>
     <string name="follow_system">ตามการตั้งค่าระบบ</string>
     <string name="light_mode">โหมดสว่าง</string>
     <string name="dark_mode">โหมดมืด</string>

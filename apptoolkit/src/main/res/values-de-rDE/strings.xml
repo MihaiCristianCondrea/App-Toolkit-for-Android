@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">Wird automatisch vom System aktiviert</string>
     <string name="will_never_turn_on_automatically">Wird niemals automatisch aktiviert</string>
     <string name="amoled_mode">AMOLED-Modus</string>
+    <string name="wallpaper_colors">Hintergrundfarben</string>
+    <string name="other_colors">Andere Farben</string>
     <string name="follow_system">Systemmodus folgen</string>
     <string name="light_mode">Helles thema</string>
     <string name="dark_mode">Dunkles thema</string>

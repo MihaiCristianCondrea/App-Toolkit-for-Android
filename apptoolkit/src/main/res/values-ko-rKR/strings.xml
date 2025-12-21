@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">시스템에 의해 자동으로 켜집니다.</string>
     <string name="will_never_turn_on_automatically">자동으로 켜지지 않습니다.</string>
     <string name="amoled_mode">AMOLED 모드</string>
+    <string name="wallpaper_colors">배경화면 색상</string>
+    <string name="other_colors">기타 색상</string>
     <string name="follow_system">시스템 모드 따르기</string>
     <string name="light_mode">라이트 모드</string>
     <string name="dark_mode">다크 모드</string>

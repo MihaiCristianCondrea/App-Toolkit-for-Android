@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">Будет включено автоматически системой</string>
     <string name="will_never_turn_on_automatically">Никогда не будет включено автоматически</string>
     <string name="amoled_mode">AMOLED-режим</string>
+    <string name="wallpaper_colors">Цвета обоев</string>
+    <string name="other_colors">Другие цвета</string>
     <string name="follow_system">Следовать за системой</string>
     <string name="light_mode">Светлый режим</string>
     <string name="dark_mode">Тёмный режим</string>

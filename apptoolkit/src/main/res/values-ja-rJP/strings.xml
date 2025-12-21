@@ -88,6 +88,8 @@
     <string name="will_turn_on_automatically_by_system">システムによって自動的にオンになります</string>
     <string name="will_never_turn_on_automatically">自動的にオンにはなりません</string>
     <string name="amoled_mode">AMOLEDモード</string>
+    <string name="wallpaper_colors">壁紙の色</string>
+    <string name="other_colors">その他の色</string>
     <string name="follow_system">システムモードに従う</string>
     <string name="light_mode">ライトモード</string>
     <string name="dark_mode">ダークモード</string>
