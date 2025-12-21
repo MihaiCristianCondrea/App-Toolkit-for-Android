@@ -22,7 +22,7 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 85
-        versionName = "1.1.5"
+        versionName = "1.1.6"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         @Suppress("UnstableApiUsage")
         androidResources.localeFilters += listOf(

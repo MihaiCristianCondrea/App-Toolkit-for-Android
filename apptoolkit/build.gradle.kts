@@ -109,7 +109,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.MihaiCristianCondrea"
             artifactId = "App-Toolkit-for-Android"
-            version = "1.1.5"
+            version = "1.1.6"
 
             afterEvaluate {
                 from(components["release"])
