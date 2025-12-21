@@ -30,6 +30,8 @@ object StaticPaletteIds {
     const val RED = "red"
     const val YELLOW = "yellow"
 
+    const val ROSE = "rose"
+
     const val DEFAULT = "default"
 }
 

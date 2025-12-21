@@ -134,6 +134,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
             StaticPaletteIds.GREEN,
             StaticPaletteIds.RED,
             StaticPaletteIds.YELLOW,
+            StaticPaletteIds.ROSE,
         )
     }
 
