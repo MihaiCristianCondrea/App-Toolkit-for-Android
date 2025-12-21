@@ -60,6 +60,18 @@ data class ThemeSettingOption(
     val key: String, val displayName: String
 )
 
+/**
+ * Theme settings content for the app.
+ *
+ * This composable renders a vertical list of theme-related controls:
+ * - Optional header illustration.
+ * - Dynamic vs static (wallpaper/other) palette pickers when the device supports dynamic color.
+ * - AMOLED toggle.
+ * - Theme mode selection (follow system / dark / light).
+ * - An informational message with a "Learn more" action that opens system display settings.
+ *
+ * The current selections are read from [CommonDataStore] and updates are persisted asynchronously.
+ */
 @Composable
 fun ThemeSettingsList(paddingValues: PaddingValues) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -101,13 +113,10 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
 
     val isSystemInDarkThemeNow: Boolean = isSystemInDarkTheme()
 
-    // Preview scheme for wallpaper variants:
-    // IMPORTANT: on Android 12+ we can preview wallpaper colors even if dynamic is currently OFF.
     val wallpaperPreviewScheme: ColorScheme? = remember(supportsDynamic, isSystemInDarkThemeNow) {
         if (!supportsDynamic) null
-        else if (isSystemInDarkThemeNow) dynamicDarkColorScheme(context) else dynamicLightColorScheme(
-            context
-        )
+        else if (isSystemInDarkThemeNow) dynamicDarkColorScheme(context)
+        else dynamicLightColorScheme(context)
     }
 
     val variantSwatches: List<WallpaperSwatchColors> = remember(wallpaperPreviewScheme) {
@@ -141,12 +150,10 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
             }
         }
 
-    // Pager only for Android 12+
     val tabTitles =
-        remember { listOf("Wallpaper colors", "Other colors") } // TODO: make them string res
+        remember { listOf("Wallpaper colors", "Other colors") } // TODO: string resources
 
     val pagerState = rememberPagerState(
-        // nice default: if dynamic is on, start on wallpaper tab; otherwise on other colors tab
         initialPage = if (supportsDynamic && isDynamicColors) 0 else 1,
         pageCount = { 2 }
     )
@@ -154,9 +161,9 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             contentPadding = paddingValues,
+            verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
             modifier = Modifier.fillMaxSize(),
         ) {
-
             item {
                 AsyncImage(
                     model = R.drawable.il_startup,
@@ -164,18 +171,20 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(220.dp)
-                        .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(24.dp))
+                        .clip(
+                            RoundedCornerShape(
+                                size = SizeConstants.LargeSize + SizeConstants.SmallSize
+                            )
+                        )
                 )
             }
 
-            // Android 12+: segmented pager with 2 pages
             if (supportsDynamic) {
                 item {
                     SingleChoiceSegmentedButtonRow(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
+                            .padding(horizontal = SizeConstants.LargeSize)
                     ) {
                         tabTitles.forEachIndexed { index, title ->
                             SegmentedButton(
@@ -188,7 +197,10 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                     count = tabTitles.size
                                 )
                             ) {
-                                Text(text = title, modifier = Modifier.padding(vertical = 16.dp))
+                                Text(
+                                    text = title,
+                                    modifier = Modifier.padding(vertical = SizeConstants.LargeSize)
+                                )
                             }
                         }
                     }
@@ -200,12 +212,11 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                         modifier = Modifier.fillMaxWidth()
                     ) { page ->
                         when (page) {
-                            // Page 0: Wallpaper colors (dynamic variants)
                             0 -> {
                                 LazyRow(
-                                    contentPadding = PaddingValues(horizontal = 16.dp),
+                                    contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                                     horizontalArrangement = Arrangement.spacedBy(
-                                        space = 12.dp,
+                                        space = SizeConstants.MediumSize,
                                         alignment = Alignment.CenterHorizontally
                                     )
                                 ) {
@@ -218,7 +229,6 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                             selected = index == dynamicVariantIndex,
                                             onClick = {
                                                 coroutineScope.launch {
-                                                    // Selecting from Wallpaper colors => ENABLE dynamic colors
                                                     dataStore.saveDynamicColors(true)
                                                     dataStore.saveDynamicPaletteVariant(index)
                                                 }
@@ -228,12 +238,11 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                 }
                             }
 
-                            // Page 1: Other colors (static palettes)
                             else -> {
                                 LazyRow(
-                                    contentPadding = PaddingValues(horizontal = 16.dp),
+                                    contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                                     horizontalArrangement = Arrangement.spacedBy(
-                                        space = 12.dp,
+                                        space = SizeConstants.MediumSize,
                                         alignment = Alignment.CenterHorizontally
                                     )
                                 ) {
@@ -246,7 +255,6 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                             selected = id == staticPaletteId,
                                             onClick = {
                                                 coroutineScope.launch {
-                                                    // Selecting from Other colors => DISABLE dynamic colors
                                                     dataStore.saveDynamicColors(false)
                                                     dataStore.saveStaticPaletteId(id)
                                                 }
@@ -259,12 +267,11 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                     }
                 }
             } else {
-                // Android 11 and lower: only static palettes row
                 item {
                     LazyRow(
-                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                         horizontalArrangement = Arrangement.spacedBy(
-                            space = 12.dp,
+                            space = SizeConstants.MediumSize,
                             alignment = Alignment.CenterHorizontally
                         )
                     ) {
@@ -277,7 +284,6 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                 selected = id == staticPaletteId,
                                 onClick = {
                                     coroutineScope.launch {
-                                        // Dynamic doesn't exist here; keep setting false anyway.
                                         dataStore.saveDynamicColors(false)
                                         dataStore.saveStaticPaletteId(id)
                                     }
@@ -301,7 +307,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = SizeConstants.MediumSize * 2)
+                        .padding(horizontal = SizeConstants.LargeSize)
                         .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize)),
                     verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
                 ) {
@@ -331,7 +337,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                 InfoMessageSection(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = SizeConstants.MediumSize * 2),
+                        .padding(horizontal = SizeConstants.LargeSize),
                     message = stringResource(id = R.string.summary_dark_theme),
                     newLine = false,
                     learnMoreText = stringResource(id = R.string.screen_and_display_settings),
