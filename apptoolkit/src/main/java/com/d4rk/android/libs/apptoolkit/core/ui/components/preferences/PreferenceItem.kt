@@ -44,13 +44,13 @@ fun PreferenceItem(icon : ImageVector? = null , title : String? = null , summary
     val view : View = LocalView.current
     Row(
         modifier = Modifier
-                .fillMaxWidth()
-                .clip(shape = RoundedCornerShape(size = rippleEffectDp))
-                .clickable(enabled = enabled , onClick = {
-                    view.playSoundEffect(SoundEffectConstants.CLICK)
-                    hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                    onClick()
-                }) , verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth()
+            .clip(shape = RoundedCornerShape(size = rippleEffectDp))
+            .clickable(enabled = enabled, onClick = {
+                view.playSoundEffect(SoundEffectConstants.CLICK)
+                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                onClick()
+            }) , verticalAlignment = Alignment.CenterVertically
     ) {
         icon?.let {
             LargeHorizontalSpacer()
@@ -60,7 +60,14 @@ fun PreferenceItem(icon : ImageVector? = null , title : String? = null , summary
             modifier = Modifier.padding(all = SizeConstants.LargeSize)
         ) {
             title?.let {
-                Text(text = it , style = MaterialTheme.typography.titleMedium , fontWeight = FontWeight.Bold , color = if (! enabled) LocalContentColor.current.copy(alpha = 0.38f) else LocalContentColor.current , maxLines = 1 , overflow = TextOverflow.Ellipsis)
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (!enabled) LocalContentColor.current.copy(alpha = 0.38f) else LocalContentColor.current,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
             summary?.let {
                 Text(text = it , style = MaterialTheme.typography.bodyMedium , color = if (! enabled) LocalContentColor.current.copy(alpha = 0.38f) else LocalContentColor.current)
@@ -91,8 +98,8 @@ fun PreferenceItem(icon : ImageVector? = null , title : String? = null , summary
 fun SettingsPreferenceItem(icon : ImageVector? = null , title : String? = null , summary : String? = null , rippleEffectDp : Dp = SizeConstants.ExtraTinySize , onClick : () -> Unit = {}) {
     Card(
         modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(size = SizeConstants.ExtraTinySize)) ,
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(size = SizeConstants.ExtraTinySize)) ,
         shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize) ,
     ) {
         PreferenceItem(rippleEffectDp = rippleEffectDp , icon = icon , title = title , summary = summary , onClick = {

@@ -218,7 +218,7 @@ fun IssueReporterScreenContent(
                         Text(
                             text = stringResource(id = R.string.issue_submitted),
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.SemiBold
                         )
                         SmallVerticalSpacer()
 

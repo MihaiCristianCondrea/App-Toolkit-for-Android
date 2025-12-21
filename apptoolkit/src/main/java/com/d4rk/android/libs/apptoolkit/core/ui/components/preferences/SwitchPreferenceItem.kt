@@ -45,18 +45,18 @@ fun SwitchPreferenceItem(icon : ImageVector? = null , title : String , summary :
     val view : View = LocalView.current
     Card(
         modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(size = SizeConstants.ExtraTinySize)) ,
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(size = SizeConstants.ExtraTinySize)) ,
         shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize) ,
     ) {
         Row(
             modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = {
-                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                        hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                        onCheckedChange(! checked)
-                    }) ,
+                .fillMaxWidth()
+                .clickable(onClick = {
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                    hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                    onCheckedChange(!checked)
+                }) ,
             verticalAlignment = Alignment.CenterVertically ,
         ) {
             icon?.let {
@@ -66,10 +66,16 @@ fun SwitchPreferenceItem(icon : ImageVector? = null , title : String , summary :
             }
             Column(
                 modifier = Modifier
-                        .padding(all = SizeConstants.LargeSize)
-                        .weight(weight = 1f) ,
+                    .padding(all = SizeConstants.LargeSize)
+                    .weight(weight = 1f) ,
             ) {
-                Text(text = title , style = MaterialTheme.typography.titleMedium , fontWeight = FontWeight.Bold , maxLines = 1 , overflow = TextOverflow.Ellipsis)
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
                 summary?.let {
                     Text(text = it , style = MaterialTheme.typography.bodyMedium)
                 }

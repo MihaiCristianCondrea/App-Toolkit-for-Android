@@ -92,7 +92,7 @@ fun AppDetailsBottomSheet(
                 Text(
                     text = appInfo.name,
                     style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.SemiBold,
                 )
                 Text(
                     text = appInfo.packageName,
@@ -162,7 +162,7 @@ fun AppDetailsBottomSheet(
                 Text(
                     text = stringResource(id = R.string.app_details_about_title),
                     style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.SemiBold,
                 )
             }
             ExtraSmallVerticalSpacer()
@@ -180,7 +180,7 @@ fun AppDetailsBottomSheet(
                 Text(
                     text = stringResource(id = R.string.app_details_screenshots_title),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
                         .padding(horizontal = SizeConstants.LargeSize)
                 )

@@ -180,7 +180,7 @@ private fun HelpNativeAdPreview(modifier: Modifier) {
                     Text(
                         text = "Discover helpful tools",
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(

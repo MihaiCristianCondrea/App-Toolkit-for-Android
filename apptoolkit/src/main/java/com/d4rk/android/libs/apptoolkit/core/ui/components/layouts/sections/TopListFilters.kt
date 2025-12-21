@@ -33,7 +33,11 @@ fun TopListFilters(
     val scope : CoroutineScope = rememberCoroutineScope()
     Row(modifier = modifier.fillMaxWidth() , verticalAlignment = Alignment.CenterVertically) {
         LargeHorizontalSpacer()
-        Text(text = label , style = MaterialTheme.typography.bodyMedium , fontWeight = FontWeight.Bold)
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.SemiBold
+        )
         LargeHorizontalSpacer()
         LazyRow(
             modifier = Modifier.weight(1f) , state = listState

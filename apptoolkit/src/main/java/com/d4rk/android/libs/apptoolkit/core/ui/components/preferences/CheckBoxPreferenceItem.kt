@@ -44,13 +44,13 @@ fun CheckBoxPreferenceItem(icon : ImageVector? = null , title : String , summary
     val hapticFeedback : HapticFeedback = LocalHapticFeedback.current
     val view : View = LocalView.current
     Row(modifier = Modifier
-            .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
-            .clickable {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                onCheckedChange(! checked)
-            } , verticalAlignment = Alignment.CenterVertically) {
+        .fillMaxWidth()
+        .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
+        .clickable {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+            onCheckedChange(!checked)
+        } , verticalAlignment = Alignment.CenterVertically) {
         icon?.let {
             LargeHorizontalSpacer()
             Icon(imageVector = it , contentDescription = null)
@@ -58,10 +58,16 @@ fun CheckBoxPreferenceItem(icon : ImageVector? = null , title : String , summary
         }
         Column(
             modifier = Modifier
-                    .padding(all = SizeConstants.LargeSize)
-                    .weight(weight = 1f)
+                .padding(all = SizeConstants.LargeSize)
+                .weight(weight = 1f)
         ) {
-            Text(text = title , style = MaterialTheme.typography.titleMedium , maxLines = 1 , overflow = TextOverflow.Ellipsis , fontWeight = FontWeight.Bold)
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.SemiBold
+            )
             summary?.let {
                 Text(text = it , style = MaterialTheme.typography.bodyMedium)
             }

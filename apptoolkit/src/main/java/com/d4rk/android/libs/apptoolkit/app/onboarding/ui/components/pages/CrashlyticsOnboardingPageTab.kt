@@ -112,7 +112,7 @@ fun CrashlyticsOnboardingPageTab() {
             Text(
                 text = stringResource(R.string.onboarding_crashlytics_title),
                 style = MaterialTheme.typography.headlineLarge.copy(
-                    fontWeight = FontWeight.Bold, fontSize = 30.sp, textAlign = TextAlign.Center
+                    fontWeight = FontWeight.SemiBold, fontSize = 30.sp, textAlign = TextAlign.Center
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -325,7 +325,7 @@ fun CrashlyticsConsentDialog(
             Text(
                 text = stringResource(id = R.string.onboarding_crashlytics_title_dialog),
                 style = MaterialTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.Bold, textAlign = TextAlign.Center
+                    fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center
                 ),
                 modifier = Modifier.fillMaxWidth()
             )

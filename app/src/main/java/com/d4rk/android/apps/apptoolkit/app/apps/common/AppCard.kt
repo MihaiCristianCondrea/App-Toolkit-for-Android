@@ -100,7 +100,7 @@ fun AppCard(
                         .padding(horizontal = SizeConstants.LargeSize)
                         .animateContentSize(),
                     textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.SemiBold
                 )
             }
         }

@@ -11,7 +11,11 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 @Composable
 fun ConsentSectionHeader(title : String) {
     Text(
-        text = title , style = MaterialTheme.typography.titleMedium , fontWeight = FontWeight.Bold , color = MaterialTheme.colorScheme.primary , modifier = Modifier.padding(
+        text = title,
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(
             top = SizeConstants.LargeSize ,
             bottom = SizeConstants.SmallSize ,
             start = SizeConstants.SmallSize ,

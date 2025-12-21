@@ -133,7 +133,7 @@ fun FinalOnboardingPageTab() {
             Text(
                 text = stringResource(id = R.string.onboarding_final_title),
                 style = MaterialTheme.typography.headlineLarge.copy(
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.SemiBold,
                     fontSize = 30.sp,
                     textAlign = TextAlign.Center
                 ),

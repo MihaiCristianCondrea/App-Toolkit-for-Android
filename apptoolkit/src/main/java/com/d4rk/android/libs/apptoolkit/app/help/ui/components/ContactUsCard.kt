@@ -71,7 +71,10 @@ fun ContactUsCard(onClick : () -> Unit) {
                     .weight(weight = 1f)
                     .fillMaxHeight()
             ) {
-                Text(text = stringResource(id = R.string.contact_us) , fontWeight = FontWeight.Bold)
+                Text(
+                    text = stringResource(id = R.string.contact_us),
+                    fontWeight = FontWeight.SemiBold
+                )
                 Text(text = stringResource(id = R.string.contact_us_description))
             }
         }

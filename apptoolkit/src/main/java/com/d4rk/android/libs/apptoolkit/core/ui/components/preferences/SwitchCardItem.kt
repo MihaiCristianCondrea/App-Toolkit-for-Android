@@ -42,19 +42,24 @@ fun SwitchCardItem(title : String , switchState : State<Boolean> , onSwitchToggl
         shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize) ,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer) ,
         modifier = Modifier
-                .fillMaxWidth()
-                .padding(all = SizeConstants.MediumSize * 2)
-                .clip(shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize))
-                .clickable {
-                    view.playSoundEffect(SoundEffectConstants.CLICK)
-                    onSwitchToggled(! switchState.value)
-                }) {
+            .fillMaxWidth()
+            .padding(all = SizeConstants.MediumSize * 2)
+            .clip(shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize))
+            .clickable {
+                view.playSoundEffect(SoundEffectConstants.CLICK)
+                onSwitchToggled(!switchState.value)
+            }) {
         Row(
             modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = SizeConstants.LargeSize) , horizontalArrangement = Arrangement.SpaceBetween , verticalAlignment = Alignment.CenterVertically
+                .fillMaxWidth()
+                .padding(all = SizeConstants.LargeSize) , horizontalArrangement = Arrangement.SpaceBetween , verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = title , maxLines = 1 , overflow = TextOverflow.Ellipsis , fontWeight = FontWeight.Bold)
+            Text(
+                text = title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.SemiBold
+            )
             CustomSwitch(
                 checked = switchState.value,
                 onCheckedChange = { isChecked ->

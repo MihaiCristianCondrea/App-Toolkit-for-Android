@@ -77,7 +77,7 @@ fun ThemeOnboardingPageTab() {
         Text(
             text = stringResource(R.string.onboarding_theme_title),
             style = MaterialTheme.typography.headlineLarge.copy(
-                fontWeight = FontWeight.Bold, fontSize = 30.sp, textAlign = TextAlign.Center
+                fontWeight = FontWeight.SemiBold, fontSize = 30.sp, textAlign = TextAlign.Center
             ),
             color = MaterialTheme.colorScheme.onSurface
         )
