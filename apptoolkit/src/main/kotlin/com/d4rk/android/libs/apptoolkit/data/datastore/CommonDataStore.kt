@@ -175,19 +175,13 @@ open class CommonDataStore(
         stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_STATIC_PALETTE_ID)
 
     val staticPaletteId: Flow<String> = dataStore.data
-        .map { preferences -> preferences[staticPaletteIdKey] ?: StaticPaletteIds.DEFAULT }
+        .map { preferences ->
+            StaticPaletteIds.sanitize(preferences[staticPaletteIdKey] ?: StaticPaletteIds.DEFAULT)
+        }
         .distinctUntilChanged()
 
     suspend fun saveStaticPaletteId(id: String) {
-        val safe = when (id) {
-            StaticPaletteIds.MONOCHROME,
-            StaticPaletteIds.BLUE,
-            StaticPaletteIds.GREEN,
-            StaticPaletteIds.RED,
-            StaticPaletteIds.YELLOW -> id
-
-            else -> StaticPaletteIds.DEFAULT
-        }
+        val safe = StaticPaletteIds.sanitize(id)
 
         dataStore.edit { preferences ->
             preferences[staticPaletteIdKey] = safe
