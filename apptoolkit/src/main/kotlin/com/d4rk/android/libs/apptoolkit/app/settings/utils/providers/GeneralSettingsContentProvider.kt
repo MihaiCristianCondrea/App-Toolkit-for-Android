@@ -9,7 +9,7 @@ import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsLi
 import com.d4rk.android.libs.apptoolkit.app.display.ui.DisplaySettingsList
 import com.d4rk.android.libs.apptoolkit.app.privacy.ui.PrivacySettingsList
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
-import com.d4rk.android.libs.apptoolkit.app.theme.ThemeSettingsList
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.ThemeSettingsList
 
 class GeneralSettingsContentProvider(
     private val customScreens: Map<String, @Composable (PaddingValues) -> Unit> = emptyMap(),

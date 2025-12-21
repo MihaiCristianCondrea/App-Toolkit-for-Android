@@ -54,6 +54,7 @@ fun AnimatedExtendedFloatingActionButton(
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
             onClick()
         }, icon = icon, text = text ?: {}, expanded = expanded, modifier = modifier
+            .bounceClick()
             .graphicsLayer {
                 scaleX = animatedScale
                 scaleY = animatedScale

@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
@@ -16,12 +17,15 @@ import com.d4rk.android.libs.apptoolkit.app.onboarding.data.datasource.Onboardin
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.StandardDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.DynamicPaletteVariant
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
@@ -147,6 +151,59 @@ open class CommonDataStore(
     suspend fun saveDynamicColors(isChecked: Boolean) {
         dataStore.edit { preferences: MutablePreferences ->
             preferences[dynamicColorsKey] = isChecked
+        }
+    }
+
+    private val dynamicVariantIndexKey =
+        intPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_DYNAMIC_VARIANT_INDEX)
+
+    val dynamicVariantIndex: Flow<Int> = dataStore.data
+        .map { preferences: Preferences -> preferences[dynamicVariantIndexKey] ?: 0 }
+        .distinctUntilChanged()
+
+    suspend fun saveDynamicVariantIndex(index: Int) {
+        dataStore.edit { preferences: MutablePreferences ->
+            preferences[dynamicVariantIndexKey] = index
+        }
+    }
+
+    private val dynamicPaletteVariantKey =
+        intPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_DYNAMIC_PALETTE_VARIANT) // :contentReference[oaicite:2]{index=2}
+
+    val dynamicPaletteVariant: Flow<Int> = dataStore.data
+        .map { preferences ->
+            DynamicPaletteVariant.clamp(
+                preferences[dynamicPaletteVariantKey] ?: 0
+            )
+        }
+        .distinctUntilChanged()
+
+    suspend fun saveDynamicPaletteVariant(variant: Int) {
+        dataStore.edit { preferences ->
+            preferences[dynamicPaletteVariantKey] = DynamicPaletteVariant.clamp(variant)
+        }
+    }
+
+    private val staticPaletteIdKey =
+        stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_STATIC_PALETTE_ID)
+
+    val staticPaletteId: Flow<String> = dataStore.data
+        .map { preferences -> preferences[staticPaletteIdKey] ?: StaticPaletteIds.DEFAULT }
+        .distinctUntilChanged()
+
+    suspend fun saveStaticPaletteId(id: String) {
+        val safe = when (id) {
+            StaticPaletteIds.MONOCHROME,
+            StaticPaletteIds.BLUE,
+            StaticPaletteIds.GREEN,
+            StaticPaletteIds.RED,
+            StaticPaletteIds.YELLOW -> id
+
+            else -> StaticPaletteIds.DEFAULT
+        }
+
+        dataStore.edit { preferences ->
+            preferences[staticPaletteIdKey] = safe
         }
     }
 

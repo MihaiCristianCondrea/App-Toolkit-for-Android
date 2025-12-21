@@ -22,12 +22,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
+import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.blue.bluePalette
+import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.green.greenPalette
+import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.monochrome.monochromePalette
+import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.red.redPalette
+import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.yellow.yellowPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.style.typography.AppTypography
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.applyDynamicVariant
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 
-private val defaultLightScheme: ColorScheme = lightColorScheme()
-private val defaultDarkScheme: ColorScheme = darkColorScheme()
+private val defaultLightScheme: ColorScheme = lightColorScheme() // not used anymore pls fix
+private val defaultDarkScheme: ColorScheme = darkColorScheme() // not used anymore pls fix
 
 object AppThemeConfig {
     var customLightScheme: ColorScheme? = null
@@ -38,35 +46,55 @@ private fun getColorScheme(
     isDarkTheme: Boolean,
     isAmoledMode: Boolean,
     isDynamicColors: Boolean,
+    dynamicPaletteVariant: Int,
+    staticPaletteId: String,
     context: Context
 ): ColorScheme {
     val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
     val isBatterySaverOn = powerManager.isPowerSaveMode
-
-    val baseLightScheme = AppThemeConfig.customLightScheme ?: defaultLightScheme
-    val baseDarkScheme = AppThemeConfig.customDarkScheme ?: defaultDarkScheme
-
-    val dynamicDark: ColorScheme =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) dynamicDarkColorScheme(context) else baseDarkScheme
-    val dynamicLight: ColorScheme =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) dynamicLightColorScheme(context) else baseLightScheme
-
     val shouldUseDarkTheme = isDarkTheme || isBatterySaverOn
 
-    return when {
-        isAmoledMode && shouldUseDarkTheme && isDynamicColors -> dynamicDark.copy(
-            surface = Color.Black,
-            background = Color.Black,
-        )
+    val supportsDynamic = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val useDynamic = isDynamicColors && supportsDynamic
 
-        isAmoledMode && shouldUseDarkTheme -> baseDarkScheme.copy(
-            surface = Color.Black,
-            background = Color.Black,
-        )
+    // Selected static palette (module)
+    val selectedPalette: ColorPalette = paletteById(staticPaletteId)
 
-        isDynamicColors -> if (shouldUseDarkTheme) dynamicDark else dynamicLight
+    // Keep your override mechanism intact
+    val baseLightScheme = AppThemeConfig.customLightScheme ?: selectedPalette.lightColorScheme
+    val baseDarkScheme = AppThemeConfig.customDarkScheme ?: selectedPalette.darkColorScheme
+
+    val dynamicDark: ColorScheme =
+        if (supportsDynamic) dynamicDarkColorScheme(context) else baseDarkScheme
+    val dynamicLight: ColorScheme =
+        if (supportsDynamic) dynamicLightColorScheme(context) else baseLightScheme
+
+    val dynamicDarkVariant = dynamicDark.applyDynamicVariant(dynamicPaletteVariant)
+    val dynamicLightVariant = dynamicLight.applyDynamicVariant(dynamicPaletteVariant)
+
+    val chosen: ColorScheme = when {
+        useDynamic -> if (shouldUseDarkTheme) dynamicDarkVariant else dynamicLightVariant
         else -> if (shouldUseDarkTheme) baseDarkScheme else baseLightScheme
     }
+
+    return when {
+        isAmoledMode && shouldUseDarkTheme -> chosen.copy(
+            surface = Color.Black,
+            background = Color.Black,
+        )
+
+        else -> chosen
+    }
+}
+
+// TODO: move somewhere else
+fun paletteById(id: String): ColorPalette = when (id) {
+    StaticPaletteIds.MONOCHROME -> monochromePalette
+    StaticPaletteIds.BLUE -> bluePalette
+    StaticPaletteIds.GREEN -> greenPalette
+    StaticPaletteIds.RED -> redPalette
+    StaticPaletteIds.YELLOW -> yellowPalette
+    else -> bluePalette
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -74,12 +102,23 @@ private fun getColorScheme(
 fun AppTheme(content: @Composable () -> Unit) {
     val context: Context = LocalContext.current
     val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
+
     val themeMode: String =
-        dataStore.themeMode.collectAsStateWithLifecycle(initialValue = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM).value
+        dataStore.themeMode.collectAsStateWithLifecycle(
+            initialValue = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
+        ).value
+
     val isDynamicColors: Boolean =
         dataStore.dynamicColors.collectAsStateWithLifecycle(initialValue = true).value
+
     val isAmoledMode: Boolean =
         dataStore.amoledMode.collectAsStateWithLifecycle(initialValue = false).value
+
+    val dynamicPaletteVariant: Int =
+        dataStore.dynamicPaletteVariant.collectAsStateWithLifecycle(initialValue = 0).value
+
+    val staticPaletteId: String =
+        dataStore.staticPaletteId.collectAsStateWithLifecycle(initialValue = StaticPaletteIds.DEFAULT).value
 
     val isSystemDarkTheme: Boolean = isSystemInDarkTheme()
     val isDarkTheme: Boolean = when (themeMode) {
@@ -88,8 +127,14 @@ fun AppTheme(content: @Composable () -> Unit) {
         else -> isSystemDarkTheme
     }
 
-    val colorScheme: ColorScheme =
-        getColorScheme(isDarkTheme, isAmoledMode, isDynamicColors, context)
+    val colorScheme: ColorScheme = getColorScheme(
+        isDarkTheme = isDarkTheme,
+        isAmoledMode = isAmoledMode,
+        isDynamicColors = isDynamicColors,
+        dynamicPaletteVariant = dynamicPaletteVariant,
+        staticPaletteId = staticPaletteId,
+        context = context
+    )
 
     val view: View = LocalView.current
     if (!view.isInEditMode) {
@@ -104,7 +149,7 @@ fun AppTheme(content: @Composable () -> Unit) {
 
     MaterialExpressiveTheme(
         colorScheme = colorScheme,
-        content = content,
-        typography = AppTypography
+        typography = AppTypography,
+        content = content
     )
 }

@@ -338,6 +338,7 @@ fun OutlinedIconButtonWithText(
     }
 }
 
+// TODO: Move to another file
 @Composable
 private fun IconContent(
     icon: ImageVector?,
