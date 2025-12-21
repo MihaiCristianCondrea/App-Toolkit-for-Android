@@ -1,3 +1,10 @@
+# Version 1.1.5
+
+* **New**: Added multiple new themes and color palettes for deeper personalization.
+* **New**: Introduced a seasonal theme to celebrate together.
+* **Patch**: Enhanced overall app performance and responsiveness.
+* **Patch**: Updated dependencies to the latest stable versions.
+
 # Version 1.1.4:
 
 - **New**: Introduced an "Open Random App" button for spontaneous app discovery.
