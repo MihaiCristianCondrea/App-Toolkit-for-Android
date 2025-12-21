@@ -3,11 +3,10 @@ package com.d4rk.android.libs.apptoolkit.core.utils.helpers
 import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.permissions.PermissionsConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.hasNotificationPermission
 
 /**
  * Utility class for handling runtime permissions.
@@ -20,15 +19,8 @@ object PermissionsHelper {
      * @param context The application context.
      * @return True if the permission is granted, false otherwise.
      */
-    // TODO: Move it to extensions bool
     fun hasNotificationPermission(context: Context): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ContextCompat.checkSelfPermission(
-                context, Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        } else {
-            true
-        }
+        return context.hasNotificationPermission()
     }
 
     /**

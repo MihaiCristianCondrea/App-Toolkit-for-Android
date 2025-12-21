@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.apps.apptoolkit.core.di.initializeKoin
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppThemeConfig
+import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
 import com.d4rk.android.libs.apptoolkit.data.core.BaseCoreManager
 import com.d4rk.android.libs.apptoolkit.data.core.ads.AdsCoreManager
@@ -45,6 +46,7 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
         val colorPalette: ColorPalette = getKoin().get()
         AppThemeConfig.customLightScheme = colorPalette.lightColorScheme
         AppThemeConfig.customDarkScheme = colorPalette.darkColorScheme
+        ThemePaletteProvider.defaultPalette = colorPalette
     }
 
     override fun onStart(owner: LifecycleOwner) {

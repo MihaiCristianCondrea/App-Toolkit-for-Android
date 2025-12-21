@@ -2,11 +2,9 @@ package com.d4rk.android.libs.apptoolkit.core.ui.components.buttons
 
 import android.view.SoundEffectConstants
 import android.view.View
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -21,9 +19,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ButtonIconSpacer
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-
-private const val IconRequirementMessage: String = "Either icon or painter must be provided"
 
 /**
  * A custom [IconButton] composable that adds a bounce click effect, sound feedback,
@@ -335,30 +330,5 @@ fun OutlinedIconButtonWithText(
         )
         ButtonIconSpacer()
         Text(text = label, maxLines = 1, overflow = TextOverflow.Ellipsis)
-    }
-}
-
-// TODO: Move to another file
-@Composable
-private fun IconContent(
-    icon: ImageVector?,
-    painter: Painter?,
-    contentDescription: String?,
-) {
-    require(icon != null || painter != null) { IconRequirementMessage }
-
-    val iconModifier: Modifier = Modifier.size(size = SizeConstants.ButtonIconSize)
-    when {
-        icon != null -> Icon(
-            modifier = iconModifier,
-            imageVector = icon,
-            contentDescription = contentDescription
-        )
-
-        painter != null -> Icon(
-            modifier = iconModifier,
-            painter = painter,
-            contentDescription = contentDescription
-        )
     }
 }

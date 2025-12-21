@@ -30,7 +30,7 @@ object StaticPaletteIds {
     const val RED = "red"
     const val YELLOW = "yellow"
 
-    const val DEFAULT = BLUE
+    const val DEFAULT = "default"
 }
 
 fun ColorScheme.applyDynamicVariant(variant: Int): ColorScheme =

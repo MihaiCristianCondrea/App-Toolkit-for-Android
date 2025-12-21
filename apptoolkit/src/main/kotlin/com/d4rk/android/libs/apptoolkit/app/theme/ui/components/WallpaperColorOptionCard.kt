@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 
 @Composable
@@ -40,12 +41,12 @@ fun WallpaperColorOptionCard(
             .bounceClick()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = null, // set to rememberRipple() if you want ripple
+                indication = null,
                 role = Role.RadioButton,
                 onClick = onClick
             ),
         shape = shape,
-        color = MaterialTheme.colorScheme.surfaceContainer, // looks like that light rounded card
+        color = MaterialTheme.colorScheme.surfaceContainer,
         border = BorderStroke(2.dp, borderColor),
     ) {
         Box(contentAlignment = Alignment.Center) {

@@ -39,9 +39,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.theme.style.paletteById
+import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.ThemeSettingOption
+import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
+import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider.paletteById
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.components.WallpaperColorOptionCard
-import com.d4rk.android.libs.apptoolkit.app.theme.ui.components.WallpaperSwatchColors
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.RadioButtonPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.SwitchCardItem
@@ -54,11 +55,6 @@ import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
-// TODO: This should be moved somewhere in the theme module data/domain/ui
-data class ThemeSettingOption(
-    val key: String, val displayName: String
-)
 
 /**
  * Theme settings content for the app.
@@ -133,6 +129,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
 
     val staticOptions: List<String> = remember {
         listOf(
+            StaticPaletteIds.DEFAULT,
             StaticPaletteIds.MONOCHROME,
             StaticPaletteIds.BLUE,
             StaticPaletteIds.GREEN,
@@ -150,8 +147,10 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
             }
         }
 
-    val tabTitles =
-        remember { listOf("Wallpaper colors", "Other colors") } // TODO: string resources
+    val tabTitles = listOf(
+        stringResource(id = R.string.wallpaper_colors),
+        stringResource(id = R.string.other_colors)
+    )
 
     val pagerState = rememberPagerState(
         initialPage = if (supportsDynamic && isDynamicColors) 0 else 1,

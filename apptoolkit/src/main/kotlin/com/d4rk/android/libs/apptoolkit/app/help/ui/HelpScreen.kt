@@ -44,6 +44,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraLargeVer
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.findActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.isInAppReviewAvailable
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ReviewHelper
 import kotlinx.collections.immutable.ImmutableList
@@ -73,7 +74,7 @@ fun HelpScreen(
 
     LaunchedEffect(Unit) {
         isInAppReviewAvailable.value =
-            activity?.let { ReviewHelper.isInAppReviewAvailable(it) } ?: false
+            activity?.isInAppReviewAvailable() ?: false
     }
 
     LaunchedEffect(scrollBehavior) {

@@ -89,6 +89,8 @@
     <string name="will_turn_on_automatically_by_system">Will turn on automatically by the system</string>
     <string name="will_never_turn_on_automatically">Will never turn on automatically</string>
     <string name="amoled_mode">AMOLED mode</string>
+    <string name="wallpaper_colors">Wallpaper colors</string>
+    <string name="other_colors">Other colors</string>
     <string name="follow_system">Follow system mode</string>
     <string name="light_mode">Light mode</string>
     <string name="dark_mode">Dark mode</string>
