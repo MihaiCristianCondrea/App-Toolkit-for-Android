@@ -1,11 +1,11 @@
 package com.d4rk.android.apps.apptoolkit.app.main.ui
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import io.mockk.clearAllMocks
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -107,8 +107,8 @@ class MainViewModelTest {
     private fun createIcon(): ImageVector =
         ImageVector.Builder(
             name = "navigation_icon",
-            defaultWidth = 24.dp,
-            defaultHeight = 24.dp,
+            defaultWidth = SizeConstants.TwentyFourSize,
+            defaultHeight = SizeConstants.TwentyFourSize,
             viewportWidth = 24f,
             viewportHeight = 24f
         ).build()

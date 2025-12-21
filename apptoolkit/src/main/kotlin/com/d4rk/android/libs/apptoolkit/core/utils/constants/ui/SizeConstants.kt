@@ -19,6 +19,20 @@ object SizeConstants {
     val SmallSize: Dp = 8.dp
     val ExtraSmallSize: Dp = 4.dp
     val ExtraTinySize: Dp = 2.dp
+    val ZeroSize: Dp = 0.dp
+    val TwentyFourSize: Dp = LargeSize + SmallSize
+    val FortyFourSize: Dp = ExtraLargeSize + LargeSize
+    val SeventyTwoSize: Dp = ExtraExtraLargeSize + LargeIncreasedSize + ExtraSmallSize
+    val EightySize: Dp = ExtraExtraLargeSize + ExtraLargeIncreasedSize
+    val NinetySixSize: Dp = ExtraExtraLargeSize * 2
+    val OneHundredSize: Dp = ExtraLargeIncreasedSize * 3 + ExtraSmallSize
+    val OneFortyFourSize: Dp = ExtraExtraLargeSize * 3
+    val OneEightySize: Dp = OneFortyFourSize + LargeIncreasedSize + LargeSize
+    val TwoHundredSize: Dp = ExtraExtraLargeSize * 4 + SmallSize
+    val TwoHundredTwentySize: Dp = ExtraExtraLargeSize * 4 + ExtraLargeSize
+    val TwoHundredFortySize: Dp = ExtraExtraLargeSize * 5
+    val TwoHundredFiftySixSize: Dp = TwoHundredFortySize + LargeSize
+    val TwoHundredFiftyEightSize: Dp = TwoHundredFortySize + MediumSize + ExtraSmallSize + ExtraTinySize
     val ButtonIconSize: Dp = ButtonDefaults.IconSize
     val SwitchIconSize: Dp = SwitchDefaults.IconSize
 }

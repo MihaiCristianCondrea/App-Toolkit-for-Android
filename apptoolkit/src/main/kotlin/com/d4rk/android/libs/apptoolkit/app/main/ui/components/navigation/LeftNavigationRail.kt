@@ -34,10 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -80,7 +80,7 @@ fun LeftNavigationRail(
     content: @Composable BoxScope.() -> Unit,
 ) {
     val railWidth: Dp by animateDpAsState(
-        targetValue = if (isRailExpanded) 200.dp else 72.dp,
+        targetValue = if (isRailExpanded) SizeConstants.TwoHundredSize else SizeConstants.SeventyTwoSize,
         animationSpec = tween(durationMillis = 300)
     )
     val textEntryAnimation: EnterTransition =

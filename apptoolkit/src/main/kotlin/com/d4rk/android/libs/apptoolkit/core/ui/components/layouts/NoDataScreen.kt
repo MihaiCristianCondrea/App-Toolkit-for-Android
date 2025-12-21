@@ -76,7 +76,7 @@ fun NoDataScreen(
             contentAlignment = Alignment.Center
         ) {
             LoadingIndicator(
-                modifier = Modifier.size(size = 144.dp),
+                modifier = Modifier.size(size = SizeConstants.OneFortyFourSize),
                 color = if (isError) MaterialTheme.colorScheme.errorContainer else LoadingIndicatorDefaults.indicatorColor
             )
 

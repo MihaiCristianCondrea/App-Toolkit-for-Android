@@ -169,7 +169,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(220.dp)
+                        .height(SizeConstants.TwoHundredTwentySize)
                         .clip(
                             RoundedCornerShape(
                                 size = SizeConstants.LargeSize + SizeConstants.SmallSize

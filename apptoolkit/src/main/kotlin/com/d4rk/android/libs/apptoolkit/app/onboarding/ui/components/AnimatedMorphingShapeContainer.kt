@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -22,7 +21,7 @@ fun AnimatedMorphingShapeContainer(imageVector: ImageVector) {
         contentAlignment = Alignment.Center
     ) {
         LoadingIndicator(
-            modifier = Modifier.size(256.dp)
+            modifier = Modifier.size(SizeConstants.TwoHundredFiftySixSize)
         )
 
         Box(
@@ -32,7 +31,7 @@ fun AnimatedMorphingShapeContainer(imageVector: ImageVector) {
             Icon(
                 imageVector = imageVector,
                 contentDescription = null,
-                modifier = Modifier.size(80.dp),
+                modifier = Modifier.size(SizeConstants.EightySize),
                 tint = MaterialTheme.colorScheme.onSecondary
             )
         }

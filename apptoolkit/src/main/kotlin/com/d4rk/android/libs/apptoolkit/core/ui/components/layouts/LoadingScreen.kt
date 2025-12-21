@@ -16,9 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.MediumVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 /**
  * Fullscreen wrapper that displays an animated [LoadingIndicator].
@@ -36,8 +36,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.MediumVertica
 @Composable
 fun LoadingScreen(
     modifier: Modifier = Modifier,
-    paddingValues: PaddingValues = PaddingValues(0.dp),
-    indicatorSize: Dp = 96.dp,
+    paddingValues: PaddingValues = PaddingValues(SizeConstants.ZeroSize),
+    indicatorSize: Dp = SizeConstants.NinetySixSize,
     showText: Boolean = true
 ) {
     Column(

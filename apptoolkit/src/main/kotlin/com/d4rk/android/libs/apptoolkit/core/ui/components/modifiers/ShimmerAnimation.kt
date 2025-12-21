@@ -31,7 +31,7 @@ import androidx.compose.ui.graphics.Brush
  * ```
  * Box(
  *     modifier = Modifier
- *         .size(100.dp)
+ *         .size(SizeConstants.OneHundredSize)
  *         .shimmerEffect()
  * )
  * ```

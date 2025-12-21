@@ -3,11 +3,11 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation
 import android.content.Context
 import androidx.compose.material3.DrawerState
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpActivity
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import io.mockk.Called
 import io.mockk.Runs
@@ -38,8 +38,8 @@ class NavigationItemClickTest {
         title = 0,
         selectedIcon = ImageVector.Builder(
             name = "test",
-            defaultWidth = 24.dp,
-            defaultHeight = 24.dp,
+            defaultWidth = SizeConstants.TwentyFourSize,
+            defaultHeight = SizeConstants.TwentyFourSize,
             viewportWidth = 24f,
             viewportHeight = 24f
         ).build(),
@@ -158,4 +158,3 @@ class NavigationItemClickTest {
         verify { IntentsHelper wasNot Called }
     }
 }
-
