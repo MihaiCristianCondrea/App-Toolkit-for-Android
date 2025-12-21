@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.d4rk.android.libs.apptoolkit.R
@@ -225,7 +224,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                     ) { index, palette ->
                                         WallpaperColorOptionCard(
                                             colors = palette,
-                                            selected = index == dynamicVariantIndex,
+                                            selected = isDynamicColors && index == dynamicVariantIndex,
                                             onClick = {
                                                 coroutineScope.launch {
                                                     dataStore.saveDynamicColors(true)
@@ -251,7 +250,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                     ) { index, id ->
                                         WallpaperColorOptionCard(
                                             colors = staticSwatches[index],
-                                            selected = id == staticPaletteId,
+                                            selected = !isDynamicColors && id == staticPaletteId,
                                             onClick = {
                                                 coroutineScope.launch {
                                                     dataStore.saveDynamicColors(false)
@@ -336,7 +335,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                 InfoMessageSection(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = SizeConstants.LargeSize),
+                        .padding(all = SizeConstants.MediumSize * 2),
                     message = stringResource(id = R.string.summary_dark_theme),
                     newLine = false,
                     learnMoreText = stringResource(id = R.string.screen_and_display_settings),
