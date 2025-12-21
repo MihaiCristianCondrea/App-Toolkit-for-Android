@@ -31,7 +31,6 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.IconButton
@@ -66,7 +65,7 @@ fun AppCard(
             Row(
                 modifier = Modifier.align(Alignment.TopEnd),
                 horizontalArrangement = Arrangement.spacedBy(
-                    space = 0.dp,
+                    space = SizeConstants.ZeroSize,
                     alignment = Alignment.End
                 )
             ) {

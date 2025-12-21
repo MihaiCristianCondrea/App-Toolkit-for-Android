@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
@@ -27,8 +26,8 @@ fun WallpaperColorOptionCard(
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    cardSize: Dp = 72.dp,
-    swatchSize: Dp = 44.dp,
+    cardSize: Dp = SizeConstants.SeventyTwoSize,
+    swatchSize: Dp = SizeConstants.FortyFourSize,
     shape: RoundedCornerShape = RoundedCornerShape(SizeConstants.LargeSize),
 ) {
     val borderColor = animateColorAsState(

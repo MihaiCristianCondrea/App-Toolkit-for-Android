@@ -37,7 +37,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.d4rk.android.libs.apptoolkit.R
@@ -192,7 +191,7 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
                         model = R.drawable.il_settings,
                         contentDescription = null,
                         modifier = Modifier
-                            .size(size = 258.dp)
+                            .size(size = SizeConstants.TwoHundredFiftyEightSize)
                             .fillMaxWidth(),
                     )
                     LargeVerticalSpacer()
@@ -283,4 +282,3 @@ fun SettingsList(
         }
     }
 }
-

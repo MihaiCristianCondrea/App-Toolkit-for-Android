@@ -39,7 +39,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
@@ -198,7 +197,7 @@ fun AppDetailsBottomSheet(
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
-                                    .height(240.dp)
+                                    .height(SizeConstants.TwoHundredFortySize)
                                     .aspectRatio(9f / 16f)
                                     .clip(RoundedCornerShape(SizeConstants.LargeSize))
                             )
