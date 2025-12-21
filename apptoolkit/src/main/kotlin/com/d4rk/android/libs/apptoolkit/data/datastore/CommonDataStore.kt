@@ -154,6 +154,18 @@ open class CommonDataStore(
         }
     }
 
+    private val settingsInteractedKey =
+        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SETTINGS_INTERACTED)
+    val settingsInteracted: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[settingsInteractedKey] == true
+    }
+
+    suspend fun markSettingsInteracted() {
+        dataStore.edit { preferences: MutablePreferences ->
+            preferences[settingsInteractedKey] = true
+        }
+    }
+
     private val dynamicPaletteVariantKey =
         intPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_DYNAMIC_PALETTE_VARIANT) // :contentReference[oaicite:2]{index=2}
 
