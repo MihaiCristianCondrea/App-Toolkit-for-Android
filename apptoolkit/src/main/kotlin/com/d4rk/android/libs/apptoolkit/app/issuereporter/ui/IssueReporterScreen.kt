@@ -57,7 +57,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo
@@ -200,7 +199,9 @@ fun IssueReporterScreenContent(
             if (!data.issueUrl.isNullOrEmpty()) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = SizeConstants.ExtraSmallSize
+                    )
                 ) {
                     Column(
                         modifier = Modifier
@@ -212,7 +213,7 @@ fun IssueReporterScreenContent(
                             imageVector = Icons.Outlined.CheckCircleOutline,
                             contentDescription = stringResource(id = R.string.issue_submitted_successfully),
                             tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(48.dp)
+                            modifier = Modifier.size(SizeConstants.ExtraExtraLargeSize)
                         )
                         SmallVerticalSpacer()
                         Text(

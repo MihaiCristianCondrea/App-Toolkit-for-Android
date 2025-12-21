@@ -16,12 +16,14 @@ Jetpack Compose helps you be explicit about where and how you store and use stat
 Compose is declarative and as such the only way to update it is by calling the same composable with new arguments. These arguments are representations of the UI state. Any time a state is updated a recomposition takes place. As a result, things like `TextField` don’t automatically update like they do in imperative XML based views. A composable has to explicitly be told the new state in order for it to update accordingly.
 
 ```kotlin
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+
 @Composable
 private fun HelloContent() {
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = Modifier.padding(SizeConstants.LargeSize)) {
         Text(
             text = "Hello!",
-            modifier = Modifier.padding(bottom = 8.dp),
+            modifier = Modifier.padding(bottom = SizeConstants.SmallSize),
             style = MaterialTheme.typography.bodyMedium
         )
         OutlinedTextField(
@@ -79,14 +81,16 @@ import androidx.compose.runtime.setValue
 You can use the remembered value as a parameter for other composables or even as logic in statements to change which composables are displayed. For example, if you don't want to display the greeting if the name is empty, use the state in an `if` statement:
 
 ```kotlin
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+
 @Composable
 fun HelloContent() {
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = Modifier.padding(SizeConstants.LargeSize)) {
         var name by remember { mutableStateOf("") }
         if (name.isNotEmpty()) {
             Text(
                 text = "Hello, $name!",
-                modifier = Modifier.padding(bottom = 8.dp),
+                modifier = Modifier.padding(bottom = SizeConstants.SmallSize),
                 style = MaterialTheme.typography.bodyMedium
             )
         }
@@ -205,6 +209,8 @@ State that is hoisted this way has some important properties:
 In the example case, you extract the `name` and the `onValueChange` out of `HelloContent` and move them up the tree to a `HelloScreen` composable that calls `HelloContent`.
 
 ```kotlin
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+
 @Composable
 fun HelloScreen() {
     var name by rememberSaveable { mutableStateOf("") }
@@ -214,10 +220,10 @@ fun HelloScreen() {
 
 @Composable
 fun HelloContent(name: String, onNameChange: (String) -> Unit) {
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = Modifier.padding(SizeConstants.LargeSize)) {
         Text(
             text = "Hello, $name",
-            modifier = Modifier.padding(bottom = 8.dp),
+            modifier = Modifier.padding(bottom = SizeConstants.SmallSize),
             style = MaterialTheme.typography.bodyMedium
         )
         OutlinedTextField(value = name, onValueChange = onNameChange, label = { Text("Name") })

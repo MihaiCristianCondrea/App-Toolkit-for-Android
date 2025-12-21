@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable
 fun WallpaperColorOptionCard(
@@ -28,7 +29,7 @@ fun WallpaperColorOptionCard(
     modifier: Modifier = Modifier,
     cardSize: Dp = 72.dp,
     swatchSize: Dp = 44.dp,
-    shape: RoundedCornerShape = RoundedCornerShape(16.dp),
+    shape: RoundedCornerShape = RoundedCornerShape(SizeConstants.LargeSize),
 ) {
     val borderColor = animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.primary else Color.Transparent,
@@ -47,7 +48,7 @@ fun WallpaperColorOptionCard(
             ),
         shape = shape,
         color = MaterialTheme.colorScheme.surfaceContainer,
-        border = BorderStroke(2.dp, borderColor),
+        border = BorderStroke(SizeConstants.ExtraTinySize, borderColor),
     ) {
         Box(contentAlignment = Alignment.Center) {
             MaterialYouCircleSwatch(
