@@ -10,10 +10,8 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialExpressiveTheme
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
@@ -34,9 +32,6 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.applyDynamicVariant
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 
-private val defaultLightScheme: ColorScheme = lightColorScheme() // not used anymore pls fix
-private val defaultDarkScheme: ColorScheme = darkColorScheme() // not used anymore pls fix
-
 object AppThemeConfig {
     var customLightScheme: ColorScheme? = null
     var customDarkScheme: ColorScheme? = null
@@ -51,18 +46,21 @@ private fun getColorScheme(
     context: Context
 ): ColorScheme {
     val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-    val isBatterySaverOn = powerManager.isPowerSaveMode
-    val shouldUseDarkTheme = isDarkTheme || isBatterySaverOn
+    val shouldUseDarkTheme = isDarkTheme || powerManager.isPowerSaveMode
 
     val supportsDynamic = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    val useDynamic = isDynamicColors && supportsDynamic
 
-    // Selected static palette (module)
     val selectedPalette: ColorPalette = paletteById(staticPaletteId)
 
-    // Keep your override mechanism intact
-    val baseLightScheme = AppThemeConfig.customLightScheme ?: selectedPalette.lightColorScheme
-    val baseDarkScheme = AppThemeConfig.customDarkScheme ?: selectedPalette.darkColorScheme
+    val useCustomOverride: Boolean = staticPaletteId == StaticPaletteIds.DEFAULT
+
+    val baseLightScheme: ColorScheme =
+        if (useCustomOverride) AppThemeConfig.customLightScheme ?: selectedPalette.lightColorScheme
+        else selectedPalette.lightColorScheme
+
+    val baseDarkScheme: ColorScheme =
+        if (useCustomOverride) AppThemeConfig.customDarkScheme ?: selectedPalette.darkColorScheme
+        else selectedPalette.darkColorScheme
 
     val dynamicDark: ColorScheme =
         if (supportsDynamic) dynamicDarkColorScheme(context) else baseDarkScheme
@@ -73,7 +71,7 @@ private fun getColorScheme(
     val dynamicLightVariant = dynamicLight.applyDynamicVariant(dynamicPaletteVariant)
 
     val chosen: ColorScheme = when {
-        useDynamic -> if (shouldUseDarkTheme) dynamicDarkVariant else dynamicLightVariant
+        isDynamicColors && supportsDynamic -> if (shouldUseDarkTheme) dynamicDarkVariant else dynamicLightVariant
         else -> if (shouldUseDarkTheme) baseDarkScheme else baseLightScheme
     }
 
@@ -94,7 +92,7 @@ fun paletteById(id: String): ColorPalette = when (id) {
     StaticPaletteIds.GREEN -> greenPalette
     StaticPaletteIds.RED -> redPalette
     StaticPaletteIds.YELLOW -> yellowPalette
-    else -> bluePalette
+    else -> bluePalette // TODO: Make the default palette the one injected from koin
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

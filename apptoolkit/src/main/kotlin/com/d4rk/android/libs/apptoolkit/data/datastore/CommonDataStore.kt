@@ -154,19 +154,6 @@ open class CommonDataStore(
         }
     }
 
-    private val dynamicVariantIndexKey =
-        intPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_DYNAMIC_VARIANT_INDEX)
-
-    val dynamicVariantIndex: Flow<Int> = dataStore.data
-        .map { preferences: Preferences -> preferences[dynamicVariantIndexKey] ?: 0 }
-        .distinctUntilChanged()
-
-    suspend fun saveDynamicVariantIndex(index: Int) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[dynamicVariantIndexKey] = index
-        }
-    }
-
     private val dynamicPaletteVariantKey =
         intPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_DYNAMIC_PALETTE_VARIANT) // :contentReference[oaicite:2]{index=2}
 
