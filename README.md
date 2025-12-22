@@ -57,6 +57,36 @@ Download App Toolkit from the Google Play Store and explore the internal structu
 apps. It's free, easy to navigate, and the perfect way to discover how reusable design can elevate
 any project.
 
+# Use the library in your project
+
+App Toolkit’s shared components are published as a library that you can consume from Maven
+repositories. Maven Central publishing is being prepared, and JitPack is available right now.
+
+### Gradle (Maven Central-ready)
+
+```kotlin
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("com.d4rk.android.libs:apptoolkit:1.1.6")
+}
+```
+
+### Gradle (JitPack)
+
+```kotlin
+repositories {
+    mavenCentral()
+    maven(url = "https://jitpack.io")
+}
+
+dependencies {
+    implementation("com.github.MihaiCristianCondrea:apptoolkit:1.1.6")
+}
+```
+
 # Feedback
 
 We are constantly updating and improving App Toolkit to give you the best possible experience. If you
