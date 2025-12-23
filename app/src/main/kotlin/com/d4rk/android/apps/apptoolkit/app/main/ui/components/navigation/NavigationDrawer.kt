@@ -15,9 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainScaffoldContent
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.NavigationDrawerItemContent
+import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
+import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
+import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.hapticDrawerSwipe
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
@@ -30,9 +34,9 @@ import org.koin.core.qualifier.named
 fun NavigationDrawer(
     uiState: MainUiState,
     windowWidthSizeClass: WindowWidthSizeClass,
-    bottomItems: ImmutableList<BottomBarItem>,
-    navigationState: NavigationState,
-    navigator: Navigator,
+    bottomItems: ImmutableList<BottomBarItem<AppNavKey>>,
+    navigationState: NavigationState<AppNavKey>,
+    navigator: Navigator<AppNavKey>,
 ) {
     val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope: CoroutineScope = rememberCoroutineScope()

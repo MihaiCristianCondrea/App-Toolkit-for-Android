@@ -13,14 +13,14 @@ import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-// TODO: Consider relocating to a shared navigation defaults module.
+// TODO: Consider relocating to a shared navigation defaults module to respect structure.
 internal object MainNavigationDefaults {
     val fabSupportedRoutes: Set<AppNavKey> = setOf(
         AppsListRoute,
         FavoriteAppsRoute
     )
 
-    val bottomBarItems: ImmutableList<BottomBarItem> = persistentListOf(
+    val bottomBarItems: ImmutableList<BottomBarItem<AppNavKey>> = persistentListOf(
         BottomBarItem(
             route = AppsListRoute,
             icon = Icons.Outlined.Apps,

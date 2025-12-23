@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation
+package com.d4rk.android.libs.apptoolkit.core.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -18,13 +18,20 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.savedstate.compose.serialization.serializers.MutableStateSerializer
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
+import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.StableNavKey
+import kotlinx.collections.immutable.ImmutableSet
 
+/**
+ * Remembers navigation state for a set of top-level destinations.
+ *
+ * This implementation is generic so that any module can provide its own
+ * [StableNavKey] implementations while reusing the same state management.
+ */
 @Composable
-fun rememberNavigationState(
-    startRoute: AppNavKey,
-    topLevelRoutes: Set<AppNavKey>, // FIXME: Parameter 'topLevelRoutes' has runtime-determined stability
-): NavigationState {
+fun <T : StableNavKey> rememberNavigationState(
+    startRoute: T, // FIXME: Parameter 'startRoute' has runtime-determined stability
+    topLevelRoutes: ImmutableSet<T>,
+): NavigationState<T> {
     val topLevelRoute = rememberSerializable(
         startRoute,
         topLevelRoutes,
@@ -43,20 +50,19 @@ fun rememberNavigationState(
         NavigationState(
             startRoute = startRoute,
             topLevelRoute = topLevelRoute,
-            backStacks = backStacks // FIXME: Argument type mismatch: actual type is 'Map<AppNavKey, NavBackStack<NavKey>>', but 'Map<AppNavKey, NavBackStack<AppNavKey>>' was expected.
+            backStacks = backStacks // FIXME: Argument type mismatch: actual type is 'Map<T (of fun <T : StableNavKey> rememberNavigationState), NavBackStack<NavKey>>', but 'Map<T (of fun <T : StableNavKey> rememberNavigationState), NavBackStack<T (of fun <T : StableNavKey> rememberNavigationState)>>' was expected.
         )
     }
 }
 
-// TODO: Move to state to repspect artchitecture
 @Stable
-class NavigationState(
-    val startRoute: AppNavKey,
-    topLevelRoute: MutableState<AppNavKey>,
-    val backStacks: Map<AppNavKey, NavBackStack<AppNavKey>>
+class NavigationState<T : StableNavKey>(
+    val startRoute: T,
+    topLevelRoute: MutableState<T>,
+    val backStacks: Map<T, NavBackStack<T>>
 ) {
-    var topLevelRoute: AppNavKey by topLevelRoute
-    val stacksInUse: List<AppNavKey>
+    var topLevelRoute: T by topLevelRoute
+    val stacksInUse: List<T>
         get() = if (topLevelRoute == startRoute) {
             listOf(startRoute)
         } else {
@@ -64,10 +70,9 @@ class NavigationState(
         }
 }
 
-// TODO: move to respect architecture
 @Stable
-class Navigator(val state: NavigationState) {
-    fun navigate(route: AppNavKey) {
+class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
+    fun navigate(route: T) {
         if (route in state.backStacks.keys) {
             state.topLevelRoute = route
         } else {
@@ -89,12 +94,12 @@ class Navigator(val state: NavigationState) {
 }
 
 @Composable
-fun NavigationState.toEntries(
-    entryProvider: (AppNavKey) -> NavEntry<AppNavKey>
-): SnapshotStateList<NavEntry<AppNavKey>> {
+fun <T : StableNavKey> NavigationState<T>.toEntries(
+    entryProvider: (T) -> NavEntry<T>
+): SnapshotStateList<NavEntry<T>> {
     val decoratedEntries = backStacks.mapValues { (_, stack) ->
         val decorators = listOf(
-            rememberSaveableStateHolderNavEntryDecorator<AppNavKey>(),
+            rememberSaveableStateHolderNavEntryDecorator<T>(),
             rememberViewModelStoreNavEntryDecorator()
         )
         rememberDecoratedNavEntries(

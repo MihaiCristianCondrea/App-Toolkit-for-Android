@@ -47,7 +47,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.components.fab.MainFloatingA
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.AppNavigationHost
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.NavigationDrawer
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler
-import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.handleNavigationItemClick
+import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
@@ -63,11 +63,11 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.BottomAppBarNativ
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHost
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
-import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.NavigationState
-import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.Navigator
-import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.rememberNavigationState
-import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.startupDestinationFlow
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
+import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
+import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
+import com.d4rk.android.libs.apptoolkit.core.ui.navigation.rememberNavigationState
+import com.d4rk.android.libs.apptoolkit.data.datastore.startupDestinationFlow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -97,16 +97,19 @@ fun MainScreen() {
     val viewModel: MainViewModel = koinViewModel()
     val screenState: UiStateScreen<MainUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val bottomItems: ImmutableList<BottomBarItem> = MainNavigationDefaults.bottomBarItems
+    val bottomItems: ImmutableList<BottomBarItem<AppNavKey>> = MainNavigationDefaults.bottomBarItems
     val dataStore: DataStore = koinInject()
     val startupRoute: AppNavKey by dataStore
-        .startupDestinationFlow() // FIXME: This method should only be accessed from tests or within private scope
+        .startupDestinationFlow(
+            defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
+            mapToKey = { value -> value.toNavKeyOrDefault() }
+        )
         .collectAsStateWithLifecycle(initialValue = NavigationRoutes.ROUTE_APPS_LIST.toNavKeyOrDefault())
-    val navigationState: NavigationState = rememberNavigationState(
+    val navigationState: NavigationState<AppNavKey> = rememberNavigationState(
         startRoute = startupRoute,
         topLevelRoutes = NavigationRoutes.topLevelRoutes
     )
-    val navigator: Navigator = remember(startupRoute) { Navigator(navigationState) }
+    val navigator: Navigator<AppNavKey> = remember(startupRoute) { Navigator(navigationState) }
 
     if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
         NavigationDrawer(
@@ -146,9 +149,9 @@ fun MainScreen() {
 fun MainScaffoldContent(
     drawerState: DrawerState,
     windowWidthSizeClass: WindowWidthSizeClass,
-    bottomItems: ImmutableList<BottomBarItem>,
-    navigationState: NavigationState,
-    navigator: Navigator,
+    bottomItems: ImmutableList<BottomBarItem<AppNavKey>>,
+    navigationState: NavigationState<AppNavKey>,
+    navigator: Navigator<AppNavKey>,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
@@ -202,7 +205,7 @@ fun MainScaffoldContent(
                 BottomNavigationBar(
                     currentRoute = currentRoute,
                     items = bottomItems,
-                    onNavigate = navigator::navigate // FIXME: Inapplicable candidate(s): fun navigate(route: AppNavKey): Unit
+                    onNavigate = navigator::navigate
                 )
             }
         },
@@ -263,9 +266,9 @@ fun MainScaffoldContent(
 fun MainScaffoldTabletContent(
     uiState: MainUiState,
     windowWidthSizeClass: WindowWidthSizeClass,
-    bottomItems: ImmutableList<BottomBarItem>,
-    navigationState: NavigationState,
-    navigator: Navigator,
+    bottomItems: ImmutableList<BottomBarItem<AppNavKey>>,
+    navigationState: NavigationState<AppNavKey>,
+    navigator: Navigator<AppNavKey>,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -335,7 +338,7 @@ fun MainScaffoldTabletContent(
             isRailExpanded = isRailExpanded.value,
             paddingValues = paddingValues,
             onBottomItemClick = { item ->
-                navigator.navigate(item.route) // FIXME: Argument type mismatch: actual type is 'StableNavKey', but 'AppNavKey' was expected.
+                navigator.navigate(item.route)
             },
             onDrawerItemClick = { item ->
                 handleNavigationItemClick(
@@ -350,10 +353,10 @@ fun MainScaffoldTabletContent(
                     navigator = navigator,
                     paddingValues = PaddingValues(),
                     windowWidthSizeClass = windowWidthSizeClass,
-            onRandomAppHandlerChanged = { route: AppNavKey, handler ->
-                if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] = handler
-            },
-        )
+                    onRandomAppHandlerChanged = { route: AppNavKey, handler ->
+                        if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] = handler
+                    },
+                )
             }
         )
     }

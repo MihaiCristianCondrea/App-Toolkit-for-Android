@@ -1,0 +1,13 @@
+package com.d4rk.android.libs.apptoolkit.core.domain.model.navigation
+
+import androidx.compose.runtime.Immutable
+import androidx.navigation3.runtime.NavKey
+
+/**
+ * Marker interface to signal Compose stability for navigation keys.
+ *
+ * Located in the core domain layer so that both the library and consuming
+ * applications can share the same stable navigation contract.
+ */
+@Immutable
+interface StableNavKey : NavKey

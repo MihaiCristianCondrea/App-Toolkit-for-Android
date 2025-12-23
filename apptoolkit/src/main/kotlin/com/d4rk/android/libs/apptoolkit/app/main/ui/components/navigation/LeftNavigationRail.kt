@@ -38,7 +38,7 @@ import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.navigation.StableNavKey
+import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.StableNavKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -69,13 +69,13 @@ import kotlinx.collections.immutable.persistentListOf
  *   This is a Composable lambda that will be placed inside a `BoxScope`.
  */
 @Composable
-fun LeftNavigationRail(
-    bottomItems: ImmutableList<BottomBarItem> = persistentListOf(),
+fun <T : StableNavKey> LeftNavigationRail(
+    bottomItems: ImmutableList<BottomBarItem<T>> = persistentListOf(),
     drawerItems: ImmutableList<NavigationDrawerItem> = persistentListOf(),
-    currentRoute: StableNavKey?,
+    currentRoute: T?, // FIXME: Parameter 'currentRoute' has runtime-determined stability
     isRailExpanded: Boolean = false,
     paddingValues: PaddingValues,
-    onBottomItemClick: (BottomBarItem) -> Unit = {},
+    onBottomItemClick: (BottomBarItem<T>) -> Unit = {},
     onDrawerItemClick: (NavigationDrawerItem) -> Unit = {},
     centerContent: Float = 1f,
     content: @Composable BoxScope.() -> Unit,
@@ -100,7 +100,7 @@ fun LeftNavigationRail(
                 .fillMaxHeight()
                 .verticalScroll(state = rememberScrollState())
         ) {
-            bottomItems.forEach { item: BottomBarItem ->
+            bottomItems.forEach { item: BottomBarItem<T> ->
                 val isSelected: Boolean = currentRoute == item.route
                 NavigationRailItem(
                     modifier = Modifier.bounceClick(),

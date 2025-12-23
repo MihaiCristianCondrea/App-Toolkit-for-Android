@@ -24,15 +24,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
-import com.d4rk.android.libs.apptoolkit.navigation.StableNavKey
+import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.StableNavKey
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomNavigationBar(
-    currentRoute: StableNavKey?,
-    items: ImmutableList<BottomBarItem>,
-    onNavigate: (StableNavKey) -> Unit,
+fun <T : StableNavKey> BottomNavigationBar(
+    currentRoute: T?, // FIXME: Parameter 'currentRoute' has runtime-determined stability
+    items: ImmutableList<BottomBarItem<T>>,
+    onNavigate: (T) -> Unit,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
