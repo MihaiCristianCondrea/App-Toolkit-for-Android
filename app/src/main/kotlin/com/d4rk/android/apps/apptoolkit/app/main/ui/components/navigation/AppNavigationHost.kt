@@ -24,7 +24,6 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import androidx.navigation3.ui.rememberDialogSceneStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -38,7 +37,6 @@ fun AppNavigationHost(
     paddingValues: PaddingValues,
     windowWidthSizeClass: WindowWidthSizeClass,
     onRandomAppHandlerChanged: (NavKey, RandomAppHandler?) -> Unit,
-    startRoute: NavKey,
 ) {
     val registerAppsListHandler = remember(onRandomAppHandlerChanged) {
         { handler: RandomAppHandler? -> onRandomAppHandlerChanged(AppsListKey, handler) }
@@ -68,7 +66,6 @@ fun AppNavigationHost(
         modifier = modifier,
         entries = navigationState.toEntries(entryProvider),
         onBack = { navigator.goBack() },
-        sceneStrategy = rememberDialogSceneStrategy(startRoute = startRoute)
     )
 }
 

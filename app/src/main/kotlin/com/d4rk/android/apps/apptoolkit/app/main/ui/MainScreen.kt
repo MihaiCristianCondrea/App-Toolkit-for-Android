@@ -115,7 +115,6 @@ fun MainScreen() {
             bottomItems = bottomItems,
             navigationState = navigationState,
             navigator = navigator,
-            startRoute = startupRoute,
         )
     } else {
         MainScaffoldTabletContent(
@@ -124,7 +123,6 @@ fun MainScreen() {
             bottomItems = bottomItems,
             navigationState = navigationState,
             navigator = navigator,
-            startRoute = startupRoute,
         )
     }
 }
@@ -151,7 +149,6 @@ fun MainScaffoldContent(
     bottomItems: ImmutableList<BottomBarItem>,
     navigationState: NavigationState,
     navigator: Navigator,
-    startRoute: NavKey,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
@@ -242,7 +239,6 @@ fun MainScaffoldContent(
             onRandomAppHandlerChanged = { route, handler ->
                 if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] = handler
             },
-            startRoute = startRoute,
         )
     }
 }
@@ -358,7 +354,6 @@ fun MainScaffoldTabletContent(
                     onRandomAppHandlerChanged = { route, handler ->
                         if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] = handler
                     },
-                    startRoute = startRoute,
                 )
             }
         )
