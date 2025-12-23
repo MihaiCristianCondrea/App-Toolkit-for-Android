@@ -100,7 +100,7 @@ fun MainScreen() {
     val bottomItems: ImmutableList<BottomBarItem> = MainNavigationDefaults.bottomBarItems
     val dataStore: DataStore = koinInject()
     val startupRoute: NavKey by dataStore
-        .startupDestinationFlow()
+        .startupDestinationFlow() // FIXME: This method should only be accessed from tests or within private scope
         .collectAsStateWithLifecycle(initialValue = NavigationRoutes.ROUTE_APPS_LIST.toNavKeyOrDefault())
     val navigationState: NavigationState = rememberNavigationState(
         startRoute = startupRoute,
@@ -147,8 +147,8 @@ fun MainScaffoldContent(
     drawerState: DrawerState,
     windowWidthSizeClass: WindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem>,
-    navigationState: NavigationState,
-    navigator: Navigator,
+    navigationState: NavigationState, // FIXME: Unstable parameter 'navigationState' prevents composable from being skippable
+    navigator: Navigator, // FIXME: Unstable parameter 'navigator' prevents composable from being skippable
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
@@ -264,9 +264,8 @@ fun MainScaffoldTabletContent(
     uiState: MainUiState,
     windowWidthSizeClass: WindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem>,
-    navigationState: NavigationState,
-    navigator: Navigator,
-    startRoute: NavKey,
+    navigationState: NavigationState, // FIXME: Unstable parameter 'navigationState' prevents composable from being skippable
+    navigator: Navigator, // FIXME: Unstable parameter 'navigator' prevents composable from being skippable
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 

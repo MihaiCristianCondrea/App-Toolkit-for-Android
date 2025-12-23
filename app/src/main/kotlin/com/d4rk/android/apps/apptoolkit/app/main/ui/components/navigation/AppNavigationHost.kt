@@ -21,7 +21,6 @@ import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivit
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import androidx.navigation3.runtime.NavKey
-import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.CoroutineScope
@@ -32,8 +31,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun AppNavigationHost(
     modifier: Modifier = Modifier,
-    navigationState: NavigationState,
-    navigator: Navigator,
+    navigationState: NavigationState, // FIXME: Unstable parameter 'navigationState' prevents composable from being skippable
+    navigator: Navigator, // FIXME : Unstable parameter 'navigator' prevents composable from being skippable
     paddingValues: PaddingValues,
     windowWidthSizeClass: WindowWidthSizeClass,
     onRandomAppHandlerChanged: (NavKey, RandomAppHandler?) -> Unit,
@@ -45,7 +44,7 @@ fun AppNavigationHost(
         { handler: RandomAppHandler? -> onRandomAppHandlerChanged(FavoriteAppsKey, handler) }
     }
 
-    val entryProvider = entryProvider<NavKey> {
+    val entryProvider = entryProvider {
         entry<AppsListKey> {
             AppsListRoute(
                 paddingValues = paddingValues,

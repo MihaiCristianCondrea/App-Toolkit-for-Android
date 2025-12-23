@@ -30,7 +30,7 @@ import kotlinx.collections.immutable.ImmutableList
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigationBar(
-    currentRoute: NavKey?,
+    currentRoute: NavKey?, // FIXME: Parameter 'currentRoute' has runtime-determined stability
     items: ImmutableList<BottomBarItem>,
     onNavigate: (NavKey) -> Unit,
 ) {

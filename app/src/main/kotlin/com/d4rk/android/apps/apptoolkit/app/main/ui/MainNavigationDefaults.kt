@@ -13,6 +13,7 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+// TODO && FIXME: Move somewhere else to fit architecture
 internal object MainNavigationDefaults {
     val fabSupportedRoutes: Set<NavKey> = setOf(
         AppsListRoute,
