@@ -2,6 +2,15 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -10,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.FavoriteAppsRoute
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute as AppsListKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute as FavoriteAppsKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
@@ -20,7 +30,6 @@ import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawe
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
-import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.CoroutineScope
@@ -31,11 +40,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun AppNavigationHost(
     modifier: Modifier = Modifier,
-    navigationState: NavigationState, // FIXME: Unstable parameter 'navigationState' prevents composable from being skippable
-    navigator: Navigator, // FIXME : Unstable parameter 'navigator' prevents composable from being skippable
+    navigationState: NavigationState,
+    navigator: Navigator,
     paddingValues: PaddingValues,
     windowWidthSizeClass: WindowWidthSizeClass,
-    onRandomAppHandlerChanged: (NavKey, RandomAppHandler?) -> Unit,
+    onRandomAppHandlerChanged: (AppNavKey, RandomAppHandler?) -> Unit,
 ) {
     val registerAppsListHandler = remember(onRandomAppHandlerChanged) {
         { handler: RandomAppHandler? -> onRandomAppHandlerChanged(AppsListKey, handler) }
@@ -65,15 +74,20 @@ fun AppNavigationHost(
         modifier = modifier,
         entries = navigationState.toEntries(entryProvider),
         onBack = { navigator.goBack() },
+        transitionSpec = { NavigationAnimations.default() },
+        popTransitionSpec = { NavigationAnimations.default() },
+        predictivePopTransitionSpec = { NavigationAnimations.default() },
     )
 }
 
+// TODO: Move it somewhere else in the project to fit architecture
 @VisibleForTesting
-internal fun DataStore.startupDestinationFlow(): Flow<NavKey> =
+internal fun DataStore.startupDestinationFlow(): Flow<AppNavKey> =
     getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST).map { route ->
         route.ifBlank { NavigationRoutes.ROUTE_APPS_LIST }.toNavKeyOrDefault()
     }
 
+// TODO: Move it to library and make it extensible to be used for other apps that want to add their routes
 fun handleNavigationItemClick(
     context: Context,
     item: NavigationDrawerItem,
@@ -100,5 +114,24 @@ fun handleNavigationItemClick(
     }
     if (drawerState != null && coroutineScope != null) {
         coroutineScope.launch { drawerState.close() }
+    }
+}
+
+// TODO: Move it to library
+private object NavigationAnimations {
+    private const val FadeScaleDurationMillis = 200
+    private val fadeScaleEnterSpec = tween<Float>(durationMillis = FadeScaleDurationMillis)
+    private val fadeScaleExitSpec = tween<Float>(durationMillis = FadeScaleDurationMillis)
+
+    fun default(): ContentTransform {
+        val enter: EnterTransition = fadeIn(animationSpec = fadeScaleEnterSpec) + scaleIn(
+            initialScale = 0.92f,
+            animationSpec = fadeScaleEnterSpec
+        )
+        val exit: ExitTransition = fadeOut(animationSpec = fadeScaleExitSpec) + scaleOut(
+            targetScale = 0.95f,
+            animationSpec = fadeScaleExitSpec
+        )
+        return enter togetherWith exit
     }
 }

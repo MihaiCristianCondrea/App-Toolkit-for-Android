@@ -34,11 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.navigation3.runtime.NavKey
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.d4rk.android.libs.apptoolkit.navigation.StableNavKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -72,7 +72,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun LeftNavigationRail(
     bottomItems: ImmutableList<BottomBarItem> = persistentListOf(),
     drawerItems: ImmutableList<NavigationDrawerItem> = persistentListOf(),
-    currentRoute: NavKey?, // FIXME: Parameter 'currentRoute' has runtime-determined stability
+    currentRoute: StableNavKey?,
     isRailExpanded: Boolean = false,
     paddingValues: PaddingValues,
     onBottomItemClick: (BottomBarItem) -> Unit = {},

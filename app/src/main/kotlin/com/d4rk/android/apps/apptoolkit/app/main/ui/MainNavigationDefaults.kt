@@ -6,16 +6,16 @@ import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.Star
 import com.d4rk.android.apps.apptoolkit.R
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
-import androidx.navigation3.runtime.NavKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-// TODO && FIXME: Move somewhere else to fit architecture
+// TODO: Consider relocating to a shared navigation defaults module.
 internal object MainNavigationDefaults {
-    val fabSupportedRoutes: Set<NavKey> = setOf(
+    val fabSupportedRoutes: Set<AppNavKey> = setOf(
         AppsListRoute,
         FavoriteAppsRoute
     )

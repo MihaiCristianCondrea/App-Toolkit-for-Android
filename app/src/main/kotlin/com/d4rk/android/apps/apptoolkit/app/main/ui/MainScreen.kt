@@ -49,6 +49,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.Naviga
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.handleNavigationItemClick
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
@@ -67,7 +68,6 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.Naviga
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.rememberNavigationState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.startupDestinationFlow
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
-import androidx.navigation3.runtime.NavKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -99,7 +99,7 @@ fun MainScreen() {
 
     val bottomItems: ImmutableList<BottomBarItem> = MainNavigationDefaults.bottomBarItems
     val dataStore: DataStore = koinInject()
-    val startupRoute: NavKey by dataStore
+    val startupRoute: AppNavKey by dataStore
         .startupDestinationFlow() // FIXME: This method should only be accessed from tests or within private scope
         .collectAsStateWithLifecycle(initialValue = NavigationRoutes.ROUTE_APPS_LIST.toNavKeyOrDefault())
     val navigationState: NavigationState = rememberNavigationState(
@@ -147,21 +147,21 @@ fun MainScaffoldContent(
     drawerState: DrawerState,
     windowWidthSizeClass: WindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem>,
-    navigationState: NavigationState, // FIXME: Unstable parameter 'navigationState' prevents composable from being skippable
-    navigator: Navigator, // FIXME: Unstable parameter 'navigator' prevents composable from being skippable
+    navigationState: NavigationState,
+    navigator: Navigator,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val currentRoute: NavKey =
+    val currentRoute: AppNavKey =
         navigationState.backStacks[navigationState.topLevelRoute]?.lastOrNull()
             ?: navigationState.topLevelRoute
 
     val isFabVisible: Boolean = currentRoute in MainNavigationDefaults.fabSupportedRoutes
     var isFabExtended by remember { mutableStateOf(true) }
 
-    val randomAppHandlers = remember { mutableStateMapOf<NavKey, RandomAppHandler>() }
+    val randomAppHandlers = remember { mutableStateMapOf<AppNavKey, RandomAppHandler>() }
     val randomAppHandler: RandomAppHandler? = randomAppHandlers[currentRoute]
 
     LaunchedEffect(scrollBehavior) {
@@ -202,7 +202,7 @@ fun MainScaffoldContent(
                 BottomNavigationBar(
                     currentRoute = currentRoute,
                     items = bottomItems,
-                    onNavigate = navigator::navigate
+                    onNavigate = navigator::navigate // FIXME: Inapplicable candidate(s): fun navigate(route: AppNavKey): Unit
                 )
             }
         },
@@ -236,7 +236,7 @@ fun MainScaffoldContent(
             navigator = navigator,
             paddingValues = paddingValues,
             windowWidthSizeClass = windowWidthSizeClass,
-            onRandomAppHandlerChanged = { route, handler ->
+            onRandomAppHandlerChanged = { route: AppNavKey, handler ->
                 if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] = handler
             },
         )
@@ -264,8 +264,8 @@ fun MainScaffoldTabletContent(
     uiState: MainUiState,
     windowWidthSizeClass: WindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem>,
-    navigationState: NavigationState, // FIXME: Unstable parameter 'navigationState' prevents composable from being skippable
-    navigator: Navigator, // FIXME: Unstable parameter 'navigator' prevents composable from being skippable
+    navigationState: NavigationState,
+    navigator: Navigator,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -279,7 +279,7 @@ fun MainScaffoldTabletContent(
 
     val showChangelog = rememberSaveable { mutableStateOf(false) }
 
-    val currentRoute: NavKey =
+    val currentRoute: AppNavKey =
         navigationState.backStacks[navigationState.topLevelRoute]?.lastOrNull()
             ?: navigationState.topLevelRoute
 
@@ -287,7 +287,7 @@ fun MainScaffoldTabletContent(
     var isFabExtended by remember { mutableStateOf(true) }
 
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val randomAppHandlers = remember { mutableStateMapOf<NavKey, RandomAppHandler>() }
+    val randomAppHandlers = remember { mutableStateMapOf<AppNavKey, RandomAppHandler>() }
     val randomAppHandler: RandomAppHandler? = randomAppHandlers[currentRoute]
 
     LaunchedEffect(scrollBehavior) {
@@ -335,7 +335,7 @@ fun MainScaffoldTabletContent(
             isRailExpanded = isRailExpanded.value,
             paddingValues = paddingValues,
             onBottomItemClick = { item ->
-                navigator.navigate(item.route)
+                navigator.navigate(item.route) // FIXME: Argument type mismatch: actual type is 'StableNavKey', but 'AppNavKey' was expected.
             },
             onDrawerItemClick = { item ->
                 handleNavigationItemClick(
@@ -350,10 +350,10 @@ fun MainScaffoldTabletContent(
                     navigator = navigator,
                     paddingValues = PaddingValues(),
                     windowWidthSizeClass = windowWidthSizeClass,
-                    onRandomAppHandlerChanged = { route, handler ->
-                        if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] = handler
-                    },
-                )
+            onRandomAppHandlerChanged = { route: AppNavKey, handler ->
+                if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] = handler
+            },
+        )
             }
         )
     }

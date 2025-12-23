@@ -31,8 +31,8 @@ fun NavigationDrawer(
     uiState: MainUiState,
     windowWidthSizeClass: WindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem>,
-    navigationState: NavigationState, // FIXME: Unstable parameter 'navigationState' prevents composable from being skippable
-    navigator: Navigator, // FIXME: Unstable parameter 'navigator' prevents composable from being skippable
+    navigationState: NavigationState,
+    navigator: Navigator,
 ) {
     val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
