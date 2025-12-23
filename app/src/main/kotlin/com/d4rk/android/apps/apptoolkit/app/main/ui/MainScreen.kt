@@ -158,9 +158,7 @@ fun MainScaffoldContent(
     val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val currentRoute: AppNavKey =
-        navigationState.backStacks[navigationState.topLevelRoute]?.lastOrNull()
-            ?: navigationState.topLevelRoute
+    val currentRoute: AppNavKey = navigationState.currentRoute
 
     val isFabVisible: Boolean = currentRoute in MainNavigationDefaults.fabSupportedRoutes
     var isFabExtended by remember { mutableStateOf(true) }
@@ -283,9 +281,7 @@ fun MainScaffoldTabletContent(
 
     val showChangelog = rememberSaveable { mutableStateOf(false) }
 
-    val currentRoute: AppNavKey =
-        navigationState.backStacks[navigationState.topLevelRoute]?.lastOrNull()
-            ?: navigationState.topLevelRoute
+    val currentRoute: AppNavKey = navigationState.currentRoute
 
     val isFabVisible: Boolean = currentRoute in MainNavigationDefaults.fabSupportedRoutes
     var isFabExtended by remember { mutableStateOf(true) }

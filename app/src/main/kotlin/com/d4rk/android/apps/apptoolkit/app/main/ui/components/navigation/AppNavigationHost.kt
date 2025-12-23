@@ -15,7 +15,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRou
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
-import com.d4rk.android.libs.apptoolkit.core.ui.navigation.toEntries
+import com.d4rk.android.libs.apptoolkit.core.ui.navigation.rememberNavigationEntryDecorators
 
 @Composable
 fun AppNavigationHost(
@@ -50,9 +50,13 @@ fun AppNavigationHost(
         }
     }
 
+    val entryDecorators = rememberNavigationEntryDecorators<AppNavKey>()
+
     NavDisplay(
         modifier = modifier,
-        entries = navigationState.toEntries(entryProvider),
+        backStack = navigationState.currentBackStack,
+        entryDecorators = entryDecorators,
+        entryProvider = entryProvider,
         onBack = { navigator.goBack() },
         transitionSpec = { NavigationAnimations.default() },
         popTransitionSpec = { NavigationAnimations.default() },
