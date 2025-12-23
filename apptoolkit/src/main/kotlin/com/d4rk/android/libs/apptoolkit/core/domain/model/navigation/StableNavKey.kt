@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.core.domain.model.navigation
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.navigation3.runtime.NavKey
 
 /**
@@ -10,4 +11,5 @@ import androidx.navigation3.runtime.NavKey
  * applications can share the same stable navigation contract.
  */
 @Immutable
+@Stable
 interface StableNavKey : NavKey

@@ -16,31 +16,37 @@ import kotlinx.coroutines.launch
  * Exposed from the library so applications can easily reuse the same behavior
  * while still customizing the changelog handling callback.
  */
-fun handleNavigationItemClick( // TODO: Move it to the libary and make it extendible (the library will contain the default routes for settings, help, updates share etc and then make it possible for the apps to add their extra things routes if they want to)
+fun handleNavigationItemClick(
     context: Context,
     item: NavigationDrawerItem,
     drawerState: DrawerState? = null,
     coroutineScope: CoroutineScope? = null,
     onChangelogRequested: () -> Unit = {},
+    additionalHandlers: Map<String, (NavigationDrawerItem) -> Unit> = emptyMap(),
 ) {
-    when (item.route) {
+    val handled = when (item.route) {
         NavigationDrawerRoutes.ROUTE_SETTINGS -> IntentsHelper.openActivity(
             context = context,
             activityClass = SettingsActivity::class.java
-        )
+        ).let { true }
 
         NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> IntentsHelper.openActivity(
             context = context,
             activityClass = HelpActivity::class.java
-        )
+        ).let { true }
 
-        NavigationDrawerRoutes.ROUTE_UPDATES -> onChangelogRequested()
+        NavigationDrawerRoutes.ROUTE_UPDATES -> onChangelogRequested().let { true }
         NavigationDrawerRoutes.ROUTE_SHARE -> IntentsHelper.shareApp(
             context = context,
             shareMessageFormat = com.d4rk.android.libs.apptoolkit.R.string.summary_share_message
-        )
+        ).let { true }
+
+        else -> additionalHandlers[item.route]?.let { handler ->
+            handler(item)
+            true
+        } ?: false
     }
-    if (drawerState != null && coroutineScope != null) {
+    if (handled && drawerState != null && coroutineScope != null) {
         coroutineScope.launch { drawerState.close() }
     }
 }

@@ -40,17 +40,15 @@ fun <T : StableNavKey> rememberNavigationState(
         mutableStateOf(startRoute)
     }
 
-    val backStacks = topLevelRoutes.associateWith { key ->
-        rememberNavBackStack(key).apply {
-            if (isEmpty()) add(key)
-        }
+    val backStacks: Map<T, NavBackStack<T>> = topLevelRoutes.associateWith { key ->
+        rememberTypedBackStack(initialRoute = key)
     }
 
     return remember(startRoute, topLevelRoutes) {
         NavigationState(
             startRoute = startRoute,
             topLevelRoute = topLevelRoute,
-            backStacks = backStacks // FIXME: Argument type mismatch: actual type is 'Map<T (of fun <T : StableNavKey> rememberNavigationState), NavBackStack<NavKey>>', but 'Map<T (of fun <T : StableNavKey> rememberNavigationState), NavBackStack<T (of fun <T : StableNavKey> rememberNavigationState)>>' was expected.
+            backStacks = backStacks
         )
     }
 }
@@ -112,4 +110,13 @@ fun <T : StableNavKey> NavigationState<T>.toEntries(
     return stacksInUse
         .flatMap { decoratedEntries[it] ?: emptyList() }
         .toMutableStateList()
+}
+
+@Composable
+private fun <T : StableNavKey> rememberTypedBackStack(initialRoute: T): NavBackStack<T> {
+    val backStack = rememberNavBackStack().apply {
+        if (isEmpty()) add(initialRoute)
+    }
+    @Suppress("UNCHECKED_CAST")
+    return backStack as NavBackStack<T>
 }

@@ -3,6 +3,7 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.libs.apptoolkit.data.datastore.startupDestinationFlow
 import io.mockk.clearAllMocks
@@ -33,10 +34,13 @@ class AppNavigationHostTest {
             ""
         )
 
-        val startDestination = dataStore.startupDestinationFlow().first() // FIXME: Cannot infer type for type parameter 'T'. Specify it explicitly.
+        val startDestination = dataStore.startupDestinationFlow(
+            defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
+            mapToKey = { route -> route.toNavKeyOrDefault() }
+        ).first()
 
         assertEquals(AppsListRoute, startDestination)
-        verify(exactly = 1) { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) }
+        verify(exactly = 1) { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) } // FIXME: Flow is constructed but not used
     }
 
     @Test
@@ -45,9 +49,12 @@ class AppNavigationHostTest {
             dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST)
         } returns flowOf(NavigationRoutes.ROUTE_FAVORITE_APPS)
 
-        val startDestination = dataStore.startupDestinationFlow().first()
+        val startDestination = dataStore.startupDestinationFlow(
+            defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
+            mapToKey = { route -> route.toNavKeyOrDefault() }
+        ).first()
 
         assertEquals(FavoriteAppsRoute, startDestination)
-        verify(exactly = 1) { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) }
+        verify(exactly = 1) { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) } // FIXME: Flow is constructed but not used
     }
 }
