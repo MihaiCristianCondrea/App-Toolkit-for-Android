@@ -48,6 +48,7 @@ fun rememberNavigationState(
     }
 }
 
+// TODO: Move to state to repspect artchitecture
 @Stable
 class NavigationState(
     val startRoute: AppNavKey,
@@ -63,6 +64,7 @@ class NavigationState(
         }
 }
 
+// TODO: move to respect architecture
 @Stable
 class Navigator(val state: NavigationState) {
     fun navigate(route: AppNavKey) {
