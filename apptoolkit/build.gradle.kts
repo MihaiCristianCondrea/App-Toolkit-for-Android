@@ -1,16 +1,10 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
-val publishingGroupId = providers.gradleProperty("PUBLISHING_GROUP_ID")
 val publishingArtifactId = providers.gradleProperty("PUBLISHING_ARTIFACT_ID")
 val jitpackGroupId = providers.gradleProperty("JITPACK_GROUP_ID")
 val publishingVersion = providers.gradleProperty("PUBLISHING_VERSION")
 
-val useJitpackCoordinates = providers.gradleProperty("USE_JITPACK_COORDINATES")
-    .map(String::toBoolean)
-    .orElse(true)
-    .get() || providers.environmentVariable("JITPACK").isPresent
-
-group = if (useJitpackCoordinates) jitpackGroupId.get() else publishingGroupId.get()
+group = jitpackGroupId.get()
 version = publishingVersion.get()
 
 plugins {

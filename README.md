@@ -59,31 +59,29 @@ any project.
 
 # Use the library in your project
 
-App Toolkit’s shared components are published as a library that you can consume from Maven
-repositories. Maven Central publishing is being prepared, and JitPack is available right now.
+[![Release](https://jitpack.io/v/MihaiCristianCondrea/App-Toolkit-for-Android.svg)](https://jitpack.io/#MihaiCristianCondrea/App-Toolkit-for-Android)
 
-### Gradle (Maven Central-ready)
+App Toolkit’s shared components are available exclusively through JitPack. Add the JitPack
+repository
+at the end of your list so Gradle resolves other dependencies first, and scope lookups to this
+library’s coordinates for faster resolution.
+
+### Gradle (Kotlin DSL)
 
 ```kotlin
-repositories {
-    mavenCentral()
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            setUrl(url = "https://jitpack.io")
+        }
+    }
 }
 
 dependencies {
-    implementation("com.d4rk.android.libs:apptoolkit:1.1.6")
-}
-```
-
-### Gradle (JitPack)
-
-```kotlin
-repositories {
-    mavenCentral()
-    maven(url = "https://jitpack.io")
-}
-
-dependencies {
-    implementation("com.github.MihaiCristianCondrea:apptoolkit:1.1.6")
+    implementation("com.github.MihaiCristianCondrea:apptoolkit:2.0.0")
 }
 ```
 
