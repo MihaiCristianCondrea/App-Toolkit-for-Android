@@ -1,4 +1,4 @@
-# Version 1.1.5
+# Version 2.0.0
 
 - **New**: Added multiple new themes and color palettes for deeper personalization.
 - **New**: Introduced a seasonal theme to celebrate together.
