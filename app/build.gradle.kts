@@ -1,3 +1,4 @@
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
@@ -100,6 +101,9 @@ android {
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = true
+            }
         }
         debug {
             isDebuggable = true
