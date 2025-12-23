@@ -13,6 +13,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation3.runtime.NavKey
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainScaffoldContent
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
@@ -31,6 +32,9 @@ fun NavigationDrawer(
     uiState: MainUiState,
     windowWidthSizeClass: WindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem>,
+    navigationState: NavigationState,
+    navigator: Navigator,
+    startRoute: NavKey,
 ) {
     val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -66,6 +70,9 @@ fun NavigationDrawer(
             drawerState = drawerState,
             windowWidthSizeClass = windowWidthSizeClass,
             bottomItems = bottomItems,
+            navigationState = navigationState,
+            navigator = navigator,
+            startRoute = startRoute,
         )
     }
 

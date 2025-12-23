@@ -25,7 +25,6 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -43,9 +42,6 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.d4rk.android.apps.apptoolkit.app.logging.FAB_LOG_TAG
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.fab.MainFloatingActionButton
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.AppNavigationHost
@@ -53,6 +49,8 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.Naviga
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.handleNavigationItemClick
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.BottomNavigationBar
@@ -61,11 +59,15 @@ import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.LeftNa
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.MainTopAppBar
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.BottomAppBarNativeAdBanner
-import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.StableNavController
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHost
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.normalizeRoute
 import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
+import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.NavigationState
+import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.Navigator
+import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.rememberNavigationState
+import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.startupDestinationFlow
+import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
+import androidx.navigation3.runtime.NavKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -96,18 +98,33 @@ fun MainScreen() {
     val screenState: UiStateScreen<MainUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
     val bottomItems: ImmutableList<BottomBarItem> = MainNavigationDefaults.bottomBarItems
+    val dataStore: DataStore = koinInject()
+    val startupRoute: NavKey by dataStore
+        .startupDestinationFlow()
+        .collectAsStateWithLifecycle(initialValue = NavigationRoutes.ROUTE_APPS_LIST.toNavKeyOrDefault())
+    val navigationState: NavigationState = rememberNavigationState(
+        startRoute = startupRoute,
+        topLevelRoutes = NavigationRoutes.topLevelRoutes
+    )
+    val navigator: Navigator = remember(startupRoute) { Navigator(navigationState) }
 
     if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
         NavigationDrawer(
             uiState = screenState.data ?: MainUiState(),
             windowWidthSizeClass = windowWidthSizeClass,
             bottomItems = bottomItems,
+            navigationState = navigationState,
+            navigator = navigator,
+            startRoute = startupRoute,
         )
     } else {
         MainScaffoldTabletContent(
             uiState = screenState.data ?: MainUiState(),
             windowWidthSizeClass = windowWidthSizeClass,
             bottomItems = bottomItems,
+            navigationState = navigationState,
+            navigator = navigator,
+            startRoute = startupRoute,
         )
     }
 }
@@ -132,23 +149,23 @@ fun MainScaffoldContent(
     drawerState: DrawerState,
     windowWidthSizeClass: WindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem>,
+    navigationState: NavigationState,
+    navigator: Navigator,
+    startRoute: NavKey,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val navController: NavHostController = rememberNavController()
-    val stableNavController = remember(navController) { StableNavController(navController) }
+    val currentRoute: NavKey =
+        navigationState.backStacks[navigationState.topLevelRoute]?.lastOrNull()
+            ?: navigationState.topLevelRoute
 
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute: String? = navBackStackEntry?.destination?.route
-    val normalizedRoute: String? = currentRoute.normalizeRoute()
-
-    val isFabVisible: Boolean = normalizedRoute in MainNavigationDefaults.fabSupportedRoutes
+    val isFabVisible: Boolean = currentRoute in MainNavigationDefaults.fabSupportedRoutes
     var isFabExtended by remember { mutableStateOf(true) }
 
-    val randomAppHandlers = remember { mutableStateMapOf<String, RandomAppHandler>() }
-    val randomAppHandler: RandomAppHandler? = normalizedRoute?.let(randomAppHandlers::get)
+    val randomAppHandlers = remember { mutableStateMapOf<NavKey, RandomAppHandler>() }
+    val randomAppHandler: RandomAppHandler? = randomAppHandlers[currentRoute]
 
     LaunchedEffect(scrollBehavior) {
         snapshotFlow { scrollBehavior.state.contentOffset >= 0f }
@@ -158,11 +175,11 @@ fun MainScaffoldContent(
             }
     }
 
-    LaunchedEffect(isFabVisible, normalizedRoute) {
+    LaunchedEffect(isFabVisible, currentRoute) {
         if (isFabVisible) isFabExtended = true
         Log.d(
             FAB_LOG_TAG,
-            "[Phone] visibility update raw=$currentRoute normalized=$normalizedRoute visible=$isFabVisible handlerPresent=${randomAppHandler != null}"
+            "[Phone] visibility update route=$currentRoute visible=$isFabVisible handlerPresent=${randomAppHandler != null}"
         )
     }
 
@@ -186,8 +203,9 @@ fun MainScaffoldContent(
                     adUnitId = adsConfig.bannerAdUnitId
                 )
                 BottomNavigationBar(
-                    navController = stableNavController,
-                    items = bottomItems
+                    currentRoute = currentRoute,
+                    items = bottomItems,
+                    onNavigate = navigator::navigate
                 )
             }
         },
@@ -217,16 +235,14 @@ fun MainScaffoldContent(
         AppNavigationHost(
             modifier = Modifier
                 .consumeWindowInsets(paddingValues),
-            navController = stableNavController,
+            navigationState = navigationState,
+            navigator = navigator,
             paddingValues = paddingValues,
             windowWidthSizeClass = windowWidthSizeClass,
             onRandomAppHandlerChanged = { route, handler ->
-                val normalized = route.normalizeRoute()
-                if (normalized != null) {
-                    if (handler == null) randomAppHandlers.remove(normalized)
-                    else randomAppHandlers[normalized] = handler
-                }
+                if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] = handler
             },
+            startRoute = startRoute,
         )
     }
 }
@@ -252,6 +268,9 @@ fun MainScaffoldTabletContent(
     uiState: MainUiState,
     windowWidthSizeClass: WindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem>,
+    navigationState: NavigationState,
+    navigator: Navigator,
+    startRoute: NavKey,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -265,22 +284,16 @@ fun MainScaffoldTabletContent(
 
     val showChangelog = rememberSaveable { mutableStateOf(false) }
 
-    val navController: NavHostController = rememberNavController()
-    val stableNavController = remember(navController) { StableNavController(navController) }
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute by remember(backStackEntry) {
-        derivedStateOf {
-            backStackEntry?.destination?.route ?: navController.currentDestination?.route
-        }
-    }
+    val currentRoute: NavKey =
+        navigationState.backStacks[navigationState.topLevelRoute]?.lastOrNull()
+            ?: navigationState.topLevelRoute
 
-    val normalizedRoute = currentRoute.normalizeRoute()
-    val isFabVisible: Boolean = normalizedRoute in MainNavigationDefaults.fabSupportedRoutes
+    val isFabVisible: Boolean = currentRoute in MainNavigationDefaults.fabSupportedRoutes
     var isFabExtended by remember { mutableStateOf(true) }
 
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val randomAppHandlers = remember { mutableStateMapOf<String, RandomAppHandler>() }
-    val randomAppHandler: RandomAppHandler? = normalizedRoute?.let(randomAppHandlers::get)
+    val randomAppHandlers = remember { mutableStateMapOf<NavKey, RandomAppHandler>() }
+    val randomAppHandler: RandomAppHandler? = randomAppHandlers[currentRoute]
 
     LaunchedEffect(scrollBehavior) {
         snapshotFlow { scrollBehavior.state.contentOffset >= 0f }
@@ -290,11 +303,11 @@ fun MainScaffoldTabletContent(
             }
     }
 
-    LaunchedEffect(isFabVisible, normalizedRoute) {
+    LaunchedEffect(isFabVisible, currentRoute) {
         if (isFabVisible) isFabExtended = true
         Log.d(
             FAB_LOG_TAG,
-            "[Tablet] visibility update raw=$currentRoute normalized=$normalizedRoute visible=$isFabVisible handlerPresent=${randomAppHandler != null}"
+            "[Tablet] visibility update route=$currentRoute visible=$isFabVisible handlerPresent=${randomAppHandler != null}"
         )
     }
 
@@ -327,10 +340,7 @@ fun MainScaffoldTabletContent(
             isRailExpanded = isRailExpanded.value,
             paddingValues = paddingValues,
             onBottomItemClick = { item ->
-                navController.navigate(item.route) {
-                    launchSingleTop = true
-                    popUpTo(navController.graph.startDestinationId)
-                }
+                navigator.navigate(item.route)
             },
             onDrawerItemClick = { item ->
                 handleNavigationItemClick(
@@ -341,15 +351,14 @@ fun MainScaffoldTabletContent(
             },
             content = {
                 AppNavigationHost(
-                    navController = stableNavController,
+                    navigationState = navigationState,
+                    navigator = navigator,
                     paddingValues = PaddingValues(),
                     windowWidthSizeClass = windowWidthSizeClass,
                     onRandomAppHandlerChanged = { route, handler ->
-                        route.normalizeRoute()?.let { appIdentifier ->
-                            if (handler == null) randomAppHandlers.remove(appIdentifier)
-                            else randomAppHandlers[appIdentifier] = handler
-                        }
+                        if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] = handler
                     },
+                    startRoute = startRoute,
                 )
             }
         )

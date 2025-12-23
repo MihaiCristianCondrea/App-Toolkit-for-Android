@@ -6,70 +6,56 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.composable
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.FavoriteAppsRoute
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute as AppsListKey
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute as FavoriteAppsKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpActivity
-import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.NavigationHost
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
-import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.StableNavController
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entry
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
+import androidx.navigation3.ui.rememberDialogSceneStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
 
 @Composable
 fun AppNavigationHost(
     modifier: Modifier = Modifier,
-    navController: StableNavController,
+    navigationState: NavigationState,
+    navigator: Navigator,
     paddingValues: PaddingValues,
     windowWidthSizeClass: WindowWidthSizeClass,
-    onRandomAppHandlerChanged: (route: String, RandomAppHandler?) -> Unit,
+    onRandomAppHandlerChanged: (NavKey, RandomAppHandler?) -> Unit,
+    startRoute: NavKey,
 ) {
-    val dataStore: DataStore = koinInject()
-
-    val startupRoute: String by dataStore
-        .startupDestinationFlow()
-        .collectAsStateWithLifecycle(initialValue = NavigationRoutes.ROUTE_APPS_LIST)
-
-    val startDestination: String = remember(startupRoute) {
-        startupRoute.ifBlank { NavigationRoutes.ROUTE_APPS_LIST }
-    }
-
     val registerAppsListHandler = remember(onRandomAppHandlerChanged) {
-        { handler: RandomAppHandler? ->
-            onRandomAppHandlerChanged(NavigationRoutes.ROUTE_APPS_LIST, handler)
-        }
+        { handler: RandomAppHandler? -> onRandomAppHandlerChanged(AppsListKey, handler) }
     }
     val registerFavoritesHandler = remember(onRandomAppHandlerChanged) {
-        { handler: RandomAppHandler? ->
-            onRandomAppHandlerChanged(NavigationRoutes.ROUTE_FAVORITE_APPS, handler)
-        }
+        { handler: RandomAppHandler? -> onRandomAppHandlerChanged(FavoriteAppsKey, handler) }
     }
 
-    NavigationHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = startDestination
-    ) {
-        composable(route = NavigationRoutes.ROUTE_APPS_LIST) {
+    val entryProvider = entryProvider<NavKey> {
+        entry<AppsListKey> {
             AppsListRoute(
                 paddingValues = paddingValues,
                 windowWidthSizeClass = windowWidthSizeClass,
                 onRegisterRandomAppHandler = registerAppsListHandler,
             )
         }
-        composable(route = NavigationRoutes.ROUTE_FAVORITE_APPS) {
+        entry<FavoriteAppsKey> {
             FavoriteAppsRoute(
                 paddingValues = paddingValues,
                 windowWidthSizeClass = windowWidthSizeClass,
@@ -77,12 +63,19 @@ fun AppNavigationHost(
             )
         }
     }
+
+    NavDisplay(
+        modifier = modifier,
+        entries = navigationState.toEntries(entryProvider),
+        onBack = { navigator.goBack() },
+        sceneStrategy = rememberDialogSceneStrategy(startRoute = startRoute)
+    )
 }
 
 @VisibleForTesting
-internal fun DataStore.startupDestinationFlow(): Flow<String> =
+internal fun DataStore.startupDestinationFlow(): Flow<NavKey> =
     getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST).map { route ->
-        route.ifBlank { NavigationRoutes.ROUTE_APPS_LIST }
+        route.ifBlank { NavigationRoutes.ROUTE_APPS_LIST }.toNavKeyOrDefault()
     }
 
 fun handleNavigationItemClick(

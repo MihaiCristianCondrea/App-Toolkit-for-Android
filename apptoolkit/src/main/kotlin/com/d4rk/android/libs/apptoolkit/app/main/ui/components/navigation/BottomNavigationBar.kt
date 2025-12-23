@@ -21,30 +21,24 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation3.runtime.NavKey
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
-import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.StableNavController
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigationBar(
-    navController: StableNavController,
+    currentRoute: NavKey?,
     items: ImmutableList<BottomBarItem>,
+    onNavigate: (NavKey) -> Unit,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
     val context: Context = LocalContext.current
 
     val dataStore: CommonDataStore = CommonDataStore.getInstance(context)
-
-
-    val nav = navController.navController
-    val backStackEntry by nav.currentBackStackEntryAsState()
-    val currentRoute = backStackEntry?.destination?.route ?: nav.currentDestination?.route
-
     val showLabels: Boolean by dataStore
         .getShowBottomBarLabels()
         .collectAsStateWithLifecycle(initialValue = true)
@@ -78,12 +72,7 @@ fun BottomNavigationBar(
                         hapticFeedbackType = HapticFeedbackType.ContextClick
                     )
 
-                    if (!selected) {
-                        nav.navigate(item.route) {
-                            popUpTo(nav.graph.startDestinationId) { saveState = false }
-                            launchSingleTop = true
-                        }
-                    }
+                    if (!selected) onNavigate(item.route)
                 }
             )
         }

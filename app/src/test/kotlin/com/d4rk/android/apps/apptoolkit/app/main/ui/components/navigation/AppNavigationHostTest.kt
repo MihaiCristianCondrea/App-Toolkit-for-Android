@@ -1,5 +1,7 @@
 package com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation
 
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import io.mockk.clearAllMocks
@@ -32,7 +34,7 @@ class AppNavigationHostTest {
 
         val startDestination = dataStore.startupDestinationFlow().first()
 
-        assertEquals(NavigationRoutes.ROUTE_APPS_LIST, startDestination)
+        assertEquals(AppsListRoute, startDestination)
         verify(exactly = 1) { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) }
     }
 
@@ -44,7 +46,7 @@ class AppNavigationHostTest {
 
         val startDestination = dataStore.startupDestinationFlow().first()
 
-        assertEquals(NavigationRoutes.ROUTE_FAVORITE_APPS, startDestination)
+        assertEquals(FavoriteAppsRoute, startDestination)
         verify(exactly = 1) { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) }
     }
 }
