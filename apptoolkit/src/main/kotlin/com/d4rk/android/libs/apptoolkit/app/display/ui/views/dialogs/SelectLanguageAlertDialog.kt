@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.display.ui.components.dialogs
+package com.d4rk.android.libs.apptoolkit.app.display.ui.views.dialogs
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement

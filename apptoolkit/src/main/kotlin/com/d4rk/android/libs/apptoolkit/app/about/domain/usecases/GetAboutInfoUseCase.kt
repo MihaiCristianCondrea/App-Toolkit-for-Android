@@ -1,11 +1,10 @@
 package com.d4rk.android.libs.apptoolkit.app.about.domain.usecases
 
+import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 
-class CopyDeviceInfoUseCase(
+class GetAboutInfoUseCase(
     private val repository: AboutRepository,
 ) {
-    operator fun invoke(label: String, deviceInfo: String) {
-        repository.copyDeviceInfo(label = label, deviceInfo = deviceInfo)
-    }
+    suspend operator fun invoke(): AboutInfo = repository.getAboutInfo()
 }

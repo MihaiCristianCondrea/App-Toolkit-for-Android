@@ -10,7 +10,7 @@ import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.Pe
 import com.d4rk.android.libs.apptoolkit.app.about.data.repository.AboutRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
-import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.ObserveAboutInfoUseCase
+import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.GetAboutInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.ui.AboutViewModel
 import com.d4rk.android.libs.apptoolkit.app.advanced.data.repository.CacheRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
@@ -57,10 +57,9 @@ val settingsModule = module {
             deviceProvider = get(),
             configProvider = get(),
             context = get(),
-            dispatchers = get(),
         )
     }
-    single { ObserveAboutInfoUseCase(repository = get()) }
+    single { GetAboutInfoUseCase(repository = get()) }
     single { CopyDeviceInfoUseCase(repository = get()) }
     single<GeneralSettingsRepository> {
         GeneralSettingsRepositoryImpl(dispatchers = get())
@@ -87,6 +86,7 @@ val settingsModule = module {
         AboutViewModel(
             observeAboutInfo = get(),
             copyDeviceInfo = get(),
+            dispatchers = get(),
         )
     }
 

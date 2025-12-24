@@ -3,7 +3,7 @@ package com.d4rk.android.libs.apptoolkit.app.about.ui
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
-import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.ObserveAboutInfoUseCase
+import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.GetAboutInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
@@ -54,8 +54,8 @@ class TestAboutViewModel {
             }
         }
         return AboutViewModel(
-            observeAboutInfo = ObserveAboutInfoUseCase(repository),
-            copyDeviceInfo = CopyDeviceInfoUseCase(repository),
+            observeAboutInfo = GetAboutInfoUseCase(repository) ,
+            copyDeviceInfo = CopyDeviceInfoUseCase(repository) ,
         )
     }
 
@@ -68,8 +68,8 @@ class TestAboutViewModel {
             }
         }
         return AboutViewModel(
-            observeAboutInfo = ObserveAboutInfoUseCase(repository),
-            copyDeviceInfo = CopyDeviceInfoUseCase(repository),
+            observeAboutInfo = GetAboutInfoUseCase(repository) ,
+            copyDeviceInfo = CopyDeviceInfoUseCase(repository) ,
         )
     }
 
@@ -156,8 +156,8 @@ class TestAboutViewModel {
             }
         }
         val viewModel = AboutViewModel(
-            observeAboutInfo = ObserveAboutInfoUseCase(repository),
-            copyDeviceInfo = CopyDeviceInfoUseCase(repository),
+            observeAboutInfo = GetAboutInfoUseCase(repository) ,
+            copyDeviceInfo = CopyDeviceInfoUseCase(repository) ,
         )
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 

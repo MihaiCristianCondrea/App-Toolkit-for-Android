@@ -26,7 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.LocaleListCompat
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.display.ui.components.dialogs.SelectLanguageAlertDialog
+import com.d4rk.android.libs.apptoolkit.app.display.ui.views.dialogs.SelectLanguageAlertDialog
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.DisplaySettingsProvider
 import com.d4rk.android.libs.apptoolkit.core.logging.DISPLAY_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.PreferenceCategoryItem
