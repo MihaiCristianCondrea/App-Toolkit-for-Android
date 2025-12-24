@@ -2,7 +2,7 @@ package com.d4rk.android.libs.apptoolkit.app.advanced.ui
 
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.advanced.data.CacheRepository
+import com.d4rk.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsAction
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.state.AdvancedSettingsUiState

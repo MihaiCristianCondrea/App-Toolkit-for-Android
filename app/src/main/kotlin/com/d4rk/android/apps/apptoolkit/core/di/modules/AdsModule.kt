@@ -1,7 +1,7 @@
 package com.d4rk.android.apps.apptoolkit.core.di.modules
 
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
-import com.d4rk.android.libs.apptoolkit.app.ads.data.DefaultAdsSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.ads.data.repository.DefaultAdsSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.AdsSettingsViewModel
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider

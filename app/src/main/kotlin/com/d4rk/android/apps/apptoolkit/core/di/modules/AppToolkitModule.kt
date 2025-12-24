@@ -3,14 +3,14 @@ package com.d4rk.android.apps.apptoolkit.core.di.modules
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.startup.utils.interfaces.providers.AppStartupProvider
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.HelpConstants
-import com.d4rk.android.libs.apptoolkit.app.help.data.DefaultHelpRepository
+import com.d4rk.android.libs.apptoolkit.app.help.data.repository.FaqRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.help.data.local.HelpLocalDataSource
 import com.d4rk.android.libs.apptoolkit.app.help.data.remote.HelpRemoteDataSource
-import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepository
+import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
 import com.d4rk.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpViewModel
 import com.d4rk.android.libs.apptoolkit.app.help.ui.model.HelpScreenConfig
-import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.DefaultIssueReporterRepository
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.repository.DefaultIssueReporterRepository
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.local.DeviceInfoLocalDataSource
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.remote.IssueReporterRemoteDataSource
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
@@ -53,8 +53,8 @@ val appToolkitModule: Module = module {
 
     single { HelpLocalDataSource(context = get()) }
     single { HelpRemoteDataSource(client = get()) }
-    single<HelpRepository> {
-        DefaultHelpRepository(
+    single<FaqRepository> {
+        FaqRepositoryImpl(
             localDataSource = get(),
             remoteDataSource = get(),
             catalogUrl = com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants.FAQ_BASE_URL.faqCatalogUrl(isDebugBuild = BuildConfig.DEBUG),

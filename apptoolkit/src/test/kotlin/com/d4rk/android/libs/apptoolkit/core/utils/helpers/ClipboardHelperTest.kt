@@ -6,7 +6,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.copyTextToClipboard
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.copyTextToClipboard
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk

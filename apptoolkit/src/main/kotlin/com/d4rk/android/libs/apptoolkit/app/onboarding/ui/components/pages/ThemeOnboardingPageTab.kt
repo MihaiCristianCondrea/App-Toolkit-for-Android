@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.data.model.OnboardingThemeChoice
+import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.model.OnboardingThemeChoice
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components.AmoledModeToggle
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components.ThemeChoiceCard
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraExtraLargeVerticalSpacer

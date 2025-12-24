@@ -1,6 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository
 
-import com.d4rk.android.libs.apptoolkit.app.onboarding.data.datasource.OnboardingPreferencesDataSource
+import com.d4rk.android.libs.apptoolkit.app.onboarding.data.local.OnboardingPreferencesDataSource
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import kotlinx.coroutines.flow.Flow

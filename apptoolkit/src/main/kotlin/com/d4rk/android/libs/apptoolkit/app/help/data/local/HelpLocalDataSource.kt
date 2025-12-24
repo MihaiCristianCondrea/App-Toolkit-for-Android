@@ -2,6 +2,7 @@ package com.d4rk.android.libs.apptoolkit.app.help.data.local
 
 import android.content.Context
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqId
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 
 class HelpLocalDataSource(
@@ -18,13 +19,13 @@ class HelpLocalDataSource(
             R.string.question_7 to R.string.summary_preference_faq_7,
             R.string.question_8 to R.string.summary_preference_faq_8,
             R.string.question_9 to R.string.summary_preference_faq_9
-        ).mapIndexed { index, (questionRes, answerRes) ->
+        ).map { (questionRes, answerRes) ->
             FaqItem(
-                id = index,
+                id = FaqId("local:$questionRes"),
                 question = context.getString(questionRes),
                 answer = context.getString(answerRes),
             )
-        }.filter { it.question.isNotBlank() && it.answer.isNotBlank() }
+        }
         return faq
     }
 }

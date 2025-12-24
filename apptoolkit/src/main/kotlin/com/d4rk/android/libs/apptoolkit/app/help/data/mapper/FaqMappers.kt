@@ -1,13 +1,15 @@
 package com.d4rk.android.libs.apptoolkit.app.help.data.mapper
 
 import com.d4rk.android.libs.apptoolkit.app.help.data.remote.model.FaqQuestionDto
+import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqId
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 
-internal fun List<FaqQuestionDto>.toFaqItems(): List<FaqItem> =
-    mapIndexed { index, question ->
+internal fun Iterable<FaqQuestionDto>.toFaqItems(): List<FaqItem> =
+        map(FaqQuestionDto::toDomain)
+
+internal fun FaqQuestionDto.toDomain(): FaqItem =
         FaqItem(
-            id = index,
-            question = question.question,
-            answer = question.answer.trim(),
+            id = FaqId(id),
+            question = question,
+            answer = answer,
         )
-    }.filter { faqItem -> faqItem.question.isNotBlank() && faqItem.answer.isNotBlank() }

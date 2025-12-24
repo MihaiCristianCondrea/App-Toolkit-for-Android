@@ -38,7 +38,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVertical
 import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectWithLifecycleOnCompletion
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.safeStartActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.safeStartActivity
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope

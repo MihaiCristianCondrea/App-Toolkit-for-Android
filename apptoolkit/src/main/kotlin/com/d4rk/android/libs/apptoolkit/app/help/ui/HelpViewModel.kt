@@ -16,6 +16,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
@@ -58,10 +59,12 @@ class HelpViewModel(
 
                     is DataState.Success -> {
                         val payload = result.data
+                        val screenStateForData =
+                            if (payload.isEmpty()) ScreenState.NoData() else ScreenState.Success()
                         screenState.update { current ->
                             current.copy(
-                                screenState = payload.screenState,
-                                data = payload.data
+                                screenState = screenStateForData,
+                                data = HelpUiState(questions = payload.toImmutableList())
                             )
                         }
                     }

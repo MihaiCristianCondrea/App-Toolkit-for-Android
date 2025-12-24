@@ -27,9 +27,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
-import com.d4rk.android.libs.apptoolkit.app.help.ui.components.ContactUsCard
-import com.d4rk.android.libs.apptoolkit.app.help.ui.components.HelpQuestionsList
-import com.d4rk.android.libs.apptoolkit.app.help.ui.components.dropdown.HelpScreenMenuActions
+import com.d4rk.android.libs.apptoolkit.app.help.ui.views.cards.ContactUsCard
+import com.d4rk.android.libs.apptoolkit.app.help.ui.views.lists.HelpQuestionsList
+import com.d4rk.android.libs.apptoolkit.app.help.ui.views.dropdowns.HelpScreenMenuActions
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
 import com.d4rk.android.libs.apptoolkit.app.help.ui.model.HelpScreenConfig
 import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
@@ -43,8 +43,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.LargeTopAp
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraLargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.findActivity
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.isInAppReviewAvailable
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.findActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.isInAppReviewAvailable
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ReviewHelper
 import kotlinx.collections.immutable.ImmutableList

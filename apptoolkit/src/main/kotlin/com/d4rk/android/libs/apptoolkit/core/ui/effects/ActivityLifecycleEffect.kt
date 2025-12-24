@@ -8,7 +8,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.findActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.findActivity
 
 @Composable
 fun ActivityLifecycleEffect(lifecycleEvent: Lifecycle.Event, onEvent: () -> Unit) {

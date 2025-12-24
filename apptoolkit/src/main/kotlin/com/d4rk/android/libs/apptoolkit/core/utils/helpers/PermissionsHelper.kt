@@ -6,7 +6,7 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.permissions.PermissionsConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.hasNotificationPermission
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.hasNotificationPermission
 
 /**
  * Utility class for handling runtime permissions.
