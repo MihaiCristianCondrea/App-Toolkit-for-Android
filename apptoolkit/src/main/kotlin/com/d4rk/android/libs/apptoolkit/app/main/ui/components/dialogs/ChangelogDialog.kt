@@ -22,6 +22,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoPr
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.components.dialogs.BasicAlertDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeHorizontalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.extractChangesForVersion
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -49,7 +50,7 @@ fun ChangelogDialog(
         withContext(dispatchers.io) {
             runCatching {
                 val content: String = httpClient.get(changelogUrl).body()
-                val section = extractChangesForVersion(content, buildInfoProvider.appVersion)
+                val section = content.extractChangesForVersion(buildInfoProvider.appVersion)
                 changelogText.value = section.ifBlank { noNewUpdatesText }
             }.onFailure {
                 isError.value = true
@@ -101,18 +102,4 @@ fun ChangelogDialog(
                 }
             }
         })
-}
-
-private fun extractChangesForVersion(markdown: String, version: String): String {
-    val lines = markdown.lines()
-    val startIndex = lines.indexOfFirst { line -> line.contains(version) }
-    if (startIndex == -1) return ""
-    val versionSection = StringBuilder()
-    versionSection.appendLine(lines[startIndex])
-    for (i in startIndex + 1 until lines.size) {
-        val line = lines[i]
-        if (line.startsWith("#")) break
-        versionSection.appendLine(line)
-    }
-    return versionSection.toString().trim()
 }

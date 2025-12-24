@@ -1,9 +1,14 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.ContextWrapper
+import android.os.Build
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
+import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
 
 /**
  * Traverses the context chain and returns the first [ComponentActivity] if present.
@@ -16,4 +21,26 @@ fun Context.findActivity(): ComponentActivity? {
         ctx = ctx.baseContext
     }
     return null
+}
+
+fun Context.copyTextToClipboard(
+    label: String,
+    text: String,
+    onShowSnackbar: () -> Unit = {},
+) {
+    val clipboard: ClipboardManager? = runCatching {
+        getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+    }.getOrNull()
+
+    if (clipboard == null) {
+        Log.w(CLIPBOARD_HELPER_LOG_TAG, "Clipboard service unavailable")
+        return
+    }
+
+    val clip: ClipData = ClipData.newPlainText(label, text)
+    clipboard.setPrimaryClip(clip)
+
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+        onShowSnackbar()
+    }
 }

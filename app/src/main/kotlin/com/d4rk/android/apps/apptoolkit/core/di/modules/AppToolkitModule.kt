@@ -25,8 +25,8 @@ import com.d4rk.android.libs.apptoolkit.app.support.ui.SupportViewModel
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.github.GithubConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.Base64Decoder.parseBase64String
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.HelpUrlHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.decodeBase64OrEmpty
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.faqCatalogUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
@@ -57,7 +57,7 @@ val appToolkitModule: Module = module {
         DefaultHelpRepository(
             localDataSource = get(),
             remoteDataSource = get(),
-            catalogUrl = HelpUrlHelper.faqCatalogUrl(isDebugBuild = BuildConfig.DEBUG),
+            catalogUrl = com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants.FAQ_BASE_URL.faqCatalogUrl(isDebugBuild = BuildConfig.DEBUG),
             productId = HelpConstants.FAQ_PRODUCT_ID,
         )
     }
@@ -91,7 +91,7 @@ val appToolkitModule: Module = module {
         GithubConstants.githubChangelog(get<String>(named("github_repository")))
     }
 
-    single(githubTokenQualifier) { parseBase64String(BuildConfig.GITHUB_TOKEN) }
+    single(githubTokenQualifier) { BuildConfig.GITHUB_TOKEN.decodeBase64OrEmpty() }
 
     single<HelpScreenConfig> {
         HelpScreenConfig(

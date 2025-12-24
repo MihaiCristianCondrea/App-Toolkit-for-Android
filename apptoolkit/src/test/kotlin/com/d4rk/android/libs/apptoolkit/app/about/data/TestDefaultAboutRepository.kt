@@ -6,12 +6,12 @@ import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettin
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ClipboardHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.copyTextToClipboard
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkObject
-import io.mockk.unmockkObject
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -59,13 +59,13 @@ class TestDefaultAboutRepository {
         runTest(dispatcherExtension.testDispatcher) {
             val ctx = mockk<Context>(relaxed = true)
             val repo = repository(ctx)
-            mockkObject(ClipboardHelper)
+            mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.ContextExtensionsKt")
             try {
-                every { ClipboardHelper.copyTextToClipboard(ctx, any(), any(), any()) } returns Unit
+                every { ctx.copyTextToClipboard(any(), any(), any()) } returns Unit
                 repo.copyDeviceInfo("label", "info")
-                verify { ClipboardHelper.copyTextToClipboard(ctx, "label", "info", any()) }
+                verify { ctx.copyTextToClipboard("label", "info", any()) }
             } finally {
-                unmockkObject(ClipboardHelper)
+                unmockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.ContextExtensionsKt")
             }
         }
 }

@@ -6,7 +6,7 @@ import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ClipboardHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.copyTextToClipboard
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -36,11 +36,7 @@ class DefaultAboutRepository(
 
     override suspend fun copyDeviceInfo(label: String, deviceInfo: String) {
         withContext(dispatchers.main) {
-            ClipboardHelper.copyTextToClipboard(
-                context = context,
-                label = label,
-                text = deviceInfo,
-            )
+            context.copyTextToClipboard(label = label, text = deviceInfo)
         }
     }
 }

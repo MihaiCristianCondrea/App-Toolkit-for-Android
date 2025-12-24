@@ -1,9 +1,9 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 
-import android.net.Uri
-import androidx.core.net.toUri
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiEnvironments
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 fun String.developerAppsBaseUrl(
     baseRepositoryUrl: String = ApiConstants.BASE_REPOSITORY_URL,
@@ -23,18 +23,43 @@ fun String?.sanitizeUrlOrNull(): String? {
     return sanitized.takeUnless { it.isEmpty() }
 }
 
-/**
- * Produces a [Uri] from a sanitized string, or `null` when the input is blank or invalid.
- */
-fun String?.sanitizeUriOrNull(): Uri? =
-    sanitizeUrlOrNull()
-        ?.let { url ->
-            runCatching { url.toUri() }
-                .getOrNull()
-                ?.takeIf { uri -> !uri.scheme.isNullOrBlank() }
-        }
-
 fun String?.normalizeRoute(): String? = this
     ?.substringBefore('?')
     ?.substringBefore('/')
     ?.takeIf { it.isNotBlank() }
+
+@OptIn(ExperimentalEncodingApi::class)
+fun String.decodeBase64OrEmpty(): String =
+    runCatching { String(Base64.decode(this), Charsets.UTF_8) }.getOrDefault("")
+
+/**
+ * Extracts the changelog section for the first line that contains [version].
+ *
+ * Compatibility/behavior (matches your current implementation + unit tests):
+ * - Finds the first line where `line.contains(version)` is true.
+ * - Includes that matching line.
+ * - Includes subsequent lines until the next Markdown header (a line starting with '#'),
+ *   or until end of content.
+ * - Returns the extracted block trimmed; returns an empty string if [version] isn't found
+ *   (or if the receiver is blank).
+ *
+ * Implementation notes:
+ * - Uses [lineSequence] to avoid allocating a full list of lines. :contentReference[oaicite:1]{index=1}
+ * - Uses lazy sequence operators ([dropWhile], [takeWhile]) for clean, idiomatic flow. :contentReference[oaicite:2]{index=2}
+ */
+fun String.extractChangesForVersion(version: String): String {
+    val versionLinesIterator = lineSequence()
+            .dropWhile { currentLine -> !currentLine.contains(version) }
+            .iterator()
+    if (!versionLinesIterator.hasNext()) return ""
+    val versionHeaderLine = versionLinesIterator.next()
+    val changelogSectionLines = sequenceOf(versionHeaderLine) + generateSequence { if (versionLinesIterator.hasNext()) versionLinesIterator.next() else null }.takeWhile { currentLine -> !currentLine.startsWith("#") }
+    return buildString {
+        changelogSectionLines.forEach { appendLine(it) }
+    }.trim()
+}
+
+fun String.faqCatalogUrl(isDebugBuild: Boolean): String {
+    val catalogEnvironment = isDebugBuild.toApiEnvironment()
+    return "$this/$catalogEnvironment/catalog.json"
+}

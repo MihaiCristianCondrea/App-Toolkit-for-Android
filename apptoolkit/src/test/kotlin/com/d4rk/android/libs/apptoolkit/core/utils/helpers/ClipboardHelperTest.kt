@@ -5,6 +5,8 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.copyTextToClipboard
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -34,8 +36,7 @@ class ClipboardHelperTest {
 
             var callbackInvoked = false
 
-            ClipboardHelper.copyTextToClipboard(
-                context = context,
+            context.copyTextToClipboard(
                 label = "label",
                 text = "text",
                 onShowSnackbar = { callbackInvoked = true },
@@ -65,8 +66,7 @@ class ClipboardHelperTest {
 
             var callbackInvoked = false
 
-            ClipboardHelper.copyTextToClipboard(
-                context = context,
+            context.copyTextToClipboard(
                 label = "label",
                 text = "text",
                 onShowSnackbar = { callbackInvoked = true },
@@ -88,19 +88,18 @@ class ClipboardHelperTest {
 
         mockkStatic(Log::class)
         try {
-            every { Log.w("ClipboardHelper", "Clipboard service unavailable") } returns 0
+            every { Log.w(CLIPBOARD_HELPER_LOG_TAG, "Clipboard service unavailable") } returns 0
 
             var callbackInvoked = false
 
-            ClipboardHelper.copyTextToClipboard(
-                context = context,
+            context.copyTextToClipboard(
                 label = "label",
                 text = "text",
                 onShowSnackbar = { callbackInvoked = true },
             )
 
             assertFalse(callbackInvoked)
-            verify(exactly = 1) { Log.w("ClipboardHelper", "Clipboard service unavailable") }
+            verify(exactly = 1) { Log.w(CLIPBOARD_HELPER_LOG_TAG, "Clipboard service unavailable") }
         } finally {
             unmockkStatic(Log::class)
         }
