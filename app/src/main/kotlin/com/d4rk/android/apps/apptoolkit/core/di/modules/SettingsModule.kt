@@ -51,7 +51,7 @@ val settingsModule = module {
     single<PrivacySettingsProvider> { AppPrivacySettingsProvider(context = get()) }
     single<BuildInfoProvider> { AppBuildInfoProvider(context = get()) }
     single<GeneralSettingsContentProvider> { GeneralSettingsContentProvider() }
-    single<CacheRepository> { CacheRepositoryImpl(context = get(), dispatchers = get()) }
+    single<CacheRepository> { CacheRepositoryImpl(context = get()) }
     single<AboutRepository> {
         AboutRepositoryImpl(
             deviceProvider = get(),
@@ -81,7 +81,7 @@ val settingsModule = module {
         )
     }
 
-    viewModel { AdvancedSettingsViewModel(repository = get()) }
+    viewModel { AdvancedSettingsViewModel(repository = get(), dispatchers = get()) }
 
     viewModel {
         AboutViewModel(
