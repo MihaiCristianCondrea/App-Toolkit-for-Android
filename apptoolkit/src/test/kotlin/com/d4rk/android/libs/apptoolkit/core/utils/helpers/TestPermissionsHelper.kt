@@ -24,10 +24,7 @@ class TestPermissionsHelper {
     fun `hasNotificationPermission returns true for API 32 and below`() {
         val context = mockk<Context>()
 
-        mockkStatic(Build.VERSION::class)
-        mockkStatic(ContextCompat::class)
-
-        try {
+        withStaticMocks(Build.VERSION::class, ContextCompat::class) {
             every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.S_V2
 
             assertTrue(PermissionsHelper.hasNotificationPermission(context))
@@ -35,9 +32,6 @@ class TestPermissionsHelper {
             verify(exactly = 0) {
                 ContextCompat.checkSelfPermission(any(), any())
             }
-        } finally {
-            unmockkStatic(ContextCompat::class)
-            unmockkStatic(Build.VERSION::class)
         }
     }
 
@@ -45,10 +39,7 @@ class TestPermissionsHelper {
     fun `hasNotificationPermission reflects granted state on API 33`() {
         val context = mockk<Context>()
 
-        mockkStatic(Build.VERSION::class)
-        mockkStatic(ContextCompat::class)
-
-        try {
+        withStaticMocks(Build.VERSION::class, ContextCompat::class) {
             every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.TIRAMISU
             every {
                 ContextCompat.checkSelfPermission(
@@ -69,9 +60,6 @@ class TestPermissionsHelper {
                     Manifest.permission.POST_NOTIFICATIONS
                 )
             }
-        } finally {
-            unmockkStatic(ContextCompat::class)
-            unmockkStatic(Build.VERSION::class)
         }
     }
 
@@ -79,11 +67,7 @@ class TestPermissionsHelper {
     fun `requestNotificationPermission requests on API 33 when missing`() {
         val activity = mockk<Activity>()
 
-        mockkStatic(Build.VERSION::class)
-        mockkStatic(ContextCompat::class)
-        mockkStatic(ActivityCompat::class)
-
-        try {
+        withStaticMocks(Build.VERSION::class, ContextCompat::class, ActivityCompat::class) {
             every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.TIRAMISU
             every {
                 ContextCompat.checkSelfPermission(
@@ -91,6 +75,7 @@ class TestPermissionsHelper {
                     Manifest.permission.POST_NOTIFICATIONS
                 )
             } returns PackageManager.PERMISSION_DENIED
+
             justRun {
                 ActivityCompat.requestPermissions(
                     activity,
@@ -108,10 +93,6 @@ class TestPermissionsHelper {
                     PermissionsConstants.REQUEST_CODE_NOTIFICATION_PERMISSION
                 )
             }
-        } finally {
-            unmockkStatic(ActivityCompat::class)
-            unmockkStatic(ContextCompat::class)
-            unmockkStatic(Build.VERSION::class)
         }
     }
 
@@ -119,11 +100,7 @@ class TestPermissionsHelper {
     fun `requestNotificationPermission skips when already granted on API 33`() {
         val activity = mockk<Activity>()
 
-        mockkStatic(Build.VERSION::class)
-        mockkStatic(ContextCompat::class)
-        mockkStatic(ActivityCompat::class)
-
-        try {
+        withStaticMocks(Build.VERSION::class, ContextCompat::class, ActivityCompat::class) {
             every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.TIRAMISU
             every {
                 ContextCompat.checkSelfPermission(
@@ -137,10 +114,6 @@ class TestPermissionsHelper {
             verify(exactly = 0) {
                 ActivityCompat.requestPermissions(any(), any(), any())
             }
-        } finally {
-            unmockkStatic(ActivityCompat::class)
-            unmockkStatic(ContextCompat::class)
-            unmockkStatic(Build.VERSION::class)
         }
     }
 
@@ -148,11 +121,7 @@ class TestPermissionsHelper {
     fun `requestNotificationPermission ignores API 32 and below`() {
         val activity = mockk<Activity>()
 
-        mockkStatic(Build.VERSION::class)
-        mockkStatic(ContextCompat::class)
-        mockkStatic(ActivityCompat::class)
-
-        try {
+        withStaticMocks(Build.VERSION::class, ContextCompat::class, ActivityCompat::class) {
             every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.S_V2
 
             PermissionsHelper.requestNotificationPermission(activity)
@@ -163,10 +132,21 @@ class TestPermissionsHelper {
             verify(exactly = 0) {
                 ActivityCompat.requestPermissions(any(), any(), any())
             }
-        } finally {
-            unmockkStatic(ActivityCompat::class)
-            unmockkStatic(ContextCompat::class)
-            unmockkStatic(Build.VERSION::class)
         }
+    }
+
+    private inline fun <T> withStaticMocks(
+        vararg targets: kotlin.reflect.KClass<*>,
+        block: () -> T
+    ): T {
+        targets.forEach { mockkStatic(it) }
+
+        return runCatching(block)
+                .also {
+                    targets.reversed().forEach { k ->
+                        runCatching { unmockkStatic(k) }
+                    }
+                }
+                .getOrThrow()
     }
 }

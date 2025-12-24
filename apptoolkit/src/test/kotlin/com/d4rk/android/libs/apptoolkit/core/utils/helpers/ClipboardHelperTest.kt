@@ -21,6 +21,24 @@ import kotlin.test.assertTrue
 
 class ClipboardHelperTest {
 
+    private inline fun <T> runCatchingFinally(
+        block: () -> T,
+        finallyBlock: () -> Unit
+    ): T {
+        val result = runCatching(block)
+        val cleanupError = runCatching(finallyBlock).exceptionOrNull()
+
+        if (cleanupError != null) {
+            result.exceptionOrNull()?.let { primary ->
+                primary.addSuppressed(cleanupError)
+                throw primary
+            }
+            throw cleanupError
+        }
+
+        return result.getOrThrow()
+    }
+
     @Test
     fun `copyTextToClipboard copies text and invokes callback for API 32`() {
         val context = mockk<Context>()
@@ -31,24 +49,28 @@ class ClipboardHelperTest {
         justRun { clipboardManager.setPrimaryClip(capture(clipDataSlot)) }
 
         mockkStatic(Build.VERSION::class)
-        try {
-            every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.S_V2
 
-            var callbackInvoked = false
+        runCatchingFinally(
+            block = {
+                every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.S_V2
 
-            context.copyTextToClipboard(
-                label = "label",
-                text = "text",
-                onShowSnackbar = { callbackInvoked = true },
-            )
+                var callbackInvoked = false
 
-            verify(exactly = 1) { clipboardManager.setPrimaryClip(any()) }
-            assertEquals("label", clipDataSlot.captured.description.label.toString())
-            assertEquals("text", clipDataSlot.captured.getItemAt(0).text.toString())
-            assertTrue(callbackInvoked)
-        } finally {
-            unmockkStatic(Build.VERSION::class)
-        }
+                context.copyTextToClipboard(
+                    label = "label",
+                    text = "text",
+                    onShowSnackbar = { callbackInvoked = true },
+                )
+
+                verify(exactly = 1) { clipboardManager.setPrimaryClip(any()) }
+                assertEquals("label", clipDataSlot.captured.description.label.toString())
+                assertEquals("text", clipDataSlot.captured.getItemAt(0).text.toString())
+                assertTrue(callbackInvoked)
+            },
+            finallyBlock = {
+                unmockkStatic(Build.VERSION::class)
+            }
+        )
     }
 
     @Test
@@ -61,24 +83,28 @@ class ClipboardHelperTest {
         justRun { clipboardManager.setPrimaryClip(capture(clipDataSlot)) }
 
         mockkStatic(Build.VERSION::class)
-        try {
-            every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.TIRAMISU
 
-            var callbackInvoked = false
+        runCatchingFinally(
+            block = {
+                every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.TIRAMISU
 
-            context.copyTextToClipboard(
-                label = "label",
-                text = "text",
-                onShowSnackbar = { callbackInvoked = true },
-            )
+                var callbackInvoked = false
 
-            verify(exactly = 1) { clipboardManager.setPrimaryClip(any()) }
-            assertEquals("label", clipDataSlot.captured.description.label.toString())
-            assertEquals("text", clipDataSlot.captured.getItemAt(0).text.toString())
-            assertFalse(callbackInvoked)
-        } finally {
-            unmockkStatic(Build.VERSION::class)
-        }
+                context.copyTextToClipboard(
+                    label = "label",
+                    text = "text",
+                    onShowSnackbar = { callbackInvoked = true },
+                )
+
+                verify(exactly = 1) { clipboardManager.setPrimaryClip(any()) }
+                assertEquals("label", clipDataSlot.captured.description.label.toString())
+                assertEquals("text", clipDataSlot.captured.getItemAt(0).text.toString())
+                assertFalse(callbackInvoked)
+            },
+            finallyBlock = {
+                unmockkStatic(Build.VERSION::class)
+            }
+        )
     }
 
     @Test
@@ -87,21 +113,25 @@ class ClipboardHelperTest {
         every { context.getSystemService(Context.CLIPBOARD_SERVICE) } returns null
 
         mockkStatic(Log::class)
-        try {
-            every { Log.w(CLIPBOARD_HELPER_LOG_TAG, "Clipboard service unavailable") } returns 0
 
-            var callbackInvoked = false
+        runCatchingFinally(
+            block = {
+                every { Log.w(CLIPBOARD_HELPER_LOG_TAG, "Clipboard service unavailable") } returns 0
 
-            context.copyTextToClipboard(
-                label = "label",
-                text = "text",
-                onShowSnackbar = { callbackInvoked = true },
-            )
+                var callbackInvoked = false
 
-            assertFalse(callbackInvoked)
-            verify(exactly = 1) { Log.w(CLIPBOARD_HELPER_LOG_TAG, "Clipboard service unavailable") }
-        } finally {
-            unmockkStatic(Log::class)
-        }
+                context.copyTextToClipboard(
+                    label = "label",
+                    text = "text",
+                    onShowSnackbar = { callbackInvoked = true },
+                )
+
+                assertFalse(callbackInvoked)
+                verify(exactly = 1) { Log.w(CLIPBOARD_HELPER_LOG_TAG, "Clipboard service unavailable") }
+            },
+            finallyBlock = {
+                unmockkStatic(Log::class)
+            }
+        )
     }
 }

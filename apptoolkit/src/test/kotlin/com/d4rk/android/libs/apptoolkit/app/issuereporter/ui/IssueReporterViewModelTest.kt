@@ -15,6 +15,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -39,11 +40,24 @@ class IssueReporterViewModelTest {
         override suspend fun capture(): DeviceInfo = mockk()
     }
 
+    private inline fun <T> withMainDispatcher(
+        dispatcher: CoroutineDispatcher ,
+        block: () -> T
+    ): T {
+        Dispatchers.setMain(dispatcher)
+        return runCatching { block() }
+                .also {
+                    // Don’t let cleanup override test failures.
+                    runCatching { Dispatchers.resetMain() }
+                }
+                .getOrThrow()
+    }
+
     @Test
     fun `invalid input shows error and does not call use case`() = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
-        try {
+
+        withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
             val viewModel = IssueReporterViewModel(useCase, githubTarget, "", deviceInfoProvider)
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -54,22 +68,20 @@ class IssueReporterViewModelTest {
             val snackbar = viewModel.uiState.value.snackbar!!
             val msg = snackbar.message as UiTextHelper.StringResource
             assertThat(msg.resourceId).isEqualTo(R.string.error_invalid_report)
-            verify(exactly = 0) { useCase.invoke(any()) }
-        } finally {
-            Dispatchers.resetMain()
+            verify(exactly = 0) { useCase.invoke(any()) } // FIXME: Flow is constructed but not used
         }
     }
 
     @Test
     fun `send report success updates state`() = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
-        try {
+
+        withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
             val captured = slot<SendIssueReportUseCase.Params>()
             every { useCase.invoke(capture(captured)) } returns flowOf(IssueReportResult.Success("url"))
-            val viewModel =
-                IssueReporterViewModel(useCase, githubTarget, "token", deviceInfoProvider)
+
+            val viewModel = IssueReporterViewModel(useCase, githubTarget, "token", deviceInfoProvider)
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
             viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))
@@ -83,18 +95,16 @@ class IssueReporterViewModelTest {
             assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
             assertThat(state.data?.issueUrl).isEqualTo("url")
             assertThat((snackbar.message as UiTextHelper.StringResource).resourceId)
-                .isEqualTo(R.string.snack_report_success)
+                    .isEqualTo(R.string.snack_report_success)
             assertThat(captured.captured.token).isEqualTo("token")
-        } finally {
-            Dispatchers.resetMain()
         }
     }
 
     @Test
     fun `update events modify state`() = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
-        try {
+
+        withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
             val viewModel = IssueReporterViewModel(useCase, githubTarget, "", deviceInfoProvider)
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -110,21 +120,20 @@ class IssueReporterViewModelTest {
             assertThat(data.description).isEqualTo("D")
             assertThat(data.email).isEqualTo("E")
             assertThat(data.anonymous).isTrue()
-        } finally {
-            Dispatchers.resetMain()
         }
     }
 
     @Test
     fun `device info failure shows error and skips use case`() = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
+
         val failingProvider = object : DeviceInfoProvider {
             override suspend fun capture(): DeviceInfo {
                 throw IllegalStateException("boom")
             }
         }
-        try {
+
+        withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
             val viewModel = IssueReporterViewModel(useCase, githubTarget, "", failingProvider)
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -139,10 +148,8 @@ class IssueReporterViewModelTest {
             val snackbar = state.snackbar!!
             assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
             assertThat((snackbar.message as UiTextHelper.StringResource).resourceId)
-                .isEqualTo(R.string.snack_report_failed)
-            verify(exactly = 0) { useCase.invoke(any()) }
-        } finally {
-            Dispatchers.resetMain()
+                    .isEqualTo(R.string.snack_report_failed)
+            verify(exactly = 0) { useCase.invoke(any()) } // FIXME: Flow is constructed but not used
         }
     }
 
@@ -161,10 +168,11 @@ class IssueReporterViewModelTest {
     @MethodSource("errorCases")
     fun `send report error maps message`(status: HttpStatusCode, expected: Int) = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
-        try {
+
+        withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
             every { useCase.invoke(any()) } returns flowOf(IssueReportResult.Error(status, ""))
+
             val viewModel = IssueReporterViewModel(useCase, githubTarget, "tok", deviceInfoProvider)
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
@@ -177,11 +185,7 @@ class IssueReporterViewModelTest {
             val state = viewModel.uiState.value
             val snackbar = state.snackbar!!
             assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
-            assertThat((snackbar.message as UiTextHelper.StringResource).resourceId).isEqualTo(
-                expected
-            )
-        } finally {
-            Dispatchers.resetMain()
+            assertThat((snackbar.message as UiTextHelper.StringResource).resourceId).isEqualTo(expected)
         }
     }
 }

@@ -55,17 +55,40 @@ class TestDefaultAboutRepository {
     }
 
     @Test
-    fun `copyDeviceInfo delegates to ClipboardHelper`() =
-        runTest(dispatcherExtension.testDispatcher) {
-            val ctx = mockk<Context>(relaxed = true)
-            val repo = repository(ctx)
-            mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.ContextExtensionsKt")
-            try {
+    fun `copyDeviceInfo delegates to ClipboardHelper`() = runTest(dispatcherExtension.testDispatcher) {
+        val ctx = mockk<Context>(relaxed = true)
+        val repo = repository(ctx)
+
+        val extFile = "com.d4rk.android.libs.apptoolkit.core.utils.extensions.ContextExtensionsKt"
+        mockkStatic(extFile)
+
+        runCatchingFinally(
+            block = {
                 every { ctx.copyTextToClipboard(any(), any(), any()) } returns Unit
                 repo.copyDeviceInfo("label", "info")
                 verify { ctx.copyTextToClipboard("label", "info", any()) }
-            } finally {
-                unmockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.ContextExtensionsKt")
+            },
+            finallyBlock = {
+                unmockkStatic(extFile)
             }
+        )
+    }
+
+    private inline fun <T> runCatchingFinally(
+        block: () -> T,
+        finallyBlock: () -> Unit
+    ): T {
+        val result = runCatching(block)
+        val cleanupError = runCatching(finallyBlock).exceptionOrNull()
+
+        if (cleanupError != null) {
+            result.exceptionOrNull()?.let { primary ->
+                primary.addSuppressed(cleanupError)
+                throw primary
+            }
+            throw cleanupError
         }
+
+        return result.getOrThrow()
+    }
 }

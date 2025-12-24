@@ -26,17 +26,20 @@ class DataStoreTest {
         val dispatchers = TestDispatcherProvider(dispatcher)
         val dataStore = DataStore(context = context, dispatchers = dispatchers)
 
-        try {
-            val expectedTheme = "dark"
+        val dataStoreFile =
+                context.preferencesDataStoreFile(DataStoreNamesConstants.DATA_STORE_SETTINGS)
 
+        val expectedTheme = "dark"
+
+        val storedTheme = runCatching {
             dataStore.saveThemeMode(mode = expectedTheme)
-            val storedTheme = dataStore.themeMode.first()
+            dataStore.themeMode.first()
+        }.also {
+            runCatching { dataStore.close() }
+            runCatching { dataStoreFile.delete() }
+        }.getOrThrow()
 
-            assertEquals(expectedTheme, storedTheme)
-        } finally {
-            dataStore.close()
-            context.preferencesDataStoreFile(DataStoreNamesConstants.DATA_STORE_SETTINGS).delete()
-        }
+        assertEquals(expectedTheme, storedTheme)
     }
 
     private class TestDispatcherProvider(

@@ -24,6 +24,45 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class TestAppInfoHelper {
 
+    /**
+     * `try { block } finally { cleanup }` but expressed via Result-style chaining:
+     * - preserves the original failure (test still fails as expected)
+     * - always runs cleanup
+     * - if cleanup fails too, it is added as a suppressed exception
+     */
+    private suspend inline fun <T> runCatchingFinally(
+        crossinline block: suspend () -> T,
+        crossinline finallyBlock: () -> Unit
+    ): T {
+        val result: Result<T> = try {
+            Result.success(block())
+        } catch (t: Throwable) {
+            Result.failure(t)
+        }
+
+        val cleanupError: Throwable? = runCatching { finallyBlock() }.exceptionOrNull()
+
+        if (cleanupError != null) {
+            result.exceptionOrNull()?.let { primary ->
+                primary.addSuppressed(cleanupError)
+                throw primary
+            }
+            throw cleanupError
+        }
+
+        return result.getOrThrow()
+    }
+
+    private suspend inline fun <T> withToastStaticMock(
+        crossinline block: suspend () -> T
+    ): T {
+        mockkStatic(Toast::class)
+        return runCatchingFinally(
+            block = { block() },
+            finallyBlock = { unmockkStatic(Toast::class) }
+        )
+    }
+
     @Test
     fun `openApp adds new task flag when context not Activity`() = runTest {
         val dispatcher = UnconfinedTestDispatcher(testScheduler)
@@ -100,8 +139,8 @@ class TestAppInfoHelper {
         every { context.packageManager } returns pm
         every { pm.getLaunchIntentForPackage("pkg") } returns null
         every { context.getString(any()) } returns "not installed"
-        mockkStatic(Toast::class)
-        try {
+
+        withToastStaticMock {
             val toast = mockk<Toast>(relaxed = true)
             every { Toast.makeText(context, "not installed", Toast.LENGTH_SHORT) } returns toast
 
@@ -110,8 +149,6 @@ class TestAppInfoHelper {
             assertEquals(false, result)
             verify { Toast.makeText(context, "not installed", Toast.LENGTH_SHORT) }
             println("🏁 [TEST DONE] openApp shows toast and returns false when launch intent missing")
-        } finally {
-            unmockkStatic(Toast::class)
         }
     }
 
@@ -144,18 +181,17 @@ class TestAppInfoHelper {
         every { pm.getLaunchIntentForPackage("pkg") } returns intent
         every { intent.resolveActivity(pm) } returns mockk<ComponentName>()
         every { context.getString(any()) } returns "not installed"
-        mockkStatic(Toast::class)
-        try {
+
+        withToastStaticMock {
             val toast = mockk<Toast>(relaxed = true)
             every { Toast.makeText(context, "not installed", Toast.LENGTH_SHORT) } returns toast
             every { context.startActivity(intent) } throws RuntimeException("fail")
 
             val result = AppInfoHelper(TestDispatchers(dispatcher)).openApp(context, "pkg")
+
             assertEquals(false, result)
             verify { Toast.makeText(context, "not installed", Toast.LENGTH_SHORT) }
             println("🏁 [TEST DONE] openApp returns false on start failure")
-        } finally {
-            unmockkStatic(Toast::class)
         }
     }
 
@@ -170,18 +206,17 @@ class TestAppInfoHelper {
         every { pm.getLaunchIntentForPackage("pkg") } returns intent
         every { intent.resolveActivity(pm) } returns mockk<ComponentName>()
         every { context.getString(any()) } returns "not installed"
-        mockkStatic(Toast::class)
-        try {
+
+        withToastStaticMock {
             val toast = mockk<Toast>(relaxed = true)
             every { Toast.makeText(context, "not installed", Toast.LENGTH_SHORT) } returns toast
             every { context.startActivity(intent) } throws RuntimeException("fail")
 
             val result = AppInfoHelper(TestDispatchers(dispatcher)).openAppResult(context, "pkg")
+
             assertTrue(result.isFailure)
             verify { Toast.makeText(context, "not installed", Toast.LENGTH_SHORT) }
             println("🏁 [TEST DONE] openAppResult exposes failure")
-        } finally {
-            unmockkStatic(Toast::class)
         }
     }
 }
