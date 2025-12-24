@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components
+package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.cards
 
 import android.view.SoundEffectConstants
 import android.view.View

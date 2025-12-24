@@ -7,20 +7,20 @@ import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.Ap
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppPrivacySettingsProvider
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppSettingsProvider
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.PermissionsSettingsRepository
-import com.d4rk.android.libs.apptoolkit.app.about.data.repository.DefaultAboutRepository
+import com.d4rk.android.libs.apptoolkit.app.about.data.repository.AboutRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.ObserveAboutInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.ui.AboutViewModel
-import com.d4rk.android.libs.apptoolkit.app.advanced.data.repository.DefaultCacheRepository
+import com.d4rk.android.libs.apptoolkit.app.advanced.data.repository.CacheRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.AdvancedSettingsViewModel
-import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.repository.DefaultUsageAndDiagnosticsRepository
+import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.repository.UsageAndDiagnosticsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageAndDiagnosticsRepository
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsViewModel
 import com.d4rk.android.libs.apptoolkit.app.permissions.domain.repository.PermissionsRepository
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.PermissionsViewModel
-import com.d4rk.android.libs.apptoolkit.app.settings.general.data.repository.DefaultGeneralSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.GeneralSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsViewModel
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsViewModel
@@ -51,9 +51,9 @@ val settingsModule = module {
     single<PrivacySettingsProvider> { AppPrivacySettingsProvider(context = get()) }
     single<BuildInfoProvider> { AppBuildInfoProvider(context = get()) }
     single<GeneralSettingsContentProvider> { GeneralSettingsContentProvider() }
-    single<CacheRepository> { DefaultCacheRepository(context = get(), dispatchers = get()) }
+    single<CacheRepository> { CacheRepositoryImpl(context = get(), dispatchers = get()) }
     single<AboutRepository> {
-        DefaultAboutRepository(
+        AboutRepositoryImpl(
             deviceProvider = get(),
             configProvider = get(),
             context = get(),
@@ -63,7 +63,7 @@ val settingsModule = module {
     single { ObserveAboutInfoUseCase(repository = get()) }
     single { CopyDeviceInfoUseCase(repository = get()) }
     single<GeneralSettingsRepository> {
-        DefaultGeneralSettingsRepository(dispatchers = get())
+        GeneralSettingsRepositoryImpl(dispatchers = get())
     }
     viewModel {
         GeneralSettingsViewModel(repository = get())
@@ -91,8 +91,8 @@ val settingsModule = module {
     }
 
     single<UsageAndDiagnosticsRepository> {
-        DefaultUsageAndDiagnosticsRepository(
-            dataSource = CommonDataStore.getInstance(get()),
+        UsageAndDiagnosticsRepositoryImpl(
+            dataSource = get<CommonDataStore>(),
             configProvider = get(),
             dispatchers = get(),
         )

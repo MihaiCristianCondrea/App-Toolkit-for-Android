@@ -21,7 +21,7 @@ private class FakeOnboardingPreferencesDataSource : OnboardingPreferencesDataSou
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TestDefaultOnboardingRepository {
+class TestOnboardingRepositoryImpl {
 
     companion object {
         @JvmField
@@ -33,7 +33,7 @@ class TestDefaultOnboardingRepository {
     fun `observeOnboardingCompletion reflects data source state`() =
         runTest(dispatcherExtension.testDispatcher) {
             val dataSource = FakeOnboardingPreferencesDataSource()
-            val repository = DefaultOnboardingRepository(
+            val repository = OnboardingRepositoryImpl(
                 dataSource,
                 TestDispatchers(dispatcherExtension.testDispatcher)
             )
@@ -48,7 +48,7 @@ class TestDefaultOnboardingRepository {
     fun `setOnboardingCompleted updates data source`() =
         runTest(dispatcherExtension.testDispatcher) {
             val dataSource = FakeOnboardingPreferencesDataSource()
-            val repository = DefaultOnboardingRepository(
+            val repository = OnboardingRepositoryImpl(
                 dataSource,
                 TestDispatchers(dispatcherExtension.testDispatcher)
             )

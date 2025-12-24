@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components.pages
+package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.model.OnboardingThemeChoice
-import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components.AmoledModeToggle
-import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components.ThemeChoiceCard
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.AmoledModeToggle
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.cards.ThemeChoiceCard
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraExtraLargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants

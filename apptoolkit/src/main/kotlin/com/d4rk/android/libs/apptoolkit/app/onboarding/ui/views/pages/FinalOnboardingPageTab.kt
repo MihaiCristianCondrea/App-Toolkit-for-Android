@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components.pages
+package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween

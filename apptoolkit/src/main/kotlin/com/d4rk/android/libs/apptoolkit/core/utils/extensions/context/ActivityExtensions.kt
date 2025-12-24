@@ -1,11 +1,9 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions.context
 
 import android.app.Activity
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.store.StoreConstants
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.tasks.await
-
-// TODO: Move to constants class
-const val PLAY_STORE_PACKAGE = "com.android.vending"
 
 suspend fun Activity.isInAppReviewAvailable(): Boolean {
     val context = applicationContext

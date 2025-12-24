@@ -9,10 +9,7 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.repository.Issu
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import kotlinx.coroutines.withContext
 
-/**
- * Default implementation of [IssueReporterRepository] that posts issues to GitHub.
- */
-class DefaultIssueReporterRepository(
+class IssueReporterRepositoryImpl(
     private val remoteDataSource: IssueReporterRemoteDataSource,
     private val dispatchers: DispatcherProvider,
 ) : IssueReporterRepository {

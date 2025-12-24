@@ -12,11 +12,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
-/**
- * Default implementation of [AboutRepository] that gathers device and build
- * information on an I/O dispatcher.
- */
-class DefaultAboutRepository(
+class AboutRepositoryImpl(
     private val deviceProvider: AboutSettingsProvider,
     private val configProvider: BuildInfoProvider,
     private val context: Context,

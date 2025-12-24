@@ -18,6 +18,9 @@ import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.apps.apptoolkit.core.data.favorites.FavoritesRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.data.repository.MainRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
+import com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository.OnboardingRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.OnboardingViewModel
 import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.developerAppsBaseUrl
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.toApiEnvironment
@@ -67,10 +70,17 @@ val appModule: Module = module {
     }
 
     single<OnboardingProvider> { AppOnboardingProvider() }
+    single<OnboardingRepository> {
+        OnboardingRepositoryImpl(
+            dataStore = get(),
+            dispatchers = get(),
+        )
+    }
 
     single<NavigationRepository> { MainRepositoryImpl(dispatchers = get()) }
 
     viewModel { MainViewModel(navigationRepository = get()) }
+    viewModel { OnboardingViewModel(repository = get()) }
 
     single<String>(qualifier = named(name = "developer_apps_base_url")) {
         val environment = BuildConfig.DEBUG.toApiEnvironment()

@@ -13,10 +13,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import java.io.File
 
-/**
- * Default implementation of [CacheRepository] that clears cache directories using the provided [Context].
- */
-class DefaultCacheRepository(
+class CacheRepositoryImpl(
     private val context: Context,
     private val dispatchers: DispatcherProvider,
 ) : CacheRepository {
@@ -41,10 +38,10 @@ class DefaultCacheRepository(
         }
         emit(
             result.fold(
-            onSuccess = { Result.Success(Unit) },
-            onFailure = { Result.Error(it as Exception) }
-        ))
-    }
-        .catch { e -> emit(Result.Error(e as Exception)) }
+                onSuccess = { Result.Success(Unit) },
+                onFailure = { Result.Error(it as Exception) },
+            ),
+        )
+    }.catch { e -> emit(Result.Error(e as Exception)) }
         .flowOn(dispatchers.io)
 }

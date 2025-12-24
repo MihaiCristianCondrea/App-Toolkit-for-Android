@@ -18,7 +18,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
-class TestDefaultAboutRepository {
+class TestAboutRepositoryImpl {
 
     companion object {
         @JvmField
@@ -37,8 +37,8 @@ class TestDefaultAboutRepository {
         override val isDebugBuild: Boolean = false
     }
 
-    private fun repository(context: Context = mockk()): DefaultAboutRepository =
-        DefaultAboutRepository(
+    private fun repository(context: Context = mockk()): AboutRepositoryImpl =
+        AboutRepositoryImpl(
             deviceProvider = deviceProvider,
             configProvider = buildInfoProvider,
             context = context,

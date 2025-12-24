@@ -8,12 +8,9 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-/**
- * Default implementation of [OnboardingRepository] backed by an [OnboardingPreferencesDataSource].
- */
-class DefaultOnboardingRepository(
+class OnboardingRepositoryImpl(
     private val dataStore: OnboardingPreferencesDataSource,
-    private val dispatchers: DispatcherProvider
+    private val dispatchers: DispatcherProvider,
 ) : OnboardingRepository {
 
     override fun observeOnboardingCompletion(): Flow<Boolean> =

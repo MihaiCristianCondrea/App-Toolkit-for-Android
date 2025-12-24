@@ -10,7 +10,7 @@ import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
 import com.d4rk.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpViewModel
 import com.d4rk.android.libs.apptoolkit.app.help.ui.model.HelpScreenConfig
-import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.repository.DefaultIssueReporterRepository
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.local.DeviceInfoLocalDataSource
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.remote.IssueReporterRemoteDataSource
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
@@ -66,7 +66,7 @@ val appToolkitModule: Module = module {
 
     single { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
-    single<IssueReporterRepository> { DefaultIssueReporterRepository(get(), get()) }
+    single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get()) }
     single { SendIssueReportUseCase(get(), get()) }
 
     val githubTokenQualifier = qualifier<GithubToken>()

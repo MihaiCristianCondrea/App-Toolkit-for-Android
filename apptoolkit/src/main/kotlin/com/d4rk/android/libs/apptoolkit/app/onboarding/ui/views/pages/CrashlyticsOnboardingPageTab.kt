@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components.pages
+package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages
 
 import android.content.Context
 import android.content.Intent

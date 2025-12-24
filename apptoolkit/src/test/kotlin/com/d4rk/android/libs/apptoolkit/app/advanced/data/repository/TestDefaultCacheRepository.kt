@@ -14,7 +14,7 @@ import org.junit.Test
 import kotlin.io.path.createTempDirectory
 import kotlin.test.assertFalse
 
-class TestDefaultCacheRepository {
+class TestCacheRepositoryImpl {
 
     @Test
     fun `clearCache deletes cache directories`() = runTest {
@@ -27,7 +27,7 @@ class TestDefaultCacheRepository {
         every { context.codeCacheDir } returns dir2
         every { context.filesDir } returns dir3
 
-        val repository = DefaultCacheRepository(context, TestDispatchers())
+        val repository = CacheRepositoryImpl(context, TestDispatchers())
         val result = repository.clearCache().single()
 
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -49,7 +49,7 @@ class TestDefaultCacheRepository {
         every { context.codeCacheDir } returns failing
         every { context.filesDir } returns dir3
 
-        val repository = DefaultCacheRepository(context, TestDispatchers())
+        val repository = CacheRepositoryImpl(context, TestDispatchers())
         val result = repository.clearCache().single()
 
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -62,7 +62,7 @@ class TestDefaultCacheRepository {
         val context = mockk<Context>()
         every { context.cacheDir } throws SecurityException("denied")
 
-        val repository = DefaultCacheRepository(context, TestDispatchers())
+        val repository = CacheRepositoryImpl(context, TestDispatchers())
         val result = repository.clearCache().single()
         assertThat(result).isInstanceOf(Result.Error::class.java)
     }
@@ -78,7 +78,7 @@ class TestDefaultCacheRepository {
         every { context.codeCacheDir } returns dir2
         every { context.filesDir } returns dir3
 
-        val repository = DefaultCacheRepository(context, TestDispatchers())
+        val repository = CacheRepositoryImpl(context, TestDispatchers())
         val result = repository.clearCache().single()
 
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -97,7 +97,7 @@ class TestDefaultCacheRepository {
         every { context.codeCacheDir } returns failing
         every { context.filesDir } returns dir3
 
-        val repository = DefaultCacheRepository(context, TestDispatchers())
+        val repository = CacheRepositoryImpl(context, TestDispatchers())
         val result = repository.clearCache().single()
         assertThat(result).isInstanceOf(Result.Error::class.java)
     }
@@ -114,7 +114,7 @@ class TestDefaultCacheRepository {
         every { context.filesDir } returns dir3
 
         val dispatcher = StandardTestDispatcher(testScheduler)
-        val repository = DefaultCacheRepository(context, TestDispatchers(dispatcher))
+        val repository = CacheRepositoryImpl(context, TestDispatchers(dispatcher))
 
         repository.clearCache().test {
             assertThat(awaitItem()).isInstanceOf(Result.Success::class.java)

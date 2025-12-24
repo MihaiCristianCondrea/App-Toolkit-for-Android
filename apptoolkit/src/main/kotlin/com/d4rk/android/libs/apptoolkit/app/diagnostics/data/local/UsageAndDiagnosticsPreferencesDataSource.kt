@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.diagnostics.data.datasource
+package com.d4rk.android.libs.apptoolkit.app.diagnostics.data.local
 
 import kotlinx.coroutines.flow.Flow
 
@@ -40,4 +40,3 @@ interface UsageAndDiagnosticsPreferencesDataSource {
     /** Persists ad personalization consent. */
     suspend fun saveAdPersonalizationConsent(isGranted: Boolean)
 }
-

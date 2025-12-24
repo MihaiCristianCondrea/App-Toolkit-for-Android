@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.hasPackage
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.store.StoreConstants
 
 /**
  * Traverses the context chain and returns the first [ComponentActivity] if present.
@@ -93,10 +94,10 @@ fun Context.hasNotificationPermission(): Boolean {
 }
 
 fun Context.hasPlayStore(): Boolean =
-        packageManager.hasPackage(PLAY_STORE_PACKAGE)
+        packageManager.hasPackage(StoreConstants.PLAY_STORE_PACKAGE)
 
 fun Context.isInstalledFromPlayStore(): Boolean =
-        installingPackageNameOrNull() == PLAY_STORE_PACKAGE
+        installingPackageNameOrNull() == StoreConstants.PLAY_STORE_PACKAGE
 
 fun Context.installingPackageNameOrNull(): String? =
         runCatching {

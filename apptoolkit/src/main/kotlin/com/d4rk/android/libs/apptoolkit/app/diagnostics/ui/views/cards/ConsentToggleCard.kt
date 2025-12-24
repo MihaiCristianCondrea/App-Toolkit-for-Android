@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.components
+package com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.views.cards
 
 import android.view.SoundEffectConstants
 import android.view.View

@@ -1,6 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.diagnostics.data.repository
 
-import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.datasource.UsageAndDiagnosticsPreferencesDataSource
+import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.local.UsageAndDiagnosticsPreferencesDataSource
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.model.UsageAndDiagnosticsSettings
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageAndDiagnosticsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
@@ -10,11 +10,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
-/**
- * Default implementation of [UsageAndDiagnosticsRepository] backed by a
- * [UsageAndDiagnosticsPreferencesDataSource].
- */
-class DefaultUsageAndDiagnosticsRepository(
+class UsageAndDiagnosticsRepositoryImpl(
     private val dataSource: UsageAndDiagnosticsPreferencesDataSource,
     private val configProvider: BuildInfoProvider,
     private val dispatchers: DispatcherProvider,
@@ -52,4 +48,3 @@ class DefaultUsageAndDiagnosticsRepository(
     override suspend fun setAdPersonalizationConsent(granted: Boolean) =
         withContext(dispatchers.io) { dataSource.saveAdPersonalizationConsent(isGranted = granted) }
 }
-

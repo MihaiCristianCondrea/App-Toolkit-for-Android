@@ -6,14 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-/**
- * Default implementation of [GeneralSettingsRepository].
- *
- * This implementation performs basic validation on the provided key and runs
- * the work on the supplied [CoroutineDispatcher] to keep it off the main
- * thread.
- */
-class DefaultGeneralSettingsRepository(
+class GeneralSettingsRepositoryImpl(
     private val dispatchers: DispatcherProvider,
 ) : GeneralSettingsRepository {
 

@@ -33,7 +33,7 @@ class TestIssueReporterRepository {
     private fun createRepository(
         client: HttpClient,
         scheduler: TestCoroutineScheduler,
-    ): IssueReporterRepository = DefaultIssueReporterRepository(
+    ): IssueReporterRepository = IssueReporterRepositoryImpl(
         remoteDataSource = IssueReporterRemoteDataSource(client),
         dispatchers = testDispatchers(scheduler)
     )

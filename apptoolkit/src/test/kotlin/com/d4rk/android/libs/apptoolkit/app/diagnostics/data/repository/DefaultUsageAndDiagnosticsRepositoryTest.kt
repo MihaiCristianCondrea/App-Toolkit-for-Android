@@ -1,6 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.diagnostics.data.repository
 
-import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.datasource.UsageAndDiagnosticsPreferencesDataSource
+import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.local.UsageAndDiagnosticsPreferencesDataSource
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
@@ -55,7 +55,7 @@ private class FakeBuildInfoProvider : BuildInfoProvider {
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class DefaultUsageAndDiagnosticsRepositoryTest {
+class UsageAndDiagnosticsRepositoryImplTest {
 
     companion object {
         @JvmField
@@ -67,7 +67,7 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
     fun `observeSettings reflects data source updates`() =
         runTest(dispatcherExtension.testDispatcher) {
             val dataSource = FakeUsageAndDiagnosticsPreferencesDataSource()
-            val repository = DefaultUsageAndDiagnosticsRepository(
+            val repository = UsageAndDiagnosticsRepositoryImpl(
                 dataSource = dataSource,
                 configProvider = FakeBuildInfoProvider(),
                 dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
@@ -82,4 +82,3 @@ class DefaultUsageAndDiagnosticsRepositoryTest {
             assertThat(repository.observeSettings().first().usageAndDiagnostics).isFalse()
         }
 }
-
