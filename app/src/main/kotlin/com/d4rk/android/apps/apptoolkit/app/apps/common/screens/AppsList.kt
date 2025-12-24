@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -28,6 +27,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.AppsListNativeAdC
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import org.koin.compose.koinInject
@@ -59,16 +59,18 @@ fun AppsList(
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
     adFrequency: Int = BuildConfig.APPS_LIST_AD_FREQUENCY,
-    windowWidthSizeClass: WindowWidthSizeClass,
+    windowWidthSizeClass: AppWindowWidthSizeClass,
 ) {
     val apps: ImmutableList<AppInfo> = uiHomeScreen.apps
 
     val columnCount by remember(windowWidthSizeClass) {
         derivedStateOf {
             when (windowWidthSizeClass) {
-                WindowWidthSizeClass.Compact -> 2
-                WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> 4
-                else -> 2
+                AppWindowWidthSizeClass.Compact -> 2
+                AppWindowWidthSizeClass.Medium -> 3
+                AppWindowWidthSizeClass.Expanded -> 4
+                AppWindowWidthSizeClass.Large -> 5
+                AppWindowWidthSizeClass.ExtraLarge -> 6
             }
         }
     }
@@ -222,4 +224,3 @@ private fun AppCardItem(
         modifier = modifier
     )
 }
-

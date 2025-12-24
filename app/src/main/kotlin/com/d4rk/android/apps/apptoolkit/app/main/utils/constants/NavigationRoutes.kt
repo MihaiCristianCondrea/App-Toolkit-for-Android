@@ -7,6 +7,7 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.serialization.Serializable
 
 @Immutable
+@Serializable
 sealed interface AppNavKey : StableNavKey
 
 @Serializable

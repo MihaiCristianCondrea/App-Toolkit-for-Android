@@ -6,7 +6,6 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -20,11 +19,12 @@ import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.NavigationDrawerItemContent
 import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
-import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
-import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.hapticDrawerSwipe
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
+import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
+import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.koinInject
@@ -33,7 +33,7 @@ import org.koin.core.qualifier.named
 @Composable
 fun NavigationDrawer(
     uiState: MainUiState,
-    windowWidthSizeClass: WindowWidthSizeClass,
+    windowWidthSizeClass: AppWindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem<AppNavKey>>,
     navigationState: NavigationState<AppNavKey>,
     navigator: Navigator<AppNavKey>,

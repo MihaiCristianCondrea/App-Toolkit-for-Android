@@ -1,34 +1,61 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.window
 
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.unit.DpSize
+import androidx.window.core.layout.WindowSizeClass
 
 /**
- * Remembers the current [WindowSizeClass] for the active configuration.
+ * Application-specific extension of the window width breakpoints.
+ *
+ * The default Material breakpoints only expose up to the expanded bucket. This enum adds the
+ * recommended Large and ExtraLarge classes so layouts can react to wider viewports such as tablets,
+ * desktop windows, or connected displays.
  */
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Composable
-fun rememberWindowSizeClass(): WindowSizeClass {
-    val density = LocalDensity.current
-    val container = LocalWindowInfo.current.containerSize
-    val dpSize = remember(container, density) {
-        with(density) { DpSize(container.width.toDp(), container.height.toDp()) }
-    }
-    return remember(dpSize) { WindowSizeClass.calculateFromSize(dpSize) }
+enum class AppWindowWidthSizeClass {
+    Compact,
+    Medium,
+    Expanded,
+    Large,
+    ExtraLarge
 }
 
-
 /**
- * Returns the current [WindowWidthSizeClass] calculated from the active window metrics.
+ * Remembers the current [WindowAdaptiveInfo], opting into the Large and ExtraLarge width
+ * breakpoints.
  */
 @Composable
-fun rememberWindowWidthSizeClass(): WindowWidthSizeClass {
-    val windowSizeClass = rememberWindowSizeClass()
-    return remember(windowSizeClass) { windowSizeClass.widthSizeClass }
+fun rememberWindowAdaptiveInfo(
+    supportLargeAndXLargeWidth: Boolean = true,
+): WindowAdaptiveInfo =
+    currentWindowAdaptiveInfo(supportLargeAndXLargeWidth = supportLargeAndXLargeWidth)
+
+/**
+ * Remembers the current [WindowSizeClass] calculated from the active window metrics.
+ */
+@Composable
+fun rememberWindowSizeClass(): WindowSizeClass {
+    val adaptiveInfo: WindowAdaptiveInfo = rememberWindowAdaptiveInfo()
+    return remember(adaptiveInfo) { adaptiveInfo.windowSizeClass }
+}
+
+/**
+ * Returns the current [AppWindowWidthSizeClass] calculated from the active window metrics.
+ */
+@Composable
+fun rememberWindowWidthSizeClass(): AppWindowWidthSizeClass {
+    val windowSizeClass: WindowSizeClass = rememberWindowSizeClass()
+    return remember(windowSizeClass) { windowSizeClass.toAppWindowWidthSizeClass() }
+}
+
+/**
+ * Maps the raw [WindowSizeClass] breakpoints to the extended [AppWindowWidthSizeClass] values.
+ */
+fun WindowSizeClass.toAppWindowWidthSizeClass(): AppWindowWidthSizeClass = when {
+    isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXTRA_LARGE_LOWER_BOUND) -> AppWindowWidthSizeClass.ExtraLarge
+    isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_LARGE_LOWER_BOUND) -> AppWindowWidthSizeClass.Large
+    isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND) -> AppWindowWidthSizeClass.Expanded
+    isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) -> AppWindowWidthSizeClass.Medium
+    else -> AppWindowWidthSizeClass.Compact
 }

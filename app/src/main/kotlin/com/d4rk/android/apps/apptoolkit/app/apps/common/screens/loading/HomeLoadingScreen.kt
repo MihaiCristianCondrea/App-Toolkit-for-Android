@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -13,19 +12,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.WindowItemFit
+import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
 
 @Composable
 fun HomeLoadingScreen(
     paddingValues: PaddingValues,
-    windowWidthSizeClass: WindowWidthSizeClass,
+    windowWidthSizeClass: AppWindowWidthSizeClass,
     itemAspectRatio: Float = 1f,
 ) {
     val numberOfColumns: Int by remember(windowWidthSizeClass) {
         derivedStateOf {
             when (windowWidthSizeClass) {
-                WindowWidthSizeClass.Compact -> 2
-                WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> 4
-                else -> 2
+                AppWindowWidthSizeClass.Compact -> 2
+                AppWindowWidthSizeClass.Medium -> 3
+                AppWindowWidthSizeClass.Expanded -> 4
+                AppWindowWidthSizeClass.Large -> 5
+                AppWindowWidthSizeClass.ExtraLarge -> 6
             }
         }
     }

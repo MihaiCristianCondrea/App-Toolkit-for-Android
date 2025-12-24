@@ -22,7 +22,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,29 +44,30 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.apps.apptoolkit.app.logging.FAB_LOG_TAG
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.fab.MainFloatingActionButton
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.AppNavigationHost
-import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.NavigationDrawer
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.MainNavigationDefaults
+import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.NavigationDrawer
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler
-import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
+import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.BottomNavigationBar
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.HideOnScrollBottomBar
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.LeftNavigationRail
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.MainTopAppBar
+import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.BottomAppBarNativeAdBanner
 import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHost
-import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
-import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.rememberNavigationState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.data.datastore.startupDestinationFlow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -81,7 +81,7 @@ import org.koin.core.qualifier.named
  * The main entry point composable for the application's UI.
  *
  * This function acts as a router, determining the top-level layout based on the device's
- * screen width. It observes the [WindowWidthSizeClass] and delegates the UI construction
+ * screen width. It observes the [AppWindowWidthSizeClass] and delegates the UI construction
  * to either [NavigationDrawer] for compact screens (phones) or [MainScaffoldTabletContent]
  * for larger screens (tablets and desktops).
  *
@@ -90,11 +90,11 @@ import org.koin.core.qualifier.named
  *
  * @see NavigationDrawer for the compact width implementation.
  * @see MainScaffoldTabletContent for the medium/expanded width implementation.
- * @see rememberWindowWidthSizeClass
+ * @see rememberWindowWidthSizeClass for deriving the adaptive window size classes.
  */
 @Composable
 fun MainScreen() {
-    val windowWidthSizeClass: WindowWidthSizeClass = rememberWindowWidthSizeClass()
+    val windowWidthSizeClass: AppWindowWidthSizeClass = rememberWindowWidthSizeClass()
     val viewModel: MainViewModel = koinViewModel()
     val screenState: UiStateScreen<MainUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -112,7 +112,7 @@ fun MainScreen() {
     )
     val navigator: Navigator<AppNavKey> = remember(startupRoute) { Navigator(navigationState) }
 
-    if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
+    if (windowWidthSizeClass == AppWindowWidthSizeClass.Compact) {
         NavigationDrawer(
             uiState = screenState.data ?: MainUiState(),
             windowWidthSizeClass = windowWidthSizeClass,
@@ -149,7 +149,7 @@ fun MainScreen() {
 @Composable
 fun MainScaffoldContent(
     drawerState: DrawerState,
-    windowWidthSizeClass: WindowWidthSizeClass,
+    windowWidthSizeClass: AppWindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem<AppNavKey>>,
     navigationState: NavigationState<AppNavKey>,
     navigator: Navigator<AppNavKey>,
@@ -264,7 +264,7 @@ fun MainScaffoldContent(
 @Composable
 fun MainScaffoldTabletContent(
     uiState: MainUiState,
-    windowWidthSizeClass: WindowWidthSizeClass,
+    windowWidthSizeClass: AppWindowWidthSizeClass,
     bottomItems: ImmutableList<BottomBarItem<AppNavKey>>,
     navigationState: NavigationState<AppNavKey>,
     navigator: Navigator<AppNavKey>,
@@ -272,7 +272,7 @@ fun MainScaffoldTabletContent(
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val isRailExpanded = rememberSaveable(windowWidthSizeClass) {
-        mutableStateOf(windowWidthSizeClass == WindowWidthSizeClass.Expanded)
+        mutableStateOf(windowWidthSizeClass >= AppWindowWidthSizeClass.Expanded)
     }
 
     val context: Context = LocalContext.current
