@@ -73,7 +73,6 @@ class UsageAndDiagnosticsRepositoryImplTest {
                 dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
             )
 
-            // Initial state should reflect default true values
             assertThat(repository.observeSettings().first().usageAndDiagnostics).isTrue()
 
             repository.setUsageAndDiagnostics(false)

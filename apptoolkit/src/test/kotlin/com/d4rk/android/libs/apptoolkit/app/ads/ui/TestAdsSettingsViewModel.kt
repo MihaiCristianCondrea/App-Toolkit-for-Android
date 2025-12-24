@@ -2,6 +2,8 @@ package com.d4rk.android.libs.apptoolkit.app.ads.ui
 
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
+import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
@@ -25,6 +27,8 @@ class TestAdsSettingsViewModel {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
+    private val testDispatchers: DispatcherProvider = TestDispatchers()
+
     private class FakeAdsSettingsRepository(
         override val defaultAdsEnabled: Boolean = true
     ) : AdsSettingsRepository {
@@ -46,7 +50,7 @@ class TestAdsSettingsViewModel {
     fun `initial state reflects repository value`() = runTest(dispatcherExtension.testDispatcher) {
         println("\uD83D\uDE80 [TEST] initial state reflects repository value")
         val repo = FakeAdsSettingsRepository(defaultAdsEnabled = true)
-        val viewModel = AdsSettingsViewModel(repo)
+        val viewModel = AdsSettingsViewModel(repository = repo, dispatchers = testDispatchers)
 
         advanceUntilIdle()
 
@@ -65,7 +69,7 @@ class TestAdsSettingsViewModel {
                 override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> =
                     Result.Success(Unit)
             }
-            val viewModel = AdsSettingsViewModel(repo)
+            val viewModel = AdsSettingsViewModel(repository = repo, dispatchers = testDispatchers)
 
             advanceUntilIdle()
 
@@ -78,7 +82,7 @@ class TestAdsSettingsViewModel {
     fun `setAdsEnabled success updates state`() = runTest(dispatcherExtension.testDispatcher) {
         println("\uD83D\uDE80 [TEST] setAdsEnabled success updates state")
         val repo = FakeAdsSettingsRepository(defaultAdsEnabled = true)
-        val viewModel = AdsSettingsViewModel(repo)
+        val viewModel = AdsSettingsViewModel(repository = repo, dispatchers = testDispatchers)
         advanceUntilIdle()
 
         viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(false))
@@ -94,7 +98,7 @@ class TestAdsSettingsViewModel {
         println("\uD83D\uDE80 [TEST] setAdsEnabled error reverts state")
         val repo = FakeAdsSettingsRepository(defaultAdsEnabled = true)
         repo.setResult = Result.Error(IOException("fail"))
-        val viewModel = AdsSettingsViewModel(repo)
+        val viewModel = AdsSettingsViewModel(repository = repo, dispatchers = testDispatchers)
         advanceUntilIdle()
 
         viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(false))

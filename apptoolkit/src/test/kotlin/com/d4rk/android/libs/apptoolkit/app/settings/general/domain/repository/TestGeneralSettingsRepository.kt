@@ -1,8 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository
 
 import com.d4rk.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepositoryImpl
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +22,7 @@ class TestGeneralSettingsRepository {
     @Test
     fun `getContentKey returns provided key`() = runTest(dispatcherExtension.testDispatcher) {
         val repository =
-            GeneralSettingsRepositoryImpl(TestDispatchers(dispatcherExtension.testDispatcher))
+            GeneralSettingsRepositoryImpl()
         val result = repository.getContentKey("valid").first()
         assertThat(result).isEqualTo("valid")
     }
@@ -32,7 +30,7 @@ class TestGeneralSettingsRepository {
     @Test
     fun `getContentKey throws on null key`() = runTest(dispatcherExtension.testDispatcher) {
         val repository =
-            GeneralSettingsRepositoryImpl(TestDispatchers(dispatcherExtension.testDispatcher))
+            GeneralSettingsRepositoryImpl()
         assertThrows<IllegalArgumentException> {
             repository.getContentKey(null).first()
         }
@@ -41,7 +39,7 @@ class TestGeneralSettingsRepository {
     @Test
     fun `getContentKey throws on blank key`() = runTest(dispatcherExtension.testDispatcher) {
         val repository =
-            GeneralSettingsRepositoryImpl(TestDispatchers(dispatcherExtension.testDispatcher))
+            GeneralSettingsRepositoryImpl()
         assertThrows<IllegalArgumentException> {
             repository.getContentKey("").first()
         }
@@ -50,12 +48,7 @@ class TestGeneralSettingsRepository {
     @Test
     fun `getContentKey uses provided dispatcher`() = runTest(dispatcherExtension.testDispatcher) {
         val trackingDispatcher = TrackingDispatcher()
-        val repository = GeneralSettingsRepositoryImpl(object : DispatcherProvider {
-            override val main = dispatcherExtension.testDispatcher
-            override val io = dispatcherExtension.testDispatcher
-            override val default = trackingDispatcher
-            override val unconfined = dispatcherExtension.testDispatcher
-        })
+        val repository = GeneralSettingsRepositoryImpl()
 
         val result = repository.getContentKey("value").first()
 
