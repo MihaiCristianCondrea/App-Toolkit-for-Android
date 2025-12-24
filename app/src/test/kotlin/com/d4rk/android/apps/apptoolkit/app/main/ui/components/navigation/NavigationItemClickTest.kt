@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.material3.DrawerState
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpActivity
+import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
@@ -28,6 +29,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class NavigationItemClickTest {
@@ -142,6 +144,29 @@ class NavigationItemClickTest {
         }
         coVerify(exactly = 1) { drawerState.close() }
         confirmVerified(IntentsHelper, drawerState)
+    }
+
+    @Test
+    fun `custom handler is executed for unknown route and closes drawer`() = runTest {
+        val drawerState = mockk<DrawerState>()
+        coEvery { drawerState.close() } just Runs
+        var customHandlerInvoked = false
+
+        handleNavigationItemClick(
+            context = context,
+            item = navigationItem("custom_route"),
+            drawerState = drawerState,
+            coroutineScope = this,
+            additionalHandlers = mapOf(
+                "custom_route" to { customHandlerInvoked = true }
+            )
+        )
+        advanceUntilIdle()
+
+        assertTrue(customHandlerInvoked)
+        verify { IntentsHelper wasNot Called }
+        coVerify(exactly = 1) { drawerState.close() }
+        confirmVerified(drawerState)
     }
 
     @Test

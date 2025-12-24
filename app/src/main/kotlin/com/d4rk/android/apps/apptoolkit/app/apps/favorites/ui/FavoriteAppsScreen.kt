@@ -8,7 +8,6 @@ import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,6 +40,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.ScreenStateHa
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.AppInfoHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
@@ -65,7 +65,7 @@ import org.koin.core.qualifier.named
 @Composable
 fun FavoriteAppsRoute(
     paddingValues: PaddingValues,
-    windowWidthSizeClass: WindowWidthSizeClass,
+    windowWidthSizeClass: AppWindowWidthSizeClass,
     onRegisterRandomAppHandler: (RandomAppHandler?) -> Unit,
 ) {
     val viewModel: FavoriteAppsViewModel = koinViewModel()

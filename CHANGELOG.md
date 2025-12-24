@@ -2,6 +2,7 @@
 
 - **New**: Added multiple new themes and color palettes for deeper personalization.
 - **New**: Introduced a seasonal theme to celebrate together.
+- **New**: Migrated navigation to Navigation 3 for simpler, adaptive back stack management.
 - **Patch**: Enhanced overall app performance and responsiveness.
 - **Patch**: Updated dependencies to the latest stable versions.
 

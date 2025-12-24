@@ -23,7 +23,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -61,6 +60,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVertical
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -109,8 +109,8 @@ fun SettingsScreenContent(
     settingsConfig: SettingsConfig,
     contentProvider: GeneralSettingsContentProvider,
 ) {
-    val windowWidthSizeClass: WindowWidthSizeClass = rememberWindowWidthSizeClass()
-    if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
+    val windowWidthSizeClass: AppWindowWidthSizeClass = rememberWindowWidthSizeClass()
+    if (windowWidthSizeClass == AppWindowWidthSizeClass.Compact) {
         PhoneSettingsScreen(
             paddingValues = paddingValues,
             settingsConfig = settingsConfig,
