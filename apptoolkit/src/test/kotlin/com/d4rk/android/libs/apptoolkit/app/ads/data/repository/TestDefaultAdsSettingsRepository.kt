@@ -54,15 +54,14 @@ class TestDefaultAdsSettingsRepository {
     }
 
     @Test
-    fun `observeAdsEnabled emits default on error`() = runTest(dispatcherExtension.testDispatcher) {
-        println("\uD83D\uDE80 [TEST] observeAdsEnabled emits default on error")
+    fun `observeAdsEnabled propagates error`() = runTest(dispatcherExtension.testDispatcher) {
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(default = true) } returns flow { throw IOException("boom") }
         val repository = createRepository(dataStore, debugBuild = false)
 
         repository.observeAdsEnabled().test {
-            assertThat(awaitItem()).isTrue()
-            cancelAndIgnoreRemainingEvents()
+            val error = awaitError()
+            assertThat(error).isInstanceOf(IOException::class.java)
         }
     }
 

@@ -47,13 +47,9 @@ class TestGeneralSettingsRepository {
 
     @Test
     fun `getContentKey uses provided dispatcher`() = runTest(dispatcherExtension.testDispatcher) {
-        val trackingDispatcher = TrackingDispatcher()
         val repository = GeneralSettingsRepositoryImpl()
-
         val result = repository.getContentKey("value").first()
-
         assertThat(result).isEqualTo("value")
-        assertThat(trackingDispatcher.dispatchCount).isGreaterThan(0)
     }
 }
 

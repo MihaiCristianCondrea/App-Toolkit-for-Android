@@ -16,6 +16,7 @@ import io.ktor.client.request.HttpRequestData
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
@@ -28,76 +29,60 @@ import kotlin.test.assertFailsWith
 class TestIssueReporterRepository {
 
     private fun testDispatchers(scheduler: TestCoroutineScheduler) =
-        TestDispatchers(StandardTestDispatcher(scheduler))
+            TestDispatchers(StandardTestDispatcher(scheduler))
 
     private fun createRepository(
         client: HttpClient,
         scheduler: TestCoroutineScheduler,
     ): IssueReporterRepository = IssueReporterRepositoryImpl(
         remoteDataSource = IssueReporterRemoteDataSource(client),
-        dispatchers = testDispatchers(scheduler)
+        dispatchers = testDispatchers(scheduler),
     )
+
+    // ✅ Pure-JVM fixture: no Android calls
+    private fun report(
+        title: String = "t",
+        desc: String = "d",
+        email: String? = null,
+    ): Report = Report(
+        title ,
+        desc ,
+        mockk(relaxed = true) ,
+        ExtraInfo() ,
+        email ,
+    )
+
+    private val target = GithubTarget("user", "repo")
 
     @Test
     fun `sendReport returns success`() = runTest {
-        println("\uD83D\uDE80 [TEST] repository success")
         var capturedRequest: HttpRequestData? = null
         val engine = MockEngine { request ->
             capturedRequest = request
-            val body = """{"html_url":"https://example.com/issue/1"}"""
-            respond(content = body, status = HttpStatusCode.Created)
+            respond("""{"html_url":"https://example.com/issue/1"}""", HttpStatusCode.Created)
         }
-        val client = HttpClient(engine) {
-            install(ContentNegotiation) { json() }
-        }
-        val repository: IssueReporterRepository = createRepository(
-            client = client,
-            scheduler = testScheduler
-        )
-        val report = Report(
-            "title",
-            "desc",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            "me@test.com"
-        )
-        val target = GithubTarget("user", "repo")
-        val result = repository.sendReport(report, target, token = "token123")
+        val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
+        val repository = createRepository(client = client, scheduler = testScheduler)
+
+        val result = repository.sendReport(report("title", "desc", "me@test.com"), target, token = "token123")
 
         assertThat(result).isInstanceOf(IssueReportResult.Success::class.java)
         assertThat((result as IssueReportResult.Success).url).isEqualTo("https://example.com/issue/1")
         assertThat(capturedRequest?.headers?.get(HttpHeaders.Authorization)).isEqualTo("Bearer token123")
-        println("\uD83C\uDFC1 [TEST DONE] repository success")
     }
 
     @Test
     fun `sendReport returns error`() = runTest {
-        println("\uD83D\uDE80 [TEST] repository error")
         val engine = MockEngine { respond("fail", HttpStatusCode.BadRequest) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(
-            client = client,
-            scheduler = testScheduler
-        )
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
-        val result = repository.sendReport(report, target)
+        val repository = createRepository(client = client, scheduler = testScheduler)
+
+        val result = repository.sendReport(report(), target)
 
         assertThat(result).isInstanceOf(IssueReportResult.Error::class.java)
         val error = result as IssueReportResult.Error
         assertThat(error.status).isEqualTo(HttpStatusCode.BadRequest)
         assertThat(error.message).isEqualTo("fail")
-        println("\uD83C\uDFC1 [TEST DONE] repository error")
     }
 
     @Test
@@ -108,22 +93,9 @@ class TestIssueReporterRepository {
             respond("""{"html_url":"https://example.com/issue/2"}""", HttpStatusCode.Created)
         }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(
-            client = client,
-            scheduler = testScheduler
-        )
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
+        val repository = createRepository(client = client, scheduler = testScheduler)
 
-        val result = repository.sendReport(report, target, token = null)
+        val result = repository.sendReport(report(), target, token = null)
 
         assertThat(result).isInstanceOf(IssueReportResult.Success::class.java)
         assertThat(capturedRequest?.headers?.get(HttpHeaders.Authorization)).isNull()
@@ -133,23 +105,10 @@ class TestIssueReporterRepository {
     fun `sendReport network exception`() = runTest {
         val engine = MockEngine { throw SocketTimeoutException("timeout") }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(
-            client = client,
-            scheduler = testScheduler
-        )
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
+        val repository = createRepository(client = client, scheduler = testScheduler)
 
         assertFailsWith<SocketTimeoutException> {
-            repository.sendReport(report, target)
+            repository.sendReport(report(), target)
         }
     }
 
@@ -157,20 +116,10 @@ class TestIssueReporterRepository {
     fun `sendReport malformed json`() = runTest {
         val engine = MockEngine { respond("{", HttpStatusCode.Created) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(client, testScheduler)
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
+        val repository = createRepository(client, testScheduler)
 
         assertFailsWith<kotlinx.serialization.SerializationException> {
-            repository.sendReport(report, target)
+            repository.sendReport(report(), target)
         }
     }
 
@@ -178,19 +127,10 @@ class TestIssueReporterRepository {
     fun `sendReport unsupported status`() = runTest {
         val engine = MockEngine { respond("weird", HttpStatusCode.PaymentRequired) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(client, testScheduler)
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
+        val repository = createRepository(client, testScheduler)
 
-        val result = repository.sendReport(report, target)
+        val result = repository.sendReport(report(), target)
+
         assertThat(result).isInstanceOf(IssueReportResult.Error::class.java)
         val error = result as IssueReportResult.Error
         assertThat(error.status).isEqualTo(HttpStatusCode.PaymentRequired)
@@ -205,39 +145,22 @@ class TestIssueReporterRepository {
             respond("""{"html_url":"https://ex.com/1"}""", HttpStatusCode.Created)
         }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(client, testScheduler)
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
+        val repository = createRepository(client, testScheduler)
 
-        repository.sendReport(report, target)
-        assertThat(capturedRequest?.headers?.get(HttpHeaders.Accept)).isEqualTo("application/vnd.github+json")
+        repository.sendReport(report(), target)
+
+        assertThat(capturedRequest?.headers?.get(HttpHeaders.Accept))
+                .isEqualTo("application/vnd.github+json")
     }
 
     @Test
     fun `sendReport handles bad gateway`() = runTest {
         val engine = MockEngine { respond("broke", HttpStatusCode.BadGateway) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(client, testScheduler)
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
+        val repository = createRepository(client, testScheduler)
 
-        val result = repository.sendReport(report, target)
+        val result = repository.sendReport(report(), target)
+
         assertThat(result).isInstanceOf(IssueReportResult.Error::class.java)
         val error = result as IssueReportResult.Error
         assertThat(error.status).isEqualTo(HttpStatusCode.BadGateway)
@@ -248,19 +171,10 @@ class TestIssueReporterRepository {
     fun `sendReport handles teapot`() = runTest {
         val engine = MockEngine { respond("hot", HttpStatusCode.fromValue(418)) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(client, testScheduler)
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
+        val repository = createRepository(client, testScheduler)
 
-        val result = repository.sendReport(report, target)
+        val result = repository.sendReport(report(), target)
+
         assertThat(result).isInstanceOf(IssueReportResult.Error::class.java)
         val error = result as IssueReportResult.Error
         assertThat(error.status).isEqualTo(HttpStatusCode.fromValue(418))
@@ -271,20 +185,10 @@ class TestIssueReporterRepository {
     fun `sendReport null pointer exception`() = runTest {
         val engine = MockEngine { throw NullPointerException("boom") }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(client, testScheduler)
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
+        val repository = createRepository(client, testScheduler)
 
         assertFailsWith<NullPointerException> {
-            repository.sendReport(report, target)
+            repository.sendReport(report(), target)
         }
     }
 
@@ -292,20 +196,10 @@ class TestIssueReporterRepository {
     fun `sendReport illegal state exception`() = runTest {
         val engine = MockEngine { throw IllegalStateException("illegal") }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(client, testScheduler)
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
+        val repository = createRepository(client, testScheduler)
 
         assertFailsWith<IllegalStateException> {
-            repository.sendReport(report, target)
+            repository.sendReport(report(), target)
         }
     }
 
@@ -313,19 +207,10 @@ class TestIssueReporterRepository {
     fun `sendReport unauthorized`() = runTest {
         val engine = MockEngine { respond("unauth", HttpStatusCode.Unauthorized) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(client, testScheduler)
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
+        val repository = createRepository(client, testScheduler)
 
-        val result = repository.sendReport(report, target)
+        val result = repository.sendReport(report(), target)
+
         assertThat(result).isInstanceOf(IssueReportResult.Error::class.java)
         val error = result as IssueReportResult.Error
         assertThat(error.status).isEqualTo(HttpStatusCode.Unauthorized)
@@ -336,19 +221,10 @@ class TestIssueReporterRepository {
     fun `sendReport forbidden`() = runTest {
         val engine = MockEngine { respond("stop", HttpStatusCode.Forbidden) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(client, testScheduler)
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
+        val repository = createRepository(client, testScheduler)
 
-        val result = repository.sendReport(report, target)
+        val result = repository.sendReport(report(), target)
+
         assertThat(result).isInstanceOf(IssueReportResult.Error::class.java)
         val error = result as IssueReportResult.Error
         assertThat(error.status).isEqualTo(HttpStatusCode.Forbidden)
@@ -359,22 +235,10 @@ class TestIssueReporterRepository {
     fun `sendReport created without url`() = runTest {
         val engine = MockEngine { respond("{}", HttpStatusCode.Created) }
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
-        val repository: IssueReporterRepository = createRepository(
-            client = client,
-            scheduler = testScheduler
-        )
-        val report = Report(
-            "t",
-            "d",
-            com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo.create(
-                android.app.Application()
-            ),
-            ExtraInfo(),
-            null
-        )
-        val target = GithubTarget("user", "repo")
+        val repository = createRepository(client = client, scheduler = testScheduler)
 
-        val result = repository.sendReport(report, target)
+        val result = repository.sendReport(report(), target)
+
         assertThat(result).isInstanceOf(IssueReportResult.Success::class.java)
         val success = result as IssueReportResult.Success
         assertThat(success.url).isEmpty()
