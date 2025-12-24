@@ -74,6 +74,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStore
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ConsentManagerHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.safeStartActivity
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -250,13 +251,12 @@ fun LearnMoreSection() {
         OutlinedIconButtonWithText(
             onClick = {
                 val intent = Intent(Intent.ACTION_VIEW, AppLinks.PRIVACY_POLICY.toUri())
-                intent.resolveActivity(context.packageManager)?.let {
-                    runCatching { context.startActivity(intent) }
-                } ?: Toast.makeText(
-                    appContext,
-                    errorText, // ✅ no LocalContext.getString()
-                    Toast.LENGTH_SHORT
-                ).show()
+                context.safeStartActivity(
+                    intent = intent,
+                    onFailure = {
+                        Toast.makeText(appContext, errorText, Toast.LENGTH_SHORT).show()
+                    },
+                )
             },
             icon = Icons.AutoMirrored.Filled.Launch,
             iconContentDescription = null,

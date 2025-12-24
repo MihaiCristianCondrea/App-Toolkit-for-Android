@@ -1,9 +1,11 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -42,5 +44,36 @@ fun Context.copyTextToClipboard(
 
     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
         onShowSnackbar()
+    }
+}
+
+/**
+ * Resolves and launches the provided [intent], adding [Intent.FLAG_ACTIVITY_NEW_TASK] when the
+ * caller is not an [Activity]. Returns `true` on success and invokes [onFailure] when the intent
+ * cannot be resolved or launching it fails.
+ */
+fun Context.safeStartActivity(
+    intent: Intent,
+    addNewTaskFlag: Boolean = true,
+    onFailure: (Throwable?) -> Unit = {},
+): Boolean {
+    val canResolveIntent = intent.resolveActivity(packageManager) != null
+    if (!canResolveIntent) {
+        onFailure(null)
+        return false
+    }
+
+    val launchIntent = if (addNewTaskFlag && this !is Activity) {
+        Intent(intent).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
+    } else {
+        intent
+    }
+
+    return runCatching {
+        startActivity(launchIntent)
+        true
+    }.getOrElse { throwable ->
+        onFailure(throwable)
+        false
     }
 }

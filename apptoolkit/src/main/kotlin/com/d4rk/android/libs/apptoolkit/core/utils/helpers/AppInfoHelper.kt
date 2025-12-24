@@ -1,11 +1,10 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.helpers
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.widget.Toast
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.safeStartActivity
 import kotlinx.coroutines.withContext
 
 open class AppInfoHelper(
@@ -43,26 +42,19 @@ open class AppInfoHelper(
         }
 
         return if (launchIntent != null) {
-            if (context !is Activity) {
-                launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            launchIntent.resolveActivity(context.packageManager)?.let {
-                runCatching {
-                    context.startActivity(launchIntent)
-                    true
-                }.onFailure {
+            val launched = context.safeStartActivity(
+                intent = launchIntent,
+                onFailure = {
                     Toast.makeText(
                         context,
                         context.getString(R.string.app_not_installed),
                         Toast.LENGTH_SHORT
                     ).show()
-                }
-            } ?: run {
-                Toast.makeText(
-                    context,
-                    context.getString(R.string.app_not_installed),
-                    Toast.LENGTH_SHORT
-                ).show()
+                },
+            )
+            if (launched) {
+                Result.success(true)
+            } else {
                 Result.failure(IllegalStateException("App not installed"))
             }
         } else {

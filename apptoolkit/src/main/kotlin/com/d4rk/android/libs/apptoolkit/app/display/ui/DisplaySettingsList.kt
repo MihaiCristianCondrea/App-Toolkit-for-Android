@@ -38,6 +38,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVertical
 import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectWithLifecycleOnCompletion
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.safeStartActivity
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -237,11 +238,13 @@ fun DisplaySettingsList(
                                     Uri.fromParts("package", context.packageName, null)
                                 )
 
-                            localeIntent.resolveActivity(context.packageManager)?.let {
-                                runCatching { context.startActivity(localeIntent) }
-                            } ?: detailsIntent.resolveActivity(context.packageManager)?.let {
-                                runCatching { context.startActivity(detailsIntent) }
-                            } ?: run {
+                            val openedLocaleSettings = context.safeStartActivity(intent = localeIntent)
+                            val openedAppDetails = if (!openedLocaleSettings) {
+                                context.safeStartActivity(intent = detailsIntent)
+                            } else {
+                                false
+                            }
+                            if (!openedLocaleSettings && !openedAppDetails) {
                                 showLanguageDialog.value = true
                             }
                         } else {

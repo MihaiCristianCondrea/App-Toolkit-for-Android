@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.logging.GENERAL_SETTINGS_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.safeStartActivity
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import kotlinx.coroutines.launch
 
@@ -25,10 +26,10 @@ class GeneralSettingsActivity : AppCompatActivity() {
                 putExtra(EXTRA_CONTENT, contentKey)
             }
 
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.resolveActivity(context.packageManager)?.let {
-                runCatching { context.startActivity(intent) }
-            } ?: Log.e(GENERAL_SETTINGS_LOG_TAG, "Unable to resolve activity to handle intent")
+            context.safeStartActivity(
+                intent = intent,
+                onFailure = { Log.e(GENERAL_SETTINGS_LOG_TAG, "Unable to resolve activity to handle intent") },
+            )
         }
     }
 
