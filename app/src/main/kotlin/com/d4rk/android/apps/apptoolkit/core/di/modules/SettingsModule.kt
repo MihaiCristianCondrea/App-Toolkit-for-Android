@@ -55,17 +55,15 @@ val settingsModule = module {
     single<AboutRepository> {
         AboutRepositoryImpl(
             deviceProvider = get(),
-            configProvider = get(),
+            buildInfoProvider = get(),
             context = get(),
         )
     }
     single { GetAboutInfoUseCase(repository = get()) }
     single { CopyDeviceInfoUseCase(repository = get()) }
-    single<GeneralSettingsRepository> {
-        GeneralSettingsRepositoryImpl(dispatchers = get())
-    }
+    single<GeneralSettingsRepository> { GeneralSettingsRepositoryImpl() }
     viewModel {
-        GeneralSettingsViewModel(repository = get())
+        GeneralSettingsViewModel(repository = get(), dispatchers = get())
     }
 
     single<PermissionsRepository> {
@@ -82,9 +80,10 @@ val settingsModule = module {
 
     viewModel { AdvancedSettingsViewModel(repository = get(), dispatchers = get()) }
 
+    single<GetAboutInfoUseCase> { GetAboutInfoUseCase(repository = get()) }
     viewModel {
         AboutViewModel(
-            observeAboutInfo = get(),
+            getAboutInfo = get(),
             copyDeviceInfo = get(),
             dispatchers = get(),
         )
