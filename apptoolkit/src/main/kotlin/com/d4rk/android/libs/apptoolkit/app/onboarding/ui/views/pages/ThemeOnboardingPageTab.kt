@@ -1,6 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,16 +14,13 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.model.OnboardingThemeChoice
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.AmoledModeToggle
@@ -33,19 +29,20 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraExtraLar
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.rememberThemePreferencesState
+import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun ThemeOnboardingPageTab() {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val context: Context = LocalContext.current
-    val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
+    val dataStore = rememberCommonDataStore()
+    val themePreferences = rememberThemePreferencesState()
 
     val defaultThemeModeKey: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
-    val currentThemeMode: String by dataStore.themeMode.collectAsStateWithLifecycle(initialValue = defaultThemeModeKey)
-    val isAmoledMode: Boolean by dataStore.amoledMode.collectAsStateWithLifecycle(initialValue = false)
+    val currentThemeMode: String = themePreferences.themeMode.ifBlank { defaultThemeModeKey }
+    val isAmoledMode: Boolean = themePreferences.amoledMode
 
     val themeChoices: List<OnboardingThemeChoice> = listOf(
         OnboardingThemeChoice(

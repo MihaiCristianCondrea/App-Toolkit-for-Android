@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -74,9 +75,7 @@ fun SupportNativeAdCard(
     val appContext = remember(context) { context.applicationContext }
     val inspectionMode = LocalInspectionMode.current
 
-    val dataStore: CommonDataStore = remember(appContext) {
-        CommonDataStore.getInstance(context = appContext)
-    }
+    val dataStore: CommonDataStore = rememberCommonDataStore()
     val showAds: Boolean by dataStore.adsEnabledFlow.collectAsStateWithLifecycle(initialValue = true)
 
     if (inspectionMode) {

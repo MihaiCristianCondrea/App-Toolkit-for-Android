@@ -30,10 +30,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.style.TextAlign
 import androidx.core.view.isVisible
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -68,10 +66,7 @@ fun NoDataNativeAdCard(
 ) {
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
-    val appContext = context.applicationContext
-    val dataStore: CommonDataStore =
-        remember(appContext) { CommonDataStore.getInstance(context = appContext) }
-    val showAds: Boolean by dataStore.adsEnabledFlow.collectAsStateWithLifecycle(initialValue = true)
+    val showAds: Boolean = rememberAdsEnabled()
 
     if (inspectionMode) {
         NoDataNativeAdPreview(modifier = modifier)

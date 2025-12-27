@@ -1,6 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui
 
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
+import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteOnboardingUseCase
+import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOnboardingCompletionUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
@@ -51,13 +53,14 @@ class TestOnboardingViewModel {
 
     @Test
     fun `initial state is not completed`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = OnboardingViewModel(repository = FakeOnboardingRepository())
+        val repository = FakeOnboardingRepository()
+        val viewModel = createViewModel(repository)
         assertThat(viewModel.uiState.value.data?.isOnboardingCompleted).isFalse()
     }
 
     @Test
     fun `current tab index mutates as expected`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = OnboardingViewModel(repository = FakeOnboardingRepository())
+        val viewModel = createViewModel(FakeOnboardingRepository())
 
         // Default value
         assertThat(viewModel.uiState.value.data?.currentTabIndex).isEqualTo(0)
@@ -81,7 +84,7 @@ class TestOnboardingViewModel {
 
     @Test
     fun `repeated index changes remain stable`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = OnboardingViewModel(repository = FakeOnboardingRepository())
+        val viewModel = createViewModel(FakeOnboardingRepository())
 
         repeat(5) { index ->
             viewModel.onEvent(OnboardingEvent.UpdateCurrentTab(index))
@@ -96,7 +99,7 @@ class TestOnboardingViewModel {
     @Test
     fun `repository completion updates state`() = runTest(dispatcherExtension.testDispatcher) {
         val repository = FakeOnboardingRepository()
-        val viewModel = OnboardingViewModel(repository = repository)
+        val viewModel = createViewModel(repository)
 
         repository.emit(true)
         advanceUntilIdle()
@@ -107,7 +110,7 @@ class TestOnboardingViewModel {
     @Test
     fun `repository failure resets completion state via onCompletion`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val viewModel = OnboardingViewModel(repository = FailingOnboardingRepository())
+            val viewModel = createViewModel(FailingOnboardingRepository())
 
             advanceUntilIdle()
 
@@ -117,7 +120,7 @@ class TestOnboardingViewModel {
     @Test
     fun `completeOnboarding sets completion state`() = runTest(dispatcherExtension.testDispatcher) {
         val repository = FakeOnboardingRepository()
-        val viewModel = OnboardingViewModel(repository = repository)
+        val viewModel = createViewModel(repository)
 
         viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
         advanceUntilIdle()
@@ -130,7 +133,7 @@ class TestOnboardingViewModel {
     fun `completeOnboarding failure resets completion`() =
         runTest(dispatcherExtension.testDispatcher) {
             val repository = FakeOnboardingRepository().apply { shouldFail = true }
-            val viewModel = OnboardingViewModel(repository = repository)
+            val viewModel = createViewModel(repository)
 
             viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
             advanceUntilIdle()
@@ -138,4 +141,23 @@ class TestOnboardingViewModel {
             assertThat(repository.completed).isFalse()
             assertThat(viewModel.uiState.value.data?.isOnboardingCompleted).isFalse()
         }
+
+    @Test
+    fun `crashlytics dialog visibility toggles`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = createViewModel(FakeOnboardingRepository())
+
+        assertThat(viewModel.uiState.value.data?.isCrashlyticsDialogVisible).isTrue()
+
+        viewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
+        assertThat(viewModel.uiState.value.data?.isCrashlyticsDialogVisible).isFalse()
+
+        viewModel.onEvent(OnboardingEvent.ShowCrashlyticsDialog)
+        assertThat(viewModel.uiState.value.data?.isCrashlyticsDialogVisible).isTrue()
+    }
+
+    private fun createViewModel(repository: OnboardingRepository): OnboardingViewModel =
+        OnboardingViewModel(
+            observeOnboardingCompletionUseCase = ObserveOnboardingCompletionUseCase(repository),
+            completeOnboardingUseCase = CompleteOnboardingUseCase(repository),
+        )
 }

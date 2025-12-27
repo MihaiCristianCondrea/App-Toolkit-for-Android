@@ -22,7 +22,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.coroutines.delay
 import kotlin.math.min
 
@@ -43,8 +43,8 @@ import kotlin.math.min
 fun Modifier.bounceClick(
     animationEnabled: Boolean = true,
 ): Modifier = composed {
-    val context: Context = LocalContext.current
-    val dataStore: CommonDataStore = remember(context) { CommonDataStore.getInstance(context) }
+    LocalContext.current
+    val dataStore = rememberCommonDataStore()
 
     val bouncyButtonsEnabled: Boolean by dataStore.bouncyButtons
         .collectAsStateWithLifecycle(initialValue = true)

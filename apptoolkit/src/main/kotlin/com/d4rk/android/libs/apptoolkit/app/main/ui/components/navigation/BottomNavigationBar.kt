@@ -24,7 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.StableNavKey
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,9 +36,9 @@ fun <T : StableNavKey> BottomNavigationBar(
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
-    val context: Context = LocalContext.current
+    LocalContext.current
 
-    val dataStore: CommonDataStore = CommonDataStore.getInstance(context)
+    val dataStore = rememberCommonDataStore()
     val showLabels: Boolean by dataStore
         .getShowBottomBarLabels()
         .collectAsStateWithLifecycle(initialValue = true)

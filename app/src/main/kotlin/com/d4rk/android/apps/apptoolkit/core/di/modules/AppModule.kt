@@ -20,6 +20,8 @@ import com.d4rk.android.libs.apptoolkit.app.main.data.repository.MainRepositoryI
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository.OnboardingRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
+import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteOnboardingUseCase
+import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOnboardingCompletionUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.OnboardingViewModel
 import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.developerAppsBaseUrl
@@ -61,6 +63,7 @@ val appModule: Module = module {
         )
     }
 
+    // TODOL Make a startup module
     single<List<String>>(qualifier = named(name = "startup_entries")) {
         get<Context>().resources.getStringArray(R.array.preference_startup_entries).toList()
     }
@@ -69,18 +72,25 @@ val appModule: Module = module {
         get<Context>().resources.getStringArray(R.array.preference_startup_values).toList()
     }
 
+    // TODO: Make an onboarding module
     single<OnboardingProvider> { AppOnboardingProvider() }
     single<OnboardingRepository> {
         OnboardingRepositoryImpl(
             dataStore = get(),
+        )
+    }
+    single { ObserveOnboardingCompletionUseCase(repository = get()) }
+    single { CompleteOnboardingUseCase(repository = get()) }
+    viewModel { MainViewModel(navigationRepository = get()) }
+    viewModel {
+        OnboardingViewModel(
+            observeOnboardingCompletionUseCase = get(),
+            completeOnboardingUseCase = get(),
             dispatchers = get(),
         )
     }
 
     single<NavigationRepository> { MainRepositoryImpl(dispatchers = get()) }
-
-    viewModel { MainViewModel(navigationRepository = get()) }
-    viewModel { OnboardingViewModel(repository = get()) }
 
     single<String>(qualifier = named(name = "developer_apps_base_url")) {
         val environment = BuildConfig.DEBUG.toApiEnvironment()

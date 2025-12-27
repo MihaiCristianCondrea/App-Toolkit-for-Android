@@ -25,9 +25,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -63,8 +61,7 @@ fun BottomAppBarNativeAdBanner(
 ) {
     val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
-    val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }
-    val showAds: Boolean by dataStore.adsEnabledFlow.collectAsStateWithLifecycle(initialValue = true)
+    val showAds: Boolean = rememberAdsEnabled()
 
     if (inspectionMode) {
         NativeAdPreview(modifier = modifier)

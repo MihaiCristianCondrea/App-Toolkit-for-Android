@@ -38,9 +38,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,8 +57,12 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.helpers.CrashlyticsOnboardingStateManager
-import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
+import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsViewModel
+import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsEvent
+import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnosticsUiState
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.OnboardingViewModel
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
 import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.OutlinedIconButtonWithText
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraLargeIncreasedVerticalSpacer
@@ -70,27 +73,22 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.MediumHorizon
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.MediumVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.components.switches.CustomSwitch
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.safeStartActivity
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ConsentManagerHelper
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CrashlyticsOnboardingPageTab() {
-    val context: Context = LocalContext.current
-    val configProvider = koinInject<BuildInfoProvider>()
-    val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val switchState: State<Boolean> =
-        dataStore.usageAndDiagnostics(default = !configProvider.isDebugBuild)
-            .collectAsStateWithLifecycle(initialValue = !configProvider.isDebugBuild)
-    val showCrashlyticsDialog = CrashlyticsOnboardingStateManager.showCrashlyticsDialog
+    val onboardingViewModel: OnboardingViewModel = koinViewModel()
+    val diagnosticsViewModel: UsageAndDiagnosticsViewModel = koinViewModel()
+
+    val onboardingState by onboardingViewModel.uiState.collectAsStateWithLifecycle()
+    val onboardingUiState = onboardingState.data ?: OnboardingUiState()
+
+    val diagnosticsState by diagnosticsViewModel.uiState.collectAsStateWithLifecycle()
+    val diagnosticsUiState = diagnosticsState.data ?: UsageAndDiagnosticsUiState()
 
     Column(
         modifier = Modifier
@@ -132,16 +130,20 @@ fun CrashlyticsOnboardingPageTab() {
             SmallVerticalSpacer()
 
             UsageAndDiagnosticsToggleCard(
-                switchState = switchState.value, onCheckedChange = { isChecked ->
-                    coroutineScope.launch {
-                        dataStore.saveUsageAndDiagnostics(isChecked = isChecked)
-                    }
-                })
+                switchState = diagnosticsUiState.usageAndDiagnostics,
+                onCheckedChange = { isChecked ->
+                    diagnosticsViewModel.onEvent(
+                        UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(isChecked)
+                    )
+                },
+            )
 
             LargeVerticalSpacer()
 
             OutlinedIconButtonWithText(
-                onClick = { CrashlyticsOnboardingStateManager.openDialog() },
+                onClick = {
+                    onboardingViewModel.onEvent(OnboardingEvent.ShowCrashlyticsDialog)
+                },
                 modifier = Modifier.fillMaxWidth(),
                 icon = Icons.Outlined.PrivacyTip,
                 iconContentDescription = stringResource(id = R.string.onboarding_crashlytics_show_details_button_cd),
@@ -154,10 +156,39 @@ fun CrashlyticsOnboardingPageTab() {
         }
     }
 
-    if (showCrashlyticsDialog) {
+    if (onboardingUiState.isCrashlyticsDialogVisible) {
         CrashlyticsConsentDialog(
-            onDismissRequest = { CrashlyticsOnboardingStateManager.dismissDialog() },
-            onAcknowledge = { CrashlyticsOnboardingStateManager.dismissDialog() })
+            state = diagnosticsUiState,
+            onDismissRequest = {
+                onboardingViewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
+            },
+            onAcknowledge = { shouldEnableUsage ->
+                diagnosticsViewModel.onEvent(
+                    UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(shouldEnableUsage)
+                )
+                onboardingViewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
+            },
+            onAnalyticsConsentChanged = {
+                diagnosticsViewModel.onEvent(
+                    UsageAndDiagnosticsEvent.SetAnalyticsConsent(it)
+                )
+            },
+            onAdStorageConsentChanged = {
+                diagnosticsViewModel.onEvent(
+                    UsageAndDiagnosticsEvent.SetAdStorageConsent(it)
+                )
+            },
+            onAdUserDataConsentChanged = {
+                diagnosticsViewModel.onEvent(
+                    UsageAndDiagnosticsEvent.SetAdUserDataConsent(it)
+                )
+            },
+            onAdPersonalizationConsentChanged = {
+                diagnosticsViewModel.onEvent(
+                    UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(it)
+                )
+            },
+        )
     }
 }
 
@@ -268,51 +299,14 @@ fun LearnMoreSection() {
 
 @Composable
 fun CrashlyticsConsentDialog(
+    state: UsageAndDiagnosticsUiState,
     onDismissRequest: () -> Unit,
-    onAcknowledge: () -> Unit,
+    onAcknowledge: (Boolean) -> Unit,
+    onAnalyticsConsentChanged: (Boolean) -> Unit,
+    onAdStorageConsentChanged: (Boolean) -> Unit,
+    onAdUserDataConsentChanged: (Boolean) -> Unit,
+    onAdPersonalizationConsentChanged: (Boolean) -> Unit,
 ) {
-    val context: Context = LocalContext.current
-    val configProvider: BuildInfoProvider = koinInject()
-    val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
-
-    val initialConsentValue: Boolean = !configProvider.isDebugBuild
-
-    val analyticsState: State<Boolean> =
-        dataStore.analyticsConsent(default = initialConsentValue)
-            .collectAsStateWithLifecycle(initialValue = initialConsentValue)
-    val adStorageState: State<Boolean> =
-        dataStore.adStorageConsent(default = initialConsentValue)
-            .collectAsStateWithLifecycle(initialValue = initialConsentValue)
-    val adUserDataState: State<Boolean> =
-        dataStore.adUserDataConsent(default = initialConsentValue)
-            .collectAsStateWithLifecycle(initialValue = initialConsentValue)
-    val adPersonalizationState: State<Boolean> =
-        dataStore.adPersonalizationConsent(default = initialConsentValue)
-            .collectAsStateWithLifecycle(initialValue = initialConsentValue)
-
-    fun updateConsentState(type: String, value: Boolean) {
-        coroutineScope.launch {
-            when (type) {
-                DataStoreNamesConstants.DATA_STORE_ANALYTICS_CONSENT -> dataStore.saveAnalyticsConsent(
-                    isGranted = value
-                )
-
-                DataStoreNamesConstants.DATA_STORE_AD_STORAGE_CONSENT -> dataStore.saveAdStorageConsent(
-                    isGranted = value
-                )
-
-                DataStoreNamesConstants.DATA_STORE_AD_USER_DATA_CONSENT -> dataStore.saveAdUserDataConsent(
-                    isGranted = value
-                )
-
-                DataStoreNamesConstants.DATA_STORE_AD_PERSONALIZATION_CONSENT -> dataStore.saveAdPersonalizationConsent(
-                    value
-                )
-            }
-        }
-    }
-
     AlertDialog(
         onDismissRequest = onDismissRequest,
         properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false),
@@ -353,67 +347,49 @@ fun CrashlyticsConsentDialog(
                     title = stringResource(id = R.string.consent_analytics_storage_title),
                     description = stringResource(id = R.string.consent_analytics_storage_description_short),
                     icon = Icons.Outlined.Analytics,
-                    switchState = analyticsState.value,
+                    switchState = state.analyticsConsent,
                     onCheckedChange = {
-                        updateConsentState(
-                            type = DataStoreNamesConstants.DATA_STORE_ANALYTICS_CONSENT,
-                            value = it
-                        )
-                    })
+                        onAnalyticsConsentChanged(it)
+                    },
+                )
                 SmallVerticalSpacer()
                 ConsentToggleItem(
                     title = stringResource(id = R.string.consent_ad_storage_title),
                     description = stringResource(id = R.string.consent_ad_storage_description_short),
                     icon = Icons.Outlined.Storage,
-                    switchState = adStorageState.value,
+                    switchState = state.adStorageConsent,
                     onCheckedChange = {
-                        updateConsentState(
-                            type = DataStoreNamesConstants.DATA_STORE_AD_STORAGE_CONSENT,
-                            value = it
-                        )
-                    })
+                        onAdStorageConsentChanged(it)
+                    },
+                )
                 SmallVerticalSpacer()
                 ConsentToggleItem(
                     title = stringResource(id = R.string.consent_ad_user_data_title),
                     description = stringResource(id = R.string.consent_ad_user_data_description_short),
                     icon = Icons.AutoMirrored.Outlined.Send,
-                    switchState = adUserDataState.value,
+                    switchState = state.adUserDataConsent,
                     onCheckedChange = {
-                        updateConsentState(
-                            type = DataStoreNamesConstants.DATA_STORE_AD_USER_DATA_CONSENT,
-                            value = it
-                        )
-                    })
+                        onAdUserDataConsentChanged(it)
+                    },
+                )
                 SmallVerticalSpacer()
                 ConsentToggleItem(
                     title = stringResource(id = R.string.consent_ad_personalization_title),
                     description = stringResource(id = R.string.consent_ad_personalization_description_short),
                     icon = Icons.Outlined.Campaign,
-                    switchState = adPersonalizationState.value,
+                    switchState = state.adPersonalizationConsent,
                     onCheckedChange = {
-                        updateConsentState(
-                            type = DataStoreNamesConstants.DATA_STORE_AD_PERSONALIZATION_CONSENT,
-                            value = it
-                        )
-                    })
+                        onAdPersonalizationConsentChanged(it)
+                    },
+                )
             }
         },
         confirmButton = {
             OutlinedIconButtonWithText(
                 onClick = {
-                    coroutineScope.launch {
-                        val overallConsent: Boolean =
-                            analyticsState.value && adStorageState.value && adUserDataState.value && adPersonalizationState.value
-                        dataStore.saveUsageAndDiagnostics(isChecked = overallConsent)
-
-                        ConsentManagerHelper.updateConsent(
-                            analyticsGranted = analyticsState.value,
-                            adStorageGranted = adStorageState.value,
-                            adUserDataGranted = adUserDataState.value,
-                            adPersonalizationGranted = adPersonalizationState.value
-                        )
-                    }
-                    onAcknowledge()
+                    val overallConsent: Boolean =
+                        state.analyticsConsent && state.adStorageConsent && state.adUserDataConsent && state.adPersonalizationConsent
+                    onAcknowledge(overallConsent)
                 },
                 label = stringResource(id = R.string.button_acknowledge_consents),
                 icon = Icons.Outlined.Check,

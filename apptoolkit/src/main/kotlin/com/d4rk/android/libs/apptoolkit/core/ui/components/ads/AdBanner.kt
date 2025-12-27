@@ -19,9 +19,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LifecycleResumeEffect
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 
@@ -49,8 +47,7 @@ fun AdBanner(
     if (LocalInspectionMode.current) return
 
     val context: Context = LocalContext.current
-    val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context = context) }
-    val showAds: Boolean by dataStore.adsEnabledFlow.collectAsStateWithLifecycle(initialValue = true)
+    val showAds: Boolean = rememberAdsEnabled()
 
     var isAdLoaded by remember(adsConfig.bannerAdUnitId) { mutableStateOf(false) }
 

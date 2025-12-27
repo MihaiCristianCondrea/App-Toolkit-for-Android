@@ -26,16 +26,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.ThemeSettingOption
@@ -50,9 +48,10 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.DynamicPaletteVariant
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.applyDynamicVariant
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.rememberThemePreferencesState
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.SeasonalHelper
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -72,23 +71,14 @@ import kotlinx.coroutines.launch
 fun ThemeSettingsList(paddingValues: PaddingValues) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
-    val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
+    val dataStore = rememberCommonDataStore()
 
-    val currentThemeModeKey: String by dataStore.themeMode.collectAsStateWithLifecycle(
-        initialValue = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
-    )
-
-    val isAmoledMode: State<Boolean> =
-        dataStore.amoledMode.collectAsStateWithLifecycle(initialValue = false)
-
-    val isDynamicColors: Boolean by dataStore.dynamicColors
-        .collectAsStateWithLifecycle(initialValue = true)
-
-    val dynamicVariantIndex: Int by dataStore.dynamicPaletteVariant
-        .collectAsStateWithLifecycle(initialValue = 0)
-
-    val staticPaletteId: String by dataStore.staticPaletteId
-        .collectAsStateWithLifecycle(initialValue = StaticPaletteIds.DEFAULT)
+    val themePreferences = rememberThemePreferencesState()
+    val currentThemeModeKey = themePreferences.themeMode
+    val isAmoledMode = rememberUpdatedState(themePreferences.amoledMode)
+    val isDynamicColors: Boolean = themePreferences.dynamicColors
+    val dynamicVariantIndex: Int = themePreferences.dynamicPaletteVariant
+    val staticPaletteId: String = themePreferences.staticPaletteId
 
     val supportsDynamic = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
