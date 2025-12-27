@@ -56,7 +56,8 @@ fun <T> ScreenStateHandler(
     AnimatedContent(
         targetState = currentScreenState,
         transitionSpec = { animationSpec },
-        label = "ScreenStateTransition") { currentState ->
+        label = "ScreenStateTransition"
+    ) { currentState ->
         when (currentState) {
             is ScreenState.IsLoading -> {
                 onLoading()

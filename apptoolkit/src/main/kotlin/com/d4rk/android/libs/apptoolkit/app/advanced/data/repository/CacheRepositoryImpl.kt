@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.flow
 import java.io.File
 
 class CacheRepositoryImpl(
-    private val context : Context ,
+    private val context: Context,
 ) : CacheRepository {
 
-    override fun clearCache() : Flow<Result<Unit>> = flow {
-        val cacheDirs : List<File> = buildList {
+    override fun clearCache(): Flow<Result<Unit>> = flow {
+        val cacheDirs: List<File> = buildList {
             add(context.cacheDir)
             add(context.codeCacheDir)
             context.externalCacheDir?.let(::add)

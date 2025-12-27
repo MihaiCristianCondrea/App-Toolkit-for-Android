@@ -23,8 +23,8 @@ import kotlinx.coroutines.withContext
 
 /** ViewModel for Ads settings screen. */
 class AdsSettingsViewModel(
-    private val repository: AdsSettingsRepository ,
-    private val dispatchers: DispatcherProvider ,
+    private val repository: AdsSettingsRepository,
+    private val dispatchers: DispatcherProvider,
 ) : ScreenViewModel<AdsSettingsUiState, AdsSettingsEvent, AdsSettingsAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.IsLoading(),
@@ -44,20 +44,20 @@ class AdsSettingsViewModel(
 
     private fun observeAdsEnabled() {
         repository.observeAdsEnabled()
-                .flowOn(dispatchers.io)
-                .onStart { screenState.setLoading() }
-                .onEach { enabled ->
-                    screenState.updateData(newState = ScreenState.Success()) { current ->
-                        current.copy(adsEnabled = enabled)
-                    }
+            .flowOn(dispatchers.io)
+            .onStart { screenState.setLoading() }
+            .onEach { enabled ->
+                screenState.updateData(newState = ScreenState.Success()) { current ->
+                    current.copy(adsEnabled = enabled)
                 }
-                .catch { t ->
-                    if (t is CancellationException) throw t
-                    screenState.updateData(newState = ScreenState.Error()) { current ->
-                        current.copy(adsEnabled = repository.defaultAdsEnabled)
-                    }
+            }
+            .catch { t ->
+                if (t is CancellationException) throw t
+                screenState.updateData(newState = ScreenState.Error()) { current ->
+                    current.copy(adsEnabled = repository.defaultAdsEnabled)
                 }
-                .launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun setAdsEnabled(enabled: Boolean) {

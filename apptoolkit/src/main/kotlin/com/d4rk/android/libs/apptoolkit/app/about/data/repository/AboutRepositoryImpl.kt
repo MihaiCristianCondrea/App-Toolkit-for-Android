@@ -14,11 +14,11 @@ class AboutRepositoryImpl(
 ) : AboutRepository {
 
     override suspend fun getAboutInfo(): AboutInfo =
-            AboutInfo(
-                appVersion = buildInfoProvider.appVersion,
-                appVersionCode = buildInfoProvider.appVersionCode,
-                deviceInfo = deviceProvider.deviceInfo,
-            )
+        AboutInfo(
+            appVersion = buildInfoProvider.appVersion,
+            appVersionCode = buildInfoProvider.appVersionCode,
+            deviceInfo = deviceProvider.deviceInfo,
+        )
 
     override fun copyDeviceInfo(label: String, deviceInfo: String) {
         context.copyTextToClipboard(label = label, text = deviceInfo)

@@ -57,7 +57,8 @@ fun CheckBoxPreferenceItem(
                 view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                 onCheckedChange(!checked)
-            }, verticalAlignment = Alignment.CenterVertically) {
+            }, verticalAlignment = Alignment.CenterVertically
+    ) {
         icon?.let {
             LargeHorizontalSpacer()
             Icon(imageVector = it, contentDescription = null)

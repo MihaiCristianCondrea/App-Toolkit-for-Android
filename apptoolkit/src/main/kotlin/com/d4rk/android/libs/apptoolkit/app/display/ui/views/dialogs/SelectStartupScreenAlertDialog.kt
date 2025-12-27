@@ -19,33 +19,34 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.ui.components.dialogs.BasicAlertDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.RadioButtonPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.MediumVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectWithLifecycleOnCompletion
+import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.onCompletion
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.min
+
+private const val SELECT_STARTUP_LOG_TAG = "SelectStartupDialog"
 
 @Composable
 fun SelectStartupScreenAlertDialog(
     onDismiss: () -> Unit,
     onStartupSelected: (String) -> Unit
 ) {
-    val context = LocalContext.current
-    val dataStore = CommonDataStore.getInstance(context)
+    val dataStore: CommonDataStore = rememberCommonDataStore()
 
     val entriesRaw: List<String> = koinInject(qualifier = named("startup_entries"))
     val valuesRaw: List<String> = koinInject(qualifier = named("startup_values"))
@@ -54,11 +55,17 @@ fun SelectStartupScreenAlertDialog(
     val values: ImmutableList<String> = remember(valuesRaw) { valuesRaw.toImmutableList() }
 
     val defaultRoute: String = values.firstOrNull().orEmpty()
-    val startupRoute by dataStore
+    val startupRouteState = dataStore
         .getStartupPage(default = defaultRoute)
-        .collectWithLifecycleOnCompletion(initialValueProvider = { defaultRoute }) { _: Throwable? -> }
+        .collectDataStoreState(
+            initial = { defaultRoute },
+            logTag = SELECT_STARTUP_LOG_TAG,
+            onErrorReset = { mutableState -> mutableState.value = defaultRoute },
+        )
+    val startupRoute by startupRouteState
 
-    var selectedPage by rememberSaveable { mutableStateOf(defaultRoute) }
+    val selectedPageState = rememberSaveable { mutableStateOf(defaultRoute) }
+    var selectedPage by selectedPageState
 
     LaunchedEffect(startupRoute) {
         selectedPage = startupRoute
@@ -94,7 +101,7 @@ fun SelectStartupScreenAlertDialog(
         content = {
             SelectStartupScreenAlertDialogContent(
                 selectedPage = selectedPage,
-                onSelectedPageChange = { selectedPage = it },
+                onSelectedPageChange = { selected -> selectedPage = selected },
                 startupEntries = entries,
                 startupValues = values,
             )

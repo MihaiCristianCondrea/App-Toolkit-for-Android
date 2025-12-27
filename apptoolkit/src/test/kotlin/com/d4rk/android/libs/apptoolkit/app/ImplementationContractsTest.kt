@@ -2,7 +2,7 @@ package com.d4rk.android.libs.apptoolkit.app
 
 import com.d4rk.android.libs.apptoolkit.app.about.data.repository.AboutRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
-import com.d4rk.android.libs.apptoolkit.app.ads.data.repository.DefaultAdsSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.advanced.data.repository.CacheRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
@@ -53,7 +53,7 @@ class ImplementationContractsTest {
             contract(GeneralSettingsRepository::class, GeneralSettingsRepositoryImpl::class),
             contract(IssueReporterRepository::class, IssueReporterRepositoryImpl::class),
             contract(NavigationRepository::class, MainRepositoryImpl::class),
-            contract(AdsSettingsRepository::class, DefaultAdsSettingsRepository::class),
+            contract(AdsSettingsRepository::class, AdsSettingsRepositoryImpl::class),
         )
 
         private fun contract(

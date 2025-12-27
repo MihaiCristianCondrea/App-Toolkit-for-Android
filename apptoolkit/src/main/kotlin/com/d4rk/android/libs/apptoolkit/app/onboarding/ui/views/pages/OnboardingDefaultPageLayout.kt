@@ -13,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.AnimatedMorphingShapeContainer
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.model.OnboardingPage
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.AnimatedMorphingShapeContainer
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 

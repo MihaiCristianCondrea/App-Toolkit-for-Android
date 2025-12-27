@@ -13,6 +13,8 @@ import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppThemeConfig
 import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
+import com.d4rk.android.libs.apptoolkit.core.utils.helpers.SeasonalHelper
 import com.d4rk.android.libs.apptoolkit.data.core.BaseCoreManager
 import com.d4rk.android.libs.apptoolkit.data.core.ads.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
@@ -23,8 +25,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.supervisorScope
 import org.koin.android.ext.android.getKoin
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.SeasonalHelper
 
 class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     private var currentActivity: Activity? = null

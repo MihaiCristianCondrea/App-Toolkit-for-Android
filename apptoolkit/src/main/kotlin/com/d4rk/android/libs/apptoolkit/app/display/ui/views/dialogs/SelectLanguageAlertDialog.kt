@@ -1,6 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.display.ui.views.dialogs
 
-import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,12 +17,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
@@ -30,20 +29,20 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.dialogs.BasicAlertDia
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.RadioButtonPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.MediumVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectWithLifecycleOnCompletion
+import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
+import com.d4rk.android.libs.apptoolkit.core.ui.effects.persistChanges
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.CoroutineScope
+
+private const val SELECT_LANGUAGE_LOG_TAG = "SelectLanguageDialog"
 
 @Composable
 fun SelectLanguageAlertDialog(onDismiss: () -> Unit, onLanguageSelected: (String) -> Unit) {
-    val context: Context = LocalContext.current
-    val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
+    val dataStore: CommonDataStore = rememberCommonDataStore()
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val selectedLanguage = remember { mutableStateOf(value = "") }
 
     val preferenceLanguageEntries =
@@ -57,12 +56,16 @@ fun SelectLanguageAlertDialog(onDismiss: () -> Unit, onLanguageSelected: (String
         preferenceLanguageValues
     }
 
-    val currentLanguage by dataStore.getLanguage()
-        .collectWithLifecycleOnCompletion(initialValueProvider = { "" }) { cause: Throwable? ->
-            if (cause != null && cause !is CancellationException) {
+    val currentLanguageState = dataStore.getLanguage()
+        .collectDataStoreState(
+            initial = { "" },
+            logTag = SELECT_LANGUAGE_LOG_TAG,
+            onErrorReset = { mutableState ->
+                mutableState.value = ""
                 selectedLanguage.value = ""
-            }
-        }
+            },
+        )
+    val currentLanguage by currentLanguageState
 
     LaunchedEffect(currentLanguage) {
         selectedLanguage.value = currentLanguage
@@ -70,20 +73,20 @@ fun SelectLanguageAlertDialog(onDismiss: () -> Unit, onLanguageSelected: (String
 
     val latestLanguage by rememberUpdatedState(newValue = currentLanguage)
 
-    LaunchedEffect(Unit) {
-        snapshotFlow { selectedLanguage.value }
-            .distinctUntilChanged()
-            .drop(count = 1)
-            .onCompletion { cause: Throwable? ->
-                if (cause != null && cause !is CancellationException) {
-                    selectedLanguage.value = latestLanguage
-                }
-            }
-            .collectLatest { language: String ->
+    LaunchedEffect(selectedLanguage, coroutineScope) {
+        selectedLanguage.persistChanges(
+            scope = coroutineScope,
+            currentValue = { latestLanguage },
+            onPersist = { language: String ->
                 if (language.isNotBlank()) {
                     dataStore.saveLanguage(language = language)
                 }
-            }
+            },
+            onError = { throwable, latest ->
+                Log.w(SELECT_LANGUAGE_LOG_TAG, "Failed to persist language selection.", throwable)
+                selectedLanguage.value = latest
+            },
+        )
     }
 
     BasicAlertDialog(

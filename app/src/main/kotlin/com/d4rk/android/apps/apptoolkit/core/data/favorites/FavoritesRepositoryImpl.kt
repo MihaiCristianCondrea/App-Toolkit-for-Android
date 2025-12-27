@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.repository.FavoritesRepository
-import com.d4rk.android.apps.apptoolkit.app.logging.FAVORITES_REPOSITORY_LOG_TAG
 import com.d4rk.android.apps.apptoolkit.core.broadcast.FavoritesChangedReceiver
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
+import com.d4rk.android.apps.apptoolkit.core.logging.FAVORITES_REPOSITORY_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn

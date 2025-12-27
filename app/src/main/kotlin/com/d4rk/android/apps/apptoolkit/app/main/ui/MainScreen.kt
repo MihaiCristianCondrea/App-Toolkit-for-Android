@@ -41,7 +41,6 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d4rk.android.apps.apptoolkit.app.logging.FAB_LOG_TAG
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.fab.MainFloatingActionButton
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.AppNavigationHost
 import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.MainNavigationDefaults
@@ -52,6 +51,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
+import com.d4rk.android.apps.apptoolkit.core.logging.FAB_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.components.navigation.BottomNavigationBar
@@ -239,7 +239,8 @@ fun MainScaffoldContent(
             paddingValues = paddingValues,
             windowWidthSizeClass = windowWidthSizeClass,
             onRandomAppHandlerChanged = { route: AppNavKey, handler ->
-                if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] = handler
+                if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] =
+                    handler
             },
         )
     }
@@ -351,7 +352,8 @@ fun MainScaffoldTabletContent(
                     paddingValues = PaddingValues(),
                     windowWidthSizeClass = windowWidthSizeClass,
                     onRandomAppHandlerChanged = { route: AppNavKey, handler ->
-                        if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] = handler
+                        if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] =
+                            handler
                     },
                 )
             }

@@ -28,7 +28,12 @@ class GeneralSettingsActivity : AppCompatActivity() {
 
             context.safeStartActivity(
                 intent = intent,
-                onFailure = { Log.e(GENERAL_SETTINGS_LOG_TAG, "Unable to resolve activity to handle intent") },
+                onFailure = {
+                    Log.e(
+                        GENERAL_SETTINGS_LOG_TAG,
+                        "Unable to resolve activity to handle intent"
+                    )
+                },
             )
         }
     }

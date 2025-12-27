@@ -2,9 +2,9 @@ package com.d4rk.android.libs.apptoolkit.core.ui.components.ads
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 
 /**
  * A Composable function that remembers and observes whether ads are enabled.
@@ -16,8 +16,7 @@ import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
  */
 @Composable
 fun rememberAdsEnabled(): Boolean {
-    val context = LocalContext.current
-    val dataStore: CommonDataStore = remember { CommonDataStore.getInstance(context) }
+    val dataStore: CommonDataStore = rememberCommonDataStore()
     return remember { dataStore.ads(default = true) }
         .collectAsStateWithLifecycle(initialValue = true).value
 }

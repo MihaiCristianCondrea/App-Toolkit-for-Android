@@ -22,7 +22,8 @@ fun NavigationDrawerItemContent(
     val title: String = stringResource(id = item.title)
     val view: View = LocalView.current
 
-    NavigationDrawerItem(label = { Text(text = title) }, selected = false, onClick = {
+    NavigationDrawerItem(
+        label = { Text(text = title) }, selected = false, onClick = {
         view.playSoundEffect(SoundEffectConstants.CLICK)
         handleNavigationItemClick()
     }, icon = {
@@ -32,6 +33,7 @@ fun NavigationDrawerItemContent(
             Text(text = item.badgeText)
         }
     }, modifier = Modifier
-        .padding(paddingValues = NavigationDrawerItemDefaults.ItemPadding)
-        .bounceClick())
+            .padding(paddingValues = NavigationDrawerItemDefaults.ItemPadding)
+            .bounceClick()
+    )
 }

@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import java.io.IOException
 
-class TestDefaultAdsSettingsRepository {
+class TestAdsSettingsRepositoryImpl {
 
     companion object {
         @JvmField
@@ -30,11 +30,11 @@ class TestDefaultAdsSettingsRepository {
     private fun createRepository(
         dataStore: CommonDataStore,
         debugBuild: Boolean = false,
-    ): DefaultAdsSettingsRepository {
+    ): AdsSettingsRepositoryImpl {
         val buildInfoProvider = mockk<BuildInfoProvider> {
             every { isDebugBuild } returns debugBuild
         }
-        return DefaultAdsSettingsRepository(
+        return AdsSettingsRepositoryImpl(
             dataStore = dataStore,
             buildInfoProvider = buildInfoProvider,
         )

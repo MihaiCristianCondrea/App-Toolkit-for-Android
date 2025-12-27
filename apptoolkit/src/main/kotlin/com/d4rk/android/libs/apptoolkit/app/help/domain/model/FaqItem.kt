@@ -1,7 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.app.help.domain.model
 
-import kotlin.jvm.JvmInline
-
 @JvmInline
 value class FaqId(val value: String)
 

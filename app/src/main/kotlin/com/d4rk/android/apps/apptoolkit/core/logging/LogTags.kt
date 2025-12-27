@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.app.logging
+package com.d4rk.android.apps.apptoolkit.core.logging
 
 const val APPS_LIST_LOG_TAG = "AppsListRoute"
 const val FAVORITES_LOG_TAG = "FavoriteAppsRoute"

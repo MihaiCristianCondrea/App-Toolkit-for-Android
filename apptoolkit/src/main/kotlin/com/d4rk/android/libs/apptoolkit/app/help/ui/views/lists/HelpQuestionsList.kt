@@ -38,9 +38,14 @@ fun HelpQuestionsList(questions: ImmutableList<FaqItem>) {
                 key(question.id) {
                     val isExpanded = expandedStates[question.id] == true
                     QuestionCard(
-                        title = question.question , summary = question.answer , isExpanded = isExpanded , onToggleExpand = {
-                        expandedStates[question.id] = ! isExpanded
-                    } , modifier = Modifier.animateVisibility(index = index))
+                        title = question.question,
+                        summary = question.answer,
+                        isExpanded = isExpanded,
+                        onToggleExpand = {
+                            expandedStates[question.id] = !isExpanded
+                        },
+                        modifier = Modifier.animateVisibility(index = index)
+                    )
                 }
             }
         }

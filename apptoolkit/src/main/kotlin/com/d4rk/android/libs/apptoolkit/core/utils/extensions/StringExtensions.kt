@@ -49,11 +49,14 @@ fun String.decodeBase64OrEmpty(): String =
  */
 fun String.extractChangesForVersion(version: String): String {
     val versionLinesIterator = lineSequence()
-            .dropWhile { currentLine -> !currentLine.contains(version) }
-            .iterator()
+        .dropWhile { currentLine -> !currentLine.contains(version) }
+        .iterator()
     if (!versionLinesIterator.hasNext()) return ""
     val versionHeaderLine = versionLinesIterator.next()
-    val changelogSectionLines = sequenceOf(versionHeaderLine) + generateSequence { if (versionLinesIterator.hasNext()) versionLinesIterator.next() else null }.takeWhile { currentLine -> !currentLine.startsWith("#") }
+    val changelogSectionLines =
+        sequenceOf(versionHeaderLine) + generateSequence { if (versionLinesIterator.hasNext()) versionLinesIterator.next() else null }.takeWhile { currentLine ->
+            !currentLine.startsWith("#")
+        }
     return buildString {
         changelogSectionLines.forEach { appendLine(it) }
     }.trim()

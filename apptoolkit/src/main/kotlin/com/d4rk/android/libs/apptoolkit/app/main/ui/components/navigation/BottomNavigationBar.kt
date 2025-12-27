@@ -22,9 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
+import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.StableNavKey
 import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
-import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.StableNavKey
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)

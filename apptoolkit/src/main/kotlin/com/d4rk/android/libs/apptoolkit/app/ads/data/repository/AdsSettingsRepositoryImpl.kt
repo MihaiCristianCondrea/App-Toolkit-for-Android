@@ -8,9 +8,9 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Default implementation of [AdsSettingsRepository] backed by [CommonDataStore].
+ * Repository implementation of [AdsSettingsRepository] backed by [CommonDataStore].
  */
-class DefaultAdsSettingsRepository(
+class AdsSettingsRepositoryImpl(
     private val dataStore: CommonDataStore,
     buildInfoProvider: BuildInfoProvider,
 ) : AdsSettingsRepository {
@@ -18,16 +18,16 @@ class DefaultAdsSettingsRepository(
     override val defaultAdsEnabled: Boolean = !buildInfoProvider.isDebugBuild
 
     override fun observeAdsEnabled(): Flow<Boolean> =
-            dataStore.ads(default = defaultAdsEnabled)
+        dataStore.ads(default = defaultAdsEnabled)
 
     override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> =
-            runCatching {
-                dataStore.saveAds(isChecked = enabled)
-            }.fold(
-                onSuccess = { Result.Success(Unit) },
-                onFailure = { t ->
-                    if (t is CancellationException) throw t
-                    Result.Error(t as? Exception ?: Exception(t))
-                }
-            )
+        runCatching {
+            dataStore.saveAds(isChecked = enabled)
+        }.fold(
+            onSuccess = { Result.Success(Unit) },
+            onFailure = { throwable ->
+                if (throwable is CancellationException) throw throwable
+                Result.Error(throwable as? Exception ?: Exception(throwable))
+            }
+        )
 }

@@ -59,7 +59,8 @@ fun LargeTopAppBarWithScaffold(
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            LargeTopAppBar(title = { Text(modifier = Modifier.animateContentSize(), text = title) },
+            LargeTopAppBar(
+                title = { Text(modifier = Modifier.animateContentSize(), text = title) },
                 navigationIcon = {
                     AnimatedIconButtonDirection(
                         icon = Icons.AutoMirrored.Filled.ArrowBack,
@@ -67,7 +68,8 @@ fun LargeTopAppBarWithScaffold(
                         onClick = { onBackClicked() })
                 },
                 actions = actions,
-                scrollBehavior = scrollBehavior)
+                scrollBehavior = scrollBehavior
+            )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         floatingActionButton = floatingActionButton ?: {},
@@ -116,8 +118,10 @@ fun TopAppBarScaffold(
     Scaffold(
         modifier = Modifier.nestedScroll(connection = scrollBehaviorState.nestedScrollConnection),
         topBar = {
-            LargeTopAppBar(title = { Text(modifier = Modifier.animateContentSize(), text = title) },
-                scrollBehavior = scrollBehaviorState)
+            LargeTopAppBar(
+                title = { Text(modifier = Modifier.animateContentSize(), text = title) },
+                scrollBehavior = scrollBehaviorState
+            )
         },
         floatingActionButton = floatingActionButton ?: {},
     ) { paddingValues ->

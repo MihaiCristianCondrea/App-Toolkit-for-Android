@@ -14,8 +14,8 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.hasPackage
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.store.StoreConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.hasPackage
 
 /**
  * Traverses the context chain and returns the first [ComponentActivity] if present.
@@ -94,18 +94,18 @@ fun Context.hasNotificationPermission(): Boolean {
 }
 
 fun Context.hasPlayStore(): Boolean =
-        packageManager.hasPackage(StoreConstants.PLAY_STORE_PACKAGE)
+    packageManager.hasPackage(StoreConstants.PLAY_STORE_PACKAGE)
 
 fun Context.isInstalledFromPlayStore(): Boolean =
-        installingPackageNameOrNull() == StoreConstants.PLAY_STORE_PACKAGE
+    installingPackageNameOrNull() == StoreConstants.PLAY_STORE_PACKAGE
 
 fun Context.installingPackageNameOrNull(): String? =
-        runCatching {
-            val pm = packageManager
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                pm.getInstallSourceInfo(packageName).installingPackageName
-            } else {
-                @Suppress("DEPRECATION")
-                pm.getInstallerPackageName(packageName)
-            }
-        }.getOrNull()
+    runCatching {
+        val pm = packageManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            pm.getInstallSourceInfo(packageName).installingPackageName
+        } else {
+            @Suppress("DEPRECATION")
+            pm.getInstallerPackageName(packageName)
+        }
+    }.getOrNull()

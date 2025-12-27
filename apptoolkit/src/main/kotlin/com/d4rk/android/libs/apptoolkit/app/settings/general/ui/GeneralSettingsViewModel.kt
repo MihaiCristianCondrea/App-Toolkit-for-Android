@@ -44,29 +44,29 @@ class GeneralSettingsViewModel(
         loadJob?.cancel()
         loadJob = viewModelScope.launch {
             repository.getContentKey(contentKey)
-                    .flowOn(dispatchers.default)
-                    .onStart { screenState.setLoading() }
-                    .onEach { key ->
-                        screenState.setErrors(errors = emptyList())
-                        screenState.copyData { copy(contentKey = key) }
-                        screenState.updateState(newValues = ScreenState.Success())
-                    }
-                    .catch { t ->
-                        if (t is CancellationException) throw t
+                .flowOn(dispatchers.default)
+                .onStart { screenState.setLoading() }
+                .onEach { key ->
+                    screenState.setErrors(errors = emptyList())
+                    screenState.copyData { copy(contentKey = key) }
+                    screenState.updateState(newValues = ScreenState.Success())
+                }
+                .catch { t ->
+                    if (t is CancellationException) throw t
 
-                        screenState.setErrors(
-                            errors = listOf(
-                                UiSnackbar(
-                                    message = UiTextHelper.StringResource(R.string.error_invalid_content_key)
-                                )
+                    screenState.setErrors(
+                        errors = listOf(
+                            UiSnackbar(
+                                message = UiTextHelper.StringResource(R.string.error_invalid_content_key)
                             )
                         )
-                        screenState.updateState(newValues = ScreenState.NoData())
-                    }
-                    .onCompletion { cause ->
-                        if (cause is CancellationException) return@onCompletion
-                    }
-                    .collect { }
+                    )
+                    screenState.updateState(newValues = ScreenState.NoData())
+                }
+                .onCompletion { cause ->
+                    if (cause is CancellationException) return@onCompletion
+                }
+                .collect { }
         }
     }
 }

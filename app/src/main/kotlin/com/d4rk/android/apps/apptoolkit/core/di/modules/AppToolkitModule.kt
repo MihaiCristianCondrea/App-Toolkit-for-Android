@@ -3,16 +3,16 @@ package com.d4rk.android.apps.apptoolkit.core.di.modules
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.startup.utils.interfaces.providers.AppStartupProvider
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.HelpConstants
-import com.d4rk.android.libs.apptoolkit.app.help.data.repository.FaqRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.help.data.local.HelpLocalDataSource
 import com.d4rk.android.libs.apptoolkit.app.help.data.remote.HelpRemoteDataSource
+import com.d4rk.android.libs.apptoolkit.app.help.data.repository.FaqRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
 import com.d4rk.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpViewModel
 import com.d4rk.android.libs.apptoolkit.app.help.ui.model.HelpScreenConfig
-import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.local.DeviceInfoLocalDataSource
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.remote.IssueReporterRemoteDataSource
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
@@ -57,7 +57,9 @@ val appToolkitModule: Module = module {
         FaqRepositoryImpl(
             localDataSource = get(),
             remoteDataSource = get(),
-            catalogUrl = com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants.FAQ_BASE_URL.faqCatalogUrl(isDebugBuild = BuildConfig.DEBUG),
+            catalogUrl = com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants.FAQ_BASE_URL.faqCatalogUrl(
+                isDebugBuild = BuildConfig.DEBUG
+            ),
             productId = HelpConstants.FAQ_PRODUCT_ID,
         )
     }
