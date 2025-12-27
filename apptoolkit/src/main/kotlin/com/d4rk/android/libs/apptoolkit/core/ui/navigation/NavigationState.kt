@@ -16,7 +16,9 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
 import androidx.savedstate.compose.serialization.serializers.MutableStateSerializer
 import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.StableNavKey
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.serializer
 
 /**
@@ -26,7 +28,7 @@ import kotlinx.serialization.serializer
  */
 @Composable
 inline fun <reified T : StableNavKey> rememberNavigationState(
-    startRoute: T, // FIXME: Parameter 'startRoute' has runtime-determined stability
+    startRoute: T,
     topLevelRoutes: ImmutableSet<T>,
 ): NavigationState<T> {
     val topLevelRouteState: MutableState<T> = rememberSerializable(
@@ -39,7 +41,7 @@ inline fun <reified T : StableNavKey> rememberNavigationState(
 
     val backStacks: Map<T, NavBackStack<T>> = buildMap {
         for (route in topLevelRoutes) {
-            put(route, rememberTypedNavBackStack(route))
+            put(route, rememberTypedNavBackStack(persistentListOf(route)))
         }
     }
 
@@ -53,11 +55,13 @@ inline fun <reified T : StableNavKey> rememberNavigationState(
 }
 
 @Composable
-inline fun <reified T : StableNavKey> rememberTypedNavBackStack(vararg elements: T): NavBackStack<T> { // FIXME: Parameter 'elements' has runtime-determined stability
+inline fun <reified T : StableNavKey> rememberTypedNavBackStack(
+    initialElements: ImmutableList<T> = persistentListOf(),
+): NavBackStack<T> {
     return rememberSerializable(
         serializer = NavBackStackSerializer(elementSerializer = serializer<T>())
     ) {
-        NavBackStack(*elements)
+        NavBackStack(*initialElements.toTypedArray())
     }
 }
 

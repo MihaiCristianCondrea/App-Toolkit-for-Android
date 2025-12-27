@@ -15,18 +15,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.help.ui.model.HelpScreenConfig
 import com.d4rk.android.libs.apptoolkit.app.licenses.ui.LicensesActivity
 import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.AnimatedIconButtonDirection
 import com.d4rk.android.libs.apptoolkit.core.ui.components.dialogs.VersionInfoAlertDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.components.dropdown.CommonDropdownMenuItem
+import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 
 @Composable
 fun HelpScreenMenuActions(
-    config: HelpScreenConfig,
+    config: AppVersionInfo,
     showDialog: Boolean,
     onShowDialogChange: (Boolean) -> Unit
 ) {
@@ -118,7 +118,7 @@ fun HelpScreenMenuActions(
             onDismiss = { onShowDialogChange(false) },
             copyrightString = R.string.copyright,
             appName = R.string.app_full_name,
-            versionName = config.versionName,
+            versionName = config.versionName.orEmpty(),
             versionString = R.string.version
         )
     }

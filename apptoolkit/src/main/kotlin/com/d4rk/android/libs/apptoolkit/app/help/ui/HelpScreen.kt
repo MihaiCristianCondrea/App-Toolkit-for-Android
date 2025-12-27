@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
-import com.d4rk.android.libs.apptoolkit.app.help.ui.model.HelpScreenConfig
 import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.content.HelpScreenContent
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.dropdowns.HelpScreenMenuActions
@@ -31,6 +30,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.LargeTopAppBarWithScaffold
+import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.findActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.isInAppReviewAvailable
@@ -42,7 +42,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HelpScreen(
-    config: HelpScreenConfig,
+    config: AppVersionInfo,
 ) {
     val viewModel: HelpViewModel = koinViewModel()
     val context = LocalContext.current

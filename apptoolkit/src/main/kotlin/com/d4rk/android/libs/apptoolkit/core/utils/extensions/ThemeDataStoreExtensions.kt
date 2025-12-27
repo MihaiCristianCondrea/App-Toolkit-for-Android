@@ -3,10 +3,12 @@ package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.DynamicPaletteVariant.clamp
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onStart
 
 data class ThemePreferencesState(
     val themeMode: String,
@@ -18,23 +20,25 @@ data class ThemePreferencesState(
 
 fun CommonDataStore.themePreferencesState(
     themeModeDefault: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-    dynamicColorsDefault: Boolean = true, // FIXME: Parameter "dynamicColorsDefault" is never used
-    amoledModeDefault: Boolean = false, // FIXME: Parameter "amoledModeDefault" is never used
-    dynamicPaletteVariantDefault: Int = 0, // FIXME: Parameter "dynamicPaletteVariantDefault" is never used
+    dynamicColorsDefault: Boolean = true,
+    amoledModeDefault: Boolean = false,
+    dynamicPaletteVariantDefault: Int = 0,
     staticPaletteIdDefault: String = StaticPaletteIds.DEFAULT,
 ): Flow<ThemePreferencesState> = combine(
     themeMode,
-    dynamicColors,
-    amoledMode,
-    dynamicPaletteVariant,
-    staticPaletteId,
+    dynamicColors.onStart { emit(dynamicColorsDefault) },
+    amoledMode.onStart { emit(amoledModeDefault) },
+    dynamicPaletteVariant.onStart { emit(clamp(dynamicPaletteVariantDefault)) },
+    staticPaletteId.onStart { emit(StaticPaletteIds.sanitize(staticPaletteIdDefault)) },
 ) { themeModeValue, dynamicColorsValue, amoledModeValue, dynamicPaletteVariantValue, staticPaletteIdValue ->
     ThemePreferencesState(
         themeMode = themeModeValue.ifBlank { themeModeDefault },
         dynamicColors = dynamicColorsValue,
         amoledMode = amoledModeValue,
         dynamicPaletteVariant = dynamicPaletteVariantValue,
-        staticPaletteId = staticPaletteIdValue.ifBlank { staticPaletteIdDefault },
+        staticPaletteId = StaticPaletteIds.sanitize(staticPaletteIdValue).ifBlank {
+            StaticPaletteIds.sanitize(staticPaletteIdDefault)
+        },
     )
 }
 

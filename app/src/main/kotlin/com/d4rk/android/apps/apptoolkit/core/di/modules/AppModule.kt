@@ -1,8 +1,6 @@
 package com.d4rk.android.apps.apptoolkit.core.di.modules
 
-import android.content.Context
 import com.d4rk.android.apps.apptoolkit.BuildConfig
-import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.repository.FavoritesRepository
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ObserveFavoriteAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ObserveFavoritesUseCase
@@ -13,17 +11,10 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.repository.Develope
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.usecases.FetchDeveloperAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainViewModel
-import com.d4rk.android.apps.apptoolkit.app.onboarding.utils.interfaces.providers.AppOnboardingProvider
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.apps.apptoolkit.core.data.favorites.FavoritesRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.data.repository.MainRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
-import com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository.OnboardingRepositoryImpl
-import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
-import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteOnboardingUseCase
-import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOnboardingCompletionUseCase
-import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.OnboardingViewModel
-import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.developerAppsBaseUrl
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.toApiEnvironment
 import com.d4rk.android.libs.apptoolkit.data.client.KtorClient
@@ -63,32 +54,7 @@ val appModule: Module = module {
         )
     }
 
-    // TODOL Make a startup module
-    single<List<String>>(qualifier = named(name = "startup_entries")) {
-        get<Context>().resources.getStringArray(R.array.preference_startup_entries).toList()
-    }
-
-    single<List<String>>(qualifier = named(name = "startup_values")) {
-        get<Context>().resources.getStringArray(R.array.preference_startup_values).toList()
-    }
-
-    // TODO: Make an onboarding module
-    single<OnboardingProvider> { AppOnboardingProvider() }
-    single<OnboardingRepository> {
-        OnboardingRepositoryImpl(
-            dataStore = get(),
-        )
-    }
-    single { ObserveOnboardingCompletionUseCase(repository = get()) }
-    single { CompleteOnboardingUseCase(repository = get()) }
     viewModel { MainViewModel(navigationRepository = get()) }
-    viewModel {
-        OnboardingViewModel(
-            observeOnboardingCompletionUseCase = get(),
-            completeOnboardingUseCase = get(),
-            dispatchers = get(),
-        )
-    }
 
     single<NavigationRepository> { MainRepositoryImpl(dispatchers = get()) }
 

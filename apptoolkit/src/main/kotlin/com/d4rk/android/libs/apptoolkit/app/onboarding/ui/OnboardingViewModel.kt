@@ -37,9 +37,9 @@ class OnboardingViewModel(
     override fun onEvent(event: OnboardingEvent) {
         when (event) {
             is OnboardingEvent.UpdateCurrentTab -> updateCurrentTab(event.index)
-            OnboardingEvent.CompleteOnboarding -> completeOnboarding()
-            OnboardingEvent.ShowCrashlyticsDialog -> setCrashlyticsDialogVisibility(true)
-            OnboardingEvent.HideCrashlyticsDialog -> setCrashlyticsDialogVisibility(false)
+            is OnboardingEvent.CompleteOnboarding -> completeOnboarding()
+            is OnboardingEvent.ShowCrashlyticsDialog -> setCrashlyticsDialogVisibility(true)
+            is OnboardingEvent.HideCrashlyticsDialog -> setCrashlyticsDialogVisibility(false)
         }
     }
 

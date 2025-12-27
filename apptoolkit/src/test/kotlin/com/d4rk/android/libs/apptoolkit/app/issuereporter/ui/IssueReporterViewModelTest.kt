@@ -11,10 +11,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
 import com.google.common.truth.Truth.assertThat
 import io.ktor.http.HttpStatusCode
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import io.mockk.verify
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -68,7 +68,7 @@ class IssueReporterViewModelTest {
             val snackbar = viewModel.uiState.value.snackbar!!
             val msg = snackbar.message as UiTextHelper.StringResource
             assertThat(msg.resourceId).isEqualTo(R.string.error_invalid_report)
-            verify(exactly = 0) { useCase.invoke(any()) } // FIXME: Flow is constructed but not used
+            confirmVerified(useCase)
         }
     }
 
@@ -149,7 +149,7 @@ class IssueReporterViewModelTest {
             assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
             assertThat((snackbar.message as UiTextHelper.StringResource).resourceId)
                     .isEqualTo(R.string.snack_report_failed)
-            verify(exactly = 0) { useCase.invoke(any()) } // FIXME: Flow is constructed but not used
+            confirmVerified(useCase)
         }
     }
 

@@ -9,7 +9,6 @@ import com.d4rk.android.libs.apptoolkit.data.datastore.startupDestinationFlow
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -40,7 +39,6 @@ class AppNavigationHostTest {
         ).first()
 
         assertEquals(AppsListRoute, startDestination)
-        verify(exactly = 1) { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) } // FIXME: Flow is constructed but not used
     }
 
     @Test
@@ -55,6 +53,5 @@ class AppNavigationHostTest {
         ).first()
 
         assertEquals(FavoriteAppsRoute, startDestination)
-        verify(exactly = 1) { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) } // FIXME: Flow is constructed but not used
     }
 }

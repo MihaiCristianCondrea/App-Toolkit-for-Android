@@ -9,7 +9,6 @@ import com.d4rk.android.libs.apptoolkit.app.help.data.repository.FaqRepositoryIm
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
 import com.d4rk.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpViewModel
-import com.d4rk.android.libs.apptoolkit.app.help.ui.model.HelpScreenConfig
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.local.DeviceInfoLocalDataSource
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.remote.IssueReporterRemoteDataSource
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepositoryImpl
@@ -24,6 +23,7 @@ import com.d4rk.android.libs.apptoolkit.app.support.billing.BillingRepository
 import com.d4rk.android.libs.apptoolkit.app.support.ui.SupportViewModel
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
+import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.github.GithubConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.decodeBase64OrEmpty
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.faqCatalogUrl
@@ -95,10 +95,10 @@ val appToolkitModule: Module = module {
 
     single(githubTokenQualifier) { BuildConfig.GITHUB_TOKEN.decodeBase64OrEmpty() }
 
-    single<HelpScreenConfig> {
-        HelpScreenConfig(
-            versionName = BuildConfig.VERSION_NAME,
-            versionCode = BuildConfig.VERSION_CODE
+    single<AppVersionInfo> {
+        AppVersionInfo(
+            BuildConfig.VERSION_NAME,
+            BuildConfig.VERSION_CODE.toLong()
         )
     }
 }
