@@ -26,7 +26,7 @@ activityCompose = "1.12.2"
 composeMaterial3 = "1.5.0-alpha11"
 composeMaterial3WindowSizeClass = "1.4.0"
 reviewKtx = "2.0.2"
-billing = "8.2.1"
+billing = "8.3.0"
 material = "1.13.0"
 playServicesAds = "24.9.0"
 multidex = "2.0.1"
@@ -173,11 +173,14 @@ androidx-compose = [
     "androidx-material3",
     "androidx-material3-window-size",
     "androidx-material-icons-extended",
+    "androidx-material3-adaptive",
+]
+
+androidx-navigation3 = [
     "androidx-navigation3-runtime",
     "androidx-navigation3-ui",
     "androidx-lifecycle-viewmodel-navigation3",
     "androidx-material3-adaptive-navigation3",
-    "androidx-material3-adaptive",
 ]
 
 androidx-lifecycle = [
