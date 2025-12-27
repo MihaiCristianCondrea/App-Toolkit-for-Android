@@ -35,8 +35,7 @@ open class TestFavoriteAppsViewModelBase {
         val toggleFavoriteUseCase = ToggleFavoriteUseCase(favoritesRepository)
         val observeFavoriteAppsUseCase = ObserveFavoriteAppsUseCase(
             fetchUseCase,
-            observeFavoritesUseCase,
-            dispatchers,
+            observeFavoritesUseCase
         )
         viewModel = FavoriteAppsViewModel(
             observeFavoriteAppsUseCase = observeFavoriteAppsUseCase,

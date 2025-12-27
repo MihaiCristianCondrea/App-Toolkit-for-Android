@@ -1,7 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository
 
 import com.d4rk.android.libs.apptoolkit.app.onboarding.data.local.OnboardingPreferencesDataSource
-import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -34,8 +33,7 @@ class TestOnboardingRepositoryImpl {
         runTest(dispatcherExtension.testDispatcher) {
             val dataSource = FakeOnboardingPreferencesDataSource()
             val repository = OnboardingRepositoryImpl(
-                dataSource,
-                TestDispatchers(dispatcherExtension.testDispatcher)
+                dataSource
             )
 
             assertThat(repository.observeOnboardingCompletion().first()).isFalse()
@@ -49,8 +47,7 @@ class TestOnboardingRepositoryImpl {
         runTest(dispatcherExtension.testDispatcher) {
             val dataSource = FakeOnboardingPreferencesDataSource()
             val repository = OnboardingRepositoryImpl(
-                dataSource,
-                TestDispatchers(dispatcherExtension.testDispatcher)
+                dataSource
             )
 
             repository.setOnboardingCompleted()

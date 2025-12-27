@@ -5,17 +5,10 @@ import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -23,11 +16,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -78,10 +69,7 @@ fun SupportNativeAdCard(
     val dataStore: CommonDataStore = rememberCommonDataStore()
     val showAds: Boolean by dataStore.adsEnabledFlow.collectAsStateWithLifecycle(initialValue = true)
 
-    if (inspectionMode) {
-        SupportNativeAdPreview(modifier = modifier)
-        return
-    }
+    if (inspectionMode) return
     if (!showAds || adUnitId.isBlank()) return
 
     val adRequest: AdRequest = remember { AdRequest.Builder().build() }
@@ -138,61 +126,6 @@ fun SupportNativeAdCard(
 
         view.isVisible = false
         adLoader.loadAd(adRequest)
-    }
-}
-
-@Composable
-private fun SupportNativeAdPreview(modifier: Modifier) {
-    OutlinedCard(
-        modifier = modifier,
-        shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(SizeConstants.MediumSize),
-            contentAlignment = Alignment.Center
-        ) {
-            SupportPreviewPlaceholder()
-        }
-    }
-}
-
-@Composable
-private fun SupportPreviewPlaceholder() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(16f / 9f)
-                .padding(bottom = SizeConstants.SmallSize),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Media",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-        }
-        Text(
-            text = "Sponsored Tool",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center
-        )
-        Text(
-            modifier = Modifier
-                .padding(top = SizeConstants.SmallSize)
-                .heightIn(min = SizeConstants.ExtraLargeSize),
-            text = "Ad preview placeholder",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
-        )
     }
 }
 

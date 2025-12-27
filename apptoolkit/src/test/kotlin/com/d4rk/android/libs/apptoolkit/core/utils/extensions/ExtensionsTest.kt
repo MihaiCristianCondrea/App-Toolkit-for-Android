@@ -3,6 +3,8 @@ package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiEnvironments
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiPaths
 import kotlinx.serialization.SerializationException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -23,32 +25,43 @@ class ExtensionsTest {
     }
 
     @Test
-    fun `developerAppsBaseUrl appends environment segment`() {
+    fun `developerAppsApiUrl appends environment language and path segments`() {
         val baseUrl = "https://example.com/repository"
 
         assertAll(
             {
                 assertEquals(
-                    "$baseUrl/${ApiEnvironments.ENV_DEBUG}",
-                    ApiEnvironments.ENV_DEBUG.developerAppsBaseUrl(baseUrl)
+                    "$baseUrl/${ApiEnvironments.ENV_DEBUG}/${ApiLanguages.DEFAULT}/${ApiPaths.DEVELOPER_APPS_API}",
+                    ApiEnvironments.ENV_DEBUG.developerAppsApiUrl(
+                        baseRepositoryUrl = baseUrl,
+                        language = ApiLanguages.DEFAULT,
+                    )
                 )
             },
             {
                 assertEquals(
-                    "$baseUrl/${ApiEnvironments.ENV_RELEASE}",
-                    ApiEnvironments.ENV_RELEASE.developerAppsBaseUrl(baseUrl)
+                    "$baseUrl/${ApiEnvironments.ENV_RELEASE}/${ApiLanguages.DEFAULT}/${ApiPaths.DEVELOPER_APPS_API}",
+                    ApiEnvironments.ENV_RELEASE.developerAppsApiUrl(
+                        baseRepositoryUrl = baseUrl,
+                        language = ApiLanguages.DEFAULT,
+                    )
                 )
             },
             {
                 assertEquals(
-                    "$baseUrl/${ApiEnvironments.ENV_RELEASE}",
-                    "unknown".developerAppsBaseUrl(baseUrl)
+                    "$baseUrl/${ApiEnvironments.ENV_RELEASE}/${ApiLanguages.DEFAULT}/${ApiPaths.DEVELOPER_APPS_API}",
+                    "unknown".developerAppsApiUrl(
+                        baseRepositoryUrl = baseUrl,
+                        language = ApiLanguages.DEFAULT,
+                    )
                 )
             },
             {
                 assertTrue(
-                    ApiConstants.BASE_REPOSITORY_URL.developerAppsBaseUrl()
-                        .contains(ApiConstants.BASE_REPOSITORY_URL)
+                    ApiConstants.BASE_REPOSITORY_URL.developerAppsApiUrl()
+                        .contains(ApiConstants.BASE_REPOSITORY_URL) &&
+                            ApiConstants.BASE_REPOSITORY_URL.developerAppsApiUrl()
+                                .contains(ApiLanguages.DEFAULT)
                 )
             },
         )

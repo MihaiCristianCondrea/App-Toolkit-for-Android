@@ -2,17 +2,27 @@ package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiEnvironments
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiPaths
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-fun String.developerAppsBaseUrl(
+fun String.developerAppsApiUrl(
+    language: String = ApiLanguages.DEFAULT,
     baseRepositoryUrl: String = ApiConstants.BASE_REPOSITORY_URL,
-): String =
-    when (lowercase()) {
-        ApiEnvironments.ENV_DEBUG -> "$baseRepositoryUrl/${ApiEnvironments.ENV_DEBUG}"
-        ApiEnvironments.ENV_RELEASE -> "$baseRepositoryUrl/${ApiEnvironments.ENV_RELEASE}"
-        else -> "$baseRepositoryUrl/${ApiEnvironments.ENV_RELEASE}"
+    path: String = ApiPaths.DEVELOPER_APPS_API,
+): String {
+    val environmentSegment = when (lowercase()) {
+        ApiEnvironments.ENV_DEBUG -> ApiEnvironments.ENV_DEBUG
+        ApiEnvironments.ENV_RELEASE -> ApiEnvironments.ENV_RELEASE
+        else -> ApiEnvironments.ENV_RELEASE
     }
+    val languageSegment = language.lowercase().ifBlank { ApiLanguages.DEFAULT }
+    val normalizedPath = path.trimStart('/')
+
+    return listOf(baseRepositoryUrl, environmentSegment, languageSegment, normalizedPath)
+        .joinToString(separator = "/")
+}
 
 /**
  * Sanitizes a URL string by trimming whitespace and returning `null` for blank inputs.

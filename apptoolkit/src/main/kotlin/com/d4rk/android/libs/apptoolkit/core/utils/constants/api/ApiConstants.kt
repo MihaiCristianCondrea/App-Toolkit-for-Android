@@ -16,8 +16,12 @@ object ApiEnvironments {
     const val ENV_RELEASE: String = "release"
 }
 
+object ApiLanguages {
+    const val DEFAULT: String = "en"
+}
+
 object ApiPaths {
-    const val DEVELOPER_APPS_API: String = "/en/home/api_android_apps.json"
+    const val DEVELOPER_APPS_API: String = "home/api_android_apps.json"
 }
 
 object ApiConstants {
