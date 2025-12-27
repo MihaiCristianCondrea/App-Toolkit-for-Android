@@ -35,8 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
-import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
-import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.StableNavKey
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList

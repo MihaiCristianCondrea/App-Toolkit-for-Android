@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation
+package com.d4rk.android.apps.apptoolkit.app.main.utils.defaults
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Apps
@@ -13,7 +13,6 @@ import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-// TODO: Move somewhere else in utils
 internal object MainNavigationDefaults {
     val fabSupportedRoutes: Set<AppNavKey> = setOf(
         AppsListRoute,

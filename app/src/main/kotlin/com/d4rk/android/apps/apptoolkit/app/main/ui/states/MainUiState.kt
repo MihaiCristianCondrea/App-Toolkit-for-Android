@@ -1,7 +1,7 @@
 package com.d4rk.android.apps.apptoolkit.app.main.ui.states
 
 import androidx.compose.runtime.Immutable
-import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

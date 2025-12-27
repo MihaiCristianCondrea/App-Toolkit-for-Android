@@ -22,7 +22,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.utils.buildAppListItems
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppListItem
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
+import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.AppsListNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer

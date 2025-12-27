@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.NoDataNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.IconButtonWithText
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
@@ -59,7 +60,7 @@ fun NoDataScreen(
     isError: Boolean = false,
     paddingValues: PaddingValues = PaddingValues(),
 ) {
-    val adUnitId = koinInject<com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig>(
+    val adUnitId = koinInject<AdsConfig>(
         qualifier = named(name = "no_data_native_ad")
     ).bannerAdUnitId
     Column(

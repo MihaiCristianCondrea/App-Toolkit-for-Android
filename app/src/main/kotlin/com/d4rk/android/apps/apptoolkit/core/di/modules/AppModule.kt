@@ -1,6 +1,9 @@
 package com.d4rk.android.apps.apptoolkit.core.di.modules
 
 import com.d4rk.android.apps.apptoolkit.BuildConfig
+import com.d4rk.android.apps.apptoolkit.app.apps.favorites.data.local.FavoritesLocalDataSource
+import com.d4rk.android.apps.apptoolkit.app.apps.favorites.data.local.FavoritesLocalDataSourceImpl
+import com.d4rk.android.apps.apptoolkit.app.apps.favorites.data.repository.FavoritesRepositoryImpl
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.repository.FavoritesRepository
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ObserveFavoriteAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ObserveFavoritesUseCase
@@ -12,7 +15,6 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.usecases.FetchDevel
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainViewModel
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
-import com.d4rk.android.apps.apptoolkit.core.data.favorites.FavoritesRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.data.repository.MainRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.developerAppsBaseUrl
@@ -36,27 +38,8 @@ val appModule: Module = module {
         )
     }
     single { KtorClient.createClient(enableLogging = BuildConfig.DEBUG) }
-
-    single<FavoritesRepository> {
-        FavoritesRepositoryImpl(
-            context = get(),
-            dataStore = get(),
-            dispatchers = get()
-        )
-    }
-    single { ObserveFavoritesUseCase(repository = get()) }
-    single { ToggleFavoriteUseCase(repository = get()) }
-    single {
-        ObserveFavoriteAppsUseCase(
-            fetchDeveloperAppsUseCase = get(),
-            observeFavoritesUseCase = get(),
-            dispatchers = get(),
-        )
-    }
-
-    viewModel { MainViewModel(navigationRepository = get()) }
-
     single<NavigationRepository> { MainRepositoryImpl(dispatchers = get()) }
+    viewModel { MainViewModel(navigationRepository = get()) }
 
     single<String>(qualifier = named(name = "developer_apps_base_url")) {
         val environment = BuildConfig.DEBUG.toApiEnvironment()
@@ -69,6 +52,7 @@ val appModule: Module = module {
             baseUrl = get(qualifier = named(name = "developer_apps_base_url")),
         )
     }
+
     single { FetchDeveloperAppsUseCase(repository = get()) }
     viewModel {
         AppsListViewModel(
@@ -78,6 +62,19 @@ val appModule: Module = module {
             dispatchers = get(),
         )
     }
+
+    single<FavoritesLocalDataSource> { FavoritesLocalDataSourceImpl(dataStore = get()) }
+    single<FavoritesRepository> { FavoritesRepositoryImpl(local = get()) }
+
+    single { ObserveFavoritesUseCase(repository = get()) }
+    single { ToggleFavoriteUseCase(repository = get()) }
+    single {
+        ObserveFavoriteAppsUseCase(
+            fetchDeveloperAppsUseCase = get(),
+            observeFavoritesUseCase = get()
+        )
+    }
+
     viewModel {
         FavoriteAppsViewModel(
             observeFavoriteAppsUseCase = get(),

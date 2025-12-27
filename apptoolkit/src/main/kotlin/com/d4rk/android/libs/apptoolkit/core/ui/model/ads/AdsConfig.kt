@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.domain.model.ads
+package com.d4rk.android.libs.apptoolkit.core.ui.model.ads
 
 import androidx.compose.runtime.Immutable
 import com.google.android.gms.ads.AdSize

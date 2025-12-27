@@ -19,7 +19,7 @@ import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.NavigationDrawerItemContent
-import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.hapticDrawerSwipe

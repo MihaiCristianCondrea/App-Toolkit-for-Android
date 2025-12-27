@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.domain.model.navigation
+package com.d4rk.android.libs.apptoolkit.core.ui.model.navigation
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable

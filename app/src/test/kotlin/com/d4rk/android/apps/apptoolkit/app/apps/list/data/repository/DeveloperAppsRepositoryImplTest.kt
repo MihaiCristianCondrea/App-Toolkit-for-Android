@@ -1,9 +1,9 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.list.data.repository
 
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.ApiResponse
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.AppCategoryDto
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.AppDataWrapper
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.AppInfoDto
+import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.AppCategoryDto
+import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.AppDataWrapper
+import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.AppInfoDto
+import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.ApiResponseDto
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppCategory
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
@@ -36,7 +36,7 @@ class DeveloperAppsRepositoryImplTest {
                 screenshots = emptyList(),
             )
         )
-        val response = ApiResponse(AppDataWrapper(apps.map {
+        val response = ApiResponseDto(AppDataWrapper(apps.map {
             AppInfoDto(
                 it.name,
                 it.packageName,
@@ -66,7 +66,7 @@ class DeveloperAppsRepositoryImplTest {
     @Test
     fun `fetchDeveloperApps maps category information`() = runTest {
         val expectedCategory = AppCategory(label = "Education", id = "education")
-        val response = ApiResponse(
+        val response = ApiResponseDto(
             AppDataWrapper(
                 listOf(
                     AppInfoDto(
@@ -148,7 +148,7 @@ class DeveloperAppsRepositoryImplTest {
                 screenshots = emptyList(),
             ),
         )
-        val response = ApiResponse(AppDataWrapper(unsorted.map {
+        val response = ApiResponseDto(AppDataWrapper(unsorted.map {
             AppInfoDto(
                 it.name,
                 it.packageName,

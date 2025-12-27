@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api
+package com.d4rk.android.apps.apptoolkit.app.apps.list.data.model
 
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppCategory
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo

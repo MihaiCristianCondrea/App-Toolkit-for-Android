@@ -15,7 +15,7 @@ import androidx.navigation3.runtime.NavEntryDecorator
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
 import androidx.savedstate.compose.serialization.serializers.MutableStateSerializer
-import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.StableNavKey
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf

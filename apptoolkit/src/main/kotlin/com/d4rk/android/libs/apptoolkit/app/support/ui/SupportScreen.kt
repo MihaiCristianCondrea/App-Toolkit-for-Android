@@ -33,7 +33,7 @@ import com.d4rk.android.libs.apptoolkit.app.support.ui.state.SupportScreenUiStat
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.ShortenLinkConstants
 import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.primaryFormattedPrice
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
+import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.SupportNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.TonalIconButtonWithText

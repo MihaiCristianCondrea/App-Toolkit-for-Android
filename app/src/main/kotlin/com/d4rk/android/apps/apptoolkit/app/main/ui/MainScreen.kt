@@ -44,12 +44,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.fab.MainFloatingActionButton
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.AppNavigationHost
-import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.MainNavigationDefaults
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.NavigationDrawer
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.RandomAppHandler
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
+import com.d4rk.android.apps.apptoolkit.app.main.utils.defaults.MainNavigationDefaults
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.apps.apptoolkit.core.logging.FAB_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
@@ -59,7 +59,7 @@ import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.BottomNavig
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.HideOnScrollBottomBar
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.LeftNavigationRail
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.MainTopAppBar
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
+import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.rememberNavigationState
