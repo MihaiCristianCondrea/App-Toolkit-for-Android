@@ -23,4 +23,3 @@ class FakeDeveloperAppsRepository(
         emit(DataState.Success(apps))
     }
 }
-

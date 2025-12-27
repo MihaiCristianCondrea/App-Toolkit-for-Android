@@ -4,7 +4,6 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.repository.DeveloperAppsRepository
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.RootError
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -41,7 +40,7 @@ class FetchDeveloperAppsUseCaseTest {
 
         val result = useCase().toList()
 
-        val expected = mutableListOf<DataState<List<AppInfo>, RootError>>(
+        val expected = mutableListOf<DataState<List<AppInfo>, Errors>>(
             DataState.Loading(),
         )
         expected.addAll(repositoryEmissions)

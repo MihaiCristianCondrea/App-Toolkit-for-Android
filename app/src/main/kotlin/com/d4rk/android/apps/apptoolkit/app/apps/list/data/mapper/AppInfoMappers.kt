@@ -1,7 +1,7 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.list.data.mapper
 
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.AppCategoryDto
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.AppInfoDto
+import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppCategoryDto
+import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppInfoDto
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppCategory
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.utils.constants.PlayStoreUrls
