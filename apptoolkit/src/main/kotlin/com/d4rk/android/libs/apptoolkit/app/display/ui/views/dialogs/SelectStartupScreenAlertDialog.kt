@@ -21,11 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.core.ui.components.dialogs.BasicAlertDialog
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.sections.InfoMessageSection
-import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.RadioButtonPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.MediumVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.collections.immutable.ImmutableList

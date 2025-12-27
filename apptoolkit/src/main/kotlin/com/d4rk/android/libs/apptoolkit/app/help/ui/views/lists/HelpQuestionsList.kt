@@ -14,7 +14,7 @@ import androidx.compose.ui.draw.clip
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqId
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.cards.QuestionCard
-import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.animateVisibility
+import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 

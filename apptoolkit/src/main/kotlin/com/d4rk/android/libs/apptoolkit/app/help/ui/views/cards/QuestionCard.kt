@@ -32,11 +32,11 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
-import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.OutlinedIconButton
-import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeHorizontalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.components.text.HtmlText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.text.HtmlText
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

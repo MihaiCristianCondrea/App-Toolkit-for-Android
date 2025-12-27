@@ -34,8 +34,8 @@ import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiStat
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.OnboardingBottomNavigation
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.OnboardingDefaultPageLayout
 import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
-import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.OutlinedIconButtonWithText
-import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.hapticPagerSwipe
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.hapticPagerSwipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject

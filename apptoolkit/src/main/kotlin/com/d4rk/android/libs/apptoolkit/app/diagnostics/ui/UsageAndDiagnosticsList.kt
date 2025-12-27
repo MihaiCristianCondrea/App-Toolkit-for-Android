@@ -30,10 +30,10 @@ import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnos
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.views.cards.ConsentToggleCard
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.views.headers.ConsentSectionHeader
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.views.headers.ExpandableConsentSectionHeader
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.sections.InfoMessageSection
-import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.SwitchCardItem
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import org.koin.compose.viewmodel.koinViewModel

@@ -25,8 +25,8 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.model.OnboardingThemeChoice
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.AmoledModeToggle
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.cards.ThemeChoiceCard
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraExtraLargeVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraExtraLargeVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.rememberThemePreferencesState

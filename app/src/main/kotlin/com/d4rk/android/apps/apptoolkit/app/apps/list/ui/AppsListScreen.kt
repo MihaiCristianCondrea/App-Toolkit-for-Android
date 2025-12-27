@@ -24,13 +24,13 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
-import com.d4rk.android.apps.apptoolkit.app.main.ui.components.navigation.RandomAppHandler
+import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.RandomAppHandler
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
-import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.rememberAdsEnabled
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.NoDataScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.AppInfoHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass

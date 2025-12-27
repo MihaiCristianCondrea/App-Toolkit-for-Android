@@ -39,10 +39,10 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.ThemeSettingOption
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
 import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider.paletteById
-import com.d4rk.android.libs.apptoolkit.app.theme.ui.components.WallpaperColorOptionCard
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.sections.InfoMessageSection
-import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.RadioButtonPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.SwitchCardItem
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.DynamicPaletteVariant

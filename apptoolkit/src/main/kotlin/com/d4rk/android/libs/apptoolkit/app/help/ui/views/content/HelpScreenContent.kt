@@ -14,8 +14,8 @@ import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.cards.ContactUsCard
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.lists.HelpQuestionsList
 import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
-import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.HelpNativeAdCard
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraLargeVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.HelpNativeAdCard
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import kotlinx.collections.immutable.ImmutableList
