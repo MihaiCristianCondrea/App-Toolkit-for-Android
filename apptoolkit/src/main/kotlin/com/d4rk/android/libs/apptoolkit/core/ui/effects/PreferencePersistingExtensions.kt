@@ -10,6 +10,12 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
+/**
+ * Persists changes emitted by a [MutableState] using the provided [onPersist] callback.
+ *
+ * The helper observes state changes, skips the initial value, and invokes [onError] when a
+ * persistence failure occurs (defaulting to restoring the last known value).
+ */
 fun <T> MutableState<T>.persistChanges(
     scope: CoroutineScope,
     currentValue: () -> T,

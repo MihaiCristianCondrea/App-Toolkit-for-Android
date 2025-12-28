@@ -7,16 +7,16 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiPaths
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
+/**
+ * Builds the developer apps API URL using the provided environment, language, and path segments.
+ */
 fun String.developerAppsApiUrl(
     language: String = ApiLanguages.DEFAULT,
     baseRepositoryUrl: String = ApiConstants.BASE_REPOSITORY_URL,
     path: String = ApiPaths.DEVELOPER_APPS_API,
 ): String {
-    val environmentSegment = when (lowercase()) {
-        ApiEnvironments.ENV_DEBUG -> ApiEnvironments.ENV_DEBUG
-        ApiEnvironments.ENV_RELEASE -> ApiEnvironments.ENV_RELEASE
-        else -> ApiEnvironments.ENV_RELEASE
-    }
+    val environmentSegment = lowercase().takeIf { it == ApiEnvironments.ENV_DEBUG }
+        ?: ApiEnvironments.ENV_RELEASE
     val languageSegment = language.lowercase().ifBlank { ApiLanguages.DEFAULT }
     val normalizedPath = path.trimStart('/')
 
@@ -28,13 +28,19 @@ fun String.developerAppsApiUrl(
  * Sanitizes a URL string by trimming whitespace and returning `null` for blank inputs.
  */
 fun String?.sanitizeUrlOrNull(): String? =
-    this?.trim()?.takeUnless(String::isEmpty)
+    this?.trim()?.takeIf(String::isNotEmpty)
 
+/**
+ * Normalizes a navigation route by removing query/child segments and returning `null` for blanks.
+ */
 fun String?.normalizeRoute(): String? = this
     ?.substringBefore('?')
     ?.substringBefore('/')
     ?.takeIf { it.isNotBlank() }
 
+/**
+ * Decodes a base64 string into UTF-8 text, returning an empty string on failure.
+ */
 @OptIn(ExperimentalEncodingApi::class)
 fun String.decodeBase64OrEmpty(): String =
     runCatching { String(Base64.decode(this), Charsets.UTF_8) }.getOrDefault("")
@@ -69,6 +75,9 @@ fun String.extractChangesForVersion(version: String): String {
     }.trim()
 }
 
+/**
+ * Builds the FAQ catalog URL for the current build type.
+ */
 fun String.faqCatalogUrl(isDebugBuild: Boolean): String {
     val catalogEnvironment = isDebugBuild.toApiEnvironment()
     return "$this/$catalogEnvironment/catalog.json"

@@ -18,6 +18,9 @@ data class ThemePreferencesState(
     val staticPaletteId: String,
 )
 
+/**
+ * Emits a combined [ThemePreferencesState] with sensible defaults for missing values.
+ */
 fun CommonDataStore.themePreferencesState(
     themeModeDefault: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
     dynamicColorsDefault: Boolean = true,
@@ -42,6 +45,9 @@ fun CommonDataStore.themePreferencesState(
     )
 }
 
+/**
+ * Collects [themePreferencesState] as state within a composable.
+ */
 @Composable
 fun rememberThemePreferencesState(
     themeModeDefault: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,

@@ -110,6 +110,12 @@ class ExtensionsTest {
                     java.sql.SQLException().toError()
                 )
             },
+            {
+                assertEquals(
+                    Errors.UseCase.ILLEGAL_ARGUMENT,
+                    IllegalArgumentException().toError()
+                )
+            },
             { assertEquals(Errors.UseCase.NO_DATA, IllegalStateException().toError()) },
         )
     }

@@ -25,9 +25,13 @@ class ErrorsKtTest {
     }
 
     @Test
+    fun `maps illegal argument to use case error`() {
+        assertEquals(Errors.UseCase.ILLEGAL_ARGUMENT, IllegalArgumentException().toError())
+    }
+
+    @Test
     fun `returns default error when not mapped`() {
         val default = Errors.UseCase.NO_DATA
         assertEquals(default, IllegalStateException().toError(default))
     }
 }
-

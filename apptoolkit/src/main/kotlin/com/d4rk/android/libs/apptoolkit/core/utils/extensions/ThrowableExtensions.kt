@@ -9,21 +9,22 @@ import java.net.UnknownHostException
 import java.sql.SQLException
 
 /**
- * Converts a [Throwable] into a domain specific [Errors] value.
+ * Converts a [Throwable] into a domain-level [Errors] value.
  *
- * The mapping centralizes error handling by translating common
- * networking, serialization and database failures into
- * semantic categories understood by the rest of the toolkit.
+ * The mapping centralizes common transport and storage failures so that repositories and use
+ * cases do not duplicate boilerplate checks.
  *
- * @param default value returned when the [Throwable] type is not recognized
- * @return [Errors] describing the failure
+ * @param default value returned when the throwable type is not recognized.
+ * @return [Errors] describing the failure.
  */
 fun Throwable.toError(default: Errors = Errors.UseCase.NO_DATA): Errors =
     when (this) {
-        is UnknownHostException -> Errors.Network.NO_INTERNET
-        is SocketTimeoutException -> Errors.Network.REQUEST_TIMEOUT
+        is UnknownHostException,
         is ConnectException -> Errors.Network.NO_INTERNET
+
+        is SocketTimeoutException -> Errors.Network.REQUEST_TIMEOUT
         is SerializationException -> Errors.Network.SERIALIZATION
         is SQLException, is SQLiteException -> Errors.Database.DATABASE_OPERATION_FAILED
+        is IllegalArgumentException -> Errors.UseCase.ILLEGAL_ARGUMENT
         else -> default
     }

@@ -4,6 +4,12 @@ import android.app.Activity
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Checks whether the Play Store in-app review flow can be safely requested.
+ *
+ * The helper ensures the app originates from the Play Store and that a lightweight review
+ * request succeeds before reporting availability.
+ */
 suspend fun Activity.isInAppReviewAvailable(): Boolean {
     val context = applicationContext
 

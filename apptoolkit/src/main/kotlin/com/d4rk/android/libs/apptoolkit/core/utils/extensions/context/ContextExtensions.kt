@@ -31,6 +31,11 @@ fun Context.findActivity(): ComponentActivity? {
     return null
 }
 
+/**
+ * Copies [text] to the clipboard and optionally shows a snackbar callback for legacy devices.
+ *
+ * When the clipboard service is unavailable, a warning is logged instead of throwing.
+ */
 fun Context.copyTextToClipboard(
     label: String,
     text: String,
@@ -72,6 +77,9 @@ fun Context.safeStartActivity(
     onFailure = onFailure,
 )
 
+/**
+ * Returns `true` when the app already has the POST_NOTIFICATIONS permission (API 33+ only).
+ */
 fun Context.hasNotificationPermission(): Boolean {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         ContextCompat.checkSelfPermission(
@@ -82,12 +90,21 @@ fun Context.hasNotificationPermission(): Boolean {
     }
 }
 
+/**
+ * Checks whether the Play Store package is installed.
+ */
 fun Context.hasPlayStore(): Boolean =
     packageManager.hasPackage(StoreConstants.PLAY_STORE_PACKAGE)
 
+/**
+ * Determines whether the current app was installed from the Play Store.
+ */
 fun Context.isInstalledFromPlayStore(): Boolean =
     installingPackageNameOrNull() == StoreConstants.PLAY_STORE_PACKAGE
 
+/**
+ * Returns the installer package name when available.
+ */
 fun Context.installingPackageNameOrNull(): String? =
     runCatching {
         val pm = packageManager

@@ -9,23 +9,14 @@ import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
  * Returns `true` when the provided [packageName] exists on the device.
  */
 fun PackageManager.hasPackage(packageName: String): Boolean =
-    runCatching {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
-        } else {
-            @Suppress("DEPRECATION")
-            getPackageInfo(packageName, 0)
-        }
-    }.isSuccess
+    runCatching { getPackageInfoCompat(packageName) }.isSuccess
 
+/**
+ * Returns version metadata for the provided [packageName], or `null` when unavailable.
+ */
 fun PackageManager.getVersionInfo(packageName: String): AppVersionInfo? =
     runCatching {
-        val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
-        } else {
-            @Suppress("DEPRECATION")
-            getPackageInfo(packageName, 0)
-        }
+        val packageInfo = getPackageInfoCompat(packageName)
 
         val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             packageInfo.longVersionCode
@@ -40,6 +31,10 @@ fun PackageManager.getVersionInfo(packageName: String): AppVersionInfo? =
         )
     }.getOrNull()
 
+/**
+ * Checks whether there is a handler for an implicit [intent], mirroring
+ * `Context#startActivity` resolution with compatibility flags.
+ */
 fun PackageManager.canResolveActivityCompat(intent: Intent): Boolean {
     // MATCH_DEFAULT_ONLY mirrors how Context#startActivity resolves implicit intents. :contentReference[oaicite:2]{index=2}
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -52,3 +47,11 @@ fun PackageManager.canResolveActivityCompat(intent: Intent): Boolean {
         resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null
     }
 }
+
+private fun PackageManager.getPackageInfoCompat(packageName: String) =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0L))
+    } else {
+        @Suppress("DEPRECATION")
+        getPackageInfo(packageName, 0)
+    }
