@@ -286,6 +286,7 @@
     <string name="support_offer_unavailable">Ця опція пожертви наразі недоступна.</string>
     <string name="non_paid_support">Безкоштовна підтримка</string>
     <string name="web_ad">Веб-реклама</string>
+    <string name="sponsored_ad_label">● Спонсорована реклама</string>
     <string name="error_failed_to_load_sku_details">Не вдалося завантажити деталі SKU</string>
     <string name="purchase_pending">Ваша пожертва обробляється Google. Ми повідомимо вас, коли він завершиться. Дякую.</string>
     <string name="purchase_thank_you">Дякую за пожертву.</string>

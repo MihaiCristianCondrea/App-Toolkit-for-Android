@@ -286,6 +286,7 @@
     <string name="support_offer_unavailable">Questa opzione di donazione non è al momento disponibile.</string>
     <string name="non_paid_support">Supporto non a pagamento</string>
     <string name="web_ad">Annuncio web</string>
+    <string name="sponsored_ad_label">● Annuncio sponsorizzato</string>
     <string name="error_failed_to_load_sku_details">Impossibile caricare i dettagli dello SKU</string>
     <string name="purchase_pending">La tua donazione viene elaborata da Google. Ti avviseremo quando sarà completo. Grazie.</string>
     <string name="purchase_thank_you">Grazie per la tua donazione.</string>

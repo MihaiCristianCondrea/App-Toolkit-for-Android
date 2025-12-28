@@ -286,6 +286,7 @@
     <string name="support_offer_unavailable">Diese Spendenoption ist derzeit nicht verfügbar.</string>
     <string name="non_paid_support">Unbezahlte unterstützung</string>
     <string name="web_ad">Webanzeige</string>
+    <string name="sponsored_ad_label">● Gesponserte Anzeige</string>
     <string name="error_failed_to_load_sku_details">Fehler beim Laden der SKU-Details</string>
     <string name="purchase_pending">Ihre Spende wird von Google verarbeitet. Wir werden Sie benachrichtigen, wenn es abgeschlossen ist. Danke schön.</string>
     <string name="purchase_thank_you">Vielen Dank für Ihre Spende.</string>

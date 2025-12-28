@@ -46,7 +46,7 @@ class FetchDeveloperAppsUseCaseTest {
         expected.addAll(repositoryEmissions)
 
         assertEquals(expected, result)
-        verify(exactly = 1) { repository.fetchDeveloperApps() }
+        verify(exactly = 1) { repository.fetchDeveloperApps() } // FIXME: Flow is constructed but not used
     }
 
     @Test
@@ -62,6 +62,6 @@ class FetchDeveloperAppsUseCaseTest {
         }
 
         assertSame(exception, thrown)
-        verify(exactly = 1) { repository.fetchDeveloperApps() }
+        verify(exactly = 1) { repository.fetchDeveloperApps() } // FIXME: Flow is constructed but not used
     }
 }

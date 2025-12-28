@@ -286,6 +286,7 @@
     <string name="support_offer_unavailable">ตัวเลือกการบริจาคนี้ไม่พร้อมใช้งานในขณะนี้.</string>
     <string name="non_paid_support">การสนับสนุนแบบไม่ชำระเงิน</string>
     <string name="web_ad">โฆษณาเว็บ</string>
+    <string name="sponsored_ad_label">● โฆษณาที่ได้รับการสนับสนุน</string>
     <string name="error_failed_to_load_sku_details">ไม่สามารถโหลดรายละเอียด SKU ได้</string>
     <string name="purchase_pending">การบริจาคของคุณกำลังดำเนินการโดย Google เราจะแจ้งให้คุณทราบเมื่อเสร็จสิ้น ขอบคุณ.</string>
     <string name="purchase_thank_you">ขอบคุณสำหรับการบริจาค.</string>

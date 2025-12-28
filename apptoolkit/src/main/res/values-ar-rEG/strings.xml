@@ -286,6 +286,7 @@
     <string name="support_offer_unavailable">خيار التبرع هذا غير متاح حاليًا.</string>
     <string name="non_paid_support">دعم غير مدفوع</string>
     <string name="web_ad">إعلان ويب</string>
+    <string name="sponsored_ad_label">● إعلان برعاية</string>
     <string name="error_failed_to_load_sku_details">فشل تحميل تفاصيل SKU</string>
     <string name="purchase_pending">تتم معالجة تبرعك بواسطة Google. سوف نعلمك عند اكتماله. شكرًا لك.</string>
     <string name="purchase_thank_you">شكرا لك على تبرعك.</string>

@@ -286,6 +286,7 @@
     <string name="support_offer_unavailable">目前無法使用此捐款選項。</string>
     <string name="non_paid_support">非付費支持</string>
     <string name="web_ad">網頁廣告</string>
+    <string name="sponsored_ad_label">● 贊助廣告</string>
     <string name="error_failed_to_load_sku_details">載入 SKU 詳細資料失敗</string>
     <string name="purchase_pending">您的捐款正在Google处理。完成后，我们将通知您。谢谢你！</string>
     <string name="purchase_thank_you">谢谢您的捐款！</string>

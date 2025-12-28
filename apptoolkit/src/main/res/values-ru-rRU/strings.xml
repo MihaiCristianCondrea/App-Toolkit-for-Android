@@ -286,6 +286,7 @@
     <string name="support_offer_unavailable">Этот вариант пожертвования сейчас недоступен.</string>
     <string name="non_paid_support">Бесплатная поддержка</string>
     <string name="web_ad">Веб-реклама</string>
+    <string name="sponsored_ad_label">● Спонсируемая реклама</string>
     <string name="error_failed_to_load_sku_details">Не удалось загрузить сведения о SKU</string>
     <string name="purchase_pending">Ваше пожертвование обрабатывается Google. Мы уведомим вас, когда это будет завершено. Спасибо.</string>
     <string name="purchase_thank_you">Спасибо за пожертвование.</string>

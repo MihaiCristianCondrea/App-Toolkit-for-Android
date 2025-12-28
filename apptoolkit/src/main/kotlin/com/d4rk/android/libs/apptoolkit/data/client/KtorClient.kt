@@ -24,7 +24,7 @@ import kotlinx.serialization.json.Json
  */
 object KtorClient {
 
-    private const val requestTimeout: Long = 30_000L
+    private const val REQUEST_TIMEOUT_LIMIT: Long = 30_000L
     private var client: HttpClient? = null
 
     /**
@@ -50,9 +50,9 @@ object KtorClient {
             }
 
             install(plugin = HttpTimeout) {
-                requestTimeoutMillis = requestTimeout
-                connectTimeoutMillis = requestTimeout
-                socketTimeoutMillis = requestTimeout
+                requestTimeoutMillis = REQUEST_TIMEOUT_LIMIT
+                connectTimeoutMillis = REQUEST_TIMEOUT_LIMIT
+                socketTimeoutMillis = REQUEST_TIMEOUT_LIMIT
             }
 
             install(plugin = DefaultRequest) {

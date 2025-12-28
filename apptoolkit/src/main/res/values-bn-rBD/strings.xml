@@ -286,6 +286,7 @@
     <string name="support_offer_unavailable">এই অনুদানের বিকল্পটি বর্তমানে উপলভ্য নয়।</string>
     <string name="non_paid_support">নন-পেইড সাপোর্ট</string>
     <string name="web_ad">ওয়েব বিজ্ঞাপন</string>
+    <string name="sponsored_ad_label">● স্পনসর্ড বিজ্ঞাপন</string>
     <string name="error_failed_to_load_sku_details">SKU বিবরণ লোড করতে ব্যর্থ</string>
     <string name="purchase_pending">আপনার অনুদান গুগল দ্বারা প্রক্রিয়া করা হচ্ছে। এটি সম্পূর্ণ হলে আমরা আপনাকে অবহিত করব। আপনাকে ধন্যবাদ.</string>
     <string name="purchase_thank_you">আপনার অনুদানের জন্য আপনাকে ধন্যবাদ.</string>

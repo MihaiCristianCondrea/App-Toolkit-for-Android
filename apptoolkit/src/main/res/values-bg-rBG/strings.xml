@@ -286,6 +286,7 @@
     <string name="support_offer_unavailable">Тази опция за дарение в момента не е налична.</string>
     <string name="non_paid_support">Безплатна подкрепа</string>
     <string name="web_ad">Уеб реклама</string>
+    <string name="sponsored_ad_label">● Спонсорирана реклама</string>
     <string name="error_failed_to_load_sku_details">Неуспешно зареждане на SKU детайли</string>
     <string name="purchase_pending">Вашето дарение се обработва от Google. Ще ви уведомим, когато приключи. Благодаря ти.</string>
     <string name="purchase_thank_you">Благодаря ви за дарението.</string>
