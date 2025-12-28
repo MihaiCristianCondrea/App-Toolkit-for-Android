@@ -55,7 +55,6 @@ sealed class UiTextHelper {
      *
      * @throws android.content.res.Resources.NotFoundException if a [StringResource] is used and the resource ID does not exist.
      * @throws java.util.MissingFormatArgumentException if a [StringResource] is used with format arguments and not all of them are provided.
-     * @throws IllegalFormatException if a format string used in a [StringResource] is invalid or incompatible with the arguments.
      *
      * @see DynamicString
      * @see StringResource

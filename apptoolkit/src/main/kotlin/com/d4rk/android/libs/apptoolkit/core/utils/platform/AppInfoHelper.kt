@@ -4,7 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.safeStartActivity
 import kotlinx.coroutines.withContext
 
 open class AppInfoHelper(
@@ -43,6 +42,7 @@ open class AppInfoHelper(
 
         return if (launchIntent != null) {
             val launched = context.safeStartActivity(
+                // FIXME: Unresolved reference 'safeStartActivity'.
                 intent = launchIntent,
                 onFailure = {
                     Toast.makeText(
