@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers
+package com.d4rk.android.libs.apptoolkit.app.permissions.data.repository
 
 import android.content.Context
 import com.d4rk.android.libs.apptoolkit.R
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flowOn
  * Default implementation of [PermissionsRepository] that builds the permissions
  * configuration using string resources from the provided [Context].
  */
-class PermissionsSettingsRepository(
+class PermissionsRepositoryImpl(
     private val context: Context,
     private val dispatchers: DispatcherProvider,
 ) : PermissionsRepository {
@@ -82,4 +82,3 @@ class PermissionsSettingsRepository(
             )
         }.flowOn(dispatchers.io)
 }
-

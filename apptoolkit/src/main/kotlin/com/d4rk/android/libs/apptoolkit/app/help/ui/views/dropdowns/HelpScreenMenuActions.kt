@@ -22,7 +22,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.VersionInfoAlertDi
 import com.d4rk.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
 
 @Composable
 fun HelpScreenMenuActions(

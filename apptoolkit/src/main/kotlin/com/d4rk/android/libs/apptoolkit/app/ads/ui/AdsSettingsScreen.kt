@@ -30,7 +30,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ConsentFormHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentFormHelper
 import com.google.android.ump.UserMessagingPlatform
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel

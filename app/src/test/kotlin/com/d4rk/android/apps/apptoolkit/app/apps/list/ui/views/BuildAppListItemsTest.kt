@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.app.apps.list.ui.components
+package com.d4rk.android.apps.apptoolkit.app.apps.list.ui.views
 
 import com.d4rk.android.apps.apptoolkit.app.apps.common.utils.buildAppListItems
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo

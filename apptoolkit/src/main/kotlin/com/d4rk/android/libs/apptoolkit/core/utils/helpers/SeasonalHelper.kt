@@ -5,7 +5,7 @@ import java.time.Month
 import java.time.ZoneId
 
 object SeasonalHelper {
-    fun isChristmasSeason(zoneId: ZoneId = ZoneId.systemDefault()): Boolean {
+    fun isChristmasSeason(zoneId: ZoneId = ZoneId.systemDefault()): Boolean { // TODO: Make this a bool extension
         val today: LocalDate = LocalDate.now(zoneId)
         return (today.month == Month.DECEMBER) || (today.month == Month.JANUARY && today.dayOfMonth <= 6)
     }

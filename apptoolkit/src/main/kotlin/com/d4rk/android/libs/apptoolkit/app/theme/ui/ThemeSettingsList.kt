@@ -49,8 +49,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.DynamicPaletteVari
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.applyDynamicVariant
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.rememberThemePreferencesState
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.helpers.SeasonalHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

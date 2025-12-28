@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.utils.helpers
+package com.d4rk.android.libs.apptoolkit.core.utils.platform
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable

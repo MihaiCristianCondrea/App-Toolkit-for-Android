@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.WindowItemFit
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.WindowItemFit
 import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
 
 @Composable

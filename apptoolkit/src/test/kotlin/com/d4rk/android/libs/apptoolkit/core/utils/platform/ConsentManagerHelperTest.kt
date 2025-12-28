@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.utils.helpers
+package com.d4rk.android.libs.apptoolkit.core.utils.platform
 
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import com.google.firebase.Firebase

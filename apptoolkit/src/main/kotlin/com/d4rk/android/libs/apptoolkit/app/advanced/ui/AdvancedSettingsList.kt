@@ -28,7 +28,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCate
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
 import org.koin.compose.viewmodel.koinViewModel
 
 /**

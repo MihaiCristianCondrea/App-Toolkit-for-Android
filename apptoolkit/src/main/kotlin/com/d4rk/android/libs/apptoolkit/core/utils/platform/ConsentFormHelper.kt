@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.utils.helpers
+package com.d4rk.android.libs.apptoolkit.core.utils.platform
 
 import android.app.Activity
 import android.util.Log
@@ -107,4 +107,3 @@ object ConsentFormHelper {
         }
     }
 }
-

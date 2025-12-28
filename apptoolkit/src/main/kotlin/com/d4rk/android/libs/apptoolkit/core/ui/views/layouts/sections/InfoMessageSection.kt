@@ -26,7 +26,7 @@ import androidx.compose.ui.text.withStyle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.text.LearnMoreText
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
 
 /**
  * Displays an information message section with an optional "Learn More" link.

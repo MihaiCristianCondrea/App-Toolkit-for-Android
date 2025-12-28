@@ -3,7 +3,7 @@ package com.d4rk.android.apps.apptoolkit.core.utils.extensions
 import android.database.sqlite.SQLiteException
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.serialization.SerializationException
 import java.net.ConnectException
 import java.net.SocketTimeoutException

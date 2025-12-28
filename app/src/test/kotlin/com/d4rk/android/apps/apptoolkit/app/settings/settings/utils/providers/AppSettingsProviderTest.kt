@@ -5,7 +5,7 @@ import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.constants.Se
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just

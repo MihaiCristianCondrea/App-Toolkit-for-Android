@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.utils.helpers
+package com.d4rk.android.libs.apptoolkit.core.utils.extensions.context
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -6,7 +6,6 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.copyTextToClipboard
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk

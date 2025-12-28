@@ -9,8 +9,8 @@ import androidx.compose.ui.platform.LocalContext
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.AppInfoHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.AppInfoHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
