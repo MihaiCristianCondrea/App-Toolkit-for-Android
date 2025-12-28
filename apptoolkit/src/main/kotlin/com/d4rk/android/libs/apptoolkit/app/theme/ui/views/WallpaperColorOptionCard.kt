@@ -86,6 +86,7 @@ fun WallpaperColorOptionCard(
                     primary = colors.primary,
                     secondary = colors.secondary,
                     tertiary = colors.tertiary,
+                    selected = selected,
                     modifier = Modifier.size(swatchSize)
                 )
             }

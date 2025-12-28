@@ -116,8 +116,8 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
         DynamicPaletteVariant.indices.map { variant ->
             val scheme = base.applyDynamicVariant(variant)
             WallpaperSwatchColors(
-                primary = scheme.primaryContainer,
-                secondary = scheme.secondaryContainer,
+                primary = scheme.primary,
+                secondary = scheme.secondary,
                 tertiary = scheme.tertiaryContainer,
             )
         }
