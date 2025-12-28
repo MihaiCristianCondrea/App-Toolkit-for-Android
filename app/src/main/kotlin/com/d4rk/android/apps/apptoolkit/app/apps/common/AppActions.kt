@@ -9,8 +9,9 @@ import androidx.compose.ui.platform.LocalContext
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.shareApp
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.AppInfoHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -29,10 +30,10 @@ fun buildOnAppClick(
                 if (appInfo.packageName.isNotEmpty()) {
                     if (appInfoHelper.isAppInstalled(ctx, appInfo.packageName)) {
                         if (!appInfoHelper.openApp(ctx, appInfo.packageName)) {
-                            IntentsHelper.openPlayStoreForApp(ctx, appInfo.packageName)
+                            ctx.openPlayStoreForApp(appInfo.packageName)
                         }
                     } else {
-                        IntentsHelper.openPlayStoreForApp(ctx, appInfo.packageName)
+                        ctx.openPlayStoreForApp(appInfo.packageName)
                     }
                 }
             }
@@ -46,8 +47,7 @@ fun buildOnShareClick(): (AppInfo) -> Unit {
     val currentContext by rememberUpdatedState(newValue = context)
     return remember(currentContext) {
         { appInfo ->
-            IntentsHelper.shareApp(
-                context = currentContext,
+            currentContext.shareApp(
                 shareMessageFormat = R.string.summary_share_message,
                 packageName = appInfo.packageName
             )

@@ -26,7 +26,7 @@ import androidx.compose.ui.text.withStyle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.text.LearnMoreText
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 
 /**
  * Displays an information message section with an optional "Learn More" link.
@@ -89,8 +89,7 @@ fun InfoMessageSection(
                             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                             when {
                                 learnMoreAction != null -> learnMoreAction()
-                                !learnMoreUrl.isNullOrEmpty() -> IntentsHelper.openUrl(
-                                    context,
+                                !learnMoreUrl.isNullOrEmpty() -> context.openUrl( // FIXME: The result of `openUrl` is not used
                                     learnMoreUrl
                                 )
                             }
@@ -108,8 +107,7 @@ fun InfoMessageSection(
                         hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                         when {
                             learnMoreAction != null -> learnMoreAction()
-                            !learnMoreUrl.isNullOrEmpty() -> IntentsHelper.openUrl(
-                                context,
+                            !learnMoreUrl.isNullOrEmpty() -> context.openUrl(
                                 learnMoreUrl
                             )
                         }

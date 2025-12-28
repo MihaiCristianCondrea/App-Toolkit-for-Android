@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import kotlinx.serialization.SerializationException
 import org.junit.Test
 import java.net.ConnectException

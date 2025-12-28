@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.utils.extensions
+package com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
  * 6 = Rotate backward (secondary -> primary -> tertiary -> secondary)
  * 7 = Fixed-Dim accents (use *FixedDim + on*Fixed for primary/secondary/tertiary when available)
  */
-object DynamicPaletteVariant {
+object DynamicPaletteVariant { // TODO && FIXME: Move somewhere else to respect code structure
     const val MIN: Int = 0
     const val MAX: Int = 7
     val indices: IntRange = MIN..MAX
@@ -23,7 +23,7 @@ object DynamicPaletteVariant {
     fun clamp(value: Int): Int = value.coerceIn(MIN, MAX)
 }
 
-object StaticPaletteIds {
+object StaticPaletteIds { // TODO && FIXME: Move somewhere else to respect code structure
     const val MONOCHROME = "monochrome"
     const val BLUE = "blue"
     const val GREEN = "green"

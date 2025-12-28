@@ -21,7 +21,7 @@ import com.d4rk.android.libs.apptoolkit.app.support.ui.SupportActivity
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 
 /**
  * A top app bar for the main screen of the application.
@@ -74,7 +74,7 @@ fun MainTopAppBar(
                     icon = Icons.Outlined.VolunteerActivism,
                     onClick = {
                         setExpandedMenu(false)
-                        IntentsHelper.openActivity(context, SupportActivity::class.java)
+                        context.openActivity(SupportActivity::class.java)
                     }
                 )
             }

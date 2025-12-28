@@ -1,9 +1,10 @@
-package com.d4rk.android.libs.apptoolkit.core.utils.extensions
+package com.d4rk.android.libs.apptoolkit.core.utils.extensions.string
 
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiEnvironments
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiPaths
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -28,7 +29,7 @@ fun String.developerAppsApiUrl(
  * Sanitizes a URL string by trimming whitespace and returning `null` for blank inputs.
  */
 fun String?.sanitizeUrlOrNull(): String? =
-    this?.trim()?.takeIf(String::isNotEmpty)
+    this?.trim()?.takeIf { it.isNotEmpty() }
 
 /**
  * Normalizes a navigation route by removing query/child segments and returning `null` for blanks.

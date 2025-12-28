@@ -43,7 +43,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -214,10 +214,7 @@ fun SupportScreenContent(
                     .fillMaxWidth()
                     .padding(all = SizeConstants.LargeSize),
                 onClick = {
-                    IntentsHelper.openUrl(
-                        context = context,
-                        url = ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK
-                    )
+                    context.openUrl(ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK)
                 },
                 icon = Icons.Outlined.Paid,
                 label = stringResource(id = R.string.web_ad)

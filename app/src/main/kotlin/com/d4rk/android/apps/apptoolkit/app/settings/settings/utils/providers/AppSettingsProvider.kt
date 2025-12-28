@@ -15,7 +15,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.Setti
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsPreference
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openAppNotificationSettings
 
 class AppSettingsProvider : SettingsProvider {
     override fun provideSettingsConfig(context: Context): SettingsConfig {
@@ -29,7 +29,7 @@ class AppSettingsProvider : SettingsProvider {
                             icon = Icons.Outlined.Notifications,
                             title = context.getString(R.string.notifications),
                             summary = context.getString(R.string.summary_preference_settings_notifications),
-                            action = { IntentsHelper.openAppNotificationSettings(context = context) },
+                            action = { context.openAppNotificationSettings() },
                         ),
                         SettingsPreference(
                             key = SettingsContent.DISPLAY,

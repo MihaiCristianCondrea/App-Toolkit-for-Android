@@ -17,7 +17,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.HelpNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.sendEmailToDeveloper
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
@@ -58,8 +58,7 @@ fun HelpScreenContent(
         item {
             ContactUsCard(
                 onClick = {
-                    IntentsHelper.sendEmailToDeveloper(
-                        context = context,
+                    context.sendEmailToDeveloper(
                         applicationNameRes = R.string.app_name
                     )
                 }

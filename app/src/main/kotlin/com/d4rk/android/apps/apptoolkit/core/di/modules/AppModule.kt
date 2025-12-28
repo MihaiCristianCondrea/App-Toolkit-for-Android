@@ -18,8 +18,8 @@ import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.libs.apptoolkit.app.main.data.repository.MainRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.developerAppsApiUrl
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.toApiEnvironment
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.developerAppsApiUrl
 import com.d4rk.android.libs.apptoolkit.data.client.KtorClient
 import com.d4rk.android.libs.apptoolkit.data.core.ads.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore

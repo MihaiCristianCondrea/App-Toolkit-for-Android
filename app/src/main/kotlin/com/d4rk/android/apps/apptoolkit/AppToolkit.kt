@@ -13,8 +13,8 @@ import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppThemeConfig
 import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.isChristmasSeason
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.StaticPaletteIds
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
 import com.d4rk.android.libs.apptoolkit.data.core.BaseCoreManager
 import com.d4rk.android.libs.apptoolkit.data.core.ads.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore

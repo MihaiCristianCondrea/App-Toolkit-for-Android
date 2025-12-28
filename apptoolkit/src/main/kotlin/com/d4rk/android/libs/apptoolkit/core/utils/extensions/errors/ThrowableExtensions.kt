@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.utils.extensions
+package com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors
 
 import android.database.sqlite.SQLiteException
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
@@ -21,7 +21,6 @@ fun Throwable.toError(default: Errors = Errors.UseCase.NO_DATA): Errors =
     when (this) {
         is UnknownHostException,
         is ConnectException -> Errors.Network.NO_INTERNET
-
         is SocketTimeoutException -> Errors.Network.REQUEST_TIMEOUT
         is SerializationException -> Errors.Network.SERIALIZATION
         is SQLException, is SQLiteException -> Errors.Database.DATABASE_OPERATION_FAILED

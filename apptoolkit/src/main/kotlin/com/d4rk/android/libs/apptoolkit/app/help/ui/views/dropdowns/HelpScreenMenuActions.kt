@@ -22,7 +22,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.VersionInfoAlertDi
 import com.d4rk.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 
 @Composable
 fun HelpScreenMenuActions(
@@ -54,9 +55,8 @@ fun HelpScreenMenuActions(
             icon = Icons.Outlined.Shop,
             onClick = {
                 closeMenu()
-                IntentsHelper.openUrl(
-                    context = context,
-                    url = "${AppLinks.PLAY_STORE_APP}${context.packageName}"
+                context.openUrl(
+                    "${AppLinks.PLAY_STORE_APP}${context.packageName}"
                 )
             }
         )
@@ -75,9 +75,8 @@ fun HelpScreenMenuActions(
             icon = Icons.Outlined.Science,
             onClick = {
                 closeMenu()
-                IntentsHelper.openUrl(
-                    context = context,
-                    url = "${AppLinks.PLAY_STORE_BETA}${context.packageName}"
+                context.openUrl(
+                    "${AppLinks.PLAY_STORE_BETA}${context.packageName}"
                 )
             }
         )
@@ -87,7 +86,7 @@ fun HelpScreenMenuActions(
             icon = Icons.Outlined.Description,
             onClick = {
                 closeMenu()
-                IntentsHelper.openUrl(context = context, url = AppLinks.TERMS_OF_SERVICE)
+                context.openUrl(AppLinks.TERMS_OF_SERVICE)
             }
         )
 
@@ -96,7 +95,7 @@ fun HelpScreenMenuActions(
             icon = Icons.Outlined.PrivacyTip,
             onClick = {
                 closeMenu()
-                IntentsHelper.openUrl(context = context, url = AppLinks.PRIVACY_POLICY)
+                context.openUrl(AppLinks.PRIVACY_POLICY)
             }
         )
 
@@ -105,9 +104,8 @@ fun HelpScreenMenuActions(
             icon = Icons.Outlined.Balance,
             onClick = {
                 closeMenu()
-                IntentsHelper.openActivity(
-                    context = context,
-                    activityClass = LicensesActivity::class.java
+                context.openActivity(
+                    LicensesActivity::class.java
                 )
             }
         )

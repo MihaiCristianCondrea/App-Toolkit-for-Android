@@ -28,7 +28,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCate
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -86,10 +86,7 @@ fun AdvancedSettingsList(
                             title = stringResource(id = R.string.bug_report),
                             summary = stringResource(id = R.string.summary_preference_settings_bug_report),
                             onClick = {
-                                IntentsHelper.openActivity(
-                                    context = context,
-                                    activityClass = IssueReporterActivity::class.java,
-                                )
+                                context.openActivity(IssueReporterActivity::class.java)
                             },
                         )
                     }

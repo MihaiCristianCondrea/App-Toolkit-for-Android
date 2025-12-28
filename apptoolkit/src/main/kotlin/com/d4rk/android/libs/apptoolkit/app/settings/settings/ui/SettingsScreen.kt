@@ -59,7 +59,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalS
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
 import org.koin.compose.koinInject
@@ -212,9 +212,8 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
                         .padding(all = SizeConstants.MediumSize * 2)
                         .align(alignment = Alignment.Start),
                     onClick = {
-                        IntentsHelper.openActivity(
-                            context = context,
-                            activityClass = HelpActivity::class.java,
+                        context.openActivity(
+                            HelpActivity::class.java,
                         )
                     },
                     icon = Icons.AutoMirrored.Outlined.ContactSupport,

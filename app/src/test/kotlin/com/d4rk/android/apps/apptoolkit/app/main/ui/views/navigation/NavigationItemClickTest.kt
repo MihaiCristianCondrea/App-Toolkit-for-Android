@@ -9,8 +9,8 @@ import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawe
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
-import io.mockk.Called
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.shareApp
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -18,7 +18,7 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkObject
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -50,7 +50,7 @@ class NavigationItemClickTest {
 
     @BeforeEach
     fun setup() {
-        mockkObject(IntentsHelper)
+        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt")
     }
 
     @AfterEach
@@ -60,7 +60,7 @@ class NavigationItemClickTest {
 
     @Test
     fun `settings route opens settings activity and closes drawer`() = runTest {
-        every { IntentsHelper.openActivity(context, SettingsActivity::class.java) } returns true
+        every { context.openActivity(SettingsActivity::class.java) } returns true
         val drawerState = mockk<DrawerState>()
         coEvery { drawerState.close() } just Runs
 
@@ -72,14 +72,14 @@ class NavigationItemClickTest {
         )
         advanceUntilIdle()
 
-        verify(exactly = 1) { IntentsHelper.openActivity(context, SettingsActivity::class.java) }
+        verify(exactly = 1) { context.openActivity(SettingsActivity::class.java) }
         coVerify(exactly = 1) { drawerState.close() }
-        confirmVerified(IntentsHelper, drawerState)
+        confirmVerified(drawerState)
     }
 
     @Test
     fun `help and feedback route opens help activity and closes drawer`() = runTest {
-        every { IntentsHelper.openActivity(context, HelpActivity::class.java) } returns true
+        every { context.openActivity(HelpActivity::class.java) } returns true
         val drawerState = mockk<DrawerState>()
         coEvery { drawerState.close() } just Runs
 
@@ -91,9 +91,9 @@ class NavigationItemClickTest {
         )
         advanceUntilIdle()
 
-        verify(exactly = 1) { IntentsHelper.openActivity(context, HelpActivity::class.java) }
+        verify(exactly = 1) { context.openActivity(HelpActivity::class.java) }
         coVerify(exactly = 1) { drawerState.close() }
-        confirmVerified(IntentsHelper, drawerState)
+        confirmVerified(drawerState)
     }
 
     @Test
@@ -112,7 +112,7 @@ class NavigationItemClickTest {
         advanceUntilIdle()
 
         assertEquals(1, changelogRequests)
-        verify { IntentsHelper wasNot Called }
+        verify(exactly = 0) { context.openActivity(any()) }
         coVerify(exactly = 1) { drawerState.close() }
         confirmVerified(drawerState)
     }
@@ -120,8 +120,7 @@ class NavigationItemClickTest {
     @Test
     fun `share route invokes share app and closes drawer`() = runTest {
         every {
-            IntentsHelper.shareApp(
-                context,
+            context.shareApp(
                 com.d4rk.android.libs.apptoolkit.R.string.summary_share_message
             )
         } returns true
@@ -137,13 +136,12 @@ class NavigationItemClickTest {
         advanceUntilIdle()
 
         verify(exactly = 1) {
-            IntentsHelper.shareApp(
-                context,
+            context.shareApp(
                 com.d4rk.android.libs.apptoolkit.R.string.summary_share_message
             )
         }
         coVerify(exactly = 1) { drawerState.close() }
-        confirmVerified(IntentsHelper, drawerState)
+        confirmVerified(drawerState)
     }
 
     @Test
@@ -164,7 +162,7 @@ class NavigationItemClickTest {
         advanceUntilIdle()
 
         assertTrue(customHandlerInvoked)
-        verify { IntentsHelper wasNot Called }
+        verify(exactly = 0) { context.openActivity(any()) }
         coVerify(exactly = 1) { drawerState.close() }
         confirmVerified(drawerState)
     }
@@ -180,6 +178,6 @@ class NavigationItemClickTest {
         )
 
         assertFalse(changelogInvoked)
-        verify { IntentsHelper wasNot Called }
+        verify(exactly = 0) { context.openActivity(any()) }
     }
 }

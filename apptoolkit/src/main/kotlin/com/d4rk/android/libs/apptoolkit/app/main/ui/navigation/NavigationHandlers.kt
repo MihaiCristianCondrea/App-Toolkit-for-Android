@@ -6,7 +6,8 @@ import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpActivity
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.shareApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -25,19 +26,16 @@ fun handleNavigationItemClick(
     additionalHandlers: Map<String, (NavigationDrawerItem) -> Unit> = emptyMap(),
 ) {
     val handled = when (item.route) {
-        NavigationDrawerRoutes.ROUTE_SETTINGS -> IntentsHelper.openActivity(
-            context = context,
-            activityClass = SettingsActivity::class.java
+        NavigationDrawerRoutes.ROUTE_SETTINGS -> context.openActivity(
+            SettingsActivity::class.java
         ).let { true }
 
-        NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> IntentsHelper.openActivity(
-            context = context,
-            activityClass = HelpActivity::class.java
+        NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> context.openActivity(
+            HelpActivity::class.java
         ).let { true }
 
         NavigationDrawerRoutes.ROUTE_UPDATES -> onChangelogRequested().let { true }
-        NavigationDrawerRoutes.ROUTE_SHARE -> IntentsHelper.shareApp(
-            context = context,
+        NavigationDrawerRoutes.ROUTE_SHARE -> context.shareApp(
             shareMessageFormat = com.d4rk.android.libs.apptoolkit.R.string.summary_share_message
         ).let { true }
 

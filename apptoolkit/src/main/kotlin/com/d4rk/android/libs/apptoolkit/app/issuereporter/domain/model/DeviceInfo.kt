@@ -3,7 +3,7 @@ package com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.getVersionInfo
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.pm.getVersionInfo
 
 class DeviceInfo() {
     private var versionCode: Long = -1

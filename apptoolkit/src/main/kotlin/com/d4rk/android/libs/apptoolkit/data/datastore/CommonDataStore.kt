@@ -17,8 +17,8 @@ import com.d4rk.android.libs.apptoolkit.app.onboarding.data.local.OnboardingPref
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.StandardDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.DynamicPaletteVariant
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.DynamicPaletteVariant
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.StaticPaletteIds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel

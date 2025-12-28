@@ -32,9 +32,9 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.activity.isInAppReviewAvailable
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.findActivity
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.isInAppReviewAvailable
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ReviewHelper
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.compose.viewmodel.koinViewModel
@@ -94,9 +94,8 @@ fun HelpScreen(
                                 scope = scope
                             )
                         } else {
-                            IntentsHelper.openUrl(
-                                context = context,
-                                url = "https://mihaicristiancondrea.github.io/profile/#faqs"
+                            context.openUrl(
+                                "https://mihaicristiancondrea.github.io/profile/#faqs"
                             )
                         }
                     }

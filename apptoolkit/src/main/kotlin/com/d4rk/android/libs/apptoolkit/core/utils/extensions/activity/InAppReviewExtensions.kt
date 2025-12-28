@@ -1,6 +1,8 @@
-package com.d4rk.android.libs.apptoolkit.core.utils.extensions.context
+package com.d4rk.android.libs.apptoolkit.core.utils.extensions.activity
 
 import android.app.Activity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.hasPlayStore
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.isInstalledFromPlayStore
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.tasks.await
 

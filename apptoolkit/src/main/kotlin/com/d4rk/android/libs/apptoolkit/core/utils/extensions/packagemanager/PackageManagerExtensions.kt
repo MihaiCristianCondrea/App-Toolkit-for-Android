@@ -1,19 +1,24 @@
-package com.d4rk.android.libs.apptoolkit.core.utils.extensions
+package com.d4rk.android.libs.apptoolkit.core.utils.extensions.pm
 
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.annotation.CheckResult
 import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 
 /**
- * Returns `true` when the provided [packageName] exists on the device.
+ * Returns `true` when [packageName] is installed AND visible to the caller.
+ *
+ * On Android 11+ this is affected by package visibility (<queries> / QUERY_ALL_PACKAGES).
  */
-fun PackageManager.hasPackage(packageName: String): Boolean =
+@CheckResult
+fun PackageManager.hasPackageVisible(packageName: String): Boolean =
     runCatching { getPackageInfoCompat(packageName) }.isSuccess
 
 /**
- * Returns version metadata for the provided [packageName], or `null` when unavailable.
+ * Returns version metadata for [packageName], or `null` when unavailable (not installed, not visible, or error).
  */
+@CheckResult
 fun PackageManager.getVersionInfo(packageName: String): AppVersionInfo? =
     runCatching {
         val packageInfo = getPackageInfoCompat(packageName)
@@ -32,12 +37,14 @@ fun PackageManager.getVersionInfo(packageName: String): AppVersionInfo? =
     }.getOrNull()
 
 /**
- * Checks whether there is a handler for an implicit [intent], mirroring
- * `Context#startActivity` resolution with compatibility flags.
+ * Best-effort handler check for an implicit [intent].
+ *
+ * WARNING: On Android 11+ this can return false even when startActivity(intent) would succeed,
+ * due to package visibility filtering. Prefer try/catch for actual launches.
  */
-fun PackageManager.canResolveActivityCompat(intent: Intent): Boolean {
-    // MATCH_DEFAULT_ONLY mirrors how Context#startActivity resolves implicit intents. :contentReference[oaicite:2]{index=2}
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+@CheckResult
+fun PackageManager.canResolveActivityCompat(intent: Intent): Boolean =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         resolveActivity(
             intent,
             PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong())
@@ -46,7 +53,6 @@ fun PackageManager.canResolveActivityCompat(intent: Intent): Boolean {
         @Suppress("DEPRECATION")
         resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null
     }
-}
 
 private fun PackageManager.getPackageInfoCompat(packageName: String) =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

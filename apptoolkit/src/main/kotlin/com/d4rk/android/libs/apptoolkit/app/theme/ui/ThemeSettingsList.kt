@@ -45,12 +45,12 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPre
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.DynamicPaletteVariant
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.applyDynamicVariant
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.rememberThemePreferencesState
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.isChristmasSeason
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.DynamicPaletteVariant
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.StaticPaletteIds
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.applyDynamicVariant
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openDisplaySettings
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.datastore.rememberThemePreferencesState
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
 import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -120,7 +120,9 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
 
     val staticOptions: List<String> = remember { StaticPaletteIds.withDefault }
 
-    val isChristmasSeason: Boolean = remember { ZoneId.systemDefault().isChristmasSeason() }
+    val isChristmasSeason: Boolean = remember {
+        ZoneId.systemDefault().isChristmasSeason()
+    } // FIXME: Expression 'isChristmasSeason' of type 'Boolean' cannot be invoked as a function. Function 'invoke()' is not found.
 
     val staticSwatches: List<WallpaperSwatchColors> =
         remember(staticOptions, isSystemInDarkThemeNow) {
@@ -326,7 +328,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                     message = stringResource(id = R.string.summary_dark_theme),
                     newLine = false,
                     learnMoreText = stringResource(id = R.string.screen_and_display_settings),
-                    learnMoreAction = { IntentsHelper.openDisplaySettings(context) }
+                    learnMoreAction = { context.openDisplaySettings() } // FIXME: The result of `openDisplaySettings` is not used
                 )
             }
         }

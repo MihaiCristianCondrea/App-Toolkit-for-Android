@@ -36,7 +36,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHa
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Angle
@@ -122,10 +122,7 @@ fun AboutSettingsList(
                                 title = stringResource(id = R.string.oss_license_title),
                                 summary = stringResource(id = R.string.summary_preference_settings_oss)
                             ) {
-                                IntentsHelper.openActivity(
-                                    context = context,
-                                    activityClass = LicensesActivity::class.java
-                                )
+                                context.openActivity(LicensesActivity::class.java)
                             }
                         }
                     }

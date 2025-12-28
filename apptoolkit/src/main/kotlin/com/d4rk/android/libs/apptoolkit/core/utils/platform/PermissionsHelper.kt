@@ -6,7 +6,7 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.permissions.PermissionsConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.hasNotificationPermission
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.hasPostNotificationsPermissions
 
 /**
  * Utility class for handling runtime permissions.
@@ -20,7 +20,7 @@ object PermissionsHelper {
      * @return True if the permission is granted, false otherwise.
      */
     fun hasNotificationPermission(context: Context): Boolean {
-        return context.hasNotificationPermission()
+        return context.hasPostNotificationsPermissions()
     }
 
     /**

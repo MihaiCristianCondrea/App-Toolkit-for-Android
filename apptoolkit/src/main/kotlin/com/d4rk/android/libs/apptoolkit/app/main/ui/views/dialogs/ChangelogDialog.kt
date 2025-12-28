@@ -22,7 +22,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoPr
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.extractChangesForVersion
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.extractChangesForVersion
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

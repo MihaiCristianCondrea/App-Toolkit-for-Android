@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.utils.extensions
+package com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean
 
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiEnvironments
 

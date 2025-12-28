@@ -25,8 +25,8 @@ import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
 import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.github.GithubConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.decodeBase64OrEmpty
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.faqCatalogUrl
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.decodeBase64OrEmpty
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.faqCatalogUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module

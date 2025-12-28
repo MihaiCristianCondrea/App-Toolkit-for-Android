@@ -8,7 +8,7 @@ import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.monochrome.monoch
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.red.redPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.rose.rosePalette
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.yellow.yellowPalette
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.StaticPaletteIds
 
 object ThemePaletteProvider {
     var defaultPalette: ColorPalette = bluePalette

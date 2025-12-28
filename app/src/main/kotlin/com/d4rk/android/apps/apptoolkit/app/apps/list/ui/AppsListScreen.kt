@@ -31,8 +31,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.AppInfoHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
@@ -94,7 +94,7 @@ fun AppsListRoute(
     val onOpenInPlayStore: (AppInfo) -> Unit = remember(context) {
         { appInfo ->
             if (appInfo.packageName.isNotEmpty()) {
-                IntentsHelper.openPlayStoreForApp(context, appInfo.packageName)
+                context.openPlayStoreForApp(appInfo.packageName)
             }
         }
     }

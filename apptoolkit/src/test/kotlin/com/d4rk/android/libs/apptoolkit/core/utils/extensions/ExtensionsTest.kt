@@ -5,10 +5,18 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiEnvironments
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiPaths
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.developerAppsApiUrl
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.normalizeRoute
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.sanitizeUrlOrNull
 import kotlinx.serialization.SerializationException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.robolectric.annotation.Config
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.sql.SQLException
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -94,10 +102,10 @@ class ExtensionsTest {
             {
                 assertEquals(
                     Errors.Network.REQUEST_TIMEOUT,
-                    java.net.SocketTimeoutException().toError()
+                    SocketTimeoutException().toError()
                 )
             },
-            { assertEquals(Errors.Network.NO_INTERNET, java.net.ConnectException().toError()) },
+            { assertEquals(Errors.Network.NO_INTERNET, ConnectException().toError()) },
             {
                 assertEquals(
                     Errors.Network.SERIALIZATION,
@@ -107,7 +115,7 @@ class ExtensionsTest {
             {
                 assertEquals(
                     Errors.Database.DATABASE_OPERATION_FAILED,
-                    java.sql.SQLException().toError()
+                    SQLException().toError()
                 )
             },
             {

@@ -5,12 +5,12 @@ import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.constants.Se
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openAppNotificationSettings
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkObject
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
@@ -45,9 +45,9 @@ class AppSettingsProviderTest {
     @Test
     fun `provideSettingsConfig returns expected configuration`() {
         val context = createContext(defaultStrings)
-        mockkObject(IntentsHelper)
+        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt")
         mockkObject(GeneralSettingsActivity.Companion)
-        every { IntentsHelper.openAppNotificationSettings(context) } returns true
+        every { context.openAppNotificationSettings() } returns true
         every { GeneralSettingsActivity.start(any(), any(), any()) } just Runs
 
         val config = provider.provideSettingsConfig(context)
@@ -96,7 +96,7 @@ class AppSettingsProviderTest {
         assertEquals(defaultStrings[R.string.summary_preference_settings_about], about.summary)
 
         notifications.action.invoke()
-        verify(exactly = 1) { IntentsHelper.openAppNotificationSettings(context) }
+        verify(exactly = 1) { context.openAppNotificationSettings() }
 
         display.action.invoke()
         verify(exactly = 1) {

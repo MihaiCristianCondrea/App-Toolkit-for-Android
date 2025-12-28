@@ -14,9 +14,9 @@ import com.d4rk.android.libs.apptoolkit.app.main.utils.InAppUpdateHelper
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentFormHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentManagerHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ReviewHelper
 import com.google.android.gms.ads.MobileAds
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startStartupActivity() {
-        IntentsHelper.openActivity(context = this, activityClass = StartupActivity::class.java)
+        openActivity(activityClass = StartupActivity::class.java)
         finish()
     }
 

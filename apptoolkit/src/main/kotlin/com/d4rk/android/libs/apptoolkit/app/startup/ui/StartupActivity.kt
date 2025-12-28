@@ -17,8 +17,8 @@ import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
 import com.d4rk.android.libs.apptoolkit.app.startup.utils.interfaces.providers.StartupProvider
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.logging.STARTUP_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentFormHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.UserMessagingPlatform
 import kotlinx.coroutines.CancellationException
@@ -78,8 +78,7 @@ class StartupActivity : AppCompatActivity() {
     }
 
     private fun navigateToNext() {
-        IntentsHelper.openActivity(
-            context = this@StartupActivity,
+        openActivity(
             activityClass = provider.getNextIntent(this@StartupActivity)
                 .component?.className?.let { Class.forName(it) }
                 ?: StartupActivity::class.java

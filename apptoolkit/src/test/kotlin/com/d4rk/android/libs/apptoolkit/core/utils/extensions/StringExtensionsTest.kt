@@ -1,5 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.decodeBase64OrEmpty
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.extractChangesForVersion
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.faqCatalogUrl
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 

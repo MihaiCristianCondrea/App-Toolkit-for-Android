@@ -5,7 +5,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppInfoD
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppCategory
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.utils.constants.PlayStoreUrls
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.sanitizeUrlOrNull
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.sanitizeUrlOrNull
 
 fun AppInfoDto.toDomain(): AppInfo = AppInfo(
     name = name,

@@ -19,7 +19,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPrefer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import org.koin.compose.koinInject
 
 @Composable
@@ -43,17 +43,17 @@ fun PrivacySettingsList(
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.privacy_policy),
                     summary = stringResource(id = R.string.summary_preference_settings_privacy_policy),
-                    onClick = { IntentsHelper.openUrl(context, provider.privacyPolicyUrl) })
+                    onClick = { context.openUrl(provider.privacyPolicyUrl) })
                 ExtraTinyVerticalSpacer()
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.terms_of_service),
                     summary = stringResource(id = R.string.summary_preference_settings_terms_of_service),
-                    onClick = { IntentsHelper.openUrl(context, provider.termsOfServiceUrl) })
+                    onClick = { context.openUrl(provider.termsOfServiceUrl) })
                 ExtraTinyVerticalSpacer()
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.code_of_conduct),
                     summary = stringResource(id = R.string.summary_preference_settings_code_of_conduct),
-                    onClick = { IntentsHelper.openUrl(context, provider.codeOfConductUrl) })
+                    onClick = { context.openUrl(provider.codeOfConductUrl) })
                 ExtraTinyVerticalSpacer()
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.permissions),
@@ -82,12 +82,12 @@ fun PrivacySettingsList(
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.legal_notices),
                     summary = stringResource(id = R.string.summary_preference_settings_legal_notices),
-                    onClick = { IntentsHelper.openUrl(context, provider.legalNoticesUrl) })
+                    onClick = { context.openUrl(provider.legalNoticesUrl) })
                 ExtraTinyVerticalSpacer()
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.license),
                     summary = stringResource(id = R.string.summary_preference_settings_license),
-                    onClick = { IntentsHelper.openUrl(context, provider.licenseUrl) })
+                    onClick = { context.openUrl(provider.licenseUrl) })
             }
         }
     }
