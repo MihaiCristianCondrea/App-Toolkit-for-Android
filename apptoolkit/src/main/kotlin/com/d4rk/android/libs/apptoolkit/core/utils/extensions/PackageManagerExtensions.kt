@@ -1,5 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
@@ -38,3 +39,16 @@ fun PackageManager.getVersionInfo(packageName: String): AppVersionInfo? =
             versionCode = versionCode,
         )
     }.getOrNull()
+
+fun PackageManager.canResolveActivityCompat(intent: Intent): Boolean {
+    // MATCH_DEFAULT_ONLY mirrors how Context#startActivity resolves implicit intents. :contentReference[oaicite:2]{index=2}
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        resolveActivity(
+            intent,
+            PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong())
+        ) != null
+    } else {
+        @Suppress("DEPRECATION")
+        resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null
+    }
+}

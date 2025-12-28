@@ -9,6 +9,7 @@ import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.safeStartActivity
 import java.net.URLEncoder
 
 /**
@@ -32,15 +33,8 @@ object IntentsHelper {
     fun openUrl(context: Context, url: String): Boolean {
         val intent = Intent(Intent.ACTION_VIEW, url.trim().toUri()).apply {
             addCategory(Intent.CATEGORY_BROWSABLE)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        return runCatching {
-            context.startActivity(intent)
-            true
-        }.getOrElse {
-            it.printStackTrace()
-            false
-        }
+        return context.launchIntent(intent = intent)
     }
 
     /**
@@ -56,13 +50,7 @@ object IntentsHelper {
         val intent = Intent(context, activityClass).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        return runCatching {
-            context.startActivity(intent)
-            true
-        }.getOrElse {
-            it.printStackTrace()
-            false
-        }
+        return context.launchIntent(intent = intent)
     }
 
     /**
@@ -86,13 +74,7 @@ object IntentsHelper {
             }
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        return runCatching {
-            context.startActivity(intent)
-            true
-        }.getOrElse {
-            it.printStackTrace()
-            false
-        }
+        return context.launchIntent(intent = intent, addNewTaskFlag = false)
     }
 
     /**
@@ -105,8 +87,6 @@ object IntentsHelper {
      * @return `true` if a settings screen could be opened, `false` otherwise.
      */
     fun openDisplaySettings(context: Context): Boolean {
-        val packageManager = context.packageManager
-
         val displayIntent = Intent(Settings.ACTION_DISPLAY_SETTINGS).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
@@ -115,23 +95,8 @@ object IntentsHelper {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
-        return displayIntent.resolveActivity(packageManager)?.let {
-            runCatching {
-                context.startActivity(displayIntent)
-                true
-            }.getOrElse {
-                it.printStackTrace()
-                false
-            }
-        } ?: settingsIntent.resolveActivity(packageManager)?.let {
-            runCatching {
-                context.startActivity(settingsIntent)
-                true
-            }.getOrElse {
-                it.printStackTrace()
-                false
-            }
-        } ?: false
+        return context.launchIntent(intent = displayIntent, addNewTaskFlag = false) ||
+                context.launchIntent(intent = settingsIntent, addNewTaskFlag = false)
     }
 
     /**
@@ -149,10 +114,9 @@ object IntentsHelper {
         ).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        return runCatching {
-            context.startActivity(marketIntent)
+        return if (context.launchIntent(intent = marketIntent, addNewTaskFlag = false)) {
             true
-        }.getOrElse {
+        } else {
             openUrl(context, "${AppLinks.PLAY_STORE_APP}$packageName")
         }
     }
@@ -188,13 +152,7 @@ object IntentsHelper {
         ).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        return runCatching {
-            context.startActivity(chooser)
-            true
-        }.getOrElse {
-            it.printStackTrace()
-            false
-        }
+        return context.launchIntent(intent = chooser)
     }
 
     /**
@@ -217,18 +175,18 @@ object IntentsHelper {
         val mailtoUri: Uri =
             "mailto:$developerEmail?subject=$subjectEncoded&body=$bodyEncoded".toUri()
 
-        return runCatching {
-            context.startActivity(
-                Intent.createChooser(
-                    Intent(Intent.ACTION_SENDTO, mailtoUri),
-                    context.getString(R.string.send_email_using)
-                ).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                })
-            true
-        }.getOrElse {
-            it.printStackTrace()
-            false
+        val chooserIntent = Intent.createChooser(
+            Intent(Intent.ACTION_SENDTO, mailtoUri),
+            context.getString(R.string.send_email_using)
+        ).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
+
+        return context.launchIntent(intent = chooserIntent)
     }
+
+    private fun Context.launchIntent(
+        intent: Intent,
+        addNewTaskFlag: Boolean = true,
+    ): Boolean = safeStartActivity(intent = intent, addNewTaskFlag = addNewTaskFlag)
 }

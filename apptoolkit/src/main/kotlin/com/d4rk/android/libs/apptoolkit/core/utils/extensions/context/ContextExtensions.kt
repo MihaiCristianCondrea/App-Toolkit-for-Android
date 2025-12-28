@@ -11,10 +11,12 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.annotation.CheckResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.store.StoreConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.canResolveActivityCompat
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.hasPackage
 
 /**
@@ -53,34 +55,37 @@ fun Context.copyTextToClipboard(
 }
 
 /**
- * Resolves and launches the provided [intent], adding [Intent.FLAG_ACTIVITY_NEW_TASK] when the
- * caller is not an [Activity]. Returns `true` on success and invokes [onFailure] when the intent
- * cannot be resolved or launching it fails.
+ * Starts an activity defensively.
+ *
+ * - For implicit intents, checks if there is a handler to avoid ActivityNotFoundException.
+ * - When called from a non-Activity Context, optionally adds FLAG_ACTIVITY_NEW_TASK.
+ *
+ * @return true if startActivity() succeeded, false otherwise.
  */
+@CheckResult
 fun Context.safeStartActivity(
     intent: Intent,
     addNewTaskFlag: Boolean = true,
     onFailure: (Throwable?) -> Unit = {},
 ): Boolean {
-    val canResolveIntent = intent.resolveActivity(packageManager) != null
-    if (!canResolveIntent) {
+    val canHandle = when {
+        intent.component != null -> true
+        intent.action == Intent.ACTION_CHOOSER -> true
+        else -> packageManager.canResolveActivityCompat(intent)
+    }
+
+    if (!canHandle) {
         onFailure(null)
         return false
     }
 
-    val launchIntent = if (addNewTaskFlag && this !is Activity) {
-        Intent(intent).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
-    } else {
-        intent
-    }
+    val launchIntent =
+        intent.takeUnless { addNewTaskFlag && this !is Activity }
+            ?: Intent(intent).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-    return runCatching {
-        startActivity(launchIntent)
-        true
-    }.getOrElse { throwable ->
-        onFailure(throwable)
-        false
-    }
+    return runCatching { startActivity(launchIntent) }
+        .onFailure(onFailure)
+        .isSuccess
 }
 
 fun Context.hasNotificationPermission(): Boolean {
