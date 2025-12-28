@@ -9,7 +9,8 @@ import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.safeStartActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.launchIntentSafely
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.requireNewTask
 import java.net.URLEncoder
 
 /**
@@ -34,7 +35,7 @@ object IntentsHelper {
         val intent = Intent(Intent.ACTION_VIEW, url.trim().toUri()).apply {
             addCategory(Intent.CATEGORY_BROWSABLE)
         }
-        return context.launchIntent(intent = intent)
+        return context.launchIntentSafely(intent = intent)
     }
 
     /**
@@ -47,10 +48,8 @@ object IntentsHelper {
      * @return `true` if the activity could be launched, `false` otherwise.
      */
     fun openActivity(context: Context, activityClass: Class<*>): Boolean {
-        val intent = Intent(context, activityClass).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        return context.launchIntent(intent = intent)
+        val intent = Intent(context, activityClass).requireNewTask(context)
+        return context.launchIntentSafely(intent = intent, addNewTaskFlag = false)
     }
 
     /**
@@ -73,8 +72,10 @@ object IntentsHelper {
                 data = Uri.fromParts("package", context.packageName, null)
             }
         }
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        return context.launchIntent(intent = intent, addNewTaskFlag = false)
+        return context.launchIntentSafely(
+            intent = intent.requireNewTask(context),
+            addNewTaskFlag = false
+        )
     }
 
     /**
@@ -87,16 +88,16 @@ object IntentsHelper {
      * @return `true` if a settings screen could be opened, `false` otherwise.
      */
     fun openDisplaySettings(context: Context): Boolean {
-        val displayIntent = Intent(Settings.ACTION_DISPLAY_SETTINGS).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
+        val displayIntent = Intent(Settings.ACTION_DISPLAY_SETTINGS).requireNewTask(context)
+        val settingsIntent = Intent(Settings.ACTION_SETTINGS).requireNewTask(context)
 
-        val settingsIntent = Intent(Settings.ACTION_SETTINGS).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-
-        return context.launchIntent(intent = displayIntent, addNewTaskFlag = false) ||
-                context.launchIntent(intent = settingsIntent, addNewTaskFlag = false)
+        return context.launchIntentSafely(
+            intent = displayIntent,
+            addNewTaskFlag = false
+        ) || context.launchIntentSafely(
+            intent = settingsIntent,
+            addNewTaskFlag = false
+        )
     }
 
     /**
@@ -111,10 +112,8 @@ object IntentsHelper {
     fun openPlayStoreForApp(context: Context, packageName: String): Boolean {
         val marketIntent = Intent(
             Intent.ACTION_VIEW, "${AppLinks.MARKET_APP_PAGE}$packageName".toUri()
-        ).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        return if (context.launchIntent(intent = marketIntent, addNewTaskFlag = false)) {
+        ).requireNewTask(context)
+        return if (context.launchIntentSafely(intent = marketIntent, addNewTaskFlag = false)) {
             true
         } else {
             openUrl(context, "${AppLinks.PLAY_STORE_APP}$packageName")
@@ -149,10 +148,11 @@ object IntentsHelper {
         }
         val chooser = Intent.createChooser(
             sendIntent, context.resources.getText(R.string.send_email_using)
-        ).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        return context.launchIntent(intent = chooser)
+        )
+        return context.launchIntentSafely(
+            intent = chooser.requireNewTask(context),
+            addNewTaskFlag = false
+        )
     }
 
     /**
@@ -178,15 +178,11 @@ object IntentsHelper {
         val chooserIntent = Intent.createChooser(
             Intent(Intent.ACTION_SENDTO, mailtoUri),
             context.getString(R.string.send_email_using)
-        ).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
+        )
 
-        return context.launchIntent(intent = chooserIntent)
+        return context.launchIntentSafely(
+            intent = chooserIntent.requireNewTask(context),
+            addNewTaskFlag = false
+        )
     }
-
-    private fun Context.launchIntent(
-        intent: Intent,
-        addNewTaskFlag: Boolean = true,
-    ): Boolean = safeStartActivity(intent = intent, addNewTaskFlag = addNewTaskFlag)
 }

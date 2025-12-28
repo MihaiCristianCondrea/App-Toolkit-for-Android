@@ -27,11 +27,8 @@ fun String.developerAppsApiUrl(
 /**
  * Sanitizes a URL string by trimming whitespace and returning `null` for blank inputs.
  */
-fun String?.sanitizeUrlOrNull(): String? {
-    if (this == null) return null
-    val sanitized = trim()
-    return sanitized.takeUnless { it.isEmpty() }
-}
+fun String?.sanitizeUrlOrNull(): String? =
+    this?.trim()?.takeUnless(String::isEmpty)
 
 fun String?.normalizeRoute(): String? = this
     ?.substringBefore('?')

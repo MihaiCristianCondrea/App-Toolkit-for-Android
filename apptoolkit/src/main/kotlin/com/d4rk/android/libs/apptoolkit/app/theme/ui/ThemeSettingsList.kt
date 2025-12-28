@@ -49,11 +49,12 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.DynamicPaletteVari
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.applyDynamicVariant
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.rememberThemePreferencesState
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.SeasonalHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.helpers.isChristmasSeason
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.IntentsHelper
 import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.time.ZoneId
 
 /**
  * Theme settings content for the app.
@@ -119,7 +120,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
 
     val staticOptions: List<String> = remember { StaticPaletteIds.withDefault }
 
-    val isChristmasSeason: Boolean = remember { SeasonalHelper.isChristmasSeason() }
+    val isChristmasSeason: Boolean = remember { ZoneId.systemDefault().isChristmasSeason() }
 
     val staticSwatches: List<WallpaperSwatchColors> =
         remember(staticOptions, isSystemInDarkThemeNow) {

@@ -1,7 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions.context
 
 import android.Manifest
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -16,8 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.store.StoreConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.canResolveActivityCompat
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.hasPackage
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.launchIntentSafely
 
 /**
  * Traverses the context chain and returns the first [ComponentActivity] if present.
@@ -41,16 +40,15 @@ fun Context.copyTextToClipboard(
         getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
     }.getOrNull()
 
-    if (clipboard == null) {
+    clipboard?.let { manager ->
+        val clip: ClipData = ClipData.newPlainText(label, text)
+        manager.setPrimaryClip(clip)
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+            onShowSnackbar()
+        }
+    } ?: run {
         Log.w(CLIPBOARD_HELPER_LOG_TAG, "Clipboard service unavailable")
-        return
-    }
-
-    val clip: ClipData = ClipData.newPlainText(label, text)
-    clipboard.setPrimaryClip(clip)
-
-    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-        onShowSnackbar()
     }
 }
 
@@ -67,26 +65,12 @@ fun Context.safeStartActivity(
     intent: Intent,
     addNewTaskFlag: Boolean = true,
     onFailure: (Throwable?) -> Unit = {},
-): Boolean {
-    val canHandle = when {
-        intent.component != null -> true
-        intent.action == Intent.ACTION_CHOOSER -> true
-        else -> packageManager.canResolveActivityCompat(intent)
-    }
-
-    if (!canHandle) {
-        onFailure(null)
-        return false
-    }
-
-    val launchIntent =
-        intent.takeUnless { addNewTaskFlag && this !is Activity }
-            ?: Intent(intent).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-    return runCatching { startActivity(launchIntent) }
-        .onFailure(onFailure)
-        .isSuccess
-}
+): Boolean = launchIntentSafely(
+    intent = intent,
+    addNewTaskFlag = addNewTaskFlag,
+    requireResolver = true,
+    onFailure = onFailure,
+)
 
 fun Context.hasNotificationPermission(): Boolean {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
