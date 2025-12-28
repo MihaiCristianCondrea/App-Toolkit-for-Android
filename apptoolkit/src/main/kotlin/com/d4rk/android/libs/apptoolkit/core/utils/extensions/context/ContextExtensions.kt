@@ -15,8 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.store.StoreConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.canResolveActivityCompat
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.hasPackage
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.launchIntentSafely
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.requireNewTask
 
 /**
  * Traverses the context chain and returns the first [ComponentActivity] if present.
@@ -55,6 +56,34 @@ fun Context.copyTextToClipboard(
     } ?: run {
         Log.w(CLIPBOARD_HELPER_LOG_TAG, "Clipboard service unavailable")
     }
+}
+
+/**
+ * Safely launches an [Intent], optionally validating for available handlers and adding the
+ * new-task flag when needed.
+ *
+ * The helper mirrors [Context.startActivity] resolution rules while avoiding
+ * `ActivityNotFoundException` for implicit intents.
+ */
+@CheckResult
+fun Context.launchIntentSafely(
+    intent: Intent,
+    addNewTaskFlag: Boolean = true,
+    requireResolver: Boolean = true,
+    onFailure: (Throwable?) -> Unit = {},
+): Boolean {
+    val launchIntent = if (addNewTaskFlag) intent.requireNewTask(this) else intent
+    val needsResolution = requireResolver && launchIntent.component == null &&
+            launchIntent.action != Intent.ACTION_CHOOSER
+
+    if (needsResolution && !packageManager.canResolveActivityCompat(launchIntent)) {
+        onFailure(null)
+        return false
+    }
+
+    return runCatching { startActivity(launchIntent) }
+        .onFailure(onFailure)
+        .isSuccess
 }
 
 /**

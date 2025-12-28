@@ -9,7 +9,7 @@ import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.launchIntentSafely
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.launchIntentSafely
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.requireNewTask
 import java.net.URLEncoder
 
