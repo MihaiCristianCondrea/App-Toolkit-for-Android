@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.logging.GENERAL_SETTINGS_LOG_TAG
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.safeStartActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import kotlinx.coroutines.launch
 
@@ -26,7 +26,8 @@ class GeneralSettingsActivity : AppCompatActivity() {
                 putExtra(EXTRA_CONTENT, contentKey)
             }
 
-            context.safeStartActivity(
+            context.startActivitySafely(
+                // FIXME: The result of `startActivitySafely` is not used
                 intent = intent,
                 onFailure = {
                     Log.e(

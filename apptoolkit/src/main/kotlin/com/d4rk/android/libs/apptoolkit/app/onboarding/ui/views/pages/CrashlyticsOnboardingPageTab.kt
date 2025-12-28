@@ -75,7 +75,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpace
 import com.d4rk.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.safeStartActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -281,9 +281,9 @@ fun LearnMoreSection() {
 
         OutlinedIconButtonWithText(
             onClick = {
-                val intent = Intent(Intent.ACTION_VIEW, AppLinks.PRIVACY_POLICY.toUri())
-                context.safeStartActivity(
-                    intent = intent,
+                context.startActivitySafely(
+                    // FIXME: The result of `startActivitySafely` is not used
+                    intent = Intent(Intent.ACTION_VIEW, AppLinks.PRIVACY_POLICY.toUri()),
                     onFailure = {
                         Toast.makeText(appContext, errorText, Toast.LENGTH_SHORT).show()
                     },

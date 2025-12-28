@@ -14,7 +14,7 @@ class ObserveFavoriteAppsUseCase(
 ) {
     operator fun invoke(): Flow<DataState<List<AppInfo>, Errors>> =
         combine(
-            fetchDeveloperAppsUseCase(),
+            fetchDeveloperAppsUseCase(), // TODO: Flow starts here emit like in the help of loading or anything else is here
             observeFavoritesUseCase(),
         ) { appsState, favorites ->
             when (appsState) {

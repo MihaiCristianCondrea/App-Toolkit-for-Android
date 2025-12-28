@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
 import kotlinx.coroutines.withContext
 
 open class AppInfoHelper(
@@ -40,30 +41,28 @@ open class AppInfoHelper(
             runCatching { context.packageManager.getLaunchIntentForPackage(packageName) }.getOrNull()
         }
 
-        return if (launchIntent != null) {
-            val launched = context.safeStartActivity(
-                // FIXME: Unresolved reference 'safeStartActivity'.
-                intent = launchIntent,
-                onFailure = {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.app_not_installed),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                },
-            )
-            if (launched) {
-                Result.success(true)
-            } else {
-                Result.failure(IllegalStateException("App not installed"))
-            }
-        } else {
+        val failureResult = Result.failure<Boolean>(IllegalStateException("App not installed"))
+        val failureToast: () -> Unit = {
             Toast.makeText(
                 context,
                 context.getString(R.string.app_not_installed),
                 Toast.LENGTH_SHORT
             ).show()
-            Result.failure(IllegalStateException("App not installed"))
+        }
+
+        return if (launchIntent != null) {
+            val launched = context.startActivitySafely(
+                intent = launchIntent,
+                onFailure = { failureToast() },
+            )
+            if (launched) {
+                Result.success(true)
+            } else {
+                failureResult
+            }
+        } else {
+            failureToast()
+            failureResult
         }
     }
 }

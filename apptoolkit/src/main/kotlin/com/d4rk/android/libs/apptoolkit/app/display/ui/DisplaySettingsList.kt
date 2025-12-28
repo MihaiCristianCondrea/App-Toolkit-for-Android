@@ -37,7 +37,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalS
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.safeStartActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
@@ -228,9 +228,9 @@ fun DisplaySettingsList(
                                 )
 
                             val openedLocaleSettings =
-                                context.safeStartActivity(intent = localeIntent)
+                                context.startActivitySafely(intent = localeIntent)
                             val openedAppDetails = if (!openedLocaleSettings) {
-                                context.safeStartActivity(intent = detailsIntent)
+                                context.startActivitySafely(intent = detailsIntent)
                             } else {
                                 false
                             }

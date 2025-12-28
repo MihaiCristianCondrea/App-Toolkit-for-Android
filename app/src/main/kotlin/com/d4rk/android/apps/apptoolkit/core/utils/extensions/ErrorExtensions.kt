@@ -12,7 +12,7 @@ import com.d4rk.android.libs.apptoolkit.R as LibR
  * should be communicated to the user.
  */
 fun Errors.asUiText(): UiTextHelper =
-    when (this) { // TODO | FIXME: This is unused but it will be useful for the usecases
+    when (this) {
         Errors.Network.NO_INTERNET,
         Errors.Network.REQUEST_TIMEOUT -> UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
 
@@ -21,12 +21,12 @@ fun Errors.asUiText(): UiTextHelper =
         Errors.UseCase.NO_DATA -> UiTextHelper.StringResource(R.string.error_failed_to_fetch_our_apps)
         Errors.UseCase.FAILED_TO_LOAD_APPS -> UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
         Errors.UseCase.ILLEGAL_ARGUMENT -> UiTextHelper.StringResource(LibR.string.illegal_argument_error)
-        Errors.UseCase.FAILED_TO_LAUNCH_REVIEW,
-        Errors.UseCase.FAILED_TO_LOAD_FAQ,
-        Errors.UseCase.FAILED_TO_REQUEST_REVIEW,
-        Errors.UseCase.FAILED_TO_UPDATE_APP,
-        Errors.UseCase.FAILED_TO_LOAD_SKU_DETAILS,
-        Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO -> UiTextHelper.StringResource(LibR.string.unknown_error) // TODO: Make strings for the errors
+        Errors.UseCase.FAILED_TO_LAUNCH_REVIEW -> UiTextHelper.StringResource(R.string.error_failed_to_launch_review)
+        Errors.UseCase.FAILED_TO_LOAD_FAQ -> UiTextHelper.StringResource(R.string.error_failed_to_load_faq)
+        Errors.UseCase.FAILED_TO_REQUEST_REVIEW -> UiTextHelper.StringResource(R.string.error_failed_to_request_review)
+        Errors.UseCase.FAILED_TO_UPDATE_APP -> UiTextHelper.StringResource(R.string.error_failed_to_update_app)
+        Errors.UseCase.FAILED_TO_LOAD_SKU_DETAILS -> UiTextHelper.StringResource(R.string.error_failed_to_load_sku_details)
+        Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO -> UiTextHelper.StringResource(R.string.error_failed_to_load_consent_info)
 
         Errors.Database.DATABASE_OPERATION_FAILED -> UiTextHelper.StringResource(LibR.string.io_error)
     }

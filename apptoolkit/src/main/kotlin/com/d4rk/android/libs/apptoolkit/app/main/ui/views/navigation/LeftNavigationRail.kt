@@ -72,7 +72,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun <T : StableNavKey> LeftNavigationRail(
     bottomItems: ImmutableList<BottomBarItem<T>> = persistentListOf(),
     drawerItems: ImmutableList<NavigationDrawerItem> = persistentListOf(),
-    currentRoute: T?, // FIXME: Parameter 'currentRoute' has runtime-determined stability
+    currentRoute: StableNavKey?,
     isRailExpanded: Boolean = false,
     paddingValues: PaddingValues,
     onBottomItemClick: (BottomBarItem<T>) -> Unit = {},

@@ -17,6 +17,12 @@
     <string name="error_failed_to_load_apps">Impossibile caricare le app</string>
     <string name="error_an_error_occurred">Si è verificato un errore</string>
     <string name="error_failed_to_update_favorite">Impossibile aggiornare il preferito</string>
+    <string name="error_failed_to_launch_review">Impossibile avviare il flusso di valutazione</string>
+    <string name="error_failed_to_load_faq">Impossibile caricare le FAQ</string>
+    <string name="error_failed_to_request_review">Impossibile richiedere una valutazione</string>
+    <string name="error_failed_to_update_app">Impossibile aggiornare l\'app</string>
+    <string name="error_failed_to_load_sku_details">Impossibile caricare i dettagli del prodotto</string>
+    <string name="error_failed_to_load_consent_info">Impossibile caricare le informazioni sul consenso</string>
     <string name="open_random_app">Apri l\'app casuale</string>
 
     <!-- App details bottom sheet -->

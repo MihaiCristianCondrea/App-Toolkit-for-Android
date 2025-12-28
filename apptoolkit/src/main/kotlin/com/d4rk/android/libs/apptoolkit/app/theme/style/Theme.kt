@@ -22,8 +22,8 @@ import androidx.core.view.WindowCompat
 import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider.paletteById
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.style.typography.AppTypography
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.applyDynamicVariant
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.datastore.rememberThemePreferencesState
 

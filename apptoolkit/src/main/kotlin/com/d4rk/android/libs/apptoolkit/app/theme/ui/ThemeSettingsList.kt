@@ -2,6 +2,8 @@ package com.d4rk.android.libs.apptoolkit.app.theme.ui
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,19 +36,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import coil3.compose.AsyncImage
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.ThemeSettingOption
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
 import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider.paletteById
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
+import com.d4rk.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.DynamicPaletteVariant
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.DynamicPaletteVariant
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.applyDynamicVariant
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openDisplaySettings
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.datastore.rememberThemePreferencesState
@@ -54,7 +56,10 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSe
 import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.ZoneId
+
+private const val THEME_SETTINGS_TAG = "ThemeSettingsList" // TODO: Move to logging constants
 
 /**
  * Theme settings content for the app.
@@ -121,8 +126,8 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
     val staticOptions: List<String> = remember { StaticPaletteIds.withDefault }
 
     val isChristmasSeason: Boolean = remember {
-        ZoneId.systemDefault().isChristmasSeason()
-    } // FIXME: Expression 'isChristmasSeason' of type 'Boolean' cannot be invoked as a function. Function 'invoke()' is not found.
+        LocalDate.now(ZoneId.systemDefault()).isChristmasSeason
+    }
 
     val staticSwatches: List<WallpaperSwatchColors> =
         remember(staticOptions, isSystemInDarkThemeNow) {
@@ -150,8 +155,8 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
             modifier = Modifier.fillMaxSize(),
         ) {
             item {
-                AsyncImage(
-                    model = R.drawable.il_startup,
+                Image(
+                    imageVector = rememberPaletteImageVector(),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -328,7 +333,14 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                     message = stringResource(id = R.string.summary_dark_theme),
                     newLine = false,
                     learnMoreText = stringResource(id = R.string.screen_and_display_settings),
-                    learnMoreAction = { context.openDisplaySettings() } // FIXME: The result of `openDisplaySettings` is not used
+                    learnMoreAction = {
+                        if (!context.openDisplaySettings()) {
+                            Log.w(
+                                THEME_SETTINGS_TAG,
+                                "Failed to open display settings from theme page"
+                            )
+                        }
+                    }
                 )
             }
         }

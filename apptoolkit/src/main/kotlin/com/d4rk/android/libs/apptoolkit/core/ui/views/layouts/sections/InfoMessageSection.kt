@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections
 
 import android.content.Context
+import android.util.Log
 import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,8 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.text.LearnMoreText
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
+
+private const val INFO_MESSAGE_TAG = "InfoMessageSection"
 
 /**
  * Displays an information message section with an optional "Learn More" link.
@@ -89,9 +92,14 @@ fun InfoMessageSection(
                             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                             when {
                                 learnMoreAction != null -> learnMoreAction()
-                                !learnMoreUrl.isNullOrEmpty() -> context.openUrl( // FIXME: The result of `openUrl` is not used
-                                    learnMoreUrl
-                                )
+                                !learnMoreUrl.isNullOrEmpty() -> {
+                                    if (!context.openUrl(learnMoreUrl)) {
+                                        Log.w(
+                                            INFO_MESSAGE_TAG,
+                                            "Failed to open learn more url: $learnMoreUrl"
+                                        )
+                                    }
+                                }
                             }
                         }
                     )
@@ -107,9 +115,14 @@ fun InfoMessageSection(
                         hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                         when {
                             learnMoreAction != null -> learnMoreAction()
-                            !learnMoreUrl.isNullOrEmpty() -> context.openUrl(
-                                learnMoreUrl
-                            )
+                            !learnMoreUrl.isNullOrEmpty() -> {
+                                if (!context.openUrl(learnMoreUrl)) {
+                                    Log.w(
+                                        INFO_MESSAGE_TAG,
+                                        "Failed to open learn more url: $learnMoreUrl"
+                                    )
+                                }
+                            }
                         }
                     }
 

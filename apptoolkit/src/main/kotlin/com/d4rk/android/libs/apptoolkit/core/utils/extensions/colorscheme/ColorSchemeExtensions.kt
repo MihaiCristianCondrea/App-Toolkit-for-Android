@@ -2,6 +2,7 @@ package com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.DynamicPaletteVariant
 
 /**
  * 8 dynamic palette variants (0..7).
@@ -15,45 +16,6 @@ import androidx.compose.ui.graphics.Color
  * 6 = Rotate backward (secondary -> primary -> tertiary -> secondary)
  * 7 = Fixed-Dim accents (use *FixedDim + on*Fixed for primary/secondary/tertiary when available)
  */
-object DynamicPaletteVariant { // TODO && FIXME: Move somewhere else to respect code structure
-    const val MIN: Int = 0
-    const val MAX: Int = 7
-    val indices: IntRange = MIN..MAX
-
-    fun clamp(value: Int): Int = value.coerceIn(MIN, MAX)
-}
-
-object StaticPaletteIds { // TODO && FIXME: Move somewhere else to respect code structure
-    const val MONOCHROME = "monochrome"
-    const val BLUE = "blue"
-    const val GREEN = "green"
-    const val RED = "red"
-    const val YELLOW = "yellow"
-
-    const val ROSE = "rose"
-    const val CHRISTMAS = "christmas"
-
-    const val DEFAULT = "default"
-
-    private val supportedOrder = listOf(
-        MONOCHROME,
-        BLUE,
-        GREEN,
-        RED,
-        YELLOW,
-        ROSE,
-        CHRISTMAS,
-    )
-
-    val withDefault: List<String> = listOf(DEFAULT) + supportedOrder
-
-    fun sanitize(id: String): String = when (id) {
-        DEFAULT -> DEFAULT
-        in supportedOrder -> id
-        else -> DEFAULT
-    }
-}
-
 fun ColorScheme.applyDynamicVariant(variant: Int): ColorScheme =
     when (DynamicPaletteVariant.clamp(variant)) {
         0 -> this
