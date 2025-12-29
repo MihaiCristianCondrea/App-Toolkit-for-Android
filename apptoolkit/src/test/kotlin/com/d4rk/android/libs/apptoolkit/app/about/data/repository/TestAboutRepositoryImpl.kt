@@ -7,7 +7,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoPr
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.copyTextToClipboard
 import com.google.common.truth.Truth.assertThat
-import io.mockk.Runs
+import io.mockk.Awaits
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -64,9 +64,15 @@ class TestAboutRepositoryImpl {
         mockkStatic(extFile)
 
         try {
-            every { ctx.copyTextToClipboard(any(), any(), any()) } just Runs
+            every { ctx.copyTextToClipboard(any(), any(), any()) } just Awaits
             repo.copyDeviceInfo("label", "info")
-            verify { ctx.copyTextToClipboard("label", "info", any()) }
+            verify {
+                ctx.copyTextToClipboard(
+                    "label",
+                    "info",
+                    any()
+                )
+            } // FIXME: The result of `copyTextToClipboard` is not used
         } finally {
             unmockkStatic(extFile)
         }

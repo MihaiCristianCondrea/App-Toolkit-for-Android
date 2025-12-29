@@ -11,7 +11,7 @@ import com.d4rk.android.libs.apptoolkit.R as LibR
  * This keeps UI layers free from error-handling boilerplate while centralizing how each category
  * should be communicated to the user.
  */
-fun Errors.asUiText(): UiTextHelper =
+fun Errors.asUiText(): UiTextHelper = // TODO: Move to libary
     when (this) {
         Errors.Network.NO_INTERNET,
         Errors.Network.REQUEST_TIMEOUT -> UiTextHelper.StringResource(R.string.error_failed_to_load_apps)

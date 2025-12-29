@@ -15,6 +15,7 @@ import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
  *
  * - Android 13+ shows system UI confirmation; avoid duplicate in-app snackbars there.
  * - If [isSensitive] is true, the clipboard preview is obfuscated on Android 13+. :contentReference[oaicite:5]{index=5}
+ * - [onCopyFallback] is invoked only on API 32 and lower where in-app feedback is still needed.
  *
  * @return true if the clipboard was written, false otherwise.
  */
@@ -23,7 +24,7 @@ fun Context.copyTextToClipboard(
     label: String,
     text: String,
     isSensitive: Boolean = false,
-    onLegacyFeedback: () -> Unit = {},
+    onCopyFallback: () -> Unit = {},
 ): Boolean {
     val clipboard = getSystemService(ClipboardManager::class.java)
     if (clipboard == null) {
@@ -49,7 +50,7 @@ fun Context.copyTextToClipboard(
     return runCatching {
         clipboard.setPrimaryClip(clip)
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-            onLegacyFeedback()
+            onCopyFallback()
         }
         true
     }.getOrElse { t ->

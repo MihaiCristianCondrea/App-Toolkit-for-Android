@@ -18,7 +18,7 @@
     <string name="error_an_error_occurred">An error occurred</string>
     <string name="error_failed_to_update_favorite">Failed to update favorite</string>
     <string name="error_failed_to_launch_review">Failed to launch review flow</string>
-    <string name="error_failed_to_load_faq">Failed to load FAQs</string>
+    <string name="error_failed_to_load_faq">Failed to load FAQs</string> <!--TODO: Move to library-->
     <string name="error_failed_to_request_review">Failed to request review</string>
     <string name="error_failed_to_update_app">Failed to update app</string>
     <string name="error_failed_to_load_sku_details">Failed to load product details</string>

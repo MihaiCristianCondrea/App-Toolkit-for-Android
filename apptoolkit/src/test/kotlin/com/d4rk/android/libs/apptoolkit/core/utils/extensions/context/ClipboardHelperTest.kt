@@ -42,7 +42,7 @@ class ClipboardHelperTest {
     fun `copyTextToClipboard copies text and invokes callback for API 32`() {
         val context = mockk<Context>()
         val clipboardManager = mockk<ClipboardManager>()
-        every { context.getSystemService(Context.CLIPBOARD_SERVICE) } returns clipboardManager
+        every { context.getSystemService(ClipboardManager::class.java) } returns clipboardManager
 
         val clipDataSlot = slot<ClipData>()
         justRun { clipboardManager.setPrimaryClip(capture(clipDataSlot)) }
@@ -56,9 +56,10 @@ class ClipboardHelperTest {
                 var callbackInvoked = false
 
                 context.copyTextToClipboard(
+                    // FIXME: The result of `copyTextToClipboard` is not used
                     label = "label",
                     text = "text",
-                    onShowSnackbar = { callbackInvoked = true },
+                    onCopyFallback = { callbackInvoked = true },
                 )
 
                 verify(exactly = 1) { clipboardManager.setPrimaryClip(any()) }
@@ -76,7 +77,7 @@ class ClipboardHelperTest {
     fun `copyTextToClipboard does not invoke callback on API above 32`() {
         val context = mockk<Context>()
         val clipboardManager = mockk<ClipboardManager>()
-        every { context.getSystemService(Context.CLIPBOARD_SERVICE) } returns clipboardManager
+        every { context.getSystemService(ClipboardManager::class.java) } returns clipboardManager
 
         val clipDataSlot = slot<ClipData>()
         justRun { clipboardManager.setPrimaryClip(capture(clipDataSlot)) }
@@ -90,9 +91,10 @@ class ClipboardHelperTest {
                 var callbackInvoked = false
 
                 context.copyTextToClipboard(
+                    // FIXME: The result of `copyTextToClipboard` is not used
                     label = "label",
                     text = "text",
-                    onShowSnackbar = { callbackInvoked = true },
+                    onCopyFallback = { callbackInvoked = true },
                 )
 
                 verify(exactly = 1) { clipboardManager.setPrimaryClip(any()) }
@@ -120,9 +122,10 @@ class ClipboardHelperTest {
                 var callbackInvoked = false
 
                 context.copyTextToClipboard(
+                    // FIXME: The result of `copyTextToClipboard` is not used
                     label = "label",
                     text = "text",
-                    onShowSnackbar = { callbackInvoked = true },
+                    onCopyFallback = { callbackInvoked = true },
                 )
 
                 assertFalse(callbackInvoked)
