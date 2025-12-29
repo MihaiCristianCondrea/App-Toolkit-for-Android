@@ -70,7 +70,7 @@ class TestAboutRepositoryImpl {
                     "label",
                     "info",
                     any()
-                )
+                ) // FIXME: The result of `copyTextToClipboard` is not used
             }
             assertThat(copied).isTrue()
         } finally {
