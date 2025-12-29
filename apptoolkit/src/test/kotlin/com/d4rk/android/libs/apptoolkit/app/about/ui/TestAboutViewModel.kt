@@ -46,9 +46,7 @@ class TestAboutViewModel {
                 deviceInfo = deviceProvider.deviceInfo,
             )
 
-            override fun copyDeviceInfo(label: String, deviceInfo: String) {
-                // no-op
-            }
+            override fun copyDeviceInfo(label: String, deviceInfo: String): Boolean = true
         }
     ): AboutViewModel {
         val testDispatchers: DispatcherProvider = TestDispatchers(testDispatcher)
@@ -66,9 +64,7 @@ class TestAboutViewModel {
         val repository = object : AboutRepository {
             override suspend fun getAboutInfo(): AboutInfo = throw Exception("fail")
 
-            override fun copyDeviceInfo(label: String, deviceInfo: String) {
-                // no-op
-            }
+            override fun copyDeviceInfo(label: String, deviceInfo: String): Boolean = false
         }
         return createViewModel(testDispatcher = testDispatcher, repository = repository)
     }

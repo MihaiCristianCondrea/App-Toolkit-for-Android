@@ -55,8 +55,7 @@ class ClipboardHelperTest {
 
                 var callbackInvoked = false
 
-                context.copyTextToClipboard(
-                    // FIXME: The result of `copyTextToClipboard` is not used
+                val result = context.copyTextToClipboard(
                     label = "label",
                     text = "text",
                     onCopyFallback = { callbackInvoked = true },
@@ -66,6 +65,7 @@ class ClipboardHelperTest {
                 assertEquals("label", clipDataSlot.captured.description.label.toString())
                 assertEquals("text", clipDataSlot.captured.getItemAt(0).text.toString())
                 assertTrue(callbackInvoked)
+                assertTrue(result)
             },
             finallyBlock = {
                 unmockkStatic(Build.VERSION::class)
@@ -90,8 +90,7 @@ class ClipboardHelperTest {
 
                 var callbackInvoked = false
 
-                context.copyTextToClipboard(
-                    // FIXME: The result of `copyTextToClipboard` is not used
+                val result = context.copyTextToClipboard(
                     label = "label",
                     text = "text",
                     onCopyFallback = { callbackInvoked = true },
@@ -101,6 +100,7 @@ class ClipboardHelperTest {
                 assertEquals("label", clipDataSlot.captured.description.label.toString())
                 assertEquals("text", clipDataSlot.captured.getItemAt(0).text.toString())
                 assertFalse(callbackInvoked)
+                assertTrue(result)
             },
             finallyBlock = {
                 unmockkStatic(Build.VERSION::class)
@@ -121,8 +121,7 @@ class ClipboardHelperTest {
 
                 var callbackInvoked = false
 
-                context.copyTextToClipboard(
-                    // FIXME: The result of `copyTextToClipboard` is not used
+                val result = context.copyTextToClipboard(
                     label = "label",
                     text = "text",
                     onCopyFallback = { callbackInvoked = true },
@@ -130,6 +129,7 @@ class ClipboardHelperTest {
 
                 assertFalse(callbackInvoked)
                 verify(exactly = 1) { Log.w(CLIPBOARD_HELPER_LOG_TAG, "Clipboard service unavailable") }
+                assertFalse(result)
             },
             finallyBlock = {
                 unmockkStatic(Log::class)

@@ -26,16 +26,20 @@ class GeneralSettingsActivity : AppCompatActivity() {
                 putExtra(EXTRA_CONTENT, contentKey)
             }
 
-            context.startActivitySafely(
-                // FIXME: The result of `startActivitySafely` is not used
+            val launched = context.startActivitySafely(
                 intent = intent,
-                onFailure = {
+                onFailure = { throwable ->
                     Log.e(
                         GENERAL_SETTINGS_LOG_TAG,
-                        "Unable to resolve activity to handle intent"
+                        "Unable to resolve activity to handle intent",
+                        throwable
                     )
                 },
             )
+
+            if (!launched) {
+                Log.w(GENERAL_SETTINGS_LOG_TAG, "General settings activity launch failed")
+            }
         }
     }
 

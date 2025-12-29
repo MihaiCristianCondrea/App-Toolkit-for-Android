@@ -20,7 +20,6 @@ class AboutRepositoryImpl(
             deviceInfo = deviceProvider.deviceInfo,
         )
 
-    override fun copyDeviceInfo(label: String, deviceInfo: String) {
+    override fun copyDeviceInfo(label: String, deviceInfo: String): Boolean =
         context.copyTextToClipboard(label = label, text = deviceInfo)
-    }
 }

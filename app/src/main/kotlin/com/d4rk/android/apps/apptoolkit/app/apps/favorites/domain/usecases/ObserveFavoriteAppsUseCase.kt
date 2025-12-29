@@ -7,6 +7,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onStart
 
 class ObserveFavoriteAppsUseCase(
     private val fetchDeveloperAppsUseCase: FetchDeveloperAppsUseCase,
@@ -14,7 +15,7 @@ class ObserveFavoriteAppsUseCase(
 ) {
     operator fun invoke(): Flow<DataState<List<AppInfo>, Errors>> =
         combine(
-            fetchDeveloperAppsUseCase(), // TODO: Flow starts here emit like in the help of loading or anything else is here
+            fetchDeveloperAppsUseCase().onStart { emit(DataState.Loading()) },
             observeFavoritesUseCase(),
         ) { appsState, favorites ->
             when (appsState) {

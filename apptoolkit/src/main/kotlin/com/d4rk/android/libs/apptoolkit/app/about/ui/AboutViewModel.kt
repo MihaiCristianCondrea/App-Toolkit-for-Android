@@ -90,15 +90,26 @@ open class AboutViewModel(
         copyJob = viewModelScope.launch {
             runCatching {
                 withContext(dispatchers.main) { copyDeviceInfo(label, deviceInfo) }
-            }.onSuccess {
-                screenState.showSnackbar(
-                    UiSnackbar(
-                        message = UiTextHelper.StringResource(R.string.snack_device_info_copied),
-                        isError = false,
-                        timeStamp = System.nanoTime(),
-                        type = ScreenMessageType.SNACKBAR,
+            }.onSuccess { copied ->
+                if (copied) {
+                    screenState.showSnackbar(
+                        UiSnackbar(
+                            message = UiTextHelper.StringResource(R.string.snack_device_info_copied),
+                            isError = false,
+                            timeStamp = System.nanoTime(),
+                            type = ScreenMessageType.SNACKBAR,
+                        )
                     )
-                )
+                } else {
+                    screenState.showSnackbar(
+                        UiSnackbar(
+                            message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
+                            isError = true,
+                            timeStamp = System.nanoTime(),
+                            type = ScreenMessageType.SNACKBAR,
+                        )
+                    )
+                }
             }.onFailure { t ->
                 if (t is CancellationException) throw t
                 screenState.showSnackbar(

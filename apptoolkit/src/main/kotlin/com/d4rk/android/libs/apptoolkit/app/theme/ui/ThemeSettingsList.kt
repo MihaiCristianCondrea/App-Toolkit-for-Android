@@ -41,6 +41,7 @@ import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.ThemeSettingOptio
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
 import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider.paletteById
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
+import com.d4rk.android.libs.apptoolkit.core.logging.THEME_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
@@ -58,8 +59,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneId
-
-private const val THEME_SETTINGS_TAG = "ThemeSettingsList" // TODO: Move to logging constants
 
 /**
  * Theme settings content for the app.
@@ -336,7 +335,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                     learnMoreAction = {
                         if (!context.openDisplaySettings()) {
                             Log.w(
-                                THEME_SETTINGS_TAG,
+                                THEME_SETTINGS_LOG_TAG,
                                 "Failed to open display settings from theme page"
                             )
                         }

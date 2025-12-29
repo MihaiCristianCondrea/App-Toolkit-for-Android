@@ -14,6 +14,7 @@ import com.d4rk.android.libs.apptoolkit.app.theme.style.AppThemeConfig
 import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
 import com.d4rk.android.libs.apptoolkit.data.core.BaseCoreManager
 import com.d4rk.android.libs.apptoolkit.data.core.ads.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
@@ -24,6 +25,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.supervisorScope
 import org.koin.android.ext.android.getKoin
+import java.time.LocalDate
+import java.time.ZoneId
 
 class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     private var currentActivity: Activity? = null
@@ -63,8 +66,8 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
         if (!hasInteractedWithSettings) {
             val staticPaletteId: String = runBlocking { dataStore.staticPaletteId.first() }
             val shouldUseSeasonalPalette: Boolean =
-                staticPaletteId == StaticPaletteIds.DEFAULT
-            // && ZoneId.systemDefault().isChristmasSeason() // FIXME: Unresolved reference 'isChristmasSeason'.
+                staticPaletteId == StaticPaletteIds.DEFAULT &&
+                        LocalDate.now(ZoneId.systemDefault()).isChristmasSeason
 
             if (shouldUseSeasonalPalette) {
                 return ThemePaletteProvider.paletteById(StaticPaletteIds.CHRISTMAS)

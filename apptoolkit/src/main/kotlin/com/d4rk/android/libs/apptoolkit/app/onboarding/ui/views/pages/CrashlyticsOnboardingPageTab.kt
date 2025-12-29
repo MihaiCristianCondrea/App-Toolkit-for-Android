@@ -281,13 +281,13 @@ fun LearnMoreSection() {
 
         OutlinedIconButtonWithText(
             onClick = {
-                context.startActivitySafely(
-                    // FIXME: The result of `startActivitySafely` is not used
+                val opened = context.startActivitySafely(
                     intent = Intent(Intent.ACTION_VIEW, AppLinks.PRIVACY_POLICY.toUri()),
-                    onFailure = {
-                        Toast.makeText(appContext, errorText, Toast.LENGTH_SHORT).show()
-                    },
                 )
+
+                if (!opened) {
+                    Toast.makeText(appContext, errorText, Toast.LENGTH_SHORT).show()
+                }
             },
             icon = Icons.AutoMirrored.Filled.Launch,
             iconContentDescription = null,
