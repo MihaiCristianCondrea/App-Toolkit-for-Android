@@ -294,4 +294,11 @@
     <string name="purchase_pending">Your donation is being processed by Google. You will be notified when it\'s complete. Thank you.</string>
     <string name="purchase_thank_you">Thank you for your donation.</string>
     <string name="purchase_cancelled">Purchase cancelled</string>
+
+    <string name="error_an_error_occurred">An error occurred</string>
+    <string name="error_failed_to_launch_review">Failed to launch review flow</string>
+    <string name="error_failed_to_load_faq">Failed to load FAQs</string>
+    <string name="error_failed_to_request_review">Failed to request review</string>
+    <string name="error_failed_to_update_app">Failed to update app</string>
+    <string name="error_failed_to_load_consent_info">Failed to load consent info</string>
 </resources>

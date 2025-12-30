@@ -2,7 +2,7 @@ package com.d4rk.android.apps.apptoolkit.app.apps.list.domain.usecases
 
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.repository.DeveloperAppsRepository
-import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import io.mockk.every
 import io.mockk.mockk
@@ -31,7 +31,7 @@ class FetchDeveloperAppsUseCaseTest {
         )
         val repositoryEmissions = listOf(
             DataState.Success(apps),
-            DataState.Error<List<AppInfo>, Errors>(error = Errors.Network.REQUEST_TIMEOUT),
+            DataState.Error<List<AppInfo>, AppErrors>(error = AppErrors.Network.REQUEST_TIMEOUT),
         )
         val repository = mockk<DeveloperAppsRepository> {
             every { fetchDeveloperApps() } returns repositoryEmissions.asFlow()
@@ -40,7 +40,7 @@ class FetchDeveloperAppsUseCaseTest {
 
         val result = useCase().toList()
 
-        val expected = mutableListOf<DataState<List<AppInfo>, Errors>>(
+        val expected = mutableListOf<DataState<List<AppInfo>, AppErrors>>(
             DataState.Loading(),
         )
         expected.addAll(repositoryEmissions)

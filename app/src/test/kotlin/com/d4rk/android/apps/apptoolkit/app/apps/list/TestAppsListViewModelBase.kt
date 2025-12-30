@@ -10,7 +10,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.usecases.FetchDevel
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
-import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
@@ -30,7 +30,7 @@ open class TestAppsListViewModelBase {
         initialFavorites: Set<String> = emptySet(),
         favoritesFlow: Flow<Set<String>>? = null,
         toggleError: Throwable? = null,
-        fetchError: Errors? = null,
+        fetchError: AppErrors? = null,
         dispatchers: DispatcherProvider = TestDispatchers(),
     ) {
         println("\uD83E\uDDEA [SETUP] Initial favorites: $initialFavorites")

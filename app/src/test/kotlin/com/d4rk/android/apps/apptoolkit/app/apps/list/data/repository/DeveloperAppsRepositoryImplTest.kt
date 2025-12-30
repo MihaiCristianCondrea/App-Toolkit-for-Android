@@ -6,7 +6,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppDataW
 import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppInfoDto
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppCategory
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
-import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -120,7 +120,7 @@ class DeveloperAppsRepositoryImplTest {
 
         val result = repository.fetchDeveloperApps().first()
         val error = result as DataState.Error
-        assertEquals(Errors.Network.REQUEST_TIMEOUT, error.error)
+        assertEquals(AppErrors.Network.REQUEST_TIMEOUT, error.error)
     }
 
     @Test
@@ -192,6 +192,6 @@ class DeveloperAppsRepositoryImplTest {
 
         val result = repository.fetchDeveloperApps().first()
         val error = result as DataState.Error
-        assertEquals(Errors.UseCase.FAILED_TO_LOAD_APPS, error.error)
+        assertEquals(AppErrors.UseCase.FAILED_TO_LOAD_APPS, error.error)
     }
 }

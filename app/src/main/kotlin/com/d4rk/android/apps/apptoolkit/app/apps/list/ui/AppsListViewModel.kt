@@ -8,8 +8,8 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.usecases.FetchDevel
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
-import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
-import com.d4rk.android.apps.apptoolkit.core.utils.extensions.asUiText
+import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
+import com.d4rk.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
@@ -122,11 +122,11 @@ class AppsListViewModel(
         }
     }
 
-    private fun showLoadAppsError(error: Errors? = null) {
+    private fun showLoadAppsError(error: AppErrors? = null) {
         screenState.updateState(ScreenState.Error())
         screenState.showSnackbar(
             UiSnackbar(
-                message = error?.asUiText()
+                message = error?.toErrorMessage()
                     ?: UiTextHelper.StringResource(R.string.error_failed_to_load_apps),
                 isError = true,
                 timeStamp = System.nanoTime(),

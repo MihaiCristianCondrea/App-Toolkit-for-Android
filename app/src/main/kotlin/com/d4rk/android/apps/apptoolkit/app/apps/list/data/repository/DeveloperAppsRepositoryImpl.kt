@@ -4,7 +4,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.data.mapper.toDomain
 import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.ApiResponseDto
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.repository.DeveloperAppsRepository
-import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -24,7 +24,7 @@ class DeveloperAppsRepositoryImpl(
     private val baseUrl: String,
 ) : DeveloperAppsRepository {
 
-    override fun fetchDeveloperApps(): Flow<DataState<List<AppInfo>, Errors>> = flow {
+    override fun fetchDeveloperApps(): Flow<DataState<List<AppInfo>, AppErrors>> = flow {
         runCatching {
             client.get(baseUrl)
         }.onSuccess { response ->
@@ -45,21 +45,21 @@ class DeveloperAppsRepositoryImpl(
         }
     }
 
-    private fun mapHttpStatusToError(status: HttpStatusCode): Errors {
+    private fun mapHttpStatusToError(status: HttpStatusCode): AppErrors {
         return if (status == HttpStatusCode.RequestTimeout) {
-            Errors.Network.REQUEST_TIMEOUT
+            AppErrors.Network.REQUEST_TIMEOUT
         } else {
-            Errors.UseCase.FAILED_TO_LOAD_APPS
+            AppErrors.UseCase.FAILED_TO_LOAD_APPS
         }
     }
 
-    private fun mapThrowableToError(t: Throwable): Errors {
+    private fun mapThrowableToError(t: Throwable): AppErrors {
         return when (t) {
-            is SocketTimeoutException -> Errors.Network.REQUEST_TIMEOUT
-            is IOException -> Errors.Network.NO_INTERNET
+            is SocketTimeoutException -> AppErrors.Network.REQUEST_TIMEOUT
+            is IOException -> AppErrors.Network.NO_INTERNET
             is ClientRequestException -> mapHttpStatusToError(t.response.status)
-            is ServerResponseException -> Errors.UseCase.FAILED_TO_LOAD_APPS
-            else -> Errors.UseCase.FAILED_TO_LOAD_APPS
+            is ServerResponseException -> AppErrors.UseCase.FAILED_TO_LOAD_APPS
+            else -> AppErrors.UseCase.FAILED_TO_LOAD_APPS
         }
     }
 }
