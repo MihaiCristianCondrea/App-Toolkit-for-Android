@@ -20,15 +20,15 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.state.AdvancedSettingsUiState
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.IssueReporterActivity
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.NoDataScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.ScreenStateHandler
-import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.PreferenceCategoryItem
-import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.SettingsPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -86,10 +86,7 @@ fun AdvancedSettingsList(
                             title = stringResource(id = R.string.bug_report),
                             summary = stringResource(id = R.string.summary_preference_settings_bug_report),
                             onClick = {
-                                IntentsHelper.openActivity(
-                                    context = context,
-                                    activityClass = IssueReporterActivity::class.java,
-                                )
+                                context.openActivity(IssueReporterActivity::class.java)
                             },
                         )
                     }

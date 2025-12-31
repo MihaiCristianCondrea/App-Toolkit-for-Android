@@ -3,9 +3,10 @@ package com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.pm.getVersionInfo
 
 class DeviceInfo() {
-    private var versionCode: Int = -1
+    private var versionCode: Long = -1
     private var versionName: String? = null
     private val buildVersion: String = Build.VERSION.INCREMENTAL ?: Build.UNKNOWN
     private val releaseVersion: String = Build.VERSION.RELEASE ?: Build.UNKNOWN
@@ -31,13 +32,10 @@ class DeviceInfo() {
     companion object {
         fun create(context: Context): DeviceInfo {
             val info = DeviceInfo()
-            val packageInfo = runCatching {
-                context.packageManager.getPackageInfo(context.packageName, 0)
-            }.getOrNull()
+            val versionInfo = context.packageManager.getVersionInfo(context.packageName)
 
-            @Suppress("DEPRECATION")
-            info.versionCode = packageInfo?.versionCode ?: -1
-            info.versionName = packageInfo?.versionName
+            info.versionCode = versionInfo?.versionCode ?: -1
+            info.versionName = versionInfo?.versionName
             return info
         }
     }

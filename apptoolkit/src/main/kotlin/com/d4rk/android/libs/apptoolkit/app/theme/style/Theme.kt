@@ -19,14 +19,13 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider.paletteById
 import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.style.typography.AppTypography
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.applyDynamicVariant
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.applyDynamicVariant
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.datastore.rememberThemePreferencesState
 
 object AppThemeConfig {
     var customLightScheme: ColorScheme? = null
@@ -85,27 +84,10 @@ private fun getColorScheme(
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
     val context: Context = LocalContext.current
-    val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
-
-    val themeMode: String =
-        dataStore.themeMode.collectAsStateWithLifecycle(
-            initialValue = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
-        ).value
-
-    val isDynamicColors: Boolean =
-        dataStore.dynamicColors.collectAsStateWithLifecycle(initialValue = true).value
-
-    val isAmoledMode: Boolean =
-        dataStore.amoledMode.collectAsStateWithLifecycle(initialValue = false).value
-
-    val dynamicPaletteVariant: Int =
-        dataStore.dynamicPaletteVariant.collectAsStateWithLifecycle(initialValue = 0).value
-
-    val staticPaletteId: String =
-        dataStore.staticPaletteId.collectAsStateWithLifecycle(initialValue = StaticPaletteIds.DEFAULT).value
+    val themePreferences = rememberThemePreferencesState()
 
     val isSystemDarkTheme: Boolean = isSystemInDarkTheme()
-    val isDarkTheme: Boolean = when (themeMode) {
+    val isDarkTheme: Boolean = when (themePreferences.themeMode) {
         DataStoreNamesConstants.THEME_MODE_DARK -> true
         DataStoreNamesConstants.THEME_MODE_LIGHT -> false
         else -> isSystemDarkTheme
@@ -113,10 +95,10 @@ fun AppTheme(content: @Composable () -> Unit) {
 
     val colorScheme: ColorScheme = getColorScheme(
         isDarkTheme = isDarkTheme,
-        isAmoledMode = isAmoledMode,
-        isDynamicColors = isDynamicColors,
-        dynamicPaletteVariant = dynamicPaletteVariant,
-        staticPaletteId = staticPaletteId,
+        isAmoledMode = themePreferences.amoledMode,
+        isDynamicColors = themePreferences.dynamicColors,
+        dynamicPaletteVariant = themePreferences.dynamicPaletteVariant,
+        staticPaletteId = themePreferences.staticPaletteId,
         context = context
     )
 

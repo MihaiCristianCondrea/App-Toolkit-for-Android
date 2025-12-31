@@ -286,8 +286,15 @@
     <string name="support_offer_unavailable">Bu bağış seçeneği şu anda kullanılamıyor.</string>
     <string name="non_paid_support">Ücretsiz destek</string>
     <string name="web_ad">Web reklamı</string>
+    <string name="sponsored_ad_label">● Sponsorlu reklam</string>
     <string name="error_failed_to_load_sku_details">SKU ayrıntıları yüklenemedi</string>
     <string name="purchase_pending">Bağışınız Google tarafından işleniyor. Tamamlandığında sizi bilgilendireceğiz. Teşekkür ederim.</string>
     <string name="purchase_thank_you">Bağışınız için teşekkür ederiz.</string>
     <string name="purchase_cancelled">Satınalma İptal edildi</string>
+    <string name="error_an_error_occurred">Bir hata oluştu</string>
+    <string name="error_failed_to_launch_review">İnceleme akışı başlatılamadı</string>
+    <string name="error_failed_to_load_faq">SSS yüklenemedi</string>
+    <string name="error_failed_to_request_review">İnceleme talep edilemedi</string>
+    <string name="error_failed_to_update_app">Uygulama güncellenemedi</string>
+    <string name="error_failed_to_load_consent_info">Onay bilgileri yüklenemedi</string>
 </resources>

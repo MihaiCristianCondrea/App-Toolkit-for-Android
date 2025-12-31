@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.diagnostics.ui
 
 import androidx.lifecycle.viewModelScope
+import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.model.UsageAndDiagnosticsSettings
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageAndDiagnosticsRepository
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsAction
@@ -14,8 +15,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ConsentManagerHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentManagerHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -63,7 +64,7 @@ class UsageAndDiagnosticsViewModel(
             }
             .onCompletion { cause ->
                 if (cause != null && cause !is CancellationException) {
-                    handleObservationError(cause)
+                    handleObservationError()
                 }
             }
             .catch { throwable ->
@@ -103,20 +104,14 @@ class UsageAndDiagnosticsViewModel(
         )
     }
 
-    private fun handleObservationError(cause: Throwable) {
+    private fun handleObservationError() {
         screenState.setErrors(
             errors = listOf(
                 UiSnackbar(
-                    message = UiTextHelper.DynamicString(
-                        cause.message ?: OBSERVATION_ERROR_MESSAGE,
-                    ),
+                    message = UiTextHelper.StringResource(R.string.error_an_error_occurred),
                 ),
             ),
         )
         screenState.updateState(ScreenState.Error())
-    }
-
-    private companion object {
-        const val OBSERVATION_ERROR_MESSAGE = "Unable to observe usage and diagnostics settings."
     }
 }

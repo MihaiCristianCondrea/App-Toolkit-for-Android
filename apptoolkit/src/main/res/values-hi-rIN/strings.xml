@@ -286,8 +286,15 @@
     <string name="support_offer_unavailable">यह दान विकल्प फिलहाल उपलब्ध नहीं है।</string>
     <string name="non_paid_support">गैर-भुगतान समर्थन</string>
     <string name="web_ad">वेब विज्ञापन</string>
+    <string name="sponsored_ad_label">● प्रायोजित विज्ञापन</string>
     <string name="error_failed_to_load_sku_details">SKU विवरण लोड करने में विफल</string>
     <string name="purchase_pending">आपका दान Google द्वारा संसाधित किया जा रहा है। जब यह पूरा हो जाएगा तो हम आपको सूचित करेंगे। धन्यवाद.</string>
     <string name="purchase_thank_you">आपके दान के लिए शुक्रिया.</string>
     <string name="purchase_cancelled">रद्द कर दिया गया</string>
+    <string name="error_an_error_occurred">कोई त्रुटि हुई</string>
+    <string name="error_failed_to_launch_review">समीक्षा प्रवाह लॉन्च करने में विफल</string>
+    <string name="error_failed_to_load_faq">सामान्य प्रश्न लोड करने में विफल</string>
+    <string name="error_failed_to_request_review">समीक्षा का अनुरोध करने में विफल</string>
+    <string name="error_failed_to_update_app">ऐप अपडेट करने में विफल</string>
+    <string name="error_failed_to_load_consent_info">सहमति जानकारी लोड करने में विफल</string>
 </resources>

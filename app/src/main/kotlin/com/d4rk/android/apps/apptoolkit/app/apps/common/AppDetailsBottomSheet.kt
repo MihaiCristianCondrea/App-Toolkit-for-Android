@@ -42,13 +42,13 @@ import androidx.compose.ui.text.style.TextAlign
 import coil3.compose.AsyncImage
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
-import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.AppDetailsNativeAd
-import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.OutlinedIconButtonWithText
-import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraSmallVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.MediumHorizontalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
+import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.AppDetailsNativeAd
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

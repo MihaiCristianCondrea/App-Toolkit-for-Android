@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.help.ui
 
 import androidx.lifecycle.viewModelScope
+import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpAction
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
@@ -15,7 +16,9 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
@@ -58,10 +61,12 @@ class HelpViewModel(
 
                     is DataState.Success -> {
                         val payload = result.data
+                        val screenStateForData =
+                            if (payload.isEmpty()) ScreenState.NoData() else ScreenState.Success()
                         screenState.update { current ->
                             current.copy(
-                                screenState = payload.screenState,
-                                data = payload.data
+                                screenState = screenStateForData,
+                                data = HelpUiState(questions = payload.toImmutableList())
                             )
                         }
                     }
@@ -70,7 +75,7 @@ class HelpViewModel(
                         screenState.updateState(ScreenState.Error())
                         screenState.showSnackbar(
                             UiSnackbar(
-                                message = UiTextHelper.DynamicString(result.error.toString()),
+                                message = result.error.asUiText(),
                                 isError = true,
                                 timeStamp = System.currentTimeMillis(),
                                 type = ScreenMessageType.SNACKBAR,
@@ -83,7 +88,7 @@ class HelpViewModel(
                 screenState.updateState(ScreenState.Error())
                 screenState.showSnackbar(
                     UiSnackbar(
-                        message = UiTextHelper.DynamicString(t.message ?: "Failed to load FAQs"),
+                        message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq),
                         isError = true,
                         timeStamp = System.currentTimeMillis(),
                         type = ScreenMessageType.SNACKBAR,

@@ -1,22 +1,22 @@
 package com.d4rk.android.libs.apptoolkit.app
 
-import com.d4rk.android.libs.apptoolkit.app.about.data.DefaultAboutRepository
+import com.d4rk.android.libs.apptoolkit.app.about.data.repository.AboutRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
-import com.d4rk.android.libs.apptoolkit.app.ads.data.DefaultAdsSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
-import com.d4rk.android.libs.apptoolkit.app.advanced.data.CacheRepository
-import com.d4rk.android.libs.apptoolkit.app.advanced.data.DefaultCacheRepository
-import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.repository.DefaultUsageAndDiagnosticsRepository
+import com.d4rk.android.libs.apptoolkit.app.advanced.data.repository.CacheRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
+import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.repository.UsageAndDiagnosticsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageAndDiagnosticsRepository
-import com.d4rk.android.libs.apptoolkit.app.help.data.DefaultHelpRepository
-import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepository
-import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.DefaultIssueReporterRepository
+import com.d4rk.android.libs.apptoolkit.app.help.data.repository.FaqRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
 import com.d4rk.android.libs.apptoolkit.app.main.data.repository.MainRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
-import com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository.DefaultOnboardingRepository
+import com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository.OnboardingRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
-import com.d4rk.android.libs.apptoolkit.app.settings.general.data.DefaultGeneralSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.GeneralSettingsRepository
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.params.ParameterizedTest
@@ -42,18 +42,18 @@ class ImplementationContractsTest {
     companion object {
         @JvmStatic
         fun implementationContracts(): Stream<Arguments> = Stream.of(
-            contract(CacheRepository::class, DefaultCacheRepository::class),
-            contract(OnboardingRepository::class, DefaultOnboardingRepository::class),
+            contract(CacheRepository::class, CacheRepositoryImpl::class),
+            contract(OnboardingRepository::class, OnboardingRepositoryImpl::class),
             contract(
                 UsageAndDiagnosticsRepository::class,
-                DefaultUsageAndDiagnosticsRepository::class
+                UsageAndDiagnosticsRepositoryImpl::class
             ),
-            contract(HelpRepository::class, DefaultHelpRepository::class),
-            contract(AboutRepository::class, DefaultAboutRepository::class),
-            contract(GeneralSettingsRepository::class, DefaultGeneralSettingsRepository::class),
-            contract(IssueReporterRepository::class, DefaultIssueReporterRepository::class),
+            contract(FaqRepository::class, FaqRepositoryImpl::class),
+            contract(AboutRepository::class, AboutRepositoryImpl::class),
+            contract(GeneralSettingsRepository::class, GeneralSettingsRepositoryImpl::class),
+            contract(IssueReporterRepository::class, IssueReporterRepositoryImpl::class),
             contract(NavigationRepository::class, MainRepositoryImpl::class),
-            contract(AdsSettingsRepository::class, DefaultAdsSettingsRepository::class),
+            contract(AdsSettingsRepository::class, AdsSettingsRepositoryImpl::class),
         )
 
         private fun contract(

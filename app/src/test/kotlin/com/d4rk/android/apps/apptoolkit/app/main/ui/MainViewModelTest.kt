@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
-import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.NavigationDrawerItem
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import io.mockk.clearAllMocks
 import kotlinx.collections.immutable.toImmutableList

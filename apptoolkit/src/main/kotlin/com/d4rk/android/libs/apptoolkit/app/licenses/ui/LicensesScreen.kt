@@ -13,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.LargeTopAppBarWithScaffold
+import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.ui.compose.LibraryDefaults
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries

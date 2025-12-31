@@ -2,13 +2,15 @@ package com.d4rk.android.libs.apptoolkit.app.ads.ui
 
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
+import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -25,18 +27,21 @@ class TestAdsSettingsViewModel {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
+    private fun testDispatchers(): DispatcherProvider =
+        TestDispatchers(dispatcherExtension.testDispatcher)
+
     private class FakeAdsSettingsRepository(
         override val defaultAdsEnabled: Boolean = true
     ) : AdsSettingsRepository {
-        private val flow =
-            MutableSharedFlow<Boolean>(replay = 1).apply { tryEmit(defaultAdsEnabled) }
+
+        private val state = MutableStateFlow(defaultAdsEnabled)
         var setResult: Result<Unit> = Result.Success(Unit)
 
-        override fun observeAdsEnabled(): Flow<Boolean> = flow
+        override fun observeAdsEnabled(): Flow<Boolean> = state
 
         override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> {
             if (setResult is Result.Success) {
-                flow.emit(enabled)
+                state.value = enabled
             }
             return setResult
         }
@@ -44,9 +49,8 @@ class TestAdsSettingsViewModel {
 
     @Test
     fun `initial state reflects repository value`() = runTest(dispatcherExtension.testDispatcher) {
-        println("\uD83D\uDE80 [TEST] initial state reflects repository value")
         val repo = FakeAdsSettingsRepository(defaultAdsEnabled = true)
-        val viewModel = AdsSettingsViewModel(repo)
+        val viewModel = AdsSettingsViewModel(repository = repo, dispatchers = testDispatchers())
 
         advanceUntilIdle()
 
@@ -58,14 +62,14 @@ class TestAdsSettingsViewModel {
     @Test
     fun `emission error sets default and error state`() =
         runTest(dispatcherExtension.testDispatcher) {
-            println("\uD83D\uDE80 [TEST] emission error sets default and error state")
             val repo = object : AdsSettingsRepository {
                 override val defaultAdsEnabled: Boolean = false
                 override fun observeAdsEnabled(): Flow<Boolean> = flow { throw IOException("boom") }
                 override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> =
                     Result.Success(Unit)
             }
-            val viewModel = AdsSettingsViewModel(repo)
+
+            val viewModel = AdsSettingsViewModel(repository = repo, dispatchers = testDispatchers())
 
             advanceUntilIdle()
 
@@ -76,9 +80,8 @@ class TestAdsSettingsViewModel {
 
     @Test
     fun `setAdsEnabled success updates state`() = runTest(dispatcherExtension.testDispatcher) {
-        println("\uD83D\uDE80 [TEST] setAdsEnabled success updates state")
         val repo = FakeAdsSettingsRepository(defaultAdsEnabled = true)
-        val viewModel = AdsSettingsViewModel(repo)
+        val viewModel = AdsSettingsViewModel(repository = repo, dispatchers = testDispatchers())
         advanceUntilIdle()
 
         viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(false))
@@ -91,10 +94,11 @@ class TestAdsSettingsViewModel {
 
     @Test
     fun `setAdsEnabled error reverts state`() = runTest(dispatcherExtension.testDispatcher) {
-        println("\uD83D\uDE80 [TEST] setAdsEnabled error reverts state")
-        val repo = FakeAdsSettingsRepository(defaultAdsEnabled = true)
-        repo.setResult = Result.Error(IOException("fail"))
-        val viewModel = AdsSettingsViewModel(repo)
+        val repo = FakeAdsSettingsRepository(defaultAdsEnabled = true).apply {
+            setResult = Result.Error(IOException("fail"))
+        }
+
+        val viewModel = AdsSettingsViewModel(repository = repo, dispatchers = testDispatchers())
         advanceUntilIdle()
 
         viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(false))
@@ -105,4 +109,3 @@ class TestAdsSettingsViewModel {
         assertThat(state.data?.adsEnabled).isTrue()
     }
 }
-

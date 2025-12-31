@@ -3,10 +3,20 @@ package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiEnvironments
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiPaths
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.developerAppsApiUrl
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.normalizeRoute
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.sanitizeUrlOrNull
 import kotlinx.serialization.SerializationException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.robolectric.annotation.Config
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.sql.SQLException
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -23,32 +33,43 @@ class ExtensionsTest {
     }
 
     @Test
-    fun `developerAppsBaseUrl appends environment segment`() {
+    fun `developerAppsApiUrl appends environment language and path segments`() {
         val baseUrl = "https://example.com/repository"
 
         assertAll(
             {
                 assertEquals(
-                    "$baseUrl/${ApiEnvironments.ENV_DEBUG}",
-                    ApiEnvironments.ENV_DEBUG.developerAppsBaseUrl(baseUrl)
+                    "$baseUrl/${ApiEnvironments.ENV_DEBUG}/${ApiLanguages.DEFAULT}/${ApiPaths.DEVELOPER_APPS_API}",
+                    ApiEnvironments.ENV_DEBUG.developerAppsApiUrl(
+                        baseRepositoryUrl = baseUrl,
+                        language = ApiLanguages.DEFAULT,
+                    )
                 )
             },
             {
                 assertEquals(
-                    "$baseUrl/${ApiEnvironments.ENV_RELEASE}",
-                    ApiEnvironments.ENV_RELEASE.developerAppsBaseUrl(baseUrl)
+                    "$baseUrl/${ApiEnvironments.ENV_RELEASE}/${ApiLanguages.DEFAULT}/${ApiPaths.DEVELOPER_APPS_API}",
+                    ApiEnvironments.ENV_RELEASE.developerAppsApiUrl(
+                        baseRepositoryUrl = baseUrl,
+                        language = ApiLanguages.DEFAULT,
+                    )
                 )
             },
             {
                 assertEquals(
-                    "$baseUrl/${ApiEnvironments.ENV_RELEASE}",
-                    "unknown".developerAppsBaseUrl(baseUrl)
+                    "$baseUrl/${ApiEnvironments.ENV_RELEASE}/${ApiLanguages.DEFAULT}/${ApiPaths.DEVELOPER_APPS_API}",
+                    "unknown".developerAppsApiUrl(
+                        baseRepositoryUrl = baseUrl,
+                        language = ApiLanguages.DEFAULT,
+                    )
                 )
             },
             {
                 assertTrue(
-                    ApiConstants.BASE_REPOSITORY_URL.developerAppsBaseUrl()
-                        .contains(ApiConstants.BASE_REPOSITORY_URL)
+                    ApiConstants.BASE_REPOSITORY_URL.developerAppsApiUrl()
+                        .contains(ApiConstants.BASE_REPOSITORY_URL) &&
+                            ApiConstants.BASE_REPOSITORY_URL.developerAppsApiUrl()
+                                .contains(ApiLanguages.DEFAULT)
                 )
             },
         )
@@ -81,10 +102,10 @@ class ExtensionsTest {
             {
                 assertEquals(
                     Errors.Network.REQUEST_TIMEOUT,
-                    java.net.SocketTimeoutException().toError()
+                    SocketTimeoutException().toError()
                 )
             },
-            { assertEquals(Errors.Network.NO_INTERNET, java.net.ConnectException().toError()) },
+            { assertEquals(Errors.Network.NO_INTERNET, ConnectException().toError()) },
             {
                 assertEquals(
                     Errors.Network.SERIALIZATION,
@@ -94,7 +115,13 @@ class ExtensionsTest {
             {
                 assertEquals(
                     Errors.Database.DATABASE_OPERATION_FAILED,
-                    java.sql.SQLException().toError()
+                    SQLException().toError()
+                )
+            },
+            {
+                assertEquals(
+                    Errors.UseCase.ILLEGAL_ARGUMENT,
+                    IllegalArgumentException().toError()
                 )
             },
             { assertEquals(Errors.UseCase.NO_DATA, IllegalStateException().toError()) },

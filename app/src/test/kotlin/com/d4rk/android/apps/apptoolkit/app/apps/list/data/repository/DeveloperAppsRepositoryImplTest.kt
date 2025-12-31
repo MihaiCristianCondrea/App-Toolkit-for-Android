@@ -1,12 +1,12 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.list.data.repository
 
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.ApiResponse
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.AppCategoryDto
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.AppDataWrapper
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api.AppInfoDto
+import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.ApiResponseDto
+import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppCategoryDto
+import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppDataWrapperDto
+import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppInfoDto
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppCategory
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
-import com.d4rk.android.apps.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -36,7 +36,7 @@ class DeveloperAppsRepositoryImplTest {
                 screenshots = emptyList(),
             )
         )
-        val response = ApiResponse(AppDataWrapper(apps.map {
+        val response = ApiResponseDto(AppDataWrapperDto(apps.map {
             AppInfoDto(
                 it.name,
                 it.packageName,
@@ -66,8 +66,8 @@ class DeveloperAppsRepositoryImplTest {
     @Test
     fun `fetchDeveloperApps maps category information`() = runTest {
         val expectedCategory = AppCategory(label = "Education", id = "education")
-        val response = ApiResponse(
-            AppDataWrapper(
+        val response = ApiResponseDto(
+            AppDataWrapperDto(
                 listOf(
                     AppInfoDto(
                         name = "App",
@@ -120,7 +120,7 @@ class DeveloperAppsRepositoryImplTest {
 
         val result = repository.fetchDeveloperApps().first()
         val error = result as DataState.Error
-        assertEquals(Errors.Network.REQUEST_TIMEOUT, error.error)
+        assertEquals(AppErrors.Network.REQUEST_TIMEOUT, error.error)
     }
 
     @Test
@@ -148,7 +148,7 @@ class DeveloperAppsRepositoryImplTest {
                 screenshots = emptyList(),
             ),
         )
-        val response = ApiResponse(AppDataWrapper(unsorted.map {
+        val response = ApiResponseDto(AppDataWrapperDto(unsorted.map {
             AppInfoDto(
                 it.name,
                 it.packageName,
@@ -192,7 +192,6 @@ class DeveloperAppsRepositoryImplTest {
 
         val result = repository.fetchDeveloperApps().first()
         val error = result as DataState.Error
-        assertEquals(Errors.UseCase.FAILED_TO_LOAD_APPS, error.error)
+        assertEquals(AppErrors.UseCase.FAILED_TO_LOAD_APPS, error.error)
     }
 }
-

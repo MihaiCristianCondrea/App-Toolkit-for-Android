@@ -1,7 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.help.ui
 
+import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqId
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
-import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepository
+import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
 import com.d4rk.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
@@ -32,13 +33,13 @@ class HelpViewModelTest {
     @Test
     fun `loadFaq sets success state when repository returns data`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val repository = object : HelpRepository {
+            val repository = object : FaqRepository {
                 override fun fetchFaq(): Flow<DataState<List<FaqItem>, Errors>> =
                     flowOf(
                         DataState.Success(
                             data = listOf(
                                 FaqItem(
-                                    id = 1,
+                                    id = FaqId("remote-1"),
                                     question = " Q ",
                                     answer = " A "
                                 )
@@ -64,7 +65,7 @@ class HelpViewModelTest {
     @Test
     fun `loadFaq sets error state when repository throws`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val repository = object : HelpRepository {
+            val repository = object : FaqRepository {
                 override fun fetchFaq(): Flow<DataState<List<FaqItem>, Errors>> = flow {
                     emit(DataState.Loading())
                     throw IllegalStateException("error")

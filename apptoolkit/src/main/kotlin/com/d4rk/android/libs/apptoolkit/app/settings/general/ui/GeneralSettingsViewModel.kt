@@ -6,6 +6,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.G
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsAction
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.state.GeneralSettingsUiState
+import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -14,18 +15,24 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class GeneralSettingsViewModel(
-    private val repository: GeneralSettingsRepository
+    private val repository: GeneralSettingsRepository,
+    private val dispatchers: DispatcherProvider,
 ) : ScreenViewModel<GeneralSettingsUiState, GeneralSettingsEvent, GeneralSettingsAction>(
     initialState = UiStateScreen(data = GeneralSettingsUiState())
 ) {
+
+    private var loadJob: Job? = null
 
     override fun onEvent(event: GeneralSettingsEvent) {
         when (event) {
@@ -33,36 +40,33 @@ class GeneralSettingsViewModel(
         }
     }
 
-    private var loadJob: Job? = null
-
     private fun loadContent(contentKey: String?) {
         loadJob?.cancel()
         loadJob = viewModelScope.launch {
             repository.getContentKey(contentKey)
+                .flowOn(dispatchers.default)
                 .onStart { screenState.setLoading() }
-                .onCompletion { cause ->
-                    if (cause == null) {
-                        screenState.updateState(newValues = ScreenState.Success())
-                    }
+                .onEach { key ->
+                    screenState.setErrors(errors = emptyList())
+                    screenState.copyData { copy(contentKey = key) }
+                    screenState.updateState(newValues = ScreenState.Success())
                 }
-                .catch {
+                .catch { t ->
+                    if (t is CancellationException) throw t
+
                     screenState.setErrors(
                         errors = listOf(
                             UiSnackbar(
-                                message = UiTextHelper.StringResource(
-                                    resourceId = R.string.error_invalid_content_key
-                                )
+                                message = UiTextHelper.StringResource(R.string.error_invalid_content_key)
                             )
                         )
                     )
                     screenState.updateState(newValues = ScreenState.NoData())
                 }
-                .collect { key ->
-                    screenState.setErrors(errors = emptyList())
-                    screenState.copyData {
-                        copy(contentKey = key)
-                    }
+                .onCompletion { cause ->
+                    if (cause is CancellationException) return@onCompletion
                 }
+                .collect { }
         }
     }
 }

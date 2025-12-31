@@ -6,4 +6,3 @@ interface FavoritesRepository {
     fun observeFavorites(): Flow<Set<String>>
     suspend fun toggleFavorite(packageName: String)
 }
-

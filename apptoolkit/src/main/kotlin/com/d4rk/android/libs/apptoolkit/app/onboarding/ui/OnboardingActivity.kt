@@ -8,7 +8,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.libs.apptoolkit.app.theme.style.AppTheme
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ConsentFormHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentFormHelper
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.UserMessagingPlatform
 import kotlinx.coroutines.launch

@@ -1,11 +1,11 @@
 package com.d4rk.android.apps.apptoolkit.core.di.modules
 
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
-import com.d4rk.android.libs.apptoolkit.app.ads.data.DefaultAdsSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.AdsSettingsViewModel
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
+import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.google.android.gms.ads.AdSize
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
@@ -15,15 +15,14 @@ import org.koin.dsl.module
 val adsModule: Module = module {
 
     single<AdsSettingsRepository> {
-        DefaultAdsSettingsRepository(
+        AdsSettingsRepositoryImpl(
             dataStore = get(),
             buildInfoProvider = get<BuildInfoProvider>(),
-            dispatchers = get()
         )
     }
 
     viewModel {
-        AdsSettingsViewModel(repository = get())
+        AdsSettingsViewModel(repository = get(), dispatchers = get())
     }
 
     single<AdsConfig>(named(name = "native_ad")) {

@@ -42,7 +42,7 @@ Each feature lives in its own package with actions, events, repositories, UI sta
 
 ## Data layer
 
-Common networking is handled by a shared `KtorClient`, while persistent preferences rely on a reusable `CommonDataStore`. Specialized repositories such as `DefaultHelpRepository` or `DefaultOnboardingRepository` extend this infrastructure.
+Common networking is handled by a shared `KtorClient`, while persistent preferences rely on a reusable `CommonDataStore`. Specialized repositories such as `FaqRepositoryImpl` or `OnboardingRepositoryImpl` extend this infrastructure.
 
 ## Extensibility
 

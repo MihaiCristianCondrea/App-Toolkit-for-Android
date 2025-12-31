@@ -8,13 +8,14 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.providers.Devic
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import com.google.common.truth.Truth.assertThat
 import io.ktor.http.HttpStatusCode
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import io.mockk.verify
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -39,11 +40,23 @@ class IssueReporterViewModelTest {
         override suspend fun capture(): DeviceInfo = mockk()
     }
 
+    private inline fun <T> withMainDispatcher(
+        dispatcher: CoroutineDispatcher,
+        block: () -> T
+    ): T {
+        Dispatchers.setMain(dispatcher)
+        return runCatching { block() }
+            .also {
+                runCatching { Dispatchers.resetMain() }
+            }
+            .getOrThrow()
+    }
+
     @Test
     fun `invalid input shows error and does not call use case`() = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
-        try {
+
+        withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
             val viewModel = IssueReporterViewModel(useCase, githubTarget, "", deviceInfoProvider)
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -54,20 +67,19 @@ class IssueReporterViewModelTest {
             val snackbar = viewModel.uiState.value.snackbar!!
             val msg = snackbar.message as UiTextHelper.StringResource
             assertThat(msg.resourceId).isEqualTo(R.string.error_invalid_report)
-            verify(exactly = 0) { useCase.invoke(any()) }
-        } finally {
-            Dispatchers.resetMain()
+            confirmVerified(useCase)
         }
     }
 
     @Test
     fun `send report success updates state`() = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
-        try {
+
+        withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
             val captured = slot<SendIssueReportUseCase.Params>()
             every { useCase.invoke(capture(captured)) } returns flowOf(IssueReportResult.Success("url"))
+
             val viewModel =
                 IssueReporterViewModel(useCase, githubTarget, "token", deviceInfoProvider)
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -85,16 +97,14 @@ class IssueReporterViewModelTest {
             assertThat((snackbar.message as UiTextHelper.StringResource).resourceId)
                 .isEqualTo(R.string.snack_report_success)
             assertThat(captured.captured.token).isEqualTo("token")
-        } finally {
-            Dispatchers.resetMain()
         }
     }
 
     @Test
     fun `update events modify state`() = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
-        try {
+
+        withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
             val viewModel = IssueReporterViewModel(useCase, githubTarget, "", deviceInfoProvider)
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -110,21 +120,20 @@ class IssueReporterViewModelTest {
             assertThat(data.description).isEqualTo("D")
             assertThat(data.email).isEqualTo("E")
             assertThat(data.anonymous).isTrue()
-        } finally {
-            Dispatchers.resetMain()
         }
     }
 
     @Test
     fun `device info failure shows error and skips use case`() = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
+
         val failingProvider = object : DeviceInfoProvider {
             override suspend fun capture(): DeviceInfo {
                 throw IllegalStateException("boom")
             }
         }
-        try {
+
+        withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
             val viewModel = IssueReporterViewModel(useCase, githubTarget, "", failingProvider)
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
@@ -140,9 +149,7 @@ class IssueReporterViewModelTest {
             assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
             assertThat((snackbar.message as UiTextHelper.StringResource).resourceId)
                 .isEqualTo(R.string.snack_report_failed)
-            verify(exactly = 0) { useCase.invoke(any()) }
-        } finally {
-            Dispatchers.resetMain()
+            confirmVerified(useCase)
         }
     }
 
@@ -161,10 +168,11 @@ class IssueReporterViewModelTest {
     @MethodSource("errorCases")
     fun `send report error maps message`(status: HttpStatusCode, expected: Int) = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
-        try {
+
+        withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
             every { useCase.invoke(any()) } returns flowOf(IssueReportResult.Error(status, ""))
+
             val viewModel = IssueReporterViewModel(useCase, githubTarget, "tok", deviceInfoProvider)
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
@@ -180,8 +188,6 @@ class IssueReporterViewModelTest {
             assertThat((snackbar.message as UiTextHelper.StringResource).resourceId).isEqualTo(
                 expected
             )
-        } finally {
-            Dispatchers.resetMain()
         }
     }
 }

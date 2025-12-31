@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import kotlinx.serialization.SerializationException
 import org.junit.Test
 import java.net.ConnectException
@@ -25,9 +26,13 @@ class ErrorsKtTest {
     }
 
     @Test
+    fun `maps illegal argument to use case error`() {
+        assertEquals(Errors.UseCase.ILLEGAL_ARGUMENT, IllegalArgumentException().toError())
+    }
+
+    @Test
     fun `returns default error when not mapped`() {
         val default = Errors.UseCase.NO_DATA
         assertEquals(default, IllegalStateException().toError(default))
     }
 }
-

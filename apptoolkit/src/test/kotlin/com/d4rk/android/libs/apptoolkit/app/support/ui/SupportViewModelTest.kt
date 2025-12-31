@@ -8,7 +8,7 @@ import com.d4rk.android.libs.apptoolkit.app.support.billing.BillingRepository
 import com.d4rk.android.libs.apptoolkit.app.support.billing.PurchaseResult
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.every

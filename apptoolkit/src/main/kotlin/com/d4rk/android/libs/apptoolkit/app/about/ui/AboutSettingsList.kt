@@ -26,17 +26,17 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.app.licenses.ui.LicensesActivity
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.NoDataScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.ScreenStateHandler
-import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.PreferenceCategoryItem
-import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.SettingsPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHandler
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraTinyVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Angle
@@ -122,10 +122,7 @@ fun AboutSettingsList(
                                 title = stringResource(id = R.string.oss_license_title),
                                 summary = stringResource(id = R.string.summary_preference_settings_oss)
                             ) {
-                                IntentsHelper.openActivity(
-                                    context = context,
-                                    activityClass = LicensesActivity::class.java
-                                )
+                                context.openActivity(LicensesActivity::class.java)
                             }
                         }
                     }

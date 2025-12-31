@@ -20,7 +20,7 @@
             android:paddingTop="@dimen/native_ad_card_label_vertical_padding"
             android:paddingEnd="@dimen/native_ad_card_label_horizontal_padding"
             android:paddingBottom="@dimen/native_ad_card_label_vertical_padding"
-            android:text="● Sponsored Ad"
+            android:text="@string/sponsored_ad_label"
             android:textAllCaps="true"
             android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
             android:textColor="?attr/colorPrimary"

@@ -26,23 +26,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository.DefaultOnboardingRepository
-import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.data.model.ui.OnboardingPage
-import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components.OnboardingBottomNavigation
-import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.components.pages.OnboardingDefaultPageLayout
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.model.OnboardingPage
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.OnboardingBottomNavigation
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.OnboardingDefaultPageLayout
 import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.OutlinedIconButtonWithText
-import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.hapticPagerSwipe
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.hapticPagerSwipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -52,11 +49,7 @@ fun OnboardingScreen() {
     val pages: List<OnboardingPage> =
         remember { onboardingProvider.getOnboardingPages(context = context) }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val dispatchers: DispatcherProvider = koinInject()
-    val repository =
-        remember { DefaultOnboardingRepository(CommonDataStore.getInstance(context), dispatchers) }
-    val viewModel: OnboardingViewModel =
-        viewModel(factory = OnboardingViewModel.provideFactory(repository))
+    val viewModel: OnboardingViewModel = koinViewModel()
     val screenState by viewModel.uiState.collectAsStateWithLifecycle()
     val uiState = screenState.data ?: OnboardingUiState()
     val pagerState: PagerState =

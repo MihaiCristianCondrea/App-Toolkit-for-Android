@@ -1,11 +1,11 @@
 package com.d4rk.android.libs.apptoolkit.app.help.domain.model
 
-import androidx.compose.runtime.Immutable
+@JvmInline
+value class FaqId(val value: String)
 
 /** Simple representation of a FAQ item */
-@Immutable
 data class FaqItem(
-    val id: Int,
+    val id: FaqId,
     val question: String,
     val answer: String,
 )

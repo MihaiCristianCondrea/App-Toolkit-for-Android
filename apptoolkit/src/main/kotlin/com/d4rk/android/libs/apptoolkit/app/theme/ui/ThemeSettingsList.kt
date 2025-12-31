@@ -2,6 +2,8 @@ package com.d4rk.android.libs.apptoolkit.app.theme.ui
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,35 +28,37 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.ThemeSettingOption
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
 import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider.paletteById
-import com.d4rk.android.libs.apptoolkit.app.theme.ui.components.WallpaperColorOptionCard
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.sections.InfoMessageSection
-import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.RadioButtonPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.SwitchCardItem
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
+import com.d4rk.android.libs.apptoolkit.core.logging.THEME_SETTINGS_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.DynamicPaletteVariant
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.DynamicPaletteVariant
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.applyDynamicVariant
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.SeasonalHelper
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.applyDynamicVariant
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openDisplaySettings
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.datastore.rememberThemePreferencesState
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
+import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.ZoneId
 
 /**
  * Theme settings content for the app.
@@ -72,23 +76,14 @@ import kotlinx.coroutines.launch
 fun ThemeSettingsList(paddingValues: PaddingValues) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
-    val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
+    val dataStore = rememberCommonDataStore()
 
-    val currentThemeModeKey: String by dataStore.themeMode.collectAsStateWithLifecycle(
-        initialValue = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
-    )
-
-    val isAmoledMode: State<Boolean> =
-        dataStore.amoledMode.collectAsStateWithLifecycle(initialValue = false)
-
-    val isDynamicColors: Boolean by dataStore.dynamicColors
-        .collectAsStateWithLifecycle(initialValue = true)
-
-    val dynamicVariantIndex: Int by dataStore.dynamicPaletteVariant
-        .collectAsStateWithLifecycle(initialValue = 0)
-
-    val staticPaletteId: String by dataStore.staticPaletteId
-        .collectAsStateWithLifecycle(initialValue = StaticPaletteIds.DEFAULT)
+    val themePreferences = rememberThemePreferencesState()
+    val currentThemeModeKey = themePreferences.themeMode
+    val isAmoledMode = rememberUpdatedState(themePreferences.amoledMode)
+    val isDynamicColors: Boolean = themePreferences.dynamicColors
+    val dynamicVariantIndex: Int = themePreferences.dynamicPaletteVariant
+    val staticPaletteId: String = themePreferences.staticPaletteId
 
     val supportsDynamic = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
@@ -122,14 +117,16 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
             WallpaperSwatchColors(
                 primary = scheme.primary,
                 secondary = scheme.secondary,
-                tertiary = scheme.tertiary
+                tertiary = scheme.tertiaryContainer,
             )
         }
     }
 
     val staticOptions: List<String> = remember { StaticPaletteIds.withDefault }
 
-    val isChristmasSeason: Boolean = remember { SeasonalHelper.isChristmasSeason() }
+    val isChristmasSeason: Boolean = remember {
+        LocalDate.now(ZoneId.systemDefault()).isChristmasSeason
+    }
 
     val staticSwatches: List<WallpaperSwatchColors> =
         remember(staticOptions, isSystemInDarkThemeNow) {
@@ -157,8 +154,8 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
             modifier = Modifier.fillMaxSize(),
         ) {
             item {
-                AsyncImage(
-                    model = R.drawable.il_startup,
+                Image(
+                    imageVector = rememberPaletteImageVector(),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -335,7 +332,14 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                     message = stringResource(id = R.string.summary_dark_theme),
                     newLine = false,
                     learnMoreText = stringResource(id = R.string.screen_and_display_settings),
-                    learnMoreAction = { IntentsHelper.openDisplaySettings(context) }
+                    learnMoreAction = {
+                        if (!context.openDisplaySettings()) {
+                            Log.w(
+                                THEME_SETTINGS_LOG_TAG,
+                                "Failed to open display settings from theme page"
+                            )
+                        }
+                    }
                 )
             }
         }

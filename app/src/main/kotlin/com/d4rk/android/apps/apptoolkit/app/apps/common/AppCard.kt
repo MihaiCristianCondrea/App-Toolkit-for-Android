@@ -33,9 +33,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import coil3.compose.AsyncImage
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
-import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.IconButton
-import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.IconButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable

@@ -286,8 +286,15 @@
     <string name="support_offer_unavailable">Ta opcja darowizny jest obecnie niedostępna.</string>
     <string name="non_paid_support">Wsparcie bezpłatne</string>
     <string name="web_ad">Reklama internetowa</string>
+    <string name="sponsored_ad_label">● Reklama sponsorowana</string>
     <string name="error_failed_to_load_sku_details">Nie udało się załadować szczegółów SKU</string>
     <string name="purchase_pending">Twoja darowizna jest przetwarzana przez Google. Powiadomimy Cię, kiedy będzie to kompletne. Dziękuję.</string>
     <string name="purchase_thank_you">Dziękuję za darowiznę.</string>
     <string name="purchase_cancelled">Zakup anulowany</string>
+    <string name="error_an_error_occurred">Wystąpił błąd</string>
+    <string name="error_failed_to_launch_review">Nie udało się uruchomić procesu recenzji</string>
+    <string name="error_failed_to_load_faq">Nie udało się wczytać najczęściej zadawanych pytań</string>
+    <string name="error_failed_to_request_review">Nie udało się poprosić o recenzję</string>
+    <string name="error_failed_to_update_app">Nie udało się zaktualizować aplikacji</string>
+    <string name="error_failed_to_load_consent_info">Nie udało się wczytać informacji o zgodzie</string>
 </resources>

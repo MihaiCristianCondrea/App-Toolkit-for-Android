@@ -3,16 +3,15 @@ package com.d4rk.android.apps.apptoolkit.core.di.modules
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.startup.utils.interfaces.providers.AppStartupProvider
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.HelpConstants
-import com.d4rk.android.libs.apptoolkit.app.help.data.DefaultHelpRepository
 import com.d4rk.android.libs.apptoolkit.app.help.data.local.HelpLocalDataSource
 import com.d4rk.android.libs.apptoolkit.app.help.data.remote.HelpRemoteDataSource
-import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.HelpRepository
+import com.d4rk.android.libs.apptoolkit.app.help.data.repository.FaqRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
 import com.d4rk.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpViewModel
-import com.d4rk.android.libs.apptoolkit.app.help.ui.model.HelpScreenConfig
-import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.DefaultIssueReporterRepository
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.local.DeviceInfoLocalDataSource
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.remote.IssueReporterRemoteDataSource
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
@@ -24,9 +23,10 @@ import com.d4rk.android.libs.apptoolkit.app.support.billing.BillingRepository
 import com.d4rk.android.libs.apptoolkit.app.support.ui.SupportViewModel
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
+import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.github.GithubConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.Base64Decoder.parseBase64String
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.HelpUrlHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.decodeBase64OrEmpty
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.faqCatalogUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
@@ -53,11 +53,13 @@ val appToolkitModule: Module = module {
 
     single { HelpLocalDataSource(context = get()) }
     single { HelpRemoteDataSource(client = get()) }
-    single<HelpRepository> {
-        DefaultHelpRepository(
+    single<FaqRepository> {
+        FaqRepositoryImpl(
             localDataSource = get(),
             remoteDataSource = get(),
-            catalogUrl = HelpUrlHelper.faqCatalogUrl(isDebugBuild = BuildConfig.DEBUG),
+            catalogUrl = com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants.FAQ_BASE_URL.faqCatalogUrl(
+                isDebugBuild = BuildConfig.DEBUG
+            ),
             productId = HelpConstants.FAQ_PRODUCT_ID,
         )
     }
@@ -66,7 +68,7 @@ val appToolkitModule: Module = module {
 
     single { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
-    single<IssueReporterRepository> { DefaultIssueReporterRepository(get(), get()) }
+    single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get()) }
     single { SendIssueReportUseCase(get(), get()) }
 
     val githubTokenQualifier = qualifier<GithubToken>()
@@ -91,12 +93,12 @@ val appToolkitModule: Module = module {
         GithubConstants.githubChangelog(get<String>(named("github_repository")))
     }
 
-    single(githubTokenQualifier) { parseBase64String(BuildConfig.GITHUB_TOKEN) }
+    single(githubTokenQualifier) { BuildConfig.GITHUB_TOKEN.decodeBase64OrEmpty() }
 
-    single<HelpScreenConfig> {
-        HelpScreenConfig(
-            versionName = BuildConfig.VERSION_NAME,
-            versionCode = BuildConfig.VERSION_CODE
+    single<AppVersionInfo> {
+        AppVersionInfo(
+            BuildConfig.VERSION_NAME,
+            BuildConfig.VERSION_CODE.toLong()
         )
     }
 }

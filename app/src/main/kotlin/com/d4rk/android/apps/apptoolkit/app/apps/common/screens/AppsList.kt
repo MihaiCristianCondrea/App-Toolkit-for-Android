@@ -22,10 +22,10 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.utils.buildAppListItems
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppListItem
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
-import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.AppsListNativeAdCard
-import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.animateVisibility
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
+import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.AppsListNativeAdCard
+import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableList

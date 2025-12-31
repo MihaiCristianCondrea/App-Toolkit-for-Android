@@ -6,7 +6,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.RootError
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenDataStatus
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 

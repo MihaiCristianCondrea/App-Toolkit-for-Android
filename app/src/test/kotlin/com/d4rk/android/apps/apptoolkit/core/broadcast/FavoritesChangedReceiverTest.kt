@@ -24,16 +24,17 @@ class FavoritesChangedReceiverTest {
         every { intent.getStringExtra(FavoritesChangedReceiver.EXTRA_PACKAGE_NAME) } returns packageName
 
         mockkStatic(Log::class)
-        try {
+
+        runCatching {
             every { Log.d(any(), any()) } returns 0
 
             receiver.onReceive(context, intent)
 
             verify(exactly = 1) { intent.getStringExtra(FavoritesChangedReceiver.EXTRA_PACKAGE_NAME) }
             verify { Log.d(any(), match { packageName in it }) }
-        } finally {
-            unmockkStatic(Log::class)
-        }
+        }.also {
+            runCatching { unmockkStatic(Log::class) }
+        }.getOrThrow()
     }
 
     @Test
@@ -43,7 +44,8 @@ class FavoritesChangedReceiverTest {
         every { intent.getStringExtra(FavoritesChangedReceiver.EXTRA_PACKAGE_NAME) } returns null
 
         mockkStatic(Log::class)
-        try {
+
+        runCatching {
             every { Log.d(any(), any()) } returns 0
 
             assertDoesNotThrow {
@@ -52,8 +54,9 @@ class FavoritesChangedReceiverTest {
 
             verify(exactly = 1) { intent.getStringExtra(FavoritesChangedReceiver.EXTRA_PACKAGE_NAME) }
             verify { Log.d(any(), match { "Favorites changed:" in it }) }
-        } finally {
-            unmockkStatic(Log::class)
-        }
+        }.also {
+            runCatching { unmockkStatic(Log::class) }
+        }.getOrThrow()
     }
 }
+

@@ -286,8 +286,15 @@
     <string name="support_offer_unavailable">Opsi donasi ini saat ini tidak tersedia.</string>
     <string name="non_paid_support">Dukungan tidak berbayar</string>
     <string name="web_ad">Iklan web</string>
+    <string name="sponsored_ad_label">● Iklan bersponsor</string>
     <string name="error_failed_to_load_sku_details">Gagal memuat detail SKU</string>
     <string name="purchase_pending">Donasi Anda sedang diproses oleh Google. Kami akan memberi tahu Anda saat selesai. Terima kasih.</string>
     <string name="purchase_thank_you">Terima kasih atas donasi Anda.</string>
     <string name="purchase_cancelled">Pembelian dibatalkan</string>
+    <string name="error_an_error_occurred">Terjadi kesalahan</string>
+    <string name="error_failed_to_launch_review">Gagal memulai alur ulasan</string>
+    <string name="error_failed_to_load_faq">Gagal memuat FAQ</string>
+    <string name="error_failed_to_request_review">Gagal meminta ulasan</string>
+    <string name="error_failed_to_update_app">Gagal memperbarui aplikasi</string>
+    <string name="error_failed_to_load_consent_info">Gagal memuat informasi persetujuan</string>
 </resources>

@@ -48,18 +48,18 @@ import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.Setti
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsPreference
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
-import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.OutlinedIconButtonWithText
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.NoDataScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.ScreenStateHandler
-import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.LargeTopAppBarWithScaffold
-import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.SettingsPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraTinyVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
 import org.koin.compose.koinInject
@@ -212,9 +212,8 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
                         .padding(all = SizeConstants.MediumSize * 2)
                         .align(alignment = Alignment.Start),
                     onClick = {
-                        IntentsHelper.openActivity(
-                            context = context,
-                            activityClass = HelpActivity::class.java,
+                        context.openActivity(
+                            HelpActivity::class.java,
                         )
                     },
                     icon = Icons.AutoMirrored.Outlined.ContactSupport,

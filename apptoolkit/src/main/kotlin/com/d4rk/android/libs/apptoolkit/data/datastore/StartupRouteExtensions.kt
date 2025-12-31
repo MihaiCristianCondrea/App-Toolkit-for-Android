@@ -1,6 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.data.datastore
 
-import com.d4rk.android.libs.apptoolkit.core.domain.model.navigation.StableNavKey
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

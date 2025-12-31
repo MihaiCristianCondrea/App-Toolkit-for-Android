@@ -1,55 +1,60 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui
 
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
+import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteOnboardingUseCase
+import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOnboardingCompletionUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
+import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-/**
- * ViewModel for handling onboarding state and actions.
- *
- * Follows the common ScreenViewModel pattern used in the toolkit by exposing
- * [UiStateScreen] data and responding to [OnboardingEvent]s.
- */
 class OnboardingViewModel(
-    private val repository: OnboardingRepository
+    private val observeOnboardingCompletionUseCase: ObserveOnboardingCompletionUseCase,
+    private val completeOnboardingUseCase: CompleteOnboardingUseCase,
+    private val dispatchers: DispatcherProvider,
 ) : ScreenViewModel<OnboardingUiState, OnboardingEvent, OnboardingAction>(
     initialState = UiStateScreen(data = OnboardingUiState())
 ) {
 
+    private var observeCompletionJob: Job? = null
+    private var completeJob: Job? = null
+
     init {
-        repository
-            .observeOnboardingCompletion()
-            .onEach { completed ->
-                screenState.copyData { copy(isOnboardingCompleted = completed) }
-            }
-            .onCompletion { cause ->
-                if (cause != null) {
-                    screenState.copyData { copy(isOnboardingCompleted = false) }
-                }
-            }
-            .catch { _ ->
-                screenState.copyData { copy(isOnboardingCompleted = false) }
-            }
-            .launchIn(viewModelScope)
+        observeCompletion()
     }
 
     override fun onEvent(event: OnboardingEvent) {
         when (event) {
             is OnboardingEvent.UpdateCurrentTab -> updateCurrentTab(event.index)
-            OnboardingEvent.CompleteOnboarding -> completeOnboarding()
+            is OnboardingEvent.CompleteOnboarding -> completeOnboarding()
+            is OnboardingEvent.ShowCrashlyticsDialog -> setCrashlyticsDialogVisibility(true)
+            is OnboardingEvent.HideCrashlyticsDialog -> setCrashlyticsDialogVisibility(false)
         }
+    }
+
+    private fun observeCompletion() {
+        observeCompletionJob?.cancel()
+        observeCompletionJob = observeOnboardingCompletionUseCase()
+            .flowOn(dispatchers.io)
+            .onEach { completed ->
+                screenState.copyData { copy(isOnboardingCompleted = completed) }
+            }
+            .catch { t ->
+                if (t is CancellationException) throw t
+                screenState.copyData { copy(isOnboardingCompleted = false) }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun updateCurrentTab(index: Int) {
@@ -57,32 +62,22 @@ class OnboardingViewModel(
     }
 
     private fun completeOnboarding() {
-        flow {
-            repository.setOnboardingCompleted()
-            emit(Unit)
-        }
-            .onStart { screenState.copyData { copy(isOnboardingCompleted = false) } }
-            .onEach { screenState.copyData { copy(isOnboardingCompleted = true) } }
-            .onCompletion { cause ->
-                if (cause == null) {
-                    sendAction(OnboardingAction.OnboardingCompleted)
-                } else {
-                    screenState.copyData { copy(isOnboardingCompleted = false) }
-                }
-            }
-            .catch { _ ->
+        completeJob?.cancel()
+        completeJob = viewModelScope.launch {
+            screenState.copyData { copy(isOnboardingCompleted = true) }
+
+            runCatching {
+                withContext(dispatchers.io) { completeOnboardingUseCase() }
+            }.onSuccess {
+                sendAction(OnboardingAction.OnboardingCompleted)
+            }.onFailure { t ->
+                if (t is CancellationException) throw t
                 screenState.copyData { copy(isOnboardingCompleted = false) }
             }
-            .launchIn(viewModelScope)
+        }
     }
 
-    companion object {
-        fun provideFactory(repository: OnboardingRepository): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                    return OnboardingViewModel(repository) as T
-                }
-            }
+    private fun setCrashlyticsDialogVisibility(isVisible: Boolean) {
+        screenState.copyData { copy(isCrashlyticsDialogVisible = isVisible) }
     }
 }

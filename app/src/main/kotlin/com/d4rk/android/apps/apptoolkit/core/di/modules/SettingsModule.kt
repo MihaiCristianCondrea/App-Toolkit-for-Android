@@ -6,21 +6,21 @@ import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.Ap
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppDisplaySettingsProvider
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppPrivacySettingsProvider
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppSettingsProvider
-import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.PermissionsSettingsRepository
-import com.d4rk.android.libs.apptoolkit.app.about.data.DefaultAboutRepository
+import com.d4rk.android.libs.apptoolkit.app.about.data.repository.AboutRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
-import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.ObserveAboutInfoUseCase
+import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.GetAboutInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.ui.AboutViewModel
-import com.d4rk.android.libs.apptoolkit.app.advanced.data.CacheRepository
-import com.d4rk.android.libs.apptoolkit.app.advanced.data.DefaultCacheRepository
+import com.d4rk.android.libs.apptoolkit.app.advanced.data.repository.CacheRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.AdvancedSettingsViewModel
-import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.repository.DefaultUsageAndDiagnosticsRepository
+import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.repository.UsageAndDiagnosticsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageAndDiagnosticsRepository
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsViewModel
+import com.d4rk.android.libs.apptoolkit.app.permissions.data.repository.PermissionsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.permissions.domain.repository.PermissionsRepository
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.PermissionsViewModel
-import com.d4rk.android.libs.apptoolkit.app.settings.general.data.DefaultGeneralSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.GeneralSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsViewModel
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsViewModel
@@ -49,28 +49,25 @@ val settingsModule = module {
     single<AdvancedSettingsProvider> { AppAdvancedSettingsProvider(context = get()) }
     single<DisplaySettingsProvider> { AppDisplaySettingsProvider(context = get()) }
     single<PrivacySettingsProvider> { AppPrivacySettingsProvider(context = get()) }
-    single<BuildInfoProvider> { AppBuildInfoProvider(context = get()) }
+    single<BuildInfoProvider> { AppBuildInfoProvider() }
     single<GeneralSettingsContentProvider> { GeneralSettingsContentProvider() }
-    single<CacheRepository> { DefaultCacheRepository(context = get(), dispatchers = get()) }
+    single<CacheRepository> { CacheRepositoryImpl(context = get()) }
     single<AboutRepository> {
-        DefaultAboutRepository(
+        AboutRepositoryImpl(
             deviceProvider = get(),
-            configProvider = get(),
+            buildInfoProvider = get(),
             context = get(),
-            dispatchers = get(),
         )
     }
-    single { ObserveAboutInfoUseCase(repository = get()) }
+    single { GetAboutInfoUseCase(repository = get()) }
     single { CopyDeviceInfoUseCase(repository = get()) }
-    single<GeneralSettingsRepository> {
-        DefaultGeneralSettingsRepository(dispatchers = get())
-    }
+    single<GeneralSettingsRepository> { GeneralSettingsRepositoryImpl() }
     viewModel {
-        GeneralSettingsViewModel(repository = get())
+        GeneralSettingsViewModel(repository = get(), dispatchers = get())
     }
 
     single<PermissionsRepository> {
-        PermissionsSettingsRepository(
+        PermissionsRepositoryImpl(
             context = get(),
             dispatchers = get()
         )
@@ -81,18 +78,20 @@ val settingsModule = module {
         )
     }
 
-    viewModel { AdvancedSettingsViewModel(repository = get()) }
+    viewModel { AdvancedSettingsViewModel(repository = get(), dispatchers = get()) }
 
+    single<GetAboutInfoUseCase> { GetAboutInfoUseCase(repository = get()) }
     viewModel {
         AboutViewModel(
-            observeAboutInfo = get(),
+            getAboutInfo = get(),
             copyDeviceInfo = get(),
+            dispatchers = get(),
         )
     }
 
     single<UsageAndDiagnosticsRepository> {
-        DefaultUsageAndDiagnosticsRepository(
-            dataSource = CommonDataStore.getInstance(get()),
+        UsageAndDiagnosticsRepositoryImpl(
+            dataSource = get<CommonDataStore>(),
             configProvider = get(),
             dispatchers = get(),
         )

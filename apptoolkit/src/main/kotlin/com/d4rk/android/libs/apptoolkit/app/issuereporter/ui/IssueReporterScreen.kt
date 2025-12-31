@@ -63,22 +63,22 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInf
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.state.IssueReporterUiState
-import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.OutlinedIconButtonWithText
-import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.fab.AnimatedExtendedFloatingActionButton
-import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.fab.SmallFloatingActionButton
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.NoDataScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.ScreenStateHandler
-import com.d4rk.android.libs.apptoolkit.core.ui.components.modifiers.bounceClick
-import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.LargeTopAppBarWithScaffold
-import com.d4rk.android.libs.apptoolkit.core.ui.components.preferences.RadioButtonPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.components.snackbar.DefaultSnackbarHandler
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraExtraLargeVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.LargeHorizontalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.SmallFloatingActionButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraExtraLargeVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
@@ -121,7 +121,7 @@ fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
                     isVisible = true,
                     isExtended = true,
                     icon = Icons.Outlined.Link,
-                    onClick = { IntentsHelper.openUrl(context = context, url = issuesUrl) }
+                    onClick = { context.openUrl(issuesUrl) }
                 )
 
                 AnimatedExtendedFloatingActionButton(

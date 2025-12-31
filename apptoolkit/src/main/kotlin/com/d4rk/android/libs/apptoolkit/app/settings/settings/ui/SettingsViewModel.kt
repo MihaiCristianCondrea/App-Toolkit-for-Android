@@ -16,7 +16,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -25,6 +25,20 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * ViewModel responsible for managing the state and logic of the settings screen.
+ *
+ * This ViewModel handles loading settings configurations and updating the UI state accordingly.
+ * It communicates with a [SettingsProvider] to fetch the settings data.
+ *
+ * @param settingsProvider An implementation of [SettingsProvider] that supplies the settings configuration.
+ * @param dispatchers A provider for coroutine dispatchers, used for managing background tasks.
+ *
+ * @see ScreenViewModel
+ * @see SettingsConfig
+ * @see SettingsEvent
+ * @see SettingsAction
+ */
 class SettingsViewModel(
     private val settingsProvider: SettingsProvider,
     private val dispatchers: DispatcherProvider,
@@ -61,6 +75,15 @@ class SettingsViewModel(
                     when {
                         error is CancellationException -> Unit
                         error != null -> {
+                            screenState.setErrors(
+                                listOf(
+                                    UiSnackbar(
+                                        message = UiTextHelper.StringResource(
+                                            R.string.error_an_error_occurred
+                                        ),
+                                    ),
+                                ),
+                            )
                             screenState.updateState(ScreenState.Error())
                         }
                     }

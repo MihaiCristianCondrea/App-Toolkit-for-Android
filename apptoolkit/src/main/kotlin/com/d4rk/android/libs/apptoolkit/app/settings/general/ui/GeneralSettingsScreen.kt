@@ -11,11 +11,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.state.GeneralSettingsUiState
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.NoDataScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.ScreenStateHandler
-import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 

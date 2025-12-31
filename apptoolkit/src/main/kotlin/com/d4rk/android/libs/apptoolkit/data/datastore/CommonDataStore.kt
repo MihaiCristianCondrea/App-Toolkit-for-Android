@@ -12,13 +12,13 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.datasource.UsageAndDiagnosticsPreferencesDataSource
-import com.d4rk.android.libs.apptoolkit.app.onboarding.data.datasource.OnboardingPreferencesDataSource
+import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.local.UsageAndDiagnosticsPreferencesDataSource
+import com.d4rk.android.libs.apptoolkit.app.onboarding.data.local.OnboardingPreferencesDataSource
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.StandardDispatchers
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.DynamicPaletteVariant
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.DynamicPaletteVariant
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.StaticPaletteIds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel

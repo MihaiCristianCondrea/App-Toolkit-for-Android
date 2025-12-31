@@ -286,8 +286,15 @@
     <string name="support_offer_unavailable">Ez az adományozási lehetőség jelenleg nem érhető el.</string>
     <string name="non_paid_support">Nem fizetett támogatás</string>
     <string name="web_ad">Webes hirdetés</string>
+    <string name="sponsored_ad_label">● Szponzorált hirdetés</string>
     <string name="error_failed_to_load_sku_details">Nem sikerült betölteni az SKU részleteit</string>
     <string name="purchase_pending">Adományát a Google dolgozza fel. Értesítjük, ha teljes. Köszönöm.</string>
     <string name="purchase_thank_you">Köszönöm az adományt.</string>
     <string name="purchase_cancelled">Vásárlás lemondva</string>
+    <string name="error_an_error_occurred">Hiba történt</string>
+    <string name="error_failed_to_launch_review">A véleményezési folyamat indítása sikertelen</string>
+    <string name="error_failed_to_load_faq">A GYIK betöltése sikertelen</string>
+    <string name="error_failed_to_request_review">A véleménykérés sikertelen</string>
+    <string name="error_failed_to_update_app">Az alkalmazás frissítése sikertelen</string>
+    <string name="error_failed_to_load_consent_info">A hozzájárulási információk betöltése sikertelen</string>
 </resources>

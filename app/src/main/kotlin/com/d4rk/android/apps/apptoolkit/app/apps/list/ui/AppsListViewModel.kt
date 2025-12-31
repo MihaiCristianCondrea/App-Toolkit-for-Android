@@ -4,37 +4,40 @@ import androidx.lifecycle.viewModelScope
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.ToggleFavoriteUseCase
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.usecases.FetchDeveloperAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
+import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
+import com.d4rk.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppsListViewModel(
@@ -47,15 +50,18 @@ class AppsListViewModel(
 ) {
 
     private val fetchAppsTrigger = MutableSharedFlow<Unit>(replay = 1)
+    private var fetchJob: Job? = null
+    private var toggleJob: Job? = null
 
-    val favorites = flow { emitAll(observeFavoritesUseCase()) }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = emptySet()
-    )
+    val favorites = observeFavoritesUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = emptySet()
+        )
 
     val canOpenRandomApp = screenState
-        .map { state -> state.data?.apps?.isNotEmpty() == true }
+        .map { it.data?.apps?.isNotEmpty() == true }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -63,44 +69,7 @@ class AppsListViewModel(
         )
 
     init {
-        viewModelScope.launch {
-            fetchAppsTrigger
-                .flatMapLatest {
-                    fetchDeveloperAppsUseCase()
-                        .flowOn(dispatchers.io)
-                        .onCompletion { cause ->
-                            if (cause != null && cause !is CancellationException) {
-                                cause.printStackTrace()
-                                showLoadAppsError()
-                            }
-                        }
-                }
-                .collect { result ->
-                    when (result) {
-                        is DataState.Success -> {
-                            val apps = result.data.toImmutableList()
-
-                            if (apps.isEmpty()) {
-                                screenState.update { current ->
-                                    current.copy(
-                                        screenState = ScreenState.NoData(),
-                                        data = AppListUiState(apps = persistentListOf<AppInfo>())
-                                    )
-                                }
-                            } else {
-                                screenState.updateData(newState = ScreenState.Success()) { currentData ->
-                                    currentData.copy(apps = apps)
-                                }
-                            }
-                        }
-
-                        is DataState.Error -> showLoadAppsError()
-
-                        is DataState.Loading -> screenState.updateState(ScreenState.IsLoading())
-                    }
-                }
-        }
-
+        observeFetch()
         fetchAppsTrigger.tryEmit(Unit)
     }
 
@@ -114,27 +83,67 @@ class AppsListViewModel(
         }
     }
 
-    private fun showLoadAppsError() {
+    private fun observeFetch() {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch {
+            fetchAppsTrigger
+                .flatMapLatest {
+                    fetchDeveloperAppsUseCase()
+                        .flowOn(dispatchers.io)
+                        .onStart { screenState.setLoading() }
+                }
+                .catch { t ->
+                    if (t is CancellationException) throw t
+                    showLoadAppsError()
+                }
+                .collect { result ->
+                    when (result) {
+                        is DataState.Loading -> screenState.updateState(ScreenState.IsLoading())
+
+                        is DataState.Success -> {
+                            val apps = result.data.toImmutableList()
+                            if (apps.isEmpty()) {
+                                screenState.update { current ->
+                                    current.copy(
+                                        screenState = ScreenState.NoData(),
+                                        data = AppListUiState(apps = persistentListOf())
+                                    )
+                                }
+                            } else {
+                                screenState.updateData(newState = ScreenState.Success()) { current ->
+                                    current.copy(apps = apps)
+                                }
+                            }
+                        }
+
+                        is DataState.Error -> showLoadAppsError(result.error)
+                    }
+                }
+        }
+    }
+
+    private fun showLoadAppsError(error: AppErrors? = null) {
         screenState.updateState(ScreenState.Error())
         screenState.showSnackbar(
             UiSnackbar(
-                message = UiTextHelper.StringResource(R.string.error_failed_to_load_apps),
+                message = error?.toErrorMessage()
+                    ?: UiTextHelper.StringResource(R.string.error_failed_to_load_apps),
                 isError = true,
-                timeStamp = System.currentTimeMillis(),
+                timeStamp = System.nanoTime(),
                 type = ScreenMessageType.SNACKBAR,
             )
         )
     }
 
     fun toggleFavorite(packageName: String) {
-        viewModelScope.launch(dispatchers.io) {
-            runCatching { toggleFavoriteUseCase(packageName) }
-                .onFailure { error ->
-                    error.printStackTrace()
-                    screenState.update { currentState ->
-                        currentState.copy(screenState = ScreenState.Error())
-                    }
-                }
+        toggleJob?.cancel()
+        toggleJob = viewModelScope.launch {
+            runCatching {
+                withContext(dispatchers.io) { toggleFavoriteUseCase(packageName) }
+            }.onFailure { t ->
+                if (t is CancellationException) throw t
+                screenState.updateState(ScreenState.Error())
+            }
         }
     }
 }

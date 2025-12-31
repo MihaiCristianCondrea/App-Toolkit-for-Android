@@ -286,8 +286,15 @@
     <string name="support_offer_unavailable">Hindi kasalukuyang available ang opsyong ito ng donasyon.</string>
     <string name="non_paid_support">Hindi bayad na suporta</string>
     <string name="web_ad">Web ad</string>
+    <string name="sponsored_ad_label">● Naka-sponsor na ad</string>
     <string name="error_failed_to_load_sku_details">Nabigong i-load ang mga detalye ng SKU</string>
     <string name="purchase_pending">Ang iyong donasyon ay pinoproseso ng Google. Sasabihan ka namin kapag kumpleto na ito. Salamat.</string>
     <string name="purchase_thank_you">Salamat sa iyong donasyon.</string>
     <string name="purchase_cancelled">Bumili ng kanselahin</string>
+    <string name="error_an_error_occurred">May naganap na error</string>
+    <string name="error_failed_to_launch_review">Nabigong simulan ang daloy ng pagsusuri</string>
+    <string name="error_failed_to_load_faq">Nabigong i-load ang mga FAQ</string>
+    <string name="error_failed_to_request_review">Nabigong humiling ng pagsusuri</string>
+    <string name="error_failed_to_update_app">Nabigong i-update ang app</string>
+    <string name="error_failed_to_load_consent_info">Nabigong i-load ang impormasyon ng pahintulot</string>
 </resources>

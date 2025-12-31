@@ -1,9 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.app.help.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.RateReview
@@ -21,42 +17,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
-import com.d4rk.android.libs.apptoolkit.app.help.ui.components.ContactUsCard
-import com.d4rk.android.libs.apptoolkit.app.help.ui.components.HelpQuestionsList
-import com.d4rk.android.libs.apptoolkit.app.help.ui.components.dropdown.HelpScreenMenuActions
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
-import com.d4rk.android.libs.apptoolkit.app.help.ui.model.HelpScreenConfig
 import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.ads.AdsConfig
-import com.d4rk.android.libs.apptoolkit.core.ui.components.ads.HelpNativeAdCard
-import com.d4rk.android.libs.apptoolkit.core.ui.components.buttons.fab.AnimatedExtendedFloatingActionButton
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.LoadingScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.NoDataScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.components.layouts.ScreenStateHandler
-import com.d4rk.android.libs.apptoolkit.core.ui.components.navigation.LargeTopAppBarWithScaffold
-import com.d4rk.android.libs.apptoolkit.core.ui.components.spacers.ExtraLargeVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.app.help.ui.views.content.HelpScreenContent
+import com.d4rk.android.libs.apptoolkit.app.help.ui.views.dropdowns.HelpScreenMenuActions
+import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.findActivity
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.isInAppReviewAvailable
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.IntentsHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.ReviewHelper
-import kotlinx.collections.immutable.ImmutableList
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.activity.isInAppReviewAvailable
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.findActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.ReviewHelper
 import kotlinx.coroutines.flow.distinctUntilChanged
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.qualifier.named
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HelpScreen(
-    config: HelpScreenConfig,
+    config: AppVersionInfo,
 ) {
     val viewModel: HelpViewModel = koinViewModel()
     val context = LocalContext.current
@@ -108,9 +94,8 @@ fun HelpScreen(
                                 scope = scope
                             )
                         } else {
-                            IntentsHelper.openUrl(
-                                context = context,
-                                url = "https://mihaicristiancondrea.github.io/profile/#faqs"
+                            context.openUrl(
+                                "https://mihaicristiancondrea.github.io/profile/#faqs"
                             )
                         }
                     }
@@ -159,52 +144,5 @@ fun HelpScreen(
                 )
             }
         )
-    }
-}
-
-@Composable
-fun HelpScreenContent(
-    questions: ImmutableList<FaqItem>,
-    paddingValues: PaddingValues
-) {
-    val context = LocalContext.current
-    val adsConfig: AdsConfig = koinInject(qualifier = named("help_large_banner_ad"))
-
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(
-            top = paddingValues.calculateTopPadding(),
-            bottom = paddingValues.calculateBottomPadding(),
-            start = SizeConstants.LargeSize,
-            end = SizeConstants.LargeSize
-        ),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
-    ) {
-        item {
-            Text(text = stringResource(id = R.string.popular_help_resources))
-        }
-
-        item {
-            HelpQuestionsList(questions = questions)
-        }
-
-        item {
-            HelpNativeAdCard(
-                adUnitId = adsConfig.bannerAdUnitId,
-                modifier = Modifier.animateItem()
-            )
-        }
-
-        item {
-            ContactUsCard(
-                onClick = {
-                    IntentsHelper.sendEmailToDeveloper(
-                        context = context,
-                        applicationNameRes = R.string.app_name
-                    )
-                }
-            )
-            repeat(3) { ExtraLargeVerticalSpacer() }
-        }
     }
 }

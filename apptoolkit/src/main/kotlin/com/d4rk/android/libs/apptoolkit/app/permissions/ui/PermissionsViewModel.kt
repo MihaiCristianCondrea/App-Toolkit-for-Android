@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.permissions.ui
 
 import androidx.lifecycle.viewModelScope
+import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.permissions.domain.repository.PermissionsRepository
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsAction
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
@@ -13,15 +14,26 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
-import com.d4rk.android.libs.apptoolkit.core.utils.helpers.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-
-/** ViewModel responsible for exposing the permissions configuration to the UI layer. */
+/**
+ * ViewModel for the permissions screen.
+ *
+ * This ViewModel is responsible for orchestrating the retrieval of permission configurations
+ * from the [PermissionsRepository] and exposing them to the UI. It handles the loading state,
+ * success state with the configuration data, and various error states (e.g., network errors,
+ * no permissions found).
+ *
+ * It extends [ScreenViewModel] to manage the UI state ([UiStateScreen]) and handle UI events
+ * ([PermissionsEvent]) and actions ([PermissionsAction]).
+ *
+ * @param permissionsRepository The repository responsible for fetching permissions data info.
+ */
 class PermissionsViewModel(
     private val permissionsRepository: PermissionsRepository,
 ) :
@@ -50,7 +62,9 @@ class PermissionsViewModel(
                         latestConfig?.categories.isNullOrEmpty() -> {
                             screenState.setErrors(
                                 listOf(
-                                    UiSnackbar(message = UiTextHelper.DynamicString("No settings found"))
+                                    UiSnackbar(
+                                        message = UiTextHelper.StringResource(R.string.error_no_settings_found)
+                                    )
                                 )
                             )
                             screenState.updateState(ScreenState.NoData())
@@ -66,9 +80,7 @@ class PermissionsViewModel(
                     screenState.setErrors(
                         listOf(
                             UiSnackbar(
-                                message = UiTextHelper.DynamicString(
-                                    error.message ?: "Something went wrong"
-                                )
+                                message = UiTextHelper.StringResource(R.string.error_an_error_occurred)
                             )
                         )
                     )
@@ -84,7 +96,9 @@ class PermissionsViewModel(
                     } else {
                         screenState.setErrors(
                             listOf(
-                                UiSnackbar(message = UiTextHelper.DynamicString("No settings found"))
+                                UiSnackbar(
+                                    message = UiTextHelper.StringResource(R.string.error_no_settings_found)
+                                )
                             )
                         )
                     }
