@@ -14,6 +14,6 @@ sealed interface AppErrors : Error {
     }
 
     enum class UseCase : AppErrors {
-        NO_DATA, FAILED_TO_LOAD_APPS // TODO: keep FAILED_TO_LOAD_APPS but NO_DATA should not be there
+        NO_DATA, FAILED_TO_LOAD_APPS // TODO: keep these
     }
 }
