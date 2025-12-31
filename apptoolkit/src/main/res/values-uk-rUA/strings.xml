@@ -291,4 +291,10 @@
     <string name="purchase_pending">Ваша пожертва обробляється Google. Ми повідомимо вас, коли він завершиться. Дякую.</string>
     <string name="purchase_thank_you">Дякую за пожертву.</string>
     <string name="purchase_cancelled">Купівля скасована</string>
+    <string name="error_an_error_occurred">Сталася помилка</string>
+    <string name="error_failed_to_launch_review">Не вдалося запустити процес відгуку</string>
+    <string name="error_failed_to_load_faq">Не вдалося завантажити запитання та відповіді</string>
+    <string name="error_failed_to_request_review">Не вдалося надіслати запит на відгук</string>
+    <string name="error_failed_to_update_app">Не вдалося оновити застосунок</string>
+    <string name="error_failed_to_load_consent_info">Не вдалося завантажити інформацію про згоду</string>
 </resources>

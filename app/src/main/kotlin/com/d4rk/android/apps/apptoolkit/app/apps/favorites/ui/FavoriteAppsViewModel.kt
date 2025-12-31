@@ -82,7 +82,7 @@ class FavoriteAppsViewModel(
                     screenState.updateState(ScreenState.Error())
                     screenState.showSnackbar(
                         UiSnackbar(
-                            message = UiTextHelper.StringResource(R.string.error_an_error_occurred),
+                            message = UiTextHelper.StringResource(com.d4rk.android.libs.apptoolkit.R.string.error_an_error_occurred),
                             isError = true,
                             timeStamp = System.nanoTime(),
                             type = ScreenMessageType.SNACKBAR,
@@ -106,7 +106,7 @@ class FavoriteAppsViewModel(
                             screenState.updateState(ScreenState.Error())
                             screenState.showSnackbar(
                                 UiSnackbar(
-                                    message = UiTextHelper.StringResource(R.string.error_an_error_occurred),
+                                    message = UiTextHelper.StringResource(com.d4rk.android.libs.apptoolkit.R.string.error_an_error_occurred),
                                     isError = true,
                                     timeStamp = System.nanoTime(),
                                     type = ScreenMessageType.SNACKBAR,

@@ -15,5 +15,5 @@ fun AppErrors.toErrorMessage(): UiTextHelper =
     when (this) {
         AppErrors.UseCase.NO_DATA -> UiTextHelper.StringResource(R.string.error_failed_to_fetch_our_apps)
         AppErrors.UseCase.FAILED_TO_LOAD_APPS -> UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
-        else -> asUiText()
+        else -> asUiText() // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun Errors.asUiText(): UiTextHelper
     }

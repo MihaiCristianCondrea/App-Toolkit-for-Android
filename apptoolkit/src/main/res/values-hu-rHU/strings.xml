@@ -291,4 +291,10 @@
     <string name="purchase_pending">Adományát a Google dolgozza fel. Értesítjük, ha teljes. Köszönöm.</string>
     <string name="purchase_thank_you">Köszönöm az adományt.</string>
     <string name="purchase_cancelled">Vásárlás lemondva</string>
+    <string name="error_an_error_occurred">Hiba történt</string>
+    <string name="error_failed_to_launch_review">A véleményezési folyamat indítása sikertelen</string>
+    <string name="error_failed_to_load_faq">A GYIK betöltése sikertelen</string>
+    <string name="error_failed_to_request_review">A véleménykérés sikertelen</string>
+    <string name="error_failed_to_update_app">Az alkalmazás frissítése sikertelen</string>
+    <string name="error_failed_to_load_consent_info">A hozzájárulási információk betöltése sikertelen</string>
 </resources>

@@ -291,4 +291,10 @@
     <string name="purchase_pending">Votre don est traité par Google. Nous vous informerons quand il sera terminé. Merci.</string>
     <string name="purchase_thank_you">Merci pour votre don.</string>
     <string name="purchase_cancelled">Acheter annulé</string>
+    <string name="error_an_error_occurred">Une erreur s\'est produite</string>
+    <string name="error_failed_to_launch_review">Échec du lancement du flux d\'avis</string>
+    <string name="error_failed_to_load_faq">Échec du chargement de la FAQ</string>
+    <string name="error_failed_to_request_review">Échec de la demande d\'avis</string>
+    <string name="error_failed_to_update_app">Échec de la mise à jour de l\'application</string>
+    <string name="error_failed_to_load_consent_info">Échec du chargement des informations de consentement</string>
 </resources>

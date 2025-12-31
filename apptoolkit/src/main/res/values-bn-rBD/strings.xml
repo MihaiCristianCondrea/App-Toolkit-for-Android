@@ -291,4 +291,10 @@
     <string name="purchase_pending">আপনার অনুদান গুগল দ্বারা প্রক্রিয়া করা হচ্ছে। এটি সম্পূর্ণ হলে আমরা আপনাকে অবহিত করব। আপনাকে ধন্যবাদ.</string>
     <string name="purchase_thank_you">আপনার অনুদানের জন্য আপনাকে ধন্যবাদ.</string>
     <string name="purchase_cancelled">ক্রয় বাতিল</string>
+    <string name="error_an_error_occurred">একটি ত্রুটি ঘটেছে</string>
+    <string name="error_failed_to_launch_review">রিভিউ ফ্লো চালু করতে ব্যর্থ</string>
+    <string name="error_failed_to_load_faq">প্রশ্নোত্তর লোড করতে ব্যর্থ</string>
+    <string name="error_failed_to_request_review">রিভিউ অনুরোধ করতে ব্যর্থ</string>
+    <string name="error_failed_to_update_app">অ্যাপ আপডেট করতে ব্যর্থ</string>
+    <string name="error_failed_to_load_consent_info">সম্মতি সম্পর্কিত তথ্য লোড করতে ব্যর্থ</string>
 </resources>

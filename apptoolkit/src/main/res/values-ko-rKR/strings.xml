@@ -291,4 +291,10 @@
     <string name="purchase_pending">기부금은 Google에서 처리 중입니다. 완료되면 알려 드리겠습니다. 감사합니다.</string>
     <string name="purchase_thank_you">기부해 주셔서 감사합니다.</string>
     <string name="purchase_cancelled">구매 취소</string>
+    <string name="error_an_error_occurred">오류가 발생했습니다</string>
+    <string name="error_failed_to_launch_review">리뷰 흐름을 시작하지 못했습니다</string>
+    <string name="error_failed_to_load_faq">FAQ를 로드하지 못했습니다</string>
+    <string name="error_failed_to_request_review">리뷰 요청에 실패했습니다</string>
+    <string name="error_failed_to_update_app">앱을 업데이트하지 못했습니다</string>
+    <string name="error_failed_to_load_consent_info">동의 정보를 로드하지 못했습니다</string>
 </resources>

@@ -291,4 +291,10 @@
     <string name="purchase_pending">Google procesa su donación. Te notificaremos cuando esté completo. Gracias.</string>
     <string name="purchase_thank_you">Gracias por tu donación.</string>
     <string name="purchase_cancelled">Compra cancelada</string>
+    <string name="error_an_error_occurred">Se produjo un error</string>
+    <string name="error_failed_to_launch_review">No se pudo iniciar el flujo de reseñas</string>
+    <string name="error_failed_to_load_faq">No se pudieron cargar las preguntas frecuentes</string>
+    <string name="error_failed_to_request_review">No se pudo solicitar la reseña</string>
+    <string name="error_failed_to_update_app">No se pudo actualizar la aplicación</string>
+    <string name="error_failed_to_load_consent_info">No se pudo cargar la información de consentimiento</string>
 </resources>

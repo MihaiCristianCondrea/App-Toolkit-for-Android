@@ -291,4 +291,10 @@
     <string name="purchase_pending">การบริจาคของคุณกำลังดำเนินการโดย Google เราจะแจ้งให้คุณทราบเมื่อเสร็จสิ้น ขอบคุณ.</string>
     <string name="purchase_thank_you">ขอบคุณสำหรับการบริจาค.</string>
     <string name="purchase_cancelled">การซื้อที่ถูกยกเลิก</string>
+    <string name="error_an_error_occurred">เกิดข้อผิดพลาด</string>
+    <string name="error_failed_to_launch_review">ไม่สามารถเริ่มกระบวนการให้คะแนนได้</string>
+    <string name="error_failed_to_load_faq">ไม่สามารถโหลดคำถามที่พบบ่อยได้</string>
+    <string name="error_failed_to_request_review">ไม่สามารถขอให้คะแนนได้</string>
+    <string name="error_failed_to_update_app">ไม่สามารถอัปเดตแอปได้</string>
+    <string name="error_failed_to_load_consent_info">ไม่สามารถโหลดข้อมูลความยินยอมได้</string>
 </resources>

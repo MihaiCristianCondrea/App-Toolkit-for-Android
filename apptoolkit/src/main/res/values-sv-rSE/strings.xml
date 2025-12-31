@@ -291,4 +291,10 @@
     <string name="purchase_pending">Din donation behandlas av Google. Vi kommer att meddela dig när den är klar. Tack.</string>
     <string name="purchase_thank_you">Tack för din donation.</string>
     <string name="purchase_cancelled">Köp avbruten</string>
+    <string name="error_an_error_occurred">Ett fel inträffade</string>
+    <string name="error_failed_to_launch_review">Det gick inte att starta granskningsflödet</string>
+    <string name="error_failed_to_load_faq">Det gick inte att läsa in vanliga frågor</string>
+    <string name="error_failed_to_request_review">Det gick inte att begära en recension</string>
+    <string name="error_failed_to_update_app">Det gick inte att uppdatera appen</string>
+    <string name="error_failed_to_load_consent_info">Det gick inte att läsa in samtyckesinformationen</string>
 </resources>

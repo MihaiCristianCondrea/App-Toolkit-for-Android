@@ -291,4 +291,10 @@
     <string name="purchase_pending">Вашето дарение се обработва от Google. Ще ви уведомим, когато приключи. Благодаря ти.</string>
     <string name="purchase_thank_you">Благодаря ви за дарението.</string>
     <string name="purchase_cancelled">Покупка отменена</string>
+    <string name="error_an_error_occurred">Възникна грешка</string>
+    <string name="error_failed_to_launch_review">Неуспешно стартиране на потока за отзиви</string>
+    <string name="error_failed_to_load_faq">Неуспешно зареждане на често задаваните въпроси</string>
+    <string name="error_failed_to_request_review">Неуспешно заявяване на отзив</string>
+    <string name="error_failed_to_update_app">Неуспешно актуализиране на приложението</string>
+    <string name="error_failed_to_load_consent_info">Неуспешно зареждане на информация за съгласие</string>
 </resources>

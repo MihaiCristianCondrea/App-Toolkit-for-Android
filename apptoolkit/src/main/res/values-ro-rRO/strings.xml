@@ -291,4 +291,10 @@
     <string name="purchase_pending">Donația dvs. este procesată de Google. Vă vom anunța când va fi finalizat. Vă mulțumesc.</string>
     <string name="purchase_thank_you">Vă mulțumim pentru donație.</string>
     <string name="purchase_cancelled">Achiziția a fost anulată</string>
+    <string name="error_an_error_occurred">A apărut o eroare</string>
+    <string name="error_failed_to_launch_review">Nu s-a putut lansa fluxul de recenzii</string>
+    <string name="error_failed_to_load_faq">Nu s-au putut încărca întrebările frecvente</string>
+    <string name="error_failed_to_request_review">Nu s-a putut solicita recenzia</string>
+    <string name="error_failed_to_update_app">Nu s-a putut actualiza aplicația</string>
+    <string name="error_failed_to_load_consent_info">Nu s-au putut încărca informațiile privind consimțământul</string>
 </resources>

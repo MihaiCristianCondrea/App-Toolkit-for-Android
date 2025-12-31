@@ -291,4 +291,10 @@
     <string name="purchase_pending">Ihre Spende wird von Google verarbeitet. Wir werden Sie benachrichtigen, wenn es abgeschlossen ist. Danke schön.</string>
     <string name="purchase_thank_you">Vielen Dank für Ihre Spende.</string>
     <string name="purchase_cancelled">Kauf storniert</string>
+    <string name="error_an_error_occurred">Es ist ein Fehler aufgetreten</string>
+    <string name="error_failed_to_launch_review">Der Start des Bewertungsablaufs ist fehlgeschlagen</string>
+    <string name="error_failed_to_load_faq">Die FAQs konnten nicht geladen werden</string>
+    <string name="error_failed_to_request_review">Bewertung konnte nicht angefordert werden</string>
+    <string name="error_failed_to_update_app">App konnte nicht aktualisiert werden</string>
+    <string name="error_failed_to_load_consent_info">Einverständnisinformationen konnten nicht geladen werden</string>
 </resources>

@@ -291,4 +291,10 @@
     <string name="purchase_pending">あなたの寄付はGoogleによって処理されています。完了したら通知します。ありがとう！</string>
     <string name="purchase_thank_you">寄付ありがとうございます！</string>
     <string name="purchase_cancelled">キャンセルされた購入</string>
+    <string name="error_an_error_occurred">エラーが発生しました</string>
+    <string name="error_failed_to_launch_review">レビュー フローを開始できませんでした</string>
+    <string name="error_failed_to_load_faq">FAQ を読み込めませんでした</string>
+    <string name="error_failed_to_request_review">レビューをリクエストできませんでした</string>
+    <string name="error_failed_to_update_app">アプリを更新できませんでした</string>
+    <string name="error_failed_to_load_consent_info">同意情報を読み込めませんでした</string>
 </resources>
