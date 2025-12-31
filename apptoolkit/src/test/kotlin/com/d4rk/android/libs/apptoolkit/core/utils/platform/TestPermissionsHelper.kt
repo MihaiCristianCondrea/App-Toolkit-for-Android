@@ -142,11 +142,11 @@ class TestPermissionsHelper {
         targets.forEach { mockkStatic(it) }
 
         return runCatching(block)
-                .also {
-                    targets.reversed().forEach { k ->
-                        runCatching { unmockkStatic(k) }
-                    }
+            .also {
+                targets.reversed().forEach { k ->
+                    runCatching { unmockkStatic(k) }
                 }
-                .getOrThrow()
+            }
+            .getOrThrow()
     }
 }

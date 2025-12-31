@@ -27,7 +27,7 @@ fun Context.startActivitySafely(
 ): Boolean {
     val launchIntent = if (addNewTaskFlag) intent.requireNewTask(this) else intent
 
-    return try {
+    return try { // TODO: Make try catch to be runCatching
         startActivity(launchIntent)
         true
     } catch (t: ActivityNotFoundException) {

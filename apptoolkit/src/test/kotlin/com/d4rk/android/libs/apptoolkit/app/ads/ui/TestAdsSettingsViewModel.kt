@@ -28,7 +28,7 @@ class TestAdsSettingsViewModel {
     }
 
     private fun testDispatchers(): DispatcherProvider =
-            TestDispatchers(dispatcherExtension.testDispatcher)
+        TestDispatchers(dispatcherExtension.testDispatcher)
 
     private class FakeAdsSettingsRepository(
         override val defaultAdsEnabled: Boolean = true
@@ -60,21 +60,23 @@ class TestAdsSettingsViewModel {
     }
 
     @Test
-    fun `emission error sets default and error state`() = runTest(dispatcherExtension.testDispatcher) {
-        val repo = object : AdsSettingsRepository {
-            override val defaultAdsEnabled: Boolean = false
-            override fun observeAdsEnabled(): Flow<Boolean> = flow { throw IOException("boom") }
-            override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> = Result.Success(Unit)
+    fun `emission error sets default and error state`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repo = object : AdsSettingsRepository {
+                override val defaultAdsEnabled: Boolean = false
+                override fun observeAdsEnabled(): Flow<Boolean> = flow { throw IOException("boom") }
+                override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> =
+                    Result.Success(Unit)
+            }
+
+            val viewModel = AdsSettingsViewModel(repository = repo, dispatchers = testDispatchers())
+
+            advanceUntilIdle()
+
+            val state = viewModel.uiState.value
+            assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
+            assertThat(state.data?.adsEnabled).isFalse()
         }
-
-        val viewModel = AdsSettingsViewModel(repository = repo, dispatchers = testDispatchers())
-
-        advanceUntilIdle()
-
-        val state = viewModel.uiState.value
-        assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
-        assertThat(state.data?.adsEnabled).isFalse()
-    }
 
     @Test
     fun `setAdsEnabled success updates state`() = runTest(dispatcherExtension.testDispatcher) {

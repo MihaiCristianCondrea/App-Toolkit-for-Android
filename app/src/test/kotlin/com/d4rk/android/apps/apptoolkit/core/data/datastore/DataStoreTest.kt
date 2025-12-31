@@ -27,7 +27,7 @@ class DataStoreTest {
         val dataStore = DataStore(context = context, dispatchers = dispatchers)
 
         val dataStoreFile =
-                context.preferencesDataStoreFile(DataStoreNamesConstants.DATA_STORE_SETTINGS)
+            context.preferencesDataStoreFile(DataStoreNamesConstants.DATA_STORE_SETTINGS)
 
         val expectedTheme = "dark"
 

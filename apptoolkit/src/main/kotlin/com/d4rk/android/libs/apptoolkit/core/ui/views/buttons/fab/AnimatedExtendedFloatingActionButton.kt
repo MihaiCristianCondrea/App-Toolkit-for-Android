@@ -51,10 +51,10 @@ fun AnimatedExtendedFloatingActionButton(
     if (animatedScale > 0f) {
         ExtendedFloatingActionButton(
             onClick = {
-            view.playSoundEffect(SoundEffectConstants.CLICK)
-            hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-            onClick()
-        }, icon = icon, text = text ?: {}, expanded = expanded, modifier = modifier
+                view.playSoundEffect(SoundEffectConstants.CLICK)
+                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                onClick()
+            }, icon = icon, text = text ?: {}, expanded = expanded, modifier = modifier
                 .bounceClick()
                 .graphicsLayer {
                     scaleX = animatedScale

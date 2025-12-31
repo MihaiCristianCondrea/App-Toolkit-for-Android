@@ -41,16 +41,15 @@ class IssueReporterViewModelTest {
     }
 
     private inline fun <T> withMainDispatcher(
-        dispatcher: CoroutineDispatcher ,
+        dispatcher: CoroutineDispatcher,
         block: () -> T
     ): T {
         Dispatchers.setMain(dispatcher)
         return runCatching { block() }
-                .also {
-                    // Don’t let cleanup override test failures.
-                    runCatching { Dispatchers.resetMain() }
-                }
-                .getOrThrow()
+            .also {
+                runCatching { Dispatchers.resetMain() }
+            }
+            .getOrThrow()
     }
 
     @Test
@@ -81,7 +80,8 @@ class IssueReporterViewModelTest {
             val captured = slot<SendIssueReportUseCase.Params>()
             every { useCase.invoke(capture(captured)) } returns flowOf(IssueReportResult.Success("url"))
 
-            val viewModel = IssueReporterViewModel(useCase, githubTarget, "token", deviceInfoProvider)
+            val viewModel =
+                IssueReporterViewModel(useCase, githubTarget, "token", deviceInfoProvider)
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
             viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))
@@ -95,7 +95,7 @@ class IssueReporterViewModelTest {
             assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
             assertThat(state.data?.issueUrl).isEqualTo("url")
             assertThat((snackbar.message as UiTextHelper.StringResource).resourceId)
-                    .isEqualTo(R.string.snack_report_success)
+                .isEqualTo(R.string.snack_report_success)
             assertThat(captured.captured.token).isEqualTo("token")
         }
     }
@@ -148,7 +148,7 @@ class IssueReporterViewModelTest {
             val snackbar = state.snackbar!!
             assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
             assertThat((snackbar.message as UiTextHelper.StringResource).resourceId)
-                    .isEqualTo(R.string.snack_report_failed)
+                .isEqualTo(R.string.snack_report_failed)
             confirmVerified(useCase)
         }
     }
@@ -185,7 +185,9 @@ class IssueReporterViewModelTest {
             val state = viewModel.uiState.value
             val snackbar = state.snackbar!!
             assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
-            assertThat((snackbar.message as UiTextHelper.StringResource).resourceId).isEqualTo(expected)
+            assertThat((snackbar.message as UiTextHelper.StringResource).resourceId).isEqualTo(
+                expected
+            )
         }
     }
 }

@@ -36,11 +36,11 @@ class TestAboutRepositoryImpl {
     }
 
     private fun repository(context: Context = mockk()): AboutRepositoryImpl =
-            AboutRepositoryImpl(
-                deviceProvider = deviceProvider,
-                buildInfoProvider = buildInfoProvider,
-                context = context,
-            )
+        AboutRepositoryImpl(
+            deviceProvider = deviceProvider,
+            buildInfoProvider = buildInfoProvider,
+            context = context,
+        )
 
     @Test
     fun `getAboutInfo returns expected info`() = runTest(dispatcherExtension.testDispatcher) {
@@ -58,15 +58,16 @@ class TestAboutRepositoryImpl {
         val ctx = mockk<Context>(relaxed = true)
         val repo = repository(ctx)
 
-        val extFile = "com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextExtensionsKt"
+        val extFile =
+            "com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextExtensionsKt"
         mockkStatic(extFile)
 
-        try {
+        try { // TODO: Make try catch to be runCatching
             every { ctx.copyTextToClipboard(any(), any(), any()) } returns true
 
             val copied = repo.copyDeviceInfo("label", "info")
             verify {
-                ctx.copyTextToClipboard(
+                ctx.copyTextToClipboard( // FIXME: The result of `copyTextToClipboard` is not used
                     "label",
                     "info",
                     any()

@@ -29,7 +29,7 @@ import kotlin.test.assertFailsWith
 class TestIssueReporterRepository {
 
     private fun testDispatchers(scheduler: TestCoroutineScheduler) =
-            TestDispatchers(StandardTestDispatcher(scheduler))
+        TestDispatchers(StandardTestDispatcher(scheduler))
 
     private fun createRepository(
         client: HttpClient,
@@ -45,11 +45,11 @@ class TestIssueReporterRepository {
         desc: String = "d",
         email: String? = null,
     ): Report = Report(
-        title ,
-        desc ,
-        mockk(relaxed = true) ,
-        ExtraInfo() ,
-        email ,
+        title,
+        desc,
+        mockk(relaxed = true),
+        ExtraInfo(),
+        email,
     )
 
     private val target = GithubTarget("user", "repo")
@@ -64,7 +64,11 @@ class TestIssueReporterRepository {
         val client = HttpClient(engine) { install(ContentNegotiation) { json() } }
         val repository = createRepository(client = client, scheduler = testScheduler)
 
-        val result = repository.sendReport(report("title", "desc", "me@test.com"), target, token = "token123")
+        val result = repository.sendReport(
+            report("title", "desc", "me@test.com"),
+            target,
+            token = "token123"
+        )
 
         assertThat(result).isInstanceOf(IssueReportResult.Success::class.java)
         assertThat((result as IssueReportResult.Success).url).isEqualTo("https://example.com/issue/1")
@@ -150,7 +154,7 @@ class TestIssueReporterRepository {
         repository.sendReport(report(), target)
 
         assertThat(capturedRequest?.headers?.get(HttpHeaders.Accept))
-                .isEqualTo("application/vnd.github+json")
+            .isEqualTo("application/vnd.github+json")
     }
 
     @Test

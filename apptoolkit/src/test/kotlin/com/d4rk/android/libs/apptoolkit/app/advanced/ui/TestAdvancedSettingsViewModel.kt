@@ -20,7 +20,7 @@ class FakeCacheRepository(private val result: Result<Unit>) : CacheRepository {
     override fun clearCache(): Flow<Result<Unit>> = flowOf(result)
 }
 
- class HotFakeCacheRepository : CacheRepository {
+class HotFakeCacheRepository : CacheRepository {
     private val flow = MutableSharedFlow<Result<Unit>>(replay = 0, extraBufferCapacity = 1)
     override fun clearCache(): Flow<Result<Unit>> = flow
     suspend fun emit(result: Result<Unit>) = flow.emit(result)
@@ -43,7 +43,7 @@ class TestAdvancedSettingsViewModel {
         advanceUntilIdle()
 
         assertThat(viewModel.uiState.value.data?.cacheClearMessage)
-                .isEqualTo(R.string.cache_cleared_success)
+            .isEqualTo(R.string.cache_cleared_success)
 
         viewModel.onEvent(AdvancedSettingsEvent.MessageShown)
         advanceUntilIdle()
@@ -62,7 +62,7 @@ class TestAdvancedSettingsViewModel {
         advanceUntilIdle()
 
         assertThat(viewModel.uiState.value.data?.cacheClearMessage)
-                .isEqualTo(R.string.cache_cleared_error)
+            .isEqualTo(R.string.cache_cleared_error)
     }
 
     @Test
@@ -80,7 +80,7 @@ class TestAdvancedSettingsViewModel {
             advanceUntilIdle()
             repository.emit(Result.Success(Unit))
             assertThat(awaitItem().data?.cacheClearMessage)
-                    .isEqualTo(R.string.cache_cleared_success)
+                .isEqualTo(R.string.cache_cleared_success)
 
             viewModel.onEvent(AdvancedSettingsEvent.MessageShown)
             assertThat(awaitItem().data?.cacheClearMessage).isNull()
@@ -89,7 +89,7 @@ class TestAdvancedSettingsViewModel {
             advanceUntilIdle()
             repository.emit(Result.Error(Exception("boom")))
             assertThat(awaitItem().data?.cacheClearMessage)
-                    .isEqualTo(R.string.cache_cleared_error)
+                .isEqualTo(R.string.cache_cleared_error)
 
             cancelAndIgnoreRemainingEvents()
         }

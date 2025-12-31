@@ -128,7 +128,12 @@ class ClipboardHelperTest {
                 )
 
                 assertFalse(callbackInvoked)
-                verify(exactly = 1) { Log.w(CLIPBOARD_HELPER_LOG_TAG, "Clipboard service unavailable") }
+                verify(exactly = 1) {
+                    Log.w(
+                        CLIPBOARD_HELPER_LOG_TAG,
+                        "Clipboard service unavailable"
+                    )
+                }
                 assertFalse(result)
             },
             finallyBlock = {

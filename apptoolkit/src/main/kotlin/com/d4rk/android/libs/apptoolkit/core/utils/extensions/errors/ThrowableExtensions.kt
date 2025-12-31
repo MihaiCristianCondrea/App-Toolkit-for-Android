@@ -21,6 +21,7 @@ fun Throwable.toError(default: Errors = Errors.UseCase.NO_DATA): Errors =
     when (this) {
         is UnknownHostException,
         is ConnectException -> Errors.Network.NO_INTERNET
+
         is SocketTimeoutException -> Errors.Network.REQUEST_TIMEOUT
         is SerializationException -> Errors.Network.SERIALIZATION
         is SQLException, is SQLiteException -> Errors.Database.DATABASE_OPERATION_FAILED

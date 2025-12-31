@@ -29,7 +29,7 @@ class TestGeneralSettingsViewModel {
      * otherwise `flowOn(dispatchers.default)` runs on a different scheduler and never advances.
      */
     private fun testDispatchers(): DispatcherProvider =
-            TestDispatchers(dispatcherExtension.testDispatcher)
+        TestDispatchers(dispatcherExtension.testDispatcher)
 
     @Test
     fun `load content success`() = runTest(dispatcherExtension.testDispatcher) {
@@ -205,19 +205,20 @@ class TestGeneralSettingsViewModel {
     }
 
     @Test
-    fun `concurrent load events yield latest state`() = runTest(dispatcherExtension.testDispatcher) {
-        println("🚀 [TEST] concurrent load events yield latest state")
-        val viewModel = GeneralSettingsViewModel(
-            repository = GeneralSettingsRepositoryImpl(),
-            dispatchers = testDispatchers(),
-        )
+    fun `concurrent load events yield latest state`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            println("🚀 [TEST] concurrent load events yield latest state")
+            val viewModel = GeneralSettingsViewModel(
+                repository = GeneralSettingsRepositoryImpl(),
+                dispatchers = testDispatchers(),
+            )
 
-        viewModel.onEvent(GeneralSettingsEvent.Load("first"))
-        viewModel.onEvent(GeneralSettingsEvent.Load("second"))
-        advanceUntilIdle()
+            viewModel.onEvent(GeneralSettingsEvent.Load("first"))
+            viewModel.onEvent(GeneralSettingsEvent.Load("second"))
+            advanceUntilIdle()
 
-        val state = viewModel.uiState.value
-        assertThat(state.data?.contentKey).isEqualTo("second")
-        println("🏁 [TEST DONE] concurrent load events yield latest state")
-    }
+            val state = viewModel.uiState.value
+            assertThat(state.data?.contentKey).isEqualTo("second")
+            println("🏁 [TEST DONE] concurrent load events yield latest state")
+        }
 }

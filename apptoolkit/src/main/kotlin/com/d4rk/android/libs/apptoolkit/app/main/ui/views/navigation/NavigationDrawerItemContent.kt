@@ -24,15 +24,15 @@ fun NavigationDrawerItemContent(
 
     NavigationDrawerItem(
         label = { Text(text = title) }, selected = false, onClick = {
-        view.playSoundEffect(SoundEffectConstants.CLICK)
-        handleNavigationItemClick()
-    }, icon = {
-        Icon(item.selectedIcon, contentDescription = title)
-    }, badge = {
-        if (item.badgeText.isNotBlank()) {
-            Text(text = item.badgeText)
-        }
-    }, modifier = Modifier
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            handleNavigationItemClick()
+        }, icon = {
+            Icon(item.selectedIcon, contentDescription = title)
+        }, badge = {
+            if (item.badgeText.isNotBlank()) {
+                Text(text = item.badgeText)
+            }
+        }, modifier = Modifier
             .padding(paddingValues = NavigationDrawerItemDefaults.ItemPadding)
             .bounceClick()
     )

@@ -111,21 +111,22 @@ class TestAboutViewModel {
     }
 
     @Test
-    fun `snackbar can be shown again after dismissal`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+    fun `snackbar can be shown again after dismissal`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-        viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+            viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-        viewModel.onEvent(AboutEvent.DismissSnackbar)
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-        assertThat(viewModel.uiState.value.snackbar).isNull()
+            viewModel.onEvent(AboutEvent.DismissSnackbar)
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+            assertThat(viewModel.uiState.value.snackbar).isNull()
 
-        viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
-        assertThat(viewModel.uiState.value.snackbar).isNotNull()
-    }
+            viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+            assertThat(viewModel.uiState.value.snackbar).isNotNull()
+        }
 
     @Test
     fun `repeated copy events replace snackbar`() = runTest(dispatcherExtension.testDispatcher) {
@@ -144,15 +145,16 @@ class TestAboutViewModel {
     }
 
     @Test
-    fun `rapid successive copy events keep snackbar visible`() = runTest(dispatcherExtension.testDispatcher) {
-        val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+    fun `rapid successive copy events keep snackbar visible`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-        repeat(5) { viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label")) }
-        dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+            repeat(5) { viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label")) }
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
 
-        assertThat(viewModel.uiState.value.snackbar).isNotNull()
-    }
+            assertThat(viewModel.uiState.value.snackbar).isNotNull()
+        }
 
     @Test
     fun `repository error shows snackbar`() = runTest(dispatcherExtension.testDispatcher) {

@@ -1,4 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.app.theme.style.colors.blue
+
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF0058BD)
