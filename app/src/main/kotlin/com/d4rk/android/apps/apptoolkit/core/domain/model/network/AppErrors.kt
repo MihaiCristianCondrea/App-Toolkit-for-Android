@@ -12,9 +12,6 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
  */
 sealed interface AppErrors : Error {
 
-    /**
-     * Wrapper that allows the app module to propagate shared toolkit errors.
-     */
     data class Common(val value: Errors) : AppErrors
 
     enum class UseCase : AppErrors {
