@@ -11,6 +11,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
  * should be communicated to the user.
  */
 fun Errors.asUiText(): UiTextHelper =
+    // TODO: Use these in the vm's where needed instead of hardcoding the text in the VM the errors will be there
     when (this) {
         Errors.Network.NO_INTERNET, Errors.UseCase.ILLEGAL_ARGUMENT -> UiTextHelper.StringResource(R.string.illegal_argument_error)
         Errors.UseCase.FAILED_TO_LAUNCH_REVIEW -> UiTextHelper.StringResource(R.string.error_failed_to_launch_review)

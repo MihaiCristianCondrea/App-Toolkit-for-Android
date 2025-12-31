@@ -7,13 +7,13 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error
  * to avoid duplicating domain error definitions. All call sites should rely on this alias so that
  * throwable-to-error mappings and UI representations share one canonical model.
  */
-sealed interface AppErrors : Error { // TODO: Keep the app-specific errrors to this class
+sealed interface AppErrors : Error {
 
     enum class Network : AppErrors {
         REQUEST_TIMEOUT, NO_INTERNET // TODO: Move generic errors to the library
     }
 
     enum class UseCase : AppErrors {
-        NO_DATA, FAILED_TO_LOAD_APPS
+        NO_DATA, FAILED_TO_LOAD_APPS // TODO: keep FAILED_TO_LOAD_APPS but NO_DATA should not be there
     }
 }
