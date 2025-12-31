@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">ไม่มีการเพิ่มแอพในรายการโปรด</string>
     <string name="error_failed_to_fetch_our_apps">ไม่สามารถดึงข้อมูลรายการแอปของเราได้</string>
     <string name="error_failed_to_load_apps">ไม่สามารถโหลดแอปได้</string>
-    <string name="error_an_error_occurred">เกิดข้อผิดพลาด</string>
     <string name="error_failed_to_update_favorite">ไม่สามารถอัปเดตที่ชื่นชอบได้</string>
     <string name="open_random_app">เปิดแอปแบบสุ่ม</string>
 

@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">Favorilere eklenen uygulama yok</string>
     <string name="error_failed_to_fetch_our_apps">Uygulama listelerimiz alınamadı</string>
     <string name="error_failed_to_load_apps">Uygulamalar yüklenemedi</string>
-    <string name="error_an_error_occurred">Bir hata oluştu</string>
     <string name="error_failed_to_update_favorite">Favori güncellenemedi</string>
     <string name="open_random_app">Rastgele uygulamayı aç</string>
 

@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">পছন্দসই কোনও অ্যাপস যুক্ত করা হয়নি</string>
     <string name="error_failed_to_fetch_our_apps">আমাদের অ্যাপের তালিকা আনতে ব্যর্থ</string>
     <string name="error_failed_to_load_apps">অ্যাপ লোড করতে ব্যর্থ</string>
-    <string name="error_an_error_occurred">একটি ত্রুটি ঘটেছে</string>
     <string name="error_failed_to_update_favorite">পছন্দ আপডেট করতে ব্যর্থ</string>
     <string name="open_random_app">র্যান্ডম অ্যাপ খুলুন</string>
 

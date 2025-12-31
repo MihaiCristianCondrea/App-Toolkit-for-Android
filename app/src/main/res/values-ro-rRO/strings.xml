@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">Nu se adaugă aplicații la favorite</string>
     <string name="error_failed_to_fetch_our_apps">Nu s-au putut prelua listele aplicațiilor noastre</string>
     <string name="error_failed_to_load_apps">Nu s-au putut încărca aplicațiile</string>
-    <string name="error_an_error_occurred">A apărut o eroare</string>
     <string name="error_failed_to_update_favorite">Nu s-a putut actualiza favorita</string>
     <string name="open_random_app">Deschideți aplicația aleatorie</string>
 

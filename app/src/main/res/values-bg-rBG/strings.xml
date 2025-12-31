@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">Няма добавени приложения към любимите</string>
     <string name="error_failed_to_fetch_our_apps">Неуспешно зареждане на списъка с нашите приложения</string>
     <string name="error_failed_to_load_apps">Неуспешно зареждане на приложенията</string>
-    <string name="error_an_error_occurred">Възникна грешка</string>
     <string name="error_failed_to_update_favorite">Неуспешно актуализиране на избраното</string>
     <string name="open_random_app">Отворете произволно приложение</string>
 

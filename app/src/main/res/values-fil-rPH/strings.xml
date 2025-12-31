@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">Walang mga app na idinagdag sa mga paborito</string>
     <string name="error_failed_to_fetch_our_apps">Nabigong makuha ang aming mga listahan ng app</string>
     <string name="error_failed_to_load_apps">Nabigong mag-load ng mga app</string>
-    <string name="error_an_error_occurred">May naganap na error</string>
     <string name="error_failed_to_update_favorite">Nabigong i-update ang paborito</string>
     <string name="open_random_app">Buksan ang random na app</string>
 

@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">沒有添加到收藏夾的應用程序</string>
     <string name="error_failed_to_fetch_our_apps">無法擷取我們的應用程式清單</string>
     <string name="error_failed_to_load_apps">無法載入應用程式</string>
-    <string name="error_an_error_occurred">發生錯誤</string>
     <string name="error_failed_to_update_favorite">無法更新最愛</string>
     <string name="open_random_app">打開隨機應用程序</string>
 

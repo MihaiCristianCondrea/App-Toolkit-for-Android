@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">お気に入りに追加されるアプリはありません</string>
     <string name="error_failed_to_fetch_our_apps">アプリ一覧の取得に失敗しました</string>
     <string name="error_failed_to_load_apps">アプリの読み込みに失敗しました</string>
-    <string name="error_an_error_occurred">エラーが発生しました</string>
     <string name="error_failed_to_update_favorite">お気に入りの更新に失敗しました</string>
     <string name="open_random_app">ランダムなアプリを開く</string>
 

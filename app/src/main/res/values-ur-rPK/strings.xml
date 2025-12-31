@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">کوئی ایپس شامل نہیں کی گئیں</string>
     <string name="error_failed_to_fetch_our_apps">ہماری ایپ فہرستیں حاصل کرنے میں ناکام</string>
     <string name="error_failed_to_load_apps">ایپس لوڈ کرنے میں ناکامی</string>
-    <string name="error_an_error_occurred">ایک خرابی پیش آگئی</string>
     <string name="error_failed_to_update_favorite">پسندیدہ کو اپ ڈیٹ کرنے میں ناکامی</string>
     <string name="open_random_app">بے ترتیب ایپ کھولیں</string>
 

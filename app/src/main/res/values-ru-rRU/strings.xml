@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">Приложения не добавляются в фавориты</string>
     <string name="error_failed_to_fetch_our_apps">Не удалось загрузить списки наших приложений</string>
     <string name="error_failed_to_load_apps">Не удалось загрузить приложения</string>
-    <string name="error_an_error_occurred">Произошла ошибка</string>
     <string name="error_failed_to_update_favorite">Не удалось обновить избранное</string>
     <string name="open_random_app">Открыть случайное приложение</string>
 

@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">Nincs hozzáadott alkalmazás a kedvencekhez</string>
     <string name="error_failed_to_fetch_our_apps">Nem sikerült lekérni alkalmazáslistáinkat</string>
     <string name="error_failed_to_load_apps">Az alkalmazások betöltése sikertelen</string>
-    <string name="error_an_error_occurred">Hiba történt</string>
     <string name="error_failed_to_update_favorite">A kedvenc frissítése nem sikerült</string>
     <string name="open_random_app">Nyissa meg a véletlenszerű alkalmazást</string>
 

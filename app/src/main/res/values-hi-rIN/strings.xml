@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">पसंदीदा में कोई ऐप नहीं जोड़ा गया</string>
     <string name="error_failed_to_fetch_our_apps">हमारे ऐप लिस्टिंग को लाने में विफल</string>
     <string name="error_failed_to_load_apps">ऐप लोड करने में विफल</string>
-    <string name="error_an_error_occurred">कोई त्रुटि हुई</string>
     <string name="error_failed_to_update_favorite">पसंदीदा अपडेट करने में विफल</string>
     <string name="open_random_app">रैंडम ऐप खोलें</string>
 

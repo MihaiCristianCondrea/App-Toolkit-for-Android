@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">Inga appar läggs till i favoriterna</string>
     <string name="error_failed_to_fetch_our_apps">Kunde inte hämta våra applistningar</string>
     <string name="error_failed_to_load_apps">Det gick inte att läsa in appar</string>
-    <string name="error_an_error_occurred">Ett fel inträffade</string>
     <string name="error_failed_to_update_favorite">Det gick inte att uppdatera favoriten</string>
     <string name="open_random_app">Öppna slumpmässig app</string>
 

@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">До улюблених не додається додатків</string>
     <string name="error_failed_to_fetch_our_apps">Не вдалося завантажити списки наших програм</string>
     <string name="error_failed_to_load_apps">Не вдалося завантажити додатки</string>
-    <string name="error_an_error_occurred">Сталася помилка</string>
     <string name="error_failed_to_update_favorite">Не вдалося оновити вибране</string>
     <string name="open_random_app">Відкрити випадкову програму</string>
 

@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">Nenhum aplicativo adicionado aos favoritos</string>
     <string name="error_failed_to_fetch_our_apps">Falha ao buscar nossas listagens de aplicativos</string>
     <string name="error_failed_to_load_apps">Falha ao carregar aplicativos</string>
-    <string name="error_an_error_occurred">Ocorreu um erro</string>
     <string name="error_failed_to_update_favorite">Falha ao atualizar o favorito</string>
     <string name="open_random_app">Abra aplicativo aleatório</string>
 

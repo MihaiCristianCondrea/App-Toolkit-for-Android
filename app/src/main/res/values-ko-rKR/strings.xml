@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">즐겨 찾기에 추가 된 앱이 없습니다</string>
     <string name="error_failed_to_fetch_our_apps">저희 앱 목록을 가져오는 데 실패했습니다.</string>
     <string name="error_failed_to_load_apps">앱을 불러오지 못했습니다</string>
-    <string name="error_an_error_occurred">오류가 발생했습니다</string>
     <string name="error_failed_to_update_favorite">즐겨찾기를 업데이트하지 못했습니다</string>
     <string name="open_random_app">임의의 앱 열기</string>
 

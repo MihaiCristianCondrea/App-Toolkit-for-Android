@@ -15,7 +15,6 @@
     <string name="no_apps_added_to_favorites">Không có ứng dụng nào được thêm vào yêu thích</string>
     <string name="error_failed_to_fetch_our_apps">Không thể tìm nạp danh sách ứng dụng của chúng tôi</string>
     <string name="error_failed_to_load_apps">Không tải được ứng dụng</string>
-    <string name="error_an_error_occurred">Đã xảy ra lỗi</string>
     <string name="error_failed_to_update_favorite">Không thể cập nhật mục yêu thích</string>
     <string name="open_random_app">Mở ứng dụng ngẫu nhiên</string>
 
