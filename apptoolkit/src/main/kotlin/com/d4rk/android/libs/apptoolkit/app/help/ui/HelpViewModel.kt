@@ -7,7 +7,8 @@ import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpAction
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
 import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -56,34 +57,22 @@ class HelpViewModel(
             .flowOn(dispatchers.io)
             .onStart { screenState.updateState(ScreenState.IsLoading()) }
             .onEach { result ->
-                when (result) {
-                    is DataState.Loading -> screenState.updateState(ScreenState.IsLoading())
-
-                    is DataState.Success -> {
-                        val payload = result.data
-                        val screenStateForData =
-                            if (payload.isEmpty()) ScreenState.NoData() else ScreenState.Success()
-                        screenState.update { current ->
-                            current.copy(
-                                screenState = screenStateForData,
-                                data = HelpUiState(questions = payload.toImmutableList())
-                            )
+                result
+                        .onSuccess { faqs ->
+                            val screenStateForData = if (faqs.isEmpty()) ScreenState.NoData() else ScreenState.Success()
+                            screenState.update { current ->
+                                current.copy(
+                                    screenState = screenStateForData ,
+                                    data = HelpUiState(questions = faqs.toImmutableList())
+                                )
+                            }
                         }
-                    }
-
-                    is DataState.Error -> {
-                        screenState.updateState(ScreenState.Error())
-                        screenState.showSnackbar(
-                            UiSnackbar(
-                                message = result.error.asUiText(),
-                                isError = true,
-                                timeStamp = System.currentTimeMillis(),
-                                type = ScreenMessageType.SNACKBAR,
-                            )
-                        )
-                    }
-                }
+                        .onFailure { error ->
+                            screenState.updateState(ScreenState.Error())
+                            screenState.showSnackbar(UiSnackbar(message = error.asUiText() , isError = true , timeStamp = System.currentTimeMillis() , type = ScreenMessageType.SNACKBAR))
+                        }
             }
+
             .catch { t ->
                 screenState.updateState(ScreenState.Error())
                 screenState.showSnackbar(

@@ -23,10 +23,29 @@ sealed interface DataState<out D, out E : RootError> {
  * @param action The action to be performed with the success data.
  * @return The original [DataState] instance.
  */
-inline fun <D, E : RootError> DataState<D, E>.onSuccess(action: (D) -> Unit): DataState<D, E> {
+inline fun <D, E : RootError> DataState<D, E>.onSuccess(action: (D) -> Unit): DataState<D, E> { // TODO && FIXME: Use these across the entire library and app like shown in helper module
     return when (this) {
         is DataState.Success -> {
             action(data)
+            this
+        }
+
+        else -> this
+    }
+}
+
+/**
+ * Executes the given [action] if the [DataState] is an [DataState.Error].
+ * The action receives the error of type [E]. This function allows for handling
+ * error cases in a chained manner.
+ *
+ * @param action The block of code to be executed with the error.
+ * @return The original [DataState] instance, allowing for further chaining.
+ */
+inline fun <D, E : RootError> DataState<D, E>.onFailure(action: (E) -> Unit): DataState<D, E> {
+    return when (this) {
+        is DataState.Error -> {
+            action(error)
             this
         }
 

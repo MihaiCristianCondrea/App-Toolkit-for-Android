@@ -18,11 +18,8 @@ class GetFaqUseCase(
                     is DataState.Success -> {
                         val data = result.data
                             .asSequence()
-                            .map {
-                                it.copy(
-                                    question = it.question.trim(),
-                                    answer = it.answer.trim()
-                                )
+                            .map { faqItem ->
+                                faqItem.copy(question = faqItem.question.trim(), answer = faqItem.answer.trim())
                             }
                             .filter { it.question.isNotBlank() && it.answer.isNotBlank() }
                             .distinctBy { it.id.value }

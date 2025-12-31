@@ -9,7 +9,6 @@
     <string name="welcome">Welcome</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Read and agree to the Terms of Service and Privacy Policy to continue</string>
     <string name="agree">Agree</string>
-    <string name="error_loading_consent_info">Failed to load consent information</string>
 
     <string name="loading">Loading…</string>
     <string name="skip_button_text">Skip</string>
@@ -66,20 +65,11 @@
 
     <string name="home">Home</string>
 
-    <string name="activity_not_found">Activity not found.</string>
-    <string name="security_error">A security error occurred. Please try again later.</string>
-    <string name="io_error">An input/output error occurred. Please check your network connection or storage and try again.</string>
-    <string name="illegal_argument_error">Invalid input or argument provided. Please check the information and try again.</string>
-    <string name="unknown_error">An unknown error occurred.</string>
-    <string name="initialization_error">Initialization failed. Please try again later.</string>
-
     <string name="settings">Settings</string>
     <string name="long_settings_label">Application settings</string>
     <string name="settings_disabled_message">Settings are currently unavailable.</string>
     <string name="settings_placeholder_description">No settings selected. Choose an option to view its details here.</string>
     <string name="get_help">Get help</string>
-    <string name="error_no_settings_found">No settings found</string>
-    <string name="error_invalid_content_key">Invalid content key.</string>
 
     <string name="display">Display</string>
     <string name="summary_preference_settings_display">Personalize your app\'s look and feel</string>
@@ -145,15 +135,10 @@
     <string name="view_on_github">Redirect to GitHub</string>
     <string name="snack_report_success">Report sent successfully</string>
     <string name="snack_report_failed">Failed to send report</string>
-    <string name="error_invalid_report">Title and description cannot be empty</string>
     <string name="issue_submitted_successfully">Issue submitted successfully</string>
     <string name="open_issue_in_browser">Open in browser</string>
     <string name="open_button_label">Open issue</string>
     <string name="issue_submitted">Your issue was submitted.</string>
-    <string name="error_unauthorized">Unauthorized: Invalid token</string>
-    <string name="error_forbidden">Forbidden: insufficient permissions</string>
-    <string name="error_gone">API endpoint removed</string>
-    <string name="error_unprocessable">Invalid data for issue creation</string>
 
     <string name="error_reporting">Error reporting</string>
     <string name="bug_report">Bug report</string>
@@ -162,7 +147,6 @@
     <string name="clear_cache">Clear cache</string>
     <string name="summary_preference_settings_clear_cache">Clear temporary application data.</string>
     <string name="cache_cleared_success">Cache cleared successfully</string>
-    <string name="cache_cleared_error">Cache cleared with some errors</string>
 
     <string name="security_and_privacy">Security &amp; privacy</string>
     <string name="summary_preference_settings_privacy_and_security">Manage your privacy settings</string>
@@ -209,7 +193,6 @@
     <string name="summary_ads">See ads that are relevant to you. Manage the information used to show personalized ads based on your app activity. You can always turn off personalization here.\n</string>
     <string name="ads_enabled">Ads enabled</string>
     <string name="ads_disabled">Ads disabled</string>
-    <string name="error_failed_to_load_ads_settings">Failed to load ads settings</string>
 
     <string name="usage_and_diagnostics">Usage and diagnostics</string>
     <string name="summary_preference_settings_usage_and_diagnostics">Share data to help improve in-app experience</string>
@@ -248,10 +231,6 @@
 
     <string name="eula_title">EULA</string>
     <string name="changelog_title">App changelog</string>
-    <string name="loading_eula_message">Retrieving End User License Agreement…</string>
-    <string name="loading_changelog_message">Fetching application changelog…</string>
-    <string name="error_loading_eula_message">Unable to load the End User License Agreement. Please try again.</string>
-    <string name="error_loading_changelog_message">Unable to load the application changelog. Please try again.</string>
     <string name="no_new_updates_message">No new updates available.</string>
 
     <string name="device_info">Device info</string>
@@ -290,15 +269,7 @@
     <string name="non_paid_support">Non-paid support</string>
     <string name="web_ad">Web ad</string>
     <string name="sponsored_ad_label">● Sponsored Ad</string>
-    <string name="error_failed_to_load_sku_details">Failed to load SKU details</string>
     <string name="purchase_pending">Your donation is being processed by Google. You will be notified when it\'s complete. Thank you.</string>
     <string name="purchase_thank_you">Thank you for your donation.</string>
     <string name="purchase_cancelled">Purchase cancelled</string>
-
-    <string name="error_an_error_occurred">An error occurred</string>
-    <string name="error_failed_to_launch_review">Failed to launch review flow</string>
-    <string name="error_failed_to_load_faq">Failed to load FAQs</string>
-    <string name="error_failed_to_request_review">Failed to request review</string>
-    <string name="error_failed_to_update_app">Failed to update app</string>
-    <string name="error_failed_to_load_consent_info">Failed to load consent info</string>
 </resources>

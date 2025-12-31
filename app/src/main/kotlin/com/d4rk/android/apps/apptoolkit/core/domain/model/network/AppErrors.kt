@@ -17,13 +17,7 @@ sealed interface AppErrors : Error {
      */
     data class Common(val value: Errors) : AppErrors
 
-    enum class Network : AppErrors {
-        REQUEST_TIMEOUT,
-        NO_INTERNET
-    }
-
     enum class UseCase : AppErrors {
-        NO_DATA,
         FAILED_TO_LOAD_APPS
     }
 }

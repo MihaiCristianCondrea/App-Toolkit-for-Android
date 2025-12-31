@@ -14,19 +14,14 @@ import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
  */
 fun AppErrors.toErrorMessage(): UiTextHelper {
     return when (this) {
-        AppErrors.UseCase.NO_DATA -> UiTextHelper.StringResource(R.string.error_failed_to_fetch_our_apps)
         AppErrors.UseCase.FAILED_TO_LOAD_APPS -> UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
-        else -> this.asShared()?.asUiText()
-            ?: UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
+        else -> this.asShared()?.asUiText() ?: UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
     }
 }
 
 private fun AppErrors.asShared(): Errors? {
     return when (this) {
         is AppErrors.Common -> value
-        AppErrors.Network.REQUEST_TIMEOUT -> Errors.Network.REQUEST_TIMEOUT
-        AppErrors.Network.NO_INTERNET -> Errors.Network.NO_INTERNET
-        AppErrors.UseCase.NO_DATA -> Errors.UseCase.NO_DATA
-        AppErrors.UseCase.FAILED_TO_LOAD_APPS -> Errors.UseCase.FAILED_TO_LOAD_APPS
+        else -> null
     }
 }
