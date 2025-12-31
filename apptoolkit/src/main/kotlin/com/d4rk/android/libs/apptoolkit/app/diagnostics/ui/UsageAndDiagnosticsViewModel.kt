@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.diagnostics.ui
 
 import androidx.lifecycle.viewModelScope
+import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.model.UsageAndDiagnosticsSettings
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageAndDiagnosticsRepository
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsAction
@@ -63,7 +64,7 @@ class UsageAndDiagnosticsViewModel(
             }
             .onCompletion { cause ->
                 if (cause != null && cause !is CancellationException) {
-                    handleObservationError(cause)
+                    handleObservationError()
                 }
             }
             .catch { throwable ->
@@ -103,20 +104,14 @@ class UsageAndDiagnosticsViewModel(
         )
     }
 
-    private fun handleObservationError(cause: Throwable) {
+    private fun handleObservationError() {
         screenState.setErrors(
             errors = listOf(
                 UiSnackbar(
-                    message = UiTextHelper.DynamicString(
-                        cause.message ?: OBSERVATION_ERROR_MESSAGE,
-                    ),
+                    message = UiTextHelper.StringResource(R.string.error_an_error_occurred),
                 ),
             ),
         )
         screenState.updateState(ScreenState.Error())
-    }
-
-    private companion object {
-        const val OBSERVATION_ERROR_MESSAGE = "Unable to observe usage and diagnostics settings."
     }
 }

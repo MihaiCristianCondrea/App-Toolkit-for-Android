@@ -8,6 +8,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases.Toggl
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.contract.FavoriteAppsAction
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.contract.FavoriteAppsEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
+import com.d4rk.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
@@ -80,13 +81,8 @@ class FavoriteAppsViewModel(
                 .catch { t ->
                     if (t is CancellationException) throw t
                     screenState.updateState(ScreenState.Error())
-                    screenState.showSnackbar(
-                        UiSnackbar(
-                            message = UiTextHelper.StringResource(com.d4rk.android.libs.apptoolkit.R.string.error_an_error_occurred),
-                            isError = true,
-                            timeStamp = System.nanoTime(),
-                            type = ScreenMessageType.SNACKBAR,
-                        )
+                    showErrorSnackbar(
+                        UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
                     )
                 }
                 .collect { result ->
@@ -104,14 +100,7 @@ class FavoriteAppsViewModel(
 
                         is DataState.Error -> {
                             screenState.updateState(ScreenState.Error())
-                            screenState.showSnackbar(
-                                UiSnackbar(
-                                    message = UiTextHelper.StringResource(com.d4rk.android.libs.apptoolkit.R.string.error_an_error_occurred),
-                                    isError = true,
-                                    timeStamp = System.nanoTime(),
-                                    type = ScreenMessageType.SNACKBAR,
-                                )
-                            )
+                            showErrorSnackbar(result.error.toErrorMessage())
                         }
                     }
                 }
@@ -126,15 +115,19 @@ class FavoriteAppsViewModel(
             }.onFailure { t ->
                 if (t is CancellationException) throw t
                 screenState.updateState(ScreenState.Error())
-                screenState.showSnackbar(
-                    UiSnackbar(
-                        message = UiTextHelper.StringResource(R.string.error_failed_to_update_favorite),
-                        isError = true,
-                        timeStamp = System.nanoTime(),
-                        type = ScreenMessageType.SNACKBAR,
-                    )
-                )
+                showErrorSnackbar(UiTextHelper.StringResource(R.string.error_failed_to_update_favorite))
             }
         }
+    }
+
+    private fun showErrorSnackbar(message: UiTextHelper) {
+        screenState.showSnackbar(
+            UiSnackbar(
+                message = message,
+                isError = true,
+                timeStamp = System.nanoTime(),
+                type = ScreenMessageType.SNACKBAR,
+            )
+        )
     }
 }
