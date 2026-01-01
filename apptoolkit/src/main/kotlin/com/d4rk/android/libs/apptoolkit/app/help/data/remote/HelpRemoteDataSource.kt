@@ -6,7 +6,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 
-class HelpRemoteDataSource(private val client: HttpClient, ) {
+class HelpRemoteDataSource(private val client: HttpClient) {
     suspend fun fetchCatalog(url: String): FaqCatalogDto = client.get(url).body()
     suspend fun fetchQuestions(url: String): List<FaqQuestionDto> = client.get(url).body()
 }

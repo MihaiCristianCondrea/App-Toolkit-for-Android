@@ -15,8 +15,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.io.IOException
-import java.net.SocketTimeoutException
 import kotlin.coroutines.cancellation.CancellationException
 
 class DeveloperAppsRepositoryImpl(
@@ -45,18 +43,19 @@ class DeveloperAppsRepositoryImpl(
         }
     }
 
-    private fun mapHttpStatusToError(status: HttpStatusCode): AppErrors {
+    private fun mapHttpStatusToError(status: HttpStatusCode): AppErrors { // FIXME: !!!
         return if (status == HttpStatusCode.RequestTimeout) {
-            AppErrors.Network.REQUEST_TIMEOUT
+            AppErrors.UseCase.FAILED_TO_LOAD_APPS
         } else {
             AppErrors.UseCase.FAILED_TO_LOAD_APPS
         }
     }
 
+    // TODO && FIXME: FIX THE ISSUES and make the code compatible with the library
     private fun mapThrowableToError(t: Throwable): AppErrors {
         return when (t) {
-            is SocketTimeoutException -> AppErrors.Network.REQUEST_TIMEOUT
-            is IOException -> AppErrors.Network.NO_INTERNET
+            //is SocketTimeoutException -> AppErrors.Network.REQUEST_TIMEOUT
+            //is IOException -> AppErrors.Network.NO_INTERNET
             is ClientRequestException -> mapHttpStatusToError(t.response.status)
             is ServerResponseException -> AppErrors.UseCase.FAILED_TO_LOAD_APPS
             else -> AppErrors.UseCase.FAILED_TO_LOAD_APPS

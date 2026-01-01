@@ -12,6 +12,7 @@ import com.d4rk.android.apps.apptoolkit.core.di.modules.themeModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
+// TODO: Separate all modules better (per-feature some of them)
 fun initializeKoin(context: Context) {
     startKoin {
         androidContext(androidContext = context)

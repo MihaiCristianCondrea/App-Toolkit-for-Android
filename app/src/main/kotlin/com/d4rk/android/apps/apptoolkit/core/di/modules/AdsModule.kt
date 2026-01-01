@@ -22,7 +22,12 @@ val adsModule: Module = module {
     }
 
     viewModel {
-        AdsSettingsViewModel(repository = get(), dispatchers = get())
+        AdsSettingsViewModel(
+            repository = get(),
+            dispatchers = get(),
+            observeAdsEnabled = get(),
+            setAdsEnabled = get()
+        )
     }
 
     single<AdsConfig>(named(name = "native_ad")) {

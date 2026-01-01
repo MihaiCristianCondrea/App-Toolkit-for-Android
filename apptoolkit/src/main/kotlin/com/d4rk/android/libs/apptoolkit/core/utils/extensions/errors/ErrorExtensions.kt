@@ -49,7 +49,5 @@ fun Errors.asUiText(): UiTextHelper {
         Errors.Database.DATABASE_CANT_OPEN -> UiTextHelper.StringResource(R.string.database_cant_open_error)
         Errors.Database.DATABASE_CORRUPT -> UiTextHelper.StringResource(R.string.database_corrupt_error)
         Errors.Database.DATABASE_FULL -> UiTextHelper.StringResource(R.string.database_full_error)
-
-        else -> UiTextHelper.StringResource(R.string.unknown_error)
     }
 }

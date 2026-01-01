@@ -14,6 +14,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
@@ -55,7 +56,7 @@ class HelpViewModel(
         loadFaqJob?.cancel()
         loadFaqJob = getFaqUseCase()
             .flowOn(dispatchers.io)
-            .onStart { screenState.updateState(ScreenState.IsLoading()) }
+            .onStart { screenState.setLoading() }
             .onEach { result ->
                 result
                         .onSuccess { faqs ->
@@ -73,7 +74,7 @@ class HelpViewModel(
                         }
             }
 
-            .catch { t ->
+            .catch {
                 screenState.updateState(ScreenState.Error())
                 screenState.showSnackbar(
                     UiSnackbar(

@@ -54,4 +54,11 @@
     <string name="database_cant_open_error">Unable to open storage.</string>
     <string name="database_corrupt_error">Storage is corrupted.</string>
     <string name="database_full_error">Storage is full.</string>
+
+    <string name="error_an_error_occurred">An error occurred</string>
+    <string name="error_failed_to_launch_review">Failed to launch review flow</string>
+    <string name="error_failed_to_load_faq">Failed to load FAQs</string>
+    <string name="error_failed_to_request_review">Failed to request review</string>
+    <string name="error_failed_to_update_app">Failed to update app</string>
+    <string name="error_failed_to_load_consent_info">Failed to load consent info</string>
 </resources>
