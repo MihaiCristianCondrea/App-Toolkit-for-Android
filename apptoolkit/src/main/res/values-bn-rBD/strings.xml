@@ -9,7 +9,6 @@
     <string name="welcome">স্বাগতম</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">চালিয়ে যেতে আমাদের পরিষেবার শর্তাবলী এবং গোপনীয়তা নীতি পড়ুন এবং সম্মত হন</string>
     <string name="agree">রাজি</string>
-    <string name="error_loading_consent_info">সম্মতি তথ্য লোড করতে ব্যর্থ</string>
     <string name="loading">লোড হচ্ছে…</string>
 
     <string name="skip_button_text">এড়িয়ে যান</string>
@@ -65,20 +64,11 @@
 
     <string name="home">হোম</string>
 
-    <string name="activity_not_found">অ্যাক্টিভিটি খুঁজে পাওয়া যায়নি।</string>
-    <string name="security_error">একটি নিরাপত্তা ত্রুটি ঘটেছে। অনুগ্রহ করে পরে আবার চেষ্টা করুন।</string>
-    <string name="io_error">একটি ইনপুট/আউটপুট ত্রুটি ঘটেছে। অনুগ্রহ করে আপনার নেটওয়ার্ক সংযোগ বা স্টোরেজ পরীক্ষা করে আবার চেষ্টা করুন।</string>
-    <string name="illegal_argument_error">অবৈধ ইনপুট বা আর্গুমেন্ট প্রদান করা হয়েছে। অনুগ্রহ করে তথ্য পরীক্ষা করে আবার চেষ্টা করুন।</string>
-    <string name="unknown_error">একটি অজানা ত্রুটি ঘটেছে।</string>
-    <string name="initialization_error">প্রারম্ভিকীকরণ ব্যর্থ হয়েছে। অনুগ্রহ করে পরে আবার চেষ্টা করুন।</string>
-
     <string name="settings">সেটিংস</string>
     <string name="long_settings_label">অ্যাপ্লিকেশন সেটিংস</string>
     <string name="settings_disabled_message">সেটিংস বর্তমানে উপলব্ধ নেই।</string>
     <string name="settings_placeholder_description">কোনো সেটিংস নির্বাচন করা হয়নি। এর বিবরণ এখানে দেখতে একটি বিকল্প পছন্দ করুন।</string>
     <string name="get_help">সাহায্য পান</string>
-    <string name="error_no_settings_found">কোনো সেটিংস খুঁজে পাওয়া যায়নি</string>
-    <string name="error_invalid_content_key">অবৈধ কনটেন্ট কী.</string>
 
     <string name="display">ডিসপ্লে</string>
     <string name="summary_preference_settings_display">আপনার অ্যাপের চেহারা ও অনুভূতি ব্যক্তিগত করুন</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">GitHub-এ পুনঃনির্দেশ করুন</string>
     <string name="snack_report_success">রিপোর্ট সফলভাবে পাঠানো হয়েছে</string>
     <string name="snack_report_failed">রিপোর্ট পাঠাতে ব্যর্থ হয়েছে</string>
-    <string name="error_invalid_report">শিরোনাম ও বর্ণনা খালি হতে পারে না</string>
     <string name="issue_submitted_successfully">ইস্যু সফলভাবে জমা দেওয়া</string>
     <string name="open_issue_in_browser">ব্রাউজারে খুলুন</string>
     <string name="open_button_label">খোলা সমস্যা</string>
     <string name="issue_submitted">আপনার সমস্যা জমা দেওয়া হয়েছিল.</string>
-    <string name="error_unauthorized">অননুমোদিত: অবৈধ টোকেন</string>
-    <string name="error_forbidden">নিষিদ্ধ: অপর্যাপ্ত অনুমতি</string>
-    <string name="error_gone">এপিআই শেষ পয়েন্ট সরানো হয়েছে</string>
-    <string name="error_unprocessable">ইস্যু তৈরির জন্য অবৈধ ডেটা</string>
 
     <string name="error_reporting">ত্রুটি প্রতিবেদন</string>
     <string name="bug_report">বাগ রিপোর্ট</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">ক্যাশে পরিষ্কার করুন</string>
     <string name="summary_preference_settings_clear_cache">অস্থায়ী অ্যাপ্লিকেশন ডেটা পরিষ্কার করুন।</string>
     <string name="cache_cleared_success">ক্যাশে সফলভাবে পরিষ্কার করা হয়েছে</string>
-    <string name="cache_cleared_error">কিছু ত্রুটিসহ ক্যাশে পরিষ্কার করা হয়েছে</string>
 
     <string name="security_and_privacy">নিরাপত্তা ও গোপনীয়তা</string>
     <string name="summary_preference_settings_privacy_and_security">আপনার গোপনীয়তা সেটিংস পরিচালনা করুন</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">আপনার জন্য প্রাসঙ্গিক বিজ্ঞাপন দেখুন। আপনার অ্যাপ কার্যকলাপের উপর ভিত্তি করে ব্যক্তিগতকৃত বিজ্ঞাপন দেখানোর জন্য ব্যবহৃত তথ্য পরিচালনা করুন। আপনি সর্বদা এখানে ব্যক্তিগতকরণ বন্ধ করতে পারেন।\n</string>
     <string name="ads_enabled">বিজ্ঞাপন সক্রিয়</string>
     <string name="ads_disabled">বিজ্ঞাপন নিষ্ক্রিয়</string>
-    <string name="error_failed_to_load_ads_settings">বিজ্ঞাপন সেটিংস লোড করতে ব্যর্থ</string>
 
     <string name="usage_and_diagnostics">ব্যবহার এবং ডায়াগনস্টিকস</string>
     <string name="summary_preference_settings_usage_and_diagnostics">অ্যাপ-মধ্যস্থ অভিজ্ঞতা উন্নত করতে ডেটা শেয়ার করুন</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">EULA</string>
     <string name="changelog_title">অ্যাপ চেঞ্জলগ</string>
-    <string name="loading_eula_message">ব্যবহারকারী লাইসেন্স চুক্তি পুনরুদ্ধার করা হচ্ছে…</string>
-    <string name="loading_changelog_message">অ্যাপ্লিকেশন চেঞ্জলগ আনা হচ্ছে…</string>
-    <string name="error_loading_eula_message">ব্যবহারকারী লাইসেন্স চুক্তি লোড করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।</string>
-    <string name="error_loading_changelog_message">অ্যাপ্লিকেশন চেঞ্জলগ লোড করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।</string>
     <string name="no_new_updates_message">কোনো নতুন আপডেট উপলব্ধ নেই।</string>
 
     <string name="device_info">ডিভাইসের তথ্য</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">নন-পেইড সাপোর্ট</string>
     <string name="web_ad">ওয়েব বিজ্ঞাপন</string>
     <string name="sponsored_ad_label">● স্পনসর্ড বিজ্ঞাপন</string>
-    <string name="error_failed_to_load_sku_details">SKU বিবরণ লোড করতে ব্যর্থ</string>
     <string name="purchase_pending">আপনার অনুদান গুগল দ্বারা প্রক্রিয়া করা হচ্ছে। এটি সম্পূর্ণ হলে আমরা আপনাকে অবহিত করব। আপনাকে ধন্যবাদ.</string>
     <string name="purchase_thank_you">আপনার অনুদানের জন্য আপনাকে ধন্যবাদ.</string>
     <string name="purchase_cancelled">ক্রয় বাতিল</string>
-    <string name="error_an_error_occurred">একটি ত্রুটি ঘটেছে</string>
-    <string name="error_failed_to_launch_review">রিভিউ ফ্লো চালু করতে ব্যর্থ</string>
-    <string name="error_failed_to_load_faq">প্রশ্নোত্তর লোড করতে ব্যর্থ</string>
-    <string name="error_failed_to_request_review">রিভিউ অনুরোধ করতে ব্যর্থ</string>
-    <string name="error_failed_to_update_app">অ্যাপ আপডেট করতে ব্যর্থ</string>
-    <string name="error_failed_to_load_consent_info">সম্মতি সম্পর্কিত তথ্য লোড করতে ব্যর্থ</string>
 </resources>

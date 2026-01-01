@@ -9,7 +9,6 @@
     <string name="welcome">Willkommen</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Lesen und akzeptieren Sie unsere Nutzungsbedingungen und Datenschutzrichtlinien, um fortzufahren</string>
     <string name="agree">Zustimmen</string>
-    <string name="error_loading_consent_info">Fehler beim Laden der Einwilligungsinformationen</string>
     <string name="loading">Wird geladen…</string>
 
     <string name="skip_button_text">Überspringen</string>
@@ -65,20 +64,11 @@
 
     <string name="home">Startseite</string>
 
-    <string name="activity_not_found">Aktivität nicht gefunden.</string>
-    <string name="security_error">Ein Sicherheitsfehler ist aufgetreten. Bitte versuchen Sie es später erneut.</string>
-    <string name="io_error">Ein Eingabe-/Ausgabefehler ist aufgetreten. Bitte überprüfen Sie Ihre Netzwerkverbindung oder Ihren Speicher und versuchen Sie es erneut.</string>
-    <string name="illegal_argument_error">Ungültige Eingabe oder ungültiges Argument. Bitte überprüfen Sie die Informationen und versuchen Sie es erneut.</string>
-    <string name="unknown_error">Ein unbekannter Fehler ist aufgetreten.</string>
-    <string name="initialization_error">Die Initialisierung ist fehlgeschlagen. Bitte versuchen Sie es später erneut.</string>
-
     <string name="settings">Einstellungen</string>
     <string name="long_settings_label">Anwendungseinstellungen</string>
     <string name="settings_disabled_message">Einstellungen sind derzeit nicht verfügbar.</string>
     <string name="settings_placeholder_description">Keine Einstellungen ausgewählt. Wählen Sie eine Option, um Details anzuzeigen.</string>
     <string name="get_help">Hilfe erhalten</string>
-    <string name="error_no_settings_found">Keine Einstellungen gefunden</string>
-    <string name="error_invalid_content_key">Ungültiger Inhaltsschlüssel.</string>
 
     <string name="display">Anzeige</string>
     <string name="summary_preference_settings_display">Passen Sie das Erscheinungsbild Ihrer App an</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">Zu GitHub weiterleiten</string>
     <string name="snack_report_success">Bericht erfolgreich gesendet</string>
     <string name="snack_report_failed">Senden des Berichts fehlgeschlagen</string>
-    <string name="error_invalid_report">Titel und Beschreibung dürfen nicht leer sein</string>
     <string name="issue_submitted_successfully">Ausgabe erfolgreich eingereicht</string>
     <string name="open_issue_in_browser">Im Browser geöffnet</string>
     <string name="open_button_label">Offene Ausgabe</string>
     <string name="issue_submitted">Ihr Problem wurde eingereicht.</string>
-    <string name="error_unauthorized">Nicht autorisiert: Ungültiges Token</string>
-    <string name="error_forbidden">Verboten: unzureichende Berechtigungen</string>
-    <string name="error_gone">API -Endpunkt entfernt</string>
-    <string name="error_unprocessable">Ungültige Daten zur Erstellung von Problemen</string>
 
     <string name="error_reporting">Fehlerberichte</string>
     <string name="bug_report">Fehlerbericht</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">Cache leeren</string>
     <string name="summary_preference_settings_clear_cache">Temporäre Anwendungsdaten löschen.</string>
     <string name="cache_cleared_success">Cache erfolgreich geleert</string>
-    <string name="cache_cleared_error">Cache wurde mit einigen Fehlern geleert</string>
 
     <string name="security_and_privacy">Sicherheit &amp; Datenschutz</string>
     <string name="summary_preference_settings_privacy_and_security">Verwalten Sie Ihre Datenschutzeinstellungen</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">Sehen Sie relevante Anzeigen. Verwalten Sie, welche Informationen verwendet werden, um personalisierte Anzeigen basierend auf Ihrer App-Nutzung anzuzeigen.</string>
     <string name="ads_enabled">Werbung aktiviert</string>
     <string name="ads_disabled">Werbung deaktiviert</string>
-    <string name="error_failed_to_load_ads_settings">Fehler beim Laden der Werbeeinstellungen</string>
 
     <string name="usage_and_diagnostics">Nutzung und Diagnostik</string>
     <string name="summary_preference_settings_usage_and_diagnostics">Teilen Sie Daten, um die App-Erfahrung zu verbessern</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">Lizenzvereinbarung</string>
     <string name="changelog_title">Änderungsprotokoll</string>
-    <string name="loading_eula_message">Lizenzvereinbarung wird geladen…</string>
-    <string name="loading_changelog_message">Änderungsprotokoll wird geladen…</string>
-    <string name="error_loading_eula_message">Lizenzvereinbarung konnte nicht geladen werden. Bitte versuchen Sie es erneut.</string>
-    <string name="error_loading_changelog_message">Änderungsprotokoll konnte nicht geladen werden. Bitte versuchen Sie es erneut.</string>
     <string name="no_new_updates_message">Keine neuen Updates verfügbar.</string>
 
     <string name="device_info">Geräteinformationen</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">Unbezahlte unterstützung</string>
     <string name="web_ad">Webanzeige</string>
     <string name="sponsored_ad_label">● Gesponserte Anzeige</string>
-    <string name="error_failed_to_load_sku_details">Fehler beim Laden der SKU-Details</string>
     <string name="purchase_pending">Ihre Spende wird von Google verarbeitet. Wir werden Sie benachrichtigen, wenn es abgeschlossen ist. Danke schön.</string>
     <string name="purchase_thank_you">Vielen Dank für Ihre Spende.</string>
     <string name="purchase_cancelled">Kauf storniert</string>
-    <string name="error_an_error_occurred">Es ist ein Fehler aufgetreten</string>
-    <string name="error_failed_to_launch_review">Der Start des Bewertungsablaufs ist fehlgeschlagen</string>
-    <string name="error_failed_to_load_faq">Die FAQs konnten nicht geladen werden</string>
-    <string name="error_failed_to_request_review">Bewertung konnte nicht angefordert werden</string>
-    <string name="error_failed_to_update_app">App konnte nicht aktualisiert werden</string>
-    <string name="error_failed_to_load_consent_info">Einverständnisinformationen konnten nicht geladen werden</string>
 </resources>

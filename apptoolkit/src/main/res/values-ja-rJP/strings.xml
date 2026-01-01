@@ -9,7 +9,6 @@
     <string name="welcome">ようこそ</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">続行するには、利用規約およびプライバシーポリシーをお読みいただき、同意してください</string>
     <string name="agree">同意する</string>
-    <string name="error_loading_consent_info">同意情報の読み込みに失敗しました</string>
     <string name="loading">読み込み中…</string>
 
     <string name="skip_button_text">スキップ</string>
@@ -65,20 +64,11 @@
 
     <string name="home">ホーム</string>
 
-    <string name="activity_not_found">アクティビティが見つかりません。</string>
-    <string name="security_error">セキュリティエラーが発生しました。後でもう一度お試しください。</string>
-    <string name="io_error">入力/出力エラーが発生しました。ネットワーク接続またはストレージを確認して、再試行してください。</string>
-    <string name="illegal_argument_error">無効な入力または引数が提供されました。情報を確認して再試行してください。</string>
-    <string name="unknown_error">不明なエラーが発生しました。</string>
-    <string name="initialization_error">初期化に失敗しました。後でもう一度お試しください。</string>
-
     <string name="settings">設定</string>
     <string name="long_settings_label">アプリの設定</string>
     <string name="settings_disabled_message">設定は現在利用できません。</string>
     <string name="settings_placeholder_description">設定が選択されていません。詳細を表示するにはオプションを選択してください。</string>
     <string name="get_help">ヘルプを取得</string>
-    <string name="error_no_settings_found">設定が見つかりません</string>
-    <string name="error_invalid_content_key">無効なコンテンツキーです！</string>
 
     <string name="display">ディスプレイ</string>
     <string name="summary_preference_settings_display">アプリの外観と操作感をカスタマイズする</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">GitHubにリダイレクト</string>
     <string name="snack_report_success">レポートが送信されました</string>
     <string name="snack_report_failed">レポートの送信に失敗しました</string>
-    <string name="error_invalid_report">タイトルと説明は空にできません</string>
     <string name="issue_submitted_successfully">問題が正常に提出されました</string>
     <string name="open_issue_in_browser">ブラウザで開きます</string>
     <string name="open_button_label">開かれた問題</string>
     <string name="issue_submitted">あなたの問題が提出されました！</string>
-    <string name="error_unauthorized">不正：無効なトークン</string>
-    <string name="error_forbidden">禁止：不十分な権限</string>
-    <string name="error_gone">APIエンドポイントが削除されました</string>
-    <string name="error_unprocessable">問題作成のための無効なデータ</string>
 
     <string name="error_reporting">エラー報告</string>
     <string name="bug_report">バグ報告</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">キャッシュをクリア</string>
     <string name="summary_preference_settings_clear_cache">一時的なアプリケーションデータをクリアします。</string>
     <string name="cache_cleared_success">キャッシュのクリアに成功しました</string>
-    <string name="cache_cleared_error">いくつかのエラーが発生しましたが、キャッシュをクリアしました</string>
 
     <string name="security_and_privacy">セキュリティとプライバシー</string>
     <string name="summary_preference_settings_privacy_and_security">プライバシー設定を管理する</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">あなたに関連する広告を表示します。アプリのアクティビティに基づいた広告のパーソナライズを管理できます。ここでパーソナライズをいつでも無効にすることができます。</string>
     <string name="ads_enabled">広告が有効です</string>
     <string name="ads_disabled">広告が無効です</string>
-    <string name="error_failed_to_load_ads_settings">広告設定の読み込みに失敗しました</string>
 
     <string name="usage_and_diagnostics">使用状況と診断</string>
     <string name="summary_preference_settings_usage_and_diagnostics">アプリ内の体験向上に役立つデータを共有する</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">エンドユーザーライセンス契約</string>
     <string name="changelog_title">アプリの変更履歴</string>
-    <string name="loading_eula_message">エンドユーザーライセンス契約を取得しています…</string>
-    <string name="loading_changelog_message">アプリの変更履歴を取得しています…</string>
-    <string name="error_loading_eula_message">エンドユーザーライセンス契約を読み込めません。再試行してください。</string>
-    <string name="error_loading_changelog_message">アプリの変更履歴を読み込めません。再試行してください。</string>
     <string name="no_new_updates_message">新しい更新はありません。</string>
 
     <string name="device_info">デバイス情報</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">無償サポート</string>
     <string name="web_ad">ウェブ広告</string>
     <string name="sponsored_ad_label">● スポンサー広告</string>
-    <string name="error_failed_to_load_sku_details">SKU の詳細を読み込めませんでした</string>
     <string name="purchase_pending">あなたの寄付はGoogleによって処理されています。完了したら通知します。ありがとう！</string>
     <string name="purchase_thank_you">寄付ありがとうございます！</string>
     <string name="purchase_cancelled">キャンセルされた購入</string>
-    <string name="error_an_error_occurred">エラーが発生しました</string>
-    <string name="error_failed_to_launch_review">レビュー フローを開始できませんでした</string>
-    <string name="error_failed_to_load_faq">FAQ を読み込めませんでした</string>
-    <string name="error_failed_to_request_review">レビューをリクエストできませんでした</string>
-    <string name="error_failed_to_update_app">アプリを更新できませんでした</string>
-    <string name="error_failed_to_load_consent_info">同意情報を読み込めませんでした</string>
 </resources>

@@ -9,7 +9,6 @@
     <string name="welcome">歡迎</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">閱讀並同意我們的服務條款和隱私政策以繼續</string>
     <string name="agree">同意</string>
-    <string name="error_loading_consent_info">載入同意資訊失敗</string>
     <string name="loading">載入中…</string>
 
     <string name="skip_button_text">跳過</string>
@@ -65,20 +64,11 @@
 
     <string name="home">主頁</string>
 
-    <string name="activity_not_found">找不到活動。</string>
-    <string name="security_error">發生安全錯誤。請稍後再試。</string>
-    <string name="io_error">發生輸入/輸出錯誤。請檢查您的網路連接或儲存空間後再試一次。</string>
-    <string name="illegal_argument_error">提供的輸入或參數無效。請檢查資訊並再試一次。</string>
-    <string name="unknown_error">發生未知錯誤。</string>
-    <string name="initialization_error">初始化失敗。請稍後再試。</string>
-
     <string name="settings">設定</string>
     <string name="long_settings_label">應用程式設定</string>
     <string name="settings_disabled_message">目前無法使用設定。</string>
     <string name="settings_placeholder_description">未選擇設定。選擇一個選項以在此查看詳細資訊。</string>
     <string name="get_help">獲取幫助</string>
-    <string name="error_no_settings_found">找不到設定</string>
-    <string name="error_invalid_content_key">內容金鑰無效！</string>
 
     <string name="display">顯示</string>
     <string name="summary_preference_settings_display">個性化您的應用程式外觀和感受</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">重新導向到 GitHub</string>
     <string name="snack_report_success">報告已成功送出</string>
     <string name="snack_report_failed">無法傳送報告</string>
-    <string name="error_invalid_report">標題和描述不能為空</string>
     <string name="issue_submitted_successfully">問題成功提交</string>
     <string name="open_issue_in_browser">在瀏覽器中打開</string>
     <string name="open_button_label">公開問題</string>
     <string name="issue_submitted">您的問題已提交！</string>
-    <string name="error_unauthorized">未經授權：無效令牌</string>
-    <string name="error_forbidden">禁止：權限不足</string>
-    <string name="error_gone">刪除了API端點</string>
-    <string name="error_unprocessable">發行創建的無效數據</string>
 
     <string name="error_reporting">錯誤回報</string>
     <string name="bug_report">錯誤回報</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">清除快取</string>
     <string name="summary_preference_settings_clear_cache">清除臨時應用資料</string>
     <string name="cache_cleared_success">快取已成功清除</string>
-    <string name="cache_cleared_error">快取清除時出現一些錯誤</string>
 
     <string name="security_and_privacy">安全與隱私</string>
     <string name="summary_preference_settings_privacy_and_security">管理您的隱私設定</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">查看與您相關的廣告。管理應用程式活動所用資訊。</string>
     <string name="ads_enabled">廣告已啟用</string>
     <string name="ads_disabled">廣告已停用</string>
-    <string name="error_failed_to_load_ads_settings">載入廣告設定失敗</string>
 
     <string name="usage_and_diagnostics">使用與診斷</string>
     <string name="summary_preference_settings_usage_and_diagnostics">分享數據以幫助改進應用程式體驗</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">最終用戶許可協議</string>
     <string name="changelog_title">應用程式變更紀錄</string>
-    <string name="loading_eula_message">檢索最終用戶許可協議中…</string>
-    <string name="loading_changelog_message">獲取應用程式變更紀錄中…</string>
-    <string name="error_loading_eula_message">無法加載最終用戶許可協議。請再試一次。</string>
-    <string name="error_loading_changelog_message">無法加載應用程式變更紀錄。請再試一次。</string>
     <string name="no_new_updates_message">沒有新的更新可用。</string>
 
     <string name="device_info">設備資訊</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">非付費支持</string>
     <string name="web_ad">網頁廣告</string>
     <string name="sponsored_ad_label">● 贊助廣告</string>
-    <string name="error_failed_to_load_sku_details">載入 SKU 詳細資料失敗</string>
     <string name="purchase_pending">您的捐款正在Google处理。完成后，我们将通知您。谢谢你！</string>
     <string name="purchase_thank_you">谢谢您的捐款！</string>
     <string name="purchase_cancelled">购买取消</string>
-    <string name="error_an_error_occurred">發生錯誤</string>
-    <string name="error_failed_to_launch_review">無法啟動評論流程</string>
-    <string name="error_failed_to_load_faq">無法載入常見問題</string>
-    <string name="error_failed_to_request_review">無法請求評論</string>
-    <string name="error_failed_to_update_app">無法更新應用程式</string>
-    <string name="error_failed_to_load_consent_info">無法載入同意資訊</string>
 </resources>

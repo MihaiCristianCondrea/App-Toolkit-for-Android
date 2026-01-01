@@ -9,7 +9,6 @@
     <string name="welcome">Üdvözlünk</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Olvasd el és fogadd el a Szolgáltatási feltételeinket és az Adatvédelmi irányelveinket a folytatáshoz</string>
     <string name="agree">Elfogadom</string>
-    <string name="error_loading_consent_info">A hozzájárulási információ betöltése sikertelen</string>
     <string name="loading">Betöltés…</string>
 
     <string name="skip_button_text">Kihagyás</string>
@@ -65,20 +64,11 @@
 
     <string name="home">Főoldal</string>
 
-    <string name="activity_not_found">A tevékenység nem található.</string>
-    <string name="security_error">Biztonsági hiba történt. Kérlek, próbáld újra később.</string>
-    <string name="io_error">Bemeneti/kimeneti hiba történt. Ellenőrizd a hálózati kapcsolatot vagy a tárhelyet, majd próbáld újra.</string>
-    <string name="illegal_argument_error">Érvénytelen adat vagy argumentum. Ellenőrizd az információt, majd próbáld újra.</string>
-    <string name="unknown_error">Ismeretlen hiba történt.</string>
-    <string name="initialization_error">Az inicializálás sikertelen. Próbáld újra később.</string>
-
     <string name="settings">Beállítások</string>
     <string name="long_settings_label">Alkalmazás beállításai</string>
     <string name="settings_disabled_message">A beállítások jelenleg nem érhetők el.</string>
     <string name="settings_placeholder_description">Nincs kiválasztott beállítás. Válassz egy lehetőséget a részletek megtekintéséhez.</string>
     <string name="get_help">Segítség kérése</string>
-    <string name="error_no_settings_found">Nincs beállítás található</string>
-    <string name="error_invalid_content_key">Érvénytelen tartalomkulcs.</string>
 
     <string name="display">Kijelző</string>
     <string name="summary_preference_settings_display">Személyre szabhatod az alkalmazás megjelenését</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">Átirányítás GitHubra</string>
     <string name="snack_report_success">A jelentés sikeresen elküldve</string>
     <string name="snack_report_failed">A jelentés elküldése nem sikerült</string>
-    <string name="error_invalid_report">A cím és a leírás nem lehet üres</string>
     <string name="issue_submitted_successfully">A kiadás sikeresen benyújtva</string>
     <string name="open_issue_in_browser">Nyissa meg a böngészőben</string>
     <string name="open_button_label">Nyitott kérdés</string>
     <string name="issue_submitted">A kérdését benyújtották.</string>
-    <string name="error_unauthorized">Jogosulatlan: Érvénytelen token</string>
-    <string name="error_forbidden">Tiltott: Nem elegendő engedély</string>
-    <string name="error_gone">Az API végpontja eltávolítva</string>
-    <string name="error_unprocessable">Érvénytelen adatok a kiadás létrehozásához</string>
 
     <string name="error_reporting">Hibajelentés</string>
     <string name="bug_report">Hibajelentés</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">Gyorsítótár törlése</string>
     <string name="summary_preference_settings_clear_cache">Törölje az ideiglenes alkalmazásadatokat.</string>
     <string name="cache_cleared_success">A gyorsítótár sikeresen törölve</string>
-    <string name="cache_cleared_error">A gyorsítótár törlése néhány hibával történt</string>
 
     <string name="security_and_privacy">Biztonság és adatvédelem</string>
     <string name="summary_preference_settings_privacy_and_security">Kezeld az adatvédelmi beállításaidat</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">Nézz meg számodra releváns hirdetéseket. A személyre szabást bármikor kikapcsolhatod itt.</string>
     <string name="ads_enabled">Hirdetések engedélyezve</string>
     <string name="ads_disabled">Hirdetések letiltva</string>
-    <string name="error_failed_to_load_ads_settings">A hirdetésbeállítások betöltése sikertelen</string>
 
     <string name="usage_and_diagnostics">Használat és diagnosztika</string>
     <string name="summary_preference_settings_usage_and_diagnostics">Oszd meg az adatokat az alkalmazásélmény javítása érdekében</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">Végfelhasználói licencszerződés</string>
     <string name="changelog_title">Alkalmazás változásnapló</string>
-    <string name="loading_eula_message">A végfelhasználói licencszerződés letöltése…</string>
-    <string name="loading_changelog_message">Az alkalmazás változásnaplójának betöltése…</string>
-    <string name="error_loading_eula_message">Nem sikerült betölteni a végfelhasználói licencszerződést. Próbáld újra.</string>
-    <string name="error_loading_changelog_message">Nem sikerült betölteni az alkalmazás változásnaplóját. Próbáld újra.</string>
     <string name="no_new_updates_message">Nincs új frissítés elérhető.</string>
 
     <string name="device_info">Eszközinformációk</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">Nem fizetett támogatás</string>
     <string name="web_ad">Webes hirdetés</string>
     <string name="sponsored_ad_label">● Szponzorált hirdetés</string>
-    <string name="error_failed_to_load_sku_details">Nem sikerült betölteni az SKU részleteit</string>
     <string name="purchase_pending">Adományát a Google dolgozza fel. Értesítjük, ha teljes. Köszönöm.</string>
     <string name="purchase_thank_you">Köszönöm az adományt.</string>
     <string name="purchase_cancelled">Vásárlás lemondva</string>
-    <string name="error_an_error_occurred">Hiba történt</string>
-    <string name="error_failed_to_launch_review">A véleményezési folyamat indítása sikertelen</string>
-    <string name="error_failed_to_load_faq">A GYIK betöltése sikertelen</string>
-    <string name="error_failed_to_request_review">A véleménykérés sikertelen</string>
-    <string name="error_failed_to_update_app">Az alkalmazás frissítése sikertelen</string>
-    <string name="error_failed_to_load_consent_info">A hozzájárulási információk betöltése sikertelen</string>
 </resources>

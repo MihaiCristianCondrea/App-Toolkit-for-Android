@@ -9,7 +9,6 @@
     <string name="welcome">Witamy</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Przeczytaj i zaakceptuj nasze Warunki korzystania z usługi oraz Politykę prywatności, aby kontynuować</string>
     <string name="agree">Zgadzam się</string>
-    <string name="error_loading_consent_info">Nie udało się załadować informacji o zgodzie</string>
     <string name="loading">Ładowanie…</string>
 
     <string name="skip_button_text">Pomiń</string>
@@ -65,20 +64,11 @@
 
     <string name="home">Strona główna</string>
 
-    <string name="activity_not_found">Nie znaleziono aktywności.</string>
-    <string name="security_error">Wystąpił błąd bezpieczeństwa. Spróbuj ponownie później.</string>
-    <string name="io_error">Wystąpił błąd wejścia/wyjścia. Sprawdź połączenie sieciowe lub pamięć i spróbuj ponownie.</string>
-    <string name="illegal_argument_error">Podano nieprawidłowe dane lub argument. Sprawdź informacje i spróbuj ponownie.</string>
-    <string name="unknown_error">Wystąpił nieznany błąd.</string>
-    <string name="initialization_error">Inicjalizacja nie powiodła się. Spróbuj ponownie później.</string>
-
     <string name="settings">Ustawienia</string>
     <string name="long_settings_label">Ustawienia aplikacji</string>
     <string name="settings_disabled_message">Ustawienia są obecnie niedostępne.</string>
     <string name="settings_placeholder_description">Nie wybrano żadnych ustawień. Wybierz opcję, aby wyświetlić jej szczegóły tutaj.</string>
     <string name="get_help">Uzyskaj pomoc</string>
-    <string name="error_no_settings_found">Nie znaleziono ustawień</string>
-    <string name="error_invalid_content_key">Nieprawidłowy klucz treści.</string>
 
     <string name="display">Wyświetlanie</string>
     <string name="summary_preference_settings_display">Spersonalizuj wygląd i działanie swojej aplikacji</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">Przekieruj do GitHub</string>
     <string name="snack_report_success">Zgłoszenie wysłane pomyślnie</string>
     <string name="snack_report_failed">Nie udało się wysłać zgłoszenia</string>
-    <string name="error_invalid_report">Tytuł i opis nie mogą być puste</string>
     <string name="issue_submitted_successfully">Problem złożony pomyślnie</string>
     <string name="open_issue_in_browser">Otwarte w przeglądarce</string>
     <string name="open_button_label">Problem otwarty</string>
     <string name="issue_submitted">Twój problem został przesłany.</string>
-    <string name="error_unauthorized">Nieautoryzowany: Nieprawidłowy token</string>
-    <string name="error_forbidden">Zakazane: niewystarczające uprawnienia</string>
-    <string name="error_gone">Usunięty punkt końcowy API</string>
-    <string name="error_unprocessable">Nieprawidłowe dane dotyczące tworzenia problemów</string>
 
     <string name="error_reporting">Zgłaszanie błędów</string>
     <string name="bug_report">Raport o błędzie</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">Wyczyść pamięć podręczną</string>
     <string name="summary_preference_settings_clear_cache">Wyczyść tymczasowe dane aplikacji.</string>
     <string name="cache_cleared_success">Pamięć podręczna została pomyślnie wyczyszczona</string>
-    <string name="cache_cleared_error">Pamięć podręczna została wyczyszczona z pewnymi błędami</string>
 
     <string name="security_and_privacy">Bezpieczeństwo i prywatność</string>
     <string name="summary_preference_settings_privacy_and_security">Zarządzaj ustawieniami prywatności</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">Wyświetlaj reklamy dostosowane do Ciebie. Zarządzaj informacjami używanymi do wyświetlania spersonalizowanych reklam. Możesz zawsze wyłączyć personalizację tutaj.</string>
     <string name="ads_enabled">Reklamy włączone</string>
     <string name="ads_disabled">Reklamy wyłączone</string>
-    <string name="error_failed_to_load_ads_settings">Nie udało się załadować ustawień reklam</string>
 
     <string name="usage_and_diagnostics">Użycie i diagnostyka</string>
     <string name="summary_preference_settings_usage_and_diagnostics">Udostępnij dane, aby pomóc ulepszyć doświadczenia w aplikacji</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">Umowa licencyjna użytkownika końcowego</string>
     <string name="changelog_title">Dziennik zmian aplikacji</string>
-    <string name="loading_eula_message">Pobieranie umowy licencyjnej użytkownika końcowego…</string>
-    <string name="loading_changelog_message">Pobieranie dziennika zmian aplikacji…</string>
-    <string name="error_loading_eula_message">Nie można załadować umowy licencyjnej użytkownika końcowego. Spróbuj ponownie.</string>
-    <string name="error_loading_changelog_message">Nie można załadować dziennika zmian aplikacji. Spróbuj ponownie.</string>
     <string name="no_new_updates_message">Brak nowych aktualizacji.</string>
 
     <string name="device_info">Informacje o urządzeniu</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">Wsparcie bezpłatne</string>
     <string name="web_ad">Reklama internetowa</string>
     <string name="sponsored_ad_label">● Reklama sponsorowana</string>
-    <string name="error_failed_to_load_sku_details">Nie udało się załadować szczegółów SKU</string>
     <string name="purchase_pending">Twoja darowizna jest przetwarzana przez Google. Powiadomimy Cię, kiedy będzie to kompletne. Dziękuję.</string>
     <string name="purchase_thank_you">Dziękuję za darowiznę.</string>
     <string name="purchase_cancelled">Zakup anulowany</string>
-    <string name="error_an_error_occurred">Wystąpił błąd</string>
-    <string name="error_failed_to_launch_review">Nie udało się uruchomić procesu recenzji</string>
-    <string name="error_failed_to_load_faq">Nie udało się wczytać najczęściej zadawanych pytań</string>
-    <string name="error_failed_to_request_review">Nie udało się poprosić o recenzję</string>
-    <string name="error_failed_to_update_app">Nie udało się zaktualizować aplikacji</string>
-    <string name="error_failed_to_load_consent_info">Nie udało się wczytać informacji o zgodzie</string>
 </resources>

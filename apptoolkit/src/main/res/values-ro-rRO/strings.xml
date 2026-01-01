@@ -9,7 +9,6 @@
     <string name="welcome">Bine ai venit</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Citește și acceptă Termenii de utilizare și Politica de confidențialitate pentru a continua</string>
     <string name="agree">Sunt de acord</string>
-    <string name="error_loading_consent_info">Încărcarea informațiilor privind consimțământul a eșuat</string>
     <string name="loading">Se încarcă…</string>
 
     <string name="skip_button_text">Omite</string>
@@ -65,20 +64,11 @@
 
     <string name="home">Acasă</string>
 
-    <string name="activity_not_found">Activitatea nu a fost găsită.</string>
-    <string name="security_error">A apărut o eroare de securitate. Încearcă din nou mai târziu.</string>
-    <string name="io_error">A apărut o eroare de intrare/ieșire. Verifică conexiunea la rețea sau spațiul de stocare și încearcă din nou.</string>
-    <string name="illegal_argument_error">Datele introduse sau argumentul furnizat sunt invalide. Verifică informațiile și încearcă din nou.</string>
-    <string name="unknown_error">A apărut o eroare necunoscută.</string>
-    <string name="initialization_error">Inițializarea a eșuat. Încearcă din nou mai târziu.</string>
-
     <string name="settings">Setări</string>
     <string name="long_settings_label">Setări aplicație</string>
     <string name="settings_disabled_message">Setările nu sunt disponibile momentan.</string>
     <string name="settings_placeholder_description">Nicio setare selectată. Alege o opțiune pentru a vedea detalii aici.</string>
     <string name="get_help">Obține ajutor</string>
-    <string name="error_no_settings_found">Nu s-au găsit setări</string>
-    <string name="error_invalid_content_key">Cheie de conținut invalidă.</string>
 
     <string name="display">Afișaj</string>
     <string name="summary_preference_settings_display">Personalizează aspectul și funcționalitatea aplicației</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">Redirecționează către GitHub</string>
     <string name="snack_report_success">Raport trimis cu succes</string>
     <string name="snack_report_failed">Trimiterea raportului a eșuat</string>
-    <string name="error_invalid_report">Titlul și descrierea nu pot fi goale</string>
     <string name="issue_submitted_successfully">Problema depusă cu succes</string>
     <string name="open_issue_in_browser">Deschis în browser</string>
     <string name="open_button_label">Problemă deschisă</string>
     <string name="issue_submitted">Problema dvs. a fost trimisă.</string>
-    <string name="error_unauthorized">Neautorizat: jeton nevalid</string>
-    <string name="error_forbidden">Interzis: permisiuni insuficiente</string>
-    <string name="error_gone">Punctul final API eliminat</string>
-    <string name="error_unprocessable">Date nevalide pentru crearea problemelor</string>
 
     <string name="error_reporting">Raportare erori</string>
     <string name="bug_report">Raportare bug</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">Șterge cache</string>
     <string name="summary_preference_settings_clear_cache">Șterge datele temporare ale aplicației.</string>
     <string name="cache_cleared_success">Cache-ul a fost șters cu succes</string>
-    <string name="cache_cleared_error">Cache-ul a fost șters, dar cu unele erori</string>
 
     <string name="security_and_privacy">Securitate și confidențialitate</string>
     <string name="summary_preference_settings_privacy_and_security">Gestionează setările de confidențialitate</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">Vezi reclame relevante pentru tine. Gestionează informațiile utilizate pentru a afișa reclame personalizate bazate pe activitatea ta în aplicație. Poți dezactiva personalizarea aici oricând.</string>
     <string name="ads_enabled">Reclamele sunt activate</string>
     <string name="ads_disabled">Reclamele sunt dezactivate</string>
-    <string name="error_failed_to_load_ads_settings">Nu s-au putut încărca setările reclamelor</string>
 
     <string name="usage_and_diagnostics">Utilizare și diagnoză</string>
     <string name="summary_preference_settings_usage_and_diagnostics">Partajează date pentru a ajuta la îmbunătățirea experienței în aplicație</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">Acordul de Licență pentru Utilizatorul Final</string>
     <string name="changelog_title">Jurnal de modificări al aplicației</string>
-    <string name="loading_eula_message">Se preia Acordul de Licență pentru Utilizatorul Final…</string>
-    <string name="loading_changelog_message">Se preia jurnalul de modificări al aplicației…</string>
-    <string name="error_loading_eula_message">Nu s-a putut încărca Acordul de Licență pentru Utilizatorul Final. Încearcă din nou.</string>
-    <string name="error_loading_changelog_message">Nu s-a putut încărca jurnalul de modificări al aplicației. Încearcă din nou.</string>
     <string name="no_new_updates_message">Nu există actualizări noi disponibile.</string>
 
     <string name="device_info">Informații despre dispozitiv</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">Suport neplătit</string>
     <string name="web_ad">Reclamă web</string>
     <string name="sponsored_ad_label">● Anunț sponsorizat</string>
-    <string name="error_failed_to_load_sku_details">Nu s-au putut încărca detaliile SKU</string>
     <string name="purchase_pending">Donația dvs. este procesată de Google. Vă vom anunța când va fi finalizat. Vă mulțumesc.</string>
     <string name="purchase_thank_you">Vă mulțumim pentru donație.</string>
     <string name="purchase_cancelled">Achiziția a fost anulată</string>
-    <string name="error_an_error_occurred">A apărut o eroare</string>
-    <string name="error_failed_to_launch_review">Nu s-a putut lansa fluxul de recenzii</string>
-    <string name="error_failed_to_load_faq">Nu s-au putut încărca întrebările frecvente</string>
-    <string name="error_failed_to_request_review">Nu s-a putut solicita recenzia</string>
-    <string name="error_failed_to_update_app">Nu s-a putut actualiza aplicația</string>
-    <string name="error_failed_to_load_consent_info">Nu s-au putut încărca informațiile privind consimțământul</string>
 </resources>

@@ -9,7 +9,6 @@
     <string name="welcome">Bienvenue</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Lisez et acceptez nos Conditions d\'utilisation et notre Politique de confidentialité pour continuer</string>
     <string name="agree">Accepter</string>
-    <string name="error_loading_consent_info">Échec du chargement des informations de consentement</string>
     <string name="loading">Chargement…</string>
 
     <string name="skip_button_text">Passer</string>
@@ -65,20 +64,11 @@
 
     <string name="home">Accueil</string>
 
-    <string name="activity_not_found">Activité introuvable.</string>
-    <string name="security_error">Une erreur de sécurité s\'est produite. Veuillez réessayer plus tard.</string>
-    <string name="io_error">Une erreur d\'entrée/sortie s\'est produite. Veuillez vérifier votre connexion réseau ou votre stockage et réessayer.</string>
-    <string name="illegal_argument_error">Une entrée ou un argument invalide a été fourni. Veuillez vérifier les informations et réessayer.</string>
-    <string name="unknown_error">Une erreur inconnue s\'est produite.</string>
-    <string name="initialization_error">L\'initialisation a échoué. Veuillez réessayer plus tard.</string>
-
     <string name="settings">Paramètres</string>
     <string name="long_settings_label">Paramètres de l\'application</string>
     <string name="settings_disabled_message">Les paramètres ne sont pas disponibles pour le moment.</string>
     <string name="settings_placeholder_description">Aucun paramètre sélectionné. Choisissez une option pour afficher les détails ici.</string>
     <string name="get_help">Obtenir de l\'aide</string>
-    <string name="error_no_settings_found">Aucun paramètre trouvé</string>
-    <string name="error_invalid_content_key">Clé de contenu invalide .</string>
 
     <string name="display">Affichage</string>
     <string name="summary_preference_settings_display">Personnalisez l\'apparence de votre application</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">Rediriger vers GitHub</string>
     <string name="snack_report_success">Rapport envoyé avec succès</string>
     <string name="snack_report_failed">Échec de l\'envoi du rapport</string>
-    <string name="error_invalid_report">Le titre et la description ne peuvent pas être vides</string>
     <string name="issue_submitted_successfully">Numéro soumis avec succès</string>
     <string name="open_issue_in_browser">Ouvert dans le navigateur</string>
     <string name="open_button_label">Problème d\'ouverture</string>
     <string name="issue_submitted">Votre problème a été soumis.</string>
-    <string name="error_unauthorized">Non autorisé: jeton non valide</string>
-    <string name="error_forbidden">Interdit: autorisation insuffisante</string>
-    <string name="error_gone">Point de terminaison API supprimé</string>
-    <string name="error_unprocessable">Données non valides pour la création de problèmes</string>
 
     <string name="error_reporting">Rapport d\'erreurs</string>
     <string name="bug_report">Rapport de bug</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">Vider le cache</string>
     <string name="summary_preference_settings_clear_cache">Effacer les données temporaires de l\'application.</string>
     <string name="cache_cleared_success">Cache vidé avec succès</string>
-    <string name="cache_cleared_error">Cache vidé avec quelques erreurs</string>
 
     <string name="security_and_privacy">Sécurité et confidentialité</string>
     <string name="summary_preference_settings_privacy_and_security">Gérez vos paramètres de confidentialité</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">Voir des publicités pertinentes pour vous. Gérez les informations utilisées pour afficher des publicités personnalisées basées sur votre activité dans l\'application.</string>
     <string name="ads_enabled">Publicités activées</string>
     <string name="ads_disabled">Publicités désactivées</string>
-    <string name="error_failed_to_load_ads_settings">Échec du chargement des paramètres publicitaires</string>
 
     <string name="usage_and_diagnostics">Utilisation et diagnostics</string>
     <string name="summary_preference_settings_usage_and_diagnostics">Partagez des données pour améliorer l\'expérience de l\'application</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">Accord de licence</string>
     <string name="changelog_title">Journal des modifications</string>
-    <string name="loading_eula_message">Récupération de l\'accord de licence utilisateur final…</string>
-    <string name="loading_changelog_message">Récupération du journal des modifications…</string>
-    <string name="error_loading_eula_message">Impossible de charger l\'accord de licence. Veuillez réessayer.</string>
-    <string name="error_loading_changelog_message">Impossible de charger le journal des modifications. Veuillez réessayer.</string>
     <string name="no_new_updates_message">Aucune nouvelle mise à jour disponible.</string>
 
     <string name="device_info">Informations sur l\'appareil</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">Support non payant</string>
     <string name="web_ad">Publicité web</string>
     <string name="sponsored_ad_label">● Annonce sponsorisée</string>
-    <string name="error_failed_to_load_sku_details">Échec du chargement des détails du SKU</string>
     <string name="purchase_pending">Votre don est traité par Google. Nous vous informerons quand il sera terminé. Merci.</string>
     <string name="purchase_thank_you">Merci pour votre don.</string>
     <string name="purchase_cancelled">Acheter annulé</string>
-    <string name="error_an_error_occurred">Une erreur s\'est produite</string>
-    <string name="error_failed_to_launch_review">Échec du lancement du flux d\'avis</string>
-    <string name="error_failed_to_load_faq">Échec du chargement de la FAQ</string>
-    <string name="error_failed_to_request_review">Échec de la demande d\'avis</string>
-    <string name="error_failed_to_update_app">Échec de la mise à jour de l\'application</string>
-    <string name="error_failed_to_load_consent_info">Échec du chargement des informations de consentement</string>
 </resources>

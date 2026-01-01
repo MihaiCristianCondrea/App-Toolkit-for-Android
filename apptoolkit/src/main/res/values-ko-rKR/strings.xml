@@ -9,7 +9,6 @@
     <string name="welcome">환영합니다</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">계속하려면 서비스 약관 및 개인정보처리방침을 읽고 동의하세요.</string>
     <string name="agree">동의</string>
-    <string name="error_loading_consent_info">동의 정보를 로드하지 못했습니다.</string>
     <string name="loading">로딩 중…</string>
 
     <string name="skip_button_text">건너뛰기</string>
@@ -65,20 +64,11 @@
 
     <string name="home">홈</string>
 
-    <string name="activity_not_found">활동을 찾을 수 없습니다.</string>
-    <string name="security_error">보안 오류가 발생했습니다. 나중에 다시 시도해 주세요.</string>
-    <string name="io_error">입력/출력 오류가 발생했습니다. 네트워크 연결 또는 저장 공간을 확인하고 다시 시도해 주세요.</string>
-    <string name="illegal_argument_error">잘못된 입력 또는 인수가 제공되었습니다. 정보를 확인하고 다시 시도해 주세요.</string>
-    <string name="unknown_error">알 수 없는 오류가 발생했습니다.</string>
-    <string name="initialization_error">초기화에 실패했습니다. 나중에 다시 시도해 주세요.</string>
-
     <string name="settings">설정</string>
     <string name="long_settings_label">애플리케이션 설정</string>
     <string name="settings_disabled_message">현재 설정을 사용할 수 없습니다.</string>
     <string name="settings_placeholder_description">선택된 설정이 없습니다. 여기서 세부 정보를 보려면 옵션을 선택하세요.</string>
     <string name="get_help">도움 받기</string>
-    <string name="error_no_settings_found">설정을 찾을 수 없음</string>
-    <string name="error_invalid_content_key">잘못된 콘텐츠 키입니다.</string>
 
     <string name="display">디스플레이</string>
     <string name="summary_preference_settings_display">앱의 모양과 느낌을 맞춤 설정하세요.</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">GitHub로 리디렉션</string>
     <string name="snack_report_success">보고서가 성공적으로 전송되었습니다</string>
     <string name="snack_report_failed">보고서 전송 실패</string>
-    <string name="error_invalid_report">제목과 설명은 비워 둘 수 없습니다</string>
     <string name="issue_submitted_successfully">문제가 성공적으로 제출되었습니다</string>
     <string name="open_issue_in_browser">브라우저에서 열립니다</string>
     <string name="open_button_label">열린 문제</string>
     <string name="issue_submitted">귀하의 문제가 제출되었습니다.</string>
-    <string name="error_unauthorized">무단 : 유효하지 않은 토큰</string>
-    <string name="error_forbidden">금지 : 불충분 한 권한</string>
-    <string name="error_gone">API 엔드 포인트가 제거되었습니다</string>
-    <string name="error_unprocessable">이슈 생성을위한 잘못된 데이터</string>
 
     <string name="error_reporting">오류 보고</string>
     <string name="bug_report">버그 신고</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">캐시 지우기</string>
     <string name="summary_preference_settings_clear_cache">임시 애플리케이션 데이터를 지웁니다.</string>
     <string name="cache_cleared_success">캐시가 성공적으로 지워졌습니다.</string>
-    <string name="cache_cleared_error">일부 오류와 함께 캐시가 지워졌습니다.</string>
 
     <string name="security_and_privacy">보안 &amp; 개인 정보 보호</string>
     <string name="summary_preference_settings_privacy_and_security">개인 정보 설정을 관리합니다.</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">귀하와 관련된 광고를 확인하세요. 앱 활동을 기반으로 맞춤 광고를 표시하는 데 사용되는 정보를 관리합니다. 언제든지 여기에서 맞춤 설정을 끌 수 있습니다.\n</string>
     <string name="ads_enabled">광고 사용</string>
     <string name="ads_disabled">광고 사용 안 함</string>
-    <string name="error_failed_to_load_ads_settings">광고 설정을 로드하지 못했습니다.</string>
 
     <string name="usage_and_diagnostics">사용량 &amp; 진단</string>
     <string name="summary_preference_settings_usage_and_diagnostics">인앱 환경 개선을 위해 데이터 공유</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">EULA</string>
     <string name="changelog_title">앱 변경 로그</string>
-    <string name="loading_eula_message">최종 사용자 사용권 계약을 검색 중입니다…</string>
-    <string name="loading_changelog_message">애플리케이션 변경 로그를 가져오는 중입니다…</string>
-    <string name="error_loading_eula_message">최종 사용자 사용권 계약을 로드할 수 없습니다. 다시 시도해 주세요.</string>
-    <string name="error_loading_changelog_message">애플리케이션 변경 로그를 로드할 수 없습니다. 다시 시도해 주세요.</string>
     <string name="no_new_updates_message">새로운 업데이트가 없습니다.</string>
 
     <string name="device_info">기기 정보</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">무료 지원</string>
     <string name="web_ad">웹 광고</string>
     <string name="sponsored_ad_label">● 스폰서 광고</string>
-    <string name="error_failed_to_load_sku_details">SKU 세부 정보를 로드하지 못했습니다.</string>
     <string name="purchase_pending">기부금은 Google에서 처리 중입니다. 완료되면 알려 드리겠습니다. 감사합니다.</string>
     <string name="purchase_thank_you">기부해 주셔서 감사합니다.</string>
     <string name="purchase_cancelled">구매 취소</string>
-    <string name="error_an_error_occurred">오류가 발생했습니다</string>
-    <string name="error_failed_to_launch_review">리뷰 흐름을 시작하지 못했습니다</string>
-    <string name="error_failed_to_load_faq">FAQ를 로드하지 못했습니다</string>
-    <string name="error_failed_to_request_review">리뷰 요청에 실패했습니다</string>
-    <string name="error_failed_to_update_app">앱을 업데이트하지 못했습니다</string>
-    <string name="error_failed_to_load_consent_info">동의 정보를 로드하지 못했습니다</string>
 </resources>
