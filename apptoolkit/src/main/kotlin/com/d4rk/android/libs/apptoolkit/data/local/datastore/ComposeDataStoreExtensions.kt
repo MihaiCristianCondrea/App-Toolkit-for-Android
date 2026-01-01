@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.data.datastore
+package com.d4rk.android.libs.apptoolkit.data.local.datastore
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

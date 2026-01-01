@@ -1,9 +1,11 @@
 # Version 2.0.0
 
 - **New**: Added multiple new themes and color palettes for deeper personalization.
-- **New**: Introduced a seasonal theme to celebrate together.
+- **New**: Introduced a seasonal themes to celebrate together Christmas and Halloween.
 - **New**: Migrated navigation to Navigation 3 for simpler, adaptive back stack management.
-- **Patch**: Enhanced overall app performance and responsiveness.
+- **Major**: This update includes major under-the-hood improvements.
+- **Patch**: Enhanced overall app performance and responsiveness and app size.
+- **Patch**: Addressed various bugs to enhance overall stability.
 - **Patch**: Updated dependencies to the latest stable versions.
 
 # Version 1.1.4:

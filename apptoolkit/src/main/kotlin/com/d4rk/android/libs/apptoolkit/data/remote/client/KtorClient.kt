@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.data.client
+package com.d4rk.android.libs.apptoolkit.data.remote.client
 
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig

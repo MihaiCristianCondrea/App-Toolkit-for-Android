@@ -54,7 +54,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.applyD
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openDisplaySettings
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.datastore.rememberThemePreferencesState
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
-import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.local.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate

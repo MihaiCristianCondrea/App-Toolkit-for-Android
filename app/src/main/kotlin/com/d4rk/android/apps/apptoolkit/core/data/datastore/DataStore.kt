@@ -3,7 +3,7 @@ package com.d4rk.android.apps.apptoolkit.core.data.datastore
 import android.content.Context
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
 
 class DataStore(
     context: Context,
