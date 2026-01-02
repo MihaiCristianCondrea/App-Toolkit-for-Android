@@ -39,7 +39,7 @@ import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.ThemeSettingOption
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
-import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider.paletteById
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.ThemePaletteProvider.paletteById
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
 import com.d4rk.android.libs.apptoolkit.core.logging.THEME_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector

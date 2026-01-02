@@ -1,10 +1,10 @@
-package com.d4rk.android.libs.apptoolkit.app.theme.style.colors.monochrome
+package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.red
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 
-val monochromePalette: ColorPalette = ColorPalette(
+val redPalette: ColorPalette = ColorPalette(
     lightColorScheme = lightColorScheme(
         primary = primaryLight,
         onPrimary = onPrimaryLight,

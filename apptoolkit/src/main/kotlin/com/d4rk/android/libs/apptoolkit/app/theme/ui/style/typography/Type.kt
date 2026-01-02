@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.theme.style.typography
+package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.typography
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.Font

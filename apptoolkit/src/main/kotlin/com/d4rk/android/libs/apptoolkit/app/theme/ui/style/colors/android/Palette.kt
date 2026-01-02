@@ -1,10 +1,10 @@
-package com.d4rk.android.libs.apptoolkit.app.theme.style.colors.rose
+package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.android
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 
-val rosePalette: ColorPalette = ColorPalette(
+val androidPalette: ColorPalette = ColorPalette(
     lightColorScheme = lightColorScheme(
         primary = primaryLight,
         onPrimary = onPrimaryLight,

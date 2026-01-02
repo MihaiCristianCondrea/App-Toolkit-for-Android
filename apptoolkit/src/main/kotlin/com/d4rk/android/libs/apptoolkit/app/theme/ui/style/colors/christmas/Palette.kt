@@ -1,8 +1,8 @@
-package com.d4rk.android.libs.apptoolkit.app.theme.style.colors.christmas
+package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.christmas
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 
 val christmasPalette: ColorPalette = ColorPalette(
     lightColorScheme = lightColorScheme(
