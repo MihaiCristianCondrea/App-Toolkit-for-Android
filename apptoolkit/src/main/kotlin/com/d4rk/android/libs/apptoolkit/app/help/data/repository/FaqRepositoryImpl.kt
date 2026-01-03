@@ -9,11 +9,16 @@ import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
-import kotlinx.coroutines.CancellationException
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.result.runSuspendCatching
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class FaqRepositoryImpl(private val localDataSource : HelpLocalDataSource , private val remoteDataSource : HelpRemoteDataSource , private val catalogUrl : String , private val productId : String , ) : FaqRepository {
+class FaqRepositoryImpl(
+    private val localDataSource: HelpLocalDataSource,
+    private val remoteDataSource: HelpRemoteDataSource,
+    private val catalogUrl: String,
+    private val productId: String,
+) : FaqRepository {
 
     override fun fetchFaq(): Flow<DataState<List<FaqItem>, Errors>> = flow {
         val remoteResult: Result<List<FaqItem>> = runSuspendCatching {
@@ -48,18 +53,5 @@ class FaqRepositoryImpl(private val localDataSource : HelpLocalDataSource , priv
         }
 
         return questions.toFaqItems()
-    }
-}
-
-// TODO: Move somewhere else
-internal suspend inline fun <T> runSuspendCatching(
-    crossinline block: suspend () -> T,
-): Result<T> {
-    return try {
-        Result.success(block())
-    } catch (e: CancellationException) {
-        throw e
-    } catch (t: Throwable) {
-        Result.failure(t)
     }
 }
