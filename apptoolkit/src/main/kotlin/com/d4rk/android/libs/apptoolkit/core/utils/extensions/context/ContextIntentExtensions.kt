@@ -27,20 +27,12 @@ fun Context.startActivitySafely(
 ): Boolean {
     val launchIntent = if (addNewTaskFlag) intent.requireNewTask(this) else intent
 
-    return try { // TODO: Make try catch to be runCatching
-        startActivity(launchIntent)
-        true
-    } catch (t: ActivityNotFoundException) {
-        onFailure(t)
-        false
-    } catch (t: SecurityException) {
-        onFailure(t)
-        false
-    } catch (t: RuntimeException) {
-        // Covers OEM/background launch restrictions, bad flags, etc.
-        onFailure(t)
-        false
-    }
+    return runCatching { startActivity(launchIntent) }
+        .onFailure(onFailure)
+        .fold(
+            onSuccess = { true },
+            onFailure = { false }
+        )
 }
 
 @CheckResult
@@ -94,7 +86,14 @@ fun Context.openAppNotificationSettings(): Boolean {
             putExtra(Settings.EXTRA_CHANNEL_ID, 0)
         }
     }
-    return startActivitySafely(intent)
+    if (startActivitySafely(intent)) return true
+
+    val appDetails = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+        data = Uri.fromParts("package", pkg, null)
+    }
+    if (startActivitySafely(appDetails)) return true
+
+    return startActivitySafely(Intent(Settings.ACTION_SETTINGS))
 }
 
 /**

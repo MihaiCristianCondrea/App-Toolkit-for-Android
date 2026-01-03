@@ -62,12 +62,14 @@ class TestAboutRepositoryImpl {
             "com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextExtensionsKt"
         mockkStatic(extFile)
 
-        try { // TODO: Make try catch to be runCatching
-            every { ctx.copyTextToClipboard(any(), any(), any()) } returns true
+        try {
+            val copied = runCatching {
+                every { ctx.copyTextToClipboard(any(), any(), any()) } returns true
+                repo.copyDeviceInfo("label", "info")
+            }.getOrThrow()
 
-            val copied = repo.copyDeviceInfo("label", "info")
             verify {
-                ctx.copyTextToClipboard( // FIXME: The result of `copyTextToClipboard` is not used
+                ctx.copyTextToClipboard(
                     "label",
                     "info",
                     any()
