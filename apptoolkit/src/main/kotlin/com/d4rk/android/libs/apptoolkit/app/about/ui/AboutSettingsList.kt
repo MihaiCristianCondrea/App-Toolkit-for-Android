@@ -47,6 +47,23 @@ import nl.dionsegijn.konfetti.core.emitter.Emitter
 import org.koin.compose.viewmodel.koinViewModel
 import java.util.concurrent.TimeUnit
 
+/**
+ * A Composable that displays the "About" screen's settings list.
+ *
+ * This screen presents information about the application and the device. It handles its own state
+ * via a [AboutViewModel] and displays different UI states (loading, empty, success).
+ *
+ * The list includes:
+ * - App information: full name, version, and a link to the open-source licenses screen.
+ * - Device information: a summary of the device's details, which can be copied to the clipboard.
+ *
+ * It also features an easter egg: tapping the app version five times triggers a konfetti animation.
+ *
+ * @param paddingValues The padding values to be applied to the content of the lazy column,
+ * typically provided by a Scaffold.
+ * @param snackbarHostState The [SnackbarHostState] to manage and display Snackbars for user feedback,
+ * such as when device info is copied.
+ */
 @Composable
 fun AboutSettingsList(
     paddingValues: PaddingValues = PaddingValues(),

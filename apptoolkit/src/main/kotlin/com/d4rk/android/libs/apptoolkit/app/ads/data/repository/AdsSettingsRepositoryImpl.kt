@@ -5,6 +5,17 @@ import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoPr
 import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Concrete implementation of [AdsSettingsRepository].
+ *
+ * This class manages the persistence and retrieval of ad-related settings,
+ * specifically whether ads are enabled or disabled. It uses [CommonDataStore]
+ * for data persistence and [BuildInfoProvider] to determine the default ad state
+ * based on the build type (e.g., disabling ads for debug builds).
+ *
+ * @param dataStore The data store used for persisting ad settings.
+ * @param buildInfoProvider Provider for build-specific information, like whether it's a debug build.
+ */
 class AdsSettingsRepositoryImpl(
     private val dataStore: CommonDataStore,
     buildInfoProvider: BuildInfoProvider,

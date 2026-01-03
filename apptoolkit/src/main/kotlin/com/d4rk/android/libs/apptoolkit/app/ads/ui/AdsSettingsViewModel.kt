@@ -26,6 +26,18 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
+/**
+ * ViewModel for the Ads Settings screen.
+ *
+ * This ViewModel manages the UI state for the ads settings, allowing the user to
+ * enable or disable advertisements within the application. It communicates with the
+ * domain layer to observe and persist the ad-enabled status.
+ *
+ * @param observeAdsEnabled Use case to observe the current ad-enabled status from the repository.
+ * @param setAdsEnabled Use case to update the ad-enabled status in the repository.
+ * @param repository Repository for ads settings, used here to get the default value on error.
+ * @param dispatchers Provides coroutine dispatchers for different threads (IO, Main, etc.).
+ */
 class AdsSettingsViewModel(
     private val observeAdsEnabled: ObserveAdsEnabledUseCase,
     private val setAdsEnabled: SetAdsEnabledUseCase,
@@ -52,6 +64,20 @@ class AdsSettingsViewModel(
         }
     }
 
+    /**
+     * Observes the state of the "ads enabled" setting from the data source.
+     *
+     * This function initiates a flow that listens for changes to the ads enabled preference.
+     * - It cancels any previous observation to avoid multiple listeners.
+     * - On start, it sets the UI screen state to loading.
+     * - It maps the boolean result from the use case to a [DataState.Success].
+     * - If an error occurs during the observation (e.g., a database issue), it catches the exception
+     *   and emits a [DataState.Error], falling back to the default ads enabled value from the repository.
+     * - For each emitted result:
+     *   - On success, it updates the UI state with the fetched `adsEnabled` value and sets the screen state to [ScreenState.Success].
+     *   - On failure, it updates the UI state with the default `adsEnabled` value and sets the screen state to [ScreenState.Error].
+     * The entire flow is launched within the `viewModelScope`.
+     */
     private fun observe() {
         observeJob?.cancel()
         observeJob = observeAdsEnabled()
@@ -82,6 +108,16 @@ class AdsSettingsViewModel(
             .launchIn(viewModelScope)
     }
 
+    /**
+     * Persists the user's choice for enabling or disabling ads.
+     *
+     * This function first optimistically updates the UI state to reflect the new `enabled` status.
+     * It then launches a coroutine to save this setting to the underlying data source via the
+     * `setAdsEnabled` use case. If the persistence operation fails, it reverts the UI state
+     * to the previous value and updates the screen state to show an error.
+     *
+     * @param enabled A boolean indicating whether ads should be enabled (`true`) or disabled (`false`).
+     */
     private fun persist(enabled: Boolean) {
         screenState.updateData(newState = ScreenState.Success()) { current ->
             current.copy(adsEnabled = enabled)

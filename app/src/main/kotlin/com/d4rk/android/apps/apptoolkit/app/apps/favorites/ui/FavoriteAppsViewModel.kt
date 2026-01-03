@@ -10,7 +10,6 @@ import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.contract.FavoriteA
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onLoading
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
@@ -35,6 +34,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.cancellation.CancellationException
 
+/**
+ * ViewModel for the Favorite Apps screen.
+ *
+ * This ViewModel is responsible for managing the UI state for the list of favorite applications.
+ * It observes changes in the list of favorite apps, handles user actions like opening a random app,
+ * and manages the process of toggling an app's favorite status.
+ *
+ * @param observeFavoriteAppsUseCase Use case to observe the list of favorite applications.
+ * @param observeFavoritesUseCase Use case to observe the set of favorite package names.
+ * @param toggleFavoriteUseCase Use case to add or remove an app from favorites.
+ * @param dispatchers Provides CoroutineDispatchers for managing thread execution.
+ */
 class FavoriteAppsViewModel(
     private val observeFavoriteAppsUseCase: ObserveFavoriteAppsUseCase,
     observeFavoritesUseCase: ObserveFavoritesUseCase,

@@ -30,6 +30,22 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 
+/**
+ * ViewModel for the "About" screen, responsible for handling business logic and managing UI state.
+ *
+ * This ViewModel orchestrates the fetching and display of application and device information.
+ * It also handles user actions such as copying device information to the clipboard.
+ * It interacts with use cases to perform these operations and updates the UI state accordingly.
+ *
+ * @param getAboutInfo An instance of [GetAboutInfoUseCase] to fetch application and device information.
+ * @param copyDeviceInfo An instance of [CopyDeviceInfoUseCase] to handle copying device info text.
+ * @param dispatchers A provider for coroutine dispatchers, used to switch between I/O and main threads.
+ *
+ * @see ScreenViewModel
+ * @see AboutUiState
+ * @see AboutEvent
+ * @see AboutAction
+ */
 open class AboutViewModel(
     private val getAboutInfo: GetAboutInfoUseCase,
     private val copyDeviceInfo: CopyDeviceInfoUseCase,

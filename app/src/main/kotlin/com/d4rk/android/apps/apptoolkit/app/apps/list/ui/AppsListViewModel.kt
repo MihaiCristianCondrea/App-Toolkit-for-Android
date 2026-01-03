@@ -11,7 +11,6 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onLoading
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
@@ -32,6 +31,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -41,6 +41,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * ViewModel for the Apps List screen.
+ *
+ * This ViewModel is responsible for fetching and managing the list of developer applications,
+ * handling user interactions such as fetching apps, opening a random app, and toggling favorites.
+ * It observes changes in favorite apps and updates the UI state accordingly.
+ *
+ * @param fetchDeveloperAppsUseCase Use case to fetch the list of applications.
+ * @param observeFavoritesUseCase Use case to observe the set of favorite app package names.
+ * @param toggleFavoriteUseCase Use case to add or remove an app from favorites.
+ * @param dispatchers Provides coroutine dispatchers for different contexts (IO, Main, etc.).
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppsListViewModel(
     private val fetchDeveloperAppsUseCase: FetchDeveloperAppsUseCase,
@@ -102,8 +114,8 @@ class AppsListViewModel(
                     result
                         .onLoading { screenState.updateState(ScreenState.IsLoading()) }
                         .onSuccess { apps ->
-                            val immutableApps = apps.toImmutableList()
-                            if (immutableApps.isEmpty()) {
+                            val data = apps.toImmutableList()
+                            if (data.isEmpty()) {
                                 screenState.update { current ->
                                     current.copy(
                                         screenState = ScreenState.NoData(),
@@ -112,7 +124,7 @@ class AppsListViewModel(
                                 }
                             } else {
                                 screenState.updateData(newState = ScreenState.Success()) { current ->
-                                    current.copy(apps = immutableApps)
+                                    current.copy(apps = data)
                                 }
                             }
                         }
