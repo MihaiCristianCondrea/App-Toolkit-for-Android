@@ -123,13 +123,24 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
         }
     }
 
-    val staticOptions: List<String> = remember { StaticPaletteIds.withDefault }
-
     val isChristmasSeason: Boolean = remember {
         LocalDate.now(ZoneId.systemDefault()).isChristmasSeason
     }
     val isHalloweenSeason: Boolean = remember {
         LocalDate.now(ZoneId.systemDefault()).isHalloweenSeason
+    }
+
+    val staticOptions: List<String> = remember(
+        isChristmasSeason,
+        isHalloweenSeason,
+        staticPaletteId
+    ) {
+        filterSeasonalStaticPalettes(
+            baseOptions = StaticPaletteIds.withDefault,
+            isChristmasSeason = isChristmasSeason,
+            isHalloweenSeason = isHalloweenSeason,
+            selectedPaletteId = staticPaletteId
+        )
     }
 
     val staticSwatches: List<WallpaperSwatchColors> =
