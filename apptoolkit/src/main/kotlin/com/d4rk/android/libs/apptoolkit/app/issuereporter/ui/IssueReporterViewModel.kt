@@ -79,7 +79,9 @@ class IssueReporterViewModel(
         }
 
         sendJob = viewModelScope.launch {
-            val report = runCatching {
+            var report: Report? = null
+
+            runCatching {
                 val deviceInfo = deviceInfoProvider.capture()
                 val extraInfo = ExtraInfo()
                 Report(
@@ -89,13 +91,19 @@ class IssueReporterViewModel(
                     extraInfo = extraInfo,
                     email = data.email.ifBlank { null },
                 )
-            }.getOrElse {
-                showFailureSnackbar()
-                return@launch
             }
+                .onSuccess { createdReport ->
+                    report = createdReport
+                }
+                .onFailure { throwable ->
+                    if (throwable is CancellationException) throw throwable
+                    showFailureSnackbar()
+                }
+
+            val preparedReport = report ?: return@launch
 
             val params = SendIssueReportUseCase.Params(
-                report = report,
+                report = preparedReport,
                 target = githubTarget,
                 token = githubToken.takeIf { it.isNotBlank() }
             )
