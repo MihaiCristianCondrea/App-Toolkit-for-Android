@@ -50,8 +50,8 @@ class OnboardingViewModel(
             .onEach { completed ->
                 screenState.copyData { copy(isOnboardingCompleted = completed) }
             }
-            .catch { t ->
-                if (t is CancellationException) throw t
+            .catch { throwable ->
+                if (throwable is CancellationException) throw throwable
                 screenState.copyData { copy(isOnboardingCompleted = false) }
             }
             .launchIn(viewModelScope)

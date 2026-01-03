@@ -245,4 +245,3 @@ class SupportViewModel(
         billingRepository.launchPurchaseFlow(activity, productDetails, offerToken)
     }
 }
-

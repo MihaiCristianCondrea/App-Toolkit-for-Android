@@ -93,7 +93,9 @@ class AdsSettingsViewModel(
             emit(DataState.Success(Unit))
         }
             .flowOn(dispatchers.io)
-            .catch { emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)) }
+            .catch {
+                emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
+            }
             .onEach { result ->
                 result.onFailure {
                     screenState.updateData(newState = ScreenState.Error()) { current ->

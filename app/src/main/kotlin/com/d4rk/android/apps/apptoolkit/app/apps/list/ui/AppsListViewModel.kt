@@ -29,7 +29,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -92,8 +91,8 @@ class AppsListViewModel(
                         .flowOn(dispatchers.io)
                         .onStart { screenState.setLoading() }
                 }
-                .catch { t ->
-                    if (t is CancellationException) throw t
+                .catch { throwable ->
+                    if (throwable is CancellationException) throw throwable
                     showLoadAppsError()
                 }
                 .collect { result ->

@@ -7,10 +7,12 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
@@ -34,10 +36,13 @@ class MainViewModel(
         viewModelScope.launch {
             navigationRepository.getNavigationDrawerItems()
                 .catch { error ->
-                    screenState.successData {
-                        copy(
-                            showSnackbar = true,
-                            snackbarMessage = error.message ?: "Failed to load navigation"
+                    screenState.update { current ->
+                        current.copy(
+                            screenState = ScreenState.Error(),
+                            data = current.data?.copy(
+                                showSnackbar = true,
+                                snackbarMessage = error.message ?: "Failed to load navigation"
+                            )
                         )
                     }
                 }
