@@ -12,6 +12,9 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueRepor
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.state.IssueReporterUiState
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -28,6 +31,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -79,9 +83,7 @@ class IssueReporterViewModel(
         }
 
         sendJob = viewModelScope.launch {
-            var report: Report? = null
-
-            runCatching {
+            val preparedReport = try {
                 val deviceInfo = deviceInfoProvider.capture()
                 val extraInfo = ExtraInfo()
                 Report(
@@ -91,16 +93,11 @@ class IssueReporterViewModel(
                     extraInfo = extraInfo,
                     email = data.email.ifBlank { null },
                 )
+            } catch (throwable: Throwable) {
+                if (throwable is CancellationException) throw throwable
+                showFailureSnackbar()
+                return@launch
             }
-                .onSuccess { createdReport ->
-                    report = createdReport
-                }
-                .onFailure { throwable ->
-                    if (throwable is CancellationException) throw throwable
-                    showFailureSnackbar()
-                }
-
-            val preparedReport = report ?: return@launch
 
             val params = SendIssueReportUseCase.Params(
                 report = preparedReport,
@@ -109,27 +106,28 @@ class IssueReporterViewModel(
             )
 
             sendIssueReport(params)
+                .map { it.asDataState() }
                 .onStart { screenState.setLoading() }
                 .onCompletion { cause ->
-                    when {
-                        cause != null && cause !is CancellationException -> showFailureSnackbar()
-                        screenState.value.screenState is ScreenState.IsLoading ->
-                            screenState.updateState(ScreenState.Success())
+                    if (cause is CancellationException) throw cause
+                    if (screenState.value.screenState is ScreenState.IsLoading) {
+                        screenState.updateState(ScreenState.Success())
                     }
                     sendJob = null
                 }
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable
+                    emit(DataState.Error(error = IssueReporterError.Generic(message = throwable.message)))
                 }
-                .collect { outcome -> handleResult(outcome) }
+                .collect(::handleResult)
         }
     }
 
-    private fun handleResult(outcome: IssueReportResult) {
-        when (outcome) {
-            is IssueReportResult.Success -> {
+    private fun handleResult(outcome: DataState<String, IssueReporterError>) {
+        outcome
+            .onSuccess { url ->
                 screenState.update { current ->
-                    val updated = current.data?.copy(issueUrl = outcome.url)
+                    val updated = current.data?.copy(issueUrl = url)
                     current.copy(
                         screenState = ScreenState.Success(),
                         data = updated,
@@ -142,18 +140,23 @@ class IssueReporterViewModel(
                     )
                 }
             }
-
-            is IssueReportResult.Error -> {
-                val msg = when (outcome.status) {
-                    HttpStatusCode.Unauthorized -> UiTextHelper.StringResource(R.string.error_unauthorized)
-                    HttpStatusCode.Forbidden -> UiTextHelper.StringResource(R.string.error_forbidden)
-                    HttpStatusCode.Gone -> UiTextHelper.StringResource(R.string.error_gone)
-                    HttpStatusCode.UnprocessableEntity -> UiTextHelper.StringResource(R.string.error_unprocessable)
-                    else -> UiTextHelper.StringResource(R.string.snack_report_failed)
+            .onFailure { error ->
+                val message = when (error) {
+                    is IssueReporterError.Http -> error.toUiText()
+                    is IssueReporterError.Generic -> error.toUiText()
                 }
-                showFailureSnackbar(msg)
+                screenState.update { current ->
+                    current.copy(
+                        screenState = ScreenState.Error(),
+                        snackbar = UiSnackbar(
+                            message = message,
+                            isError = true,
+                            timeStamp = System.currentTimeMillis(),
+                            type = ScreenMessageType.SNACKBAR,
+                        )
+                    )
+                }
             }
-        }
     }
 
     private fun showFailureSnackbar(
@@ -169,6 +172,39 @@ class IssueReporterViewModel(
                     type = ScreenMessageType.SNACKBAR,
                 )
             )
+        }
+    }
+
+    private fun IssueReportResult.asDataState(): DataState<String, IssueReporterError> {
+        return when (this) {
+            is IssueReportResult.Success -> DataState.Success(url)
+            is IssueReportResult.Error -> DataState.Error(
+                error = IssueReporterError.Http(status = status, message = message)
+            )
+        }
+    }
+
+    private sealed class IssueReporterError(open val message: String?) : Error(message) {
+        data class Http(val status: HttpStatusCode, override val message: String?) : IssueReporterError(message)
+        data class Generic(override val message: String?) : IssueReporterError(message)
+    }
+
+    private fun IssueReporterError.toUiText(): UiTextHelper {
+        return when (this) {
+            is IssueReporterError.Http -> when (status) {
+                HttpStatusCode.Unauthorized -> UiTextHelper.StringResource(R.string.error_unauthorized)
+                HttpStatusCode.Forbidden -> UiTextHelper.StringResource(R.string.error_forbidden)
+                HttpStatusCode.Gone -> UiTextHelper.StringResource(R.string.error_gone)
+                HttpStatusCode.UnprocessableEntity -> UiTextHelper.StringResource(R.string.error_unprocessable)
+                else -> if (message.isNullOrBlank()) {
+                    UiTextHelper.StringResource(R.string.snack_report_failed)
+                } else {
+                    UiTextHelper.DynamicString(message)
+                }
+            }
+
+            is IssueReporterError.Generic -> message?.let { UiTextHelper.DynamicString(it) }
+                ?: UiTextHelper.StringResource(R.string.snack_report_failed)
         }
     }
 }

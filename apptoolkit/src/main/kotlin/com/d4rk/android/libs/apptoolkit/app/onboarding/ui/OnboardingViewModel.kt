@@ -7,12 +7,17 @@ import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAct
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -63,18 +68,28 @@ class OnboardingViewModel(
 
     private fun completeOnboarding() {
         completeJob?.cancel()
-        completeJob = viewModelScope.launch {
-            screenState.copyData { copy(isOnboardingCompleted = true) }
-
-            runCatching {
-                withContext(dispatchers.io) { completeOnboardingUseCase() }
-            }.onSuccess {
-                sendAction(OnboardingAction.OnboardingCompleted)
-            }.onFailure { t ->
-                if (t is CancellationException) throw t
-                screenState.copyData { copy(isOnboardingCompleted = false) }
-            }
+        completeJob = flow<DataState<Unit, Errors.UseCase>> {
+            emit(DataState.Loading())
+            withContext(dispatchers.io) { completeOnboardingUseCase() }
+            emit(DataState.Success(Unit))
         }
+            .flowOn(dispatchers.io)
+            .catch { throwable ->
+                if (throwable is CancellationException) throw throwable
+                emit(DataState.Error(error = Errors.UseCase.INVALID_STATE))
+            }
+            .onEach { result ->
+                result
+                    .onSuccess { sendAction(OnboardingAction.OnboardingCompleted) }
+                    .onFailure {
+                        screenState.copyData { copy(isOnboardingCompleted = false) }
+                    }
+
+                if (result is DataState.Loading) {
+                    screenState.copyData { copy(isOnboardingCompleted = true) }
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun setCrashlyticsDialogVisibility(isVisible: Boolean) {
