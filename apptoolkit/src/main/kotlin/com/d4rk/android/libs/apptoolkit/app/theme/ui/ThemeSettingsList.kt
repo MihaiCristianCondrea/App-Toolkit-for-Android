@@ -54,6 +54,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.applyD
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openDisplaySettings
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.datastore.rememberThemePreferencesState
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isHalloweenSeason
 import com.d4rk.android.libs.apptoolkit.data.local.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -126,6 +127,9 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
 
     val isChristmasSeason: Boolean = remember {
         LocalDate.now(ZoneId.systemDefault()).isChristmasSeason
+    }
+    val isHalloweenSeason: Boolean = remember {
+        LocalDate.now(ZoneId.systemDefault()).isHalloweenSeason
     }
 
     val staticSwatches: List<WallpaperSwatchColors> =
@@ -242,7 +246,8 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                         WallpaperColorOptionCard(
                                             colors = staticSwatches[index],
                                             selected = !isDynamicColors && id == staticPaletteId,
-                                            showSeasonalBadge = isChristmasSeason && id == StaticPaletteIds.CHRISTMAS,
+                                            showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
+                                                    (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
                                             onClick = {
                                                 coroutineScope.launch {
                                                     dataStore.saveDynamicColors(false)
@@ -272,7 +277,8 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                             WallpaperColorOptionCard(
                                 colors = staticSwatches[index],
                                 selected = id == staticPaletteId,
-                                showSeasonalBadge = isChristmasSeason && id == StaticPaletteIds.CHRISTMAS,
+                                showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
+                                        (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
                                 onClick = {
                                     coroutineScope.launch {
                                         dataStore.saveDynamicColors(false)
