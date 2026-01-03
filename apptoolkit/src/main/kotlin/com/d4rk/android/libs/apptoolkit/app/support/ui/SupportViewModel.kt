@@ -12,6 +12,7 @@ import com.d4rk.android.libs.apptoolkit.app.support.ui.state.SupportScreenUiStat
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
 import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.primaryOfferToken
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
@@ -25,6 +26,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
@@ -195,7 +197,7 @@ class SupportViewModel(
 
     private fun queryProductDetails() {
         viewModelScope.launch {
-            flow<DataState<Unit, BillingError>> { // FIXME: Type argument is not within its bounds: must be subtype of 'Error'.
+            flow<DataState<Unit, Errors>> {
                 billingRepository.queryProductDetails(
                     productIds = listOf(
                         DonationProductIds.LOW_DONATION,
@@ -209,11 +211,7 @@ class SupportViewModel(
                 .onStart { screenState.setLoading() }
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable
-                    emit(
-                        DataState.Error(
-                            error = BillingError(message = throwable.message) // FIXME: Argument type mismatch: actual type is 'SupportViewModel.BillingError', but 'Error' was expected.
-                        )
-                    )
+                    emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_SKU_DETAILS))
                 }
                 .onEach { result ->
                     result
@@ -222,16 +220,10 @@ class SupportViewModel(
                                 screenState.updateState(ScreenState.Success())
                             }
                         }
-                        .onFailure { error -> // TODO: should use thesae correctly across entire project onFailure and onSuccess
-                            val errorMessage = error.message.orEmpty()
-                            val snackbarMessage = if (errorMessage.isNotBlank()) {
-                                UiTextHelper.DynamicString(errorMessage)
-                            } else {
-                                UiTextHelper.StringResource(R.string.error_failed_to_load_sku_details)
-                            }
-
+                        .onFailure { error ->
+                            val snackbarMessage = error.asUiText()
                             screenState.updateData(newState = Error()) { current ->
-                                current.copy(error = errorMessage.ifBlank { null })
+                                current.copy(error = null)
                             }
                             screenState.showSnackbar(
                                 UiSnackbar(
@@ -246,7 +238,4 @@ class SupportViewModel(
                 .launchIn(viewModelScope)
         }
     }
-
-    data class BillingError(val message: String?) :
-        Error(message) // TODO: move somehwere else FIXME: Function 'fun component1(): String?' generated for the data class conflicts with the supertype member 'fun component1(): String' defined in 'com/d4rk/android/libs/apptoolkit/core/ui/state/ScreenState.Error'.
 }
