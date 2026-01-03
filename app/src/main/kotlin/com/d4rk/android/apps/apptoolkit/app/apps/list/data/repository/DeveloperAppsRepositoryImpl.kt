@@ -7,6 +7,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.repository.Develope
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.result.runSuspendCatching
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
@@ -30,7 +31,7 @@ class DeveloperAppsRepositoryImpl(
 ) : DeveloperAppsRepository {
 
     override fun fetchDeveloperApps(): Flow<DataState<List<AppInfo>, AppErrors>> = flow {
-        runCatching {
+        runSuspendCatching {
             client.get(baseUrl)
         }.onSuccess { response ->
             if (!response.status.isSuccess()) {
