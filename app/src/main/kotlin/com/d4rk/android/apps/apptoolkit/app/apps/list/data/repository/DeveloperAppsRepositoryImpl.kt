@@ -5,16 +5,23 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.ApiRespo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.repository.DeveloperAppsRepository
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.HttpRequestTimeoutException
+import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.SerializationException
 import kotlin.coroutines.cancellation.CancellationException
 
 class DeveloperAppsRepositoryImpl(
@@ -43,21 +50,28 @@ class DeveloperAppsRepositoryImpl(
         }
     }
 
-    private fun mapHttpStatusToError(status: HttpStatusCode): AppErrors { // FIXME: !!!
-        return if (status == HttpStatusCode.RequestTimeout) {
-            AppErrors.UseCase.FAILED_TO_LOAD_APPS
-        } else {
-            AppErrors.UseCase.FAILED_TO_LOAD_APPS
+    private fun mapHttpStatusToError(status: HttpStatusCode): AppErrors {
+        return when {
+            status == HttpStatusCode.RequestTimeout -> AppErrors.Common(Errors.Network.REQUEST_TIMEOUT)
+            status == HttpStatusCode.TooManyRequests -> AppErrors.Common(Errors.Network.RATE_LIMITED)
+            status.value in 300..399 -> AppErrors.Common(Errors.Network.HTTP_REDIRECT)
+            status.value in 400..499 -> AppErrors.Common(Errors.Network.HTTP_CLIENT_ERROR)
+            status.value >= 500 -> AppErrors.Common(Errors.Network.HTTP_SERVER_ERROR)
+            else -> AppErrors.Common(Errors.Network.UNKNOWN)
         }
     }
 
-    // TODO && FIXME: FIX THE ISSUES and make the code compatible with the library
     private fun mapThrowableToError(t: Throwable): AppErrors {
         return when (t) {
-            //is SocketTimeoutException -> AppErrors.Network.REQUEST_TIMEOUT
-            //is IOException -> AppErrors.Network.NO_INTERNET
+            is CancellationException -> throw t
+            is HttpRequestTimeoutException, is SocketTimeoutException ->
+                AppErrors.Common(Errors.Network.REQUEST_TIMEOUT)
+            is UnknownHostException -> AppErrors.Common(Errors.Network.NO_INTERNET)
+            is IOException -> AppErrors.Common(Errors.Network.CONNECTION_ERROR)
+            is SerializationException -> AppErrors.Common(Errors.Network.SERIALIZATION)
+            is RedirectResponseException -> mapHttpStatusToError(t.response.status)
             is ClientRequestException -> mapHttpStatusToError(t.response.status)
-            is ServerResponseException -> AppErrors.UseCase.FAILED_TO_LOAD_APPS
+            is ServerResponseException -> mapHttpStatusToError(t.response.status)
             else -> AppErrors.UseCase.FAILED_TO_LOAD_APPS
         }
     }
