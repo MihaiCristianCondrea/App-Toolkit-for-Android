@@ -1,46 +1,42 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.platform
 
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
-import com.google.firebase.Firebase
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.analytics
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.perf.FirebasePerformance
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkObject
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import io.mockk.verifyOrder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 import org.junit.After
 import org.junit.Test
-import kotlin.test.assertEquals
 
 class ConsentManagerHelperTest {
 
     @After
     fun tearDown() {
         unmockkAll()
+        stopKoin()
     }
 
     @Test
     fun `updateConsent sets consent statuses for every boolean combination`() {
-        val analytics = mockk<FirebaseAnalytics>(relaxed = true)
-        mockkObject(Firebase)
-        every { Firebase.analytics } returns analytics
-
-        val capturedConsents =
-            mutableListOf<Map<FirebaseAnalytics.ConsentType, FirebaseAnalytics.ConsentStatus>>()
-        every { analytics.setConsent(any()) } answers {
-            @Suppress("UNCHECKED_CAST")
-            capturedConsents += firstArg<Map<FirebaseAnalytics.ConsentType, FirebaseAnalytics.ConsentStatus>>()
+        val firebaseController = mockk<FirebaseController>(relaxed = true)
+        startKoin {
+            modules(
+                module {
+                    single<FirebaseController> { firebaseController }
+                    single { mockk<com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider> { every { isDebugBuild } returns false } }
+                }
+            )
         }
 
         val combinations = mutableListOf<ConsentFlags>()
@@ -65,32 +61,16 @@ class ConsentManagerHelperTest {
             }
         }
 
-        assertEquals(combinations.size, capturedConsents.size)
-        combinations.forEachIndexed { index, flags ->
-            val consent = capturedConsents[index]
-            assertEquals(
-                flags.analyticsGranted.toStatus(),
-                consent[FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE],
-                "ANALYTICS_STORAGE consent mismatch for $flags"
-            )
-            assertEquals(
-                flags.adStorageGranted.toStatus(),
-                consent[FirebaseAnalytics.ConsentType.AD_STORAGE],
-                "AD_STORAGE consent mismatch for $flags"
-            )
-            assertEquals(
-                flags.adUserDataGranted.toStatus(),
-                consent[FirebaseAnalytics.ConsentType.AD_USER_DATA],
-                "AD_USER_DATA consent mismatch for $flags"
-            )
-            assertEquals(
-                flags.adPersonalizationGranted.toStatus(),
-                consent[FirebaseAnalytics.ConsentType.AD_PERSONALIZATION],
-                "AD_PERSONALIZATION consent mismatch for $flags"
-            )
+        combinations.forEach { flags ->
+            verify {
+                firebaseController.updateConsent(
+                    analyticsGranted = flags.analyticsGranted,
+                    adStorageGranted = flags.adStorageGranted,
+                    adUserDataGranted = flags.adUserDataGranted,
+                    adPersonalizationGranted = flags.adPersonalizationGranted
+                )
+            }
         }
-
-        verify(exactly = combinations.size) { analytics.setConsent(any()) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -157,31 +137,31 @@ class ConsentManagerHelperTest {
             flowOf(false)
         )
 
-        val analytics = mockk<FirebaseAnalytics>(relaxed = true)
-        val crashlytics = mockk<FirebaseCrashlytics>(relaxed = true)
-        val performance = mockk<FirebasePerformance>(relaxed = true)
-        mockkObject(Firebase)
-        every { Firebase.analytics } returns analytics
-        mockkStatic(FirebaseCrashlytics::class)
-        mockkStatic(FirebasePerformance::class)
-        every { FirebaseCrashlytics.getInstance() } returns crashlytics
-        every { FirebasePerformance.getInstance() } returns performance
+        val firebaseController = mockk<FirebaseController>(relaxed = true)
+        startKoin {
+            modules(
+                module {
+                    single<FirebaseController> { firebaseController }
+                    single { mockk<com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider> { every { isDebugBuild } returns !defaultValue } }
+                }
+            )
+        }
 
         ConsentManagerHelper.updateAnalyticsCollectionFromDatastore(dataStore)
         ConsentManagerHelper.updateAnalyticsCollectionFromDatastore(dataStore)
 
         verify(exactly = 2) { dataStore.usageAndDiagnostics(defaultValue) }
         verifyOrder {
-            analytics.setAnalyticsCollectionEnabled(true)
-            analytics.setAnalyticsCollectionEnabled(false)
+            firebaseController.setAnalyticsEnabled(true)
+            firebaseController.setAnalyticsEnabled(false)
         }
         verifyOrder {
-            crashlytics.isCrashlyticsCollectionEnabled = true
-            crashlytics.isCrashlyticsCollectionEnabled = false
+            firebaseController.setCrashlyticsEnabled(true)
+            firebaseController.setCrashlyticsEnabled(false)
         }
         verifyOrder {
-            performance.isPerformanceCollectionEnabled = true
-            performance.isPerformanceCollectionEnabled = false
+            firebaseController.setPerformanceEnabled(true)
+            firebaseController.setPerformanceEnabled(false)
         }
     }
 
@@ -191,7 +171,4 @@ class ConsentManagerHelperTest {
         val adUserDataGranted: Boolean,
         val adPersonalizationGranted: Boolean
     )
-
-    private fun Boolean.toStatus(): FirebaseAnalytics.ConsentStatus =
-        if (this) FirebaseAnalytics.ConsentStatus.GRANTED else FirebaseAnalytics.ConsentStatus.DENIED
 }
