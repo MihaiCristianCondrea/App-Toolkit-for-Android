@@ -1,0 +1,17 @@
+package com.d4rk.android.apps.apptoolkit.core.di.modules.settings
+
+import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppAdvancedSettingsProvider
+import com.d4rk.android.libs.apptoolkit.app.advanced.data.repository.CacheRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
+import com.d4rk.android.libs.apptoolkit.app.advanced.ui.AdvancedSettingsViewModel
+import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AdvancedSettingsProvider
+import org.koin.core.module.Module
+import org.koin.core.module.dsl.viewModel
+import org.koin.dsl.module
+
+val advancedSettingsModule: Module = module {
+    single<AdvancedSettingsProvider> { AppAdvancedSettingsProvider(context = get()) }
+    single<CacheRepository> { CacheRepositoryImpl(context = get()) }
+
+    viewModel { AdvancedSettingsViewModel(repository = get(), dispatchers = get()) }
+}

@@ -35,11 +35,22 @@ import org.koin.core.qualifier.named
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 
-// TODO: Separate the modules better
-val appToolkitModule: Module = module {
-    single<StartupProvider> { AppStartupProvider() }
+private val githubTokenQualifier = qualifier<GithubToken>()
 
-    single(createdAtStart = true) { // TODO: Make support module
+val appToolkitCoreModule: Module = module {
+    single<StartupProvider> { AppStartupProvider() }
+    viewModel { StartupViewModel() }
+
+    single<AppVersionInfo> {
+        AppVersionInfo(
+            BuildConfig.VERSION_NAME,
+            BuildConfig.VERSION_CODE.toLong()
+        )
+    }
+}
+
+val supportModule: Module = module {
+    single(createdAtStart = true) {
         val dispatchers = get<DispatcherProvider>()
         BillingRepository.getInstance(
             context = get(),
@@ -47,12 +58,13 @@ val appToolkitModule: Module = module {
             externalScope = CoroutineScope(SupervisorJob() + dispatchers.io)
         )
     }
+
     viewModel {
         SupportViewModel(billingRepository = get())
     }
-    viewModel { StartupViewModel() }
+}
 
-    // TODO: Make help module
+val helpModule: Module = module {
     single { HelpLocalDataSource(context = get()) }
     single { HelpRemoteDataSource(client = get()) }
     single<FaqRepository> {
@@ -67,22 +79,13 @@ val appToolkitModule: Module = module {
     }
     single { GetFaqUseCase(repository = get()) }
     viewModel { HelpViewModel(getFaqUseCase = get(), dispatchers = get()) }
+}
 
-    // TODO: make issue reporter module
+val issueReporterModule: Module = module {
     single { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
     single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get()) }
     single { SendIssueReportUseCase(get(), get()) }
-
-    val githubTokenQualifier = qualifier<GithubToken>()
-    viewModel {
-        IssueReporterViewModel(
-            sendIssueReport = get(),
-            githubTarget = get(),
-            githubToken = get(githubTokenQualifier),
-            deviceInfoProvider = get()
-        )
-    }
 
     single(qualifier = named(name = "github_repository")) { "App-Toolkit-for-Android" }
     single<GithubTarget> {
@@ -98,11 +101,19 @@ val appToolkitModule: Module = module {
 
     single(githubTokenQualifier) { BuildConfig.GITHUB_TOKEN.toToken() }
 
-    // TODO: This is general for the app toolkit library and app
-    single<AppVersionInfo> {
-        AppVersionInfo(
-            BuildConfig.VERSION_NAME,
-            BuildConfig.VERSION_CODE.toLong()
+    viewModel {
+        IssueReporterViewModel(
+            sendIssueReport = get(),
+            githubTarget = get(),
+            githubToken = get(githubTokenQualifier),
+            deviceInfoProvider = get()
         )
     }
 }
+
+val appToolkitModules = listOf(
+    appToolkitCoreModule,
+    supportModule,
+    helpModule,
+    issueReporterModule
+)
