@@ -25,6 +25,20 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for the Usage and Diagnostics screen.
+ *
+ * This ViewModel manages the state and logic for user consent settings related to usage data,
+ * diagnostics, and advertising. It interacts with the [UsageAndDiagnosticsRepository] to
+ * observe and update these settings.
+ *
+ * It handles events from the UI to update specific consents, such as analytics, ad storage,
+ * and personalization, and reflects these changes in the [UsageAndDiagnosticsUiState]. The
+ * ViewModel also ensures that the underlying consent framework (via [ConsentManagerHelper])
+ * is updated whenever settings change.
+ *
+ * @param repository The repository responsible for persisting and retrieving usage and diagnostics settings.
+ */
 class UsageAndDiagnosticsViewModel(
     private val repository: UsageAndDiagnosticsRepository,
 ) : ScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent, UsageAndDiagnosticsAction>(

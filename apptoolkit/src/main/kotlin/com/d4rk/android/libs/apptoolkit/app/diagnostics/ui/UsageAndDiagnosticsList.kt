@@ -38,6 +38,18 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ * A Composable that displays a list of settings for usage and diagnostics.
+ *
+ * This screen presents a main toggle to enable or disable overall usage and diagnostics reporting.
+ * It also includes an expandable section for "Advanced privacy settings" which allows the user
+ * to granularly control consent for different categories like analytics and advertising (ad storage,
+ * user data, and personalization).
+ *
+ * The state is managed by a [UsageAndDiagnosticsViewModel] and reflects the user's current consent choices.
+ *
+ * @param paddingValues The padding to apply to the content of the list, typically provided by a Scaffold.
+ */
 @Composable
 fun UsageAndDiagnosticsList(
     paddingValues: PaddingValues,

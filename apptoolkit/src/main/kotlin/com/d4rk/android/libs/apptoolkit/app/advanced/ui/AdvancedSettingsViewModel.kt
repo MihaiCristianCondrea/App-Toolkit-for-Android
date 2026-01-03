@@ -20,6 +20,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.coroutines.cancellation.CancellationException
 
+/**
+ * ViewModel for the advanced settings screen.
+ *
+ * This ViewModel manages the UI state and business logic for advanced settings functionalities,
+ * such as clearing the application cache. It interacts with a [CacheRepository] to perform
+ * data operations and updates the UI state accordingly.
+ *
+ * @param repository The repository responsible for cache-related operations.
+ * @param dispatchers Provides coroutine dispatchers for different contexts (IO, Main, etc.).
+ */
 class AdvancedSettingsViewModel(
     private val repository: CacheRepository,
     private val dispatchers: DispatcherProvider,
@@ -39,6 +49,14 @@ class AdvancedSettingsViewModel(
         }
     }
 
+    /**
+     * Initiates the cache clearing process.
+     *
+     * This function cancels any ongoing cache clearing operation to prevent multiple concurrent executions.
+     * It then calls the repository to clear the cache on an IO thread. The UI state is updated based on
+     * the result of the operation (success or error), setting an appropriate message to be displayed
+     * to the user. It also handles potential exceptions during the flow execution.
+     */
     private fun clearCache() {
         clearCacheJob?.cancel()
 

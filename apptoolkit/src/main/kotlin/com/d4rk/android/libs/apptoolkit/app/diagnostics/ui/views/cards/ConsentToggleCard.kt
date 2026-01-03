@@ -32,6 +32,23 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpa
 import com.d4rk.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
+/**
+ * A card component that displays a toggle switch for user consent.
+ *
+ * This card is designed to present a specific consent option to the user,
+ * such as enabling analytics or crash reporting. It includes an icon, a title, a description,
+ * and a switch to toggle the consent state. The entire card is clickable to toggle the switch,
+ * providing a larger touch target and better user experience. Haptic and sound feedback are
+ * triggered on click.
+ *
+ * @param title The main text displayed on the card, representing the consent category.
+ * @param description A detailed explanation of what the consent option entails.
+ * @param switchState The current state of the consent (true for granted, false for denied).
+ * @param icon An [ImageVector] to be displayed alongside the title and description,
+ *             visually representing the consent category.
+ * @param onCheckedChange A lambda function that is invoked when the user toggles the switch or
+ *                        clicks the card. It receives the new boolean state of the consent.
+ */
 @Composable
 fun ConsentToggleCard(
     title: String,

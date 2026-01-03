@@ -12,7 +12,6 @@ import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onLoading
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
@@ -112,7 +111,6 @@ class AppsListViewModel(
                 }
                 .collect { result ->
                     result
-                        .onLoading { screenState.updateState(ScreenState.IsLoading()) }
                         .onSuccess { apps ->
                             val data = apps.toImmutableList()
                             if (data.isEmpty()) {

@@ -16,6 +16,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
@@ -45,7 +46,7 @@ class SupportViewModel(
                 if (screenData?.products?.isNotEmpty() == true) {
                     screenState.updateState(ScreenState.Success())
                 } else {
-                    screenState.updateState(ScreenState.IsLoading())
+                    screenState.setLoading()
                 }
             }
             .map { it.values.toList() }
@@ -160,7 +161,7 @@ class SupportViewModel(
             .launchIn(viewModelScope)
 
         viewModelScope.launch {
-            screenState.updateState(ScreenState.IsLoading())
+            screenState.setLoading()
             runCatching {
                 billingRepository.queryProductDetails(
                     listOf(
@@ -195,7 +196,7 @@ class SupportViewModel(
     override fun onEvent(event: SupportEvent) {
         when (event) {
             is SupportEvent.QueryProductDetails -> viewModelScope.launch {
-                screenState.updateState(ScreenState.IsLoading())
+                screenState.setLoading()
                 runCatching {
                     billingRepository.queryProductDetails(
                         listOf(

@@ -8,6 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
+/**
+ * A composable that displays a styled header for a section within a consent screen.
+ *
+ * This is typically used to visually separate and title different parts of a consent-related UI,
+ * such as "Data Collection" or "Third-Party Services". It uses the `titleMedium` typography
+ * from the current [MaterialTheme], with a semi-bold weight and the primary color scheme color.
+ *
+ * @param title The text to be displayed as the header title.
+ */
 @Composable
 fun ConsentSectionHeader(title: String) {
     Text(
