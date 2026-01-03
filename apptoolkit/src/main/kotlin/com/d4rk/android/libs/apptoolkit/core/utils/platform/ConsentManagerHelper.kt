@@ -1,12 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.platform
 
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
-import com.google.firebase.Firebase
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.analytics
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.perf.FirebasePerformance
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -24,6 +20,7 @@ import org.koin.core.component.inject
 object ConsentManagerHelper : KoinComponent {
 
     private val configProvider: BuildInfoProvider by inject()
+    private val firebaseController: FirebaseController by inject()
     val defaultAnalyticsGranted: Boolean by lazy { !configProvider.isDebugBuild }
 
     /**
@@ -42,23 +39,12 @@ object ConsentManagerHelper : KoinComponent {
         adUserDataGranted: Boolean,
         adPersonalizationGranted: Boolean
     ) {
-        val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
-        val consentSettings: MutableMap<FirebaseAnalytics.ConsentType, FirebaseAnalytics.ConsentStatus> =
-            mutableMapOf()
-
-        consentSettings[FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE] =
-            if (analyticsGranted) FirebaseAnalytics.ConsentStatus.GRANTED else FirebaseAnalytics.ConsentStatus.DENIED
-
-        consentSettings[FirebaseAnalytics.ConsentType.AD_STORAGE] =
-            if (adStorageGranted) FirebaseAnalytics.ConsentStatus.GRANTED else FirebaseAnalytics.ConsentStatus.DENIED
-
-        consentSettings[FirebaseAnalytics.ConsentType.AD_USER_DATA] =
-            if (adUserDataGranted) FirebaseAnalytics.ConsentStatus.GRANTED else FirebaseAnalytics.ConsentStatus.DENIED
-
-        consentSettings[FirebaseAnalytics.ConsentType.AD_PERSONALIZATION] =
-            if (adPersonalizationGranted) FirebaseAnalytics.ConsentStatus.GRANTED else FirebaseAnalytics.ConsentStatus.DENIED
-
-        firebaseAnalytics.setConsent(consentSettings)
+        firebaseController.updateConsent(
+            analyticsGranted = analyticsGranted,
+            adStorageGranted = adStorageGranted,
+            adUserDataGranted = adUserDataGranted,
+            adPersonalizationGranted = adPersonalizationGranted,
+        )
     }
 
 
@@ -114,10 +100,8 @@ object ConsentManagerHelper : KoinComponent {
     suspend fun updateAnalyticsCollectionFromDatastore(dataStore: CommonDataStore) {
         val usageAndDiagnosticsGranted: Boolean =
             dataStore.usageAndDiagnostics(default = defaultAnalyticsGranted).first()
-        Firebase.analytics.setAnalyticsCollectionEnabled(usageAndDiagnosticsGranted)
-        FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled =
-            usageAndDiagnosticsGranted
-        FirebasePerformance.getInstance().isPerformanceCollectionEnabled =
-            usageAndDiagnosticsGranted
+        firebaseController.setAnalyticsEnabled(usageAndDiagnosticsGranted)
+        firebaseController.setCrashlyticsEnabled(usageAndDiagnosticsGranted)
+        firebaseController.setPerformanceEnabled(usageAndDiagnosticsGranted)
     }
 }

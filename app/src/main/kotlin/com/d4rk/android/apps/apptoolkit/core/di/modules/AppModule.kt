@@ -17,6 +17,8 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.MainViewModel
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.libs.apptoolkit.app.main.data.repository.MainRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
+import com.d4rk.android.libs.apptoolkit.core.data.firebase.FirebaseControllerImpl
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.developerAppsApiUrl
@@ -38,6 +40,7 @@ val appModule: Module = module {
             dispatchers = get()
         )
     }
+    single<FirebaseController> { FirebaseControllerImpl() }
     single { KtorClient.createClient(enableLogging = BuildConfig.DEBUG) }
     single<NavigationRepository> { MainRepositoryImpl(dispatchers = get()) }
     viewModel { MainViewModel(navigationRepository = get()) }
