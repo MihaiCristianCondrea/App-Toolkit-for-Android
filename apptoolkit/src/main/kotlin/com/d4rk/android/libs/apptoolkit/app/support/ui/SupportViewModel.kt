@@ -11,9 +11,12 @@ import com.d4rk.android.libs.apptoolkit.app.support.ui.contract.SupportEvent
 import com.d4rk.android.libs.apptoolkit.app.support.ui.state.SupportScreenUiState
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
 import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.primaryOfferToken
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState.Error
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState.Error
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
@@ -23,9 +26,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -81,7 +81,7 @@ class SupportViewModel(
                     is CancellationException -> return@onCompletion
                     else -> {
                         val errorMessage = cause.message.orEmpty()
-                        screenState.updateData(newState = ScreenState.Error()) { current ->
+                        screenState.updateData(newState = Error()) { current ->
                             current.copy(error = errorMessage)
                         }
                         screenState.showSnackbar(
@@ -122,7 +122,7 @@ class SupportViewModel(
                     )
 
                     is PurchaseResult.Failed -> {
-                        screenState.updateData(newState = ScreenState.Error()) { current ->
+                        screenState.updateData(newState = Error()) { current ->
                             current.copy(error = result.error)
                         }
                         screenState.showSnackbar(
@@ -195,7 +195,7 @@ class SupportViewModel(
 
     private fun queryProductDetails() {
         viewModelScope.launch {
-            flow<DataState<Unit, BillingError>> {
+            flow<DataState<Unit, BillingError>> { // FIXME: Type argument is not within its bounds: must be subtype of 'Error'.
                 billingRepository.queryProductDetails(
                     productIds = listOf(
                         DonationProductIds.LOW_DONATION,
@@ -211,7 +211,7 @@ class SupportViewModel(
                     if (throwable is CancellationException) throw throwable
                     emit(
                         DataState.Error(
-                            error = BillingError(message = throwable.message)
+                            error = BillingError(message = throwable.message) // FIXME: Argument type mismatch: actual type is 'SupportViewModel.BillingError', but 'Error' was expected.
                         )
                     )
                 }
@@ -222,7 +222,7 @@ class SupportViewModel(
                                 screenState.updateState(ScreenState.Success())
                             }
                         }
-                        .onFailure { error ->
+                        .onFailure { error -> // TODO: should use thesae correctly across entire project onFailure and onSuccess
                             val errorMessage = error.message.orEmpty()
                             val snackbarMessage = if (errorMessage.isNotBlank()) {
                                 UiTextHelper.DynamicString(errorMessage)
@@ -247,5 +247,6 @@ class SupportViewModel(
         }
     }
 
-    private data class BillingError(val message: String?) : Error(message)
+    data class BillingError(val message: String?) :
+        Error(message) // TODO: move somehwere else FIXME: Function 'fun component1(): String?' generated for the data class conflicts with the supertype member 'fun component1(): String' defined in 'com/d4rk/android/libs/apptoolkit/core/ui/state/ScreenState.Error'.
 }

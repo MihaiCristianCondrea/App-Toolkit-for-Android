@@ -1,14 +1,14 @@
 package com.d4rk.android.apps.apptoolkit.core.di
 
 import android.content.Context
-import com.d4rk.android.apps.apptoolkit.core.di.modules.adsModule
-import com.d4rk.android.apps.apptoolkit.core.di.modules.appModule
-import com.d4rk.android.apps.apptoolkit.core.di.modules.appToolkitModule
+import com.d4rk.android.apps.apptoolkit.core.di.modules.app.adsModule
+import com.d4rk.android.apps.apptoolkit.core.di.modules.app.appModule
+import com.d4rk.android.apps.apptoolkit.core.di.modules.app.onboardingModule
+import com.d4rk.android.apps.apptoolkit.core.di.modules.app.startupModule
+import com.d4rk.android.apps.apptoolkit.core.di.modules.apptoolkit.appToolkitModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.dispatchersModule
-import com.d4rk.android.apps.apptoolkit.core.di.modules.onboardingModule
-import com.d4rk.android.apps.apptoolkit.core.di.modules.settingsModule
-import com.d4rk.android.apps.apptoolkit.core.di.modules.startupModule
-import com.d4rk.android.apps.apptoolkit.core.di.modules.themeModule
+import com.d4rk.android.apps.apptoolkit.core.di.modules.settings.settingsModule
+import com.d4rk.android.apps.apptoolkit.core.di.modules.settings.themeModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

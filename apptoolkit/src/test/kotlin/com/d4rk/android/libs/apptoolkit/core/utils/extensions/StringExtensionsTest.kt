@@ -1,8 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.decodeBase64OrEmpty
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.extractChangesForVersion
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.faqCatalogUrl
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.toToken
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -55,14 +55,14 @@ class StringExtensionsTest {
     fun `decodeBase64OrEmpty returns decoded value`() {
         val encoded = "Z2l0aHViLXRva2Vu"
 
-        val decoded = encoded.decodeBase64OrEmpty()
+        val decoded = encoded.toToken()
 
         assertEquals("github-token", decoded)
     }
 
     @Test
     fun `decodeBase64OrEmpty returns empty on invalid input`() {
-        val decoded = "not-base64%%%".decodeBase64OrEmpty()
+        val decoded = "not-base64%%%".toToken()
 
         assertEquals("", decoded)
     }

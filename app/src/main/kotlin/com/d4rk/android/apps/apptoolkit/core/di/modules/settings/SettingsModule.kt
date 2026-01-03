@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.di.modules
+package com.d4rk.android.apps.apptoolkit.core.di.modules.settings
 
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppAboutSettingsProvider
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppAdvancedSettingsProvider
@@ -45,6 +45,7 @@ val settingsModule = module {
         )
     }
 
+    // TODO: Make about module
     single<AboutSettingsProvider> { AppAboutSettingsProvider(context = get()) }
     single<AdvancedSettingsProvider> { AppAdvancedSettingsProvider(context = get()) }
     single<DisplaySettingsProvider> { AppDisplaySettingsProvider(context = get()) }
@@ -66,6 +67,7 @@ val settingsModule = module {
         GeneralSettingsViewModel(repository = get(), dispatchers = get())
     }
 
+    // TODO MAke permissions module
     single<PermissionsRepository> {
         PermissionsRepositoryImpl(
             context = get(),
@@ -89,6 +91,7 @@ val settingsModule = module {
         )
     }
 
+    // TODO Make usage and diagnostics module
     single<UsageAndDiagnosticsRepository> {
         UsageAndDiagnosticsRepositoryImpl(
             dataSource = get<CommonDataStore>(),

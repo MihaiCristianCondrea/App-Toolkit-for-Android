@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.di.modules
+package com.d4rk.android.apps.apptoolkit.core.di.modules.apptoolkit
 
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.startup.utils.interfaces.providers.AppStartupProvider
@@ -25,8 +25,8 @@ import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
 import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.github.GithubConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.decodeBase64OrEmpty
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.faqCatalogUrl
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.toToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
@@ -35,10 +35,11 @@ import org.koin.core.qualifier.named
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 
+// TODO: Separate the modules better
 val appToolkitModule: Module = module {
     single<StartupProvider> { AppStartupProvider() }
 
-    single(createdAtStart = true) {
+    single(createdAtStart = true) { // TODO: Make support module
         val dispatchers = get<DispatcherProvider>()
         BillingRepository.getInstance(
             context = get(),
@@ -51,6 +52,7 @@ val appToolkitModule: Module = module {
     }
     viewModel { StartupViewModel() }
 
+    // TODO: Make help module
     single { HelpLocalDataSource(context = get()) }
     single { HelpRemoteDataSource(client = get()) }
     single<FaqRepository> {
@@ -66,6 +68,7 @@ val appToolkitModule: Module = module {
     single { GetFaqUseCase(repository = get()) }
     viewModel { HelpViewModel(getFaqUseCase = get(), dispatchers = get()) }
 
+    // TODO: make issue reporter module
     single { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
     single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get()) }
@@ -93,8 +96,9 @@ val appToolkitModule: Module = module {
         GithubConstants.githubChangelog(get<String>(named("github_repository")))
     }
 
-    single(githubTokenQualifier) { BuildConfig.GITHUB_TOKEN.decodeBase64OrEmpty() }
+    single(githubTokenQualifier) { BuildConfig.GITHUB_TOKEN.toToken() }
 
+    // TODO: This is general for the app toolkit library and app
     single<AppVersionInfo> {
         AppVersionInfo(
             BuildConfig.VERSION_NAME,

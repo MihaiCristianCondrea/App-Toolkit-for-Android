@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.di.modules
+package com.d4rk.android.apps.apptoolkit.core.di.modules.settings
 
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.google.blue.bluePalette
