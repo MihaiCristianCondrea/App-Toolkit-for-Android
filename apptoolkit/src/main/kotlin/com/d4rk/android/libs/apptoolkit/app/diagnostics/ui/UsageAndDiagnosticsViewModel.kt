@@ -68,9 +68,7 @@ class UsageAndDiagnosticsViewModel(
                 }
             }
             .catch { throwable ->
-                if (throwable is CancellationException) {
-                    throw throwable
-                }
+                if (throwable is CancellationException) throw throwable
             }
             .launchIn(viewModelScope)
     }

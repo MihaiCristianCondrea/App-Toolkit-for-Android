@@ -54,8 +54,8 @@ class AdvancedSettingsViewModel(
 
                 screenState.copyData { copy(cacheClearMessage = messageResId) }
             }
-            .catch { t ->
-                if (t is CancellationException) throw t
+            .catch { throwable ->
+                if (throwable is CancellationException) throw throwable
                 screenState.updateState(ScreenState.Success())
                 screenState.copyData { copy(cacheClearMessage = R.string.cache_cleared_error) }
             }

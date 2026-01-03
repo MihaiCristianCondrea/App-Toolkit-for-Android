@@ -78,8 +78,8 @@ class FavoriteAppsViewModel(
         observeJob = viewModelScope.launch {
             observeFavoriteAppsUseCase()
                 .flowOn(dispatchers.io)
-                .catch { t ->
-                    if (t is CancellationException) throw t
+                .catch { error ->
+                    if (error is CancellationException) throw error
                     screenState.updateState(ScreenState.Error())
                     showErrorSnackbar(
                         UiTextHelper.StringResource(R.string.error_failed_to_load_apps)

@@ -25,6 +25,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
@@ -107,6 +108,9 @@ class IssueReporterViewModel(
                             screenState.updateState(ScreenState.Success())
                     }
                     sendJob = null
+                }
+                .catch { throwable ->
+                    if (throwable is CancellationException) throw throwable
                 }
                 .collect { outcome -> handleResult(outcome) }
         }

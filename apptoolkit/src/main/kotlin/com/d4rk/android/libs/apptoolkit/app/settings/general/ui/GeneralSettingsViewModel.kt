@@ -51,8 +51,8 @@ class GeneralSettingsViewModel(
                     screenState.copyData { copy(contentKey = key) }
                     screenState.updateState(newValues = ScreenState.Success())
                 }
-                .catch { t ->
-                    if (t is CancellationException) throw t
+                .catch { throwable ->
+                    if (throwable is CancellationException) throw throwable
 
                     screenState.setErrors(
                         errors = listOf(
