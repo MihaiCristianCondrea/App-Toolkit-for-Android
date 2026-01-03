@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.yellow
+package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.google.yellow
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,10 +1,10 @@
-package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.blue
+package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.google.android
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 
-val bluePalette: ColorPalette = ColorPalette(
+val androidPalette: ColorPalette = ColorPalette(
     lightColorScheme = lightColorScheme(
         primary = primaryLight,
         onPrimary = onPrimaryLight,

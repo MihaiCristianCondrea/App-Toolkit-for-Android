@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.red
+package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.google.red
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.christmas
+package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.special.christmas
 
 import androidx.compose.ui.graphics.Color
 

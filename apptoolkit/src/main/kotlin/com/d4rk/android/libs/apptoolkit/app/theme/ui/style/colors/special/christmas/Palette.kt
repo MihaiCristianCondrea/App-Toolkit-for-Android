@@ -1,10 +1,10 @@
-package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.android
+package com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.special.christmas
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 
-val androidPalette: ColorPalette = ColorPalette(
+val christmasPalette: ColorPalette = ColorPalette(
     lightColorScheme = lightColorScheme(
         primary = primaryLight,
         onPrimary = onPrimaryLight,
