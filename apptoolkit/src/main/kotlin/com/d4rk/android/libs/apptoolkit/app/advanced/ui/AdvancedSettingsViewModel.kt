@@ -7,17 +7,24 @@ import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSetting
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.state.AdvancedSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlin.coroutines.cancellation.CancellationException
 
 /**
@@ -62,19 +69,29 @@ class AdvancedSettingsViewModel(
 
         clearCacheJob = repository.clearCache()
             .flowOn(dispatchers.io)
-            .onEach { result ->
-                screenState.updateState(ScreenState.Success())
-
-                val messageResId = when (result) {
-                    is Result.Success -> R.string.cache_cleared_success
-                    is Result.Error -> R.string.cache_cleared_error
+            .map<Result<Unit>, DataState<Unit, Errors.Database>> { result ->
+                when (result) {
+                    is Result.Success -> DataState.Success(Unit)
+                    is Result.Error -> DataState.Error(
+                        error = Errors.Database.DATABASE_OPERATION_FAILED
+                    )
                 }
-
-                screenState.copyData { copy(cacheClearMessage = messageResId) }
+            }
+            .onStart { screenState.setLoading() }
+            .onEach { result ->
+                result
+                    .onSuccess {
+                        screenState.updateState(ScreenState.Success())
+                        screenState.copyData { copy(cacheClearMessage = R.string.cache_cleared_success) }
+                    }
+                    .onFailure {
+                        screenState.updateState(ScreenState.Error())
+                        screenState.copyData { copy(cacheClearMessage = R.string.cache_cleared_error) }
+                    }
             }
             .catch { throwable ->
                 if (throwable is CancellationException) throw throwable
-                screenState.updateState(ScreenState.Success())
+                screenState.updateState(ScreenState.Error())
                 screenState.copyData { copy(cacheClearMessage = R.string.cache_cleared_error) }
             }
             .launchIn(viewModelScope)
