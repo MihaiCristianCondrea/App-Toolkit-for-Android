@@ -44,8 +44,9 @@ val settingsModule = module {
             dispatchers = get(),
         )
     }
+}
 
-    // TODO: Make about module
+val aboutModule = module {
     single<AboutSettingsProvider> { AppAboutSettingsProvider(context = get()) }
     single<AdvancedSettingsProvider> { AppAdvancedSettingsProvider(context = get()) }
     single<DisplaySettingsProvider> { AppDisplaySettingsProvider(context = get()) }
@@ -67,7 +68,18 @@ val settingsModule = module {
         GeneralSettingsViewModel(repository = get(), dispatchers = get())
     }
 
-    // TODO MAke permissions module
+    viewModel { AdvancedSettingsViewModel(repository = get(), dispatchers = get()) }
+
+    viewModel {
+        AboutViewModel(
+            getAboutInfo = get(),
+            copyDeviceInfo = get(),
+            dispatchers = get(),
+        )
+    }
+}
+
+val permissionsModule = module {
     single<PermissionsRepository> {
         PermissionsRepositoryImpl(
             context = get(),
@@ -79,19 +91,9 @@ val settingsModule = module {
             permissionsRepository = get(),
         )
     }
+}
 
-    viewModel { AdvancedSettingsViewModel(repository = get(), dispatchers = get()) }
-
-    single<GetAboutInfoUseCase> { GetAboutInfoUseCase(repository = get()) }
-    viewModel {
-        AboutViewModel(
-            getAboutInfo = get(),
-            copyDeviceInfo = get(),
-            dispatchers = get(),
-        )
-    }
-
-    // TODO Make usage and diagnostics module
+val usageAndDiagnosticsModule = module {
     single<UsageAndDiagnosticsRepository> {
         UsageAndDiagnosticsRepositoryImpl(
             dataSource = get<CommonDataStore>(),
@@ -104,3 +106,10 @@ val settingsModule = module {
         UsageAndDiagnosticsViewModel(repository = get())
     }
 }
+
+val settingsModules = listOf(
+    settingsModule,
+    aboutModule,
+    permissionsModule,
+    usageAndDiagnosticsModule
+)
