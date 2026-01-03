@@ -3,7 +3,9 @@ package com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
 import kotlinx.coroutines.flow.Flow
 
-// TODO && FIXME: May be miss from DI Koin
+/**
+ * Exposes a stream of the ads-enabled flag from the repository.
+ */
 class ObserveAdsEnabledUseCase(
     private val repo: AdsSettingsRepository,
 ) {

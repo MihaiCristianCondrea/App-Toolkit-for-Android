@@ -3,6 +3,8 @@ package com.d4rk.android.apps.apptoolkit.core.di.modules.app
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.d4rk.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.ObserveAdsEnabledUseCase
+import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.SetAdsEnabledUseCase
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.AdsSettingsViewModel
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
@@ -20,6 +22,9 @@ val adsModule: Module = module {
             buildInfoProvider = get<BuildInfoProvider>(),
         )
     }
+
+    single { ObserveAdsEnabledUseCase(repo = get()) }
+    single { SetAdsEnabledUseCase(repo = get()) }
 
     viewModel {
         AdsSettingsViewModel(

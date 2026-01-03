@@ -29,7 +29,16 @@ class AppSettingsProvider : SettingsProvider {
                             icon = Icons.Outlined.Notifications,
                             title = context.getString(R.string.notifications),
                             summary = context.getString(R.string.summary_preference_settings_notifications),
-                            action = { context.openAppNotificationSettings() },
+                            action = {
+                                val opened = context.openAppNotificationSettings()
+                                if (!opened) {
+                                    GeneralSettingsActivity.start(
+                                        context = context,
+                                        title = context.getString(R.string.security_and_privacy),
+                                        contentKey = SettingsContent.SECURITY_AND_PRIVACY,
+                                    )
+                                }
+                            },
                         ),
                         SettingsPreference(
                             key = SettingsContent.DISPLAY,

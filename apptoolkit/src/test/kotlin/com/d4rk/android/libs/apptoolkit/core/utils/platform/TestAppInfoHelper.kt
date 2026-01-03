@@ -34,11 +34,7 @@ class TestAppInfoHelper {
         crossinline block: suspend () -> T,
         crossinline finallyBlock: () -> Unit
     ): T {
-        val result: Result<T> = try { // TODO: Make try catch to be runCatching
-            Result.success(block())
-        } catch (t: Throwable) {
-            Result.failure(t)
-        }
+        val result: Result<T> = runCatching { block() }
 
         val cleanupError: Throwable? = runCatching { finallyBlock() }.exceptionOrNull()
 
