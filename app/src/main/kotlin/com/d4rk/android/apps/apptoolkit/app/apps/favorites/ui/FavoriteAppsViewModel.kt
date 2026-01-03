@@ -11,6 +11,9 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onLoading
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState.IsLoading
@@ -86,23 +89,24 @@ class FavoriteAppsViewModel(
                     )
                 }
                 .collect { result ->
-                    when (result) {
-                        is DataState.Loading -> screenState.updateState(IsLoading())
-
-                        is DataState.Success -> {
-                            val apps = result.data
-                            if (apps.isEmpty()) {
-                                screenState.updateData(ScreenState.NoData()) { it.copy(apps = apps.toImmutableList()) }
+                    result
+                        .onLoading { screenState.updateState(IsLoading()) }
+                        .onSuccess { apps ->
+                            val immutableApps = apps.toImmutableList()
+                            if (immutableApps.isEmpty()) {
+                                screenState.updateData(ScreenState.NoData()) {
+                                    it.copy(apps = immutableApps)
+                                }
                             } else {
-                                screenState.updateData(ScreenState.Success()) { it.copy(apps = apps.toImmutableList()) }
+                                screenState.updateData(ScreenState.Success()) {
+                                    it.copy(apps = immutableApps)
+                                }
                             }
                         }
-
-                        is DataState.Error -> {
+                        .onFailure { error ->
                             screenState.updateState(ScreenState.Error())
-                            showErrorSnackbar(result.error.toErrorMessage())
+                            showErrorSnackbar(error.toErrorMessage())
                         }
-                    }
                 }
         }
     }
@@ -110,9 +114,9 @@ class FavoriteAppsViewModel(
     fun toggleFavorite(packageName: String) {
         toggleJob?.cancel()
         toggleJob = viewModelScope.launch {
-            runCatching {
+            try {
                 withContext(dispatchers.io) { toggleFavoriteUseCase(packageName) }
-            }.onFailure { t ->
+            } catch (t: Throwable) {
                 if (t is CancellationException) throw t
                 screenState.updateState(ScreenState.Error())
                 showErrorSnackbar(UiTextHelper.StringResource(R.string.error_failed_to_update_favorite))
