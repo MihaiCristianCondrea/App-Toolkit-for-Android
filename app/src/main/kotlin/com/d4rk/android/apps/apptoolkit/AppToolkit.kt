@@ -15,6 +15,7 @@ import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isHalloweenSeason
 import com.d4rk.android.libs.apptoolkit.data.core.BaseCoreManager
 import com.d4rk.android.libs.apptoolkit.data.core.ads.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
@@ -65,12 +66,15 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
 
         if (!hasInteractedWithSettings) {
             val staticPaletteId: String = runBlocking { dataStore.staticPaletteId.first() }
-            val shouldUseSeasonalPalette: Boolean =
-                staticPaletteId == StaticPaletteIds.DEFAULT &&
-                        LocalDate.now(ZoneId.systemDefault()).isChristmasSeason
+            val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
+            val shouldUseSeasonalPalette: Boolean = staticPaletteId == StaticPaletteIds.DEFAULT
 
             if (shouldUseSeasonalPalette) {
-                return ThemePaletteProvider.paletteById(StaticPaletteIds.CHRISTMAS)
+                return when {
+                    today.isHalloweenSeason -> ThemePaletteProvider.paletteById(StaticPaletteIds.HALLOWEEN)
+                    today.isChristmasSeason -> ThemePaletteProvider.paletteById(StaticPaletteIds.CHRISTMAS)
+                    else -> getKoin().get()
+                }
             }
         }
 

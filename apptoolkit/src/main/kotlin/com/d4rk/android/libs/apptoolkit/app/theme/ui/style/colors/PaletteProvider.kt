@@ -8,6 +8,7 @@ import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.google.yellow.
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.monochrome.monochromePalette
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.rose.rosePalette
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.special.christmas.christmasPalette
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.special.halloween.halloweenPalette
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 
 object ThemePaletteProvider {
@@ -22,6 +23,7 @@ object ThemePaletteProvider {
         StaticPaletteIds.YELLOW -> yellowPalette
         StaticPaletteIds.ROSE -> rosePalette
         StaticPaletteIds.CHRISTMAS -> christmasPalette
+        StaticPaletteIds.HALLOWEEN -> halloweenPalette
         StaticPaletteIds.DEFAULT -> defaultPalette
         else -> defaultPalette
     }
