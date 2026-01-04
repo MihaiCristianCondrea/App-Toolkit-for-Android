@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">সম্মতির তথ্য লোড করতে ব্যর্থ হয়েছে</string>
+
+    <string name="activity_not_found">অ্যাক্টিভিটি পাওয়া যায়নি।</string>
+
+    <string name="security_error">একটি নিরাপত্তা ত্রুটি ঘটেছে। অনুগ্রহ করে পরে আবার চেষ্টা করুন।</string>
+    <string name="io_error">ইনপুট/আউটপুট ত্রুটি ঘটেছে। অনুগ্রহ করে আপনার নেটওয়ার্ক সংযোগ বা স্টোরেজ পরীক্ষা করে আবার চেষ্টা করুন।</string>
+    <string name="illegal_argument_error">অবৈধ ইনপুট বা আর্গুমেন্ট প্রদান করা হয়েছে। অনুগ্রহ করে তথ্য যাচাই করে আবার চেষ্টা করুন।</string>
+    <string name="unknown_error">একটি অজানা ত্রুটি ঘটেছে।</string>
+    <string name="initialization_error">আরম্ভ করতে ব্যর্থ হয়েছে। অনুগ্রহ করে পরে আবার চেষ্টা করুন।</string>
+
+    <string name="error_no_settings_found">কোনো সেটিংস পাওয়া যায়নি</string>
+    <string name="error_invalid_content_key">অবৈধ কনটেন্ট কী।</string>
+
+    <string name="error_unauthorized">অননুমোদিত: অবৈধ টোকেন</string>
+    <string name="error_forbidden">নিষিদ্ধ: পর্যাপ্ত অনুমতি নেই</string>
+    <string name="error_gone">API এন্ডপয়েন্ট সরানো হয়েছে</string>
+    <string name="error_unprocessable">ইস্যু তৈরি করার জন্য অবৈধ ডেটা</string>
+    <string name="error_invalid_report">শিরোনাম এবং বিবরণ খালি হতে পারে না</string>
+
+    <string name="error_failed_to_load_ads_settings">বিজ্ঞাপন সেটিংস লোড করতে ব্যর্থ হয়েছে</string>
+
+    <string name="cache_cleared_error">কিছু ত্রুটিসহ ক্যাশ পরিষ্কার করা হয়েছে</string>
+
+    <string name="loading_eula_message">এন্ড ইউজার লাইসেন্স এগ্রিমেন্ট আহরণ করা হচ্ছে…</string>
+    <string name="loading_changelog_message">অ্যাপ্লিকেশনের চেঞ্জলগ আনা হচ্ছে…</string>
+    <string name="error_loading_eula_message">এন্ড ইউজার লাইসেন্স এগ্রিমেন্ট লোড করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।</string>
+    <string name="error_loading_changelog_message">অ্যাপ্লিকেশনের চেঞ্জলগ লোড করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।</string>
+
+    <string name="error_failed_to_load_sku_details">SKU বিস্তারিত লোড করতে ব্যর্থ হয়েছে</string>
+
+    <string name="no_internet_error">ইন্টারনেট সংযোগ নেই।</string>
+    <string name="connection_error">নেটওয়ার্ক ত্রুটি। অনুগ্রহ করে আবার চেষ্টা করুন।</string>
+    <string name="connection_closed_error">সংযোগ বিঘ্নিত হয়েছে।</string>
+    <string name="request_timeout_error">অনুরোধের সময়সীমা শেষ হয়েছে। আবার চেষ্টা করুন।</string>
+    <string name="ssl_error">নিরাপদ সংযোগ ব্যর্থ হয়েছে।</string>
+
+    <string name="http_redirect_error">সার্ভার থেকে অপ্রত্যাশিত রিডাইরেক্ট।</string>
+    <string name="http_client_error">অনুরোধ ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।</string>
+    <string name="http_server_error">সার্ভার ত্রুটি। অনুগ্রহ করে পরে আবার চেষ্টা করুন।</string>
+    <string name="rate_limited_error">অতিরিক্ত অনুরোধ। পরে আবার চেষ্টা করুন।</string>
+
+    <string name="serialization_error">সার্ভারের প্রতিক্রিয়া পড়তে ব্যর্থ হয়েছে।</string>
+
+    <string name="no_data_error">কোনো ডেটা উপলব্ধ নেই।</string>
+    <string name="invalid_state_error">এই মুহূর্তে অপারেশন অনুমোদিত নয়।</string>
+    <string name="unsupported_operation_error">অসমর্থিত অপারেশন।</string>
+    <string name="cancelled_error">অপারেশন বাতিল করা হয়েছে।</string>
+
+    <string name="database_error">স্টোরেজ ত্রুটি।</string>
+    <string name="database_locked_error">স্টোরেজ ব্যস্ত। আবার চেষ্টা করুন।</string>
+    <string name="database_constraint_error">স্টোরেজ কনস্ট্রেইন্ট ত্রুটি।</string>
+    <string name="database_cant_open_error">স্টোরেজ খুলতে ব্যর্থ হয়েছে।</string>
+    <string name="database_corrupt_error">স্টোরেজ ক্ষতিগ্রস্ত হয়েছে।</string>
+    <string name="database_full_error">স্টোরেজ পূর্ণ।</string>
+
+    <string name="error_an_error_occurred">একটি ত্রুটি ঘটেছে</string>
+    <string name="error_failed_to_launch_review">রিভিউ ফ্লো চালু করতে ব্যর্থ হয়েছে</string>
+    <string name="error_failed_to_load_faq">FAQ লোড করতে ব্যর্থ হয়েছে</string>
+    <string name="error_failed_to_request_review">রিভিউ অনুরোধ করতে ব্যর্থ হয়েছে</string>
+    <string name="error_failed_to_update_app">অ্যাপ আপডেট করতে ব্যর্থ হয়েছে</string>
+    <string name="error_failed_to_load_consent_info">সম্মতির তথ্য লোড করতে ব্যর্থ হয়েছে</string>
+</resources>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Hindi ma-load ang impormasyon ng pahintulot</string>
+
+    <string name="activity_not_found">Hindi nahanap ang aktibidad.</string>
+
+    <string name="security_error">May naganap na error sa seguridad. Pakisubukang muli mamaya.</string>
+    <string name="io_error">May naganap na error sa input/output. Pakisuri ang iyong koneksyon sa network o storage at subukang muli.</string>
+    <string name="illegal_argument_error">Hindi wastong input o argument ang ibinigay. Pakisuri ang impormasyon at subukang muli.</string>
+    <string name="unknown_error">May naganap na hindi kilalang error.</string>
+    <string name="initialization_error">Nabigo ang pagsisimula. Pakisubukang muli mamaya.</string>
+
+    <string name="error_no_settings_found">Walang nakitang mga setting</string>
+    <string name="error_invalid_content_key">Hindi wastong content key.</string>
+
+    <string name="error_unauthorized">Hindi awtorisado: Hindi wastong token</string>
+    <string name="error_forbidden">Ipinagbabawal: kulang ang mga pahintulot</string>
+    <string name="error_gone">Inalis ang API endpoint</string>
+    <string name="error_unprocessable">Hindi wastong data para sa paglikha ng isyu</string>
+    <string name="error_invalid_report">Hindi maaaring walang laman ang pamagat at paglalarawan</string>
+
+    <string name="error_failed_to_load_ads_settings">Hindi ma-load ang mga setting ng ads</string>
+
+    <string name="cache_cleared_error">Na-clear ang cache na may ilang error</string>
+
+    <string name="loading_eula_message">Kinukuha ang End User License Agreement…</string>
+    <string name="loading_changelog_message">Kinukuha ang changelog ng application…</string>
+    <string name="error_loading_eula_message">Hindi ma-load ang End User License Agreement. Pakisubukang muli.</string>
+    <string name="error_loading_changelog_message">Hindi ma-load ang changelog ng application. Pakisubukang muli.</string>
+
+    <string name="error_failed_to_load_sku_details">Hindi ma-load ang mga detalye ng SKU</string>
+
+    <string name="no_internet_error">Walang koneksyon sa internet.</string>
+    <string name="connection_error">Error sa network. Pakisubukang muli.</string>
+    <string name="connection_closed_error">Naputol ang koneksyon.</string>
+    <string name="request_timeout_error">Nag-time out ang kahilingan. Subukang muli.</string>
+    <string name="ssl_error">Nabigo ang secure na koneksyon.</string>
+
+    <string name="http_redirect_error">Hindi inaasahang pag-redirect mula sa server.</string>
+    <string name="http_client_error">Nabigo ang kahilingan. Pakisubukang muli.</string>
+    <string name="http_server_error">Error sa server. Pakisubukang muli mamaya.</string>
+    <string name="rate_limited_error">Napakaraming kahilingan. Subukang muli mamaya.</string>
+
+    <string name="serialization_error">Hindi mabasa ang tugon ng server.</string>
+
+    <string name="no_data_error">Walang available na data.</string>
+    <string name="invalid_state_error">Hindi pinapayagan ang operasyon sa ngayon.</string>
+    <string name="unsupported_operation_error">Hindi suportadong operasyon.</string>
+    <string name="cancelled_error">Kinansela ang operasyon.</string>
+
+    <string name="database_error">Error sa storage.</string>
+    <string name="database_locked_error">Abala ang storage. Subukang muli.</string>
+    <string name="database_constraint_error">Error sa constraint ng storage.</string>
+    <string name="database_cant_open_error">Hindi mabuksan ang storage.</string>
+    <string name="database_corrupt_error">Sira ang storage.</string>
+    <string name="database_full_error">Puno ang storage.</string>
+
+    <string name="error_an_error_occurred">May naganap na error</string>
+    <string name="error_failed_to_launch_review">Hindi mailunsad ang daloy ng review</string>
+    <string name="error_failed_to_load_faq">Hindi ma-load ang mga FAQ</string>
+    <string name="error_failed_to_request_review">Hindi makahiling ng review</string>
+    <string name="error_failed_to_update_app">Hindi ma-update ang app</string>
+    <string name="error_failed_to_load_consent_info">Hindi ma-load ang impormasyon ng pahintulot</string>
+</resources>
