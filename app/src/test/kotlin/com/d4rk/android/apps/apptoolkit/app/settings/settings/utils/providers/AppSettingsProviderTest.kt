@@ -43,26 +43,28 @@ class AppSettingsProviderTest {
         unmockkAll()
     }
 
+    // TODO && FIXME: FIX THE TEST FAIL
     /*
-    FIXME:
-com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
-	at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
-	at java.base/java.lang.Class.forName0(Native Method)
-	at java.base/java.lang.Class.forName(Unknown Source)
-	at java.base/java.lang.Class.forName(Unknown Source)
-	at io.mockk.InternalPlatformDsl.classForName(InternalPlatformDsl.kt:93)
-	at com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppSettingsProviderTest.provideSettingsConfig returns expected configuration(AppSettingsProviderTest.kt:207)
 
+Expected value to be null, but was: <>.
+java.lang.AssertionError: Expected value to be null, but was: <>.
+	at kotlin.test.DefaultAsserter.fail(DefaultAsserter.kt:16)
+	at kotlin.test.Asserter$DefaultImpls.assertTrue(Assertions.kt:694)
+	at kotlin.test.DefaultAsserter.assertTrue(DefaultAsserter.kt:11)
+	at kotlin.test.Asserter$DefaultImpls.assertNull(Assertions.kt:749)
+	at kotlin.test.DefaultAsserter.assertNull(DefaultAsserter.kt:11)
+	at kotlin.test.AssertionsKt__AssertionsKt.assertNull(Assertions.kt:159)
+	at kotlin.test.AssertionsKt.assertNull(Unknown Source)
+	at kotlin.test.AssertionsKt__AssertionsKt.assertNull$default(Assertions.kt:158)
+	at kotlin.test.AssertionsKt.assertNull$default(Unknown Source)
+	at com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppSettingsProviderTest.provideSettingsConfig returns expected configuration(AppSettingsProviderTest.kt:138)
 
 
     */
     @Test
     fun `provideSettingsConfig returns expected configuration`() {
         val context = createContext(defaultStrings)
-        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt")
+        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextIntentExtensionsKt")
         mockkObject(GeneralSettingsActivity.Companion)
         every { context.openAppNotificationSettings() } returns true
         every { GeneralSettingsActivity.start(any(), any(), any()) } just Runs
@@ -151,33 +153,14 @@ java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.ex
             )
         }
 
-        assertNull(config.categories[0].title)
+        assertNull(config.categories[0].title) // FIXME: Expected value to be null, but was: <>.
         assertEquals(defaultStrings[R.string.settings], config.title)
     }
 
-    /*
-
-    FIXME:
-
-
-com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
-	at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
-	at java.base/java.lang.Class.forName0(Native Method)
-	at java.base/java.lang.Class.forName(Unknown Source)
-	at java.base/java.lang.Class.forName(Unknown Source)
-	at io.mockk.InternalPlatformDsl.classForName(InternalPlatformDsl.kt:93)
-	at com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppSettingsProviderTest.notifications preference falls back to privacy screen when system settings cannot open(AppSettingsProviderTest.kt:292)
-
-
-
-    */
     @Test
     fun `notifications preference falls back to privacy screen when system settings cannot open`() {
         val context = createContext(defaultStrings)
-        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt")
+        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextIntentExtensionsKt")
         mockkObject(GeneralSettingsActivity.Companion)
         every { context.openAppNotificationSettings() } returns false
         every { GeneralSettingsActivity.start(any(), any(), any()) } just Runs

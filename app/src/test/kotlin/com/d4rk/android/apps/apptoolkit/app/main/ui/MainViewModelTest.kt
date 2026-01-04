@@ -40,7 +40,6 @@ class MainViewModelTest {
 
         MainViewModel(repo)
 
-        // With StandardTestDispatcher, launched coroutines don't run until you drive the scheduler.
         runCurrent()
         advanceUntilIdle()
 
@@ -111,9 +110,6 @@ java.lang.AssertionError: Expected <MainUiState(showSnackbar=true, snackbarMessa
 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0$default(TestBuilders.kt:159)
 	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0$default(Unknown Source)
 	at com.d4rk.android.apps.apptoolkit.app.main.ui.MainViewModelTest.navigation load error shows snackbar(MainViewModelTest.kt:77)
-
-
-
     */
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test

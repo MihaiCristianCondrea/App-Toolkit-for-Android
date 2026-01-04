@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.di.modules.settings
+package com.d4rk.android.apps.apptoolkit.core.di.modules.settings.modules
 
 import com.d4rk.android.libs.apptoolkit.app.permissions.data.repository.PermissionsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.permissions.domain.repository.PermissionsRepository
@@ -9,15 +9,15 @@ import org.koin.dsl.module
 
 val permissionsModule: Module =
     module {
-    single<PermissionsRepository> {
-        PermissionsRepositoryImpl(
-            context = get(),
-            dispatchers = get()
-        )
+        single<PermissionsRepository> {
+            PermissionsRepositoryImpl(
+                context = get(),
+                dispatchers = get()
+            )
+        }
+        viewModel {
+            PermissionsViewModel(
+                permissionsRepository = get(),
+            )
+        }
     }
-    viewModel {
-        PermissionsViewModel(
-            permissionsRepository = get(),
-        )
-    }
-}

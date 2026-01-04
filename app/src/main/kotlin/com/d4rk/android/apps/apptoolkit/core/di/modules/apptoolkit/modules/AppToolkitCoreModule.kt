@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.di.modules.apptoolkit
+package com.d4rk.android.apps.apptoolkit.core.di.modules.apptoolkit.modules
 
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.startup.utils.interfaces.providers.AppStartupProvider
@@ -11,13 +11,13 @@ import org.koin.dsl.module
 
 val appToolkitCoreModule: Module =
     module {
-    single<StartupProvider> { AppStartupProvider() }
-    viewModel { StartupViewModel() }
+        single<StartupProvider> { AppStartupProvider() }
+        viewModel { StartupViewModel() }
 
-    single<AppVersionInfo> {
-        AppVersionInfo(
-            BuildConfig.VERSION_NAME,
-            BuildConfig.VERSION_CODE.toLong()
-        )
+        single<AppVersionInfo> {
+            AppVersionInfo(
+                BuildConfig.VERSION_NAME,
+                BuildConfig.VERSION_CODE.toLong()
+            )
+        }
     }
-}

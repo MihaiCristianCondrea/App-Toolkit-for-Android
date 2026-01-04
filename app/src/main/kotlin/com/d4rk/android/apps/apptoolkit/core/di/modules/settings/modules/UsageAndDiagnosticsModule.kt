@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.di.modules.settings
+package com.d4rk.android.apps.apptoolkit.core.di.modules.settings.modules
 
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.repository.UsageAndDiagnosticsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageAndDiagnosticsRepository
@@ -10,15 +10,15 @@ import org.koin.dsl.module
 
 val usageAndDiagnosticsModule: Module =
     module {
-    single<UsageAndDiagnosticsRepository> {
-        UsageAndDiagnosticsRepositoryImpl(
-            dataSource = get<CommonDataStore>(),
-            configProvider = get(),
-            dispatchers = get(),
-        )
-    }
+        single<UsageAndDiagnosticsRepository> {
+            UsageAndDiagnosticsRepositoryImpl(
+                dataSource = get<CommonDataStore>(),
+                configProvider = get(),
+                dispatchers = get(),
+            )
+        }
 
-    viewModel {
-        UsageAndDiagnosticsViewModel(repository = get())
+        viewModel {
+            UsageAndDiagnosticsViewModel(repository = get())
+        }
     }
-}

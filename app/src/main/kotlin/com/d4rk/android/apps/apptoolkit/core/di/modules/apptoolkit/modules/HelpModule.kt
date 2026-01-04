@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.di.modules.apptoolkit
+package com.d4rk.android.apps.apptoolkit.core.di.modules.apptoolkit.modules
 
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.HelpConstants
@@ -16,18 +16,18 @@ import org.koin.dsl.module
 
 val helpModule: Module =
     module {
-    single { HelpLocalDataSource(context = get()) }
-    single { HelpRemoteDataSource(client = get()) }
-    single<FaqRepository> {
-        FaqRepositoryImpl(
-            localDataSource = get(),
-            remoteDataSource = get(),
-            catalogUrl = com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants.FAQ_BASE_URL.faqCatalogUrl(
-                isDebugBuild = BuildConfig.DEBUG
-            ),
-            productId = HelpConstants.FAQ_PRODUCT_ID,
-        )
+        single { HelpLocalDataSource(context = get()) }
+        single { HelpRemoteDataSource(client = get()) }
+        single<FaqRepository> {
+            FaqRepositoryImpl(
+                localDataSource = get(),
+                remoteDataSource = get(),
+                catalogUrl = com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants.FAQ_BASE_URL.faqCatalogUrl(
+                    isDebugBuild = BuildConfig.DEBUG
+                ),
+                productId = HelpConstants.FAQ_PRODUCT_ID,
+            )
+        }
+        single { GetFaqUseCase(repository = get()) }
+        viewModel { HelpViewModel(getFaqUseCase = get(), dispatchers = get<DispatcherProvider>()) }
     }
-    single { GetFaqUseCase(repository = get()) }
-    viewModel { HelpViewModel(getFaqUseCase = get(), dispatchers = get<DispatcherProvider>()) }
-}

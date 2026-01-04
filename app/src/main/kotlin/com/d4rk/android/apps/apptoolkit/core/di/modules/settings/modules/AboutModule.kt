@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.di.modules.settings
+package com.d4rk.android.apps.apptoolkit.core.di.modules.settings.modules
 
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppAboutSettingsProvider
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppBuildInfoProvider
@@ -15,23 +15,23 @@ import org.koin.dsl.module
 
 val aboutModule: Module =
     module {
-    single<AboutSettingsProvider> { AppAboutSettingsProvider(context = get()) }
-    single<BuildInfoProvider> { AppBuildInfoProvider() }
-    single<AboutRepository> {
-        AboutRepositoryImpl(
-            deviceProvider = get(),
-            buildInfoProvider = get(),
-            context = get(),
-        )
-    }
-    single { GetAboutInfoUseCase(repository = get()) }
-    single { CopyDeviceInfoUseCase(repository = get()) }
+        single<AboutSettingsProvider> { AppAboutSettingsProvider(context = get()) }
+        single<BuildInfoProvider> { AppBuildInfoProvider() }
+        single<AboutRepository> {
+            AboutRepositoryImpl(
+                deviceProvider = get(),
+                buildInfoProvider = get(),
+                context = get(),
+            )
+        }
+        single { GetAboutInfoUseCase(repository = get()) }
+        single { CopyDeviceInfoUseCase(repository = get()) }
 
-    viewModel {
-        AboutViewModel(
-            getAboutInfo = get(),
-            copyDeviceInfo = get(),
-            dispatchers = get(),
-        )
+        viewModel {
+            AboutViewModel(
+                getAboutInfo = get(),
+                copyDeviceInfo = get(),
+                dispatchers = get(),
+            )
+        }
     }
-}

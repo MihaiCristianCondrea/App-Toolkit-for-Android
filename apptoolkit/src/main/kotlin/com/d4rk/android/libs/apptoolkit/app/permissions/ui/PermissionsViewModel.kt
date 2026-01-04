@@ -87,7 +87,7 @@ class PermissionsViewModel(
                         }
                         .onFailure { error ->
                             val message = error.asUiText()
-                            if (configCategoriesAreEmpty(result)) {
+                            if (error == Errors.UseCase.NO_DATA) {
                                 screenState.setErrors(
                                     listOf(
                                         UiSnackbar(
@@ -109,14 +109,5 @@ class PermissionsViewModel(
                         }
                 }
         }
-    }
-
-    private fun configCategoriesAreEmpty(result: DataState<SettingsConfig, Errors>): Boolean {
-        val data = when (result) {
-            is DataState.Success -> result.data
-            is DataState.Error -> result.data
-            is DataState.Loading -> result.data
-        }
-        return data?.categories.isNullOrEmpty()
     }
 }

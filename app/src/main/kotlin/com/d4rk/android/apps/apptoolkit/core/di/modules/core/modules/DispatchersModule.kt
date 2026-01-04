@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.di.modules
+package com.d4rk.android.apps.apptoolkit.core.di.modules.core.modules
 
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.StandardDispatchers

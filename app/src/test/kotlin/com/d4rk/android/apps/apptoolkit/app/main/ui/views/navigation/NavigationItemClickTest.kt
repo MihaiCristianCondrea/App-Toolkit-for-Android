@@ -50,7 +50,7 @@ class NavigationItemClickTest {
 
     @BeforeEach
     fun setup() {
-        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt")
+        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextIntentExtensionsKt")
     }
 
     @AfterEach
@@ -58,23 +58,6 @@ class NavigationItemClickTest {
         unmockkAll()
     }
 
-
-    // TODO FIXME FIX TEST FAIL:
-    /*
-
-com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
-	at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
-	at java.base/java.lang.Class.forName0(Native Method)
-	at java.base/java.lang.Class.forName(Unknown Source)
-	at java.base/java.lang.Class.forName(Unknown Source)
-	at io.mockk.InternalPlatformDsl.classForName(InternalPlatformDsl.kt:93)
-	at com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.NavigationItemClickTest.setup(NavigationItemClickTest.kt:213)
-
-
-    */
     @Test
     fun `settings route opens settings activity and closes drawer`() = runTest {
         every { context.openActivity(SettingsActivity::class.java) } returns true
@@ -93,27 +76,6 @@ java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.ex
         coVerify(exactly = 1) { drawerState.close() }
         confirmVerified(drawerState)
     }
-
-
-    /*
-
-    FIXME: TODO"
-
-
-
-    com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-    java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-        at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
-        at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
-        at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
-        at java.base/java.lang.Class.forName0(Native Method)
-        at java.base/java.lang.Class.forName(Unknown Source)
-        at java.base/java.lang.Class.forName(Unknown Source)
-        at io.mockk.InternalPlatformDsl.classForName(InternalPlatformDsl.kt:93)
-        at com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.NavigationItemClickTest.setup(NavigationItemClickTest.kt:213)
-
-
-    */
 
     @Test
     fun `help and feedback route opens help activity and closes drawer`() = runTest {
@@ -134,22 +96,6 @@ java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.ex
         confirmVerified(drawerState)
     }
 
-    // FIXME TODO: FIX TEST FAIL:
-    /*
-
-com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
-	at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
-	at java.base/java.lang.Class.forName0(Native Method)
-	at java.base/java.lang.Class.forName(Unknown Source)
-	at java.base/java.lang.Class.forName(Unknown Source)
-	at io.mockk.InternalPlatformDsl.classForName(InternalPlatformDsl.kt:93)
-	at com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.NavigationItemClickTest.setup(NavigationItemClickTest.kt:213)
-
-
-    */
     @Test
     fun `updates route triggers changelog callback and closes drawer`() = runTest {
         val drawerState = mockk<DrawerState>()
@@ -171,24 +117,6 @@ java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.ex
         confirmVerified(drawerState)
     }
 
-    // TODO: FIXME
-    /*
-
-    com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-    java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-        at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
-        at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
-        at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
-        at java.base/java.lang.Class.forName0(Native Method)
-        at java.base/java.lang.Class.forName(Unknown Source)
-        at java.base/java.lang.Class.forName(Unknown Source)
-        at io.mockk.InternalPlatformDsl.classForName(InternalPlatformDsl.kt:93)
-        at com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.NavigationItemClickTest.setup(NavigationItemClickTest.kt:213)
-
-
-
-
-    */
     @Test
     fun `share route invokes share app and closes drawer`() = runTest {
         every {
@@ -216,26 +144,6 @@ java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.ex
         confirmVerified(drawerState)
     }
 
-
-// TODDO AN FIXME:
-
-    /*
-
-
-com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
-	at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
-	at java.base/java.lang.Class.forName0(Native Method)
-	at java.base/java.lang.Class.forName(Unknown Source)
-	at java.base/java.lang.Class.forName(Unknown Source)
-	at io.mockk.InternalPlatformDsl.classForName(InternalPlatformDsl.kt:93)
-	at com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.NavigationItemClickTest.setup(NavigationItemClickTest.kt:213)
-
-
-*/
-
     @Test
     fun `custom handler is executed for unknown route and closes drawer`() = runTest {
         val drawerState = mockk<DrawerState>()
@@ -259,24 +167,6 @@ java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.ex
         confirmVerified(drawerState)
     }
 
-
-    // TODO FIXME: FIX TEST FAIL
-    /*
-
-com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
-	at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
-	at java.base/java.lang.Class.forName0(Native Method)
-	at java.base/java.lang.Class.forName(Unknown Source)
-	at java.base/java.lang.Class.forName(Unknown Source)
-	at io.mockk.InternalPlatformDsl.classForName(InternalPlatformDsl.kt:93)
-	at com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.NavigationItemClickTest.setup(NavigationItemClickTest.kt:213)
-
-
-
-    */
     @Test
     fun `unknown route produces no action`() {
         var changelogInvoked = false

@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.di.modules.apptoolkit
+package com.d4rk.android.apps.apptoolkit.core.di.modules.apptoolkit.modules
 
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.data.local.DeviceInfoLocalDataSource
@@ -22,31 +22,31 @@ private val githubTokenQualifier = qualifier<GithubToken>()
 
 val issueReporterModule: Module =
     module {
-    single { IssueReporterRemoteDataSource(client = get()) }
-    single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
-    single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get()) }
-    single { SendIssueReportUseCase(get(), get()) }
+        single { IssueReporterRemoteDataSource(client = get()) }
+        single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
+        single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get()) }
+        single { SendIssueReportUseCase(get(), get()) }
 
-    single(qualifier = named(name = "github_repository")) { "App-Toolkit-for-Android" }
-    single<GithubTarget> {
-        GithubTarget(
-            username = GithubConstants.GITHUB_USER,
-            repository = get(qualifier = named("github_repository")),
-        )
+        single(qualifier = named(name = "github_repository")) { "App-Toolkit-for-Android" }
+        single<GithubTarget> {
+            GithubTarget(
+                username = GithubConstants.GITHUB_USER,
+                repository = get(qualifier = named("github_repository")),
+            )
+        }
+
+        single(qualifier = named("github_changelog")) {
+            GithubConstants.githubChangelog(get<String>(named("github_repository")))
+        }
+
+        single(githubTokenQualifier) { BuildConfig.GITHUB_TOKEN.toToken() }
+
+        viewModel {
+            IssueReporterViewModel(
+                sendIssueReport = get(),
+                githubTarget = get(),
+                githubToken = get(githubTokenQualifier),
+                deviceInfoProvider = get()
+            )
+        }
     }
-
-    single(qualifier = named("github_changelog")) {
-        GithubConstants.githubChangelog(get<String>(named("github_repository")))
-    }
-
-    single(githubTokenQualifier) { BuildConfig.GITHUB_TOKEN.toToken() }
-
-    viewModel {
-        IssueReporterViewModel(
-            sendIssueReport = get(),
-            githubTarget = get(),
-            githubToken = get(githubTokenQualifier),
-            deviceInfoProvider = get()
-        )
-    }
-}

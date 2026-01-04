@@ -163,10 +163,6 @@ expected not to be: 1767524814502
 	at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0$default(TestBuilders.kt:159)
 	at app//kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0$default(Unknown Source)
 	at app//com.d4rk.android.libs.apptoolkit.app.about.ui.TestAboutViewModel.repeated copy events replace snackbar(TestAboutViewModel.kt:132)
-
-
-
-
     */
     @Test
     fun `repeated copy events replace snackbar`() = runTest(dispatcherExtension.testDispatcher) {

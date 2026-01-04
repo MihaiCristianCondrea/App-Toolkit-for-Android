@@ -188,9 +188,6 @@ org.opentest4j.MultipleFailuresError: Multiple Failures (3 failures)
 		at java.base/java.util.stream.ReferencePipeline.toList(Unknown Source)
 		at org.junit.jupiter.api.AssertAll.assertAll(AssertAll.java:77)
 		... 5 more
-
-
-
     */
     @Test
     fun `toError maps throwable to domain error`() {

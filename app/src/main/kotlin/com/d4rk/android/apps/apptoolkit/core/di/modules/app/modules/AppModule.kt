@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.di.modules.app
+package com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules
 
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.data.local.FavoritesLocalDataSource
@@ -31,17 +31,22 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val appModule: Module = module {
-    single { DataStore(context = get(), dispatchers = get()) }
-    single<CommonDataStore> { get<DataStore>() }
-    single<AdsCoreManager> {
+    single {
+        DataStore(
+            context = get(),
+            dispatchers = get()
+        )
+    } // TODO: Move to core where dispatcher module is
+    single<CommonDataStore> { get<DataStore>() } // TODO: Move to core where dispatcher module is
+    single<AdsCoreManager> { // TODO: Move to core where dispatcher module is
         AdsCoreManager(
             context = get(),
             buildInfoProvider = get(),
             dispatchers = get()
         )
     }
-    single<FirebaseController> { FirebaseControllerImpl() }
-    single { KtorClient.createClient(enableLogging = BuildConfig.DEBUG) }
+    single<FirebaseController> { FirebaseControllerImpl() } // TODO: Move to core where dispatcher module is
+    single { KtorClient.createClient(enableLogging = BuildConfig.DEBUG) }// TODO: Move to core where dispatcher module is
     single<NavigationRepository> { MainRepositoryImpl(dispatchers = get()) }
     viewModel { MainViewModel(navigationRepository = get()) }
 
@@ -50,6 +55,7 @@ val appModule: Module = module {
         environment.developerAppsApiUrl(language = ApiLanguages.DEFAULT)
     }
 
+    // TODO: separate to modules like settings and app toolkit // TODO AppsListModule
     single<DeveloperAppsRepository> {
         DeveloperAppsRepositoryImpl(
             client = get(),

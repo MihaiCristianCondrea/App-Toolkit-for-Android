@@ -117,10 +117,6 @@ class TestAdsSettingsRepositoryImpl {
         at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0$default(TestBuilders.kt:159)
         at app//kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0$default(Unknown Source)
         at app//com.d4rk.android.libs.apptoolkit.app.ads.data.repository.TestAdsSettingsRepositoryImpl.setAdsEnabled returns success when persisted(TestAdsSettingsRepositoryImpl.kt:82)
-
-
-
-
         */
     @Test
     fun `setAdsEnabled returns success when persisted`() =
@@ -172,8 +168,6 @@ java.io.IOException: boom
 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0$default(TestBuilders.kt:159)
 	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0$default(Unknown Source)
 	at com.d4rk.android.libs.apptoolkit.app.ads.data.repository.TestAdsSettingsRepositoryImpl.setAdsEnabled returns error on failure(TestAdsSettingsRepositoryImpl.kt:95)
-
-
     */
     @Test
     fun `setAdsEnabled returns error on failure`() = runTest(dispatcherExtension.testDispatcher) {

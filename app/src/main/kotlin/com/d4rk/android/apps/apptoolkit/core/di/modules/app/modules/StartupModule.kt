@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.di.modules.app
+package com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules
 
 import android.content.Context
 import com.d4rk.android.apps.apptoolkit.R
