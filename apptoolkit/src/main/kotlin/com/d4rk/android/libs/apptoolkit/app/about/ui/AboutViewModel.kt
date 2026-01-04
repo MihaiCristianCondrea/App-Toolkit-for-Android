@@ -90,7 +90,7 @@ open class AboutViewModel(
                             UiSnackbar(
                                 message = error.asUiText(),
                                 isError = true,
-                                timeStamp = System.currentTimeMillis(),
+                                timeStamp = System.nanoTime(),
                                 type = ScreenMessageType.SNACKBAR
                             )
                         )
@@ -102,7 +102,7 @@ open class AboutViewModel(
                     UiSnackbar(
                         message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
                         isError = true,
-                        timeStamp = System.currentTimeMillis(),
+                        timeStamp = System.nanoTime(),
                         type = ScreenMessageType.SNACKBAR
                     )
                 )
@@ -117,7 +117,7 @@ open class AboutViewModel(
                 UiSnackbar(
                     message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
                     isError = true,
-                    timeStamp = System.currentTimeMillis(),
+                    timeStamp = System.nanoTime(),
                     type = ScreenMessageType.SNACKBAR
                 )
             )
@@ -141,7 +141,7 @@ open class AboutViewModel(
                                     messageRes
                                 ),
                                 isError = !copied,
-                                timeStamp = System.currentTimeMillis(),
+                                timeStamp = System.nanoTime(),
                                 type = ScreenMessageType.SNACKBAR
                             )
                         )
@@ -151,7 +151,7 @@ open class AboutViewModel(
                             UiSnackbar(
                                 message = error.asUiText(),
                                 isError = true,
-                                timeStamp = System.currentTimeMillis(),
+                                timeStamp = System.nanoTime(),
                                 type = ScreenMessageType.SNACKBAR
                             )
                         )
@@ -162,7 +162,7 @@ open class AboutViewModel(
                     UiSnackbar(
                         message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
                         isError = true,
-                        timeStamp = System.currentTimeMillis(),
+                        timeStamp = System.nanoTime(),
                         type = ScreenMessageType.SNACKBAR
                     )
                 )
