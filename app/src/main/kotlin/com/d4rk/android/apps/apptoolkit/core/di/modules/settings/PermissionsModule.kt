@@ -8,7 +8,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val permissionsModule: Module =
-    module { // FIXME: <html>Conflicting declarations:<br/>val permissionsModule: &lt;implicit&gt;
+    module {
     single<PermissionsRepository> {
         PermissionsRepositoryImpl(
             context = get(),

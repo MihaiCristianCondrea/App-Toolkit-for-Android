@@ -8,6 +8,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.General
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.state.GeneralSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
@@ -18,6 +19,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -49,7 +52,7 @@ class GeneralSettingsViewModel(
         loadJob = viewModelScope.launch {
             repository.getContentKey(contentKey)
                 .flowOn(dispatchers.default)
-                .map<String, DataState<String, Error>> { key -> // FIXME: Type argument is not within its bounds: must be subtype of 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error'.
+                .map<String, DataState<String, Errors>> { key ->
                     DataState.Success(key)
                 }
                 .onStart { screenState.setLoading() }
@@ -58,22 +61,28 @@ class GeneralSettingsViewModel(
 
                     emit(
                         DataState.Error(
-                            error = Error(throwable.message) // FIXME: Argument type mismatch: actual type is 'java.lang.Error', but 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error' was expected.
+                            error = throwable.toError(default = Errors.UseCase.INVALID_STATE)
                         )
                     )
                 }
                 .onEach { result ->
                     result
-                        .onSuccess { key -> // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onSuccess(action: (D) -&gt; Unit): DataState&lt;D, E&gt;
+                        .onSuccess { key ->
                             screenState.setErrors(errors = emptyList())
                             screenState.copyData { copy(contentKey = key) }
                             screenState.updateState(newValues = ScreenState.Success())
                         }
-                        .onFailure { _ -> // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onFailure(action: (E) -&gt; Unit): DataState&lt;D, E&gt;
+                        .onFailure { error ->
                             screenState.setErrors(
                                 errors = listOf(
                                     UiSnackbar(
-                                        message = UiTextHelper.StringResource(R.string.error_invalid_content_key)
+                                        message = when (error) {
+                                            Errors.UseCase.ILLEGAL_ARGUMENT -> UiTextHelper.StringResource(
+                                                R.string.error_invalid_content_key
+                                            )
+
+                                            else -> error.asUiText()
+                                        }
                                     )
                                 )
                             )

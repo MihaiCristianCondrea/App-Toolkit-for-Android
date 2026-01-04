@@ -15,7 +15,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val helpModule: Module =
-    module { // FIXME: <html>Conflicting declarations:<br/>val helpModule: Module
+    module {
     single { HelpLocalDataSource(context = get()) }
     single { HelpRemoteDataSource(client = get()) }
     single<FaqRepository> {
