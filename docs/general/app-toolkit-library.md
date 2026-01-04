@@ -19,7 +19,7 @@ The `core` package provides foundational helpers and models:
 
 - Material 3 window size classes are exported as API dependencies so apps using the toolkit inherit
   responsive layout tooling by default.
-- Use `rememberWindowWidthSizeClass()` from `core.utils.window` to query the current width class in
+- Use `rememberWindowWidthSizeClass()` from `core.ui.window` to query the current width class in
   composables and toggle between phone and tablet experiences without relying on orientation
   heuristics.
 
