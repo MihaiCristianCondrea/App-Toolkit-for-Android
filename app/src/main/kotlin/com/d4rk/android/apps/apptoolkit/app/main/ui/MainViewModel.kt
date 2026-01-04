@@ -5,6 +5,9 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
@@ -12,8 +15,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 
 class MainViewModel(
@@ -35,21 +40,40 @@ class MainViewModel(
     private fun loadNavigationItems() {
         viewModelScope.launch {
             navigationRepository.getNavigationDrawerItems()
-                .catch { error ->
-                    screenState.update { current ->
-                        current.copy(
-                            screenState = ScreenState.Error(),
-                            data = current.data?.copy(
-                                showSnackbar = true,
-                                snackbarMessage = error.message ?: "Failed to load navigation"
-                            )
-                        )
-                    }
+                .map<List<NavigationDrawerItem>, DataState<List<NavigationDrawerItem>, Error>> { items ->
+                    DataState.Success(items)
                 }
-                .collect { items: List<NavigationDrawerItem> ->
-                    screenState.successData {
-                        copy(navigationDrawerItems = items.toImmutableList())
-                    }
+                .catch { throwable ->
+                    if (throwable is CancellationException) throw throwable
+                    emit(
+                        DataState.Error(
+                            error = Error(throwable.message)
+                        )
+                    )
+                }
+                .collect { result ->
+                    result
+                        .onSuccess { items ->
+                            screenState.successData {
+                                copy(
+                                    navigationDrawerItems = items.toImmutableList(),
+                                    showSnackbar = false,
+                                    snackbarMessage = ""
+                                )
+                            }
+                        }
+                        .onFailure { error ->
+                            val message = error.message ?: "Failed to load navigation"
+                            screenState.update { current ->
+                                current.copy(
+                                    screenState = ScreenState.Error(),
+                                    data = current.data?.copy(
+                                        showSnackbar = true,
+                                        snackbarMessage = message
+                                    )
+                                )
+                            }
+                        }
                 }
         }
     }

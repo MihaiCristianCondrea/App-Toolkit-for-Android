@@ -7,6 +7,9 @@ import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageA
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsAction
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsEvent
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnosticsUiState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -20,7 +23,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -64,25 +67,32 @@ class UsageAndDiagnosticsViewModel(
     private fun observeConsents() {
         repository.observeSettings()
             .onStart { screenState.setLoading() }
-            .onEach { settings ->
-                screenState.successData {
-                    UsageAndDiagnosticsUiState(
-                        usageAndDiagnostics = settings.usageAndDiagnostics,
-                        analyticsConsent = settings.analyticsConsent,
-                        adStorageConsent = settings.adStorageConsent,
-                        adUserDataConsent = settings.adUserDataConsent,
-                        adPersonalizationConsent = settings.adPersonalizationConsent,
-                    )
-                }
-                updateConsent(settings)
-            }
-            .onCompletion { cause ->
-                if (cause != null && cause !is CancellationException) {
-                    handleObservationError()
-                }
+            .map<UsageAndDiagnosticsSettings, DataState<UsageAndDiagnosticsSettings, Error>> { settings ->
+                DataState.Success(settings)
             }
             .catch { throwable ->
                 if (throwable is CancellationException) throw throwable
+                emit(
+                    DataState.Error(
+                        error = Error(throwable.message)
+                    )
+                )
+            }
+            .onEach { result ->
+                result
+                    .onSuccess { settings ->
+                        screenState.successData {
+                            UsageAndDiagnosticsUiState(
+                                usageAndDiagnostics = settings.usageAndDiagnostics,
+                                analyticsConsent = settings.analyticsConsent,
+                                adStorageConsent = settings.adStorageConsent,
+                                adUserDataConsent = settings.adUserDataConsent,
+                                adPersonalizationConsent = settings.adPersonalizationConsent,
+                            )
+                        }
+                        updateConsent(settings)
+                    }
+                    .onFailure { handleObservationError() }
             }
             .launchIn(viewModelScope)
     }
