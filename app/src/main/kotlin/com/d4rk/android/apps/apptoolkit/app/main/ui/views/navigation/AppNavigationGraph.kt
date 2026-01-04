@@ -6,7 +6,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.navigation.favorit
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.navigation.appsListEntryBuilder
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
-import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 
 /**
  * Context shared by all navigation entry builders in the app module.

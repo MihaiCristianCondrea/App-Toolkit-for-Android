@@ -33,7 +33,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.AppInfoHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

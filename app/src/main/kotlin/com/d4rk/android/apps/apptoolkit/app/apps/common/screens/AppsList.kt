@@ -27,7 +27,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.AppsListNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import org.koin.compose.koinInject

@@ -13,7 +13,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.entryProviderFor
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.rememberNavigationEntryDecorators
-import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

@@ -66,8 +66,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.navigation.rememberNavigationSta
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.BottomAppBarNativeAdBanner
 import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
-import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
-import com.d4rk.android.libs.apptoolkit.core.utils.window.rememberWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.data.local.datastore.startupDestinationFlow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope

@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.utils.window
+package com.d4rk.android.libs.apptoolkit.core.ui.window
 
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
