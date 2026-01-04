@@ -53,9 +53,12 @@ class PermissionsViewModel(
     private fun loadPermissions() {
         viewModelScope.launch {
             permissionsRepository.getPermissionsConfig()
-                .map<SettingsConfig, DataState<SettingsConfig, Error>> { config ->
+                .map<SettingsConfig, DataState<SettingsConfig, Error>> { config -> // FIXME: Type argument is not within its bounds: must be subtype of 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error'.
                     if (config.categories.isEmpty()) {
-                        DataState.Error(data = config, error = Error("No settings found"))
+                        DataState.Error(
+                            data = config,
+                            error = Error("No settings found")
+                        ) // FIXME: Argument type mismatch: actual type is 'java.lang.Error', but 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error' was expected.
                     } else {
                         DataState.Success(config)
                     }
@@ -66,16 +69,16 @@ class PermissionsViewModel(
                 }
                 .catch { error ->
                     if (error is CancellationException) throw error
-                    emit(DataState.Error(error = Error(error.message)))
+                    emit(DataState.Error(error = Error(error.message))) // FIXME: Argument type mismatch: actual type is 'java.lang.Error', but 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error' was expected.
                 }
                 .collect { result ->
                     result
-                        .onSuccess { config ->
+                        .onSuccess { config -> // FIXME:" <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onSuccess(action: (D) -&gt; Unit): DataState&lt;D, E&gt;
                             screenState.successData {
                                 copy(title = config.title, categories = config.categories)
                             }
                         }
-                        .onFailure { error ->
+                        .onFailure { error -> // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onFailure(action: (E) -&gt; Unit): DataState&lt;D, E&gt;
                             val message = if (error.message.isNullOrBlank()) {
                                 UiTextHelper.StringResource(R.string.error_an_error_occurred)
                             } else {
@@ -106,7 +109,7 @@ class PermissionsViewModel(
         }
     }
 
-    private fun configCategoriesAreEmpty(result: DataState<SettingsConfig, Error>): Boolean {
+    private fun configCategoriesAreEmpty(result: DataState<SettingsConfig, Error>): Boolean { // FIXME: Type argument is not within its bounds: must be subtype of 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error'.
         val data = when (result) {
             is DataState.Success -> result.data
             is DataState.Error -> result.data

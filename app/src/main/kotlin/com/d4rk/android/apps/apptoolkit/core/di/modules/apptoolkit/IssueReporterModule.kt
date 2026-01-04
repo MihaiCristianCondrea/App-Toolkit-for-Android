@@ -20,7 +20,8 @@ import org.koin.dsl.module
 
 private val githubTokenQualifier = qualifier<GithubToken>()
 
-val issueReporterModule: Module = module {
+val issueReporterModule: Module =
+    module { // FIXME: <html>Conflicting declarations:<br/>val issueReporterModule: Module
     single { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
     single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get()) }

@@ -8,7 +8,8 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val usageAndDiagnosticsModule: Module = module {
+val usageAndDiagnosticsModule: Module =
+    module { // FIXME: <html>Conflicting declarations:<br/>val usageAndDiagnosticsModule: Module
     single<UsageAndDiagnosticsRepository> {
         UsageAndDiagnosticsRepositoryImpl(
             dataSource = get<CommonDataStore>(),

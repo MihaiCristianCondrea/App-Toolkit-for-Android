@@ -67,20 +67,20 @@ class UsageAndDiagnosticsViewModel(
     private fun observeConsents() {
         repository.observeSettings()
             .onStart { screenState.setLoading() }
-            .map<UsageAndDiagnosticsSettings, DataState<UsageAndDiagnosticsSettings, Error>> { settings ->
+            .map<UsageAndDiagnosticsSettings, DataState<UsageAndDiagnosticsSettings, Error>> { settings -> // FIXME: Type argument is not within its bounds: must be subtype of 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error'.
                 DataState.Success(settings)
             }
             .catch { throwable ->
                 if (throwable is CancellationException) throw throwable
                 emit(
                     DataState.Error(
-                        error = Error(throwable.message)
+                        error = Error(throwable.message) // FIXME: Argument type mismatch: actual type is 'java.lang.Error', but 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error' was expected.
                     )
                 )
             }
             .onEach { result ->
                 result
-                    .onSuccess { settings ->
+                    .onSuccess { settings -> // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onSuccess(action: (D) -&gt; Unit): DataState&lt;D, E&gt;
                         screenState.successData {
                             UsageAndDiagnosticsUiState(
                                 usageAndDiagnostics = settings.usageAndDiagnostics,
@@ -92,7 +92,7 @@ class UsageAndDiagnosticsViewModel(
                         }
                         updateConsent(settings)
                     }
-                    .onFailure { handleObservationError() }
+                    .onFailure { handleObservationError() } // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onFailure(action: (E) -&gt; Unit): DataState&lt;D, E&gt;
             }
             .launchIn(viewModelScope)
     }

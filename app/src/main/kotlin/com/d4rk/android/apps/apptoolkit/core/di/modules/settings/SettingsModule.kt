@@ -46,7 +46,7 @@ val settingsModule = module {
     }
 }
 
-val aboutModule = module {
+val aboutModule = module { // FIXME: <html>Conflicting declarations:<br/>val aboutModule: Module
     single<AboutSettingsProvider> { AppAboutSettingsProvider(context = get()) }
     single<AdvancedSettingsProvider> { AppAdvancedSettingsProvider(context = get()) }
     single<DisplaySettingsProvider> { AppDisplaySettingsProvider(context = get()) }
@@ -79,7 +79,8 @@ val aboutModule = module {
     }
 }
 
-val permissionsModule = module {
+val permissionsModule =
+    module { // FIXME: <html>Conflicting declarations:<br/>val permissionsModule: Module
     single<PermissionsRepository> {
         PermissionsRepositoryImpl(
             context = get(),
@@ -93,7 +94,8 @@ val permissionsModule = module {
     }
 }
 
-val usageAndDiagnosticsModule = module {
+val usageAndDiagnosticsModule =
+    module { // FIXME: <html>Conflicting declarations:<br/>val usageAndDiagnosticsModule: Module
     single<UsageAndDiagnosticsRepository> {
         UsageAndDiagnosticsRepositoryImpl(
             dataSource = get<CommonDataStore>(),
@@ -107,9 +109,10 @@ val usageAndDiagnosticsModule = module {
     }
 }
 
-val settingsModules = listOf(
+val settingsModules =
+    listOf( // FIXME: <html>Conflicting declarations:<br/>val settingsModules: &lt;implicit&gt;
     settingsModule,
-    aboutModule,
-    permissionsModule,
-    usageAndDiagnosticsModule
+        aboutModule, // FIXME: <html>Overload resolution ambiguity between candidates:<br/>val aboutModule: Module<br/>val aboutModule: Module
+        permissionsModule, // FIXME: <html>Overload resolution ambiguity between candidates:<br/>val permissionsModule: Module<br/>val permissionsModule: Module
+        usageAndDiagnosticsModule // FIXME: <html>Overload resolution ambiguity between candidates:<br/>val usageAndDiagnosticsModule: Module<br/>val usageAndDiagnosticsModule: Module
 )

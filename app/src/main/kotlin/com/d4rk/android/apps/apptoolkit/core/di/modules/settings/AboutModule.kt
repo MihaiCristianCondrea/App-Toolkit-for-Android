@@ -13,7 +13,8 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val aboutModule: Module = module {
+val aboutModule: Module =
+    module { // FIXME" <html>Conflicting declarations:<br/>val aboutModule: &lt;implicit&gt;
     single<AboutSettingsProvider> { AppAboutSettingsProvider(context = get()) }
     single<BuildInfoProvider> { AppBuildInfoProvider() }
     single<AboutRepository> {

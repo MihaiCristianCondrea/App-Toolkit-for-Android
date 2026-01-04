@@ -40,20 +40,20 @@ class MainViewModel(
     private fun loadNavigationItems() {
         viewModelScope.launch {
             navigationRepository.getNavigationDrawerItems()
-                .map<List<NavigationDrawerItem>, DataState<List<NavigationDrawerItem>, Error>> { items ->
+                .map<List<NavigationDrawerItem>, DataState<List<NavigationDrawerItem>, Error>> { items -> // FIXME: Type argument is not within its bounds: must be subtype of 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error'.
                     DataState.Success(items)
                 }
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable
                     emit(
                         DataState.Error(
-                            error = Error(throwable.message)
+                            error = Error(throwable.message) // FIXME: Argument type mismatch: actual type is 'java.lang.Error', but 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error' was expected.
                         )
                     )
                 }
                 .collect { result ->
                     result
-                        .onSuccess { items ->
+                        .onSuccess { items -> // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onSuccess(action: (D) -&gt; Unit): DataState&lt;D, E&gt;
                             screenState.successData {
                                 copy(
                                     navigationDrawerItems = items.toImmutableList(),
@@ -62,7 +62,7 @@ class MainViewModel(
                                 )
                             }
                         }
-                        .onFailure { error ->
+                        .onFailure { error -> // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onFailure(action: (E) -&gt; Unit): DataState&lt;D, E&gt;
                             val message = error.message ?: "Failed to load navigation"
                             screenState.update { current ->
                                 current.copy(

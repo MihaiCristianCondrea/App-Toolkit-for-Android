@@ -37,7 +37,9 @@ import org.koin.dsl.module
 
 private val githubTokenQualifier = qualifier<GithubToken>()
 
-val appToolkitCoreModule: Module = module {
+// TODO: Add each module into its own .kt file
+val appToolkitCoreModule: Module =
+    module { // FIXME: <html>Conflicting declarations:<br/>val appToolkitCoreModule: Module
     single<StartupProvider> { AppStartupProvider() }
     viewModel { StartupViewModel() }
 
@@ -49,7 +51,8 @@ val appToolkitCoreModule: Module = module {
     }
 }
 
-val supportModule: Module = module {
+val supportModule: Module =
+    module { // FIXME: <html>Conflicting declarations:<br/>val appToolkitCoreModule: Module
     single(createdAtStart = true) {
         val dispatchers = get<DispatcherProvider>()
         BillingRepository.getInstance(
@@ -64,7 +67,8 @@ val supportModule: Module = module {
     }
 }
 
-val helpModule: Module = module {
+val helpModule: Module =
+    module { // FIXME: <html>Conflicting declarations:<br/>val appToolkitCoreModule: Module
     single { HelpLocalDataSource(context = get()) }
     single { HelpRemoteDataSource(client = get()) }
     single<FaqRepository> {
@@ -81,7 +85,8 @@ val helpModule: Module = module {
     viewModel { HelpViewModel(getFaqUseCase = get(), dispatchers = get()) }
 }
 
-val issueReporterModule: Module = module {
+val issueReporterModule: Module =
+    module { // FIXME: <html>Conflicting declarations:<br/>val appToolkitCoreModule: Module
     single { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
     single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get()) }
@@ -111,7 +116,8 @@ val issueReporterModule: Module = module {
     }
 }
 
-val appToolkitModules = listOf(
+val appToolkitModules =
+    listOf( // FIXME: <html>Conflicting declarations:<br/>val appToolkitCoreModule: Module
     appToolkitCoreModule,
     supportModule,
     helpModule,

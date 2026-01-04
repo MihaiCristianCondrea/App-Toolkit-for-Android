@@ -9,7 +9,8 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val supportModule: Module = module {
+val supportModule: Module =
+    module { // FIXME: <html>Conflicting declarations:<br/>val supportModule: Module
     single(createdAtStart = true) {
         val dispatchers = get<DispatcherProvider>()
         BillingRepository.getInstance(
