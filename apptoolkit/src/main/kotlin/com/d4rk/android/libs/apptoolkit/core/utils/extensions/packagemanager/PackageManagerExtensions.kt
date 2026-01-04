@@ -1,5 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions.pm
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -14,6 +15,23 @@ import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 @CheckResult
 fun PackageManager.hasPackageVisible(packageName: String): Boolean =
     runCatching { getPackageInfoCompat(packageName) }.isSuccess
+
+/**
+ * Returns `true` when [packageName] is installed.
+ *
+ * The visibility rules documented in [hasPackageVisible] apply here as well on Android 11+
+ * devices.
+ */
+@CheckResult
+fun PackageManager.isAppInstalled(packageName: String): Boolean =
+    hasPackageVisible(packageName)
+
+/**
+ * Returns `true` when [packageName] is installed on this [Context]'s device.
+ */
+@CheckResult
+fun Context.isAppInstalled(packageName: String): Boolean =
+    packageManager.isAppInstalled(packageName)
 
 /**
  * Returns version metadata for [packageName], or `null` when unavailable (not installed, not visible, or error).

@@ -32,6 +32,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.pm.isAppInstalled
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.AppInfoHelper
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.toImmutableSet
@@ -107,10 +108,11 @@ fun AppsListRoute(
 
     LaunchedEffect(selectedApp?.packageName) {
         isSelectedAppInstalled = selectedApp?.let { app ->
-            if (app.packageName.isNotEmpty()) appInfoHelper.isAppInstalled(
-                context,
-                app.packageName
-            ) else false
+            if (app.packageName.isNotEmpty()) {
+                context.isAppInstalled(app.packageName)
+            } else {
+                false
+            }
         }
     }
 
