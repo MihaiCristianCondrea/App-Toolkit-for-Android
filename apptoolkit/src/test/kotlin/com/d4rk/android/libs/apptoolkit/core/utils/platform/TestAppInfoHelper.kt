@@ -4,10 +4,11 @@ import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ApplicationInfo
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.widget.Toast
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.pm.isAppInstalled
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -79,15 +80,13 @@ class TestAppInfoHelper {
 
     @Test
     fun `isAppInstalled returns true when app exists`() = runTest {
-        val dispatcher = UnconfinedTestDispatcher(testScheduler)
         println("🚀 [TEST] isAppInstalled returns true when app exists")
         val context = mockk<Context>()
         val pm = mockk<PackageManager>()
-        val appInfo = mockk<ApplicationInfo>()
         every { context.packageManager } returns pm
-        every { pm.getApplicationInfo("pkg", 0) } returns appInfo
+        every { pm.getPackageInfo("pkg", 0) } returns PackageInfo()
 
-        val result = AppInfoHelper(TestDispatchers(dispatcher)).isAppInstalled(context, "pkg")
+        val result = context.isAppInstalled("pkg")
 
         assertEquals(true, result)
         println("🏁 [TEST DONE] isAppInstalled returns true when app exists")
@@ -95,14 +94,13 @@ class TestAppInfoHelper {
 
     @Test
     fun `isAppInstalled returns false when app missing`() = runTest {
-        val dispatcher = UnconfinedTestDispatcher(testScheduler)
         println("🚀 [TEST] isAppInstalled returns false when app missing")
         val context = mockk<Context>()
         val pm = mockk<PackageManager>()
         every { context.packageManager } returns pm
-        every { pm.getApplicationInfo("pkg", 0) } throws PackageManager.NameNotFoundException()
+        every { pm.getPackageInfo("pkg", 0) } throws PackageManager.NameNotFoundException()
 
-        val result = AppInfoHelper(TestDispatchers(dispatcher)).isAppInstalled(context, "pkg")
+        val result = context.isAppInstalled("pkg")
 
         assertEquals(false, result)
         println("🏁 [TEST DONE] isAppInstalled returns false when app missing")
