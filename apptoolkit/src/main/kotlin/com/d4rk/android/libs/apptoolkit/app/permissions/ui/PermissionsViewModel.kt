@@ -7,6 +7,7 @@ import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsA
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
@@ -17,6 +18,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
@@ -53,12 +56,12 @@ class PermissionsViewModel(
     private fun loadPermissions() {
         viewModelScope.launch {
             permissionsRepository.getPermissionsConfig()
-                .map<SettingsConfig, DataState<SettingsConfig, Error>> { config -> // FIXME: Type argument is not within its bounds: must be subtype of 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error'.
+                .map<SettingsConfig, DataState<SettingsConfig, Errors>> { config ->
                     if (config.categories.isEmpty()) {
                         DataState.Error(
                             data = config,
-                            error = Error("No settings found")
-                        ) // FIXME: Argument type mismatch: actual type is 'java.lang.Error', but 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error' was expected.
+                            error = Errors.UseCase.NO_DATA
+                        )
                     } else {
                         DataState.Success(config)
                     }
@@ -69,22 +72,21 @@ class PermissionsViewModel(
                 }
                 .catch { error ->
                     if (error is CancellationException) throw error
-                    emit(DataState.Error(error = Error(error.message))) // FIXME: Argument type mismatch: actual type is 'java.lang.Error', but 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error' was expected.
+                    emit(
+                        DataState.Error(
+                            error = error.toError(default = Errors.UseCase.INVALID_STATE)
+                        )
+                    )
                 }
                 .collect { result ->
                     result
-                        .onSuccess { config -> // FIXME:" <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onSuccess(action: (D) -&gt; Unit): DataState&lt;D, E&gt;
+                        .onSuccess { config ->
                             screenState.successData {
                                 copy(title = config.title, categories = config.categories)
                             }
                         }
-                        .onFailure { error -> // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onFailure(action: (E) -&gt; Unit): DataState&lt;D, E&gt;
-                            val message = if (error.message.isNullOrBlank()) {
-                                UiTextHelper.StringResource(R.string.error_an_error_occurred)
-                            } else {
-                                UiTextHelper.DynamicString(error.message!!)
-                            }
-
+                        .onFailure { error ->
+                            val message = error.asUiText()
                             if (configCategoriesAreEmpty(result)) {
                                 screenState.setErrors(
                                     listOf(
@@ -109,7 +111,7 @@ class PermissionsViewModel(
         }
     }
 
-    private fun configCategoriesAreEmpty(result: DataState<SettingsConfig, Error>): Boolean { // FIXME: Type argument is not within its bounds: must be subtype of 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error'.
+    private fun configCategoriesAreEmpty(result: DataState<SettingsConfig, Errors>): Boolean {
         val data = when (result) {
             is DataState.Success -> result.data
             is DataState.Error -> result.data

@@ -13,6 +13,7 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueRepor
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.state.IssueReporterUiState
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error as RootError
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
@@ -172,7 +173,7 @@ class IssueReporterViewModel(
                     type = ScreenMessageType.SNACKBAR,
                 )
             )
-        }
+            }
     }
 
     private fun IssueReportResult.asDataState(): DataState<String, IssueReporterError> {
@@ -184,9 +185,11 @@ class IssueReporterViewModel(
         }
     }
 
-    private sealed class IssueReporterError(open val message: String?) : Error(message) {
-        data class Http(val status: HttpStatusCode, override val message: String?) : IssueReporterError(message)
-        data class Generic(override val message: String?) : IssueReporterError(message)
+    private sealed interface IssueReporterError : RootError {
+        val message: String?
+
+        data class Http(val status: HttpStatusCode, override val message: String?) : IssueReporterError
+        data class Generic(override val message: String?) : IssueReporterError
     }
 
     private fun IssueReporterError.toUiText(): UiTextHelper {

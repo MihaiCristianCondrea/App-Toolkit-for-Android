@@ -10,7 +10,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appToolkitCoreModule: Module =
-    module { // FIXME: <html>Conflicting declarations:<br/>val appToolkitCoreModule: Module
+    module {
     single<StartupProvider> { AppStartupProvider() }
     viewModel { StartupViewModel() }
 

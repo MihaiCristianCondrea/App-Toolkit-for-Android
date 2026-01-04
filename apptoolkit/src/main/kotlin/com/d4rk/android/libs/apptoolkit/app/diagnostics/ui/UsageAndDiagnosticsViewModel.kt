@@ -8,6 +8,7 @@ import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiag
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsEvent
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnosticsUiState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
@@ -20,6 +21,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentManagerHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -67,20 +70,20 @@ class UsageAndDiagnosticsViewModel(
     private fun observeConsents() {
         repository.observeSettings()
             .onStart { screenState.setLoading() }
-            .map<UsageAndDiagnosticsSettings, DataState<UsageAndDiagnosticsSettings, Error>> { settings -> // FIXME: Type argument is not within its bounds: must be subtype of 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error'.
+            .map<UsageAndDiagnosticsSettings, DataState<UsageAndDiagnosticsSettings, Errors>> { settings ->
                 DataState.Success(settings)
             }
             .catch { throwable ->
                 if (throwable is CancellationException) throw throwable
                 emit(
                     DataState.Error(
-                        error = Error(throwable.message) // FIXME: Argument type mismatch: actual type is 'java.lang.Error', but 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error' was expected.
+                        error = throwable.toError(default = Errors.Database.DATABASE_OPERATION_FAILED)
                     )
                 )
             }
             .onEach { result ->
                 result
-                    .onSuccess { settings -> // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onSuccess(action: (D) -&gt; Unit): DataState&lt;D, E&gt;
+                    .onSuccess { settings ->
                         screenState.successData {
                             UsageAndDiagnosticsUiState(
                                 usageAndDiagnostics = settings.usageAndDiagnostics,
@@ -92,7 +95,7 @@ class UsageAndDiagnosticsViewModel(
                         }
                         updateConsent(settings)
                     }
-                    .onFailure { handleObservationError() } // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onFailure(action: (E) -&gt; Unit): DataState&lt;D, E&gt;
+                    .onFailure { error -> handleObservationError(error.asUiText()) }
             }
             .launchIn(viewModelScope)
     }
@@ -126,11 +129,11 @@ class UsageAndDiagnosticsViewModel(
         )
     }
 
-    private fun handleObservationError() {
+    private fun handleObservationError(message: UiTextHelper = UiTextHelper.StringResource(R.string.error_an_error_occurred)) {
         screenState.setErrors(
             errors = listOf(
                 UiSnackbar(
-                    message = UiTextHelper.StringResource(R.string.error_an_error_occurred),
+                    message = message,
                 ),
             ),
         )
