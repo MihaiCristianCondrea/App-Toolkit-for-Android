@@ -7,17 +7,18 @@ import io.mockk.coVerify
 import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import io.mockk.verifyOrder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import org.junit.After
-import org.junit.Test
 
 class ConsentManagerHelperTest {
 
@@ -92,10 +93,10 @@ class ConsentManagerHelperTest {
 
             ConsentManagerHelper.applyInitialConsent(dataStore)
 
-            verify(exactly = 1) { dataStore.analyticsConsent(defaultValue) }
-            verify(exactly = 1) { dataStore.adStorageConsent(defaultValue) }
-            verify(exactly = 1) { dataStore.adUserDataConsent(defaultValue) }
-            verify(exactly = 1) { dataStore.adPersonalizationConsent(defaultValue) }
+            verify(exactly = 1) { dataStore.analyticsConsent(defaultValue) } // FIXME: Flow is constructed but not used
+            verify(exactly = 1) { dataStore.adStorageConsent(defaultValue) }// FIXME: Flow is constructed but not used
+            verify(exactly = 1) { dataStore.adUserDataConsent(defaultValue) }// FIXME: Flow is constructed but not used
+            verify(exactly = 1) { dataStore.adPersonalizationConsent(defaultValue) }// FIXME: Flow is constructed but not used
 
             verify(exactly = 1) {
                 ConsentManagerHelper.updateConsent(

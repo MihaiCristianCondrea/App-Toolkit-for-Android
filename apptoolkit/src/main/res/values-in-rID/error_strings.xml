@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Gagal memuat informasi persetujuan</string>
+
+    <string name="activity_not_found">Aktivitas tidak ditemukan.</string>
+
+    <string name="security_error">Terjadi kesalahan keamanan. Silakan coba lagi nanti.</string>
+    <string name="io_error">Terjadi kesalahan input/output. Silakan periksa koneksi jaringan atau penyimpanan Anda dan coba lagi.</string>
+    <string name="illegal_argument_error">Input atau argumen tidak valid diberikan. Silakan periksa informasi dan coba lagi.</string>
+    <string name="unknown_error">Terjadi kesalahan yang tidak diketahui.</string>
+    <string name="initialization_error">Inisialisasi gagal. Silakan coba lagi nanti.</string>
+
+    <string name="error_no_settings_found">Tidak ada pengaturan yang ditemukan</string>
+    <string name="error_invalid_content_key">Kunci konten tidak valid.</string>
+
+    <string name="error_unauthorized">Tidak diizinkan: token tidak valid</string>
+    <string name="error_forbidden">Dilarang: izin tidak mencukupi</string>
+    <string name="error_gone">Endpoint API dihapus</string>
+    <string name="error_unprocessable">Data tidak valid untuk pembuatan isu</string>
+    <string name="error_invalid_report">Judul dan deskripsi tidak boleh kosong</string>
+
+    <string name="error_failed_to_load_ads_settings">Gagal memuat pengaturan iklan</string>
+
+    <string name="cache_cleared_error">Cache dibersihkan dengan beberapa kesalahan</string>
+
+    <string name="loading_eula_message">Mengambil Perjanjian Lisensi Pengguna Akhir…</string>
+    <string name="loading_changelog_message">Mengambil changelog aplikasi…</string>
+    <string name="error_loading_eula_message">Tidak dapat memuat Perjanjian Lisensi Pengguna Akhir. Silakan coba lagi.</string>
+    <string name="error_loading_changelog_message">Tidak dapat memuat changelog aplikasi. Silakan coba lagi.</string>
+
+    <string name="error_failed_to_load_sku_details">Gagal memuat detail SKU</string>
+
+    <string name="no_internet_error">Tidak ada koneksi internet.</string>
+    <string name="connection_error">Kesalahan jaringan. Silakan coba lagi.</string>
+    <string name="connection_closed_error">Koneksi terputus.</string>
+    <string name="request_timeout_error">Waktu permintaan habis. Coba lagi.</string>
+    <string name="ssl_error">Koneksi aman gagal.</string>
+
+    <string name="http_redirect_error">Pengalihan tidak terduga dari server.</string>
+    <string name="http_client_error">Permintaan gagal. Silakan coba lagi.</string>
+    <string name="http_server_error">Kesalahan server. Silakan coba lagi nanti.</string>
+    <string name="rate_limited_error">Terlalu banyak permintaan. Coba lagi nanti.</string>
+
+    <string name="serialization_error">Gagal membaca respons server.</string>
+
+    <string name="no_data_error">Tidak ada data yang tersedia.</string>
+    <string name="invalid_state_error">Operasi tidak diizinkan saat ini.</string>
+    <string name="unsupported_operation_error">Operasi tidak didukung.</string>
+    <string name="cancelled_error">Operasi dibatalkan.</string>
+
+    <string name="database_error">Kesalahan penyimpanan.</string>
+    <string name="database_locked_error">Penyimpanan sedang sibuk. Coba lagi.</string>
+    <string name="database_constraint_error">Kesalahan batasan penyimpanan.</string>
+    <string name="database_cant_open_error">Tidak dapat membuka penyimpanan.</string>
+    <string name="database_corrupt_error">Penyimpanan rusak.</string>
+    <string name="database_full_error">Penyimpanan penuh.</string>
+
+    <string name="error_an_error_occurred">Terjadi kesalahan</string>
+    <string name="error_failed_to_launch_review">Gagal memulai alur ulasan</string>
+    <string name="error_failed_to_load_faq">Gagal memuat FAQ</string>
+    <string name="error_failed_to_request_review">Gagal meminta ulasan</string>
+    <string name="error_failed_to_update_app">Gagal memperbarui aplikasi</string>
+    <string name="error_failed_to_load_consent_info">Gagal memuat informasi persetujuan</string>
+</resources>
