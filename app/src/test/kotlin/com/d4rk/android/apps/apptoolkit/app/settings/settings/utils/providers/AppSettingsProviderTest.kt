@@ -43,6 +43,22 @@ class AppSettingsProviderTest {
         unmockkAll()
     }
 
+    /*
+    FIXME:
+com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
+java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
+	at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Unknown Source)
+	at java.base/java.lang.Class.forName(Unknown Source)
+	at io.mockk.InternalPlatformDsl.classForName(InternalPlatformDsl.kt:93)
+	at com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppSettingsProviderTest.provideSettingsConfig returns expected configuration(AppSettingsProviderTest.kt:207)
+
+
+
+    */
     @Test
     fun `provideSettingsConfig returns expected configuration`() {
         val context = createContext(defaultStrings)
@@ -139,6 +155,25 @@ class AppSettingsProviderTest {
         assertEquals(defaultStrings[R.string.settings], config.title)
     }
 
+    /*
+
+    FIXME:
+
+
+com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
+java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
+	at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Unknown Source)
+	at java.base/java.lang.Class.forName(Unknown Source)
+	at io.mockk.InternalPlatformDsl.classForName(InternalPlatformDsl.kt:93)
+	at com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppSettingsProviderTest.notifications preference falls back to privacy screen when system settings cannot open(AppSettingsProviderTest.kt:292)
+
+
+
+    */
     @Test
     fun `notifications preference falls back to privacy screen when system settings cannot open`() {
         val context = createContext(defaultStrings)

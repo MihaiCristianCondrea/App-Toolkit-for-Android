@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Nu s-au putut încărca informațiile de consimțământ</string>
+
+    <string name="activity_not_found">Activitate negăsită.</string>
+
+    <string name="security_error">A apărut o eroare de securitate. Vă rugăm să încercați din nou mai târziu.</string>
+    <string name="io_error">A apărut o eroare de intrare/ieșire. Verificați conexiunea la rețea sau spațiul de stocare și încercați din nou.</string>
+    <string name="illegal_argument_error">Intrare sau argument invalid furnizat. Verificați informațiile și încercați din nou.</string>
+    <string name="unknown_error">A apărut o eroare necunoscută.</string>
+    <string name="initialization_error">Inițializarea a eșuat. Vă rugăm să încercați din nou mai târziu.</string>
+
+    <string name="error_no_settings_found">Nu au fost găsite setări</string>
+    <string name="error_invalid_content_key">Cheie de conținut invalidă.</string>
+
+    <string name="error_unauthorized">Neautorizat: token invalid</string>
+    <string name="error_forbidden">Interzis: permisiuni insuficiente</string>
+    <string name="error_gone">Punctul final API a fost eliminat</string>
+    <string name="error_unprocessable">Date invalide pentru crearea problemei</string>
+    <string name="error_invalid_report">Titlul și descrierea nu pot fi goale</string>
+
+    <string name="error_failed_to_load_ads_settings">Nu s-au putut încărca setările de reclame</string>
+
+    <string name="cache_cleared_error">Cache-ul a fost curățat cu unele erori</string>
+
+    <string name="loading_eula_message">Se preia Contractul de Licență pentru Utilizatorul Final…</string>
+    <string name="loading_changelog_message">Se preia jurnalul de modificări al aplicației…</string>
+    <string name="error_loading_eula_message">Nu s-a putut încărca Contractul de Licență pentru Utilizatorul Final. Vă rugăm să încercați din nou.</string>
+    <string name="error_loading_changelog_message">Nu s-a putut încărca jurnalul de modificări al aplicației. Vă rugăm să încercați din nou.</string>
+
+    <string name="error_failed_to_load_sku_details">Nu s-au putut încărca detaliile SKU</string>
+
+    <string name="no_internet_error">Nu există conexiune la internet.</string>
+    <string name="connection_error">Eroare de rețea. Vă rugăm să încercați din nou.</string>
+    <string name="connection_closed_error">Conexiunea a fost întreruptă.</string>
+    <string name="request_timeout_error">Timpul de așteptare al cererii a expirat. Încercați din nou.</string>
+    <string name="ssl_error">Conexiunea securizată a eșuat.</string>
+
+    <string name="http_redirect_error">Redirecționare neașteptată de la server.</string>
+    <string name="http_client_error">Cererea a eșuat. Vă rugăm să încercați din nou.</string>
+    <string name="http_server_error">Eroare de server. Vă rugăm să încercați din nou mai târziu.</string>
+    <string name="rate_limited_error">Prea multe cereri. Încercați din nou mai târziu.</string>
+
+    <string name="serialization_error">Nu s-a putut citi răspunsul serverului.</string>
+
+    <string name="no_data_error">Nu există date disponibile.</string>
+    <string name="invalid_state_error">Operația nu este permisă în acest moment.</string>
+    <string name="unsupported_operation_error">Operație neacceptată.</string>
+    <string name="cancelled_error">Operație anulată.</string>
+
+    <string name="database_error">Eroare de stocare.</string>
+    <string name="database_locked_error">Stocarea este ocupată. Încercați din nou.</string>
+    <string name="database_constraint_error">Eroare de restricție a stocării.</string>
+    <string name="database_cant_open_error">Nu s-a putut deschide stocarea.</string>
+    <string name="database_corrupt_error">Stocarea este coruptă.</string>
+    <string name="database_full_error">Stocarea este plină.</string>
+
+    <string name="error_an_error_occurred">A apărut o eroare</string>
+    <string name="error_failed_to_launch_review">Nu s-a putut porni fluxul de evaluare</string>
+    <string name="error_failed_to_load_faq">Nu s-au putut încărca întrebările frecvente</string>
+    <string name="error_failed_to_request_review">Nu s-a putut solicita evaluarea</string>
+    <string name="error_failed_to_update_app">Nu s-a putut actualiza aplicația</string>
+    <string name="error_failed_to_load_consent_info">Nu s-au putut încărca informațiile de consimțământ</string>
+</resources>

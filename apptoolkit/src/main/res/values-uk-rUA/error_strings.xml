@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Не вдалося завантажити інформацію про згоду</string>
+
+    <string name="activity_not_found">Дію не знайдено.</string>
+
+    <string name="security_error">Сталася помилка безпеки. Будь ласка, спробуйте пізніше.</string>
+    <string name="io_error">Сталася помилка введення/виведення. Перевірте підключення до мережі або сховище та спробуйте ще раз.</string>
+    <string name="illegal_argument_error">Надано недійсні дані або аргумент. Перевірте інформацію та спробуйте ще раз.</string>
+    <string name="unknown_error">Сталася невідома помилка.</string>
+    <string name="initialization_error">Помилка ініціалізації. Будь ласка, спробуйте пізніше.</string>
+
+    <string name="error_no_settings_found">Налаштування не знайдено</string>
+    <string name="error_invalid_content_key">Недійсний ключ вмісту.</string>
+
+    <string name="error_unauthorized">Неавторизовано: недійсний токен</string>
+    <string name="error_forbidden">Заборонено: недостатньо дозволів</string>
+    <string name="error_gone">Кінцеву точку API видалено</string>
+    <string name="error_unprocessable">Недійсні дані для створення запиту</string>
+    <string name="error_invalid_report">Заголовок і опис не можуть бути порожніми</string>
+
+    <string name="error_failed_to_load_ads_settings">Не вдалося завантажити налаштування реклами</string>
+
+    <string name="cache_cleared_error">Кеш очищено з деякими помилками</string>
+
+    <string name="loading_eula_message">Отримання Ліцензійної угоди з кінцевим користувачем…</string>
+    <string name="loading_changelog_message">Отримання журналу змін застосунку…</string>
+    <string name="error_loading_eula_message">Не вдалося завантажити Ліцензійну угоду з кінцевим користувачем. Будь ласка, спробуйте ще раз.</string>
+    <string name="error_loading_changelog_message">Не вдалося завантажити журнал змін застосунку. Будь ласка, спробуйте ще раз.</string>
+
+    <string name="error_failed_to_load_sku_details">Не вдалося завантажити відомості SKU</string>
+
+    <string name="no_internet_error">Немає підключення до інтернету.</string>
+    <string name="connection_error">Помилка мережі. Будь ласка, спробуйте ще раз.</string>
+    <string name="connection_closed_error">З’єднання було перервано.</string>
+    <string name="request_timeout_error">Час очікування запиту минув. Спробуйте ще раз.</string>
+    <string name="ssl_error">Не вдалося встановити захищене з’єднання.</string>
+
+    <string name="http_redirect_error">Неочікуване перенаправлення від сервера.</string>
+    <string name="http_client_error">Не вдалося виконати запит. Будь ласка, спробуйте ще раз.</string>
+    <string name="http_server_error">Помилка сервера. Будь ласка, спробуйте пізніше.</string>
+    <string name="rate_limited_error">Забагато запитів. Спробуйте пізніше.</string>
+
+    <string name="serialization_error">Не вдалося прочитати відповідь сервера.</string>
+
+    <string name="no_data_error">Дані відсутні.</string>
+    <string name="invalid_state_error">Операцію наразі заборонено.</string>
+    <string name="unsupported_operation_error">Операція не підтримується.</string>
+    <string name="cancelled_error">Операцію скасовано.</string>
+
+    <string name="database_error">Помилка сховища.</string>
+    <string name="database_locked_error">Сховище зайняте. Спробуйте ще раз.</string>
+    <string name="database_constraint_error">Помилка обмеження сховища.</string>
+    <string name="database_cant_open_error">Не вдалося відкрити сховище.</string>
+    <string name="database_corrupt_error">Сховище пошкоджене.</string>
+    <string name="database_full_error">Сховище заповнене.</string>
+
+    <string name="error_an_error_occurred">Сталася помилка</string>
+    <string name="error_failed_to_launch_review">Не вдалося запустити процес оцінювання</string>
+    <string name="error_failed_to_load_faq">Не вдалося завантажити розділ поширених запитань</string>
+    <string name="error_failed_to_request_review">Не вдалося надіслати запит на оцінювання</string>
+    <string name="error_failed_to_update_app">Не вдалося оновити застосунок</string>
+    <string name="error_failed_to_load_consent_info">Не вдалося завантажити інформацію про згоду</string>
+</resources>

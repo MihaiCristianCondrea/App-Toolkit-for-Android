@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">無法載入同意資訊</string>
+
+    <string name="activity_not_found">找不到活動。</string>
+
+    <string name="security_error">發生安全性錯誤。請稍後再試。</string>
+    <string name="io_error">發生輸入/輸出錯誤。請檢查您的網路連線或儲存空間，然後再試一次。</string>
+    <string name="illegal_argument_error">提供的輸入或參數無效。請檢查資訊後再試一次。</string>
+    <string name="unknown_error">發生未知錯誤。</string>
+    <string name="initialization_error">初始化失敗。請稍後再試。</string>
+
+    <string name="error_no_settings_found">找不到設定</string>
+    <string name="error_invalid_content_key">內容金鑰無效。</string>
+
+    <string name="error_unauthorized">未授權：權杖無效</string>
+    <string name="error_forbidden">禁止存取：權限不足</string>
+    <string name="error_gone">API 端點已移除</string>
+    <string name="error_unprocessable">建立問題的資料無效</string>
+    <string name="error_invalid_report">標題與描述不可為空白</string>
+
+    <string name="error_failed_to_load_ads_settings">無法載入廣告設定</string>
+
+    <string name="cache_cleared_error">快取已清除，但發生部分錯誤</string>
+
+    <string name="loading_eula_message">正在取得終端使用者授權合約…</string>
+    <string name="loading_changelog_message">正在擷取應用程式變更記錄…</string>
+    <string name="error_loading_eula_message">無法載入終端使用者授權合約。請再試一次。</string>
+    <string name="error_loading_changelog_message">無法載入應用程式變更記錄。請再試一次。</string>
+
+    <string name="error_failed_to_load_sku_details">無法載入 SKU 詳細資訊</string>
+
+    <string name="no_internet_error">沒有網際網路連線。</string>
+    <string name="connection_error">網路錯誤。請再試一次。</string>
+    <string name="connection_closed_error">連線已中斷。</string>
+    <string name="request_timeout_error">要求逾時。請再試一次。</string>
+    <string name="ssl_error">安全連線失敗。</string>
+
+    <string name="http_redirect_error">來自伺服器的非預期重新導向。</string>
+    <string name="http_client_error">要求失敗。請再試一次。</string>
+    <string name="http_server_error">伺服器錯誤。請稍後再試。</string>
+    <string name="rate_limited_error">請求次數過多。請稍後再試。</string>
+
+    <string name="serialization_error">無法讀取伺服器回應。</string>
+
+    <string name="no_data_error">沒有可用的資料。</string>
+    <string name="invalid_state_error">目前不允許執行此操作。</string>
+    <string name="unsupported_operation_error">不支援的操作。</string>
+    <string name="cancelled_error">操作已取消。</string>
+
+    <string name="database_error">儲存空間錯誤。</string>
+    <string name="database_locked_error">儲存空間忙碌中。請再試一次。</string>
+    <string name="database_constraint_error">儲存空間限制錯誤。</string>
+    <string name="database_cant_open_error">無法開啟儲存空間。</string>
+    <string name="database_corrupt_error">儲存空間已損毀。</string>
+    <string name="database_full_error">儲存空間已滿。</string>
+
+    <string name="error_an_error_occurred">發生錯誤</string>
+    <string name="error_failed_to_launch_review">無法啟動評論流程</string>
+    <string name="error_failed_to_load_faq">無法載入常見問題</string>
+    <string name="error_failed_to_request_review">無法請求評論</string>
+    <string name="error_failed_to_update_app">無法更新應用程式</string>
+    <string name="error_failed_to_load_consent_info">無法載入同意資訊</string>
+</resources>

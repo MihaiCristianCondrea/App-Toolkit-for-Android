@@ -53,6 +53,24 @@ class TestAboutRepositoryImpl {
         assertThat(result.deviceInfo).isEqualTo(deviceProvider.deviceInfo)
     }
 
+    /*
+    FIXME:
+
+
+com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextExtensionsKt
+java.lang.ClassNotFoundException: com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextExtensionsKt
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
+	at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Unknown Source)
+	at java.base/java.lang.Class.forName(Unknown Source)
+	at io.mockk.InternalPlatformDsl.classForName(InternalPlatformDsl.kt:93)
+	at com.d4rk.android.libs.apptoolkit.app.about.data.repository.TestAboutRepositoryImpl.copyDeviceInfo delegates to copyTextToClipboard(TestAboutRepositoryImpl.kt:138)
+
+
+
+    */
     @Test
     fun `copyDeviceInfo delegates to copyTextToClipboard`() {
         val ctx = mockk<Context>(relaxed = true)

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Falha ao carregar informações de consentimento</string>
+
+    <string name="activity_not_found">Atividade não encontrada.</string>
+
+    <string name="security_error">Ocorreu um erro de segurança. Tente novamente mais tarde.</string>
+    <string name="io_error">Ocorreu um erro de entrada/saída. Verifique sua conexão de rede ou armazenamento e tente novamente.</string>
+    <string name="illegal_argument_error">Entrada ou argumento inválido fornecido. Verifique as informações e tente novamente.</string>
+    <string name="unknown_error">Ocorreu um erro desconhecido.</string>
+    <string name="initialization_error">Falha na inicialização. Tente novamente mais tarde.</string>
+
+    <string name="error_no_settings_found">Nenhuma configuração encontrada</string>
+    <string name="error_invalid_content_key">Chave de conteúdo inválida.</string>
+
+    <string name="error_unauthorized">Não autorizado: token inválido</string>
+    <string name="error_forbidden">Proibido: permissões insuficientes</string>
+    <string name="error_gone">Endpoint da API removido</string>
+    <string name="error_unprocessable">Dados inválidos para criação do problema</string>
+    <string name="error_invalid_report">Título e descrição não podem estar vazios</string>
+
+    <string name="error_failed_to_load_ads_settings">Falha ao carregar configurações de anúncios</string>
+
+    <string name="cache_cleared_error">Cache limpo com alguns erros</string>
+
+    <string name="loading_eula_message">Obtendo o Contrato de Licença do Usuário Final…</string>
+    <string name="loading_changelog_message">Buscando o registro de alterações do aplicativo…</string>
+    <string name="error_loading_eula_message">Não foi possível carregar o Contrato de Licença do Usuário Final. Tente novamente.</string>
+    <string name="error_loading_changelog_message">Não foi possível carregar o registro de alterações do aplicativo. Tente novamente.</string>
+
+    <string name="error_failed_to_load_sku_details">Falha ao carregar detalhes do SKU</string>
+
+    <string name="no_internet_error">Sem conexão com a internet.</string>
+    <string name="connection_error">Erro de rede. Tente novamente.</string>
+    <string name="connection_closed_error">A conexão foi interrompida.</string>
+    <string name="request_timeout_error">Tempo limite da solicitação excedido. Tente novamente.</string>
+    <string name="ssl_error">Falha na conexão segura.</string>
+
+    <string name="http_redirect_error">Redirecionamento inesperado do servidor.</string>
+    <string name="http_client_error">Falha na solicitação. Tente novamente.</string>
+    <string name="http_server_error">Erro no servidor. Tente novamente mais tarde.</string>
+    <string name="rate_limited_error">Muitas solicitações. Tente novamente mais tarde.</string>
+
+    <string name="serialization_error">Falha ao ler a resposta do servidor.</string>
+
+    <string name="no_data_error">Nenhum dado disponível.</string>
+    <string name="invalid_state_error">Operação não permitida no momento.</string>
+    <string name="unsupported_operation_error">Operação não suportada.</string>
+    <string name="cancelled_error">Operação cancelada.</string>
+
+    <string name="database_error">Erro de armazenamento.</string>
+    <string name="database_locked_error">O armazenamento está ocupado. Tente novamente.</string>
+    <string name="database_constraint_error">Erro de restrição de armazenamento.</string>
+    <string name="database_cant_open_error">Não foi possível abrir o armazenamento.</string>
+    <string name="database_corrupt_error">O armazenamento está corrompido.</string>
+    <string name="database_full_error">O armazenamento está cheio.</string>
+
+    <string name="error_an_error_occurred">Ocorreu um erro</string>
+    <string name="error_failed_to_launch_review">Falha ao iniciar o fluxo de avaliação</string>
+    <string name="error_failed_to_load_faq">Falha ao carregar as perguntas frequentes</string>
+    <string name="error_failed_to_request_review">Falha ao solicitar avaliação</string>
+    <string name="error_failed_to_update_app">Falha ao atualizar o aplicativo</string>
+    <string name="error_failed_to_load_consent_info">Falha ao carregar informações de consentimento</string>
+</resources>

@@ -128,6 +128,46 @@ class TestAboutViewModel {
             assertThat(viewModel.uiState.value.snackbar).isNotNull()
         }
 
+    /*
+    TODO FIXME:
+
+
+expected not to be: 1767524814502
+expected not to be: 1767524814502
+	at app//com.d4rk.android.libs.apptoolkit.app.about.ui.TestAboutViewModel$repeated copy events replace snackbar$1.invokeSuspend(TestAboutViewModel.kt:144)
+	at app//com.d4rk.android.libs.apptoolkit.app.about.ui.TestAboutViewModel$repeated copy events replace snackbar$1.invoke(TestAboutViewModel.kt)
+	at app//com.d4rk.android.libs.apptoolkit.app.about.ui.TestAboutViewModel$repeated copy events replace snackbar$1.invoke(TestAboutViewModel.kt)
+	at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invoke(TestBuilders.kt)
+	at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invoke(TestBuilders.kt)
+	at app//kotlinx.coroutines.intrinsics.UndispatchedKt.startCoroutineUndispatched(Undispatched.kt:20)
+	at app//kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:360)
+	at app//kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:134)
+	at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1.invokeSuspend(TestBuilders.kt:312)
+	at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1.invoke(TestBuilders.kt)
+	at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1.invoke(TestBuilders.kt)
+	at app//kotlinx.coroutines.test.TestBuildersJvmKt$createTestResult$1.invokeSuspend(TestBuildersJvm.kt:11)
+	at app//kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at app//kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at app//kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at app//kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at app//kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at app//kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at app//kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at app//kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at app//kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at app//kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
+	at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at app//kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
+	at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0$default(TestBuilders.kt:159)
+	at app//kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0$default(Unknown Source)
+	at app//com.d4rk.android.libs.apptoolkit.app.about.ui.TestAboutViewModel.repeated copy events replace snackbar(TestAboutViewModel.kt:132)
+
+
+
+
+    */
     @Test
     fun `repeated copy events replace snackbar`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
