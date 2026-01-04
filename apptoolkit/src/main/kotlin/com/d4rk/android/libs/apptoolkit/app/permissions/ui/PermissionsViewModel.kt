@@ -6,6 +6,9 @@ import com.d4rk.android.libs.apptoolkit.app.permissions.domain.repository.Permis
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsAction
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -17,7 +20,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
@@ -49,60 +52,66 @@ class PermissionsViewModel(
 
     private fun loadPermissions() {
         viewModelScope.launch {
-            var latestConfig: SettingsConfig? = null
-            var failure: Throwable? = null
-
             permissionsRepository.getPermissionsConfig()
-                .onStart { screenState.setLoading() }
-                .onCompletion { cause ->
-                    val error = cause ?: failure
-                    when {
-                        error is CancellationException -> return@onCompletion
-                        error != null -> screenState.updateState(ScreenState.Error())
-                        latestConfig?.categories.isNullOrEmpty() -> {
-                            screenState.setErrors(
-                                listOf(
-                                    UiSnackbar(
-                                        message = UiTextHelper.StringResource(R.string.error_no_settings_found)
-                                    )
-                                )
-                            )
-                            screenState.updateState(ScreenState.NoData())
-                        }
-
-                        else -> screenState.updateState(ScreenState.Success())
+                .map<SettingsConfig, DataState<SettingsConfig, Error>> { config ->
+                    if (config.categories.isEmpty()) {
+                        DataState.Error(data = config, error = Error("No settings found"))
+                    } else {
+                        DataState.Success(config)
                     }
+                }
+                .onStart {
+                    screenState.setErrors(emptyList())
+                    screenState.setLoading()
                 }
                 .catch { error ->
                     if (error is CancellationException) throw error
-
-                    failure = error
-                    screenState.setErrors(
-                        listOf(
-                            UiSnackbar(
-                                message = UiTextHelper.StringResource(R.string.error_an_error_occurred)
-                            )
-                        )
-                    )
+                    emit(DataState.Error(error = Error(error.message)))
                 }
-                .collect { result: SettingsConfig ->
-                    failure = null
-                    latestConfig = result
-
-                    if (result.categories.isNotEmpty()) {
-                        screenState.successData {
-                            copy(title = result.title, categories = result.categories)
+                .collect { result ->
+                    result
+                        .onSuccess { config ->
+                            screenState.successData {
+                                copy(title = config.title, categories = config.categories)
+                            }
                         }
-                    } else {
-                        screenState.setErrors(
-                            listOf(
-                                UiSnackbar(
-                                    message = UiTextHelper.StringResource(R.string.error_no_settings_found)
+                        .onFailure { error ->
+                            val message = if (error.message.isNullOrBlank()) {
+                                UiTextHelper.StringResource(R.string.error_an_error_occurred)
+                            } else {
+                                UiTextHelper.DynamicString(error.message!!)
+                            }
+
+                            if (configCategoriesAreEmpty(result)) {
+                                screenState.setErrors(
+                                    listOf(
+                                        UiSnackbar(
+                                            message = UiTextHelper.StringResource(R.string.error_no_settings_found)
+                                        )
+                                    )
                                 )
-                            )
-                        )
-                    }
+                                screenState.updateState(ScreenState.NoData())
+                            } else {
+                                screenState.setErrors(
+                                    listOf(
+                                        UiSnackbar(
+                                            message = message
+                                        )
+                                    )
+                                )
+                                screenState.updateState(ScreenState.Error())
+                            }
+                        }
                 }
         }
+    }
+
+    private fun configCategoriesAreEmpty(result: DataState<SettingsConfig, Error>): Boolean {
+        val data = when (result) {
+            is DataState.Success -> result.data
+            is DataState.Error -> result.data
+            is DataState.Loading -> result.data
+        }
+        return data?.categories.isNullOrEmpty()
     }
 }

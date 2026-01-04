@@ -6,6 +6,9 @@ import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.G
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsAction
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.state.GeneralSettingsUiState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
@@ -20,6 +23,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -45,23 +49,36 @@ class GeneralSettingsViewModel(
         loadJob = viewModelScope.launch {
             repository.getContentKey(contentKey)
                 .flowOn(dispatchers.default)
-                .onStart { screenState.setLoading() }
-                .onEach { key ->
-                    screenState.setErrors(errors = emptyList())
-                    screenState.copyData { copy(contentKey = key) }
-                    screenState.updateState(newValues = ScreenState.Success())
+                .map<String, DataState<String, Error>> { key ->
+                    DataState.Success(key)
                 }
+                .onStart { screenState.setLoading() }
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable
 
-                    screenState.setErrors(
-                        errors = listOf(
-                            UiSnackbar(
-                                message = UiTextHelper.StringResource(R.string.error_invalid_content_key)
-                            )
+                    emit(
+                        DataState.Error(
+                            error = Error(throwable.message)
                         )
                     )
-                    screenState.updateState(newValues = ScreenState.NoData())
+                }
+                .onEach { result ->
+                    result
+                        .onSuccess { key ->
+                            screenState.setErrors(errors = emptyList())
+                            screenState.copyData { copy(contentKey = key) }
+                            screenState.updateState(newValues = ScreenState.Success())
+                        }
+                        .onFailure { _ ->
+                            screenState.setErrors(
+                                errors = listOf(
+                                    UiSnackbar(
+                                        message = UiTextHelper.StringResource(R.string.error_invalid_content_key)
+                                    )
+                                )
+                            )
+                            screenState.updateState(newValues = ScreenState.NoData())
+                        }
                 }
                 .onCompletion { cause ->
                     if (cause is CancellationException) return@onCompletion
