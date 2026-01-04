@@ -6,10 +6,10 @@ import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.G
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsAction
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.state.GeneralSettingsUiState
+import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -49,7 +49,7 @@ class GeneralSettingsViewModel(
         loadJob = viewModelScope.launch {
             repository.getContentKey(contentKey)
                 .flowOn(dispatchers.default)
-                .map<String, DataState<String, Error>> { key ->
+                .map<String, DataState<String, Error>> { key -> // FIXME: Type argument is not within its bounds: must be subtype of 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error'.
                     DataState.Success(key)
                 }
                 .onStart { screenState.setLoading() }
@@ -58,18 +58,18 @@ class GeneralSettingsViewModel(
 
                     emit(
                         DataState.Error(
-                            error = Error(throwable.message)
+                            error = Error(throwable.message) // FIXME: Argument type mismatch: actual type is 'java.lang.Error', but 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error' was expected.
                         )
                     )
                 }
                 .onEach { result ->
                     result
-                        .onSuccess { key ->
+                        .onSuccess { key -> // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onSuccess(action: (D) -&gt; Unit): DataState&lt;D, E&gt;
                             screenState.setErrors(errors = emptyList())
                             screenState.copyData { copy(contentKey = key) }
                             screenState.updateState(newValues = ScreenState.Success())
                         }
-                        .onFailure { _ ->
+                        .onFailure { _ -> // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onFailure(action: (E) -&gt; Unit): DataState&lt;D, E&gt;
                             screenState.setErrors(
                                 errors = listOf(
                                     UiSnackbar(

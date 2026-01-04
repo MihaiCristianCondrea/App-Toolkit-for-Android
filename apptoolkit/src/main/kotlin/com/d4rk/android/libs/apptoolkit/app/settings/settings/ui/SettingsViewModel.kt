@@ -7,10 +7,10 @@ import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.Setti
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsAction
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
+import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -63,9 +63,12 @@ class SettingsViewModel(
                 }
                 emit(config)
             }
-                .map<SettingsConfig, DataState<SettingsConfig, Error>> { config ->
+                .map<SettingsConfig, DataState<SettingsConfig, Error>> { config -> // FIXME: Type argument is not within its bounds: must be subtype of 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error'.
                     if (config.categories.isEmpty()) {
-                        DataState.Error(data = config, error = Error("No settings found"))
+                        DataState.Error(
+                            data = config,
+                            error = Error("No settings found")
+                        ) // FIXME: Argument type mismatch: actual type is 'java.lang.Error', but 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error' was expected.
                     } else {
                         DataState.Success(config)
                     }
@@ -76,16 +79,16 @@ class SettingsViewModel(
                 }
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable
-                    emit(DataState.Error(error = Error(throwable.message)))
+                    emit(DataState.Error(error = Error(throwable.message))) // FIXME: Argument type mismatch: actual type is 'java.lang.Error', but 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error' was expected.
                 }
                 .collect { result ->
                     result
-                        .onSuccess { config ->
+                        .onSuccess { config -> // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onSuccess(action: (D) -&gt; Unit): DataState&lt;D, E&gt;
                             screenState.successData {
                                 copy(title = config.title, categories = config.categories)
                             }
                         }
-                        .onFailure { error ->
+                        .onFailure { error -> // FIXME: <html>Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:<br/>fun &lt;D, E : Error&gt; DataState&lt;D, E&gt;.onFailure(action: (E) -&gt; Unit): DataState&lt;D, E&gt;
                             val snackbarMessage = when {
                                 configCategoriesAreEmpty(result) -> UiTextHelper.StringResource(
                                     R.string.error_no_settings_found,
@@ -117,7 +120,7 @@ class SettingsViewModel(
         }
     }
 
-    private fun configCategoriesAreEmpty(result: DataState<SettingsConfig, Error>): Boolean {
+    private fun configCategoriesAreEmpty(result: DataState<SettingsConfig, Error>): Boolean { // FIXME: Type argument is not within its bounds: must be subtype of 'com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error'.
         val data = when (result) {
             is DataState.Success -> result.data
             is DataState.Error -> result.data
