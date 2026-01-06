@@ -7,6 +7,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -28,15 +29,16 @@ import kotlinx.serialization.serializer
  */
 @Composable
 inline fun <reified T : StableNavKey> rememberNavigationState(
-    startRoute: T, // FIXME: Parameter 'startRoute' has runtime-determined stability
+    startRoute: T,
     topLevelRoutes: ImmutableSet<T>,
 ): NavigationState<T> {
+    val stableStartRoute by rememberUpdatedState(newValue = startRoute)
     val topLevelRouteState: MutableState<T> = rememberSerializable(
-        startRoute,
+        stableStartRoute,
         topLevelRoutes,
         serializer = MutableStateSerializer(serializer<T>())
     ) {
-        mutableStateOf(startRoute)
+        mutableStateOf(stableStartRoute)
     }
 
     val backStacks: Map<T, NavBackStack<T>> = buildMap {
@@ -45,9 +47,9 @@ inline fun <reified T : StableNavKey> rememberNavigationState(
         }
     }
 
-    return remember(startRoute, topLevelRoutes, topLevelRouteState.value) {
+    return remember(stableStartRoute, topLevelRoutes, topLevelRouteState.value) {
         NavigationState(
-            startRoute = startRoute,
+            startRoute = stableStartRoute,
             topLevelRoute = topLevelRouteState,
             backStacks = backStacks
         )

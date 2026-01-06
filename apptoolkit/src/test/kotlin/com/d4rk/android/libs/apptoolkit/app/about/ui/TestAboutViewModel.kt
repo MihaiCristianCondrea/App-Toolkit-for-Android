@@ -101,6 +101,39 @@ class TestAboutViewModel {
     }
 
     @Test
+    fun `copy device info failure surfaces fallback snackbar`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = object : AboutRepository {
+                override suspend fun getAboutInfo(): AboutInfo = AboutInfo(
+                    appVersion = buildInfoProvider.appVersion,
+                    appVersionCode = buildInfoProvider.appVersionCode,
+                    deviceInfo = deviceProvider.deviceInfo,
+                )
+
+                override fun copyDeviceInfo(
+                    label: String,
+                    deviceInfo: String,
+                ): CopyDeviceInfoResult = CopyDeviceInfoResult(
+                    copied = false,
+                    shouldShowFeedback = true
+                )
+            }
+
+            val viewModel = createViewModel(
+                testDispatcher = dispatcherExtension.testDispatcher,
+                repository = repository
+            )
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            val snackbar = viewModel.uiState.value.snackbar!!
+            val msg = snackbar.message as UiTextHelper.StringResource
+            assertThat(msg.resourceId).isEqualTo(R.string.snack_device_info_failed)
+        }
+
+    @Test
     fun `dismiss snackbar resets state`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(testDispatcher = dispatcherExtension.testDispatcher)
         dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
