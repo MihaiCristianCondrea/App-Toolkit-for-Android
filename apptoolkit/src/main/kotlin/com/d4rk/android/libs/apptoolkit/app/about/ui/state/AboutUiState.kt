@@ -10,7 +10,7 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 data class AboutUiState(
-    val appVersion: String = "",
-    val appVersionCode: Int = 0,
+    val appVersion: String = "", // TODO: for that we have the AppVersionInfo class
+    val appVersionCode: Int = 0, // TODO: for that we have the AppVersionInfo class
     val deviceInfo: String = "",
 )

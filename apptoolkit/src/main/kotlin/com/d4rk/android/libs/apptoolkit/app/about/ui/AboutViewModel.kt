@@ -110,6 +110,7 @@ open class AboutViewModel(
             .launchIn(viewModelScope)
     }
 
+    // FIXME: DeadSystemException: The system died; earlier logs will point to the root cause
     private fun copyDeviceInfo(label: String) {
         val deviceInfo = screenData?.deviceInfo.orEmpty()
         if (deviceInfo.isBlank()) {
