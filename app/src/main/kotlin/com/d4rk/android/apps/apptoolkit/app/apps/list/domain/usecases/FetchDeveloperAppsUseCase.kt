@@ -11,6 +11,13 @@ import kotlinx.coroutines.flow.flow
 class FetchDeveloperAppsUseCase(
     private val repository: DeveloperAppsRepository
 ) {
+    /**
+     * Returns developer apps.
+     *
+     * The repository flow is emitted untouched so upstream errors and cancellations keep their
+     * original semantics. The leading [DataState.Loading] allows screens to render a progress UI
+     * before the repository responds.
+     */
     operator fun invoke(): Flow<DataState<List<AppInfo>, AppErrors>> = flow {
         emitAll(repository.fetchDeveloperApps())
     }

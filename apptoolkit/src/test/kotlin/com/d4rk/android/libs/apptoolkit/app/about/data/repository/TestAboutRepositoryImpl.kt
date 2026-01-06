@@ -71,7 +71,8 @@ class TestAboutRepositoryImpl {
                     context.copyTextToClipboard(
                         "label",
                         "info",
-                        capture(fallbackSlot) // FIXME: Argument type mismatch: actual type is 'Function0<Unit>', but 'Boolean' was expected.
+                        isSensitive = false,
+                        onCopyFallback = capture(fallbackSlot)
                     )
                 } answers {
                     fallbackSlot.captured.invoke()
@@ -82,11 +83,11 @@ class TestAboutRepositoryImpl {
 
             verify {
                 context.copyTextToClipboard(
-                    // FXIME: The result of `copyTextToClipboard` is not used
                     "label",
                     "info",
-                    any(),
-                )
+                    isSensitive = false,
+                    onCopyFallback = any(),
+                ) // FIXME: The result of `copyTextToClipboard` is not used
             }
             assertThat(copyResult).isEqualTo(CopyDeviceInfoResult(copied = true, shouldShowFeedback = true))
         } finally {
