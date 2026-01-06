@@ -3,6 +3,9 @@ package com.d4rk.android.libs.apptoolkit.core.ui.views.buttons
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -13,22 +16,24 @@ private const val IconRequirementMessage: String = "Either icon or painter must 
 @Composable
 internal fun IconContent(
     icon: ImageVector?,
-    painter: Painter?, // FIXME: Parameter 'painter' has runtime-determined stability
+    painter: Painter?,
     contentDescription: String?,
 ) {
     require(icon != null || painter != null) { IconRequirementMessage }
 
-    val iconModifier: Modifier = Modifier.size(size = SizeConstants.ButtonIconSize)
+    val iconModifier: Modifier = remember { Modifier.size(size = SizeConstants.ButtonIconSize) }
+    val stableIcon by rememberUpdatedState(newValue = icon)
+    val stablePainter by rememberUpdatedState(newValue = painter)
     when {
-        icon != null -> Icon(
+        stableIcon != null -> Icon(
             modifier = iconModifier,
-            imageVector = icon,
+            imageVector = stableIcon!!,
             contentDescription = contentDescription
         )
 
-        painter != null -> Icon(
+        stablePainter != null -> Icon(
             modifier = iconModifier,
-            painter = painter,
+            painter = stablePainter!!,
             contentDescription = contentDescription
         )
     }

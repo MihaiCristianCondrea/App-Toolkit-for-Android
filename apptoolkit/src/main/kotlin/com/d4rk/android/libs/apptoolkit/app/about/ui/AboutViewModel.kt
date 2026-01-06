@@ -110,7 +110,6 @@ open class AboutViewModel(
             .launchIn(viewModelScope)
     }
 
-    // FIXME: DeadSystemException: The system died; earlier logs will point to the root cause
     private fun copyDeviceInfo(label: String) {
         val deviceInfo = screenData?.deviceInfo.orEmpty()
         if (deviceInfo.isBlank()) {
@@ -155,7 +154,7 @@ open class AboutViewModel(
                     .onFailure { error ->
                         screenState.showSnackbar(
                             UiSnackbar(
-                                message = error.asUiText(),
+                                message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
                                 isError = true,
                                 timeStamp = System.nanoTime(),
                                 type = ScreenMessageType.SNACKBAR

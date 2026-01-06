@@ -14,10 +14,20 @@ class CopyDeviceInfoUseCase(private val repository: AboutRepository) {
         deviceInfo: String,
     ): Flow<DataState<CopyDeviceInfoResult, Errors>> =
         flow {
-            val result = repository.copyDeviceInfo(
-                label = label,
-                deviceInfo = deviceInfo
-            )
-            emit(DataState.Success(result))
+            val result = runCatching {
+                repository.copyDeviceInfo(
+                    label = label,
+                    deviceInfo = deviceInfo
+                )
+            }.getOrElse {
+                emit(DataState.Error(error = Errors.UseCase.INVALID_STATE))
+                return@flow
+            }
+
+            if (result.copied) {
+                emit(DataState.Success(result))
+            } else {
+                emit(DataState.Error(data = result, error = Errors.UseCase.INVALID_STATE))
+            }
         }
 }
