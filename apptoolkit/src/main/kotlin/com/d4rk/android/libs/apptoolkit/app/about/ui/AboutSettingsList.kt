@@ -37,6 +37,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalS
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
+import com.d4rk.android.libs.apptoolkit.core.logging.ABOUT_SETTINGS_LOG_TAG
+import android.util.Log
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Angle
@@ -126,7 +128,7 @@ fun AboutSettingsList(
                             ExtraTinyVerticalSpacer()
                             SettingsPreferenceItem(
                                 title = stringResource(id = R.string.app_build_version),
-                                summary = "${data.appVersion} (${data.appVersionCode})",
+                                summary = "${data.appVersionInfo.versionName.orEmpty()} (${data.appVersionInfo.versionCode})",
                             ) {
                                 appVersionTapCount += 1
                                 if (appVersionTapCount >= 5) {
@@ -139,7 +141,10 @@ fun AboutSettingsList(
                                 title = stringResource(id = R.string.oss_license_title),
                                 summary = stringResource(id = R.string.summary_preference_settings_oss)
                             ) {
-                                context.openActivity(LicensesActivity::class.java) // FIXME: The result of `openActivity` is not used
+                                val opened = context.openActivity(LicensesActivity::class.java)
+                                if (!opened) {
+                                    Log.w(ABOUT_SETTINGS_LOG_TAG, "Failed to open licenses screen from About settings")
+                                }
                             }
                         }
                     }

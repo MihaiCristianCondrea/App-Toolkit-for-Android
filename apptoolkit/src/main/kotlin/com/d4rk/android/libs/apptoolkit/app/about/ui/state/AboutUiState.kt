@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.about.ui.state
 
 import androidx.compose.runtime.Immutable
+import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 
 /**
  * UI representation for the about screen.
@@ -10,7 +11,6 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 data class AboutUiState(
-    val appVersion: String = "", // TODO: for that we have the AppVersionInfo class
-    val appVersionCode: Int = 0, // TODO: for that we have the AppVersionInfo class
+    val appVersionInfo: AppVersionInfo = AppVersionInfo(versionName = "", versionCode = 0L),
     val deviceInfo: String = "",
 )

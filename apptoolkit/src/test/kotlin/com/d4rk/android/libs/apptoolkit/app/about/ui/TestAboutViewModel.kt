@@ -79,8 +79,9 @@ class TestAboutViewModel {
 
         val state = viewModel.uiState.value
         assertThat(state.data?.deviceInfo).isEqualTo(deviceProvider.deviceInfo)
-        assertThat(state.data?.appVersion).isEqualTo(buildInfoProvider.appVersion)
-        assertThat(state.data?.appVersionCode).isEqualTo(buildInfoProvider.appVersionCode)
+        assertThat(state.data?.appVersionInfo?.versionName).isEqualTo(buildInfoProvider.appVersion)
+        assertThat(state.data?.appVersionInfo?.versionCode)
+            .isEqualTo(buildInfoProvider.appVersionCode.toLong())
     }
 
     @Test
