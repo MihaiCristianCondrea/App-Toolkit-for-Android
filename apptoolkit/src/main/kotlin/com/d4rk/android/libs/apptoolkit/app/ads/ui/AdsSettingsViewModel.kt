@@ -8,6 +8,7 @@ import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsAction
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.state.AdsSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
@@ -17,6 +18,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
+import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -25,6 +28,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.Flow
 
 /**
  * ViewModel for the Ads Settings screen.
@@ -119,26 +123,41 @@ class AdsSettingsViewModel(
      * @param enabled A boolean indicating whether ads should be enabled (`true`) or disabled (`false`).
      */
     private fun persist(enabled: Boolean) {
+        val previousValue = uiState.value.data?.adsEnabled ?: repository.defaultAdsEnabled
+
         screenState.updateData(newState = ScreenState.Success()) { current ->
             current.copy(adsEnabled = enabled)
         }
 
         setJob?.cancel()
-        setJob = flow<DataState<Unit, Errors>> {
-            setAdsEnabled(enabled)
-            emit(DataState.Success(Unit))
-        }
+        setJob = persistAdsEnabled(enabled)
             .flowOn(dispatchers.io)
-            .catch {
-                emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
-            }
             .onEach { result ->
-                result.onFailure {
-                    screenState.updateData(newState = ScreenState.Error()) { current ->
-                        current.copy(adsEnabled = !enabled)
+                result
+                    .onSuccess {
+                        screenState.updateState(ScreenState.Success())
                     }
-                }
+                    .onFailure {
+                        screenState.updateData(newState = ScreenState.Error()) { current ->
+                            current.copy(adsEnabled = previousValue)
+                        }
+                    }
             }
             .launchIn(viewModelScope)
     }
+
+    private fun persistAdsEnabled(enabled: Boolean): Flow<DataState<Unit, Errors>> =
+        kotlinx.coroutines.flow.flow {
+            emit(setAdsEnabled(enabled))
+        }.map { result ->
+            when (result) {
+                is Result.Success -> DataState.Success(Unit)
+                is Result.Error -> DataState.Error(
+                    error = Errors.Database.DATABASE_OPERATION_FAILED
+                )
+            }
+        }.catch { throwable ->
+            if (throwable is CancellationException) throw throwable
+            emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
+        }
 }

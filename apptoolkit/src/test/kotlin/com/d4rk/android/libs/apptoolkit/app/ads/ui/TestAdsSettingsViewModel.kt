@@ -6,6 +6,7 @@ import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.SetAdsEnabledUse
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
+import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
@@ -40,9 +41,10 @@ class TestAdsSettingsViewModel {
 
         override fun observeAdsEnabled(): Flow<Boolean> = state
 
-        override suspend fun setAdsEnabled(enabled: Boolean) {
+        override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> {
             if (shouldFail) throw IOException("fail")
             state.value = enabled
+            return Result.Success(Unit)
         }
     }
 
@@ -75,7 +77,7 @@ class TestAdsSettingsViewModel {
             val repo = object : AdsSettingsRepository {
                 override val defaultAdsEnabled: Boolean = false
                 override fun observeAdsEnabled(): Flow<Boolean> = flow { throw IOException("boom") }
-                override suspend fun setAdsEnabled(enabled: Boolean) = Unit
+                override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> = Result.Success(Unit)
             }
 
             val viewModel = createViewModel(repo)

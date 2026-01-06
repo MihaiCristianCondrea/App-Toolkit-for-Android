@@ -43,24 +43,6 @@ class AppSettingsProviderTest {
         unmockkAll()
     }
 
-    // TODO && FIXME: FIX THE TEST FAIL
-    /*
-
-Expected value to be null, but was: <>.
-java.lang.AssertionError: Expected value to be null, but was: <>.
-	at kotlin.test.DefaultAsserter.fail(DefaultAsserter.kt:16)
-	at kotlin.test.Asserter$DefaultImpls.assertTrue(Assertions.kt:694)
-	at kotlin.test.DefaultAsserter.assertTrue(DefaultAsserter.kt:11)
-	at kotlin.test.Asserter$DefaultImpls.assertNull(Assertions.kt:749)
-	at kotlin.test.DefaultAsserter.assertNull(DefaultAsserter.kt:11)
-	at kotlin.test.AssertionsKt__AssertionsKt.assertNull(Assertions.kt:159)
-	at kotlin.test.AssertionsKt.assertNull(Unknown Source)
-	at kotlin.test.AssertionsKt__AssertionsKt.assertNull$default(Assertions.kt:158)
-	at kotlin.test.AssertionsKt.assertNull$default(Unknown Source)
-	at com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppSettingsProviderTest.provideSettingsConfig returns expected configuration(AppSettingsProviderTest.kt:138)
-
-
-    */
     @Test
     fun `provideSettingsConfig returns expected configuration`() {
         val context = createContext(defaultStrings)

@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.RegisterExtension
 import java.io.IOException
 
@@ -76,48 +77,6 @@ class TestAdsSettingsRepositoryImpl {
 
         assertThat(thrown).isInstanceOf(CancellationException::class.java)
     }
-
-    /*
-        FIXME:
-
-        🚀 [TEST] setAdsEnabled returns success when persisted
-
-    expected instance of: com.d4rk.android.libs.apptoolkit.core.domain.model.Result$Success
-    but was instance of : kotlin.Unit
-    with value          : kotlin.Unit
-    expected instance of: com.d4rk.android.libs.apptoolkit.core.domain.model.Result$Success
-    but was instance of : kotlin.Unit
-    with value          : kotlin.Unit
-        at app//com.d4rk.android.libs.apptoolkit.app.ads.data.repository.TestAdsSettingsRepositoryImpl$setAdsEnabled returns success when persisted$1.invokeSuspend(TestAdsSettingsRepositoryImpl.kt:90)
-        at app//com.d4rk.android.libs.apptoolkit.app.ads.data.repository.TestAdsSettingsRepositoryImpl$setAdsEnabled returns success when persisted$1.invoke(TestAdsSettingsRepositoryImpl.kt)
-        at app//com.d4rk.android.libs.apptoolkit.app.ads.data.repository.TestAdsSettingsRepositoryImpl$setAdsEnabled returns success when persisted$1.invoke(TestAdsSettingsRepositoryImpl.kt)
-        at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
-        at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invoke(TestBuilders.kt)
-        at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invoke(TestBuilders.kt)
-        at app//kotlinx.coroutines.intrinsics.UndispatchedKt.startCoroutineUndispatched(Undispatched.kt:20)
-        at app//kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:360)
-        at app//kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:134)
-        at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1.invokeSuspend(TestBuilders.kt:312)
-        at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1.invoke(TestBuilders.kt)
-        at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1.invoke(TestBuilders.kt)
-        at app//kotlinx.coroutines.test.TestBuildersJvmKt$createTestResult$1.invokeSuspend(TestBuildersJvm.kt:11)
-        at app//kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
-        at app//kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
-        at app//kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
-        at app//kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
-        at app//kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
-        at app//kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
-        at app//kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
-        at app//kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
-        at app//kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
-        at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
-        at app//kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
-        at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
-        at app//kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
-        at app//kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0$default(TestBuilders.kt:159)
-        at app//kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0$default(Unknown Source)
-        at app//com.d4rk.android.libs.apptoolkit.app.ads.data.repository.TestAdsSettingsRepositoryImpl.setAdsEnabled returns success when persisted(TestAdsSettingsRepositoryImpl.kt:82)
-        */
     @Test
     fun `setAdsEnabled returns success when persisted`() =
         runTest(dispatcherExtension.testDispatcher) {
@@ -131,44 +90,6 @@ class TestAdsSettingsRepositoryImpl {
             assertThat(result).isInstanceOf(Result.Success::class.java)
             coVerify { dataStore.saveAds(isChecked = true) }
         }
-
-    /*
-    FIXME:
-
-    🚀 [TEST] setAdsEnabled returns error on failure
-
-boom
-java.io.IOException: boom
-	at com.d4rk.android.libs.apptoolkit.app.ads.data.repository.TestAdsSettingsRepositoryImpl$setAdsEnabled returns error on failure$1.invokeSuspend(TestAdsSettingsRepositoryImpl.kt:98)
-	at com.d4rk.android.libs.apptoolkit.app.ads.data.repository.TestAdsSettingsRepositoryImpl$setAdsEnabled returns error on failure$1.invoke(TestAdsSettingsRepositoryImpl.kt)
-	at com.d4rk.android.libs.apptoolkit.app.ads.data.repository.TestAdsSettingsRepositoryImpl$setAdsEnabled returns error on failure$1.invoke(TestAdsSettingsRepositoryImpl.kt)
-	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
-	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invoke(TestBuilders.kt)
-	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invoke(TestBuilders.kt)
-	at kotlinx.coroutines.intrinsics.UndispatchedKt.startCoroutineUndispatched(Undispatched.kt:20)
-	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:360)
-	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:134)
-	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1.invokeSuspend(TestBuilders.kt:312)
-	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1.invoke(TestBuilders.kt)
-	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1.invoke(TestBuilders.kt)
-	at kotlinx.coroutines.test.TestBuildersJvmKt$createTestResult$1.invokeSuspend(TestBuildersJvm.kt:11)
-	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
-	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
-	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
-	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
-	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
-	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
-	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
-	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
-	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
-	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
-	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
-	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
-	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
-	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0$default(TestBuilders.kt:159)
-	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0$default(Unknown Source)
-	at com.d4rk.android.libs.apptoolkit.app.ads.data.repository.TestAdsSettingsRepositoryImpl.setAdsEnabled returns error on failure(TestAdsSettingsRepositoryImpl.kt:95)
-    */
     @Test
     fun `setAdsEnabled returns error on failure`() = runTest(dispatcherExtension.testDispatcher) {
         println("\uD83D\uDE80 [TEST] setAdsEnabled returns error on failure")
@@ -176,9 +97,7 @@ java.io.IOException: boom
         coEvery { dataStore.saveAds(any()) } throws IOException("boom")
         val repository = createRepository(dataStore, debugBuild = false)
 
-        val result = repository.setAdsEnabled(true)
-
-        assertThat(result).isInstanceOf(Result.Error::class.java)
+        assertThrows<IOException> { repository.setAdsEnabled(true) }
         coVerify { dataStore.saveAds(isChecked = true) }
     }
 

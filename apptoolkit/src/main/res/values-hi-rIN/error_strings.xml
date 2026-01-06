@@ -61,4 +61,5 @@
     <string name="error_failed_to_request_review">रिव्यू का अनुरोध करने में विफल</string>
     <string name="error_failed_to_update_app">ऐप अपडेट करने में विफल</string>
     <string name="error_failed_to_load_consent_info">सहमति की जानकारी लोड करने में विफल</string>
+    <string name="error_failed_to_load_navigation">नेविगेशन लोड नहीं हो सका</string>
 </resources>

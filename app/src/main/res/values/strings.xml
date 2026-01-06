@@ -16,6 +16,7 @@
     <string name="error_failed_to_fetch_our_apps">Failed to load app listings</string>
     <string name="error_failed_to_load_apps">Failed to load apps</string>
     <string name="error_failed_to_update_favorite">Failed to update favorite</string>
+    <string name="error_failed_to_load_navigation">Failed to load navigation</string>
     <string name="open_random_app">Open random app</string>
 
     <!-- App details bottom sheet -->

@@ -61,4 +61,5 @@
     <string name="error_failed_to_request_review">Nie udało się poprosić o recenzję</string>
     <string name="error_failed_to_update_app">Nie udało się zaktualizować aplikacji</string>
     <string name="error_failed_to_load_consent_info">Nie udało się załadować informacji o zgodzie</string>
+    <string name="error_failed_to_load_navigation">Nie udało się wczytać nawigacji</string>
 </resources>

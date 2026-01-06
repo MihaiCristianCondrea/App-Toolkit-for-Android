@@ -61,4 +61,5 @@
     <string name="error_failed_to_request_review">İnceleme isteği başarısız oldu</string>
     <string name="error_failed_to_update_app">Uygulama güncellenemedi</string>
     <string name="error_failed_to_load_consent_info">Onay bilgileri yüklenemedi</string>
+    <string name="error_failed_to_load_navigation">Gezinme yüklenemedi</string>
 </resources>

@@ -3,6 +3,7 @@ package com.d4rk.android.libs.apptoolkit.app.ads.data.repository
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -26,7 +27,8 @@ class AdsSettingsRepositoryImpl(
     override fun observeAdsEnabled(): Flow<Boolean> =
         dataStore.ads(default = defaultAdsEnabled)
 
-    override suspend fun setAdsEnabled(enabled: Boolean) {
+    override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> {
         dataStore.saveAds(isChecked = enabled)
+        return Result.Success(Unit)
     }
 }

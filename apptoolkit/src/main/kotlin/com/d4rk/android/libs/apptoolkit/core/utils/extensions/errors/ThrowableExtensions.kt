@@ -22,6 +22,7 @@ import java.net.ProtocolException
 import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import java.sql.SQLException
 import javax.net.ssl.SSLException
 import io.ktor.client.network.sockets.ConnectTimeoutException as KtorConnectTimeoutException
 
@@ -48,7 +49,7 @@ fun Throwable.toError(default: Errors = Errors.Network.UNKNOWN): Errors {
         is ResponseException -> Errors.Network.UNKNOWN
 
         is UnknownHostException -> Errors.Network.NO_INTERNET
-        is ConnectException -> Errors.Network.CONNECTION_ERROR
+        is ConnectException -> Errors.Network.NO_INTERNET
 
         is SSLException -> Errors.Network.SSL_ERROR
 
@@ -61,6 +62,7 @@ fun Throwable.toError(default: Errors = Errors.Network.UNKNOWN): Errors {
         is SQLiteFullException -> Errors.Database.DATABASE_FULL
         is SQLiteDiskIOException,
         is SQLiteException -> Errors.Database.DATABASE_OPERATION_FAILED
+        is SQLException -> Errors.Database.DATABASE_OPERATION_FAILED
 
         is EOFException,
         is ProtocolException ,
@@ -70,7 +72,7 @@ fun Throwable.toError(default: Errors = Errors.Network.UNKNOWN): Errors {
 
         is IllegalArgumentException -> Errors.UseCase.ILLEGAL_ARGUMENT
         is UnsupportedOperationException -> Errors.UseCase.UNSUPPORTED_OPERATION
-        is IllegalStateException -> Errors.UseCase.INVALID_STATE
+        is IllegalStateException -> Errors.UseCase.NO_DATA
 
         else -> default
     }

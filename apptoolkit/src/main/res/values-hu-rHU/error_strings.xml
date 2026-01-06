@@ -61,4 +61,5 @@
     <string name="error_failed_to_request_review">Nem sikerült értékelést kérni</string>
     <string name="error_failed_to_update_app">Nem sikerült frissíteni az alkalmazást</string>
     <string name="error_failed_to_load_consent_info">Nem sikerült betölteni a hozzájárulási információkat</string>
+    <string name="error_failed_to_load_navigation">Nem sikerült betölteni a navigációt</string>
 </resources>

@@ -61,4 +61,5 @@
     <string name="error_failed_to_request_review">Nu s-a putut solicita evaluarea</string>
     <string name="error_failed_to_update_app">Nu s-a putut actualiza aplicația</string>
     <string name="error_failed_to_load_consent_info">Nu s-au putut încărca informațiile de consimțământ</string>
+    <string name="error_failed_to_load_navigation">Nu s-a putut încărca navigația</string>
 </resources>
