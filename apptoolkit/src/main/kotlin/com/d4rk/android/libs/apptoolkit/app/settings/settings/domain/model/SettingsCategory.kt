@@ -4,6 +4,6 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class SettingsCategory(
-    val title: String = "",
+    val title: String? = null,
     val preferences: List<SettingsPreference> = emptyList(),
 )

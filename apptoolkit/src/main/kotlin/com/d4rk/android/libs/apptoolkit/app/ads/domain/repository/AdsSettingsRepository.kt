@@ -1,5 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.ads.domain.repository
 
+import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -11,5 +12,5 @@ import kotlinx.coroutines.flow.Flow
 interface AdsSettingsRepository {
     val defaultAdsEnabled: Boolean
     fun observeAdsEnabled(): Flow<Boolean>
-    suspend fun setAdsEnabled(enabled: Boolean)
+    suspend fun setAdsEnabled(enabled: Boolean): Result<Unit>
 }
