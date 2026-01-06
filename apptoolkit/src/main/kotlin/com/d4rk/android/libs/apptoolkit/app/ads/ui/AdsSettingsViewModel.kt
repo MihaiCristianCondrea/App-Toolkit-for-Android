@@ -147,18 +147,15 @@ class AdsSettingsViewModel(
     }
 
     private fun persistAdsEnabled(enabled: Boolean): Flow<DataState<Unit, Errors>> =
-        flow {
-            emit(setAdsEnabled(enabled))
-
-            // TODO: use onSuccess and onFailure like above
-        }.map { result -> // FIXME: Cannot infer type for type parameter 'R'. Specify it explicitly.
-            when (result) {
-                is Result.Success -> DataState.Success(Unit) // FIXME: Cannot infer type for type parameter 'E'. Specify it explicitly.
-                is Result.Error -> DataState.Error( // FIXME: Cannot infer type for type parameter 'D'. Specify it explicitly.
-                    error = Errors.Database.DATABASE_OPERATION_FAILED
+        flow<DataState<Unit, Errors>> {
+            when (val result = setAdsEnabled(enabled)) {
+                is Result.Success -> emit(DataState.Success(Unit))
+                is Result.Error -> emit(
+                    DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
                 )
             }
-        }.catch { throwable ->
+        }
+            .catch { throwable ->
             if (throwable is CancellationException) throw throwable
             emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
         }

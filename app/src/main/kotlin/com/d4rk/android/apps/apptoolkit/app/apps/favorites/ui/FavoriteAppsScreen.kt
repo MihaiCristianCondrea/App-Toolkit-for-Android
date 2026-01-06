@@ -96,7 +96,10 @@ fun FavoriteAppsRoute(
     val onOpenInPlayStore: (AppInfo) -> Unit = remember(context) {
         { appInfo ->
             if (appInfo.packageName.isNotEmpty()) {
-                context.openPlayStoreForApp(appInfo.packageName) // FIXME: The result of `openPlayStoreForApp` is not used
+                val opened = context.openPlayStoreForApp(appInfo.packageName)
+                if (!opened) {
+                    Log.w(FAVORITES_LOG_TAG, "Unable to open Play Store for ${appInfo.packageName}")
+                }
             }
         }
     }

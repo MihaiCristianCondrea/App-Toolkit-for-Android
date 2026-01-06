@@ -34,6 +34,6 @@ private fun LocalDate.isWithinSeason(start: MonthDay, end: MonthDay): Boolean {
     return if (seasonWrapsYear) {
         today >= start || today <= end
     } else {
-        today >= start && today <= end // FIXME: Two comparisons should be converted to a range check
+        today in start..end
     }
 }
