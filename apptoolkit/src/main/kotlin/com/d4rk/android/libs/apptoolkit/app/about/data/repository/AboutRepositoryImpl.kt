@@ -2,6 +2,7 @@ package com.d4rk.android.libs.apptoolkit.app.about.data.repository
 
 import android.content.Context
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo
+import com.d4rk.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
@@ -20,6 +21,16 @@ class AboutRepositoryImpl(
             deviceInfo = deviceProvider.deviceInfo,
         )
 
-    override fun copyDeviceInfo(label: String, deviceInfo: String): Boolean =
-        context.copyTextToClipboard(label = label, text = deviceInfo)
+    override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult {
+        var shouldShowFeedback = false
+        val copied = context.copyTextToClipboard(
+            label = label,
+            text = deviceInfo,
+            onCopyFallback = { shouldShowFeedback = true }
+        )
+        return CopyDeviceInfoResult(
+            copied = copied,
+            shouldShowFeedback = shouldShowFeedback
+        )
+    }
 }

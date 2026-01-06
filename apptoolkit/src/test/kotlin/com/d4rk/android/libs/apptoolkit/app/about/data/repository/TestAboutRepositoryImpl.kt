@@ -2,6 +2,7 @@ package com.d4rk.android.libs.apptoolkit.app.about.data.repository
 
 import android.content.Context
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo
+import com.d4rk.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
@@ -63,8 +64,14 @@ class TestAboutRepositoryImpl {
         mockkStatic(extFile)
 
         try {
-            val copied = runCatching {
-                every { context.copyTextToClipboard(any(), any(), any()) } returns true
+            val fallbackSlot = slot<() -> Unit>()
+            val copyResult = runCatching {
+                every {
+                    context.copyTextToClipboard("label", "info", capture(fallbackSlot))
+                } answers {
+                    fallbackSlot.captured.invoke()
+                    true
+                }
                 repo.copyDeviceInfo("label", "info")
             }.getOrThrow()
 
@@ -72,10 +79,10 @@ class TestAboutRepositoryImpl {
                 context.copyTextToClipboard(
                     "label",
                     "info",
-                    any()
+                    any(),
                 )
             }
-            assertThat(copied).isTrue()
+            assertThat(copyResult).isEqualTo(CopyDeviceInfoResult(copied = true, shouldShowFeedback = true))
         } finally {
             unmockkStatic(extFile)
         }
