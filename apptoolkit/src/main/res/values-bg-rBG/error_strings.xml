@@ -61,4 +61,5 @@
     <string name="error_failed_to_request_review">Неуспешна заявка за отзив</string>
     <string name="error_failed_to_update_app">Неуспешно обновяване на приложението</string>
     <string name="error_failed_to_load_consent_info">Неуспешно зареждане на информацията за съгласие</string>
+    <string name="error_failed_to_load_navigation">Неуспешно зареждане на навигацията</string>
 </resources>

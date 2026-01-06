@@ -61,4 +61,5 @@
     <string name="error_failed_to_request_review">無法請求評論</string>
     <string name="error_failed_to_update_app">無法更新應用程式</string>
     <string name="error_failed_to_load_consent_info">無法載入同意資訊</string>
+    <string name="error_failed_to_load_navigation">無法載入導覽</string>
 </resources>

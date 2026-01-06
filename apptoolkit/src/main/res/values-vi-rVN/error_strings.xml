@@ -61,4 +61,5 @@
     <string name="error_failed_to_request_review">Không thể yêu cầu đánh giá</string>
     <string name="error_failed_to_update_app">Không thể cập nhật ứng dụng</string>
     <string name="error_failed_to_load_consent_info">Không thể tải thông tin chấp thuận</string>
+    <string name="error_failed_to_load_navigation">Không tải được điều hướng</string>
 </resources>

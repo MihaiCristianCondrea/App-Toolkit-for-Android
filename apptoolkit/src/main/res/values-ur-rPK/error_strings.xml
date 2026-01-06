@@ -61,4 +61,5 @@
     <string name="error_failed_to_request_review">جائزہ کی درخواست ناکام ہو گئی</string>
     <string name="error_failed_to_update_app">ایپ کو اپ ڈیٹ کرنے میں ناکام رہا</string>
     <string name="error_failed_to_load_consent_info">رضامندی کی معلومات لوڈ کرنے میں ناکام رہا</string>
+    <string name="error_failed_to_load_navigation">نیویگیشن لوڈ نہیں ہو سکی</string>
 </resources>
