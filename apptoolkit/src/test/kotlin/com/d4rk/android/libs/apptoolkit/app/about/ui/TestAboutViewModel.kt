@@ -2,6 +2,7 @@ package com.d4rk.android.libs.apptoolkit.app.about.ui
 
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo
+import com.d4rk.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.GetAboutInfoUseCase
@@ -46,7 +47,8 @@ class TestAboutViewModel {
                 deviceInfo = deviceProvider.deviceInfo,
             )
 
-            override fun copyDeviceInfo(label: String, deviceInfo: String): Boolean = true
+            override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult =
+                CopyDeviceInfoResult(copied = true, shouldShowFeedback = true)
         }
     ): AboutViewModel {
         val testDispatchers: DispatcherProvider = TestDispatchers(testDispatcher)
@@ -64,7 +66,8 @@ class TestAboutViewModel {
         val repository = object : AboutRepository {
             override suspend fun getAboutInfo(): AboutInfo = throw Exception("fail")
 
-            override fun copyDeviceInfo(label: String, deviceInfo: String): Boolean = false
+            override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult =
+                CopyDeviceInfoResult(copied = false, shouldShowFeedback = true)
         }
         return createViewModel(testDispatcher = testDispatcher, repository = repository)
     }
@@ -126,6 +129,32 @@ class TestAboutViewModel {
             viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
             assertThat(viewModel.uiState.value.snackbar).isNotNull()
+        }
+
+    @Test
+    fun `no fallback means no success snackbar`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = object : AboutRepository {
+                override suspend fun getAboutInfo(): AboutInfo = AboutInfo(
+                    appVersion = buildInfoProvider.appVersion,
+                    appVersionCode = buildInfoProvider.appVersionCode,
+                    deviceInfo = deviceProvider.deviceInfo,
+                )
+
+                override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult =
+                    CopyDeviceInfoResult(copied = true, shouldShowFeedback = false)
+            }
+
+            val viewModel = createViewModel(
+                testDispatcher = dispatcherExtension.testDispatcher,
+                repository = repository
+            )
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            assertThat(viewModel.uiState.value.snackbar).isNull()
         }
 
     @Test

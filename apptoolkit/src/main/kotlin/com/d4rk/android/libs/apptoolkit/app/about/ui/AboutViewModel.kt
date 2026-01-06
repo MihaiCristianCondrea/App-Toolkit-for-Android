@@ -125,26 +125,31 @@ open class AboutViewModel(
         }
 
         copyJob?.cancel()
-        copyJob = copyDeviceInfo(label = label, deviceInfo = deviceInfo)
+        copyJob = copyDeviceInfo(
+            label = label,
+            deviceInfo = deviceInfo,
+        )
             .flowOn(dispatchers.io)
             .onEach { result ->
                 result
-                    .onSuccess { copied ->
-                        val messageRes = if (copied) {
+                    .onSuccess { copyResult ->
+                        val messageRes = if (copyResult.copied) {
                             R.string.snack_device_info_copied
                         } else {
                             R.string.snack_device_info_failed
                         }
-                        screenState.showSnackbar(
-                            UiSnackbar(
-                                message = UiTextHelper.StringResource(
-                                    messageRes
-                                ),
-                                isError = !copied,
-                                timeStamp = System.nanoTime(),
-                                type = ScreenMessageType.SNACKBAR
+                        if (!copyResult.copied || copyResult.shouldShowFeedback) {
+                            screenState.showSnackbar(
+                                UiSnackbar(
+                                    message = UiTextHelper.StringResource(
+                                        messageRes
+                                    ),
+                                    isError = !copyResult.copied,
+                                    timeStamp = System.nanoTime(),
+                                    type = ScreenMessageType.SNACKBAR
+                                )
                             )
-                        )
+                        }
                     }
                     .onFailure { error ->
                         screenState.showSnackbar(
