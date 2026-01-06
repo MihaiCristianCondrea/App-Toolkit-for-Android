@@ -149,7 +149,7 @@ class AdsSettingsViewModel(
     private fun persistAdsEnabled(enabled: Boolean): Flow<DataState<Unit, Errors>> =
         flow<DataState<Unit, Errors>> {
             when (val result = setAdsEnabled(enabled)) {
-                is Result.Success -> emit(DataState.Success(Unit))
+                is Result.Success -> emit(DataState.Success(Unit)) // FIXME: Property "result" is never used
                 is Result.Error -> emit(
                     DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
                 )
