@@ -28,7 +28,7 @@ import kotlinx.serialization.serializer
  */
 @Composable
 inline fun <reified T : StableNavKey> rememberNavigationState(
-    startRoute: T,
+    startRoute: T, // FIXME: Parameter 'startRoute' has runtime-determined stability
     topLevelRoutes: ImmutableSet<T>,
 ): NavigationState<T> {
     val topLevelRouteState: MutableState<T> = rememberSerializable(

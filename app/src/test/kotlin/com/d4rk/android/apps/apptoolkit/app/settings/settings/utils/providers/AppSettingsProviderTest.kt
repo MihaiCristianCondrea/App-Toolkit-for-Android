@@ -115,7 +115,7 @@ java.lang.AssertionError: Expected value to be null, but was: <>.
         assertEquals(defaultStrings[R.string.summary_preference_settings_about], about.summary)
 
         notifications.action.invoke()
-        verify(exactly = 1) { context.openAppNotificationSettings() }
+        verify(exactly = 1) { context.openAppNotificationSettings() } // FIXME: The result of `openAppNotificationSettings` is not used
 
         display.action.invoke()
         verify(exactly = 1) {
@@ -170,7 +170,7 @@ java.lang.AssertionError: Expected value to be null, but was: <>.
 
         assertDoesNotThrow { notifications.action.invoke() }
 
-        verify(exactly = 1) { context.openAppNotificationSettings() }
+        verify(exactly = 1) { context.openAppNotificationSettings() } // FIXME: The result of `openAppNotificationSettings` is not used
         verify(exactly = 1) {
             GeneralSettingsActivity.start(
                 context,

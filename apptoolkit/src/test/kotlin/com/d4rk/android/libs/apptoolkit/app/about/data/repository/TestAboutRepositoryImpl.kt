@@ -11,6 +11,7 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -65,18 +66,23 @@ class TestAboutRepositoryImpl {
 
         try {
             val fallbackSlot = slot<() -> Unit>()
-            val copyResult = runCatching {
+            val copyResult = run {
                 every {
-                    context.copyTextToClipboard("label", "info", capture(fallbackSlot))
+                    context.copyTextToClipboard(
+                        "label",
+                        "info",
+                        capture(fallbackSlot) // FIXME: Argument type mismatch: actual type is 'Function0<Unit>', but 'Boolean' was expected.
+                    )
                 } answers {
                     fallbackSlot.captured.invoke()
                     true
                 }
                 repo.copyDeviceInfo("label", "info")
-            }.getOrThrow()
+            }
 
             verify {
                 context.copyTextToClipboard(
+                    // FXIME: The result of `copyTextToClipboard` is not used
                     "label",
                     "info",
                     any(),

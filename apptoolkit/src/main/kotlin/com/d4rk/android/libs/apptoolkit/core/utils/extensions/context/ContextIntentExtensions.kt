@@ -1,6 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions.context
 
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri

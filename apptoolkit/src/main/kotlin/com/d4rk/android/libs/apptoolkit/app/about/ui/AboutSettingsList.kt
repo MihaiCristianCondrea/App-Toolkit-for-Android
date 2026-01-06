@@ -139,7 +139,7 @@ fun AboutSettingsList(
                                 title = stringResource(id = R.string.oss_license_title),
                                 summary = stringResource(id = R.string.summary_preference_settings_oss)
                             ) {
-                                context.openActivity(LicensesActivity::class.java)
+                                context.openActivity(LicensesActivity::class.java) // FIXME: The result of `openActivity` is not used
                             }
                         }
                     }

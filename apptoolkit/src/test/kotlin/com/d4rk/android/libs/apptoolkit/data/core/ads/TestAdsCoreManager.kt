@@ -31,7 +31,7 @@ class TestAdsCoreManager {
     private val testScope = CoroutineScope(Dispatchers.Unconfined)
     private val noopContinuation = object : Continuation<Unit> {
         override val context = EmptyCoroutineContext
-        override fun resumeWith(result: Result<Unit>) {}
+        override fun resumeWith(result: Result<Unit>) {} // FIXME: This method is empty
     }
 
     @Test

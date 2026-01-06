@@ -11,7 +11,7 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.shareApp
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.pm.isAppInstalled
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isAppInstalled
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.AppInfoHelper
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject

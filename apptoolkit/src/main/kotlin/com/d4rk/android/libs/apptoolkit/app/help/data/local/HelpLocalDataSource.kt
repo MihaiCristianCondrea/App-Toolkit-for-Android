@@ -5,7 +5,7 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqId
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 
-class HelpLocalDataSource(private val context: Context, ) {
+class HelpLocalDataSource(private val context: Context) {
     fun loadLocalQuestions(): List<FaqItem> {
         val faq = listOf(
             R.string.question_1 to R.string.summary_preference_faq_1,

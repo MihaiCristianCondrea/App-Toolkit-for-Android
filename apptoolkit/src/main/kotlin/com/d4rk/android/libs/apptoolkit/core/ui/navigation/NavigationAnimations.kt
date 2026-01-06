@@ -14,7 +14,8 @@ import androidx.compose.animation.togetherWith
  * Default navigation animations shared across the toolkit.
  */
 object NavigationAnimations {
-    private const val FadeScaleDurationMillis = 200
+    private const val FadeScaleDurationMillis =
+        200 // FIXME: Const property name 'FadeScaleDurationMillis' should not contain lowercase letters
     private val fadeScaleEnterSpec = tween<Float>(durationMillis = FadeScaleDurationMillis)
     private val fadeScaleExitSpec = tween<Float>(durationMillis = FadeScaleDurationMillis)
 

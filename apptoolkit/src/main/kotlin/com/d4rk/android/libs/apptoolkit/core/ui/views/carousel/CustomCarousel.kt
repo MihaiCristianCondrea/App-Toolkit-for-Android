@@ -18,7 +18,7 @@ import kotlin.math.absoluteValue
 
 @Composable
 fun <T> CustomCarousel(
-    items: List<T>,
+    items: List<T>, // FIXME: Parameter 'items' has runtime-determined stability
     sidePadding: Dp,
     pagerState: PagerState,
     itemContent: @Composable (item: T) -> Unit

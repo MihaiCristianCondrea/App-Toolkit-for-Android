@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.utils.extensions.pm
+package com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager
 
 import android.content.Context
 import android.content.Intent

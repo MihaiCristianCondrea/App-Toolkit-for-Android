@@ -13,7 +13,7 @@ private const val IconRequirementMessage: String = "Either icon or painter must 
 @Composable
 internal fun IconContent(
     icon: ImageVector?,
-    painter: Painter?,
+    painter: Painter?, // FIXME: Parameter 'painter' has runtime-determined stability
     contentDescription: String?,
 ) {
     require(icon != null || painter != null) { IconRequirementMessage }

@@ -11,7 +11,7 @@ import androidx.compose.ui.util.lerp
 
 @Composable
 fun <T> CarouselItem(
-    item: T,
+    item: T, // FIXME: Parameter 'item' has runtime-determined stability
     pageOffset: Float,
     itemContent: @Composable (item: T) -> Unit
 ) {

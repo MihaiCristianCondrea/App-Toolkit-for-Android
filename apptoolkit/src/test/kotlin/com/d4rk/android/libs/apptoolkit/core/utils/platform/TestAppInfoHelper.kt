@@ -8,7 +8,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.widget.Toast
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.pm.isAppInstalled
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isAppInstalled
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk

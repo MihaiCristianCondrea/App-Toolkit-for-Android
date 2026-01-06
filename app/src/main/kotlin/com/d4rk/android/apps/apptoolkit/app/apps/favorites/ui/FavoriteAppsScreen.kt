@@ -38,10 +38,9 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.pm.isAppInstalled
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.AppInfoHelper
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isAppInstalled
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
@@ -94,11 +93,10 @@ fun FavoriteAppsRoute(
     val openApp: (AppInfo) -> Unit = remember(dispatchers) { buildAppClick }
     val onShareClick: (AppInfo) -> Unit = remember { buildShareClick }
 
-    val appInfoHelper = remember(dispatchers) { AppInfoHelper(dispatchers) }
     val onOpenInPlayStore: (AppInfo) -> Unit = remember(context) {
         { appInfo ->
             if (appInfo.packageName.isNotEmpty()) {
-                context.openPlayStoreForApp(appInfo.packageName)
+                context.openPlayStoreForApp(appInfo.packageName) // FIXME: The result of `openPlayStoreForApp` is not used
             }
         }
     }
