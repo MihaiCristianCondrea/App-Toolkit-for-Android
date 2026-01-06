@@ -21,6 +21,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -28,7 +29,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.Flow
 
 /**
  * ViewModel for the Ads Settings screen.
@@ -147,12 +147,14 @@ class AdsSettingsViewModel(
     }
 
     private fun persistAdsEnabled(enabled: Boolean): Flow<DataState<Unit, Errors>> =
-        kotlinx.coroutines.flow.flow {
+        flow {
             emit(setAdsEnabled(enabled))
-        }.map { result ->
+
+            // TODO: use onSuccess and onFailure like above
+        }.map { result -> // FIXME: Cannot infer type for type parameter 'R'. Specify it explicitly.
             when (result) {
-                is Result.Success -> DataState.Success(Unit)
-                is Result.Error -> DataState.Error(
+                is Result.Success -> DataState.Success(Unit) // FIXME: Cannot infer type for type parameter 'E'. Specify it explicitly.
+                is Result.Error -> DataState.Error( // FIXME: Cannot infer type for type parameter 'D'. Specify it explicitly.
                     error = Errors.Database.DATABASE_OPERATION_FAILED
                 )
             }
