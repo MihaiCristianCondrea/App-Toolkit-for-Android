@@ -2,46 +2,47 @@
 <resources>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome_title">앱 툴킷에 오신 것을 환영합니다</string>
-    <string name="onboarding_welcome_description">저희 앱툴킷 라이브러리의 기능을 살펴보세요. 저희 앱툴킷 라이브러리의 강력한 기능을 시연하고 활용하기 위해 제작된 저희 애플리케이션들을 만나보세요. 이를 통해 안드로이드 개발 및 사용자 경험을 향상시킬 수 있습니다.</string>
-    <string name="onboarding_feature1_title">저희 애플리케이션 살펴보기</string>
-    <string name="onboarding_feature1_description">앱 툴킷은 저희 앱툴킷 라이브러리의 다양한 측면을 부각하고 안드로이드 경험을 향상시키도록 설계된 엄선된 애플리케이션들을 소개합니다. 저희 앱툴킷 라이브러리로 어떤 것들이 가능한지 확인해보세요.</string>
-    <string name="onboarding_personalization_title">저희 앱툴킷 라이브러리 실제 활용 사례 보기</string>
-    <string name="onboarding_personalization_description">이 앱은 저희 앱툴킷 라이브러리를 사용하여 다양하고 사용자 중심적인 애플리케이션을 구축하는 방법을 보여줍니다. 저희 앱들을 탐색하여 라이브러리의 다양한 기능과 구현 사례를 확인하세요.</string>
+    <string name="onboarding_welcome_title">App Toolkit에 오신 것을 환영합니다</string>
+    <string name="onboarding_welcome_description">AppToolkit 라이브러리의 기능을 살펴보세요. 라이브러리의 힘을 보여 주고 Android 개발과 사용자 경험을 향상시키기 위해 만든 앱을 발견하세요.</string>
+    <string name="onboarding_feature1_title">앱을 살펴보기</string>
+    <string name="onboarding_feature1_description">App Toolkit은 AppToolkit 라이브러리의 다양한 측면을 강조하고 Android 경험을 개선하도록 설계된 앱을 소개합니다. AppToolkit 라이브러리로 가능한 것을 확인해 보세요.</string>
+    <string name="onboarding_personalization_title">AppToolkit 라이브러리를 직접 확인하세요</string>
+    <string name="onboarding_personalization_description">이 앱은 AppToolkit 라이브러리가 어떻게 다재다능하고 사용자 중심의 앱을 만드는지 보여 줍니다. 샘플 앱을 살펴보며 라이브러리의 다양한 기능과 구현을 확인하세요.</string>
 
     <!-- Home screen -->
     <string name="all_apps">모든 앱</string>
-    <string name="favorite_apps">즐겨 찾기</string>
-    <string name="no_apps_added_to_favorites">즐겨 찾기에 추가 된 앱이 없습니다</string>
-    <string name="error_failed_to_fetch_our_apps">저희 앱 목록을 가져오는 데 실패했습니다.</string>
+    <string name="favorite_apps">즐겨찾기</string>
+    <string name="no_apps_added_to_favorites">즐겨찾기에 추가된 앱이 없습니다</string>
+    <string name="error_failed_to_fetch_our_apps">앱 목록을 불러오지 못했습니다</string>
     <string name="error_failed_to_load_apps">앱을 불러오지 못했습니다</string>
     <string name="error_failed_to_update_favorite">즐겨찾기를 업데이트하지 못했습니다</string>
-    <string name="open_random_app">임의의 앱 열기</string>
+    <string name="error_failed_to_load_navigation">탐색을 불러오지 못했습니다</string>
+    <string name="open_random_app">무작위 앱 열기</string>
 
     <!-- App details bottom sheet -->
-    <string name="app_details_share_content_description">앱 공유하기</string>
+    <string name="app_details_share_content_description">앱 공유</string>
     <string name="app_details_view_on_play_store">Google Play에서 보기</string>
     <string name="app_details_about_title">이 앱 정보</string>
     <string name="app_details_screenshots_title">스크린샷</string>
     <string name="app_details_open_app">앱 열기</string>
 
     <!-- Help screen -->
-    <string name="question_1">앱 툴킷이란 무엇인가요?</string>
-    <string name="summary_preference_faq_1">앱 툴킷은 저희가 앱툴킷 라이브러리를 사용하여 개발한 앱들을 소개하고 시연하기 위해 설계된 애플리케이션입니다. 저희 애플리케이션 생태계를 탐색하고 앱툴킷 라이브러리의 실제 활용 사례를 볼 수 있는 가이드입니다.</string>
-    <string name="question_2">앱 툴킷에 표시된 다양한 앱에 어떻게 액세스하나요?</string>
-    <string name="summary_preference_faq_2">앱 툴킷은 저희의 다양한 애플리케이션을 나열합니다. 앱 목록을 탭하면 일반적으로 더 많은 정보와 Google Play 스토어에서 설치하거나 열 수 있는 링크가 제공되어 직접 경험해 볼 수 있습니다.</string>
-    <string name="question_3">앱 툴킷에 소개된 앱은 무료인가요?</string>
-    <string name="summary_preference_faq_3">앱 툴킷에 소개된 저희 앱 중 다수는 핵심 기능 세트를 무료로 제공합니다. 일부 앱은 프리미엄 버전이나 인앱 구매를 통해 고급 기능을 사용할 수 있습니다. 각 앱에 대한 자세한 내용은 해당 Play 스토어 페이지에서 확인할 수 있습니다.</string>
-    <string name="question_4">목록에 있는 특정 앱에 대해 더 자세히 알아보려면 어떻게 해야 하나요?</string>
-    <string name="summary_preference_faq_4">저희 앱 중 하나의 기능, 사용자 리뷰 등 자세한 내용을 보려면 앱 툴킷에서 해당 앱을 탭하여 Google Play 스토어 페이지를 방문하세요.</string>
-    <string name="question_5">목록에 있는 앱 중 하나에 대한 도움이나 지원은 어디서 받을 수 있나요?</string>
-    <string name="summary_preference_faq_5">개별 앱에 대한 지원은 일반적으로 해당 Play 스토어 페이지나 앱 자체 내에 자세히 설명된 각자의 채널을 통해 제공됩니다. 앱 툴킷은 이러한 앱을 찾는 용도입니다. 앱별 문제는 해당 앱의 지원 옵션을 참조하세요.</string>
-    <string name="question_6">앱 툴킷의 앱 목록은 얼마나 자주 업데이트되나요?</string>
-    <string name="summary_preference_faq_6">저희는 앱툴킷 라이브러리를 활용하는 최신의 가장 관련성 높은 애플리케이션으로 앱 툴킷을 업데이트하는 것을 목표로 합니다. 새로운 앱이나 중요한 업데이트가 여기에 소개될 수 있습니다.</string>
-    <string name="question_7">앱 툴킷에 인터넷 접속과 같은 권한이 필요한 이유는 무엇인가요?</string>
-    <string name="summary_preference_faq_7">앱 툴킷은 Google Play 스토어에서 최신 애플리케이션 목록을 가져오고 해당 정보를 정확하게 표시하기 위해 인터넷 접속이 필요합니다. 일반적으로 다른 민감한 권한은 필요하지 않습니다.</string>
-    <string name="question_8">앱 툴킷이나 저희 앱에 대한 피드백은 어떻게 제공할 수 있나요?</string>
-    <string name="summary_preference_faq_8">앱 툴킷과 개별 앱에 대한 여러분의 피드백을 소중하게 생각합니다. 일반적으로 앱 툴킷 설정 내 또는 Play 스토어의 개발자 페이지에서 \"피드백\" 또는 \"문의하기\" 옵션을 찾을 수 있습니다. 저희 앱툴킷 라이브러리 자체에 대한 피드백도 적절한 채널을 통해 환영합니다.</string>
-    <string name="question_9">다른 앱을 찾기 위해 앱 툴킷을 사용할 때 제 데이터는 안전한가요?</string>
-    <string name="summary_preference_faq_9">앱 툴킷은 주로 저희 앱에 대한 공개적으로 사용 가능한 정보를 가져옵니다. 목록에 있는 앱 중 하나를 설치하거나 사용하기로 선택하면 해당 앱 자체의 개인정보처리방침이 적용됩니다. 검토해 보시기를 권장합니다. 앱 툴킷의 데이터 처리는 저희 개인정보처리방침에 설명되어 있습니다.</string>
+    <string name="question_1">App Toolkit이란 무엇인가요?</string>
+    <string name="summary_preference_faq_1">App Toolkit은 AppToolkit 라이브러리로 제작된 앱을 소개하고 시연하기 위해 설계된 앱입니다. 이 생태계를 탐색하고 AppToolkit 라이브러리를 직접 확인할 수 있는 안내서입니다.</string>
+    <string name="question_2">App Toolkit에 표시된 다양한 앱에 어떻게 접근하나요?</string>
+    <string name="summary_preference_faq_2">App Toolkit은 다양한 앱을 나열합니다. 앱 항목을 탭하면 보통 더 많은 정보와 Google Play Store에서 설치하거나 열 수 있는 링크가 제공되어 직접 체험할 수 있습니다.</string>
+    <string name="question_3">App Toolkit에 소개된 앱은 무료인가요?</string>
+    <string name="summary_preference_faq_3">App Toolkit에 소개된 많은 앱은 기본 기능을 무료로 제공합니다. 일부는 프리미엄 버전 또는 앱 내 구매를 통해 고급 기능을 제공할 수 있습니다. 각 앱의 자세한 내용은 해당 Google Play Store 페이지에서 확인할 수 있습니다.</string>
+    <string name="question_4">목록에 있는 특정 앱에 대해 더 알아보려면?</string>
+    <string name="summary_preference_faq_4">앱의 세부 정보, 기능, 사용자 리뷰를 확인하려면 App Toolkit에서 해당 앱을 탭해 Google Play Store 페이지로 이동하세요.</string>
+    <string name="question_5">목록에 있는 앱의 도움말이나 지원은 어디에서 찾나요?</string>
+    <string name="summary_preference_faq_5">각 앱에는 자체 지원 채널이 있으며, 보통 Google Play Store 페이지나 앱 내부에 안내되어 있습니다. App Toolkit은 이러한 앱을 찾기 위한 용도이며, 특정 앱 문제는 해당 앱의 지원 옵션을 이용하세요.</string>
+    <string name="question_6">App Toolkit의 앱 목록은 얼마나 자주 업데이트되나요?</string>
+    <string name="summary_preference_faq_6">App Toolkit은 AppToolkit 라이브러리를 사용하는 최신 앱을 항상 볼 수 있도록 정기적으로 업데이트됩니다. 새 앱이나 중요한 업데이트가 여기에 표시될 수 있습니다.</string>
+    <string name="question_7">App Toolkit이 인터넷 접근과 같은 권한을 필요로 하는 이유는 무엇인가요?</string>
+    <string name="summary_preference_faq_7">최신 앱 목록을 표시하기 위해 App Toolkit은 Google Play Store에서 정보를 가져와 정확하게 표시하기 위해 인터넷 접근을 사용합니다. 일반적으로 다른 침습적 권한은 필요하지 않습니다.</string>
+    <string name="question_8">App Toolkit이나 앱에 대한 피드백을 어떻게 전달하나요?</string>
+    <string name="summary_preference_faq_8">App Toolkit과 목록에 있는 앱에 대한 피드백은 환영합니다. 보통 App Toolkit 설정이나 Google Play Store의 개발자 페이지에서 "Feedback" 또는 "Contact" 옵션을 찾을 수 있습니다. AppToolkit 라이브러리에 대한 피드백도 적절한 채널을 통해 환영합니다.</string>
+    <string name="question_9">App Toolkit으로 다른 앱을 찾을 때 데이터가 안전한가요?</string>
+    <string name="summary_preference_faq_9">App Toolkit은 주로 공개적으로 제공되는 앱 정보를 가져옵니다. 이러한 앱 중 하나를 설치하거나 사용하기로 선택하면 해당 앱의 개인정보 처리방침이 적용되므로 확인하세요. App Toolkit의 데이터 처리 방식은 자체 개인정보 처리방침에 설명되어 있습니다.</string>
 </resources>

@@ -3,19 +3,20 @@
 
     <!-- Onboarding -->
     <string name="onboarding_welcome_title">Selamat datang di App Toolkit</string>
-    <string name="onboarding_welcome_description">Jelajahi kemampuan pustaka AppToolkit kami. Temukan aplikasi kami, semua dibuat untuk mendemonstrasikan dan memanfaatkan kekuatan pustaka AppToolkit kami, meningkatkan pengembangan Android dan pengalaman pengguna Anda.</string>
-    <string name="onboarding_feature1_title">Temukan aplikasi kami</string>
-    <string name="onboarding_feature1_description">App Toolkit memperkenalkan Anda pada pilihan aplikasi kami, masing-masing dirancang untuk menyoroti berbagai aspek pustaka AppToolkit kami dan meningkatkan pengalaman Android Anda. Lihat apa yang mungkin dengan pustaka AppToolkit kami.</string>
-    <string name="onboarding_personalization_title">Lihat pustaka AppToolkit kami beraksi</string>
-    <string name="onboarding_personalization_description">Aplikasi ini menunjukkan bagaimana pustaka AppToolkit kami dapat digunakan untuk membangun aplikasi yang serbaguna dan berfokus pada pengguna. Jelajahi aplikasi kami untuk melihat berbagai fitur dan implementasi pustaka.</string>
+    <string name="onboarding_welcome_description">Jelajahi kemampuan pustaka AppToolkit. Temukan aplikasi yang dibuat untuk menunjukkan kekuatan pustaka dan meningkatkan pengembangan Android serta pengalaman pengguna Anda.</string>
+    <string name="onboarding_feature1_title">Temukan aplikasi</string>
+    <string name="onboarding_feature1_description">App Toolkit menghadirkan pilihan aplikasi, masing-masing dirancang untuk menyoroti berbagai aspek pustaka AppToolkit dan meningkatkan pengalaman Android Anda. Lihat apa yang mungkin dilakukan dengan pustaka AppToolkit.</string>
+    <string name="onboarding_personalization_title">Lihat pustaka AppToolkit beraksi</string>
+    <string name="onboarding_personalization_description">Aplikasi ini menunjukkan bagaimana pustaka AppToolkit membangun aplikasi yang serbaguna dan berfokus pada pengguna. Jelajahi aplikasi contoh untuk melihat berbagai fitur dan implementasi pustaka.</string>
 
     <!-- Home screen -->
     <string name="all_apps">Semua aplikasi</string>
     <string name="favorite_apps">Favorit</string>
-    <string name="no_apps_added_to_favorites">Tidak ada aplikasi yang ditambahkan ke favorit</string>
-    <string name="error_failed_to_fetch_our_apps">Gagal mengambil daftar aplikasi kami</string>
+    <string name="no_apps_added_to_favorites">Belum ada aplikasi yang ditambahkan ke favorit</string>
+    <string name="error_failed_to_fetch_our_apps">Gagal memuat daftar aplikasi</string>
     <string name="error_failed_to_load_apps">Gagal memuat aplikasi</string>
     <string name="error_failed_to_update_favorite">Gagal memperbarui favorit</string>
+    <string name="error_failed_to_load_navigation">Gagal memuat navigasi</string>
     <string name="open_random_app">Buka aplikasi acak</string>
 
     <!-- App details bottom sheet -->
@@ -27,21 +28,21 @@
 
     <!-- Help screen -->
     <string name="question_1">Apa itu App Toolkit?</string>
-    <string name="summary_preference_faq_1">App Toolkit adalah aplikasi yang dirancang untuk menampilkan dan mendemonstrasikan aplikasi yang dikembangkan oleh kami menggunakan pustaka AppToolkit kami. Ini adalah panduan Anda untuk menjelajahi ekosistem aplikasi kami dan melihat pustaka AppToolkit kami beraksi.</string>
+    <string name="summary_preference_faq_1">App Toolkit adalah aplikasi yang dirancang untuk menampilkan dan mendemonstrasikan aplikasi yang dibuat dengan pustaka AppToolkit. Ini adalah panduan Anda untuk menjelajahi ekosistem ini dan melihat pustaka AppToolkit beraksi.</string>
     <string name="question_2">Bagaimana cara mengakses berbagai aplikasi yang ditampilkan di App Toolkit?</string>
-    <string name="summary_preference_faq_2">App Toolkit mencantumkan berbagai aplikasi kami. Mengetuk daftar aplikasi biasanya akan memberikan informasi lebih lanjut dan tautan untuk menginstal atau membukanya dari Google Play Store, memungkinkan Anda mengalaminya secara langsung.</string>
+    <string name="summary_preference_faq_2">App Toolkit menampilkan berbagai aplikasi. Saat mengetuk salah satu aplikasi, biasanya Anda akan melihat informasi lebih lanjut dan tautan untuk memasang atau membukanya dari Google Play Store agar bisa mencobanya langsung.</string>
     <string name="question_3">Apakah aplikasi yang ditampilkan di App Toolkit gratis?</string>
-    <string name="summary_preference_faq_3">Banyak aplikasi kami yang ditampilkan di App Toolkit menawarkan serangkaian fitur inti secara gratis. Beberapa mungkin memiliki fungsionalitas lanjutan yang tersedia melalui versi premium atau pembelian dalam aplikasi. Detail untuk setiap aplikasi dapat ditemukan di halaman Play Store masing-masing.</string>
-    <string name="question_4">Bagaimana cara mempelajari lebih lanjut tentang aplikasi tertentu yang terdaftar?</string>
-    <string name="summary_preference_faq_4">Untuk detail lengkap tentang salah satu aplikasi kami, fitur-fiturnya, dan ulasan pengguna, silakan ketuk aplikasi di App Toolkit untuk mengunjungi halamannya di Google Play Store.</string>
-    <string name="question_5">Di mana saya dapat menemukan bantuan atau dukungan untuk salah satu aplikasi Anda yang terdaftar?</string>
-    <string name="summary_preference_faq_5">Dukungan untuk masing-masing aplikasi kami disediakan melalui saluran masing-masing, biasanya dirinci di halaman Play Store mereka atau di dalam aplikasi itu sendiri. App Toolkit adalah untuk menemukan aplikasi ini; untuk masalah khusus aplikasi, silakan merujuk ke opsi dukungan aplikasi tersebut.</string>
-    <string name="question_6">Seberapa sering daftar aplikasi Anda diperbarui di App Toolkit?</string>
-    <string name="summary_preference_faq_6">Kami bertujuan untuk menjaga App Toolkit tetap diperbarui dengan aplikasi terbaru dan paling relevan kami yang menggunakan pustaka AppToolkit kami. Aplikasi baru atau pembaruan signifikan mungkin ditampilkan di sini.</string>
+    <string name="summary_preference_faq_3">Banyak aplikasi yang ditampilkan di App Toolkit menawarkan kumpulan fitur dasar secara gratis. Beberapa mungkin memiliki fitur lanjutan melalui versi premium atau pembelian dalam aplikasi. Detail tiap aplikasi tersedia di halaman Google Play Store-nya.</string>
+    <string name="question_4">Bagaimana saya bisa mengetahui lebih lanjut tentang aplikasi tertentu yang terdaftar?</string>
+    <string name="summary_preference_faq_4">Untuk detail lengkap tentang sebuah aplikasi, fitur, dan ulasan pengguna, ketuk aplikasi di App Toolkit untuk mengunjungi halamannya di Google Play Store.</string>
+    <string name="question_5">Di mana saya bisa mendapatkan bantuan atau dukungan untuk salah satu aplikasi yang terdaftar?</string>
+    <string name="summary_preference_faq_5">Setiap aplikasi memiliki saluran dukungannya sendiri, biasanya tercantum di halaman Google Play Store atau di dalam aplikasi. App Toolkit digunakan untuk menemukan aplikasi tersebut; untuk masalah khusus aplikasi, gunakan opsi dukungan aplikasi itu.</string>
+    <string name="question_6">Seberapa sering daftar aplikasi di App Toolkit diperbarui?</string>
+    <string name="summary_preference_faq_6">App Toolkit diperbarui secara berkala agar Anda selalu melihat aplikasi terbaru yang menggunakan pustaka AppToolkit. Aplikasi baru atau pembaruan besar dapat muncul di sini.</string>
     <string name="question_7">Mengapa App Toolkit memerlukan izin seperti akses Internet?</string>
-    <string name="summary_preference_faq_7">App Toolkit memerlukan akses Internet untuk mengambil daftar terbaru aplikasi kami dari Google Play Store dan menampilkan informasinya secara akurat. Biasanya tidak memerlukan izin invasif lainnya.</string>
-    <string name="question_8">Bagaimana cara memberikan umpan balik tentang App Toolkit atau aplikasi Anda?</string>
-    <string name="summary_preference_faq_8">Kami menghargai umpan balik Anda tentang App Toolkit dan masing-masing aplikasi kami. Anda biasanya dapat menemukan opsi \"Umpan Balik\" atau \"Hubungi Kami\" dalam pengaturan App Toolkit atau di halaman pengembang kami di Play Store. Umpan balik tentang pustaka AppToolkit kami sendiri juga diterima melalui saluran yang sesuai.</string>
-    <string name="question_9">Apakah data saya aman saat menggunakan App Toolkit untuk menemukan aplikasi Anda yang lain?</string>
-    <string name="summary_preference_faq_9">App Toolkit terutama mengambil informasi yang tersedia untuk umum tentang aplikasi kami. Ketika Anda memilih untuk menginstal atau menggunakan salah satu aplikasi kami yang terdaftar, Kebijakan Privasi aplikasi itu sendiri akan berlaku. Kami mendorong Anda untuk meninjaunya. Penanganan data App Toolkit diuraikan dalam Kebijakan Privasi kami.</string>
+    <string name="summary_preference_faq_7">Untuk menampilkan daftar aplikasi terbaru, App Toolkit menggunakan akses Internet untuk mengambil informasi dari Google Play Store dan menampilkannya dengan tepat. Biasanya tidak memerlukan izin invasif lainnya.</string>
+    <string name="question_8">Bagaimana saya bisa memberikan masukan tentang App Toolkit atau aplikasi?</string>
+    <string name="summary_preference_faq_8">Masukan Anda tentang App Toolkit dan aplikasi yang terdaftar sangat dihargai. Anda biasanya dapat menemukan opsi "Feedback" atau "Kontak" di pengaturan App Toolkit atau di halaman pengembang di Google Play Store. Masukan tentang pustaka AppToolkit juga diterima melalui saluran yang sesuai.</string>
+    <string name="question_9">Apakah data saya aman saat menggunakan App Toolkit untuk menemukan aplikasi lain?</string>
+    <string name="summary_preference_faq_9">App Toolkit terutama mengambil informasi publik tentang aplikasi yang terdaftar. Saat Anda memilih untuk memasang atau menggunakan salah satu aplikasi tersebut, kebijakan privasinya berlaku; pastikan untuk meninjaunya. Penanganan data App Toolkit dijelaskan dalam kebijakan privasinya.</string>
 </resources>

@@ -2,20 +2,21 @@
 <resources>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome_title">ایپ ٹول کٹ میں خوش آمدید</string>
-    <string name="onboarding_welcome_description">ہماری ایپ ٹول کٹ لائبریری کی صلاحیتوں کو دریافت کریں۔ ہماری ایپلی کیشنز دریافت کریں، جو سبھی ہماری ایپ ٹول کٹ لائبریری کی طاقت کو ظاہر کرنے اور استعمال کرنے کے لیے بنائی گئی ہیں، آپ کی اینڈرائیڈ ڈیولپمنٹ اور صارف کے تجربے کو بہتر بناتی ہیں۔</string>
-    <string name="onboarding_feature1_title">ہماری ایپلی کیشنز دریافت کریں</string>
-    <string name="onboarding_feature1_description">ایپ ٹول کٹ آپ کو ہماری ایپلی کیشنز کے انتخاب سے متعارف کرواتا ہے، ہر ایک ہماری ایپ ٹول کٹ لائبریری کے مختلف پہلوؤں کو اجاگر کرنے اور آپ کے اینڈرائیڈ تجربے کو بہتر بنانے کے لیے ڈیزائن کیا گیا ہے۔ دیکھیں ہماری ایپ ٹول کٹ لائبریری کے ساتھ کیا ممکن ہے.</string>
-    <string name="onboarding_personalization_title">ہماری ایپ ٹول کٹ لائبریری کو عملی طور پر دیکھیں</string>
-    <string name="onboarding_personalization_description">یہ ایپ ظاہر کرتی ہے کہ ہماری ایپ ٹول کٹ لائبریری کو ورسٹائل اور صارف پر مرکوز ایپلی کیشنز بنانے کے لیے کیسے استعمال کیا جا سکتا ہے۔ لائبریری کی مختلف خصوصیات اور نفاذ کو دیکھنے کے لیے ہماری ایپس کو دریافت کریں۔</string>
+    <string name="onboarding_welcome_title">App Toolkit میں خوش آمدید</string>
+    <string name="onboarding_welcome_description">AppToolkit لائبریری کی صلاحیتیں دریافت کریں۔ ایسی ایپس دریافت کریں جو لائبریری کی طاقت دکھانے اور آپ کی Android ڈیولپمنٹ اور صارف تجربہ بہتر بنانے کے لیے بنائی گئی ہیں۔</string>
+    <string name="onboarding_feature1_title">ایپس دریافت کریں</string>
+    <string name="onboarding_feature1_description">App Toolkit ایپس کا ایک انتخاب پیش کرتا ہے، جن میں سے ہر ایک AppToolkit لائبریری کے مختلف پہلوؤں کو نمایاں کرنے اور آپ کے Android تجربے کو بہتر بنانے کے لیے بنائی گئی ہے۔ دیکھیں AppToolkit لائبریری سے کیا ممکن ہے۔</string>
+    <string name="onboarding_personalization_title">AppToolkit لائبریری کو عمل میں دیکھیں</string>
+    <string name="onboarding_personalization_description">یہ ایپ دکھاتی ہے کہ AppToolkit لائبریری کیسے ہمہ جہت، صارف مرکوز ایپس بناتی ہے۔ لائبریری کے مختلف فیچرز اور نفاذ دیکھنے کے لیے نمونہ ایپس دریافت کریں۔</string>
 
     <!-- Home screen -->
-    <string name="all_apps">ﺲﭙﯾﺍ ﻡﺎﻤﺗ</string>
-    <string name="favorite_apps">ﮦﺪﯾﺪﻨﺴﭘ</string>
-    <string name="no_apps_added_to_favorites">کوئی ایپس شامل نہیں کی گئیں</string>
-    <string name="error_failed_to_fetch_our_apps">ہماری ایپ فہرستیں حاصل کرنے میں ناکام</string>
-    <string name="error_failed_to_load_apps">ایپس لوڈ کرنے میں ناکامی</string>
-    <string name="error_failed_to_update_favorite">پسندیدہ کو اپ ڈیٹ کرنے میں ناکامی</string>
+    <string name="all_apps">تمام ایپس</string>
+    <string name="favorite_apps">پسندیدہ</string>
+    <string name="no_apps_added_to_favorites">پسندیدہ میں کوئی ایپ شامل نہیں</string>
+    <string name="error_failed_to_fetch_our_apps">ایپ فہرستیں لوڈ نہیں ہو سکیں</string>
+    <string name="error_failed_to_load_apps">ایپس لوڈ نہیں ہو سکیں</string>
+    <string name="error_failed_to_update_favorite">پسندیدہ اپ ڈیٹ نہیں ہو سکا</string>
+    <string name="error_failed_to_load_navigation">نیویگیشن لوڈ نہیں ہو سکا</string>
     <string name="open_random_app">بے ترتیب ایپ کھولیں</string>
 
     <!-- App details bottom sheet -->
@@ -26,22 +27,22 @@
     <string name="app_details_open_app">ایپ کھولیں</string>
 
     <!-- Help screen -->
-    <string name="question_1">ایپ ٹول کٹ کیا ہے؟</string>
-    <string name="summary_preference_faq_1">ایپ ٹول کٹ ایک ایسی ایپلی کیشن ہے جو ہماری ایپ ٹول کٹ لائبریری کا استعمال کرتے ہوئے ہمارے تیار کردہ ایپس کو نمایاں کرنے اور ظاہر کرنے کے لیے ڈیزائن کی گئی ہے۔ یہ ہماری ایپلی کیشنز کے ایکو سسٹم کو دریافت کرنے اور ہماری ایپ ٹول کٹ لائبریری کو عملی طور پر دیکھنے کے لیے آپ کا رہنما ہے۔</string>
-    <string name="question_2">میں ایپ ٹول کٹ میں دکھائی گئی مختلف ایپس تک کیسے رسائی حاصل کر سکتا ہوں؟</string>
-    <string name="summary_preference_faq_2">ایپ ٹول کٹ ہماری مختلف ایپلی کیشنز کی فہرست دیتا ہے۔ کسی ایپ لسٹنگ پر ٹیپ کرنے سے عام طور پر مزید معلومات اور اسے گوگل پلے اسٹور سے انسٹال کرنے یا کھولنے کا لنک فراہم ہوگا، جس سے آپ اسے خود تجربہ کر سکیں گے۔</string>
-    <string name="question_3">کیا ایپ ٹول کٹ میں نمایاں کردہ ایپس مفت ہیں؟</string>
-    <string name="summary_preference_faq_3">ایپ ٹول کٹ میں نمایاں کردہ ہماری بہت سی ایپس مفت میں بنیادی خصوصیات کا ایک مجموعہ پیش کرتی ہیں۔ کچھ میں پریمیم ورژن یا ایپ میں خریداریوں کے ذریعے جدید خصوصیات دستیاب ہو سکتی ہیں۔ ہر ایپ کی تفصیلات اس کے متعلقہ پلے اسٹور پیج پر مل سکتی ہیں۔</string>
-    <string name="question_4">میں کسی مخصوص درج کردہ ایپ کے بارے میں مزید کیسے جان سکتا ہوں؟</string>
-    <string name="summary_preference_faq_4">ہماری کسی ایک ایپ، اس کی خصوصیات، اور صارف کے جائزوں کے بارے میں مکمل تفصیلات کے لیے، براہ کرم ایپ ٹول کٹ میں ایپ پر ٹیپ کریں تاکہ گوگل پلے اسٹور پر اس کا صفحہ ملاحظہ کیا جا سکے۔</string>
-    <string name="question_5">میں آپ کی درج کردہ ایپس میں سے کسی ایک کے لیے مدد یا معاونت کہاں سے حاصل کر سکتا ہوں؟</string>
-    <string name="summary_preference_faq_5">ہماری انفرادی ایپس کے لیے سپورٹ ان کے متعلقہ چینلز کے ذریعے فراہم کی جاتی ہے، جو عام طور پر ان کے پلے اسٹور پیج پر یا خود ایپ کے اندر تفصیل سے بیان کی جاتی ہے۔ ایپ ٹول کٹ ان ایپس کو دریافت کرنے کے لیے ہے۔ ایپ سے متعلق مخصوص مسائل کے لیے، براہ کرم اس ایپ کے سپورٹ آپشنز سے رجوع کریں۔</string>
-    <string name="question_6">ایپ ٹول کٹ میں آپ کی ایپس کی فہرست کتنی بار اپ ڈیٹ ہوتی ہے؟</string>
-    <string name="summary_preference_faq_6">ہمارا مقصد ایپ ٹول کٹ کو ہماری تازہ ترین اور انتہائی متعلقہ ایپلی کیشنز کے ساتھ اپ ڈیٹ رکھنا ہے جو ہماری ایپ ٹول کٹ لائبریری کا استعمال کرتی ہیں۔ نئی ایپس یا اہم اپ ڈیٹس یہاں نمایاں کی جا سکتی ہیں۔</string>
-    <string name="question_7">ایپ ٹول کٹ کو انٹرنیٹ تک رسائی جیسی اجازتوں کی ضرورت کیوں ہے؟</string>
-    <string name="summary_preference_faq_7">ایپ ٹول کٹ کو گوگل پلے اسٹور سے ہماری ایپلی کیشنز کی تازہ ترین فہرست حاصل کرنے اور ان کی معلومات کو درست طریقے سے ظاہر کرنے کے لیے انٹرنیٹ تک رسائی درکار ہے۔ اسے عام طور پر دیگر دخل اندازی کی اجازتوں کی ضرورت نہیں ہوتی۔</string>
-    <string name="question_8">میں ایپ ٹول کٹ یا آپ کی ایپس پر رائے کیسے فراہم کر سکتا ہوں؟</string>
-    <string name="summary_preference_faq_8">ہم ایپ ٹول کٹ اور ہماری انفرادی ایپس پر آپ کی رائے کو قدر کی نگاہ سے دیکھتے ہیں. آپ عام طور پر ایپ ٹول کٹ کی ترتیبات کے اندر یا پلے اسٹور پر ہمارے ڈیولپر پیج پر \"رائے\" یا \"ہم سے رابطہ کریں\" کا آپشن تلاش کر سکتے ہیں۔ ہماری ایپ ٹول کٹ لائبریری پر بھی رائے مناسب چینلز کے ذریعے خوش آئند ہے۔</string>
-    <string name="question_9">جب میں آپ کی دیگر ایپس کو تلاش کرنے کے لیے ایپ ٹول کٹ استعمال کرتا ہوں تو کیا میرا ڈیٹا محفوظ ہے؟</string>
-    <string name="summary_preference_faq_9">ایپ ٹول کٹ بنیادی طور پر ہماری ایپس کے بارے میں عوامی طور پر دستیاب معلومات حاصل کرتا ہے۔ جب آپ ہماری درج کردہ ایپس میں سے کسی ایک کو انسٹال کرنے یا استعمال کرنے کا انتخاب کرتے ہیں، تو اس ایپ کی اپنی رازداری کی پالیسی لاگو ہوگی۔ ہم آپ کو اس کا جائزہ لینے کی ترغیب دیتے ہیں۔ ایپ ٹول کٹ کا ڈیٹا ہینڈلنگ ہماری رازداری کی پالیسی میں بیان کیا گیا ہے۔</string>
+    <string name="question_1">App Toolkit کیا ہے؟</string>
+    <string name="summary_preference_faq_1">App Toolkit ایک ایپ ہے جو AppToolkit لائبریری سے بنی ایپس کو پیش کرنے اور دکھانے کے لیے بنائی گئی ہے۔ یہ اس ایکوسسٹم کو دریافت کرنے اور AppToolkit لائبریری کو عمل میں دیکھنے کے لیے آپ کی رہنمائی ہے۔</string>
+    <string name="question_2">App Toolkit میں دکھائی گئی مختلف ایپس تک کیسے رسائی حاصل کروں؟</string>
+    <string name="summary_preference_faq_2">App Toolkit مختلف ایپس کی فہرست دیتا ہے۔ کسی ایپ پر ٹیپ کرنے سے عموماً مزید معلومات اور Google Play Store سے اسے انسٹال یا کھولنے کا لنک ملتا ہے تاکہ آپ اسے براہِ راست آزما سکیں۔</string>
+    <string name="question_3">کیا App Toolkit میں نمایاں ایپس مفت ہیں؟</string>
+    <string name="summary_preference_faq_3">App Toolkit میں نمایاں بہت سی ایپس بنیادی فیچرز مفت فراہم کرتی ہیں۔ کچھ میں پریمیم ورژن یا اِن ایپ خریداری کے ذریعے جدید فیچرز دستیاب ہو سکتے ہیں۔ ہر ایپ کی تفصیل اس کے Google Play Store صفحے پر ملتی ہے۔</string>
+    <string name="question_4">فہرست میں موجود کسی مخصوص ایپ کے بارے میں مزید کیسے جانوں؟</string>
+    <string name="summary_preference_faq_4">کسی ایپ، اس کے فیچرز اور صارف جائزوں کی مکمل تفصیل کے لیے App Toolkit میں ایپ پر ٹیپ کریں تاکہ Google Play Store پر اس کا صفحہ کھل جائے۔</string>
+    <string name="question_5">فہرست میں موجود کسی ایپ کے لیے مدد یا سپورٹ کہاں ملے گی؟</string>
+    <string name="summary_preference_faq_5">ہر ایپ کے اپنے سپورٹ چینلز ہوتے ہیں، جو عموماً Google Play Store صفحے یا ایپ کے اندر درج ہوتے ہیں۔ App Toolkit ان ایپس کو دریافت کرنے کے لیے ہے؛ ایپ سے متعلق مسائل کے لیے اسی ایپ کے سپورٹ آپشنز استعمال کریں۔</string>
+    <string name="question_6">App Toolkit میں ایپس کی فہرست کتنی بار اپ ڈیٹ ہوتی ہے؟</string>
+    <string name="summary_preference_faq_6">App Toolkit کو باقاعدگی سے اپ ڈیٹ کیا جاتا ہے تاکہ آپ ہمیشہ AppToolkit لائبریری استعمال کرنے والی جدید ترین ایپس دیکھ سکیں۔ نئی ایپس یا اہم اپ ڈیٹس یہاں نظر آ سکتے ہیں۔</string>
+    <string name="question_7">App Toolkit کو انٹرنیٹ رسائی جیسی اجازتوں کی ضرورت کیوں ہے؟</string>
+    <string name="summary_preference_faq_7">تازہ ترین ایپ فہرست دکھانے کے لیے App Toolkit Google Play Store سے معلومات حاصل کرنے اور درست طور پر دکھانے کے لیے انٹرنیٹ رسائی استعمال کرتا ہے۔ عموماً دیگر مداخلت آمیز اجازتیں درکار نہیں ہوتیں۔</string>
+    <string name="question_8">App Toolkit یا ایپس پر فیڈبیک کیسے بھیجوں؟</string>
+    <string name="summary_preference_faq_8">App Toolkit اور فہرست شدہ ایپس پر آپ کا فیڈبیک قابل قدر ہے۔ عموماً App Toolkit کی سیٹنگز یا Google Play Store کے ڈیولپر صفحے پر "Feedback" یا "Contact" آپشن ملتا ہے۔ AppToolkit لائبریری پر فیڈبیک بھی مناسب ذرائع کے ذریعے خوش آمدید ہے۔</string>
+    <string name="question_9">کیا App Toolkit استعمال کرتے ہوئے میرا ڈیٹا محفوظ ہے؟</string>
+    <string name="summary_preference_faq_9">App Toolkit بنیادی طور پر فہرست شدہ ایپس کے بارے میں عوامی معلومات حاصل کرتا ہے۔ جب آپ ان ایپس میں سے کسی کو انسٹال یا استعمال کرنے کا انتخاب کرتے ہیں تو اس ایپ کی اپنی پرائیویسی پالیسی لاگو ہوتی ہے؛ براہِ کرم اسے ضرور دیکھیں۔ App Toolkit کا ڈیٹا ہینڈلنگ اس کی اپنی پرائیویسی پالیسی میں بیان کیا گیا ہے۔</string>
 </resources>
