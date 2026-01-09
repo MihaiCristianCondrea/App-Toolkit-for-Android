@@ -56,6 +56,24 @@ class TestAboutRepositoryImpl {
         assertThat(result.deviceInfo).isEqualTo(deviceProvider.deviceInfo)
     }
 
+    /*
+    FIXME:
+
+    Missing mocked calls inside every { ... } block: make sure the object inside the block is a mock
+Note: if you tried to stub a Kotlin inline function, it cannot be mocked. Inline functions are inlined at call sites, so no call is recorded. Extract a non-inline wrapper or mock the dependencies used inside the inline function.
+io.mockk.MockKException: Missing mocked calls inside every { ... } block: make sure the object inside the block is a mock
+Note: if you tried to stub a Kotlin inline function, it cannot be mocked. Inline functions are inlined at call sites, so no call is recorded. Extract a non-inline wrapper or mock the dependencies used inside the inline function.
+	at app//io.mockk.impl.recording.states.StubbingState.checkMissingCalls(StubbingState.kt:14)
+	at app//io.mockk.impl.recording.states.StubbingState.recordingDone(StubbingState.kt:8)
+	at app//io.mockk.impl.recording.CommonCallRecorder.done(CommonCallRecorder.kt:47)
+	at app//io.mockk.impl.eval.RecordedBlockEvaluator.record(RecordedBlockEvaluator.kt:63)
+	at app//io.mockk.impl.eval.EveryBlockEvaluator.every(EveryBlockEvaluator.kt:30)
+	at app//io.mockk.MockKDsl.internalEvery(API.kt:95)
+	at app//io.mockk.MockKKt.every(MockK.kt:148)
+	at app//com.d4rk.android.libs.apptoolkit.app.about.data.repository.TestAboutRepositoryImpl.copyDeviceInfo delegates to copyTextToClipboard(TestAboutRepositoryImpl.kt:70)
+
+
+    */
     @Test
     fun `copyDeviceInfo delegates to copyTextToClipboard`() {
         val context = mockk<Context>(relaxed = true)
