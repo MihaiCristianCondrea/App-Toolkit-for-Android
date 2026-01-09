@@ -74,7 +74,7 @@ class ClipboardHelperTest {
     }
 
     @Test
-    fun `copyTextToClipboard does not invoke callback on API above 32`() {
+    fun `copyTextToClipboard does not invoke callback on API 33`() {
         val context = mockk<Context>()
         val clipboardManager = mockk<ClipboardManager>()
         every { context.getSystemService(ClipboardManager::class.java) } returns clipboardManager
@@ -87,6 +87,41 @@ class ClipboardHelperTest {
         runCatchingFinally(
             block = {
                 every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.TIRAMISU
+
+                var callbackInvoked = false
+
+                val result = context.copyTextToClipboard(
+                    label = "label",
+                    text = "text",
+                    onCopyFallback = { callbackInvoked = true },
+                )
+
+                verify(exactly = 1) { clipboardManager.setPrimaryClip(any()) }
+                assertEquals("label", clipDataSlot.captured.description.label.toString())
+                assertEquals("text", clipDataSlot.captured.getItemAt(0).text.toString())
+                assertFalse(callbackInvoked)
+                assertTrue(result)
+            },
+            finallyBlock = {
+                unmockkStatic(Build.VERSION::class)
+            }
+        )
+    }
+
+    @Test
+    fun `copyTextToClipboard does not invoke callback on API above 33`() {
+        val context = mockk<Context>()
+        val clipboardManager = mockk<ClipboardManager>()
+        every { context.getSystemService(ClipboardManager::class.java) } returns clipboardManager
+
+        val clipDataSlot = slot<ClipData>()
+        justRun { clipboardManager.setPrimaryClip(capture(clipDataSlot)) }
+
+        mockkStatic(Build.VERSION::class)
+
+        runCatchingFinally(
+            block = {
+                every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.UPSIDE_DOWN_CAKE
 
                 var callbackInvoked = false
 

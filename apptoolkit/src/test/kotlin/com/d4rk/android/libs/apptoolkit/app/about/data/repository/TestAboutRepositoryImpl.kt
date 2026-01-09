@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.about.data.repository
 
 import android.content.Context
+import android.os.Build
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
@@ -63,8 +64,11 @@ class TestAboutRepositoryImpl {
         val extFile =
             "com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextClipboardExtensionsKt"
         mockkStatic(extFile)
+        mockkStatic(Build.VERSION::class)
 
         try {
+            every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.S_V2
+
             val fallbackSlot = slot<() -> Unit>()
             val copyResult = run {
                 every {
@@ -96,6 +100,7 @@ class TestAboutRepositoryImpl {
                 )
             )
         } finally {
+            unmockkStatic(Build.VERSION::class)
             unmockkStatic(extFile)
         }
     }
