@@ -38,6 +38,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isA
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -114,7 +115,9 @@ fun AppsListRoute(
     LaunchedEffect(selectedApp?.packageName) {
         isSelectedAppInstalled = selectedApp?.let { app ->
             if (app.packageName.isNotEmpty()) {
-                context.isAppInstalled(app.packageName)
+                withContext(dispatchers.io) {
+                    context.isAppInstalled(app.packageName)
+                }
             } else {
                 false
             }
