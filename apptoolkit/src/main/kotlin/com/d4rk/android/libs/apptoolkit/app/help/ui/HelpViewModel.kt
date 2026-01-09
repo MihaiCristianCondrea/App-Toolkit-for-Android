@@ -9,6 +9,7 @@ import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -21,6 +22,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageTyp
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
@@ -32,6 +34,7 @@ import kotlinx.coroutines.flow.update
 class HelpViewModel(
     private val getFaqUseCase: GetFaqUseCase,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<HelpUiState, HelpEvent, HelpAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.IsLoading(),
@@ -59,22 +62,36 @@ class HelpViewModel(
             .onStart { screenState.setLoading() }
             .onEach { result ->
                 result
-                        .onSuccess { faqs ->
-                            val screenStateForData = if (faqs.isEmpty()) ScreenState.NoData() else ScreenState.Success()
-                            screenState.update { current ->
-                                current.copy(
-                                    screenState = screenStateForData ,
-                                    data = HelpUiState(questions = faqs.toImmutableList())
-                                )
-                            }
+                    .onSuccess { faqs ->
+                        val screenStateForData =
+                            if (faqs.isEmpty()) ScreenState.NoData() else ScreenState.Success()
+                        screenState.update { current ->
+                            current.copy(
+                                screenState = screenStateForData,
+                                data = HelpUiState(questions = faqs.toImmutableList())
+                            )
                         }
-                        .onFailure { error ->
-                            screenState.updateState(ScreenState.Error())
-                            screenState.showSnackbar(UiSnackbar(message = error.asUiText() , isError = true , timeStamp = System.currentTimeMillis() , type = ScreenMessageType.SNACKBAR))
-                        }
+                    }
+                    .onFailure { error ->
+                        screenState.updateState(ScreenState.Error())
+                        screenState.showSnackbar(
+                            UiSnackbar(
+                                message = error.asUiText(),
+                                isError = true,
+                                timeStamp = System.currentTimeMillis(),
+                                type = ScreenMessageType.SNACKBAR
+                            )
+                        )
+                    }
             }
 
             .catch {
+                if (it is CancellationException) throw it
+                firebaseController.reportViewModelError(
+                    viewModelName = "HelpViewModel",
+                    action = "loadFaq",
+                    throwable = it,
+                )
                 screenState.updateState(ScreenState.Error())
                 screenState.showSnackbar(
                     UiSnackbar(

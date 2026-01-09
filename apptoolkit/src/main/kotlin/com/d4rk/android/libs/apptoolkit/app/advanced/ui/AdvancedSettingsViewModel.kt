@@ -7,11 +7,12 @@ import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSetting
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.state.AdvancedSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
-import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
@@ -36,10 +37,12 @@ import kotlin.coroutines.cancellation.CancellationException
  *
  * @param repository The repository responsible for cache-related operations.
  * @param dispatchers Provides coroutine dispatchers for different contexts (IO, Main, etc.).
+ * @param firebaseController Reports ViewModel flow failures to Firebase.
  */
 class AdvancedSettingsViewModel(
     private val repository: CacheRepository,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<AdvancedSettingsUiState, AdvancedSettingsEvent, AdvancedSettingsAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
@@ -91,6 +94,11 @@ class AdvancedSettingsViewModel(
             }
             .catch { throwable ->
                 if (throwable is CancellationException) throw throwable
+                firebaseController.reportViewModelError(
+                    viewModelName = "AdvancedSettingsViewModel",
+                    action = "clearCache",
+                    throwable = throwable,
+                )
                 screenState.updateState(ScreenState.Error())
                 screenState.copyData { copy(cacheClearMessage = R.string.cache_cleared_error) }
             }

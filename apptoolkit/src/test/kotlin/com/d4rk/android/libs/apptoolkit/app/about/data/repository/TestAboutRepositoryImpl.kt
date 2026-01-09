@@ -89,7 +89,12 @@ class TestAboutRepositoryImpl {
                     onCopyFallback = any(),
                 ) // FIXME: The result of `copyTextToClipboard` is not used
             }
-            assertThat(copyResult).isEqualTo(CopyDeviceInfoResult(copied = true, shouldShowFeedback = true))
+            assertThat(copyResult).isEqualTo(
+                CopyDeviceInfoResult(
+                    copied = true,
+                    shouldShowFeedback = true
+                )
+            )
         } finally {
             unmockkStatic(extFile)
         }

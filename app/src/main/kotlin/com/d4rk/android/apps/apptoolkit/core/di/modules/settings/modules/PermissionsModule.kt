@@ -18,6 +18,7 @@ val permissionsModule: Module =
         viewModel {
             PermissionsViewModel(
                 permissionsRepository = get(),
+                firebaseController = get(),
             )
         }
     }

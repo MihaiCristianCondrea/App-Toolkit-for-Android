@@ -19,6 +19,10 @@ val generalSettingsModule: Module = module {
     single<GeneralSettingsRepository> { GeneralSettingsRepositoryImpl() }
 
     viewModel {
-        GeneralSettingsViewModel(repository = get(), dispatchers = get())
+        GeneralSettingsViewModel(
+            repository = get(),
+            dispatchers = get(),
+            firebaseController = get(),
+        )
     }
 }

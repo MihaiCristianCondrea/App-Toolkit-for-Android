@@ -9,6 +9,7 @@ import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +31,8 @@ class HelpViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
+    private val firebaseController = FakeFirebaseController()
+
     @Test
     fun `loadFaq sets success state when repository returns data`() =
         runTest(dispatcherExtension.testDispatcher) {
@@ -49,7 +52,8 @@ class HelpViewModelTest {
             }
             val viewModel = HelpViewModel(
                 getFaqUseCase = GetFaqUseCase(repository),
-                dispatchers = testDispatcherProvider()
+                dispatchers = testDispatcherProvider(),
+                firebaseController = firebaseController,
             )
 
             viewModel.onEvent(HelpEvent.LoadFaq)
@@ -73,7 +77,8 @@ class HelpViewModelTest {
             }
             val viewModel = HelpViewModel(
                 getFaqUseCase = GetFaqUseCase(repository),
-                dispatchers = testDispatcherProvider()
+                dispatchers = testDispatcherProvider(),
+                firebaseController = firebaseController,
             )
 
             viewModel.onEvent(HelpEvent.LoadFaq)

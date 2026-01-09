@@ -11,6 +11,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
@@ -27,6 +28,7 @@ class OnboardingViewModel(
     private val observeOnboardingCompletionUseCase: ObserveOnboardingCompletionUseCase,
     private val completeOnboardingUseCase: CompleteOnboardingUseCase,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<OnboardingUiState, OnboardingEvent, OnboardingAction>(
     initialState = UiStateScreen(data = OnboardingUiState())
 ) {
@@ -56,6 +58,11 @@ class OnboardingViewModel(
             }
             .catch { throwable ->
                 if (throwable is CancellationException) throw throwable
+                firebaseController.reportViewModelError(
+                    viewModelName = "OnboardingViewModel",
+                    action = "observeCompletion",
+                    throwable = throwable,
+                )
                 screenState.copyData { copy(isOnboardingCompleted = false) }
             }
             .launchIn(viewModelScope)
@@ -75,6 +82,11 @@ class OnboardingViewModel(
             .flowOn(dispatchers.io)
             .catch { throwable ->
                 if (throwable is CancellationException) throw throwable
+                firebaseController.reportViewModelError(
+                    viewModelName = "OnboardingViewModel",
+                    action = "completeOnboarding",
+                    throwable = throwable,
+                )
                 emit(DataState.Error(error = Errors.UseCase.INVALID_STATE))
             }
             .onEach { result ->

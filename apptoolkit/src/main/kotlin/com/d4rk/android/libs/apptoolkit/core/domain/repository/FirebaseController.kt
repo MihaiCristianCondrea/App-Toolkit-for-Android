@@ -33,4 +33,22 @@ interface FirebaseController {
      * Enables or disables Firebase Performance monitoring for the current process.
      */
     fun setPerformanceEnabled(enabled: Boolean)
+
+    /**
+     * Reports a ViewModel flow failure to Firebase Crashlytics with useful context.
+     *
+     * Implementations should attach the ViewModel name, action identifier, and
+     * throwable details as custom keys to aid debugging.
+     *
+     * @param viewModelName the ViewModel where the failure occurred
+     * @param action label describing the flow or action that failed
+     * @param throwable the exception that was caught
+     * @param extraKeys optional extra context to attach as Crashlytics keys
+     */
+    fun reportViewModelError(
+        viewModelName: String,
+        action: String,
+        throwable: Throwable,
+        extraKeys: Map<String, String> = emptyMap(),
+    )
 }

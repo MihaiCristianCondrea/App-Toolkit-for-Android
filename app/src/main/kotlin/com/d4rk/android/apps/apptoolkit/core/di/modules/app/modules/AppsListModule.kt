@@ -32,6 +32,7 @@ val appsListModule: Module = module {
             observeFavoritesUseCase = get(),
             toggleFavoriteUseCase = get(),
             dispatchers = get(),
+            firebaseController = get(),
         )
     }
 
@@ -53,6 +54,7 @@ val appsListModule: Module = module {
             observeFavoritesUseCase = get(),
             toggleFavoriteUseCase = get(),
             dispatchers = get(),
+            firebaseController = get(),
         )
     }
 }

@@ -24,6 +24,7 @@ val onboardingModule: Module = module {
             observeOnboardingCompletionUseCase = get(),
             completeOnboardingUseCase = get(),
             dispatchers = get(),
+            firebaseController = get(),
         )
     }
 }

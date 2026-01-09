@@ -29,5 +29,11 @@ val helpModule: Module =
             )
         }
         single { GetFaqUseCase(repository = get()) }
-        viewModel { HelpViewModel(getFaqUseCase = get(), dispatchers = get<DispatcherProvider>()) }
+        viewModel {
+            HelpViewModel(
+                getFaqUseCase = get(),
+                dispatchers = get<DispatcherProvider>(),
+                firebaseController = get(),
+            )
+        }
     }

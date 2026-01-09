@@ -58,10 +58,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPrefer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 

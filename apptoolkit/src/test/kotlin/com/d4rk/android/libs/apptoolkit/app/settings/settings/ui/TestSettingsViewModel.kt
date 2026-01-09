@@ -7,6 +7,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.contract.Settin
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
@@ -30,12 +31,13 @@ class TestSettingsViewModel {
 
     private lateinit var viewModel: SettingsViewModel
     private lateinit var provider: SettingsProvider
+    private val firebaseController = FakeFirebaseController()
 
     private fun setup(config: SettingsConfig) {
         provider = mockk()
         every { provider.provideSettingsConfig(any()) } returns config
         val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-        viewModel = SettingsViewModel(provider, dispatchers)
+        viewModel = SettingsViewModel(provider, dispatchers, firebaseController)
     }
 
     @Test
@@ -78,7 +80,7 @@ class TestSettingsViewModel {
             provider = mockk()
             every { provider.provideSettingsConfig(any()) } returnsMany listOf(empty, valid)
             val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-            viewModel = SettingsViewModel(provider, dispatchers)
+            viewModel = SettingsViewModel(provider, dispatchers, firebaseController)
 
             viewModel.onEvent(SettingsEvent.Load(context))
             advanceUntilIdle()
@@ -101,7 +103,7 @@ class TestSettingsViewModel {
         provider = mockk()
         every { provider.provideSettingsConfig(any()) } returns config
         val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
-        viewModel = SettingsViewModel(provider, dispatchers)
+        viewModel = SettingsViewModel(provider, dispatchers, firebaseController)
 
         viewModel.onEvent(SettingsEvent.Load(context))
         advanceUntilIdle()

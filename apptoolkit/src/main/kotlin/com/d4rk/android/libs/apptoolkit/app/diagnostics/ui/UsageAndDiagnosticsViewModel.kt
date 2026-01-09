@@ -11,6 +11,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -19,10 +20,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentManagerHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentManagerHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -44,9 +45,11 @@ import kotlinx.coroutines.launch
  * is updated whenever settings change.
  *
  * @param repository The repository responsible for persisting and retrieving usage and diagnostics settings.
+ * @param firebaseController Reports ViewModel flow failures to Firebase.
  */
 class UsageAndDiagnosticsViewModel(
     private val repository: UsageAndDiagnosticsRepository,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent, UsageAndDiagnosticsAction>(
     initialState = UiStateScreen(data = UsageAndDiagnosticsUiState()),
 ) {
@@ -75,6 +78,11 @@ class UsageAndDiagnosticsViewModel(
             }
             .catch { throwable ->
                 if (throwable is CancellationException) throw throwable
+                firebaseController.reportViewModelError(
+                    viewModelName = "UsageAndDiagnosticsViewModel",
+                    action = "observeConsents",
+                    throwable = throwable,
+                )
                 emit(
                     DataState.Error(
                         error = throwable.toError(default = Errors.Database.DATABASE_OPERATION_FAILED)

@@ -46,6 +46,24 @@ class FirebaseControllerImpl : FirebaseController {
         FirebasePerformance.getInstance().isPerformanceCollectionEnabled = enabled
     }
 
+    override fun reportViewModelError(
+        viewModelName: String,
+        action: String,
+        throwable: Throwable,
+        extraKeys: Map<String, String>,
+    ) {
+        val crashlytics = FirebaseCrashlytics.getInstance()
+        crashlytics.setCustomKey("view_model", viewModelName)
+        crashlytics.setCustomKey("action", action)
+        crashlytics.setCustomKey("exception_type", throwable::class.java.name)
+        crashlytics.setCustomKey("exception_message", throwable.message ?: "unknown")
+        extraKeys.forEach { (key, value) ->
+            crashlytics.setCustomKey(key, value)
+        }
+        crashlytics.log("ViewModel catch in $viewModelName during $action")
+        crashlytics.recordException(throwable)
+    }
+
     private fun Boolean.toStatus(): FirebaseAnalytics.ConsentStatus =
         if (this) FirebaseAnalytics.ConsentStatus.GRANTED else FirebaseAnalytics.ConsentStatus.DENIED
 }

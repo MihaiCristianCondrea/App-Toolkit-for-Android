@@ -10,6 +10,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
@@ -26,7 +27,8 @@ import kotlin.coroutines.cancellation.CancellationException
 
 
 class MainViewModel(
-    private val navigationRepository: NavigationRepository
+    private val navigationRepository: NavigationRepository,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<MainUiState, MainEvent, MainAction>(
     initialState = UiStateScreen(data = MainUiState())
 ) {
@@ -53,6 +55,11 @@ class MainViewModel(
                 }
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable
+                    firebaseController.reportViewModelError(
+                        viewModelName = "MainViewModel",
+                        action = "loadNavigationItems",
+                        throwable = throwable,
+                    )
                     emit(
                         DataState.Error(
                             error = throwable.toError(default = Errors.UseCase.INVALID_STATE)
@@ -71,7 +78,8 @@ class MainViewModel(
                             }
                         }
                         .onFailure {
-                            val message = UiTextHelper.StringResource(R.string.error_failed_to_load_navigation)
+                            val message =
+                                UiTextHelper.StringResource(R.string.error_failed_to_load_navigation)
                             screenState.update { current ->
                                 current.copy(
                                     screenState = ScreenState.Error(),

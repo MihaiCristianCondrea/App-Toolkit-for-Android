@@ -15,6 +15,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState.Error
@@ -40,6 +41,7 @@ import kotlinx.coroutines.launch
 
 class SupportViewModel(
     private val billingRepository: BillingRepository,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<SupportScreenUiState, SupportEvent, SupportAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.IsLoading(),
@@ -99,6 +101,11 @@ class SupportViewModel(
             }
             .catch { cause ->
                 if (cause is CancellationException) throw cause
+                firebaseController.reportViewModelError(
+                    viewModelName = "SupportViewModel",
+                    action = "observeProductDetails",
+                    throwable = cause,
+                )
             }
             .launchIn(viewModelScope)
 
@@ -164,6 +171,11 @@ class SupportViewModel(
             }
             .catch { cause ->
                 if (cause is CancellationException) throw cause
+                firebaseController.reportViewModelError(
+                    viewModelName = "SupportViewModel",
+                    action = "observePurchaseResult",
+                    throwable = cause,
+                )
             }
             .launchIn(viewModelScope)
 
@@ -211,6 +223,11 @@ class SupportViewModel(
                 .onStart { screenState.setLoading() }
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable
+                    firebaseController.reportViewModelError(
+                        viewModelName = "SupportViewModel",
+                        action = "queryProductDetails",
+                        throwable = throwable,
+                    )
                     emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_SKU_DETAILS))
                 }
                 .onEach { result ->

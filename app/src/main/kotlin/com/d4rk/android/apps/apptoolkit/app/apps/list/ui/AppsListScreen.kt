@@ -96,7 +96,10 @@ fun AppsListRoute(
             if (appInfo.packageName.isNotEmpty()) {
                 val opened = context.openPlayStoreForApp(appInfo.packageName)
                 if (!opened) {
-                    android.util.Log.w(APPS_LIST_LOG_TAG, "Unable to open Play Store for ${appInfo.packageName}")
+                    android.util.Log.w(
+                        APPS_LIST_LOG_TAG,
+                        "Unable to open Play Store for ${appInfo.packageName}"
+                    )
                 }
             }
         }

@@ -12,6 +12,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -39,6 +40,7 @@ import kotlinx.coroutines.withContext
  *
  * @param settingsProvider An implementation of [SettingsProvider] that supplies the settings configuration.
  * @param dispatchers A provider for coroutine dispatchers, used for managing background tasks.
+ * @param firebaseController Reports ViewModel flow failures to Firebase.
  *
  * @see ScreenViewModel
  * @see SettingsConfig
@@ -48,6 +50,7 @@ import kotlinx.coroutines.withContext
 class SettingsViewModel(
     private val settingsProvider: SettingsProvider,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<SettingsConfig, SettingsEvent, SettingsAction>(
     initialState = UiStateScreen(data = SettingsConfig(title = "", categories = emptyList())),
 ) {
@@ -82,6 +85,11 @@ class SettingsViewModel(
                 }
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable
+                    firebaseController.reportViewModelError(
+                        viewModelName = "SettingsViewModel",
+                        action = "loadSettings",
+                        throwable = throwable,
+                    )
                     emit(
                         DataState.Error(
                             error = throwable.toError(default = Errors.UseCase.INVALID_STATE)

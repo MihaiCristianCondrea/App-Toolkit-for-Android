@@ -11,6 +11,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettin
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
+import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import com.google.common.truth.Truth.assertThat
@@ -37,6 +38,7 @@ class TestAboutViewModel {
         override val packageName: String = "pkg"
         override val isDebugBuild: Boolean = false
     }
+    private val firebaseController = FakeFirebaseController()
 
     private fun createViewModel(
         testDispatcher: TestDispatcher = dispatcherExtension.testDispatcher,
@@ -57,6 +59,7 @@ class TestAboutViewModel {
             getAboutInfo = GetAboutInfoUseCase(repository),
             copyDeviceInfo = CopyDeviceInfoUseCase(repository),
             dispatchers = testDispatchers,
+            firebaseController = firebaseController,
         )
     }
 
@@ -175,7 +178,10 @@ class TestAboutViewModel {
                     deviceInfo = deviceProvider.deviceInfo,
                 )
 
-                override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult =
+                override fun copyDeviceInfo(
+                    label: String,
+                    deviceInfo: String
+                ): CopyDeviceInfoResult =
                     CopyDeviceInfoResult(copied = true, shouldShowFeedback = false)
             }
 

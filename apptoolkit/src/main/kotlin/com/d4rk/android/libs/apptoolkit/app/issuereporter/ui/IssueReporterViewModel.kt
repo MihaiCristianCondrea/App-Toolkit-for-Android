@@ -13,9 +13,9 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueRepor
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.state.IssueReporterUiState
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error as RootError
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -31,17 +31,19 @@ import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error as RootError
 
 class IssueReporterViewModel(
     private val sendIssueReport: SendIssueReportUseCase,
     private val githubTarget: GithubTarget,
     @param:GithubToken private val githubToken: String,
     private val deviceInfoProvider: DeviceInfoProvider,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<IssueReporterUiState, IssueReporterEvent, IssueReporterAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
@@ -118,6 +120,11 @@ class IssueReporterViewModel(
                 }
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable
+                    firebaseController.reportViewModelError(
+                        viewModelName = "IssueReporterViewModel",
+                        action = "sendReport",
+                        throwable = throwable,
+                    )
                     emit(DataState.Error(error = IssueReporterError.Generic(message = throwable.message)))
                 }
                 .collect(::handleResult)
@@ -173,7 +180,7 @@ class IssueReporterViewModel(
                     type = ScreenMessageType.SNACKBAR,
                 )
             )
-            }
+        }
     }
 
     private fun IssueReportResult.asDataState(): DataState<String, IssueReporterError> {
@@ -188,7 +195,9 @@ class IssueReporterViewModel(
     private sealed interface IssueReporterError : RootError {
         val message: String?
 
-        data class Http(val status: HttpStatusCode, override val message: String?) : IssueReporterError
+        data class Http(val status: HttpStatusCode, override val message: String?) :
+            IssueReporterError
+
         data class Generic(override val message: String?) : IssueReporterError
     }
 

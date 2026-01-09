@@ -13,6 +13,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
@@ -41,12 +42,14 @@ import kotlinx.coroutines.flow.onStart
  * @param setAdsEnabled Use case to update the ad-enabled status in the repository.
  * @param repository Repository for ads settings, used here to get the default value on error.
  * @param dispatchers Provides coroutine dispatchers for different threads (IO, Main, etc.).
+ * @param firebaseController Reports ViewModel flow failures to Firebase.
  */
 class AdsSettingsViewModel(
     private val observeAdsEnabled: ObserveAdsEnabledUseCase,
     private val setAdsEnabled: SetAdsEnabledUseCase,
     private val repository: AdsSettingsRepository,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<AdsSettingsUiState, AdsSettingsEvent, AdsSettingsAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.IsLoading(),
@@ -89,6 +92,12 @@ class AdsSettingsViewModel(
             .onStart { screenState.setLoading() }
             .map<Boolean, DataState<Boolean, Errors>> { enabled -> DataState.Success(enabled) }
             .catch {
+                if (it is CancellationException) throw it
+                firebaseController.reportViewModelError(
+                    viewModelName = "AdsSettingsViewModel",
+                    action = "observe",
+                    throwable = it,
+                )
                 emit(
                     DataState.Error(
                         data = repository.defaultAdsEnabled,
@@ -155,6 +164,11 @@ class AdsSettingsViewModel(
         }
             .catch { throwable ->
                 if (throwable is CancellationException) throw throwable
+                firebaseController.reportViewModelError(
+                    viewModelName = "AdsSettingsViewModel",
+                    action = "persistAdsEnabled",
+                    throwable = throwable,
+                )
                 emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
             }
 }

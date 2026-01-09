@@ -62,10 +62,11 @@ fun Throwable.toError(default: Errors = Errors.Network.UNKNOWN): Errors {
         is SQLiteFullException -> Errors.Database.DATABASE_FULL
         is SQLiteDiskIOException,
         is SQLiteException -> Errors.Database.DATABASE_OPERATION_FAILED
+
         is SQLException -> Errors.Database.DATABASE_OPERATION_FAILED
 
         is EOFException,
-        is ProtocolException ,
+        is ProtocolException,
         is SocketException -> Errors.Network.CONNECTION_CLOSED
 
         is IOException -> Errors.Network.CONNECTION_ERROR

@@ -21,6 +21,6 @@ val supportModule: Module =
         }
 
         viewModel {
-            SupportViewModel(billingRepository = get())
+            SupportViewModel(billingRepository = get(), firebaseController = get())
         }
     }

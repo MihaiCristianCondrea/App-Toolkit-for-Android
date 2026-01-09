@@ -10,6 +10,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -39,9 +40,11 @@ import kotlinx.coroutines.launch
  * ([PermissionsEvent]) and actions ([PermissionsAction]).
  *
  * @param permissionsRepository The repository responsible for fetching permissions data info.
+ * @param firebaseController Reports ViewModel flow failures to Firebase.
  */
 class PermissionsViewModel(
     private val permissionsRepository: PermissionsRepository,
+    private val firebaseController: FirebaseController,
 ) :
     ScreenViewModel<SettingsConfig, PermissionsEvent, PermissionsAction>(
         initialState = UiStateScreen(data = SettingsConfig(title = "", categories = emptyList()))
@@ -72,6 +75,11 @@ class PermissionsViewModel(
                 }
                 .catch { error ->
                     if (error is CancellationException) throw error
+                    firebaseController.reportViewModelError(
+                        viewModelName = "PermissionsViewModel",
+                        action = "loadPermissions",
+                        throwable = error,
+                    )
                     emit(
                         DataState.Error(
                             error = error.toError(default = Errors.UseCase.INVALID_STATE)

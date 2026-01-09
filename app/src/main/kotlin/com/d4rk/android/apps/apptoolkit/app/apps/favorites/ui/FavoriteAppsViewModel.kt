@@ -12,6 +12,7 @@ import com.d4rk.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState.IsLoading
@@ -46,12 +47,14 @@ import kotlin.coroutines.cancellation.CancellationException
  * @param observeFavoritesUseCase Use case to observe the set of favorite package names.
  * @param toggleFavoriteUseCase Use case to add or remove an app from favorites.
  * @param dispatchers Provides CoroutineDispatchers for managing thread execution.
+ * @param firebaseController Reports ViewModel flow failures to Firebase.
  */
 class FavoriteAppsViewModel(
     private val observeFavoriteAppsUseCase: ObserveFavoriteAppsUseCase,
     observeFavoritesUseCase: ObserveFavoritesUseCase,
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<AppListUiState, FavoriteAppsEvent, FavoriteAppsAction>(
     initialState = UiStateScreen(screenState = IsLoading(), data = AppListUiState())
 ) {
@@ -96,6 +99,11 @@ class FavoriteAppsViewModel(
                 .onStart { screenState.setLoading() }
                 .catch { error ->
                     if (error is CancellationException) throw error
+                    firebaseController.reportViewModelError(
+                        viewModelName = "FavoriteAppsViewModel",
+                        action = "observe",
+                        throwable = error,
+                    )
                     screenState.updateState(ScreenState.Error())
                     showErrorSnackbar(
                         UiTextHelper.StringResource(R.string.error_failed_to_load_apps)

@@ -13,5 +13,11 @@ val advancedSettingsModule: Module = module {
     single<AdvancedSettingsProvider> { AppAdvancedSettingsProvider(context = get()) }
     single<CacheRepository> { CacheRepositoryImpl(context = get()) }
 
-    viewModel { AdvancedSettingsViewModel(repository = get(), dispatchers = get()) }
+    viewModel {
+        AdvancedSettingsViewModel(
+            repository = get(),
+            dispatchers = get(),
+            firebaseController = get(),
+        )
+    }
 }

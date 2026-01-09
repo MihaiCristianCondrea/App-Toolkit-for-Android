@@ -46,7 +46,8 @@ val issueReporterModule: Module =
                 sendIssueReport = get(),
                 githubTarget = get(),
                 githubToken = get(githubTokenQualifier),
-                deviceInfoProvider = get()
+                deviceInfoProvider = get(),
+                firebaseController = get(),
             )
         }
     }

@@ -42,7 +42,11 @@ fun <T> CustomCarousel(
             val pageOffset = remember(pagerState.currentPage, page) {
                 (pagerState.currentPage - page).absoluteValue.toFloat()
             }
-            CarouselItem(item = currentItems[page], pageOffset = pageOffset, itemContent = itemContent)
+            CarouselItem(
+                item = currentItems[page],
+                pageOffset = pageOffset,
+                itemContent = itemContent
+            )
         }
 
         LargeVerticalSpacer()

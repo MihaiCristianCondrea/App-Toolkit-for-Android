@@ -8,6 +8,7 @@ import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,6 +33,8 @@ class TestAdsSettingsViewModel {
     private fun testDispatchers(): DispatcherProvider =
         TestDispatchers(dispatcherExtension.testDispatcher)
 
+    private val firebaseController = FakeFirebaseController()
+
     private class FakeAdsSettingsRepository(
         override val defaultAdsEnabled: Boolean = true,
         var shouldFail: Boolean = false
@@ -55,7 +58,8 @@ class TestAdsSettingsViewModel {
             observeAdsEnabled = observeUseCase,
             setAdsEnabled = setUseCase,
             repository = repository,
-            dispatchers = testDispatchers()
+            dispatchers = testDispatchers(),
+            firebaseController = firebaseController,
         )
     }
 
@@ -77,7 +81,8 @@ class TestAdsSettingsViewModel {
             val repo = object : AdsSettingsRepository {
                 override val defaultAdsEnabled: Boolean = false
                 override fun observeAdsEnabled(): Flow<Boolean> = flow { throw IOException("boom") }
-                override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> = Result.Success(Unit)
+                override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> =
+                    Result.Success(Unit)
             }
 
             val viewModel = createViewModel(repo)

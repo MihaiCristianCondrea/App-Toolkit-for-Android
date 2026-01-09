@@ -37,12 +37,16 @@ class FaqRepositoryImpl(
             return@flow
         }
 
-        val error = remoteResult.exceptionOrNull()?.toError(default = Errors.UseCase.FAILED_TO_LOAD_FAQ) ?: Errors.UseCase.FAILED_TO_LOAD_FAQ
+        val error =
+            remoteResult.exceptionOrNull()?.toError(default = Errors.UseCase.FAILED_TO_LOAD_FAQ)
+                ?: Errors.UseCase.FAILED_TO_LOAD_FAQ
         emit(DataState.Error(error = error))
     }
 
     private suspend fun fetchRemoteFaqItems(): List<FaqItem> {
-        val product = remoteDataSource.fetchCatalog(catalogUrl).products.firstOrNull { it.productId == productId || it.key == productId } ?: return emptyList()
+        val product =
+            remoteDataSource.fetchCatalog(catalogUrl).products.firstOrNull { it.productId == productId || it.key == productId }
+                ?: return emptyList()
 
         val questions: List<FaqQuestionDto> = product.questionSources.flatMap { source ->
             runSuspendCatching {

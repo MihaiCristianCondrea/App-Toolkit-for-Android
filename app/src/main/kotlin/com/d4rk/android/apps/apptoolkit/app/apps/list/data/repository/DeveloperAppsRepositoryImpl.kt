@@ -5,8 +5,8 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.ApiRespo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.repository.DeveloperAppsRepository
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.result.runSuspendCatching
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -17,12 +17,12 @@ import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
-import java.io.IOException
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.SerializationException
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import kotlin.coroutines.cancellation.CancellationException
 
 class DeveloperAppsRepositoryImpl(
@@ -67,6 +67,7 @@ class DeveloperAppsRepositoryImpl(
             is CancellationException -> throw t
             is HttpRequestTimeoutException, is SocketTimeoutException ->
                 AppErrors.Common(Errors.Network.REQUEST_TIMEOUT)
+
             is UnknownHostException -> AppErrors.Common(Errors.Network.NO_INTERNET)
             is IOException -> AppErrors.Common(Errors.Network.CONNECTION_ERROR)
             is SerializationException -> AppErrors.Common(Errors.Network.SERIALIZATION)

@@ -14,7 +14,7 @@ import org.koin.dsl.module
 
 val appModule: Module = module {
     single<NavigationRepository> { MainRepositoryImpl(dispatchers = get()) }
-    viewModel { MainViewModel(navigationRepository = get()) }
+    viewModel { MainViewModel(navigationRepository = get(), firebaseController = get()) }
 
     single<String>(qualifier = named(name = "developer_apps_api_url")) {
         val environment = BuildConfig.DEBUG.toApiEnvironment()

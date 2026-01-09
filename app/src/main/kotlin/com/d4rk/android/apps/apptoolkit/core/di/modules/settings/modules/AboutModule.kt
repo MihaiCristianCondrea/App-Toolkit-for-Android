@@ -32,6 +32,7 @@ val aboutModule: Module =
                 getAboutInfo = get(),
                 copyDeviceInfo = get(),
                 dispatchers = get(),
+                firebaseController = get(),
             )
         }
     }

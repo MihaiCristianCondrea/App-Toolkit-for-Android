@@ -13,6 +13,7 @@ import com.d4rk.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -51,6 +52,7 @@ import kotlinx.coroutines.withContext
  * @param observeFavoritesUseCase Use case to observe the set of favorite app package names.
  * @param toggleFavoriteUseCase Use case to add or remove an app from favorites.
  * @param dispatchers Provides coroutine dispatchers for different contexts (IO, Main, etc.).
+ * @param firebaseController Reports ViewModel flow failures to Firebase.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppsListViewModel(
@@ -58,6 +60,7 @@ class AppsListViewModel(
     observeFavoritesUseCase: ObserveFavoritesUseCase,
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<AppListUiState, HomeEvent, HomeAction>(
     initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = AppListUiState())
 ) {
@@ -107,6 +110,11 @@ class AppsListViewModel(
                 }
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable
+                    firebaseController.reportViewModelError(
+                        viewModelName = "AppsListViewModel",
+                        action = "observeFetch",
+                        throwable = throwable,
+                    )
                     showLoadAppsError()
                 }
                 .collect { result ->

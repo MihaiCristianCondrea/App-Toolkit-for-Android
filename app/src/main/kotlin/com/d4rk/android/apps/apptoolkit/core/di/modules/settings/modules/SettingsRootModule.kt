@@ -14,6 +14,7 @@ val settingsRootModule: Module = module {
         SettingsViewModel(
             settingsProvider = get(),
             dispatchers = get(),
+            firebaseController = get(),
         )
     }
 }

@@ -77,6 +77,7 @@ class TestAdsSettingsRepositoryImpl {
 
         assertThat(thrown).isInstanceOf(CancellationException::class.java)
     }
+
     @Test
     fun `setAdsEnabled returns success when persisted`() =
         runTest(dispatcherExtension.testDispatcher) {
@@ -90,6 +91,7 @@ class TestAdsSettingsRepositoryImpl {
             assertThat(result).isInstanceOf(Result.Success::class.java)
             coVerify { dataStore.saveAds(isChecked = true) }
         }
+
     @Test
     fun `setAdsEnabled returns error on failure`() = runTest(dispatcherExtension.testDispatcher) {
         println("\uD83D\uDE80 [TEST] setAdsEnabled returns error on failure")

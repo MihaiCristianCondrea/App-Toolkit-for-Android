@@ -7,6 +7,7 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.support.billing.BillingRepository
 import com.d4rk.android.libs.apptoolkit.app.support.billing.PurchaseResult
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import com.google.common.truth.Truth.assertThat
@@ -36,10 +37,11 @@ class SupportViewModelTest {
         coEvery { queryProductDetails(any()) } returns Unit
         every { launchPurchaseFlow(any(), any(), any()) } returns Unit
     }
+    private val firebaseController = FakeFirebaseController()
 
     private fun createViewModel(): SupportViewModel {
         productDetailsFlow.value = emptyMap()
-        return SupportViewModel(billingRepository)
+        return SupportViewModel(billingRepository, firebaseController)
     }
 
     @Test

@@ -11,6 +11,7 @@ import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * ViewModel for the "About" screen, responsible for handling business logic and managing UI state.
@@ -40,6 +42,7 @@ import kotlinx.coroutines.flow.update
  * @param getAboutInfo An instance of [GetAboutInfoUseCase] to fetch application and device information.
  * @param copyDeviceInfo An instance of [CopyDeviceInfoUseCase] to handle copying device info text.
  * @param dispatchers A provider for coroutine dispatchers, used to switch between I/O and main threads.
+ * @param firebaseController Reports ViewModel flow failures to Firebase.
  *
  * @see ScreenViewModel
  * @see AboutUiState
@@ -50,6 +53,7 @@ open class AboutViewModel(
     private val getAboutInfo: GetAboutInfoUseCase,
     private val copyDeviceInfo: CopyDeviceInfoUseCase,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<AboutUiState, AboutEvent, AboutAction>(
     initialState = UiStateScreen(data = AboutUiState())
 ) {
@@ -97,6 +101,12 @@ open class AboutViewModel(
                     }
             }
             .catch {
+                if (it is CancellationException) throw it
+                firebaseController.reportViewModelError(
+                    viewModelName = "AboutViewModel",
+                    action = "loadAboutInfo",
+                    throwable = it,
+                )
                 screenState.updateState(ScreenState.Error())
                 screenState.showSnackbar(
                     UiSnackbar(
@@ -163,6 +173,12 @@ open class AboutViewModel(
                     }
             }
             .catch {
+                if (it is CancellationException) throw it
+                firebaseController.reportViewModelError(
+                    viewModelName = "AboutViewModel",
+                    action = "copyDeviceInfo",
+                    throwable = it,
+                )
                 screenState.showSnackbar(
                     UiSnackbar(
                         message = UiTextHelper.StringResource(R.string.snack_device_info_failed),

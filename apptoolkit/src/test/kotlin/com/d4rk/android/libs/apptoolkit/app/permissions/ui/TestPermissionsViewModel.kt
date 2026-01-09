@@ -5,6 +5,7 @@ import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsE
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsCategory
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
@@ -28,6 +29,7 @@ class TestPermissionsViewModel {
 
     private lateinit var viewModel: PermissionsViewModel
     private lateinit var repository: PermissionsRepository
+    private val firebaseController = FakeFirebaseController()
 
     private fun setup(config: SettingsConfig? = null, error: Throwable? = null) {
         repository = mockk()
@@ -36,7 +38,7 @@ class TestPermissionsViewModel {
         } else {
             every { repository.getPermissionsConfig() } returns flowOf(config!!)
         }
-        viewModel = PermissionsViewModel(repository)
+        viewModel = PermissionsViewModel(repository, firebaseController)
     }
 
     @Test

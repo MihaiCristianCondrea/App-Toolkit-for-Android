@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.about.ui
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +27,7 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.app.licenses.ui.LicensesActivity
+import com.d4rk.android.libs.apptoolkit.core.logging.ABOUT_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
@@ -37,8 +39,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalS
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
-import com.d4rk.android.libs.apptoolkit.core.logging.ABOUT_SETTINGS_LOG_TAG
-import android.util.Log
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Angle
@@ -143,7 +143,10 @@ fun AboutSettingsList(
                             ) {
                                 val opened = context.openActivity(LicensesActivity::class.java)
                                 if (!opened) {
-                                    Log.w(ABOUT_SETTINGS_LOG_TAG, "Failed to open licenses screen from About settings")
+                                    Log.w(
+                                        ABOUT_SETTINGS_LOG_TAG,
+                                        "Failed to open licenses screen from About settings"
+                                    )
                                 }
                             }
                         }

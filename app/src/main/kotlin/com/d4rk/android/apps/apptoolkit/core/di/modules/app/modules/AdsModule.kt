@@ -31,7 +31,8 @@ val adsModule: Module = module {
             repository = get(),
             dispatchers = get(),
             observeAdsEnabled = get(),
-            setAdsEnabled = get()
+            setAdsEnabled = get(),
+            firebaseController = get(),
         )
     }
 
