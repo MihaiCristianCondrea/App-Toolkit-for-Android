@@ -150,13 +150,11 @@ class AdsSettingsViewModel(
         flow<DataState<Unit, Errors>> {
             when (setAdsEnabled(enabled)) {
                 is Result.Success -> emit(DataState.Success(Unit))
-                is Result.Error -> emit(
-                    DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
-                )
+                is Result.Error -> emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
             }
         }
             .catch { throwable ->
-            if (throwable is CancellationException) throw throwable
-            emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
-        }
+                if (throwable is CancellationException) throw throwable
+                emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
+            }
 }

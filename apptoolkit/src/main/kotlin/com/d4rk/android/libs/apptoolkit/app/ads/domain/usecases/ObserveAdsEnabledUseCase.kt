@@ -6,8 +6,6 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Exposes a stream of the ads-enabled flag from the repository.
  */
-class ObserveAdsEnabledUseCase(
-    private val repo: AdsSettingsRepository,
-) {
+class ObserveAdsEnabledUseCase(private val repo: AdsSettingsRepository) {
     operator fun invoke(): Flow<Boolean> = repo.observeAdsEnabled()
 }

@@ -12,8 +12,6 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
  *
  * @property repo The repository responsible for handling ad settings persistence.
  */
-class SetAdsEnabledUseCase(
-    private val repo: AdsSettingsRepository,
-) {
+class SetAdsEnabledUseCase(private val repo: AdsSettingsRepository) {
     suspend operator fun invoke(enabled: Boolean): Result<Unit> = repo.setAdsEnabled(enabled)
 }
