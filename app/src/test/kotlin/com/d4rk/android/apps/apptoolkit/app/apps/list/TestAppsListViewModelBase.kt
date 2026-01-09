@@ -11,6 +11,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
+import com.d4rk.android.apps.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 open class TestAppsListViewModelBase {
 
     protected lateinit var viewModel: AppsListViewModel
+    private val firebaseController = FakeFirebaseController()
     protected fun setup(
         fetchApps: List<AppInfo>,
         initialFavorites: Set<String> = emptySet(),
@@ -45,6 +47,7 @@ open class TestAppsListViewModelBase {
             observeFavoritesUseCase,
             toggleFavoriteUseCase,
             dispatchers,
+            firebaseController
         )
         println("\u2705 [SETUP] ViewModel initialized")
     }

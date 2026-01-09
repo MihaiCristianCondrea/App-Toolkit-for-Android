@@ -9,6 +9,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.FakeDeveloperAppsRepositor
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.usecases.FetchDeveloperAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
+import com.d4rk.android.apps.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.AfterEach
 open class TestFavoriteAppsViewModelBase {
 
     protected lateinit var viewModel: FavoriteAppsViewModel
+    private val firebaseController = FakeFirebaseController()
     protected fun setup(
         fetchApps: List<AppInfo>,
         initialFavorites: Set<String> = emptySet(),
@@ -42,6 +44,7 @@ open class TestFavoriteAppsViewModelBase {
             observeFavoritesUseCase = observeFavoritesUseCase,
             toggleFavoriteUseCase = toggleFavoriteUseCase,
             dispatchers = dispatchers,
+            firebaseController = firebaseController,
         )
         println("\u2705 [SETUP] ViewModel initialized")
     }

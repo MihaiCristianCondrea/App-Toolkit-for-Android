@@ -93,10 +93,10 @@ class ConsentManagerHelperTest {
 
             ConsentManagerHelper.applyInitialConsent(dataStore)
 
-            verify(exactly = 1) { dataStore.analyticsConsent(defaultValue) } // FIXME: Flow is constructed but not used
-            verify(exactly = 1) { dataStore.adStorageConsent(defaultValue) } // FIXME: Flow is constructed but not used
-            verify(exactly = 1) { dataStore.adUserDataConsent(defaultValue) } // FIXME: Flow is constructed but not used
-            verify(exactly = 1) { dataStore.adPersonalizationConsent(defaultValue) } // FIXME: Flow is constructed but not used
+            verify(exactly = 1) { dataStore.analyticsConsent(defaultValue) }
+            verify(exactly = 1) { dataStore.adStorageConsent(defaultValue) }
+            verify(exactly = 1) { dataStore.adUserDataConsent(defaultValue) }
+            verify(exactly = 1) { dataStore.adPersonalizationConsent(defaultValue) }
 
             verify(exactly = 1) {
                 ConsentManagerHelper.updateConsent(
@@ -151,7 +151,7 @@ class ConsentManagerHelperTest {
         ConsentManagerHelper.updateAnalyticsCollectionFromDatastore(dataStore)
         ConsentManagerHelper.updateAnalyticsCollectionFromDatastore(dataStore)
 
-        verify(exactly = 2) { dataStore.usageAndDiagnostics(defaultValue) } // FIXME: Flow is constructed but not used
+        verify(exactly = 2) { dataStore.usageAndDiagnostics(defaultValue) }
         verifyOrder {
             firebaseController.setAnalyticsEnabled(true)
             firebaseController.setAnalyticsEnabled(false)
