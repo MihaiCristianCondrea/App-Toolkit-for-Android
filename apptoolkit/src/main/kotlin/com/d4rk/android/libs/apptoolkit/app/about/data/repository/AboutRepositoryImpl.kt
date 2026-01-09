@@ -11,10 +11,16 @@ import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoPr
 import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.copyTextToClipboard
 
+/**
+ * Provides About-related data and handles clipboard interactions for device info.
+ *
+ * @param sdkIntProvider Supplies the current SDK version for clipboard feedback decisions.
+ */
 class AboutRepositoryImpl(
     private val deviceProvider: AboutSettingsProvider,
     private val buildInfoProvider: BuildInfoProvider,
     private val context: Context,
+    private val sdkIntProvider: () -> Int = { Build.VERSION.SDK_INT },
 ) : AboutRepository {
 
     override suspend fun getAboutInfo(): AboutInfo =
@@ -25,7 +31,7 @@ class AboutRepositoryImpl(
         )
 
     override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult {
-        val allowFeedback = Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2
+        val allowFeedback = sdkIntProvider() <= Build.VERSION_CODES.S_V2
         var shouldShowFeedback = false
         val copied = runCatching {
             context.copyTextToClipboard(

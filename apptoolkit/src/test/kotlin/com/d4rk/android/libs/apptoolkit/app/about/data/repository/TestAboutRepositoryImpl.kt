@@ -12,8 +12,6 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -38,11 +36,15 @@ class TestAboutRepositoryImpl {
         override val isDebugBuild: Boolean = false
     }
 
-    private fun repository(context: Context = mockk()): AboutRepositoryImpl =
+    private fun repository(
+        context: Context = mockk(),
+        sdkIntProvider: () -> Int = { Build.VERSION.SDK_INT },
+    ): AboutRepositoryImpl =
         AboutRepositoryImpl(
             deviceProvider = deviceProvider,
             buildInfoProvider = buildInfoProvider,
             context = context,
+            sdkIntProvider = sdkIntProvider,
         )
 
     @Test
@@ -62,23 +64,19 @@ class TestAboutRepositoryImpl {
         val clipboardManager = mockk<ClipboardManager>()
         every { context.getSystemService(ClipboardManager::class.java) } returns clipboardManager
         justRun { clipboardManager.setPrimaryClip(any()) }
-        val repo = repository(context)
-        mockkStatic(Build.VERSION::class)
+        val repo = repository(
+            context = context,
+            sdkIntProvider = { Build.VERSION_CODES.S_V2 },
+        )
 
-        try {
-            every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.S_V2
+        val copyResult = repo.copyDeviceInfo("label", "info")
 
-            val copyResult = repo.copyDeviceInfo("label", "info")
-
-            verify { clipboardManager.setPrimaryClip(any()) }
-            assertThat(copyResult).isEqualTo(
-                CopyDeviceInfoResult(
-                    copied = true,
-                    shouldShowFeedback = true
-                )
+        verify { clipboardManager.setPrimaryClip(any()) }
+        assertThat(copyResult).isEqualTo(
+            CopyDeviceInfoResult(
+                copied = true,
+                shouldShowFeedback = true
             )
-        } finally {
-            unmockkStatic(Build.VERSION::class)
-        }
+        )
     }
 }
