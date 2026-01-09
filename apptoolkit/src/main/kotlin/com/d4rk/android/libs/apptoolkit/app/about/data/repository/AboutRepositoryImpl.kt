@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.about.data.repository
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
@@ -24,16 +25,23 @@ class AboutRepositoryImpl(
         )
 
     override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult {
+        val allowFeedback = Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2
         var shouldShowFeedback = false
         val copied = runCatching {
             context.copyTextToClipboard(
                 label = label,
                 text = deviceInfo,
-                onCopyFallback = { shouldShowFeedback = true }
+                onCopyFallback = {
+                    if (allowFeedback) {
+                        shouldShowFeedback = true
+                    }
+                }
             )
         }.onFailure { throwable ->
             Log.w(CLIPBOARD_HELPER_LOG_TAG, "Failed to copy device info", throwable)
-            shouldShowFeedback = true
+            if (allowFeedback) {
+                shouldShowFeedback = true
+            }
         }.getOrDefault(false)
         return CopyDeviceInfoResult(
             copied = copied,
