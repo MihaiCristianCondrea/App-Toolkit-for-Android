@@ -27,14 +27,14 @@ fun buildOnAppClick(
     return remember(appInfoHelper, coroutineScope) {
         { appInfo ->
             coroutineScope.launch {
-                val ctx = currentContext
+                val context = currentContext
                 if (appInfo.packageName.isNotEmpty()) {
-                    if (ctx.isAppInstalled(appInfo.packageName)) {
-                        if (!appInfoHelper.openApp(ctx, appInfo.packageName)) {
-                            ctx.openPlayStoreForApp(appInfo.packageName)
+                    if (context.isAppInstalled(appInfo.packageName)) {
+                        if (!appInfoHelper.openApp(context, appInfo.packageName)) {
+                            context.openPlayStoreForApp(appInfo.packageName)
                         }
                     } else {
-                        ctx.openPlayStoreForApp(appInfo.packageName)
+                        context.openPlayStoreForApp(appInfo.packageName)
                     }
                 }
             }
