@@ -97,7 +97,14 @@ class AppSettingsProviderTest {
         assertEquals(defaultStrings[R.string.summary_preference_settings_about], about.summary)
 
         notifications.action.invoke()
-        verify(exactly = 1) { context.openAppNotificationSettings() } // FIXME: The result of `openAppNotificationSettings` is not used
+        verify(exactly = 1) { context.openAppNotificationSettings() }
+        verify(exactly = 0) {
+            GeneralSettingsActivity.start(
+                context,
+                defaultStrings[R.string.security_and_privacy]!!,
+                SettingsContent.SECURITY_AND_PRIVACY
+            )
+        }
 
         display.action.invoke()
         verify(exactly = 1) {
@@ -135,7 +142,7 @@ class AppSettingsProviderTest {
             )
         }
 
-        assertNull(config.categories[0].title) // FIXME: Expected value to be null, but was: <>.
+        assertNull(config.categories[0].title)
         assertEquals(defaultStrings[R.string.settings], config.title)
     }
 
@@ -152,7 +159,7 @@ class AppSettingsProviderTest {
 
         assertDoesNotThrow { notifications.action.invoke() }
 
-        verify(exactly = 1) { context.openAppNotificationSettings() } // FIXME: The result of `openAppNotificationSettings` is not used
+        verify(exactly = 1) { context.openAppNotificationSettings() }
         verify(exactly = 1) {
             GeneralSettingsActivity.start(
                 context,
