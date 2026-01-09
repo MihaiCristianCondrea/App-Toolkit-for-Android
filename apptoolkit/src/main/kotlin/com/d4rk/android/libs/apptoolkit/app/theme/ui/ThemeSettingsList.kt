@@ -39,7 +39,7 @@ import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.ThemeSettingOption
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
-import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider.paletteById
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider.paletteById
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
 import com.d4rk.android.libs.apptoolkit.core.logging.THEME_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
@@ -54,7 +54,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.applyD
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openDisplaySettings
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.datastore.rememberThemePreferencesState
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
-import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isHalloweenSeason
+import com.d4rk.android.libs.apptoolkit.data.local.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -122,10 +123,24 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
         }
     }
 
-    val staticOptions: List<String> = remember { StaticPaletteIds.withDefault }
-
     val isChristmasSeason: Boolean = remember {
         LocalDate.now(ZoneId.systemDefault()).isChristmasSeason
+    }
+    val isHalloweenSeason: Boolean = remember {
+        LocalDate.now(ZoneId.systemDefault()).isHalloweenSeason
+    }
+
+    val staticOptions: List<String> = remember(
+        isChristmasSeason,
+        isHalloweenSeason,
+        staticPaletteId
+    ) {
+        filterSeasonalStaticPalettes(
+            baseOptions = StaticPaletteIds.withDefault,
+            isChristmasSeason = isChristmasSeason,
+            isHalloweenSeason = isHalloweenSeason,
+            selectedPaletteId = staticPaletteId
+        )
     }
 
     val staticSwatches: List<WallpaperSwatchColors> =
@@ -242,7 +257,8 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                         WallpaperColorOptionCard(
                                             colors = staticSwatches[index],
                                             selected = !isDynamicColors && id == staticPaletteId,
-                                            showSeasonalBadge = isChristmasSeason && id == StaticPaletteIds.CHRISTMAS,
+                                            showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
+                                                    (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
                                             onClick = {
                                                 coroutineScope.launch {
                                                     dataStore.saveDynamicColors(false)
@@ -272,7 +288,8 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                             WallpaperColorOptionCard(
                                 colors = staticSwatches[index],
                                 selected = id == staticPaletteId,
-                                showSeasonalBadge = isChristmasSeason && id == StaticPaletteIds.CHRISTMAS,
+                                showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
+                                        (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
                                 onClick = {
                                     coroutineScope.launch {
                                         dataStore.saveDynamicColors(false)

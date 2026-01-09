@@ -46,7 +46,7 @@ class AppSettingsProviderTest {
     @Test
     fun `provideSettingsConfig returns expected configuration`() {
         val context = createContext(defaultStrings)
-        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt")
+        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextIntentExtensionsKt")
         mockkObject(GeneralSettingsActivity.Companion)
         every { context.openAppNotificationSettings() } returns true
         every { GeneralSettingsActivity.start(any(), any(), any()) } just Runs
@@ -132,6 +132,32 @@ class AppSettingsProviderTest {
                 context,
                 defaultStrings[R.string.about]!!,
                 SettingsContent.ABOUT
+            )
+        }
+
+        assertNull(config.categories[0].title) // FIXME: Expected value to be null, but was: <>.
+        assertEquals(defaultStrings[R.string.settings], config.title)
+    }
+
+    @Test
+    fun `notifications preference falls back to privacy screen when system settings cannot open`() {
+        val context = createContext(defaultStrings)
+        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextIntentExtensionsKt")
+        mockkObject(GeneralSettingsActivity.Companion)
+        every { context.openAppNotificationSettings() } returns false
+        every { GeneralSettingsActivity.start(any(), any(), any()) } just Runs
+
+        val config = provider.provideSettingsConfig(context)
+        val notifications = config.categories.first().preferences.first()
+
+        assertDoesNotThrow { notifications.action.invoke() }
+
+        verify(exactly = 1) { context.openAppNotificationSettings() } // FIXME: The result of `openAppNotificationSettings` is not used
+        verify(exactly = 1) {
+            GeneralSettingsActivity.start(
+                context,
+                defaultStrings[R.string.security_and_privacy]!!,
+                SettingsContent.SECURITY_AND_PRIVACY
             )
         }
     }

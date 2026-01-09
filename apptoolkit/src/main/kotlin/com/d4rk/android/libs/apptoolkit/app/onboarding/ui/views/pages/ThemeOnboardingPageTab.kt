@@ -30,7 +30,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpace
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.datastore.rememberThemePreferencesState
-import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.local.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

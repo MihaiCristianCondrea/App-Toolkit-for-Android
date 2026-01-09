@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.about.ui
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +27,7 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.app.licenses.ui.LicensesActivity
+import com.d4rk.android.libs.apptoolkit.core.logging.ABOUT_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
@@ -47,6 +49,23 @@ import nl.dionsegijn.konfetti.core.emitter.Emitter
 import org.koin.compose.viewmodel.koinViewModel
 import java.util.concurrent.TimeUnit
 
+/**
+ * A Composable that displays the "About" screen's settings list.
+ *
+ * This screen presents information about the application and the device. It handles its own state
+ * via a [AboutViewModel] and displays different UI states (loading, empty, success).
+ *
+ * The list includes:
+ * - App information: full name, version, and a link to the open-source licenses screen.
+ * - Device information: a summary of the device's details, which can be copied to the clipboard.
+ *
+ * It also features an easter egg: tapping the app version five times triggers a konfetti animation.
+ *
+ * @param paddingValues The padding values to be applied to the content of the lazy column,
+ * typically provided by a Scaffold.
+ * @param snackbarHostState The [SnackbarHostState] to manage and display Snackbars for user feedback,
+ * such as when device info is copied.
+ */
 @Composable
 fun AboutSettingsList(
     paddingValues: PaddingValues = PaddingValues(),
@@ -109,7 +128,7 @@ fun AboutSettingsList(
                             ExtraTinyVerticalSpacer()
                             SettingsPreferenceItem(
                                 title = stringResource(id = R.string.app_build_version),
-                                summary = "${data.appVersion} (${data.appVersionCode})",
+                                summary = "${data.appVersionInfo.versionName.orEmpty()} (${data.appVersionInfo.versionCode})",
                             ) {
                                 appVersionTapCount += 1
                                 if (appVersionTapCount >= 5) {
@@ -122,7 +141,13 @@ fun AboutSettingsList(
                                 title = stringResource(id = R.string.oss_license_title),
                                 summary = stringResource(id = R.string.summary_preference_settings_oss)
                             ) {
-                                context.openActivity(LicensesActivity::class.java)
+                                val opened = context.openActivity(LicensesActivity::class.java)
+                                if (!opened) {
+                                    Log.w(
+                                        ABOUT_SETTINGS_LOG_TAG,
+                                        "Failed to open licenses screen from About settings"
+                                    )
+                                }
                             }
                         }
                     }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Onay bilgileri yüklenemedi</string>
+
+    <string name="activity_not_found">Etkinlik bulunamadı.</string>
+
+    <string name="security_error">Bir güvenlik hatası oluştu. Lütfen daha sonra tekrar deneyin.</string>
+    <string name="io_error">Bir giriş/çıkış hatası oluştu. Lütfen ağ bağlantınızı veya depolama alanını kontrol edip tekrar deneyin.</string>
+    <string name="illegal_argument_error">Geçersiz giriş veya bağımsız değişken sağlandı. Lütfen bilgileri kontrol edip tekrar deneyin.</string>
+    <string name="unknown_error">Bilinmeyen bir hata oluştu.</string>
+    <string name="initialization_error">Başlatma başarısız oldu. Lütfen daha sonra tekrar deneyin.</string>
+
+    <string name="error_no_settings_found">Ayar bulunamadı</string>
+    <string name="error_invalid_content_key">Geçersiz içerik anahtarı.</string>
+
+    <string name="error_unauthorized">Yetkisiz: Geçersiz belirteç</string>
+    <string name="error_forbidden">Yasaklı: yetersiz izinler</string>
+    <string name="error_gone">API uç noktası kaldırıldı</string>
+    <string name="error_unprocessable">Sorun oluşturma için geçersiz veriler</string>
+    <string name="error_invalid_report">Başlık ve açıklama boş olamaz</string>
+
+    <string name="error_failed_to_load_ads_settings">Reklam ayarları yüklenemedi</string>
+
+    <string name="cache_cleared_error">Önbellek bazı hatalarla temizlendi</string>
+
+    <string name="loading_eula_message">Son Kullanıcı Lisans Sözleşmesi alınıyor…</string>
+    <string name="loading_changelog_message">Uygulama değişiklik günlüğü alınıyor…</string>
+    <string name="error_loading_eula_message">Son Kullanıcı Lisans Sözleşmesi yüklenemedi. Lütfen tekrar deneyin.</string>
+    <string name="error_loading_changelog_message">Uygulama değişiklik günlüğü yüklenemedi. Lütfen tekrar deneyin.</string>
+
+    <string name="error_failed_to_load_sku_details">SKU ayrıntıları yüklenemedi</string>
+
+    <string name="no_internet_error">İnternet bağlantısı yok.</string>
+    <string name="connection_error">Ağ hatası. Lütfen tekrar deneyin.</string>
+    <string name="connection_closed_error">Bağlantı kesildi.</string>
+    <string name="request_timeout_error">İstek zaman aşımına uğradı. Tekrar deneyin.</string>
+    <string name="ssl_error">Güvenli bağlantı başarısız oldu.</string>
+
+    <string name="http_redirect_error">Sunucudan beklenmeyen yönlendirme.</string>
+    <string name="http_client_error">İstek başarısız oldu. Lütfen tekrar deneyin.</string>
+    <string name="http_server_error">Sunucu hatası. Lütfen daha sonra tekrar deneyin.</string>
+    <string name="rate_limited_error">Çok fazla istek. Lütfen daha sonra tekrar deneyin.</string>
+
+    <string name="serialization_error">Sunucu yanıtı okunamadı.</string>
+
+    <string name="no_data_error">Veri yok.</string>
+    <string name="invalid_state_error">İşlem şu anda izin verilmiyor.</string>
+    <string name="unsupported_operation_error">Desteklenmeyen işlem.</string>
+    <string name="cancelled_error">İşlem iptal edildi.</string>
+
+    <string name="database_error">Depolama hatası.</string>
+    <string name="database_locked_error">Depolama meşgul. Tekrar deneyin.</string>
+    <string name="database_constraint_error">Depolama kısıtlama hatası.</string>
+    <string name="database_cant_open_error">Depolama açılamadı.</string>
+    <string name="database_corrupt_error">Depolama bozuk.</string>
+    <string name="database_full_error">Depolama dolu.</string>
+
+    <string name="error_an_error_occurred">Bir hata oluştu</string>
+    <string name="error_failed_to_launch_review">İnceleme akışı başlatılamadı</string>
+    <string name="error_failed_to_load_faq">SSS yüklenemedi</string>
+    <string name="error_failed_to_request_review">İnceleme isteği başarısız oldu</string>
+    <string name="error_failed_to_update_app">Uygulama güncellenemedi</string>
+    <string name="error_failed_to_load_consent_info">Onay bilgileri yüklenemedi</string>
+    <string name="error_failed_to_load_navigation">Gezinme yüklenemedi</string>
+</resources>

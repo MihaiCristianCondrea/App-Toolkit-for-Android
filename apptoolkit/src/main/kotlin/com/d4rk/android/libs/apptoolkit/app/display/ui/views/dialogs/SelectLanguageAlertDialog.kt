@@ -31,8 +31,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
-import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.local.datastore.rememberCommonDataStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope

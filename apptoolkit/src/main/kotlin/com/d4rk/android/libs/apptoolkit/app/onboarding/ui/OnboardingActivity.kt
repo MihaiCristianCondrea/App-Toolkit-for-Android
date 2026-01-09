@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.d4rk.android.libs.apptoolkit.app.theme.style.AppTheme
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentFormHelper
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.UserMessagingPlatform

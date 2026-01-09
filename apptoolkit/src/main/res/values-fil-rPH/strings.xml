@@ -9,7 +9,6 @@
     <string name="welcome">Maligayang pagdating</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Basahin at sumang-ayon sa aming Mga tuntunin ng serbisyo at Patakaran sa Privacy upang magpatuloy</string>
     <string name="agree">Sumang-ayon</string>
-    <string name="error_loading_consent_info">Nabigong i-load ang impormasyon ng pahintulot</string>
     <string name="loading">Naglo-load…</string>
 
     <string name="skip_button_text">Laktawan</string>
@@ -65,20 +64,11 @@
 
     <string name="home">Home</string>
 
-    <string name="activity_not_found">Hindi nahanap ang aktibidad.</string>
-    <string name="security_error">Nagkaroon ng error sa seguridad. Pakisubukan muli mamaya.</string>
-    <string name="io_error">Nagkaroon ng input/output error. Pakisuri ang iyong koneksyon sa network o storage at subukang muli.</string>
-    <string name="illegal_argument_error">Hindi valid na input o argument ang ibinigay. Pakisuri ang impormasyon at subukang muli.</string>
-    <string name="unknown_error">Nagkaroon ng hindi kilalang error.</string>
-    <string name="initialization_error">Nabigo ang initialization. Pakisubukan muli mamaya.</string>
-
     <string name="settings">Mga Setting</string>
     <string name="long_settings_label">Mga setting ng application</string>
     <string name="settings_disabled_message">Kasalukuyang hindi available ang mga setting.</string>
     <string name="settings_placeholder_description">Walang napiling setting. Pumili ng opsyon para tingnan ang mga detalye nito dito.</string>
     <string name="get_help">Humingi ng tulong</string>
-    <string name="error_no_settings_found">Walang nahanap na mga setting</string>
-    <string name="error_invalid_content_key">Hindi valid na content key.</string>
 
     <string name="display">Display</string>
     <string name="summary_preference_settings_display">I-personalize ang itsura at pakiramdam ng iyong app</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">I-redirect sa GitHub</string>
     <string name="snack_report_success">Matagumpay na naipadala ang ulat</string>
     <string name="snack_report_failed">Nabigo ang pagpapadala ng ulat</string>
-    <string name="error_invalid_report">Hindi maaaring walang laman ang pamagat at paglalarawan</string>
     <string name="issue_submitted_successfully">Matagumpay na isinumite ang isyu</string>
     <string name="open_issue_in_browser">Buksan sa browser</string>
     <string name="open_button_label">Bukas na isyu</string>
     <string name="issue_submitted">Isinumite ang iyong isyu.</string>
-    <string name="error_unauthorized">Hindi awtorisado: Di -wastong token</string>
-    <string name="error_forbidden">Ipinagbabawal: Hindi sapat na pahintulot</string>
-    <string name="error_gone">Inalis ang endpoint ng API</string>
-    <string name="error_unprocessable">Di -wastong data para sa paglikha ng isyu</string>
 
     <string name="error_reporting">Pag-uulat ng error</string>
     <string name="bug_report">Ulat ng bug</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">I-clear ang cache</string>
     <string name="summary_preference_settings_clear_cache">I-clear ang pansamantalang data ng application.</string>
     <string name="cache_cleared_success">Matagumpay na na-clear ang cache</string>
-    <string name="cache_cleared_error">Na-clear ang cache na may ilang error</string>
 
     <string name="security_and_privacy">Seguridad &amp; Pribasya</string>
     <string name="summary_preference_settings_privacy_and_security">Pamahalaan ang iyong mga setting ng privacy</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">Tingnan ang mga ad na nauugnay sa iyo. Pamahalaan ang impormasyong ginagamit para ipakita ang mga personalized na ad batay sa iyong aktibidad sa app. Maaari mong palaging i-off ang personalization dito.\n</string>
     <string name="ads_enabled">Naka-enable ang mga ad</string>
     <string name="ads_disabled">Naka-disable ang mga ad</string>
-    <string name="error_failed_to_load_ads_settings">Nabigong i-load ang mga setting ng ad</string>
 
     <string name="usage_and_diagnostics">Paggamit at mga diagnostic</string>
     <string name="summary_preference_settings_usage_and_diagnostics">Ibahagi ang data para makatulong na mapabuti ang karanasan sa loob ng app</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">EULA</string>
     <string name="changelog_title">Changelog ng app</string>
-    <string name="loading_eula_message">Kinukuha ang End User License Agreement…</string>
-    <string name="loading_changelog_message">Kinukuha ang changelog ng application…</string>
-    <string name="error_loading_eula_message">Hindi ma-load ang End User License Agreement. Pakisubukan muli.</string>
-    <string name="error_loading_changelog_message">Hindi ma-load ang changelog ng application. Pakisubukan muli.</string>
     <string name="no_new_updates_message">Walang bagong update na available.</string>
 
     <string name="device_info">Impormasyon ng device</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">Hindi bayad na suporta</string>
     <string name="web_ad">Web ad</string>
     <string name="sponsored_ad_label">● Naka-sponsor na ad</string>
-    <string name="error_failed_to_load_sku_details">Nabigong i-load ang mga detalye ng SKU</string>
     <string name="purchase_pending">Ang iyong donasyon ay pinoproseso ng Google. Sasabihan ka namin kapag kumpleto na ito. Salamat.</string>
     <string name="purchase_thank_you">Salamat sa iyong donasyon.</string>
     <string name="purchase_cancelled">Bumili ng kanselahin</string>
-    <string name="error_an_error_occurred">May naganap na error</string>
-    <string name="error_failed_to_launch_review">Nabigong simulan ang daloy ng pagsusuri</string>
-    <string name="error_failed_to_load_faq">Nabigong i-load ang mga FAQ</string>
-    <string name="error_failed_to_request_review">Nabigong humiling ng pagsusuri</string>
-    <string name="error_failed_to_update_app">Nabigong i-update ang app</string>
-    <string name="error_failed_to_load_consent_info">Nabigong i-load ang impormasyon ng pahintulot</string>
 </resources>

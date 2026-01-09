@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.CheckResult
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.store.StoreConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.pm.hasPackageVisible
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.hasPackageVisible
 
 /**
  * Returns the installer package name when available, null otherwise.

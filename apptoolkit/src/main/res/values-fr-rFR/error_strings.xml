@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Échec du chargement des informations de consentement</string>
+
+    <string name="activity_not_found">Activité introuvable.</string>
+
+    <string name="security_error">Une erreur de sécurité s\'est produite. Veuillez réessayer plus tard.</string>
+    <string name="io_error">Une erreur d\'entrée/sortie s\'est produite. Veuillez vérifier votre connexion réseau ou le stockage, puis réessayer.</string>
+    <string name="illegal_argument_error">Entrée ou argument non valide fourni. Veuillez vérifier les informations et réessayer.</string>
+    <string name="unknown_error">Une erreur inconnue s\'est produite.</string>
+    <string name="initialization_error">L\'initialisation a échoué. Veuillez réessayer plus tard.</string>
+
+    <string name="error_no_settings_found">Aucun paramètre trouvé</string>
+    <string name="error_invalid_content_key">Clé de contenu non valide.</string>
+
+    <string name="error_unauthorized">Non autorisé : jeton non valide</string>
+    <string name="error_forbidden">Interdit : autorisations insuffisantes</string>
+    <string name="error_gone">Point de terminaison de l\'API supprimé</string>
+    <string name="error_unprocessable">Données non valides pour la création du problème</string>
+    <string name="error_invalid_report">Le titre et la description ne peuvent pas être vides</string>
+
+    <string name="error_failed_to_load_ads_settings">Échec du chargement des paramètres des annonces</string>
+
+    <string name="cache_cleared_error">Cache vidé avec certaines erreurs</string>
+
+    <string name="loading_eula_message">Récupération du contrat de licence utilisateur final…</string>
+    <string name="loading_changelog_message">Récupération du journal des modifications de l\'application…</string>
+    <string name="error_loading_eula_message">Impossible de charger le contrat de licence utilisateur final. Veuillez réessayer.</string>
+    <string name="error_loading_changelog_message">Impossible de charger le journal des modifications de l\'application. Veuillez réessayer.</string>
+
+    <string name="error_failed_to_load_sku_details">Échec du chargement des détails du SKU</string>
+
+    <string name="no_internet_error">Aucune connexion Internet.</string>
+    <string name="connection_error">Erreur réseau. Veuillez réessayer.</string>
+    <string name="connection_closed_error">La connexion a été interrompue.</string>
+    <string name="request_timeout_error">Délai de la requête dépassé. Réessayez.</string>
+    <string name="ssl_error">La connexion sécurisée a échoué.</string>
+
+    <string name="http_redirect_error">Redirection inattendue depuis le serveur.</string>
+    <string name="http_client_error">La requête a échoué. Veuillez réessayer.</string>
+    <string name="http_server_error">Erreur du serveur. Veuillez réessayer plus tard.</string>
+    <string name="rate_limited_error">Trop de requêtes. Réessayez plus tard.</string>
+
+    <string name="serialization_error">Échec de la lecture de la réponse du serveur.</string>
+
+    <string name="no_data_error">Aucune donnée disponible.</string>
+    <string name="invalid_state_error">Opération non autorisée pour le moment.</string>
+    <string name="unsupported_operation_error">Opération non prise en charge.</string>
+    <string name="cancelled_error">Opération annulée.</string>
+
+    <string name="database_error">Erreur de stockage.</string>
+    <string name="database_locked_error">Le stockage est occupé. Réessayez.</string>
+    <string name="database_constraint_error">Erreur de contrainte du stockage.</string>
+    <string name="database_cant_open_error">Impossible d\'ouvrir le stockage.</string>
+    <string name="database_corrupt_error">Le stockage est corrompu.</string>
+    <string name="database_full_error">Le stockage est plein.</string>
+
+    <string name="error_an_error_occurred">Une erreur s\'est produite</string>
+    <string name="error_failed_to_launch_review">Échec du lancement du flux d\'avis</string>
+    <string name="error_failed_to_load_faq">Échec du chargement de la FAQ</string>
+    <string name="error_failed_to_request_review">Échec de la demande d\'avis</string>
+    <string name="error_failed_to_update_app">Échec de la mise à jour de l\'application</string>
+    <string name="error_failed_to_load_consent_info">Échec du chargement des informations de consentement</string>
+    <string name="error_failed_to_load_navigation">Échec du chargement de la navigation</string>
+</resources>

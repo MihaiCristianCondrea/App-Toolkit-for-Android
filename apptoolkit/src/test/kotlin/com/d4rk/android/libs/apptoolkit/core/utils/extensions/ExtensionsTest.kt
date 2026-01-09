@@ -98,6 +98,7 @@ class ExtensionsTest {
     @Test
     fun `toError maps throwable to domain error`() {
         assertAll(
+            // FIXME: <html>Multiple Failures (3 failures)<br/>	java.lang.AssertionError: Expected &lt;NO_INTERNET&gt;, actual &lt;CONNECTION_ERROR&gt;.<br/>	java.lang.AssertionError: Expected &lt;DATABASE_OPERATION_FAILED&gt;, actual &lt;UNKNOWN&gt;.<br/>	java.lang.AssertionError: Expected &lt;NO_DATA&gt;, actual &lt;INVALID_STATE&gt;.
             { assertEquals(Errors.Network.NO_INTERNET, java.net.UnknownHostException().toError()) },
             {
                 assertEquals(

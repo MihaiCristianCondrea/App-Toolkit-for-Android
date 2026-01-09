@@ -9,7 +9,6 @@
     <string name="welcome">Ласкаво просимо</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Прочитайте та погодьтеся з нашими Умовами використання та Політикою конфіденційності, щоб продовжити</string>
     <string name="agree">Погодитися</string>
-    <string name="error_loading_consent_info">Не вдалося завантажити інформацію про згоду</string>
     <string name="loading">Завантаження…</string>
 
     <string name="skip_button_text">Пропустити</string>
@@ -65,20 +64,11 @@
 
     <string name="home">Головна</string>
 
-    <string name="activity_not_found">Активність не знайдено.</string>
-    <string name="security_error">Виникла помилка безпеки. Будь ласка, спробуйте пізніше.</string>
-    <string name="io_error">Виникла помилка вводу/виводу. Перевірте з\'єднання з мережею або сховище та спробуйте ще раз.</string>
-    <string name="illegal_argument_error">Введено неправильний параметр або аргумент. Перевірте інформацію та спробуйте ще раз.</string>
-    <string name="unknown_error">Виникла невідома помилка.</string>
-    <string name="initialization_error">Ініціалізація не вдалася. Будь ласка, спробуйте пізніше.</string>
-
     <string name="settings">Налаштування</string>
     <string name="long_settings_label">Налаштування додатку</string>
     <string name="settings_disabled_message">Наразі налаштування недоступні.</string>
     <string name="settings_placeholder_description">Налаштування не вибрано. Виберіть опцію, щоб переглянути її деталі.</string>
     <string name="get_help">Отримати допомогу</string>
-    <string name="error_no_settings_found">Налаштування не знайдено</string>
-    <string name="error_invalid_content_key">Недійсний ключ вмісту.</string>
 
     <string name="display">Екран</string>
     <string name="summary_preference_settings_display">Персоналізуйте вигляд та функціонал вашого додатка</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">Перенаправити на GitHub</string>
     <string name="snack_report_success">Звіт успішно надіслано</string>
     <string name="snack_report_failed">Не вдалося надіслати звіт</string>
-    <string name="error_invalid_report">Заголовок і опис не можуть бути порожніми</string>
     <string name="issue_submitted_successfully">Проблема подано успішно</string>
     <string name="open_issue_in_browser">Відкрито в браузері</string>
     <string name="open_button_label">Відкритий випуск</string>
     <string name="issue_submitted">Ваше питання було подано.</string>
-    <string name="error_unauthorized">Несанкціонований: Недійсний маркер</string>
-    <string name="error_forbidden">Заборонено: недостатньо дозволів</string>
-    <string name="error_gone">Кінцева точка API видалена</string>
-    <string name="error_unprocessable">Недійсні дані для створення випусків</string>
 
     <string name="error_reporting">Звіт про помилки</string>
     <string name="bug_report">Звіт про помилку</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">Очистити кеш</string>
     <string name="summary_preference_settings_clear_cache">Очистити тимчасові дані застосунку.</string>
     <string name="cache_cleared_success">Кеш успішно очищено</string>
-    <string name="cache_cleared_error">Кеш очищено з деякими помилками</string>
 
     <string name="security_and_privacy">Безпека та конфіденційність</string>
     <string name="summary_preference_settings_privacy_and_security">Керуйте своїми налаштуваннями конфіденційності</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">Переглядайте релевантну рекламу та керуйте налаштуваннями</string>
     <string name="ads_enabled">Реклама увімкнена</string>
     <string name="ads_disabled">Реклама вимкнена</string>
-    <string name="error_failed_to_load_ads_settings">Не вдалося завантажити налаштування реклами</string>
 
     <string name="usage_and_diagnostics">Використання та діагностика</string>
     <string name="summary_preference_settings_usage_and_diagnostics">Поділіться даними для покращення роботи додатка</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">Ліцензійна угода</string>
     <string name="changelog_title">Журнал змін</string>
-    <string name="loading_eula_message">Отримання ліцензійної угоди…</string>
-    <string name="loading_changelog_message">Отримання журналу змін…</string>
-    <string name="error_loading_eula_message">Не вдалося завантажити ліцензійну угоду. Будь ласка, спробуйте знову.</string>
-    <string name="error_loading_changelog_message">Не вдалося завантажити журнал змін. Будь ласка, спробуйте знову.</string>
     <string name="no_new_updates_message">Немає нових оновлень.</string>
 
     <string name="device_info">Інформація про пристрій</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">Безкоштовна підтримка</string>
     <string name="web_ad">Веб-реклама</string>
     <string name="sponsored_ad_label">● Спонсорована реклама</string>
-    <string name="error_failed_to_load_sku_details">Не вдалося завантажити деталі SKU</string>
     <string name="purchase_pending">Ваша пожертва обробляється Google. Ми повідомимо вас, коли він завершиться. Дякую.</string>
     <string name="purchase_thank_you">Дякую за пожертву.</string>
     <string name="purchase_cancelled">Купівля скасована</string>
-    <string name="error_an_error_occurred">Сталася помилка</string>
-    <string name="error_failed_to_launch_review">Не вдалося запустити процес відгуку</string>
-    <string name="error_failed_to_load_faq">Не вдалося завантажити запитання та відповіді</string>
-    <string name="error_failed_to_request_review">Не вдалося надіслати запит на відгук</string>
-    <string name="error_failed_to_update_app">Не вдалося оновити застосунок</string>
-    <string name="error_failed_to_load_consent_info">Не вдалося завантажити інформацію про згоду</string>
 </resources>

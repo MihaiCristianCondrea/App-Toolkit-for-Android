@@ -8,6 +8,7 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.providers.Devic
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import com.google.common.truth.Truth.assertThat
 import io.ktor.http.HttpStatusCode
@@ -39,6 +40,7 @@ class IssueReporterViewModelTest {
     private val deviceInfoProvider = object : DeviceInfoProvider {
         override suspend fun capture(): DeviceInfo = mockk()
     }
+    private val firebaseController = FakeFirebaseController()
 
     private inline fun <T> withMainDispatcher(
         dispatcher: CoroutineDispatcher,
@@ -58,7 +60,13 @@ class IssueReporterViewModelTest {
 
         withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
-            val viewModel = IssueReporterViewModel(useCase, githubTarget, "", deviceInfoProvider)
+            val viewModel = IssueReporterViewModel(
+                useCase,
+                githubTarget,
+                "",
+                deviceInfoProvider,
+                firebaseController,
+            )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
             viewModel.onEvent(IssueReporterEvent.Send)
@@ -81,7 +89,13 @@ class IssueReporterViewModelTest {
             every { useCase.invoke(capture(captured)) } returns flowOf(IssueReportResult.Success("url"))
 
             val viewModel =
-                IssueReporterViewModel(useCase, githubTarget, "token", deviceInfoProvider)
+                IssueReporterViewModel(
+                    useCase,
+                    githubTarget,
+                    "token",
+                    deviceInfoProvider,
+                    firebaseController,
+                )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
             viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))
@@ -106,7 +120,13 @@ class IssueReporterViewModelTest {
 
         withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
-            val viewModel = IssueReporterViewModel(useCase, githubTarget, "", deviceInfoProvider)
+            val viewModel = IssueReporterViewModel(
+                useCase,
+                githubTarget,
+                "",
+                deviceInfoProvider,
+                firebaseController,
+            )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
             viewModel.onEvent(IssueReporterEvent.UpdateTitle("T"))
@@ -135,7 +155,13 @@ class IssueReporterViewModelTest {
 
         withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
-            val viewModel = IssueReporterViewModel(useCase, githubTarget, "", failingProvider)
+            val viewModel = IssueReporterViewModel(
+                useCase,
+                githubTarget,
+                "",
+                failingProvider,
+                firebaseController,
+            )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
             viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))
@@ -173,7 +199,13 @@ class IssueReporterViewModelTest {
             val useCase = mockk<SendIssueReportUseCase>()
             every { useCase.invoke(any()) } returns flowOf(IssueReportResult.Error(status, ""))
 
-            val viewModel = IssueReporterViewModel(useCase, githubTarget, "tok", deviceInfoProvider)
+            val viewModel = IssueReporterViewModel(
+                useCase,
+                githubTarget,
+                "tok",
+                deviceInfoProvider,
+                firebaseController,
+            )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
             viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))

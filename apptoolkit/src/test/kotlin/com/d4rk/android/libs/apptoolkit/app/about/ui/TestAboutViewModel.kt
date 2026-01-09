@@ -2,6 +2,7 @@ package com.d4rk.android.libs.apptoolkit.app.about.ui
 
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo
+import com.d4rk.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.GetAboutInfoUseCase
@@ -10,6 +11,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettin
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
+import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import com.google.common.truth.Truth.assertThat
@@ -36,6 +38,7 @@ class TestAboutViewModel {
         override val packageName: String = "pkg"
         override val isDebugBuild: Boolean = false
     }
+    private val firebaseController = FakeFirebaseController()
 
     private fun createViewModel(
         testDispatcher: TestDispatcher = dispatcherExtension.testDispatcher,
@@ -46,7 +49,8 @@ class TestAboutViewModel {
                 deviceInfo = deviceProvider.deviceInfo,
             )
 
-            override fun copyDeviceInfo(label: String, deviceInfo: String): Boolean = true
+            override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult =
+                CopyDeviceInfoResult(copied = true, shouldShowFeedback = true)
         }
     ): AboutViewModel {
         val testDispatchers: DispatcherProvider = TestDispatchers(testDispatcher)
@@ -55,6 +59,7 @@ class TestAboutViewModel {
             getAboutInfo = GetAboutInfoUseCase(repository),
             copyDeviceInfo = CopyDeviceInfoUseCase(repository),
             dispatchers = testDispatchers,
+            firebaseController = firebaseController,
         )
     }
 
@@ -64,7 +69,8 @@ class TestAboutViewModel {
         val repository = object : AboutRepository {
             override suspend fun getAboutInfo(): AboutInfo = throw Exception("fail")
 
-            override fun copyDeviceInfo(label: String, deviceInfo: String): Boolean = false
+            override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult =
+                CopyDeviceInfoResult(copied = false, shouldShowFeedback = true)
         }
         return createViewModel(testDispatcher = testDispatcher, repository = repository)
     }
@@ -76,8 +82,9 @@ class TestAboutViewModel {
 
         val state = viewModel.uiState.value
         assertThat(state.data?.deviceInfo).isEqualTo(deviceProvider.deviceInfo)
-        assertThat(state.data?.appVersion).isEqualTo(buildInfoProvider.appVersion)
-        assertThat(state.data?.appVersionCode).isEqualTo(buildInfoProvider.appVersionCode)
+        assertThat(state.data?.appVersionInfo?.versionName).isEqualTo(buildInfoProvider.appVersion)
+        assertThat(state.data?.appVersionInfo?.versionCode)
+            .isEqualTo(buildInfoProvider.appVersionCode.toLong())
     }
 
     @Test
@@ -95,6 +102,39 @@ class TestAboutViewModel {
         val msg = snackbar.message as UiTextHelper.StringResource
         assertThat(msg.resourceId).isEqualTo(R.string.snack_device_info_copied)
     }
+
+    @Test
+    fun `copy device info failure surfaces fallback snackbar`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = object : AboutRepository {
+                override suspend fun getAboutInfo(): AboutInfo = AboutInfo(
+                    appVersion = buildInfoProvider.appVersion,
+                    appVersionCode = buildInfoProvider.appVersionCode,
+                    deviceInfo = deviceProvider.deviceInfo,
+                )
+
+                override fun copyDeviceInfo(
+                    label: String,
+                    deviceInfo: String,
+                ): CopyDeviceInfoResult = CopyDeviceInfoResult(
+                    copied = false,
+                    shouldShowFeedback = true
+                )
+            }
+
+            val viewModel = createViewModel(
+                testDispatcher = dispatcherExtension.testDispatcher,
+                repository = repository
+            )
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            val snackbar = viewModel.uiState.value.snackbar!!
+            val msg = snackbar.message as UiTextHelper.StringResource
+            assertThat(msg.resourceId).isEqualTo(R.string.snack_device_info_failed)
+        }
 
     @Test
     fun `dismiss snackbar resets state`() = runTest(dispatcherExtension.testDispatcher) {
@@ -126,6 +166,35 @@ class TestAboutViewModel {
             viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
             dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
             assertThat(viewModel.uiState.value.snackbar).isNotNull()
+        }
+
+    @Test
+    fun `no fallback means no success snackbar`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = object : AboutRepository {
+                override suspend fun getAboutInfo(): AboutInfo = AboutInfo(
+                    appVersion = buildInfoProvider.appVersion,
+                    appVersionCode = buildInfoProvider.appVersionCode,
+                    deviceInfo = deviceProvider.deviceInfo,
+                )
+
+                override fun copyDeviceInfo(
+                    label: String,
+                    deviceInfo: String
+                ): CopyDeviceInfoResult =
+                    CopyDeviceInfoResult(copied = true, shouldShowFeedback = false)
+            }
+
+            val viewModel = createViewModel(
+                testDispatcher = dispatcherExtension.testDispatcher,
+                repository = repository
+            )
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            viewModel.onEvent(AboutEvent.CopyDeviceInfo(label = "label"))
+            dispatcherExtension.testDispatcher.scheduler.advanceUntilIdle()
+
+            assertThat(viewModel.uiState.value.snackbar).isNull()
         }
 
     @Test

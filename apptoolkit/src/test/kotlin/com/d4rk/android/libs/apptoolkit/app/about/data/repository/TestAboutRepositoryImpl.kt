@@ -1,7 +1,9 @@
 package com.d4rk.android.libs.apptoolkit.app.about.data.repository
 
 import android.content.Context
+import android.os.Build
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo
+import com.d4rk.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
@@ -10,6 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -55,26 +58,49 @@ class TestAboutRepositoryImpl {
 
     @Test
     fun `copyDeviceInfo delegates to copyTextToClipboard`() {
-        val ctx = mockk<Context>(relaxed = true)
-        val repo = repository(ctx)
+        val context = mockk<Context>(relaxed = true)
+        val repo = repository(context)
 
         val extFile =
-            "com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextExtensionsKt"
+            "com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextClipboardExtensionsKt"
         mockkStatic(extFile)
+        mockkStatic(Build.VERSION::class)
 
-        try { // TODO: Make try catch to be runCatching
-            every { ctx.copyTextToClipboard(any(), any(), any()) } returns true
+        try {
+            every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.S_V2
 
-            val copied = repo.copyDeviceInfo("label", "info")
+            val fallbackSlot = slot<() -> Unit>()
+            val copyResult = run {
+                every {
+                    context.copyTextToClipboard(
+                        "label",
+                        "info",
+                        isSensitive = false,
+                        onCopyFallback = capture(fallbackSlot)
+                    )
+                } answers {
+                    fallbackSlot.captured.invoke()
+                    true
+                }
+                repo.copyDeviceInfo("label", "info")
+            }
+
             verify {
-                ctx.copyTextToClipboard( // FIXME: The result of `copyTextToClipboard` is not used
+                context.copyTextToClipboard(
                     "label",
                     "info",
-                    any()
-                )
+                    isSensitive = false,
+                    onCopyFallback = any(),
+                ) // FIXME: The result of `copyTextToClipboard` is not used
             }
-            assertThat(copied).isTrue()
+            assertThat(copyResult).isEqualTo(
+                CopyDeviceInfoResult(
+                    copied = true,
+                    shouldShowFeedback = true
+                )
+            )
         } finally {
+            unmockkStatic(Build.VERSION::class)
             unmockkStatic(extFile)
         }
     }

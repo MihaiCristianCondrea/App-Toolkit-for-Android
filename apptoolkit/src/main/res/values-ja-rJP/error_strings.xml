@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">同意情報の読み込みに失敗しました</string>
+
+    <string name="activity_not_found">アクティビティが見つかりません。</string>
+
+    <string name="security_error">セキュリティエラーが発生しました。しばらくしてからもう一度お試しください。</string>
+    <string name="io_error">入出力エラーが発生しました。ネットワーク接続またはストレージを確認して、もう一度お試しください。</string>
+    <string name="illegal_argument_error">無効な入力または引数が指定されました。情報を確認して、もう一度お試しください。</string>
+    <string name="unknown_error">不明なエラーが発生しました。</string>
+    <string name="initialization_error">初期化に失敗しました。しばらくしてからもう一度お試しください。</string>
+
+    <string name="error_no_settings_found">設定が見つかりません</string>
+    <string name="error_invalid_content_key">無効なコンテンツキーです。</string>
+
+    <string name="error_unauthorized">未認証: 無効なトークン</string>
+    <string name="error_forbidden">禁止: 権限が不足しています</string>
+    <string name="error_gone">API エンドポイントが削除されました</string>
+    <string name="error_unprocessable">課題作成のためのデータが無効です</string>
+    <string name="error_invalid_report">タイトルと説明を空にすることはできません</string>
+
+    <string name="error_failed_to_load_ads_settings">広告設定の読み込みに失敗しました</string>
+
+    <string name="cache_cleared_error">一部のエラーとともにキャッシュがクリアされました</string>
+
+    <string name="loading_eula_message">エンドユーザー使用許諾契約書を取得しています…</string>
+    <string name="loading_changelog_message">アプリケーションの変更履歴を取得しています…</string>
+    <string name="error_loading_eula_message">エンドユーザー使用許諾契約書を読み込めません。もう一度お試しください。</string>
+    <string name="error_loading_changelog_message">アプリケーションの変更履歴を読み込めません。もう一度お試しください。</string>
+
+    <string name="error_failed_to_load_sku_details">SKU の詳細を読み込めませんでした</string>
+
+    <string name="no_internet_error">インターネットに接続されていません。</string>
+    <string name="connection_error">ネットワークエラーが発生しました。もう一度お試しください。</string>
+    <string name="connection_closed_error">接続が中断されました。</string>
+    <string name="request_timeout_error">リクエストがタイムアウトしました。もう一度お試しください。</string>
+    <string name="ssl_error">安全な接続に失敗しました。</string>
+
+    <string name="http_redirect_error">サーバーから予期しないリダイレクトがありました。</string>
+    <string name="http_client_error">リクエストに失敗しました。もう一度お試しください。</string>
+    <string name="http_server_error">サーバーエラーが発生しました。しばらくしてからもう一度お試しください。</string>
+    <string name="rate_limited_error">リクエストが多すぎます。しばらくしてからもう一度お試しください。</string>
+
+    <string name="serialization_error">サーバーの応答を読み取れませんでした。</string>
+
+    <string name="no_data_error">利用可能なデータがありません。</string>
+    <string name="invalid_state_error">現在、この操作は許可されていません。</string>
+    <string name="unsupported_operation_error">サポートされていない操作です。</string>
+    <string name="cancelled_error">操作がキャンセルされました。</string>
+
+    <string name="database_error">ストレージエラーが発生しました。</string>
+    <string name="database_locked_error">ストレージが使用中です。もう一度お試しください。</string>
+    <string name="database_constraint_error">ストレージ制約エラーが発生しました。</string>
+    <string name="database_cant_open_error">ストレージを開けません。</string>
+    <string name="database_corrupt_error">ストレージが破損しています。</string>
+    <string name="database_full_error">ストレージがいっぱいです。</string>
+
+    <string name="error_an_error_occurred">エラーが発生しました</string>
+    <string name="error_failed_to_launch_review">レビューのフローを起動できませんでした</string>
+    <string name="error_failed_to_load_faq">FAQ の読み込みに失敗しました</string>
+    <string name="error_failed_to_request_review">レビューのリクエストに失敗しました</string>
+    <string name="error_failed_to_update_app">アプリの更新に失敗しました</string>
+    <string name="error_failed_to_load_consent_info">同意情報の読み込みに失敗しました</string>
+    <string name="error_failed_to_load_navigation">ナビゲーションを読み込めませんでした</string>
+</resources>

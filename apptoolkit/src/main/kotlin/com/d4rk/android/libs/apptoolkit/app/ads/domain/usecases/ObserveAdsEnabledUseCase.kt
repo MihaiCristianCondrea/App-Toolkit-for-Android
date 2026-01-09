@@ -1,0 +1,11 @@
+package com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases
+
+import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
+import kotlinx.coroutines.flow.Flow
+
+/**
+ * Exposes a stream of the ads-enabled flag from the repository.
+ */
+class ObserveAdsEnabledUseCase(private val repo: AdsSettingsRepository) {
+    operator fun invoke(): Flow<Boolean> = repo.observeAdsEnabled()
+}

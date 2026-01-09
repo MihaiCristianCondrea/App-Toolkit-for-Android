@@ -9,7 +9,6 @@
     <string name="welcome">Välkommen</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Läs och godkänn våra användarvillkor och integritetspolicy för att fortsätta</string>
     <string name="agree">Godkänn</string>
-    <string name="error_loading_consent_info">Misslyckades med att läsa in samtyckesinformationen</string>
     <string name="loading">Läser in…</string>
 
     <string name="skip_button_text">Hoppa över</string>
@@ -65,20 +64,11 @@
 
     <string name="home">Hem</string>
 
-    <string name="activity_not_found">Aktiviteten hittades inte.</string>
-    <string name="security_error">Ett säkerhetsfel inträffade. Försök igen senare.</string>
-    <string name="io_error">Ett in- och utmatningsfel inträffade. Kontrollera din nätverksanslutning eller lagring och försök igen.</string>
-    <string name="illegal_argument_error">Ogiltig indata eller argument angavs. Kontrollera informationen och försök igen.</string>
-    <string name="unknown_error">Ett okänt fel inträffade.</string>
-    <string name="initialization_error">Initialiseringen misslyckades. Försök igen senare.</string>
-
     <string name="settings">Inställningar</string>
     <string name="long_settings_label">Appinställningar</string>
     <string name="settings_disabled_message">Inställningarna är för närvarande inte tillgängliga.</string>
     <string name="settings_placeholder_description">Inga inställningar valda. Välj ett alternativ för att se detaljer här.</string>
     <string name="get_help">Få hjälp</string>
-    <string name="error_no_settings_found">Inga inställningar hittades</string>
-    <string name="error_invalid_content_key">Ogiltig innehållsnyckel.</string>
 
     <string name="display">Skärm</string>
     <string name="summary_preference_settings_display">Anpassa appens utseende och känsla</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">Omdirigera till GitHub</string>
     <string name="snack_report_success">Rapporten skickades</string>
     <string name="snack_report_failed">Det gick inte att skicka rapporten</string>
-    <string name="error_invalid_report">Titel och beskrivning får inte vara tomma</string>
     <string name="issue_submitted_successfully">Utfärdas framgångsrikt</string>
     <string name="open_issue_in_browser">Öppet i webbläsaren</string>
     <string name="open_button_label">Öppen fråga</string>
     <string name="issue_submitted">Ditt problem lämnades in.</string>
-    <string name="error_unauthorized">Obehörig: Ogiltig token</string>
-    <string name="error_forbidden">Förbjudet: Otillräckliga behörigheter</string>
-    <string name="error_gone">API -slutpunkten borttagen</string>
-    <string name="error_unprocessable">Ogiltiga data för skapande av problem</string>
 
     <string name="error_reporting">Felrapportering</string>
     <string name="bug_report">Felrapport</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">Rensa cache</string>
     <string name="summary_preference_settings_clear_cache">Rensa tillfälliga applikationsdata.</string>
     <string name="cache_cleared_success">Cache rensades framgångsrikt</string>
-    <string name="cache_cleared_error">Cache rensades med vissa fel</string>
 
     <string name="security_and_privacy">Säkerhet och integritet</string>
     <string name="summary_preference_settings_privacy_and_security">Hantera dina sekretessinställningar</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">Se annonser som är relevanta för dig. Hantera informationen som används för personaliserade annonser.</string>
     <string name="ads_enabled">Annonser aktiverade</string>
     <string name="ads_disabled">Annonser inaktiverade</string>
-    <string name="error_failed_to_load_ads_settings">Det gick inte att ladda annonsinställningarna</string>
 
     <string name="usage_and_diagnostics">Användning och diagnostik</string>
     <string name="summary_preference_settings_usage_and_diagnostics">Dela data för att hjälpa till att förbättra appupplevelsen</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">Licensavtal</string>
     <string name="changelog_title">Ändringslogg</string>
-    <string name="loading_eula_message">Hämtar licensavtal…</string>
-    <string name="loading_changelog_message">Hämtar ändringslogg…</string>
-    <string name="error_loading_eula_message">Det gick inte att ladda licensavtalet. Försök igen.</string>
-    <string name="error_loading_changelog_message">Det gick inte att ladda ändringsloggen. Försök igen.</string>
     <string name="no_new_updates_message">Inga nya uppdateringar tillgängliga.</string>
 
     <string name="device_info">Enhetsinformation</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">Obetalt stöd</string>
     <string name="web_ad">Webbannons</string>
     <string name="sponsored_ad_label">● Sponsrad annons</string>
-    <string name="error_failed_to_load_sku_details">Det gick inte att läsa in SKU-detaljer</string>
     <string name="purchase_pending">Din donation behandlas av Google. Vi kommer att meddela dig när den är klar. Tack.</string>
     <string name="purchase_thank_you">Tack för din donation.</string>
     <string name="purchase_cancelled">Köp avbruten</string>
-    <string name="error_an_error_occurred">Ett fel inträffade</string>
-    <string name="error_failed_to_launch_review">Det gick inte att starta granskningsflödet</string>
-    <string name="error_failed_to_load_faq">Det gick inte att läsa in vanliga frågor</string>
-    <string name="error_failed_to_request_review">Det gick inte att begära en recension</string>
-    <string name="error_failed_to_update_app">Det gick inte att uppdatera appen</string>
-    <string name="error_failed_to_load_consent_info">Det gick inte att läsa in samtyckesinformationen</string>
 </resources>

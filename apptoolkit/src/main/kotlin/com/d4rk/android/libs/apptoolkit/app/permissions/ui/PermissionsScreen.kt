@@ -68,7 +68,7 @@ fun PermissionsContent(
     LazyColumn(contentPadding = paddingValues, modifier = Modifier.fillMaxHeight()) {
         settingsConfig.categories.forEach { category ->
             item {
-                category.title.let { title ->
+                category.title?.let { title ->
                     PreferenceCategoryItem(title = title)
                     SmallVerticalSpacer()
                 }

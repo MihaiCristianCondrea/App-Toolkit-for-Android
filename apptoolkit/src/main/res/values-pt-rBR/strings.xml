@@ -9,7 +9,6 @@
     <string name="welcome">Bem-vindo</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Leia e concorde com nossos Termos de serviço e Política de Privacidade para continuar</string>
     <string name="agree">Concordo</string>
-    <string name="error_loading_consent_info">Falha ao carregar as informações de consentimento</string>
     <string name="loading">Carregando…</string>
 
     <string name="skip_button_text">Pular</string>
@@ -65,20 +64,11 @@
 
     <string name="home">Início</string>
 
-    <string name="activity_not_found">Atividade não encontrada.</string>
-    <string name="security_error">Ocorreu um erro de segurança. Tente novamente mais tarde.</string>
-    <string name="io_error">Ocorreu um erro de entrada/saída. Verifique sua conexão de rede ou armazenamento e tente novamente.</string>
-    <string name="illegal_argument_error">Entrada ou argumento inválido. Verifique as informações e tente novamente.</string>
-    <string name="unknown_error">Ocorreu um erro desconhecido.</string>
-    <string name="initialization_error">Falha na inicialização. Tente novamente mais tarde.</string>
-
     <string name="settings">Configurações</string>
     <string name="long_settings_label">Configurações do aplicativo</string>
     <string name="settings_disabled_message">As configurações estão indisponíveis no momento.</string>
     <string name="settings_placeholder_description">Nenhuma configuração selecionada. Escolha uma opção para ver seus detalhes aqui.</string>
     <string name="get_help">Obter ajuda</string>
-    <string name="error_no_settings_found">Nenhuma configuração encontrada</string>
-    <string name="error_invalid_content_key">Chave de conteúdo inválida.</string>
 
     <string name="display">Tela</string>
     <string name="summary_preference_settings_display">Personalize a aparência e o comportamento do aplicativo</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">Redirecionar para o GitHub</string>
     <string name="snack_report_success">Relatório enviado com sucesso</string>
     <string name="snack_report_failed">Falha ao enviar relatório</string>
-    <string name="error_invalid_report">O título e a descrição não podem estar vazios</string>
     <string name="issue_submitted_successfully">Edição enviada com sucesso</string>
     <string name="open_issue_in_browser">Aberto no navegador</string>
     <string name="open_button_label">Emissão aberta</string>
     <string name="issue_submitted">Seu problema foi enviado.</string>
-    <string name="error_unauthorized">Não autorizado: Token inválido</string>
-    <string name="error_forbidden">Proibido: permissões insuficientes</string>
-    <string name="error_gone">Ponto de extremidade da API removido</string>
-    <string name="error_unprocessable">Dados inválidos para criação de problemas</string>
 
     <string name="error_reporting">Relatar erros</string>
     <string name="bug_report">Relatar bug</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">Limpar cache</string>
     <string name="summary_preference_settings_clear_cache">Limpar os dados temporários do aplicativo.</string>
     <string name="cache_cleared_success">Cache limpo com sucesso</string>
-    <string name="cache_cleared_error">Cache limpo com alguns erros</string>
 
     <string name="security_and_privacy">Segurança e privacidade</string>
     <string name="summary_preference_settings_privacy_and_security">Gerencie suas configurações de privacidade</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">Veja anúncios relevantes para você. Gerencie as informações usadas para mostrar anúncios personalizados com base em sua atividade no aplicativo. Você pode desativar a personalização aqui a qualquer momento.</string>
     <string name="ads_enabled">Anúncios ativados</string>
     <string name="ads_disabled">Anúncios desativados</string>
-    <string name="error_failed_to_load_ads_settings">Falha ao carregar as configurações de anúncios</string>
 
     <string name="usage_and_diagnostics">Uso e diagnósticos</string>
     <string name="summary_preference_settings_usage_and_diagnostics">Compartilhe dados para ajudar a melhorar a experiência no aplicativo</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">Contrato de Licença de Usuário Final</string>
     <string name="changelog_title">Registro de alterações do aplicativo</string>
-    <string name="loading_eula_message">Carregando o Contrato de Licença de Usuário Final…</string>
-    <string name="loading_changelog_message">Carregando registro de alterações do aplicativo…</string>
-    <string name="error_loading_eula_message">Não foi possível carregar o Contrato de Licença de Usuário Final. Tente novamente.</string>
-    <string name="error_loading_changelog_message">Não foi possível carregar o registro de alterações do aplicativo. Tente novamente.</string>
     <string name="no_new_updates_message">Nenhuma nova atualização disponível.</string>
 
     <string name="device_info">Informações do dispositivo</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">Suporte não pago</string>
     <string name="web_ad">Anúncio na web</string>
     <string name="sponsored_ad_label">● Anúncio patrocinado</string>
-    <string name="error_failed_to_load_sku_details">Falha ao carregar os detalhes do SKU</string>
     <string name="purchase_pending">Sua doação está sendo processada pelo Google. Nós o notificaremos quando estiver completo. Obrigado.</string>
     <string name="purchase_thank_you">Obrigado por sua doação.</string>
     <string name="purchase_cancelled">Compra cancelada</string>
-    <string name="error_an_error_occurred">Ocorreu um erro</string>
-    <string name="error_failed_to_launch_review">Falha ao iniciar o fluxo de avaliação</string>
-    <string name="error_failed_to_load_faq">Falha ao carregar as perguntas frequentes</string>
-    <string name="error_failed_to_request_review">Falha ao solicitar avaliação</string>
-    <string name="error_failed_to_update_app">Falha ao atualizar o aplicativo</string>
-    <string name="error_failed_to_load_consent_info">Falha ao carregar as informações de consentimento</string>
 </resources>

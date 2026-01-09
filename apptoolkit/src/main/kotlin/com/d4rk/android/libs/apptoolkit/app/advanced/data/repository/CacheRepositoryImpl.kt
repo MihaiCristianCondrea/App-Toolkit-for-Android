@@ -7,6 +7,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.File
 
+/**
+ * Implementation of the [CacheRepository] interface.
+ * This class handles the logic for clearing the application's cache directories.
+ *
+ * @property context The application context used to access cache directories.
+ */
 class CacheRepositoryImpl(
     private val context: Context,
 ) : CacheRepository {

@@ -9,7 +9,6 @@
     <string name="welcome">خوش آمدید</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">جاری رکھنے کے لیے ہماری سروس کی شرائط اور رازداری کی پالیسی کو پڑھیں اور ان سے اتفاق کریں</string>
     <string name="agree">متفق ہوں</string>
-    <string name="error_loading_consent_info">رضامندی کی معلومات لوڈ کرنے میں ناکام</string>
     <string name="loading">لوڈ ہو رہا ہے…</string>
 
     <string name="skip_button_text">اسکپ کریں</string>
@@ -65,20 +64,11 @@
 
     <string name="home">ہوم</string>
 
-    <string name="activity_not_found">سرگرمی نہیں ملی۔</string>
-    <string name="security_error">ایک سیکیورٹی خرابی پیش آئی۔ براہ کرم بعد میں دوبارہ کوشش کریں۔</string>
-    <string name="io_error">ایک ان پٹ/آؤٹ پٹ خرابی پیش آئی۔ براہ کرم اپنے نیٹ ورک کنکشن یا اسٹوریج کو چیک کریں اور دوبارہ کوشش کریں۔</string>
-    <string name="illegal_argument_error">غلط ان پٹ یا دلیل فراہم کی گئی۔ براہ کرم معلومات کو چیک کریں اور دوبارہ کوشش کریں۔</string>
-    <string name="unknown_error">ایک نامعلوم خرابی پیش آئی۔</string>
-    <string name="initialization_error">شروع کرنے میں ناکامی۔ براہ کرم بعد میں دوبارہ کوشش کریں۔</string>
-
     <string name="settings">ترتیبات</string>
     <string name="long_settings_label">ایپلیکیشن کی ترتیبات</string>
     <string name="settings_disabled_message">ترتیبات فی الحال دستیاب نہیں ہیں۔</string>
     <string name="settings_placeholder_description">کوئی ترتیبات منتخب نہیں ہیں۔ اس کی تفصیلات یہاں دیکھنے کے لیے ایک آپشن منتخب کریں۔</string>
     <string name="get_help">مدد حاصل کریں</string>
-    <string name="error_no_settings_found">کوئی ترتیبات نہیں ملیں</string>
-    <string name="error_invalid_content_key">غلط مواد کی کلید.</string>
 
     <string name="display">ڈسپلے</string>
     <string name="summary_preference_settings_display">اپنی ایپ کی شکل و صورت کو ذاتی بنائیں</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">GitHub پر ری ڈائریکٹ کریں</string>
     <string name="snack_report_success">رپورٹ کامیابی سے بھیج دی گئی</string>
     <string name="snack_report_failed">رپورٹ بھیجنے میں ناکام</string>
-    <string name="error_invalid_report">عنوان اور تفصیل خالی نہیں ہوسکتے</string>
     <string name="issue_submitted_successfully">مسئلہ کامیابی کے ساتھ جمع کرایا گیا</string>
     <string name="open_issue_in_browser">براؤزر میں کھلا</string>
     <string name="open_button_label">کھلا مسئلہ</string>
     <string name="issue_submitted">آپ کا مسئلہ پیش کیا گیا تھا.</string>
-    <string name="error_unauthorized">غیر مجاز: غلط ٹوکن</string>
-    <string name="error_forbidden">ممنوع: ناکافی اجازتیں</string>
-    <string name="error_gone">API اختتامی نقطہ ہٹا دیا گیا</string>
-    <string name="error_unprocessable">جاری کرنے کے لئے غلط ڈیٹا</string>
 
     <string name="error_reporting">خرابی کی اطلاع دینا</string>
     <string name="bug_report">بگ رپورٹ</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">کیشے صاف کریں</string>
     <string name="summary_preference_settings_clear_cache">عارضی ایپلیکیشن ڈیٹا صاف کریں۔</string>
     <string name="cache_cleared_success">کیشے کامیابی سے صاف ہو گیا</string>
-    <string name="cache_cleared_error">کچھ خرابیوں کے ساتھ کیشے صاف ہوا</string>
 
     <string name="security_and_privacy">سیکیورٹی اور رازداری</string>
     <string name="summary_preference_settings_privacy_and_security">اپنی رازداری کی ترتیبات کا نظم کریں</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">وہ اشتہارات دیکھیں جو آپ سے متعلقہ ہوں۔ اپنی ایپ سرگرمی کی بنیاد پر ذاتی نوعیت کے اشتہارات دکھانے کے لیے استعمال ہونے والی معلومات کا نظم کریں۔ آپ یہاں ہمیشہ ذاتی نوعیت کو بند کر سکتے ہیں۔\n</string>
     <string name="ads_enabled">اشتہارات فعال ہیں</string>
     <string name="ads_disabled">اشتہارات غیر فعال ہیں</string>
-    <string name="error_failed_to_load_ads_settings">اشتہارات کی ترتیبات لوڈ کرنے میں ناکام</string>
 
     <string name="usage_and_diagnostics">استعمال اور تشخیص</string>
     <string name="summary_preference_settings_usage_and_diagnostics">ایپ میں تجربے کو بہتر بنانے میں مدد کے لیے ڈیٹا شیئر کریں</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">EULA</string>
     <string name="changelog_title">ایپ چینج لاگ</string>
-    <string name="loading_eula_message">اینڈ یوزر لائسنس ایگریمنٹ حاصل کیا جا رہا ہے…</string>
-    <string name="loading_changelog_message">ایپلیکیشن چینج لاگ حاصل کیا جا رہا ہے…</string>
-    <string name="error_loading_eula_message">اینڈ یوزر لائسنس ایگریمنٹ لوڈ کرنے سے قاصر۔ براہ کرم دوبارہ کوشش کریں۔</string>
-    <string name="error_loading_changelog_message">ایپلیکیشن چینج لاگ لوڈ کرنے سے قاصر۔ براہ کرم دوبارہ کوشش کریں۔</string>
     <string name="no_new_updates_message">کوئی نئی اپ ڈیٹس دستیاب نہیں ہیں۔</string>
 
     <string name="device_info">ڈیوائس کی معلومات</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">بغیر معاوضہ سپورٹ</string>
     <string name="web_ad">ویب اشتہار</string>
     <string name="sponsored_ad_label">● اسپانسر شدہ اشتہار</string>
-    <string name="error_failed_to_load_sku_details">SKU تفصیلات لوڈ کرنے میں ناکام</string>
     <string name="purchase_pending">آپ کے عطیہ پر گوگل کے ذریعہ کارروائی کی جارہی ہے۔ جب یہ مکمل ہوجائے گا تو ہم آپ کو مطلع کریں گے۔ آپ کا شکریہ.</string>
     <string name="purchase_thank_you">آپ کے عطیہ کا شکریہ.</string>
     <string name="purchase_cancelled">خریداری منسوخ</string>
-    <string name="error_an_error_occurred">ایک خرابی پیش آگئی</string>
-    <string name="error_failed_to_launch_review">جائزے کا عمل شروع کرنے میں ناکام</string>
-    <string name="error_failed_to_load_faq">عمومی سوالات لوڈ کرنے میں ناکام</string>
-    <string name="error_failed_to_request_review">جائزے کی درخواست میں ناکام</string>
-    <string name="error_failed_to_update_app">ایپ کو اپ ڈیٹ کرنے میں ناکام</string>
-    <string name="error_failed_to_load_consent_info">رضامندی کی معلومات لوڈ کرنے میں ناکام</string>
 </resources>

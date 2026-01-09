@@ -11,6 +11,7 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.shareApp
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isAppInstalled
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.AppInfoHelper
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -26,14 +27,14 @@ fun buildOnAppClick(
     return remember(appInfoHelper, coroutineScope) {
         { appInfo ->
             coroutineScope.launch {
-                val ctx = currentContext
+                val context = currentContext
                 if (appInfo.packageName.isNotEmpty()) {
-                    if (appInfoHelper.isAppInstalled(ctx, appInfo.packageName)) {
-                        if (!appInfoHelper.openApp(ctx, appInfo.packageName)) {
-                            ctx.openPlayStoreForApp(appInfo.packageName)
+                    if (context.isAppInstalled(appInfo.packageName)) {
+                        if (!appInfoHelper.openApp(context, appInfo.packageName)) {
+                            context.openPlayStoreForApp(appInfo.packageName)
                         }
                     } else {
-                        ctx.openPlayStoreForApp(appInfo.packageName)
+                        context.openPlayStoreForApp(appInfo.packageName)
                     }
                 }
             }

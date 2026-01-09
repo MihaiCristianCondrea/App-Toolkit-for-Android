@@ -11,7 +11,9 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -39,12 +41,26 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * ViewModel for the Apps List screen.
+ *
+ * This ViewModel is responsible for fetching and managing the list of developer applications,
+ * handling user interactions such as fetching apps, opening a random app, and toggling favorites.
+ * It observes changes in favorite apps and updates the UI state accordingly.
+ *
+ * @param fetchDeveloperAppsUseCase Use case to fetch the list of applications.
+ * @param observeFavoritesUseCase Use case to observe the set of favorite app package names.
+ * @param toggleFavoriteUseCase Use case to add or remove an app from favorites.
+ * @param dispatchers Provides coroutine dispatchers for different contexts (IO, Main, etc.).
+ * @param firebaseController Reports ViewModel flow failures to Firebase.
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppsListViewModel(
     private val fetchDeveloperAppsUseCase: FetchDeveloperAppsUseCase,
     observeFavoritesUseCase: ObserveFavoritesUseCase,
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<AppListUiState, HomeEvent, HomeAction>(
     initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = AppListUiState())
 ) {
@@ -92,17 +108,20 @@ class AppsListViewModel(
                         .flowOn(dispatchers.io)
                         .onStart { screenState.setLoading() }
                 }
-                .catch { t ->
-                    if (t is CancellationException) throw t
+                .catch { throwable ->
+                    if (throwable is CancellationException) throw throwable
+                    firebaseController.reportViewModelError(
+                        viewModelName = "AppsListViewModel",
+                        action = "observeFetch",
+                        throwable = throwable,
+                    )
                     showLoadAppsError()
                 }
                 .collect { result ->
-                    when (result) {
-                        is DataState.Loading -> screenState.updateState(ScreenState.IsLoading())
-
-                        is DataState.Success -> {
-                            val apps = result.data.toImmutableList()
-                            if (apps.isEmpty()) {
+                    result
+                        .onSuccess { apps ->
+                            val data = apps.toImmutableList()
+                            if (data.isEmpty()) {
                                 screenState.update { current ->
                                     current.copy(
                                         screenState = ScreenState.NoData(),
@@ -111,13 +130,11 @@ class AppsListViewModel(
                                 }
                             } else {
                                 screenState.updateData(newState = ScreenState.Success()) { current ->
-                                    current.copy(apps = apps)
+                                    current.copy(apps = data)
                                 }
                             }
                         }
-
-                        is DataState.Error -> showLoadAppsError(result.error)
-                    }
+                        .onFailure(::showLoadAppsError)
                 }
         }
     }
@@ -138,9 +155,9 @@ class AppsListViewModel(
     fun toggleFavorite(packageName: String) {
         toggleJob?.cancel()
         toggleJob = viewModelScope.launch {
-            runCatching {
+            try {
                 withContext(dispatchers.io) { toggleFavoriteUseCase(packageName) }
-            }.onFailure { t ->
+            } catch (t: Throwable) {
                 if (t is CancellationException) throw t
                 screenState.updateState(ScreenState.Error())
             }

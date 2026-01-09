@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Nie udało się załadować informacji o zgodzie</string>
+
+    <string name="activity_not_found">Nie znaleziono aktywności.</string>
+
+    <string name="security_error">Wystąpił błąd zabezpieczeń. Spróbuj ponownie później.</string>
+    <string name="io_error">Wystąpił błąd wejścia/wyjścia. Sprawdź połączenie sieciowe lub pamięć i spróbuj ponownie.</string>
+    <string name="illegal_argument_error">Podano nieprawidłowe dane wejściowe lub argument. Sprawdź informacje i spróbuj ponownie.</string>
+    <string name="unknown_error">Wystąpił nieznany błąd.</string>
+    <string name="initialization_error">Inicjalizacja nie powiodła się. Spróbuj ponownie później.</string>
+
+    <string name="error_no_settings_found">Nie znaleziono ustawień</string>
+    <string name="error_invalid_content_key">Nieprawidłowy klucz treści.</string>
+
+    <string name="error_unauthorized">Brak autoryzacji: nieprawidłowy token</string>
+    <string name="error_forbidden">Zabronione: niewystarczające uprawnienia</string>
+    <string name="error_gone">Punkt końcowy API został usunięty</string>
+    <string name="error_unprocessable">Nieprawidłowe dane do utworzenia zgłoszenia</string>
+    <string name="error_invalid_report">Tytuł i opis nie mogą być puste</string>
+
+    <string name="error_failed_to_load_ads_settings">Nie udało się załadować ustawień reklam</string>
+
+    <string name="cache_cleared_error">Pamięć podręczna została wyczyszczona z pewnymi błędami</string>
+
+    <string name="loading_eula_message">Pobieranie Umowy Licencyjnej Użytkownika Końcowego…</string>
+    <string name="loading_changelog_message">Pobieranie dziennika zmian aplikacji…</string>
+    <string name="error_loading_eula_message">Nie można załadować Umowy Licencyjnej Użytkownika Końcowego. Spróbuj ponownie.</string>
+    <string name="error_loading_changelog_message">Nie można załadować dziennika zmian aplikacji. Spróbuj ponownie.</string>
+
+    <string name="error_failed_to_load_sku_details">Nie udało się załadować szczegółów SKU</string>
+
+    <string name="no_internet_error">Brak połączenia z internetem.</string>
+    <string name="connection_error">Błąd sieci. Spróbuj ponownie.</string>
+    <string name="connection_closed_error">Połączenie zostało przerwane.</string>
+    <string name="request_timeout_error">Przekroczono limit czasu żądania. Spróbuj ponownie.</string>
+    <string name="ssl_error">Nie udało się nawiązać bezpiecznego połączenia.</string>
+
+    <string name="http_redirect_error">Nieoczekiwane przekierowanie z serwera.</string>
+    <string name="http_client_error">Żądanie nie powiodło się. Spróbuj ponownie.</string>
+    <string name="http_server_error">Błąd serwera. Spróbuj ponownie później.</string>
+    <string name="rate_limited_error">Zbyt wiele żądań. Spróbuj ponownie później.</string>
+
+    <string name="serialization_error">Nie udało się odczytać odpowiedzi serwera.</string>
+
+    <string name="no_data_error">Brak dostępnych danych.</string>
+    <string name="invalid_state_error">Operacja nie jest obecnie dozwolona.</string>
+    <string name="unsupported_operation_error">Nieobsługiwana operacja.</string>
+    <string name="cancelled_error">Operacja anulowana.</string>
+
+    <string name="database_error">Błąd pamięci.</string>
+    <string name="database_locked_error">Pamięć jest zajęta. Spróbuj ponownie.</string>
+    <string name="database_constraint_error">Błąd ograniczeń pamięci.</string>
+    <string name="database_cant_open_error">Nie można otworzyć pamięci.</string>
+    <string name="database_corrupt_error">Pamięć jest uszkodzona.</string>
+    <string name="database_full_error">Pamięć jest pełna.</string>
+
+    <string name="error_an_error_occurred">Wystąpił błąd</string>
+    <string name="error_failed_to_launch_review">Nie udało się uruchomić procesu recenzji</string>
+    <string name="error_failed_to_load_faq">Nie udało się załadować FAQ</string>
+    <string name="error_failed_to_request_review">Nie udało się poprosić o recenzję</string>
+    <string name="error_failed_to_update_app">Nie udało się zaktualizować aplikacji</string>
+    <string name="error_failed_to_load_consent_info">Nie udało się załadować informacji o zgodzie</string>
+    <string name="error_failed_to_load_navigation">Nie udało się wczytać nawigacji</string>
+</resources>

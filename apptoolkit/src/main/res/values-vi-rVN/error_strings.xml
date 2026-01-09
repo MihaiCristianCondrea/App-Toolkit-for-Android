@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Không thể tải thông tin chấp thuận</string>
+
+    <string name="activity_not_found">Không tìm thấy hoạt động.</string>
+
+    <string name="security_error">Đã xảy ra lỗi bảo mật. Vui lòng thử lại sau.</string>
+    <string name="io_error">Đã xảy ra lỗi vào/ra. Vui lòng kiểm tra kết nối mạng hoặc bộ nhớ và thử lại.</string>
+    <string name="illegal_argument_error">Đã cung cấp dữ liệu hoặc đối số không hợp lệ. Vui lòng kiểm tra thông tin và thử lại.</string>
+    <string name="unknown_error">Đã xảy ra lỗi không xác định.</string>
+    <string name="initialization_error">Khởi tạo thất bại. Vui lòng thử lại sau.</string>
+
+    <string name="error_no_settings_found">Không tìm thấy cài đặt</string>
+    <string name="error_invalid_content_key">Khóa nội dung không hợp lệ.</string>
+
+    <string name="error_unauthorized">Không được ủy quyền: mã thông báo không hợp lệ</string>
+    <string name="error_forbidden">Bị cấm: không đủ quyền</string>
+    <string name="error_gone">Điểm cuối API đã bị xóa</string>
+    <string name="error_unprocessable">Dữ liệu không hợp lệ để tạo vấn đề</string>
+    <string name="error_invalid_report">Tiêu đề và mô tả không được để trống</string>
+
+    <string name="error_failed_to_load_ads_settings">Không thể tải cài đặt quảng cáo</string>
+
+    <string name="cache_cleared_error">Bộ nhớ đệm đã được xóa nhưng có một số lỗi</string>
+
+    <string name="loading_eula_message">Đang lấy Thỏa thuận cấp phép người dùng cuối…</string>
+    <string name="loading_changelog_message">Đang lấy nhật ký thay đổi của ứng dụng…</string>
+    <string name="error_loading_eula_message">Không thể tải Thỏa thuận cấp phép người dùng cuối. Vui lòng thử lại.</string>
+    <string name="error_loading_changelog_message">Không thể tải nhật ký thay đổi của ứng dụng. Vui lòng thử lại.</string>
+
+    <string name="error_failed_to_load_sku_details">Không thể tải chi tiết SKU</string>
+
+    <string name="no_internet_error">Không có kết nối internet.</string>
+    <string name="connection_error">Lỗi mạng. Vui lòng thử lại.</string>
+    <string name="connection_closed_error">Kết nối đã bị gián đoạn.</string>
+    <string name="request_timeout_error">Yêu cầu đã hết thời gian chờ. Thử lại.</string>
+    <string name="ssl_error">Kết nối bảo mật thất bại.</string>
+
+    <string name="http_redirect_error">Chuyển hướng không mong muốn từ máy chủ.</string>
+    <string name="http_client_error">Yêu cầu thất bại. Vui lòng thử lại.</string>
+    <string name="http_server_error">Lỗi máy chủ. Vui lòng thử lại sau.</string>
+    <string name="rate_limited_error">Quá nhiều yêu cầu. Thử lại sau.</string>
+
+    <string name="serialization_error">Không thể đọc phản hồi từ máy chủ.</string>
+
+    <string name="no_data_error">Không có dữ liệu.</string>
+    <string name="invalid_state_error">Hiện không cho phép thực hiện thao tác.</string>
+    <string name="unsupported_operation_error">Thao tác không được hỗ trợ.</string>
+    <string name="cancelled_error">Thao tác đã bị hủy.</string>
+
+    <string name="database_error">Lỗi lưu trữ.</string>
+    <string name="database_locked_error">Bộ nhớ đang bận. Thử lại.</string>
+    <string name="database_constraint_error">Lỗi ràng buộc lưu trữ.</string>
+    <string name="database_cant_open_error">Không thể mở bộ nhớ.</string>
+    <string name="database_corrupt_error">Bộ nhớ đã bị hỏng.</string>
+    <string name="database_full_error">Bộ nhớ đã đầy.</string>
+
+    <string name="error_an_error_occurred">Đã xảy ra lỗi</string>
+    <string name="error_failed_to_launch_review">Không thể khởi chạy quy trình đánh giá</string>
+    <string name="error_failed_to_load_faq">Không thể tải câu hỏi thường gặp</string>
+    <string name="error_failed_to_request_review">Không thể yêu cầu đánh giá</string>
+    <string name="error_failed_to_update_app">Không thể cập nhật ứng dụng</string>
+    <string name="error_failed_to_load_consent_info">Không thể tải thông tin chấp thuận</string>
+    <string name="error_failed_to_load_navigation">Không tải được điều hướng</string>
+</resources>

@@ -9,7 +9,6 @@
     <string name="welcome">स्वागत है</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">जारी रखने के लिए हमारी सेवा की शर्तें और गोपनीयता नीति पढ़ें और सहमति दें</string>
     <string name="agree">सहमत</string>
-    <string name="error_loading_consent_info">सहमति जानकारी लोड करने में विफल</string>
     <string name="loading">लोड हो रहा है…</string>
 
     <string name="skip_button_text">छोड़ें</string>
@@ -65,20 +64,11 @@
 
     <string name="home">होम</string>
 
-    <string name="activity_not_found">गतिविधि नहीं मिली।</string>
-    <string name="security_error">सुरक्षा त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।</string>
-    <string name="io_error">इनपुट/आउटपुट त्रुटि हुई। कृपया अपने नेटवर्क कनेक्शन या स्टोरेज की जाँच करें और पुनः प्रयास करें।</string>
-    <string name="illegal_argument_error">अमान्य इनपुट या तर्क दिया गया है। कृपया जानकारी की जाँच करें और पुनः प्रयास करें।</string>
-    <string name="unknown_error">एक अज्ञात त्रुटि हुई।</string>
-    <string name="initialization_error">प्रारंभिककरण विफल रहा। कृपया बाद में पुनः प्रयास करें।</string>
-
     <string name="settings">सेटिंग्स</string>
     <string name="long_settings_label">एप्लिकेशन सेटिंग्स</string>
     <string name="settings_disabled_message">सेटिंग्स अभी उपलब्ध नहीं हैं।</string>
     <string name="settings_placeholder_description">कोई सेटिंग्स चयनित नहीं। विवरण देखने के लिए एक विकल्प चुनें।</string>
     <string name="get_help">मदद प्राप्त करें</string>
-    <string name="error_no_settings_found">कोई सेटिंग नहीं मिली</string>
-    <string name="error_invalid_content_key">अमान्य सामग्री कुंजी.</string>
 
     <string name="display">डिस्प्ले</string>
     <string name="summary_preference_settings_display">अपने ऐप के लुक और अनुभव को वैयक्तिकृत करें</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">GitHub पर रीडायरेक्ट करें</string>
     <string name="snack_report_success">रिपोर्ट सफलतापूर्वक भेजी गई</string>
     <string name="snack_report_failed">रिपोर्ट भेजने में विफल</string>
-    <string name="error_invalid_report">शीर्षक और विवरण खाली नहीं हो सकते</string>
     <string name="issue_submitted_successfully">मुद्दा सफलतापूर्वक प्रस्तुत किया गया</string>
     <string name="open_issue_in_browser">ब्राउज़र में खोलें</string>
     <string name="open_button_label">मुद्दा खोलें</string>
     <string name="issue_submitted">आपका मुद्दा प्रस्तुत किया गया था.</string>
-    <string name="error_unauthorized">अनधिकृत: अमान्य टोकन</string>
-    <string name="error_forbidden">निषिद्ध: अपर्याप्त अनुमतियाँ</string>
-    <string name="error_gone">एपीआई समापन बिंदु हटा दिया गया</string>
-    <string name="error_unprocessable">मुद्दा निर्माण के लिए अमान्य डेटा</string>
 
     <string name="error_reporting">त्रुटि रिपोर्टिंग</string>
     <string name="bug_report">बग रिपोर्ट</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">कैश साफ़ करें</string>
     <string name="summary_preference_settings_clear_cache">अस्थायी एप्लिकेशन डेटा साफ़ करें.</string>
     <string name="cache_cleared_success">कैश सफलतापूर्वक साफ़ किया गया</string>
-    <string name="cache_cleared_error">कुछ त्रुटियों के साथ कैश साफ़ किया गया</string>
 
     <string name="security_and_privacy">सुरक्षा और गोपनीयता</string>
     <string name="summary_preference_settings_privacy_and_security">अपनी गोपनीयता सेटिंग्स का प्रबंधन करें</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">आपके लिए प्रासंगिक विज्ञापन देखें। आप यहाँ विज्ञापन वैयक्तिकरण को हमेशा बंद कर सकते हैं।</string>
     <string name="ads_enabled">विज्ञापन सक्षम हैं</string>
     <string name="ads_disabled">विज्ञापन अक्षम हैं</string>
-    <string name="error_failed_to_load_ads_settings">विज्ञापन सेटिंग्स लोड करने में विफल</string>
 
     <string name="usage_and_diagnostics">उपयोग और निदान</string>
     <string name="summary_preference_settings_usage_and_diagnostics">ऐप अनुभव को बेहतर बनाने में मदद के लिए डेटा साझा करें</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">अंतिम उपयोगकर्ता लाइसेंस समझौता</string>
     <string name="changelog_title">ऐप चेंजलॉग</string>
-    <string name="loading_eula_message">एंड यूज़र लाइसेंस एग्रीमेंट प्राप्त किया जा रहा है…</string>
-    <string name="loading_changelog_message">एप्लिकेशन चेंजलॉग प्राप्त किया जा रहा है…</string>
-    <string name="error_loading_eula_message">एंड यूज़र लाइसेंस एग्रीमेंट लोड करने में असमर्थ। कृपया पुनः प्रयास करें।</string>
-    <string name="error_loading_changelog_message">एप्लिकेशन चेंजलॉग लोड करने में असमर्थ। कृपया पुनः प्रयास करें।</string>
     <string name="no_new_updates_message">कोई नया अपडेट उपलब्ध नहीं है।</string>
 
     <string name="device_info">डिवाइस जानकारी</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">गैर-भुगतान समर्थन</string>
     <string name="web_ad">वेब विज्ञापन</string>
     <string name="sponsored_ad_label">● प्रायोजित विज्ञापन</string>
-    <string name="error_failed_to_load_sku_details">SKU विवरण लोड करने में विफल</string>
     <string name="purchase_pending">आपका दान Google द्वारा संसाधित किया जा रहा है। जब यह पूरा हो जाएगा तो हम आपको सूचित करेंगे। धन्यवाद.</string>
     <string name="purchase_thank_you">आपके दान के लिए शुक्रिया.</string>
     <string name="purchase_cancelled">रद्द कर दिया गया</string>
-    <string name="error_an_error_occurred">कोई त्रुटि हुई</string>
-    <string name="error_failed_to_launch_review">समीक्षा प्रवाह लॉन्च करने में विफल</string>
-    <string name="error_failed_to_load_faq">सामान्य प्रश्न लोड करने में विफल</string>
-    <string name="error_failed_to_request_review">समीक्षा का अनुरोध करने में विफल</string>
-    <string name="error_failed_to_update_app">ऐप अपडेट करने में विफल</string>
-    <string name="error_failed_to_load_consent_info">सहमति जानकारी लोड करने में विफल</string>
 </resources>

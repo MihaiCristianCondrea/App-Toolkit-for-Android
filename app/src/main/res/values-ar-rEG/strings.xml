@@ -3,45 +3,46 @@
 
     <!-- Onboarding -->
     <string name="onboarding_welcome_title">مرحبًا بك في App Toolkit</string>
-    <string name="onboarding_welcome_description">استكشف إمكانيات مكتبة AppToolkit الخاصة بنا. اكتشف تطبيقاتنا، التي تم إنشاؤها جميعًا لعرض واستخدام قوة مكتبة AppToolkit الخاصة بنا، مما يعزز تطوير Android وتجربة المستخدم.</string>
-    <string name="onboarding_feature1_title">اكتشف تطبيقاتنا</string>
-    <string name="onboarding_feature1_description">يقدم لك App Toolkit مجموعة مختارة من تطبيقاتنا، تم تصميم كل منها لتسليط الضوء على جوانب مختلفة من مكتبة AppToolkit الخاصة بنا وتعزيز تجربتك على Android. شاهد ما هو ممكن مع مكتبة AppToolkit الخاصة بنا.</string>
-    <string name="onboarding_personalization_title">شاهد مكتبة AppToolkit الخاصة بنا وهي تعمل</string>
-    <string name="onboarding_personalization_description">يوضح هذا التطبيق كيف يمكن استخدام مكتبة AppToolkit الخاصة بنا لبناء تطبيقات متعددة الاستخدامات ومركزة على المستخدم. استكشف تطبيقاتنا للاطلاع على الميزات والتطبيقات المختلفة للمكتبة.</string>
+    <string name="onboarding_welcome_description">استكشف إمكانات مكتبة AppToolkit. اكتشف تطبيقات صُممت لعرض قوة المكتبة وتعزيز تطوير Android وتجربة المستخدم.</string>
+    <string name="onboarding_feature1_title">اكتشف التطبيقات</string>
+    <string name="onboarding_feature1_description">يوفر App Toolkit مجموعة من التطبيقات، صُمم كل منها لإبراز جوانب مختلفة من مكتبة AppToolkit وتحسين تجربتك على Android. شاهد ما يمكن تحقيقه باستخدام مكتبة AppToolkit.</string>
+    <string name="onboarding_personalization_title">شاهد مكتبة AppToolkit قيد الاستخدام</string>
+    <string name="onboarding_personalization_description">يوضح هذا التطبيق كيف تُنشئ مكتبة AppToolkit تطبيقات مرنة ومتمحورة حول المستخدم. استكشف تطبيقات العينات لرؤية ميزات وتنفيذات مختلفة للمكتبة.</string>
 
     <!-- Home screen -->
-    <string name="all_apps">ﺕﺎﻘﻴﺒﻄﺘﻟﺍ ﻊﻴﻤﺟ</string>
-    <string name="favorite_apps">ﺔﻠﻀﻔﻤﻟﺍ</string>
-    <string name="no_apps_added_to_favorites">ﻻ توجد تطبيقات مضافة إلى المفضلة</string>
-    <string name="error_failed_to_fetch_our_apps">فشل في جلب قوائم تطبيقاتنا</string>
-    <string name="error_failed_to_load_apps">فشل تحميل التطبيقات</string>
-    <string name="error_failed_to_update_favorite">فشل تحديث المفضلة</string>
-    <string name="open_random_app">افتح التطبيق العشوائي</string>
+    <string name="all_apps">جميع التطبيقات</string>
+    <string name="favorite_apps">المفضلة</string>
+    <string name="no_apps_added_to_favorites">لا توجد تطبيقات في المفضلة</string>
+    <string name="error_failed_to_fetch_our_apps">تعذر تحميل قوائم التطبيقات</string>
+    <string name="error_failed_to_load_apps">تعذر تحميل التطبيقات</string>
+    <string name="error_failed_to_update_favorite">تعذر تحديث المفضلة</string>
+    <string name="error_failed_to_load_navigation">تعذر تحميل التنقل</string>
+    <string name="open_random_app">فتح تطبيق عشوائي</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">مشاركة التطبيق</string>
-    <string name="app_details_view_on_play_store">عرض في Google Play</string>
+    <string name="app_details_view_on_play_store">عرض على Google Play</string>
     <string name="app_details_about_title">حول هذا التطبيق</string>
     <string name="app_details_screenshots_title">لقطات الشاشة</string>
     <string name="app_details_open_app">فتح التطبيق</string>
 
     <!-- Help screen -->
     <string name="question_1">ما هو App Toolkit؟</string>
-    <string name="summary_preference_faq_1">App Toolkit هو تطبيق مصمم لعرض وتقديم التطبيقات التي قمنا بتطويرها باستخدام مكتبة AppToolkit الخاصة بنا. إنه دليلك لاستكشاف نظامنا البيئي للتطبيقات ورؤية مكتبة AppToolkit الخاصة بنا وهي تعمل.</string>
-    <string name="question_2">كيف يمكنني الوصول إلى التطبيقات المختلفة المعروضة في App Toolkit؟</string>
-    <string name="summary_preference_faq_2">يسرد App Toolkit تطبيقاتنا المختلفة. يؤدي النقر على قائمة التطبيقات عادةً إلى توفير المزيد من المعلومات ورابط لتثبيتها أو فتحها من متجر Google Play، مما يتيح لك تجربتها بشكل مباشر.</string>
-    <string name="question_3">هل التطبيقات المميزة في App Toolkit مجانية؟</string>
-    <string name="summary_preference_faq_3">تقدم العديد من تطبيقاتنا المميزة في App Toolkit مجموعة أساسية من الميزات مجانًا. قد تحتوي بعضها على وظائف متقدمة متاحة من خلال إصدار متميز أو عمليات شراء داخل التطبيق. يمكن العثور على تفاصيل كل تطبيق في صفحته الخاصة في متجر Play.</string>
-    <string name="question_4">كيف يمكنني معرفة المزيد عن تطبيق معين مدرج؟</string>
-    <string name="summary_preference_faq_4">للحصول على تفاصيل كاملة حول أحد تطبيقاتنا وميزاته ومراجعات المستخدمين، يرجى النقر على التطبيق في App Toolkit لزيارة صفحته في متجر Google Play.</string>
-    <string name="question_5">أين يمكنني العثور على مساعدة أو دعم لأحد تطبيقاتكم المدرجة؟</string>
-    <string name="summary_preference_faq_5">يتم توفير الدعم لتطبيقاتنا الفردية من خلال قنواتها الخاصة، والتي عادة ما تكون مفصلة في صفحة متجر Play الخاصة بها أو داخل التطبيق نفسه. App Toolkit مخصص لاكتشاف هذه التطبيقات؛ للمشكلات الخاصة بالتطبيق، يرجى الرجوع إلى خيارات الدعم الخاصة بهذا التطبيق.</string>
-    <string name="question_6">كم مرة يتم تحديث قائمة تطبيقاتكم في App Toolkit؟</string>
-    <string name="summary_preference_faq_6">نسعى جاهدين للحفاظ على تحديث App Toolkit بأحدث تطبيقاتنا وأكثرها صلة والتي تستخدم مكتبة AppToolkit الخاصة بنا. قد يتم عرض التطبيقات الجديدة أو التحديثات الهامة هنا.</string>
+    <string name="summary_preference_faq_1">App Toolkit هو تطبيق صُمم لعرض وإظهار التطبيقات المبنية بمكتبة AppToolkit. إنه دليلك لاستكشاف هذا النظام البيئي ورؤية مكتبة AppToolkit قيد الاستخدام.</string>
+    <string name="question_2">كيف أصل إلى التطبيقات المختلفة المعروضة في App Toolkit؟</string>
+    <string name="summary_preference_faq_2">يعرض App Toolkit تطبيقات متنوعة. عند النقر على تطبيق، ستحصل عادةً على مزيد من المعلومات ورابط لتثبيته أو فتحه من Google Play Store لتجربته مباشرةً.</string>
+    <string name="question_3">هل التطبيقات المعروضة في App Toolkit مجانية؟</string>
+    <string name="summary_preference_faq_3">العديد من التطبيقات المعروضة في App Toolkit توفر مجموعة أساسية من الميزات مجانًا. قد تتوفر ميزات متقدمة عبر نسخة مميزة أو عمليات شراء داخل التطبيق. يمكن العثور على تفاصيل كل تطبيق في صفحته على Google Play Store.</string>
+    <string name="question_4">كيف يمكنني معرفة المزيد عن تطبيق محدد في القائمة؟</string>
+    <string name="summary_preference_faq_4">للحصول على تفاصيل كاملة حول تطبيق وميزاته ومراجعات المستخدمين، انقر على التطبيق داخل App Toolkit لزيارة صفحته على Google Play Store.</string>
+    <string name="question_5">أين يمكنني العثور على المساعدة أو الدعم لتطبيق من التطبيقات المدرجة؟</string>
+    <string name="summary_preference_faq_5">لكل تطبيق قنوات دعم خاصة به، وغالبًا ما تكون موضحة في صفحته على Google Play Store أو داخل التطبيق نفسه. App Toolkit مخصص لاكتشاف هذه التطبيقات؛ وللمشكلات الخاصة بالتطبيق، استخدم خيارات دعم ذلك التطبيق.</string>
+    <string name="question_6">كم مرة يتم تحديث قائمة التطبيقات في App Toolkit؟</string>
+    <string name="summary_preference_faq_6">يتم تحديث App Toolkit بانتظام حتى ترى دائمًا أحدث التطبيقات التي تستخدم مكتبة AppToolkit. قد تظهر تطبيقات جديدة أو تحديثات مهمة هنا.</string>
     <string name="question_7">لماذا يحتاج App Toolkit إلى أذونات مثل الوصول إلى الإنترنت؟</string>
-    <string name="summary_preference_faq_7">يتطلب App Toolkit الوصول إلى الإنترنت لجلب أحدث قائمة بتطبيقاتنا من متجر Google Play وعرض معلوماتها بدقة. لا يتطلب عادةً أذونات أخرى متطفلة.</string>
-    <string name="question_8">كيف يمكنني تقديم ملاحظات حول App Toolkit أو تطبيقاتكم؟</string>
-    <string name="summary_preference_faq_8">نحن نقدر ملاحظاتك حول App Toolkit وتطبيقاتنا الفردية. يمكنك عادةً العثور على خيار "ملاحظات" أو "اتصل بنا" ضمن إعدادات App Toolkit أو في صفحة المطور الخاصة بنا على متجر Play. نرحب أيضًا بالملاحظات حول مكتبة AppToolkit نفسها من خلال القنوات المناسبة.</string>
-    <string name="question_9">هل بياناتي آمنة عند استخدام App Toolkit للعثور على تطبيقاتكم الأخرى؟</string>
-    <string name="summary_preference_faq_9">يقوم App Toolkit بجمع المعلومات المتاحة للجمهور حول تطبيقاتنا بشكل أساسي. عندما تختار تثبيت أو استخدام أحد تطبيقاتنا المدرجة، سيتم تطبيق سياسة الخصوصية الخاصة بهذا التطبيق. نشجعك على مراجعتها. يتم تحديد معالجة البيانات بواسطة App Toolkit في سياسة الخصوصية الخاصة بنا.</string>
+    <string name="summary_preference_faq_7">لعرض أحدث قائمة بالتطبيقات، يستخدم App Toolkit الوصول إلى الإنترنت لجلب المعلومات من Google Play Store وعرضها بدقة. عادةً لا يحتاج إلى أذونات أخرى متطفلة.</string>
+    <string name="question_8">كيف يمكنني إرسال ملاحظات حول App Toolkit أو التطبيقات؟</string>
+    <string name="summary_preference_faq_8">نُقدّر ملاحظاتك حول App Toolkit والتطبيقات المدرجة. يمكنك عادةً العثور على خيار "ملاحظات" أو "اتصال" في إعدادات App Toolkit أو على صفحة المطور في Google Play Store. كما نرحب بالملاحظات حول مكتبة AppToolkit عبر القنوات المناسبة.</string>
+    <string name="question_9">هل بياناتي آمنة عند استخدام App Toolkit للعثور على تطبيقات أخرى؟</string>
+    <string name="summary_preference_faq_9">يجلب App Toolkit في الغالب معلومات متاحة علنًا حول التطبيقات المدرجة. عندما تختار تثبيت أحد هذه التطبيقات أو استخدامه، تسري سياسة الخصوصية الخاصة به؛ لذا يُرجى مراجعتها. يرد شرح معالجة بيانات App Toolkit في سياسة الخصوصية الخاصة به.</string>
 </resources>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">सहमति की जानकारी लोड करने में विफल</string>
+
+    <string name="activity_not_found">गतिविधि नहीं मिली।</string>
+
+    <string name="security_error">एक सुरक्षा त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।</string>
+    <string name="io_error">इनपुट/आउटपुट त्रुटि हुई। कृपया अपनी नेटवर्क कनेक्शन या स्टोरेज की जाँच करें और पुनः प्रयास करें।</string>
+    <string name="illegal_argument_error">अमान्य इनपुट या आर्ग्युमेंट प्रदान किया गया। कृपया जानकारी की जाँच करें और पुनः प्रयास करें।</string>
+    <string name="unknown_error">एक अज्ञात त्रुटि हुई।</string>
+    <string name="initialization_error">प्रारंभिककरण विफल रहा। कृपया बाद में पुनः प्रयास करें।</string>
+
+    <string name="error_no_settings_found">कोई सेटिंग्स नहीं मिलीं</string>
+    <string name="error_invalid_content_key">अमान्य सामग्री कुंजी।</string>
+
+    <string name="error_unauthorized">अनधिकृत: अमान्य टोकन</string>
+    <string name="error_forbidden">निषिद्ध: अपर्याप्त अनुमतियाँ</string>
+    <string name="error_gone">API एंडपॉइंट हटा दिया गया</string>
+    <string name="error_unprocessable">इश्यू बनाने के लिए अमान्य डेटा</string>
+    <string name="error_invalid_report">शीर्षक और विवरण खाली नहीं हो सकते</string>
+
+    <string name="error_failed_to_load_ads_settings">विज्ञापन सेटिंग्स लोड करने में विफल</string>
+
+    <string name="cache_cleared_error">कुछ त्रुटियों के साथ कैश साफ़ किया गया</string>
+
+    <string name="loading_eula_message">एंड यूज़र लाइसेंस एग्रीमेंट प्राप्त किया जा रहा है…</string>
+    <string name="loading_changelog_message">एप्लिकेशन चेंजलॉग प्राप्त किया जा रहा है…</string>
+    <string name="error_loading_eula_message">एंड यूज़र लाइसेंस एग्रीमेंट लोड करने में असमर्थ। कृपया पुनः प्रयास करें।</string>
+    <string name="error_loading_changelog_message">एप्लिकेशन चेंजलॉग लोड करने में असमर्थ। कृपया पुनः प्रयास करें।</string>
+
+    <string name="error_failed_to_load_sku_details">SKU विवरण लोड करने में विफल</string>
+
+    <string name="no_internet_error">कोई इंटरनेट कनेक्शन नहीं है।</string>
+    <string name="connection_error">नेटवर्क त्रुटि। कृपया पुनः प्रयास करें।</string>
+    <string name="connection_closed_error">कनेक्शन बाधित हो गया।</string>
+    <string name="request_timeout_error">अनुरोध का समय समाप्त हो गया। पुनः प्रयास करें।</string>
+    <string name="ssl_error">सुरक्षित कनेक्शन विफल रहा।</string>
+
+    <string name="http_redirect_error">सर्वर से अप्रत्याशित रीडायरेक्ट।</string>
+    <string name="http_client_error">अनुरोध विफल रहा। कृपया पुनः प्रयास करें।</string>
+    <string name="http_server_error">सर्वर त्रुटि। कृपया बाद में पुनः प्रयास करें।</string>
+    <string name="rate_limited_error">बहुत अधिक अनुरोध। बाद में पुनः प्रयास करें।</string>
+
+    <string name="serialization_error">सर्वर प्रतिक्रिया पढ़ने में विफल।</string>
+
+    <string name="no_data_error">कोई डेटा उपलब्ध नहीं है।</string>
+    <string name="invalid_state_error">इस समय ऑपरेशन की अनुमति नहीं है।</string>
+    <string name="unsupported_operation_error">असमर्थित ऑपरेशन।</string>
+    <string name="cancelled_error">ऑपरेशन रद्द किया गया।</string>
+
+    <string name="database_error">स्टोरेज त्रुटि।</string>
+    <string name="database_locked_error">स्टोरेज व्यस्त है। पुनः प्रयास करें।</string>
+    <string name="database_constraint_error">स्टोरेज बाधा त्रुटि।</string>
+    <string name="database_cant_open_error">स्टोरेज खोलने में असमर्थ।</string>
+    <string name="database_corrupt_error">स्टोरेज दूषित है।</string>
+    <string name="database_full_error">स्टोरेज भरा हुआ है।</string>
+
+    <string name="error_an_error_occurred">एक त्रुटि हुई</string>
+    <string name="error_failed_to_launch_review">रिव्यू फ़्लो शुरू करने में विफल</string>
+    <string name="error_failed_to_load_faq">FAQ लोड करने में विफल</string>
+    <string name="error_failed_to_request_review">रिव्यू का अनुरोध करने में विफल</string>
+    <string name="error_failed_to_update_app">ऐप अपडेट करने में विफल</string>
+    <string name="error_failed_to_load_consent_info">सहमति की जानकारी लोड करने में विफल</string>
+    <string name="error_failed_to_load_navigation">नेविगेशन लोड नहीं हो सका</string>
+</resources>

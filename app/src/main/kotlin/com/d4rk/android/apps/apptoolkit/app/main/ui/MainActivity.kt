@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
 import com.d4rk.android.libs.apptoolkit.app.main.utils.InAppUpdateHelper
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
-import com.d4rk.android.libs.apptoolkit.app.theme.style.AppTheme
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentFormHelper

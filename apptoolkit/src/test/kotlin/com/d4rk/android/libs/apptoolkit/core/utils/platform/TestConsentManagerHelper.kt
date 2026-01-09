@@ -1,17 +1,10 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.platform
 
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
-import com.google.firebase.Firebase
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.analytics
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.perf.FirebasePerformance
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
 import io.mockk.every
-import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.mockkObject
-import io.mockk.mockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
@@ -30,10 +23,15 @@ class TestConsentManagerHelper {
     @Test
     fun `updateConsent passes values to firebase`() {
         println("🚀 [TEST] updateConsent passes values to firebase")
-        val analytics = mockk<FirebaseAnalytics>(relaxed = true)
-        mockkObject(Firebase)
-        every { Firebase.analytics } returns analytics
-        justRun { analytics.setConsent(any()) }
+        val firebaseController = mockk<FirebaseController>(relaxed = true)
+        startKoin {
+            modules(
+                module {
+                    single<FirebaseController> { firebaseController }
+                    single<BuildInfoProvider> { mockk(relaxed = true) }
+                }
+            )
+        }
 
         ConsentManagerHelper.updateConsent(
             analyticsGranted = true,
@@ -43,13 +41,14 @@ class TestConsentManagerHelper {
         )
 
         verify {
-            analytics.setConsent(match {
-                it[FirebaseAnalytics.ConsentType.ANALYTICS_STORAGE] == FirebaseAnalytics.ConsentStatus.GRANTED &&
-                        it[FirebaseAnalytics.ConsentType.AD_STORAGE] == FirebaseAnalytics.ConsentStatus.DENIED &&
-                        it[FirebaseAnalytics.ConsentType.AD_USER_DATA] == FirebaseAnalytics.ConsentStatus.GRANTED &&
-                        it[FirebaseAnalytics.ConsentType.AD_PERSONALIZATION] == FirebaseAnalytics.ConsentStatus.DENIED
-            })
+            firebaseController.updateConsent(
+                analyticsGranted = true,
+                adStorageGranted = false,
+                adUserDataGranted = true,
+                adPersonalizationGranted = false
+            )
         }
+        stopKoin()
         println("🏁 [TEST DONE] updateConsent passes values to firebase")
     }
 
@@ -66,25 +65,22 @@ class TestConsentManagerHelper {
 
         val provider = mockk<BuildInfoProvider>()
         every { provider.isDebugBuild } returns false
-        startKoin { modules(module { single<BuildInfoProvider> { provider } }) }
-
-        val analytics = mockk<FirebaseAnalytics>(relaxed = true)
-        mockkObject(Firebase)
-        every { Firebase.analytics } returns analytics
-
-        val crashlytics = mockk<FirebaseCrashlytics>(relaxed = true)
-        val performance = mockk<FirebasePerformance>(relaxed = true)
-        mockkStatic(FirebaseCrashlytics::class)
-        mockkStatic(FirebasePerformance::class)
-        every { FirebaseCrashlytics.getInstance() } returns crashlytics
-        every { FirebasePerformance.getInstance() } returns performance
+        val firebaseController = mockk<FirebaseController>(relaxed = true)
+        startKoin {
+            modules(
+                module {
+                    single<BuildInfoProvider> { provider }
+                    single<FirebaseController> { firebaseController }
+                }
+            )
+        }
 
         ConsentManagerHelper.applyInitialConsent(dataStore)
 
-        verify { analytics.setConsent(any()) }
-        verify { analytics.setAnalyticsCollectionEnabled(true) }
-        verify { crashlytics.isCrashlyticsCollectionEnabled = true }
-        verify { performance.isPerformanceCollectionEnabled = true }
+        verify { firebaseController.updateConsent(any(), any(), any(), any()) }
+        verify { firebaseController.setAnalyticsEnabled(true) }
+        verify { firebaseController.setCrashlyticsEnabled(true) }
+        verify { firebaseController.setPerformanceEnabled(true) }
 
         stopKoin()
         println("🏁 [TEST DONE] applyInitialConsent reads datastore and initializes firebase")
@@ -100,25 +96,26 @@ class TestConsentManagerHelper {
             flowOf(false)
         )
 
-        val analytics = mockk<FirebaseAnalytics>(relaxed = true)
-        mockkObject(Firebase)
-        every { Firebase.analytics } returns analytics
-        val crashlytics = mockk<FirebaseCrashlytics>(relaxed = true)
-        val performance = mockk<FirebasePerformance>(relaxed = true)
-        mockkStatic(FirebaseCrashlytics::class)
-        mockkStatic(FirebasePerformance::class)
-        every { FirebaseCrashlytics.getInstance() } returns crashlytics
-        every { FirebasePerformance.getInstance() } returns performance
+        val firebaseController = mockk<FirebaseController>(relaxed = true)
+        startKoin {
+            modules(
+                module {
+                    single<FirebaseController> { firebaseController }
+                    single<BuildInfoProvider> { mockk(relaxed = true) }
+                }
+            )
+        }
 
         ConsentManagerHelper.updateAnalyticsCollectionFromDatastore(dataStore)
-        verify { analytics.setAnalyticsCollectionEnabled(true) }
-        verify { crashlytics.isCrashlyticsCollectionEnabled = true }
-        verify { performance.isPerformanceCollectionEnabled = true }
+        verify { firebaseController.setAnalyticsEnabled(true) }
+        verify { firebaseController.setCrashlyticsEnabled(true) }
+        verify { firebaseController.setPerformanceEnabled(true) }
 
         ConsentManagerHelper.updateAnalyticsCollectionFromDatastore(dataStore)
-        verify { analytics.setAnalyticsCollectionEnabled(false) }
-        verify { crashlytics.isCrashlyticsCollectionEnabled = false }
-        verify { performance.isPerformanceCollectionEnabled = false }
+        verify { firebaseController.setAnalyticsEnabled(false) }
+        verify { firebaseController.setCrashlyticsEnabled(false) }
+        verify { firebaseController.setPerformanceEnabled(false) }
+        stopKoin()
         println("🏁 [TEST DONE] updateAnalyticsCollectionFromDatastore sets collection flags")
     }
 
@@ -187,16 +184,16 @@ class TestConsentManagerHelper {
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.usageAndDiagnostics(any()) } returns flowOf(true)
 
-        val analytics = mockk<FirebaseAnalytics>(relaxed = true)
-        mockkObject(Firebase)
-        every { Firebase.analytics } returns analytics
-        val crashlytics = mockk<FirebaseCrashlytics>()
-        val performance = mockk<FirebasePerformance>(relaxed = true)
-        mockkStatic(FirebaseCrashlytics::class)
-        mockkStatic(FirebasePerformance::class)
-        every { FirebaseCrashlytics.getInstance() } returns crashlytics
-        every { FirebasePerformance.getInstance() } returns performance
-        every { crashlytics.isCrashlyticsCollectionEnabled = any() } throws RuntimeException("fail")
+        val firebaseController = mockk<FirebaseController>(relaxed = true)
+        every { firebaseController.setCrashlyticsEnabled(any()) } throws RuntimeException("fail")
+        startKoin {
+            modules(
+                module {
+                    single<FirebaseController> { firebaseController }
+                    single<BuildInfoProvider> { mockk(relaxed = true) }
+                }
+            )
+        }
 
         assertFailsWith<RuntimeException> {
             ConsentManagerHelper.updateAnalyticsCollectionFromDatastore(dataStore)
@@ -217,29 +214,27 @@ class TestConsentManagerHelper {
 
         val provider = mockk<BuildInfoProvider>()
         every { provider.isDebugBuild } returns true
-        startKoin { modules(module { single<BuildInfoProvider> { provider } }) }
+        val firebaseController = mockk<FirebaseController>(relaxed = true)
+        startKoin {
+            modules(
+                module {
+                    single<BuildInfoProvider> { provider }
+                    single<FirebaseController> { firebaseController }
+                }
+            )
+        }
 
         val field =
             ConsentManagerHelper::class.java.getDeclaredField($$"defaultAnalyticsGranted$delegate")
         field.isAccessible = true
         field.set(ConsentManagerHelper, lazy { !provider.isDebugBuild })
 
-        val analytics = mockk<FirebaseAnalytics>(relaxed = true)
-        mockkObject(Firebase)
-        every { Firebase.analytics } returns analytics
-        val crashlytics = mockk<FirebaseCrashlytics>(relaxed = true)
-        val performance = mockk<FirebasePerformance>(relaxed = true)
-        mockkStatic(FirebaseCrashlytics::class)
-        mockkStatic(FirebasePerformance::class)
-        every { FirebaseCrashlytics.getInstance() } returns crashlytics
-        every { FirebasePerformance.getInstance() } returns performance
-
         ConsentManagerHelper.applyInitialConsent(dataStore)
 
-        verify { analytics.setConsent(any()) }
-        verify { analytics.setAnalyticsCollectionEnabled(false) }
-        verify { crashlytics.isCrashlyticsCollectionEnabled = false }
-        verify { performance.isPerformanceCollectionEnabled = false }
+        verify { firebaseController.updateConsent(any(), any(), any(), any()) }
+        verify { firebaseController.setAnalyticsEnabled(false) }
+        verify { firebaseController.setCrashlyticsEnabled(false) }
+        verify { firebaseController.setPerformanceEnabled(false) }
 
         stopKoin()
         println("🏁 [TEST DONE] applyInitialConsent when debug build uses datastore values")
@@ -248,10 +243,23 @@ class TestConsentManagerHelper {
     @Test
     fun `updateConsent propagates firebase exception`() {
         println("🚀 [TEST] updateConsent propagates firebase exception")
-        val analytics = mockk<FirebaseAnalytics>()
-        mockkObject(Firebase)
-        every { Firebase.analytics } returns analytics
-        every { analytics.setConsent(any()) } throws RuntimeException("fail")
+        val firebaseController = mockk<FirebaseController>()
+        every {
+            firebaseController.updateConsent(
+                analyticsGranted = true,
+                adStorageGranted = true,
+                adUserDataGranted = true,
+                adPersonalizationGranted = true
+            )
+        } throws RuntimeException("fail")
+        startKoin {
+            modules(
+                module {
+                    single<FirebaseController> { firebaseController }
+                    single<BuildInfoProvider> { mockk(relaxed = true) }
+                }
+            )
+        }
 
         assertFailsWith<RuntimeException> {
             ConsentManagerHelper.updateConsent(
@@ -274,25 +282,25 @@ class TestConsentManagerHelper {
             flowOf(true)
         )
 
-        val analytics = mockk<FirebaseAnalytics>(relaxed = true)
-        mockkObject(Firebase)
-        every { Firebase.analytics } returns analytics
-        val crashlytics = mockk<FirebaseCrashlytics>(relaxed = true)
-        val performance = mockk<FirebasePerformance>(relaxed = true)
-        mockkStatic(FirebaseCrashlytics::class)
-        mockkStatic(FirebasePerformance::class)
-        every { FirebaseCrashlytics.getInstance() } returns crashlytics
-        every { FirebasePerformance.getInstance() } returns performance
+        val firebaseController = mockk<FirebaseController>(relaxed = true)
+        startKoin {
+            modules(
+                module {
+                    single<FirebaseController> { firebaseController }
+                    single<BuildInfoProvider> { mockk(relaxed = true) }
+                }
+            )
+        }
 
         ConsentManagerHelper.updateAnalyticsCollectionFromDatastore(dataStore)
-        verify { analytics.setAnalyticsCollectionEnabled(false) }
-        verify { crashlytics.isCrashlyticsCollectionEnabled = false }
-        verify { performance.isPerformanceCollectionEnabled = false }
+        verify { firebaseController.setAnalyticsEnabled(false) }
+        verify { firebaseController.setCrashlyticsEnabled(false) }
+        verify { firebaseController.setPerformanceEnabled(false) }
 
         ConsentManagerHelper.updateAnalyticsCollectionFromDatastore(dataStore)
-        verify { analytics.setAnalyticsCollectionEnabled(true) }
-        verify { crashlytics.isCrashlyticsCollectionEnabled = true }
-        verify { performance.isPerformanceCollectionEnabled = true }
+        verify { firebaseController.setAnalyticsEnabled(true) }
+        verify { firebaseController.setCrashlyticsEnabled(true) }
+        verify { firebaseController.setPerformanceEnabled(true) }
         println("🏁 [TEST DONE] updateAnalyticsCollectionFromDatastore toggles false to true")
     }
 

@@ -7,6 +7,11 @@ import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageA
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsAction
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsEvent
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnosticsUiState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -15,18 +20,36 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentManagerHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for the Usage and Diagnostics screen.
+ *
+ * This ViewModel manages the state and logic for user consent settings related to usage data,
+ * diagnostics, and advertising. It interacts with the [UsageAndDiagnosticsRepository] to
+ * observe and update these settings.
+ *
+ * It handles events from the UI to update specific consents, such as analytics, ad storage,
+ * and personalization, and reflects these changes in the [UsageAndDiagnosticsUiState]. The
+ * ViewModel also ensures that the underlying consent framework (via [ConsentManagerHelper])
+ * is updated whenever settings change.
+ *
+ * @param repository The repository responsible for persisting and retrieving usage and diagnostics settings.
+ * @param firebaseController Reports ViewModel flow failures to Firebase.
+ */
 class UsageAndDiagnosticsViewModel(
     private val repository: UsageAndDiagnosticsRepository,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent, UsageAndDiagnosticsAction>(
     initialState = UiStateScreen(data = UsageAndDiagnosticsUiState()),
 ) {
@@ -50,27 +73,37 @@ class UsageAndDiagnosticsViewModel(
     private fun observeConsents() {
         repository.observeSettings()
             .onStart { screenState.setLoading() }
-            .onEach { settings ->
-                screenState.successData {
-                    UsageAndDiagnosticsUiState(
-                        usageAndDiagnostics = settings.usageAndDiagnostics,
-                        analyticsConsent = settings.analyticsConsent,
-                        adStorageConsent = settings.adStorageConsent,
-                        adUserDataConsent = settings.adUserDataConsent,
-                        adPersonalizationConsent = settings.adPersonalizationConsent,
-                    )
-                }
-                updateConsent(settings)
-            }
-            .onCompletion { cause ->
-                if (cause != null && cause !is CancellationException) {
-                    handleObservationError()
-                }
+            .map<UsageAndDiagnosticsSettings, DataState<UsageAndDiagnosticsSettings, Errors>> { settings ->
+                DataState.Success(settings)
             }
             .catch { throwable ->
-                if (throwable is CancellationException) {
-                    throw throwable
-                }
+                if (throwable is CancellationException) throw throwable
+                firebaseController.reportViewModelError(
+                    viewModelName = "UsageAndDiagnosticsViewModel",
+                    action = "observeConsents",
+                    throwable = throwable,
+                )
+                emit(
+                    DataState.Error(
+                        error = throwable.toError(default = Errors.Database.DATABASE_OPERATION_FAILED)
+                    )
+                )
+            }
+            .onEach { result ->
+                result
+                    .onSuccess { settings ->
+                        screenState.successData {
+                            UsageAndDiagnosticsUiState(
+                                usageAndDiagnostics = settings.usageAndDiagnostics,
+                                analyticsConsent = settings.analyticsConsent,
+                                adStorageConsent = settings.adStorageConsent,
+                                adUserDataConsent = settings.adUserDataConsent,
+                                adPersonalizationConsent = settings.adPersonalizationConsent,
+                            )
+                        }
+                        updateConsent(settings)
+                    }
+                    .onFailure { error -> handleObservationError(error.asUiText()) }
             }
             .launchIn(viewModelScope)
     }
@@ -104,11 +137,11 @@ class UsageAndDiagnosticsViewModel(
         )
     }
 
-    private fun handleObservationError() {
+    private fun handleObservationError(message: UiTextHelper = UiTextHelper.StringResource(R.string.error_an_error_occurred)) {
         screenState.setErrors(
             errors = listOf(
                 UiSnackbar(
-                    message = UiTextHelper.StringResource(R.string.error_an_error_occurred),
+                    message = message,
                 ),
             ),
         )

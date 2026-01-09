@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,18 +26,20 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.RandomAppHandler
+import com.d4rk.android.apps.apptoolkit.core.logging.APPS_LIST_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.AppInfoHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isAppInstalled
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -90,11 +93,16 @@ fun AppsListRoute(
     val openApp: (AppInfo) -> Unit = remember(dispatchers) { buildAppClick }
     val onShareClick: (AppInfo) -> Unit = remember { buildShareClick }
 
-    val appInfoHelper = remember(dispatchers) { AppInfoHelper(dispatchers) }
     val onOpenInPlayStore: (AppInfo) -> Unit = remember(context) {
         { appInfo ->
             if (appInfo.packageName.isNotEmpty()) {
-                context.openPlayStoreForApp(appInfo.packageName)
+                val opened = context.openPlayStoreForApp(appInfo.packageName)
+                if (!opened) {
+                    android.util.Log.w(
+                        APPS_LIST_LOG_TAG,
+                        "Unable to open Play Store for ${appInfo.packageName}"
+                    )
+                }
             }
         }
     }
@@ -107,10 +115,13 @@ fun AppsListRoute(
 
     LaunchedEffect(selectedApp?.packageName) {
         isSelectedAppInstalled = selectedApp?.let { app ->
-            if (app.packageName.isNotEmpty()) appInfoHelper.isAppInstalled(
-                context,
-                app.packageName
-            ) else false
+            if (app.packageName.isNotEmpty()) {
+                withContext(dispatchers.io) {
+                    context.isAppInstalled(app.packageName)
+                }
+            } else {
+                false
+            }
         }
     }
 
@@ -151,8 +162,10 @@ fun AppsListRoute(
     val randomAppHandler: RandomAppHandler =
         remember(viewModel) { { viewModel.onEvent(HomeEvent.OpenRandomApp) } }
 
+    val registerHandler by rememberUpdatedState(onRegisterRandomAppHandler)
+
     LaunchedEffect(canOpenRandomApp) {
-        onRegisterRandomAppHandler(if (canOpenRandomApp) randomAppHandler else null)
+        registerHandler(if (canOpenRandomApp) randomAppHandler else null)
     }
 
     LaunchedEffect(viewModel) {

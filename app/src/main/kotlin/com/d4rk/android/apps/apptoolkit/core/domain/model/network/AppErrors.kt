@@ -12,18 +12,9 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
  */
 sealed interface AppErrors : Error {
 
-    /**
-     * Wrapper that allows the app module to propagate shared toolkit errors.
-     */
     data class Common(val value: Errors) : AppErrors
 
-    enum class Network : AppErrors {
-        REQUEST_TIMEOUT,
-        NO_INTERNET
-    }
-
     enum class UseCase : AppErrors {
-        NO_DATA,
         FAILED_TO_LOAD_APPS
     }
 }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Failed to load consent information</string>
+
+    <string name="activity_not_found">Activity not found.</string>
+
+    <string name="security_error">A security error occurred. Please try again later.</string>
+    <string name="io_error">An input/output error occurred. Please check your network connection or storage and try again.</string>
+    <string name="illegal_argument_error">Invalid input or argument provided. Please check the information and try again.</string>
+    <string name="unknown_error">An unknown error occurred.</string>
+    <string name="initialization_error">Initialization failed. Please try again later.</string>
+
+    <string name="error_no_settings_found">No settings found</string>
+    <string name="error_invalid_content_key">Invalid content key.</string>
+
+    <string name="error_unauthorized">Unauthorized: Invalid token</string>
+    <string name="error_forbidden">Forbidden: insufficient permissions</string>
+    <string name="error_gone">API endpoint removed</string>
+    <string name="error_unprocessable">Invalid data for issue creation</string>
+    <string name="error_invalid_report">Title and description cannot be empty</string>
+
+    <string name="error_failed_to_load_ads_settings">Failed to load ads settings</string>
+
+    <string name="cache_cleared_error">Cache cleared with some errors</string>
+
+    <string name="loading_eula_message">Retrieving End User License Agreement…</string>
+    <string name="loading_changelog_message">Fetching application changelog…</string>
+    <string name="error_loading_eula_message">Unable to load the End User License Agreement. Please try again.</string>
+    <string name="error_loading_changelog_message">Unable to load the application changelog. Please try again.</string>
+
+    <string name="error_failed_to_load_sku_details">Failed to load SKU details</string>
+
+    <string name="no_internet_error">No internet connection.</string>
+    <string name="connection_error">Network error. Please try again.</string>
+    <string name="connection_closed_error">Connection was interrupted.</string>
+    <string name="request_timeout_error">Request timed out. Try again.</string>
+    <string name="ssl_error">Secure connection failed.</string>
+
+    <string name="http_redirect_error">Unexpected redirect from server.</string>
+    <string name="http_client_error">Request failed. Please try again.</string>
+    <string name="http_server_error">Server error. Please try again later.</string>
+    <string name="rate_limited_error">Too many requests. Try again later.</string>
+
+    <string name="serialization_error">Failed to read server response.</string>
+
+    <string name="no_data_error">No data available.</string>
+    <string name="invalid_state_error">Operation not allowed right now.</string>
+    <string name="unsupported_operation_error">Unsupported operation.</string>
+    <string name="cancelled_error">Operation cancelled.</string>
+
+    <string name="database_error">Storage error.</string>
+    <string name="database_locked_error">Storage is busy. Try again.</string>
+    <string name="database_constraint_error">Storage constraint error.</string>
+    <string name="database_cant_open_error">Unable to open storage.</string>
+    <string name="database_corrupt_error">Storage is corrupted.</string>
+    <string name="database_full_error">Storage is full.</string>
+
+    <string name="error_an_error_occurred">An error occurred</string>
+    <string name="error_failed_to_launch_review">Failed to launch review flow</string>
+    <string name="error_failed_to_load_faq">Failed to load FAQs</string>
+    <string name="error_failed_to_request_review">Failed to request review</string>
+    <string name="error_failed_to_update_app">Failed to update app</string>
+    <string name="error_failed_to_load_consent_info">Failed to load consent info</string>
+    <string name="error_failed_to_load_navigation">Failed to load navigation</string>
+</resources>

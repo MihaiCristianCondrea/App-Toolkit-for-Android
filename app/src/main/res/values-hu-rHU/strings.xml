@@ -2,46 +2,47 @@
 <resources>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome_title">Üdvözli az App Toolkit</string>
-    <string name="onboarding_welcome_description">Fedezze fel AppToolkit könyvtárunk képességeit. Fedezze fel alkalmazásainkat, melyek mindegyike az AppToolkit könyvtárunk erejének bemutatására és kihasználására készült, javítva ezzel Android fejlesztési és felhasználói élményét.</string>
-    <string name="onboarding_feature1_title">Fedezze fel alkalmazásainkat</string>
-    <string name="onboarding_feature1_description">Az App Toolkit bemutatja Önnek alkalmazásaink válogatását, melyek mindegyike az AppToolkit könyvtárunk különböző aspektusainak kiemelésére és Android élményének javítására lett tervezve. Nézze meg, mi minden lehetséges AppToolkit könyvtárunkkal.</string>
-    <string name="onboarding_personalization_title">Tekintse meg AppToolkit könyvtárunkat működés közben</string>
-    <string name="onboarding_personalization_description">Ez az alkalmazás bemutatja, hogyan használható AppToolkit könyvtárunk sokoldalú és felhasználó-központú alkalmazások készítésére. Fedezze fel alkalmazásainkat, hogy megtekinthesse a könyvtár különböző funkcióit és implementációit.</string>
+    <string name="onboarding_welcome_title">Üdvözöljük az App Toolkitben</string>
+    <string name="onboarding_welcome_description">Fedezze fel az AppToolkit könyvtár képességeit. Ismerjen meg olyan alkalmazásokat, amelyek a könyvtár erejét mutatják be, és javítják az Android-fejlesztést és a felhasználói élményt.</string>
+    <string name="onboarding_feature1_title">Fedezze fel az alkalmazásokat</string>
+    <string name="onboarding_feature1_description">Az App Toolkit alkalmazásválogatást mutat be, amelyek mind az AppToolkit könyvtár különböző aspektusait emelik ki és javítják az Android-élményt. Nézze meg, mi lehetséges az AppToolkit könyvtárral.</string>
+    <string name="onboarding_personalization_title">Az AppToolkit könyvtár működés közben</string>
+    <string name="onboarding_personalization_description">Ez az app megmutatja, hogyan hoz létre az AppToolkit könyvtár sokoldalú, felhasználóközpontú alkalmazásokat. Nézze meg a mintalkalmazásokat, hogy különböző funkciókat és megvalósításokat lásson.</string>
 
     <!-- Home screen -->
-    <string name="all_apps">Minden alkalmazás</string>
+    <string name="all_apps">Összes app</string>
     <string name="favorite_apps">Kedvencek</string>
-    <string name="no_apps_added_to_favorites">Nincs hozzáadott alkalmazás a kedvencekhez</string>
-    <string name="error_failed_to_fetch_our_apps">Nem sikerült lekérni alkalmazáslistáinkat</string>
-    <string name="error_failed_to_load_apps">Az alkalmazások betöltése sikertelen</string>
-    <string name="error_failed_to_update_favorite">A kedvenc frissítése nem sikerült</string>
-    <string name="open_random_app">Nyissa meg a véletlenszerű alkalmazást</string>
+    <string name="no_apps_added_to_favorites">Nincsenek kedvencekhez hozzáadott appok</string>
+    <string name="error_failed_to_fetch_our_apps">Nem sikerült betölteni az alkalmazáslistákat</string>
+    <string name="error_failed_to_load_apps">Nem sikerült betölteni az appokat</string>
+    <string name="error_failed_to_update_favorite">Nem sikerült frissíteni a kedvencet</string>
+    <string name="error_failed_to_load_navigation">Nem sikerült betölteni a navigációt</string>
+    <string name="open_random_app">Véletlenszerű app megnyitása</string>
 
     <!-- App details bottom sheet -->
-    <string name="app_details_share_content_description">Alkalmazás megosztása</string>
+    <string name="app_details_share_content_description">App megosztása</string>
     <string name="app_details_view_on_play_store">Megtekintés a Google Playen</string>
-    <string name="app_details_about_title">Az alkalmazásról</string>
+    <string name="app_details_about_title">Az app névjegye</string>
     <string name="app_details_screenshots_title">Képernyőképek</string>
-    <string name="app_details_open_app">Alkalmazás megnyitása</string>
+    <string name="app_details_open_app">App megnyitása</string>
 
     <!-- Help screen -->
     <string name="question_1">Mi az App Toolkit?</string>
-    <string name="summary_preference_faq_1">Az App Toolkit egy olyan alkalmazás, amelyet az általunk fejlesztett, AppToolkit könyvtárunkat használó alkalmazások bemutatására és demonstrálására terveztek. Ez az Ön útmutatója alkalmazás-ökoszisztémánk felfedezéséhez és AppToolkit könyvtárunk működés közbeni megtekintéséhez.</string>
-    <string name="question_2">Hogyan érhetem el az App Toolkitben megjelenített különböző alkalmazásokat?</string>
-    <string name="summary_preference_faq_2">Az App Toolkit felsorolja különböző alkalmazásainkat. Egy alkalmazáslistára koppintva általában több információt és egy linket kap a Google Play Áruházból történő telepítéshez vagy megnyitáshoz, lehetővé téve, hogy első kézből tapasztalja meg.</string>
-    <string name="question_3">Ingyenesek az App Toolkitben szereplő alkalmazások?</string>
-    <string name="summary_preference_faq_3">Sok, az App Toolkitben szereplő alkalmazásunk alapvető funkciókat kínál ingyenesen. Néhányuk rendelkezhet prémium verzióban vagy alkalmazáson belüli vásárlások révén elérhető fejlett funkciókkal. Az egyes alkalmazások részletei a megfelelő Play Áruház oldalukon találhatók.</string>
-    <string name="question_4">Hogyan tudhatok meg többet egy adott listázott alkalmazásról?</string>
-    <string name="summary_preference_faq_4">Egyik alkalmazásunkkal, annak funkcióival és felhasználói véleményeivel kapcsolatos teljes részletekért kérjük, koppintson az alkalmazásra az App Toolkitben, hogy meglátogassa annak oldalát a Google Play Áruházban.</string>
-    <string name="question_5">Hol találok segítséget vagy támogatást valamelyik listázott alkalmazásához?</string>
-    <string name="summary_preference_faq_5">Egyedi alkalmazásainkhoz a támogatást a megfelelő csatornáikon keresztül biztosítjuk, általában a Play Áruház oldalukon vagy magában az alkalmazásban részletezve. Az App Toolkit ezeknek az alkalmazásoknak a felfedezésére szolgál; alkalmazás-specifikus problémák esetén kérjük, forduljon az adott alkalmazás támogatási lehetőségeihez.</string>
-    <string name="question_6">Milyen gyakran frissül az alkalmazásai listája az App Toolkitben?</string>
-    <string name="summary_preference_faq_6">Célunk, hogy az App Toolkitet naprakészen tartsuk legújabb és legrelevánsabb alkalmazásainkkal, amelyek AppToolkit könyvtárunkat használják. Itt új alkalmazások vagy jelentős frissítések jelenhetnek meg.</string>
-    <string name="question_7">Miért van szüksége az App Toolkitnek olyan engedélyekre, mint az internet-hozzáférés?</string>
-    <string name="summary_preference_faq_7">Az App Toolkitnek internet-hozzáférésre van szüksége ahhoz, hogy lekérje alkalmazásaink legfrissebb listáját a Google Play Áruházból, és pontosan megjelenítse azok információit. Általában nem igényel más invazív engedélyeket.</string>
-    <string name="question_8">Hogyan adhatok visszajelzést az App Toolkitről vagy az alkalmazásairól?</string>
-    <string name="summary_preference_faq_8">Nagyra értékeljük visszajelzését az App Toolkitről és egyedi alkalmazásainkról. Általában talál egy \"Visszajelzés\" vagy \"Kapcsolatfelvétel\" opciót az App Toolkit beállításaiban vagy fejlesztői oldalunkon a Play Áruházban. Magáról az AppToolkit könyvtárunkról szóló visszajelzést is szívesen fogadjuk a megfelelő csatornákon keresztül.</string>
-    <string name="question_9">Biztonságban vannak az adataim, amikor az App Toolkitet használom más alkalmazásai megkeresésére?</string>
-    <string name="summary_preference_faq_9">Az App Toolkit elsősorban nyilvánosan elérhető információkat kér le alkalmazásainkról. Amikor úgy dönt, hogy telepíti vagy használja valamelyik listázott alkalmazásunkat, az adott alkalmazás saját Adatvédelmi Irányelvei érvényesülnek. Javasoljuk, hogy olvassa el. Az App Toolkit adatkezelését Adatvédelmi Irányelveink ismertetik.</string>
+    <string name="summary_preference_faq_1">Az App Toolkit egy alkalmazás, amely az AppToolkit könyvtárral készült appokat mutatja be és szemlélteti. Útmutató az ökoszisztéma felfedezéséhez és az AppToolkit könyvtár működésének megtekintéséhez.</string>
+    <string name="question_2">Hogyan érem el az App Toolkitben megjelenített különböző appokat?</string>
+    <string name="summary_preference_faq_2">Az App Toolkit különféle alkalmazásokat listáz. Egy appra koppintva általában több információt és egy linket kap a Google Play Store-ban való telepítéshez vagy megnyitáshoz, így közvetlenül kipróbálhatja.</string>
+    <string name="question_3">Az App Toolkitben bemutatott appok ingyenesek?</string>
+    <string name="summary_preference_faq_3">Sok, az App Toolkitben bemutatott app alap funkciókat ingyen kínál. Néhány fejlettebb funkciót prémium verzióval vagy alkalmazáson belüli vásárlással tesz elérhetővé. Az egyes appok részletei a Google Play Store megfelelő oldalán találhatók.</string>
+    <string name="question_4">Hogyan tudhatok meg többet egy konkrét listázott appról?</string>
+    <string name="summary_preference_faq_4">Egy app részletes leírásáért, funkcióiért és felhasználói értékeléseiért koppintson az appról az App Toolkitben, hogy megnyissa a Google Play Store oldalát.</string>
+    <string name="question_5">Hol találok segítséget vagy támogatást egy listázott apphoz?</string>
+    <string name="summary_preference_faq_5">Minden appnak saját támogatási csatornái vannak, amelyek általában a Google Play Store oldalán vagy az appon belül szerepelnek. Az App Toolkit az appok felfedezésére szolgál; app-specifikus problémáknál használja az adott app támogatási lehetőségeit.</string>
+    <string name="question_6">Milyen gyakran frissül az appok listája az App Toolkitben?</string>
+    <string name="summary_preference_faq_6">Az App Toolkitet rendszeresen frissítjük, hogy mindig a legújabb, AppToolkit könyvtárat használó appokat lássa. Új appok vagy jelentős frissítések jelenhetnek meg itt.</string>
+    <string name="question_7">Miért van szüksége az App Toolkitnek internet-hozzáféréshez hasonló engedélyekre?</string>
+    <string name="summary_preference_faq_7">A legfrissebb applista megjelenítéséhez az App Toolkit internet-hozzáférést használ a Google Play Store információinak lekéréséhez és pontos megjelenítéséhez. Általában nincs szükség más, invazív engedélyekre.</string>
+    <string name="question_8">Hogyan küldhetek visszajelzést az App Toolkitről vagy az appokról?</string>
+    <string name="summary_preference_faq_8">Értékeljük az App Toolkittel és a listázott appokkal kapcsolatos visszajelzését. Általában talál „Feedback” vagy „Kapcsolat” opciót az App Toolkit beállításaiban vagy a Google Play Store fejlesztői oldalán. Az AppToolkit könyvtárról szóló visszajelzések is szívesen fogadottak a megfelelő csatornákon.</string>
+    <string name="question_9">Biztonságban vannak az adataim, ha az App Toolkitet használom más appok megtalálásához?</string>
+    <string name="summary_preference_faq_9">Az App Toolkit főként nyilvánosan elérhető információkat kér le a listázott appokról. Amikor úgy dönt, hogy telepít vagy használ egyet, annak saját adatvédelmi irányelvei érvényesek; érdemes átnézni. Az App Toolkit adatkezelése a saját adatvédelmi irányelveiben van leírva.</string>
 </resources>

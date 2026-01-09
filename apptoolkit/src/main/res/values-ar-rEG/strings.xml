@@ -9,7 +9,6 @@
     <string name="welcome">مرحباً</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">اقرأ ووافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا للمتابعة</string>
     <string name="agree">أوافق</string>
-    <string name="error_loading_consent_info">فشل تحميل معلومات الموافقة</string>
     <string name="loading">جارٍ التحميل…</string>
 
     <string name="skip_button_text">تخطي</string>
@@ -65,20 +64,11 @@
 
     <string name="home">الرئيسية</string>
 
-    <string name="activity_not_found">النشاط غير موجود.</string>
-    <string name="security_error">حدث خطأ أمني. يرجى المحاولة مرة أخرى لاحقًا.</string>
-    <string name="io_error">حدث خطأ في الإدخال/الإخراج. يرجى التحقق من اتصال الشبكة أو التخزين وحاول مرة أخرى.</string>
-    <string name="illegal_argument_error">تم تقديم إدخال أو وسيطة غير صالحة. يرجى التحقق من المعلومات وحاول مرة أخرى.</string>
-    <string name="unknown_error">حدث خطأ غير معروف.</string>
-    <string name="initialization_error">فشل التهيئة. يرجى المحاولة مرة أخرى لاحقًا.</string>
-
     <string name="settings">الإعدادات</string>
     <string name="long_settings_label">إعدادات التطبيق</string>
     <string name="settings_disabled_message">الإعدادات غير متوفرة حاليًا.</string>
     <string name="settings_placeholder_description">لم يتم تحديد أي إعدادات. اختر خيارًا لعرض تفاصيله هنا.</string>
     <string name="get_help">احصل على مساعدة</string>
-    <string name="error_no_settings_found">لم يتم العثور على إعدادات</string>
-    <string name="error_invalid_content_key">مفتاح محتوى غير صالح.</string>
 
     <string name="display">العرض</string>
     <string name="summary_preference_settings_display">خصص شكل ومظهر تطبيقك</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">إعادة التوجيه إلى GitHub</string>
     <string name="snack_report_success">تم إرسال التقرير بنجاح</string>
     <string name="snack_report_failed">فشل في إرسال التقرير</string>
-    <string name="error_invalid_report">لا يمكن أن يكون العنوان والوصف فارغين</string>
     <string name="issue_submitted_successfully">تم تقديم القضية بنجاح</string>
     <string name="open_issue_in_browser">مفتوح في المتصفح</string>
     <string name="open_button_label">قضية مفتوحة</string>
     <string name="issue_submitted">تم تقديم مشكلتك.</string>
-    <string name="error_unauthorized">غير مصرح به: رمز غير صالح</string>
-    <string name="error_forbidden">ممنوع: أذونات غير كافية</string>
-    <string name="error_gone">أزياء نقطة نهاية API</string>
-    <string name="error_unprocessable">بيانات غير صالحة لإنشاء المشكلات</string>
 
     <string name="error_reporting">الإبلاغ عن الأخطاء</string>
     <string name="bug_report">تقرير خطأ</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">مسح ذاكرة التخزين المؤقت</string>
     <string name="summary_preference_settings_clear_cache">مسح بيانات التطبيق المؤقتة.</string>
     <string name="cache_cleared_success">تم مسح ذاكرة التخزين المؤقت بنجاح</string>
-    <string name="cache_cleared_error">تم مسح ذاكرة التخزين المؤقت مع بعض الأخطاء</string>
 
     <string name="security_and_privacy">الأمان والخصوصية</string>
     <string name="summary_preference_settings_privacy_and_security">إدارة إعدادات الخصوصية الخاصة بك</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">شاهد الإعلانات ذات الصلة بك. قم بإدارة المعلومات المستخدمة لعرض الإعلانات المخصصة بناءً على نشاطك في التطبيق. يمكنك دائمًا إيقاف التخصيص هنا.\n</string>
     <string name="ads_enabled">الإعلانات مفعلة</string>
     <string name="ads_disabled">الإعلانات معطلة</string>
-    <string name="error_failed_to_load_ads_settings">فشل تحميل إعدادات الإعلانات</string>
 
     <string name="usage_and_diagnostics">الاستخدام والتشخيصات</string>
     <string name="summary_preference_settings_usage_and_diagnostics">شارك البيانات للمساعدة في تحسين التجربة داخل التطبيق</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">اتفاقية ترخيص المستخدم النهائي</string>
     <string name="changelog_title">سجل تغييرات التطبيق</string>
-    <string name="loading_eula_message">جارٍ استرداد اتفاقية ترخيص المستخدم النهائي…</string>
-    <string name="loading_changelog_message">جارٍ جلب سجل تغييرات التطبيق…</string>
-    <string name="error_loading_eula_message">تعذر تحميل اتفاقية ترخيص المستخدم النهائي. يرجى المحاولة مرة أخرى.</string>
-    <string name="error_loading_changelog_message">تعذر تحميل سجل تغييرات التطبيق. يرجى المحاولة مرة أخرى.</string>
     <string name="no_new_updates_message">لا توجد تحديثات جديدة متاحة.</string>
 
     <string name="device_info">معلومات الجهاز</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">دعم غير مدفوع</string>
     <string name="web_ad">إعلان ويب</string>
     <string name="sponsored_ad_label">● إعلان برعاية</string>
-    <string name="error_failed_to_load_sku_details">فشل تحميل تفاصيل SKU</string>
     <string name="purchase_pending">تتم معالجة تبرعك بواسطة Google. سوف نعلمك عند اكتماله. شكرًا لك.</string>
     <string name="purchase_thank_you">شكرا لك على تبرعك.</string>
     <string name="purchase_cancelled">الشراء تم إلغاؤه</string>
-    <string name="error_an_error_occurred">حدث خطأ</string>
-    <string name="error_failed_to_launch_review">فشل إطلاق تدفق المراجعة</string>
-    <string name="error_failed_to_load_faq">فشل تحميل الأسئلة الشائعة</string>
-    <string name="error_failed_to_request_review">فشل طلب المراجعة</string>
-    <string name="error_failed_to_update_app">فشل تحديث التطبيق</string>
-    <string name="error_failed_to_load_consent_info">فشل تحميل معلومات الموافقة</string>
 </resources>

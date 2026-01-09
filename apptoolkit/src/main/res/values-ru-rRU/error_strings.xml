@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Не удалось загрузить информацию о согласии</string>
+
+    <string name="activity_not_found">Действие не найдено.</string>
+
+    <string name="security_error">Произошла ошибка безопасности. Пожалуйста, попробуйте позже.</string>
+    <string name="io_error">Произошла ошибка ввода/вывода. Проверьте подключение к сети или хранилище и попробуйте снова.</string>
+    <string name="illegal_argument_error">Указан недопустимый ввод или аргумент. Проверьте информацию и попробуйте снова.</string>
+    <string name="unknown_error">Произошла неизвестная ошибка.</string>
+    <string name="initialization_error">Ошибка инициализации. Пожалуйста, попробуйте позже.</string>
+
+    <string name="error_no_settings_found">Настройки не найдены</string>
+    <string name="error_invalid_content_key">Недопустимый ключ содержимого.</string>
+
+    <string name="error_unauthorized">Не авторизовано: недопустимый токен</string>
+    <string name="error_forbidden">Доступ запрещён: недостаточно прав</string>
+    <string name="error_gone">Конечная точка API удалена</string>
+    <string name="error_unprocessable">Недопустимые данные для создания задачи</string>
+    <string name="error_invalid_report">Заголовок и описание не могут быть пустыми</string>
+
+    <string name="error_failed_to_load_ads_settings">Не удалось загрузить настройки рекламы</string>
+
+    <string name="cache_cleared_error">Кэш очищен с некоторыми ошибками</string>
+
+    <string name="loading_eula_message">Получение Лицензионного соглашения с конечным пользователем…</string>
+    <string name="loading_changelog_message">Загрузка журнала изменений приложения…</string>
+    <string name="error_loading_eula_message">Не удалось загрузить Лицензионное соглашение с конечным пользователем. Пожалуйста, попробуйте снова.</string>
+    <string name="error_loading_changelog_message">Не удалось загрузить журнал изменений приложения. Пожалуйста, попробуйте снова.</string>
+
+    <string name="error_failed_to_load_sku_details">Не удалось загрузить сведения о SKU</string>
+
+    <string name="no_internet_error">Нет подключения к интернету.</string>
+    <string name="connection_error">Ошибка сети. Пожалуйста, попробуйте снова.</string>
+    <string name="connection_closed_error">Соединение было прервано.</string>
+    <string name="request_timeout_error">Время ожидания запроса истекло. Попробуйте снова.</string>
+    <string name="ssl_error">Не удалось установить защищённое соединение.</string>
+
+    <string name="http_redirect_error">Неожиданное перенаправление от сервера.</string>
+    <string name="http_client_error">Запрос не выполнен. Пожалуйста, попробуйте снова.</string>
+    <string name="http_server_error">Ошибка сервера. Пожалуйста, попробуйте позже.</string>
+    <string name="rate_limited_error">Слишком много запросов. Попробуйте позже.</string>
+
+    <string name="serialization_error">Не удалось прочитать ответ сервера.</string>
+
+    <string name="no_data_error">Данные отсутствуют.</string>
+    <string name="invalid_state_error">Операция сейчас недоступна.</string>
+    <string name="unsupported_operation_error">Операция не поддерживается.</string>
+    <string name="cancelled_error">Операция отменена.</string>
+
+    <string name="database_error">Ошибка хранилища.</string>
+    <string name="database_locked_error">Хранилище занято. Попробуйте снова.</string>
+    <string name="database_constraint_error">Ошибка ограничения хранилища.</string>
+    <string name="database_cant_open_error">Не удалось открыть хранилище.</string>
+    <string name="database_corrupt_error">Хранилище повреждено.</string>
+    <string name="database_full_error">Хранилище заполнено.</string>
+
+    <string name="error_an_error_occurred">Произошла ошибка</string>
+    <string name="error_failed_to_launch_review">Не удалось запустить процесс оценки</string>
+    <string name="error_failed_to_load_faq">Не удалось загрузить раздел FAQ</string>
+    <string name="error_failed_to_request_review">Не удалось запросить оценку</string>
+    <string name="error_failed_to_update_app">Не удалось обновить приложение</string>
+    <string name="error_failed_to_load_consent_info">Не удалось загрузить информацию о согласии</string>
+    <string name="error_failed_to_load_navigation">Не удалось загрузить навигацию</string>
+</resources>

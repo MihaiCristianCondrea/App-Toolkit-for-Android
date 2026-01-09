@@ -3,20 +3,21 @@
 
     <!-- Onboarding -->
     <string name="onboarding_welcome_title">歡迎使用 App Toolkit</string>
-    <string name="onboarding_welcome_description">探索我們 AppToolkit 程式庫的功能。探索我們的應用程式，所有應用程式皆為展示並利用我們 AppToolkit 程式庫的強大功能而打造，可增強您的 Android 開發與使用者體驗。</string>
-    <string name="onboarding_feature1_title">探索我們的應用程式</string>
-    <string name="onboarding_feature1_description">App Toolkit 為您介紹我們精選的應用程式，每個應用程式都旨在突顯我們 AppToolkit 程式庫的不同面向，並提升您的 Android 體驗。看看我們的 AppToolkit 程式庫能實現哪些可能性！</string>
-    <string name="onboarding_personalization_title">查看我們的 AppToolkit 程式庫實際運作</string>
-    <string name="onboarding_personalization_description">此應用程式展示了如何使用我們的 AppToolkit 程式庫來建構多功能且以使用者為中心的應用程式。探索我們的應用程式，以了解程式庫的不同功能和實作方式。</string>
+    <string name="onboarding_welcome_description">探索 AppToolkit 程式庫的能力。發現為展示程式庫威力並提升 Android 開發與使用者體驗而打造的應用程式。</string>
+    <string name="onboarding_feature1_title">探索應用程式</string>
+    <string name="onboarding_feature1_description">App Toolkit 提供一系列應用程式，每個都旨在突顯 AppToolkit 程式庫的不同面向並提升你的 Android 體驗。看看 AppToolkit 程式庫可以做到什麼。</string>
+    <string name="onboarding_personalization_title">看看 AppToolkit 程式庫的實際運作</string>
+    <string name="onboarding_personalization_description">此應用程式展示 AppToolkit 程式庫如何打造多元且以使用者為中心的應用程式。探索範例應用程式，了解程式庫的不同功能與實作。</string>
 
     <!-- Home screen -->
-    <string name="all_apps">所有應用程序</string>
+    <string name="all_apps">所有應用程式</string>
     <string name="favorite_apps">最愛</string>
-    <string name="no_apps_added_to_favorites">沒有添加到收藏夾的應用程序</string>
-    <string name="error_failed_to_fetch_our_apps">無法擷取我們的應用程式清單</string>
+    <string name="no_apps_added_to_favorites">最愛中沒有任何應用程式</string>
+    <string name="error_failed_to_fetch_our_apps">無法載入應用程式清單</string>
     <string name="error_failed_to_load_apps">無法載入應用程式</string>
     <string name="error_failed_to_update_favorite">無法更新最愛</string>
-    <string name="open_random_app">打開隨機應用程序</string>
+    <string name="error_failed_to_load_navigation">無法載入導覽</string>
+    <string name="open_random_app">開啟隨機應用程式</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">分享應用程式</string>
@@ -26,22 +27,22 @@
     <string name="app_details_open_app">開啟應用程式</string>
 
     <!-- Help screen -->
-    <string name="question_1">App Toolkit 是什麼？</string>
-    <string name="summary_preference_faq_1">App Toolkit 是一款旨在展示我們使用 AppToolkit 程式庫開發的應用程式的應用程式。它是您探索我們應用程式生態系統並查看我們 AppToolkit 程式庫實際運作的指南。</string>
-    <string name="question_2">我要如何存取 App Toolkit 中顯示的不同應用程式？</string>
-    <string name="summary_preference_faq_2">App Toolkit 會列出我們的各種應用程式。點選應用程式清單通常會提供更多資訊，以及從 Google Play 商店安裝或開啟該應用程式的連結，讓您親身體驗。</string>
-    <string name="question_3">App Toolkit 中推薦的應用程式是免費的嗎？</string>
-    <string name="summary_preference_faq_3">我們在 App Toolkit 中推薦的許多應用程式都免費提供一組核心功能。有些應用程式可能透過付費版本或應用程式內購買提供進階功能。每個應用程式的詳細資訊都可以在其各自的 Play 商店頁面上找到。</string>
-    <string name="question_4">我要如何進一步了解清單中特定的應用程式？</string>
-    <string name="summary_preference_faq_4">如需我們某個應用程式的完整詳細資訊、其功能和使用者評論，請在 App Toolkit 中點選該應用程式，以造訪其在 Google Play 商店上的頁面。</string>
-    <string name="question_5">我在哪裡可以找到您所列應用程式的說明或支援？</string>
-    <string name="summary_preference_faq_5">我們個別應用程式的支援是透過其各自的管道提供，通常會在其 Play 商店頁面或應用程式本身中詳細說明。App Toolkit 的用途是探索這些應用程式；若有應用程式特定問題，請參閱該應用程式的支援選項。</string>
-    <string name="question_6">您在 App Toolkit 中的應用程式清單多久更新一次？</string>
-    <string name="summary_preference_faq_6">我們的目標是讓 App Toolkit 隨時更新我們使用 AppToolkit 程式庫的最新且最相關的應用程式。新的應用程式或重大更新可能會在此處展示。</string>
-    <string name="question_7">為什麼 App Toolkit 需要網際網路存取等權限？</string>
-    <string name="summary_preference_faq_7">App Toolkit 需要網際網路存取權限，才能從 Google Play 商店擷取我們最新的應用程式清單並準確顯示其資訊。它通常不需要其他侵入性權限。</string>
-    <string name="question_8">我要如何針對 App Toolkit 或您的應用程式提供意見回饋？</string>
-    <string name="summary_preference_faq_8">我們非常重視您對 App Toolkit 和我們個別應用程式的意見回饋！您通常可以在 App Toolkit 的設定中或我們在 Play 商店上的開發者頁面找到「意見回饋」或「與我們聯絡」的選項。我們也歡迎透過適当管道提供關於我們 AppToolkit 程式庫本身的意見回饋。</string>
-    <string name="question_9">使用 App Toolkit 尋找您的其他應用程式時，我的資料是否安全？</string>
-    <string name="summary_preference_faq_9">App Toolkit 主要擷取關於我們應用程式的公開可用資訊。當您選擇安裝或使用我們所列的其中一個應用程式時，將適用該應用程式自己的隱私權政策。我們建議您檢閱該政策。App Toolkit 的資料處理方式已在我們的隱私權政策中概述。</string>
+    <string name="question_1">什麼是 App Toolkit？</string>
+    <string name="summary_preference_faq_1">App Toolkit 是用來展示與示範使用 AppToolkit 程式庫打造的應用程式的應用程式。它是你探索此生態系並查看 AppToolkit 程式庫實際運作的指南。</string>
+    <string name="question_2">如何存取 App Toolkit 中顯示的不同應用程式？</string>
+    <string name="summary_preference_faq_2">App Toolkit 會列出各種應用程式。點選某個應用程式通常會看到更多資訊與連結，可從 Google Play Store 安裝或開啟，以便親自體驗。</string>
+    <string name="question_3">App Toolkit 中展示的應用程式是免費的嗎？</string>
+    <string name="summary_preference_faq_3">許多在 App Toolkit 中展示的應用程式提供基本功能免費使用。部分應用程式可能透過進階版或應用程式內購提供進階功能。每個應用程式的詳細資訊可在其 Google Play Store 頁面找到。</string>
+    <string name="question_4">如何進一步了解清單中的特定應用程式？</string>
+    <string name="summary_preference_faq_4">若要查看應用程式的完整細節、功能與使用者評價，請在 App Toolkit 中點選該應用程式以開啟其 Google Play Store 頁面。</string>
+    <string name="question_5">哪裡可以找到清單中應用程式的協助或支援？</string>
+    <string name="summary_preference_faq_5">每個應用程式都有自己的支援管道，通常會在 Google Play Store 頁面或應用程式內說明。App Toolkit 用於探索這些應用程式；若有特定應用程式問題，請使用該應用程式的支援選項。</string>
+    <string name="question_6">App Toolkit 的應用程式清單多久更新一次？</string>
+    <string name="summary_preference_faq_6">App Toolkit 會定期更新，讓你隨時看到使用 AppToolkit 程式庫的最新應用程式。新應用程式或重要更新可能會出現在此處。</string>
+    <string name="question_7">為什麼 App Toolkit 需要像網際網路存取這樣的權限？</string>
+    <string name="summary_preference_faq_7">為了顯示最新的應用程式清單，App Toolkit 會使用網際網路存取從 Google Play Store 取得資訊並正確顯示。通常不需要其他具侵入性的權限。</string>
+    <string name="question_8">如何提供 App Toolkit 或應用程式的意見回饋？</string>
+    <string name="summary_preference_faq_8">我們感謝你對 App Toolkit 與清單中的應用程式提供意見。你通常可以在 App Toolkit 設定或 Google Play Store 的開發者頁面中找到 "Feedback" 或 "Contact" 選項。對 AppToolkit 程式庫的回饋也歡迎透過適當管道提供。</string>
+    <string name="question_9">使用 App Toolkit 尋找其他應用程式時，我的資料安全嗎？</string>
+    <string name="summary_preference_faq_9">App Toolkit 主要取得清單中應用程式的公開資訊。當你選擇安裝或使用其中一個應用程式時，將適用該應用程式的隱私權政策；請務必查看。App Toolkit 的資料處理方式已在其隱私權政策中說明。</string>
 </resources>

@@ -9,7 +9,6 @@
     <string name="welcome">Chào mừng</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Đọc và đồng ý với Điều khoản dịch vụ và Chính sách quyền riêng tư của chúng tôi để tiếp tục</string>
     <string name="agree">Đồng ý</string>
-    <string name="error_loading_consent_info">Không thể tải thông tin chấp thuận</string>
     <string name="loading">Đang tải…</string>
 
     <string name="skip_button_text">Bỏ qua</string>
@@ -65,20 +64,11 @@
 
     <string name="home">Trang chủ</string>
 
-    <string name="activity_not_found">Không tìm thấy hoạt động.</string>
-    <string name="security_error">Đã xảy ra lỗi bảo mật. Vui lòng thử lại sau.</string>
-    <string name="io_error">Đã xảy ra lỗi nhập/xuất. Vui lòng kiểm tra kết nối mạng hoặc bộ nhớ của bạn và thử lại.</string>
-    <string name="illegal_argument_error">Đã cung cấp đầu vào hoặc đối số không hợp lệ. Vui lòng kiểm tra thông tin và thử lại.</string>
-    <string name="unknown_error">Đã xảy ra lỗi không xác định.</string>
-    <string name="initialization_error">Khởi tạo không thành công. Vui lòng thử lại sau.</string>
-
     <string name="settings">Cài đặt</string>
     <string name="long_settings_label">Cài đặt ứng dụng</string>
     <string name="settings_disabled_message">Cài đặt hiện không khả dụng.</string>
     <string name="settings_placeholder_description">Chưa chọn cài đặt nào. Chọn một tùy chọn để xem chi tiết tại đây.</string>
     <string name="get_help">Nhận trợ giúp</string>
-    <string name="error_no_settings_found">Không tìm thấy cài đặt nào</string>
-    <string name="error_invalid_content_key">Khóa nội dung không hợp lệ.</string>
 
     <string name="display">Hiển thị</string>
     <string name="summary_preference_settings_display">Cá nhân hóa giao diện và cảm nhận của ứng dụng</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">Chuyển hướng tới GitHub</string>
     <string name="snack_report_success">Báo cáo đã được gửi thành công</string>
     <string name="snack_report_failed">Gửi báo cáo thất bại</string>
-    <string name="error_invalid_report">Tiêu đề và mô tả không được để trống</string>
     <string name="issue_submitted_successfully">Vấn đề được gửi thành công</string>
     <string name="open_issue_in_browser">Mở trong trình duyệt</string>
     <string name="open_button_label">Vấn đề mở</string>
     <string name="issue_submitted">Vấn đề của bạn đã được gửi.</string>
-    <string name="error_unauthorized">Nhập học: Mã thông báo không hợp lệ</string>
-    <string name="error_forbidden">Cấm: Không đủ quyền</string>
-    <string name="error_gone">Đã xóa điểm cuối API</string>
-    <string name="error_unprocessable">Dữ liệu không hợp lệ để tạo ra vấn đề</string>
 
     <string name="error_reporting">Báo cáo lỗi</string>
     <string name="bug_report">Báo cáo lỗi</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">Xóa bộ nhớ đệm</string>
     <string name="summary_preference_settings_clear_cache">Xóa dữ liệu ứng dụng tạm thời.</string>
     <string name="cache_cleared_success">Đã xóa bộ nhớ đệm thành công</string>
-    <string name="cache_cleared_error">Đã xóa bộ nhớ đệm với một số lỗi</string>
 
     <string name="security_and_privacy">Bảo mật &amp; quyền riêng tư</string>
     <string name="summary_preference_settings_privacy_and_security">Quản lý cài đặt quyền riêng tư của bạn</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">Xem quảng cáo phù hợp với bạn. Quản lý thông tin được sử dụng để hiển thị quảng cáo được cá nhân hóa dựa trên hoạt động ứng dụng của bạn. Bạn luôn có thể tắt cá nhân hóa tại đây.\n</string>
     <string name="ads_enabled">Đã bật quảng cáo</string>
     <string name="ads_disabled">Đã tắt quảng cáo</string>
-    <string name="error_failed_to_load_ads_settings">Không thể tải cài đặt quảng cáo</string>
 
     <string name="usage_and_diagnostics">Sử dụng và chẩn đoán</string>
     <string name="summary_preference_settings_usage_and_diagnostics">Chia sẻ dữ liệu để giúp cải thiện trải nghiệm trong ứng dụng</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">EULA</string>
     <string name="changelog_title">Nhật ký thay đổi ứng dụng</string>
-    <string name="loading_eula_message">Đang truy xuất Thỏa thuận cấp phép người dùng cuối…</string>
-    <string name="loading_changelog_message">Đang tìm nạp nhật ký thay đổi ứng dụng…</string>
-    <string name="error_loading_eula_message">Không thể tải Thỏa thuận cấp phép người dùng cuối. Vui lòng thử lại.</string>
-    <string name="error_loading_changelog_message">Không thể tải nhật ký thay đổi ứng dụng. Vui lòng thử lại.</string>
     <string name="no_new_updates_message">Không có bản cập nhật mới.</string>
 
     <string name="device_info">Thông tin thiết bị</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">Hỗ trợ không trả phí</string>
     <string name="web_ad">Quảng cáo web</string>
     <string name="sponsored_ad_label">● Quảng cáo được tài trợ</string>
-    <string name="error_failed_to_load_sku_details">Không thể tải chi tiết SKU</string>
     <string name="purchase_pending">Sự đóng góp của bạn đang được Google xử lý. Chúng tôi sẽ thông báo cho bạn khi nó hoàn thành. Cảm ơn.</string>
     <string name="purchase_thank_you">Cảm ơn bạn đã đóng góp của bạn.</string>
     <string name="purchase_cancelled">Mua hàng bị hủy bỏ</string>
-    <string name="error_an_error_occurred">Đã xảy ra lỗi</string>
-    <string name="error_failed_to_launch_review">Không thể khởi chạy quy trình đánh giá</string>
-    <string name="error_failed_to_load_faq">Không thể tải câu hỏi thường gặp</string>
-    <string name="error_failed_to_request_review">Không thể yêu cầu đánh giá</string>
-    <string name="error_failed_to_update_app">Không thể cập nhật ứng dụng</string>
-    <string name="error_failed_to_load_consent_info">Không thể tải thông tin đồng ý</string>
 </resources>

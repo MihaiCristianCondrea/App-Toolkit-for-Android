@@ -12,11 +12,16 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueRepor
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.state.IssueReporterUiState
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
@@ -25,16 +30,20 @@ import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error as RootError
 
 class IssueReporterViewModel(
     private val sendIssueReport: SendIssueReportUseCase,
     private val githubTarget: GithubTarget,
     @param:GithubToken private val githubToken: String,
     private val deviceInfoProvider: DeviceInfoProvider,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<IssueReporterUiState, IssueReporterEvent, IssueReporterAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
@@ -77,7 +86,7 @@ class IssueReporterViewModel(
         }
 
         sendJob = viewModelScope.launch {
-            val report = runCatching {
+            val preparedReport = try {
                 val deviceInfo = deviceInfoProvider.capture()
                 val extraInfo = ExtraInfo()
                 Report(
@@ -87,36 +96,46 @@ class IssueReporterViewModel(
                     extraInfo = extraInfo,
                     email = data.email.ifBlank { null },
                 )
-            }.getOrElse {
+            } catch (throwable: Throwable) {
+                if (throwable is CancellationException) throw throwable
                 showFailureSnackbar()
                 return@launch
             }
 
             val params = SendIssueReportUseCase.Params(
-                report = report,
+                report = preparedReport,
                 target = githubTarget,
                 token = githubToken.takeIf { it.isNotBlank() }
             )
 
             sendIssueReport(params)
-                .onStart { screenState.updateState(ScreenState.IsLoading()) }
+                .map { it.asDataState() }
+                .onStart { screenState.setLoading() }
                 .onCompletion { cause ->
-                    when {
-                        cause != null && cause !is CancellationException -> showFailureSnackbar()
-                        screenState.value.screenState is ScreenState.IsLoading ->
-                            screenState.updateState(ScreenState.Success())
+                    if (cause is CancellationException) throw cause
+                    if (screenState.value.screenState is ScreenState.IsLoading) {
+                        screenState.updateState(ScreenState.Success())
                     }
                     sendJob = null
                 }
-                .collect { outcome -> handleResult(outcome) }
+                .catch { throwable ->
+                    if (throwable is CancellationException) throw throwable
+                    firebaseController.reportViewModelError(
+                        viewModelName = "IssueReporterViewModel",
+                        action = "sendReport",
+                        throwable = throwable,
+                    )
+                    emit(DataState.Error(error = IssueReporterError.Generic(message = throwable.message)))
+                }
+                .collect(::handleResult)
         }
     }
 
-    private fun handleResult(outcome: IssueReportResult) {
-        when (outcome) {
-            is IssueReportResult.Success -> {
+    private fun handleResult(outcome: DataState<String, IssueReporterError>) {
+        outcome
+            .onSuccess { url ->
                 screenState.update { current ->
-                    val updated = current.data?.copy(issueUrl = outcome.url)
+                    val updated = current.data?.copy(issueUrl = url)
                     current.copy(
                         screenState = ScreenState.Success(),
                         data = updated,
@@ -129,18 +148,23 @@ class IssueReporterViewModel(
                     )
                 }
             }
-
-            is IssueReportResult.Error -> {
-                val msg = when (outcome.status) {
-                    HttpStatusCode.Unauthorized -> UiTextHelper.StringResource(R.string.error_unauthorized)
-                    HttpStatusCode.Forbidden -> UiTextHelper.StringResource(R.string.error_forbidden)
-                    HttpStatusCode.Gone -> UiTextHelper.StringResource(R.string.error_gone)
-                    HttpStatusCode.UnprocessableEntity -> UiTextHelper.StringResource(R.string.error_unprocessable)
-                    else -> UiTextHelper.StringResource(R.string.snack_report_failed)
+            .onFailure { error ->
+                val message = when (error) {
+                    is IssueReporterError.Http -> error.toUiText()
+                    is IssueReporterError.Generic -> error.toUiText()
                 }
-                showFailureSnackbar(msg)
+                screenState.update { current ->
+                    current.copy(
+                        screenState = ScreenState.Error(),
+                        snackbar = UiSnackbar(
+                            message = message,
+                            isError = true,
+                            timeStamp = System.currentTimeMillis(),
+                            type = ScreenMessageType.SNACKBAR,
+                        )
+                    )
+                }
             }
-        }
     }
 
     private fun showFailureSnackbar(
@@ -156,6 +180,43 @@ class IssueReporterViewModel(
                     type = ScreenMessageType.SNACKBAR,
                 )
             )
+        }
+    }
+
+    private fun IssueReportResult.asDataState(): DataState<String, IssueReporterError> {
+        return when (this) {
+            is IssueReportResult.Success -> DataState.Success(url)
+            is IssueReportResult.Error -> DataState.Error(
+                error = IssueReporterError.Http(status = status, message = message)
+            )
+        }
+    }
+
+    private sealed interface IssueReporterError : RootError {
+        val message: String?
+
+        data class Http(val status: HttpStatusCode, override val message: String?) :
+            IssueReporterError
+
+        data class Generic(override val message: String?) : IssueReporterError
+    }
+
+    private fun IssueReporterError.toUiText(): UiTextHelper {
+        return when (this) {
+            is IssueReporterError.Http -> when (status) {
+                HttpStatusCode.Unauthorized -> UiTextHelper.StringResource(R.string.error_unauthorized)
+                HttpStatusCode.Forbidden -> UiTextHelper.StringResource(R.string.error_forbidden)
+                HttpStatusCode.Gone -> UiTextHelper.StringResource(R.string.error_gone)
+                HttpStatusCode.UnprocessableEntity -> UiTextHelper.StringResource(R.string.error_unprocessable)
+                else -> if (message.isNullOrBlank()) {
+                    UiTextHelper.StringResource(R.string.snack_report_failed)
+                } else {
+                    UiTextHelper.DynamicString(message)
+                }
+            }
+
+            is IssueReporterError.Generic -> message?.let { UiTextHelper.DynamicString(it) }
+                ?: UiTextHelper.StringResource(R.string.snack_report_failed)
         }
     }
 }

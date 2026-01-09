@@ -3,45 +3,46 @@
 
     <!-- Onboarding -->
     <string name="onboarding_welcome_title">Bem-vindo ao App Toolkit</string>
-    <string name="onboarding_welcome_description">Explore as capacidades da nossa biblioteca AppToolkit. Descubra nossos aplicativos, todos construídos para demonstrar e utilizar o poder da nossa biblioteca AppToolkit, aprimorando seu desenvolvimento Android e experiência do usuário.</string>
-    <string name="onboarding_feature1_title">Descubra nossos aplicativos</string>
-    <string name="onboarding_feature1_description">O App Toolkit apresenta a você uma seleção de nossos aplicativos, cada um projetado para destacar diferentes aspectos da nossa biblioteca AppToolkit e aprimorar sua experiência Android. Veja o que é possível com nossa biblioteca AppToolkit.</string>
-    <string name="onboarding_personalization_title">Veja nossa biblioteca AppToolkit em ação</string>
-    <string name="onboarding_personalization_description">Este aplicativo demonstra como nossa biblioteca AppToolkit pode ser usada para construir aplicativos versáteis e focados no usuário. Explore nossos aplicativos para ver diferentes recursos e implementações da biblioteca.</string>
+    <string name="onboarding_welcome_description">Explore as capacidades da biblioteca AppToolkit. Descubra aplicativos criados para demonstrar o poder da biblioteca e aprimorar seu desenvolvimento Android e a experiência do usuário.</string>
+    <string name="onboarding_feature1_title">Descubra aplicativos</string>
+    <string name="onboarding_feature1_description">O App Toolkit apresenta uma seleção de aplicativos, cada um projetado para destacar diferentes aspectos da biblioteca AppToolkit e melhorar sua experiência no Android. Veja o que é possível com a biblioteca AppToolkit.</string>
+    <string name="onboarding_personalization_title">Veja a biblioteca AppToolkit em ação</string>
+    <string name="onboarding_personalization_description">Este app mostra como a biblioteca AppToolkit cria aplicativos versáteis e centrados no usuário. Explore os apps de exemplo para ver diferentes recursos e implementações da biblioteca.</string>
 
     <!-- Home screen -->
-    <string name="all_apps">Todos os aplicativos</string>
+    <string name="all_apps">Todos os apps</string>
     <string name="favorite_apps">Favoritos</string>
-    <string name="no_apps_added_to_favorites">Nenhum aplicativo adicionado aos favoritos</string>
-    <string name="error_failed_to_fetch_our_apps">Falha ao buscar nossas listagens de aplicativos</string>
-    <string name="error_failed_to_load_apps">Falha ao carregar aplicativos</string>
+    <string name="no_apps_added_to_favorites">Nenhum app adicionado aos favoritos</string>
+    <string name="error_failed_to_fetch_our_apps">Falha ao carregar as listas de apps</string>
+    <string name="error_failed_to_load_apps">Falha ao carregar os apps</string>
     <string name="error_failed_to_update_favorite">Falha ao atualizar o favorito</string>
-    <string name="open_random_app">Abra aplicativo aleatório</string>
+    <string name="error_failed_to_load_navigation">Falha ao carregar a navegação</string>
+    <string name="open_random_app">Abrir app aleatório</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Compartilhar app</string>
     <string name="app_details_view_on_play_store">Ver no Google Play</string>
-    <string name="app_details_about_title">Sobre este aplicativo</string>
+    <string name="app_details_about_title">Sobre este app</string>
     <string name="app_details_screenshots_title">Capturas de tela</string>
-    <string name="app_details_open_app">Abrir aplicativo</string>
+    <string name="app_details_open_app">Abrir app</string>
 
     <!-- Help screen -->
     <string name="question_1">O que é o App Toolkit?</string>
-    <string name="summary_preference_faq_1">O App Toolkit é um aplicativo projetado para apresentar e demonstrar aplicativos desenvolvidos por nós usando nossa biblioteca AppToolkit. É o seu guia para explorar nosso ecossistema de aplicativos e ver nossa biblioteca AppToolkit em ação.</string>
-    <string name="question_2">Como acesso os diferentes aplicativos mostrados no App Toolkit?</string>
-    <string name="summary_preference_faq_2">O App Toolkit lista nossos vários aplicativos. Tocar em uma listagem de aplicativo normalmente fornecerá mais informações e um link para instalá-lo ou abri-lo na Google Play Store, permitindo que você o experimente em primeira mão.</string>
-    <string name="question_3">Os aplicativos apresentados no App Toolkit são gratuitos?</string>
-    <string name="summary_preference_faq_3">Muitos de nossos aplicativos apresentados no App Toolkit oferecem um conjunto principal de recursos gratuitamente. Alguns podem ter funcionalidades avançadas disponíveis através de uma versão premium ou compras no aplicativo. Detalhes de cada aplicativo podem ser encontrados em sua respectiva página na Play Store.</string>
-    <string name="question_4">Como posso saber mais sobre um aplicativo específico listado?</string>
-    <string name="summary_preference_faq_4">Para detalhes completos sobre um de nossos aplicativos, seus recursos e avaliações de usuários, toque no aplicativo no App Toolkit para visitar sua página na Google Play Store.</string>
-    <string name="question_5">Onde posso encontrar ajuda ou suporte para um dos seus aplicativos listados?</string>
-    <string name="summary_preference_faq_5">O suporte para nossos aplicativos individuais é fornecido através de seus respectivos canais, geralmente detalhados em sua página na Play Store ou dentro do próprio aplicativo. O App Toolkit é para descobrir esses aplicativos; para problemas específicos do aplicativo, consulte as opções de suporte desse aplicativo.</string>
-    <string name="question_6">Com que frequência a lista de seus aplicativos é atualizada no App Toolkit?</string>
-    <string name="summary_preference_faq_6">Nosso objetivo é manter o App Toolkit atualizado com nossos aplicativos mais recentes e relevantes que utilizam nossa biblioteca AppToolkit. Novos aplicativos ou atualizações significativas podem ser apresentados aqui.</string>
+    <string name="summary_preference_faq_1">O App Toolkit é um aplicativo criado para apresentar e demonstrar apps desenvolvidos com a biblioteca AppToolkit. É seu guia para explorar esse ecossistema e ver a biblioteca AppToolkit em ação.</string>
+    <string name="question_2">Como acesso os diferentes apps exibidos no App Toolkit?</string>
+    <string name="summary_preference_faq_2">O App Toolkit lista vários aplicativos. Ao tocar em um app, você geralmente vê mais informações e um link para instalá-lo ou abri-lo no Google Play Store, permitindo experimentar na prática.</string>
+    <string name="question_3">Os apps apresentados no App Toolkit são gratuitos?</string>
+    <string name="summary_preference_faq_3">Muitos apps apresentados no App Toolkit oferecem um conjunto básico de recursos gratuitos. Alguns podem ter funcionalidades avançadas por meio de uma versão premium ou compras no app. Os detalhes de cada app podem ser encontrados em sua página correspondente no Google Play Store.</string>
+    <string name="question_4">Como posso saber mais sobre um app específico listado?</string>
+    <string name="summary_preference_faq_4">Para detalhes completos sobre um app, seus recursos e avaliações, toque no app no App Toolkit para visitar sua página no Google Play Store.</string>
+    <string name="question_5">Onde posso encontrar ajuda ou suporte para um dos apps listados?</string>
+    <string name="summary_preference_faq_5">Cada app possui seus próprios canais de suporte, geralmente detalhados na página do Google Play Store ou dentro do próprio app. O App Toolkit serve para descobrir esses apps; para problemas específicos, use as opções de suporte daquele app.</string>
+    <string name="question_6">Com que frequência a lista de apps é atualizada no App Toolkit?</string>
+    <string name="summary_preference_faq_6">O App Toolkit é atualizado regularmente para que você sempre veja os apps mais recentes que usam a biblioteca AppToolkit. Novos apps ou atualizações importantes podem aparecer aqui.</string>
     <string name="question_7">Por que o App Toolkit precisa de permissões como acesso à Internet?</string>
-    <string name="summary_preference_faq_7">O App Toolkit requer acesso à Internet para buscar a lista mais recente de nossos aplicativos na Google Play Store e exibir suas informações com precisão. Ele normalmente não requer outras permissões invasivas.</string>
-    <string name="question_8">Como posso fornecer feedback sobre o App Toolkit ou seus aplicativos?</string>
-    <string name="summary_preference_faq_8">Valorizamos seu feedback sobre o App Toolkit e nossos aplicativos individuais. Você geralmente pode encontrar uma opção \"Feedback\" ou \"Entre em Contato\" nas configurações do App Toolkit ou em nossa página de desenvolvedor na Play Store. O feedback sobre nossa biblioteca AppToolkit em si também é bem-vindo através dos canais apropriados.</string>
-    <string name="question_9">Meus dados estão seguros ao usar o App Toolkit para encontrar seus outros aplicativos?</string>
-    <string name="summary_preference_faq_9">O App Toolkit busca principalmente informações publicamente disponíveis sobre nossos aplicativos. Quando você opta por instalar ou usar um de nossos aplicativos listados, a Política de Privacidade própria desse aplicativo será aplicada. Incentivamos você a revisá-la. O manuseio de dados do App Toolkit é descrito em nossa Política de Privacidade.</string>
+    <string name="summary_preference_faq_7">Para mostrar a lista mais recente de apps, o App Toolkit usa o acesso à Internet para obter informações do Google Play Store e exibi-las corretamente. Em geral, não requer outras permissões invasivas.</string>
+    <string name="question_8">Como posso enviar feedback sobre o App Toolkit ou os apps?</string>
+    <string name="summary_preference_faq_8">Seu feedback sobre o App Toolkit e os apps listados é bem-vindo. Normalmente é possível encontrar uma opção "Feedback" ou "Contato" nas configurações do App Toolkit ou na página do desenvolvedor no Google Play Store. Feedback sobre a biblioteca AppToolkit também é bem-vindo pelos canais apropriados.</string>
+    <string name="question_9">Meus dados estão seguros ao usar o App Toolkit para encontrar outros apps?</string>
+    <string name="summary_preference_faq_9">O App Toolkit busca principalmente informações públicas sobre os apps listados. Quando você escolhe instalar ou usar um desses apps, aplica-se a política de privacidade do próprio app; revise-a. O tratamento de dados do App Toolkit é descrito na sua própria política de privacidade.</string>
 </resources>

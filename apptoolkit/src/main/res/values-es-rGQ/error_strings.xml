@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">No se pudo cargar la información de consentimiento</string>
+
+    <string name="activity_not_found">Actividad no encontrada.</string>
+
+    <string name="security_error">Se produjo un error de seguridad. Por favor, inténtelo de nuevo más tarde.</string>
+    <string name="io_error">Se produjo un error de entrada/salida. Compruebe su conexión de red o el almacenamiento e inténtelo de nuevo.</string>
+    <string name="illegal_argument_error">Se proporcionó una entrada o argumento no válido. Compruebe la información e inténtelo de nuevo.</string>
+    <string name="unknown_error">Se produjo un error desconocido.</string>
+    <string name="initialization_error">La inicialización falló. Por favor, inténtelo de nuevo más tarde.</string>
+
+    <string name="error_no_settings_found">No se encontraron ajustes</string>
+    <string name="error_invalid_content_key">Clave de contenido no válida.</string>
+
+    <string name="error_unauthorized">No autorizado: token no válido</string>
+    <string name="error_forbidden">Prohibido: permisos insuficientes</string>
+    <string name="error_gone">Punto final de la API eliminado</string>
+    <string name="error_unprocessable">Datos no válidos para la creación del problema</string>
+    <string name="error_invalid_report">El título y la descripción no pueden estar vacíos</string>
+
+    <string name="error_failed_to_load_ads_settings">No se pudieron cargar los ajustes de anuncios</string>
+
+    <string name="cache_cleared_error">La caché se borró con algunos errores</string>
+
+    <string name="loading_eula_message">Recuperando el Acuerdo de Licencia de Usuario Final…</string>
+    <string name="loading_changelog_message">Obteniendo el registro de cambios de la aplicación…</string>
+    <string name="error_loading_eula_message">No se pudo cargar el Acuerdo de Licencia de Usuario Final. Por favor, inténtelo de nuevo.</string>
+    <string name="error_loading_changelog_message">No se pudo cargar el registro de cambios de la aplicación. Por favor, inténtelo de nuevo.</string>
+
+    <string name="error_failed_to_load_sku_details">No se pudieron cargar los detalles del SKU</string>
+
+    <string name="no_internet_error">No hay conexión a internet.</string>
+    <string name="connection_error">Error de red. Por favor, inténtelo de nuevo.</string>
+    <string name="connection_closed_error">La conexión fue interrumpida.</string>
+    <string name="request_timeout_error">La solicitud agotó el tiempo de espera. Inténtelo de nuevo.</string>
+    <string name="ssl_error">La conexión segura falló.</string>
+
+    <string name="http_redirect_error">Redirección inesperada desde el servidor.</string>
+    <string name="http_client_error">La solicitud falló. Por favor, inténtelo de nuevo.</string>
+    <string name="http_server_error">Error del servidor. Por favor, inténtelo de nuevo más tarde.</string>
+    <string name="rate_limited_error">Demasiadas solicitudes. Inténtelo de nuevo más tarde.</string>
+
+    <string name="serialization_error">No se pudo leer la respuesta del servidor.</string>
+
+    <string name="no_data_error">No hay datos disponibles.</string>
+    <string name="invalid_state_error">La operación no está permitida en este momento.</string>
+    <string name="unsupported_operation_error">Operación no compatible.</string>
+    <string name="cancelled_error">Operación cancelada.</string>
+
+    <string name="database_error">Error de almacenamiento.</string>
+    <string name="database_locked_error">El almacenamiento está ocupado. Inténtelo de nuevo.</string>
+    <string name="database_constraint_error">Error de restricción de almacenamiento.</string>
+    <string name="database_cant_open_error">No se puede abrir el almacenamiento.</string>
+    <string name="database_corrupt_error">El almacenamiento está dañado.</string>
+    <string name="database_full_error">El almacenamiento está lleno.</string>
+
+    <string name="error_an_error_occurred">Se produjo un error</string>
+    <string name="error_failed_to_launch_review">No se pudo iniciar el flujo de reseña</string>
+    <string name="error_failed_to_load_faq">No se pudieron cargar las preguntas frecuentes</string>
+    <string name="error_failed_to_request_review">No se pudo solicitar la reseña</string>
+    <string name="error_failed_to_update_app">No se pudo actualizar la aplicación</string>
+    <string name="error_failed_to_load_consent_info">No se pudo cargar la información de consentimiento</string>
+    <string name="error_failed_to_load_navigation">No se pudo cargar la navegación</string>
+</resources>

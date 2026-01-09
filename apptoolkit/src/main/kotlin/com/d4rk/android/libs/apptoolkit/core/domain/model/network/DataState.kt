@@ -35,6 +35,25 @@ inline fun <D, E : RootError> DataState<D, E>.onSuccess(action: (D) -> Unit): Da
 }
 
 /**
+ * Executes the given [action] if the [DataState] is an [DataState.Error].
+ * The action receives the error of type [E]. This function allows for handling
+ * error cases in a chained manner.
+ *
+ * @param action The block of code to be executed with the error.
+ * @return The original [DataState] instance, allowing for further chaining.
+ */
+inline fun <D, E : RootError> DataState<D, E>.onFailure(action: (E) -> Unit): DataState<D, E> {
+    return when (this) {
+        is DataState.Error -> {
+            action(error)
+            this
+        }
+
+        else -> this
+    }
+}
+
+/**
  * A chained function that is executed only when the [DataState] is [DataState.Loading].
  * It provides the nullable data that might be available during the loading state.
  *

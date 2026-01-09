@@ -38,13 +38,14 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.AppInfoHelper
-import com.d4rk.android.libs.apptoolkit.core.utils.window.AppWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isAppInstalled
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -93,11 +94,13 @@ fun FavoriteAppsRoute(
     val openApp: (AppInfo) -> Unit = remember(dispatchers) { buildAppClick }
     val onShareClick: (AppInfo) -> Unit = remember { buildShareClick }
 
-    val appInfoHelper = remember(dispatchers) { AppInfoHelper(dispatchers) }
     val onOpenInPlayStore: (AppInfo) -> Unit = remember(context) {
         { appInfo ->
             if (appInfo.packageName.isNotEmpty()) {
-                context.openPlayStoreForApp(appInfo.packageName)
+                val opened = context.openPlayStoreForApp(appInfo.packageName)
+                if (!opened) {
+                    Log.w(FAVORITES_LOG_TAG, "Unable to open Play Store for ${appInfo.packageName}")
+                }
             }
         }
     }
@@ -110,10 +113,13 @@ fun FavoriteAppsRoute(
 
     LaunchedEffect(selectedApp?.packageName) {
         isSelectedAppInstalled = selectedApp?.let { app ->
-            if (app.packageName.isNotEmpty()) appInfoHelper.isAppInstalled(
-                context,
-                app.packageName
-            ) else false
+            if (app.packageName.isNotEmpty()) {
+                withContext(dispatchers.io) {
+                    context.isAppInstalled(app.packageName)
+                }
+            } else {
+                false
+            }
         }
     }
 

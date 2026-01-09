@@ -3,45 +3,46 @@
 
     <!-- Onboarding -->
     <string name="onboarding_welcome_title">ยินดีต้อนรับสู่ App Toolkit</string>
-    <string name="onboarding_welcome_description">สำรวจความสามารถของไลบรารี AppToolkit ของเรา ค้นพบแอปพลิเคชันของเรา ซึ่งทั้งหมดสร้างขึ้นเพื่อสาธิตและใช้ประโยชน์จากพลังของไลบรารี AppToolkit ของเรา ซึ่งจะช่วยยกระดับการพัฒนา Android และประสบการณ์ผู้ใช้ของคุณ</string>
-    <string name="onboarding_feature1_title">ค้นพบแอปพลิเคชันของเรา</string>
-    <string name="onboarding_feature1_description">App Toolkit ขอแนะนำชุดแอปพลิเคชันที่เราคัดสรรมา ซึ่งแต่ละแอปพลิเคชันออกแบบมาเพื่อเน้นด้านต่างๆ ของไลบรารี AppToolkit ของเรา และยกระดับประสบการณ์ Android ของคุณ ดูว่าไลบรารี AppToolkit ของเราทำอะไรได้บ้าง.</string>
-    <string name="onboarding_personalization_title">ดูไลบรารี AppToolkit ของเราทำงานจริง</string>
-    <string name="onboarding_personalization_description">แอปนี้สาธิตวิธีการใช้ไลบรารี AppToolkit ของเราเพื่อสร้างแอปพลิเคชันที่หลากหลายและเน้นผู้ใช้เป็นศูนย์กลาง สำรวจแอปของเราเพื่อดูคุณสมบัติและการนำไลบรารีไปใช้งานในรูปแบบต่างๆ</string>
+    <string name="onboarding_welcome_description">สำรวจความสามารถของไลบรารี AppToolkit ค้นพบแอปที่สร้างขึ้นเพื่อแสดงศักยภาพของไลบรารี และยกระดับการพัฒนา Android และประสบการณ์ผู้ใช้ของคุณ</string>
+    <string name="onboarding_feature1_title">ค้นพบแอป</string>
+    <string name="onboarding_feature1_description">App Toolkit นำเสนอชุดแอปที่คัดสรรมา โดยแต่ละแอปออกแบบเพื่อเน้นแง่มุมต่าง ๆ ของไลบรารี AppToolkit และปรับปรุงประสบการณ์ Android ของคุณ ดูว่าทำอะไรได้บ้างด้วยไลบรารี AppToolkit</string>
+    <string name="onboarding_personalization_title">ดูไลบรารี AppToolkit ในการใช้งานจริง</string>
+    <string name="onboarding_personalization_description">แอปนี้แสดงให้เห็นว่าไลบรารี AppToolkit สร้างแอปที่ยืดหยุ่นและเน้นผู้ใช้อย่างไร สำรวจแอปตัวอย่างเพื่อดูฟีเจอร์และการใช้งานที่หลากหลายของไลบรารี</string>
 
     <!-- Home screen -->
-    <string name="all_apps">แอพทั้งหมด</string>
+    <string name="all_apps">แอปทั้งหมด</string>
     <string name="favorite_apps">รายการโปรด</string>
-    <string name="no_apps_added_to_favorites">ไม่มีการเพิ่มแอพในรายการโปรด</string>
-    <string name="error_failed_to_fetch_our_apps">ไม่สามารถดึงข้อมูลรายการแอปของเราได้</string>
+    <string name="no_apps_added_to_favorites">ยังไม่มีแอปในรายการโปรด</string>
+    <string name="error_failed_to_fetch_our_apps">ไม่สามารถโหลดรายการแอปได้</string>
     <string name="error_failed_to_load_apps">ไม่สามารถโหลดแอปได้</string>
-    <string name="error_failed_to_update_favorite">ไม่สามารถอัปเดตที่ชื่นชอบได้</string>
+    <string name="error_failed_to_update_favorite">ไม่สามารถอัปเดตรายการโปรดได้</string>
+    <string name="error_failed_to_load_navigation">ไม่สามารถโหลดการนำทางได้</string>
     <string name="open_random_app">เปิดแอปแบบสุ่ม</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">แชร์แอป</string>
-    <string name="app_details_view_on_play_store">ดูใน Google Play</string>
+    <string name="app_details_view_on_play_store">ดูบน Google Play</string>
     <string name="app_details_about_title">เกี่ยวกับแอปนี้</string>
     <string name="app_details_screenshots_title">ภาพหน้าจอ</string>
     <string name="app_details_open_app">เปิดแอป</string>
 
     <!-- Help screen -->
-    <string name="question_1">App Toolkit คืออะไร</string>
-    <string name="summary_preference_faq_1">App Toolkit เป็นแอปพลิเคชันที่ออกแบบมาเพื่อนำเสนอและสาธิตแอปที่เราพัฒนาขึ้นโดยใช้ไลบรารี AppToolkit ของเรา เป็นคู่มือของคุณในการสำรวจระบบนิเวศของแอปพลิเคชันของเราและดูไลบรารี AppToolkit ของเราทำงานจริง</string>
-    <string name="question_2">ฉันจะเข้าถึงแอปต่างๆ ที่แสดงใน App Toolkit ได้อย่างไร</string>
-    <string name="summary_preference_faq_2">App Toolkit แสดงรายการแอปพลิเคชันต่างๆ ของเรา การแตะที่รายการแอปมักจะให้ข้อมูลเพิ่มเติมและลิงก์เพื่อติดตั้งหรือเปิดจาก Google Play Store ซึ่งช่วยให้คุณได้สัมผัสด้วยตนเอง</string>
-    <string name="question_3">แอปที่นำเสนอใน App Toolkit ฟรีหรือไม่</string>
-    <string name="summary_preference_faq_3">แอปจำนวนมากของเราที่นำเสนอใน App Toolkit มีชุดคุณสมบัติหลักให้ใช้ฟรี บางแอปอาจมีฟังก์ชันการทำงานขั้นสูงที่พร้อมใช้งานผ่านเวอร์ชันพรีเมียมหรือการซื้อในแอป สามารถดูรายละเอียดสำหรับแต่ละแอปได้ในหน้า Play Store ที่เกี่ยวข้อง</string>
-    <string name="question_4">ฉันจะเรียนรู้เพิ่มเติมเกี่ยวกับแอปที่ระบุในรายการได้อย่างไร</string>
-    <string name="summary_preference_faq_4">สำหรับรายละเอียดทั้งหมดเกี่ยวกับแอปใดแอปหนึ่งของเรา คุณสมบัติ และรีวิวจากผู้ใช้ โปรดแตะที่แอปใน App Toolkit เพื่อไปที่หน้าใน Google Play Store</string>
-    <string name="question_5">ฉันจะหาความช่วยเหลือหรือการสนับสนุนสำหรับแอปที่คุณระบุในรายการได้ที่ไหน</string>
-    <string name="summary_preference_faq_5">การสนับสนุนสำหรับแอปแต่ละรายการของเรามีให้ผ่านช่องทางที่เกี่ยวข้อง ซึ่งโดยปกติจะให้รายละเอียดไว้ในหน้า Play Store หรือภายในตัวแอปเอง App Toolkit มีไว้สำหรับค้นหาแอปเหล่านี้ สำหรับปัญหาเฉพาะแอป โปรดดูตัวเลือกการสนับสนุนของแอปนั้น</string>
-    <string name="question_6">รายการแอปของคุณใน App Toolkit อัปเดตบ่อยแค่ไหน</string>
-    <string name="summary_preference_faq_6">เรามุ่งมั่นที่จะอัปเดต App Toolkit ให้มีแอปพลิเคชันล่าสุดและเกี่ยวข้องที่สุดที่ใช้ไลบรารี AppToolkit ของเราอยู่เสมอ แอปใหม่หรือการอัปเดตที่สำคัญอาจแสดงอยู่ที่นี่</string>
-    <string name="question_7">เหตุใด App Toolkit จึงต้องการสิทธิ์ต่างๆ เช่น การเข้าถึงอินเทอร์เน็ต</string>
-    <string name="summary_preference_faq_7">App Toolkit ต้องการการเข้าถึงอินเทอร์เน็ตเพื่อดึงข้อมูลรายการแอปพลิเคชันล่าสุดของเราจาก Google Play Store และแสดงข้อมูลอย่างถูกต้อง โดยทั่วไปแล้วไม่ต้องการสิทธิ์ที่ล่วงล้ำอื่นๆ</string>
-    <string name="question_8">ฉันจะให้ข้อเสนอแนะเกี่ยวกับ App Toolkit หรือแอปของคุณได้อย่างไร</string>
-    <string name="summary_preference_faq_8">เราให้ความสำคัญกับความคิดเห็นของคุณเกี่ยวกับ App Toolkit และแอปแต่ละรายการของเรา. โดยปกติคุณจะพบตัวเลือก \"ข้อเสนอแนะ\" หรือ \"ติดต่อเรา\" ภายในการตั้งค่าของ App Toolkit หรือในหน้าผู้พัฒนาของเราบน Play Store ข้อเสนอแนะเกี่ยวกับไลบรารี AppToolkit ของเราเองก็ยินดีรับฟังผ่านช่องทางที่เหมาะสมเช่นกัน</string>
-    <string name="question_9">ข้อมูลของฉันปลอดภัยหรือไม่เมื่อใช้ App Toolkit เพื่อค้นหาแอปอื่นๆ ของคุณ</string>
-    <string name="summary_preference_faq_9">App Toolkit ดึงข้อมูลที่เปิดเผยต่อสาธารณะเกี่ยวกับแอปของเราเป็นหลัก เมื่อคุณเลือกที่จะติดตั้งหรือใช้แอปใดแอปหนึ่งที่เราแสดงไว้ นโยบายความเป็นส่วนตัวของแอปนั้นๆ จะมีผลบังคับใช้ เราขอแนะนำให้คุณตรวจสอบนโยบายดังกล่าว การจัดการข้อมูลของ App Toolkit ระบุไว้ในนโยบายความเป็นส่วนตัวของเรา</string>
+    <string name="question_1">App Toolkit คืออะไร?</string>
+    <string name="summary_preference_faq_1">App Toolkit เป็นแอปที่ออกแบบมาเพื่อแนะนำและสาธิตแอปที่สร้างด้วยไลบรารี AppToolkit นี่คือคู่มือของคุณในการสำรวจระบบนิเวศนี้และดูไลบรารี AppToolkit ในการใช้งานจริง</string>
+    <string name="question_2">จะเข้าถึงแอปต่าง ๆ ที่แสดงใน App Toolkit ได้อย่างไร?</string>
+    <string name="summary_preference_faq_2">App Toolkit แสดงรายการแอปต่าง ๆ เมื่อแตะแอป คุณมักจะเห็นข้อมูลเพิ่มเติมและลิงก์สำหรับติดตั้งหรือเปิดจาก Google Play Store เพื่อทดลองใช้งานได้ทันที</string>
+    <string name="question_3">แอปที่นำเสนอใน App Toolkit ฟรีหรือไม่?</string>
+    <string name="summary_preference_faq_3">แอปจำนวนมากที่นำเสนอใน App Toolkit มีฟีเจอร์พื้นฐานให้ใช้ฟรี บางแอปอาจมีฟีเจอร์ขั้นสูงผ่านเวอร์ชันพรีเมียมหรือการซื้อในแอป รายละเอียดของแต่ละแอปสามารถดูได้ที่หน้าของแอปใน Google Play Store</string>
+    <string name="question_4">จะรู้เพิ่มเติมเกี่ยวกับแอปที่ระบุไว้ได้อย่างไร?</string>
+    <string name="summary_preference_faq_4">หากต้องการรายละเอียดครบถ้วนเกี่ยวกับแอป ฟีเจอร์ และรีวิวจากผู้ใช้ ให้แตะแอปใน App Toolkit เพื่อไปที่หน้าบน Google Play Store</string>
+    <string name="question_5">ฉันจะหาความช่วยเหลือหรือการสนับสนุนสำหรับแอปที่อยู่ในรายการได้ที่ไหน?</string>
+    <string name="summary_preference_faq_5">แต่ละแอปมีช่องทางสนับสนุนของตนเอง ซึ่งมักระบุไว้บนหน้า Google Play Store หรือภายในแอป App Toolkit ใช้เพื่อค้นพบแอปเหล่านี้; สำหรับปัญหาเฉพาะของแอป ให้ใช้ตัวเลือกการสนับสนุนของแอปนั้น</string>
+    <string name="question_6">รายการแอปใน App Toolkit อัปเดตบ่อยแค่ไหน?</string>
+    <string name="summary_preference_faq_6">App Toolkit มีการอัปเดตเป็นประจำเพื่อให้คุณเห็นแอปล่าสุดที่ใช้ไลบรารี AppToolkit อยู่เสมอ อาจมีแอปใหม่หรือการอัปเดตสำคัญปรากฏที่นี่</string>
+    <string name="question_7">ทำไม App Toolkit ต้องขอสิทธิ์อย่างการเข้าถึงอินเทอร์เน็ต?</string>
+    <string name="summary_preference_faq_7">เพื่อแสดงรายการแอปล่าสุด App Toolkit ใช้การเข้าถึงอินเทอร์เน็ตในการดึงข้อมูลจาก Google Play Store และแสดงอย่างถูกต้อง โดยทั่วไปไม่จำเป็นต้องมีสิทธิ์ที่รุกล้ำอื่น ๆ</string>
+    <string name="question_8">ฉันจะส่งความคิดเห็นเกี่ยวกับ App Toolkit หรือแอปได้อย่างไร?</string>
+    <string name="summary_preference_faq_8">เรายินดีรับความคิดเห็นของคุณเกี่ยวกับ App Toolkit และแอปที่อยู่ในรายการ โดยทั่วไปคุณสามารถพบตัวเลือก "Feedback" หรือ "Contact" ในการตั้งค่า App Toolkit หรือหน้าโปรไฟล์นักพัฒนาใน Google Play Store ความคิดเห็นเกี่ยวกับไลบรารี AppToolkit ก็ยินดีรับผ่านช่องทางที่เหมาะสม</string>
+    <string name="question_9">ข้อมูลของฉันปลอดภัยไหมเมื่อใช้ App Toolkit เพื่อหาแอปอื่น ๆ?</string>
+    <string name="summary_preference_faq_9">App Toolkit ดึงข้อมูลสาธารณะเกี่ยวกับแอปที่อยู่ในรายการเป็นหลัก เมื่อคุณเลือกติดตั้งหรือใช้แอปใดแอปหนึ่ง นโยบายความเป็นส่วนตัวของแอปนั้นจะมีผลบังคับใช้ โปรดอ่านให้ครบถ้วน การจัดการข้อมูลของ App Toolkit อธิบายไว้ในนโยบายความเป็นส่วนตัวของแอปนี้</string>
 </resources>

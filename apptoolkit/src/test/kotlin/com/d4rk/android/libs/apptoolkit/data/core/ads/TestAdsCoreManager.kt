@@ -5,7 +5,7 @@ import android.content.Context
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.interfaces.OnShowAdCompleteListener
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.appopen.AppOpenAd
@@ -31,7 +31,7 @@ class TestAdsCoreManager {
     private val testScope = CoroutineScope(Dispatchers.Unconfined)
     private val noopContinuation = object : Continuation<Unit> {
         override val context = EmptyCoroutineContext
-        override fun resumeWith(result: Result<Unit>) {}
+        override fun resumeWith(result: Result<Unit>) {} // FIXME: This method is empty
     }
 
     @Test

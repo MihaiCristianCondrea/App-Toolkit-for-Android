@@ -7,18 +7,22 @@ import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpAction
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
 import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
@@ -30,6 +34,7 @@ import kotlinx.coroutines.flow.update
 class HelpViewModel(
     private val getFaqUseCase: GetFaqUseCase,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
 ) : ScreenViewModel<HelpUiState, HelpEvent, HelpAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.IsLoading(),
@@ -54,37 +59,39 @@ class HelpViewModel(
         loadFaqJob?.cancel()
         loadFaqJob = getFaqUseCase()
             .flowOn(dispatchers.io)
-            .onStart { screenState.updateState(ScreenState.IsLoading()) }
+            .onStart { screenState.setLoading() }
             .onEach { result ->
-                when (result) {
-                    is DataState.Loading -> screenState.updateState(ScreenState.IsLoading())
-
-                    is DataState.Success -> {
-                        val payload = result.data
+                result
+                    .onSuccess { faqs ->
                         val screenStateForData =
-                            if (payload.isEmpty()) ScreenState.NoData() else ScreenState.Success()
+                            if (faqs.isEmpty()) ScreenState.NoData() else ScreenState.Success()
                         screenState.update { current ->
                             current.copy(
                                 screenState = screenStateForData,
-                                data = HelpUiState(questions = payload.toImmutableList())
+                                data = HelpUiState(questions = faqs.toImmutableList())
                             )
                         }
                     }
-
-                    is DataState.Error -> {
+                    .onFailure { error ->
                         screenState.updateState(ScreenState.Error())
                         screenState.showSnackbar(
                             UiSnackbar(
-                                message = result.error.asUiText(),
+                                message = error.asUiText(),
                                 isError = true,
                                 timeStamp = System.currentTimeMillis(),
-                                type = ScreenMessageType.SNACKBAR,
+                                type = ScreenMessageType.SNACKBAR
                             )
                         )
                     }
-                }
             }
-            .catch { t ->
+
+            .catch {
+                if (it is CancellationException) throw it
+                firebaseController.reportViewModelError(
+                    viewModelName = "HelpViewModel",
+                    action = "loadFaq",
+                    throwable = it,
+                )
                 screenState.updateState(ScreenState.Error())
                 screenState.showSnackbar(
                     UiSnackbar(

@@ -5,6 +5,7 @@ import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteO
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOnboardingCompletionUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
+import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -51,6 +52,8 @@ class TestOnboardingViewModel {
         @RegisterExtension
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
+
+    private val firebaseController = FakeFirebaseController()
 
     @Test
     fun `initial state is not completed`() = runTest(dispatcherExtension.testDispatcher) {
@@ -160,6 +163,7 @@ class TestOnboardingViewModel {
         OnboardingViewModel(
             observeOnboardingCompletionUseCase = ObserveOnboardingCompletionUseCase(repository),
             completeOnboardingUseCase = CompleteOnboardingUseCase(repository),
-            dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher)
+            dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
+            firebaseController = firebaseController,
         )
 }

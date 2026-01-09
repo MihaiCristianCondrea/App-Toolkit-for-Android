@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">فشل في تحميل معلومات الموافقة</string>
+
+    <string name="activity_not_found">لم يتم العثور على النشاط.</string>
+
+    <string name="security_error">حدث خطأ أمني. يرجى المحاولة مرة أخرى لاحقًا.</string>
+    <string name="io_error">حدث خطأ إدخال/إخراج. يرجى التحقق من اتصال الشبكة أو التخزين والمحاولة مرة أخرى.</string>
+    <string name="illegal_argument_error">تم تقديم إدخال أو وسيطة غير صالحة. يرجى التحقق من المعلومات والمحاولة مرة أخرى.</string>
+    <string name="unknown_error">حدث خطأ غير معروف.</string>
+    <string name="initialization_error">فشلت عملية التهيئة. يرجى المحاولة مرة أخرى لاحقًا.</string>
+
+    <string name="error_no_settings_found">لم يتم العثور على إعدادات</string>
+    <string name="error_invalid_content_key">مفتاح المحتوى غير صالح.</string>
+
+    <string name="error_unauthorized">غير مصرح: رمز غير صالح</string>
+    <string name="error_forbidden">محظور: أذونات غير كافية</string>
+    <string name="error_gone">تمت إزالة نقطة نهاية واجهة برمجة التطبيقات</string>
+    <string name="error_unprocessable">بيانات غير صالحة لإنشاء المشكلة</string>
+    <string name="error_invalid_report">لا يمكن أن يكون العنوان والوصف فارغين</string>
+
+    <string name="error_failed_to_load_ads_settings">فشل في تحميل إعدادات الإعلانات</string>
+
+    <string name="cache_cleared_error">تم مسح ذاكرة التخزين المؤقت مع بعض الأخطاء</string>
+
+    <string name="loading_eula_message">جارٍ استرداد اتفاقية ترخيص المستخدم النهائي…</string>
+    <string name="loading_changelog_message">جارٍ جلب سجل تغييرات التطبيق…</string>
+    <string name="error_loading_eula_message">تعذر تحميل اتفاقية ترخيص المستخدم النهائي. يرجى المحاولة مرة أخرى.</string>
+    <string name="error_loading_changelog_message">تعذر تحميل سجل تغييرات التطبيق. يرجى المحاولة مرة أخرى.</string>
+
+    <string name="error_failed_to_load_sku_details">فشل في تحميل تفاصيل SKU</string>
+
+    <string name="no_internet_error">لا يوجد اتصال بالإنترنت.</string>
+    <string name="connection_error">خطأ في الشبكة. يرجى المحاولة مرة أخرى.</string>
+    <string name="connection_closed_error">تمت مقاطعة الاتصال.</string>
+    <string name="request_timeout_error">انتهت مهلة الطلب. حاول مرة أخرى.</string>
+    <string name="ssl_error">فشل الاتصال الآمن.</string>
+
+    <string name="http_redirect_error">إعادة توجيه غير متوقعة من الخادم.</string>
+    <string name="http_client_error">فشل الطلب. يرجى المحاولة مرة أخرى.</string>
+    <string name="http_server_error">خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقًا.</string>
+    <string name="rate_limited_error">طلبات كثيرة جدًا. حاول مرة أخرى لاحقًا.</string>
+
+    <string name="serialization_error">فشل في قراءة استجابة الخادم.</string>
+
+    <string name="no_data_error">لا توجد بيانات متاحة.</string>
+    <string name="invalid_state_error">العملية غير مسموح بها الآن.</string>
+    <string name="unsupported_operation_error">عملية غير مدعومة.</string>
+    <string name="cancelled_error">تم إلغاء العملية.</string>
+
+    <string name="database_error">خطأ في التخزين.</string>
+    <string name="database_locked_error">التخزين مشغول. حاول مرة أخرى.</string>
+    <string name="database_constraint_error">خطأ في قيود التخزين.</string>
+    <string name="database_cant_open_error">تعذر فتح التخزين.</string>
+    <string name="database_corrupt_error">التخزين تالف.</string>
+    <string name="database_full_error">التخزين ممتلئ.</string>
+
+    <string name="error_an_error_occurred">حدث خطأ</string>
+    <string name="error_failed_to_launch_review">فشل في تشغيل تدفق المراجعة</string>
+    <string name="error_failed_to_load_faq">فشل في تحميل الأسئلة الشائعة</string>
+    <string name="error_failed_to_request_review">فشل في طلب المراجعة</string>
+    <string name="error_failed_to_update_app">فشل في تحديث التطبيق</string>
+    <string name="error_failed_to_load_consent_info">فشل في تحميل معلومات الموافقة</string>
+    <string name="error_failed_to_load_navigation">تعذّر تحميل التنقّل</string>
+</resources>

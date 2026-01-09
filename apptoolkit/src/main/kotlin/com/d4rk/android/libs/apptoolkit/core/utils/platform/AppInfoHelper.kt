@@ -12,15 +12,6 @@ open class AppInfoHelper(
 ) {
 
     /**
-     * Checks if a specific app is installed on the device.
-     * @return True if the app is installed, false otherwise.
-     */
-    suspend fun isAppInstalled(context: Context, packageName: String): Boolean =
-        withContext(dispatchers.io) {
-            runCatching { context.packageManager.getApplicationInfo(packageName, 0) }.isSuccess
-        }
-
-    /**
      * Opens a specific app if installed.
      *
      * Returns `true` if the app was successfully launched and `false` otherwise.

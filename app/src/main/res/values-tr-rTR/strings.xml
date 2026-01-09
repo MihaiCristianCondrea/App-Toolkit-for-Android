@@ -2,46 +2,47 @@
 <resources>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome_title">App Toolkit\'e Hoş Geldiniz</string>
-    <string name="onboarding_welcome_description">AppToolkit kütüphanemizin yeteneklerini keşfedin. Android geliştirmenizi ve kullanıcı deneyiminizi geliştiren AppToolkit kütüphanemizin gücünü göstermek ve kullanmak için oluşturulmuş uygulamalarımızı keşfedin.</string>
-    <string name="onboarding_feature1_title">Uygulamalarımızı keşfedin</string>
-    <string name="onboarding_feature1_description">App Toolkit, her biri AppToolkit kütüphanemizin farklı yönlerini vurgulamak ve Android deneyiminizi geliştirmek için tasarlanmış uygulamalarımızdan bir seçki sunar. AppToolkit kütüphanemizle nelerin mümkün olduğunu görün.</string>
-    <string name="onboarding_personalization_title">AppToolkit kütüphanemizi çalışırken görün</string>
-    <string name="onboarding_personalization_description">Bu uygulama, AppToolkit kütüphanemizin çok yönlü ve kullanıcı odaklı uygulamalar oluşturmak için nasıl kullanılabileceğini gösterir. Kütüphanenin farklı özelliklerini ve uygulamalarını görmek için uygulamalarımızı keşfedin.</string>
+    <string name="onboarding_welcome_title">App Toolkit’e hoş geldiniz</string>
+    <string name="onboarding_welcome_description">AppToolkit kitaplığının yeteneklerini keşfedin. Kitaplığın gücünü göstermek ve Android geliştirme ile kullanıcı deneyiminizi iyileştirmek için oluşturulmuş uygulamaları keşfedin.</string>
+    <string name="onboarding_feature1_title">Uygulamaları keşfedin</string>
+    <string name="onboarding_feature1_description">App Toolkit, AppToolkit kitaplığının farklı yönlerini öne çıkarmak ve Android deneyiminizi iyileştirmek için tasarlanmış uygulamalardan oluşan bir seçki sunar. AppToolkit kitaplığıyla neler yapılabileceğini görün.</string>
+    <string name="onboarding_personalization_title">AppToolkit kitaplığını iş başında görün</string>
+    <string name="onboarding_personalization_description">Bu uygulama, AppToolkit kitaplığının çok yönlü ve kullanıcı odaklı uygulamalar nasıl oluşturduğunu gösterir. Kitaplığın farklı özelliklerini ve uygulamalarını görmek için örnek uygulamaları keşfedin.</string>
 
     <!-- Home screen -->
     <string name="all_apps">Tüm uygulamalar</string>
     <string name="favorite_apps">Favoriler</string>
-    <string name="no_apps_added_to_favorites">Favorilere eklenen uygulama yok</string>
-    <string name="error_failed_to_fetch_our_apps">Uygulama listelerimiz alınamadı</string>
+    <string name="no_apps_added_to_favorites">Favorilere eklenmiş uygulama yok</string>
+    <string name="error_failed_to_fetch_our_apps">Uygulama listeleri yüklenemedi</string>
     <string name="error_failed_to_load_apps">Uygulamalar yüklenemedi</string>
     <string name="error_failed_to_update_favorite">Favori güncellenemedi</string>
-    <string name="open_random_app">Rastgele uygulamayı aç</string>
+    <string name="error_failed_to_load_navigation">Gezinme yüklenemedi</string>
+    <string name="open_random_app">Rastgele uygulama aç</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Uygulamayı paylaş</string>
-    <string name="app_details_view_on_play_store">Google Play\'de görüntüle</string>
+    <string name="app_details_view_on_play_store">Google Play’de görüntüle</string>
     <string name="app_details_about_title">Bu uygulama hakkında</string>
     <string name="app_details_screenshots_title">Ekran görüntüleri</string>
     <string name="app_details_open_app">Uygulamayı aç</string>
 
     <!-- Help screen -->
     <string name="question_1">App Toolkit nedir?</string>
-    <string name="summary_preference_faq_1">App Toolkit, AppToolkit kütüphanemizi kullanarak geliştirdiğimiz uygulamaları öne çıkarmak ve göstermek için tasarlanmış bir uygulamadır. Uygulama ekosistemimizi keşfetmeniz ve AppToolkit kütüphanemizi çalışırken görmeniz için rehberinizdir.</string>
-    <string name="question_2">App Toolkit\'te gösterilen farklı uygulamalara nasıl erişebilirim?</string>
-    <string name="summary_preference_faq_2">App Toolkit çeşitli uygulamalarımızı listeler. Bir uygulama listesine dokunmak genellikle daha fazla bilgi ve Google Play Store\'dan yüklemek veya açmak için bir bağlantı sağlar, böylece ilk elden deneyimleyebilirsiniz.</string>
-    <string name="question_3">App Toolkit\'te öne çıkan uygulamalar ücretsiz mi?</string>
-    <string name="summary_preference_faq_3">App Toolkit\'te öne çıkan uygulamalarımızın çoğu temel bir dizi özelliği ücretsiz olarak sunar. Bazıları premium bir sürüm veya uygulama içi satın alımlar yoluyla kullanılabilen gelişmiş işlevlere sahip olabilir. Her uygulama için ayrıntılar ilgili Play Store sayfasında bulunabilir.</string>
+    <string name="summary_preference_faq_1">App Toolkit, AppToolkit kitaplığıyla oluşturulmuş uygulamaları tanıtmak ve göstermek için tasarlanmış bir uygulamadır. Bu ekosistemi keşfetmeniz ve AppToolkit kitaplığını iş başında görmeniz için bir rehberdir.</string>
+    <string name="question_2">App Toolkit’te gösterilen farklı uygulamalara nasıl erişirim?</string>
+    <string name="summary_preference_faq_2">App Toolkit çeşitli uygulamaları listeler. Bir uygulama kaydına dokunduğunuzda genellikle daha fazla bilgi ve onu Google Play Store’dan yüklemek veya açmak için bir bağlantı görürsünüz; böylece doğrudan deneyimleyebilirsiniz.</string>
+    <string name="question_3">App Toolkit’te öne çıkan uygulamalar ücretsiz mi?</string>
+    <string name="summary_preference_faq_3">App Toolkit’te öne çıkan birçok uygulama temel bir özellik setini ücretsiz sunar. Bazıları premium sürüm veya uygulama içi satın alımlar üzerinden gelişmiş işlevler sağlayabilir. Her uygulamanın ayrıntıları Google Play Store sayfasında bulunabilir.</string>
     <string name="question_4">Listelenen belirli bir uygulama hakkında nasıl daha fazla bilgi edinebilirim?</string>
-    <string name="summary_preference_faq_4">Uygulamalarımızdan biri, özellikleri ve kullanıcı yorumları hakkında eksiksiz ayrıntılar için lütfen Google Play Store\'daki sayfasını ziyaret etmek üzere App Toolkit\'teki uygulamaya dokunun.</string>
-    <string name="question_5">Listelenen uygulamalarınızdan biri için yardımı veya desteği nerede bulabilirim?</string>
-    <string name="summary_preference_faq_5">Bireysel uygulamalarımız için destek, genellikle Play Store sayfalarında veya uygulamanın kendi içinde ayrıntılı olarak belirtilen ilgili kanalları aracılığıyla sağlanır. App Toolkit bu uygulamaları keşfetmek içindir; uygulamaya özgü sorunlar için lütfen o uygulamanın destek seçeneklerine başvurun.</string>
-    <string name="question_6">Uygulamalarınızın listesi App Toolkit\'te ne sıklıkla güncellenir?</string>
-    <string name="summary_preference_faq_6">AppToolkit kütüphanemizi kullanan en son ve en alakalı uygulamalarımızla App Toolkit\'i güncel tutmayı amaçlıyoruz. Yeni uygulamalar veya önemli güncellemeler burada öne çıkarılabilir.</string>
+    <string name="summary_preference_faq_4">Bir uygulama, özellikleri ve kullanıcı yorumları hakkında tam bilgi için App Toolkit’te uygulamaya dokunarak Google Play Store sayfasını ziyaret edin.</string>
+    <string name="question_5">Listelenen uygulamalardan biri için yardım veya destek nerede bulunur?</string>
+    <string name="summary_preference_faq_5">Her uygulamanın kendi destek kanalları vardır; bunlar genellikle Google Play Store sayfasında veya uygulama içinde belirtilir. App Toolkit bu uygulamaları keşfetmek içindir; uygulamaya özel sorunlar için uygulamanın destek seçeneklerini kullanın.</string>
+    <string name="question_6">App Toolkit’te uygulama listesi ne sıklıkla güncellenir?</string>
+    <string name="summary_preference_faq_6">App Toolkit düzenli olarak güncellenir, böylece AppToolkit kitaplığını kullanan en yeni uygulamaları her zaman görürsünüz. Yeni uygulamalar veya önemli güncellemeler burada yer alabilir.</string>
     <string name="question_7">App Toolkit neden İnternet erişimi gibi izinlere ihtiyaç duyar?</string>
-    <string name="summary_preference_faq_7">App Toolkit, uygulamalarımızın en son listesini Google Play Store\'dan almak ve bilgilerini doğru bir şekilde görüntülemek için İnternet erişimi gerektirir. Genellikle başka müdahaleci izinler gerektirmez.</string>
-    <string name="question_8">App Toolkit veya uygulamalarınız hakkında nasıl geri bildirimde bulunabilirim?</string>
-    <string name="summary_preference_faq_8">App Toolkit ve bireysel uygulamalarımız hakkındaki geri bildirimlerinize değer veriyoruz. Genellikle App Toolkit\'in ayarlarında veya Play Store\'daki geliştirici sayfamızda bir \"Geri Bildirim\" veya \"Bize Ulaşın\" seçeneği bulabilirsiniz. AppToolkit kütüphanemiz hakkındaki geri bildirimler de uygun kanallar aracılığıyla memnuniyetle karşılanır.</string>
-    <string name="question_9">Diğer uygulamalarınızı bulmak için App Toolkit\'i kullanırken verilerim güvende mi?</string>
-    <string name="summary_preference_faq_9">App Toolkit öncelikle uygulamalarımız hakkında halka açık bilgileri alır. Listelenen uygulamalarımızdan birini yüklemeyi veya kullanmayı seçtiğinizde, o uygulamanın kendi Gizlilik Politikası geçerli olacaktır. Gözden geçirmenizi öneririz. App Toolkit\'in veri işleme şekli Gizlilik Politikamızda belirtilmiştir.</string>
+    <string name="summary_preference_faq_7">En güncel uygulama listesini göstermek için App Toolkit, Google Play Store’dan bilgi almak ve doğru şekilde göstermek üzere İnternet erişimini kullanır. Genellikle başka istilacı izinler gerekmez.</string>
+    <string name="question_8">App Toolkit veya uygulamalar hakkında nasıl geri bildirimde bulunabilirim?</string>
+    <string name="summary_preference_faq_8">App Toolkit ve listelenen uygulamalar hakkındaki geri bildiriminiz değerlidir. Genellikle App Toolkit ayarlarında veya Google Play Store’daki geliştirici sayfasında "Geri Bildirim" ya da "İletişim" seçeneğini bulabilirsiniz. AppToolkit kitaplığı hakkındaki geri bildirimler de uygun kanallar üzerinden memnuniyetle karşılanır.</string>
+    <string name="question_9">App Toolkit’i kullanarak diğer uygulamaları bulurken verilerim güvende mi?</string>
+    <string name="summary_preference_faq_9">App Toolkit çoğunlukla listelenen uygulamalarla ilgili herkese açık bilgileri getirir. Bu uygulamalardan birini yüklemeyi veya kullanmayı seçtiğinizde, uygulamanın kendi gizlilik politikası geçerlidir; mutlaka gözden geçirin. App Toolkit’in veri işleme yaklaşımı kendi gizlilik politikasında açıklanır.</string>
 </resources>

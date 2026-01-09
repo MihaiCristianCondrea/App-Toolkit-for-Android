@@ -6,6 +6,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.General
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import com.google.common.truth.Truth.assertThat
@@ -31,12 +32,15 @@ class TestGeneralSettingsViewModel {
     private fun testDispatchers(): DispatcherProvider =
         TestDispatchers(dispatcherExtension.testDispatcher)
 
+    private val firebaseController = FakeFirebaseController()
+
     @Test
     fun `load content success`() = runTest(dispatcherExtension.testDispatcher) {
         println("🚀 [TEST] load content success")
         val viewModel = GeneralSettingsViewModel(
             repository = GeneralSettingsRepositoryImpl(),
             dispatchers = testDispatchers(),
+            firebaseController = firebaseController,
         )
 
         viewModel.onEvent(GeneralSettingsEvent.Load("key"))
@@ -54,6 +58,7 @@ class TestGeneralSettingsViewModel {
         val viewModel = GeneralSettingsViewModel(
             repository = GeneralSettingsRepositoryImpl(),
             dispatchers = testDispatchers(),
+            firebaseController = firebaseController,
         )
 
         viewModel.onEvent(GeneralSettingsEvent.Load(null))
@@ -72,6 +77,7 @@ class TestGeneralSettingsViewModel {
         val viewModel = GeneralSettingsViewModel(
             repository = GeneralSettingsRepositoryImpl(),
             dispatchers = testDispatchers(),
+            firebaseController = firebaseController,
         )
 
         viewModel.onEvent(GeneralSettingsEvent.Load(""))
@@ -90,6 +96,7 @@ class TestGeneralSettingsViewModel {
         val viewModel = GeneralSettingsViewModel(
             repository = GeneralSettingsRepositoryImpl(),
             dispatchers = testDispatchers(),
+            firebaseController = firebaseController,
         )
 
         viewModel.onEvent(GeneralSettingsEvent.Load("one"))
@@ -112,6 +119,7 @@ class TestGeneralSettingsViewModel {
         val viewModel = GeneralSettingsViewModel(
             repository = GeneralSettingsRepositoryImpl(),
             dispatchers = testDispatchers(),
+            firebaseController = firebaseController,
         )
 
         viewModel.onEvent(GeneralSettingsEvent.Load(""))
@@ -135,6 +143,7 @@ class TestGeneralSettingsViewModel {
         val viewModel = GeneralSettingsViewModel(
             repository = GeneralSettingsRepositoryImpl(),
             dispatchers = testDispatchers(),
+            firebaseController = firebaseController,
         )
 
         viewModel.onEvent(GeneralSettingsEvent.Load("rotate"))
@@ -154,6 +163,7 @@ class TestGeneralSettingsViewModel {
         val viewModel = GeneralSettingsViewModel(
             repository = GeneralSettingsRepositoryImpl(),
             dispatchers = testDispatchers(),
+            firebaseController = firebaseController,
         )
 
         viewModel.onEvent(GeneralSettingsEvent.Load("keep"))
@@ -174,6 +184,7 @@ class TestGeneralSettingsViewModel {
         val viewModel = GeneralSettingsViewModel(
             repository = GeneralSettingsRepositoryImpl(),
             dispatchers = testDispatchers(),
+            firebaseController = firebaseController,
         )
 
         val longKey = "a".repeat(1000)
@@ -192,6 +203,7 @@ class TestGeneralSettingsViewModel {
         val viewModel = GeneralSettingsViewModel(
             repository = GeneralSettingsRepositoryImpl(),
             dispatchers = testDispatchers(),
+            firebaseController = firebaseController,
         )
 
         val key = "!@#$%^&*()_+漢字"
@@ -211,6 +223,7 @@ class TestGeneralSettingsViewModel {
             val viewModel = GeneralSettingsViewModel(
                 repository = GeneralSettingsRepositoryImpl(),
                 dispatchers = testDispatchers(),
+                firebaseController = firebaseController,
             )
 
             viewModel.onEvent(GeneralSettingsEvent.Load("first"))

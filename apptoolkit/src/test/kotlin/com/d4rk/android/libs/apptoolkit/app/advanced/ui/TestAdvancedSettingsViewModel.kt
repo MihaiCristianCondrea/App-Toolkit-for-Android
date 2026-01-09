@@ -7,6 +7,7 @@ import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSetting
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
+import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -31,12 +32,14 @@ class HotFakeCacheRepository : CacheRepository {
 class TestAdvancedSettingsViewModel {
 
     private val testDispatchers: DispatcherProvider = TestDispatchers()
+    private val firebaseController = FakeFirebaseController()
 
     @Test
     fun `onClearCache emits success message`() = runTest {
         val viewModel = AdvancedSettingsViewModel(
             repository = FakeCacheRepository(Result.Success(Unit)),
             dispatchers = testDispatchers,
+            firebaseController = firebaseController,
         )
 
         viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
@@ -56,6 +59,7 @@ class TestAdvancedSettingsViewModel {
         val viewModel = AdvancedSettingsViewModel(
             repository = FakeCacheRepository(Result.Error(Exception("fail"))),
             dispatchers = testDispatchers,
+            firebaseController = firebaseController,
         )
 
         viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
@@ -71,6 +75,7 @@ class TestAdvancedSettingsViewModel {
         val viewModel = AdvancedSettingsViewModel(
             repository = repository,
             dispatchers = testDispatchers,
+            firebaseController = firebaseController,
         )
 
         viewModel.uiState.test {

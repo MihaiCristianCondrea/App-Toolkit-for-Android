@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.RegisterExtension
 import java.io.IOException
 
@@ -98,9 +99,7 @@ class TestAdsSettingsRepositoryImpl {
         coEvery { dataStore.saveAds(any()) } throws IOException("boom")
         val repository = createRepository(dataStore, debugBuild = false)
 
-        val result = repository.setAdsEnabled(true)
-
-        assertThat(result).isInstanceOf(Result.Error::class.java)
+        assertThrows<IOException> { repository.setAdsEnabled(true) }
         coVerify { dataStore.saveAds(isChecked = true) }
     }
 

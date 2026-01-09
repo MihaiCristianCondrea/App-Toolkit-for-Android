@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Неуспешно зареждане на информацията за съгласие</string>
+
+    <string name="activity_not_found">Дейността не е намерена.</string>
+
+    <string name="security_error">Възникна грешка в сигурността. Моля, опитайте отново по-късно.</string>
+    <string name="io_error">Възникна грешка при вход/изход. Моля, проверете мрежовата връзка или хранилището и опитайте отново.</string>
+    <string name="illegal_argument_error">Предоставен е невалиден вход или аргумент. Моля, проверете информацията и опитайте отново.</string>
+    <string name="unknown_error">Възникна неизвестна грешка.</string>
+    <string name="initialization_error">Инициализацията не бе успешна. Моля, опитайте отново по-късно.</string>
+
+    <string name="error_no_settings_found">Не са намерени настройки</string>
+    <string name="error_invalid_content_key">Невалиден ключ за съдържание.</string>
+
+    <string name="error_unauthorized">Неоторизиран достъп: Невалиден токен</string>
+    <string name="error_forbidden">Забранено: недостатъчни разрешения</string>
+    <string name="error_gone">Крайната точка на API е премахната</string>
+    <string name="error_unprocessable">Невалидни данни за създаване на проблем</string>
+    <string name="error_invalid_report">Заглавието и описанието не могат да бъдат празни</string>
+
+    <string name="error_failed_to_load_ads_settings">Неуспешно зареждане на настройките за реклами</string>
+
+    <string name="cache_cleared_error">Кешът е изчистен с някои грешки</string>
+
+    <string name="loading_eula_message">Извличане на Лицензионното споразумение с крайния потребител…</string>
+    <string name="loading_changelog_message">Извличане на дневника с промените на приложението…</string>
+    <string name="error_loading_eula_message">Не може да се зареди Лицензионното споразумение с крайния потребител. Моля, опитайте отново.</string>
+    <string name="error_loading_changelog_message">Не може да се зареди дневникът с промените на приложението. Моля, опитайте отново.</string>
+
+    <string name="error_failed_to_load_sku_details">Неуспешно зареждане на подробности за SKU</string>
+
+    <string name="no_internet_error">Няма интернет връзка.</string>
+    <string name="connection_error">Мрежова грешка. Моля, опитайте отново.</string>
+    <string name="connection_closed_error">Връзката беше прекъсната.</string>
+    <string name="request_timeout_error">Времето за заявката изтече. Опитайте отново.</string>
+    <string name="ssl_error">Сигурната връзка не бе успешна.</string>
+
+    <string name="http_redirect_error">Неочаквано пренасочване от сървъра.</string>
+    <string name="http_client_error">Заявката не бе успешна. Моля, опитайте отново.</string>
+    <string name="http_server_error">Грешка на сървъра. Моля, опитайте отново по-късно.</string>
+    <string name="rate_limited_error">Твърде много заявки. Опитайте отново по-късно.</string>
+
+    <string name="serialization_error">Неуспешно прочитане на отговора от сървъра.</string>
+
+    <string name="no_data_error">Няма налични данни.</string>
+    <string name="invalid_state_error">Операцията не е разрешена в момента.</string>
+    <string name="unsupported_operation_error">Неподдържана операция.</string>
+    <string name="cancelled_error">Операцията е отменена.</string>
+
+    <string name="database_error">Грешка в хранилището.</string>
+    <string name="database_locked_error">Хранилището е заето. Опитайте отново.</string>
+    <string name="database_constraint_error">Грешка в ограниченията на хранилището.</string>
+    <string name="database_cant_open_error">Не може да се отвори хранилището.</string>
+    <string name="database_corrupt_error">Хранилището е повредено.</string>
+    <string name="database_full_error">Хранилището е пълно.</string>
+
+    <string name="error_an_error_occurred">Възникна грешка</string>
+    <string name="error_failed_to_launch_review">Неуспешно стартиране на потока за отзиви</string>
+    <string name="error_failed_to_load_faq">Неуспешно зареждане на ЧЗВ</string>
+    <string name="error_failed_to_request_review">Неуспешна заявка за отзив</string>
+    <string name="error_failed_to_update_app">Неуспешно обновяване на приложението</string>
+    <string name="error_failed_to_load_consent_info">Неуспешно зареждане на информацията за съгласие</string>
+    <string name="error_failed_to_load_navigation">Неуспешно зареждане на навигацията</string>
+</resources>

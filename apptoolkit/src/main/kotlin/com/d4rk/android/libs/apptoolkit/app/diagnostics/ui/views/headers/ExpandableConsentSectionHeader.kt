@@ -29,6 +29,17 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.IconButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
+/**
+ * A Composable that displays a header for a collapsible section, typically used for consent management.
+ * It shows a title and an expand/collapse icon. Tapping the header triggers an animation,
+ * sound, haptic feedback, and invokes the `onToggle` callback.
+ *
+ * @param title The text to be displayed as the header's title.
+ * @param expanded A boolean indicating whether the section is currently expanded or collapsed.
+ *   This determines which icon (ExpandLess or ExpandMore) is shown.
+ * @param onToggle A lambda function that will be invoked when the user taps on the header,
+ *   to toggle the expanded state.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ExpandableConsentSectionHeader(

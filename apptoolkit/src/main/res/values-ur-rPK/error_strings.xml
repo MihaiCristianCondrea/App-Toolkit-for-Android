@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">رضامندی کی معلومات لوڈ کرنے میں ناکام رہا</string>
+
+    <string name="activity_not_found">سرگرمی نہیں ملی.</string>
+
+    <string name="security_error">سیکیورٹی کی خرابی پیش آئی۔ براہ کرم بعد میں دوبارہ کوشش کریں.</string>
+    <string name="io_error">ان پٹ/آؤٹ پٹ کی خرابی پیش آئی۔ براہ کرم اپنے نیٹ ورک کنکشن یا اسٹوریج کو چیک کریں اور دوبارہ کوشش کریں.</string>
+    <string name="illegal_argument_error">غلط ان پٹ یا آرگیومنٹ فراہم کیا گیا۔ براہ کرم معلومات چیک کریں اور دوبارہ کوشش کریں.</string>
+    <string name="unknown_error">نامعلوم خرابی پیش آئی.</string>
+    <string name="initialization_error">ابتدائی عمل ناکام ہو گیا۔ براہ کرم بعد میں دوبارہ کوشش کریں.</string>
+
+    <string name="error_no_settings_found">کوئی ترتیبات نہیں ملیں</string>
+    <string name="error_invalid_content_key">غلط مواد کی کلید.</string>
+
+    <string name="error_unauthorized">غیر مجاز: غلط ٹوکن</string>
+    <string name="error_forbidden">ممنوع: ناکافی اجازتیں</string>
+    <string name="error_gone">API اینڈ پوائنٹ ہٹا دیا گیا</string>
+    <string name="error_unprocessable">مسئلہ بنانے کے لیے غلط ڈیٹا</string>
+    <string name="error_invalid_report">عنوان اور تفصیل خالی نہیں ہو سکتے</string>
+
+    <string name="error_failed_to_load_ads_settings">اشتہارات کی ترتیبات لوڈ کرنے میں ناکام رہا</string>
+
+    <string name="cache_cleared_error">کیش کچھ خرابیوں کے ساتھ صاف کر دی گئی</string>
+
+    <string name="loading_eula_message">اختتامی صارف لائسنس معاہدہ حاصل کیا جا رہا ہے…</string>
+    <string name="loading_changelog_message">ایپلیکیشن کی تبدیلیوں کی فہرست حاصل کی جا رہی ہے…</string>
+    <string name="error_loading_eula_message">اختتامی صارف لائسنس معاہدہ لوڈ نہیں ہو سکا۔ براہ کرم دوبارہ کوشش کریں.</string>
+    <string name="error_loading_changelog_message">ایپلیکیشن کی تبدیلیوں کی فہرست لوڈ نہیں ہو سکی۔ براہ کرم دوبارہ کوشش کریں.</string>
+
+    <string name="error_failed_to_load_sku_details">SKU کی تفصیلات لوڈ کرنے میں ناکام رہا</string>
+
+    <string name="no_internet_error">انٹرنیٹ کنکشن موجود نہیں.</string>
+    <string name="connection_error">نیٹ ورک کی خرابی۔ براہ کرم دوبارہ کوشش کریں.</string>
+    <string name="connection_closed_error">کنکشن منقطع ہو گیا.</string>
+    <string name="request_timeout_error">درخواست کا وقت ختم ہو گیا۔ دوبارہ کوشش کریں.</string>
+    <string name="ssl_error">محفوظ کنکشن ناکام ہو گیا.</string>
+
+    <string name="http_redirect_error">سرور کی جانب سے غیر متوقع ری ڈائریکٹ.</string>
+    <string name="http_client_error">درخواست ناکام ہو گئی۔ براہ کرم دوبارہ کوشش کریں.</string>
+    <string name="http_server_error">سرور کی خرابی۔ براہ کرم بعد میں دوبارہ کوشش کریں.</string>
+    <string name="rate_limited_error">درخواستوں کی تعداد بہت زیادہ ہے۔ بعد میں دوبارہ کوشش کریں.</string>
+
+    <string name="serialization_error">سرور کے جواب کو پڑھنے میں ناکام رہا.</string>
+
+    <string name="no_data_error">کوئی ڈیٹا دستیاب نہیں.</string>
+    <string name="invalid_state_error">اس وقت عمل کی اجازت نہیں ہے.</string>
+    <string name="unsupported_operation_error">غیر معاون عمل.</string>
+    <string name="cancelled_error">عمل منسوخ کر دیا گیا.</string>
+
+    <string name="database_error">اسٹوریج کی خرابی.</string>
+    <string name="database_locked_error">اسٹوریج مصروف ہے۔ دوبارہ کوشش کریں.</string>
+    <string name="database_constraint_error">اسٹوریج کی پابندی کی خرابی.</string>
+    <string name="database_cant_open_error">اسٹوریج کھولنے میں ناکام رہا.</string>
+    <string name="database_corrupt_error">اسٹوریج خراب ہو چکی ہے.</string>
+    <string name="database_full_error">اسٹوریج بھر چکی ہے.</string>
+
+    <string name="error_an_error_occurred">ایک خرابی پیش آئی</string>
+    <string name="error_failed_to_launch_review">جائزہ کے عمل کو شروع کرنے میں ناکام رہا</string>
+    <string name="error_failed_to_load_faq">اکثر پوچھے گئے سوالات لوڈ کرنے میں ناکام رہا</string>
+    <string name="error_failed_to_request_review">جائزہ کی درخواست ناکام ہو گئی</string>
+    <string name="error_failed_to_update_app">ایپ کو اپ ڈیٹ کرنے میں ناکام رہا</string>
+    <string name="error_failed_to_load_consent_info">رضامندی کی معلومات لوڈ کرنے میں ناکام رہا</string>
+    <string name="error_failed_to_load_navigation">نیویگیشن لوڈ نہیں ہو سکی</string>
+</resources>

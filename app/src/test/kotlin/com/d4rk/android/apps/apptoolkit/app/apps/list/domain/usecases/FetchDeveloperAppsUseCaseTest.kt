@@ -4,6 +4,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.repository.DeveloperAppsRepository
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -31,7 +32,9 @@ class FetchDeveloperAppsUseCaseTest {
         )
         val repositoryEmissions = listOf(
             DataState.Success(apps),
-            DataState.Error<List<AppInfo>, AppErrors>(error = AppErrors.Network.REQUEST_TIMEOUT),
+            DataState.Error<List<AppInfo>, AppErrors>(
+                error = AppErrors.Common(Errors.Network.REQUEST_TIMEOUT)
+            ),
         )
         val repository = mockk<DeveloperAppsRepository> {
             every { fetchDeveloperApps() } returns repositoryEmissions.asFlow()
@@ -46,7 +49,7 @@ class FetchDeveloperAppsUseCaseTest {
         expected.addAll(repositoryEmissions)
 
         assertEquals(expected, result)
-        verify(exactly = 1) { repository.fetchDeveloperApps() }
+        verify(exactly = 1) { repository.fetchDeveloperApps() } // FIXME: Flow is constructed but not used
     }
 
     @Test
@@ -62,6 +65,6 @@ class FetchDeveloperAppsUseCaseTest {
         }
 
         assertSame(exception, thrown)
-        verify(exactly = 1) { repository.fetchDeveloperApps() }
+        verify(exactly = 1) { repository.fetchDeveloperApps() } // FIXME: Flow is constructed but not used
     }
 }

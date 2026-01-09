@@ -2,46 +2,47 @@
 <resources>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome_title">অ্যাপ টুলকিট-এ স্বাগতম</string>
-    <string name="onboarding_welcome_description">আমাদের অ্যাপটুলকিট লাইব্রেরির সক্ষমতাগুলি অন্বেষণ করুন। আমাদের অ্যাপ্লিকেশনগুলি আবিষ্কার করুন, যা সবই আমাদের অ্যাপটুলকিট লাইব্রেরির শক্তি প্রদর্শন এবং ব্যবহার করার জন্য তৈরি করা হয়েছে, আপনার অ্যান্ড্রয়েড ডেভেলপমেন্ট এবং ব্যবহারকারীর অভিজ্ঞতা উন্নত করবে।</string>
-    <string name="onboarding_feature1_title">আমাদের অ্যাপ্লিকেশনগুলি আবিষ্কার করুন</string>
-    <string name="onboarding_feature1_description">অ্যাপ টুলকিট আপনাকে আমাদের নির্বাচিত কিছু অ্যাপ্লিকেশনের সাথে পরিচয় করিয়ে দেয়, যার প্রতিটি আমাদের অ্যাপটুলকিট লাইব্রেরির বিভিন্ন দিক তুলে ধরতে এবং আপনার অ্যান্ড্রয়েড অভিজ্ঞতা উন্নত করার জন্য ডিজাইন করা হয়েছে। আমাদের অ্যাপটুলকিট লাইব্রেরি দিয়ে কী সম্ভব তা দেখুন.</string>
-    <string name="onboarding_personalization_title">আমাদের অ্যাপটুলকিট লাইব্রেরির কার্যক্রম দেখুন</string>
-    <string name="onboarding_personalization_description">এই অ্যাপটি দেখায় কীভাবে আমাদের অ্যাপটুলকিট লাইব্রেরি ব্যবহার করে বহুমুখী এবং ব্যবহারকারী-কেন্দ্রিক অ্যাপ্লিকেশন তৈরি করা যায়। লাইব্রেরির বিভিন্ন বৈশিষ্ট্য এবং বাস্তবায়ন দেখতে আমাদের অ্যাপগুলি অন্বেষণ করুন।</string>
+    <string name="onboarding_welcome_title">App Toolkit এ স্বাগতম</string>
+    <string name="onboarding_welcome_description">AppToolkit লাইব্রেরির সক্ষমতা অন্বেষণ করুন। লাইব্রেরির ক্ষমতা দেখাতে এবং আপনার Android ডেভেলপমেন্ট ও ব্যবহারকারী অভিজ্ঞতা উন্নত করতে তৈরি অ্যাপগুলো আবিষ্কার করুন।</string>
+    <string name="onboarding_feature1_title">অ্যাপগুলো আবিষ্কার করুন</string>
+    <string name="onboarding_feature1_description">App Toolkit বিভিন্ন অ্যাপের একটি সংগ্রহ উপস্থাপন করে, যার প্রতিটি AppToolkit লাইব্রেরির ভিন্ন ভিন্ন দিক তুলে ধরে এবং আপনার Android অভিজ্ঞতা উন্নত করে। AppToolkit লাইব্রেরি দিয়ে কী সম্ভব তা দেখুন।</string>
+    <string name="onboarding_personalization_title">AppToolkit লাইব্রেরি কাজ করতে দেখুন</string>
+    <string name="onboarding_personalization_description">এই অ্যাপটি দেখায় AppToolkit লাইব্রেরি কীভাবে বহুমুখী, ব্যবহারকারীকেন্দ্রিক অ্যাপ তৈরি করে। লাইব্রেরির ভিন্ন ভিন্ন বৈশিষ্ট্য ও বাস্তবায়ন দেখতে নমুনা অ্যাপগুলো দেখুন।</string>
 
     <!-- Home screen -->
-    <string name="all_apps">সমস্ত অ্যাপ্লিকেশন</string>
+    <string name="all_apps">সব অ্যাপ</string>
     <string name="favorite_apps">প্রিয়</string>
-    <string name="no_apps_added_to_favorites">পছন্দসই কোনও অ্যাপস যুক্ত করা হয়নি</string>
-    <string name="error_failed_to_fetch_our_apps">আমাদের অ্যাপের তালিকা আনতে ব্যর্থ</string>
-    <string name="error_failed_to_load_apps">অ্যাপ লোড করতে ব্যর্থ</string>
-    <string name="error_failed_to_update_favorite">পছন্দ আপডেট করতে ব্যর্থ</string>
-    <string name="open_random_app">র্যান্ডম অ্যাপ খুলুন</string>
+    <string name="no_apps_added_to_favorites">প্রিয়তে কোনো অ্যাপ যোগ করা নেই</string>
+    <string name="error_failed_to_fetch_our_apps">অ্যাপের তালিকা লোড করা যায়নি</string>
+    <string name="error_failed_to_load_apps">অ্যাপ লোড করা যায়নি</string>
+    <string name="error_failed_to_update_favorite">প্রিয় আপডেট করা যায়নি</string>
+    <string name="error_failed_to_load_navigation">নেভিগেশন লোড করা যায়নি</string>
+    <string name="open_random_app">এলোমেলো অ্যাপ খুলুন</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">অ্যাপ শেয়ার করুন</string>
-    <string name="app_details_view_on_play_store">গুগল প্লেতে দেখুন</string>
+    <string name="app_details_view_on_play_store">Google Play এ দেখুন</string>
     <string name="app_details_about_title">এই অ্যাপ সম্পর্কে</string>
     <string name="app_details_screenshots_title">স্ক্রিনশট</string>
     <string name="app_details_open_app">অ্যাপ খুলুন</string>
 
     <!-- Help screen -->
-    <string name="question_1">অ্যাপ টুলকিট কী?</string>
-    <string name="summary_preference_faq_1">অ্যাপ টুলকিট একটি অ্যাপ্লিকেশন যা আমাদের অ্যাপটুলকিট লাইব্রেরি ব্যবহার করে তৈরি করা অ্যাপগুলিকে বৈশিষ্ট্যযুক্ত করতে এবং প্রদর্শন করার জন্য ডিজাইন করা হয়েছে। এটি আমাদের অ্যাপ্লিকেশনগুলির ইকোসিস্টেম অন্বেষণ করার এবং আমাদের অ্যাপটুলকিট লাইব্রেরিকে কার্যকর অবস্থায় দেখার জন্য আপনার গাইড।</string>
-    <string name="question_2">অ্যাপ টুলকিটে দেখানো বিভিন্ন অ্যাপে আমি কীভাবে অ্যাক্সেস করব?</string>
-    <string name="summary_preference_faq_2">অ্যাপ টুলকিট আমাদের বিভিন্ন অ্যাপ্লিকেশন তালিকাভুক্ত করে। কোনো অ্যাপের তালিকায় ট্যাপ করলে সাধারণত আরও তথ্য এবং গুগল প্লে স্টোর থেকে এটি ইনস্টল বা খোলার জন্য একটি লিঙ্ক প্রদান করা হয়, যা আপনাকে এটি সরাসরি অভিজ্ঞতা করতে দেয়।</string>
-    <string name="question_3">অ্যাপ টুলকিটে বৈশিষ্ট্যযুক্ত অ্যাপগুলি কি বিনামূল্যে?</string>
-    <string name="summary_preference_faq_3">অ্যাপ টুলকিটে বৈশিষ্ট্যযুক্ত আমাদের অনেক অ্যাপ বিনামূল্যে মূল কিছু বৈশিষ্ট্য সরবরাহ করে। কিছুর ক্ষেত্রে প্রিমিয়াম সংস্করণ বা অ্যাপ-মধ্যস্থ কেনাকাটার মাধ্যমে উন্নত কার্যকারিতা থাকতে পারে। প্রতিটি অ্যাপের বিস্তারিত তথ্য তার নিজ নিজ প্লে স্টোর পৃষ্ঠায় পাওয়া যাবে।</string>
-    <string name="question_4">তালিকাভুক্ত একটি নির্দিষ্ট অ্যাপ সম্পর্কে আমি কীভাবে আরও জানতে পারি?</string>
-    <string name="summary_preference_faq_4">আমাদের কোনো একটি অ্যাপ, তার বৈশিষ্ট্য এবং ব্যবহারকারীর পর্যালোচনা সম্পর্কে সম্পূর্ণ বিবরণের জন্য, অনুগ্রহ করে অ্যাপ টুলকিটে অ্যাপটিতে ট্যাপ করে গুগল প্লে স্টোরে তার পৃষ্ঠা দেখুন।</string>
-    <string name="question_5">আপনাদের তালিকাভুক্ত কোনো অ্যাপের জন্য আমি কোথায় সাহায্য বা সমর্থন খুঁজে পাব?</string>
-    <string name="summary_preference_faq_5">আমাদের স্বতন্ত্র অ্যাপগুলির জন্য সমর্থন তাদের নিজ নিজ চ্যানেলের মাধ্যমে সরবরাহ করা হয়, যা সাধারণত তাদের প্লে স্টোর পৃষ্ঠায় বা অ্যাপের মধ্যেই বিস্তারিতভাবে উল্লেখ করা থাকে। অ্যাপ টুলকিট এই অ্যাপগুলি আবিষ্কার করার জন্য; অ্যাপ-নির্দিষ্ট সমস্যার জন্য, অনুগ্রহ করে সেই অ্যাপের সমর্থন বিকল্পগুলি দেখুন।</string>
-    <string name="question_6">অ্যাপ টুলকিটে আপনাদের অ্যাপের তালিকা কত ঘন ঘন আপডেট করা হয়?</string>
-    <string name="summary_preference_faq_6">আমরা আমাদের অ্যাপটুলকিট লাইব্রেরি ব্যবহার করে এমন সর্বশেষ এবং সবচেয়ে প্রাসঙ্গিক অ্যাপ্লিকেশনগুলির সাথে অ্যাপ টুলকিটকে আপডেট রাখার লক্ষ্য রাখি। নতুন অ্যাপ বা গুরুত্বপূর্ণ আপডেট এখানে বৈশিষ্ট্যযুক্ত হতে পারে।</string>
-    <string name="question_7">অ্যাপ টুলকিটের ইন্টারনেট অ্যাক্সেসের মতো অনুমতির প্রয়োজন কেন?</string>
-    <string name="summary_preference_faq_7">অ্যাপ টুলকিটের গুগল প্লে স্টোর থেকে আমাদের অ্যাপ্লিকেশনগুলির সর্বশেষ তালিকা আনতে এবং তাদের তথ্য সঠিকভাবে প্রদর্শন করার জন্য ইন্টারনেট অ্যাক্সেসের প্রয়োজন। সাধারণত এটির জন্য অন্য কোনো হস্তক্ষেপমূলক অনুমতির প্রয়োজন হয় না।</string>
-    <string name="question_8">আমি কীভাবে অ্যাপ টুলকিট বা আপনাদের অ্যাপগুলির বিষয়ে প্রতিক্রিয়া জানাতে পারি?</string>
-    <string name="summary_preference_faq_8">আমরা অ্যাপ টুলকিট এবং আমাদের স্বতন্ত্র অ্যাপগুলির বিষয়ে আপনার প্রতিক্রিয়ার মূল্য দিই. আপনি সাধারণত অ্যাপ টুলকিটের সেটিংসের মধ্যে বা প্লে স্টোরে আমাদের ডেভেলপার পৃষ্ঠায় একটি "প্রতিক্রিয়া" বা "যোগাযোগ করুন" বিকল্প খুঁজে পাবেন। আমাদের অ্যাপটুলকিট লাইব্রেরি সম্পর্কে প্রতিক্রিয়াও উপযুক্ত চ্যানেলের মাধ্যমে স্বাগত জানানো হয়।</string>
-    <string name="question_9">আপনাদের অন্যান্য অ্যাপ খুঁজে পেতে অ্যাপ টুলকিট ব্যবহার করার সময় আমার ডেটা কি নিরাপদ?</string>
-    <string name="summary_preference_faq_9">অ্যাপ টুলকিট প্রধানত আমাদের অ্যাপগুলি সম্পর্কে সর্বজনীনভাবে উপলব্ধ তথ্য সংগ্রহ করে। আপনি যখন আমাদের তালিকাভুক্ত অ্যাপগুলির মধ্যে কোনো একটি ইনস্টল বা ব্যবহার করতে চান, তখন সেই অ্যাপের নিজস্ব গোপনীয়তা নীতি প্রযোজ্য হবে। আমরা আপনাকে এটি পর্যালোচনা করার জন্য উৎসাহিত করি। অ্যাপ টুলকিটের ডেটা হ্যান্ডলিং আমাদের গোপনীয়তা নীতিতে উল্লেখ করা আছে।</string>
+    <string name="question_1">App Toolkit কী?</string>
+    <string name="summary_preference_faq_1">App Toolkit হলো একটি অ্যাপ, যা AppToolkit লাইব্রেরি দিয়ে তৈরি অ্যাপগুলো প্রদর্শন ও দেখানোর জন্য তৈরি। এটি এই ইকোসিস্টেম অন্বেষণ এবং AppToolkit লাইব্রেরি কাজ করতে দেখার জন্য আপনার গাইড।</string>
+    <string name="question_2">App Toolkit এ দেখানো বিভিন্ন অ্যাপে আমি কীভাবে পৌঁছাব?</string>
+    <string name="summary_preference_faq_2">App Toolkit বিভিন্ন অ্যাপের তালিকা দেখায়। কোনো অ্যাপে ট্যাপ করলে সাধারণত আরও তথ্য এবং Google Play Store থেকে ইনস্টল বা খুলতে একটি লিংক পাওয়া যায়, যাতে আপনি সরাসরি ব্যবহার করে দেখতে পারেন।</string>
+    <string name="question_3">App Toolkit এ প্রদর্শিত অ্যাপগুলো কি বিনামূল্যের?</string>
+    <string name="summary_preference_faq_3">App Toolkit এ প্রদর্শিত অনেক অ্যাপ বেসিক ফিচার বিনামূল্যে দেয়। কিছু অ্যাপে প্রিমিয়াম ভার্সন বা ইন-অ্যাপ ক্রয়ের মাধ্যমে উন্নত ফিচার থাকতে পারে। প্রতিটি অ্যাপের বিস্তারিত Google Play Store এর সংশ্লিষ্ট পাতায় পাওয়া যায়।</string>
+    <string name="question_4">তালিকাভুক্ত কোনো নির্দিষ্ট অ্যাপ সম্পর্কে আরও কীভাবে জানব?</string>
+    <string name="summary_preference_faq_4">কোনো অ্যাপের সম্পূর্ণ বিবরণ, তার ফিচার এবং ব্যবহারকারীর রিভিউ জানতে App Toolkit এ অ্যাপটিতে ট্যাপ করে Google Play Store পাতায় যান।</string>
+    <string name="question_5">তালিকাভুক্ত অ্যাপগুলোর কোনো একটির সাহায্য বা সাপোর্ট কোথায় পাব?</string>
+    <string name="summary_preference_faq_5">প্রতিটি অ্যাপের নিজস্ব সাপোর্ট চ্যানেল থাকে, যা সাধারণত Google Play Store পাতায় বা অ্যাপের ভেতরে উল্লেখ থাকে। App Toolkit এই অ্যাপগুলো খুঁজে দেখার জন্য; নির্দিষ্ট অ্যাপের সমস্যার জন্য ওই অ্যাপের সাপোর্ট অপশন ব্যবহার করুন।</string>
+    <string name="question_6">App Toolkit এ অ্যাপের তালিকা কত ঘন ঘন আপডেট হয়?</string>
+    <string name="summary_preference_faq_6">App Toolkit নিয়মিত আপডেট করা হয় যাতে আপনি AppToolkit লাইব্রেরি ব্যবহার করা সর্বশেষ অ্যাপগুলো দেখতে পারেন। নতুন অ্যাপ বা বড় আপডেট এখানে দেখা যেতে পারে।</string>
+    <string name="question_7">App Toolkit কে ইন্টারনেট অ্যাক্সেসের মতো অনুমতি কেন দরকার?</string>
+    <string name="summary_preference_faq_7">সবচেয়ে নতুন অ্যাপের তালিকা দেখাতে App Toolkit Google Play Store থেকে তথ্য আনতে ইন্টারনেট অ্যাক্সেস ব্যবহার করে এবং সঠিকভাবে দেখায়। সাধারণত অন্য আক্রমণাত্মক অনুমতির প্রয়োজন হয় না।</string>
+    <string name="question_8">App Toolkit বা অ্যাপগুলো সম্পর্কে আমি কীভাবে মতামত দিতে পারি?</string>
+    <string name="summary_preference_faq_8">App Toolkit এবং তালিকাভুক্ত অ্যাপগুলোর সম্পর্কে আপনার মতামত আমরা মূল্যায়ন করি। সাধারণত App Toolkit এর সেটিংসে বা Google Play Store এর ডেভেলপার পেজে "Feedback" বা "Contact" অপশন পাওয়া যায়। AppToolkit লাইব্রেরি সম্পর্কেও উপযুক্ত চ্যানেলে মতামত স্বাগত।</string>
+    <string name="question_9">App Toolkit ব্যবহার করে অন্য অ্যাপ খুঁজলে কি আমার ডেটা নিরাপদ?</string>
+    <string name="summary_preference_faq_9">App Toolkit প্রধানত তালিকাভুক্ত অ্যাপগুলোর পাবলিক তথ্য সংগ্রহ করে। আপনি যখন এসব অ্যাপের কোনোটি ইনস্টল বা ব্যবহার করতে চান, তখন সেই অ্যাপের নিজস্ব প্রাইভেসি পলিসি প্রযোজ্য হয়; দয়া করে তা দেখুন। App Toolkit এর ডেটা ব্যবস্থাপনা তার নিজস্ব প্রাইভেসি পলিসিতে বর্ণনা করা আছে।</string>
 </resources>

@@ -2,10 +2,13 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
+import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import io.mockk.clearAllMocks
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,10 +40,14 @@ class MainViewModelTest {
     @Test
     fun `initialization triggers navigation load`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = FakeNavigationRepository(flowOf(emptyList()))
+        val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
-        MainViewModel(repo)
+        MainViewModel(
+            navigationRepository = repo,
+            firebaseController = FakeFirebaseController(),
+            dispatchers = dispatchers,
+        )
 
-        // With StandardTestDispatcher, launched coroutines don't run until you drive the scheduler.
         runCurrent()
         advanceUntilIdle()
 
@@ -59,8 +66,13 @@ class MainViewModelTest {
                 )
             )
             val repo = FakeNavigationRepository(flowOf(expectedItems))
+            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
-            val viewModel = MainViewModel(repo)
+            val viewModel = MainViewModel(
+                navigationRepository = repo,
+                firebaseController = FakeFirebaseController(),
+                dispatchers = dispatchers,
+            )
 
             runCurrent()
             advanceUntilIdle()
@@ -79,14 +91,22 @@ class MainViewModelTest {
         val repo = FakeNavigationRepository(
             flow { throw error }
         )
+        val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
-        val viewModel = MainViewModel(repo)
+        val viewModel = MainViewModel(
+            navigationRepository = repo,
+            firebaseController = FakeFirebaseController(),
+            dispatchers = dispatchers,
+        )
 
         runCurrent()
         advanceUntilIdle()
 
         assertEquals(
-            MainUiState(showSnackbar = true, snackbarMessage = "boom"),
+            MainUiState(
+                showSnackbar = true,
+                snackbarMessage = UiTextHelper.StringResource(com.d4rk.android.libs.apptoolkit.R.string.error_failed_to_load_navigation)
+            ),
             viewModel.uiState.value.data
         )
         assertEquals(1, repo.callCount)
@@ -102,6 +122,28 @@ class MainViewModelTest {
             callCount++
             return upstream
         }
+    }
+
+    private class FakeFirebaseController : FirebaseController {
+        override fun updateConsent(
+            analyticsGranted: Boolean,
+            adStorageGranted: Boolean,
+            adUserDataGranted: Boolean,
+            adPersonalizationGranted: Boolean,
+        ) = Unit
+
+        override fun setAnalyticsEnabled(enabled: Boolean) = Unit
+
+        override fun setCrashlyticsEnabled(enabled: Boolean) = Unit
+
+        override fun setPerformanceEnabled(enabled: Boolean) = Unit
+
+        override fun reportViewModelError(
+            viewModelName: String,
+            action: String,
+            throwable: Throwable,
+            extraKeys: Map<String, String>,
+        ) = Unit
     }
 
     private fun createIcon(): ImageVector =

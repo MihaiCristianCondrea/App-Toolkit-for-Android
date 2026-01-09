@@ -50,7 +50,7 @@ class NavigationItemClickTest {
 
     @BeforeEach
     fun setup() {
-        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.IntentActionsExtensionsKt")
+        mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextIntentExtensionsKt")
     }
 
     @AfterEach

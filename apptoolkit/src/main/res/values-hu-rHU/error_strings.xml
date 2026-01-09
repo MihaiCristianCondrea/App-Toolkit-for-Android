@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Nem sikerült betölteni a hozzájárulási információkat</string>
+
+    <string name="activity_not_found">Az aktivitás nem található.</string>
+
+    <string name="security_error">Biztonsági hiba történt. Kérjük, próbálja meg később.</string>
+    <string name="io_error">Bemeneti/kimeneti hiba történt. Kérjük, ellenőrizze a hálózati kapcsolatot vagy a tárhelyet, majd próbálja újra.</string>
+    <string name="illegal_argument_error">Érvénytelen bemenet vagy argumentum lett megadva. Kérjük, ellenőrizze az adatokat, majd próbálja újra.</string>
+    <string name="unknown_error">Ismeretlen hiba történt.</string>
+    <string name="initialization_error">Az inicializálás sikertelen volt. Kérjük, próbálja meg később.</string>
+
+    <string name="error_no_settings_found">Nem találhatók beállítások</string>
+    <string name="error_invalid_content_key">Érvénytelen tartalomkulcs.</string>
+
+    <string name="error_unauthorized">Nem engedélyezett: érvénytelen token</string>
+    <string name="error_forbidden">Tiltott: elégtelen jogosultságok</string>
+    <string name="error_gone">Az API végpont eltávolítva</string>
+    <string name="error_unprocessable">Érvénytelen adatok a probléma létrehozásához</string>
+    <string name="error_invalid_report">A cím és a leírás nem lehet üres</string>
+
+    <string name="error_failed_to_load_ads_settings">Nem sikerült betölteni a hirdetési beállításokat</string>
+
+    <string name="cache_cleared_error">A gyorsítótár törölve lett néhány hibával</string>
+
+    <string name="loading_eula_message">Végfelhasználói licencszerződés lekérése…</string>
+    <string name="loading_changelog_message">Az alkalmazás változásnaplójának lekérése…</string>
+    <string name="error_loading_eula_message">Nem sikerült betölteni a végfelhasználói licencszerződést. Kérjük, próbálja újra.</string>
+    <string name="error_loading_changelog_message">Nem sikerült betölteni az alkalmazás változásnaplóját. Kérjük, próbálja újra.</string>
+
+    <string name="error_failed_to_load_sku_details">Nem sikerült betölteni az SKU adatait</string>
+
+    <string name="no_internet_error">Nincs internetkapcsolat.</string>
+    <string name="connection_error">Hálózati hiba. Kérjük, próbálja újra.</string>
+    <string name="connection_closed_error">A kapcsolat megszakadt.</string>
+    <string name="request_timeout_error">A kérés időtúllépés miatt megszakadt. Próbálja újra.</string>
+    <string name="ssl_error">A biztonságos kapcsolat sikertelen volt.</string>
+
+    <string name="http_redirect_error">Váratlan átirányítás a szervertől.</string>
+    <string name="http_client_error">A kérés sikertelen volt. Kérjük, próbálja újra.</string>
+    <string name="http_server_error">Szerverhiba történt. Kérjük, próbálja később.</string>
+    <string name="rate_limited_error">Túl sok kérés. Próbálja meg később.</string>
+
+    <string name="serialization_error">Nem sikerült beolvasni a szerver válaszát.</string>
+
+    <string name="no_data_error">Nincs elérhető adat.</string>
+    <string name="invalid_state_error">A művelet jelenleg nem engedélyezett.</string>
+    <string name="unsupported_operation_error">Nem támogatott művelet.</string>
+    <string name="cancelled_error">A művelet megszakítva.</string>
+
+    <string name="database_error">Tárhelyhiba.</string>
+    <string name="database_locked_error">A tárhely foglalt. Próbálja újra.</string>
+    <string name="database_constraint_error">Tárhelykorlátozási hiba.</string>
+    <string name="database_cant_open_error">Nem sikerült megnyitni a tárhelyet.</string>
+    <string name="database_corrupt_error">A tárhely sérült.</string>
+    <string name="database_full_error">A tárhely megtelt.</string>
+
+    <string name="error_an_error_occurred">Hiba történt</string>
+    <string name="error_failed_to_launch_review">Nem sikerült elindítani az értékelési folyamatot</string>
+    <string name="error_failed_to_load_faq">Nem sikerült betölteni a GYIK-et</string>
+    <string name="error_failed_to_request_review">Nem sikerült értékelést kérni</string>
+    <string name="error_failed_to_update_app">Nem sikerült frissíteni az alkalmazást</string>
+    <string name="error_failed_to_load_consent_info">Nem sikerült betölteni a hozzájárulási információkat</string>
+    <string name="error_failed_to_load_navigation">Nem sikerült betölteni a navigációt</string>
+</resources>

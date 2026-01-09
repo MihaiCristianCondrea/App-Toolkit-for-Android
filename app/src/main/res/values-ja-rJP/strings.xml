@@ -2,20 +2,21 @@
 <resources>
 
     <!-- Onboarding -->
-    <string name="onboarding_welcome_title">App Toolkitへようこそ</string>
-    <string name="onboarding_welcome_description">当社のAppToolkitライブラリの機能をご覧ください。当社のAppToolkitライブラリの能力を実証し活用するために構築された、当社のアプリケーションをご覧ください。Android開発とユーザーエクスペリエンスを向上させます。</string>
-    <string name="onboarding_feature1_title">当社のアプリケーションを発見</string>
-    <string name="onboarding_feature1_description">App Toolkitは、当社のAppToolkitライブラリのさまざまな側面を強調し、Androidエクスペリエンスを向上させるために設計された、当社のアプリケーションのセレクションを紹介します。当社のAppToolkitライブラリで何が可能かをご覧ください！</string>
-    <string name="onboarding_personalization_title">当社のapptoolkitライブラリの動作をご覧ください</string>
-    <string name="onboarding_personalization_description">このアプリは、当社のAppToolkitライブラリを使用して、多機能でユーザー中心のアプリケーションを構築する方法を示しています。ライブラリのさまざまな機能と実装を確認するには、当社のアプリをご覧ください。</string>
+    <string name="onboarding_welcome_title">App Toolkit へようこそ</string>
+    <string name="onboarding_welcome_description">AppToolkit ライブラリの機能を探索しましょう。ライブラリの力を示し、Android 開発とユーザー体験を向上させるために作られたアプリを見つけてください。</string>
+    <string name="onboarding_feature1_title">アプリを見つける</string>
+    <string name="onboarding_feature1_description">App Toolkit は、AppToolkit ライブラリのさまざまな側面を示し、Android の体験を向上させるよう設計されたアプリのセレクションを紹介します。AppToolkit ライブラリで何ができるかを確認してください。</string>
+    <string name="onboarding_personalization_title">AppToolkit ライブラリを実際に見る</string>
+    <string name="onboarding_personalization_description">このアプリは AppToolkit ライブラリが多用途でユーザー中心のアプリをどのように構築するかを示します。サンプルアプリを探索して、ライブラリのさまざまな機能と実装を確認してください。</string>
 
     <!-- Home screen -->
     <string name="all_apps">すべてのアプリ</string>
     <string name="favorite_apps">お気に入り</string>
-    <string name="no_apps_added_to_favorites">お気に入りに追加されるアプリはありません</string>
-    <string name="error_failed_to_fetch_our_apps">アプリ一覧の取得に失敗しました</string>
-    <string name="error_failed_to_load_apps">アプリの読み込みに失敗しました</string>
-    <string name="error_failed_to_update_favorite">お気に入りの更新に失敗しました</string>
+    <string name="no_apps_added_to_favorites">お気に入りに追加されたアプリはありません</string>
+    <string name="error_failed_to_fetch_our_apps">アプリ一覧を読み込めませんでした</string>
+    <string name="error_failed_to_load_apps">アプリを読み込めませんでした</string>
+    <string name="error_failed_to_update_favorite">お気に入りを更新できませんでした</string>
+    <string name="error_failed_to_load_navigation">ナビゲーションを読み込めませんでした</string>
     <string name="open_random_app">ランダムなアプリを開く</string>
 
     <!-- App details bottom sheet -->
@@ -26,22 +27,22 @@
     <string name="app_details_open_app">アプリを開く</string>
 
     <!-- Help screen -->
-    <string name="question_1">App Toolkitとは何ですか？</string>
-    <string name="summary_preference_faq_1">App Toolkitは、当社のAppToolkitライブラリを使用して当社が開発したアプリを紹介および実証するために設計されたアプリケーションです。これは、当社のアプリケーションのエコシステムを探索し、当社のAppToolkitライブラリの実際の動作を確認するためのガイドです。</string>
-    <string name="question_2">App Toolkitに表示されるさまざまなアプリにアクセスするにはどうすればよいですか？</string>
-    <string name="summary_preference_faq_2">App Toolkitには、当社のさまざまなアプリケーションが一覧表示されます。アプリのリストをタップすると、通常、詳細情報とGoogle Playストアからインストールまたは開くためのリンクが表示され、直接体験できます。</string>
-    <string name="question_3">App Toolkitで紹介されているアプリは無料ですか？</string>
-    <string name="summary_preference_faq_3">App Toolkitで紹介されている当社のアプリの多くは、コア機能セットを無料で提供しています。一部には、プレミアムバージョンまたはアプリ内購入を通じて利用できる高度な機能がある場合があります。各アプリの詳細は、それぞれのPlayストアページで確認できます。</string>
-    <string name="question_4">リストされている特定のアプリについて詳しく知るにはどうすればよいですか？</string>
-    <string name="summary_preference_faq_4">当社のアプリの1つ、その機能、およびユーザーレビューに関する完全な詳細については、App ToolkitでアプリをタップしてGoogle Playストアのページにアクセスしてください。</string>
-    <string name="question_5">リストされているアプリのヘルプやサポートはどこで見つけられますか？</string>
-    <string name="summary_preference_faq_5">当社の個々のアプリのサポートは、それぞれのチャネルを通じて提供され、通常はPlayストアのページまたはアプリ自体に詳細が記載されています。App Toolkitはこれらのアプリを発見するためのものであり、アプリ固有の問題については、そのアプリのサポートオプションを参照してください。</string>
-    <string name="question_6">App Toolkitのアプリのリストはどのくらいの頻度で更新されますか？</string>
-    <string name="summary_preference_faq_6">当社のAppToolkitライブラリを利用する最新かつ最も関連性の高いアプリケーションでApp Toolkitを最新の状態に保つことを目指しています。新しいアプリや重要な更新がここに掲載される場合があります。</string>
-    <string name="question_7">App Toolkitがインターネットアクセスなどの権限を必要とするのはなぜですか？</string>
-    <string name="summary_preference_faq_7">App Toolkitは、Google Playストアから当社のアプリケーションの最新リストを取得し、その情報を正確に表示するためにインターネットアクセスが必要です。通常、他の侵入的な権限は必要ありません。</string>
-    <string name="question_8">App Toolkitまたは貴社のアプリに関するフィードバックを提供するにはどうすればよいですか？</string>
-    <string name="summary_preference_faq_8">App Toolkitおよび当社の個々のアプリに関するフィードバックを重視しています！通常、App Toolkitの設定内またはPlayストアのデベロッパーページに「フィードバック」または「お問い合わせ」オプションがあります。当社のAppToolkitライブラリ自体に関するフィードバックも、適切なチャネルを通じて歓迎します。</string>
-    <string name="question_9">App Toolkitを使用して他のアプリを見つける際、私のデータは安全ですか？</string>
-    <string name="summary_preference_faq_9">App Toolkitは主に、当社のアプリに関する公開情報を取得します。リストされている当社のアプリのいずれかをインストールまたは使用することを選択した場合、そのアプリ独自のプライバシーポリシーが適用されます。確認することをお勧めします。App Toolkitのデータ処理は、当社のプライバシーポリシーに概説されています。</string>
+    <string name="question_1">App Toolkit とは？</string>
+    <string name="summary_preference_faq_1">App Toolkit は、AppToolkit ライブラリで作成されたアプリを紹介・実演するためのアプリです。このエコシステムを探索し、AppToolkit ライブラリの動作を確認するためのガイドです。</string>
+    <string name="question_2">App Toolkit に表示されるさまざまなアプリへはどうやってアクセスしますか？</string>
+    <string name="summary_preference_faq_2">App Toolkit にはさまざまなアプリが一覧表示されます。アプリの項目をタップすると、通常は詳細情報と、Google Play Store からインストールまたは開くためのリンクが表示され、実際に試すことができます。</string>
+    <string name="question_3">App Toolkit に掲載されているアプリは無料ですか？</string>
+    <string name="summary_preference_faq_3">App Toolkit に掲載されている多くのアプリは、基本機能を無料で提供しています。プレミアム版やアプリ内購入で高度な機能が利用できる場合もあります。各アプリの詳細は Google Play Store の該当ページで確認できます。</string>
+    <string name="question_4">掲載されている特定のアプリについて詳しく知るには？</string>
+    <string name="summary_preference_faq_4">アプリの詳細、機能、ユーザーのレビューを確認するには、App Toolkit でそのアプリをタップし、Google Play Store のページを開いてください。</string>
+    <string name="question_5">掲載されているアプリのサポートはどこで受けられますか？</string>
+    <string name="summary_preference_faq_5">各アプリには独自のサポートチャネルがあり、通常は Google Play Store のページまたはアプリ内に記載されています。App Toolkit はこれらのアプリを発見するためのものです。アプリ固有の問題はそのアプリのサポートオプションを利用してください。</string>
+    <string name="question_6">App Toolkit のアプリ一覧はどのくらいの頻度で更新されますか？</string>
+    <string name="summary_preference_faq_6">App Toolkit は定期的に更新され、AppToolkit ライブラリを使用する最新のアプリを常に見られるようになっています。新しいアプリや重要な更新がここに表示されることがあります。</string>
+    <string name="question_7">App Toolkit がインターネットアクセスのような権限を必要とするのはなぜですか？</string>
+    <string name="summary_preference_faq_7">最新のアプリ一覧を表示するために、App Toolkit は Google Play Store から情報を取得し正確に表示するためのインターネットアクセスを使用します。通常、他の侵襲的な権限は必要ありません。</string>
+    <string name="question_8">App Toolkit やアプリへのフィードバックはどう送ればよいですか？</string>
+    <string name="summary_preference_faq_8">App Toolkit と掲載アプリへのフィードバックを歓迎します。通常、App Toolkit の設定または Google Play Store のデベロッパーページで "Feedback" または "Contact" のオプションを見つけられます。AppToolkit ライブラリへのフィードバックも適切なチャネルで受け付けています。</string>
+    <string name="question_9">App Toolkit を使って他のアプリを探すとき、私のデータは安全ですか？</string>
+    <string name="summary_preference_faq_9">App Toolkit は主に公開されているアプリ情報を取得します。これらのアプリのいずれかをインストールまたは使用すると、そのアプリ固有のプライバシーポリシーが適用されますので、確認してください。App Toolkit のデータ取り扱いはそのプライバシーポリシーに記載されています。</string>
 </resources>

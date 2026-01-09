@@ -7,13 +7,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.hapticPagerSwipe
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import kotlinx.collections.immutable.toImmutableList
 import kotlin.math.absoluteValue
 
 @Composable
@@ -23,6 +26,9 @@ fun <T> CustomCarousel(
     pagerState: PagerState,
     itemContent: @Composable (item: T) -> Unit
 ) {
+    val stableItems = remember(items) { items.toImmutableList() }
+    val currentItems by rememberUpdatedState(newValue = stableItems)
+
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -36,7 +42,11 @@ fun <T> CustomCarousel(
             val pageOffset = remember(pagerState.currentPage, page) {
                 (pagerState.currentPage - page).absoluteValue.toFloat()
             }
-            CarouselItem(item = items[page], pageOffset = pageOffset, itemContent = itemContent)
+            CarouselItem(
+                item = currentItems[page],
+                pageOffset = pageOffset,
+                itemContent = itemContent
+            )
         }
 
         LargeVerticalSpacer()
@@ -45,7 +55,7 @@ fun <T> CustomCarousel(
             modifier = Modifier
                 .align(alignment = Alignment.CenterHorizontally)
                 .padding(bottom = SizeConstants.SmallSize),
-            totalDots = items.size,
+            totalDots = currentItems.size,
             selectedIndex = pagerState.currentPage,
             dotSize = SizeConstants.MediumSize / 2,
         )

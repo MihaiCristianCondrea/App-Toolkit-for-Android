@@ -9,7 +9,6 @@
     <string name="welcome">Selamat datang</string>
     <string name="summary_browse_terms_of_service_and_privacy_policy">Baca dan setujui Ketentuan layanan dan Kebijakan Privasi kami untuk melanjutkan</string>
     <string name="agree">Setuju</string>
-    <string name="error_loading_consent_info">Gagal memuat informasi persetujuan</string>
     <string name="loading">Memuat…</string>
 
     <string name="skip_button_text">Lewati</string>
@@ -65,20 +64,11 @@
 
     <string name="home">Beranda</string>
 
-    <string name="activity_not_found">Aktivitas tidak ditemukan.</string>
-    <string name="security_error">Terjadi kesalahan keamanan. Silakan coba lagi nanti.</string>
-    <string name="io_error">Terjadi kesalahan input/output. Periksa koneksi jaringan atau penyimpanan Anda, lalu coba lagi.</string>
-    <string name="illegal_argument_error">Input atau argumen tidak valid. Periksa informasi dan coba lagi.</string>
-    <string name="unknown_error">Terjadi kesalahan yang tidak diketahui.</string>
-    <string name="initialization_error">Inisialisasi gagal. Silakan coba lagi nanti.</string>
-
     <string name="settings">Pengaturan</string>
     <string name="long_settings_label">Pengaturan aplikasi</string>
     <string name="settings_disabled_message">Pengaturan saat ini tidak tersedia.</string>
     <string name="settings_placeholder_description">Tidak ada pengaturan yang dipilih. Pilih opsi untuk melihat detailnya di sini.</string>
     <string name="get_help">Dapatkan bantuan</string>
-    <string name="error_no_settings_found">Tidak ada pengaturan ditemukan</string>
-    <string name="error_invalid_content_key">Kunci konten tidak valid.</string>
 
     <string name="display">Tampilan</string>
     <string name="summary_preference_settings_display">Personalisasi tampilan dan nuansa aplikasi Anda</string>
@@ -142,15 +132,10 @@
     <string name="view_on_github">Arahkan ke GitHub</string>
     <string name="snack_report_success">Laporan berhasil dikirim</string>
     <string name="snack_report_failed">Gagal mengirim laporan</string>
-    <string name="error_invalid_report">Judul dan deskripsi tidak boleh kosong</string>
     <string name="issue_submitted_successfully">Masalah yang berhasil diserahkan</string>
     <string name="open_issue_in_browser">Buka di browser</string>
     <string name="open_button_label">Masalah terbuka</string>
     <string name="issue_submitted">Masalah Anda telah diajukan.</string>
-    <string name="error_unauthorized">Tidak sah: token tidak valid</string>
-    <string name="error_forbidden">Terlarang: Izin yang tidak mencukupi</string>
-    <string name="error_gone">Titik akhir API dihapus</string>
-    <string name="error_unprocessable">Data tidak valid untuk pembuatan masalah</string>
 
     <string name="error_reporting">Pelaporan kesalahan</string>
     <string name="bug_report">Laporan bug</string>
@@ -159,7 +144,6 @@
     <string name="clear_cache">Bersihkan cache</string>
     <string name="summary_preference_settings_clear_cache">Bersihkan data aplikasi sementara.</string>
     <string name="cache_cleared_success">Cache berhasil dibersihkan</string>
-    <string name="cache_cleared_error">Cache dibersihkan dengan beberapa kesalahan</string>
 
     <string name="security_and_privacy">Keamanan &amp; privasi</string>
     <string name="summary_preference_settings_privacy_and_security">Kelola pengaturan privasi Anda</string>
@@ -206,7 +190,6 @@
     <string name="summary_ads">Lihat iklan yang relevan bagi Anda. Kelola informasi yang digunakan untuk menampilkan iklan yang dipersonalisasi. Anda selalu dapat mematikan personalisasi di sini.</string>
     <string name="ads_enabled">Iklan diaktifkan</string>
     <string name="ads_disabled">Iklan dinonaktifkan</string>
-    <string name="error_failed_to_load_ads_settings">Gagal memuat pengaturan iklan</string>
 
     <string name="usage_and_diagnostics">Penggunaan dan diagnostik</string>
     <string name="summary_preference_settings_usage_and_diagnostics">Bagikan data untuk membantu meningkatkan pengalaman dalam aplikasi</string>
@@ -245,10 +228,6 @@
 
     <string name="eula_title">Perjanjian Lisensi Pengguna Akhir</string>
     <string name="changelog_title">Catatan perubahan aplikasi</string>
-    <string name="loading_eula_message">Mengambil Perjanjian Lisensi Pengguna Akhir…</string>
-    <string name="loading_changelog_message">Mengambil catatan perubahan aplikasi…</string>
-    <string name="error_loading_eula_message">Tidak dapat memuat Perjanjian Lisensi Pengguna Akhir. Silakan coba lagi.</string>
-    <string name="error_loading_changelog_message">Tidak dapat memuat catatan perubahan aplikasi. Silakan coba lagi.</string>
     <string name="no_new_updates_message">Tidak ada pembaruan baru yang tersedia.</string>
 
     <string name="device_info">Informasi perangkat</string>
@@ -287,14 +266,7 @@
     <string name="non_paid_support">Dukungan tidak berbayar</string>
     <string name="web_ad">Iklan web</string>
     <string name="sponsored_ad_label">● Iklan bersponsor</string>
-    <string name="error_failed_to_load_sku_details">Gagal memuat detail SKU</string>
     <string name="purchase_pending">Donasi Anda sedang diproses oleh Google. Kami akan memberi tahu Anda saat selesai. Terima kasih.</string>
     <string name="purchase_thank_you">Terima kasih atas donasi Anda.</string>
     <string name="purchase_cancelled">Pembelian dibatalkan</string>
-    <string name="error_an_error_occurred">Terjadi kesalahan</string>
-    <string name="error_failed_to_launch_review">Gagal memulai alur ulasan</string>
-    <string name="error_failed_to_load_faq">Gagal memuat FAQ</string>
-    <string name="error_failed_to_request_review">Gagal meminta ulasan</string>
-    <string name="error_failed_to_update_app">Gagal memperbarui aplikasi</string>
-    <string name="error_failed_to_load_consent_info">Gagal memuat informasi persetujuan</string>
 </resources>

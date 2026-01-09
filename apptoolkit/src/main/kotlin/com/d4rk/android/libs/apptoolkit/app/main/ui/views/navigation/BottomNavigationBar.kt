@@ -23,7 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
-import com.d4rk.android.libs.apptoolkit.data.datastore.rememberCommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.local.datastore.rememberCommonDataStore
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)

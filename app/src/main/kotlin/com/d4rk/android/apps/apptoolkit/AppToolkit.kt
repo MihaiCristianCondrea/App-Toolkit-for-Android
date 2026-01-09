@@ -10,14 +10,15 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.apps.apptoolkit.core.di.initializeKoin
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
-import com.d4rk.android.libs.apptoolkit.app.theme.style.AppThemeConfig
-import com.d4rk.android.libs.apptoolkit.app.theme.style.ThemePaletteProvider
-import com.d4rk.android.libs.apptoolkit.app.theme.style.colors.ColorPalette
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppThemeConfig
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isHalloweenSeason
 import com.d4rk.android.libs.apptoolkit.data.core.BaseCoreManager
 import com.d4rk.android.libs.apptoolkit.data.core.ads.AdsCoreManager
-import com.d4rk.android.libs.apptoolkit.data.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first
@@ -65,12 +66,15 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
 
         if (!hasInteractedWithSettings) {
             val staticPaletteId: String = runBlocking { dataStore.staticPaletteId.first() }
-            val shouldUseSeasonalPalette: Boolean =
-                staticPaletteId == StaticPaletteIds.DEFAULT &&
-                        LocalDate.now(ZoneId.systemDefault()).isChristmasSeason
+            val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
+            val shouldUseSeasonalPalette: Boolean = staticPaletteId == StaticPaletteIds.DEFAULT
 
             if (shouldUseSeasonalPalette) {
-                return ThemePaletteProvider.paletteById(StaticPaletteIds.CHRISTMAS)
+                return when {
+                    today.isHalloweenSeason -> ThemePaletteProvider.paletteById(StaticPaletteIds.HALLOWEEN)
+                    today.isChristmasSeason -> ThemePaletteProvider.paletteById(StaticPaletteIds.CHRISTMAS)
+                    else -> getKoin().get()
+                }
             }
         }
 

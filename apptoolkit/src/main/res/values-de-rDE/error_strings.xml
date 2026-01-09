@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loading_consent_info">Fehler beim Laden der Einwilligungsinformationen</string>
+
+    <string name="activity_not_found">Aktivität nicht gefunden.</string>
+
+    <string name="security_error">Ein Sicherheitsfehler ist aufgetreten. Bitte versuchen Sie es später erneut.</string>
+    <string name="io_error">Ein Eingabe-/Ausgabefehler ist aufgetreten. Bitte überprüfen Sie Ihre Netzwerkverbindung oder den Speicher und versuchen Sie es erneut.</string>
+    <string name="illegal_argument_error">Ungültige Eingabe oder ungültiges Argument angegeben. Bitte überprüfen Sie die Informationen und versuchen Sie es erneut.</string>
+    <string name="unknown_error">Ein unbekannter Fehler ist aufgetreten.</string>
+    <string name="initialization_error">Initialisierung fehlgeschlagen. Bitte versuchen Sie es später erneut.</string>
+
+    <string name="error_no_settings_found">Keine Einstellungen gefunden</string>
+    <string name="error_invalid_content_key">Ungültiger Inhaltsschlüssel.</string>
+
+    <string name="error_unauthorized">Nicht autorisiert: Ungültiges Token</string>
+    <string name="error_forbidden">Verboten: unzureichende Berechtigungen</string>
+    <string name="error_gone">API-Endpunkt entfernt</string>
+    <string name="error_unprocessable">Ungültige Daten für die Erstellung des Vorgangs</string>
+    <string name="error_invalid_report">Titel und Beschreibung dürfen nicht leer sein</string>
+
+    <string name="error_failed_to_load_ads_settings">Fehler beim Laden der Werbeeinstellungen</string>
+
+    <string name="cache_cleared_error">Cache mit einigen Fehlern geleert</string>
+
+    <string name="loading_eula_message">Endbenutzer-Lizenzvereinbarung wird abgerufen…</string>
+    <string name="loading_changelog_message">Anwendungs-Changelog wird abgerufen…</string>
+    <string name="error_loading_eula_message">Die Endbenutzer-Lizenzvereinbarung konnte nicht geladen werden. Bitte versuchen Sie es erneut.</string>
+    <string name="error_loading_changelog_message">Der Anwendungs-Changelog konnte nicht geladen werden. Bitte versuchen Sie es erneut.</string>
+
+    <string name="error_failed_to_load_sku_details">Fehler beim Laden der SKU-Details</string>
+
+    <string name="no_internet_error">Keine Internetverbindung.</string>
+    <string name="connection_error">Netzwerkfehler. Bitte versuchen Sie es erneut.</string>
+    <string name="connection_closed_error">Die Verbindung wurde unterbrochen.</string>
+    <string name="request_timeout_error">Zeitüberschreitung der Anfrage. Versuchen Sie es erneut.</string>
+    <string name="ssl_error">Sichere Verbindung fehlgeschlagen.</string>
+
+    <string name="http_redirect_error">Unerwartete Weiterleitung vom Server.</string>
+    <string name="http_client_error">Anfrage fehlgeschlagen. Bitte versuchen Sie es erneut.</string>
+    <string name="http_server_error">Serverfehler. Bitte versuchen Sie es später erneut.</string>
+    <string name="rate_limited_error">Zu viele Anfragen. Versuchen Sie es später erneut.</string>
+
+    <string name="serialization_error">Fehler beim Lesen der Serverantwort.</string>
+
+    <string name="no_data_error">Keine Daten verfügbar.</string>
+    <string name="invalid_state_error">Vorgang ist derzeit nicht zulässig.</string>
+    <string name="unsupported_operation_error">Nicht unterstützter Vorgang.</string>
+    <string name="cancelled_error">Vorgang abgebrochen.</string>
+
+    <string name="database_error">Speicherfehler.</string>
+    <string name="database_locked_error">Der Speicher ist beschäftigt. Versuchen Sie es erneut.</string>
+    <string name="database_constraint_error">Speicherbeschränkungsfehler.</string>
+    <string name="database_cant_open_error">Der Speicher konnte nicht geöffnet werden.</string>
+    <string name="database_corrupt_error">Der Speicher ist beschädigt.</string>
+    <string name="database_full_error">Der Speicher ist voll.</string>
+
+    <string name="error_an_error_occurred">Ein Fehler ist aufgetreten</string>
+    <string name="error_failed_to_launch_review">Fehler beim Starten des Bewertungsablaufs</string>
+    <string name="error_failed_to_load_faq">Fehler beim Laden der FAQs</string>
+    <string name="error_failed_to_request_review">Fehler beim Anfordern der Bewertung</string>
+    <string name="error_failed_to_update_app">Fehler beim Aktualisieren der App</string>
+    <string name="error_failed_to_load_consent_info">Fehler beim Laden der Einwilligungsinformationen</string>
+    <string name="error_failed_to_load_navigation">Navigation konnte nicht geladen werden</string>
+</resources>
