@@ -2,6 +2,7 @@ package com.d4rk.android.libs.apptoolkit.app.about.data.repository
 
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.ClipData
 import android.os.Build
 import android.util.Log
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo
@@ -65,6 +66,9 @@ class TestAboutRepositoryImpl {
     fun `copyDeviceInfo delegates to copyTextToClipboard`() {
         mockkStatic(Log::class)
         every { Log.w(any(), any(), any()) } returns 0
+        mockkStatic(ClipData::class)
+        val clipData = mockk<ClipData>()
+        every { ClipData.newPlainText(any(), any()) } returns clipData
         val context = mockk<Context>()
         val clipboardManager = mockk<ClipboardManager>()
         every { context.getSystemService(ClipboardManager::class.java) } returns clipboardManager
@@ -80,6 +84,7 @@ class TestAboutRepositoryImpl {
                 "info"
             )
         } finally {
+            unmockkStatic(ClipData::class)
             unmockkStatic(Log::class)
         }
 
