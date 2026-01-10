@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.data.datastore
+package com.d4rk.android.apps.apptoolkit.core.data.local
 
 import android.content.Context
 import com.d4rk.android.apps.apptoolkit.BuildConfig

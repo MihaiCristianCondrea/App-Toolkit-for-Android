@@ -9,7 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
+import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 import com.d4rk.android.libs.apptoolkit.app.main.utils.InAppUpdateHelper
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme

@@ -4,7 +4,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
-import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
+import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 import com.d4rk.android.libs.apptoolkit.data.local.datastore.startupDestinationFlow
 import io.mockk.clearAllMocks
 import io.mockk.every

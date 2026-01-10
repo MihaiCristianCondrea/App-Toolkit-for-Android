@@ -1,7 +1,7 @@
 package com.d4rk.android.apps.apptoolkit.core.di.modules.core.modules
 
 import com.d4rk.android.apps.apptoolkit.BuildConfig
-import com.d4rk.android.apps.apptoolkit.core.data.datastore.DataStore
+import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 import com.d4rk.android.libs.apptoolkit.core.data.firebase.FirebaseControllerImpl
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.data.core.ads.AdsCoreManager

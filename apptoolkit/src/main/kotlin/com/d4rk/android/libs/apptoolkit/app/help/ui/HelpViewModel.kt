@@ -84,7 +84,6 @@ class HelpViewModel(
                         )
                     }
             }
-
             .catch {
                 if (it is CancellationException) throw it
                 firebaseController.reportViewModelError(
@@ -104,5 +103,4 @@ class HelpViewModel(
             }
             .launchIn(viewModelScope)
     }
-
 }
