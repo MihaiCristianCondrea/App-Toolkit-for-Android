@@ -1,7 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.about.data.repository
 
-import android.content.Context
 import android.content.ClipboardManager
+import android.content.Context
 import android.os.Build
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
@@ -58,6 +58,14 @@ class TestAboutRepositoryImpl {
         assertThat(result.deviceInfo).isEqualTo(deviceProvider.deviceInfo)
     }
 
+    /*
+    FIXME:
+    Method w in android.util.Log not mocked. See https://developer.android.com/r/studio-ui/build/not-mocked for details.
+    java.lang.RuntimeException: Method w in android.util.Log not mocked. See https://developer.android.com/r/studio-ui/build/not-mocked for details.
+        at android.util.Log.w(Log.java)
+        at com.d4rk.android.libs.apptoolkit.app.about.data.repository.AboutRepositoryImpl.copyDeviceInfo(AboutRepositoryImpl.kt:47)
+        at com.d4rk.android.libs.apptoolkit.app.about.data.repository.TestAboutRepositoryImpl.copyDeviceInfo delegates to copyTextToClipboard(TestAboutRepositoryImpl.kt:72)
+   */
     @Test
     fun `copyDeviceInfo delegates to copyTextToClipboard`() {
         val context = mockk<Context>()
@@ -69,7 +77,10 @@ class TestAboutRepositoryImpl {
             sdkIntProvider = { Build.VERSION_CODES.S_V2 },
         )
 
-        val copyResult = repo.copyDeviceInfo("label", "info")
+        val copyResult = repo.copyDeviceInfo(
+            "label",
+            "info"
+        ) // FIXME: Method w in android.util.Log not mocked. See https://developer.android.com/r/studio-ui/build/not-mocked for details.
 
         verify { clipboardManager.setPrimaryClip(any()) }
         assertThat(copyResult).isEqualTo(
