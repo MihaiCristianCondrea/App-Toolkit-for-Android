@@ -1,11 +1,11 @@
 package com.d4rk.android.apps.apptoolkit.app.main.ui
 
 import androidx.lifecycle.viewModelScope
+import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
@@ -31,7 +31,7 @@ import kotlin.coroutines.cancellation.CancellationException
  * ViewModel for the main screen that loads navigation drawer content.
  */
 class MainViewModel(
-    private val navigationRepository: NavigationRepository,
+    private val getNavigationDrawerItemsUseCase: GetNavigationDrawerItemsUseCase,
     private val firebaseController: FirebaseController,
     private val dispatchers: DispatcherProvider,
 ) : ScreenViewModel<MainUiState, MainEvent, MainAction>(
@@ -50,7 +50,7 @@ class MainViewModel(
 
     private fun loadNavigationItems() {
         viewModelScope.launch {
-            navigationRepository.getNavigationDrawerItems()
+            getNavigationDrawerItemsUseCase()
                 .flowOn(dispatchers.io)
                 .map<List<NavigationDrawerItem>, DataState<List<NavigationDrawerItem>, Errors>> { items ->
                     if (items.isEmpty()) {

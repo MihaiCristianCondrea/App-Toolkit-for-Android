@@ -174,7 +174,7 @@ private fun AppsGrid(
                     )
                 }
 
-                AppListItem.Ad -> {
+                is AppListItem.Ad -> {
                     AppsListNativeAdCard(
                         adUnitId = adUnitId,
                         modifier = Modifier

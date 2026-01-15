@@ -1,8 +1,9 @@
 package com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules
 
 import com.d4rk.android.apps.apptoolkit.BuildConfig
+import com.d4rk.android.apps.apptoolkit.app.main.data.repository.MainNavigationRepositoryImpl
+import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainViewModel
-import com.d4rk.android.libs.apptoolkit.app.main.data.repository.MainRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
@@ -13,10 +14,11 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val appModule: Module = module {
-    single<NavigationRepository> { MainRepositoryImpl(dispatchers = get()) }
+    single<NavigationRepository> { MainNavigationRepositoryImpl() }
+    single<GetNavigationDrawerItemsUseCase> { GetNavigationDrawerItemsUseCase(navigationRepository = get()) }
     viewModel {
         MainViewModel(
-            navigationRepository = get(),
+            getNavigationDrawerItemsUseCase = get(),
             firebaseController = get(),
             dispatchers = get(),
         )
