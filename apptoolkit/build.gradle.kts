@@ -9,7 +9,6 @@ version = publishingVersion.get()
 
 plugins {
     alias(notation = libs.plugins.android.library)
-    alias(notation = libs.plugins.kotlin.android)
     alias(notation = libs.plugins.mannodermaus)
     alias(notation = libs.plugins.compose.compiler)
     alias(notation = libs.plugins.about.libraries)
@@ -78,6 +77,7 @@ dependencies {
     api(dependencyNotation = libs.bundles.androidx.compose)
     api(dependencyNotation = libs.bundles.androidx.navigation3)
     api(dependencyNotation = libs.androidx.material3.window.size)
+    api(dependencyNotation = libs.androidx.window)
 
     // Lifecycle
     api(dependencyNotation = libs.bundles.androidx.lifecycle)

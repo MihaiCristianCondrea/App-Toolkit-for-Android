@@ -3,6 +3,7 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
+import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
@@ -39,11 +40,20 @@ class MainViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `initialization triggers navigation load`() = runTest(dispatcherExtension.testDispatcher) {
-        val repo = FakeNavigationRepository(flowOf(emptyList()))
+        val expectedItems = listOf(
+            NavigationDrawerItem(
+                title = 1,
+                selectedIcon = createIcon(),
+                route = "route"
+            )
+        )
+
+        val repo = FakeNavigationRepository(flowOf(expectedItems))
+        val useCase = GetNavigationDrawerItemsUseCase(repo)
         val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
         MainViewModel(
-            navigationRepository = repo,
+            getNavigationDrawerItemsUseCase = useCase,
             firebaseController = FakeFirebaseController(),
             dispatchers = dispatchers,
         )
@@ -65,11 +75,13 @@ class MainViewModelTest {
                     route = "route"
                 )
             )
+
             val repo = FakeNavigationRepository(flowOf(expectedItems))
+            val useCase = GetNavigationDrawerItemsUseCase(repo)
             val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
             val viewModel = MainViewModel(
-                navigationRepository = repo,
+                getNavigationDrawerItemsUseCase = useCase,
                 firebaseController = FakeFirebaseController(),
                 dispatchers = dispatchers,
             )
@@ -88,13 +100,15 @@ class MainViewModelTest {
     @Test
     fun `navigation load error shows snackbar`() = runTest(dispatcherExtension.testDispatcher) {
         val error = IllegalStateException("boom")
+
         val repo = FakeNavigationRepository(
-            flow { throw error }
+            upstream = flow { throw error }
         )
+        val useCase = GetNavigationDrawerItemsUseCase(repo)
         val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
         val viewModel = MainViewModel(
-            navigationRepository = repo,
+            getNavigationDrawerItemsUseCase = useCase,
             firebaseController = FakeFirebaseController(),
             dispatchers = dispatchers,
         )
@@ -105,12 +119,33 @@ class MainViewModelTest {
         assertEquals(
             MainUiState(
                 showSnackbar = true,
-                snackbarMessage = UiTextHelper.StringResource(com.d4rk.android.libs.apptoolkit.R.string.error_failed_to_load_navigation)
+                snackbarMessage = UiTextHelper.StringResource(
+                    com.d4rk.android.libs.apptoolkit.R.string.error_failed_to_load_navigation
+                )
             ),
             viewModel.uiState.value.data
         )
         assertEquals(1, repo.callCount)
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `empty navigation list shows snackbar`() = runTest(dispatcherExtension.testDispatcher) {
+        val repo = FakeNavigationRepository(flowOf(emptyList()))
+        val useCase = GetNavigationDrawerItemsUseCase(repo)
+        val viewModel = MainViewModel(
+            useCase,
+            FakeFirebaseController(),
+            TestDispatchers(dispatcherExtension.testDispatcher)
+        )
+
+        runCurrent()
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.value.data?.showSnackbar)
+        assertEquals(1, repo.callCount)
+    }
+
 
     private class FakeNavigationRepository(
         private val upstream: Flow<List<NavigationDrawerItem>>
@@ -133,9 +168,7 @@ class MainViewModelTest {
         ) = Unit
 
         override fun setAnalyticsEnabled(enabled: Boolean) = Unit
-
         override fun setCrashlyticsEnabled(enabled: Boolean) = Unit
-
         override fun setPerformanceEnabled(enabled: Boolean) = Unit
 
         override fun reportViewModelError(

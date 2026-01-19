@@ -1,14 +1,14 @@
 [versions]
-agp = "8.13.2"
+agp = "9.0.0"
 appcompat = "1.7.1"
-aboutlibraries = "13.2.1"
+aboutlibraries = "14.0.0-b01"
 composeMarkdown = "0.5.7"
 core = "4.6.2"
 coil = "3.3.0"
 lottie = "6.7.1"
 datastorePreferences = "1.2.0"
-firebaseBom = "34.7.0"
-composeBom = "2025.12.01"
+firebaseBom = "34.8.0"
+composeBom = "2026.01.00"
 integrity = "1.6.0"
 konfettiCompose = "2.0.5"
 lifecycle = "2.10.0"
@@ -23,7 +23,7 @@ appUpdateKtx = "2.1.0"
 kotlin = "2.3.0"
 coreKtx = "1.17.0"
 activityCompose = "1.12.2"
-composeMaterial3 = "1.5.0-alpha11"
+composeMaterial3 = "1.5.0-alpha12"
 composeMaterial3WindowSizeClass = "1.4.0"
 reviewKtx = "2.0.2"
 billing = "8.3.0"
@@ -34,17 +34,18 @@ nav3 = "1.0.0"
 lifecycleViewmodelNav3 = "2.10.0"
 material3AdaptiveNav3 = "1.2.0"
 userMessagingPlatform = "4.0.0"
+window = "1.5.1"
 workRuntimeKtx = "2.11.0"
 google-services = "4.4.4"
 google-firebase-crashlytics = "3.0.6"
 junittest = "3.7.0"
-mannodermaus = "1.14.0.0"
+mannodermaus = "2.0.1"
 mockk = "1.14.7"
-jupiter = "6.0.1"
+jupiter = "6.0.2"
 testCorutines = "1.10.2"
 testTurbine = "1.2.1"
 truth = "1.7.0"
-testManifestTestJunit4Android = "1.10.0"
+testManifestTestJunit4Android = "1.10.1"
 slf4j = "2.0.17"
 robolectric = "4.16"
 junit4 = "4.13.2"
@@ -69,6 +70,7 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3" }
 androidx-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "composeMaterial3WindowSizeClass" }
+androidx-window = { module = "androidx.window:window", version.ref = "window" }
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3" }
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
@@ -148,7 +150,6 @@ androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-te
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 about-libraries = { id = "com.mikepenz.aboutlibraries.plugin.android", version.ref = "aboutlibraries" }
