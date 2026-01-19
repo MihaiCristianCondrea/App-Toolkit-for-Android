@@ -10,7 +10,7 @@ import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 /**
  * Activity that provides common Compose setup for cleanup screens.
  */
-abstract class BaseCleanupActivity :
+abstract class BaseActivity :
     AppCompatActivity() { // TODO: Make the other screens rely on this activity
 
     /**
