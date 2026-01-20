@@ -44,7 +44,7 @@ import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.AppDetailsNativeAd
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
@@ -111,7 +111,7 @@ fun AppDetailsBottomSheet(
         ) {
             when (isAppInstalled) {
                 true -> {
-                    OutlinedIconButtonWithText(
+                    GeneralOutlinedButton(
                         onClick = onOpenAppClick,
                         icon = Icons.AutoMirrored.Outlined.OpenInNew,
                         label = stringResource(id = R.string.app_details_open_app)
@@ -216,12 +216,12 @@ fun AppDetailsBottomSheet(
             ),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            OutlinedIconButtonWithText(
+            GeneralOutlinedButton(
                 onClick = onShareClick,
                 icon = Icons.Outlined.Share,
                 label = stringResource(id = R.string.app_details_share_content_description)
             )
-            OutlinedIconButtonWithText(
+            GeneralOutlinedButton(
                 onClick = onFavoriteClick,
                 icon = if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarOutline,
                 label = stringResource(id = R.string.favorite_apps)
