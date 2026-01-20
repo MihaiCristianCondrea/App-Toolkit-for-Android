@@ -2,12 +2,10 @@ package com.d4rk.android.libs.apptoolkit.app.startup.ui
 
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -15,8 +13,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
 import com.d4rk.android.libs.apptoolkit.app.startup.utils.interfaces.providers.StartupProvider
-import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.logging.STARTUP_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.ui.base.BaseActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentFormHelper
 import com.google.android.ump.ConsentInformation
@@ -27,7 +25,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class StartupActivity : AppCompatActivity() {
+class StartupActivity : BaseActivity() {
     private val provider: StartupProvider by inject()
     private val viewModel: StartupViewModel by viewModel()
     private val permissionLauncher: ActivityResultLauncher<Array<String>> =
@@ -35,7 +33,6 @@ class StartupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -65,16 +62,15 @@ class StartupActivity : AppCompatActivity() {
                 checkUserConsent()
             }
         }
+    }
 
-        setContent {
-            AppTheme {
-                val screenState by viewModel.uiState.collectAsStateWithLifecycle()
-                StartupScreen(
-                    screenState = screenState,
-                    onContinueClick = { viewModel.onEvent(StartupEvent.Continue) }
-                )
-            }
-        }
+    @Composable
+    override fun ScreenContent() {
+        val screenState by viewModel.uiState.collectAsStateWithLifecycle()
+        StartupScreen(
+            screenState = screenState,
+            onContinueClick = { viewModel.onEvent(StartupEvent.Continue) }
+        )
     }
 
     private fun navigateToNext() {
