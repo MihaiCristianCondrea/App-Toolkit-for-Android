@@ -17,6 +17,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 
@@ -127,4 +128,33 @@ fun TopAppBarScaffold(
     ) { paddingValues ->
         content(paddingValues)
     }
+}
+
+/**
+ * Creates and remembers a [TopAppBarScrollBehavior] that is initialized in a collapsed state.
+ *
+ * This is useful for screens where the [LargeTopAppBar] should start in its smaller,
+ * collapsed form rather than expanded, while still allowing for expansion or
+ * further scroll-driven animations based on user interaction.
+ *
+ * @return A [TopAppBarScrollBehavior] with its scroll state initialized to a collapsed offset.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun rememberCollapsedLargeTopAppBarScrollBehavior(): TopAppBarScrollBehavior {
+    val density = LocalDensity.current
+
+    val expandedHeight = TopAppBarDefaults.LargeAppBarExpandedHeight
+    val collapsedHeight = TopAppBarDefaults.LargeAppBarCollapsedHeight
+
+    val collapsedOffsetPx = with(density) {
+        -(expandedHeight - collapsedHeight).toPx()
+    }
+
+    val topAppBarState = rememberTopAppBarState(
+        initialHeightOffsetLimit = collapsedOffsetPx,
+        initialHeightOffset = collapsedOffsetPx,
+    )
+
+    return TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
 }
