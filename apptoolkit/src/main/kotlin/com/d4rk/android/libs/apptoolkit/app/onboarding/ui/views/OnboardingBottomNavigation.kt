@@ -26,8 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.IconButtonWithText
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @OptIn(
@@ -66,7 +66,7 @@ fun OnboardingBottomNavigation(
             ) + fadeOut(animationSpec = spring(stiffness = Spring.StiffnessLow))
         ) {
             Box(contentAlignment = Alignment.CenterStart) {
-                OutlinedIconButtonWithText(
+                GeneralOutlinedButton(
                     onClick = onBackClicked,
                     icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     iconContentDescription = stringResource(id = R.string.back_button_content_description),
@@ -88,7 +88,7 @@ fun OnboardingBottomNavigation(
             contentAlignment = Alignment.CenterEnd
         ) {
             val isLastPage = pagerState.currentPage == pageCount - 1
-            IconButtonWithText(
+            GeneralButton(
                 onClick = onNextClicked,
                 modifier = Modifier.animateContentSize(),
                 icon = if (isLastPage) Icons.Filled.Check else Icons.AutoMirrored.Filled.KeyboardArrowRight,

@@ -1,6 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -14,9 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedback
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 
 /**
@@ -28,6 +27,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * @param text Optional text to display alongside the icon in the button.
  * @param expanded Determines whether the button is in its expanded state (with text) or collapsed (icon only).
  * @param modifier Modifier to apply to the button.
+ * @param feedback The feedback configuration for sound and haptics.
  */
 @Composable
 fun AnimatedExtendedFloatingActionButton(
@@ -37,7 +37,8 @@ fun AnimatedExtendedFloatingActionButton(
     icon: @Composable () -> Unit,
     text: (@Composable () -> Unit)? = null,
     expanded: Boolean = true,
-    containerColor: Color = FloatingActionButtonDefaults.containerColor
+    containerColor: Color = FloatingActionButtonDefaults.containerColor,
+    feedback: ButtonFeedback = ButtonFeedback(),
 ) {
     val animatedScale: Float by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
@@ -51,8 +52,7 @@ fun AnimatedExtendedFloatingActionButton(
     if (animatedScale > 0f) {
         ExtendedFloatingActionButton(
             onClick = {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                feedback.performClick(view = view, hapticFeedback = hapticFeedback)
                 onClick()
             }, icon = icon, text = text ?: {}, expanded = expanded, modifier = modifier
                 .bounceClick()

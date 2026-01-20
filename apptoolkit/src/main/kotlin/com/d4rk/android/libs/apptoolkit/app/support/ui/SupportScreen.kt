@@ -36,7 +36,7 @@ import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.primaryForm
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.SupportNativeAdCard
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.TonalIconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralTonalButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
@@ -151,7 +151,7 @@ fun SupportScreenContent(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         item {
-                            TonalIconButtonWithText(
+                            GeneralTonalButton(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
                                     onDonateClick(DonationProductIds.LOW_DONATION)
@@ -161,7 +161,7 @@ fun SupportScreenContent(
                             )
                         }
                         item {
-                            TonalIconButtonWithText(
+                            GeneralTonalButton(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
                                     onDonateClick(DonationProductIds.NORMAL_DONATION)
@@ -178,7 +178,7 @@ fun SupportScreenContent(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         item {
-                            TonalIconButtonWithText(
+                            GeneralTonalButton(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
                                     onDonateClick(DonationProductIds.HIGH_DONATION)
@@ -188,7 +188,7 @@ fun SupportScreenContent(
                             )
                         }
                         item {
-                            TonalIconButtonWithText(
+                            GeneralTonalButton(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
                                     onDonateClick(DonationProductIds.EXTREME_DONATION)
@@ -209,7 +209,7 @@ fun SupportScreenContent(
             )
         }
         item {
-            TonalIconButtonWithText(
+            GeneralTonalButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(all = SizeConstants.LargeSize),

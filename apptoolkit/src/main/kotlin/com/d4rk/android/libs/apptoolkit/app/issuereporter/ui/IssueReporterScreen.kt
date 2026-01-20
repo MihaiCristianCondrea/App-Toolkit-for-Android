@@ -64,7 +64,7 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.Gi
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.state.IssueReporterUiState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.SmallFloatingActionButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
@@ -228,7 +228,7 @@ fun IssueReporterScreenContent(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.End
                         ) {
-                            OutlinedIconButtonWithText(
+                            GeneralOutlinedButton(
                                 onClick = { data.issueUrl.let(uriHandler::openUri) },
                                 icon = Icons.AutoMirrored.Outlined.OpenInNew,
                                 iconContentDescription = stringResource(R.string.open_issue_in_browser),

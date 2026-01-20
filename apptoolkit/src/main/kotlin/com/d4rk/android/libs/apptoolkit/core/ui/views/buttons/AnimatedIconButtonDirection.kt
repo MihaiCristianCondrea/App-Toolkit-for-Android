@@ -1,6 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.views.buttons
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -20,7 +19,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
@@ -39,6 +37,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * @param durationMillis The duration of the animation in milliseconds. Defaults to 500ms.
  * @param autoAnimate If true, the button will automatically animate in when `visible` is true.
  *                    If false, the animation will not be triggered automatically and will only occur when the visibility state changes. Defaults to true.
+ * @param feedback The feedback configuration for sound and haptics.
  * @param fromRight If true, the button will slide in from the right and slide out to the right.
  *                  If false, the button will slide in from the left and slide out to the left. Defaults to false.
  *
@@ -59,7 +58,7 @@ fun AnimatedIconButtonDirection(
     onClick: () -> Unit,
     durationMillis: Int = 500,
     autoAnimate: Boolean = true,
-    vibrate: Boolean = true,
+    feedback: ButtonFeedback = ButtonFeedback(),
     fromRight: Boolean = false
 ) {
     val animatedVisibility: MutableState<Boolean> =
@@ -88,10 +87,7 @@ fun AnimatedIconButtonDirection(
         )
     ) {
         IconButton(modifier = modifier.bounceClick(), onClick = {
-            view.playSoundEffect(SoundEffectConstants.CLICK)
-            if (vibrate) {
-                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-            }
+            feedback.performClick(view = view, hapticFeedback = hapticFeedback)
             onClick()
         }, shapes = IconButtonDefaults.shapes()) {
             Icon(imageVector = icon, contentDescription = contentDescription)

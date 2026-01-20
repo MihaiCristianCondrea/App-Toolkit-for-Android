@@ -1,6 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab
 
-import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
@@ -11,9 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 
 /**
@@ -28,6 +27,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * @param icon The icon to be displayed inside the button.
  * @param contentDescription Optional description of the icon for accessibility.
  * @param onClick The action to be performed when the button is clicked.
+ * @param feedback The feedback configuration for sound and haptics.
  */
 @Composable
 fun SmallFloatingActionButton(
@@ -36,7 +36,8 @@ fun SmallFloatingActionButton(
     isExtended: Boolean,
     icon: ImageVector,
     contentDescription: String? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    feedback: ButtonFeedback = ButtonFeedback(),
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -47,8 +48,7 @@ fun SmallFloatingActionButton(
         exit = scaleOut(),
     ) {
         SmallFloatingActionButton(onClick = {
-            view.playSoundEffect(SoundEffectConstants.CLICK)
-            hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+            feedback.performClick(view = view, hapticFeedback = hapticFeedback)
             onClick()
         }, modifier = modifier.bounceClick()) {
             Icon(imageVector = icon, contentDescription = contentDescription)

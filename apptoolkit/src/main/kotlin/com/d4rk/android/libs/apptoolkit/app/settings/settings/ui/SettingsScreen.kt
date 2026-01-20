@@ -49,7 +49,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.Setti
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
@@ -207,7 +207,7 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
                         textAlign = TextAlign.Center,
                     )
                 }
-                OutlinedIconButtonWithText(
+                GeneralOutlinedButton(
                     modifier = Modifier
                         .padding(all = SizeConstants.MediumSize * 2)
                         .align(alignment = Alignment.Start),
