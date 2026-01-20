@@ -1,6 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab
 
-import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -15,9 +14,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 
 /**
@@ -30,6 +29,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * @param icon The [ImageVector] to be displayed inside the FAB.
  * @param contentDescription Text used by accessibility services to describe what the icon represents.
  * @param onClick A lambda function to be invoked when the button is clicked.
+ * @param feedback The feedback configuration for sound and haptics.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -38,7 +38,8 @@ fun AnimatedFloatingActionButton(
     isVisible: Boolean,
     icon: ImageVector,
     contentDescription: String? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    feedback: ButtonFeedback = ButtonFeedback(),
 ) {
     val haptics = LocalHapticFeedback.current
     val view = LocalView.current
@@ -52,8 +53,7 @@ fun AnimatedFloatingActionButton(
         ToggleFloatingActionButton(
             checked = checkedState.value,
             onCheckedChange = { newChecked ->
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-                haptics.performHapticFeedback(HapticFeedbackType.ContextClick)
+                feedback.performClick(view = view, hapticFeedback = haptics)
                 checkedState.value = newChecked
                 onClick()
             },

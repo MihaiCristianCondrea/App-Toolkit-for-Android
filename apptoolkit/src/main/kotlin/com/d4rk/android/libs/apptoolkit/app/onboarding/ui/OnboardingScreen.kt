@@ -34,7 +34,7 @@ import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiStat
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.OnboardingBottomNavigation
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.OnboardingDefaultPageLayout
 import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.hapticPagerSwipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -82,7 +82,7 @@ fun OnboardingScreen() {
                         enter = slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth }) + fadeIn(),
                         exit = slideOutHorizontally(targetOffsetX = { fullWidth -> fullWidth }) + fadeOut()
                     ) {
-                        OutlinedIconButtonWithText(
+                        GeneralOutlinedButton(
                             onClick = { onSkipRequested() },
                             icon = Icons.Filled.SkipNext,
                             iconContentDescription = stringResource(id = R.string.skip_button_content_description),

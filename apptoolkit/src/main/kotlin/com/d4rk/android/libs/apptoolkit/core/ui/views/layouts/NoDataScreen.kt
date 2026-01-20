@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.NoDataNativeAdCard
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.IconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import org.koin.compose.koinInject
@@ -96,7 +96,7 @@ fun NoDataScreen(
         )
         if (showRetry) {
             LargeVerticalSpacer()
-            IconButtonWithText(
+            GeneralButton(
                 onClick = onRetry,
                 icon = Icons.Filled.Refresh,
                 label = stringResource(id = text)

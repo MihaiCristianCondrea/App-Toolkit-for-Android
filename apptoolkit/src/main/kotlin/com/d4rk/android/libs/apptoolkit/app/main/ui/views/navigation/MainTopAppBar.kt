@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.support.ui.SupportActivity
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.d4rk.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
@@ -51,7 +52,7 @@ fun MainTopAppBar(
                 icon = navigationIcon,
                 contentDescription = stringResource(id = R.string.go_back),
                 onClick = onNavigationIconClick,
-                vibrate = false
+                feedback = ButtonFeedback(hapticFeedbackType = null)
             )
         },
         actions = {

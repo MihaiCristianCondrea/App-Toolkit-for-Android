@@ -63,7 +63,7 @@ import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnos
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.OnboardingViewModel
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButtonWithText
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeIncreasedVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
@@ -140,7 +140,7 @@ fun CrashlyticsOnboardingPageTab() {
 
             LargeVerticalSpacer()
 
-            OutlinedIconButtonWithText(
+            GeneralOutlinedButton(
                 onClick = {
                     onboardingViewModel.onEvent(OnboardingEvent.ShowCrashlyticsDialog)
                 },
@@ -279,7 +279,7 @@ fun LearnMoreSection() {
 
         MediumVerticalSpacer()
 
-        OutlinedIconButtonWithText(
+        GeneralOutlinedButton(
             onClick = {
                 val opened = context.startActivitySafely(
                     intent = Intent(Intent.ACTION_VIEW, AppLinks.PRIVACY_POLICY.toUri()),
@@ -385,7 +385,7 @@ fun CrashlyticsConsentDialog(
             }
         },
         confirmButton = {
-            OutlinedIconButtonWithText(
+            GeneralOutlinedButton(
                 onClick = {
                     val overallConsent: Boolean =
                         state.analyticsConsent && state.adStorageConsent && state.adUserDataConsent && state.adPersonalizationConsent
