@@ -28,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -60,6 +61,33 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneId
+
+/**
+ * Returns a list of static palette IDs with duplicate palettes removed.
+ *
+ * When the injected default palette matches a built-in palette (e.g., blue), the list would
+ * otherwise show visually identical swatches twice. This helper keeps the selected palette ID
+ * while removing duplicates, so the UI reflects the effective palette without redundancy.
+ */
+private fun dedupeStaticPaletteIds(
+    options: List<String>,
+    selectedPaletteId: String
+): List<String> {
+    val resolvedPalettes = options.associateWith { paletteById(it) }
+    val uniqueIds = mutableListOf<String>()
+
+    for (id in options) {
+        val palette = resolvedPalettes.getValue(id)
+        val existingIndex = uniqueIds.indexOfFirst { resolvedPalettes.getValue(it) == palette }
+        if (existingIndex == -1) {
+            uniqueIds.add(id)
+        } else if (id == selectedPaletteId && uniqueIds[existingIndex] != selectedPaletteId) {
+            uniqueIds[existingIndex] = id
+        }
+    }
+
+    return uniqueIds
+}
 
 /**
  * Theme settings content for the app.
@@ -135,10 +163,14 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
         isHalloweenSeason,
         staticPaletteId
     ) {
-        filterSeasonalStaticPalettes(
+        val seasonalOptions = filterSeasonalStaticPalettes(
             baseOptions = StaticPaletteIds.withDefault,
             isChristmasSeason = isChristmasSeason,
             isHalloweenSeason = isHalloweenSeason,
+            selectedPaletteId = staticPaletteId
+        )
+        dedupeStaticPaletteIds(
+            options = seasonalOptions,
             selectedPaletteId = staticPaletteId
         )
     }
@@ -157,10 +189,17 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
         stringResource(id = R.string.other_colors)
     )
 
+    val initialPagerPage = if (supportsDynamic && isDynamicColors) 0 else 1
     val pagerState = rememberPagerState(
-        initialPage = if (supportsDynamic && isDynamicColors) 0 else 1,
+        initialPage = initialPagerPage,
         pageCount = { 2 }
     )
+
+    LaunchedEffect(initialPagerPage) {
+        if (pagerState.currentPage != initialPagerPage) {
+            pagerState.scrollToPage(initialPagerPage)
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
