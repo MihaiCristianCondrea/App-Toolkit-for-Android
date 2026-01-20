@@ -1,24 +1,16 @@
 package com.d4rk.android.libs.apptoolkit.app.issuereporter.ui
 
-import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
+import androidx.compose.runtime.Composable
+import com.d4rk.android.libs.apptoolkit.core.ui.base.BaseActivity
 
-class IssueReporterActivity : AppCompatActivity() {
+class IssueReporterActivity : BaseActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            AppTheme {
-                IssueReporterScreen(
-                    onBackClicked = {
-                        this.finish()
-                    }
-                )
+    @Composable
+    override fun ScreenContent() {
+        IssueReporterScreen(
+            onBackClicked = {
+                this.finish()
             }
-        }
+        )
     }
 }

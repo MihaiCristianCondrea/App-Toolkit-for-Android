@@ -8,10 +8,9 @@ import androidx.compose.runtime.Composable
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 
 /**
- * Activity that provides common Compose setup for cleanup screens.
+ * Activity that provides shared Compose setup for screens.
  */
-abstract class BaseActivity :
-    AppCompatActivity() { // TODO: Make the other screens rely on this activity
+abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Compose content to be rendered by this activity.
@@ -19,13 +18,27 @@ abstract class BaseActivity :
     @Composable
     protected abstract fun ScreenContent()
 
+    /**
+     * Controls whether this activity should set its Compose content during [onCreate].
+     */
+    protected open fun shouldSetContentOnCreate(): Boolean = true
+
+    /**
+     * Sets the activity content using the shared [AppTheme] wrapper.
+     */
+    protected fun setComposeContent(content: @Composable () -> Unit = { ScreenContent() }) {
+        setContent {
+            AppTheme {
+                content()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            AppTheme {
-                ScreenContent()
-            }
+        if (shouldSetContentOnCreate()) {
+            setComposeContent()
         }
     }
 }
