@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,6 +47,7 @@ fun DropdownMenuBox(
                     hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.VirtualKey)
                     expanded = true
                 },
+            shape = MaterialTheme.shapes.large,
             readOnly = true,
             trailingIcon = {
                 Icon(
@@ -53,7 +55,11 @@ fun DropdownMenuBox(
                     contentDescription = null
                 )
             })
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            shape = MaterialTheme.shapes.large,
+        ) {
             options.forEach { option: String ->
                 DropdownMenuItem(text = { Text(text = option) }, onClick = {
                     onOptionSelected(option)

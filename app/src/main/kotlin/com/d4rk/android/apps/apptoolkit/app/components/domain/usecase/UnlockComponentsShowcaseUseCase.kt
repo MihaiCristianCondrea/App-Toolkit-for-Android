@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.components.domain.usecase
+package com.d4rk.android.apps.apptoolkit.app.components.domain.usecase
 
 import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 

@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.components.ui.state
+package com.d4rk.android.apps.apptoolkit.app.components.ui.state
 
 /**
  * UI state for the components unlock flow.

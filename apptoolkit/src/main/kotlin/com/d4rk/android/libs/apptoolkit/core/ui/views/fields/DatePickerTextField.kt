@@ -67,6 +67,7 @@ fun DatePickerTextField(
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
                 showDialog.value = true
             },
+        shape = MaterialTheme.shapes.large,
         trailingIcon = {
             Icon(Icons.Default.CalendarToday, contentDescription = null)
         },

@@ -1,11 +1,11 @@
-package com.d4rk.android.apps.apptoolkit.components.ui
+package com.d4rk.android.apps.apptoolkit.app.components.ui
 
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.apps.apptoolkit.BuildConfig
-import com.d4rk.android.apps.apptoolkit.components.domain.usecase.UnlockComponentsShowcaseUseCase
-import com.d4rk.android.apps.apptoolkit.components.ui.contract.ComponentsUnlockAction
-import com.d4rk.android.apps.apptoolkit.components.ui.contract.ComponentsUnlockEvent
-import com.d4rk.android.apps.apptoolkit.components.ui.state.ComponentsUnlockUiState
+import com.d4rk.android.apps.apptoolkit.app.components.domain.usecase.UnlockComponentsShowcaseUseCase
+import com.d4rk.android.apps.apptoolkit.app.components.ui.contract.ComponentsUnlockAction
+import com.d4rk.android.apps.apptoolkit.app.components.ui.contract.ComponentsUnlockEvent
+import com.d4rk.android.apps.apptoolkit.app.components.ui.state.ComponentsUnlockUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel

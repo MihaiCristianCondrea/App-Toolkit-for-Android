@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.components.ui.views
+package com.d4rk.android.apps.apptoolkit.app.components.ui.views
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,9 +11,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material3.Card
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -30,15 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.d4rk.android.apps.apptoolkit.R
-import com.d4rk.android.apps.apptoolkit.components.ui.state.ComponentsUiState
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.FilledIconButton
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.FilledTonalIconButton
+import com.d4rk.android.apps.apptoolkit.app.components.ui.state.ComponentsUiState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralTonalButton
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.IconButton
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedFloatingActionButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.SmallFloatingActionButton
@@ -54,6 +51,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPrefer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItemWithDivider
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
@@ -244,28 +242,6 @@ fun ComponentsScreen(
                     onClick = {},
                 )
                 ExtraSmallVerticalSpacer()
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    IconButton(
-                        onClick = {},
-                        vectorIcon = Icons.Outlined.Info,
-                        iconContentDescription = iconContentDescription,
-                    )
-                    FilledIconButton(
-                        onClick = {},
-                        vectorIcon = Icons.Outlined.Favorite,
-                        iconContentDescription = iconContentDescription,
-                    )
-                    FilledTonalIconButton(
-                        onClick = {},
-                        vectorIcon = Icons.Outlined.StarOutline,
-                        iconContentDescription = iconContentDescription,
-                    )
-                    OutlinedIconButton(
-                        onClick = {},
-                        vectorIcon = Icons.Outlined.FilterAlt,
-                        iconContentDescription = iconContentDescription,
-                    )
-                }
             }
         }
 
@@ -354,54 +330,61 @@ fun ComponentsScreen(
                     .fillMaxWidth()
                     .padding(horizontal = SizeConstants.LargeSize)
             ) {
-                SettingsPreferenceItem(
-                    title = stringResource(id = R.string.components_preference_title),
-                    summary = stringResource(id = R.string.components_preference_summary),
-                )
-                ExtraTinyVerticalSpacer()
-                PreferenceItem(
-                    title = stringResource(id = R.string.components_preference_secondary_title),
-                    summary = stringResource(id = R.string.components_preference_secondary_summary),
-                )
-                ExtraTinyVerticalSpacer()
-                SwitchPreferenceItem(
-                    icon = Icons.Outlined.Favorite,
-                    title = stringResource(id = R.string.components_switch_title),
-                    summary = stringResource(id = R.string.components_switch_summary),
-                    checked = state.switchEnabled,
-                    onCheckedChange = onSwitchEnabledChanged,
-                )
-                ExtraTinyVerticalSpacer()
-                SwitchPreferenceItemWithDivider(
-                    icon = Icons.Outlined.Info,
-                    title = stringResource(id = R.string.components_switch_divider_title),
-                    summary = stringResource(id = R.string.components_switch_divider_summary),
-                    checked = state.switchWithDividerEnabled,
-                    onCheckedChange = onSwitchWithDividerChanged,
-                    onClick = {},
-                    onSwitchClick = {},
-                )
-                ExtraTinyVerticalSpacer()
-                SwitchCardItem(
-                    title = stringResource(id = R.string.components_switch_card_title),
-                    switchState = switchCardState,
-                    onSwitchToggled = onSwitchCardChanged,
-                )
-                ExtraTinyVerticalSpacer()
-                CheckBoxPreferenceItem(
-                    icon = Icons.Outlined.Favorite,
-                    title = stringResource(id = R.string.components_checkbox_title),
-                    summary = stringResource(id = R.string.components_checkbox_summary),
-                    checked = state.checkboxChecked,
-                    onCheckedChange = onCheckboxChanged,
-                )
-                ExtraTinyVerticalSpacer()
-                state.radioOptions.forEach { option ->
-                    RadioButtonPreferenceItem(
-                        text = option,
-                        isChecked = state.selectedRadioOption == option,
-                        onCheckedChange = { onRadioOptionSelected(option) },
-                    )
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(SizeConstants.LargeSize),
+                ) {
+                    Column {
+                        SettingsPreferenceItem(
+                            title = stringResource(id = R.string.components_preference_title),
+                            summary = stringResource(id = R.string.components_preference_summary),
+                        )
+                        ExtraTinyVerticalSpacer()
+                        PreferenceItem(
+                            title = stringResource(id = R.string.components_preference_secondary_title),
+                            summary = stringResource(id = R.string.components_preference_secondary_summary),
+                        )
+                        ExtraTinyVerticalSpacer()
+                        SwitchPreferenceItem(
+                            icon = Icons.Outlined.Favorite,
+                            title = stringResource(id = R.string.components_switch_title),
+                            summary = stringResource(id = R.string.components_switch_summary),
+                            checked = state.switchEnabled,
+                            onCheckedChange = onSwitchEnabledChanged,
+                        )
+                        ExtraTinyVerticalSpacer()
+                        SwitchPreferenceItemWithDivider(
+                            icon = Icons.Outlined.Info,
+                            title = stringResource(id = R.string.components_switch_divider_title),
+                            summary = stringResource(id = R.string.components_switch_divider_summary),
+                            checked = state.switchWithDividerEnabled,
+                            onCheckedChange = onSwitchWithDividerChanged,
+                            onClick = {},
+                            onSwitchClick = {},
+                        )
+                        ExtraTinyVerticalSpacer()
+                        SwitchCardItem(
+                            title = stringResource(id = R.string.components_switch_card_title),
+                            switchState = switchCardState,
+                            onSwitchToggled = onSwitchCardChanged,
+                        )
+                        ExtraTinyVerticalSpacer()
+                        CheckBoxPreferenceItem(
+                            icon = Icons.Outlined.Favorite,
+                            title = stringResource(id = R.string.components_checkbox_title),
+                            summary = stringResource(id = R.string.components_checkbox_summary),
+                            checked = state.checkboxChecked,
+                            onCheckedChange = onCheckboxChanged,
+                        )
+                        ExtraTinyVerticalSpacer()
+                        state.radioOptions.forEach { option ->
+                            RadioButtonPreferenceItem(
+                                text = option,
+                                isChecked = state.selectedRadioOption == option,
+                                onCheckedChange = { onRadioOptionSelected(option) },
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -413,6 +396,10 @@ fun ComponentsScreen(
                 selectedFilter = state.selectedFilter,
                 onFilterSelected = onFilterSelected,
             )
+        }
+
+        item {
+            NavigationBarSpacer()
         }
     }
 }

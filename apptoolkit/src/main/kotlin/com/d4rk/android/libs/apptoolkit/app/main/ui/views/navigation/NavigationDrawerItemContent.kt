@@ -15,11 +15,13 @@ import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 
 @Composable
 fun NavigationDrawerItemContent(
     item: NavigationDrawerItem,
-    dividerRoutes: Set<String> = emptySet(),
+    dividerRoutes: ImmutableSet<String> = persistentSetOf(),
     handleNavigationItemClick: () -> Unit = {}
 ) {
     val title: String = stringResource(id = item.title)

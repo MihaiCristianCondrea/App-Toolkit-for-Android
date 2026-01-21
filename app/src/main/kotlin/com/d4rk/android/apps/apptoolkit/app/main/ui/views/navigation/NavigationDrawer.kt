@@ -31,6 +31,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.hapticDrawerSwip
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
@@ -72,7 +73,7 @@ fun NavigationDrawer(
                 uiState.navigationDrawerItems.forEach { item: NavigationDrawerItem ->
                     NavigationDrawerItemContent(
                         item = item,
-                        dividerRoutes = setOf(NavigationRoutes.ROUTE_COMPONENTS),
+                        dividerRoutes = persistentSetOf(NavigationRoutes.ROUTE_COMPONENTS),
                         handleNavigationItemClick = {
                             handleNavigationItemClick(
                                 context = context,
