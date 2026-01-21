@@ -40,7 +40,6 @@
     <string name="components_option_gamma">Gamma</string>
     <string name="components_filter_popular">Popular</string>
     <string name="components_filter_recent">Recent</string>
-    <string name="components_filter_favorites">Favorites</string>
     <string name="components_preference_title">Preference item</string>
     <string name="components_preference_summary">Secondary text describing the preference.</string>
     <string name="components_preference_secondary_title">Secondary preference</string>
@@ -52,9 +51,6 @@
     <string name="components_switch_card_title">Switch card</string>
     <string name="components_checkbox_title">Checkbox preference</string>
     <string name="components_checkbox_summary">Shows a checkbox with optional summary.</string>
-    <string name="components_radio_system">System default</string>
-    <string name="components_radio_light">Light</string>
-    <string name="components_radio_dark">Dark</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Share app</string>

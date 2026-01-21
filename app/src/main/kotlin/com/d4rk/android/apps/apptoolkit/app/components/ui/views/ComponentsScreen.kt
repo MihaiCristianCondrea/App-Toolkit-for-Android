@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.d4rk.android.apps.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.R as ToolkitR
 import com.d4rk.android.apps.apptoolkit.app.components.ui.state.ComponentsUiState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
@@ -74,14 +75,14 @@ fun ComponentsRoute(
 
     val filterPopular = stringResource(id = R.string.components_filter_popular)
     val filterRecent = stringResource(id = R.string.components_filter_recent)
-    val filterFavorites = stringResource(id = R.string.components_filter_favorites)
+    val filterFavorites = stringResource(id = R.string.favorite_apps)
     val filters = remember(filterPopular, filterRecent, filterFavorites) {
         persistentListOf(filterPopular, filterRecent, filterFavorites)
     }
 
-    val radioSystem = stringResource(id = R.string.components_radio_system)
-    val radioLight = stringResource(id = R.string.components_radio_light)
-    val radioDark = stringResource(id = R.string.components_radio_dark)
+    val radioSystem = stringResource(id = ToolkitR.string.follow_system)
+    val radioLight = stringResource(id = ToolkitR.string.light_mode)
+    val radioDark = stringResource(id = ToolkitR.string.dark_mode)
     val radioOptions = remember(radioSystem, radioLight, radioDark) {
         persistentListOf(radioSystem, radioLight, radioDark)
     }
