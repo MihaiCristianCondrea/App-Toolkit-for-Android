@@ -1,32 +1,80 @@
 package com.d4rk.android.apps.apptoolkit.components.ui
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.components.domain.usecase.UnlockComponentsShowcaseUseCase
+import com.d4rk.android.apps.apptoolkit.components.ui.contract.ComponentsUnlockAction
+import com.d4rk.android.apps.apptoolkit.components.ui.contract.ComponentsUnlockEvent
+import com.d4rk.android.apps.apptoolkit.components.ui.state.ComponentsUnlockUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import kotlinx.coroutines.launch
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.update
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 /**
- * Handles unlocking the components showcase in release builds.
- *
- * The unlock is triggered after a configurable number of taps on the About screen's
- * app version entry, keeping the setting hidden from casual users.
+ * Coordinates unlocking the components showcase entry based on About screen taps.
  */
 class ComponentsUnlockViewModel(
     private val unlockComponentsShowcase: UnlockComponentsShowcaseUseCase,
     private val dispatchers: DispatcherProvider,
-) : ViewModel() {
+    private val firebaseController: FirebaseController,
+) : ScreenViewModel<ComponentsUnlockUiState, ComponentsUnlockEvent, ComponentsUnlockAction>(
+    initialState = UiStateScreen(
+        screenState = ScreenState.Success(),
+        data = ComponentsUnlockUiState(),
+    )
+) {
     private var unlockRequested: Boolean = false
 
-    fun onVersionTap(tapCount: Int) {
+    init {
+        onEvent(ComponentsUnlockEvent.Initialize)
+    }
+
+    override fun onEvent(event: ComponentsUnlockEvent) {
+        when (event) {
+            ComponentsUnlockEvent.Initialize -> screenState.updateState(ScreenState.Success())
+            is ComponentsUnlockEvent.VersionTapped -> handleVersionTap(event.tapCount)
+        }
+    }
+
+    private fun handleVersionTap(tapCount: Int) {
+        screenState.update { current ->
+            current.copy(
+                data = current.data?.copy(lastTapCount = tapCount)
+            )
+        }
         if (BuildConfig.DEBUG || unlockRequested) return
-        if (tapCount < COMPONENTS_UNLOCK_TAP_THRESHOLD) return
+        if ((screenData?.isUnlocked == true) || tapCount < COMPONENTS_UNLOCK_TAP_THRESHOLD) return
 
         unlockRequested = true
-        viewModelScope.launch(dispatchers.io) {
+        flow {
             unlockComponentsShowcase()
+            emit(Unit)
         }
+            .flowOn(dispatchers.io)
+            .onEach {
+                screenState.update { current ->
+                    current.copy(
+                        data = current.data?.copy(isUnlocked = true)
+                    )
+                }
+            }
+            .catch { throwable ->
+                firebaseController.reportViewModelError(
+                    viewModelName = "ComponentsUnlockViewModel",
+                    action = "handleVersionTap",
+                    throwable = throwable,
+                )
+            }
+            .launchIn(viewModelScope)
     }
 
     private companion object {

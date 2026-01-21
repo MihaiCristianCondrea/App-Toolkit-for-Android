@@ -43,6 +43,7 @@ val generalSettingsModule: Module = module {
         ComponentsUnlockViewModel(
             unlockComponentsShowcase = get(),
             dispatchers = get(),
+            firebaseController = get(),
         )
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import com.d4rk.android.apps.apptoolkit.components.ui.ComponentsUnlockViewModel
+import com.d4rk.android.apps.apptoolkit.components.ui.contract.ComponentsUnlockEvent
 import com.d4rk.android.libs.apptoolkit.app.about.ui.AboutSettingsList
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -20,6 +21,8 @@ fun AppAboutSettingsContent(
     AboutSettingsList(
         paddingValues = paddingValues,
         snackbarHostState = snackbarHostState,
-        onVersionTap = { tapCount -> unlockViewModel.onVersionTap(tapCount) },
+        onVersionTap = { tapCount ->
+            unlockViewModel.onEvent(ComponentsUnlockEvent.VersionTapped(tapCount))
+        },
     )
 }
