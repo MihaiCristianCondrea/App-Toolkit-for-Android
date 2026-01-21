@@ -72,6 +72,7 @@ fun NavigationDrawer(
                 uiState.navigationDrawerItems.forEach { item: NavigationDrawerItem ->
                     NavigationDrawerItemContent(
                         item = item,
+                        dividerRoutes = setOf(NavigationRoutes.ROUTE_COMPONENTS),
                         handleNavigationItemClick = {
                             handleNavigationItemClick(
                                 context = context,

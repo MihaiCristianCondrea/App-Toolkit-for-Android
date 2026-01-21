@@ -1,6 +1,6 @@
 package com.d4rk.android.apps.apptoolkit.components.ui.contract
 
-import com.d4rk.android.libs.apptoolkit.core.ui.state.UiEvent
+import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
 /**
  * Events for unlocking the components showcase entry.
