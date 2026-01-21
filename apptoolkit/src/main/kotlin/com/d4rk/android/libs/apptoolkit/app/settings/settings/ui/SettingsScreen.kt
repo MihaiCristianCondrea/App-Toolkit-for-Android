@@ -216,7 +216,7 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
                             HelpActivity::class.java,
                         )
                     },
-                    icon = Icons.AutoMirrored.Outlined.ContactSupport,
+                    vectorIcon = Icons.AutoMirrored.Outlined.ContactSupport,
                     label = stringResource(id = R.string.get_help),
                 )
             }

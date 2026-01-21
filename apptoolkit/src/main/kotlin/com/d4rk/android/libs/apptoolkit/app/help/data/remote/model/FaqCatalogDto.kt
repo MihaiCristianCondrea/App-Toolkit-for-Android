@@ -3,6 +3,12 @@ package com.d4rk.android.libs.apptoolkit.app.help.data.remote.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Data transfer object representing the FAQ catalog structure.
+ *
+ * @property schemaVersion The version of the catalog schema used for parsing.
+ * @property products A list of available products and their associated FAQ sources.
+ */
 @Serializable
 data class FaqCatalogDto(
     @SerialName("schemaVersion")

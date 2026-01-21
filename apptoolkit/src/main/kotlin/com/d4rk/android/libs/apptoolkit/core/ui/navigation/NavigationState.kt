@@ -56,6 +56,16 @@ inline fun <reified T : StableNavKey> rememberNavigationState(
     }
 }
 
+/**
+ * Remembers a type-safe [NavBackStack] that is preserved across process death and configuration changes.
+ *
+ * This function uses [rememberSerializable] to persist the back stack, ensuring that the
+ * navigation history of type [T] is restored correctly.
+ *
+ * @param T The type of the navigation keys, which must implement [StableNavKey].
+ * @param initialElements The initial list of destinations to populate the back stack with.
+ * @return A [NavBackStack] instance initialized with the provided elements.
+ */
 @Composable
 inline fun <reified T : StableNavKey> rememberTypedNavBackStack(
     initialElements: ImmutableList<T> = persistentListOf(),

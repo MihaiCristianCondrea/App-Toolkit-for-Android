@@ -12,6 +12,21 @@ import androidx.compose.runtime.rememberUpdatedState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Collects a [Flow] as a [State] specifically designed for DataStore operations within Compose.
+ *
+ * This function monitors the flow's lifecycle and provides specialized error handling.
+ * If the flow completes due to an exception (excluding [CancellationException]), it logs the error,
+ * resets the state to its [initial] value, and triggers the [onErrorReset] callback to allow
+ * for custom recovery logic.
+ *
+ * @param T The type of data being collected.
+ * @param initial A provider for the initial value and the fallback value in case of an error.
+ * @param logTag The tag used for logging error messages.
+ * @param onErrorReset A callback invoked when an error occurs, providing access to the [MutableState]
+ * for manual intervention or UI synchronization.
+ * @return A [State] object representing the current value of the DataStore flow.
+ */
 @Composable
 fun <T> Flow<T>.collectDataStoreState(
     initial: () -> T,

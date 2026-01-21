@@ -13,6 +13,18 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.result.runSuspendC
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
+/**
+ * Implementation of [FaqRepository] that manages the retrieval of FAQ items
+ * from both remote and local data sources.
+ *
+ * This repository prioritizes remote data from a specified catalog and product,
+ * falling back to local data if the remote fetch fails or returns no results.
+ *
+ * @property localDataSource The local data source for accessing cached or bundled FAQ questions.
+ * @property remoteDataSource The remote data source for fetching FAQ catalogs and questions via network.
+ * @property catalogUrl The URL of the remote catalog containing product information.
+ * @property productId The identifier used to find the specific product within the catalog.
+ */
 class FaqRepositoryImpl(
     private val localDataSource: HelpLocalDataSource,
     private val remoteDataSource: HelpRemoteDataSource,

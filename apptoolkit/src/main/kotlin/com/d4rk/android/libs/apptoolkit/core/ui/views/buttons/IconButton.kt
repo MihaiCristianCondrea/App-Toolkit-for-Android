@@ -33,8 +33,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ButtonIconSpacer
  * be clickable. Defaults to `true`.
  * @param iconContentDescription Text used by accessibility services to describe what the icon
  * represents. This is recommended for usability.
- * @param icon The [ImageVector] to be displayed inside the button.
- * @param painter The [Painter] to be displayed if an [ImageVector] is not provided.
+ * @param vectorIcon The [ImageVector] to be displayed inside the button.
+ * @param painterIcon The [Painter] to be displayed if an [ImageVector] is not provided.
  * @param feedback The feedback configuration for sound and haptics.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -44,8 +44,8 @@ fun IconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     iconContentDescription: String? = null,
-    icon: ImageVector? = null,
-    painter: Painter? = null,
+    vectorIcon: ImageVector? = null,
+    painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
@@ -61,8 +61,8 @@ fun IconButton(
         shapes = IconButtonDefaults.shapes()
     ) {
         IconContent(
-            icon = icon,
-            painter = painter,
+            icon = vectorIcon,
+            painter = painterIcon,
             contentDescription = iconContentDescription
         )
     }
@@ -80,8 +80,8 @@ fun IconButton(
  * @param iconContentDescription Text used by accessibility services to describe what the icon
  * represents. This text should be provided if the icon is used for an action, but not if it is
  * purely decorative.
- * @param icon The icon to be displayed inside the button, as an [ImageVector].
- * @param painter The [Painter] to be displayed when no vector icon is provided.
+ * @param vectorIcon The icon to be displayed inside the button, as an [ImageVector].
+ * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
  * @param feedback The feedback configuration for sound and haptics.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -91,8 +91,8 @@ fun FilledIconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     iconContentDescription: String? = null,
-    icon: ImageVector? = null,
-    painter: Painter? = null,
+    vectorIcon: ImageVector? = null,
+    painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
@@ -108,8 +108,8 @@ fun FilledIconButton(
         shapes = IconButtonDefaults.shapes()
     ) {
         IconContent(
-            icon = icon,
-            painter = painter,
+            icon = vectorIcon,
+            painter = painterIcon,
             contentDescription = iconContentDescription
         )
     }
@@ -126,8 +126,8 @@ fun FilledIconButton(
  * @param onClick The lambda to be executed when the button is clicked.
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
  * @param iconContentDescription Text used by accessibility services to describe the icon's action.
- * @param icon The [ImageVector] to be displayed as the icon.
- * @param painter The [Painter] to be displayed if no vector icon is provided.
+ * @param vectorIcon The [ImageVector] to be displayed as the icon.
+ * @param painterIcon The [Painter] to be displayed if no vector icon is provided.
  * @param feedback The feedback configuration for sound and haptics.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -137,8 +137,8 @@ fun FilledTonalIconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     iconContentDescription: String? = null,
-    icon: ImageVector? = null,
-    painter: Painter? = null,
+    vectorIcon: ImageVector? = null,
+    painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
@@ -154,8 +154,8 @@ fun FilledTonalIconButton(
         shapes = IconButtonDefaults.shapes()
     ) {
         IconContent(
-            icon = icon,
-            painter = painter,
+            icon = vectorIcon,
+            painter = painterIcon,
             contentDescription = iconContentDescription
         )
     }
@@ -170,8 +170,8 @@ fun FilledTonalIconButton(
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
  * @param iconContentDescription Text used by accessibility services to describe the icon.
  * @param label The text to be displayed on the button, or `null` for icon-only usage.
- * @param icon The [ImageVector] to be displayed as the leading icon.
- * @param painter The [Painter] to be displayed when no vector icon is provided.
+ * @param vectorIcon The [ImageVector] to be displayed as the leading icon.
+ * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
  * @param feedback The feedback configuration for sound and haptics.
  */
 @Composable
@@ -181,13 +181,13 @@ fun GeneralButton(
     enabled: Boolean = true,
     iconContentDescription: String? = null,
     label: String? = null,
-    icon: ImageVector? = null,
-    painter: Painter? = null,
+    vectorIcon: ImageVector? = null,
+    painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
-    val hasIcon: Boolean = icon != null || painter != null
+    val hasIcon: Boolean = vectorIcon != null || painterIcon != null
     val hasLabel: Boolean = !label.isNullOrEmpty()
 
     require(hasIcon || hasLabel) { "GeneralButton requires a label, an icon, or both." }
@@ -198,8 +198,8 @@ fun GeneralButton(
             onClick = onClick,
             enabled = enabled,
             iconContentDescription = iconContentDescription,
-            icon = icon,
-            painter = painter,
+            vectorIcon = vectorIcon,
+            painterIcon = painterIcon,
             feedback = feedback,
         )
         return
@@ -215,8 +215,8 @@ fun GeneralButton(
     ) {
         if (hasIcon) {
             IconContent(
-                icon = icon,
-                painter = painter,
+                icon = vectorIcon,
+                painter = painterIcon,
                 contentDescription = iconContentDescription,
             )
             ButtonIconSpacer()
@@ -236,8 +236,8 @@ fun GeneralButton(
  * @param enabled A boolean indicating whether this button is enabled and can be interacted with.
  * @param iconContentDescription A textual description of the icon for accessibility purposes.
  * @param label The text to be displayed on the button, or `null` for icon-only usage.
- * @param icon The [ImageVector] to be displayed as an icon at the start of the button.
- * @param painter The [Painter] to be displayed when a vector icon is not provided.
+ * @param vectorIcon The [ImageVector] to be displayed as an icon at the start of the button.
+ * @param painterIcon The [Painter] to be displayed when a vector icon is not provided.
  * @param feedback The feedback configuration for sound and haptics.
  */
 @Composable
@@ -247,13 +247,13 @@ fun GeneralTonalButton(
     enabled: Boolean = true,
     iconContentDescription: String? = null,
     label: String? = null,
-    icon: ImageVector? = null,
-    painter: Painter? = null,
+    vectorIcon: ImageVector? = null,
+    painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
-    val hasIcon: Boolean = icon != null || painter != null
+    val hasIcon: Boolean = vectorIcon != null || painterIcon != null
     val hasLabel: Boolean = !label.isNullOrEmpty()
 
     require(hasIcon || hasLabel) { "GeneralTonalButton requires a label, an icon, or both." }
@@ -264,8 +264,8 @@ fun GeneralTonalButton(
             onClick = onClick,
             enabled = enabled,
             iconContentDescription = iconContentDescription,
-            icon = icon,
-            painter = painter,
+            vectorIcon = vectorIcon,
+            painterIcon = painterIcon,
             feedback = feedback,
         )
         return
@@ -281,8 +281,8 @@ fun GeneralTonalButton(
     ) {
         if (hasIcon) {
             IconContent(
-                icon = icon,
-                painter = painter,
+                icon = vectorIcon,
+                painter = painterIcon,
                 contentDescription = iconContentDescription,
             )
             ButtonIconSpacer()
@@ -308,8 +308,8 @@ fun GeneralTonalButton(
  * @param onClick The lambda to be executed when the button is clicked. Defaults to an empty lambda.
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
  * @param iconContentDescription Text used by accessibility services to describe what the icon represents.
- * @param icon The [ImageVector] to be displayed inside the button.
- * @param painter The [Painter] to be displayed when no vector icon is provided.
+ * @param vectorIcon The [ImageVector] to be displayed inside the button.
+ * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
  * @param feedback The feedback configuration for sound and haptics.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -319,8 +319,8 @@ fun OutlinedIconButton(
     onClick: () -> Unit = {},
     enabled: Boolean = true,
     iconContentDescription: String? = null,
-    icon: ImageVector? = null,
-    painter: Painter? = null,
+    vectorIcon: ImageVector? = null,
+    painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
@@ -336,8 +336,8 @@ fun OutlinedIconButton(
         shapes = IconButtonDefaults.shapes()
     ) {
         IconContent(
-            icon = icon,
-            painter = painter,
+            icon = vectorIcon,
+            painter = painterIcon,
             contentDescription = iconContentDescription
         )
     }
@@ -352,8 +352,8 @@ fun OutlinedIconButton(
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
  * @param iconContentDescription Text used by accessibility services to describe what the icon represents.
  * @param label The text to be displayed on the button, or `null` for icon-only usage.
- * @param icon The [ImageVector] to be displayed inside the button.
- * @param painter The [Painter] to be displayed when no vector icon is provided.
+ * @param vectorIcon The [ImageVector] to be displayed inside the button.
+ * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
  * @param feedback The feedback configuration for sound and haptics.
  */
 @Composable
@@ -363,13 +363,13 @@ fun GeneralOutlinedButton(
     enabled: Boolean = true,
     iconContentDescription: String? = null,
     label: String? = null,
-    icon: ImageVector? = null,
-    painter: Painter? = null,
+    vectorIcon: ImageVector? = null,
+    painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
-    val hasIcon: Boolean = icon != null || painter != null
+    val hasIcon: Boolean = vectorIcon != null || painterIcon != null
     val hasLabel: Boolean = !label.isNullOrEmpty()
 
     require(hasIcon || hasLabel) { "GeneralOutlinedButton requires a label, an icon, or both." }
@@ -380,8 +380,8 @@ fun GeneralOutlinedButton(
             onClick = onClick,
             enabled = enabled,
             iconContentDescription = iconContentDescription,
-            icon = icon,
-            painter = painter,
+            vectorIcon = vectorIcon,
+            painterIcon = painterIcon,
             feedback = feedback,
         )
         return
@@ -397,8 +397,8 @@ fun GeneralOutlinedButton(
     ) {
         if (hasIcon) {
             IconContent(
-                icon = icon,
-                painter = painter,
+                icon = vectorIcon,
+                painter = painterIcon,
                 contentDescription = iconContentDescription,
             )
             ButtonIconSpacer()
@@ -418,8 +418,8 @@ fun GeneralOutlinedButton(
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
  * @param iconContentDescription Text used by accessibility services to describe the icon.
  * @param label The text to be displayed on the button, or `null` for icon-only usage.
- * @param icon The [ImageVector] to be displayed as the leading icon.
- * @param painter The [Painter] to be displayed when no vector icon is provided.
+ * @param vectorIcon The [ImageVector] to be displayed as the leading icon.
+ * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
  * @param feedback The feedback configuration for sound and haptics.
  */
 @Composable
@@ -429,13 +429,13 @@ fun GeneralTextButton(
     enabled: Boolean = true,
     iconContentDescription: String? = null,
     label: String? = null,
-    icon: ImageVector? = null,
-    painter: Painter? = null,
+    vectorIcon: ImageVector? = null,
+    painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
-    val hasIcon: Boolean = icon != null || painter != null
+    val hasIcon: Boolean = vectorIcon != null || painterIcon != null
     val hasLabel: Boolean = !label.isNullOrEmpty()
 
     require(hasIcon || hasLabel) { "GeneralTextButton requires a label, an icon, or both." }
@@ -446,8 +446,8 @@ fun GeneralTextButton(
             onClick = onClick,
             enabled = enabled,
             iconContentDescription = iconContentDescription,
-            icon = icon,
-            painter = painter,
+            vectorIcon = vectorIcon,
+            painterIcon = painterIcon,
             feedback = feedback,
         )
         return
@@ -463,8 +463,8 @@ fun GeneralTextButton(
     ) {
         if (hasIcon) {
             IconContent(
-                icon = icon,
-                painter = painter,
+                icon = vectorIcon,
+                painter = painterIcon,
                 contentDescription = iconContentDescription,
             )
             ButtonIconSpacer()

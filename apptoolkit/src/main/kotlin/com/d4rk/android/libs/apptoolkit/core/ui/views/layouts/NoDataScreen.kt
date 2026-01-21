@@ -98,7 +98,7 @@ fun NoDataScreen(
             LargeVerticalSpacer()
             GeneralButton(
                 onClick = onRetry,
-                icon = Icons.Filled.Refresh,
+                vectorIcon = Icons.Filled.Refresh,
                 label = stringResource(id = text)
             )
         }

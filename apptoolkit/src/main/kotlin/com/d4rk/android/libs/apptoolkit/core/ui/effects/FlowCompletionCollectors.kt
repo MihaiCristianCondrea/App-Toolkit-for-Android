@@ -14,6 +14,18 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onCompletion
 
+/**
+ * Collects values from this [Flow] in a lifecycle-aware manner and provides a completion callback.
+ *
+ * The flow is collected only when the lifecycle is at least in the [Lifecycle.State.STARTED] state.
+ * If the flow completes or fails with an exception (other than [CancellationException]), the
+ * state is reset to the value provided by [initialValueProvider].
+ *
+ * @param T The type of the values contained in the flow.
+ * @param initialValueProvider A lambda providing the initial value for the state and the reset value upon failure.
+ * @param onCompletion A callback invoked when the flow completes, providing the [Throwable] cause if an error occurred.
+ * @return A [State] object containing the latest emitted value or the initial value if reset.
+ */
 @Composable
 internal fun <T> Flow<T>.collectWithLifecycleOnCompletion(
     initialValueProvider: () -> T,

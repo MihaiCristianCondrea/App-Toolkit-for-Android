@@ -156,7 +156,7 @@ fun SupportScreenContent(
                                 onClick = {
                                     onDonateClick(DonationProductIds.LOW_DONATION)
                                 },
-                                icon = Icons.Outlined.Paid,
+                                vectorIcon = Icons.Outlined.Paid,
                                 label = getPriceLabel(DonationProductIds.LOW_DONATION)
                             )
                         }
@@ -166,7 +166,7 @@ fun SupportScreenContent(
                                 onClick = {
                                     onDonateClick(DonationProductIds.NORMAL_DONATION)
                                 },
-                                icon = Icons.Outlined.Paid,
+                                vectorIcon = Icons.Outlined.Paid,
                                 label = getPriceLabel(DonationProductIds.NORMAL_DONATION)
                             )
                         }
@@ -183,7 +183,7 @@ fun SupportScreenContent(
                                 onClick = {
                                     onDonateClick(DonationProductIds.HIGH_DONATION)
                                 },
-                                icon = Icons.Outlined.Paid,
+                                vectorIcon = Icons.Outlined.Paid,
                                 label = getPriceLabel(DonationProductIds.HIGH_DONATION)
                             )
                         }
@@ -193,7 +193,7 @@ fun SupportScreenContent(
                                 onClick = {
                                     onDonateClick(DonationProductIds.EXTREME_DONATION)
                                 },
-                                icon = Icons.Outlined.Paid,
+                                vectorIcon = Icons.Outlined.Paid,
                                 label = getPriceLabel(DonationProductIds.EXTREME_DONATION)
                             )
                         }
@@ -216,7 +216,7 @@ fun SupportScreenContent(
                 onClick = {
                     context.openUrl(ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK)
                 },
-                icon = Icons.Outlined.Paid,
+                vectorIcon = Icons.Outlined.Paid,
                 label = stringResource(id = R.string.web_ad)
             )
         }

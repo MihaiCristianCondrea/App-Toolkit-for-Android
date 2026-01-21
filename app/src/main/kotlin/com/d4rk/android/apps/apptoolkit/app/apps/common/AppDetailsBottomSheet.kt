@@ -113,7 +113,7 @@ fun AppDetailsBottomSheet(
                 true -> {
                     GeneralOutlinedButton(
                         onClick = onOpenAppClick,
-                        icon = Icons.AutoMirrored.Outlined.OpenInNew,
+                        vectorIcon = Icons.AutoMirrored.Outlined.OpenInNew,
                         label = stringResource(id = R.string.app_details_open_app)
                     )
                 }
@@ -218,12 +218,12 @@ fun AppDetailsBottomSheet(
         ) {
             GeneralOutlinedButton(
                 onClick = onShareClick,
-                icon = Icons.Outlined.Share,
+                vectorIcon = Icons.Outlined.Share,
                 label = stringResource(id = R.string.app_details_share_content_description)
             )
             GeneralOutlinedButton(
                 onClick = onFavoriteClick,
-                icon = if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarOutline,
+                vectorIcon = if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarOutline,
                 label = stringResource(id = R.string.favorite_apps)
             )
         }

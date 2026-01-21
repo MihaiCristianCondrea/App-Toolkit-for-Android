@@ -84,7 +84,7 @@ fun OnboardingScreen() {
                     ) {
                         GeneralOutlinedButton(
                             onClick = { onSkipRequested() },
-                            icon = Icons.Filled.SkipNext,
+                            vectorIcon = Icons.Filled.SkipNext,
                             iconContentDescription = stringResource(id = R.string.skip_button_content_description),
                             label = stringResource(id = R.string.skip_button_text)
                         )

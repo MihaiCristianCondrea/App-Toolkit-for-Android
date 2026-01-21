@@ -94,7 +94,7 @@ fun QuestionCard(
 
                 OutlinedIconButton(
                     onClick = { onToggleExpand() },
-                    icon = Icons.Filled.ExpandMore,
+                    vectorIcon = Icons.Filled.ExpandMore,
                     modifier = Modifier.rotate(degrees = expandIconRotation),
                 )
             }

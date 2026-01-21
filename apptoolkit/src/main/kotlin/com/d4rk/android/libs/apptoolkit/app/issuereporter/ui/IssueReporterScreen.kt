@@ -230,7 +230,7 @@ fun IssueReporterScreenContent(
                         ) {
                             GeneralOutlinedButton(
                                 onClick = { data.issueUrl.let(uriHandler::openUri) },
-                                icon = Icons.AutoMirrored.Outlined.OpenInNew,
+                                vectorIcon = Icons.AutoMirrored.Outlined.OpenInNew,
                                 iconContentDescription = stringResource(R.string.open_issue_in_browser),
                                 label = stringResource(R.string.open_button_label)
                             )

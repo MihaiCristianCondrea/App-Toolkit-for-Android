@@ -58,7 +58,7 @@ fun BasicFullScreenDialog(
                 CenterAlignedTopAppBar(navigationIcon = {
                     IconButton(
                         onClick = onDismiss,
-                        icon = Icons.Filled.Close,
+                        vectorIcon = Icons.Filled.Close,
                         iconContentDescription = null
                     )
                 }, title = { Text(text = title) }, actions = {

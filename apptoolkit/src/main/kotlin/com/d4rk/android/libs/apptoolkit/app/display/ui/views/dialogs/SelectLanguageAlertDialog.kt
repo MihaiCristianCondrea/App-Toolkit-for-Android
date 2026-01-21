@@ -37,8 +37,20 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 
-private const val SELECT_LANGUAGE_LOG_TAG = "SelectLanguageDialog"
+private const val SELECT_LANGUAGE_LOG_TAG = "SelectLanguageDialog" // TODO: Move to log tags file
 
+/**
+ * A composable that displays an alert dialog for selecting the application language.
+ *
+ * This dialog retrieves the current language preference from the [CommonDataStore],
+ * allows the user to pick a new language from a list of available options, and
+ * automatically persists the selection.
+ *
+ * @param onDismiss Callback invoked when the dialog should be dismissed,
+ * either by clicking outside, clicking the cancel button, or after confirming a selection.
+ * @param onLanguageSelected Callback invoked when a language is confirmed,
+ * providing the selected language string value as a parameter.
+ */
 @Composable
 fun SelectLanguageAlertDialog(onDismiss: () -> Unit, onLanguageSelected: (String) -> Unit) {
     val dataStore: CommonDataStore = rememberCommonDataStore()

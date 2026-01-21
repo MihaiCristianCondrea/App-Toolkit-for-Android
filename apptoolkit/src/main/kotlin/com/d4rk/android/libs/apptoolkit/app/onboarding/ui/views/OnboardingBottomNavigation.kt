@@ -1,6 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -37,9 +36,11 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 )
 @Composable
 fun OnboardingBottomNavigation(
-    pagerState: PagerState, pageCount: Int, onNextClicked: () -> Unit, onBackClicked: () -> Unit
+    pagerState: PagerState,
+    pageCount: Int,
+    onNextClicked: () -> Unit,
+    onBackClicked: () -> Unit
 ) {
-
     FlexibleBottomAppBar(
         contentPadding = PaddingValues(
             horizontal = SizeConstants.LargeSize,
@@ -53,16 +54,18 @@ fun OnboardingBottomNavigation(
                 .fillMaxWidth(),
             contentAlignment = Alignment.CenterStart
         ) {
-            AnimatedVisibility(
+            androidx.compose.animation.AnimatedVisibility(
                 visible = pagerState.currentPage > 0,
                 enter = slideInHorizontally(
-                    initialOffsetX = { -it }, animationSpec = spring(
+                    initialOffsetX = { -it },
+                    animationSpec = spring(
                         dampingRatio = Spring.DampingRatioMediumBouncy,
                         stiffness = Spring.StiffnessLow
                     )
                 ) + fadeIn(animationSpec = spring(stiffness = Spring.StiffnessLow)),
                 exit = slideOutHorizontally(
-                    targetOffsetX = { -it }, animationSpec = spring(
+                    targetOffsetX = { -it },
+                    animationSpec = spring(
                         dampingRatio = Spring.DampingRatioMediumBouncy,
                         stiffness = Spring.StiffnessLow
                     )
@@ -70,7 +73,7 @@ fun OnboardingBottomNavigation(
             ) {
                 GeneralOutlinedButton(
                     onClick = onBackClicked,
-                    icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                    vectorIcon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     iconContentDescription = stringResource(id = R.string.back_button_content_description),
                     label = stringResource(id = R.string.back_button_text)
                 )
@@ -94,16 +97,25 @@ fun OnboardingBottomNavigation(
             contentAlignment = Alignment.CenterEnd
         ) {
             val isLastPage = pagerState.currentPage == pageCount - 1
+
             GeneralButton(
                 onClick = onNextClicked,
                 modifier = Modifier.animateContentSize(),
-                icon = if (isLastPage) Icons.Filled.Check else Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                iconContentDescription = if (isLastPage) stringResource(id = R.string.done_button_content_description) else stringResource(
-                    id = R.string.next_button_content_description
-                ),
-                label = if (isLastPage) stringResource(id = R.string.done_button_text) else stringResource(
-                    id = R.string.next_button_text
-                )
+                vectorIcon = if (isLastPage) {
+                    Icons.Filled.Check
+                } else {
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight
+                },
+                iconContentDescription = if (isLastPage) {
+                    stringResource(id = R.string.done_button_content_description)
+                } else {
+                    stringResource(id = R.string.next_button_content_description)
+                },
+                label = if (isLastPage) {
+                    stringResource(id = R.string.done_button_text)
+                } else {
+                    stringResource(id = R.string.next_button_text)
+                }
             )
         }
     }

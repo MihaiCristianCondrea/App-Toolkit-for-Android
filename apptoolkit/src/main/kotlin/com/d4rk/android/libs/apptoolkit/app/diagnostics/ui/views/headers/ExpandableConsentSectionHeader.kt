@@ -74,7 +74,7 @@ fun ExpandableConsentSectionHeader(
         )
         IconButton(
             onClick = onToggle,
-            icon = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+            vectorIcon = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
             iconContentDescription = if (expanded) stringResource(id = R.string.icon_desc_expand_less) else stringResource(
                 id = R.string.icon_desc_expand_more
             ),

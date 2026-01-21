@@ -44,6 +44,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
+/**
+ * A composable function that displays a comprehensive list of display-related settings.
+ *
+ * This screen allows users to manage various UI preferences including:
+ * - **Appearance:** Dark theme toggle (with system sync detection) and Dynamic Colors (Android 12+).
+ * - **App Behavior:** Global settings like "Bouncy Buttons" animations.
+ * - **Navigation:** Configuration for the startup page and visibility of bottom bar labels.
+ * - **Language:** Access to per-app language settings via system settings (Android 13+) or an internal dialog.
+ *
+ * The function utilizes [CommonDataStore] for persistence and [DisplaySettingsProvider]
+ * for navigation and custom dialog implementations.
+ *
+ * @param paddingValues The padding to be applied to the [LazyColumn] container,
+ * typically used to avoid overlap with system bars or scaffolds.
+ */
 @Composable
 fun DisplaySettingsList(
     paddingValues: PaddingValues = PaddingValues(),

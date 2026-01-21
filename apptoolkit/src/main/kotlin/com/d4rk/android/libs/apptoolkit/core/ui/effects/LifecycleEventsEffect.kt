@@ -9,6 +9,16 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 
+/**
+ * A side effect that listens for specific [Lifecycle.Event] transitions in the current
+ * [LocalLifecycleOwner].
+ *
+ * This effect automatically handles the registration and unregistration of a
+ * [LifecycleEventObserver] when the Composable enters or leaves the composition.
+ *
+ * @param events The lifecycle events to observe.
+ * @param onEvent A callback invoked when any of the specified [events] occur.
+ */
 @Composable
 fun LifecycleEventsEffect(
     vararg events: Lifecycle.Event,

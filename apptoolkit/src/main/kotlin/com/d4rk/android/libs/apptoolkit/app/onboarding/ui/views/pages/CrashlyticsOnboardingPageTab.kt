@@ -145,7 +145,7 @@ fun CrashlyticsOnboardingPageTab() {
                     onboardingViewModel.onEvent(OnboardingEvent.ShowCrashlyticsDialog)
                 },
                 modifier = Modifier.fillMaxWidth(),
-                icon = Icons.Outlined.PrivacyTip,
+                vectorIcon = Icons.Outlined.PrivacyTip,
                 iconContentDescription = stringResource(id = R.string.onboarding_crashlytics_show_details_button_cd),
                 label = stringResource(id = R.string.onboarding_crashlytics_show_details_button)
             )
@@ -289,7 +289,7 @@ fun LearnMoreSection() {
                     Toast.makeText(appContext, errorText, Toast.LENGTH_SHORT).show()
                 }
             },
-            icon = Icons.AutoMirrored.Filled.Launch,
+            vectorIcon = Icons.AutoMirrored.Filled.Launch,
             iconContentDescription = null,
             label = stringResource(id = R.string.learn_more_privacy_policy)
         )
@@ -392,7 +392,7 @@ fun CrashlyticsConsentDialog(
                     onAcknowledge(overallConsent)
                 },
                 label = stringResource(id = R.string.button_acknowledge_consents),
-                icon = Icons.Outlined.Check,
+                vectorIcon = Icons.Outlined.Check,
             )
         },
         containerColor = MaterialTheme.colorScheme.surface,

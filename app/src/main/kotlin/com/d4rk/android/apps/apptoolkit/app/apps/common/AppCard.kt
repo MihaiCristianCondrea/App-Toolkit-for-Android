@@ -71,12 +71,12 @@ fun AppCard(
             ) {
                 IconButton(
                     onClick = onFavoriteToggle,
-                    icon = if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarOutline,
+                    vectorIcon = if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarOutline,
                     iconContentDescription = null
                 )
                 IconButton(
                     onClick = { onShareClick(appInfo) },
-                    icon = Icons.Outlined.Share,
+                    vectorIcon = Icons.Outlined.Share,
                     iconContentDescription = null
                 )
             }

@@ -7,6 +7,14 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
+/**
+ * Use case responsible for copying device information to the clipboard.
+ *
+ * This use case interacts with the [AboutRepository] to perform the copy operation
+ * and returns a [Flow] emitting the state of the operation as [DataState].
+ *
+ * @property repository The repository used to perform the copy operation.
+ */
 class CopyDeviceInfoUseCase(private val repository: AboutRepository) {
 
     operator fun invoke(

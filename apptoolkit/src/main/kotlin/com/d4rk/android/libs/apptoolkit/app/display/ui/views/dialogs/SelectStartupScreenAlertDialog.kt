@@ -39,8 +39,21 @@ import org.koin.core.qualifier.named
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.min
 
-private const val SELECT_STARTUP_LOG_TAG = "SelectStartupDialog"
+private const val SELECT_STARTUP_LOG_TAG =
+    "SelectStartupDialog" // TODO: Move to log tags file in library
 
+/**
+ * A composable function that displays an [androidx.compose.material3.AlertDialog] allowing the user
+ * to select the startup screen for the application.
+ *
+ * This dialog fetches available screen names and their corresponding route values via Koin
+ * dependency injection, manages the state of the current selection within the [CommonDataStore],
+ * and persists changes automatically when a new option is selected.
+ *
+ * @param onDismiss A callback invoked when the dialog is dismissed or the "Done" button is clicked.
+ * @param onStartupSelected A callback invoked when a startup screen is selected, providing
+ * the selected route string as a parameter.
+ */
 @Composable
 fun SelectStartupScreenAlertDialog(
     onDismiss: () -> Unit,
