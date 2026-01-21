@@ -14,7 +14,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val appModule: Module = module {
-    single<NavigationRepository> { MainNavigationRepositoryImpl() }
+    single<NavigationRepository> { MainNavigationRepositoryImpl(dataStore = get()) }
     single<GetNavigationDrawerItemsUseCase> { GetNavigationDrawerItemsUseCase(navigationRepository = get()) }
     viewModel {
         MainViewModel(

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Stable
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.navigation.favoriteAppsEntryBuilder
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.navigation.appsListEntryBuilder
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
+import com.d4rk.android.apps.apptoolkit.components.ui.navigation.componentsEntryBuilder
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 
@@ -38,4 +39,5 @@ private fun defaultAppNavigationEntryBuilders(
 ): List<NavigationEntryBuilder<AppNavKey>> = listOf(
     appsListEntryBuilder(context),
     favoriteAppsEntryBuilder(context),
+    componentsEntryBuilder(context),
 )

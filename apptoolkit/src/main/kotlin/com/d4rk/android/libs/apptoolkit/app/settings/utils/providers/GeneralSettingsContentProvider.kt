@@ -13,6 +13,7 @@ import com.d4rk.android.libs.apptoolkit.app.theme.ui.ThemeSettingsList
 
 class GeneralSettingsContentProvider(
     private val customScreens: Map<String, @Composable (PaddingValues) -> Unit> = emptyMap(),
+    private val aboutContent: (@Composable (PaddingValues, SnackbarHostState) -> Unit)? = null,
 ) {
     @Composable
     fun ProvideContent(
@@ -21,10 +22,17 @@ class GeneralSettingsContentProvider(
         snackbarHostState: SnackbarHostState
     ) {
         when (contentKey) {
-            SettingsContent.ABOUT -> AboutSettingsList(
-                paddingValues = paddingValues,
-                snackbarHostState = snackbarHostState
-            )
+            SettingsContent.ABOUT -> {
+                val aboutScreen = aboutContent
+                if (aboutScreen == null) {
+                    AboutSettingsList(
+                        paddingValues = paddingValues,
+                        snackbarHostState = snackbarHostState
+                    )
+                } else {
+                    aboutScreen(paddingValues, snackbarHostState)
+                }
+            }
 
             SettingsContent.ADVANCED -> AdvancedSettingsList(paddingValues = paddingValues)
             SettingsContent.DISPLAY -> DisplaySettingsList(paddingValues = paddingValues)

@@ -65,11 +65,13 @@ import java.util.concurrent.TimeUnit
  * typically provided by a Scaffold.
  * @param snackbarHostState The [SnackbarHostState] to manage and display Snackbars for user feedback,
  * such as when device info is copied.
+ * @param onVersionTap Callback invoked with the cumulative number of taps on the app version item.
  */
 @Composable
 fun AboutSettingsList(
     paddingValues: PaddingValues = PaddingValues(),
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    onVersionTap: (Int) -> Unit = {},
 ) {
     val context: Context = LocalContext.current
     val viewModel: AboutViewModel = koinViewModel()
@@ -78,6 +80,7 @@ fun AboutSettingsList(
 
     var showKonfettiAnimationForThisInstance: Boolean by rememberSaveable { mutableStateOf(value = false) }
     var appVersionTapCount: Int by rememberSaveable { mutableIntStateOf(value = 0) }
+    var appVersionTotalTapCount: Int by rememberSaveable { mutableIntStateOf(value = 0) }
 
     val party = Party(
         speed = 0f,
@@ -130,6 +133,8 @@ fun AboutSettingsList(
                                 title = stringResource(id = R.string.app_build_version),
                                 summary = "${data.appVersionInfo.versionName.orEmpty()} (${data.appVersionInfo.versionCode})",
                             ) {
+                                appVersionTotalTapCount += 1
+                                onVersionTap(appVersionTotalTapCount)
                                 appVersionTapCount += 1
                                 if (appVersionTapCount >= 5) {
                                     appVersionTapCount = 0

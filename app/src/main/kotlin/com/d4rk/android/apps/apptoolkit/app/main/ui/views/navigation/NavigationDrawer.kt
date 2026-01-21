@@ -8,6 +8,7 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -15,6 +16,10 @@ import androidx.compose.ui.platform.LocalContext
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainScaffoldContent
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.dialogs.ChangelogDialog
@@ -44,6 +49,19 @@ fun NavigationDrawer(
     val changelogUrl: String = koinInject(qualifier = named("github_changelog"))
 
     val showChangelog = rememberSaveable { mutableStateOf(false) }
+    val appRouteHandlers = remember(navigator) {
+        mapOf(
+            NavigationRoutes.ROUTE_APPS_LIST to { _: NavigationDrawerItem ->
+                navigator.navigate(AppsListRoute)
+            },
+            NavigationRoutes.ROUTE_FAVORITE_APPS to { _: NavigationDrawerItem ->
+                navigator.navigate(FavoriteAppsRoute)
+            },
+            NavigationRoutes.ROUTE_COMPONENTS to { _: NavigationDrawerItem ->
+                navigator.navigate(ComponentsRoute)
+            },
+        )
+    }
 
     ModalNavigationDrawer(
         modifier = Modifier.hapticDrawerSwipe(state = drawerState),
@@ -60,7 +78,8 @@ fun NavigationDrawer(
                                 item = item,
                                 drawerState = drawerState,
                                 coroutineScope = coroutineScope,
-                                onChangelogRequested = { showChangelog.value = true }
+                                onChangelogRequested = { showChangelog.value = true },
+                                additionalHandlers = appRouteHandlers,
                             )
                         }
                     )

@@ -1,7 +1,10 @@
 package com.d4rk.android.apps.apptoolkit.core.di.modules.settings.modules
 
+import com.d4rk.android.apps.apptoolkit.app.settings.about.ui.AppAboutSettingsContent
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppDisplaySettingsProvider
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppPrivacySettingsProvider
+import com.d4rk.android.apps.apptoolkit.components.domain.usecase.UnlockComponentsShowcaseUseCase
+import com.d4rk.android.apps.apptoolkit.components.ui.ComponentsUnlockViewModel
 import com.d4rk.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.GeneralSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsViewModel
@@ -15,7 +18,17 @@ import org.koin.dsl.module
 val generalSettingsModule: Module = module {
     single<DisplaySettingsProvider> { AppDisplaySettingsProvider(context = get()) }
     single<PrivacySettingsProvider> { AppPrivacySettingsProvider(context = get()) }
-    single<GeneralSettingsContentProvider> { GeneralSettingsContentProvider() }
+    single { UnlockComponentsShowcaseUseCase(dataStore = get()) }
+    single<GeneralSettingsContentProvider> {
+        GeneralSettingsContentProvider(
+            aboutContent = { paddingValues, snackbarHostState ->
+                AppAboutSettingsContent(
+                    paddingValues = paddingValues,
+                    snackbarHostState = snackbarHostState,
+                )
+            }
+        )
+    }
     single<GeneralSettingsRepository> { GeneralSettingsRepositoryImpl() }
 
     viewModel {
@@ -23,6 +36,13 @@ val generalSettingsModule: Module = module {
             repository = get(),
             dispatchers = get(),
             firebaseController = get(),
+        )
+    }
+
+    viewModel {
+        ComponentsUnlockViewModel(
+            unlockComponentsShowcase = get(),
+            dispatchers = get(),
         )
     }
 }

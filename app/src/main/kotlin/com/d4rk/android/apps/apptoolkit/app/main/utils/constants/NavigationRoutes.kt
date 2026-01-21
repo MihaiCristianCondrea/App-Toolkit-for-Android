@@ -16,15 +16,21 @@ data object AppsListRoute : AppNavKey
 @Serializable
 data object FavoriteAppsRoute : AppNavKey
 
+@Serializable
+data object ComponentsRoute : AppNavKey
+
 object NavigationRoutes {
     const val ROUTE_APPS_LIST: String = "apps_list"
     const val ROUTE_FAVORITE_APPS: String = "favorite_apps"
+    const val ROUTE_COMPONENTS: String = "components"
 
-    val topLevelRoutes: ImmutableSet<AppNavKey> = persistentSetOf(AppsListRoute, FavoriteAppsRoute)
+    val topLevelRoutes: ImmutableSet<AppNavKey> =
+        persistentSetOf(AppsListRoute, FavoriteAppsRoute, ComponentsRoute)
 }
 
 fun String.toNavKeyOrDefault(): AppNavKey =
     when (this) {
         NavigationRoutes.ROUTE_FAVORITE_APPS -> FavoriteAppsRoute
+        NavigationRoutes.ROUTE_COMPONENTS -> ComponentsRoute
         else -> AppsListRoute
     }
