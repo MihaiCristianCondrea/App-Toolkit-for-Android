@@ -47,25 +47,27 @@ fun OnboardingBottomNavigation(
         ),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        AnimatedVisibility(
-            visible = pagerState.currentPage > 0,
+        Box(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-            enter = slideInHorizontally(
-                initialOffsetX = { -it }, animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessLow
-                )
-            ) + fadeIn(animationSpec = spring(stiffness = Spring.StiffnessLow)),
-            exit = slideOutHorizontally(
-                targetOffsetX = { -it }, animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessLow
-                )
-            ) + fadeOut(animationSpec = spring(stiffness = Spring.StiffnessLow))
+            contentAlignment = Alignment.CenterStart
         ) {
-            Box(contentAlignment = Alignment.CenterStart) {
+            AnimatedVisibility(
+                visible = pagerState.currentPage > 0,
+                enter = slideInHorizontally(
+                    initialOffsetX = { -it }, animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                ) + fadeIn(animationSpec = spring(stiffness = Spring.StiffnessLow)),
+                exit = slideOutHorizontally(
+                    targetOffsetX = { -it }, animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                ) + fadeOut(animationSpec = spring(stiffness = Spring.StiffnessLow))
+            ) {
                 GeneralOutlinedButton(
                     onClick = onBackClicked,
                     icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
@@ -75,11 +77,15 @@ fun OnboardingBottomNavigation(
             }
         }
 
-        PageIndicatorDots(
-            pagerState = pagerState,
-            pageCount = pageCount,
-            modifier = Modifier.weight(1f)
-        )
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            PageIndicatorDots(
+                pagerState = pagerState,
+                pageCount = pageCount
+            )
+        }
 
         Box(
             modifier = Modifier
