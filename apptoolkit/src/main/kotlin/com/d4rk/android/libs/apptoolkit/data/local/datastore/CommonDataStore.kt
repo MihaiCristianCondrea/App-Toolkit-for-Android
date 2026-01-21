@@ -238,6 +238,18 @@ open class CommonDataStore(
         }
     }
 
+    private val componentsShowcaseUnlockedKey =
+        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_COMPONENTS_SHOWCASE_UNLOCKED)
+    val componentsShowcaseUnlocked: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[componentsShowcaseUnlockedKey] == true
+    }
+
+    suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[componentsShowcaseUnlockedKey] = isUnlocked
+        }
+    }
+
     // Usage and Diagnostics
     private val usageAndDiagnosticsKey: Preferences.Key<Boolean> =
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_USAGE_AND_DIAGNOSTICS)

@@ -19,6 +19,39 @@
     <string name="error_failed_to_load_navigation">Failed to load navigation</string>
     <string name="open_random_app">Open random app</string>
 
+    <!-- Components screen -->
+    <string name="components_title">Components</string>
+    <string name="components_section_buttons">Buttons</string>
+    <string name="components_section_fabs">Floating action buttons</string>
+    <string name="components_section_inputs">Menus &amp; inputs</string>
+    <string name="components_section_preferences">Preferences</string>
+    <string name="components_section_filters">Top list filters</string>
+    <string name="components_button_primary">Primary button</string>
+    <string name="components_button_tonal">Tonal button</string>
+    <string name="components_button_outlined">Outlined button</string>
+    <string name="components_button_text">Text button</string>
+    <string name="components_icon_content_description">Demo icon</string>
+    <string name="components_fab_extended">Create</string>
+    <string name="components_menu_label">Show menu</string>
+    <string name="components_menu_option_primary">Primary action</string>
+    <string name="components_menu_option_secondary">Secondary action</string>
+    <string name="components_option_alpha">Alpha</string>
+    <string name="components_option_beta">Beta</string>
+    <string name="components_option_gamma">Gamma</string>
+    <string name="components_filter_popular">Popular</string>
+    <string name="components_filter_recent">Recent</string>
+    <string name="components_preference_title">Preference item</string>
+    <string name="components_preference_summary">Secondary text describing the preference.</string>
+    <string name="components_preference_secondary_title">Secondary preference</string>
+    <string name="components_preference_secondary_summary">This item shows the base preference layout.</string>
+    <string name="components_switch_title">Switch preference</string>
+    <string name="components_switch_summary">Provides a summary and toggle.</string>
+    <string name="components_switch_divider_title">Switch with divider</string>
+    <string name="components_switch_divider_summary">Includes a chevron and divider.</string>
+    <string name="components_switch_card_title">Switch card</string>
+    <string name="components_checkbox_title">Checkbox preference</string>
+    <string name="components_checkbox_summary">Shows a checkbox with optional summary.</string>
+
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Share app</string>
     <string name="app_details_view_on_play_store">View on Google Play</string>
