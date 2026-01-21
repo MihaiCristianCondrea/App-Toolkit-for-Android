@@ -29,7 +29,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpac
 import com.d4rk.android.libs.apptoolkit.core.ui.views.text.LearnMoreText
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 
-private const val INFO_MESSAGE_TAG = "InfoMessageSection"
+private const val INFO_MESSAGE_TAG = "InfoMessageSection" // TODO: Move to log file
 
 /**
  * Displays an information message section with an optional "Learn More" link.
