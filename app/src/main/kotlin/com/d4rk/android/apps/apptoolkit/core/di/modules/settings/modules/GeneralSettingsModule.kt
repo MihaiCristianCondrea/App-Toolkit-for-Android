@@ -3,8 +3,8 @@ package com.d4rk.android.apps.apptoolkit.core.di.modules.settings.modules
 import com.d4rk.android.apps.apptoolkit.app.settings.about.ui.AppAboutSettingsContent
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppDisplaySettingsProvider
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppPrivacySettingsProvider
-import com.d4rk.android.apps.apptoolkit.components.domain.usecase.UnlockComponentsShowcaseUseCase
-import com.d4rk.android.apps.apptoolkit.components.ui.ComponentsUnlockViewModel
+import com.d4rk.android.apps.apptoolkit.app.components.domain.usecase.UnlockComponentsShowcaseUseCase
+import com.d4rk.android.apps.apptoolkit.app.components.ui.ComponentsUnlockViewModel
 import com.d4rk.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.GeneralSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsViewModel
