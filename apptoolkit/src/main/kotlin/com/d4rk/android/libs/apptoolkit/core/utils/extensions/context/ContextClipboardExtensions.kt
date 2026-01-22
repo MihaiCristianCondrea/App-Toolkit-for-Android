@@ -7,7 +7,6 @@ import android.content.Context
 import android.os.Build
 import android.os.PersistableBundle
 import android.util.Log
-import androidx.annotation.CheckResult
 import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
 
 /**
@@ -19,7 +18,6 @@ import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
  *
  * @return true if the clipboard was written, false otherwise.
  */
-@CheckResult
 fun Context.copyTextToClipboard(
     label: String,
     text: String,

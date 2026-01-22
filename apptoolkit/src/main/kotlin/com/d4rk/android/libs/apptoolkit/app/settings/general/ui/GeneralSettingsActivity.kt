@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
-import com.d4rk.android.libs.apptoolkit.core.ui.base.BaseActivity
 import com.d4rk.android.libs.apptoolkit.core.logging.GENERAL_SETTINGS_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.ui.base.BaseActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
 import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
 import kotlinx.coroutines.launch

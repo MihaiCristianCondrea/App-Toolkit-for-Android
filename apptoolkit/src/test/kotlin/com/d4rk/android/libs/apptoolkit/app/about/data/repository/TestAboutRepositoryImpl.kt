@@ -1,8 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.about.data.repository
 
+import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.ClipData
 import android.os.Build
 import android.util.Log
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo

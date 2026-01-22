@@ -3,9 +3,7 @@ package com.d4rk.android.libs.apptoolkit.core.utils.extensions.context
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
-import androidx.annotation.CheckResult
 import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import com.d4rk.android.libs.apptoolkit.R
@@ -18,7 +16,6 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.intent.requireNewT
  * This is the “truthy” launcher: it tries to launch and catches failures.
  * This avoids false negatives from resolveActivity() under Android 11+ package visibility. :contentReference[oaicite:6]{index=6}
  */
-@CheckResult
 fun Context.startActivitySafely(
     intent: Intent,
     addNewTaskFlag: Boolean = true,
@@ -34,11 +31,9 @@ fun Context.startActivitySafely(
         )
 }
 
-@CheckResult
 fun Context.openActivity(activityClass: Class<*>): Boolean =
     startActivitySafely(Intent(this, activityClass))
 
-@CheckResult
 fun Context.openUrl(url: String): Boolean {
     val trimmed = url.trim()
     if (trimmed.isBlank()) return false
@@ -52,7 +47,6 @@ fun Context.openUrl(url: String): Boolean {
 /**
  * Opens system display settings, with a fallback to general settings.
  */
-@CheckResult
 fun Context.openDisplaySettings(): Boolean {
     val display = Intent(Settings.ACTION_DISPLAY_SETTINGS)
     val general = Intent(Settings.ACTION_SETTINGS)
@@ -62,7 +56,6 @@ fun Context.openDisplaySettings(): Boolean {
 /**
  * Opens the Play Store page for [packageName], falling back to HTTPS.
  */
-@CheckResult
 fun Context.openPlayStoreForApp(packageName: String): Boolean {
     val market = Intent(Intent.ACTION_VIEW, "${AppLinks.MARKET_APP_PAGE}$packageName".toUri())
     if (startActivitySafely(market)) return true
@@ -74,16 +67,12 @@ fun Context.openPlayStoreForApp(packageName: String): Boolean {
  *
  * minSdk=26 => we can use ACTION_APP_NOTIFICATION_SETTINGS on all devices.
  */
-@CheckResult
 fun Context.openAppNotificationSettings(): Boolean {
     val pkg = this.packageName
 
     val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
         putExtra(Settings.EXTRA_APP_PACKAGE, pkg)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Optional, but harmless: some OEMs read the channel extra.
-            putExtra(Settings.EXTRA_CHANNEL_ID, 0)
-        }
+        putExtra(Settings.EXTRA_CHANNEL_ID, 0)
     }
     if (startActivitySafely(intent)) return true
 
@@ -98,7 +87,6 @@ fun Context.openAppNotificationSettings(): Boolean {
 /**
  * Composes an email to the developer using ACTION_SENDTO (mailto:).
  */
-@CheckResult
 fun Context.sendEmailToDeveloper(
     @StringRes applicationNameRes: Int,
 ): Boolean {
@@ -108,7 +96,7 @@ fun Context.sendEmailToDeveloper(
     val subject = getString(R.string.feedback_for, appName)
     val body = getString(R.string.dear_developer) + "\n\n"
 
-    val mailtoUri: Uri = Uri.parse("mailto:$developerEmail").buildUpon()
+    val mailtoUri: Uri = "mailto:$developerEmail".toUri().buildUpon()
         .appendQueryParameter("subject", subject)
         .appendQueryParameter("body", body)
         .build()
@@ -121,7 +109,6 @@ fun Context.sendEmailToDeveloper(
 /**
  * Shares a Play Store link for [packageName] using ACTION_SEND.
  */
-@CheckResult
 fun Context.shareApp(
     @StringRes shareMessageFormat: Int,
     packageName: String = this.packageName,

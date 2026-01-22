@@ -2,14 +2,12 @@ package com.d4rk.android.libs.apptoolkit.core.utils.extensions.context
 
 import android.content.Context
 import android.os.Build
-import androidx.annotation.CheckResult
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.store.StoreConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.hasPackageVisible
 
 /**
  * Returns the installer package name when available, null otherwise.
  */
-@CheckResult
 fun Context.installingPackageNameOrNull(): String? =
     runCatching {
         val pm = packageManager
@@ -26,13 +24,11 @@ fun Context.installingPackageNameOrNull(): String? =
  *
  * Requires <queries><package android:name="com.android.vending"/></queries> when targeting 30+.
  */
-@CheckResult
 fun Context.hasPlayStore(): Boolean =
     packageManager.hasPackageVisible(StoreConstants.PLAY_STORE_PACKAGE)
 
 /**
  * True if the current app reports it was installed from the Play Store.
  */
-@CheckResult
 fun Context.isInstalledFromPlayStore(): Boolean =
     installingPackageNameOrNull() == StoreConstants.PLAY_STORE_PACKAGE

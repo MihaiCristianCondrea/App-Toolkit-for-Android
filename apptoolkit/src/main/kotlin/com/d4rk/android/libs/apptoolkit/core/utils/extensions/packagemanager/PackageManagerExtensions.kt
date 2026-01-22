@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.annotation.CheckResult
 import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 
 /**
@@ -12,7 +11,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
  *
  * On Android 11+ this is affected by package visibility (<queries> / QUERY_ALL_PACKAGES).
  */
-@CheckResult
 fun PackageManager.hasPackageVisible(packageName: String): Boolean =
     runCatching { getPackageInfoCompat(packageName) }.isSuccess
 
@@ -22,21 +20,18 @@ fun PackageManager.hasPackageVisible(packageName: String): Boolean =
  * The visibility rules documented in [hasPackageVisible] apply here as well on Android 11+
  * devices.
  */
-@CheckResult
 fun PackageManager.isAppInstalled(packageName: String): Boolean =
     hasPackageVisible(packageName)
 
 /**
  * Returns `true` when [packageName] is installed on this [Context]'s device.
  */
-@CheckResult
 fun Context.isAppInstalled(packageName: String): Boolean =
     packageManager.isAppInstalled(packageName)
 
 /**
  * Returns version metadata for [packageName], or `null` when unavailable (not installed, not visible, or error).
  */
-@CheckResult
 fun PackageManager.getVersionInfo(packageName: String): AppVersionInfo? =
     runCatching {
         val packageInfo = getPackageInfoCompat(packageName)
@@ -60,7 +55,6 @@ fun PackageManager.getVersionInfo(packageName: String): AppVersionInfo? =
  * WARNING: On Android 11+ this can return false even when startActivity(intent) would succeed,
  * due to package visibility filtering. Prefer try/catch for actual launches.
  */
-@CheckResult
 fun PackageManager.canResolveActivityCompat(intent: Intent): Boolean =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         resolveActivity(

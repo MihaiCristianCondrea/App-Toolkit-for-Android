@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
@@ -14,24 +15,23 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Card
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.d4rk.android.apps.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.R as ToolkitR
 import com.d4rk.android.apps.apptoolkit.app.components.ui.state.ComponentsUiState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
@@ -52,12 +52,13 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPrefer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItemWithDivider
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.persistentListOf
+import com.d4rk.android.libs.apptoolkit.R as ToolkitR
 
 /**
  * Route-level composable that manages state for the components showcase screen.
@@ -90,7 +91,7 @@ fun ComponentsRoute(
     var selectedDropdownOption by rememberSaveable { mutableStateOf(dropdownOptions.first()) }
     var selectedFilter by rememberSaveable { mutableStateOf(filters.first()) }
     var selectedRadioOption by rememberSaveable { mutableStateOf(radioOptions.first()) }
-    var selectedDateMillis by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
+    var selectedDateMillis by rememberSaveable { mutableLongStateOf(System.currentTimeMillis()) }
     var switchEnabled by rememberSaveable { mutableStateOf(true) }
     var switchWithDividerEnabled by rememberSaveable { mutableStateOf(false) }
     var switchCardEnabled by rememberSaveable { mutableStateOf(false) }
@@ -130,12 +131,14 @@ fun ComponentsRoute(
         paddingValues = paddingValues,
         state = state,
         onDropdownOptionSelected = { selectedDropdownOption = it },
-        onDateSelected = { selectedDateMillis = it },
-        onFilterSelected = { selectedFilter = it },
-        onSwitchEnabledChanged = { switchEnabled = it },
-        onSwitchWithDividerChanged = { switchWithDividerEnabled = it },
-        onSwitchCardChanged = { switchCardEnabled = it },
-        onCheckboxChanged = { checkboxChecked = it },
+        onDateSelected = { selectedDateMillis = it }, // FIXME: Assigned value is never read
+        onFilterSelected = { selectedFilter = it }, // FIXME: Assigned value is never read
+        onSwitchEnabledChanged = { switchEnabled = it }, // FIXME: Assigned value is never read
+        onSwitchWithDividerChanged = {
+            switchWithDividerEnabled = it
+        }, // FIXME: Assigned value is never read
+        onSwitchCardChanged = { switchCardEnabled = it }, // FIXME: Assigned value is never read
+        onCheckboxChanged = { checkboxChecked = it }, // FIXME: Assigned value is never read
         onRadioOptionSelected = { selectedRadioOption = it },
     )
 }
