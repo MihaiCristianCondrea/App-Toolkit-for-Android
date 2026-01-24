@@ -324,7 +324,6 @@ fun ComponentsScreen(
                 )
                 SmallVerticalSpacer()
                 DropdownMenuBox(
-                    // FIXME: Items not visible onClicking
                     selectedText = state.selectedDropdownOption,
                     options = state.dropdownOptions,
                     onOptionSelected = onDropdownOptionSelected,

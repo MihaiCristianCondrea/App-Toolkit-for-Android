@@ -3,6 +3,8 @@ package com.d4rk.android.libs.apptoolkit.core.ui.views.fields
 import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
@@ -11,11 +13,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -29,53 +37,66 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerTextField(
+    modifier: Modifier = Modifier,
     dateMillis: Long,
-    onDateSelected: (Long) -> Unit
+    onDateSelected: (Long) -> Unit,
+    icon: ImageVector = Icons.Default.CalendarToday
 ) {
     val formatter = remember { SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()) }
-    val showDialog = rememberSaveable { mutableStateOf(false) }
+    val parser = remember { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()) }
+
+    var showDialog by rememberSaveable { mutableStateOf(false) }
 
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
+    val latestOnDateSelected by rememberUpdatedState(onDateSelected)
 
-    if (showDialog.value) {
+    if (showDialog) {
         DatePickerDialog(
-            onDateSelected = { dateString: String ->
-                val parsedMillis: Long = runCatching {
-                    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                        .parse(dateString)
-                        ?.time
-                }.getOrNull() ?: dateMillis
+            onDateSelected = { dateString ->
+                val parsedMillis = runCatching { parser.parse(dateString)?.time }
+                    .getOrNull() ?: dateMillis
 
-                onDateSelected(parsedMillis)
-                showDialog.value = false
+                latestOnDateSelected(parsedMillis)
+                showDialog = false
             },
-            onDismiss = { showDialog.value = false }
+            onDismiss = { showDialog = false },
         )
     }
 
-    OutlinedTextField(
-        value = formatter.format(Date(dateMillis)),
-        onValueChange = {},
-        readOnly = true,
-        enabled = false,
-        modifier = Modifier
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Box(
+        modifier = modifier
             .fillMaxWidth()
             .bounceClick()
-            .clickable {
+            .clip(MaterialTheme.shapes.large)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = ripple(bounded = true),
+            ) {
                 view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
-                showDialog.value = true
+                showDialog = true
+            }
+    ) {
+        OutlinedTextField(
+            value = formatter.format(Date(dateMillis)),
+            onValueChange = {},
+            readOnly = true,
+            enabled = false,
+            modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.large,
+            trailingIcon = {
+                Icon(imageVector = icon, contentDescription = null)
             },
-        shape = MaterialTheme.shapes.large,
-        trailingIcon = {
-            Icon(Icons.Default.CalendarToday, contentDescription = null)
-        },
-        colors = OutlinedTextFieldDefaults.colors(
-            disabledTextColor = MaterialTheme.colorScheme.onSurface,
-            disabledBorderColor = MaterialTheme.colorScheme.outline,
-            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            colors = OutlinedTextFieldDefaults.colors(
+                disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                disabledBorderColor = MaterialTheme.colorScheme.outline,
+                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         )
-    )
+    }
 }
