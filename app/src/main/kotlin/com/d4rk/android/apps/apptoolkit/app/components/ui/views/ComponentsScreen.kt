@@ -16,7 +16,9 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -146,6 +148,7 @@ fun ComponentsRoute(
 /**
  * Stateless components showcase that renders all custom UI elements in a scrolling list.
  */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ComponentsScreen(
     paddingValues: PaddingValues,
@@ -299,6 +302,7 @@ fun ComponentsScreen(
                     )
                     DropdownMenu(
                         expanded = showMenu,
+                        shape = MaterialTheme.shapes.largeIncreased,
                         onDismissRequest = { showMenu = false },
                     ) {
                         CommonDropdownMenuItem(

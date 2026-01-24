@@ -1,17 +1,19 @@
 package com.d4rk.android.apps.apptoolkit.app.main.ui
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 import com.d4rk.android.libs.apptoolkit.app.main.utils.InAppUpdateHelper
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.ui.base.BaseActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentFormHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentManagerHelper
@@ -29,7 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 
-class MainActivity : BaseActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val dataStore: DataStore by inject()
     private val dispatchers: DispatcherProvider by inject()
@@ -37,12 +39,11 @@ class MainActivity : BaseActivity() {
         registerForActivityResult(contract = ActivityResultContracts.StartIntentSenderForResult()) {}
     private var keepSplashVisible: Boolean = true
 
-    override fun shouldSetContentOnCreate(): Boolean = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { keepSplashVisible }
+        enableEdgeToEdge()
         initializeDependencies()
         handleStartup()
         checkInAppReview()
@@ -87,12 +88,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setMainActivityContent() {
-        setComposeContent()
-    }
-
-    @Composable
-    override fun ScreenContent() {
-        MainScreen()
+        setContent {
+            AppTheme {
+                MainScreen()
+            }
+        }
     }
 
     private fun checkUserConsent() {

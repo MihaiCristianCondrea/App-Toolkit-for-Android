@@ -1,3 +1,10 @@
+# Version 2.0.1
+
+- **Minor**: Updated the buttons components for better consistency.
+- **Patch**: Fixed the buttons crashes when no icon is provided.
+- **Patch**: Fixed corner radius for various components.
+- **Patch**: Fixed a bug inside the color settings when the tab pager is not correctly selected.
+
 # Version 2.0.0
 
 - **New**: Added multiple new themes and color palettes for deeper personalization.

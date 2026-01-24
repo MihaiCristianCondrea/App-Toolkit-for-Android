@@ -1,7 +1,7 @@
 [versions]
 agp = "9.0.0"
 appcompat = "1.7.1"
-aboutlibraries = "14.0.0-b01"
+aboutlibraries = "14.0.0-b02"
 composeMarkdown = "0.5.7"
 core = "4.6.2"
 coil = "3.3.0"
@@ -12,11 +12,10 @@ composeBom = "2026.01.00"
 integrity = "1.6.0"
 konfettiCompose = "2.0.5"
 lifecycle = "2.10.0"
-kotlinxSerializationJson = "1.9.0"
-kotlinxSerializationCore = "1.9.0"
+kotlinxSerialization = "1.10.0"
 kotlinxCoroutinesAndroid = "1.10.2"
 kotlinxCollectionsImmutable = "0.4.0"
-ktorBom = "3.3.3"
+ktorBom = "3.4.0"
 coreSplashscreen = "1.2.0"
 koin = "4.1.1"
 appUpdateKtx = "2.1.0"
@@ -47,7 +46,7 @@ testTurbine = "1.2.1"
 truth = "1.7.0"
 testManifestTestJunit4Android = "1.10.1"
 slf4j = "2.0.17"
-robolectric = "4.16"
+robolectric = "4.16.1"
 junit4 = "4.13.2"
 
 [libraries]
@@ -118,8 +117,8 @@ coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutlibraries" }
 konfetti-compose = { module = "nl.dionsegijn:konfetti-compose", version.ref = "konfettiCompose" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesAndroid" }
