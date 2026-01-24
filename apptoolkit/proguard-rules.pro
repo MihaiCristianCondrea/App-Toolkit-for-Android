@@ -1,6 +1,5 @@
 ##############################################
 # AppToolkit - library ProGuard rules
-# (Only used if this library module is minified)
 ##############################################
 
 # Intentionally empty:
