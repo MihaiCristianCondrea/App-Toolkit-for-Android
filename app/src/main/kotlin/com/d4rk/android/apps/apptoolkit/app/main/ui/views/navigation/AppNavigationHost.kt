@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.activity.compose.BackHandler
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
@@ -51,6 +52,10 @@ fun AppNavigationHost(
         remember(entryBuilders) {
             entryProviderFor(entryBuilders)
         }
+
+    BackHandler(enabled = navigator.canGoBack()) {
+        navigator.goBack()
+    }
 
     NavDisplay(
         modifier = modifier,

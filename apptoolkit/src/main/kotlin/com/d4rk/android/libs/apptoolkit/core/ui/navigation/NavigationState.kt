@@ -102,16 +102,36 @@ class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
         }
     }
 
-    fun goBack() {
-        val currentRoute = state.currentBackStack.lastOrNull() ?: return
+    /**
+     * Returns true when the current back stack can handle a back action.
+     */
+    fun canGoBack(): Boolean {
+        val currentRoute = state.currentBackStack.lastOrNull() ?: return false
+
+        return if (currentRoute == state.topLevelRoute) {
+            state.topLevelRoute != state.startRoute
+        } else {
+            true
+        }
+    }
+
+    /**
+     * Handles a back action, returning true when navigation consumed the request.
+     */
+    fun goBack(): Boolean {
+        val currentRoute = state.currentBackStack.lastOrNull() ?: return false
 
         if (currentRoute == state.topLevelRoute) {
             if (state.topLevelRoute != state.startRoute) {
                 state.topLevelRoute = state.startRoute
+                return true
             }
         } else {
             state.currentBackStack.removeLastOrNull()
+            return true
         }
+
+        return false
     }
 }
 
