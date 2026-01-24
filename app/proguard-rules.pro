@@ -1,15 +1,23 @@
-############################################################
-# App release ProGuard/R8 rules
-############################################################
+##############################################
+# App - ProGuard / R8 rules
+##############################################
 
-# 1) Crashlytics: keep file/line numbers for readable crash reports
+# Crashlytics: keep line numbers for readable crashes
 -keepattributes SourceFile,LineNumberTable
 
-# 2) Kotlinx Serialization (your app also uses kotlinx.serialization via AppToolkit)
+# Kotlinx Serialization
+-keepattributes *Annotation*,InnerClasses,EnclosingMethod
+
 -keepclassmembers @kotlinx.serialization.Serializable class com.d4rk.android.apps.** {
     public static ** Companion;
 }
+
 -keepclassmembers class com.d4rk.android.apps.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
+
 -keepclassmembers class **$$serializer { *; }
+
+# Optional: reduce annoying warnings if they appear (not required)
+-dontwarn kotlinx.coroutines.**
+-dontwarn io.ktor.**
