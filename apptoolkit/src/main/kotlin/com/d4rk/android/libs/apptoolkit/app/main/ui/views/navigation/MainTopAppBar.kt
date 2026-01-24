@@ -1,12 +1,13 @@
 package com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation
 
 import android.content.Context
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -21,7 +22,6 @@ import com.d4rk.android.libs.apptoolkit.app.support.ui.SupportActivity
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.d4rk.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 
 /**
@@ -36,7 +36,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivi
  * @param scrollBehavior A [TopAppBarScrollBehavior] to be applied to the top app bar,
  * which defines its behavior when content is scrolled.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MainTopAppBar(
     navigationIcon: ImageVector,
@@ -67,7 +67,7 @@ fun MainTopAppBar(
 
             DropdownMenu(
                 expanded = expandedMenu,
-                shape = RoundedCornerShape(SizeConstants.LargeIncreasedSize),
+                shape = MaterialTheme.shapes.largeIncreased,
                 onDismissRequest = { setExpandedMenu(false) }
             ) {
                 CommonDropdownMenuItem(

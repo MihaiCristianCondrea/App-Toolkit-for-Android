@@ -1,6 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.app.help.ui.views.dropdowns
 
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Balance
@@ -10,6 +9,8 @@ import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Science
 import androidx.compose.material.icons.outlined.Shop
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,10 +22,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.VersionInfoAlertDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun HelpScreenMenuActions(
     config: AppVersionInfo,
@@ -43,7 +44,7 @@ fun HelpScreenMenuActions(
 
     DropdownMenu(
         expanded = showMenu.value,
-        shape = RoundedCornerShape(SizeConstants.LargeIncreasedSize),
+        shape = MaterialTheme.shapes.largeIncreased,
         onDismissRequest = { showMenu.value = false }
     ) {
         fun closeMenu() {

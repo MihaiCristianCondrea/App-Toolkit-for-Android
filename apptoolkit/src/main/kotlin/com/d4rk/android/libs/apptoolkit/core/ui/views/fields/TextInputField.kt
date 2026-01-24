@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -26,6 +27,7 @@ import androidx.compose.ui.platform.LocalView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import kotlinx.collections.immutable.ImmutableList
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun DropdownMenuBox(
     selectedText: String,
@@ -58,7 +60,7 @@ fun DropdownMenuBox(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            shape = MaterialTheme.shapes.large,
+            shape = MaterialTheme.shapes.largeIncreased,
         ) {
             options.forEach { option: String ->
                 DropdownMenuItem(text = { Text(text = option) }, onClick = {
