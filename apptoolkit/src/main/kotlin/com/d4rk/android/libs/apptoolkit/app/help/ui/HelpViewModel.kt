@@ -2,11 +2,14 @@ package com.d4rk.android.libs.apptoolkit.app.help.ui
 
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpAction
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
 import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
@@ -45,7 +48,7 @@ class HelpViewModel(
     private var loadFaqJob: Job? = null
 
     init {
-        onEvent(HelpEvent.LoadFaq)
+        onEvent(event = HelpEvent.LoadFaq)
     }
 
     override fun onEvent(event: HelpEvent) {
@@ -58,22 +61,22 @@ class HelpViewModel(
     private fun loadFaq() {
         loadFaqJob?.cancel()
         loadFaqJob = getFaqUseCase()
-            .flowOn(dispatchers.io)
+            .flowOn(context = dispatchers.io)
             .onStart { screenState.setLoading() }
-            .onEach { result ->
+            .onEach { result: DataState<List<FaqItem>, Errors> ->
                 result
-                    .onSuccess { faqs ->
-                        val screenStateForData =
+                    .onSuccess { faqs: List<FaqItem> ->
+                        val screenStateForData: ScreenState =
                             if (faqs.isEmpty()) ScreenState.NoData() else ScreenState.Success()
-                        screenState.update { current ->
+                        screenState.update { current: UiStateScreen<HelpUiState> ->
                             current.copy(
                                 screenState = screenStateForData,
                                 data = HelpUiState(questions = faqs.toImmutableList())
                             )
                         }
                     }
-                    .onFailure { error ->
-                        screenState.updateState(ScreenState.Error())
+                    .onFailure { error: Errors ->
+                        screenState.updateState(newValues = ScreenState.Error())
                         screenState.showSnackbar(
                             UiSnackbar(
                                 message = error.asUiText(),
@@ -91,7 +94,7 @@ class HelpViewModel(
                     action = "loadFaq",
                     throwable = it,
                 )
-                screenState.updateState(ScreenState.Error())
+                screenState.updateState(newValues = ScreenState.Error())
                 screenState.showSnackbar(
                     UiSnackbar(
                         message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq),
@@ -101,6 +104,6 @@ class HelpViewModel(
                     )
                 )
             }
-            .launchIn(viewModelScope)
+            .launchIn(scope = viewModelScope)
     }
 }
