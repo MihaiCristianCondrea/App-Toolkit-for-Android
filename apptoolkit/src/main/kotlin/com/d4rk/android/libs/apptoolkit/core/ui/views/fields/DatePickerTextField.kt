@@ -40,7 +40,9 @@ fun DatePickerTextField(
     modifier: Modifier = Modifier,
     dateMillis: Long,
     onDateSelected: (Long) -> Unit,
-    icon: ImageVector = Icons.Default.CalendarToday
+    textFieldIcon: ImageVector = Icons.Default.CalendarToday,
+    textFieldReadOnly: Boolean = true,
+    textFieldEnabled: Boolean = false,
 ) {
     val formatter = remember { SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()) }
     val parser = remember { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()) }
@@ -83,12 +85,12 @@ fun DatePickerTextField(
         OutlinedTextField(
             value = formatter.format(Date(dateMillis)),
             onValueChange = {},
-            readOnly = true,
-            enabled = false,
+            readOnly = textFieldReadOnly,
+            enabled = textFieldEnabled,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.large,
             trailingIcon = {
-                Icon(imageVector = icon, contentDescription = null)
+                Icon(imageVector = textFieldIcon, contentDescription = null)
             },
             colors = OutlinedTextFieldDefaults.colors(
                 disabledTextColor = MaterialTheme.colorScheme.onSurface,
