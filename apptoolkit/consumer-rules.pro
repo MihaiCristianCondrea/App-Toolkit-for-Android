@@ -2,15 +2,17 @@
 # AppToolkit - consumer rules
 ##############################################
 
-# Kotlinx Serialization
+# Kotlinx Serialization: keep generated serializers + companions
 -keepattributes *Annotation*,InnerClasses,EnclosingMethod
 
--keepclassmembers @kotlinx.serialization.Serializable class com.d4rk.android.libs.apptoolkit.** {
+-keep @kotlinx.serialization.Serializable class com.d4rk.android.libs.apptoolkit.** { *; }
+
+-keepclassmembers class com.d4rk.android.libs.apptoolkit.** {
     public static ** Companion;
 }
 
--keepclassmembers class com.d4rk.android.libs.apptoolkit.** {
-    kotlinx.serialization.KSerializer serializer(...);
+-keepclassmembers class **$Companion {
+    public kotlinx.serialization.KSerializer serializer(...);
 }
 
 -keepclassmembers class **$$serializer { *; }
