@@ -247,17 +247,27 @@ class BillingRepository private constructor(
             return
         }
 
+        // Change rationale: we previously launched billing without verifying a one-time offer token.
+        // BillingClient 8.3.0 can surface a null PendingIntent (leading to ProxyBillingActivity NPE)
+        // when the offer token is missing. Guarding here fails fast with a clear error instead.
+        val resolvedToken = offerToken?.takeIf { it.isNotBlank() }
+            ?: details.primaryOfferToken()
+        if (resolvedToken.isNullOrBlank()) {
+            scope.launch {
+                _purchaseResult.emit(
+                    PurchaseResult.Failed("Billing offer token is missing for this product.")
+                )
+            }
+            return
+        }
+
         val params = BillingFlowParams.newBuilder()
             .setProductDetailsParamsList(
                 listOf(
                     BillingFlowParams.ProductDetailsParams.newBuilder()
                         .setProductDetails(details)
                         .apply {
-                            val resolvedToken = offerToken?.takeIf { it.isNotBlank() }
-                                ?: details.primaryOfferToken()
-                            if (!resolvedToken.isNullOrBlank()) {
-                                setOfferToken(resolvedToken)
-                            }
+                            setOfferToken(resolvedToken)
                         }
                         .build()
                 )
@@ -415,4 +425,3 @@ class BillingRepository private constructor(
         return PurchaseResult.Failed(message)
     }
 }
-
