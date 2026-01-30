@@ -18,6 +18,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -52,30 +53,25 @@ class SupportViewModelTest {
             val p2 = mockk<ProductDetails>()
             val viewModel = createViewModel()
 
-            viewModel.uiState.test {
-                awaitItem() // initial state
-                every { p1.productId } returns DonationProductIds.LOW_DONATION
-                every { p2.productId } returns DonationProductIds.NORMAL_DONATION
-                every { p1.oneTimePurchaseOfferDetails } returns mockk()
-                every { p2.oneTimePurchaseOfferDetails } returns mockk()
-                productDetailsFlow.value = linkedMapOf(
-                    DonationProductIds.LOW_DONATION to p1,
-                    DonationProductIds.NORMAL_DONATION to p2
+            every { p1.productId } returns DonationProductIds.LOW_DONATION
+            every { p2.productId } returns DonationProductIds.NORMAL_DONATION
+            every { p1.oneTimePurchaseOfferDetails } returns mockk()
+            every { p2.oneTimePurchaseOfferDetails } returns mockk()
+            productDetailsFlow.value = linkedMapOf(
+                DonationProductIds.LOW_DONATION to p1,
+                DonationProductIds.NORMAL_DONATION to p2
+            )
+
+            advanceUntilIdle()
+
+            val state = viewModel.uiState.value
+            assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
+            val donationOptions = requireNotNull(state.data).donationOptions
+            assertThat(donationOptions.map { it.productId })
+                .containsAtLeast(
+                    DonationProductIds.LOW_DONATION,
+                    DonationProductIds.NORMAL_DONATION
                 )
-                // It might take a couple of emissions for the screenState to update
-                var successState = awaitItem()
-                while (
-                    successState.screenState !is ScreenState.Success ||
-                    successState.data?.donationOptions.isNullOrEmpty()
-                ) {
-                    successState = awaitItem()
-                }
-                assertThat(successState.data!!.donationOptions.map { it.productId })
-                    .containsAtLeast(
-                        DonationProductIds.LOW_DONATION,
-                        DonationProductIds.NORMAL_DONATION
-                    )
-            }
         }
 
     @Test
@@ -110,7 +106,8 @@ class SupportViewModelTest {
                     stateWithError = awaitItem()
                 }
                 assertThat(stateWithError.screenState).isInstanceOf(ScreenState.Error::class.java)
-                assertThat(stateWithError.data!!.error).isEqualTo(error)
+                val errorData = requireNotNull(stateWithError.data)
+                assertThat(errorData.error).isEqualTo(error)
                 val snackbar = stateWithError.snackbar
                 assertThat(snackbar.isError).isTrue()
                 val msg = snackbar.message as UiTextHelper.DynamicString
@@ -150,21 +147,10 @@ class SupportViewModelTest {
 
             productDetailsFlow.value = linkedMapOf(DonationProductIds.LOW_DONATION to product)
 
-            viewModel.uiState.test {
-                awaitItem() // initial state
-                var readyState = awaitItem()
-                while (
-                    readyState.data?.donationOptions.isNullOrEmpty() ||
-                    readyState.data?.donationOptions?.none {
-                        it.productId == DonationProductIds.LOW_DONATION && it.isEligible
-                    } == true
-                ) {
-                    readyState = awaitItem()
-                }
+            advanceUntilIdle()
 
-                viewModel.onDonateClicked(activity, DonationProductIds.LOW_DONATION)
-                verify { billingRepository.launchInAppDonationFlow(activity, product) }
-            }
+            viewModel.onDonateClicked(activity, DonationProductIds.LOW_DONATION)
+            verify { billingRepository.launchInAppDonationFlow(activity, product) }
         }
 
     @Test
