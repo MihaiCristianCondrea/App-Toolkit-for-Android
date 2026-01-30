@@ -24,7 +24,6 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -41,8 +40,6 @@ class GeneralSettingsViewModel(
     initialState = UiStateScreen(data = GeneralSettingsUiState())
 ) {
 
-    private var loadJob: Job? = null
-
     override fun onEvent(event: GeneralSettingsEvent) {
         when (event) {
             is GeneralSettingsEvent.Load -> loadContent(contentKey = event.contentKey)
@@ -50,8 +47,8 @@ class GeneralSettingsViewModel(
     }
 
     private fun loadContent(contentKey: String?) {
-        loadJob?.cancel()
-        loadJob = viewModelScope.launch {
+        generalJob?.cancel()
+        generalJob = viewModelScope.launch {
             repository.getContentKey(contentKey)
                 .flowOn(dispatchers.default)
                 .map<String, DataState<String, Errors>> { key ->

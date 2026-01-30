@@ -104,29 +104,33 @@ class FavoriteAppsViewModel(
                         action = "observe",
                         throwable = error,
                     )
-                    screenState.updateState(ScreenState.Error())
-                    showErrorSnackbar(
-                        UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
-                    )
+                    updateStateThreadSafe {
+                        screenState.updateState(ScreenState.Error())
+                        showErrorSnackbar(
+                            UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
+                        )
+                    }
                 }
                 .collect { result ->
-                    result
-                        .onSuccess { apps ->
-                            val immutableApps = apps.toImmutableList()
-                            if (immutableApps.isEmpty()) {
-                                screenState.updateData(ScreenState.NoData()) {
-                                    it.copy(apps = immutableApps)
-                                }
-                            } else {
-                                screenState.updateData(ScreenState.Success()) {
-                                    it.copy(apps = immutableApps)
+                    updateStateThreadSafe {
+                        result
+                            .onSuccess { apps ->
+                                val immutableApps = apps.toImmutableList()
+                                if (immutableApps.isEmpty()) {
+                                    screenState.updateData(ScreenState.NoData()) {
+                                        it.copy(apps = immutableApps)
+                                    }
+                                } else {
+                                    screenState.updateData(ScreenState.Success()) {
+                                        it.copy(apps = immutableApps)
+                                    }
                                 }
                             }
-                        }
-                        .onFailure { error ->
-                            screenState.updateState(ScreenState.Error())
-                            showErrorSnackbar(error.toErrorMessage())
-                        }
+                            .onFailure { error ->
+                                screenState.updateState(ScreenState.Error())
+                                showErrorSnackbar(error.toErrorMessage())
+                            }
+                    }
                 }
         }
     }
@@ -138,8 +142,10 @@ class FavoriteAppsViewModel(
                 withContext(dispatchers.io) { toggleFavoriteUseCase(packageName) }
             } catch (t: Throwable) {
                 if (t is CancellationException) throw t
-                screenState.updateState(ScreenState.Error())
-                showErrorSnackbar(UiTextHelper.StringResource(R.string.error_failed_to_update_favorite))
+                updateStateThreadSafe {
+                    screenState.updateState(ScreenState.Error())
+                    showErrorSnackbar(UiTextHelper.StringResource(R.string.error_failed_to_update_favorite))
+                }
             }
         }
     }

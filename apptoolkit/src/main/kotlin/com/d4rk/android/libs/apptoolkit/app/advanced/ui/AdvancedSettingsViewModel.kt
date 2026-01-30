@@ -19,7 +19,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -50,8 +49,6 @@ class AdvancedSettingsViewModel(
     ),
 ) {
 
-    private var clearCacheJob: Job? = null
-
     override fun onEvent(event: AdvancedSettingsEvent) {
         when (event) {
             AdvancedSettingsEvent.ClearCache -> clearCache()
@@ -68,9 +65,9 @@ class AdvancedSettingsViewModel(
      * to the user. It also handles potential exceptions during the flow execution.
      */
     private fun clearCache() {
-        clearCacheJob?.cancel()
+        generalJob?.cancel()
 
-        clearCacheJob = repository.clearCache()
+        generalJob = repository.clearCache()
             .flowOn(dispatchers.io)
             .map<Result<Unit>, DataState<Unit, Errors.Database>> { result ->
                 when (result) {

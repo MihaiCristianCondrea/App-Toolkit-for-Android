@@ -22,7 +22,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -42,8 +41,6 @@ class MainViewModel(
 ) : ScreenViewModel<MainUiState, MainEvent, MainAction>(
     initialState = UiStateScreen(data = MainUiState())
 ) {
-
-    private var consentJob: Job? = null
 
     init {
         onEvent(MainEvent.LoadNavigation)
@@ -109,8 +106,8 @@ class MainViewModel(
     }
 
     private fun requestConsent(host: ConsentHost) {
-        consentJob?.cancel()
-        consentJob = requestConsentUseCase(host = host)
+        generalJob?.cancel()
+        generalJob = requestConsentUseCase(host = host)
             .flowOn(dispatchers.main)
             .catch { throwable ->
                 if (throwable is CancellationException) throw throwable

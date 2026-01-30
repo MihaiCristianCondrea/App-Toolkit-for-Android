@@ -317,8 +317,10 @@ class SupportViewModel(
             billingTimeoutJob = null
         }
 
-        screenState.copyData {
-            copy(isBillingInProgress = inProgress)
+        viewModelScope.launch {
+            updateSuccessState(screenState) {
+                it.copy(isBillingInProgress = inProgress)
+            }
         }
     }
 
