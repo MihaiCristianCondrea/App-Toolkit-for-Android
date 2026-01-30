@@ -29,10 +29,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.support.ui.contract.SupportEvent
+import com.d4rk.android.libs.apptoolkit.app.support.ui.state.DonationOptionUiState
 import com.d4rk.android.libs.apptoolkit.app.support.ui.state.SupportScreenUiState
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.ShortenLinkConstants
-import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.primaryFormattedPrice
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.SupportNativeAdCard
@@ -57,12 +57,12 @@ fun SupportComposable() {
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val currentViewModel = rememberUpdatedState(newValue = viewModel)
 
-    val onDonateClick: (Activity, com.android.billingclient.api.ProductDetails) -> Unit =
+    val onDonateClick: (Activity, String) -> Unit =
         remember(currentViewModel) {
-            { hostActivity, productDetails ->
+            { hostActivity, productId ->
                 currentViewModel.value.onDonateClicked(
                     activity = hostActivity,
-                    productDetails = productDetails
+                    productId = productId
                 )
             }
         }
@@ -85,20 +85,18 @@ fun SupportComposable() {
                 )
             },
             onSuccess = { data: SupportScreenUiState ->
-                val productDetailsMap = data.products.associateBy { it.productId }
-                val currentProducts = rememberUpdatedState(newValue = productDetailsMap)
+                val optionsById = remember(data.donationOptions) {
+                    data.donationOptions.associateBy(DonationOptionUiState::productId)
+                }
                 SupportScreenContent(
                     paddingValues = paddingValues,
-                    getPriceLabel = { productId ->
-                        currentProducts.value[productId]?.primaryFormattedPrice().orEmpty()
-                    },
+                    donationOptions = optionsById,
+                    isBillingInProgress = data.isBillingInProgress,
                     onDonateClick = { productId ->
-                        val productDetails =
-                            currentProducts.value[productId] ?: return@SupportScreenContent
                         activity?.let { hostActivity ->
-                            onDonateClick(hostActivity, productDetails)
+                            onDonateClick(hostActivity, productId)
                         }
-                    }
+                    },
                 )
             })
         DefaultSnackbarHandler(
@@ -113,7 +111,8 @@ fun SupportComposable() {
 @Composable
 fun SupportScreenContent(
     paddingValues: PaddingValues,
-    getPriceLabel: (String) -> String,
+    donationOptions: Map<String, DonationOptionUiState>,
+    isBillingInProgress: Boolean,
     onDonateClick: (String) -> Unit,
 ) {
     val context: Context = LocalContext.current
@@ -150,14 +149,21 @@ fun SupportScreenContent(
                             .padding(horizontal = SizeConstants.LargeSize),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
+                        val lowDonation = donationOptions[DonationProductIds.LOW_DONATION]
+                        val normalDonation = donationOptions[DonationProductIds.NORMAL_DONATION]
                         item {
                             GeneralTonalButton(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
                                     onDonateClick(DonationProductIds.LOW_DONATION)
                                 },
+                                enabled = lowDonation?.isEligible == true && !isBillingInProgress,
                                 vectorIcon = Icons.Outlined.Paid,
-                                label = getPriceLabel(DonationProductIds.LOW_DONATION)
+                                label = if (lowDonation?.isEligible == true) {
+                                    lowDonation.formattedPrice.orEmpty()
+                                } else {
+                                    stringResource(id = R.string.support_offer_unavailable)
+                                }
                             )
                         }
                         item {
@@ -166,8 +172,13 @@ fun SupportScreenContent(
                                 onClick = {
                                     onDonateClick(DonationProductIds.NORMAL_DONATION)
                                 },
+                                enabled = normalDonation?.isEligible == true && !isBillingInProgress,
                                 vectorIcon = Icons.Outlined.Paid,
-                                label = getPriceLabel(DonationProductIds.NORMAL_DONATION)
+                                label = if (normalDonation?.isEligible == true) {
+                                    normalDonation.formattedPrice.orEmpty()
+                                } else {
+                                    stringResource(id = R.string.support_offer_unavailable)
+                                }
                             )
                         }
                     }
@@ -177,14 +188,21 @@ fun SupportScreenContent(
                             .padding(all = SizeConstants.LargeSize),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
+                        val highDonation = donationOptions[DonationProductIds.HIGH_DONATION]
+                        val extremeDonation = donationOptions[DonationProductIds.EXTREME_DONATION]
                         item {
                             GeneralTonalButton(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
                                     onDonateClick(DonationProductIds.HIGH_DONATION)
                                 },
+                                enabled = highDonation?.isEligible == true && !isBillingInProgress,
                                 vectorIcon = Icons.Outlined.Paid,
-                                label = getPriceLabel(DonationProductIds.HIGH_DONATION)
+                                label = if (highDonation?.isEligible == true) {
+                                    highDonation.formattedPrice.orEmpty()
+                                } else {
+                                    stringResource(id = R.string.support_offer_unavailable)
+                                }
                             )
                         }
                         item {
@@ -193,8 +211,13 @@ fun SupportScreenContent(
                                 onClick = {
                                     onDonateClick(DonationProductIds.EXTREME_DONATION)
                                 },
+                                enabled = extremeDonation?.isEligible == true && !isBillingInProgress,
                                 vectorIcon = Icons.Outlined.Paid,
-                                label = getPriceLabel(DonationProductIds.EXTREME_DONATION)
+                                label = if (extremeDonation?.isEligible == true) {
+                                    extremeDonation.formattedPrice.orEmpty()
+                                } else {
+                                    stringResource(id = R.string.support_offer_unavailable)
+                                }
                             )
                         }
                     }

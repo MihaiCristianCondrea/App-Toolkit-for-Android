@@ -6,6 +6,7 @@ import com.android.billingclient.api.ProductDetails
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.support.billing.BillingRepository
 import com.d4rk.android.libs.apptoolkit.app.support.billing.PurchaseResult
+import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
@@ -17,6 +18,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -35,7 +37,7 @@ class SupportViewModelTest {
         every { productDetails } returns productDetailsFlow
         every { purchaseResult } returns purchaseResultFlow
         coEvery { queryProductDetails(any()) } returns Unit
-        every { launchPurchaseFlow(any(), any(), any()) } returns Unit
+        every { launchInAppDonationFlow(any(), any()) } returns Unit
     }
     private val firebaseController = FakeFirebaseController()
 
@@ -51,16 +53,25 @@ class SupportViewModelTest {
             val p2 = mockk<ProductDetails>()
             val viewModel = createViewModel()
 
-            viewModel.uiState.test {
-                awaitItem() // initial state
-                productDetailsFlow.value = linkedMapOf("a" to p1, "b" to p2)
-                // It might take a couple of emissions for the screenState to update
-                var successState = awaitItem()
-                while (successState.screenState !is ScreenState.Success) {
-                    successState = awaitItem()
-                }
-                assertThat(successState.data!!.products).containsExactly(p1, p2).inOrder()
-            }
+            every { p1.productId } returns DonationProductIds.LOW_DONATION
+            every { p2.productId } returns DonationProductIds.NORMAL_DONATION
+            every { p1.oneTimePurchaseOfferDetails } returns mockk()
+            every { p2.oneTimePurchaseOfferDetails } returns mockk()
+            productDetailsFlow.value = linkedMapOf(
+                DonationProductIds.LOW_DONATION to p1,
+                DonationProductIds.NORMAL_DONATION to p2
+            )
+
+            advanceUntilIdle()
+
+            val state = viewModel.uiState.value
+            assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
+            val donationOptions = requireNotNull(state.data).donationOptions
+            assertThat(donationOptions.map { it.productId })
+                .containsAtLeast(
+                    DonationProductIds.LOW_DONATION,
+                    DonationProductIds.NORMAL_DONATION
+                )
         }
 
     @Test
@@ -95,7 +106,8 @@ class SupportViewModelTest {
                     stateWithError = awaitItem()
                 }
                 assertThat(stateWithError.screenState).isInstanceOf(ScreenState.Error::class.java)
-                assertThat(stateWithError.data!!.error).isEqualTo(error)
+                val errorData = requireNotNull(stateWithError.data)
+                assertThat(errorData.error).isEqualTo(error)
                 val snackbar = stateWithError.snackbar
                 assertThat(snackbar.isError).isTrue()
                 val msg = snackbar.message as UiTextHelper.DynamicString
@@ -125,33 +137,41 @@ class SupportViewModelTest {
     fun `onDonateClicked delegates to billingRepository`() =
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = createViewModel()
-            val activity = mockk<Activity>()
+            val activity = mockk<Activity>(relaxed = true)
             val product = mockk<ProductDetails>()
 
-            val offerDetails = mockk<ProductDetails.OneTimePurchaseOfferDetails> {
-                every { offerToken } returns "token"
-            }
-            every { product.oneTimePurchaseOfferDetailsList } returns listOf(offerDetails)
+            every { activity.isFinishing } returns false
+            every { activity.isDestroyed } returns false
+            every { product.productId } returns DonationProductIds.LOW_DONATION
+            every { product.oneTimePurchaseOfferDetails } returns mockk()
 
-            viewModel.onDonateClicked(activity, product)
-            verify { billingRepository.launchPurchaseFlow(activity, product, "token") }
+            productDetailsFlow.value = linkedMapOf(DonationProductIds.LOW_DONATION to product)
+
+            advanceUntilIdle()
+
+            viewModel.onDonateClicked(activity, DonationProductIds.LOW_DONATION)
+            verify { billingRepository.launchInAppDonationFlow(activity, product) }
         }
 
     @Test
     fun `onDonateClicked without eligible offer shows error snackbar`() =
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = createViewModel()
-            val activity = mockk<Activity>()
+            val activity = mockk<Activity>(relaxed = true)
             val product = mockk<ProductDetails>()
 
-            every { product.oneTimePurchaseOfferDetailsList } returns emptyList()
+            every { activity.isFinishing } returns false
+            every { activity.isDestroyed } returns false
+            every { product.productId } returns DonationProductIds.LOW_DONATION
             every { product.oneTimePurchaseOfferDetails } returns null
+
+            productDetailsFlow.value = linkedMapOf(DonationProductIds.LOW_DONATION to product)
 
             viewModel.uiState.test {
                 awaitItem() // initial state
-                viewModel.onDonateClicked(activity, product)
+                viewModel.onDonateClicked(activity, DonationProductIds.LOW_DONATION)
 
-                verify(exactly = 0) { billingRepository.launchPurchaseFlow(any(), any(), any()) }
+                verify(exactly = 0) { billingRepository.launchInAppDonationFlow(any(), any()) }
 
                 var stateWithSnackbar = awaitItem()
                 while (stateWithSnackbar.snackbar == null) {

@@ -16,6 +16,7 @@ val supportModule: Module =
             BillingRepository.getInstance(
                 context = get(),
                 dispatchers = dispatchers,
+                firebaseController = get(),
                 externalScope = CoroutineScope(SupervisorJob() + dispatchers.io)
             )
         }

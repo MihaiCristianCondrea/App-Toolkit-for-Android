@@ -27,6 +27,10 @@ class FakeFirebaseController : FirebaseController {
         // no-op
     }
 
+    override fun logBreadcrumb(message: String, attributes: Map<String, String>) {
+        // no-op
+    }
+
     override fun reportViewModelError(
         viewModelName: String,
         action: String,
