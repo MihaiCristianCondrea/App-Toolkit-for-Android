@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.app.main.ui.states
+package com.d4rk.android.apps.apptoolkit.app.main.ui.state
 
 import androidx.compose.runtime.Immutable
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem

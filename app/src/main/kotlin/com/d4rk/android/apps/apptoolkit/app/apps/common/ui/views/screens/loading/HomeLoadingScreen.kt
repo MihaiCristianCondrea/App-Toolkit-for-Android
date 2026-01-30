@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.app.apps.common.ui.screens.loading
+package com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.screens.loading
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues

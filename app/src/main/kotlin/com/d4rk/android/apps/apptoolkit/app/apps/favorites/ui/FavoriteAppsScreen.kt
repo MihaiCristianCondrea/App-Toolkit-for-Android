@@ -20,11 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.apps.apptoolkit.R
-import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.AppDetailsBottomSheet
-import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.buildOnAppClick
-import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.buildOnShareClick
-import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.screens.AppsList
-import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.screens.loading.HomeLoadingScreen
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.AppDetailsBottomSheet
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.buildOnAppClick
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.buildOnShareClick
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.screens.AppsList
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.screens.loading.HomeLoadingScreen
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.contract.FavoriteAppsAction
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.contract.FavoriteAppsEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo

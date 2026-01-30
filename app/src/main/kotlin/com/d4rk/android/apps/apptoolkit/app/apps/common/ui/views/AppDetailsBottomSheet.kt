@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.app.apps.common.ui
+package com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

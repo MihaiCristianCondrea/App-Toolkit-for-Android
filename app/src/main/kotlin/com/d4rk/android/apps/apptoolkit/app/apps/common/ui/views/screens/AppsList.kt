@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.app.apps.common.ui.screens
+package com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -17,8 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.d4rk.android.apps.apptoolkit.BuildConfig
-import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.AppCard
-import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.utils.buildAppListItems
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.AppCard
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.utils.buildAppListItems
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppListItem
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
@@ -215,10 +215,9 @@ private fun AppCardItem(
     val appInfo = item.appInfo
     AppCard(
         appInfo = appInfo ,
-        isFavorite = isFavorite ,
-        onFavoriteToggle = { onFavoriteToggle(appInfo.packageName) } ,
-        onAppClick = onAppClick ,
-        onShareClick = onShareClick ,
-        modifier = modifier
-    )
+            isFavorite = isFavorite ,
+            onFavoriteToggle = { onFavoriteToggle(appInfo.packageName) } ,
+            onAppClick = onAppClick ,
+            onShareClick = onShareClick ,
+            modifier = modifier)
 }

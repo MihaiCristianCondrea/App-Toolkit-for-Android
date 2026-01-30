@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.core.data.datastore
+package com.d4rk.android.apps.apptoolkit.core.data.local.datastore
 
 import android.app.Application
 import androidx.datastore.preferences.preferencesDataStoreFile

@@ -41,7 +41,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
+import com.d4rk.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.fab.MainFloatingActionButton
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.AppNavigationHost
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.NavigationDrawer

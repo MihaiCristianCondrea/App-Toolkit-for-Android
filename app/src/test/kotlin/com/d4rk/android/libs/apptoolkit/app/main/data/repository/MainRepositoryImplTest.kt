@@ -11,6 +11,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
+// TODO: Move to library test
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainRepositoryImplTest {
 
