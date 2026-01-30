@@ -31,6 +31,7 @@ Each feature lives in its own package with actions, events, repositories, UI sta
 - **Permissions** – flows for requesting and explaining app permissions.
 - **Support** – donation screen backed by Google Play Billing.
 - **Ads Settings** – configuration for displaying ads and consent forms.
+- **Consent** – UMP-backed consent orchestration that emits loading/success/error flows.
 - **Startup** – initial screens and utilities to run on app launch.
 - **Diagnostics** – usage and diagnostics consent management.
 - **Advanced Settings** – cache controls and developer options.

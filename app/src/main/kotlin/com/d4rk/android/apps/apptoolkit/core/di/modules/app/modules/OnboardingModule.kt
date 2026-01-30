@@ -23,6 +23,7 @@ val onboardingModule: Module = module {
         OnboardingViewModel(
             observeOnboardingCompletionUseCase = get(),
             completeOnboardingUseCase = get(),
+            requestConsentUseCase = get(),
             dispatchers = get(),
             firebaseController = get(),
         )

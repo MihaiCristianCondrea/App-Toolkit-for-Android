@@ -5,7 +5,12 @@ import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispa
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
 import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
@@ -54,6 +59,7 @@ class MainViewModelTest {
 
         MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
+            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
             firebaseController = FakeFirebaseController(),
             dispatchers = dispatchers,
         )
@@ -82,6 +88,7 @@ class MainViewModelTest {
 
             val viewModel = MainViewModel(
                 getNavigationDrawerItemsUseCase = useCase,
+                requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
                 firebaseController = FakeFirebaseController(),
                 dispatchers = dispatchers,
             )
@@ -109,6 +116,7 @@ class MainViewModelTest {
 
         val viewModel = MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
+            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
             firebaseController = FakeFirebaseController(),
             dispatchers = dispatchers,
         )
@@ -135,6 +143,7 @@ class MainViewModelTest {
         val useCase = GetNavigationDrawerItemsUseCase(repo)
         val viewModel = MainViewModel(
             useCase,
+            RequestConsentUseCase(FakeConsentRepository()),
             FakeFirebaseController(),
             TestDispatchers(dispatcherExtension.testDispatcher)
         )
@@ -187,4 +196,11 @@ class MainViewModelTest {
             viewportWidth = 24f,
             viewportHeight = 24f
         ).build()
+}
+
+private class FakeConsentRepository : ConsentRepository {
+    override fun requestConsent(
+        host: ConsentHost,
+        showIfRequired: Boolean,
+    ) = flowOf(DataState.Success<Unit, Errors.UseCase>(Unit))
 }

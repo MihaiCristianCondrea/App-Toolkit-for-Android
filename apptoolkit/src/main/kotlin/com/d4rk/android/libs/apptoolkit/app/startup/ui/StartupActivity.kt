@@ -13,12 +13,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
 import com.d4rk.android.libs.apptoolkit.app.startup.utils.interfaces.providers.StartupProvider
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.core.logging.STARTUP_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.base.BaseActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentFormHelper
-import com.google.android.ump.ConsentInformation
-import com.google.android.ump.UserMessagingPlatform
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
@@ -30,6 +28,9 @@ class StartupActivity : BaseActivity() {
     private val viewModel: StartupViewModel by viewModel()
     private val permissionLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
+    private val consentHost: ConsentHost = object : ConsentHost {
+        override val activity = this@StartupActivity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,13 +83,7 @@ class StartupActivity : BaseActivity() {
         finish()
     }
 
-    private suspend fun checkUserConsent() {
-        val consentInfo: ConsentInformation =
-            UserMessagingPlatform.getConsentInformation(this)
-        ConsentFormHelper.showConsentFormIfRequired(
-            activity = this,
-            consentInfo = consentInfo,
-        )
-        viewModel.onEvent(StartupEvent.ConsentFormLoaded)
+    private fun checkUserConsent() {
+        viewModel.onEvent(StartupEvent.RequestConsent(host = consentHost))
     }
 }
