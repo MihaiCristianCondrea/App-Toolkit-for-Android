@@ -19,9 +19,6 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
@@ -140,10 +137,7 @@ class SupportViewModelTest {
     fun `onDonateClicked delegates to billingRepository`() =
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = createViewModel()
-            val activity = mockk<Activity>(extraInterfaces = arrayOf(LifecycleOwner::class))
-            val lifecycleRegistry = LifecycleRegistry(activity as LifecycleOwner)
-            lifecycleRegistry.currentState = Lifecycle.State.RESUMED
-            every { (activity as LifecycleOwner).lifecycle } returns lifecycleRegistry
+            val activity = mockk<Activity>(relaxed = true)
             val product = mockk<ProductDetails>()
 
             every { activity.isFinishing } returns false
@@ -161,10 +155,7 @@ class SupportViewModelTest {
     fun `onDonateClicked without eligible offer shows error snackbar`() =
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = createViewModel()
-            val activity = mockk<Activity>(extraInterfaces = arrayOf(LifecycleOwner::class))
-            val lifecycleRegistry = LifecycleRegistry(activity as LifecycleOwner)
-            lifecycleRegistry.currentState = Lifecycle.State.RESUMED
-            every { (activity as LifecycleOwner).lifecycle } returns lifecycleRegistry
+            val activity = mockk<Activity>(relaxed = true)
             val product = mockk<ProductDetails>()
 
             every { activity.isFinishing } returns false

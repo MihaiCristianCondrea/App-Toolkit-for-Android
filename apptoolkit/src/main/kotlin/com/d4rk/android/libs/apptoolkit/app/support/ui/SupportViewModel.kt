@@ -25,6 +25,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState.Error
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
@@ -37,7 +38,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -317,8 +317,8 @@ class SupportViewModel(
             billingTimeoutJob = null
         }
 
-        screenState.updateData { current ->
-            current.copy(isBillingInProgress = inProgress)
+        screenState.copyData {
+            copy(isBillingInProgress = inProgress)
         }
     }
 
@@ -335,7 +335,7 @@ class SupportViewModel(
             return false
         }
 
-        val lifecycleOwner = this as? LifecycleOwner ?: return false
+        val lifecycleOwner = this as? LifecycleOwner ?: return true
         return lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
     }
 }
