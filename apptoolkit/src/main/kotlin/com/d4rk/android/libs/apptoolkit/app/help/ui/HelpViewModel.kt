@@ -19,6 +19,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
+import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
@@ -28,7 +30,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.update
 
 class HelpViewModel(
     private val getFaqUseCase: GetFaqUseCase,
@@ -60,13 +61,11 @@ class HelpViewModel(
             .onEach { result: DataState<List<FaqItem>, Errors> ->
                 result
                     .onSuccess { faqs: List<FaqItem> ->
-                        val screenStateForData: ScreenState =
-                            if (faqs.isEmpty()) ScreenState.NoData() else ScreenState.Success()
-                        screenState.update { current: UiStateScreen<HelpUiState> ->
-                            current.copy(
-                                screenState = screenStateForData,
-                                data = HelpUiState(questions = faqs.toImmutableList())
-                            )
+                        val data = HelpUiState(questions = faqs.toImmutableList())
+                        if (faqs.isEmpty()) {
+                            screenState.updateData(newState = ScreenState.NoData()) { data }
+                        } else {
+                            screenState.setSuccess(data = data)
                         }
                     }
                     .onFailure { error: Errors ->
