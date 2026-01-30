@@ -115,26 +115,28 @@ class AppsListViewModel(
                         action = "observeFetch",
                         throwable = throwable,
                     )
-                    showLoadAppsError()
+                    updateStateThreadSafe { showLoadAppsError() }
                 }
                 .collect { result ->
-                    result
-                        .onSuccess { apps ->
-                            val data = apps.toImmutableList()
-                            if (data.isEmpty()) {
-                                screenState.update { current ->
-                                    current.copy(
-                                        screenState = ScreenState.NoData(),
-                                        data = AppListUiState(apps = persistentListOf())
-                                    )
-                                }
-                            } else {
-                                screenState.updateData(newState = ScreenState.Success()) { current ->
-                                    current.copy(apps = data)
+                    updateStateThreadSafe {
+                        result
+                            .onSuccess { apps ->
+                                val data = apps.toImmutableList()
+                                if (data.isEmpty()) {
+                                    screenState.update { current ->
+                                        current.copy(
+                                            screenState = ScreenState.NoData(),
+                                            data = AppListUiState(apps = persistentListOf())
+                                        )
+                                    }
+                                } else {
+                                    screenState.updateData(newState = ScreenState.Success()) { current ->
+                                        current.copy(apps = data)
+                                    }
                                 }
                             }
-                        }
-                        .onFailure(::showLoadAppsError)
+                            .onFailure { showLoadAppsError(it) }
+                    }
                 }
         }
     }

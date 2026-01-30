@@ -26,7 +26,6 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -45,8 +44,6 @@ class HelpViewModel(
     )
 ) {
 
-    private var loadFaqJob: Job? = null
-
     init {
         onEvent(event = HelpEvent.LoadFaq)
     }
@@ -59,33 +56,35 @@ class HelpViewModel(
     }
 
     private fun loadFaq() {
-        loadFaqJob?.cancel()
-        loadFaqJob = getFaqUseCase()
+        generalJob?.cancel()
+        generalJob = getFaqUseCase()
             .flowOn(context = dispatchers.io)
             .onStart { screenState.setLoading() }
             .onEach { result: DataState<List<FaqItem>, Errors> ->
-                result
-                    .onSuccess { faqs: List<FaqItem> ->
-                        val screenStateForData: ScreenState =
-                            if (faqs.isEmpty()) ScreenState.NoData() else ScreenState.Success()
-                        screenState.update { current: UiStateScreen<HelpUiState> ->
-                            current.copy(
-                                screenState = screenStateForData,
-                                data = HelpUiState(questions = faqs.toImmutableList())
+                updateStateThreadSafe {
+                    result
+                        .onSuccess { faqs: List<FaqItem> ->
+                            val screenStateForData: ScreenState =
+                                if (faqs.isEmpty()) ScreenState.NoData() else ScreenState.Success()
+                            screenState.update { current ->
+                                current.copy(
+                                    screenState = screenStateForData,
+                                    data = HelpUiState(questions = faqs.toImmutableList())
+                                )
+                            }
+                        }
+                        .onFailure { error: Errors ->
+                            screenState.updateState(newValues = ScreenState.Error())
+                            screenState.showSnackbar(
+                                UiSnackbar(
+                                    message = error.asUiText(),
+                                    isError = true,
+                                    timeStamp = System.currentTimeMillis(),
+                                    type = ScreenMessageType.SNACKBAR
+                                )
                             )
                         }
-                    }
-                    .onFailure { error: Errors ->
-                        screenState.updateState(newValues = ScreenState.Error())
-                        screenState.showSnackbar(
-                            UiSnackbar(
-                                message = error.asUiText(),
-                                isError = true,
-                                timeStamp = System.currentTimeMillis(),
-                                type = ScreenMessageType.SNACKBAR
-                            )
-                        )
-                    }
+                }
             }
             .catch {
                 if (it is CancellationException) throw it
@@ -94,15 +93,17 @@ class HelpViewModel(
                     action = "loadFaq",
                     throwable = it,
                 )
-                screenState.updateState(newValues = ScreenState.Error())
-                screenState.showSnackbar(
-                    UiSnackbar(
-                        message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq),
-                        isError = true,
-                        timeStamp = System.currentTimeMillis(),
-                        type = ScreenMessageType.SNACKBAR,
+                updateStateThreadSafe {
+                    screenState.updateState(newValues = ScreenState.Error())
+                    screenState.showSnackbar(
+                        UiSnackbar(
+                            message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq),
+                            isError = true,
+                            timeStamp = System.currentTimeMillis(),
+                            type = ScreenMessageType.SNACKBAR,
+                        )
                     )
-                )
+                }
             }
             .launchIn(scope = viewModelScope)
     }

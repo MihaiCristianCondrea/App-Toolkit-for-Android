@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -12,6 +15,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 /**
  * Base class for ViewModels used throughout the toolkit.
@@ -28,6 +33,8 @@ import kotlinx.coroutines.launch
 abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialState: S) :
     ViewModel() {
 
+    private val stateMutex = Mutex()
+
     protected val uiStateFlow: MutableStateFlow<S> = MutableStateFlow(value = initialState)
 
     /** Current state exposed to the UI as a [StateFlow]. */
@@ -41,6 +48,13 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
     protected val currentState: S
         get() = uiState.value
 
+    /**
+     * General-purpose job for screens that only need one cancellable operation at a time.
+     *
+     * Prefer specialized job properties when multiple concurrent jobs are required.
+     */
+    protected var generalJob: Job? = null
+
     /** Handles a new UI [event]. */
     abstract fun onEvent(event: E)
 
@@ -49,5 +63,45 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
         viewModelScope.launch {
             _actionEvent.emit(action)
         }
+    }
+
+    /**
+     * Updates the current UI state in a thread-safe manner using a [Mutex].
+     *
+     * This ensures that concurrent state updates do not result in race conditions,
+     * guaranteeing atomicity when modifying the [uiStateFlow].
+     *
+     * @param update A lambda function containing the logic to update the state.
+     */
+    protected suspend fun updateStateThreadSafe(update: () -> Unit) {
+        stateMutex.withLock {
+            update()
+        }
+    }
+
+    /**
+     * Updates [UiStateScreen.data] only when [UiStateScreen.screenState] is [ScreenState.Success].
+     *
+     * Mirrors the original "updateSuccessState" pattern (mutex + success-only update),
+     * adapted for [UiStateScreen] since [ScreenState] is not generic in this codebase.
+     */
+    protected suspend fun <T> updateSuccessState(
+        screenData: MutableStateFlow<UiStateScreen<T>>,
+        updateData: (T) -> T,
+    ) {
+        stateMutex.withLock {
+            getSuccessData(screenData)?.let { data ->
+                screenData.value = screenData.value.copy(data = updateData(data))
+            }
+        }
+    }
+
+    /**
+     * Returns the current non-null [UiStateScreen.data] only when the state is [ScreenState.Success].
+     */
+    protected fun <T> getSuccessData(screenData: MutableStateFlow<UiStateScreen<T>>): T? {
+        val current = screenData.value
+        if (current.screenState !is ScreenState.Success) return null
+        return current.data
     }
 }

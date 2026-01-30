@@ -29,7 +29,6 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageTyp
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
@@ -50,7 +49,6 @@ class IssueReporterViewModel(
         data = IssueReporterUiState()
     )
 ) {
-    private var sendJob: Job? = null
     override fun onEvent(event: IssueReporterEvent) {
         when (event) {
             is IssueReporterEvent.UpdateTitle -> update { it.copy(title = event.value) }
@@ -71,7 +69,7 @@ class IssueReporterViewModel(
     private fun sendReport() {
         val data = screenState.value.data ?: return
 
-        if (sendJob?.isActive == true) return
+        if (generalJob?.isActive == true) return
 
         if (data.title.isBlank() || data.description.isBlank()) {
             screenState.showSnackbar(
@@ -85,7 +83,7 @@ class IssueReporterViewModel(
             return
         }
 
-        sendJob = viewModelScope.launch {
+        generalJob = viewModelScope.launch {
             val preparedReport = try {
                 val deviceInfo = deviceInfoProvider.capture()
                 val extraInfo = ExtraInfo()
@@ -116,7 +114,7 @@ class IssueReporterViewModel(
                     if (screenState.value.screenState is ScreenState.IsLoading) {
                         screenState.updateState(ScreenState.Success())
                     }
-                    sendJob = null
+                    generalJob = null
                 }
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable

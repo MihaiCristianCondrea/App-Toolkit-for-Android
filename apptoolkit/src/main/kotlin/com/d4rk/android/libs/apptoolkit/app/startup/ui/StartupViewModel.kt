@@ -15,7 +15,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -29,8 +28,6 @@ class StartupViewModel(
     initialState = UiStateScreen(data = StartupUiState())
 ) {
 
-    private var consentJob: Job? = null
-
     override fun onEvent(event: StartupEvent) {
         when (event) {
             is StartupEvent.RequestConsent -> requestConsent(event.host)
@@ -43,8 +40,8 @@ class StartupViewModel(
     }
 
     private fun requestConsent(host: ConsentHost) {
-        consentJob?.cancel()
-        consentJob = requestConsentUseCase(host = host)
+        generalJob?.cancel()
+        generalJob = requestConsentUseCase(host = host)
             .flowOn(dispatchers.main)
             .catch { throwable ->
                 if (throwable is CancellationException) throw throwable
