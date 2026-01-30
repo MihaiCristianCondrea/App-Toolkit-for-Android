@@ -16,14 +16,10 @@ import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseControlle
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState.IsLoading
-import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
-import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
-import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
@@ -97,40 +93,36 @@ class FavoriteAppsViewModel(
             observeFavoriteAppsUseCase()
                 .flowOn(dispatchers.io)
                 .onStart { screenState.setLoading() }
-                .catch { error ->
-                    if (error is CancellationException) throw error
+                .catch { throwable ->
+                    if (throwable is CancellationException) throw throwable
                     firebaseController.reportViewModelError(
                         viewModelName = "FavoriteAppsViewModel",
                         action = "observe",
-                        throwable = error,
+                        throwable = throwable,
                     )
-                    updateStateThreadSafe {
-                        screenState.updateState(ScreenState.Error())
-                        showErrorSnackbar(
-                            UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
-                        )
-                    }
+                    screenState.setError(
+                        message = com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper.StringResource(
+                            R.string.error_failed_to_load_apps
+                        ),
+                    )
                 }
                 .collect { result ->
-                    updateStateThreadSafe {
-                        result
-                            .onSuccess { apps ->
-                                val immutableApps = apps.toImmutableList()
-                                if (immutableApps.isEmpty()) {
-                                    screenState.updateData(ScreenState.NoData()) {
-                                        it.copy(apps = immutableApps)
-                                    }
-                                } else {
-                                    screenState.updateData(ScreenState.Success()) {
-                                        it.copy(apps = immutableApps)
-                                    }
+                    result
+                        .onSuccess { apps ->
+                            val immutableApps = apps.toImmutableList()
+                            if (immutableApps.isEmpty()) {
+                                screenState.updateData(ScreenState.NoData()) { current ->
+                                    current.copy(apps = immutableApps)
+                                }
+                            } else {
+                                screenState.updateData(ScreenState.Success()) { current ->
+                                    current.copy(apps = immutableApps)
                                 }
                             }
-                            .onFailure { error ->
-                                screenState.updateState(ScreenState.Error())
-                                showErrorSnackbar(error.toErrorMessage())
-                            }
-                    }
+                        }
+                        .onFailure { error ->
+                            screenState.setError(message = error.toErrorMessage())
+                        }
                 }
         }
     }
@@ -140,24 +132,14 @@ class FavoriteAppsViewModel(
         toggleJob = viewModelScope.launch {
             try {
                 withContext(dispatchers.io) { toggleFavoriteUseCase(packageName) }
-            } catch (t: Throwable) {
-                if (t is CancellationException) throw t
-                updateStateThreadSafe {
-                    screenState.updateState(ScreenState.Error())
-                    showErrorSnackbar(UiTextHelper.StringResource(R.string.error_failed_to_update_favorite))
-                }
+            } catch (throwable: Throwable) {
+                if (throwable is CancellationException) throw throwable
+                screenState.setError(
+                    message = com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper.StringResource(
+                        R.string.error_failed_to_update_favorite
+                    ),
+                )
             }
         }
-    }
-
-    private fun showErrorSnackbar(message: UiTextHelper) {
-        screenState.showSnackbar(
-            UiSnackbar(
-                message = message,
-                isError = true,
-                timeStamp = System.nanoTime(),
-                type = ScreenMessageType.SNACKBAR,
-            )
-        )
     }
 }

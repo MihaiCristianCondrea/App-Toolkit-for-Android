@@ -13,13 +13,13 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
-import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.update
 import kotlin.coroutines.cancellation.CancellationException
 
 /**
@@ -81,41 +80,20 @@ open class AboutViewModel(
             .onEach { result ->
                 result
                     .onSuccess { info ->
-                        screenState.update { current ->
-                            current.copy(
-                                screenState = ScreenState.Success(),
-                                data = info.toUiState()
-                            )
-                        }
+                        screenState.setSuccess(data = info.toUiState())
                     }
                     .onFailure { error ->
-                        screenState.updateState(ScreenState.Error())
-                        screenState.showSnackbar(
-                            UiSnackbar(
-                                message = error.asUiText(),
-                                isError = true,
-                                timeStamp = System.nanoTime(),
-                                type = ScreenMessageType.SNACKBAR
-                            )
-                        )
+                        screenState.setError(message = error.asUiText())
                     }
             }
-            .catch {
-                if (it is CancellationException) throw it
+            .catch { throwable ->
+                if (throwable is CancellationException) throw throwable
                 firebaseController.reportViewModelError(
                     viewModelName = "AboutViewModel",
                     action = "loadAboutInfo",
-                    throwable = it,
+                    throwable = throwable,
                 )
-                screenState.updateState(ScreenState.Error())
-                screenState.showSnackbar(
-                    UiSnackbar(
-                        message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
-                        isError = true,
-                        timeStamp = System.nanoTime(),
-                        type = ScreenMessageType.SNACKBAR
-                    )
-                )
+                screenState.setError(message = UiTextHelper.StringResource(R.string.snack_device_info_failed))
             }
             .launchIn(viewModelScope)
     }
@@ -151,9 +129,7 @@ open class AboutViewModel(
                         if (!copyResult.copied || copyResult.shouldShowFeedback) {
                             screenState.showSnackbar(
                                 UiSnackbar(
-                                    message = UiTextHelper.StringResource(
-                                        messageRes
-                                    ),
+                                    message = UiTextHelper.StringResource(messageRes),
                                     isError = !copyResult.copied,
                                     timeStamp = System.nanoTime(),
                                     type = ScreenMessageType.SNACKBAR
@@ -161,7 +137,7 @@ open class AboutViewModel(
                             )
                         }
                     }
-                    .onFailure { error ->
+                    .onFailure {
                         screenState.showSnackbar(
                             UiSnackbar(
                                 message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
@@ -172,12 +148,12 @@ open class AboutViewModel(
                         )
                     }
             }
-            .catch {
-                if (it is CancellationException) throw it
+            .catch { throwable ->
+                if (throwable is CancellationException) throw throwable
                 firebaseController.reportViewModelError(
                     viewModelName = "AboutViewModel",
                     action = "copyDeviceInfo",
-                    throwable = it,
+                    throwable = throwable,
                 )
                 screenState.showSnackbar(
                     UiSnackbar(

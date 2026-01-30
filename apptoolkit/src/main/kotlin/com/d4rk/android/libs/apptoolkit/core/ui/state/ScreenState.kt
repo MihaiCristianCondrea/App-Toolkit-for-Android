@@ -1,8 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.state
 
 import androidx.compose.runtime.Immutable
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.RootError
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenDataStatus
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
@@ -155,51 +153,6 @@ inline fun <T> MutableStateFlow<UiStateScreen<T>>.successData(crossinline transf
 }
 
 /**
- * Updates the [UiStateScreen] based on the provided [DataState] result.
- *
- * This function is an extension on a `MutableStateFlow<UiStateScreen<T>>` and is used to handle
- * the different states of a `DataState` (Success, Error, Loading) and update the UI state accordingly.
- *
- * - On [DataState.Success], it applies the [transform] function to update the existing data `T` with
- *   the new data `D` from the result and sets the [ScreenState] to `Success`.
- * - On [DataState.Error], it sets the [ScreenState] to `Error` and adds a [UiSnackbar] with the
- *   provided [errorMessage].
- * - On [DataState.Loading], it sets the [ScreenState] to `IsLoading`.
- *
- * @param D The type of data received in a successful [DataState].
- * @param T The type of data held within the [UiStateScreen].
- * @param E The type of error, which must extend [RootError].
- * @param result The [DataState] object representing the result of an operation (e.g., a network call).
- * @param errorMessage The [UiTextHelper] to be displayed in a snackbar in case of an error.
- *                     Defaults to a generic "Something went wrong" message.
- * @param transform A high-order function that defines how to merge the new data `D` from a
- *                  successful result with the existing data `T` in the `UiStateScreen`. It takes
- *                  the new data `D` and the current data `T` as parameters and returns the updated `T`.
- */
-inline fun <D, T, E : RootError> MutableStateFlow<UiStateScreen<T>>.applyResult(
-    result: DataState<D, E>,
-    errorMessage: UiTextHelper = UiTextHelper.DynamicString("Something went wrong"),
-    crossinline transform: (D, T) -> T
-) {
-    when (result) {
-        is DataState.Success -> {
-            successData {
-                transform(result.data, this)
-            }
-        }
-
-        is DataState.Error -> {
-            setErrors(errors = listOf(element = UiSnackbar(message = errorMessage)))
-            updateState(newValues = ScreenState.Error())
-        }
-
-        is DataState.Loading -> {
-            setLoading()
-        }
-    }
-}
-
-/**
  * Updates the `screenState` of the current `UiStateScreen`.
  *
  * This is an extension function for `MutableStateFlow<UiStateScreen<T>>` that allows for
@@ -273,30 +226,57 @@ fun <T> MutableStateFlow<UiStateScreen<T>>.setLoading() {
 }
 
 /**
- * Retrieves the data from the current `UiStateScreen`.
+ * Sets the screen to a success state and replaces [UiStateScreen.data].
  *
- * This is a synchronous extension function that directly accesses the `data` property of the `UiStateScreen`'s
- * current `value`. It is intended for use in scenarios where the data is expected to be present.
+ * Use this function when you have a new, complete data object and want to:
+ * - set [UiStateScreen.screenState] to [ScreenState.Success]
+ * - replace [UiStateScreen.data] with [data]
  *
- * @return The data of type `T`.
- * @throws IllegalStateException if the `data` in the `UiStateScreen` is `null`.
+ * This function does not show a snackbar.
+ *
+ * @param data The new data to set on the screen state.
  */
-fun <T> MutableStateFlow<UiStateScreen<T>>.getData(): T {
-    return value.data ?: throw IllegalStateException("Data is not available or null.")
+fun <T> MutableStateFlow<UiStateScreen<T>>.setSuccess(data: T) {
+    update { current ->
+        current.copy(
+            screenState = ScreenState.Success(),
+            data = data,
+        )
+    }
 }
 
 /**
- * Retrieves the current list of errors from the `UiStateScreen`.
+ * Sets the screen to an error state and shows a snackbar.
  *
- * This extension function provides direct access to the `errors` property of the `UiStateScreen`
- * currently held by the `MutableStateFlow`. It is a convenient way to read the list of
- * `UiSnackbar` errors without accessing the `value` property of the state flow directly.
+ * Use this function when a screen-level operation fails and you want to:
+ * - mark the screen state as [ScreenState.Error]
+ * - surface an error message through [UiSnackbar]
  *
- * @receiver `MutableStateFlow<UiStateScreen<T>>` The state flow from which to get the errors.
- * @return The current `List<UiSnackbar>` of errors.
+ * This function does not modify [UiStateScreen.data]. It updates only:
+ * - [UiStateScreen.screenState]
+ * - [UiStateScreen.snackbar]
+ *
+ * @param message The message to show in the snackbar.
+ * @param type The snackbar type. Defaults to [ScreenMessageType.SNACKBAR].
+ * @param timeStamp A unique timestamp used to avoid duplicate snackbar rendering.
+ *                  Defaults to [System.nanoTime].
  */
-fun <T> MutableStateFlow<UiStateScreen<T>>.getErrors(): List<UiSnackbar> {
-    return value.errors
+fun <T> MutableStateFlow<UiStateScreen<T>>.setError(
+    message: UiTextHelper,
+    type: String = ScreenMessageType.SNACKBAR,
+    timeStamp: Long = System.nanoTime(),
+) {
+    update { current ->
+        current.copy(
+            screenState = ScreenState.Error(),
+            snackbar = UiSnackbar(
+                type = type,
+                message = message,
+                isError = true,
+                timeStamp = timeStamp,
+            ),
+        )
+    }
 }
 
 /**

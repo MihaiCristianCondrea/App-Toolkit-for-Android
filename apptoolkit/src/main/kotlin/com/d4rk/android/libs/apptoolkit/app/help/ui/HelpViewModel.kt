@@ -15,13 +15,10 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
-import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
-import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
@@ -50,8 +47,8 @@ class HelpViewModel(
 
     override fun onEvent(event: HelpEvent) {
         when (event) {
-            HelpEvent.LoadFaq -> loadFaq()
-            HelpEvent.DismissSnackbar -> screenState.dismissSnackbar()
+            is HelpEvent.LoadFaq -> loadFaq()
+            is HelpEvent.DismissSnackbar -> screenState.dismissSnackbar()
         }
     }
 
@@ -61,30 +58,20 @@ class HelpViewModel(
             .flowOn(context = dispatchers.io)
             .onStart { screenState.setLoading() }
             .onEach { result: DataState<List<FaqItem>, Errors> ->
-                updateStateThreadSafe {
-                    result
-                        .onSuccess { faqs: List<FaqItem> ->
-                            val screenStateForData: ScreenState =
-                                if (faqs.isEmpty()) ScreenState.NoData() else ScreenState.Success()
-                            screenState.update { current ->
-                                current.copy(
-                                    screenState = screenStateForData,
-                                    data = HelpUiState(questions = faqs.toImmutableList())
-                                )
-                            }
-                        }
-                        .onFailure { error: Errors ->
-                            screenState.updateState(newValues = ScreenState.Error())
-                            screenState.showSnackbar(
-                                UiSnackbar(
-                                    message = error.asUiText(),
-                                    isError = true,
-                                    timeStamp = System.currentTimeMillis(),
-                                    type = ScreenMessageType.SNACKBAR
-                                )
+                result
+                    .onSuccess { faqs: List<FaqItem> ->
+                        val screenStateForData: ScreenState =
+                            if (faqs.isEmpty()) ScreenState.NoData() else ScreenState.Success()
+                        screenState.update { current: UiStateScreen<HelpUiState> ->
+                            current.copy(
+                                screenState = screenStateForData,
+                                data = HelpUiState(questions = faqs.toImmutableList())
                             )
                         }
-                }
+                    }
+                    .onFailure { error: Errors ->
+                        screenState.setError(message = error.asUiText())
+                    }
             }
             .catch {
                 if (it is CancellationException) throw it
@@ -93,17 +80,7 @@ class HelpViewModel(
                     action = "loadFaq",
                     throwable = it,
                 )
-                updateStateThreadSafe {
-                    screenState.updateState(newValues = ScreenState.Error())
-                    screenState.showSnackbar(
-                        UiSnackbar(
-                            message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq),
-                            isError = true,
-                            timeStamp = System.currentTimeMillis(),
-                            type = ScreenMessageType.SNACKBAR,
-                        )
-                    )
-                }
+                screenState.setError(message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq))
             }
             .launchIn(scope = viewModelScope)
     }

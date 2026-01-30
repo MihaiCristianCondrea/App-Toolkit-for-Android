@@ -5,9 +5,9 @@ import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDr
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.apps.apptoolkit.app.main.ui.state.MainUiState
+import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
-import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
@@ -16,8 +16,8 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
-import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -84,22 +83,12 @@ class MainViewModel(
                                 copy(
                                     navigationDrawerItems = items.toImmutableList(),
                                     showSnackbar = false,
-                                    snackbarMessage = UiTextHelper.DynamicString("")
+                                    snackbarMessage = UiTextHelper.DynamicString(""),
                                 )
                             }
                         }
                         .onFailure {
-                            val message =
-                                UiTextHelper.StringResource(R.string.error_failed_to_load_navigation)
-                            screenState.update { current ->
-                                current.copy(
-                                    screenState = ScreenState.Error(),
-                                    data = current.data?.copy(
-                                        showSnackbar = true,
-                                        snackbarMessage = message
-                                    )
-                                )
-                            }
+                            screenState.setError(message = UiTextHelper.StringResource(R.string.error_failed_to_load_navigation))
                         }
                 }
         }
