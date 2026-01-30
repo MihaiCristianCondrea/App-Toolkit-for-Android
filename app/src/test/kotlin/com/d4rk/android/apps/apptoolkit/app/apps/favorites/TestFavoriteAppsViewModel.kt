@@ -1,7 +1,7 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.favorites
 
 import app.cash.turbine.test
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState

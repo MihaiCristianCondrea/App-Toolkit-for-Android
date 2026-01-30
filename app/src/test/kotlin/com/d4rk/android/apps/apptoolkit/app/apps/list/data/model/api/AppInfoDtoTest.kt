@@ -1,8 +1,8 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.list.data.model.api
 
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.mapper.toDomain
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppInfoDto
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppScreenshotDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.mapper.toDomain
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppInfoDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppScreenshotDto
 import com.d4rk.android.apps.apptoolkit.app.apps.list.utils.constants.PlayStoreUrls
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

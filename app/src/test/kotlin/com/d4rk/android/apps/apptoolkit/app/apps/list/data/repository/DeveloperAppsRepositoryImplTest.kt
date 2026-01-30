@@ -1,11 +1,12 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.list.data.repository
 
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.ApiResponseDto
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppCategoryDto
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppDataWrapperDto
-import com.d4rk.android.apps.apptoolkit.app.apps.list.data.remote.model.AppInfoDto
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppCategory
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.ApiResponseDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppCategoryDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppDataWrapperDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppInfoDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepositoryImpl
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppCategory
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
@@ -57,7 +58,7 @@ class DeveloperAppsRepositoryImplTest {
         }) {
             install(ContentNegotiation) { json() }
         }
-        val repository = DeveloperAppsRepositoryImpl(client, "https://example.com")
+        val repository = DeveloperAppsRepositoryImpl(client , "https://example.com")
 
         val result = repository.fetchDeveloperApps().first()
         val success = result as DataState.Success
@@ -95,7 +96,7 @@ class DeveloperAppsRepositoryImplTest {
         }) {
             install(ContentNegotiation) { json() }
         }
-        val repository = DeveloperAppsRepositoryImpl(client, "https://example.com")
+        val repository = DeveloperAppsRepositoryImpl(client , "https://example.com")
 
         val result = repository.fetchDeveloperApps().first() as DataState.Success
         val category = result.data.first().category
@@ -117,7 +118,7 @@ class DeveloperAppsRepositoryImplTest {
         }) {
             install(ContentNegotiation) { json() }
         }
-        val repository = DeveloperAppsRepositoryImpl(client, "https://example.com")
+        val repository = DeveloperAppsRepositoryImpl(client , "https://example.com")
 
         val result = repository.fetchDeveloperApps().first()
         val error = result as DataState.Error
@@ -169,7 +170,7 @@ class DeveloperAppsRepositoryImplTest {
         }) {
             install(ContentNegotiation) { json() }
         }
-        val repository = DeveloperAppsRepositoryImpl(client, "https://example.com")
+        val repository = DeveloperAppsRepositoryImpl(client , "https://example.com")
 
         val result = repository.fetchDeveloperApps().first() as DataState.Success
         assertEquals(listOf("Alpha", "beta", "zeta"), result.data.map(AppInfo::name))
@@ -189,7 +190,7 @@ class DeveloperAppsRepositoryImplTest {
         }) {
             install(ContentNegotiation) { json() }
         }
-        val repository = DeveloperAppsRepositoryImpl(client, "https://example.com")
+        val repository = DeveloperAppsRepositoryImpl(client , "https://example.com")
 
         val result = repository.fetchDeveloperApps().first()
         val error = result as DataState.Error

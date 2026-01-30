@@ -1,6 +1,6 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.favorites
 
-import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.repository.FavoritesRepository
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.FavoritesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

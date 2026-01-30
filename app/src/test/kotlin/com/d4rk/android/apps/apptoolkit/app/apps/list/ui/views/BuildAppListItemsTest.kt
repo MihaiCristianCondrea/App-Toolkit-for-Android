@@ -1,8 +1,8 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.list.ui.views
 
-import com.d4rk.android.apps.apptoolkit.app.apps.common.utils.buildAppListItems
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppListItem
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.utils.buildAppListItems
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppListItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

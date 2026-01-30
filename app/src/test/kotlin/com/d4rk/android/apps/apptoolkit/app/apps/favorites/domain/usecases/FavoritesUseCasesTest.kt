@@ -2,7 +2,9 @@ package com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases
 
 import app.cash.turbine.test
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.FakeFavoritesRepository
-import com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.repository.FavoritesRepository
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.FavoritesRepository
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

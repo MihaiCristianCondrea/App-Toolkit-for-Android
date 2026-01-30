@@ -1,6 +1,6 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.list
 
-import com.d4rk.android.apps.apptoolkit.app.apps.list.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
 import kotlinx.coroutines.test.runTest
