@@ -180,6 +180,8 @@ class MainViewModelTest {
         override fun setCrashlyticsEnabled(enabled: Boolean) = Unit
         override fun setPerformanceEnabled(enabled: Boolean) = Unit
 
+        override fun logBreadcrumb(message: String, attributes: Map<String, String>) = Unit
+
         override fun reportViewModelError(
             viewModelName: String,
             action: String,
