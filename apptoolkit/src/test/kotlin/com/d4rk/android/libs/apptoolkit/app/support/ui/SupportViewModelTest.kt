@@ -64,7 +64,10 @@ class SupportViewModelTest {
                 )
                 // It might take a couple of emissions for the screenState to update
                 var successState = awaitItem()
-                while (successState.screenState !is ScreenState.Success) {
+                while (
+                    successState.screenState !is ScreenState.Success ||
+                    successState.data?.donationOptions.isNullOrEmpty()
+                ) {
                     successState = awaitItem()
                 }
                 assertThat(successState.data!!.donationOptions.map { it.productId })
@@ -147,8 +150,21 @@ class SupportViewModelTest {
 
             productDetailsFlow.value = linkedMapOf(DonationProductIds.LOW_DONATION to product)
 
-            viewModel.onDonateClicked(activity, DonationProductIds.LOW_DONATION)
-            verify { billingRepository.launchInAppDonationFlow(activity, product) }
+            viewModel.uiState.test {
+                awaitItem() // initial state
+                var readyState = awaitItem()
+                while (
+                    readyState.data?.donationOptions.isNullOrEmpty() ||
+                    readyState.data?.donationOptions?.none {
+                        it.productId == DonationProductIds.LOW_DONATION && it.isEligible
+                    } == true
+                ) {
+                    readyState = awaitItem()
+                }
+
+                viewModel.onDonateClicked(activity, DonationProductIds.LOW_DONATION)
+                verify { billingRepository.launchInAppDonationFlow(activity, product) }
+            }
         }
 
     @Test
