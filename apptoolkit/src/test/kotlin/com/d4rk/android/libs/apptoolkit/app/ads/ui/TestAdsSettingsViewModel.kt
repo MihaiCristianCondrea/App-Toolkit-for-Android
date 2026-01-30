@@ -4,9 +4,14 @@ import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRep
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.ObserveAdsEnabledUseCase
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.SetAdsEnabledUseCase
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
@@ -15,6 +20,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -57,6 +63,7 @@ class TestAdsSettingsViewModel {
         return AdsSettingsViewModel(
             observeAdsEnabled = observeUseCase,
             setAdsEnabled = setUseCase,
+            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
             repository = repository,
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,
@@ -122,4 +129,11 @@ class TestAdsSettingsViewModel {
         assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
         assertThat(state.data?.adsEnabled).isTrue()
     }
+}
+
+private class FakeConsentRepository : ConsentRepository {
+    override fun requestConsent(
+        host: ConsentHost,
+        showIfRequired: Boolean,
+    ): Flow<DataState<Unit, Errors.UseCase>> = flowOf(DataState.Success(Unit))
 }

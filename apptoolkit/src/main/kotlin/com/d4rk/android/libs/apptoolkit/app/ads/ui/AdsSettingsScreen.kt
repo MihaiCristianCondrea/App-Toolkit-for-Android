@@ -11,13 +11,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.state.AdsSettingsUiState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
@@ -30,9 +29,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentFormHelper
-import com.google.android.ump.UserMessagingPlatform
-import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
 /** Compose screen displaying ad preferences. */
@@ -43,11 +39,12 @@ fun AdsSettingsScreen() {
     val screenState: UiStateScreen<AdsSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
     val activity = LocalActivity.current
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-
-    val consentInfo = remember(context) {
-        UserMessagingPlatform.getConsentInformation(context)
+    val consentHost = remember(activity) {
+        activity?.let {
+            object : ConsentHost {
+                override val activity = it
+            }
+        }
     }
 
     LargeTopAppBarWithScaffold(
@@ -81,13 +78,8 @@ fun AdsSettingsScreen() {
                                 enabled = data.adsEnabled,
                                 summary = stringResource(id = R.string.summary_ads_personalized_ads),
                                 onClick = {
-                                    activity?.let {
-                                        coroutineScope.launch {
-                                            ConsentFormHelper.showConsentForm(
-                                                activity = activity,
-                                                consentInfo = consentInfo
-                                            )
-                                        }
+                                    consentHost?.let { host ->
+                                        viewModel.onEvent(AdsSettingsEvent.RequestConsent(host))
                                     }
                                 }
                             )

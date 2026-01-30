@@ -4,6 +4,7 @@ import android.content.Context
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.adsModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.appModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.appsListModule
+import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.consentModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.onboardingModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.startupModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.apptoolkit.appToolkitModules
@@ -25,6 +26,7 @@ fun initializeKoin(context: Context) {
                 addAll(settingsModules)
                 add(adsModule)
                 add(appsListModule)
+                add(consentModule)
                 addAll(appToolkitModules)
                 add(themeModule)
                 add(onboardingModule)

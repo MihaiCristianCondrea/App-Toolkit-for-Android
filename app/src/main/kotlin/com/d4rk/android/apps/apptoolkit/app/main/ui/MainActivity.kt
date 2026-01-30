@@ -13,15 +13,14 @@ import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 import com.d4rk.android.libs.apptoolkit.app.main.utils.InAppUpdateHelper
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentFormHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentManagerHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ReviewHelper
 import com.google.android.gms.ads.MobileAds
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.ump.ConsentInformation
-import com.google.android.ump.UserMessagingPlatform
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -30,14 +29,19 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private val dataStore: DataStore by inject()
     private val dispatchers: DispatcherProvider by inject()
+    private val viewModel: MainViewModel by viewModel()
     private var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
         registerForActivityResult(contract = ActivityResultContracts.StartIntentSenderForResult()) {}
     private var keepSplashVisible: Boolean = true
+    private val consentHost: ConsentHost = object : ConsentHost {
+        override val activity = this@MainActivity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,15 +100,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkUserConsent() {
-        lifecycleScope.launch {
-            val consentInfo: ConsentInformation = withContext(dispatchers.io) {
-                UserMessagingPlatform.getConsentInformation(this@MainActivity)
-            }
-            ConsentFormHelper.showConsentFormIfRequired(
-                activity = this@MainActivity,
-                consentInfo = consentInfo
-            )
-        }
+        viewModel.onEvent(MainEvent.RequestConsent(host = consentHost))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

@@ -6,15 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentFormHelper
-import com.google.android.ump.ConsentInformation
-import com.google.android.ump.UserMessagingPlatform
-import kotlinx.coroutines.launch
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OnboardingActivity : ComponentActivity() {
 
+    private val viewModel: OnboardingViewModel by viewModel()
+    private val consentHost: ConsentHost = object : ConsentHost {
+        override val activity = this@OnboardingActivity
+    }
     private val lifecycleObserver = object : DefaultLifecycleObserver {
         override fun onResume(owner: LifecycleOwner) {
             checkUserConsent()
@@ -33,13 +35,6 @@ class OnboardingActivity : ComponentActivity() {
     }
 
     private fun checkUserConsent() {
-        lifecycleScope.launch {
-            val consentInfo: ConsentInformation =
-                UserMessagingPlatform.getConsentInformation(this@OnboardingActivity)
-            ConsentFormHelper.showConsentFormIfRequired(
-                activity = this@OnboardingActivity,
-                consentInfo = consentInfo
-            )
-        }
+        viewModel.onEvent(OnboardingEvent.RequestConsent(host = consentHost))
     }
 }
