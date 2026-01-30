@@ -31,7 +31,8 @@ class RequestConsentUseCaseTest {
 
         val useCase = RequestConsentUseCase(repository = repository)
         val result = useCase(host = host, showIfRequired = false).toList()
+        val expected: List<DataState<Unit, Errors.UseCase>> = listOf(DataState.Success(Unit))
 
-        assertEquals(listOf(DataState.Success(Unit)), result)
+        assertEquals(expected, result)
     }
 }

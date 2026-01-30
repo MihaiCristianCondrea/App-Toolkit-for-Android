@@ -27,8 +27,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -181,19 +181,17 @@ class AdsSettingsViewModel(
 
     private fun requestConsent(host: ConsentHost) {
         consentJob?.cancel()
-        consentJob = viewModelScope.launch {
-            requestConsentUseCase(host = host, showIfRequired = false)
-                .flowOn(dispatchers.main)
-                .catch { throwable ->
-                    if (throwable is CancellationException) throw throwable
-                    firebaseController.reportViewModelError(
-                        viewModelName = "AdsSettingsViewModel",
-                        action = "requestConsent",
-                        throwable = throwable,
-                    )
-                    emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
-                }
-                .first { state -> state !is DataState.Loading }
-        }
+        consentJob = requestConsentUseCase(host = host, showIfRequired = false)
+            .flowOn(dispatchers.main)
+            .catch { throwable ->
+                if (throwable is CancellationException) throw throwable
+                firebaseController.reportViewModelError(
+                    viewModelName = "AdsSettingsViewModel",
+                    action = "requestConsent",
+                    throwable = throwable,
+                )
+                emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
+            }
+            .launchIn(viewModelScope)
     }
 }

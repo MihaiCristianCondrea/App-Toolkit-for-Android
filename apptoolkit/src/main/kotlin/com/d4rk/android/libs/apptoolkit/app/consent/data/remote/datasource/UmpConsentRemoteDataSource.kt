@@ -29,7 +29,7 @@ class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
         val params = buildRequestParameters(activity)
         val consentInfo = UserMessagingPlatform.getConsentInformation(activity)
 
-        try {
+        runCatching {
             consentInfo.requestConsentInfoUpdate(
                 activity,
                 params,
@@ -55,12 +55,12 @@ class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
                         UserMessagingPlatform.loadConsentForm(
                             activity,
                             { consentForm: ConsentForm ->
-                                try {
+                                runCatching {
                                     consentForm.show(activity) {
                                         trySend(DataState.Success(Unit))
                                         close()
                                     }
-                                } catch (throwable: Throwable) {
+                                }.onFailure { throwable ->
                                     Log.e(
                                         CONSENT_LOG_TAG,
                                         "Failed to show consent form.",
@@ -102,7 +102,7 @@ class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
                     close()
                 }
             )
-        } catch (throwable: Throwable) {
+        }.onFailure { throwable ->
             Log.e(CONSENT_LOG_TAG, "Failed to request consent info.", throwable)
             trySend(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
             close()

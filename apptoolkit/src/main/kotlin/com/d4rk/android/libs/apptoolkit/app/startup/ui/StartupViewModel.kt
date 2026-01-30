@@ -17,9 +17,9 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class StartupViewModel(
     private val requestConsentUseCase: RequestConsentUseCase,
@@ -44,26 +44,24 @@ class StartupViewModel(
 
     private fun requestConsent(host: ConsentHost) {
         consentJob?.cancel()
-        consentJob = viewModelScope.launch {
-            val result = requestConsentUseCase(host = host)
-                .flowOn(dispatchers.main)
-                .catch { throwable ->
-                    if (throwable is CancellationException) throw throwable
-                    firebaseController.reportViewModelError(
-                        viewModelName = "StartupViewModel",
-                        action = "requestConsent",
-                        throwable = throwable,
-                    )
-                    emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
-                }
-                .first { state -> state !is DataState.Loading }
-
-            when (result) {
-                is DataState.Success,
-                is DataState.Error -> onEvent(StartupEvent.ConsentFormLoaded)
-
-                is DataState.Loading -> Unit
+        consentJob = requestConsentUseCase(host = host)
+            .flowOn(dispatchers.main)
+            .catch { throwable ->
+                if (throwable is CancellationException) throw throwable
+                firebaseController.reportViewModelError(
+                    viewModelName = "StartupViewModel",
+                    action = "requestConsent",
+                    throwable = throwable,
+                )
+                emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
             }
-        }
+            .onEach { result ->
+                when (result) {
+                    is DataState.Success,
+                    is DataState.Error -> onEvent(StartupEvent.ConsentFormLoaded)
+                    is DataState.Loading -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
     }
 }

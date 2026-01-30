@@ -21,10 +21,8 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 class OnboardingViewModel(
@@ -111,20 +109,18 @@ class OnboardingViewModel(
 
     private fun requestConsent(host: ConsentHost) {
         consentJob?.cancel()
-        consentJob = viewModelScope.launch {
-            requestConsentUseCase(host = host)
-                .flowOn(dispatchers.main)
-                .catch { throwable ->
-                    if (throwable is CancellationException) throw throwable
-                    firebaseController.reportViewModelError(
-                        viewModelName = "OnboardingViewModel",
-                        action = "requestConsent",
-                        throwable = throwable,
-                    )
-                    emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
-                }
-                .first { state -> state !is DataState.Loading }
-        }
+        consentJob = requestConsentUseCase(host = host)
+            .flowOn(dispatchers.main)
+            .catch { throwable ->
+                if (throwable is CancellationException) throw throwable
+                firebaseController.reportViewModelError(
+                    viewModelName = "OnboardingViewModel",
+                    action = "requestConsent",
+                    throwable = throwable,
+                )
+                emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun setCrashlyticsDialogVisibility(isVisible: Boolean) {
