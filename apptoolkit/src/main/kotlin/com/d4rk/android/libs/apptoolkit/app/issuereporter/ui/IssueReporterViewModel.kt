@@ -21,8 +21,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
@@ -33,7 +35,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error as RootError
 
@@ -112,7 +113,7 @@ class IssueReporterViewModel(
                 .onCompletion { cause ->
                     if (cause is CancellationException) throw cause
                     if (screenState.value.screenState is ScreenState.IsLoading) {
-                        screenState.updateState(ScreenState.Success())
+                        updateStateThreadSafe { screenState.updateState(ScreenState.Success()) }
                     }
                     generalJob = null
                 }
@@ -125,19 +126,17 @@ class IssueReporterViewModel(
                     )
                     emit(DataState.Error(error = IssueReporterError.Generic(message = throwable.message)))
                 }
-                .collect(::handleResult)
+                .collect { result -> handleResult(result) }
         }
     }
 
-    private fun handleResult(outcome: DataState<String, IssueReporterError>) {
+    private suspend fun handleResult(outcome: DataState<String, IssueReporterError>) {
         outcome
             .onSuccess { url ->
-                screenState.update { current ->
-                    val updated = current.data?.copy(issueUrl = url)
-                    current.copy(
-                        screenState = ScreenState.Success(),
-                        data = updated,
-                        snackbar = UiSnackbar(
+                updateStateThreadSafe {
+                    screenState.successData { copy(issueUrl = url) }
+                    screenState.showSnackbar(
+                        UiSnackbar(
                             message = UiTextHelper.StringResource(R.string.snack_report_success),
                             isError = false,
                             timeStamp = System.currentTimeMillis(),
@@ -151,34 +150,14 @@ class IssueReporterViewModel(
                     is IssueReporterError.Http -> error.toUiText()
                     is IssueReporterError.Generic -> error.toUiText()
                 }
-                screenState.update { current ->
-                    current.copy(
-                        screenState = ScreenState.Error(),
-                        snackbar = UiSnackbar(
-                            message = message,
-                            isError = true,
-                            timeStamp = System.currentTimeMillis(),
-                            type = ScreenMessageType.SNACKBAR,
-                        )
-                    )
-                }
+                updateStateThreadSafe { screenState.setError(message = message) }
             }
     }
 
-    private fun showFailureSnackbar(
+    private suspend fun showFailureSnackbar(
         message: UiTextHelper = UiTextHelper.StringResource(R.string.snack_report_failed),
     ) {
-        screenState.update { current ->
-            current.copy(
-                screenState = ScreenState.Error(),
-                snackbar = UiSnackbar(
-                    message = message,
-                    isError = true,
-                    timeStamp = System.currentTimeMillis(),
-                    type = ScreenMessageType.SNACKBAR,
-                )
-            )
-        }
+        updateStateThreadSafe { screenState.setError(message = message) }
     }
 
     private fun IssueReportResult.asDataState(): DataState<String, IssueReporterError> {

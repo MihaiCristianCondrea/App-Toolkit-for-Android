@@ -37,7 +37,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -123,11 +122,8 @@ class AppsListViewModel(
                             .onSuccess { apps ->
                                 val data = apps.toImmutableList()
                                 if (data.isEmpty()) {
-                                    screenState.update { current ->
-                                        current.copy(
-                                            screenState = ScreenState.NoData(),
-                                            data = AppListUiState(apps = persistentListOf())
-                                        )
+                                    screenState.updateData(newState = ScreenState.NoData()) { current ->
+                                        current.copy(apps = persistentListOf())
                                     }
                                 } else {
                                     screenState.updateData(newState = ScreenState.Success()) { current ->
