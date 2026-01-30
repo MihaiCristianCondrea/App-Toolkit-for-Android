@@ -1,7 +1,8 @@
-package com.d4rk.android.libs.apptoolkit.app.main.data.repository
+package com.d4rk.android.apps.apptoolkit.app.main.data.repository
 
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.app.main.data.repository.MainRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -11,7 +12,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-// TODO: Move to library test
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainRepositoryImplTest {
 
