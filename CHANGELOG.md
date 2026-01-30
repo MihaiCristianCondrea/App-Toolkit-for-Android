@@ -4,6 +4,7 @@
 - **Patch**: Fixed the buttons crashes when no icon is provided.
 - **Patch**: Fixed corner radius for various components.
 - **Patch**: Fixed a bug inside the color settings when the tab pager is not correctly selected.
+- **Patch**: Fixed other minor bugs for better overall experience.
 
 # Version 2.0.0
 
