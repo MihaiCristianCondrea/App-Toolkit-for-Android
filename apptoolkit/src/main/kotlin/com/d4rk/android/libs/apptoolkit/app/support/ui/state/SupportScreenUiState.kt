@@ -1,8 +1,13 @@
 package com.d4rk.android.libs.apptoolkit.app.support.ui.state
 
-import com.android.billingclient.api.ProductDetails
-
 data class SupportScreenUiState(
     val error: String? = null,
-    val products: List<ProductDetails> = emptyList()
+    val donationOptions: List<DonationOptionUiState> = emptyList(),
+    val isBillingInProgress: Boolean = false,
+)
+
+data class DonationOptionUiState(
+    val productId: String,
+    val formattedPrice: String?,
+    val isEligible: Boolean,
 )

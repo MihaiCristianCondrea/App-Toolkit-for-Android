@@ -14,6 +14,7 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.primaryOfferToken
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -36,6 +37,7 @@ private const val RETRY_MAX_DELAY_MS = 16_000L
 class BillingRepository private constructor(
     context: Context,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
     externalScope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatchers.io),
 ) : PurchasesUpdatedListener {
 
@@ -68,12 +70,14 @@ class BillingRepository private constructor(
         fun getInstance(
             context: Context,
             dispatchers: DispatcherProvider,
+            firebaseController: FirebaseController,
             externalScope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatchers.io),
         ): BillingRepository {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: BillingRepository(
                     context.applicationContext,
                     dispatchers,
+                    firebaseController,
                     externalScope
                 )
                     .also { INSTANCE = it }
@@ -225,16 +229,43 @@ class BillingRepository private constructor(
         }
     }
 
-    fun launchPurchaseFlow(
+    fun launchInAppDonationFlow(
+        activity: Activity,
+        details: ProductDetails
+    ) {
+        launchBillingFlow(
+            activity = activity,
+            details = details,
+            productType = BillingClient.ProductType.INAPP,
+            offerToken = details.primaryOfferToken(BillingClient.ProductType.INAPP),
+        )
+    }
+
+    fun launchSubscriptionFlow(
         activity: Activity,
         details: ProductDetails,
-        offerToken: String? = null
+        offerToken: String? = null,
+    ) {
+        launchBillingFlow(
+            activity = activity,
+            details = details,
+            productType = BillingClient.ProductType.SUBS,
+            offerToken = offerToken?.takeIf { it.isNotBlank() }
+                ?: details.primaryOfferToken(BillingClient.ProductType.SUBS),
+        )
+    }
+
+    private fun launchBillingFlow(
+        activity: Activity,
+        details: ProductDetails,
+        productType: String,
+        offerToken: String?,
     ) {
         if (!billingClient.isReady) {
             billingClient.startConnection(object : BillingClientStateListener {
                 override fun onBillingSetupFinished(billingResult: BillingResult) {
                     if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                        launchPurchaseFlow(activity, details, offerToken)
+                        launchBillingFlow(activity, details, productType, offerToken)
                     } else {
                         scope.launch { _purchaseResult.emit(billingResult.toFailureResult()) }
                     }
@@ -247,38 +278,64 @@ class BillingRepository private constructor(
             return
         }
 
-        // Change rationale: we previously launched billing without verifying a one-time offer token.
-        // BillingClient 8.3.0 can surface a null PendingIntent (leading to ProxyBillingActivity NPE)
-        // when the offer token is missing. Guarding here fails fast with a clear error instead.
-        val resolvedToken = offerToken?.takeIf { it.isNotBlank() }
-            ?: details.primaryOfferToken()
-        if (resolvedToken.isNullOrBlank()) {
+        firebaseController.logBreadcrumb(
+            message = "Billing flow launch",
+            attributes = mapOf(
+                "productId" to details.productId,
+                "productType" to productType,
+                "billingReady" to billingClient.isReady.toString(),
+                "activity" to activity::class.java.name,
+                "isFinishing" to activity.isFinishing.toString(),
+                "isDestroyed" to activity.isDestroyed.toString(),
+                "offerTokenProvided" to (!offerToken.isNullOrBlank()).toString(),
+                "offerTokenLength" to (offerToken?.length?.toString() ?: "0"),
+            ),
+        )
+
+        runCatching {
+            val paramsBuilder =
+                BillingFlowParams.ProductDetailsParams.newBuilder()
+                    .setProductDetails(details)
+            if (!offerToken.isNullOrBlank()) {
+                paramsBuilder.setOfferToken(offerToken)
+            }
+
+            val params = BillingFlowParams.newBuilder()
+                .setProductDetailsParamsList(listOf(paramsBuilder.build()))
+                .build()
+
+            billingClient.launchBillingFlow(activity, params)
+        }.onSuccess { billingResult ->
+            firebaseController.logBreadcrumb(
+                message = "Billing flow result",
+                attributes = mapOf(
+                    "responseCode" to billingResult.responseCode.toString(),
+                    "debugMessage" to billingResult.debugMessage.orEmpty(),
+                ),
+            )
+
+            if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+                val result = when (billingResult.responseCode) {
+                    BillingClient.BillingResponseCode.USER_CANCELED -> PurchaseResult.UserCancelled
+                    else -> billingResult.toFailureResult()
+                }
+                scope.launch { _purchaseResult.emit(result) }
+            }
+        }.onFailure { throwable ->
+            firebaseController.reportViewModelError(
+                viewModelName = "SupportViewModel",
+                action = "launchBillingFlow",
+                throwable = throwable,
+                extraKeys = mapOf(
+                    "product_id" to details.productId,
+                    "product_type" to productType,
+                ),
+            )
             scope.launch {
                 _purchaseResult.emit(
-                    PurchaseResult.Failed("Billing offer token is missing for this product.")
+                    PurchaseResult.Failed("Unable to start the billing flow. Please try again.")
                 )
             }
-            return
-        }
-
-        val params = BillingFlowParams.newBuilder()
-            .setProductDetailsParamsList(
-                listOf(
-                    BillingFlowParams.ProductDetailsParams.newBuilder()
-                        .setProductDetails(details)
-                        .apply {
-                            setOfferToken(resolvedToken)
-                        }
-                        .build()
-                )
-            ).build()
-        val billingResult = billingClient.launchBillingFlow(activity, params)
-        if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
-            val result = when (billingResult.responseCode) {
-                BillingClient.BillingResponseCode.USER_CANCELED -> PurchaseResult.UserCancelled
-                else -> billingResult.toFailureResult()
-            }
-            scope.launch { _purchaseResult.emit(result) }
         }
     }
 

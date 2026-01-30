@@ -1,6 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.support.ui
 
 import android.app.Activity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.ProductDetails
 import com.d4rk.android.libs.apptoolkit.R
@@ -8,9 +10,11 @@ import com.d4rk.android.libs.apptoolkit.app.support.billing.BillingRepository
 import com.d4rk.android.libs.apptoolkit.app.support.billing.PurchaseResult
 import com.d4rk.android.libs.apptoolkit.app.support.ui.contract.SupportAction
 import com.d4rk.android.libs.apptoolkit.app.support.ui.contract.SupportEvent
+import com.d4rk.android.libs.apptoolkit.app.support.ui.state.DonationOptionUiState
 import com.d4rk.android.libs.apptoolkit.app.support.ui.state.SupportScreenUiState
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
-import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.primaryOfferToken
+import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.hasOneTimePurchaseOffer
+import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.primaryFormattedPrice
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
@@ -38,6 +42,10 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+
+private const val BILLING_LAUNCH_TIMEOUT_MS = 20_000L
 
 class SupportViewModel(
     private val billingRepository: BillingRepository,
@@ -49,35 +57,46 @@ class SupportViewModel(
     )
 ) {
 
+    private val donationProductIds = listOf(
+        DonationProductIds.LOW_DONATION,
+        DonationProductIds.NORMAL_DONATION,
+        DonationProductIds.HIGH_DONATION,
+        DonationProductIds.EXTREME_DONATION,
+    )
+
+    private var currentProductDetails: Map<String, ProductDetails> = emptyMap()
+    private var billingTimeoutJob: Job? = null
+
     init {
         billingRepository.productDetails
             .onStart {
-                if (screenData?.products?.isNotEmpty() == true) {
+                if (screenData?.donationOptions?.isNotEmpty() == true) {
                     screenState.updateState(ScreenState.Success())
                 } else {
                     screenState.setLoading()
                 }
             }
-            .map { it.values.toList() }
-            .onEach { products ->
-                if (products.isEmpty()) {
+            .onEach { detailsMap ->
+                currentProductDetails = detailsMap
+                val options = buildDonationOptions(detailsMap)
+                if (detailsMap.isEmpty()) {
                     screenState.updateData(newState = ScreenState.NoData()) { current ->
-                        current.copy(error = null, products = emptyList())
+                        current.copy(error = null, donationOptions = emptyList())
                     }
                 } else {
                     screenState.updateData(newState = ScreenState.Success()) { current ->
-                        current.copy(error = null, products = products)
+                        current.copy(error = null, donationOptions = options)
                     }
                 }
             }
             .onCompletion { cause ->
                 when (cause) {
                     null -> {
-                        if (screenData?.products?.isNotEmpty() == true) {
+                        if (screenData?.donationOptions?.isNotEmpty() == true) {
                             screenState.updateState(ScreenState.Success())
                         } else {
                             screenState.updateData(newState = ScreenState.NoData()) { current ->
-                                current.copy(error = null, products = emptyList())
+                                current.copy(error = null, donationOptions = emptyList())
                             }
                         }
                     }
@@ -111,6 +130,7 @@ class SupportViewModel(
 
         billingRepository.purchaseResult
             .onEach { result ->
+                setBillingInProgress(false)
                 when (result) {
                     PurchaseResult.Pending -> screenState.showSnackbar(
                         UiSnackbar(
@@ -190,9 +210,17 @@ class SupportViewModel(
         }
     }
 
-    fun onDonateClicked(activity: Activity, productDetails: ProductDetails) {
-        val offerToken = productDetails.primaryOfferToken()
-        if (offerToken.isNullOrBlank()) {
+    fun onDonateClicked(activity: Activity, productId: String) {
+        if (!activity.isValidForBilling()) {
+            return
+        }
+
+        if (screenData?.isBillingInProgress == true) {
+            return
+        }
+
+        val option = screenData?.donationOptions?.firstOrNull { it.productId == productId }
+        if (option?.isEligible != true) {
             screenState.showSnackbar(
                 UiSnackbar(
                     message = UiTextHelper.StringResource(R.string.support_offer_unavailable),
@@ -204,7 +232,22 @@ class SupportViewModel(
             return
         }
 
-        billingRepository.launchPurchaseFlow(activity, productDetails, offerToken)
+        val details = currentProductDetails[productId]
+        if (details == null) {
+            screenState.showSnackbar(
+                UiSnackbar(
+                    message = UiTextHelper.StringResource(R.string.support_offer_unavailable),
+                    isError = true,
+                    timeStamp = System.currentTimeMillis(),
+                    type = ScreenMessageType.SNACKBAR
+                )
+            )
+            return
+        }
+
+        setBillingInProgress(true)
+        startBillingTimeout()
+        billingRepository.launchInAppDonationFlow(activity, details)
     }
 
     private fun queryProductDetails() {
@@ -233,7 +276,7 @@ class SupportViewModel(
                 .onEach { result ->
                     result
                         .onSuccess {
-                            if (screenData?.products?.isNotEmpty() == true) {
+                            if (screenData?.donationOptions?.isNotEmpty() == true) {
                                 screenState.updateState(ScreenState.Success())
                             }
                         }
@@ -254,5 +297,45 @@ class SupportViewModel(
                 }
                 .launchIn(viewModelScope)
         }
+    }
+
+    private fun buildDonationOptions(
+        detailsMap: Map<String, ProductDetails>,
+    ): List<DonationOptionUiState> =
+        donationProductIds.map { productId ->
+            val details = detailsMap[productId]
+            DonationOptionUiState(
+                productId = productId,
+                formattedPrice = details?.primaryFormattedPrice(),
+                isEligible = details?.hasOneTimePurchaseOffer() == true,
+            )
+        }
+
+    private fun setBillingInProgress(inProgress: Boolean) {
+        if (!inProgress) {
+            billingTimeoutJob?.cancel()
+            billingTimeoutJob = null
+        }
+
+        screenState.updateData { current ->
+            current.copy(isBillingInProgress = inProgress)
+        }
+    }
+
+    private fun startBillingTimeout() {
+        billingTimeoutJob?.cancel()
+        billingTimeoutJob = viewModelScope.launch {
+            delay(BILLING_LAUNCH_TIMEOUT_MS)
+            setBillingInProgress(false)
+        }
+    }
+
+    private fun Activity.isValidForBilling(): Boolean {
+        if (isFinishing || isDestroyed) {
+            return false
+        }
+
+        val lifecycleOwner = this as? LifecycleOwner ?: return false
+        return lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
     }
 }

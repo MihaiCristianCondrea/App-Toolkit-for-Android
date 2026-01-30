@@ -46,6 +46,18 @@ class FirebaseControllerImpl : FirebaseController {
         FirebasePerformance.getInstance().isPerformanceCollectionEnabled = enabled
     }
 
+    override fun logBreadcrumb(message: String, attributes: Map<String, String>) {
+        val crashlytics = FirebaseCrashlytics.getInstance()
+        val suffix = if (attributes.isEmpty()) {
+            ""
+        } else {
+            attributes.entries.joinToString(prefix = " | ") { (key, value) ->
+                "$key=$value"
+            }
+        }
+        crashlytics.log("$message$suffix")
+    }
+
     override fun reportViewModelError(
         viewModelName: String,
         action: String,

@@ -35,6 +35,17 @@ interface FirebaseController {
     fun setPerformanceEnabled(enabled: Boolean)
 
     /**
+     * Adds a breadcrumb to Crashlytics logs for tracing app events.
+     *
+     * @param message a short label describing the event
+     * @param attributes optional key/value pairs to include with the breadcrumb
+     */
+    fun logBreadcrumb(
+        message: String,
+        attributes: Map<String, String> = emptyMap(),
+    )
+
+    /**
      * Reports a ViewModel flow failure to Firebase Crashlytics with useful context.
      *
      * Implementations should attach the ViewModel name, action identifier, and
