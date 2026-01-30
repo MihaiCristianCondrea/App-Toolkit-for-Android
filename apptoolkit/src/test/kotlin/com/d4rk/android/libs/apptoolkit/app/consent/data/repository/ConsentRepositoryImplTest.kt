@@ -1,12 +1,13 @@
 package com.d4rk.android.libs.apptoolkit.app.consent.data.repository
 
 import com.d4rk.android.libs.apptoolkit.app.consent.data.remote.datasource.ConsentRemoteDataSource
-import com.d4rk.android.libs.apptoolkit.app.consent.data.remote.model.ConsentRemoteResult
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -27,10 +28,14 @@ class ConsentRepositoryImplTest {
     fun `requestConsent emits success when remote succeeds`() =
         runTest(dispatcherExtension.testDispatcher) {
             val remote = object : ConsentRemoteDataSource {
-                override suspend fun requestConsent(
+                override fun requestConsent(
                     host: ConsentHost,
                     showIfRequired: Boolean,
-                ): ConsentRemoteResult = ConsentRemoteResult.Success
+                ): Flow<DataState<Unit, Errors.UseCase>> =
+                    flowOf(
+                        DataState.Loading(),
+                        DataState.Success(Unit),
+                    )
             }
             val repository = ConsentRepositoryImpl(remote = remote)
 
@@ -52,11 +57,14 @@ class ConsentRepositoryImplTest {
     fun `requestConsent emits error when remote fails`() =
         runTest(dispatcherExtension.testDispatcher) {
             val remote = object : ConsentRemoteDataSource {
-                override suspend fun requestConsent(
+                override fun requestConsent(
                     host: ConsentHost,
                     showIfRequired: Boolean,
-                ): ConsentRemoteResult =
-                    ConsentRemoteResult.Failure(Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO)
+                ): Flow<DataState<Unit, Errors.UseCase>> =
+                    flowOf(
+                        DataState.Loading(),
+                        DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO),
+                    )
             }
             val repository = ConsentRepositoryImpl(remote = remote)
 

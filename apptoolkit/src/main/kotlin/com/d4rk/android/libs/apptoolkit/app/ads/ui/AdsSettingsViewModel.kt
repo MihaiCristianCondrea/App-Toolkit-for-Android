@@ -183,6 +183,7 @@ class AdsSettingsViewModel(
         consentJob?.cancel()
         consentJob = viewModelScope.launch {
             requestConsentUseCase(host = host, showIfRequired = false)
+                .flowOn(dispatchers.main)
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable
                     firebaseController.reportViewModelError(

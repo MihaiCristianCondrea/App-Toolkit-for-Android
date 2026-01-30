@@ -15,6 +15,7 @@ val appToolkitCoreModule: Module =
         viewModel {
             StartupViewModel(
                 requestConsentUseCase = get(),
+                dispatchers = get(),
                 firebaseController = get(),
             )
         }

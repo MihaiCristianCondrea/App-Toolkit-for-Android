@@ -113,6 +113,7 @@ class OnboardingViewModel(
         consentJob?.cancel()
         consentJob = viewModelScope.launch {
             requestConsentUseCase(host = host)
+                .flowOn(dispatchers.main)
                 .catch { throwable ->
                     if (throwable is CancellationException) throw throwable
                     firebaseController.reportViewModelError(

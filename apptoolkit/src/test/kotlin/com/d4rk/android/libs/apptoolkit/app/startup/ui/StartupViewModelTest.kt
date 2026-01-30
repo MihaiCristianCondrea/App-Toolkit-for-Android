@@ -5,6 +5,7 @@ import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRep
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
+import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
@@ -34,6 +35,7 @@ class StartupViewModelTest {
     fun `consent event updates state`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = StartupViewModel(
             requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
+            dispatchers = testDispatcherProvider(),
             firebaseController = FakeFirebaseController(),
         )
         viewModel.onEvent(StartupEvent.ConsentFormLoaded)
@@ -46,6 +48,7 @@ class StartupViewModelTest {
     fun `continue event emits navigation action`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = StartupViewModel(
             requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
+            dispatchers = testDispatcherProvider(),
             firebaseController = FakeFirebaseController(),
         )
         val actions = mutableListOf<StartupAction>()
@@ -61,6 +64,7 @@ class StartupViewModelTest {
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = StartupViewModel(
                 requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
+                dispatchers = testDispatcherProvider(),
                 firebaseController = FakeFirebaseController(),
             )
 
@@ -70,6 +74,13 @@ class StartupViewModelTest {
             val state = viewModel.uiState.value
             assertThat(state.data?.consentFormLoaded).isTrue()
         }
+
+    private fun testDispatcherProvider(): DispatcherProvider = object : DispatcherProvider {
+        override val main = dispatcherExtension.testDispatcher
+        override val io = dispatcherExtension.testDispatcher
+        override val default = dispatcherExtension.testDispatcher
+        override val unconfined = dispatcherExtension.testDispatcher
+    }
 }
 
 private class FakeConsentRepository : ConsentRepository {

@@ -2,54 +2,63 @@ package com.d4rk.android.libs.apptoolkit.app.consent.data.remote.datasource
 
 import android.util.Log
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.consent.data.remote.model.ConsentRemoteResult
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.logging.CONSENT_LOG_TAG
 import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 /**
  * UMP-backed implementation of [ConsentRemoteDataSource].
  */
 class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
 
-    override suspend fun requestConsent(
+    override fun requestConsent(
         host: ConsentHost,
         showIfRequired: Boolean,
-    ): ConsentRemoteResult {
+    ): Flow<DataState<Unit, Errors.UseCase>> = callbackFlow {
+        trySend(DataState.Loading())
+
         val activity = host.activity
         val params = buildRequestParameters(activity)
         val consentInfo = UserMessagingPlatform.getConsentInformation(activity)
 
-        return suspendCancellableCoroutine { continuation ->
-            try {
-                consentInfo.requestConsentInfoUpdate(
-                    activity,
-                    params,
-                    {
-                        if (showIfRequired &&
-                            consentInfo.consentStatus != ConsentInformation.ConsentStatus.REQUIRED &&
-                            consentInfo.consentStatus != ConsentInformation.ConsentStatus.UNKNOWN
-                        ) {
-                            if (continuation.isActive) {
-                                continuation.resume(ConsentRemoteResult.Success)
+        try {
+            consentInfo.requestConsentInfoUpdate(
+                activity,
+                params,
+                {
+                    if (showIfRequired) {
+                        UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { formError ->
+                            if (formError != null) {
+                                Log.e(
+                                    CONSENT_LOG_TAG,
+                                    "Consent form error: ${formError.message}"
+                                )
+                                trySend(
+                                    DataState.Error(
+                                        error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
+                                    )
+                                )
+                            } else {
+                                trySend(DataState.Success(Unit))
                             }
-                            return@requestConsentInfoUpdate
+                            close()
                         }
-
+                    } else {
                         UserMessagingPlatform.loadConsentForm(
                             activity,
                             { consentForm: ConsentForm ->
                                 try {
                                     consentForm.show(activity) {
-                                        if (continuation.isActive) {
-                                            continuation.resume(ConsentRemoteResult.Success)
-                                        }
+                                        trySend(DataState.Success(Unit))
+                                        close()
                                     }
                                 } catch (throwable: Throwable) {
                                     Log.e(
@@ -57,13 +66,12 @@ class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
                                         "Failed to show consent form.",
                                         throwable
                                     )
-                                    if (continuation.isActive) {
-                                        continuation.resume(
-                                            ConsentRemoteResult.Failure(
-                                                error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
-                                            )
+                                    trySend(
+                                        DataState.Error(
+                                            error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
                                         )
-                                    }
+                                    )
+                                    close()
                                 }
                             },
                             { formError ->
@@ -71,41 +79,36 @@ class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
                                     CONSENT_LOG_TAG,
                                     "Failed to load consent form: ${formError.message}"
                                 )
-                                if (continuation.isActive) {
-                                    continuation.resume(
-                                        ConsentRemoteResult.Failure(
-                                            error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
-                                        )
+                                trySend(
+                                    DataState.Error(
+                                        error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
                                     )
-                                }
+                                )
+                                close()
                             }
                         )
-                    },
-                    { requestError ->
-                        Log.e(
-                            CONSENT_LOG_TAG,
-                            "Failed to request consent info: ${requestError.message}"
-                        )
-                        if (continuation.isActive) {
-                            continuation.resume(
-                                ConsentRemoteResult.Failure(
-                                    error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
-                                )
-                            )
-                        }
                     }
-                )
-            } catch (throwable: Throwable) {
-                Log.e(CONSENT_LOG_TAG, "Failed to request consent info.", throwable)
-                if (continuation.isActive) {
-                    continuation.resume(
-                        ConsentRemoteResult.Failure(
+                },
+                { requestError ->
+                    Log.e(
+                        CONSENT_LOG_TAG,
+                        "Failed to request consent info: ${requestError.message}"
+                    )
+                    trySend(
+                        DataState.Error(
                             error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
                         )
                     )
+                    close()
                 }
-            }
+            )
+        } catch (throwable: Throwable) {
+            Log.e(CONSENT_LOG_TAG, "Failed to request consent info.", throwable)
+            trySend(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
+            close()
         }
+
+        awaitClose { }
     }
 
     /**
