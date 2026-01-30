@@ -1,6 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui
 
 import androidx.lifecycle.viewModelScope
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteOnboardingUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOnboardingCompletionUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
@@ -19,6 +21,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -27,6 +30,7 @@ import kotlinx.coroutines.withContext
 class OnboardingViewModel(
     private val observeOnboardingCompletionUseCase: ObserveOnboardingCompletionUseCase,
     private val completeOnboardingUseCase: CompleteOnboardingUseCase,
+    private val requestConsentUseCase: RequestConsentUseCase,
     private val dispatchers: DispatcherProvider,
     private val firebaseController: FirebaseController,
 ) : ScreenViewModel<OnboardingUiState, OnboardingEvent, OnboardingAction>(
@@ -35,6 +39,7 @@ class OnboardingViewModel(
 
     private var observeCompletionJob: Job? = null
     private var completeJob: Job? = null
+    private var consentJob: Job? = null
 
     init {
         observeCompletion()
@@ -44,6 +49,7 @@ class OnboardingViewModel(
         when (event) {
             is OnboardingEvent.UpdateCurrentTab -> updateCurrentTab(event.index)
             is OnboardingEvent.CompleteOnboarding -> completeOnboarding()
+            is OnboardingEvent.RequestConsent -> requestConsent(event.host)
             is OnboardingEvent.ShowCrashlyticsDialog -> setCrashlyticsDialogVisibility(true)
             is OnboardingEvent.HideCrashlyticsDialog -> setCrashlyticsDialogVisibility(false)
         }
@@ -101,6 +107,23 @@ class OnboardingViewModel(
                 }
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun requestConsent(host: ConsentHost) {
+        consentJob?.cancel()
+        consentJob = viewModelScope.launch {
+            requestConsentUseCase(host = host)
+                .catch { throwable ->
+                    if (throwable is CancellationException) throw throwable
+                    firebaseController.reportViewModelError(
+                        viewModelName = "OnboardingViewModel",
+                        action = "requestConsent",
+                        throwable = throwable,
+                    )
+                    emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
+                }
+                .first { state -> state !is DataState.Loading }
+        }
     }
 
     private fun setCrashlyticsDialogVisibility(isVisible: Boolean) {

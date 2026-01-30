@@ -12,7 +12,12 @@ import org.koin.dsl.module
 val appToolkitCoreModule: Module =
     module {
         single<StartupProvider> { AppStartupProvider() }
-        viewModel { StartupViewModel() }
+        viewModel {
+            StartupViewModel(
+                requestConsentUseCase = get(),
+                firebaseController = get(),
+            )
+        }
 
         single<AppVersionInfo> {
             AppVersionInfo(

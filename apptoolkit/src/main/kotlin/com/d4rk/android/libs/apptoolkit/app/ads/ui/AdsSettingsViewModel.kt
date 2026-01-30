@@ -1,6 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.ads.ui
 
 import androidx.lifecycle.viewModelScope
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.ObserveAdsEnabledUseCase
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.SetAdsEnabledUseCase
@@ -25,6 +27,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -40,6 +43,7 @@ import kotlinx.coroutines.flow.onStart
  *
  * @param observeAdsEnabled Use case to observe the current ad-enabled status from the repository.
  * @param setAdsEnabled Use case to update the ad-enabled status in the repository.
+ * @param requestConsentUseCase Use case to request and optionally display the consent form.
  * @param repository Repository for ads settings, used here to get the default value on error.
  * @param dispatchers Provides coroutine dispatchers for different threads (IO, Main, etc.).
  * @param firebaseController Reports ViewModel flow failures to Firebase.
@@ -47,6 +51,7 @@ import kotlinx.coroutines.flow.onStart
 class AdsSettingsViewModel(
     private val observeAdsEnabled: ObserveAdsEnabledUseCase,
     private val setAdsEnabled: SetAdsEnabledUseCase,
+    private val requestConsentUseCase: RequestConsentUseCase,
     private val repository: AdsSettingsRepository,
     private val dispatchers: DispatcherProvider,
     private val firebaseController: FirebaseController,
@@ -59,6 +64,7 @@ class AdsSettingsViewModel(
 
     private var observeJob: Job? = null
     private var setJob: Job? = null
+    private var consentJob: Job? = null
 
     init {
         onEvent(AdsSettingsEvent.Initialize)
@@ -68,6 +74,7 @@ class AdsSettingsViewModel(
         when (event) {
             AdsSettingsEvent.Initialize -> observe()
             is AdsSettingsEvent.SetAdsEnabled -> persist(event.enabled)
+            is AdsSettingsEvent.RequestConsent -> requestConsent(event.host)
         }
     }
 
@@ -171,4 +178,21 @@ class AdsSettingsViewModel(
                 )
                 emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
             }
+
+    private fun requestConsent(host: ConsentHost) {
+        consentJob?.cancel()
+        consentJob = viewModelScope.launch {
+            requestConsentUseCase(host = host, showIfRequired = false)
+                .catch { throwable ->
+                    if (throwable is CancellationException) throw throwable
+                    firebaseController.reportViewModelError(
+                        viewModelName = "AdsSettingsViewModel",
+                        action = "requestConsent",
+                        throwable = throwable,
+                    )
+                    emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
+                }
+                .first { state -> state !is DataState.Loading }
+        }
+    }
 }

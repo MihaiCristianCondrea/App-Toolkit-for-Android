@@ -5,6 +5,8 @@ import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDr
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.apps.apptoolkit.app.main.ui.states.MainUiState
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
@@ -20,7 +22,9 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -32,11 +36,14 @@ import kotlin.coroutines.cancellation.CancellationException
  */
 class MainViewModel(
     private val getNavigationDrawerItemsUseCase: GetNavigationDrawerItemsUseCase,
+    private val requestConsentUseCase: RequestConsentUseCase,
     private val firebaseController: FirebaseController,
     private val dispatchers: DispatcherProvider,
 ) : ScreenViewModel<MainUiState, MainEvent, MainAction>(
     initialState = UiStateScreen(data = MainUiState())
 ) {
+
+    private var consentJob: Job? = null
 
     init {
         onEvent(MainEvent.LoadNavigation)
@@ -45,6 +52,7 @@ class MainViewModel(
     override fun onEvent(event: MainEvent) {
         when (event) {
             MainEvent.LoadNavigation -> loadNavigationItems()
+            is MainEvent.RequestConsent -> requestConsent(event.host)
         }
     }
 
@@ -97,6 +105,23 @@ class MainViewModel(
                             }
                         }
                 }
+        }
+    }
+
+    private fun requestConsent(host: ConsentHost) {
+        consentJob?.cancel()
+        consentJob = viewModelScope.launch {
+            requestConsentUseCase(host = host)
+                .catch { throwable ->
+                    if (throwable is CancellationException) throw throwable
+                    firebaseController.reportViewModelError(
+                        viewModelName = "MainViewModel",
+                        action = "requestConsent",
+                        throwable = throwable,
+                    )
+                    emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
+                }
+                .first { state -> state !is DataState.Loading }
         }
     }
 }
