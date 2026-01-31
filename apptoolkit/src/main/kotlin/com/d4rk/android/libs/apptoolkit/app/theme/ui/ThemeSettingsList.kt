@@ -42,8 +42,14 @@ import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.ThemeSettingOptio
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider.paletteById
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.logging.THEME_SETTINGS_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
@@ -59,8 +65,12 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isHalloweenSe
 import com.d4rk.android.libs.apptoolkit.data.local.datastore.rememberCommonDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import java.time.LocalDate
 import java.time.ZoneId
+
+private const val THEME_SCREEN_NAME = "Theme"
+private const val THEME_SCREEN_CLASS = "ThemeSettingsList"
 
 /**
  * Returns a list of static palette IDs with duplicate palettes removed.
@@ -103,6 +113,20 @@ private fun dedupeStaticPaletteIds(
  */
 @Composable
 fun ThemeSettingsList(paddingValues: PaddingValues) {
+    val firebaseController: FirebaseController = koinInject()
+    val firebase = rememberUpdatedState(firebaseController)
+
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = THEME_SCREEN_NAME,
+        screenClass = THEME_SCREEN_CLASS,
+    )
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = THEME_SCREEN_NAME,
+        screenState = ScreenState.Success(),
+    )
+
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
     val dataStore = rememberCommonDataStore()
@@ -233,6 +257,15 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                             SegmentedButton(
                                 selected = pagerState.currentPage == index,
                                 onClick = {
+                                    firebase.value.logEvent(
+                                        AnalyticsEvent(
+                                            name = "theme_tab_select",
+                                            params = mapOf(
+                                                "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                                "tab" to AnalyticsValue.Str(if (index == 0) "wallpaper" else "other"),
+                                            ),
+                                        ),
+                                    )
                                     coroutineScope.launch { pagerState.animateScrollToPage(index) }
                                 },
                                 shape = SegmentedButtonDefaults.itemShape(
@@ -271,6 +304,18 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                             colors = palette,
                                             selected = isDynamicColors && index == dynamicVariantIndex,
                                             onClick = {
+                                                firebase.value.logEvent(
+                                                    AnalyticsEvent(
+                                                        name = "theme_palette_select",
+                                                        params = mapOf(
+                                                            "screen" to AnalyticsValue.Str(
+                                                                THEME_SCREEN_NAME
+                                                            ),
+                                                            "palette_type" to AnalyticsValue.Str("dynamic"),
+                                                            "variant" to AnalyticsValue.Str(index.toString()),
+                                                        ),
+                                                    ),
+                                                )
                                                 coroutineScope.launch {
                                                     dataStore.saveDynamicColors(true)
                                                     dataStore.saveDynamicPaletteVariant(index)
@@ -299,6 +344,22 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                             showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
                                                     (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
                                             onClick = {
+                                                firebase.value.logEvent(
+                                                    AnalyticsEvent(
+                                                        name = "theme_palette_select",
+                                                        params = mapOf(
+                                                            "screen" to AnalyticsValue.Str(
+                                                                THEME_SCREEN_NAME
+                                                            ),
+                                                            "palette_type" to AnalyticsValue.Str("static"),
+                                                            "palette_id" to AnalyticsValue.Str(id),
+                                                            "seasonal" to AnalyticsValue.Str(
+                                                                ((isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
+                                                                        (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN)).toString()
+                                                            ),
+                                                        ),
+                                                    ),
+                                                )
                                                 coroutineScope.launch {
                                                     dataStore.saveDynamicColors(false)
                                                     dataStore.saveStaticPaletteId(id)
@@ -330,6 +391,20 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                 showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
                                         (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
                                 onClick = {
+                                    firebase.value.logEvent(
+                                        AnalyticsEvent(
+                                            name = "theme_palette_select",
+                                            params = mapOf(
+                                                "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                                "palette_type" to AnalyticsValue.Str("static"),
+                                                "palette_id" to AnalyticsValue.Str(id),
+                                                "seasonal" to AnalyticsValue.Str(
+                                                    ((isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
+                                                            (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN)).toString()
+                                                ),
+                                            ),
+                                        ),
+                                    )
                                     coroutineScope.launch {
                                         dataStore.saveDynamicColors(false)
                                         dataStore.saveStaticPaletteId(id)
@@ -346,6 +421,15 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                     title = stringResource(id = R.string.amoled_mode),
                     switchState = isAmoledMode
                 ) { isChecked ->
+                    firebase.value.logEvent(
+                        AnalyticsEvent(
+                            name = "theme_toggle_amoled",
+                            params = mapOf(
+                                "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                "enabled" to AnalyticsValue.Str(isChecked.toString()),
+                            ),
+                        ),
+                    )
                     coroutineScope.launch { dataStore.saveAmoledMode(isChecked) }
                 }
             }
@@ -369,6 +453,15 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                 text = option.displayName,
                                 isChecked = (option.key == currentThemeModeKey),
                                 onCheckedChange = {
+                                    firebase.value.logEvent(
+                                        AnalyticsEvent(
+                                            name = "theme_mode_select",
+                                            params = mapOf(
+                                                "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                                "mode" to AnalyticsValue.Str(option.key),
+                                            ),
+                                        ),
+                                    )
                                     coroutineScope.launch {
                                         dataStore.saveThemeMode(mode = option.key)
                                         dataStore.themeModeState.value = option.key
@@ -389,7 +482,17 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                     newLine = false,
                     learnMoreText = stringResource(id = R.string.screen_and_display_settings),
                     learnMoreAction = {
-                        if (!context.openDisplaySettings()) {
+                        val opened = context.openDisplaySettings()
+                        firebase.value.logEvent(
+                            AnalyticsEvent(
+                                name = "theme_open_display_settings",
+                                params = mapOf(
+                                    "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                    "opened" to AnalyticsValue.Str(opened.toString()),
+                                ),
+                            ),
+                        )
+                        if (!opened) {
                             Log.w(
                                 THEME_SETTINGS_LOG_TAG,
                                 "Failed to open display settings from theme page"

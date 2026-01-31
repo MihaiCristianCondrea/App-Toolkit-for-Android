@@ -1,5 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.core.data.firebase
 
+import android.os.Bundle
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.asConsentStatus
 import com.google.firebase.Firebase
@@ -12,6 +15,9 @@ import com.google.firebase.perf.FirebasePerformance
  * Firebase-backed implementation that delegates toggles to the SDK.
  */
 class FirebaseControllerImpl : FirebaseController {
+
+    private val analytics: FirebaseAnalytics
+        get() = Firebase.analytics
 
     /**
      * Updates the Firebase Analytics consent settings based on the provided permissions.
@@ -125,5 +131,73 @@ class FirebaseControllerImpl : FirebaseController {
         }
         crashlytics.log("ViewModel catch in $viewModelName during $action")
         crashlytics.recordException(throwable)
+    }
+
+    override fun logEvent(event: AnalyticsEvent) {
+        val name = event.name
+        if (!isValidAnalyticsName(name)) {
+            logBreadcrumb(
+                message = "analytics_drop_invalid_event",
+                attributes = mapOf("name" to name)
+            )
+            return
+        }
+
+        val bundle = Bundle()
+        var count = 0
+
+        for ((key, rawValue) in event.params) {
+            if (count >= MAX_PARAMS) break
+            if (!isValidAnalyticsName(key)) continue
+
+            when (rawValue) {
+                is AnalyticsValue.Str -> bundle.putString(
+                    key,
+                    rawValue.value.take(MAX_PARAM_STRING_LEN)
+                )
+
+                is AnalyticsValue.LongVal -> bundle.putLong(key, rawValue.value)
+                is AnalyticsValue.DoubleVal -> bundle.putDouble(key, rawValue.value)
+                is AnalyticsValue.Bool -> bundle.putString(
+                    key,
+                    rawValue.value.toString()
+                ) // GA4 accepts boolean as string or int; keep consistent
+            }
+            count++
+        }
+
+        analytics.logEvent(name, bundle)
+    }
+
+    override fun logScreenView(screenName: String, screenClass: String?) {
+        val safeName = screenName.take(MAX_PARAM_STRING_LEN)
+
+        val bundle = Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, safeName)
+            if (!screenClass.isNullOrBlank()) {
+                putString(
+                    FirebaseAnalytics.Param.SCREEN_CLASS,
+                    screenClass.take(MAX_PARAM_STRING_LEN)
+                )
+            }
+        }
+        analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+    }
+
+    override fun setUserProperty(name: String, value: String?) {
+        val trimmedName = name.take(MAX_USER_PROP_NAME_LEN)
+        val trimmedValue = value?.take(MAX_USER_PROP_VALUE_LEN)
+        analytics.setUserProperty(trimmedName, trimmedValue)
+    }
+
+    private fun isValidAnalyticsName(name: String): Boolean = NAME_REGEX.matches(name)
+
+    private companion object {
+        const val MAX_PARAMS = 25
+        const val MAX_PARAM_STRING_LEN = 100
+        const val MAX_USER_PROP_NAME_LEN = 24
+        const val MAX_USER_PROP_VALUE_LEN = 36
+
+        val NAME_REGEX = Regex("^[A-Za-z][A-Za-z0-9_]{0,39}$")
     }
 }

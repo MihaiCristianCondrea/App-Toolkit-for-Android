@@ -26,22 +26,42 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.state.StartupUiState
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.TopAppBarScaffold
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import org.koin.compose.koinInject
+
+private const val STARTUP_SCREEN_NAME = "Startup"
+private const val STARTUP_SCREEN_CLASS = "StartupScreen"
 
 @Composable
 fun StartupScreen(
     screenState: UiStateScreen<StartupUiState>,
-    onContinueClick: () -> Unit
+    onContinueClick: () -> Unit,
 ) {
+    val firebaseController: FirebaseController = koinInject()
+
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = STARTUP_SCREEN_NAME,
+        screenClass = STARTUP_SCREEN_CLASS,
+    )
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = STARTUP_SCREEN_NAME,
+        screenState = screenState.screenState,
+    )
+
     ScreenStateHandler(
         screenState = screenState,
         onLoading = { LoadingScreen() },
@@ -65,21 +85,27 @@ fun StartupScreen(
                         onClick = onContinueClick,
                         icon = {
                             Icon(
-                                imageVector = Icons.Outlined.CheckCircle, contentDescription = null
+                                imageVector = Icons.Outlined.CheckCircle,
+                                contentDescription = null,
                             )
-                        }
+                        },
                     )
-                }
+                },
             )
-        })
+        },
+    )
 }
 
 @Composable
-fun StartupScreenContent(paddingValues: PaddingValues) {
-    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.anim_startup))
+fun StartupScreenContent(
+    paddingValues: PaddingValues,
+) {
+    val composition by rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(R.raw.anim_startup),
+    )
+
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         LottieAnimation(
             modifier = Modifier
@@ -89,7 +115,7 @@ fun StartupScreenContent(paddingValues: PaddingValues) {
             restartOnPlay = true,
             iterations = LottieConstants.IterateForever,
             contentScale = ContentScale.Crop,
-            speed = 1.2f
+            speed = 1.2f,
         )
 
         LazyColumn(
@@ -99,14 +125,17 @@ fun StartupScreenContent(paddingValues: PaddingValues) {
                 .padding(all = SizeConstants.MediumSize * 2)
                 .safeDrawingPadding(),
             verticalArrangement = Arrangement.spacedBy(space = SizeConstants.LargeSize),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item {
-                AsyncImage(model = R.drawable.il_startup, contentDescription = null)
+                AsyncImage(
+                    model = R.drawable.il_startup,
+                    contentDescription = null,
+                )
                 InfoMessageSection(
                     message = stringResource(R.string.summary_browse_terms_of_service_and_privacy_policy),
                     learnMoreText = stringResource(R.string.learn_more),
-                    learnMoreUrl = AppLinks.PRIVACY_POLICY
+                    learnMoreUrl = AppLinks.PRIVACY_POLICY,
                 )
             }
         }

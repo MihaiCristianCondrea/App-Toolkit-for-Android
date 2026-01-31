@@ -14,6 +14,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.PrivacySettingsProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
@@ -22,6 +26,9 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import org.koin.compose.koinInject
 
+private const val PRIVACY_SCREEN_NAME = "Privacy"
+private const val PRIVACY_SCREEN_CLASS = "PrivacySettingsList"
+
 @Composable
 fun PrivacySettingsList(
     paddingValues: PaddingValues = PaddingValues(),
@@ -29,65 +36,95 @@ fun PrivacySettingsList(
     val provider: PrivacySettingsProvider = koinInject()
     val context: Context = LocalContext.current
 
+    val firebaseController: FirebaseController = koinInject()
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = PRIVACY_SCREEN_NAME,
+        screenClass = PRIVACY_SCREEN_CLASS,
+    )
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = PRIVACY_SCREEN_NAME,
+        screenState = ScreenState.Success(),
+    )
+
     LazyColumn(
-        contentPadding = paddingValues, modifier = Modifier.fillMaxHeight()
+        contentPadding = paddingValues,
+        modifier = Modifier.fillMaxHeight(),
     ) {
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.privacy))
             SmallVerticalSpacer()
+
             Column(
                 modifier = Modifier
                     .padding(horizontal = SizeConstants.LargeSize)
-                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
+                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize)),
             ) {
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.privacy_policy),
                     summary = stringResource(id = R.string.summary_preference_settings_privacy_policy),
-                    onClick = { context.openUrl(provider.privacyPolicyUrl) })
+                    onClick = { context.openUrl(provider.privacyPolicyUrl) },
+                )
                 ExtraTinyVerticalSpacer()
+
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.terms_of_service),
                     summary = stringResource(id = R.string.summary_preference_settings_terms_of_service),
-                    onClick = { context.openUrl(provider.termsOfServiceUrl) })
+                    onClick = { context.openUrl(provider.termsOfServiceUrl) },
+                )
                 ExtraTinyVerticalSpacer()
+
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.code_of_conduct),
                     summary = stringResource(id = R.string.summary_preference_settings_code_of_conduct),
-                    onClick = { context.openUrl(provider.codeOfConductUrl) })
+                    onClick = { context.openUrl(provider.codeOfConductUrl) },
+                )
                 ExtraTinyVerticalSpacer()
+
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.permissions),
                     summary = stringResource(id = R.string.summary_preference_settings_permissions),
-                    onClick = { provider.openPermissionsScreen() })
+                    onClick = { provider.openPermissionsScreen() },
+                )
                 ExtraTinyVerticalSpacer()
+
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.ads),
                     summary = stringResource(id = R.string.summary_preference_settings_ads),
-                    onClick = { provider.openAdsScreen() })
+                    onClick = { provider.openAdsScreen() },
+                )
                 ExtraTinyVerticalSpacer()
+
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.usage_and_diagnostics),
                     summary = stringResource(id = R.string.summary_preference_settings_usage_and_diagnostics),
-                    onClick = { provider.openUsageAndDiagnosticsScreen() })
+                    onClick = { provider.openUsageAndDiagnosticsScreen() },
+                )
             }
         }
+
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.legal))
             SmallVerticalSpacer()
+
             Column(
                 modifier = Modifier
                     .padding(horizontal = SizeConstants.LargeSize)
-                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
+                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize)),
             ) {
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.legal_notices),
                     summary = stringResource(id = R.string.summary_preference_settings_legal_notices),
-                    onClick = { context.openUrl(provider.legalNoticesUrl) })
+                    onClick = { context.openUrl(provider.legalNoticesUrl) },
+                )
                 ExtraTinyVerticalSpacer()
+
                 SettingsPreferenceItem(
                     title = stringResource(id = R.string.license),
                     summary = stringResource(id = R.string.summary_preference_settings_license),
-                    onClick = { context.openUrl(provider.licenseUrl) })
+                    onClick = { context.openUrl(provider.licenseUrl) },
+                )
             }
         }
     }

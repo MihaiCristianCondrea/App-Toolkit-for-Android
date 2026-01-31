@@ -34,24 +34,47 @@ import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiStat
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.OnboardingBottomNavigation
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.OnboardingDefaultPageLayout
 import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.hapticPagerSwipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
+private const val ONBOARDING_SCREEN_NAME = "Onboarding"
+private const val ONBOARDING_SCREEN_CLASS = "OnboardingScreen"
+
+
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen() {
     val context = LocalContext.current
+    val firebaseController: FirebaseController = koinInject()
+
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = ONBOARDING_SCREEN_NAME,
+        screenClass = ONBOARDING_SCREEN_CLASS,
+    )
+
     val onboardingProvider: OnboardingProvider = koinInject()
     val pages: List<OnboardingPage> =
         remember { onboardingProvider.getOnboardingPages(context = context) }
+
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val viewModel: OnboardingViewModel = koinViewModel()
     val screenState by viewModel.uiState.collectAsStateWithLifecycle()
     val uiState = screenState.data ?: OnboardingUiState()
+
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = ONBOARDING_SCREEN_NAME,
+        screenState = screenState.screenState,
+    )
+
     val pagerState: PagerState =
         rememberPagerState(initialPage = uiState.currentTabIndex) { pages.size }
 
@@ -76,20 +99,23 @@ fun OnboardingScreen() {
     Scaffold(
         topBar = {
             if (pages.isNotEmpty()) {
-                TopAppBar(title = { }, actions = {
-                    AnimatedVisibility(
-                        visible = pagerState.currentPage < pages.size - 1,
-                        enter = slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth }) + fadeIn(),
-                        exit = slideOutHorizontally(targetOffsetX = { fullWidth -> fullWidth }) + fadeOut()
-                    ) {
-                        GeneralOutlinedButton(
-                            onClick = { onSkipRequested() },
-                            vectorIcon = Icons.Filled.SkipNext,
-                            iconContentDescription = stringResource(id = R.string.skip_button_content_description),
-                            label = stringResource(id = R.string.skip_button_text)
-                        )
+                TopAppBar(
+                    title = { },
+                    actions = {
+                        AnimatedVisibility(
+                            visible = pagerState.currentPage < pages.size - 1,
+                            enter = slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth }) + fadeIn(),
+                            exit = slideOutHorizontally(targetOffsetX = { fullWidth -> fullWidth }) + fadeOut()
+                        ) {
+                            GeneralOutlinedButton(
+                                onClick = { onSkipRequested() },
+                                vectorIcon = Icons.Filled.SkipNext,
+                                iconContentDescription = stringResource(id = R.string.skip_button_content_description),
+                                label = stringResource(id = R.string.skip_button_text)
+                            )
+                        }
                     }
-                })
+                )
             }
         },
         bottomBar = {

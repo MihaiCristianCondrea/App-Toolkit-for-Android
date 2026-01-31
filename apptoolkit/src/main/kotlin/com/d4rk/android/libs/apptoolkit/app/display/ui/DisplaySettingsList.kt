@@ -27,8 +27,12 @@ import androidx.core.os.LocaleListCompat
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.display.ui.views.dialogs.SelectLanguageAlertDialog
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.DisplaySettingsProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.logging.DISPLAY_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
@@ -43,6 +47,10 @@ import com.d4rk.android.libs.apptoolkit.data.local.datastore.rememberCommonDataS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+
+
+private const val DISPLAY_SETTINGS_SCREEN_NAME = "DisplaySettings"
+private const val DISPLAY_SETTINGS_SCREEN_CLASS = "DisplaySettingsList"
 
 /**
  * A composable function that displays a comprehensive list of display-related settings.
@@ -64,6 +72,20 @@ fun DisplaySettingsList(
     paddingValues: PaddingValues = PaddingValues(),
 ) {
     val provider: DisplaySettingsProvider = koinInject()
+    val firebaseController: FirebaseController = koinInject()
+
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = DISPLAY_SETTINGS_SCREEN_NAME,
+        screenClass = DISPLAY_SETTINGS_SCREEN_CLASS,
+    )
+
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = DISPLAY_SETTINGS_SCREEN_NAME,
+        screenState = ScreenState.Success(),
+    )
+
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
     val dataStore: CommonDataStore = rememberCommonDataStore()
@@ -90,12 +112,11 @@ fun DisplaySettingsList(
     }
 
     val themeSummary: String = when (currentThemeModeKey) {
-        DataStoreNamesConstants.THEME_MODE_DARK,
-        DataStoreNamesConstants.THEME_MODE_LIGHT ->
-            stringResource(id = R.string.will_never_turn_on_automatically)
+        DataStoreNamesConstants.THEME_MODE_DARK, DataStoreNamesConstants.THEME_MODE_LIGHT -> stringResource(
+            id = R.string.will_never_turn_on_automatically
+        )
 
-        else ->
-            stringResource(id = R.string.will_turn_on_automatically_by_system)
+        else -> stringResource(id = R.string.will_turn_on_automatically_by_system)
     }
 
     val isDynamicColorsState = dataStore.dynamicColors.collectDataStoreState(

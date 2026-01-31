@@ -63,6 +63,9 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInf
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.state.IssueReporterUiState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
@@ -70,6 +73,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.SmallFloatingA
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
@@ -84,6 +89,9 @@ import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
+private const val ISSUE_REPORTER_SCREEN_NAME = "IssueReporter"
+private const val ISSUE_REPORTER_SCREEN_CLASS = "IssueReporterScreen"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
@@ -97,10 +105,25 @@ fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
         derivedStateOf { scrollBehavior.state.contentOffset >= 0f }
     }
 
+    val firebaseController: FirebaseController = koinInject()
     val viewModel: IssueReporterViewModel = koinViewModel()
+
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val uiStateScreen: UiStateScreen<IssueReporterUiState> by viewModel.uiState.collectAsStateWithLifecycle()
+
     val target: GithubTarget = koinInject()
+
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = ISSUE_REPORTER_SCREEN_NAME,
+        screenClass = ISSUE_REPORTER_SCREEN_CLASS,
+    )
+
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = ISSUE_REPORTER_SCREEN_NAME,
+        screenState = uiStateScreen.screenState,
+    )
 
     val defaultBackClicked: () -> Unit = remember(activity) { { activity?.finish() } }
     val backClicked: () -> Unit = onBackClicked ?: defaultBackClicked
@@ -121,13 +144,33 @@ fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
                     isVisible = true,
                     isExtended = true,
                     icon = Icons.Outlined.Link,
-                    onClick = { context.openUrl(issuesUrl) }
+                    onClick = {
+                        firebaseController.logEvent(
+                            AnalyticsEvent(
+                                name = "issue_open_issues",
+                                params = mapOf(
+                                    "screen" to AnalyticsValue.Str(ISSUE_REPORTER_SCREEN_NAME),
+                                ),
+                            ),
+                        )
+                        context.openUrl(issuesUrl)
+                    }
                 )
 
                 AnimatedExtendedFloatingActionButton(
                     visible = true,
                     expanded = isFabExtended,
-                    onClick = { viewModel.onEvent(IssueReporterEvent.Send) },
+                    onClick = {
+                        firebaseController.logEvent(
+                            AnalyticsEvent(
+                                name = "issue_send_click",
+                                params = mapOf(
+                                    "screen" to AnalyticsValue.Str(ISSUE_REPORTER_SCREEN_NAME),
+                                ),
+                            ),
+                        )
+                        viewModel.onEvent(IssueReporterEvent.Send)
+                    },
                     text = { Text(text = stringResource(id = R.string.issue_send)) },
                     icon = {
                         Icon(
@@ -147,6 +190,7 @@ fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
             onError = { NoDataScreen(isError = true, paddingValues = paddingValues) },
             onSuccess = { data: IssueReporterUiState ->
                 IssueReporterScreenContent(
+                    firebaseController = firebaseController,
                     paddingValues = paddingValues,
                     onEvent = viewModel::onEvent,
                     data = data
@@ -165,6 +209,7 @@ fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
 
 @Composable
 fun IssueReporterScreenContent(
+    firebaseController: FirebaseController,
     paddingValues: PaddingValues,
     onEvent: (IssueReporterEvent) -> Unit,
     data: IssueReporterUiState,
@@ -229,7 +274,19 @@ fun IssueReporterScreenContent(
                             horizontalArrangement = Arrangement.End
                         ) {
                             GeneralOutlinedButton(
-                                onClick = { data.issueUrl.let(uriHandler::openUri) },
+                                onClick = {
+                                    firebaseController.logEvent(
+                                        AnalyticsEvent(
+                                            name = "issue_open_in_browser",
+                                            params = mapOf(
+                                                "screen" to AnalyticsValue.Str(
+                                                    ISSUE_REPORTER_SCREEN_NAME
+                                                ),
+                                            ),
+                                        ),
+                                    )
+                                    data.issueUrl.let(uriHandler::openUri)
+                                },
                                 vectorIcon = Icons.AutoMirrored.Outlined.OpenInNew,
                                 iconContentDescription = stringResource(R.string.open_issue_in_browser),
                                 label = stringResource(R.string.open_button_label)
@@ -345,7 +402,21 @@ fun IssueReporterScreenContent(
                             .clickable {
                                 view.playSoundEffect(SoundEffectConstants.CLICK)
                                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
-                                deviceExpanded.value = !deviceExpanded.value
+
+                                val newValue = !deviceExpanded.value
+                                deviceExpanded.value = newValue
+
+                                firebaseController.logEvent(
+                                    AnalyticsEvent(
+                                        name = "issue_device_info_toggle",
+                                        params = mapOf(
+                                            "screen" to AnalyticsValue.Str(
+                                                ISSUE_REPORTER_SCREEN_NAME
+                                            ),
+                                            "expanded" to AnalyticsValue.Str(if (newValue) "true" else "false"),
+                                        ),
+                                    ),
+                                )
                             }
                             .fillMaxWidth()
                             .padding(vertical = SizeConstants.LargeSize),

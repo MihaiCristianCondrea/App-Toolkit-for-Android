@@ -25,19 +25,26 @@ import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
 import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.content.HelpScreenContent
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.dropdowns.HelpScreenMenuActions
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.activity.isInAppReviewAvailable
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.findActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ReviewHelper
 import kotlinx.coroutines.flow.distinctUntilChanged
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+
+private const val HELP_SCREEN_NAME = "Help"
+private const val HELP_SCREEN_CLASS = "HelpScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,18 +52,30 @@ fun HelpScreen(
     config: AppVersionInfo,
 ) {
     val viewModel: HelpViewModel = koinViewModel()
+    val firebaseController: FirebaseController = koinInject()
+
     val context = LocalContext.current
     val activity = remember(context) { context.findActivity() }
     val scope = rememberCoroutineScope()
     val isInAppReviewAvailable = rememberSaveable { mutableStateOf(false) }
-
     val scrollBehavior: TopAppBarScrollBehavior =
         TopAppBarDefaults.enterAlwaysScrollBehavior(state = rememberTopAppBarState())
-
     val isFabExtended = rememberSaveable { mutableStateOf(true) }
     val showDialog = rememberSaveable { mutableStateOf(false) }
 
     val screenState: UiStateScreen<HelpUiState> by viewModel.uiState.collectAsStateWithLifecycle()
+
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = HELP_SCREEN_NAME,
+        screenClass = HELP_SCREEN_CLASS,
+    )
+
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = HELP_SCREEN_NAME,
+        screenState = screenState.screenState,
+    )
 
     LaunchedEffect(Unit) {
         isInAppReviewAvailable.value =

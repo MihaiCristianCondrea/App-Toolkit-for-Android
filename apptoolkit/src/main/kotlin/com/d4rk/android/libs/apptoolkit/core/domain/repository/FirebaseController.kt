@@ -1,5 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.core.domain.repository
 
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
+
 /**
  * Controls runtime behaviors for Firebase services.
  *
@@ -62,4 +64,10 @@ interface FirebaseController {
         throwable: Throwable,
         extraKeys: Map<String, String> = emptyMap(),
     )
+
+    fun logEvent(event: AnalyticsEvent)
+
+    fun logScreenView(screenName: String, screenClass: String? = null)
+
+    fun setUserProperty(name: String, value: String?)
 }

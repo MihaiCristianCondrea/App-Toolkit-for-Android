@@ -21,17 +21,24 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+
+private const val PERMISSIONS_SCREEN_NAME = "Permissions"
+private const val PERMISSIONS_SCREEN_CLASS = "PermissionsScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,49 +47,84 @@ fun PermissionsScreen() {
     val screenState: UiStateScreen<SettingsConfig> by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
+    val firebaseController: FirebaseController = koinInject()
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = PERMISSIONS_SCREEN_NAME,
+        screenClass = PERMISSIONS_SCREEN_CLASS,
+    )
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = PERMISSIONS_SCREEN_NAME,
+        screenState = screenState.screenState,
+    )
+
     LaunchedEffect(Unit) {
         viewModel.onEvent(PermissionsEvent.Load)
     }
 
     LargeTopAppBarWithScaffold(
         title = stringResource(id = R.string.permissions),
-        onBackClicked = { (context as Activity).finish() }) { paddingValues ->
-        ScreenStateHandler(screenState = screenState, onLoading = { LoadingScreen() }, onEmpty = {
-            NoDataScreen(
-                icon = Icons.Outlined.Settings,
-                showRetry = true,
-                onRetry = { viewModel.onEvent(PermissionsEvent.Load) },
-                paddingValues = paddingValues
-            )
-        }, onSuccess = { settingsConfig ->
-            PermissionsContent(paddingValues, settingsConfig)
-        })
+        onBackClicked = { (context as Activity).finish() },
+    ) { paddingValues ->
+        ScreenStateHandler(
+            screenState = screenState,
+            onLoading = { LoadingScreen() },
+            onEmpty = {
+                NoDataScreen(
+                    icon = Icons.Outlined.Settings,
+                    showRetry = true,
+                    onRetry = { viewModel.onEvent(PermissionsEvent.Load) },
+                    paddingValues = paddingValues,
+                )
+            },
+            onError = {
+                NoDataScreen(
+                    icon = Icons.Outlined.Settings,
+                    isError = true,
+                    showRetry = true,
+                    onRetry = { viewModel.onEvent(PermissionsEvent.Load) },
+                    paddingValues = paddingValues,
+                )
+            },
+            onSuccess = { settingsConfig ->
+                PermissionsContent(
+                    paddingValues = paddingValues,
+                    settingsConfig = settingsConfig,
+                )
+            },
+        )
     }
 }
 
 @Composable
 fun PermissionsContent(
     paddingValues: PaddingValues,
-    settingsConfig: SettingsConfig
+    settingsConfig: SettingsConfig,
 ) {
-    LazyColumn(contentPadding = paddingValues, modifier = Modifier.fillMaxHeight()) {
+    LazyColumn(
+        contentPadding = paddingValues,
+        modifier = Modifier.fillMaxHeight(),
+    ) {
         settingsConfig.categories.forEach { category ->
             item {
                 category.title?.let { title ->
                     PreferenceCategoryItem(title = title)
                     SmallVerticalSpacer()
                 }
+
                 Column(
                     modifier = Modifier
                         .padding(horizontal = SizeConstants.LargeSize)
-                        .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
+                        .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize)),
                 ) {
                     category.preferences.forEach { preference ->
                         SettingsPreferenceItem(
                             icon = preference.icon,
                             title = preference.title,
                             summary = preference.summary,
-                            onClick = { preference.action.invoke() })
+                            onClick = { preference.action.invoke() },
+                        )
                         ExtraTinyVerticalSpacer()
                     }
                 }

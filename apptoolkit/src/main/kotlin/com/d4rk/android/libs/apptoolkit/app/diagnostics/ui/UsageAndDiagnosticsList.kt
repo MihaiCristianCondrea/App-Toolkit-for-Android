@@ -30,13 +30,20 @@ import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnos
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.views.cards.ConsentToggleCard
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.views.headers.ConsentSectionHeader
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.views.headers.ExpandableConsentSectionHeader
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+
+private const val USAGE_DIAGNOSTICS_SCREEN_NAME = "UsageAndDiagnostics"
+private const val USAGE_DIAGNOSTICS_SCREEN_CLASS = "UsageAndDiagnosticsList"
 
 /**
  * A Composable that displays a list of settings for usage and diagnostics.
@@ -55,13 +62,29 @@ fun UsageAndDiagnosticsList(
     paddingValues: PaddingValues,
 ) {
     val viewModel: UsageAndDiagnosticsViewModel = koinViewModel()
-    val screenState: UiStateScreen<UsageAndDiagnosticsUiState> =
-        viewModel.uiState.collectAsStateWithLifecycle().value
-    val uiState = screenState.data ?: UsageAndDiagnosticsUiState()
+    val screenState: UiStateScreen<UsageAndDiagnosticsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState: UsageAndDiagnosticsUiState = screenState.data ?: UsageAndDiagnosticsUiState()
 
-    var advancedSettingsExpanded by remember { mutableStateOf(false) }
+    val firebaseController: FirebaseController = koinInject()
 
-    LazyColumn(contentPadding = paddingValues, modifier = Modifier.fillMaxSize()) {
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = USAGE_DIAGNOSTICS_SCREEN_NAME,
+        screenClass = USAGE_DIAGNOSTICS_SCREEN_CLASS,
+    )
+
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = USAGE_DIAGNOSTICS_SCREEN_NAME,
+        screenState = screenState.screenState,
+    )
+
+    var advancedSettingsExpanded: Boolean by remember { mutableStateOf(false) }
+
+    LazyColumn(
+        contentPadding = paddingValues,
+        modifier = Modifier.fillMaxSize(),
+    ) {
         item {
             val usageState = rememberUpdatedState(newValue = uiState.usageAndDiagnostics)
             SwitchCardItem(

@@ -16,20 +16,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.state.AdsSettingsUiState
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+
+private const val ADS_SETTINGS_SCREEN_NAME = "AdsSettings"
+private const val ADS_SETTINGS_SCREEN_CLASS = "AdsSettingsScreen"
 
 /** Compose screen displaying ad preferences. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,6 +44,20 @@ import org.koin.compose.viewmodel.koinViewModel
 fun AdsSettingsScreen() {
     val viewModel: AdsSettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<AdsSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val firebaseController: FirebaseController = koinInject()
+
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = ADS_SETTINGS_SCREEN_NAME,
+        screenClass = ADS_SETTINGS_SCREEN_CLASS,
+    )
+
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = ADS_SETTINGS_SCREEN_NAME,
+        screenState = screenState.screenState,
+    )
 
     val activity = LocalActivity.current
     val consentHost = remember(activity) {

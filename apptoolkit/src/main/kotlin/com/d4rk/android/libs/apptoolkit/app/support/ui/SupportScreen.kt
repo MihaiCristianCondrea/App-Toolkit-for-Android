@@ -33,6 +33,7 @@ import com.d4rk.android.libs.apptoolkit.app.support.ui.state.DonationOptionUiSta
 import com.d4rk.android.libs.apptoolkit.app.support.ui.state.SupportScreenUiState
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
 import com.d4rk.android.libs.apptoolkit.app.support.utils.constants.ShortenLinkConstants
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.SupportNativeAdCard
@@ -40,6 +41,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralTonalButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
@@ -66,6 +69,19 @@ fun SupportComposable() {
                 )
             }
         }
+
+    val firebaseController: FirebaseController = koinInject()
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = "Support",
+        screenClass = "SupportComposable",
+    )
+
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = "Support",
+        screenState = screenState.screenState,
+    )
 
     LargeTopAppBarWithScaffold(
         title = stringResource(id = R.string.support_us),

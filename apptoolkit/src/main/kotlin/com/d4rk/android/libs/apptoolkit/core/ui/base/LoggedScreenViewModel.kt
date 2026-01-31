@@ -1,6 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.base
 
 import androidx.lifecycle.viewModelScope
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
@@ -82,6 +84,18 @@ abstract class LoggedScreenViewModel<T, E : UiEvent, A : ActionEvent>(
             message = Breadcrumb.Messages.VM_OP_START,
             attributes = merged,
         )
+
+        firebaseController.logEvent(
+            AnalyticsEvent(
+                name = "vm_op_start",
+                params = buildMap {
+                    put("screen", AnalyticsValue.Str(screenName))
+                    put("view_model", AnalyticsValue.Str(viewModelName))
+                    put("action", AnalyticsValue.Str(action))
+                    putAll(extra.toAnalyticsParams())
+                },
+            ),
+        )
     }
 
     /** Reports a ViewModel error to Firebase (Crashlytics / your implementation). */
@@ -131,7 +145,28 @@ abstract class LoggedScreenViewModel<T, E : UiEvent, A : ActionEvent>(
 
             breadcrumb(
                 message = Breadcrumb.Messages.VM_OP_ERROR,
-                attributes = merged,
+                attributes = buildMap(extra.size + 3) {
+                    put(Breadcrumb.Keys.ACTION, action)
+                    put(Breadcrumb.Keys.STEP, "catch")
+                    put(Breadcrumb.Keys.ERROR, throwable::class.java.simpleName ?: "Throwable")
+                    putAll(extra)
+                },
+            )
+
+            firebaseController.logEvent(
+                AnalyticsEvent(
+                    name = "vm_op_error",
+                    params = buildMap {
+                        put("screen", AnalyticsValue.Str(screenName))
+                        put("view_model", AnalyticsValue.Str(viewModelName))
+                        put("action", AnalyticsValue.Str(action))
+                        put(
+                            "error_class",
+                            AnalyticsValue.Str(throwable::class.java.simpleName ?: "Throwable")
+                        )
+                        putAll(extra.toAnalyticsParams())
+                    },
+                ),
             )
 
             reportError(action = action, throwable = throwable)
@@ -157,24 +192,50 @@ abstract class LoggedScreenViewModel<T, E : UiEvent, A : ActionEvent>(
         startOperation(action = action, extra = extra)
 
         return viewModelScope.launch {
-            runCatching {
-                block()
-            }.onFailure { throwable ->
-                if (throwable is CancellationException) throw throwable
+            runCatching { block() }
+                .onFailure { throwable ->
+                    if (throwable is CancellationException) throw throwable
 
-                breadcrumb(
-                    message = Breadcrumb.Messages.VM_OP_ERROR,
-                    attributes = buildMap(extra.size + 3) {
-                        put(Breadcrumb.Keys.ACTION, action)
-                        put(Breadcrumb.Keys.STEP, "catch")
-                        put(Breadcrumb.Keys.ERROR, throwable::class.java.simpleName ?: "Throwable")
-                        putAll(extra)
-                    },
-                )
+                    breadcrumb(
+                        message = Breadcrumb.Messages.VM_OP_ERROR,
+                        attributes = buildMap(extra.size + 3) {
+                            put(Breadcrumb.Keys.ACTION, action)
+                            put(Breadcrumb.Keys.STEP, "catch")
+                            put(
+                                Breadcrumb.Keys.ERROR,
+                                throwable::class.java.simpleName ?: "Throwable"
+                            )
+                            putAll(extra)
+                        },
+                    )
 
-                reportError(action = action, throwable = throwable)
-                onError(throwable)
-            }
+                    firebaseController.logEvent(
+                        AnalyticsEvent(
+                            name = "vm_op_error",
+                            params = buildMap {
+                                put("screen", AnalyticsValue.Str(screenName))
+                                put("view_model", AnalyticsValue.Str(viewModelName))
+                                put("action", AnalyticsValue.Str(action))
+                                put(
+                                    "error_class",
+                                    AnalyticsValue.Str(
+                                        throwable::class.java.simpleName ?: "Throwable"
+                                    )
+                                )
+                                putAll(extra.toAnalyticsParams())
+                            },
+                        ),
+                    )
+
+                    reportError(action = action, throwable = throwable)
+                    onError(throwable)
+                }
+        }
+    }
+
+    private fun Map<String, String>.toAnalyticsParams(): Map<String, AnalyticsValue> {
+        return entries.associate { (k, v) ->
+            k to AnalyticsValue.Str(v)
         }
     }
 

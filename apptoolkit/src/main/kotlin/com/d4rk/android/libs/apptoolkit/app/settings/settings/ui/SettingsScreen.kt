@@ -48,11 +48,14 @@ import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.Setti
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsPreference
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
@@ -65,6 +68,10 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivi
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
+private const val SETTINGS_SCREEN_NAME = "Settings"
+private const val SETTINGS_SCREEN_CLASS = "SettingsScreen"
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen() {
@@ -72,6 +79,18 @@ fun SettingsScreen() {
     val contentProvider: GeneralSettingsContentProvider = koinInject()
     val screenState: UiStateScreen<SettingsConfig> by viewModel.uiState.collectAsStateWithLifecycle()
     val context: Context = LocalContext.current
+
+    val firebaseController: FirebaseController = koinInject()
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = SETTINGS_SCREEN_NAME,
+        screenClass = SETTINGS_SCREEN_CLASS,
+    )
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = SETTINGS_SCREEN_NAME,
+        screenState = screenState.screenState,
+    )
 
     LaunchedEffect(Unit) {
         viewModel.onEvent(event = SettingsEvent.Load(context = context))
@@ -89,7 +108,7 @@ fun SettingsScreen() {
                     icon = Icons.Outlined.Settings,
                     showRetry = true,
                     onRetry = { viewModel.onEvent(event = SettingsEvent.Load(context = context)) },
-                    paddingValues = paddingValues
+                    paddingValues = paddingValues,
                 )
             },
             onSuccess = { config: SettingsConfig ->
@@ -233,11 +252,24 @@ fun SettingsDetail(
     val viewModel: GeneralSettingsViewModel = koinViewModel()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 
+    val firebaseController: FirebaseController = koinInject()
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = "GeneralSettings",
+        screenClass = preference.key,
+    )
+
     LaunchedEffect(key1 = preference.key) {
         viewModel.onEvent(event = GeneralSettingsEvent.Load(contentKey = preference.key))
     }
 
     val uiStateScreen = viewModel.uiState.collectAsState().value
+
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = "GeneralSettings",
+        screenState = uiStateScreen.screenState,
+    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         GeneralSettingsContent(

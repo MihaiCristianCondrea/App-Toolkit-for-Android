@@ -20,16 +20,23 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.state.AdvancedSettingsUiState
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.IssueReporterActivity
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+
+private const val ADVANCED_SETTINGS_SCREEN_NAME = "AdvancedSettings"
+private const val ADVANCED_SETTINGS_SCREEN_CLASS = "AdvancedSettingsList"
 
 /**
  * A Composable function that displays a list of advanced settings.
@@ -52,6 +59,20 @@ fun AdvancedSettingsList(
     val viewModel: AdvancedSettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<AdvancedSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val firebaseController: FirebaseController = koinInject()
+
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = ADVANCED_SETTINGS_SCREEN_NAME,
+        screenClass = ADVANCED_SETTINGS_SCREEN_CLASS,
+    )
+
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = ADVANCED_SETTINGS_SCREEN_NAME,
+        screenState = screenState.screenState,
+    )
+
     val context = LocalContext.current
     val appContext = remember(context) { context.applicationContext }
 
@@ -69,6 +90,7 @@ fun AdvancedSettingsList(
         screenState = screenState,
         onLoading = { LoadingScreen() },
         onEmpty = { NoDataScreen(paddingValues = paddingValues) },
+        onError = { NoDataScreen(isError = true, paddingValues = paddingValues) },
         onSuccess = {
             LazyColumn(
                 contentPadding = paddingValues,

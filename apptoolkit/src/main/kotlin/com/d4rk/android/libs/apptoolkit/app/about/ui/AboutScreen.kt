@@ -27,11 +27,14 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.app.licenses.ui.LicensesActivity
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.logging.ABOUT_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
@@ -46,8 +49,12 @@ import nl.dionsegijn.konfetti.core.Party
 import nl.dionsegijn.konfetti.core.Position
 import nl.dionsegijn.konfetti.core.Spread
 import nl.dionsegijn.konfetti.core.emitter.Emitter
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import java.util.concurrent.TimeUnit
+
+private const val ABOUT_SCREEN_NAME = "About"
+private const val ABOUT_SCREEN_CLASS = "AboutScreen"
 
 /**
  * A Composable that displays the "About" screen's settings list.
@@ -78,9 +85,23 @@ fun AboutScreen(
     val screenState: UiStateScreen<AboutUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val deviceInfo: String = stringResource(id = R.string.device_info)
 
-    var showKonfettiAnimationForThisInstance: Boolean by rememberSaveable { mutableStateOf(value = false) }
-    var appVersionTapCount: Int by rememberSaveable { mutableIntStateOf(value = 0) }
-    var appVersionTotalTapCount: Int by rememberSaveable { mutableIntStateOf(value = 0) }
+    val firebaseController: FirebaseController = koinInject()
+
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = ABOUT_SCREEN_NAME,
+        screenClass = ABOUT_SCREEN_CLASS,
+    )
+
+    TrackScreenState(
+        firebaseController = firebaseController,
+        screenName = ABOUT_SCREEN_NAME,
+        screenState = screenState.screenState,
+    )
+
+    var showKonfettiAnimationForThisInstance: Boolean by rememberSaveable { mutableStateOf(false) }
+    var appVersionTapCount: Int by rememberSaveable { mutableIntStateOf(0) }
+    var appVersionTotalTapCount: Int by rememberSaveable { mutableIntStateOf(0) }
 
     val party = Party(
         speed = 0f,
@@ -90,19 +111,18 @@ fun AboutScreen(
         position = Position.Relative(0.5, 0.3),
         emitter = Emitter(duration = 200, TimeUnit.MILLISECONDS).max(amount = 100)
     )
-    val partyRain =
-        Party(
-            emitter = Emitter(duration = 3, TimeUnit.SECONDS).perSecond(amount = 60),
-            angle = Angle.BOTTOM,
-            spread = Spread.SMALL,
-            speed = 5f,
-            maxSpeed = 15f,
-            timeToLive = 3000L,
-            position = Position.Relative(x = 0.0, y = 0.0)
-                .between(value = Position.Relative(x = 1.0, y = 0.0))
-        )
+    val partyRain = Party(
+        emitter = Emitter(duration = 3, TimeUnit.SECONDS).perSecond(amount = 60),
+        angle = Angle.BOTTOM,
+        spread = Spread.SMALL,
+        speed = 5f,
+        maxSpeed = 15f,
+        timeToLive = 3000L,
+        position = Position.Relative(x = 0.0, y = 0.0)
+            .between(value = Position.Relative(x = 1.0, y = 0.0))
+    )
 
-    LaunchedEffect(key1 = showKonfettiAnimationForThisInstance) {
+    LaunchedEffect(showKonfettiAnimationForThisInstance) {
         if (showKonfettiAnimationForThisInstance) {
             delay(3000)
             showKonfettiAnimationForThisInstance = false
@@ -171,7 +191,8 @@ fun AboutScreen(
                         }
                     }
                 }
-            })
+            }
+        )
 
         if (showKonfettiAnimationForThisInstance) {
             KonfettiView(
@@ -185,5 +206,6 @@ fun AboutScreen(
         screenState = screenState,
         snackbarHostState = snackbarHostState,
         getDismissEvent = { AboutEvent.DismissSnackbar },
-        onEvent = { viewModel.onEvent(it) })
+        onEvent = { viewModel.onEvent(it) }
+    )
 }
