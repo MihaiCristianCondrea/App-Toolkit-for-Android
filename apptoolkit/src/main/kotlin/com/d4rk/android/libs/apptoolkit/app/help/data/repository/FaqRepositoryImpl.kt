@@ -8,6 +8,7 @@ import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.result.runSuspendCatching
 import kotlinx.coroutines.flow.Flow
@@ -30,9 +31,17 @@ class FaqRepositoryImpl(
     private val remoteDataSource: HelpRemoteDataSource,
     private val catalogUrl: String,
     private val productId: String,
+    private val firebaseController: FirebaseController,
 ) : FaqRepository {
 
     override fun fetchFaq(): Flow<DataState<List<FaqItem>, Errors>> = flow {
+        firebaseController.logBreadcrumb(
+            message = "FAQ repository fetch",
+            attributes = mapOf(
+                "catalogUrl" to catalogUrl,
+                "productId" to productId,
+            ),
+        )
         val remoteResult: Result<List<FaqItem>> = runSuspendCatching {
             fetchRemoteFaqItems()
         }

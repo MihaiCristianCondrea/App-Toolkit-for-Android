@@ -33,10 +33,11 @@ class StartupViewModelTest {
 
     @Test
     fun `consent event updates state`() = runTest(dispatcherExtension.testDispatcher) {
+        val firebaseController = FakeFirebaseController()
         val viewModel = StartupViewModel(
-            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
+            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
             dispatchers = testDispatcherProvider(),
-            firebaseController = FakeFirebaseController(),
+            firebaseController = firebaseController,
         )
         viewModel.onEvent(StartupEvent.ConsentFormLoaded)
         val state = viewModel.uiState.value
@@ -46,10 +47,11 @@ class StartupViewModelTest {
 
     @Test
     fun `continue event emits navigation action`() = runTest(dispatcherExtension.testDispatcher) {
+        val firebaseController = FakeFirebaseController()
         val viewModel = StartupViewModel(
-            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
+            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
             dispatchers = testDispatcherProvider(),
-            firebaseController = FakeFirebaseController(),
+            firebaseController = firebaseController,
         )
         val actions = mutableListOf<StartupAction>()
         val job = launch { viewModel.actionEvent.collect { actions.add(it) } }
@@ -62,10 +64,11 @@ class StartupViewModelTest {
     @Test
     fun `request consent event completes startup state`() =
         runTest(dispatcherExtension.testDispatcher) {
+            val firebaseController = FakeFirebaseController()
             val viewModel = StartupViewModel(
-                requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
+                requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
                 dispatchers = testDispatcherProvider(),
-                firebaseController = FakeFirebaseController(),
+                firebaseController = firebaseController,
             )
 
             viewModel.onEvent(StartupEvent.RequestConsent(host = FakeConsentHost()))

@@ -22,10 +22,11 @@ val aboutModule: Module =
                 deviceProvider = get(),
                 buildInfoProvider = get(),
                 context = get(),
+                firebaseController = get(),
             )
         }
-        single { GetAboutInfoUseCase(repository = get()) }
-        single { CopyDeviceInfoUseCase(repository = get()) }
+        single { GetAboutInfoUseCase(repository = get(), firebaseController = get()) }
+        single { CopyDeviceInfoUseCase(repository = get(), firebaseController = get()) }
 
         viewModel {
             AboutViewModel(

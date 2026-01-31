@@ -29,6 +29,10 @@ class StartupViewModel(
 ) {
 
     override fun onEvent(event: StartupEvent) {
+        firebaseController.logBreadcrumb(
+            message = "StartupViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             is StartupEvent.RequestConsent -> requestConsent(event.host)
             StartupEvent.ConsentFormLoaded -> screenState.updateData(

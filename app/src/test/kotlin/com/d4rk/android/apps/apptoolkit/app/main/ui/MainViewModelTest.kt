@@ -54,13 +54,14 @@ class MainViewModelTest {
         )
 
         val repo = FakeNavigationRepository(flowOf(expectedItems))
-        val useCase = GetNavigationDrawerItemsUseCase(repo)
+        val firebaseController = FakeFirebaseController()
+        val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
         val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
         MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
-            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
-            firebaseController = FakeFirebaseController(),
+            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
+            firebaseController = firebaseController,
             dispatchers = dispatchers,
         )
 
@@ -83,13 +84,14 @@ class MainViewModelTest {
             )
 
             val repo = FakeNavigationRepository(flowOf(expectedItems))
-            val useCase = GetNavigationDrawerItemsUseCase(repo)
+            val firebaseController = FakeFirebaseController()
+            val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
             val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
             val viewModel = MainViewModel(
                 getNavigationDrawerItemsUseCase = useCase,
-                requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
-                firebaseController = FakeFirebaseController(),
+                requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
+                firebaseController = firebaseController,
                 dispatchers = dispatchers,
             )
 
@@ -111,13 +113,14 @@ class MainViewModelTest {
         val repo = FakeNavigationRepository(
             upstream = flow { throw error }
         )
-        val useCase = GetNavigationDrawerItemsUseCase(repo)
+        val firebaseController = FakeFirebaseController()
+        val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
         val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
         val viewModel = MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
-            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
-            firebaseController = FakeFirebaseController(),
+            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
+            firebaseController = firebaseController,
             dispatchers = dispatchers,
         )
 
@@ -140,11 +143,12 @@ class MainViewModelTest {
     @Test
     fun `empty navigation list shows snackbar`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = FakeNavigationRepository(flowOf(emptyList()))
-        val useCase = GetNavigationDrawerItemsUseCase(repo)
+        val firebaseController = FakeFirebaseController()
+        val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
         val viewModel = MainViewModel(
             useCase,
-            RequestConsentUseCase(FakeConsentRepository()),
-            FakeFirebaseController(),
+            RequestConsentUseCase(FakeConsentRepository(), firebaseController),
+            firebaseController,
             TestDispatchers(dispatcherExtension.testDispatcher)
         )
 

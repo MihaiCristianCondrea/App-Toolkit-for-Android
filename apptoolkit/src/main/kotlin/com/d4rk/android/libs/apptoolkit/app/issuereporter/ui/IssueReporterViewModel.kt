@@ -51,6 +51,10 @@ class IssueReporterViewModel(
     )
 ) {
     override fun onEvent(event: IssueReporterEvent) {
+        firebaseController.logBreadcrumb(
+            message = "IssueReporterViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             is IssueReporterEvent.UpdateTitle -> update { it.copy(title = event.value) }
             is IssueReporterEvent.UpdateDescription -> update { it.copy(description = event.value) }
@@ -72,6 +76,14 @@ class IssueReporterViewModel(
 
         if (generalJob?.isActive == true) return
 
+        firebaseController.logBreadcrumb(
+            message = "Issue report send requested",
+            attributes = mapOf(
+                "hasTitle" to data.title.isNotBlank().toString(),
+                "hasDescription" to data.description.isNotBlank().toString(),
+                "anonymous" to data.anonymous.toString(),
+            ),
+        )
         if (data.title.isBlank() || data.description.isBlank()) {
             screenState.showSnackbar(
                 snackbar = UiSnackbar(

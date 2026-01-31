@@ -12,7 +12,8 @@ val permissionsModule: Module =
         single<PermissionsRepository> {
             PermissionsRepositoryImpl(
                 context = get(),
-                dispatchers = get()
+                dispatchers = get(),
+                firebaseController = get(),
             )
         }
         viewModel {

@@ -74,10 +74,18 @@ class FavoriteAppsViewModel(
         )
 
     init {
+        firebaseController.logBreadcrumb(
+            message = "FavoriteAppsViewModel initialized",
+            attributes = mapOf("screen" to "FavoriteApps"),
+        )
         onEvent(FavoriteAppsEvent.LoadFavorites)
     }
 
     override fun onEvent(event: FavoriteAppsEvent) {
+        firebaseController.logBreadcrumb(
+            message = "FavoriteAppsViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             is FavoriteAppsEvent.LoadFavorites -> observe()
             is FavoriteAppsEvent.OpenRandomApp -> {
@@ -88,6 +96,10 @@ class FavoriteAppsViewModel(
     }
 
     private fun observe() {
+        firebaseController.logBreadcrumb(
+            message = "Favorite apps observe",
+            attributes = mapOf("source" to "FavoriteAppsViewModel"),
+        )
         observeJob?.cancel()
         observeJob = viewModelScope.launch {
             observeFavoriteAppsUseCase()
@@ -128,6 +140,10 @@ class FavoriteAppsViewModel(
     }
 
     fun toggleFavorite(packageName: String) {
+        firebaseController.logBreadcrumb(
+            message = "Favorite apps toggle favorite",
+            attributes = mapOf("packageName" to packageName),
+        )
         toggleJob?.cancel()
         toggleJob = viewModelScope.launch {
             try {

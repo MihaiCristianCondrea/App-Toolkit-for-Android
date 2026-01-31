@@ -4,6 +4,7 @@ import com.d4rk.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoRes
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -15,13 +16,23 @@ import kotlinx.coroutines.flow.flow
  *
  * @property repository The repository used to perform the copy operation.
  */
-class CopyDeviceInfoUseCase(private val repository: AboutRepository) {
+class CopyDeviceInfoUseCase(
+    private val repository: AboutRepository,
+    private val firebaseController: FirebaseController,
+) {
 
     operator fun invoke(
         label: String,
         deviceInfo: String,
     ): Flow<DataState<CopyDeviceInfoResult, Errors>> =
         flow {
+            firebaseController.logBreadcrumb(
+                message = "Copy device info started",
+                attributes = mapOf(
+                    "label" to label,
+                    "deviceInfoLength" to deviceInfo.length.toString(),
+                ),
+            )
             val result = runCatching {
                 repository.copyDeviceInfo(
                     label = label,

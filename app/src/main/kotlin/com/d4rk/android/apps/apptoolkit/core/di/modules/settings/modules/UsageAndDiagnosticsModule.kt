@@ -15,6 +15,7 @@ val usageAndDiagnosticsModule: Module =
                 dataSource = get<CommonDataStore>(),
                 configProvider = get(),
                 dispatchers = get(),
+                firebaseController = get(),
             )
         }
 

@@ -4,6 +4,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.DeveloperAppsRepository
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
+import com.d4rk.android.apps.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import io.mockk.every
@@ -40,7 +41,7 @@ class FetchDeveloperAppsUseCaseTest {
         val repository = mockk<DeveloperAppsRepository> {
             every { fetchDeveloperApps() } returns repositoryEmissions.asFlow()
         }
-        val useCase = FetchDeveloperAppsUseCase(repository)
+        val useCase = FetchDeveloperAppsUseCase(repository, FakeFirebaseController())
 
         val result = useCase().toList()
 
@@ -59,7 +60,7 @@ class FetchDeveloperAppsUseCaseTest {
         val repository = mockk<DeveloperAppsRepository> {
             every { fetchDeveloperApps() } returns flow { throw exception }
         }
-        val useCase = FetchDeveloperAppsUseCase(repository)
+        val useCase = FetchDeveloperAppsUseCase(repository, FakeFirebaseController())
 
         val thrown = assertFailsWith<IllegalStateException> {
             useCase().toList()

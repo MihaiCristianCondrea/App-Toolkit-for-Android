@@ -51,12 +51,20 @@ class PermissionsViewModel(
     ) {
 
     override fun onEvent(event: PermissionsEvent) {
+        firebaseController.logBreadcrumb(
+            message = "PermissionsViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             PermissionsEvent.Load -> loadPermissions()
         }
     }
 
     private fun loadPermissions() {
+        firebaseController.logBreadcrumb(
+            message = "Permissions load started",
+            attributes = mapOf("source" to "PermissionsViewModel"),
+        )
         viewModelScope.launch {
             permissionsRepository.getPermissionsConfig()
                 .map<SettingsConfig, DataState<SettingsConfig, Errors>> { config ->

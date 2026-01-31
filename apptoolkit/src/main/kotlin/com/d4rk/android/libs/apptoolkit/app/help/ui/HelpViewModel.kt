@@ -43,10 +43,18 @@ class HelpViewModel(
 ) {
 
     init {
+        firebaseController.logBreadcrumb(
+            message = "HelpViewModel initialized",
+            attributes = mapOf("screen" to "Help"),
+        )
         onEvent(event = HelpEvent.LoadFaq)
     }
 
     override fun onEvent(event: HelpEvent) {
+        firebaseController.logBreadcrumb(
+            message = "HelpViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             is HelpEvent.LoadFaq -> loadFaq()
             is HelpEvent.DismissSnackbar -> screenState.dismissSnackbar()
@@ -54,6 +62,10 @@ class HelpViewModel(
     }
 
     private fun loadFaq() {
+        firebaseController.logBreadcrumb(
+            message = "Help FAQ load started",
+            attributes = mapOf("source" to "HelpViewModel"),
+        )
         generalJob?.cancel()
         generalJob = getFaqUseCase()
             .flowOn(context = dispatchers.io)

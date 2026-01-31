@@ -69,10 +69,18 @@ class AdsSettingsViewModel(
     private var consentJob: Job? = null
 
     init {
+        firebaseController.logBreadcrumb(
+            message = "AdsSettingsViewModel initialized",
+            attributes = mapOf("screen" to "AdsSettings"),
+        )
         onEvent(event = AdsSettingsEvent.Initialize)
     }
 
     override fun onEvent(event: AdsSettingsEvent) {
+        firebaseController.logBreadcrumb(
+            message = "AdsSettingsViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             is AdsSettingsEvent.Initialize -> observe()
             is AdsSettingsEvent.SetAdsEnabled -> persist(enabled = event.enabled)
@@ -95,6 +103,10 @@ class AdsSettingsViewModel(
      * The entire flow is launched within the `viewModelScope`.
      */
     private fun observe() {
+        firebaseController.logBreadcrumb(
+            message = "Ads settings observe started",
+            attributes = mapOf("source" to "AdsSettingsViewModel"),
+        )
         observeJob?.cancel()
         observeJob = observeAdsEnabled()
             .flowOn(dispatchers.io)
@@ -153,6 +165,10 @@ class AdsSettingsViewModel(
      * @param enabled A boolean indicating whether ads should be enabled (`true`) or disabled (`false`).
      */
     private fun persist(enabled: Boolean) {
+        firebaseController.logBreadcrumb(
+            message = "Ads settings persist",
+            attributes = mapOf("enabled" to enabled.toString()),
+        )
         persistJob?.cancel()
 
         var previousValue = repository.defaultAdsEnabled
@@ -231,6 +247,10 @@ class AdsSettingsViewModel(
             }
 
     private fun requestConsent(host: ConsentHost) {
+        firebaseController.logBreadcrumb(
+            message = "Ads consent request",
+            attributes = mapOf("host" to host.activity::class.java.name),
+        )
         consentJob?.cancel()
         consentJob = requestConsentUseCase(host = host, showIfRequired = false)
             .flowOn(dispatchers.main)
