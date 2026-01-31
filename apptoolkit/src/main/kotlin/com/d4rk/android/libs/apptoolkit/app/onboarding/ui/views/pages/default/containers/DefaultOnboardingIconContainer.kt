@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views
+package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.default.containers
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -15,7 +15,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun AnimatedMorphingShapeContainer(imageVector: ImageVector) {
+fun DefaultOnboardingIconContainer(imageVector: ImageVector) {
 
     Box(
         contentAlignment = Alignment.Center

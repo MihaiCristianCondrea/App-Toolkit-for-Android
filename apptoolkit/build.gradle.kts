@@ -104,6 +104,7 @@ dependencies {
     // UI utilities
     api(dependencyNotation = libs.bundles.ui.effects)
     api(dependencyNotation = libs.bundles.ui.richtext)
+    implementation(libs.androidx.compose.foundation.layout)
 
     // Unit Tests
     testImplementation(dependencyNotation = libs.bundles.unitTest)

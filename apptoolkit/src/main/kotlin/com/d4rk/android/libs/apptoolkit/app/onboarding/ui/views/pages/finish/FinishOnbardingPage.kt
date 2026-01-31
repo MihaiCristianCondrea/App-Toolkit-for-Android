@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages
+package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.finish
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
@@ -41,7 +41,7 @@ import nl.dionsegijn.konfetti.core.emitter.Emitter
 import java.util.concurrent.TimeUnit
 
 @Composable
-fun FinalOnboardingPageTab() {
+fun FinishOnbardingPage() {
 
     val iconVisible = remember { mutableStateOf(false) }
     val showKonfetti = remember { mutableStateOf(false) }

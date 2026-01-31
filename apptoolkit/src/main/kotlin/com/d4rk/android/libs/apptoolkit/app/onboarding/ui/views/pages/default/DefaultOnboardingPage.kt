@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages
+package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.default
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,12 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.model.OnboardingPage
-import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.AnimatedMorphingShapeContainer
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.default.containers.DefaultOnboardingIconContainer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable
-fun OnboardingDefaultPageLayout(page: OnboardingPage.DefaultPage) {
+fun DefaultOnboardingPage(page: OnboardingPage.DefaultPage) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -30,7 +30,7 @@ fun OnboardingDefaultPageLayout(page: OnboardingPage.DefaultPage) {
         verticalArrangement = Arrangement.Center
     ) {
 
-        AnimatedMorphingShapeContainer(page.imageVector)
+        DefaultOnboardingIconContainer(page.imageVector)
 
         Text(
             text = page.title,

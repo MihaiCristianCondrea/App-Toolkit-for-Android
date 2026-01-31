@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views
+package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.controls
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -35,7 +35,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
     ExperimentalMaterial3ExpressiveApi::class
 )
 @Composable
-fun OnboardingBottomNavigation(
+fun OnboardingFooter(
     pagerState: PagerState,
     pageCount: Int,
     onNextClicked: () -> Unit,

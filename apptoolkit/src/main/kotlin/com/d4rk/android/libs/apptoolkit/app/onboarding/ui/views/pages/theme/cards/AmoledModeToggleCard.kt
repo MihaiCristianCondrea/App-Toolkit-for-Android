@@ -1,8 +1,7 @@
-package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views
+package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.cards
 
 import android.view.SoundEffectConstants
 import android.view.View
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -32,33 +31,40 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable
-fun AmoledModeToggle(
-    isAmoledMode: Boolean, onCheckedChange: (Boolean) -> Unit
+fun AmoledModeToggleCard(
+    isAmoledMode: Boolean,
+    enabled: Boolean,
+    onCheckedChange: (Boolean) -> Unit
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
 
+    val elevation =
+        if (isAmoledMode) SizeConstants.ExtraSmallSize else SizeConstants.ExtraTinySize / 2
+    val shape = RoundedCornerShape(SizeConstants.LargeSize)
+
     Card(
-        modifier = Modifier
+        onClick = {
+            if (!enabled) return@Card
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
+            onCheckedChange(!isAmoledMode)
+        },
+        enabled = enabled,
+        modifier = (if (enabled) Modifier.bounceClick() else Modifier)
             .fillMaxWidth()
-            .bounceClick()
-            .clip(RoundedCornerShape(SizeConstants.LargeSize))
-            .clickable(onClick = {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                onCheckedChange(!isAmoledMode)
-            }),
-        shape = RoundedCornerShape(SizeConstants.LargeSize),
+            .alpha(if (enabled) 1f else 0.55f),
+        shape = shape,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (isAmoledMode) SizeConstants.ExtraSmallSize else SizeConstants.ExtraTinySize / 2)
+        elevation = CardDefaults.cardElevation(defaultElevation = elevation)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = SizeConstants.MediumSize * 2,
+                    horizontal = SizeConstants.MediumSize,
                     vertical = SizeConstants.LargeIncreasedSize
                 ),
             verticalAlignment = Alignment.CenterVertically,
@@ -76,11 +82,12 @@ fun AmoledModeToggle(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+
             LargeHorizontalSpacer()
 
             CustomSwitch(
                 checked = isAmoledMode,
-                onCheckedChange = { onCheckedChange(it) },
+                onCheckedChange = { if (enabled) onCheckedChange(it) },
                 checkIcon = Icons.Filled.Tonality,
                 uncheckIcon = Icons.Filled.Tonality
             )

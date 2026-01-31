@@ -31,8 +31,8 @@ import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAct
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.model.OnboardingPage
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
-import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.OnboardingBottomNavigation
-import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.OnboardingDefaultPageLayout
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.controls.OnboardingFooter
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.default.DefaultOnboardingPage
 import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
@@ -120,7 +120,7 @@ fun OnboardingScreen() {
         },
         bottomBar = {
             if (pages.isNotEmpty()) {
-                OnboardingBottomNavigation(
+                OnboardingFooter(
                     pagerState = pagerState,
                     pageCount = pages.size,
                     onNextClicked = {
@@ -151,7 +151,7 @@ fun OnboardingScreen() {
                 .padding(paddingValues = paddingValues)
         ) { pageIndex: Int ->
             when (val page = pages[pageIndex]) {
-                is OnboardingPage.DefaultPage -> OnboardingDefaultPageLayout(page = page)
+                is OnboardingPage.DefaultPage -> DefaultOnboardingPage(page = page)
                 is OnboardingPage.CustomPage -> page.content()
             }
         }
