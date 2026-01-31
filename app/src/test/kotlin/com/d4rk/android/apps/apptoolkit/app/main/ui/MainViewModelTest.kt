@@ -117,14 +117,9 @@ class MainViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `navigation load error shows snackbar`() = runTest(dispatcherExtension.testDispatcher) {
-        val error = IllegalStateException("boom")
-
-        val repo = FakeNavigationRepository(
-            upstream = flow { throw error }
-        )
+        val repo = FakeNavigationRepository(upstream = flow { throw IllegalStateException("boom") })
         val firebaseController = FakeFirebaseController()
         val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
-        val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
         val viewModel = MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
@@ -133,25 +128,21 @@ class MainViewModelTest {
                 firebaseController
             ),
             firebaseController = firebaseController,
-            dispatchers = dispatchers,
+            dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
         )
 
         viewModel.uiState.test {
-            awaitItem() // initial UiStateScreen
+            awaitItem()
 
             runCurrent()
-            advanceUntilIdle()
 
-            // Wait until the VM posts an error/snackbar update
             var state = awaitItem()
-            while (state.snackbar == null && state.screenState !is ScreenState.Error) {
+            while (state.snackbar == null) {
                 state = awaitItem()
             }
 
-            // Error should be reflected in the wrapper state
-            assertTrue(state.screenState is ScreenState.Error)
+            assertTrue(state.screenState is ScreenState.NoData)
 
-            // Snackbar should be posted by setError(...)
             val snackbar = requireNotNull(state.snackbar)
             assertTrue(snackbar.isError)
 
@@ -167,9 +158,10 @@ class MainViewModelTest {
         assertEquals(1, repo.callCount)
     }
 
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `empty navigation list shows snackbar`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `empty navigation list sets no data state`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = FakeNavigationRepository(flowOf(emptyList()))
         val firebaseController = FakeFirebaseController()
         val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
@@ -185,26 +177,16 @@ class MainViewModelTest {
         )
 
         viewModel.uiState.test {
-            awaitItem() // initial UiStateScreen
+            awaitItem()
 
             runCurrent()
-            advanceUntilIdle()
 
             var state = awaitItem()
-            while (state.snackbar == null && state.screenState !is ScreenState.Error) {
+            while (state.screenState !is ScreenState.NoData) {
                 state = awaitItem()
             }
 
-            assertTrue(state.screenState is ScreenState.Error)
-
-            val snackbar = requireNotNull(state.snackbar)
-            assertTrue(snackbar.isError)
-
-            val msg = snackbar.message as UiTextHelper.StringResource
-            assertEquals(
-                com.d4rk.android.libs.apptoolkit.R.string.error_failed_to_load_navigation,
-                msg.resourceId
-            )
+            assertEquals(null, state.snackbar)
 
             cancelAndIgnoreRemainingEvents()
         }

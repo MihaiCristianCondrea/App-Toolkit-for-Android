@@ -1,9 +1,11 @@
 package com.d4rk.android.libs.apptoolkit.app.permissions.ui
 
+import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.IssueReporterViewModelTest
 import com.d4rk.android.libs.apptoolkit.app.permissions.domain.repository.PermissionsRepository
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsCategory
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
+import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
@@ -38,7 +40,13 @@ class TestPermissionsViewModel {
         } else {
             every { repository.getPermissionsConfig() } returns flowOf(config!!)
         }
-        viewModel = PermissionsViewModel(repository, firebaseController)
+        val dispatchers =
+            TestDispatchers(IssueReporterViewModelTest.dispatcherExtension.testDispatcher)
+        viewModel = PermissionsViewModel(
+            permissionsRepository = repository,
+            dispatchers = dispatchers,
+            firebaseController = firebaseController
+        )
     }
 
     @Test

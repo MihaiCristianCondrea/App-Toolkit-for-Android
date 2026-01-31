@@ -13,23 +13,22 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
-import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
-import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setNoData
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
+import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
@@ -42,7 +41,7 @@ import kotlinx.coroutines.withContext
  * @param dispatchers A provider for coroutine dispatchers, used for managing background tasks.
  * @param firebaseController Reports ViewModel flow failures to Firebase.
  *
- * @see ScreenViewModel
+ * @see LoggedScreenViewModel
  * @see SettingsConfig
  * @see SettingsEvent
  * @see SettingsAction
@@ -50,101 +49,98 @@ import kotlinx.coroutines.withContext
 class SettingsViewModel(
     private val settingsProvider: SettingsProvider,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
-) : ScreenViewModel<SettingsConfig, SettingsEvent, SettingsAction>(
-    initialState = UiStateScreen(data = SettingsConfig(title = "", categories = emptyList())),
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<SettingsConfig, SettingsEvent, SettingsAction>(
+    initialState = UiStateScreen(data = SettingsConfig(title = "")),
+    firebaseController = firebaseController,
+    screenName = "Settings",
 ) {
 
-    override fun onEvent(event: SettingsEvent) {
-        firebaseController.logBreadcrumb(
-            message = "SettingsViewModel event",
-            attributes = mapOf("event" to event::class.java.simpleName),
-        )
+    override fun handleEvent(event: SettingsEvent) {
         when (event) {
             is SettingsEvent.Load -> loadSettings(context = event.context)
         }
     }
 
     private fun loadSettings(context: Context) {
-        firebaseController.logBreadcrumb(
-            message = "Settings load started",
-            attributes = mapOf("context" to context::class.java.name),
+        startOperation(
+            action = Actions.LOAD_SETTINGS,
+            extra = mapOf(ExtraKeys.CONTEXT to context::class.java.name)
         )
-        viewModelScope.launch {
+        generalJob = generalJob.restart {
             flow {
                 val config = withContext(dispatchers.io) {
                     settingsProvider.provideSettingsConfig(context = context)
                 }
                 emit(config)
             }
+                .flowOn(dispatchers.io)
                 .map<SettingsConfig, DataState<SettingsConfig, Errors>> { config ->
                     if (config.categories.isEmpty()) {
-                        DataState.Error(
-                            data = config,
-                            error = Errors.UseCase.NO_DATA
-                        )
+                        DataState.Error(data = config, error = Errors.UseCase.NO_DATA)
                     } else {
                         DataState.Success(config)
                     }
                 }
                 .onStart {
-                    screenState.setErrors(emptyList())
-                    screenState.setLoading()
+                    updateStateThreadSafe {
+                        screenState.setErrors(emptyList())
+                        screenState.setLoading()
+                    }
                 }
-                .catch { throwable ->
-                    if (throwable is CancellationException) throw throwable
-                    firebaseController.reportViewModelError(
-                        viewModelName = "SettingsViewModel",
-                        action = "loadSettings",
-                        throwable = throwable,
-                    )
-                    emit(
-                        DataState.Error(
-                            error = throwable.toError(default = Errors.UseCase.INVALID_STATE)
-                        )
-                    )
+                .catchReport(
+                    action = Actions.LOAD_SETTINGS,
+                    extra = mapOf(ExtraKeys.CONTEXT to context::class.java.name)
+                ) {
+                    emit(DataState.Error(error = Errors.UseCase.INVALID_STATE))
                 }
-                .collect { result ->
+                .onEach { result ->
                     result
                         .onSuccess { config ->
-                            screenState.successData {
-                                copy(title = config.title, categories = config.categories)
+                            updateStateThreadSafe {
+                                screenState.setErrors(emptyList())
+                                screenState.setSuccess(data = config)
                             }
                         }
                         .onFailure { error ->
-                            val snackbarMessage = when {
-                                configCategoriesAreEmpty(result) -> UiTextHelper.StringResource(
-                                    R.string.error_no_settings_found,
+                            updateStateThreadSafe {
+                                val fallback = (result as? DataState.Error)?.data ?: SettingsConfig(
+                                    title = "",
+                                    categories = emptyList()
                                 )
-
-                                else -> error.asUiText()
+                                if (error == Errors.UseCase.NO_DATA) {
+                                    screenState.setErrors(
+                                        listOf(
+                                            UiSnackbar(
+                                                message = UiTextHelper.StringResource(
+                                                    R.string.error_no_settings_found
+                                                )
+                                            )
+                                        )
+                                    )
+                                    screenState.setNoData(data = fallback)
+                                } else {
+                                    screenState.setErrors(listOf(UiSnackbar(message = error.asUiText())))
+                                    screenState.updateData(newState = com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState.Error()) { current ->
+                                        current
+                                    }.also {
+                                        if (screenState.value.data == null) {
+                                            screenState.setSuccess(data = fallback)
+                                        }
+                                    }
+                                }
                             }
-
-                            screenState.setErrors(
-                                listOf(
-                                    UiSnackbar(
-                                        message = snackbarMessage,
-                                    ),
-                                ),
-                            )
-
-                            val newState = if (configCategoriesAreEmpty(result)) {
-                                ScreenState.NoData()
-                            } else {
-                                ScreenState.Error()
-                            }
-                            screenState.updateState(newState)
                         }
                 }
+                .launchIn(viewModelScope)
         }
     }
 
-    private fun configCategoriesAreEmpty(result: DataState<SettingsConfig, Errors>): Boolean {
-        val data = when (result) {
-            is DataState.Success -> result.data
-            is DataState.Error -> result.data
-            is DataState.Loading -> result.data
-        }
-        return data?.categories.isNullOrEmpty()
+    private object Actions {
+        const val LOAD_SETTINGS: String = "loadSettings"
+    }
+
+    private object ExtraKeys {
+        const val CONTEXT: String = "context"
     }
 }

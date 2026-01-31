@@ -20,6 +20,10 @@ val usageAndDiagnosticsModule: Module =
         }
 
         viewModel {
-            UsageAndDiagnosticsViewModel(repository = get(), firebaseController = get())
+            UsageAndDiagnosticsViewModel(
+                repository = get(),
+                firebaseController = get(),
+                dispatchers = get()
+            )
         }
     }

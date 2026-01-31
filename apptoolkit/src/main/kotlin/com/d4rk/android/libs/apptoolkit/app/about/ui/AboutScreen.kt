@@ -68,7 +68,7 @@ import java.util.concurrent.TimeUnit
  * @param onVersionTap Callback invoked with the cumulative number of taps on the app version item.
  */
 @Composable
-fun AboutSettingsList(
+fun AboutScreen(
     paddingValues: PaddingValues = PaddingValues(),
     snackbarHostState: SnackbarHostState,
     onVersionTap: (Int) -> Unit = {},

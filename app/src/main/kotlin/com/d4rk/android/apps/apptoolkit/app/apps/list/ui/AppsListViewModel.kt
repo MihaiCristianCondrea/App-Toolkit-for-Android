@@ -2,9 +2,9 @@ package com.d4rk.android.apps.apptoolkit.app.apps.list.ui
 
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.apps.apptoolkit.R
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
-import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
@@ -14,30 +14,26 @@ import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
-import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
-import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
-import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setNoData
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
@@ -59,9 +55,11 @@ class AppsListViewModel(
     observeFavoritesUseCase: ObserveFavoritesUseCase,
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
-) : ScreenViewModel<AppListUiState, HomeEvent, HomeAction>(
-    initialState = UiStateScreen(screenState = ScreenState.IsLoading(), data = AppListUiState())
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<AppListUiState, HomeEvent, HomeAction>(
+    initialState = UiStateScreen(data = AppListUiState()),
+    firebaseController = firebaseController,
+    screenName = "AppsList",
 ) {
 
     private val fetchAppsTrigger = MutableSharedFlow<Unit>(replay = 1)
@@ -84,97 +82,98 @@ class AppsListViewModel(
         )
 
     init {
-        firebaseController.logBreadcrumb(
-            message = "AppsListViewModel initialized",
-            attributes = mapOf("screen" to "AppsList"),
-        )
         observeFetch()
         fetchAppsTrigger.tryEmit(Unit)
     }
 
-    override fun onEvent(event: HomeEvent) {
-        firebaseController.logBreadcrumb(
-            message = "AppsListViewModel event",
-            attributes = mapOf("event" to event::class.java.simpleName),
-        )
+    override fun handleEvent(event: HomeEvent) {
         when (event) {
             HomeEvent.FetchApps -> fetchAppsTrigger.tryEmit(Unit)
+
             HomeEvent.OpenRandomApp -> {
                 val randomApp = screenData?.apps?.randomOrNull() ?: return
+                startOperation(
+                    action = Actions.OPEN_RANDOM_APP,
+                    extra = mapOf(ExtraKeys.PACKAGE_NAME to randomApp.packageName),
+                )
                 sendAction(HomeAction.OpenRandomApp(randomApp))
             }
         }
     }
 
     private fun observeFetch() {
-        firebaseController.logBreadcrumb(
-            message = "Apps list fetch observe",
-            attributes = mapOf("source" to "AppsListViewModel"),
-        )
-        fetchJob?.cancel()
-        fetchJob = viewModelScope.launch {
+        startOperation(action = Actions.OBSERVE_FETCH)
+        fetchJob = fetchJob.restart {
             fetchAppsTrigger
                 .flatMapLatest {
                     fetchDeveloperAppsUseCase()
                         .flowOn(dispatchers.io)
-                        .onStart { screenState.setLoading() }
+                        .onStart {
+                            updateStateThreadSafe {
+                                screenState.dismissSnackbar()
+                                screenState.setLoading()
+                            }
+                        }
                 }
-                .catch { throwable ->
-                    if (throwable is CancellationException) throw throwable
-                    firebaseController.reportViewModelError(
-                        viewModelName = "AppsListViewModel",
-                        action = "observeFetch",
-                        throwable = throwable,
-                    )
-                    updateStateThreadSafe { showLoadAppsError() }
+                .catchReport(action = Actions.OBSERVE_FETCH) {
+                    showLoadAppsError()
                 }
-                .collect { result ->
-                    updateStateThreadSafe {
-                        result
-                            .onSuccess { apps ->
-                                val data = apps.toImmutableList()
-                                if (data.isEmpty()) {
-                                    screenState.updateData(newState = ScreenState.NoData()) { current ->
-                                        current.copy(apps = persistentListOf())
-                                    }
+                .onEach { result ->
+                    result
+                        .onSuccess { apps ->
+                            updateStateThreadSafe {
+                                val list = apps.toImmutableList()
+                                val base = screenData ?: AppListUiState()
+                                val updated = base.copy(apps = list)
+
+                                if (list.isEmpty()) {
+                                    screenState.setNoData(data = updated)
                                 } else {
-                                    screenState.updateData(newState = ScreenState.Success()) { current ->
-                                        current.copy(apps = data)
-                                    }
+                                    screenState.setSuccess(data = updated)
                                 }
                             }
-                            .onFailure { showLoadAppsError(it) }
-                    }
+                        }
+                        .onFailure { error ->
+                            updateStateThreadSafe {
+                                showLoadAppsError(error)
+                            }
+                        }
                 }
+                .launchIn(viewModelScope)
         }
     }
 
     private fun showLoadAppsError(error: AppErrors? = null) {
-        screenState.updateState(ScreenState.Error())
-        screenState.showSnackbar(
-            UiSnackbar(
-                message = error?.toErrorMessage()
-                    ?: UiTextHelper.StringResource(R.string.error_failed_to_load_apps),
-                isError = true,
-                timeStamp = System.nanoTime(),
-                type = ScreenMessageType.SNACKBAR,
-            )
+        screenState.setError(
+            message = error?.toErrorMessage()
+                ?: UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
         )
     }
 
     fun toggleFavorite(packageName: String) {
-        firebaseController.logBreadcrumb(
-            message = "Apps list toggle favorite",
-            attributes = mapOf("packageName" to packageName),
-        )
-        toggleJob?.cancel()
-        toggleJob = viewModelScope.launch {
-            try {
-                withContext(dispatchers.io) { toggleFavoriteUseCase(packageName) }
-            } catch (t: Throwable) {
-                if (t is CancellationException) throw t
-                screenState.updateState(ScreenState.Error())
-            }
+        toggleJob = toggleJob.restart {
+            launchReport(
+                action = Actions.TOGGLE_FAVORITE,
+                extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
+                block = {
+                    withContext(dispatchers.io) { toggleFavoriteUseCase(packageName) }
+                },
+                onError = {
+                    screenState.setError(
+                        message = UiTextHelper.StringResource(R.string.error_failed_to_update_favorite),
+                    )
+                },
+            )
         }
+    }
+
+    private object Actions {
+        const val OBSERVE_FETCH: String = "observeFetch"
+        const val TOGGLE_FAVORITE: String = "toggleFavorite"
+        const val OPEN_RANDOM_APP: String = "openRandomApp"
+    }
+
+    private object ExtraKeys {
+        const val PACKAGE_NAME: String = "packageName"
     }
 }

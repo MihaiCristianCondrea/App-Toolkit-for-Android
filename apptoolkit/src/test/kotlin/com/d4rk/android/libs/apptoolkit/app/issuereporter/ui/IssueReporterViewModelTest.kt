@@ -7,8 +7,10 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.Gi
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
+import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
+import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import com.google.common.truth.Truth.assertThat
 import io.ktor.http.HttpStatusCode
@@ -29,12 +31,28 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class IssueReporterViewModelTest {
+
+    companion object {
+        @JvmField
+        @RegisterExtension
+        val dispatcherExtension = UnconfinedDispatcherExtension()
+
+        @JvmStatic
+        fun errorCases() = listOf(
+            Arguments.of(HttpStatusCode.Unauthorized, R.string.error_unauthorized),
+            Arguments.of(HttpStatusCode.Forbidden, R.string.error_forbidden),
+            Arguments.of(HttpStatusCode.Gone, R.string.error_gone),
+            Arguments.of(HttpStatusCode.UnprocessableEntity, R.string.error_unprocessable),
+            Arguments.of(HttpStatusCode.InternalServerError, R.string.snack_report_failed),
+        )
+    }
 
     private val githubTarget = GithubTarget("user", "repo")
     private val deviceInfoProvider = object : DeviceInfoProvider {
@@ -60,12 +78,14 @@ class IssueReporterViewModelTest {
 
         withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
+            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
             val viewModel = IssueReporterViewModel(
-                useCase,
-                githubTarget,
-                "",
-                deviceInfoProvider,
-                firebaseController,
+                sendIssueReport = useCase,
+                githubTarget = githubTarget,
+                githubToken = "",
+                deviceInfoProvider = deviceInfoProvider,
+                firebaseController = firebaseController,
+                dispatchers = dispatchers,
             )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
@@ -87,15 +107,15 @@ class IssueReporterViewModelTest {
             val useCase = mockk<SendIssueReportUseCase>()
             val captured = slot<SendIssueReportUseCase.Params>()
             every { useCase.invoke(capture(captured)) } returns flowOf(IssueReportResult.Success("url"))
-
-            val viewModel =
-                IssueReporterViewModel(
-                    useCase,
-                    githubTarget,
-                    "token",
-                    deviceInfoProvider,
-                    firebaseController,
-                )
+            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
+            val viewModel = IssueReporterViewModel(
+                sendIssueReport = useCase,
+                githubTarget = githubTarget,
+                githubToken = "token",
+                deviceInfoProvider = deviceInfoProvider,
+                firebaseController = firebaseController,
+                dispatchers = dispatchers,
+            )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
             viewModel.onEvent(IssueReporterEvent.UpdateTitle("Bug"))
@@ -120,12 +140,14 @@ class IssueReporterViewModelTest {
 
         withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
+            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
             val viewModel = IssueReporterViewModel(
-                useCase,
-                githubTarget,
-                "",
-                deviceInfoProvider,
-                firebaseController,
+                sendIssueReport = useCase,
+                githubTarget = githubTarget,
+                githubToken = "",
+                deviceInfoProvider = deviceInfoProvider,
+                firebaseController = firebaseController,
+                dispatchers = dispatchers,
             )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
@@ -155,12 +177,14 @@ class IssueReporterViewModelTest {
 
         withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
+            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
             val viewModel = IssueReporterViewModel(
-                useCase,
-                githubTarget,
-                "",
-                failingProvider,
-                firebaseController,
+                sendIssueReport = useCase,
+                githubTarget = githubTarget,
+                githubToken = "",
+                deviceInfoProvider = failingProvider,
+                firebaseController = firebaseController,
+                dispatchers = dispatchers,
             )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 
@@ -179,17 +203,6 @@ class IssueReporterViewModelTest {
         }
     }
 
-    companion object {
-        @JvmStatic
-        fun errorCases() = listOf(
-            Arguments.of(HttpStatusCode.Unauthorized, R.string.error_unauthorized),
-            Arguments.of(HttpStatusCode.Forbidden, R.string.error_forbidden),
-            Arguments.of(HttpStatusCode.Gone, R.string.error_gone),
-            Arguments.of(HttpStatusCode.UnprocessableEntity, R.string.error_unprocessable),
-            Arguments.of(HttpStatusCode.InternalServerError, R.string.snack_report_failed),
-        )
-    }
-
     @ParameterizedTest
     @MethodSource("errorCases")
     fun `send report error maps message`(status: HttpStatusCode, expected: Int) = runTest {
@@ -199,12 +212,14 @@ class IssueReporterViewModelTest {
             val useCase = mockk<SendIssueReportUseCase>()
             every { useCase.invoke(any()) } returns flowOf(IssueReportResult.Error(status, ""))
 
+            val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
             val viewModel = IssueReporterViewModel(
-                useCase,
-                githubTarget,
-                "tok",
-                deviceInfoProvider,
-                firebaseController,
+                sendIssueReport = useCase,
+                githubTarget = githubTarget,
+                githubToken = "tok",
+                deviceInfoProvider = deviceInfoProvider,
+                firebaseController = firebaseController,
+                dispatchers = dispatchers,
             )
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect() }
 

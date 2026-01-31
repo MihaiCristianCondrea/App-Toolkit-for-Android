@@ -3,7 +3,7 @@ package com.d4rk.android.libs.apptoolkit.app.settings.utils.providers
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import com.d4rk.android.libs.apptoolkit.app.about.ui.AboutSettingsList
+import com.d4rk.android.libs.apptoolkit.app.about.ui.AboutScreen
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.AdvancedSettingsList
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsList
 import com.d4rk.android.libs.apptoolkit.app.display.ui.DisplaySettingsList
@@ -25,7 +25,7 @@ class GeneralSettingsContentProvider(
             SettingsContent.ABOUT -> {
                 val aboutScreen = aboutContent
                 if (aboutScreen == null) {
-                    AboutSettingsList(
+                    AboutScreen(
                         paddingValues = paddingValues,
                         snackbarHostState = snackbarHostState
                     )

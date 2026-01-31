@@ -246,6 +246,22 @@ fun <T> MutableStateFlow<UiStateScreen<T>>.setSuccess(data: T) {
 }
 
 /**
+ * Sets the screen to a "no data" state and replaces [UiStateScreen.data].
+ */
+fun <T> MutableStateFlow<UiStateScreen<T>>.setNoData(
+    data: T,
+    clearSnackbar: Boolean = true,
+) {
+    update { current ->
+        current.copy(
+            screenState = ScreenState.NoData(),
+            data = data,
+            snackbar = if (clearSnackbar) null else current.snackbar,
+        )
+    }
+}
+
+/**
  * Sets the screen to an error state and shows a snackbar.
  *
  * Use this function when a screen-level operation fails and you want to:

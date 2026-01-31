@@ -14,73 +14,47 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
+import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
-import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
-import kotlinx.coroutines.CancellationException
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-/**
- * ViewModel for the Ads Settings screen.
- *
- * This ViewModel manages the UI state for ads settings, allowing the user to
- * enable or disable ads. It observes changes from the repository and persists
- * user actions.
- *
- * Rules:
- * - Use Flow + flowOn + launchIn(viewModelScope)
- * - Report failures with firebaseController.reportViewModelError in catch blocks
- * - Update UI using onSuccess/onFailure
- * - Use setLoading in onStart when needed
- * - Prefer thread-safe state updates when concurrent flows can update the same state
- */
 class AdsSettingsViewModel(
     private val observeAdsEnabled: ObserveAdsEnabledUseCase,
     private val setAdsEnabled: SetAdsEnabledUseCase,
     private val requestConsentUseCase: RequestConsentUseCase,
     private val repository: AdsSettingsRepository,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
-) : ScreenViewModel<AdsSettingsUiState, AdsSettingsEvent, AdsSettingsAction>(
-    initialState = UiStateScreen(
-        data = AdsSettingsUiState()
-    )
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<AdsSettingsUiState, AdsSettingsEvent, AdsSettingsAction>(
+    initialState = UiStateScreen(data = AdsSettingsUiState()),
+    firebaseController = firebaseController,
+    screenName = "AdsSettings",
 ) {
-
-    private var observeJob: Job? = null
     private var persistJob: Job? = null
     private var consentJob: Job? = null
 
     init {
-        firebaseController.logBreadcrumb(
-            message = "AdsSettingsViewModel initialized",
-            attributes = mapOf("screen" to "AdsSettings"),
-        )
         onEvent(event = AdsSettingsEvent.Initialize)
     }
 
-    override fun onEvent(event: AdsSettingsEvent) {
-        firebaseController.logBreadcrumb(
-            message = "AdsSettingsViewModel event",
-            attributes = mapOf("event" to event::class.java.simpleName),
-        )
+    override fun handleEvent(event: AdsSettingsEvent) {
         when (event) {
             is AdsSettingsEvent.Initialize -> observe()
             is AdsSettingsEvent.SetAdsEnabled -> persist(enabled = event.enabled)
@@ -88,195 +62,134 @@ class AdsSettingsViewModel(
         }
     }
 
-    /**
-     * Observes the state of the "ads enabled" setting from the data source.
-     *
-     * This function initiates a flow that listens for changes to the ads enabled preference.
-     * - It cancels any previous observation to avoid multiple listeners.
-     * - On start, it sets the UI screen state to loading.
-     * - It maps the boolean result from the use case to a [DataState.Success].
-     * - If an error occurs during the observation (e.g., a database issue), it catches the exception
-     *   and emits a [DataState.Error], falling back to the default ads enabled value from the repository.
-     * - For each emitted result:
-     *   - On success, it updates the UI state with the fetched `adsEnabled` value and sets the screen state to [ScreenState.Success].
-     *   - On failure, it updates the UI state with the default `adsEnabled` value and sets the screen state to [ScreenState.Error].
-     * The entire flow is launched within the `viewModelScope`.
-     */
-    private fun observe() {
-        firebaseController.logBreadcrumb(
-            message = "Ads settings observe started",
-            attributes = mapOf("source" to "AdsSettingsViewModel"),
+    private fun errorSnackbar(message: UiTextHelper): UiSnackbar =
+        UiSnackbar(
+            type = ScreenMessageType.SNACKBAR,
+            message = message,
+            isError = true,
+            timeStamp = System.nanoTime(),
         )
-        observeJob?.cancel()
-        observeJob = observeAdsEnabled()
-            .flowOn(dispatchers.io)
-            .onStart { updateStateThreadSafe { screenState.setLoading() } }
-            .map<Boolean, DataState<Boolean, Errors>> { enabled -> DataState.Success(enabled) }
-            .catch { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.reportViewModelError(
-                    viewModelName = "AdsSettingsViewModel",
-                    action = "observe",
-                    throwable = throwable,
-                )
-                emit(
-                    DataState.Error(
-                        data = repository.defaultAdsEnabled,
-                        error = Errors.Database.DATABASE_OPERATION_FAILED,
-                    )
-                )
-            }
-            .onEach { result ->
-                updateStateThreadSafe {
-                    result
-                        .onSuccess { enabled ->
-                            screenState.updateData(newState = ScreenState.Success()) { current ->
-                                current.copy(adsEnabled = enabled)
-                            }
-                        }
-                        .onFailure { error ->
-                            val fallback =
-                                (result as? DataState.Error)?.data ?: repository.defaultAdsEnabled
-                            screenState.updateData(newState = ScreenState.Error()) { current ->
-                                current.copy(adsEnabled = fallback)
-                            }
-                            screenState.showSnackbar(
-                                UiSnackbar(
-                                    message = error.asUiText(),
-                                    isError = true,
-                                    timeStamp = System.nanoTime(),
-                                    type = ScreenMessageType.SNACKBAR,
-                                )
-                            )
-                        }
+
+    private fun observe() {
+        startOperation(action = Actions.OBSERVE_ADS_ENABLED)
+        generalJob = generalJob.restart {
+            observeAdsEnabled.invoke()
+                .flowOn(dispatchers.io)
+                .onStart {
+                    updateStateThreadSafe {
+                        screenState.dismissSnackbar()
+                        screenState.setLoading()
+                    }
                 }
-            }
-            .launchIn(viewModelScope)
+                .onEach { enabled ->
+                    updateStateThreadSafe {
+                        screenState.updateData(newState = ScreenState.Success()) { current ->
+                            current.copy(adsEnabled = enabled)
+                        }
+                    }
+                }
+                .catchReport(action = Actions.OBSERVE_ADS_ENABLED) {
+                    updateStateThreadSafe {
+                        val fallback =
+                            screenState.value.data?.adsEnabled ?: repository.defaultAdsEnabled
+                        screenState.updateData(newState = ScreenState.Error()) { current ->
+                            current.copy(adsEnabled = fallback)
+                        }
+                        screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
+                    }
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
-    /**
-     * Persists the user's choice for enabling or disabling ads.
-     *
-     * This function first optimistically updates the UI state to reflect the new `enabled` status.
-     * It then launches a coroutine to save this setting to the underlying data source via the
-     * `setAdsEnabled` use case. If the persistence operation fails, it reverts the UI state
-     * to the previous value and updates the screen state to show an error.
-     *
-     * @param enabled A boolean indicating whether ads should be enabled (`true`) or disabled (`false`).
-     */
     private fun persist(enabled: Boolean) {
-        firebaseController.logBreadcrumb(
-            message = "Ads settings persist",
-            attributes = mapOf("enabled" to enabled.toString()),
+        startOperation(
+            action = Actions.PERSIST_ADS_ENABLED,
+            extra = mapOf(ExtraKeys.ENABLED to enabled.toString())
         )
-        persistJob?.cancel()
+        persistJob = persistJob.restart {
+            var previousValue = repository.defaultAdsEnabled
 
-        var previousValue = repository.defaultAdsEnabled
-
-        persistJob = persistAdsEnabled(enabled)
-            .flowOn(dispatchers.io)
-            .onStart {
-                updateStateThreadSafe {
-                    previousValue =
-                        screenState.value.data?.adsEnabled ?: repository.defaultAdsEnabled
-                    screenState.updateData(newState = ScreenState.Success()) { current ->
-                        current.copy(adsEnabled = enabled)
+            persistAdsEnabled(enabled)
+                .flowOn(dispatchers.io)
+                .onStart {
+                    updateStateThreadSafe {
+                        previousValue =
+                            screenState.value.data?.adsEnabled ?: repository.defaultAdsEnabled
+                        screenState.dismissSnackbar()
+                        screenState.updateData(newState = ScreenState.Success()) { current ->
+                            current.copy(adsEnabled = enabled)
+                        }
                     }
                 }
-            }
-            .onEach { result ->
-                updateStateThreadSafe {
+                .onEach { result ->
                     result
-                        .onSuccess {
-                            screenState.updateState(ScreenState.Success())
-                        }
                         .onFailure { error ->
-                            screenState.updateData(newState = ScreenState.Error()) { current ->
-                                current.copy(adsEnabled = previousValue)
+                            updateStateThreadSafe {
+                                screenState.updateData(newState = ScreenState.Error()) { current ->
+                                    current.copy(adsEnabled = previousValue)
+                                }
+                                screenState.setError(message = error.asUiText())
                             }
-                            screenState.showSnackbar(
-                                UiSnackbar(
-                                    message = error.asUiText(),
-                                    isError = true,
-                                    timeStamp = System.nanoTime(),
-                                    type = ScreenMessageType.SNACKBAR,
-                                )
-                            )
                         }
+
                 }
-            }
-            .catch { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.reportViewModelError(
-                    viewModelName = "AdsSettingsViewModel",
-                    action = "persist",
-                    throwable = throwable,
-                )
-                updateStateThreadSafe {
-                    screenState.updateData(newState = ScreenState.Error()) { current ->
-                        current.copy(adsEnabled = previousValue)
+                .catchReport(
+                    action = Actions.PERSIST_ADS_ENABLED,
+                    extra = mapOf(ExtraKeys.ENABLED to enabled.toString())
+                ) {
+                    updateStateThreadSafe {
+                        screenState.updateData(newState = ScreenState.Error()) { current ->
+                            current.copy(adsEnabled = previousValue)
+                        }
+                        screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
                     }
-                    screenState.showSnackbar(
-                        UiSnackbar(
-                            message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText(),
-                            isError = true,
-                            timeStamp = System.nanoTime(),
-                            type = ScreenMessageType.SNACKBAR,
-                        )
-                    )
                 }
-            }
-            .launchIn(viewModelScope)
+                .launchIn(viewModelScope)
+        }
     }
 
     private fun persistAdsEnabled(enabled: Boolean): Flow<DataState<Unit, Errors>> =
-        flow<DataState<Unit, Errors>> {
+        flow {
             when (setAdsEnabled(enabled)) {
                 is Result.Success -> emit(DataState.Success(Unit))
                 is Result.Error -> emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
             }
         }
-            .catch { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.reportViewModelError(
-                    viewModelName = "AdsSettingsViewModel",
-                    action = "persistAdsEnabled",
-                    throwable = throwable,
-                )
-                emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
-            }
 
     private fun requestConsent(host: ConsentHost) {
-        firebaseController.logBreadcrumb(
-            message = "Ads consent request",
-            attributes = mapOf("host" to host.activity::class.java.name),
+        startOperation(
+            action = Actions.REQUEST_CONSENT,
+            extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
         )
-        consentJob?.cancel()
-        consentJob = requestConsentUseCase(host = host, showIfRequired = false)
-            .flowOn(dispatchers.main)
-            .catch { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.reportViewModelError(
-                    viewModelName = "AdsSettingsViewModel",
-                    action = "requestConsent",
-                    throwable = throwable,
-                )
-                emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
-            }
-            .onEach { result ->
-                updateStateThreadSafe {
+        consentJob = consentJob.restart {
+            requestConsentUseCase.invoke(host = host, showIfRequired = false)
+                .flowOn(dispatchers.main)
+                .onEach { result ->
                     result.onFailure { error ->
-                        screenState.showSnackbar(
-                            UiSnackbar(
-                                message = error.asUiText(),
-                                isError = true,
-                                timeStamp = System.nanoTime(),
-                                type = ScreenMessageType.SNACKBAR,
-                            )
-                        )
+                        updateStateThreadSafe {
+                            screenState.showSnackbar(errorSnackbar(error.asUiText()))
+                        }
                     }
                 }
-            }
-            .launchIn(viewModelScope)
+                .catchReport(
+                    action = Actions.REQUEST_CONSENT,
+                    extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
+                ) {
+                    screenState.showSnackbar(errorSnackbar(Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO.asUiText()))
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    private object Actions {
+        const val OBSERVE_ADS_ENABLED: String = "observeAdsEnabled"
+        const val PERSIST_ADS_ENABLED: String = "persistAdsEnabled"
+        const val REQUEST_CONSENT: String = "requestConsent"
+    }
+
+    private object ExtraKeys {
+        const val ENABLED: String = "enabled"
+        const val HOST: String = "host"
     }
 }

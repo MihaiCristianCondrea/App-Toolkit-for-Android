@@ -9,6 +9,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
  * and managing granular consent for analytics and advertising preferences.
  */
 sealed interface UsageAndDiagnosticsEvent : UiEvent {
+    data object Initialize : UsageAndDiagnosticsEvent
     data class SetUsageAndDiagnostics(val enabled: Boolean) : UsageAndDiagnosticsEvent
     data class SetAnalyticsConsent(val granted: Boolean) : UsageAndDiagnosticsEvent
     data class SetAdStorageConsent(val granted: Boolean) : UsageAndDiagnosticsEvent

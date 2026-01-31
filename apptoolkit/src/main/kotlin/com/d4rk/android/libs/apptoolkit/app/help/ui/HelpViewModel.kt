@@ -13,19 +13,16 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setNoData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
-import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -34,27 +31,18 @@ import kotlinx.coroutines.flow.onStart
 class HelpViewModel(
     private val getFaqUseCase: GetFaqUseCase,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
-) : ScreenViewModel<HelpUiState, HelpEvent, HelpAction>(
-    initialState = UiStateScreen(
-        screenState = ScreenState.IsLoading(),
-        data = HelpUiState()
-    )
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<HelpUiState, HelpEvent, HelpAction>(
+    initialState = UiStateScreen(data = HelpUiState()),
+    firebaseController = firebaseController,
+    screenName = "Help",
 ) {
 
     init {
-        firebaseController.logBreadcrumb(
-            message = "HelpViewModel initialized",
-            attributes = mapOf("screen" to "Help"),
-        )
         onEvent(event = HelpEvent.LoadFaq)
     }
 
-    override fun onEvent(event: HelpEvent) {
-        firebaseController.logBreadcrumb(
-            message = "HelpViewModel event",
-            attributes = mapOf("event" to event::class.java.simpleName),
-        )
+    override fun handleEvent(event: HelpEvent) {
         when (event) {
             is HelpEvent.LoadFaq -> loadFaq()
             is HelpEvent.DismissSnackbar -> screenState.dismissSnackbar()
@@ -62,37 +50,33 @@ class HelpViewModel(
     }
 
     private fun loadFaq() {
-        firebaseController.logBreadcrumb(
-            message = "Help FAQ load started",
-            attributes = mapOf("source" to "HelpViewModel"),
-        )
-        generalJob?.cancel()
-        generalJob = getFaqUseCase()
-            .flowOn(context = dispatchers.io)
-            .onStart { screenState.setLoading() }
-            .onEach { result: DataState<List<FaqItem>, Errors> ->
-                result
-                    .onSuccess { faqs: List<FaqItem> ->
-                        val data = HelpUiState(questions = faqs.toImmutableList())
-                        if (faqs.isEmpty()) {
-                            screenState.updateData(newState = ScreenState.NoData()) { data }
-                        } else {
-                            screenState.setSuccess(data = data)
+        startOperation(action = "loadFaq")
+        generalJob = generalJob.restart {
+            getFaqUseCase.invoke()
+                .flowOn(context = dispatchers.io)
+                .onStart { screenState.setLoading() }
+                .onEach { result: DataState<List<FaqItem>, Errors> ->
+                    result
+                        .onSuccess { faqs: List<FaqItem> ->
+                            updateStateThreadSafe {
+                                val data = HelpUiState(questions = faqs.toImmutableList())
+                                if (faqs.isEmpty()) {
+                                    screenState.setNoData(data = data)
+                                } else {
+                                    screenState.setSuccess(data = data)
+                                }
+                            }
                         }
-                    }
-                    .onFailure { error: Errors ->
-                        screenState.setError(message = error.asUiText())
-                    }
-            }
-            .catch {
-                if (it is CancellationException) throw it
-                firebaseController.reportViewModelError(
-                    viewModelName = "HelpViewModel",
-                    action = "loadFaq",
-                    throwable = it,
-                )
-                screenState.setError(message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq))
-            }
-            .launchIn(scope = viewModelScope)
+                        .onFailure { error: Errors ->
+                            updateStateThreadSafe {
+                                screenState.setError(message = error.asUiText())
+                            }
+                        }
+                }
+                .catchReport(action = "loadFaq") {
+                    screenState.setError(message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq))
+                }
+                .launchIn(scope = viewModelScope)
+        }
     }
 }

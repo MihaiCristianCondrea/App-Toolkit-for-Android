@@ -10,59 +10,69 @@ import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.catch
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
+import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 
 class StartupViewModel(
     private val requestConsentUseCase: RequestConsentUseCase,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
-) : ScreenViewModel<StartupUiState, StartupEvent, StartupAction>(
-    initialState = UiStateScreen(data = StartupUiState())
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<StartupUiState, StartupEvent, StartupAction>(
+    initialState = UiStateScreen(data = StartupUiState()),
+    firebaseController = firebaseController,
+    screenName = "Startup",
 ) {
 
-    override fun onEvent(event: StartupEvent) {
-        firebaseController.logBreadcrumb(
-            message = "StartupViewModel event",
-            attributes = mapOf("event" to event::class.java.simpleName),
-        )
+    override fun handleEvent(event: StartupEvent) {
         when (event) {
-            is StartupEvent.RequestConsent -> requestConsent(event.host)
-            StartupEvent.ConsentFormLoaded -> screenState.updateData(
-                newState = ScreenState.Success()
-            ) { current -> current.copy(consentFormLoaded = true) }
-
-            StartupEvent.Continue -> sendAction(StartupAction.NavigateNext)
+            is StartupEvent.RequestConsent -> requestConsent(host = event.host)
+            is StartupEvent.ConsentFormLoaded -> markConsentFormLoaded()
+            is StartupEvent.Continue -> sendAction(action = StartupAction.NavigateNext)
         }
     }
 
     private fun requestConsent(host: ConsentHost) {
-        generalJob?.cancel()
-        generalJob = requestConsentUseCase(host = host)
-            .flowOn(dispatchers.main)
-            .catch { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.reportViewModelError(
-                    viewModelName = "StartupViewModel",
-                    action = "requestConsent",
-                    throwable = throwable,
-                )
-                emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
-            }
-            .onEach { result ->
-                when (result) {
-                    is DataState.Success,
-                    is DataState.Error -> onEvent(StartupEvent.ConsentFormLoaded)
-                    is DataState.Loading -> Unit
+        startOperation(
+            action = Actions.REQUEST_CONSENT,
+            extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
+        )
+        generalJob = generalJob.restart {
+            requestConsentUseCase.invoke(host = host)
+                .flowOn(dispatchers.main)
+                .onStart {
+                    screenState.setLoading()
                 }
-            }
-            .launchIn(viewModelScope)
+                .catchReport(
+                    action = Actions.REQUEST_CONSENT,
+                    extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
+                ) {
+                    emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
+                }
+                .onEach { result ->
+                    when (result) {
+                        is DataState.Success, is DataState.Error -> onEvent(event = StartupEvent.ConsentFormLoaded)
+                        is DataState.Loading -> Unit
+                    }
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    private fun markConsentFormLoaded() {
+        screenState.successData { copy(consentFormLoaded = true) }
+    }
+
+    private object Actions {
+        const val REQUEST_CONSENT: String = "requestConsent"
+    }
+
+    private object ExtraKeys {
+        const val HOST: String = "host"
     }
 }

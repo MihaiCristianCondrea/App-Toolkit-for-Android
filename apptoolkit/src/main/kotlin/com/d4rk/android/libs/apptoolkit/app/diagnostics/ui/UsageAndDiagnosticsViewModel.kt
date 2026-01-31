@@ -7,161 +7,167 @@ import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageA
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsAction
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsEvent
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnosticsUiState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
+import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
-import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentManagerHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 
-/**
- * ViewModel for the Usage and Diagnostics screen.
- *
- * This ViewModel manages the state and logic for user consent settings related to usage data,
- * diagnostics, and advertising. It interacts with the [UsageAndDiagnosticsRepository] to
- * observe and update these settings.
- *
- * It handles events from the UI to update specific consents, such as analytics, ad storage,
- * and personalization, and reflects these changes in the [UsageAndDiagnosticsUiState]. The
- * ViewModel also ensures that the underlying consent framework (via [ConsentManagerHelper])
- * is updated whenever settings change.
- *
- * @param repository The repository responsible for persisting and retrieving usage and diagnostics settings.
- * @param firebaseController Reports ViewModel flow failures to Firebase.
- */
 class UsageAndDiagnosticsViewModel(
     private val repository: UsageAndDiagnosticsRepository,
-    private val firebaseController: FirebaseController,
-) : ScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent, UsageAndDiagnosticsAction>(
+    private val dispatchers: DispatcherProvider,
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent, UsageAndDiagnosticsAction>(
     initialState = UiStateScreen(data = UsageAndDiagnosticsUiState()),
+    firebaseController = firebaseController,
+    screenName = "UsageAndDiagnostics",
 ) {
 
     init {
-        firebaseController.logBreadcrumb(
-            message = "UsageAndDiagnosticsViewModel initialized",
-            attributes = mapOf("screen" to "UsageAndDiagnostics"),
-        )
-        observeConsents()
+        onEvent(event = UsageAndDiagnosticsEvent.Initialize)
     }
 
-    override fun onEvent(event: UsageAndDiagnosticsEvent) {
-        firebaseController.logBreadcrumb(
-            message = "UsageAndDiagnosticsViewModel event",
-            attributes = mapOf("event" to event::class.java.simpleName),
-        )
+    override fun handleEvent(event: UsageAndDiagnosticsEvent) {
         when (event) {
-            is UsageAndDiagnosticsEvent.SetUsageAndDiagnostics -> updateUsageAndDiagnostics(event.enabled)
-            is UsageAndDiagnosticsEvent.SetAnalyticsConsent -> updateAnalyticsConsent(event.granted)
-            is UsageAndDiagnosticsEvent.SetAdStorageConsent -> updateAdStorageConsent(event.granted)
-            is UsageAndDiagnosticsEvent.SetAdUserDataConsent -> updateAdUserDataConsent(event.granted)
+            is UsageAndDiagnosticsEvent.Initialize -> observeConsents()
+            is UsageAndDiagnosticsEvent.SetUsageAndDiagnostics -> updateUsageAndDiagnostics(enabled = event.enabled)
+            is UsageAndDiagnosticsEvent.SetAnalyticsConsent -> updateAnalyticsConsent(granted = event.granted)
+            is UsageAndDiagnosticsEvent.SetAdStorageConsent -> updateAdStorageConsent(granted = event.granted)
+            is UsageAndDiagnosticsEvent.SetAdUserDataConsent -> updateAdUserDataConsent(granted = event.granted)
             is UsageAndDiagnosticsEvent.SetAdPersonalizationConsent -> updateAdPersonalizationConsent(
-                event.granted
+                granted = event.granted
             )
         }
     }
 
     private fun observeConsents() {
-        firebaseController.logBreadcrumb(
-            message = "Usage diagnostics observe started",
-            attributes = mapOf("source" to "UsageAndDiagnosticsViewModel"),
-        )
-        repository.observeSettings()
-            .onStart { screenState.setLoading() }
-            .map<UsageAndDiagnosticsSettings, DataState<UsageAndDiagnosticsSettings, Errors>> { settings ->
-                DataState.Success(settings)
-            }
-            .catch { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.reportViewModelError(
-                    viewModelName = "UsageAndDiagnosticsViewModel",
-                    action = "observeConsents",
-                    throwable = throwable,
-                )
-                emit(
-                    DataState.Error(
-                        error = throwable.toError(default = Errors.Database.DATABASE_OPERATION_FAILED)
-                    )
-                )
-            }
-            .onEach { result ->
-                result
-                    .onSuccess { settings ->
-                        screenState.successData {
-                            UsageAndDiagnosticsUiState(
-                                usageAndDiagnostics = settings.usageAndDiagnostics,
-                                analyticsConsent = settings.analyticsConsent,
-                                adStorageConsent = settings.adStorageConsent,
-                                adUserDataConsent = settings.adUserDataConsent,
-                                adPersonalizationConsent = settings.adPersonalizationConsent,
-                            )
-                        }
+        startOperation(action = Actions.OBSERVE_CONSENTS)
+        generalJob = generalJob.restart {
+            repository.observeSettings()
+                .flowOn(dispatchers.io)
+                .onStart {
+                    updateStateThreadSafe {
+                        screenState.dismissSnackbar()
+                        screenState.setLoading()
+                    }
+                }
+                .onEach { settings: UsageAndDiagnosticsSettings ->
+                    updateStateThreadSafe {
+                        val updated = UsageAndDiagnosticsUiState(
+                            usageAndDiagnostics = settings.usageAndDiagnostics,
+                            analyticsConsent = settings.analyticsConsent,
+                            adStorageConsent = settings.adStorageConsent,
+                            adUserDataConsent = settings.adUserDataConsent,
+                            adPersonalizationConsent = settings.adPersonalizationConsent,
+                        )
+
+                        screenState.setSuccess(data = updated)
                         updateConsent(settings)
                     }
-                    .onFailure { error -> handleObservationError(error.asUiText()) }
-            }
-            .launchIn(viewModelScope)
+                }
+                .catchReport(action = Actions.OBSERVE_CONSENTS) {
+                    updateStateThreadSafe {
+                        handleObservationError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
+                    }
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     private fun updateUsageAndDiagnostics(enabled: Boolean) {
-        firebaseController.logBreadcrumb(
-            message = "Usage diagnostics toggle",
-            attributes = mapOf("enabled" to enabled.toString()),
-        )
-        viewModelScope.launch { repository.setUsageAndDiagnostics(enabled) }
+        generalJob = generalJob.restart {
+            launchReport(
+                action = Actions.SET_USAGE_AND_DIAGNOSTICS,
+                extra = mapOf(ExtraKeys.ENABLED to enabled.toString()),
+                block = {
+                    repository.setUsageAndDiagnostics(enabled)
+                },
+                onError = {
+                    updateStateThreadSafe {
+                        handleObservationError(message = UiTextHelper.StringResource(R.string.error_an_error_occurred))
+                    }
+                },
+            )
+        }
     }
 
     private fun updateAnalyticsConsent(granted: Boolean) {
-        firebaseController.logBreadcrumb(
-            message = "Analytics consent toggle",
-            attributes = mapOf("granted" to granted.toString()),
-        )
-        viewModelScope.launch { repository.setAnalyticsConsent(granted) }
+        generalJob = generalJob.restart {
+            launchReport(
+                action = Actions.SET_ANALYTICS_CONSENT,
+                extra = mapOf(ExtraKeys.GRANTED to granted.toString()),
+                block = { repository.setAnalyticsConsent(granted) },
+                onError = {
+                    updateStateThreadSafe {
+                        handleObservationError(message = UiTextHelper.StringResource(R.string.error_an_error_occurred))
+                    }
+                },
+            )
+        }
     }
 
     private fun updateAdStorageConsent(granted: Boolean) {
-        firebaseController.logBreadcrumb(
-            message = "Ad storage consent toggle",
-            attributes = mapOf("granted" to granted.toString()),
-        )
-        viewModelScope.launch { repository.setAdStorageConsent(granted) }
+        generalJob = generalJob.restart {
+            launchReport(
+                action = Actions.SET_AD_STORAGE_CONSENT,
+                extra = mapOf(ExtraKeys.GRANTED to granted.toString()),
+                block = { repository.setAdStorageConsent(granted) },
+                onError = {
+                    updateStateThreadSafe {
+                        handleObservationError(message = UiTextHelper.StringResource(R.string.error_an_error_occurred))
+                    }
+                },
+            )
+        }
     }
 
     private fun updateAdUserDataConsent(granted: Boolean) {
-        firebaseController.logBreadcrumb(
-            message = "Ad user data consent toggle",
-            attributes = mapOf("granted" to granted.toString()),
-        )
-        viewModelScope.launch { repository.setAdUserDataConsent(granted) }
+        generalJob = generalJob.restart {
+            launchReport(
+                action = Actions.SET_AD_USER_DATA_CONSENT,
+                extra = mapOf(ExtraKeys.GRANTED to granted.toString()),
+                block = { repository.setAdUserDataConsent(granted) },
+                onError = {
+                    updateStateThreadSafe {
+                        handleObservationError(message = UiTextHelper.StringResource(R.string.error_an_error_occurred))
+                    }
+                },
+            )
+        }
     }
 
     private fun updateAdPersonalizationConsent(granted: Boolean) {
-        firebaseController.logBreadcrumb(
-            message = "Ad personalization consent toggle",
-            attributes = mapOf("granted" to granted.toString()),
-        )
-        viewModelScope.launch { repository.setAdPersonalizationConsent(granted) }
+        generalJob = generalJob.restart {
+            launchReport(
+                action = Actions.SET_AD_PERSONALIZATION_CONSENT,
+                extra = mapOf(ExtraKeys.GRANTED to granted.toString()),
+                block = { repository.setAdPersonalizationConsent(granted) },
+                onError = {
+                    updateStateThreadSafe {
+                        handleObservationError(message = UiTextHelper.StringResource(R.string.error_an_error_occurred))
+                    }
+                },
+            )
+        }
     }
 
     private fun updateConsent(settings: UsageAndDiagnosticsSettings) {
         ConsentManagerHelper.updateConsent(
+            // TODO: We should make the consent manager to something else, a use case or something that calls the firebase implementation
             analyticsGranted = settings.analyticsConsent,
             adStorageGranted = settings.adStorageConsent,
             adUserDataGranted = settings.adUserDataConsent,
@@ -170,13 +176,21 @@ class UsageAndDiagnosticsViewModel(
     }
 
     private fun handleObservationError(message: UiTextHelper = UiTextHelper.StringResource(R.string.error_an_error_occurred)) {
-        screenState.setErrors(
-            errors = listOf(
-                UiSnackbar(
-                    message = message,
-                ),
-            ),
-        )
+        screenState.setErrors(errors = listOf(UiSnackbar(message = message, isError = true)))
         screenState.updateState(ScreenState.Error())
+    }
+
+    private object Actions {
+        const val OBSERVE_CONSENTS: String = "observeConsents"
+        const val SET_USAGE_AND_DIAGNOSTICS: String = "setUsageAndDiagnostics"
+        const val SET_ANALYTICS_CONSENT: String = "setAnalyticsConsent"
+        const val SET_AD_STORAGE_CONSENT: String = "setAdStorageConsent"
+        const val SET_AD_USER_DATA_CONSENT: String = "setAdUserDataConsent"
+        const val SET_AD_PERSONALIZATION_CONSENT: String = "setAdPersonalizationConsent"
+    }
+
+    private object ExtraKeys {
+        const val ENABLED: String = "enabled"
+        const val GRANTED: String = "granted"
     }
 }

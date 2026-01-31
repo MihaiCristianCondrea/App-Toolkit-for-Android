@@ -12,98 +12,96 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
+import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
+import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 
 class GeneralSettingsViewModel(
     private val repository: GeneralSettingsRepository,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
-) : ScreenViewModel<GeneralSettingsUiState, GeneralSettingsEvent, GeneralSettingsAction>(
-    initialState = UiStateScreen(data = GeneralSettingsUiState())
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<GeneralSettingsUiState, GeneralSettingsEvent, GeneralSettingsAction>(
+    initialState = UiStateScreen(data = GeneralSettingsUiState()),
+    firebaseController = firebaseController,
+    screenName = "GeneralSettings",
 ) {
 
-    override fun onEvent(event: GeneralSettingsEvent) {
-        firebaseController.logBreadcrumb(
-            message = "GeneralSettingsViewModel event",
-            attributes = mapOf("event" to event::class.java.simpleName),
-        )
+    override fun handleEvent(event: GeneralSettingsEvent) {
         when (event) {
             is GeneralSettingsEvent.Load -> loadContent(contentKey = event.contentKey)
         }
     }
 
     private fun loadContent(contentKey: String?) {
-        firebaseController.logBreadcrumb(
-            message = "General settings load started",
-            attributes = mapOf("hasContentKey" to (!contentKey.isNullOrBlank()).toString()),
+        val hasKey = !contentKey.isNullOrBlank()
+        startOperation(
+            action = Actions.LOAD_CONTENT,
+            extra = mapOf(ExtraKeys.HAS_CONTENT_KEY to hasKey.toString())
         )
-        generalJob?.cancel()
-        generalJob = viewModelScope.launch {
+
+        if (!hasKey) {
+            generalJob?.cancel()
+            screenState.setErrors(errors = listOf(UiSnackbar(message = UiTextHelper.StringResource(R.string.error_invalid_content_key))))
+            screenState.updateState(ScreenState.NoData())
+            return
+        }
+
+        generalJob = generalJob.restart {
             repository.getContentKey(contentKey)
                 .flowOn(dispatchers.default)
-                .map<String, DataState<String, Errors>> { key ->
-                    DataState.Success(key)
+                .map<String, DataState<String, Errors>> { key -> DataState.Success(key) }
+                .onStart {
+                    updateStateThreadSafe {
+                        screenState.setErrors(emptyList())
+                        screenState.setLoading()
+                    }
                 }
-                .onStart { screenState.setLoading() }
-                .catch { throwable ->
-                    if (throwable is CancellationException) throw throwable
-                    firebaseController.reportViewModelError(
-                        viewModelName = "GeneralSettingsViewModel",
-                        action = "loadContent",
-                        throwable = throwable,
-                    )
-                    emit(
-                        DataState.Error(
-                            error = throwable.toError(default = Errors.UseCase.INVALID_STATE)
-                        )
-                    )
+                .catchReport(action = Actions.LOAD_CONTENT) {
+                    emit(DataState.Error(error = Errors.UseCase.INVALID_STATE))
                 }
                 .onEach { result ->
                     result
                         .onSuccess { key ->
-                            screenState.setErrors(errors = emptyList())
-                            screenState.copyData { copy(contentKey = key) }
-                            screenState.updateState(newValues = ScreenState.Success())
+                            updateStateThreadSafe {
+                                screenState.setErrors(emptyList())
+                                screenState.successData { copy(contentKey = key) }
+                            }
                         }
                         .onFailure { error ->
-                            screenState.setErrors(
-                                errors = listOf(
-                                    UiSnackbar(
-                                        message = when (error) {
-                                            Errors.UseCase.ILLEGAL_ARGUMENT -> UiTextHelper.StringResource(
-                                                R.string.error_invalid_content_key
-                                            )
+                            updateStateThreadSafe {
+                                val message = when (error) {
+                                    Errors.UseCase.ILLEGAL_ARGUMENT ->
+                                        UiTextHelper.StringResource(R.string.error_invalid_content_key)
 
-                                            else -> error.asUiText()
-                                        }
-                                    )
-                                )
-                            )
-                            screenState.updateState(newValues = ScreenState.NoData())
+                                    else -> error.asUiText()
+                                }
+
+                                screenState.setErrors(errors = listOf(UiSnackbar(message = message)))
+                                screenState.updateState(ScreenState.NoData())
+                            }
                         }
                 }
-                .onCompletion { cause ->
-                    if (cause is CancellationException) return@onCompletion
-                }
-                .collect { }
+                .launchIn(viewModelScope)
         }
+    }
+
+    private object Actions {
+        const val LOAD_CONTENT: String = "loadContent"
+    }
+
+    private object ExtraKeys {
+        const val HAS_CONTENT_KEY: String = "hasContentKey"
     }
 }

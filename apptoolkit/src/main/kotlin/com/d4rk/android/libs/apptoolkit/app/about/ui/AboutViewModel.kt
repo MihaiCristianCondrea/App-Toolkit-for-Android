@@ -12,7 +12,7 @@ import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
+import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
@@ -24,162 +24,138 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageTyp
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlin.coroutines.cancellation.CancellationException
 
-/**
- * ViewModel for the "About" screen, responsible for handling business logic and managing UI state.
- *
- * This ViewModel orchestrates the fetching and display of application and device information.
- * It also handles user actions such as copying device information to the clipboard.
- * It interacts with use cases to perform these operations and updates the UI state accordingly.
- *
- * @param getAboutInfo An instance of [GetAboutInfoUseCase] to fetch application and device information.
- * @param copyDeviceInfo An instance of [CopyDeviceInfoUseCase] to handle copying device info text.
- * @param dispatchers A provider for coroutine dispatchers, used to switch between I/O and main threads.
- * @param firebaseController Reports ViewModel flow failures to Firebase.
- *
- * @see ScreenViewModel
- * @see AboutUiState
- * @see AboutEvent
- * @see AboutAction
- */
 open class AboutViewModel(
     private val getAboutInfo: GetAboutInfoUseCase,
     private val copyDeviceInfo: CopyDeviceInfoUseCase,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
-) : ScreenViewModel<AboutUiState, AboutEvent, AboutAction>(
-    initialState = UiStateScreen(data = AboutUiState())
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<AboutUiState, AboutEvent, AboutAction>(
+    initialState = UiStateScreen(data = AboutUiState()),
+    firebaseController = firebaseController,
+    screenName = "About",
 ) {
-
-    private var loadJob: Job? = null
     private var copyJob: Job? = null
 
     init {
-        firebaseController.logBreadcrumb(
-            message = "AboutViewModel initialized",
-            attributes = mapOf("screen" to "About"),
-        )
         onEvent(AboutEvent.Load)
     }
 
-    override fun onEvent(event: AboutEvent) {
-        firebaseController.logBreadcrumb(
-            message = "AboutViewModel event",
-            attributes = mapOf("event" to event::class.java.simpleName),
-        )
+    override fun handleEvent(event: AboutEvent) {
         when (event) {
             is AboutEvent.Load -> loadAboutInfo()
-            is AboutEvent.CopyDeviceInfo -> copyDeviceInfo(event.label)
+            is AboutEvent.CopyDeviceInfo -> copyDeviceInfo(label = event.label)
             is AboutEvent.DismissSnackbar -> screenState.dismissSnackbar()
         }
     }
 
     private fun loadAboutInfo() {
-        firebaseController.logBreadcrumb(
-            message = "About info load started",
-            attributes = mapOf("source" to "AboutViewModel"),
-        )
-        loadJob?.cancel()
-        loadJob = getAboutInfo()
-            .flowOn(dispatchers.io)
-            .onStart { screenState.setLoading() }
-            .onEach { result ->
-                result
-                    .onSuccess { info ->
-                        screenState.setSuccess(data = info.toUiState())
-                    }
-                    .onFailure { error ->
-                        screenState.setError(message = error.asUiText())
-                    }
-            }
-            .catch { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.reportViewModelError(
-                    viewModelName = "AboutViewModel",
-                    action = "loadAboutInfo",
-                    throwable = throwable,
-                )
-                screenState.setError(message = UiTextHelper.StringResource(R.string.snack_device_info_failed))
-            }
-            .launchIn(viewModelScope)
+        startOperation(action = Actions.LOAD_ABOUT_INFO)
+        generalJob = generalJob.restart {
+            getAboutInfo.invoke()
+                .flowOn(dispatchers.io)
+                .onStart { screenState.setLoading() }
+                .onEach { result ->
+                    result
+                        .onSuccess { info ->
+                            updateStateThreadSafe {
+                                screenState.setSuccess(data = info.toUiState())
+                            }
+                        }
+                        .onFailure { error ->
+                            updateStateThreadSafe {
+                                screenState.setError(message = error.asUiText())
+                            }
+                        }
+                }
+                .catchReport(action = Actions.LOAD_ABOUT_INFO) {
+                    screenState.setError(message = UiTextHelper.StringResource(R.string.snack_device_info_failed))
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     private fun copyDeviceInfo(label: String) {
-        firebaseController.logBreadcrumb(
-            message = "About copy device info",
-            attributes = mapOf("label" to label),
-        )
         val deviceInfo = screenData?.deviceInfo.orEmpty()
+        startOperation(action = Actions.COPY_DEVICE_INFO, extra = mapOf(ExtraKeys.LABEL to label))
+
         if (deviceInfo.isBlank()) {
             screenState.showSnackbar(
                 UiSnackbar(
                     message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
                     isError = true,
                     timeStamp = System.nanoTime(),
-                    type = ScreenMessageType.SNACKBAR
+                    type = ScreenMessageType.SNACKBAR,
                 )
             )
             return
         }
 
-        copyJob?.cancel()
-        copyJob = copyDeviceInfo(
-            label = label,
-            deviceInfo = deviceInfo,
-        )
-            .flowOn(dispatchers.io)
-            .onEach { result ->
-                result
-                    .onSuccess { copyResult ->
-                        val messageRes = if (copyResult.copied) {
-                            R.string.snack_device_info_copied
-                        } else {
-                            R.string.snack_device_info_failed
+        copyJob = copyJob.restart {
+            copyDeviceInfo.invoke(label = label, deviceInfo = deviceInfo)
+                .flowOn(dispatchers.io)
+                .onEach { result ->
+                    result
+                        .onSuccess { copyResult ->
+                            updateStateThreadSafe {
+                                val messageRes = if (copyResult.copied) {
+                                    R.string.snack_device_info_copied
+                                } else {
+                                    R.string.snack_device_info_failed
+                                }
+
+                                if (!copyResult.copied || copyResult.shouldShowFeedback) {
+                                    screenState.showSnackbar(
+                                        UiSnackbar(
+                                            message = UiTextHelper.StringResource(messageRes),
+                                            isError = !copyResult.copied,
+                                            timeStamp = System.nanoTime(),
+                                            type = ScreenMessageType.SNACKBAR,
+                                        )
+                                    )
+                                }
+                            }
                         }
-                        if (!copyResult.copied || copyResult.shouldShowFeedback) {
-                            screenState.showSnackbar(
-                                UiSnackbar(
-                                    message = UiTextHelper.StringResource(messageRes),
-                                    isError = !copyResult.copied,
-                                    timeStamp = System.nanoTime(),
-                                    type = ScreenMessageType.SNACKBAR
+                        .onFailure {
+                            updateStateThreadSafe {
+                                screenState.showSnackbar(
+                                    UiSnackbar(
+                                        message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
+                                        isError = true,
+                                        timeStamp = System.nanoTime(),
+                                        type = ScreenMessageType.SNACKBAR,
+                                    )
                                 )
-                            )
+                            }
                         }
-                    }
-                    .onFailure {
-                        screenState.showSnackbar(
-                            UiSnackbar(
-                                message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
-                                isError = true,
-                                timeStamp = System.nanoTime(),
-                                type = ScreenMessageType.SNACKBAR
-                            )
+                }
+                .catchReport(
+                    action = Actions.COPY_DEVICE_INFO,
+                    extra = mapOf(ExtraKeys.LABEL to label)
+                ) {
+                    screenState.showSnackbar(
+                        UiSnackbar(
+                            message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
+                            isError = true,
+                            timeStamp = System.nanoTime(),
+                            type = ScreenMessageType.SNACKBAR,
                         )
-                    }
-            }
-            .catch { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.reportViewModelError(
-                    viewModelName = "AboutViewModel",
-                    action = "copyDeviceInfo",
-                    throwable = throwable,
-                )
-                screenState.showSnackbar(
-                    UiSnackbar(
-                        message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
-                        isError = true,
-                        timeStamp = System.nanoTime(),
-                        type = ScreenMessageType.SNACKBAR
                     )
-                )
-            }
-            .launchIn(viewModelScope)
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    private object Actions {
+        const val LOAD_ABOUT_INFO: String = "loadAboutInfo"
+        const val COPY_DEVICE_INFO: String = "copyDeviceInfo"
+    }
+
+    private object ExtraKeys {
+        const val LABEL: String = "label"
     }
 }

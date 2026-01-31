@@ -9,18 +9,11 @@ import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAct
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
+import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -31,58 +24,48 @@ class OnboardingViewModel(
     private val completeOnboardingUseCase: CompleteOnboardingUseCase,
     private val requestConsentUseCase: RequestConsentUseCase,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
-) : ScreenViewModel<OnboardingUiState, OnboardingEvent, OnboardingAction>(
-    initialState = UiStateScreen(data = OnboardingUiState())
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<OnboardingUiState, OnboardingEvent, OnboardingAction>(
+    initialState = UiStateScreen(data = OnboardingUiState()),
+    firebaseController = firebaseController,
+    screenName = "Onboarding",
 ) {
 
-    private var observeCompletionJob: Job? = null
     private var completeJob: Job? = null
     private var consentJob: Job? = null
 
     init {
-        firebaseController.logBreadcrumb(
-            message = "OnboardingViewModel initialized",
-            attributes = mapOf("screen" to "Onboarding"),
-        )
-        observeCompletion()
+        handleEvent(OnboardingEvent.ObserveCompletion)
     }
 
-    override fun onEvent(event: OnboardingEvent) {
-        firebaseController.logBreadcrumb(
-            message = "OnboardingViewModel event",
-            attributes = mapOf("event" to event::class.java.simpleName),
-        )
+    override fun handleEvent(event: OnboardingEvent) {
         when (event) {
+            is OnboardingEvent.ObserveCompletion -> observeCompletion()
             is OnboardingEvent.UpdateCurrentTab -> updateCurrentTab(event.index)
             is OnboardingEvent.CompleteOnboarding -> completeOnboarding()
             is OnboardingEvent.RequestConsent -> requestConsent(event.host)
-            is OnboardingEvent.ShowCrashlyticsDialog -> setCrashlyticsDialogVisibility(true)
-            is OnboardingEvent.HideCrashlyticsDialog -> setCrashlyticsDialogVisibility(false)
+            is OnboardingEvent.ShowCrashlyticsDialog -> setCrashlyticsDialogVisibility(isVisible = true)
+            is OnboardingEvent.HideCrashlyticsDialog -> setCrashlyticsDialogVisibility(isVisible = false)
         }
     }
 
     private fun observeCompletion() {
-        firebaseController.logBreadcrumb(
-            message = "Observe onboarding completion",
-            attributes = mapOf("source" to "OnboardingViewModel"),
-        )
-        observeCompletionJob?.cancel()
-        observeCompletionJob = observeOnboardingCompletionUseCase()
-            .flowOn(dispatchers.io)
-            .onEach { completed ->
-                screenState.copyData { copy(isOnboardingCompleted = completed) }
-            }
-            .catch { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.reportViewModelError(
-                    viewModelName = "OnboardingViewModel",
-                    action = "observeCompletion",
-                    throwable = throwable,
-                )
-                screenState.copyData { copy(isOnboardingCompleted = false) }
-            }
-            .launchIn(viewModelScope)
+        startOperation(action = Actions.OBSERVE_COMPLETION)
+        generalJob = generalJob.restart {
+            observeOnboardingCompletionUseCase.invoke()
+                .flowOn(dispatchers.io)
+                .onEach { completed ->
+                    updateStateThreadSafe {
+                        screenState.copyData { copy(isOnboardingCompleted = completed) }
+                    }
+                }
+                .catchReport(action = Actions.OBSERVE_COMPLETION) {
+                    updateStateThreadSafe {
+                        screenState.copyData { copy(isOnboardingCompleted = false) }
+                    }
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     private fun updateCurrentTab(index: Int) {
@@ -90,61 +73,57 @@ class OnboardingViewModel(
     }
 
     private fun completeOnboarding() {
-        firebaseController.logBreadcrumb(
-            message = "Complete onboarding requested",
-            attributes = mapOf("source" to "OnboardingViewModel"),
-        )
-        completeJob?.cancel()
-        completeJob = flow<DataState<Unit, Errors.UseCase>> {
-            emit(DataState.Loading())
-            withContext(dispatchers.io) { completeOnboardingUseCase() }
-            emit(DataState.Success(Unit))
-        }
-            .flowOn(dispatchers.io)
-            .catch { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.reportViewModelError(
-                    viewModelName = "OnboardingViewModel",
-                    action = "completeOnboarding",
-                    throwable = throwable,
-                )
-                emit(DataState.Error(error = Errors.UseCase.INVALID_STATE))
-            }
-            .onEach { result ->
-                result
-                    .onSuccess { sendAction(OnboardingAction.OnboardingCompleted) }
-                    .onFailure {
-                        screenState.copyData { copy(isOnboardingCompleted = false) }
+        completeJob = completeJob.restart {
+            launchReport(
+                action = Actions.COMPLETE_ONBOARDING,
+                block = {
+                    withContext(dispatchers.io) {
+                        completeOnboardingUseCase()
                     }
 
-                if (result is DataState.Loading) {
-                    screenState.copyData { copy(isOnboardingCompleted = true) }
-                }
-            }
-            .launchIn(viewModelScope)
+                    updateStateThreadSafe {
+                        screenState.copyData { copy(isOnboardingCompleted = true) }
+                    }
+
+                    sendAction(OnboardingAction.OnboardingCompleted)
+                },
+                onError = {
+                    updateStateThreadSafe {
+                        screenState.copyData { copy(isOnboardingCompleted = false) }
+                    }
+                },
+            )
+        }
     }
 
     private fun requestConsent(host: ConsentHost) {
-        firebaseController.logBreadcrumb(
-            message = "Onboarding consent requested",
-            attributes = mapOf("host" to host.activity::class.java.name),
-        )
-        consentJob?.cancel()
-        consentJob = requestConsentUseCase(host = host)
-            .flowOn(dispatchers.main)
-            .catch { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.reportViewModelError(
-                    viewModelName = "OnboardingViewModel",
-                    action = "requestConsent",
-                    throwable = throwable,
-                )
-                emit(DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO))
-            }
-            .launchIn(viewModelScope)
+        val hostName = host.activity::class.java.name
+        startOperation(action = Actions.REQUEST_CONSENT, extra = mapOf(ExtraKeys.HOST to hostName))
+        consentJob = consentJob.restart {
+            requestConsentUseCase.invoke(host = host)
+                .flowOn(dispatchers.main)
+                .catchReport(
+                    action = Actions.REQUEST_CONSENT,
+                    extra = mapOf(ExtraKeys.HOST to hostName)
+                ) {
+                    // No UI change requested for consent failures in onboarding.
+                    // If needed later: updateStateThreadSafe { screenState.setError(...) } or showSnackbar(...)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     private fun setCrashlyticsDialogVisibility(isVisible: Boolean) {
         screenState.copyData { copy(isCrashlyticsDialogVisible = isVisible) }
+    }
+
+    private object Actions {
+        const val OBSERVE_COMPLETION: String = "observeCompletion"
+        const val COMPLETE_ONBOARDING: String = "completeOnboarding"
+        const val REQUEST_CONSENT: String = "requestConsent"
+    }
+
+    private object ExtraKeys {
+        const val HOST: String = "host"
     }
 }

@@ -2,6 +2,7 @@ package com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui
 
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.apps.apptoolkit.R
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoriteAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
@@ -13,149 +14,133 @@ import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState.IsLoading
+import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
-import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setNoData
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.cancellation.CancellationException
 
-/**
- * ViewModel for the Favorite Apps screen.
- *
- * This ViewModel is responsible for managing the UI state for the list of favorite applications.
- * It observes changes in the list of favorite apps, handles user actions like opening a random app,
- * and manages the process of toggling an app's favorite status.
- *
- * @param observeFavoriteAppsUseCase Use case to observe the list of favorite applications.
- * @param observeFavoritesUseCase Use case to observe the set of favorite package names.
- * @param toggleFavoriteUseCase Use case to add or remove an app from favorites.
- * @param dispatchers Provides CoroutineDispatchers for managing thread execution.
- * @param firebaseController Reports ViewModel flow failures to Firebase.
- */
 class FavoriteAppsViewModel(
     private val observeFavoriteAppsUseCase: ObserveFavoriteAppsUseCase,
     observeFavoritesUseCase: ObserveFavoritesUseCase,
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
-) : ScreenViewModel<AppListUiState, FavoriteAppsEvent, FavoriteAppsAction>(
-    initialState = UiStateScreen(screenState = IsLoading(), data = AppListUiState())
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<AppListUiState, FavoriteAppsEvent, FavoriteAppsAction>(
+    initialState = UiStateScreen(
+        data = AppListUiState(),
+    ),
+    firebaseController = firebaseController,
+    screenName = "FavoriteApps",
 ) {
 
-    private var observeJob: Job? = null
     private var toggleJob: Job? = null
 
-    val favorites = observeFavoritesUseCase()
-        .stateIn(
-            scope = viewModelScope,
-            started = WhileSubscribed(5_000),
-            initialValue = emptySet()
-        )
+    val favorites = observeFavoritesUseCase().stateIn(
+        scope = viewModelScope,
+        started = WhileSubscribed(5_000),
+        initialValue = emptySet()
+    )
 
     val canOpenRandomApp = screenState
-        .map { it.data?.apps?.isNotEmpty() == true }
-        .stateIn(
-            scope = viewModelScope,
-            started = WhileSubscribed(5_000),
-            initialValue = false
-        )
+        .map { state -> state.data?.apps?.isNotEmpty() == true }
+        .stateIn(scope = viewModelScope, started = WhileSubscribed(5_000), initialValue = false)
 
     init {
-        firebaseController.logBreadcrumb(
-            message = "FavoriteAppsViewModel initialized",
-            attributes = mapOf("screen" to "FavoriteApps"),
-        )
         onEvent(FavoriteAppsEvent.LoadFavorites)
     }
 
-    override fun onEvent(event: FavoriteAppsEvent) {
-        firebaseController.logBreadcrumb(
-            message = "FavoriteAppsViewModel event",
-            attributes = mapOf("event" to event::class.java.simpleName),
-        )
+    override fun handleEvent(event: FavoriteAppsEvent) {
         when (event) {
             is FavoriteAppsEvent.LoadFavorites -> observe()
-            is FavoriteAppsEvent.OpenRandomApp -> {
-                val randomApp = screenData?.apps?.randomOrNull() ?: return
-                sendAction(FavoriteAppsAction.OpenRandomApp(randomApp))
-            }
+            is FavoriteAppsEvent.OpenRandomApp -> openRandomApp()
         }
     }
 
-    private fun observe() {
-        firebaseController.logBreadcrumb(
-            message = "Favorite apps observe",
-            attributes = mapOf("source" to "FavoriteAppsViewModel"),
+    private fun openRandomApp() {
+        val randomApp: AppInfo = screenData?.apps?.randomOrNull() ?: return
+        startOperation(
+            action = Actions.OPEN_RANDOM_APP,
+            extra = mapOf(pair = ExtraKeys.PACKAGE_NAME to randomApp.packageName)
         )
-        observeJob?.cancel()
-        observeJob = viewModelScope.launch {
-            observeFavoriteAppsUseCase()
-                .flowOn(dispatchers.io)
-                .onStart { screenState.setLoading() }
-                .catch { throwable ->
-                    if (throwable is CancellationException) throw throwable
-                    firebaseController.reportViewModelError(
-                        viewModelName = "FavoriteAppsViewModel",
-                        action = "observe",
-                        throwable = throwable,
-                    )
-                    screenState.setError(
-                        message = com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper.StringResource(
-                            R.string.error_failed_to_load_apps
-                        ),
-                    )
+        sendAction(action = FavoriteAppsAction.OpenRandomApp(app = randomApp))
+    }
+
+    private fun observe() {
+        generalJob = generalJob.restart {
+            startOperation(action = Actions.OBSERVE_FAVORITES)
+            observeFavoriteAppsUseCase.invoke()
+                .flowOn(context = dispatchers.io)
+                .onStart {
+                    updateStateThreadSafe {
+                        screenState.dismissSnackbar()
+                        screenState.setLoading()
+                    }
                 }
-                .collect { result ->
+                .onEach { result ->
                     result
                         .onSuccess { apps ->
-                            val immutableApps = apps.toImmutableList()
-                            if (immutableApps.isEmpty()) {
-                                screenState.updateData(ScreenState.NoData()) { current ->
-                                    current.copy(apps = immutableApps)
-                                }
-                            } else {
-                                screenState.updateData(ScreenState.Success()) { current ->
-                                    current.copy(apps = immutableApps)
-                                }
+                            updateStateThreadSafe {
+                                val immutableApps = apps.toImmutableList()
+                                val base = screenData ?: AppListUiState()
+                                val updated = base.copy(apps = immutableApps)
+                                if (immutableApps.isEmpty()) screenState.setNoData(data = updated) else screenState.setSuccess(
+                                    data = updated
+                                )
                             }
+
                         }
                         .onFailure { error ->
-                            screenState.setError(message = error.toErrorMessage())
+                            updateStateThreadSafe {
+                                screenState.setError(message = error.toErrorMessage())
+                            }
                         }
+
                 }
+                .catchReport(action = Actions.OBSERVE_FAVORITES) {
+                    screenState.setError(message = UiTextHelper.StringResource(R.string.error_failed_to_load_apps))
+                }
+                .launchIn(viewModelScope)
         }
     }
 
     fun toggleFavorite(packageName: String) {
-        firebaseController.logBreadcrumb(
-            message = "Favorite apps toggle favorite",
-            attributes = mapOf("packageName" to packageName),
-        )
-        toggleJob?.cancel()
-        toggleJob = viewModelScope.launch {
-            try {
-                withContext(dispatchers.io) { toggleFavoriteUseCase(packageName) }
-            } catch (throwable: Throwable) {
-                if (throwable is CancellationException) throw throwable
-                screenState.setError(
-                    message = com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper.StringResource(
-                        R.string.error_failed_to_update_favorite
-                    ),
-                )
-            }
+        toggleJob = toggleJob.restart {
+            launchReport(
+                action = Actions.TOGGLE_FAVORITE,
+                extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
+                block = {
+                    withContext(dispatchers.io) { toggleFavoriteUseCase.invoke(packageName = packageName) }
+                },
+                onError = {
+                    updateStateThreadSafe {
+                        screenState.setError(message = UiTextHelper.StringResource(R.string.error_failed_to_update_favorite))
+                    }
+                },
+            )
         }
+    }
+
+    private object Actions {
+        const val OBSERVE_FAVORITES: String = "observeFavorites"
+        const val TOGGLE_FAVORITE: String = "toggleFavorite"
+        const val OPEN_RANDOM_APP: String = "openRandomApp"
+    }
+
+    private object ExtraKeys {
+        const val PACKAGE_NAME: String = "packageName"
     }
 }

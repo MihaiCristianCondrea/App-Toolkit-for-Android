@@ -6,27 +6,27 @@ import com.d4rk.android.libs.apptoolkit.app.permissions.domain.repository.Permis
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsAction
 import com.d4rk.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
+import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
-import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setErrors
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
-import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
-import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setNoData
+import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
+import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 
 /**
  * ViewModel for the permissions screen.
@@ -44,86 +44,93 @@ import kotlinx.coroutines.launch
  */
 class PermissionsViewModel(
     private val permissionsRepository: PermissionsRepository,
-    private val firebaseController: FirebaseController,
-) :
-    ScreenViewModel<SettingsConfig, PermissionsEvent, PermissionsAction>(
-        initialState = UiStateScreen(data = SettingsConfig(title = "", categories = emptyList()))
-    ) {
-
-    override fun onEvent(event: PermissionsEvent) {
-        firebaseController.logBreadcrumb(
-            message = "PermissionsViewModel event",
-            attributes = mapOf("event" to event::class.java.simpleName),
+    private val dispatchers: DispatcherProvider,
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<SettingsConfig, PermissionsEvent, PermissionsAction>(
+    initialState = UiStateScreen(
+        data = SettingsConfig(
+            title = "",
+            categories = emptyList(),
         )
+    ),
+    firebaseController = firebaseController,
+    screenName = "Permissions",
+) {
+
+    override fun handleEvent(event: PermissionsEvent) {
         when (event) {
             PermissionsEvent.Load -> loadPermissions()
         }
     }
 
     private fun loadPermissions() {
-        firebaseController.logBreadcrumb(
-            message = "Permissions load started",
-            attributes = mapOf("source" to "PermissionsViewModel"),
-        )
-        viewModelScope.launch {
+        generalJob = generalJob.restart {
+            startOperation(action = Actions.LOAD_PERMISSIONS)
+
             permissionsRepository.getPermissionsConfig()
+                .flowOn(dispatchers.io)
                 .map<SettingsConfig, DataState<SettingsConfig, Errors>> { config ->
                     if (config.categories.isEmpty()) {
                         DataState.Error(
                             data = config,
-                            error = Errors.UseCase.NO_DATA
+                            error = Errors.UseCase.NO_DATA,
                         )
                     } else {
                         DataState.Success(config)
                     }
                 }
                 .onStart {
-                    screenState.setErrors(emptyList())
-                    screenState.setLoading()
+                    updateStateThreadSafe {
+                        screenState.setErrors(emptyList())
+                        screenState.setLoading()
+                    }
                 }
-                .catch { error ->
-                    if (error is CancellationException) throw error
-                    firebaseController.reportViewModelError(
-                        viewModelName = "PermissionsViewModel",
-                        action = "loadPermissions",
-                        throwable = error,
-                    )
+                .catchReport(action = Actions.LOAD_PERMISSIONS) {
                     emit(
                         DataState.Error(
-                            error = error.toError(default = Errors.UseCase.INVALID_STATE)
+                            error = Errors.UseCase.INVALID_STATE,
                         )
                     )
                 }
-                .collect { result ->
+                .onEach { result ->
                     result
                         .onSuccess { config ->
-                            screenState.successData {
-                                copy(title = config.title, categories = config.categories)
+                            updateStateThreadSafe {
+                                screenState.setSuccess(data = config)
                             }
                         }
                         .onFailure { error ->
-                            val message = error.asUiText()
-                            if (error == Errors.UseCase.NO_DATA) {
-                                screenState.setErrors(
-                                    listOf(
-                                        UiSnackbar(
-                                            message = UiTextHelper.StringResource(R.string.error_no_settings_found)
+                            updateStateThreadSafe {
+                                val fallback = (result as? DataState.Error)?.data ?: SettingsConfig(
+                                    title = "",
+                                    categories = emptyList()
+                                )
+                                if (error == Errors.UseCase.NO_DATA) {
+                                    screenState.setErrors(
+                                        listOf(
+                                            UiSnackbar(
+                                                message = UiTextHelper.StringResource(
+                                                    R.string.error_no_settings_found
+                                                )
+                                            )
                                         )
                                     )
-                                )
-                                screenState.updateState(ScreenState.NoData())
-                            } else {
-                                screenState.setErrors(
-                                    listOf(
-                                        UiSnackbar(
-                                            message = message
-                                        )
-                                    )
-                                )
-                                screenState.updateState(ScreenState.Error())
+                                    screenState.setNoData(data = fallback)
+                                } else {
+                                    screenState.setErrors(listOf(UiSnackbar(message = error.asUiText())))
+                                    screenState.updateData(newState = com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState.Error()) { current ->
+                                        current
+                                    }
+                                }
                             }
                         }
+
                 }
+                .launchIn(viewModelScope)
         }
+    }
+
+    private object Actions {
+        const val LOAD_PERMISSIONS: String = "loadPermissions"
     }
 }

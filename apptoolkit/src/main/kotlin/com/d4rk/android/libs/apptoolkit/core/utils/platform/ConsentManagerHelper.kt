@@ -17,7 +17,7 @@ import org.koin.core.component.inject
  * Analytics, Crashlytics and Performance so data collection respects the
  * user's choices.
  */
-object ConsentManagerHelper : KoinComponent {
+object ConsentManagerHelper : KoinComponent { // TODO: This should not exist because we have the
 
     private val configProvider: BuildInfoProvider by inject()
     private val firebaseController: FirebaseController by inject()
