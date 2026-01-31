@@ -58,12 +58,12 @@ class TestAdsSettingsViewModel {
     }
 
     private fun createViewModel(repository: AdsSettingsRepository): AdsSettingsViewModel {
-        val observeUseCase = ObserveAdsEnabledUseCase(repository)
-        val setUseCase = SetAdsEnabledUseCase(repository)
+        val observeUseCase = ObserveAdsEnabledUseCase(repository, firebaseController)
+        val setUseCase = SetAdsEnabledUseCase(repository, firebaseController)
         return AdsSettingsViewModel(
             observeAdsEnabled = observeUseCase,
             setAdsEnabled = setUseCase,
-            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository()),
+            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
             repository = repository,
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,

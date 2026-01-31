@@ -20,11 +20,12 @@ val adsModule: Module = module {
         AdsSettingsRepositoryImpl(
             dataStore = get(),
             buildInfoProvider = get<BuildInfoProvider>(),
+            firebaseController = get(),
         )
     }
 
-    single { ObserveAdsEnabledUseCase(repo = get()) }
-    single { SetAdsEnabledUseCase(repo = get()) }
+    single { ObserveAdsEnabledUseCase(repo = get(), firebaseController = get()) }
+    single { SetAdsEnabledUseCase(repo = get(), firebaseController = get()) }
 
     viewModel {
         AdsSettingsViewModel(

@@ -56,8 +56,8 @@ class TestAboutViewModel {
         val testDispatchers: DispatcherProvider = TestDispatchers(testDispatcher)
 
         return AboutViewModel(
-            getAboutInfo = GetAboutInfoUseCase(repository),
-            copyDeviceInfo = CopyDeviceInfoUseCase(repository),
+            getAboutInfo = GetAboutInfoUseCase(repository, firebaseController),
+            copyDeviceInfo = CopyDeviceInfoUseCase(repository, firebaseController),
             dispatchers = testDispatchers,
             firebaseController = firebaseController,
         )

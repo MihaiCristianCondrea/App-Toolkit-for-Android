@@ -5,9 +5,11 @@ import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.model.UsageAndDia
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageAndDiagnosticsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
 /**
@@ -25,6 +27,7 @@ class UsageAndDiagnosticsRepositoryImpl(
     private val dataSource: UsageAndDiagnosticsPreferencesDataSource,
     private val configProvider: BuildInfoProvider,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
 ) : UsageAndDiagnosticsRepository {
 
     override fun observeSettings(): Flow<UsageAndDiagnosticsSettings> =
@@ -42,20 +45,57 @@ class UsageAndDiagnosticsRepositoryImpl(
                 adUserDataConsent = adUserData,
                 adPersonalizationConsent = adPersonalization,
             )
-        }.flowOn(dispatchers.io)
+        }
+            .onStart {
+                firebaseController.logBreadcrumb(
+                    message = "Usage diagnostics observe",
+                    attributes = mapOf("defaultEnabled" to (!configProvider.isDebugBuild).toString()),
+                )
+            }
+            .flowOn(dispatchers.io)
 
     override suspend fun setUsageAndDiagnostics(enabled: Boolean) =
-        withContext(dispatchers.io) { dataSource.saveUsageAndDiagnostics(isChecked = enabled) }
+        withContext(dispatchers.io) {
+            firebaseController.logBreadcrumb(
+                message = "Usage diagnostics updated",
+                attributes = mapOf("usageAndDiagnostics" to enabled.toString()),
+            )
+            dataSource.saveUsageAndDiagnostics(isChecked = enabled)
+        }
 
     override suspend fun setAnalyticsConsent(granted: Boolean) =
-        withContext(dispatchers.io) { dataSource.saveAnalyticsConsent(isGranted = granted) }
+        withContext(dispatchers.io) {
+            firebaseController.logBreadcrumb(
+                message = "Analytics consent updated",
+                attributes = mapOf("granted" to granted.toString()),
+            )
+            dataSource.saveAnalyticsConsent(isGranted = granted)
+        }
 
     override suspend fun setAdStorageConsent(granted: Boolean) =
-        withContext(dispatchers.io) { dataSource.saveAdStorageConsent(isGranted = granted) }
+        withContext(dispatchers.io) {
+            firebaseController.logBreadcrumb(
+                message = "Ad storage consent updated",
+                attributes = mapOf("granted" to granted.toString()),
+            )
+            dataSource.saveAdStorageConsent(isGranted = granted)
+        }
 
     override suspend fun setAdUserDataConsent(granted: Boolean) =
-        withContext(dispatchers.io) { dataSource.saveAdUserDataConsent(isGranted = granted) }
+        withContext(dispatchers.io) {
+            firebaseController.logBreadcrumb(
+                message = "Ad user data consent updated",
+                attributes = mapOf("granted" to granted.toString()),
+            )
+            dataSource.saveAdUserDataConsent(isGranted = granted)
+        }
 
     override suspend fun setAdPersonalizationConsent(granted: Boolean) =
-        withContext(dispatchers.io) { dataSource.saveAdPersonalizationConsent(isGranted = granted) }
+        withContext(dispatchers.io) {
+            firebaseController.logBreadcrumb(
+                message = "Ad personalization consent updated",
+                attributes = mapOf("granted" to granted.toString()),
+            )
+            dataSource.saveAdPersonalizationConsent(isGranted = granted)
+        }
 }

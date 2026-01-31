@@ -14,8 +14,10 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val appModule: Module = module {
-    single<NavigationRepository> { MainNavigationRepositoryImpl(dataStore = get()) }
-    single<GetNavigationDrawerItemsUseCase> { GetNavigationDrawerItemsUseCase(navigationRepository = get()) }
+    single<NavigationRepository> { MainNavigationRepositoryImpl(dataStore = get(), firebaseController = get()) }
+    single<GetNavigationDrawerItemsUseCase> {
+        GetNavigationDrawerItemsUseCase(navigationRepository = get(), firebaseController = get())
+    }
     viewModel {
         MainViewModel(
             getNavigationDrawerItemsUseCase = get(),

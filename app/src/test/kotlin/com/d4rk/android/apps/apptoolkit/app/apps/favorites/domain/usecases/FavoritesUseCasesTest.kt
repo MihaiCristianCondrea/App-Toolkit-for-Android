@@ -1,10 +1,11 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.favorites.domain.usecases
 
 import app.cash.turbine.test
-import com.d4rk.android.apps.apptoolkit.app.apps.favorites.FakeFavoritesRepository
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.FavoritesRepository
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.favorites.FakeFavoritesRepository
+import com.d4rk.android.apps.apptoolkit.core.utils.FakeFirebaseController
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -17,7 +18,7 @@ class FavoritesUseCasesTest {
     @Test
     fun `observe favorites emits initial set`() = runBlocking {
         val repository = FakeFavoritesRepository(initialFavorites = setOf("pkg1", "pkg2"))
-        val useCase = ObserveFavoritesUseCase(repository)
+        val useCase = ObserveFavoritesUseCase(repository, FakeFirebaseController())
 
         useCase().test {
             assertThat(awaitItem()).containsExactly("pkg1", "pkg2")
@@ -28,8 +29,9 @@ class FavoritesUseCasesTest {
     @Test
     fun `toggle favorite updates repository`() = runBlocking {
         val repository = FakeFavoritesRepository()
-        val toggleUseCase = ToggleFavoriteUseCase(repository)
-        val observeUseCase = ObserveFavoritesUseCase(repository)
+        val firebaseController = FakeFirebaseController()
+        val toggleUseCase = ToggleFavoriteUseCase(repository, firebaseController)
+        val observeUseCase = ObserveFavoritesUseCase(repository, firebaseController)
 
         observeUseCase().test {
             assertThat(awaitItem()).isEmpty()
@@ -44,7 +46,7 @@ class FavoritesUseCasesTest {
     @Test
     fun `toggle favorite use case invokes repository exactly once`() = runTest {
         val repository = RecordingFavoritesRepository()
-        val useCase = ToggleFavoriteUseCase(repository)
+        val useCase = ToggleFavoriteUseCase(repository, FakeFirebaseController())
 
         val result = useCase("pkg")
 
@@ -59,7 +61,7 @@ class FavoritesUseCasesTest {
         runTest {
             val expectedFlow = flowOf(setOf("pkg"))
             val repository = RecordingFavoritesRepository(observeResult = expectedFlow)
-            val useCase = ObserveFavoritesUseCase(repository)
+            val useCase = ObserveFavoritesUseCase(repository, FakeFirebaseController())
 
             val result = useCase()
 

@@ -24,8 +24,8 @@ val issueReporterModule: Module =
     module {
         single { IssueReporterRemoteDataSource(client = get()) }
         single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
-        single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get()) }
-        single { SendIssueReportUseCase(get(), get()) }
+        single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get(), get()) }
+        single { SendIssueReportUseCase(get(), get(), get()) }
 
         single(qualifier = named(name = "github_repository")) { "App-Toolkit-for-Android" }
         single<GithubTarget> {

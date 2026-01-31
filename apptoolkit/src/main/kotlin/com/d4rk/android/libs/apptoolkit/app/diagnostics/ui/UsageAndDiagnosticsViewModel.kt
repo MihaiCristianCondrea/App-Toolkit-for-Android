@@ -55,10 +55,18 @@ class UsageAndDiagnosticsViewModel(
 ) {
 
     init {
+        firebaseController.logBreadcrumb(
+            message = "UsageAndDiagnosticsViewModel initialized",
+            attributes = mapOf("screen" to "UsageAndDiagnostics"),
+        )
         observeConsents()
     }
 
     override fun onEvent(event: UsageAndDiagnosticsEvent) {
+        firebaseController.logBreadcrumb(
+            message = "UsageAndDiagnosticsViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             is UsageAndDiagnosticsEvent.SetUsageAndDiagnostics -> updateUsageAndDiagnostics(event.enabled)
             is UsageAndDiagnosticsEvent.SetAnalyticsConsent -> updateAnalyticsConsent(event.granted)
@@ -71,6 +79,10 @@ class UsageAndDiagnosticsViewModel(
     }
 
     private fun observeConsents() {
+        firebaseController.logBreadcrumb(
+            message = "Usage diagnostics observe started",
+            attributes = mapOf("source" to "UsageAndDiagnosticsViewModel"),
+        )
         repository.observeSettings()
             .onStart { screenState.setLoading() }
             .map<UsageAndDiagnosticsSettings, DataState<UsageAndDiagnosticsSettings, Errors>> { settings ->
@@ -109,22 +121,42 @@ class UsageAndDiagnosticsViewModel(
     }
 
     private fun updateUsageAndDiagnostics(enabled: Boolean) {
+        firebaseController.logBreadcrumb(
+            message = "Usage diagnostics toggle",
+            attributes = mapOf("enabled" to enabled.toString()),
+        )
         viewModelScope.launch { repository.setUsageAndDiagnostics(enabled) }
     }
 
     private fun updateAnalyticsConsent(granted: Boolean) {
+        firebaseController.logBreadcrumb(
+            message = "Analytics consent toggle",
+            attributes = mapOf("granted" to granted.toString()),
+        )
         viewModelScope.launch { repository.setAnalyticsConsent(granted) }
     }
 
     private fun updateAdStorageConsent(granted: Boolean) {
+        firebaseController.logBreadcrumb(
+            message = "Ad storage consent toggle",
+            attributes = mapOf("granted" to granted.toString()),
+        )
         viewModelScope.launch { repository.setAdStorageConsent(granted) }
     }
 
     private fun updateAdUserDataConsent(granted: Boolean) {
+        firebaseController.logBreadcrumb(
+            message = "Ad user data consent toggle",
+            attributes = mapOf("granted" to granted.toString()),
+        )
         viewModelScope.launch { repository.setAdUserDataConsent(granted) }
     }
 
     private fun updateAdPersonalizationConsent(granted: Boolean) {
+        firebaseController.logBreadcrumb(
+            message = "Ad personalization consent toggle",
+            attributes = mapOf("granted" to granted.toString()),
+        )
         viewModelScope.launch { repository.setAdPersonalizationConsent(granted) }
     }
 

@@ -56,12 +56,20 @@ class SettingsViewModel(
 ) {
 
     override fun onEvent(event: SettingsEvent) {
+        firebaseController.logBreadcrumb(
+            message = "SettingsViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             is SettingsEvent.Load -> loadSettings(context = event.context)
         }
     }
 
     private fun loadSettings(context: Context) {
+        firebaseController.logBreadcrumb(
+            message = "Settings load started",
+            attributes = mapOf("context" to context::class.java.name),
+        )
         viewModelScope.launch {
             flow {
                 val config = withContext(dispatchers.io) {

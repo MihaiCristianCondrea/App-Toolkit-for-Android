@@ -4,6 +4,7 @@ import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -29,7 +30,10 @@ class RequestConsentUseCaseTest {
                 flowOf(DataState.Success(Unit))
         }
 
-        val useCase = RequestConsentUseCase(repository = repository)
+        val useCase = RequestConsentUseCase(
+            repository = repository,
+            firebaseController = FakeFirebaseController(),
+        )
         val result = useCase(host = host, showIfRequired = false).toList()
         val expected: List<DataState<Unit, Errors.UseCase>> = listOf(DataState.Success(Unit))
 

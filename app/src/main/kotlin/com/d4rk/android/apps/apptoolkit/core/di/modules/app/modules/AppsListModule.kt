@@ -22,10 +22,11 @@ val appsListModule: Module = module {
         DeveloperAppsRepositoryImpl(
             client = get(),
             baseUrl = get(qualifier = named(name = "developer_apps_api_url")),
+            firebaseController = get(),
         )
     }
 
-    single { FetchDeveloperAppsUseCase(repository = get()) }
+    single { FetchDeveloperAppsUseCase(repository = get(), firebaseController = get()) }
     viewModel {
         AppsListViewModel(
             fetchDeveloperAppsUseCase = get(),
@@ -37,14 +38,15 @@ val appsListModule: Module = module {
     }
 
     single<FavoritesLocalDataSource> { FavoritesLocalDataSourceImpl(dataStore = get()) }
-    single<FavoritesRepository> { FavoritesRepositoryImpl(local = get()) }
+    single<FavoritesRepository> { FavoritesRepositoryImpl(local = get(), firebaseController = get()) }
 
-    single { ObserveFavoritesUseCase(repository = get()) }
-    single { ToggleFavoriteUseCase(repository = get()) }
+    single { ObserveFavoritesUseCase(repository = get(), firebaseController = get()) }
+    single { ToggleFavoriteUseCase(repository = get(), firebaseController = get()) }
     single {
         ObserveFavoriteAppsUseCase(
             fetchDeveloperAppsUseCase = get(),
-            observeFavoritesUseCase = get()
+            observeFavoritesUseCase = get(),
+            firebaseController = get(),
         )
     }
 

@@ -50,6 +50,10 @@ class AdvancedSettingsViewModel(
 ) {
 
     override fun onEvent(event: AdvancedSettingsEvent) {
+        firebaseController.logBreadcrumb(
+            message = "AdvancedSettingsViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             AdvancedSettingsEvent.ClearCache -> clearCache()
             AdvancedSettingsEvent.MessageShown -> onMessageShown()
@@ -65,6 +69,10 @@ class AdvancedSettingsViewModel(
      * to the user. It also handles potential exceptions during the flow execution.
      */
     private fun clearCache() {
+        firebaseController.logBreadcrumb(
+            message = "Advanced settings clear cache",
+            attributes = mapOf("source" to "AdvancedSettingsViewModel"),
+        )
         generalJob?.cancel()
 
         generalJob = repository.clearCache()

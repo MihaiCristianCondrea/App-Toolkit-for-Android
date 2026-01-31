@@ -61,10 +61,18 @@ open class AboutViewModel(
     private var copyJob: Job? = null
 
     init {
+        firebaseController.logBreadcrumb(
+            message = "AboutViewModel initialized",
+            attributes = mapOf("screen" to "About"),
+        )
         onEvent(AboutEvent.Load)
     }
 
     override fun onEvent(event: AboutEvent) {
+        firebaseController.logBreadcrumb(
+            message = "AboutViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             is AboutEvent.Load -> loadAboutInfo()
             is AboutEvent.CopyDeviceInfo -> copyDeviceInfo(event.label)
@@ -73,6 +81,10 @@ open class AboutViewModel(
     }
 
     private fun loadAboutInfo() {
+        firebaseController.logBreadcrumb(
+            message = "About info load started",
+            attributes = mapOf("source" to "AboutViewModel"),
+        )
         loadJob?.cancel()
         loadJob = getAboutInfo()
             .flowOn(dispatchers.io)
@@ -99,6 +111,10 @@ open class AboutViewModel(
     }
 
     private fun copyDeviceInfo(label: String) {
+        firebaseController.logBreadcrumb(
+            message = "About copy device info",
+            attributes = mapOf("label" to label),
+        )
         val deviceInfo = screenData?.deviceInfo.orEmpty()
         if (deviceInfo.isBlank()) {
             screenState.showSnackbar(

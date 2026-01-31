@@ -11,5 +11,5 @@ import org.koin.dsl.module
 val consentModule: Module = module {
     single<ConsentRemoteDataSource> { UmpConsentRemoteDataSource() }
     single<ConsentRepository> { ConsentRepositoryImpl(remote = get()) }
-    single { RequestConsentUseCase(repository = get()) }
+    single { RequestConsentUseCase(repository = get(), firebaseController = get()) }
 }

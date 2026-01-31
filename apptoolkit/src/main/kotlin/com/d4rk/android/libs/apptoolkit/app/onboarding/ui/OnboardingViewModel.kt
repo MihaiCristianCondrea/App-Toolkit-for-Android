@@ -41,10 +41,18 @@ class OnboardingViewModel(
     private var consentJob: Job? = null
 
     init {
+        firebaseController.logBreadcrumb(
+            message = "OnboardingViewModel initialized",
+            attributes = mapOf("screen" to "Onboarding"),
+        )
         observeCompletion()
     }
 
     override fun onEvent(event: OnboardingEvent) {
+        firebaseController.logBreadcrumb(
+            message = "OnboardingViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             is OnboardingEvent.UpdateCurrentTab -> updateCurrentTab(event.index)
             is OnboardingEvent.CompleteOnboarding -> completeOnboarding()
@@ -55,6 +63,10 @@ class OnboardingViewModel(
     }
 
     private fun observeCompletion() {
+        firebaseController.logBreadcrumb(
+            message = "Observe onboarding completion",
+            attributes = mapOf("source" to "OnboardingViewModel"),
+        )
         observeCompletionJob?.cancel()
         observeCompletionJob = observeOnboardingCompletionUseCase()
             .flowOn(dispatchers.io)
@@ -78,6 +90,10 @@ class OnboardingViewModel(
     }
 
     private fun completeOnboarding() {
+        firebaseController.logBreadcrumb(
+            message = "Complete onboarding requested",
+            attributes = mapOf("source" to "OnboardingViewModel"),
+        )
         completeJob?.cancel()
         completeJob = flow<DataState<Unit, Errors.UseCase>> {
             emit(DataState.Loading())
@@ -109,6 +125,10 @@ class OnboardingViewModel(
     }
 
     private fun requestConsent(host: ConsentHost) {
+        firebaseController.logBreadcrumb(
+            message = "Onboarding consent requested",
+            attributes = mapOf("host" to host.activity::class.java.name),
+        )
         consentJob?.cancel()
         consentJob = requestConsentUseCase(host = host)
             .flowOn(dispatchers.main)

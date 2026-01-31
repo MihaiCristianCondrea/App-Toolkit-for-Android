@@ -42,10 +42,18 @@ class MainViewModel(
 ) {
 
     init {
+        firebaseController.logBreadcrumb(
+            message = "MainViewModel initialized",
+            attributes = mapOf("screen" to "Main"),
+        )
         onEvent(MainEvent.LoadNavigation)
     }
 
     override fun onEvent(event: MainEvent) {
+        firebaseController.logBreadcrumb(
+            message = "MainViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             MainEvent.LoadNavigation -> loadNavigationItems()
             is MainEvent.RequestConsent -> requestConsent(event.host)
@@ -53,6 +61,10 @@ class MainViewModel(
     }
 
     private fun loadNavigationItems() {
+        firebaseController.logBreadcrumb(
+            message = "Main navigation load started",
+            attributes = mapOf("source" to "MainViewModel"),
+        )
         viewModelScope.launch {
             getNavigationDrawerItemsUseCase()
                 .flowOn(dispatchers.io)
@@ -95,6 +107,10 @@ class MainViewModel(
     }
 
     private fun requestConsent(host: ConsentHost) {
+        firebaseController.logBreadcrumb(
+            message = "Main consent request",
+            attributes = mapOf("host" to host.activity::class.java.name),
+        )
         generalJob?.cancel()
         generalJob = requestConsentUseCase(host = host)
             .flowOn(dispatchers.main)

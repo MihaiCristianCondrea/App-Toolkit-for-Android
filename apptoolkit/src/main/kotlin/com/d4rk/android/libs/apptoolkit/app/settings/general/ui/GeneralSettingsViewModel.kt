@@ -41,12 +41,20 @@ class GeneralSettingsViewModel(
 ) {
 
     override fun onEvent(event: GeneralSettingsEvent) {
+        firebaseController.logBreadcrumb(
+            message = "GeneralSettingsViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             is GeneralSettingsEvent.Load -> loadContent(contentKey = event.contentKey)
         }
     }
 
     private fun loadContent(contentKey: String?) {
+        firebaseController.logBreadcrumb(
+            message = "General settings load started",
+            attributes = mapOf("hasContentKey" to (!contentKey.isNullOrBlank()).toString()),
+        )
         generalJob?.cancel()
         generalJob = viewModelScope.launch {
             repository.getContentKey(contentKey)

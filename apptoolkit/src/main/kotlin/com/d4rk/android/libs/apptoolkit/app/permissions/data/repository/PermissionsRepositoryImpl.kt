@@ -7,6 +7,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.Setti
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsPreference
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -18,10 +19,15 @@ import kotlinx.coroutines.flow.flowOn
 class PermissionsRepositoryImpl(
     private val context: Context,
     private val dispatchers: DispatcherProvider,
+    private val firebaseController: FirebaseController,
 ) : PermissionsRepository {
 
     override fun getPermissionsConfig(): Flow<SettingsConfig> =
         flow {
+            firebaseController.logBreadcrumb(
+                message = "Permissions config requested",
+                attributes = mapOf("source" to "PermissionsRepositoryImpl"),
+            )
             emit(
                 SettingsConfig(
                     title = context.getString(R.string.permissions),

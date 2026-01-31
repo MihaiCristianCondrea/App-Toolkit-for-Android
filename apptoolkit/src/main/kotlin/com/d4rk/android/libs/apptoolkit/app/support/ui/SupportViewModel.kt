@@ -68,6 +68,10 @@ class SupportViewModel(
     private var billingTimeoutJob: Job? = null
 
     init {
+        firebaseController.logBreadcrumb(
+            message = "SupportViewModel initialized",
+            attributes = mapOf("screen" to "Support"),
+        )
         billingRepository.productDetails
             .onStart {
                 if (screenData?.donationOptions?.isNotEmpty() == true) {
@@ -203,6 +207,10 @@ class SupportViewModel(
     }
 
     override fun onEvent(event: SupportEvent) {
+        firebaseController.logBreadcrumb(
+            message = "SupportViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             is SupportEvent.QueryProductDetails -> queryProductDetails()
 
@@ -211,6 +219,13 @@ class SupportViewModel(
     }
 
     fun onDonateClicked(activity: Activity, productId: String) {
+        firebaseController.logBreadcrumb(
+            message = "Support donation clicked",
+            attributes = mapOf(
+                "productId" to productId,
+                "activity" to activity::class.java.name,
+            ),
+        )
         if (!activity.isValidForBilling()) {
             return
         }

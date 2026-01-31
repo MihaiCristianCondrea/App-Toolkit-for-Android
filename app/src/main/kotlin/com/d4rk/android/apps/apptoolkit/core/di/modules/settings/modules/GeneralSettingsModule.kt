@@ -29,7 +29,7 @@ val generalSettingsModule: Module = module {
             }
         )
     }
-    single<GeneralSettingsRepository> { GeneralSettingsRepositoryImpl() }
+    single<GeneralSettingsRepository> { GeneralSettingsRepositoryImpl(firebaseController = get()) }
 
     viewModel {
         GeneralSettingsViewModel(

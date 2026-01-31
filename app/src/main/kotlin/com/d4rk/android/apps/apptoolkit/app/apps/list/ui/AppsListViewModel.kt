@@ -84,11 +84,19 @@ class AppsListViewModel(
         )
 
     init {
+        firebaseController.logBreadcrumb(
+            message = "AppsListViewModel initialized",
+            attributes = mapOf("screen" to "AppsList"),
+        )
         observeFetch()
         fetchAppsTrigger.tryEmit(Unit)
     }
 
     override fun onEvent(event: HomeEvent) {
+        firebaseController.logBreadcrumb(
+            message = "AppsListViewModel event",
+            attributes = mapOf("event" to event::class.java.simpleName),
+        )
         when (event) {
             HomeEvent.FetchApps -> fetchAppsTrigger.tryEmit(Unit)
             HomeEvent.OpenRandomApp -> {
@@ -99,6 +107,10 @@ class AppsListViewModel(
     }
 
     private fun observeFetch() {
+        firebaseController.logBreadcrumb(
+            message = "Apps list fetch observe",
+            attributes = mapOf("source" to "AppsListViewModel"),
+        )
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             fetchAppsTrigger
@@ -151,6 +163,10 @@ class AppsListViewModel(
     }
 
     fun toggleFavorite(packageName: String) {
+        firebaseController.logBreadcrumb(
+            message = "Apps list toggle favorite",
+            attributes = mapOf("packageName" to packageName),
+        )
         toggleJob?.cancel()
         toggleJob = viewModelScope.launch {
             try {

@@ -26,9 +26,10 @@ val helpModule: Module =
                     isDebugBuild = BuildConfig.DEBUG
                 ),
                 productId = HelpConstants.FAQ_PRODUCT_ID,
+                firebaseController = get(),
             )
         }
-        single { GetFaqUseCase(repository = get()) }
+        single { GetFaqUseCase(repository = get(), firebaseController = get()) }
         viewModel {
             HelpViewModel(
                 getFaqUseCase = get(),

@@ -12,13 +12,16 @@ import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoute
 import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import com.d4rk.android.libs.apptoolkit.R as ToolkitR
 
 class MainNavigationRepositoryImpl(
     private val dataStore: DataStore,
+    private val firebaseController: FirebaseController,
 ) : NavigationRepository {
     override fun getNavigationDrawerItems(): Flow<List<NavigationDrawerItem>> =
         dataStore.componentsShowcaseUnlocked.map { isUnlocked ->
@@ -61,5 +64,10 @@ class MainNavigationRepositoryImpl(
                     ),
                 )
             }
+        }.onStart {
+            firebaseController.logBreadcrumb(
+                message = "Navigation drawer items requested",
+                attributes = mapOf("source" to "MainNavigationRepositoryImpl"),
+            )
         }
 }
