@@ -57,18 +57,27 @@ class FavoritesUseCasesTest {
     }
 
     @Test
-    fun `observe favorites use case returns repository flow and invokes repository exactly once`() =
+    fun `observe favorites use case emits repository values and invokes repository once`() =
         runTest {
-            val expectedFlow = flowOf(setOf("pkg"))
-            val repository = RecordingFavoritesRepository(observeResult = expectedFlow)
-            val useCase = ObserveFavoritesUseCase(repository, FakeFirebaseController())
+            val expectedSet = setOf("pkg")
+            val repositoryFlow = flowOf(expectedSet)
+            val repository = RecordingFavoritesRepository(observeResult = repositoryFlow)
+            val useCase = ObserveFavoritesUseCase(
+                repository = repository,
+                firebaseController = FakeFirebaseController()
+            )
 
-            val result = useCase()
+            val resultFlow = useCase()
 
-            assertThat(result).isSameInstanceAs(expectedFlow)
+            resultFlow.test {
+                assertThat(awaitItem()).containsExactly("pkg")
+                cancelAndIgnoreRemainingEvents()
+            }
+
             assertThat(repository.observeCalls).isEqualTo(1)
             assertThat(repository.toggleCalls).isEqualTo(0)
         }
+
 }
 
 private class RecordingFavoritesRepository(

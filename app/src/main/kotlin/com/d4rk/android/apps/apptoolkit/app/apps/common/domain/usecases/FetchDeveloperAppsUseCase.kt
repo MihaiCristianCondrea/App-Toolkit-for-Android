@@ -27,7 +27,7 @@ class FetchDeveloperAppsUseCase(
             attributes = mapOf("source" to "FetchDeveloperAppsUseCase"),
         )
         emitAll(repository.fetchDeveloperApps())
-    }.onStart {
+    }.onStart { // TODO: Search all use cases with onStart that includes the firebaseController.logBreadcrumb and place this log firebaseController.logBreadcrumb into the flow of the view model.
         firebaseController.logBreadcrumb(
             message = "Fetch developer apps collecting",
             attributes = mapOf("stage" to "onStart"),

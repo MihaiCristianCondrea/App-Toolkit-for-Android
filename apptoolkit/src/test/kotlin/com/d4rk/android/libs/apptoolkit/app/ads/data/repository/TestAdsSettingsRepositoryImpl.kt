@@ -3,6 +3,7 @@ package com.d4rk.android.libs.apptoolkit.app.ads.data.repository
 import app.cash.turbine.test
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
 import com.google.common.truth.Truth.assertThat
@@ -38,6 +39,7 @@ class TestAdsSettingsRepositoryImpl {
         return AdsSettingsRepositoryImpl(
             dataStore = dataStore,
             buildInfoProvider = buildInfoProvider,
+            firebaseController = mockk<FirebaseController>(relaxed = true),
         )
     }
 

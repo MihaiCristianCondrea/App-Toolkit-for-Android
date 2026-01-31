@@ -10,6 +10,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -19,6 +20,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
+import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -58,7 +60,11 @@ class DeveloperAppsRepositoryImplTest {
         }) {
             install(ContentNegotiation) { json() }
         }
-        val repository = DeveloperAppsRepositoryImpl(client , "https://example.com")
+        val repository = DeveloperAppsRepositoryImpl(
+            client = client,
+            baseUrl = "https://example.com",
+            firebaseController = mockk<FirebaseController>(relaxed = true)
+        )
 
         val result = repository.fetchDeveloperApps().first()
         val success = result as DataState.Success
@@ -96,7 +102,11 @@ class DeveloperAppsRepositoryImplTest {
         }) {
             install(ContentNegotiation) { json() }
         }
-        val repository = DeveloperAppsRepositoryImpl(client , "https://example.com")
+        val repository = DeveloperAppsRepositoryImpl(
+            client = client,
+            baseUrl = "https://example.com",
+            firebaseController = mockk<FirebaseController>(relaxed = true)
+        )
 
         val result = repository.fetchDeveloperApps().first() as DataState.Success
         val category = result.data.first().category
@@ -118,7 +128,11 @@ class DeveloperAppsRepositoryImplTest {
         }) {
             install(ContentNegotiation) { json() }
         }
-        val repository = DeveloperAppsRepositoryImpl(client , "https://example.com")
+        val repository = DeveloperAppsRepositoryImpl(
+            client = client,
+            baseUrl = "https://example.com",
+            firebaseController = mockk<FirebaseController>(relaxed = true)
+        )
 
         val result = repository.fetchDeveloperApps().first()
         val error = result as DataState.Error
@@ -170,7 +184,11 @@ class DeveloperAppsRepositoryImplTest {
         }) {
             install(ContentNegotiation) { json() }
         }
-        val repository = DeveloperAppsRepositoryImpl(client , "https://example.com")
+        val repository = DeveloperAppsRepositoryImpl(
+            client = client,
+            baseUrl = "https://example.com",
+            firebaseController = mockk<FirebaseController>(relaxed = true)
+        )
 
         val result = repository.fetchDeveloperApps().first() as DataState.Success
         assertEquals(listOf("Alpha", "beta", "zeta"), result.data.map(AppInfo::name))
@@ -190,7 +208,11 @@ class DeveloperAppsRepositoryImplTest {
         }) {
             install(ContentNegotiation) { json() }
         }
-        val repository = DeveloperAppsRepositoryImpl(client , "https://example.com")
+        val repository = DeveloperAppsRepositoryImpl(
+            client = client,
+            baseUrl = "https://example.com",
+            firebaseController = mockk<FirebaseController>(relaxed = true)
+        )
 
         val result = repository.fetchDeveloperApps().first()
         val error = result as DataState.Error

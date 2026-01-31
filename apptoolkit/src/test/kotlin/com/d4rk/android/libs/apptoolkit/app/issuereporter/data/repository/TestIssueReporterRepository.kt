@@ -7,6 +7,7 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.Ex
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.google.common.truth.Truth.assertThat
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -37,6 +38,7 @@ class TestIssueReporterRepository {
     ): IssueReporterRepository = IssueReporterRepositoryImpl(
         remoteDataSource = IssueReporterRemoteDataSource(client),
         dispatchers = testDispatchers(scheduler),
+        firebaseController = mockk<FirebaseController>(relaxed = true),
     )
 
     // ✅ Pure-JVM fixture: no Android calls

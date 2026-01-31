@@ -1,8 +1,10 @@
 package com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository
 
 import com.d4rk.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
+import io.mockk.mockk
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -22,7 +24,7 @@ class TestGeneralSettingsRepository {
     @Test
     fun `getContentKey returns provided key`() = runTest(dispatcherExtension.testDispatcher) {
         val repository =
-            GeneralSettingsRepositoryImpl()
+            GeneralSettingsRepositoryImpl(firebaseController = mockk<FirebaseController>(relaxed = true))
         val result = repository.getContentKey("valid").first()
         assertThat(result).isEqualTo("valid")
     }
@@ -30,7 +32,7 @@ class TestGeneralSettingsRepository {
     @Test
     fun `getContentKey throws on null key`() = runTest(dispatcherExtension.testDispatcher) {
         val repository =
-            GeneralSettingsRepositoryImpl()
+            GeneralSettingsRepositoryImpl(firebaseController = mockk<FirebaseController>(relaxed = true))
         assertThrows<IllegalArgumentException> {
             repository.getContentKey(null).first()
         }
@@ -39,7 +41,7 @@ class TestGeneralSettingsRepository {
     @Test
     fun `getContentKey throws on blank key`() = runTest(dispatcherExtension.testDispatcher) {
         val repository =
-            GeneralSettingsRepositoryImpl()
+            GeneralSettingsRepositoryImpl(firebaseController = mockk<FirebaseController>(relaxed = true))
         assertThrows<IllegalArgumentException> {
             repository.getContentKey("").first()
         }
@@ -47,7 +49,8 @@ class TestGeneralSettingsRepository {
 
     @Test
     fun `getContentKey uses provided dispatcher`() = runTest(dispatcherExtension.testDispatcher) {
-        val repository = GeneralSettingsRepositoryImpl()
+        val repository =
+            GeneralSettingsRepositoryImpl(firebaseController = mockk<FirebaseController>(relaxed = true))
         val result = repository.getContentKey("value").first()
         assertThat(result).isEqualTo("value")
     }

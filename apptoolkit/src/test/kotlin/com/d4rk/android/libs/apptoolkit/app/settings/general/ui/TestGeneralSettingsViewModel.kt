@@ -5,11 +5,13 @@ import com.d4rk.android.libs.apptoolkit.app.settings.general.data.repository.Gen
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsEvent
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import com.google.common.truth.Truth.assertThat
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -38,7 +40,11 @@ class TestGeneralSettingsViewModel {
     fun `load content success`() = runTest(dispatcherExtension.testDispatcher) {
         println("🚀 [TEST] load content success")
         val viewModel = GeneralSettingsViewModel(
-            repository = GeneralSettingsRepositoryImpl(),
+            repository = GeneralSettingsRepositoryImpl(
+                firebaseController = mockk<FirebaseController>(
+                    relaxed = true
+                )
+            ),
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,
         )
@@ -56,7 +62,11 @@ class TestGeneralSettingsViewModel {
     fun `load content invalid`() = runTest(dispatcherExtension.testDispatcher) {
         println("🚀 [TEST] load content invalid")
         val viewModel = GeneralSettingsViewModel(
-            repository = GeneralSettingsRepositoryImpl(),
+            repository = GeneralSettingsRepositoryImpl(
+                firebaseController = mockk<FirebaseController>(
+                    relaxed = true
+                )
+            ),
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,
         )
@@ -75,7 +85,11 @@ class TestGeneralSettingsViewModel {
     fun `load content blank`() = runTest(dispatcherExtension.testDispatcher) {
         println("🚀 [TEST] load content blank")
         val viewModel = GeneralSettingsViewModel(
-            repository = GeneralSettingsRepositoryImpl(),
+            repository = GeneralSettingsRepositoryImpl(
+                firebaseController = mockk<FirebaseController>(
+                    relaxed = true
+                )
+            ),
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,
         )
@@ -94,7 +108,11 @@ class TestGeneralSettingsViewModel {
     fun `multiple load calls update key`() = runTest(dispatcherExtension.testDispatcher) {
         println("🚀 [TEST] multiple load calls update key")
         val viewModel = GeneralSettingsViewModel(
-            repository = GeneralSettingsRepositoryImpl(),
+            repository = GeneralSettingsRepositoryImpl(
+                firebaseController = mockk<FirebaseController>(
+                    relaxed = true
+                )
+            ),
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,
         )
@@ -117,7 +135,11 @@ class TestGeneralSettingsViewModel {
     fun `errors cleared after successful load`() = runTest(dispatcherExtension.testDispatcher) {
         println("🚀 [TEST] errors cleared after successful load")
         val viewModel = GeneralSettingsViewModel(
-            repository = GeneralSettingsRepositoryImpl(),
+            repository = GeneralSettingsRepositoryImpl(
+                firebaseController = mockk<FirebaseController>(
+                    relaxed = true
+                )
+            ),
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,
         )
@@ -141,7 +163,11 @@ class TestGeneralSettingsViewModel {
     fun `content persists across config changes`() = runTest(dispatcherExtension.testDispatcher) {
         println("🚀 [TEST] content persists across config changes")
         val viewModel = GeneralSettingsViewModel(
-            repository = GeneralSettingsRepositoryImpl(),
+            repository = GeneralSettingsRepositoryImpl(
+                firebaseController = mockk<FirebaseController>(
+                    relaxed = true
+                )
+            ),
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,
         )
@@ -161,7 +187,11 @@ class TestGeneralSettingsViewModel {
     fun `reload with same key retains state`() = runTest(dispatcherExtension.testDispatcher) {
         println("🚀 [TEST] reload with same key retains state")
         val viewModel = GeneralSettingsViewModel(
-            repository = GeneralSettingsRepositoryImpl(),
+            repository = GeneralSettingsRepositoryImpl(
+                firebaseController = mockk<FirebaseController>(
+                    relaxed = true
+                )
+            ),
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,
         )
@@ -182,7 +212,11 @@ class TestGeneralSettingsViewModel {
     fun `load extremely long content key`() = runTest(dispatcherExtension.testDispatcher) {
         println("🚀 [TEST] load extremely long content key")
         val viewModel = GeneralSettingsViewModel(
-            repository = GeneralSettingsRepositoryImpl(),
+            repository = GeneralSettingsRepositoryImpl(
+                firebaseController = mockk<FirebaseController>(
+                    relaxed = true
+                )
+            ),
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,
         )
@@ -201,7 +235,11 @@ class TestGeneralSettingsViewModel {
     fun `load content key with special characters`() = runTest(dispatcherExtension.testDispatcher) {
         println("🚀 [TEST] load content key with special characters")
         val viewModel = GeneralSettingsViewModel(
-            repository = GeneralSettingsRepositoryImpl(),
+            repository = GeneralSettingsRepositoryImpl(
+                firebaseController = mockk<FirebaseController>(
+                    relaxed = true
+                )
+            ),
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,
         )
@@ -221,7 +259,11 @@ class TestGeneralSettingsViewModel {
         runTest(dispatcherExtension.testDispatcher) {
             println("🚀 [TEST] concurrent load events yield latest state")
             val viewModel = GeneralSettingsViewModel(
-                repository = GeneralSettingsRepositoryImpl(),
+                repository = GeneralSettingsRepositoryImpl(
+                    firebaseController = mockk<FirebaseController>(
+                        relaxed = true
+                    )
+                ),
                 dispatchers = testDispatchers(),
                 firebaseController = firebaseController,
             )

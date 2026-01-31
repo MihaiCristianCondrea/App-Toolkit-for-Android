@@ -3,6 +3,7 @@ package com.d4rk.android.libs.apptoolkit.app.advanced.data.repository
 import android.content.Context
 import app.cash.turbine.test
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
@@ -33,7 +34,10 @@ class TestCacheRepositoryImpl {
         every { context.codeCacheDir } returns dir2
         every { context.externalCacheDir } returns dir3
 
-        val repository = CacheRepositoryImpl(context)
+        val repository = CacheRepositoryImpl(
+            context = context,
+            firebaseController = mockk<FirebaseController>(relaxed = true),
+        )
         val result = repository.clearCache().single()
 
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -53,7 +57,10 @@ class TestCacheRepositoryImpl {
         every { context.codeCacheDir } returns failing
         every { context.externalCacheDir } returns dir3
 
-        val repository = CacheRepositoryImpl(context)
+        val repository = CacheRepositoryImpl(
+            context = context,
+            firebaseController = mockk<FirebaseController>(relaxed = true),
+        )
         val result = repository.clearCache().single()
 
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -67,7 +74,10 @@ class TestCacheRepositoryImpl {
         val context = mockk<Context>()
         every { context.cacheDir } throws SecurityException("denied")
 
-        val repository = CacheRepositoryImpl(context)
+        val repository = CacheRepositoryImpl(
+            context = context,
+            firebaseController = mockk<FirebaseController>(relaxed = true),
+        )
         val result = repository.clearCache().single()
 
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -84,7 +94,10 @@ class TestCacheRepositoryImpl {
         every { context.codeCacheDir } returns dir2
         every { context.externalCacheDir } returns dir3
 
-        val repository = CacheRepositoryImpl(context)
+        val repository = CacheRepositoryImpl(
+            context = context,
+            firebaseController = mockk<FirebaseController>(relaxed = true),
+        )
         val result = repository.clearCache().single()
 
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -101,7 +114,10 @@ class TestCacheRepositoryImpl {
         every { context.codeCacheDir } returns dir2
         every { context.externalCacheDir } returns dir3
 
-        val repository = CacheRepositoryImpl(context)
+        val repository = CacheRepositoryImpl(
+            context = context,
+            firebaseController = mockk<FirebaseController>(relaxed = true),
+        )
         val result = repository.clearCache().single()
 
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -117,7 +133,10 @@ class TestCacheRepositoryImpl {
         every { context.codeCacheDir } returns dir2
         every { context.externalCacheDir } returns null
 
-        val repository = CacheRepositoryImpl(context)
+        val repository = CacheRepositoryImpl(
+            context = context,
+            firebaseController = mockk<FirebaseController>(relaxed = true),
+        )
 
         repository.clearCache().test {
             assertThat(awaitItem()).isInstanceOf(Result.Success::class.java)

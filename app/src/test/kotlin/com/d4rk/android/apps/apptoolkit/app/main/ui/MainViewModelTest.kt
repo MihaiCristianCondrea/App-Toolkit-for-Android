@@ -1,6 +1,7 @@
 package com.d4rk.android.apps.apptoolkit.app.main.ui
 
 import androidx.compose.ui.graphics.vector.ImageVector
+import app.cash.turbine.test
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
 import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
@@ -13,6 +14,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import io.mockk.clearAllMocks
@@ -28,6 +30,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class MainViewModelTest {
 
@@ -60,7 +63,10 @@ class MainViewModelTest {
 
         MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
-            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
+            requestConsentUseCase = RequestConsentUseCase(
+                FakeConsentRepository(),
+                firebaseController
+            ),
             firebaseController = firebaseController,
             dispatchers = dispatchers,
         )
@@ -90,7 +96,10 @@ class MainViewModelTest {
 
             val viewModel = MainViewModel(
                 getNavigationDrawerItemsUseCase = useCase,
-                requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
+                requestConsentUseCase = RequestConsentUseCase(
+                    FakeConsentRepository(),
+                    firebaseController
+                ),
                 firebaseController = firebaseController,
                 dispatchers = dispatchers,
             )
@@ -119,23 +128,42 @@ class MainViewModelTest {
 
         val viewModel = MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
-            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
+            requestConsentUseCase = RequestConsentUseCase(
+                FakeConsentRepository(),
+                firebaseController
+            ),
             firebaseController = firebaseController,
             dispatchers = dispatchers,
         )
 
-        runCurrent()
-        advanceUntilIdle()
+        viewModel.uiState.test {
+            awaitItem() // initial UiStateScreen
 
-        assertEquals(
-            MainUiState(
-                showSnackbar = true,
-                snackbarMessage = UiTextHelper.StringResource(
-                    com.d4rk.android.libs.apptoolkit.R.string.error_failed_to_load_navigation
-                )
-            ),
-            viewModel.uiState.value.data
-        )
+            runCurrent()
+            advanceUntilIdle()
+
+            // Wait until the VM posts an error/snackbar update
+            var state = awaitItem()
+            while (state.snackbar == null && state.screenState !is ScreenState.Error) {
+                state = awaitItem()
+            }
+
+            // Error should be reflected in the wrapper state
+            assertTrue(state.screenState is ScreenState.Error)
+
+            // Snackbar should be posted by setError(...)
+            val snackbar = requireNotNull(state.snackbar)
+            assertTrue(snackbar.isError)
+
+            val msg = snackbar.message as UiTextHelper.StringResource
+            assertEquals(
+                com.d4rk.android.libs.apptoolkit.R.string.error_failed_to_load_navigation,
+                msg.resourceId
+            )
+
+            cancelAndIgnoreRemainingEvents()
+        }
+
         assertEquals(1, repo.callCount)
     }
 
@@ -145,20 +173,44 @@ class MainViewModelTest {
         val repo = FakeNavigationRepository(flowOf(emptyList()))
         val firebaseController = FakeFirebaseController()
         val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
+
         val viewModel = MainViewModel(
-            useCase,
-            RequestConsentUseCase(FakeConsentRepository(), firebaseController),
-            firebaseController,
-            TestDispatchers(dispatcherExtension.testDispatcher)
+            getNavigationDrawerItemsUseCase = useCase,
+            requestConsentUseCase = RequestConsentUseCase(
+                FakeConsentRepository(),
+                firebaseController
+            ),
+            firebaseController = firebaseController,
+            dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
         )
 
-        runCurrent()
-        advanceUntilIdle()
+        viewModel.uiState.test {
+            awaitItem() // initial UiStateScreen
 
-        assertEquals(true, viewModel.uiState.value.data?.showSnackbar)
+            runCurrent()
+            advanceUntilIdle()
+
+            var state = awaitItem()
+            while (state.snackbar == null && state.screenState !is ScreenState.Error) {
+                state = awaitItem()
+            }
+
+            assertTrue(state.screenState is ScreenState.Error)
+
+            val snackbar = requireNotNull(state.snackbar)
+            assertTrue(snackbar.isError)
+
+            val msg = snackbar.message as UiTextHelper.StringResource
+            assertEquals(
+                com.d4rk.android.libs.apptoolkit.R.string.error_failed_to_load_navigation,
+                msg.resourceId
+            )
+
+            cancelAndIgnoreRemainingEvents()
+        }
+
         assertEquals(1, repo.callCount)
     }
-
 
     private class FakeNavigationRepository(
         private val upstream: Flow<List<NavigationDrawerItem>>
