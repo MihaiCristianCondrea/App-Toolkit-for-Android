@@ -17,10 +17,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.d4rk.android.apps.apptoolkit.BuildConfig
-import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.AppCard
-import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.utils.buildAppListItems
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppListItem
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.AppCard
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.utils.buildAppListItems
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.AppsListNativeAdCard

@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.apps.apptoolkit.R
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.AppDetailsBottomSheet
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.buildOnAppClick
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.buildOnShareClick
@@ -27,7 +28,6 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.screens.AppsLis
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.screens.loading.HomeLoadingScreen
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.contract.FavoriteAppsAction
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.contract.FavoriteAppsEvent
-import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.RandomAppHandler
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes

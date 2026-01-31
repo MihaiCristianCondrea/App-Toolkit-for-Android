@@ -2,15 +2,15 @@ package com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules
 
 import com.d4rk.android.apps.apptoolkit.app.apps.common.data.local.FavoritesLocalDataSource
 import com.d4rk.android.apps.apptoolkit.app.apps.common.data.local.FavoritesLocalDataSourceImpl
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepositoryImpl
 import com.d4rk.android.apps.apptoolkit.app.apps.common.data.repository.FavoritesRepositoryImpl
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.DeveloperAppsRepository
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.FavoritesRepository
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoriteAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.FavoriteAppsViewModel
-import com.d4rk.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepositoryImpl
-import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.DeveloperAppsRepository
-import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
