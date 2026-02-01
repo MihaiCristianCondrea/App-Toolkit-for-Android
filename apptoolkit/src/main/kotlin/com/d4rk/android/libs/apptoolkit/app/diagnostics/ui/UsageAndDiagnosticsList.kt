@@ -88,11 +88,15 @@ fun UsageAndDiagnosticsList(
         item {
             val usageState = rememberUpdatedState(newValue = uiState.usageAndDiagnostics)
             SwitchCardItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = SizeConstants.MediumSize * 2),
                 title = stringResource(id = R.string.usage_and_diagnostics),
                 switchState = usageState,
-            ) { isChecked ->
-                viewModel.onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(isChecked))
-            }
+                onSwitchToggled = { isChecked ->
+                    viewModel.onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(isChecked))
+                }
+            )
         }
 
         item {

@@ -7,8 +7,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,10 +16,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BrightnessAuto
+import androidx.compose.material.icons.filled.Contrast
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -38,7 +42,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.ThemeSettingOption
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.DarkModePreview
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.LightModePreview
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.SystemModePreview
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider.paletteById
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
@@ -46,13 +52,16 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEve
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.logging.THEME_SETTINGS_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.ui.model.theme.ThemeModeChoice
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.cards.ThemeChoicePreviewCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
-import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePager
+import com.d4rk.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.DynamicPaletteVariant
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
@@ -71,33 +80,6 @@ import java.time.ZoneId
 
 private const val THEME_SCREEN_NAME = "Theme"
 private const val THEME_SCREEN_CLASS = "ThemeSettingsList"
-
-/**
- * Returns a list of static palette IDs with duplicate palettes removed.
- *
- * When the injected default palette matches a built-in palette (e.g., blue), the list would
- * otherwise show visually identical swatches twice. This helper keeps the selected palette ID
- * while removing duplicates, so the UI reflects the effective palette without redundancy.
- */
-private fun dedupeStaticPaletteIds(
-    options: List<String>,
-    selectedPaletteId: String
-): List<String> {
-    val resolvedPalettes = options.associateWith { paletteById(it) }
-    val uniqueIds = mutableListOf<String>()
-
-    for (id in options) {
-        val palette = resolvedPalettes.getValue(id)
-        val existingIndex = uniqueIds.indexOfFirst { resolvedPalettes.getValue(it) == palette }
-        if (existingIndex == -1) {
-            uniqueIds.add(id)
-        } else if (id == selectedPaletteId && uniqueIds[existingIndex] != selectedPaletteId) {
-            uniqueIds[existingIndex] = id
-        }
-    }
-
-    return uniqueIds
-}
 
 /**
  * Theme settings content for the app.
@@ -140,19 +122,25 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
 
     val supportsDynamic = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
-    val themeOptions: List<ThemeSettingOption> = listOf(
-        ThemeSettingOption(
-            key = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
-            displayName = stringResource(id = R.string.follow_system)
-        ),
-        ThemeSettingOption(
-            key = DataStoreNamesConstants.THEME_MODE_DARK,
-            displayName = stringResource(id = R.string.dark_mode)
-        ),
-        ThemeSettingOption(
+    val themeChoices: List<ThemeModeChoice> = listOf(
+        ThemeModeChoice(
             key = DataStoreNamesConstants.THEME_MODE_LIGHT,
-            displayName = stringResource(id = R.string.light_mode)
-        )
+            title = stringResource(id = R.string.light_mode),
+            description = stringResource(R.string.onboarding_theme_light_desc),
+            icon = Icons.Filled.LightMode,
+        ),
+        ThemeModeChoice(
+            key = DataStoreNamesConstants.THEME_MODE_DARK,
+            title = stringResource(id = R.string.dark_mode),
+            description = stringResource(R.string.onboarding_theme_dark_desc),
+            icon = Icons.Filled.DarkMode,
+        ),
+        ThemeModeChoice(
+            key = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
+            title = stringResource(id = R.string.follow_system),
+            description = stringResource(R.string.onboarding_theme_system_desc),
+            icon = Icons.Filled.BrightnessAuto,
+        ),
     )
 
     val isSystemInDarkThemeNow: Boolean = isSystemInDarkTheme()
@@ -262,7 +250,9 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                             name = "theme_tab_select",
                                             params = mapOf(
                                                 "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
-                                                "tab" to AnalyticsValue.Str(if (index == 0) "wallpaper" else "other"),
+                                                "tab" to AnalyticsValue.Str(
+                                                    if (index == 0) "wallpaper" else "other"
+                                                ),
                                             ),
                                         ),
                                     )
@@ -283,12 +273,10 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                 }
 
                 item {
-                    HorizontalPager(
-                        state = pagerState,
-                        modifier = Modifier.fillMaxWidth()
-                    ) { page ->
-                        when (page) {
-                            0 -> {
+                    ThemePalettePager(
+                        pagerState = pagerState,
+                        pages = listOf(
+                            {
                                 LazyRow(
                                     contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                                     horizontalArrangement = Arrangement.spacedBy(
@@ -324,9 +312,8 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                         )
                                     }
                                 }
-                            }
-
-                            else -> {
+                            },
+                            {
                                 LazyRow(
                                     contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                                     horizontalArrangement = Arrangement.spacedBy(
@@ -368,9 +355,10 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                         )
                                     }
                                 }
-                            }
-                        }
-                    }
+                            },
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                 }
             } else {
                 item {
@@ -417,60 +405,79 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
             }
 
             item {
-                SwitchCardItem(
-                    title = stringResource(id = R.string.amoled_mode),
-                    switchState = isAmoledMode
-                ) { isChecked ->
-                    firebase.value.logEvent(
-                        AnalyticsEvent(
-                            name = "theme_toggle_amoled",
-                            params = mapOf(
-                                "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
-                                "enabled" to AnalyticsValue.Str(isChecked.toString()),
-                            ),
-                        ),
-                    )
-                    coroutineScope.launch { dataStore.saveAmoledMode(isChecked) }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SizeConstants.LargeSize)
+                        .selectableGroup(),
+                    horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                ) {
+                    themeChoices.forEach { choice ->
+                        ThemeChoicePreviewCard(
+                            title = choice.title,
+                            description = choice.description,
+                            icon = choice.icon,
+                            isSelected = currentThemeModeKey == choice.key,
+                            onClick = {
+                                firebase.value.logEvent(
+                                    AnalyticsEvent(
+                                        name = "theme_mode_select",
+                                        params = mapOf(
+                                            "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                            "mode" to AnalyticsValue.Str(choice.key),
+                                        ),
+                                    ),
+                                )
+                                coroutineScope.launch {
+                                    dataStore.saveThemeMode(mode = choice.key)
+                                    dataStore.themeModeState.value = choice.key
+                                    if (choice.key == DataStoreNamesConstants.THEME_MODE_LIGHT &&
+                                        isAmoledMode.value
+                                    ) {
+                                        dataStore.saveAmoledMode(isChecked = false)
+                                    }
+                                }
+                            },
+                            modifier = Modifier.weight(1f),
+                            preview = {
+                                when (choice.key) {
+                                    DataStoreNamesConstants.THEME_MODE_LIGHT -> LightModePreview(
+                                        Modifier.fillMaxWidth()
+                                    )
+
+                                    DataStoreNamesConstants.THEME_MODE_DARK -> DarkModePreview(
+                                        Modifier.fillMaxWidth()
+                                    )
+
+                                    else -> SystemModePreview(Modifier.fillMaxWidth())
+                                }
+                            }
+                        )
+                    }
                 }
             }
 
             item {
-                Column(
+                SwitchCardItem(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = SizeConstants.LargeSize)
-                        .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize)),
-                    verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
-                ) {
-                    themeOptions.forEach { option: ThemeSettingOption ->
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(size = SizeConstants.ExtraTinySize)),
-                            shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
-                        ) {
-                            RadioButtonPreferenceItem(
-                                text = option.displayName,
-                                isChecked = (option.key == currentThemeModeKey),
-                                onCheckedChange = {
-                                    firebase.value.logEvent(
-                                        AnalyticsEvent(
-                                            name = "theme_mode_select",
-                                            params = mapOf(
-                                                "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
-                                                "mode" to AnalyticsValue.Str(option.key),
-                                            ),
-                                        ),
-                                    )
-                                    coroutineScope.launch {
-                                        dataStore.saveThemeMode(mode = option.key)
-                                        dataStore.themeModeState.value = option.key
-                                    }
-                                }
-                            )
-                        }
-                    }
-                }
+                        .padding(horizontal = SizeConstants.MediumSize * 2),
+                    title = stringResource(id = R.string.amoled_mode),
+                    switchState = isAmoledMode,
+                    onSwitchToggled = { isChecked ->
+                        firebase.value.logEvent(
+                            AnalyticsEvent(
+                                name = "theme_toggle_amoled",
+                                params = mapOf(
+                                    "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                    "enabled" to AnalyticsValue.Str(isChecked.toString()),
+                                ),
+                            ),
+                        )
+                        coroutineScope.launch { dataStore.saveAmoledMode(isChecked) }
+                    },
+                    checkIcon = Icons.Filled.Contrast
+                )
             }
 
             item {

@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -15,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,14 +37,20 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * The card has a rounded corner shape and provides a click sound effect upon interaction.
  */
 @Composable
-fun SwitchCardItem(title: String, switchState: State<Boolean>, onSwitchToggled: (Boolean) -> Unit) {
+fun SwitchCardItem(
+    modifier: Modifier = Modifier,
+    title: String,
+    enabled: Boolean = true,
+    switchState: State<Boolean>,
+    onSwitchToggled: (Boolean) -> Unit,
+    checkIcon: ImageVector = Icons.Filled.Check,
+) {
     val view: View = LocalView.current
     Card(
+        enabled = enabled,
         shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(all = SizeConstants.MediumSize * 2),
+        modifier = modifier,
         onClick = {
             view.playSoundEffect(SoundEffectConstants.CLICK)
             onSwitchToggled(!switchState.value)
@@ -65,6 +74,7 @@ fun SwitchCardItem(title: String, switchState: State<Boolean>, onSwitchToggled: 
                 onCheckedChange = { isChecked ->
                     onSwitchToggled(isChecked)
                 },
+                checkIcon = checkIcon
             )
         }
     }

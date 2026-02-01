@@ -85,11 +85,15 @@ fun AdsSettingsScreen() {
                 ) {
                     item {
                         SwitchCardItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(all = SizeConstants.MediumSize * 2),
                             title = stringResource(id = R.string.display_ads),
-                            switchState = rememberUpdatedState(data.adsEnabled)
-                        ) { isChecked: Boolean ->
-                            viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(isChecked))
-                        }
+                            switchState = rememberUpdatedState(data.adsEnabled),
+                            onSwitchToggled = { isChecked: Boolean ->
+                                viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(isChecked))
+                            }
+                        )
                     }
 
                     item {

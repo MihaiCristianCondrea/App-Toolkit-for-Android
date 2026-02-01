@@ -372,6 +372,9 @@ fun ComponentsScreen(
                         )
                         ExtraTinyVerticalSpacer()
                         SwitchCardItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(all = SizeConstants.MediumSize * 2),
                             title = stringResource(id = R.string.components_switch_card_title),
                             switchState = switchCardState,
                             onSwitchToggled = onSwitchCardChanged,
