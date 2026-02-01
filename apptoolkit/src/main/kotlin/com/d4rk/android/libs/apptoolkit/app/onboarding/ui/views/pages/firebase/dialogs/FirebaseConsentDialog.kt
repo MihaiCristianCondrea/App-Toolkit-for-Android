@@ -1,6 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.dialogs
 
-import android.content.Context
 import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.layout.Arrangement
@@ -30,14 +29,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnosticsUiState
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.dialogs.pages.AboutPage
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.dialogs.pages.ConsentPage
@@ -47,7 +47,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedBut
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import kotlinx.coroutines.launch
 
 @Composable
@@ -67,8 +66,13 @@ fun FirebaseConsentDialog(
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
-    val context: Context = LocalContext.current
-    val tabs = listOf("Consent", "Details", "About")
+
+    val tabs = listOf(
+        R.string.onboarding_crashlytics_dialog_tab_consent,
+        R.string.onboarding_crashlytics_dialog_tab_details,
+        R.string.onboarding_crashlytics_dialog_tab_about,
+    )
+
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabs.size })
     val scope = rememberCoroutineScope()
 
@@ -109,7 +113,7 @@ fun FirebaseConsentDialog(
                     )
                     MediumHorizontalSpacer()
                     Text(
-                        text = "Privacy choices", // TODO: move to string resources
+                        text = stringResource(R.string.onboarding_crashlytics_dialog_privacy_choices_title),
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.weight(1f),
@@ -122,7 +126,7 @@ fun FirebaseConsentDialog(
                     contentColor = MaterialTheme.colorScheme.primary,
                     divider = { HorizontalDivider(thickness = SizeConstants.ExtraTinySize / 2) },
                 ) {
-                    tabs.forEachIndexed { index, label ->
+                    tabs.forEachIndexed { index, labelResId ->
                         Tab(
                             modifier = Modifier
                                 .bounceClick()
@@ -131,7 +135,7 @@ fun FirebaseConsentDialog(
                             onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                             text = {
                                 Text(
-                                    text = label,
+                                    text = stringResource(id = labelResId),
                                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                                 )
                             }
@@ -149,11 +153,7 @@ fun FirebaseConsentDialog(
                         modifier = Modifier.fillMaxWidth(),
                     ) { page ->
                         when (page) {
-                            0 -> ConsentPage(
-                                onOpenUrl = { url ->
-                                    context.openUrl(url)
-                                }
-                            )
+                            0 -> ConsentPage()
 
                             1 -> DetailsPage(
                                 state = state,
@@ -172,11 +172,11 @@ fun FirebaseConsentDialog(
 
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraSmallSize),
+                    verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
                 ) {
                     GeneralButton(
                         modifier = Modifier.fillMaxWidth(),
-                        label = "Allow all", // TODO: string
+                        label = stringResource(R.string.onboarding_crashlytics_dialog_allow_all),
                         onClick = {
                             view.playSoundEffect(SoundEffectConstants.CLICK)
                             hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
@@ -184,15 +184,35 @@ fun FirebaseConsentDialog(
                         },
                     )
 
-                    GeneralOutlinedButton(
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
-                        label = "Allow essentials", // TODO: string
-                        onClick = {
-                            view.playSoundEffect(SoundEffectConstants.CLICK)
-                            hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
-                            onApplyConsents(true, false, false, false)
-                        },
-                    )
+                        horizontalArrangement = Arrangement.spacedBy(SizeConstants.ExtraSmallSize),
+                    ) {
+                        GeneralOutlinedButton(
+                            modifier = Modifier.weight(1f),
+                            label = stringResource(R.string.onboarding_crashlytics_dialog_confirm_choices),
+                            onClick = {
+                                view.playSoundEffect(SoundEffectConstants.CLICK)
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
+                                onApplyConsents(
+                                    state.analyticsConsent,
+                                    state.adStorageConsent,
+                                    state.adUserDataConsent,
+                                    state.adPersonalizationConsent,
+                                )
+                            },
+                        )
+
+                        GeneralOutlinedButton(
+                            modifier = Modifier.weight(1f),
+                            label = stringResource(R.string.onboarding_crashlytics_dialog_allow_essentials),
+                            onClick = {
+                                view.playSoundEffect(SoundEffectConstants.CLICK)
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
+                                onApplyConsents(true, false, false, false)
+                            },
+                        )
+                    }
                 }
             }
         }

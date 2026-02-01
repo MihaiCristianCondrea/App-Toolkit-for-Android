@@ -41,6 +41,23 @@
     <string name="onboarding_crashlytics_show_details_button">Show detailed information</string>
     <string name="onboarding_crashlytics_show_details_button_cd">Show detailed information about usage and diagnostics</string>
     <string name="button_acknowledge_consents">Save and continue</string>
+    <string name="onboarding_crashlytics_dialog_privacy_choices_title">Privacy choices</string>
+    <string name="onboarding_crashlytics_dialog_tab_consent">Consent</string>
+    <string name="onboarding_crashlytics_dialog_tab_details">Details</string>
+    <string name="onboarding_crashlytics_dialog_tab_about">About</string>
+    <string name="onboarding_crashlytics_dialog_allow_all">Allow all</string>
+    <string name="onboarding_crashlytics_dialog_confirm_choices">Confirm choices</string>
+    <string name="onboarding_crashlytics_dialog_allow_essentials">Allow essentials</string>
+    <string name="learn_more_about_provider">Learn more about this provider</string>
+    <string name="onboarding_crashlytics_details_intro">Below you\'ll find more detailed controls for how your data is used across the app. Your choices here affect what information is collected, how it\'s stored, and how it may be shared with service providers such as Google, in accordance with applicable privacy standards and consent requirements.</string>
+    <string name="onboarding_crashlytics_about_title">About consent and Firebase data usage</string>
+    <string name="onboarding_crashlytics_about_body_1">In this app we use Firebase, a platform from Google that helps developers understand how an app is used, improve performance, and provide certain services like analytics. Firebase Analytics automatically collects information such as event usage, screen views, device properties, and other signals, but only if you grant consent for these types of data to be collected. If consent is not granted, Firebase will not log events or send data related to those categories.</string>
+    <string name="onboarding_crashlytics_about_body_2">For detailed information about how Firebase and Google services handle data, and their respective privacy and security policies, please consult the official Firebase Privacy documentation and your regional privacy rights under laws like GDPR and CCPA.</string>
+    <string name="onboarding_crashlytics_consent_intro_1">Your privacy matters. Before we collect any usage or advertising data, please choose the types of data you consent to. Your choices affect how we measure app performance, improve features, and tailor advertising, while still respecting your privacy.</string>
+    <string name="onboarding_crashlytics_consent_intro_2">These choices help us comply with privacy standards like GDPR and CCPA while giving you control over how your data is used. You can change these settings later in the app\'s privacy preferences at any time.</string>
+    <string name="onboarding_crashlytics_consent_info_message">If you\'d like to learn more about how your data is used and what each consent option means, check the documentation below.</string>
+    <string name="onboarding_crashlytics_consent_info_learn_more">Learn more about consent and data usage</string>
+
     <string name="button_continue">Continue</string>
     <string name="onboarding_complete_icon_desc">Onboarding complete</string>
     <string name="onboarding_final_title">You\'re all set.</string>

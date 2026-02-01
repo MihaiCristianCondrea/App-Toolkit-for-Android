@@ -9,7 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable
@@ -21,26 +23,19 @@ fun AboutPage() {
         verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
     ) {
         Text(
-            text = "About consent and Firebase data usage",
+            text = stringResource(R.string.onboarding_crashlytics_about_title),
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
             color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = "In this app we use Firebase, a platform from Google that helps developers understand " +
-                    "how an app is used, improve performance, and provide certain services like analytics. " +
-                    "Firebase Analytics automatically collects information such as event usage, screen views, " +
-                    "device properties, and other signals, but only if you grant consent for these types of " +
-                    "data to be collected. If consent is not granted, Firebase will not log events or send " +
-                    "data related to those categories.",
+            text = stringResource(R.string.onboarding_crashlytics_about_body_1),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Text(
-            text = "For detailed information about how Firebase and Google services handle data, and " +
-                    "their respective privacy and security policies, please consult the official Firebase " +
-                    "Privacy documentation and your regional privacy rights under laws like GDPR and CCPA.",
+            text = stringResource(R.string.onboarding_crashlytics_about_body_2),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

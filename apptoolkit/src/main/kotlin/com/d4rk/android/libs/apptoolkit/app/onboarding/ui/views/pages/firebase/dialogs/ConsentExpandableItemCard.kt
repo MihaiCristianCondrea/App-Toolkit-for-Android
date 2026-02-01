@@ -35,7 +35,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
@@ -105,11 +107,14 @@ fun ConsentExpandableItemCard(
         }
 
         Text(
-            text = summary + details,
+            text = stringResource(
+                R.string.text_two_sentences_format,
+                summary,
+                details,
+            ),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
 
         AnimatedVisibility(visible = expanded) {
@@ -133,13 +138,13 @@ fun ConsentExpandableItemCard(
                         verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
                     ) {
                         Text(
-                            text = "Google",
+                            text = stringResource(R.string.provider_google),
                             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
                             color = MaterialTheme.colorScheme.onSurface
                         )
 
                         Text(
-                            text = "Learn more about this provider",
+                            text = stringResource(R.string.learn_more_about_provider),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.primary,
                         )

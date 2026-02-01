@@ -31,6 +31,7 @@
     <string name="brazilian_portuguese" translatable="false">Português (Brasil)</string>
     <string name="arch" translatable="false">Arch</string>
     <string name="summary_preference_settings_license" translatable="false">General Public License-3.0</string>
+    <string name="provider_google" translatable="false">Google</string>
 
     <string name="question_1" translatable="false" />
     <string name="summary_preference_faq_1" translatable="false" />
@@ -52,6 +53,7 @@
     <string name="summary_preference_faq_9" translatable="false" />
 
     <string name="native_ad_star_rating" translatable="false">%1$.1f ★</string>
+    <string name="text_two_sentences_format" translatable="false">%1$s %2$s</string>
 
     <string name="feedback_for" translatable="false">Feedback for %1$s</string>
     <string name="dear_developer" translatable="false">Dear developer, </string>

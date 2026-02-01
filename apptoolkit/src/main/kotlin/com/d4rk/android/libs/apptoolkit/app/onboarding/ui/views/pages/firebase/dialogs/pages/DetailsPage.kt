@@ -15,6 +15,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnosticsUiState
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.dialogs.ConsentExpandableItemCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
@@ -38,11 +40,7 @@ fun DetailsPage(
         verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
     ) {
         Text(
-            text = "Below you’ll find more detailed controls for how your data is used across the app. " +
-                    "Your choices here affect what " +
-                    "information is collected, how it’s stored, and how it may be shared with service " +
-                    "providers such as Google, in accordance with applicable privacy standards and consent " +
-                    "requirements.",
+            text = stringResource(R.string.onboarding_crashlytics_details_intro),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.fillMaxWidth()
@@ -51,51 +49,43 @@ fun DetailsPage(
         SmallVerticalSpacer()
 
         ConsentExpandableItemCard(
-            title = "Analytics storage",
-            summary = "Allows collecting analytics to improve the app.",
-            details = "This lets us measure usage, detect crashes and prioritize enhancements.",
+            title = stringResource(R.string.consent_analytics_storage_title),
+            summary = stringResource(R.string.consent_analytics_storage_description_short),
+            details = stringResource(R.string.consent_analytics_storage_description),
             icon = Icons.Outlined.Analytics,
             checked = state.analyticsConsent,
             onCheckedChange = onAnalyticsConsentChanged,
-            onLearnMoreClick = { url ->
-                context.openUrl(url)
-            }
+            onLearnMoreClick = { url -> context.openUrl(url) }
         )
 
         ConsentExpandableItemCard(
-            title = "Ad storage",
-            summary = "Ad storage on device.",
-            details = "Stores ad-related info on your device to enable ad delivery and reporting.",
+            title = stringResource(R.string.consent_ad_storage_title),
+            summary = stringResource(R.string.consent_ad_storage_description_short),
+            details = stringResource(R.string.consent_ad_storage_description),
             icon = Icons.Outlined.Storage,
             checked = state.adStorageConsent,
             onCheckedChange = onAdStorageConsentChanged,
-            onLearnMoreClick = { url ->
-                context.openUrl(url)
-            }
+            onLearnMoreClick = { url -> context.openUrl(url) }
         )
 
         ConsentExpandableItemCard(
-            title = "Ad user data",
-            summary = "Ad measurement data.",
-            details = "Allows sending ad-related user data to help measure ad performance.",
+            title = stringResource(R.string.consent_ad_user_data_title),
+            summary = stringResource(R.string.consent_ad_user_data_description_short),
+            details = stringResource(R.string.consent_ad_user_data_description),
             icon = Icons.Outlined.Info,
             checked = state.adUserDataConsent,
             onCheckedChange = onAdUserDataConsentChanged,
-            onLearnMoreClick = { url ->
-                context.openUrl(url)
-            }
+            onLearnMoreClick = { url -> context.openUrl(url) }
         )
 
         ConsentExpandableItemCard(
-            title = "Ad personalization",
-            summary = "Personalized ads.",
-            details = "Allows ads to be personalized based on your activity. Turning it off reduces personalization.",
+            title = stringResource(R.string.consent_ad_personalization_title),
+            summary = stringResource(R.string.consent_ad_personalization_description_short),
+            details = stringResource(R.string.consent_ad_personalization_description),
             icon = Icons.Outlined.Campaign,
             checked = state.adPersonalizationConsent,
             onCheckedChange = onAdPersonalizationConsentChanged,
-            onLearnMoreClick = { url ->
-                context.openUrl(url)
-            }
+            onLearnMoreClick = { url -> context.openUrl(url) }
         )
     }
 }
