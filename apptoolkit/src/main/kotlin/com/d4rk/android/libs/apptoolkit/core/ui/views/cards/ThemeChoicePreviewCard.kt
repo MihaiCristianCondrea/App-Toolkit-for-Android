@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.cards
+package com.d4rk.android.libs.apptoolkit.core.ui.views.cards
 
 import android.view.SoundEffectConstants
 import android.view.View
@@ -43,14 +43,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.model.OnboardingThemeChoice
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
+/**
+ * Displays a selectable theme choice card with optional preview content and description.
+ *
+ * This composable is shared across onboarding and settings screens to keep theme selection
+ * interactions consistent.
+ */
 @Composable
 fun ThemeChoicePreviewCard(
-    choice: OnboardingThemeChoice,
+    title: String,
+    description: String?,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -143,8 +150,8 @@ fun ThemeChoicePreviewCard(
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = choice.icon,
-                            contentDescription = choice.displayName,
+                            imageVector = icon,
+                            contentDescription = title,
                             tint = iconTint,
                             modifier = Modifier
                                 .size(SizeConstants.LargeSize + SizeConstants.SmallSize)
@@ -177,7 +184,7 @@ fun ThemeChoicePreviewCard(
         Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
 
         Text(
-            text = choice.displayName,
+            text = title,
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
@@ -186,16 +193,18 @@ fun ThemeChoicePreviewCard(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(SizeConstants.ExtraTinySize))
+        if (!description.isNullOrBlank()) {
+            Spacer(modifier = Modifier.height(SizeConstants.ExtraTinySize))
 
-        Text(
-            text = choice.description,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.fillMaxWidth()
-        )
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }

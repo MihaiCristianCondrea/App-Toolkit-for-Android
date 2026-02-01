@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,14 +17,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -41,12 +41,15 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.ThemeSettingOption
 import com.d4rk.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider.paletteById
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.views.ThemePalettePreviewDots
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.logging.THEME_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.views.cards.ThemeChoicePreviewCard
+import com.d4rk.android.libs.apptoolkit.core.ui.views.carousel.ThemePalettePager
 import com.d4rk.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
@@ -72,32 +75,12 @@ import java.time.ZoneId
 private const val THEME_SCREEN_NAME = "Theme"
 private const val THEME_SCREEN_CLASS = "ThemeSettingsList"
 
-/**
- * Returns a list of static palette IDs with duplicate palettes removed.
- *
- * When the injected default palette matches a built-in palette (e.g., blue), the list would
- * otherwise show visually identical swatches twice. This helper keeps the selected palette ID
- * while removing duplicates, so the UI reflects the effective palette without redundancy.
- */
-private fun dedupeStaticPaletteIds(
-    options: List<String>,
-    selectedPaletteId: String
-): List<String> {
-    val resolvedPalettes = options.associateWith { paletteById(it) }
-    val uniqueIds = mutableListOf<String>()
-
-    for (id in options) {
-        val palette = resolvedPalettes.getValue(id)
-        val existingIndex = uniqueIds.indexOfFirst { resolvedPalettes.getValue(it) == palette }
-        if (existingIndex == -1) {
-            uniqueIds.add(id)
-        } else if (id == selectedPaletteId && uniqueIds[existingIndex] != selectedPaletteId) {
-            uniqueIds[existingIndex] = id
-        }
-    }
-
-    return uniqueIds
-}
+private data class ThemePaletteChoice(
+    val index: Int,
+    val title: String,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
+    val previewColors: WallpaperSwatchColors?,
+)
 
 /**
  * Theme settings content for the app.
@@ -208,9 +191,19 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
             }
         }
 
-    val tabTitles = listOf(
-        stringResource(id = R.string.wallpaper_colors),
-        stringResource(id = R.string.other_colors)
+    val paletteChoices = listOf(
+        ThemePaletteChoice(
+            index = 0,
+            title = stringResource(id = R.string.wallpaper_colors),
+            icon = Icons.Filled.Wallpaper,
+            previewColors = variantSwatches.firstOrNull(),
+        ),
+        ThemePaletteChoice(
+            index = 1,
+            title = stringResource(id = R.string.other_colors),
+            icon = Icons.Filled.Palette,
+            previewColors = staticSwatches.firstOrNull(),
+        ),
     )
 
     val initialPagerPage = if (supportsDynamic && isDynamicColors) 0 else 1
@@ -248,47 +241,51 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
 
             if (supportsDynamic) {
                 item {
-                    SingleChoiceSegmentedButtonRow(
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = SizeConstants.LargeSize)
+                            .padding(horizontal = SizeConstants.LargeSize),
+                        horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
                     ) {
-                        tabTitles.forEachIndexed { index, title ->
-                            SegmentedButton(
-                                selected = pagerState.currentPage == index,
+                        paletteChoices.forEach { choice ->
+                            ThemeChoicePreviewCard(
+                                title = choice.title,
+                                description = null,
+                                icon = choice.icon,
+                                isSelected = pagerState.currentPage == choice.index,
                                 onClick = {
                                     firebase.value.logEvent(
                                         AnalyticsEvent(
                                             name = "theme_tab_select",
                                             params = mapOf(
                                                 "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
-                                                "tab" to AnalyticsValue.Str(if (index == 0) "wallpaper" else "other"),
+                                                "tab" to AnalyticsValue.Str(
+                                                    if (choice.index == 0) "wallpaper" else "other"
+                                                ),
                                             ),
                                         ),
                                     )
-                                    coroutineScope.launch { pagerState.animateScrollToPage(index) }
+                                    coroutineScope.launch {
+                                        pagerState.animateScrollToPage(choice.index)
+                                    }
                                 },
-                                shape = SegmentedButtonDefaults.itemShape(
-                                    index = index,
-                                    count = tabTitles.size
-                                )
-                            ) {
-                                Text(
-                                    text = title,
-                                    modifier = Modifier.padding(vertical = SizeConstants.LargeSize)
-                                )
-                            }
+                                modifier = Modifier.weight(1f),
+                                showPreview = choice.previewColors != null,
+                                preview = {
+                                    choice.previewColors?.let { colors ->
+                                        ThemePalettePreviewDots(colors = colors)
+                                    }
+                                }
+                            )
                         }
                     }
                 }
 
                 item {
-                    HorizontalPager(
-                        state = pagerState,
-                        modifier = Modifier.fillMaxWidth()
-                    ) { page ->
-                        when (page) {
-                            0 -> {
+                    ThemePalettePager(
+                        pagerState = pagerState,
+                        pages = listOf(
+                            {
                                 LazyRow(
                                     contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                                     horizontalArrangement = Arrangement.spacedBy(
@@ -323,10 +320,8 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                             }
                                         )
                                     }
-                                }
-                            }
-
-                            else -> {
+                                },
+                            {
                                 LazyRow(
                                     contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                                     horizontalArrangement = Arrangement.spacedBy(
@@ -368,9 +363,10 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                         )
                                     }
                                 }
-                            }
-                        }
-                    }
+                            },
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                 }
             } else {
                 item {
