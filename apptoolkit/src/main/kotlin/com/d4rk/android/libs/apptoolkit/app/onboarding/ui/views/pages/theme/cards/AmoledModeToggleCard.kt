@@ -65,7 +65,7 @@ fun AmoledModeToggleCard(
                 .fillMaxWidth()
                 .padding(
                     horizontal = SizeConstants.MediumSize,
-                    vertical = SizeConstants.LargeIncreasedSize
+                    vertical = SizeConstants.LargeSize
                 ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween

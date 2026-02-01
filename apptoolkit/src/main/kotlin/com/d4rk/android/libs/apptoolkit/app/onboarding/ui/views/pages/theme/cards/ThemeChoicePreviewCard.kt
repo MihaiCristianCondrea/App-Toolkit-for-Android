@@ -2,6 +2,11 @@ package com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.car
 
 import android.view.SoundEffectConstants
 import android.view.View
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -11,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -18,9 +24,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -100,13 +110,50 @@ fun ThemeChoicePreviewCard(
                 ExtraSmallVerticalSpacer()
 
                 if (showTopIcon) {
-                    Icon(
-                        imageVector = choice.icon,
-                        contentDescription = choice.displayName,
-                        modifier = Modifier
-                            .size(SizeConstants.LargeSize + SizeConstants.SmallSize),
-                        tint = MaterialTheme.colorScheme.onSurface
+                    val selectedBg = MaterialTheme.colorScheme.primary
+                    val selectedFg = MaterialTheme.colorScheme.onPrimary
+
+                    val contrastOk =
+                        kotlin.math.abs(selectedBg.luminance() - selectedFg.luminance()) >= 0.35f
+                    val showSelectedIcon = isSelected && contrastOk
+
+                    val iconScale by animateFloatAsState(
+                        targetValue = if (showSelectedIcon) 1.10f else 1.00f,
+                        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+                        label = "themeIconScale"
                     )
+
+                    val iconTint by animateColorAsState(
+                        targetValue = if (showSelectedIcon) selectedFg else MaterialTheme.colorScheme.onSurfaceVariant,
+                        animationSpec = spring(dampingRatio = Spring.DampingRatioNoBouncy),
+                        label = "themeIconTint"
+                    )
+
+                    val iconBg by animateColorAsState(
+                        targetValue = if (showSelectedIcon) selectedBg else Color.Transparent,
+                        animationSpec = spring(dampingRatio = Spring.DampingRatioNoBouncy),
+                        label = "themeIconBg"
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .background(iconBg)
+                            .padding(SizeConstants.ExtraSmallSize),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = choice.icon,
+                            contentDescription = choice.displayName,
+                            tint = iconTint,
+                            modifier = Modifier
+                                .size(SizeConstants.LargeSize + SizeConstants.SmallSize)
+                                .graphicsLayer {
+                                    scaleX = iconScale
+                                    scaleY = iconScale
+                                }
+                        )
+                    }
                 }
 
                 Box(
