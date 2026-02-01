@@ -75,7 +75,9 @@ fun FirebaseOnboardingPage() {
             Text(
                 text = stringResource(R.string.onboarding_crashlytics_title),
                 style = MaterialTheme.typography.headlineLarge.copy(
-                    fontWeight = FontWeight.SemiBold, fontSize = 30.sp, textAlign = TextAlign.Center
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 30.sp,
+                    textAlign = TextAlign.Center
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -126,39 +128,44 @@ fun FirebaseOnboardingPage() {
             onDismissRequest = {
                 onboardingViewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
             },
-            onAcknowledge = { shouldEnableUsage ->
+            onApplyConsents = { analyticsStorage, adStorage, adUserData, adPersonalization ->
                 diagnosticsViewModel.onEvent(
-                    UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(shouldEnableUsage)
+                    UsageAndDiagnosticsEvent.SetAnalyticsConsent(
+                        analyticsStorage
+                    )
+                )
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(adStorage))
+                diagnosticsViewModel.onEvent(
+                    UsageAndDiagnosticsEvent.SetAdUserDataConsent(
+                        adUserData
+                    )
+                )
+                diagnosticsViewModel.onEvent(
+                    UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(
+                        adPersonalization
+                    )
+                )
+                val shouldEnableUsage: Boolean = analyticsStorage
+                diagnosticsViewModel.onEvent(
+                    UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(
+                        shouldEnableUsage
+                    )
                 )
                 onboardingViewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
             },
+
             onAnalyticsConsentChanged = {
-                diagnosticsViewModel.onEvent(
-                    UsageAndDiagnosticsEvent.SetAnalyticsConsent(it)
-                )
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAnalyticsConsent(it))
             },
             onAdStorageConsentChanged = {
-                diagnosticsViewModel.onEvent(
-                    UsageAndDiagnosticsEvent.SetAdStorageConsent(it)
-                )
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(it))
             },
             onAdUserDataConsentChanged = {
-                diagnosticsViewModel.onEvent(
-                    UsageAndDiagnosticsEvent.SetAdUserDataConsent(it)
-                )
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdUserDataConsent(it))
             },
             onAdPersonalizationConsentChanged = {
-                diagnosticsViewModel.onEvent(
-                    UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(it)
-                )
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(it))
             },
         )
     }
 }
-
-
-
-
-
-
-
