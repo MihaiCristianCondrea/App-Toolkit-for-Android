@@ -49,6 +49,7 @@ import com.d4rk.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionC
 import com.d4rk.android.libs.apptoolkit.core.ui.views.cards.ThemeChoicePreviewCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePager
 import com.d4rk.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
+import com.d4rk.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.DynamicPaletteVariant
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
@@ -79,8 +80,7 @@ fun ThemeOnboardingPageTab() {
 
     val supportsDynamic = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
-    val isLightSelected = currentThemeMode == DataStoreNamesConstants.THEME_MODE_LIGHT
-    val amoledAllowed = !isLightSelected
+    val amoledAllowed = isAmoledAllowed(currentThemeMode)
 
     val themeChoices: List<OnboardingThemeChoice> = listOf(
         OnboardingThemeChoice(

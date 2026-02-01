@@ -62,6 +62,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessa
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePager
 import com.d4rk.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
+import com.d4rk.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.DynamicPaletteVariant
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
@@ -119,6 +120,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
     val isDynamicColors: Boolean = themePreferences.dynamicColors
     val dynamicVariantIndex: Int = themePreferences.dynamicPaletteVariant
     val staticPaletteId: String = themePreferences.staticPaletteId
+    val amoledAllowed = isAmoledAllowed(currentThemeModeKey)
 
     val supportsDynamic = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
@@ -463,6 +465,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                         .fillMaxWidth()
                         .padding(horizontal = SizeConstants.MediumSize * 2),
                     title = stringResource(id = R.string.amoled_mode),
+                    enabled = amoledAllowed,
                     switchState = isAmoledMode,
                     onSwitchToggled = { isChecked ->
                         firebase.value.logEvent(

@@ -52,6 +52,7 @@ fun SwitchCardItem(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
         modifier = modifier,
         onClick = {
+            if (!enabled) return@Card
             view.playSoundEffect(SoundEffectConstants.CLICK)
             onSwitchToggled(!switchState.value)
         }
@@ -71,6 +72,7 @@ fun SwitchCardItem(
             )
             CustomSwitch(
                 checked = switchState.value,
+                enabled = enabled,
                 onCheckedChange = { isChecked ->
                     onSwitchToggled(isChecked)
                 },

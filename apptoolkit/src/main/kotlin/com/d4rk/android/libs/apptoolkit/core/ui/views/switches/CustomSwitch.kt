@@ -28,6 +28,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 fun CustomSwitch(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier,
     checkIcon: ImageVector = Icons.Filled.Check,
     uncheckIcon: ImageVector = Icons.Filled.Close
@@ -35,25 +36,42 @@ fun CustomSwitch(
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
 
-    Switch(modifier = modifier, checked = checked, onCheckedChange = {
-        view.playSoundEffect(SoundEffectConstants.CLICK)
-        hapticFeedback.performHapticFeedback(hapticFeedbackType = if (checked) HapticFeedbackType.ToggleOn else HapticFeedbackType.ToggleOff)
-        onCheckedChange(it)
-    }, thumbContent = {
-        AnimatedContent(
-            targetState = checked, transitionSpec = {
-                if (targetState) {
-                    slideInVertically { height: Int -> height } + fadeIn() togetherWith slideOutVertically { height: Int -> -height } + fadeOut()
+    Switch(
+        modifier = modifier,
+        checked = checked,
+        enabled = enabled,
+        onCheckedChange = { isChecked ->
+            if (!enabled) return@Switch
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            hapticFeedback.performHapticFeedback(
+                hapticFeedbackType = if (checked) {
+                    HapticFeedbackType.ToggleOn
                 } else {
-                    slideInVertically { height: Int -> -height } + fadeIn() togetherWith slideOutVertically { height: Int -> height } + fadeOut()
-                } using SizeTransform(clip = false)
-            }, label = "SwitchIconAnimation"
-        ) { targetChecked: Boolean ->
-            Icon(
-                imageVector = if (targetChecked) checkIcon else uncheckIcon,
-                contentDescription = null,
-                modifier = Modifier.size(size = SizeConstants.SwitchIconSize),
+                    HapticFeedbackType.ToggleOff
+                }
             )
+            onCheckedChange(isChecked)
+        },
+        thumbContent = {
+            AnimatedContent(
+                targetState = checked,
+                transitionSpec = {
+                    if (targetState) {
+                        slideInVertically { height: Int -> height } + fadeIn() togetherWith
+                                slideOutVertically { height: Int -> -height } + fadeOut()
+                    } else {
+                        slideInVertically { height: Int -> -height } + fadeIn() togetherWith
+                                slideOutVertically { height: Int -> height } + fadeOut()
+                    } using SizeTransform(clip = false)
+                },
+                label = "SwitchIconAnimation"
+            ) { targetChecked: Boolean ->
+                Icon(
+                    imageVector = if (targetChecked) checkIcon else uncheckIcon,
+                    contentDescription = null,
+                    modifier = Modifier.size(size = SizeConstants.SwitchIconSize),
+                )
+            }
         }
-    })
+    )
 }

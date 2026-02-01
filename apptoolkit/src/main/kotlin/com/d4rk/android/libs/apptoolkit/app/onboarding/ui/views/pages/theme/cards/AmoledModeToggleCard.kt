@@ -88,6 +88,7 @@ fun AmoledModeToggleCard(
 
             CustomSwitch(
                 checked = isAmoledMode,
+                enabled = enabled,
                 onCheckedChange = { if (enabled) onCheckedChange(it) },
                 checkIcon = Icons.Outlined.Contrast,
                 uncheckIcon = Icons.Filled.Tonality
