@@ -4,7 +4,6 @@ import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -46,13 +44,12 @@ fun UsageAndDiagnosticsToggleCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .bounceClick()
-            .clip(RoundedCornerShape(SizeConstants.LargeSize))
-            .clickable(onClick = {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                onCheckedChange(!switchState)
-            }),
+            .bounceClick(),
+        onClick = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+            onCheckedChange(!switchState)
+        },
         shape = RoundedCornerShape(SizeConstants.LargeSize),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHighest

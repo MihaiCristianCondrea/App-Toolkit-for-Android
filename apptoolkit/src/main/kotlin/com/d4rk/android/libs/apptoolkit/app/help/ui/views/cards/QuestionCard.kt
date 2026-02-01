@@ -5,7 +5,6 @@ import android.view.View
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -57,15 +55,16 @@ fun QuestionCard(
     Card(
         modifier = modifier
             .bounceClick()
-            .clip(shape = RoundedCornerShape(size = SizeConstants.MediumSize))
-            .clickable {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                onToggleExpand()
-            }
             .padding(all = SizeConstants.LargeSize)
             .animateContentSize()
-            .fillMaxWidth()) {
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(size = SizeConstants.MediumSize),
+        onClick = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+            onToggleExpand()
+        }
+    ) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {

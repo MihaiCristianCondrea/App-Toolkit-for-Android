@@ -361,8 +361,7 @@ fun IssueReporterScreenContent(
             ) {
                 Card(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(size = SizeConstants.ExtraTinySize)),
+                        .fillMaxWidth(),
                     shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
                 ) {
                     RadioButtonPreferenceItem(
@@ -377,8 +376,7 @@ fun IssueReporterScreenContent(
                 }
                 Card(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(size = SizeConstants.ExtraTinySize)),
+                        .fillMaxWidth(),
                     shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
                 ) {
                     RadioButtonPreferenceItem(

@@ -1,5 +1,7 @@
 # Version 2.0.1
 
+- **Minor**: Redesigned the consent dialog to make it more user-friendly.
+- **Minor**: Redesigned theme settings with a fresh-new preview for the theme.
 - **Minor**: Updated the buttons components for better consistency.
 - **Patch**: Fixed the buttons crashes when no icon is provided.
 - **Patch**: Fixed corner radius for various components.

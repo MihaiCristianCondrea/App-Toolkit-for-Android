@@ -2,7 +2,6 @@ package com.d4rk.android.libs.apptoolkit.core.ui.views.preferences
 
 import android.view.SoundEffectConstants
 import android.view.View
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -43,12 +41,12 @@ fun SwitchCardItem(title: String, switchState: State<Boolean>, onSwitchToggled: 
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(all = SizeConstants.MediumSize * 2)
-            .clip(shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize))
-            .clickable {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-                onSwitchToggled(!switchState.value)
-            }) {
+            .padding(all = SizeConstants.MediumSize * 2),
+        onClick = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            onSwitchToggled(!switchState.value)
+        }
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

@@ -2,7 +2,6 @@ package com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views
 
 import android.view.SoundEffectConstants
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,13 +53,14 @@ fun AppCard(
         modifier = modifier
             .bounceClick()
             .fillMaxSize()
-            .aspectRatio(ratio = 1f)
-            .clip(shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize))
-            .clickable {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                onAppClick(appInfo)
-            }) {
+            .aspectRatio(ratio = 1f),
+        onClick = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+            onAppClick(appInfo)
+        },
+        shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize)
+    ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Row(
                 modifier = Modifier.align(Alignment.TopEnd),
