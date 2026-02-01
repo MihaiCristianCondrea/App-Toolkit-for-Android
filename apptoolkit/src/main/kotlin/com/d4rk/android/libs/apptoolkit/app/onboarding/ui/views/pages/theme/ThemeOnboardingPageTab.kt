@@ -13,10 +13,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BrightnessAuto
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.model.OnboardingThemeChoice
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.cards.AmoledModeToggleCard
@@ -70,9 +76,27 @@ fun ThemeOnboardingPageTab() {
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = SizeConstants.LargeSize),
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
     ) {
         LargeVerticalSpacer()
+
+        Text(
+            text = stringResource(R.string.onboarding_theme_title),
+            style = MaterialTheme.typography.headlineLarge.copy(
+                fontWeight = FontWeight.SemiBold, fontSize = 30.sp, textAlign = TextAlign.Center
+            ),
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Text(
+            text = stringResource(R.string.onboarding_theme_subtitle),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = SizeConstants.LargeSize)
+        )
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
