@@ -36,7 +36,10 @@ class MainActivity : AppCompatActivity() {
     private val dispatchers: DispatcherProvider by inject()
     private val viewModel: MainViewModel by viewModel()
     private val applyInitialConsentUseCase: ApplyInitialConsentUseCase by inject()
-    private lateinit var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest>
+    private val updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
+        registerForActivityResult(
+            contract = ActivityResultContracts.StartIntentSenderForResult()
+        ) {}
     private var keepSplashVisible: Boolean = true
     private val consentHost: ConsentHost = object : ConsentHost {
         override val activity = this@MainActivity
@@ -44,20 +47,8 @@ class MainActivity : AppCompatActivity() {
     private val reviewHost: ReviewHost = object : ReviewHost {
         override val activity = this@MainActivity
     }
-    private lateinit var updateHost: InAppUpdateHost
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateResultLauncher =
-            registerForActivityResult(
-                contract = ActivityResultContracts.StartIntentSenderForResult()
-            ) {}
-        val updateLauncher: ActivityResultLauncher<IntentSenderRequest> = updateResultLauncher
-        updateHost = object : InAppUpdateHost {
-            override val activity = this@MainActivity
-            override val updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
-                updateLauncher
-        }
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { keepSplashVisible }
         enableEdgeToEdge()
@@ -133,6 +124,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkForUpdates() {
-        viewModel.onEvent(MainEvent.RequestInAppUpdate(host = updateHost))
+        val host = object : InAppUpdateHost {
+            override val activity = this@MainActivity
+            override val updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
+                updateResultLauncher
+        }
+        viewModel.onEvent(MainEvent.RequestInAppUpdate(host = host))
     }
 }
