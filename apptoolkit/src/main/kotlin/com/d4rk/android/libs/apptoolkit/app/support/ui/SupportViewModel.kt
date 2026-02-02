@@ -70,6 +70,7 @@ class SupportViewModel(
     private var purchaseResultJob: Job? = null
     private var queryJob: Job? = null
     private var billingTimeoutJob: Job? = null
+    private var billingLaunchJob: Job? = null
 
     init {
         handleEvent(SupportEvent.SetUpBilling)
@@ -90,14 +91,6 @@ class SupportViewModel(
     }
 
     fun onDonateClicked(activity: Activity, productId: String) {
-        startOperation(
-            action = Actions.DONATE_CLICKED,
-            extra = mapOf(
-                ExtraKeys.PRODUCT_ID to productId,
-                ExtraKeys.ACTIVITY to activity::class.java.name
-            )
-        )
-
         if (!activity.isValidForBilling()) return
         if (screenData?.isBillingInProgress == true) return
 
@@ -112,24 +105,32 @@ class SupportViewModel(
             showOfferUnavailable()
             return
         }
-        viewModelScope.launch {
-            updateStateThreadSafe {
-                setBillingInProgress(inProgress = true)
-                startBillingTimeout()
-            }
-
-            runCatching {
-                billingRepository.launchInAppDonationFlow(activity, details)
-            }.onFailure { throwable ->
-                updateStateThreadSafe {
-                    setBillingInProgress(inProgress = false)
-                    screenState.setError(
-                        message = UiTextHelper.DynamicString(
-                            throwable.message ?: "Billing launch failed"
+        val hostName = activity::class.java.name
+        billingLaunchJob = billingLaunchJob.restart {
+            launchReport(
+                action = Actions.DONATE_CLICKED,
+                extra = mapOf(
+                    ExtraKeys.PRODUCT_ID to productId,
+                    ExtraKeys.ACTIVITY to hostName,
+                ),
+                block = {
+                    updateStateThreadSafe {
+                        setBillingInProgress(inProgress = true)
+                        startBillingTimeout()
+                    }
+                    billingRepository.launchInAppDonationFlow(activity, details)
+                },
+                onError = { throwable ->
+                    updateStateThreadSafe {
+                        setBillingInProgress(inProgress = false)
+                        screenState.setError(
+                            message = UiTextHelper.DynamicString(
+                                throwable.message ?: "Billing launch failed"
+                            )
                         )
-                    )
-                }
-            }
+                    }
+                },
+            )
         }
     }
 
