@@ -8,6 +8,9 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
+import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateHost
+import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateResult
+import com.d4rk.android.libs.apptoolkit.app.main.domain.usecases.RequestInAppUpdateUseCase
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
 import com.d4rk.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
@@ -40,6 +43,7 @@ class MainViewModel(
     private val getNavigationDrawerItemsUseCase: GetNavigationDrawerItemsUseCase,
     private val requestConsentUseCase: RequestConsentUseCase,
     private val requestInAppReviewUseCase: RequestInAppReviewUseCase,
+    private val requestInAppUpdateUseCase: RequestInAppUpdateUseCase,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<MainUiState, MainEvent, MainAction>(
@@ -51,6 +55,7 @@ class MainViewModel(
     private var navigationJob: Job? = null
     private var consentJob: Job? = null
     private var reviewJob: Job? = null
+    private var updateJob: Job? = null
 
     init {
         onEvent(MainEvent.LoadNavigation)
@@ -61,6 +66,7 @@ class MainViewModel(
             is MainEvent.LoadNavigation -> loadNavigationItems()
             is MainEvent.RequestConsent -> requestConsent(host = event.host)
             is MainEvent.RequestReview -> requestReview(host = event.host)
+            is MainEvent.RequestInAppUpdate -> requestInAppUpdate(host = event.host)
         }
     }
 
@@ -176,10 +182,26 @@ class MainViewModel(
         }
     }
 
+    private fun requestInAppUpdate(host: InAppUpdateHost) {
+        startOperation(action = Actions.REQUEST_UPDATE)
+        updateJob = updateJob.restart {
+            requestInAppUpdateUseCase(host = host)
+                .flowOn(dispatchers.io)
+                .onEach { result ->
+                    sendAction(action = MainAction.InAppUpdateResultReported(result = result))
+                }
+                .catchReport(action = Actions.REQUEST_UPDATE) {
+                    sendAction(action = MainAction.InAppUpdateResultReported(result = InAppUpdateResult.Failed))
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
     private object Actions {
         const val LOAD_NAVIGATION: String = "loadNavigationItems"
         const val REQUEST_CONSENT: String = "requestConsent"
         const val REQUEST_REVIEW: String = "requestReview"
+        const val REQUEST_UPDATE: String = "requestInAppUpdate"
     }
 
     private object ExtraKeys {

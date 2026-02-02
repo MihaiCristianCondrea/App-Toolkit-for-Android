@@ -14,14 +14,13 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
-import com.d4rk.android.libs.apptoolkit.app.main.utils.InAppUpdateHelper
+import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateHost
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import com.google.android.gms.ads.MobileAds
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -45,6 +44,10 @@ class MainActivity : AppCompatActivity() {
     }
     private val reviewHost: ReviewHost = object : ReviewHost {
         override val activity = this@MainActivity
+    }
+    private val updateHost: InAppUpdateHost = object : InAppUpdateHost {
+        override val activity = this@MainActivity
+        override val updateResultLauncher = updateResultLauncher
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,15 +120,13 @@ class MainActivity : AppCompatActivity() {
             viewModel.actionEvent.collect { action ->
                 when (action) {
                     is MainAction.ReviewOutcomeReported -> Unit
+                    is MainAction.InAppUpdateResultReported -> Unit
                 }
             }
         }
     }
 
     private fun checkForUpdates() {
-        InAppUpdateHelper.performUpdate(
-            appUpdateManager = AppUpdateManagerFactory.create(this@MainActivity),
-            updateResultLauncher = updateResultLauncher,
-        )
+        viewModel.onEvent(MainEvent.RequestInAppUpdate(host = updateHost))
     }
 }

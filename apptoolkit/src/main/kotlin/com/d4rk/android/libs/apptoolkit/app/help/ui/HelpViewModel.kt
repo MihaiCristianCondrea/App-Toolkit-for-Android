@@ -23,6 +23,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setNoData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
@@ -120,19 +121,14 @@ class HelpViewModel(
                     }
                     sendAction(action = HelpAction.ReviewOutcomeReported(outcome = outcome))
                     if (outcome != ReviewOutcome.Launched) {
-                        sendAction(action = HelpAction.OpenOnlineHelp(url = ONLINE_HELP_URL))
+                        sendAction(action = HelpAction.OpenOnlineHelp(url = HelpConstants.FAQ_BASE_URL))
                     }
                 },
                 onError = {
-                    sendAction(action = HelpAction.OpenOnlineHelp(url = ONLINE_HELP_URL))
+                    sendAction(action = HelpAction.OpenOnlineHelp(url = HelpConstants.FAQ_BASE_URL))
                 }
             )
         }
-    }
-
-    private companion object {
-        const val ONLINE_HELP_URL: String =
-            "https://mihaicristiancondrea.github.io/profile/#faqs"
     }
 
     private object Actions {
