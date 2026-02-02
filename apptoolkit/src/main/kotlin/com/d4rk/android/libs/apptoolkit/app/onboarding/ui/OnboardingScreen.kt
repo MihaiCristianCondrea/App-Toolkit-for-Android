@@ -152,7 +152,7 @@ fun OnboardingScreen() {
         ) { pageIndex: Int ->
             when (val page = pages[pageIndex]) {
                 is OnboardingPage.DefaultPage -> DefaultOnboardingPage(page = page)
-                is OnboardingPage.CustomPage -> page.content()
+                is OnboardingPage.CustomPage -> page.content(pageIndex == pagerState.currentPage)
             }
         }
     }

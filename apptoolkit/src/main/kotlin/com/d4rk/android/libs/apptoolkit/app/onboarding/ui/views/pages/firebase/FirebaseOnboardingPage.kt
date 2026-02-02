@@ -44,7 +44,12 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun FirebaseOnboardingPage() {
+        /**
+         * Firebase onboarding page content.
+         *
+         * @param isSelected Whether this page is currently selected in the onboarding pager.
+         */
+fun FirebaseOnboardingPage(isSelected: Boolean) {
     val onboardingViewModel: OnboardingViewModel = koinViewModel()
     val diagnosticsViewModel: UsageAndDiagnosticsViewModel = koinViewModel()
 
@@ -122,7 +127,7 @@ fun FirebaseOnboardingPage() {
         }
     }
 
-    if (onboardingUiState.isCrashlyticsDialogVisible) {
+    if (isSelected && onboardingUiState.isCrashlyticsDialogVisible) {
         FirebaseConsentDialog(
             state = diagnosticsUiState,
             onDismissRequest = {

@@ -34,7 +34,7 @@ class AppOnboardingProvider : OnboardingProvider {
             ),
             OnboardingPage.CustomPage(
                 key = OnboardingKeys.THEME_OPTIONS,
-                content = {
+                content = { _ ->
                     ThemeOnboardingPageTab()
                 }
             ),
@@ -46,13 +46,13 @@ class AppOnboardingProvider : OnboardingProvider {
             ),
             OnboardingPage.CustomPage(
                 key = OnboardingKeys.CRASHLYTICS_OPTIONS,
-                content = {
-                    FirebaseOnboardingPage()
+                content = { isSelected ->
+                    FirebaseOnboardingPage(isSelected = isSelected)
                 }
             ),
             OnboardingPage.CustomPage(
                 key = OnboardingKeys.ONBOARDING_COMPLETE,
-                content = {
+                content = { _ ->
                     FinishOnbardingPage()
                 }
             ),
