@@ -19,6 +19,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
+/**
+ * ViewModel for the onboarding flow, including completion and consent requests.
+ */
 class OnboardingViewModel(
     private val observeOnboardingCompletionUseCase: ObserveOnboardingCompletionUseCase,
     private val completeOnboardingUseCase: CompleteOnboardingUseCase,

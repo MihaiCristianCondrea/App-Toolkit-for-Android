@@ -20,6 +20,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
+/**
+ * ViewModel for the startup screen.
+ *
+ * Requests consent and triggers navigation when startup flow is complete.
+ */
 class StartupViewModel(
     private val requestConsentUseCase: RequestConsentUseCase,
     private val dispatchers: DispatcherProvider,

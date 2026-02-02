@@ -33,6 +33,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 
+/**
+ * ViewModel for the favorites list screen.
+ */
 class FavoriteAppsViewModel(
     private val observeFavoriteAppsUseCase: ObserveFavoriteAppsUseCase,
     observeFavoritesUseCase: ObserveFavoritesUseCase,

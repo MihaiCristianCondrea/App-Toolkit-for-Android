@@ -40,6 +40,11 @@ import kotlinx.coroutines.launch
 
 private const val BILLING_LAUNCH_TIMEOUT_MS = 20_000L
 
+/**
+ * ViewModel responsible for the support/donation flow.
+ *
+ * Handles billing setup, product detail observation, and purchase result UI updates.
+ */
 class SupportViewModel(
     private val billingRepository: BillingRepository,
     firebaseController: FirebaseController,
@@ -74,11 +79,7 @@ class SupportViewModel(
         when (event) {
             is SupportEvent.SetUpBilling -> setupBilling()
             is SupportEvent.QueryProductDetails -> queryProductDetails()
-            is SupportEvent.DismissSnackbar -> viewModelScope.launch {
-                updateStateThreadSafe {
-                    screenState.dismissSnackbar()
-                }
-            }
+            is SupportEvent.DismissSnackbar -> dismissSnackbar()
         }
     }
 
@@ -102,35 +103,13 @@ class SupportViewModel(
 
         val option = screenData?.donationOptions?.firstOrNull { it.productId == productId }
         if (option?.isEligible != true) {
-            viewModelScope.launch {
-                updateStateThreadSafe {
-                    screenState.showSnackbar(
-                        UiSnackbar(
-                            message = UiTextHelper.StringResource(R.string.support_offer_unavailable),
-                            isError = true,
-                            timeStamp = System.nanoTime(),
-                            type = ScreenMessageType.SNACKBAR
-                        )
-                    )
-                }
-            }
+            showOfferUnavailable()
             return
         }
 
         val details = currentProductDetails[productId]
         if (details == null) {
-            viewModelScope.launch {
-                updateStateThreadSafe {
-                    screenState.showSnackbar(
-                        UiSnackbar(
-                            message = UiTextHelper.StringResource(R.string.support_offer_unavailable),
-                            isError = true,
-                            timeStamp = System.nanoTime(),
-                            type = ScreenMessageType.SNACKBAR
-                        )
-                    )
-                }
-            }
+            showOfferUnavailable()
             return
         }
         viewModelScope.launch {
@@ -306,6 +285,29 @@ class SupportViewModel(
                 formattedPrice = details?.primaryFormattedPrice(),
                 isEligible = details?.hasOneTimePurchaseOffer() == true,
             )
+        }
+    }
+
+    private fun dismissSnackbar() {
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.dismissSnackbar()
+            }
+        }
+    }
+
+    private fun showOfferUnavailable() {
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.showSnackbar(
+                    UiSnackbar(
+                        message = UiTextHelper.StringResource(R.string.support_offer_unavailable),
+                        isError = true,
+                        timeStamp = System.nanoTime(),
+                        type = ScreenMessageType.SNACKBAR
+                    )
+                )
+            }
         }
     }
 

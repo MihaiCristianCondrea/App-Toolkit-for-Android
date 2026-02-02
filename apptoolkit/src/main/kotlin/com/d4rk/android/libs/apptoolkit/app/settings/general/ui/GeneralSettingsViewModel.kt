@@ -29,6 +29,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
+/**
+ * ViewModel that loads and validates general settings content by key.
+ */
 class GeneralSettingsViewModel(
     private val repository: GeneralSettingsRepository,
     private val dispatchers: DispatcherProvider,

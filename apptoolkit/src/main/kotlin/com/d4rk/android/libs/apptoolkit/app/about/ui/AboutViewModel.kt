@@ -29,6 +29,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
+/**
+ * ViewModel for the About screen, including device info sharing.
+ */
 open class AboutViewModel(
     private val getAboutInfo: GetAboutInfoUseCase,
     private val copyDeviceInfo: CopyDeviceInfoUseCase,
@@ -50,11 +53,7 @@ open class AboutViewModel(
         when (event) {
             is AboutEvent.Load -> loadAboutInfo()
             is AboutEvent.CopyDeviceInfo -> copyDeviceInfo(label = event.label)
-            is AboutEvent.DismissSnackbar -> viewModelScope.launch {
-                updateStateThreadSafe {
-                    screenState.dismissSnackbar()
-                }
-            }
+            is AboutEvent.DismissSnackbar -> dismissSnackbar()
         }
     }
 
@@ -166,6 +165,14 @@ open class AboutViewModel(
                     }
                 }
                 .launchIn(viewModelScope)
+        }
+    }
+
+    private fun dismissSnackbar() {
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.dismissSnackbar()
+            }
         }
     }
 

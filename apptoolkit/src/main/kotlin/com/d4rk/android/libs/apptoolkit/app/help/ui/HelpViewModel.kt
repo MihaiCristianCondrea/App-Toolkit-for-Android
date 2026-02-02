@@ -29,6 +29,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
+/**
+ * ViewModel for the FAQ/help screen.
+ */
 class HelpViewModel(
     private val getFaqUseCase: GetFaqUseCase,
     private val dispatchers: DispatcherProvider,
@@ -47,11 +50,7 @@ class HelpViewModel(
     override fun handleEvent(event: HelpEvent) {
         when (event) {
             is HelpEvent.LoadFaq -> loadFaq()
-            is HelpEvent.DismissSnackbar -> viewModelScope.launch {
-                updateStateThreadSafe {
-                    screenState.dismissSnackbar()
-                }
-            }
+            is HelpEvent.DismissSnackbar -> dismissSnackbar()
         }
     }
 
@@ -91,6 +90,14 @@ class HelpViewModel(
                     }
                 }
                 .launchIn(scope = viewModelScope)
+        }
+    }
+
+    private fun dismissSnackbar() {
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.dismissSnackbar()
+            }
         }
     }
 }
