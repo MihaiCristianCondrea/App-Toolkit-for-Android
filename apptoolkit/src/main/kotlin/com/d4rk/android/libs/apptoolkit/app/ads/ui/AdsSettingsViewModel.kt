@@ -35,6 +35,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
+/**
+ * ViewModel for ads settings and consent interaction.
+ */
 class AdsSettingsViewModel(
     private val observeAdsEnabled: ObserveAdsEnabledUseCase,
     private val setAdsEnabled: SetAdsEnabledUseCase,
@@ -178,7 +181,11 @@ class AdsSettingsViewModel(
                     action = Actions.REQUEST_CONSENT,
                     extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
                 ) {
-                    screenState.showSnackbar(errorSnackbar(Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO.asUiText()))
+                    updateStateThreadSafe {
+                        screenState.showSnackbar(
+                            errorSnackbar(Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO.asUiText())
+                        )
+                    }
                 }
                 .launchIn(viewModelScope)
         }

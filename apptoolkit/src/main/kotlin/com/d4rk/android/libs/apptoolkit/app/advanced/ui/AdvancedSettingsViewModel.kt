@@ -26,7 +26,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for advanced settings actions such as cache clearing.
+ */
 class AdvancedSettingsViewModel(
     private val repository: CacheRepository,
     private val dispatchers: DispatcherProvider,
@@ -94,7 +98,11 @@ class AdvancedSettingsViewModel(
     }
 
     private fun onMessageShown() {
-        screenState.copyData { copy(cacheClearMessage = null) }
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.copyData { copy(cacheClearMessage = null) }
+            }
+        }
     }
 
     private object Actions {

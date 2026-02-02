@@ -1,5 +1,6 @@
 package com.d4rk.android.libs.apptoolkit.app.issuereporter.ui
 
+import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.IssueReportResult
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.Report
@@ -33,8 +34,12 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error as RootError
 
+/**
+ * ViewModel for composing and sending issue reports.
+ */
 class IssueReporterViewModel(
     private val sendIssueReport: SendIssueReportUseCase,
     private val githubTarget: GithubTarget,
@@ -55,17 +60,45 @@ class IssueReporterViewModel(
 
     override fun handleEvent(event: IssueReporterEvent) {
         when (event) {
-            is IssueReporterEvent.UpdateTitle -> updateForm { copy(title = event.value) }
-            is IssueReporterEvent.UpdateDescription -> updateForm { copy(description = event.value) }
-            is IssueReporterEvent.UpdateEmail -> updateForm { copy(email = event.value) }
-            is IssueReporterEvent.SetAnonymous -> updateForm { copy(anonymous = event.anonymous) }
+            is IssueReporterEvent.UpdateTitle -> updateTitle(event.value)
+            is IssueReporterEvent.UpdateDescription -> updateDescription(event.value)
+            is IssueReporterEvent.UpdateEmail -> updateEmail(event.value)
+            is IssueReporterEvent.SetAnonymous -> updateAnonymous(event.anonymous)
             is IssueReporterEvent.Send -> sendReport()
-            is IssueReporterEvent.DismissSnackbar -> screenState.dismissSnackbar()
+            is IssueReporterEvent.DismissSnackbar -> dismissSnackbar()
+        }
+    }
+
+    private fun updateTitle(value: String) {
+        updateForm { copy(title = value) }
+    }
+
+    private fun updateDescription(value: String) {
+        updateForm { copy(description = value) }
+    }
+
+    private fun updateEmail(value: String) {
+        updateForm { copy(email = value) }
+    }
+
+    private fun updateAnonymous(anonymous: Boolean) {
+        updateForm { copy(anonymous = anonymous) }
+    }
+
+    private fun dismissSnackbar() {
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.dismissSnackbar()
+            }
         }
     }
 
     private fun updateForm(transform: IssueReporterUiState.() -> IssueReporterUiState) {
-        screenState.copyData { transform() }
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.copyData { transform() }
+            }
+        }
     }
 
     private fun sendReport() {
@@ -74,14 +107,18 @@ class IssueReporterViewModel(
         if (sendJob?.isActive == true) return
 
         if (data.title.isBlank() || data.description.isBlank()) {
-            screenState.showSnackbar(
-                UiSnackbar(
-                    message = UiTextHelper.StringResource(R.string.error_invalid_report),
-                    timeStamp = System.nanoTime(),
-                    isError = true,
-                    type = ScreenMessageType.SNACKBAR,
-                )
-            )
+            viewModelScope.launch {
+                updateStateThreadSafe {
+                    screenState.showSnackbar(
+                        UiSnackbar(
+                            message = UiTextHelper.StringResource(R.string.error_invalid_report),
+                            timeStamp = System.nanoTime(),
+                            isError = true,
+                            type = ScreenMessageType.SNACKBAR,
+                        )
+                    )
+                }
+            }
             return
         }
 

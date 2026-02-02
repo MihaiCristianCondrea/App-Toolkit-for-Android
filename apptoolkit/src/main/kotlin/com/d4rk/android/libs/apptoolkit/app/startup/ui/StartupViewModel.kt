@@ -19,7 +19,13 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for the startup screen.
+ *
+ * Requests consent and triggers navigation when startup flow is complete.
+ */
 class StartupViewModel(
     private val requestConsentUseCase: RequestConsentUseCase,
     private val dispatchers: DispatcherProvider,
@@ -49,7 +55,9 @@ class StartupViewModel(
             requestConsentUseCase.invoke(host = host)
                 .flowOn(dispatchers.main)
                 .onStart {
-                    screenState.setLoading()
+                    updateStateThreadSafe {
+                        screenState.setLoading()
+                    }
                 }
                 .catchReport(
                     action = Actions.REQUEST_CONSENT,
@@ -68,7 +76,11 @@ class StartupViewModel(
     }
 
     private fun markConsentFormLoaded() {
-        screenState.successData { copy(consentFormLoaded = true) }
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.successData { copy(consentFormLoaded = true) }
+            }
+        }
     }
 
     private object Actions {

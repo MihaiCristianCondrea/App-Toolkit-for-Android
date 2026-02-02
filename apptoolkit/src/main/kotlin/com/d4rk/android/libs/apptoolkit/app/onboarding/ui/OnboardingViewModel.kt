@@ -17,8 +17,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * ViewModel for the onboarding flow, including completion and consent requests.
+ */
 class OnboardingViewModel(
     private val observeOnboardingCompletionUseCase: ObserveOnboardingCompletionUseCase,
     private val completeOnboardingUseCase: CompleteOnboardingUseCase,
@@ -70,7 +74,11 @@ class OnboardingViewModel(
     }
 
     private fun updateCurrentTab(index: Int) {
-        screenState.copyData { copy(currentTabIndex = index) }
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.copyData { copy(currentTabIndex = index) }
+            }
+        }
     }
 
     private fun completeOnboarding() {
@@ -115,7 +123,11 @@ class OnboardingViewModel(
     }
 
     private fun setCrashlyticsDialogVisibility(isVisible: Boolean) {
-        screenState.copyData { copy(isCrashlyticsDialogVisible = isVisible) }
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.copyData { copy(isCrashlyticsDialogVisible = isVisible) }
+            }
+        }
     }
 
     private object Actions {

@@ -28,7 +28,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
+/**
+ * ViewModel that loads and validates general settings content by key.
+ */
 class GeneralSettingsViewModel(
     private val repository: GeneralSettingsRepository,
     private val dispatchers: DispatcherProvider,
@@ -56,8 +60,18 @@ class GeneralSettingsViewModel(
 
         if (!hasKey) {
             observeJob?.cancel()
-            screenState.setErrors(errors = listOf(UiSnackbar(message = UiTextHelper.StringResource(R.string.error_invalid_content_key))))
-            screenState.updateState(ScreenState.NoData())
+            viewModelScope.launch {
+                updateStateThreadSafe {
+                    screenState.setErrors(
+                        errors = listOf(
+                            UiSnackbar(
+                                message = UiTextHelper.StringResource(R.string.error_invalid_content_key)
+                            )
+                        )
+                    )
+                    screenState.updateState(ScreenState.NoData())
+                }
+            }
             return
         }
 

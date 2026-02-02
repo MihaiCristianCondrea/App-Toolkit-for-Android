@@ -28,7 +28,11 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for the FAQ/help screen.
+ */
 class HelpViewModel(
     private val getFaqUseCase: GetFaqUseCase,
     private val dispatchers: DispatcherProvider,
@@ -47,7 +51,7 @@ class HelpViewModel(
     override fun handleEvent(event: HelpEvent) {
         when (event) {
             is HelpEvent.LoadFaq -> loadFaq()
-            is HelpEvent.DismissSnackbar -> screenState.dismissSnackbar()
+            is HelpEvent.DismissSnackbar -> dismissSnackbar()
         }
     }
 
@@ -56,7 +60,11 @@ class HelpViewModel(
         observeJob = observeJob.restart {
             getFaqUseCase.invoke()
                 .flowOn(context = dispatchers.io)
-                .onStart { screenState.setLoading() }
+                .onStart {
+                    updateStateThreadSafe {
+                        screenState.setLoading()
+                    }
+                }
                 .onEach { result: DataState<List<FaqItem>, Errors> ->
                     result
                         .onSuccess { faqs: List<FaqItem> ->
@@ -76,9 +84,21 @@ class HelpViewModel(
                         }
                 }
                 .catchReport(action = "loadFaq") {
-                    screenState.setError(message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq))
+                    updateStateThreadSafe {
+                        screenState.setError(
+                            message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq)
+                        )
+                    }
                 }
                 .launchIn(scope = viewModelScope)
+        }
+    }
+
+    private fun dismissSnackbar() {
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.dismissSnackbar()
+            }
         }
     }
 }

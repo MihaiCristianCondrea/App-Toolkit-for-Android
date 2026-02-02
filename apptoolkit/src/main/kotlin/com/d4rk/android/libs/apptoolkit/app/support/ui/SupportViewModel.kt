@@ -40,6 +40,11 @@ import kotlinx.coroutines.launch
 
 private const val BILLING_LAUNCH_TIMEOUT_MS = 20_000L
 
+/**
+ * ViewModel responsible for the support/donation flow.
+ *
+ * Handles billing setup, product detail observation, and purchase result UI updates.
+ */
 class SupportViewModel(
     private val billingRepository: BillingRepository,
     firebaseController: FirebaseController,
@@ -74,7 +79,7 @@ class SupportViewModel(
         when (event) {
             is SupportEvent.SetUpBilling -> setupBilling()
             is SupportEvent.QueryProductDetails -> queryProductDetails()
-            is SupportEvent.DismissSnackbar -> screenState.dismissSnackbar()
+            is SupportEvent.DismissSnackbar -> dismissSnackbar()
         }
     }
 
@@ -98,27 +103,13 @@ class SupportViewModel(
 
         val option = screenData?.donationOptions?.firstOrNull { it.productId == productId }
         if (option?.isEligible != true) {
-            screenState.showSnackbar(
-                UiSnackbar(
-                    message = UiTextHelper.StringResource(R.string.support_offer_unavailable),
-                    isError = true,
-                    timeStamp = System.nanoTime(),
-                    type = ScreenMessageType.SNACKBAR
-                )
-            )
+            showOfferUnavailable()
             return
         }
 
         val details = currentProductDetails[productId]
         if (details == null) {
-            screenState.showSnackbar(
-                UiSnackbar(
-                    message = UiTextHelper.StringResource(R.string.support_offer_unavailable),
-                    isError = true,
-                    timeStamp = System.nanoTime(),
-                    type = ScreenMessageType.SNACKBAR
-                )
-            )
+            showOfferUnavailable()
             return
         }
         viewModelScope.launch {
@@ -148,10 +139,12 @@ class SupportViewModel(
 
             billingRepository.productDetails
                 .onStart {
-                    if (screenData?.donationOptions.isNullOrEmpty()) {
-                        screenState.setLoading()
-                    } else {
-                        screenState.updateState(ScreenState.Success())
+                    updateStateThreadSafe {
+                        if (screenData?.donationOptions.isNullOrEmpty()) {
+                            screenState.setLoading()
+                        } else {
+                            screenState.updateState(ScreenState.Success())
+                        }
                     }
                 }
                 .onEach { detailsMap ->
@@ -186,65 +179,59 @@ class SupportViewModel(
         purchaseResultJob = purchaseResultJob.restart {
             billingRepository.purchaseResult
                 .onEach { result ->
-                    setBillingInProgress(inProgress = false)
                     when (result) {
-                        PurchaseResult.Pending -> {
-                            updateStateThreadSafe {
-                                clearError()
-                                restoreScreenStateFromData()
-                                screenState.showSnackbar(
-                                    UiSnackbar(
-                                        message = UiTextHelper.StringResource(
-                                            R.string.purchase_pending
-                                        ),
-                                        isError = false,
-                                        timeStamp = System.nanoTime(),
-                                        type = ScreenMessageType.SNACKBAR
-                                    )
+                        PurchaseResult.Pending -> updateStateThreadSafe {
+                            setBillingInProgress(inProgress = false)
+                            clearError()
+                            restoreScreenStateFromData()
+                            screenState.showSnackbar(
+                                UiSnackbar(
+                                    message = UiTextHelper.StringResource(
+                                        R.string.purchase_pending
+                                    ),
+                                    isError = false,
+                                    timeStamp = System.nanoTime(),
+                                    type = ScreenMessageType.SNACKBAR
                                 )
-                            }
+                            )
                         }
 
-                        PurchaseResult.Success -> {
-                            updateStateThreadSafe {
-                                clearError()
-                                restoreScreenStateFromData()
-                                screenState.showSnackbar(
-                                    UiSnackbar(
-                                        message = UiTextHelper.StringResource(
-                                            R.string.purchase_thank_you
-                                        ),
-                                        isError = false,
-                                        timeStamp = System.nanoTime(),
-                                        type = ScreenMessageType.SNACKBAR
-                                    )
+                        PurchaseResult.Success -> updateStateThreadSafe {
+                            setBillingInProgress(inProgress = false)
+                            clearError()
+                            restoreScreenStateFromData()
+                            screenState.showSnackbar(
+                                UiSnackbar(
+                                    message = UiTextHelper.StringResource(
+                                        R.string.purchase_thank_you
+                                    ),
+                                    isError = false,
+                                    timeStamp = System.nanoTime(),
+                                    type = ScreenMessageType.SNACKBAR
                                 )
-                            }
+                            )
                         }
 
-                        is PurchaseResult.Failed -> {
-                            updateStateThreadSafe {
-                                screenState.copyData { copy(error = result.error) }
-                                screenState.setError(message = UiTextHelper.DynamicString(result.error))
-                            }
+                        is PurchaseResult.Failed -> updateStateThreadSafe {
+                            setBillingInProgress(inProgress = false)
+                            screenState.copyData { copy(error = result.error) }
+                            screenState.setError(message = UiTextHelper.DynamicString(result.error))
                         }
 
-                        PurchaseResult.UserCancelled -> {
-                            updateStateThreadSafe {
-                                clearError()
-                                restoreScreenStateFromData()
-                                screenState.showSnackbar(
-                                    UiSnackbar(
-                                        message = UiTextHelper.StringResource(
-                                            R.string.purchase_cancelled
-                                        ),
-                                        isError = false,
-                                        timeStamp = System.nanoTime(),
-                                        type = ScreenMessageType.SNACKBAR
-                                    )
+                        PurchaseResult.UserCancelled -> updateStateThreadSafe {
+                            setBillingInProgress(inProgress = false)
+                            clearError()
+                            restoreScreenStateFromData()
+                            screenState.showSnackbar(
+                                UiSnackbar(
+                                    message = UiTextHelper.StringResource(
+                                        R.string.purchase_cancelled
+                                    ),
+                                    isError = false,
+                                    timeStamp = System.nanoTime(),
+                                    type = ScreenMessageType.SNACKBAR
                                 )
-                            }
-
+                            )
                         }
                     }
                 }
@@ -298,6 +285,29 @@ class SupportViewModel(
                 formattedPrice = details?.primaryFormattedPrice(),
                 isEligible = details?.hasOneTimePurchaseOffer() == true,
             )
+        }
+    }
+
+    private fun dismissSnackbar() {
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.dismissSnackbar()
+            }
+        }
+    }
+
+    private fun showOfferUnavailable() {
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.showSnackbar(
+                    UiSnackbar(
+                        message = UiTextHelper.StringResource(R.string.support_offer_unavailable),
+                        isError = true,
+                        timeStamp = System.nanoTime(),
+                        type = ScreenMessageType.SNACKBAR
+                    )
+                )
+            }
         }
     }
 
