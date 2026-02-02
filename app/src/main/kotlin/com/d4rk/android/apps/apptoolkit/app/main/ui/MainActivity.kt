@@ -15,7 +15,6 @@ import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateHost
-import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
@@ -36,31 +35,30 @@ class MainActivity : AppCompatActivity() {
     private val dispatchers: DispatcherProvider by inject()
     private val viewModel: MainViewModel by viewModel()
     private val applyInitialConsentUseCase: ApplyInitialConsentUseCase by inject()
-    private val updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
-        registerForActivityResult(
-            contract = ActivityResultContracts.StartIntentSenderForResult()
-        ) {}
+    private val gmsHostFactory: GmsHostFactory by inject()
+    private lateinit var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest>
     private var keepSplashVisible: Boolean = true
     private val consentHost: ConsentHost = object : ConsentHost {
         override val activity = this@MainActivity
     }
-    private val reviewHost: ReviewHost = object : ReviewHost {
-        override val activity = this@MainActivity
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        updateResultLauncher =
+            registerForActivityResult(
+                contract = ActivityResultContracts.StartIntentSenderForResult()
+            ) {}
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { keepSplashVisible }
         enableEdgeToEdge()
         initializeDependencies()
         handleStartup()
         observeActions()
-        checkInAppReview()
     }
 
     override fun onResume() {
         super.onResume()
-        checkForUpdates()
+        handleGmsEvents()
         checkUserConsent()
     }
 
@@ -108,10 +106,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.onEvent(MainEvent.RequestConsent(host = consentHost))
     }
 
-    private fun checkInAppReview() {
-        viewModel.onEvent(MainEvent.RequestReview(host = reviewHost))
-    }
-
     private fun observeActions() {
         lifecycleScope.launch {
             viewModel.actionEvent.collect { action ->
@@ -123,12 +117,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkForUpdates() {
-        val host = object : InAppUpdateHost {
-            override val activity = this@MainActivity
-            override val updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
-                updateResultLauncher
-        }
-        viewModel.onEvent(MainEvent.RequestInAppUpdate(host = host))
+    private fun handleGmsEvents() {
+        val reviewHost = gmsHostFactory.createReviewHost(activity = this)
+        viewModel.onEvent(MainEvent.RequestReview(host = reviewHost))
+
+        val updateHost = gmsHostFactory.createUpdateHost(
+            activity = this,
+            launcher = updateResultLauncher,
+        )
+        viewModel.onEvent(MainEvent.RequestInAppUpdate(host = updateHost))
     }
 }

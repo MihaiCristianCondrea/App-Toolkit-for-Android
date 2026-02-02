@@ -3,6 +3,7 @@ package com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.main.data.repository.MainNavigationRepositoryImpl
 import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
+import com.d4rk.android.apps.apptoolkit.app.main.ui.GmsHostFactory
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainViewModel
 import com.d4rk.android.libs.apptoolkit.app.main.data.repository.InAppUpdateRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.InAppUpdateRepository
@@ -18,6 +19,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val appModule: Module = module {
+    single { GmsHostFactory() }
     single<NavigationRepository> { MainNavigationRepositoryImpl(dataStore = get(), firebaseController = get()) }
     single<GetNavigationDrawerItemsUseCase> {
         GetNavigationDrawerItemsUseCase(navigationRepository = get(), firebaseController = get())
