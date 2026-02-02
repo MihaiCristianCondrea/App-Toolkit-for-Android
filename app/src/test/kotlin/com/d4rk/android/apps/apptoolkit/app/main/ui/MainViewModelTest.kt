@@ -71,6 +71,8 @@ class MainViewModelTest {
                 repository = FakeConsentRepository(),
                 firebaseController = mockk<FirebaseController>(relaxed = true)
             ),
+            requestInAppReviewUseCase = mockk(relaxed = true),
+            requestInAppUpdateUseCase = mockk(relaxed = true),
             firebaseController = mockk<FirebaseController>(relaxed = true),
             dispatchers = dispatchers,
         )
@@ -104,6 +106,8 @@ class MainViewModelTest {
                     FakeConsentRepository(),
                     firebaseController
                 ),
+                requestInAppReviewUseCase = mockk(relaxed = true),
+                requestInAppUpdateUseCase = mockk(relaxed = true),
                 firebaseController = firebaseController,
                 dispatchers = dispatchers,
             )
@@ -131,6 +135,8 @@ class MainViewModelTest {
                 FakeConsentRepository(),
                 firebaseController
             ),
+            requestInAppReviewUseCase = mockk(relaxed = true),
+            requestInAppUpdateUseCase = mockk(relaxed = true),
             firebaseController = firebaseController,
             dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
         )
@@ -176,6 +182,8 @@ class MainViewModelTest {
                 FakeConsentRepository(),
                 firebaseController
             ),
+            requestInAppReviewUseCase = mockk(relaxed = true),
+            requestInAppUpdateUseCase = mockk(relaxed = true),
             firebaseController = firebaseController,
             dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
         )

@@ -14,17 +14,18 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpAction
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
 import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.content.HelpScreenContent
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.dropdowns.HelpScreenMenuActions
+import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
@@ -38,7 +39,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarW
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.activity.isInAppReviewAvailable
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.findActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.ReviewHelper
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -56,8 +56,14 @@ fun HelpScreen(
 
     val context = LocalContext.current
     val activity = remember(context) { context.findActivity() }
-    val scope = rememberCoroutineScope()
     val isInAppReviewAvailable = rememberSaveable { mutableStateOf(false) }
+    val reviewHost = remember(activity) {
+        activity?.let { hostActivity ->
+            object : ReviewHost {
+                override val activity = hostActivity
+            }
+        }
+    }
     val scrollBehavior: TopAppBarScrollBehavior =
         TopAppBarDefaults.enterAlwaysScrollBehavior(state = rememberTopAppBarState())
     val isFabExtended = rememberSaveable { mutableStateOf(true) }
@@ -80,6 +86,15 @@ fun HelpScreen(
     LaunchedEffect(Unit) {
         isInAppReviewAvailable.value =
             activity?.isInAppReviewAvailable() ?: false
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.actionEvent.collect { action ->
+            when (action) {
+                is HelpAction.OpenOnlineHelp -> context.openUrl(action.url)
+                is HelpAction.ReviewOutcomeReported -> Unit
+            }
+        }
     }
 
     LaunchedEffect(scrollBehavior) {
@@ -106,17 +121,8 @@ fun HelpScreen(
                 visible = true,
                 expanded = isFabExtended.value,
                 onClick = {
-                    activity?.let { componentActivity ->
-                        if (isInAppReviewAvailable.value) {
-                            ReviewHelper.forceLaunchInAppReview(
-                                activity = componentActivity,
-                                scope = scope
-                            )
-                        } else {
-                            context.openUrl(
-                                "https://mihaicristiancondrea.github.io/profile/#faqs"
-                            )
-                        }
+                    reviewHost?.let { host ->
+                        viewModel.onEvent(HelpEvent.RequestReview(host = host))
                     }
                 },
                 text = {
@@ -133,7 +139,7 @@ fun HelpScreen(
                     } else {
                         Icons.AutoMirrored.Outlined.ContactSupport
                     }
-                    Icon(icon, contentDescription = null)
+                    Icon(imageVector = icon, contentDescription = null)
                 }
             )
         }

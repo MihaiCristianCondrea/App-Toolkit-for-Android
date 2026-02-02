@@ -9,7 +9,7 @@ import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutReposit
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.CLIPBOARD_HELPER_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.copyTextToClipboard
 
 /**

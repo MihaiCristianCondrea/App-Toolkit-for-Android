@@ -28,7 +28,6 @@ import com.d4rk.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.app.licenses.ui.LicensesActivity
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.logging.ABOUT_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
@@ -40,6 +39,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPrefer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.ABOUT_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import kotlinx.coroutines.delay

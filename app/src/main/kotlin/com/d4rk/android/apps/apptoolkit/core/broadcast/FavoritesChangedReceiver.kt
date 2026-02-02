@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.d4rk.android.apps.apptoolkit.core.logging.FAVORITES_CHANGED_LOG_TAG
+import com.d4rk.android.apps.apptoolkit.core.utils.constants.logging.FAVORITES_CHANGED_LOG_TAG
 
 class FavoritesChangedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {

@@ -5,6 +5,7 @@ import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
 import com.d4rk.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
+import com.d4rk.android.libs.apptoolkit.app.review.domain.usecases.ForceInAppReviewUseCase
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
@@ -17,10 +18,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import io.mockk.mockk
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HelpViewModelTest {
@@ -32,6 +35,12 @@ class HelpViewModelTest {
     }
 
     private val firebaseController = FakeFirebaseController()
+    private lateinit var reviewUseCase: ForceInAppReviewUseCase
+
+    @BeforeEach
+    fun setup() {
+        reviewUseCase = mockk(relaxed = true)
+    }
 
     @Test
     fun `loadFaq sets success state when repository returns data`() =
@@ -52,6 +61,7 @@ class HelpViewModelTest {
             }
             val viewModel = HelpViewModel(
                 getFaqUseCase = GetFaqUseCase(repository, firebaseController),
+                forceInAppReviewUseCase = reviewUseCase,
                 dispatchers = testDispatcherProvider(),
                 firebaseController = firebaseController,
             )
@@ -77,6 +87,7 @@ class HelpViewModelTest {
             }
             val viewModel = HelpViewModel(
                 getFaqUseCase = GetFaqUseCase(repository, firebaseController),
+                forceInAppReviewUseCase = reviewUseCase,
                 dispatchers = testDispatcherProvider(),
                 firebaseController = firebaseController,
             )

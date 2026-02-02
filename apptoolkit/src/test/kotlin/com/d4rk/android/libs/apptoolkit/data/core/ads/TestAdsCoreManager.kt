@@ -3,9 +3,10 @@ package com.d4rk.android.libs.apptoolkit.data.core.ads
 import android.app.Activity
 import android.content.Context
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.data.remote.ads.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.interfaces.OnShowAdCompleteListener
-import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.appopen.AppOpenAd

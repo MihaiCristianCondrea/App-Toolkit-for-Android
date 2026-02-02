@@ -7,6 +7,9 @@ import com.d4rk.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpAction
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
 import com.d4rk.android.libs.apptoolkit.app.help.ui.state.HelpUiState
+import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
+import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
+import com.d4rk.android.libs.apptoolkit.app.review.domain.usecases.ForceInAppReviewUseCase
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
@@ -20,6 +23,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setNoData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
@@ -29,12 +33,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * ViewModel for the FAQ/help screen.
  */
 class HelpViewModel(
     private val getFaqUseCase: GetFaqUseCase,
+    private val forceInAppReviewUseCase: ForceInAppReviewUseCase,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<HelpUiState, HelpEvent, HelpAction>(
@@ -43,6 +49,7 @@ class HelpViewModel(
     screenName = "Help",
 ) {
     private var observeJob: Job? = null
+    private var reviewJob: Job? = null
 
     init {
         onEvent(event = HelpEvent.LoadFaq)
@@ -52,6 +59,7 @@ class HelpViewModel(
         when (event) {
             is HelpEvent.LoadFaq -> loadFaq()
             is HelpEvent.DismissSnackbar -> dismissSnackbar()
+            is HelpEvent.RequestReview -> requestReview(host = event.host)
         }
     }
 
@@ -100,5 +108,30 @@ class HelpViewModel(
                 screenState.dismissSnackbar()
             }
         }
+    }
+
+    private fun requestReview(host: ReviewHost) {
+        startOperation(action = Actions.REQUEST_REVIEW)
+        reviewJob = reviewJob.restart {
+            launchReport(
+                action = Actions.REQUEST_REVIEW,
+                block = {
+                    val outcome = withContext(dispatchers.io) {
+                        forceInAppReviewUseCase(host = host)
+                    }
+                    sendAction(action = HelpAction.ReviewOutcomeReported(outcome = outcome))
+                    if (outcome != ReviewOutcome.Launched) {
+                        sendAction(action = HelpAction.OpenOnlineHelp(url = HelpConstants.FAQ_BASE_URL))
+                    }
+                },
+                onError = {
+                    sendAction(action = HelpAction.OpenOnlineHelp(url = HelpConstants.FAQ_BASE_URL))
+                }
+            )
+        }
+    }
+
+    private object Actions {
+        const val REQUEST_REVIEW: String = "requestReview"
     }
 }

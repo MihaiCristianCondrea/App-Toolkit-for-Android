@@ -14,8 +14,8 @@ import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
 import com.d4rk.android.libs.apptoolkit.app.startup.utils.interfaces.providers.StartupProvider
-import com.d4rk.android.libs.apptoolkit.core.logging.STARTUP_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.ui.base.BaseActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.STARTUP_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.onCompletion

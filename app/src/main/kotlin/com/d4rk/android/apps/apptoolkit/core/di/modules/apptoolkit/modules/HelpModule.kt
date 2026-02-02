@@ -1,13 +1,14 @@
 package com.d4rk.android.apps.apptoolkit.core.di.modules.apptoolkit.modules
 
 import com.d4rk.android.apps.apptoolkit.BuildConfig
-import com.d4rk.android.apps.apptoolkit.core.utils.constants.HelpConstants
+import com.d4rk.android.apps.apptoolkit.core.utils.constants.help.HelpConstants
 import com.d4rk.android.libs.apptoolkit.app.help.data.local.HelpLocalDataSource
 import com.d4rk.android.libs.apptoolkit.app.help.data.remote.HelpRemoteDataSource
 import com.d4rk.android.libs.apptoolkit.app.help.data.repository.FaqRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
 import com.d4rk.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpViewModel
+import com.d4rk.android.libs.apptoolkit.app.review.domain.usecases.ForceInAppReviewUseCase
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.faqCatalogUrl
 import org.koin.core.module.Module
@@ -33,6 +34,7 @@ val helpModule: Module =
         viewModel {
             HelpViewModel(
                 getFaqUseCase = get(),
+                forceInAppReviewUseCase = get<ForceInAppReviewUseCase>(),
                 dispatchers = get<DispatcherProvider>(),
                 firebaseController = get(),
             )

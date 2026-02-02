@@ -2,11 +2,11 @@ package com.d4rk.android.libs.apptoolkit.core.utils.extensions.datastore
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.domain.model.theme.ThemePreferencesState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
-import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
-import com.d4rk.android.libs.apptoolkit.data.local.datastore.rememberCommonDataStore
 
 /**
  * Collects [themePreferencesState] as state within a composable.
