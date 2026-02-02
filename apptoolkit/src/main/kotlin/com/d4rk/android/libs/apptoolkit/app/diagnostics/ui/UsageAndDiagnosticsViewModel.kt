@@ -2,6 +2,8 @@ package com.d4rk.android.libs.apptoolkit.app.diagnostics.ui
 
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyConsentSettingsUseCase
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.model.UsageAndDiagnosticsSettings
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageAndDiagnosticsRepository
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsAction
@@ -20,7 +22,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentManagerHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
@@ -31,6 +32,7 @@ import kotlinx.coroutines.flow.onStart
 class UsageAndDiagnosticsViewModel(
     private val repository: UsageAndDiagnosticsRepository,
     private val dispatchers: DispatcherProvider,
+    private val applyConsentSettingsUseCase: ApplyConsentSettingsUseCase,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent, UsageAndDiagnosticsAction>(
     initialState = UiStateScreen(data = UsageAndDiagnosticsUiState()),
@@ -76,6 +78,13 @@ class UsageAndDiagnosticsViewModel(
                     }
                 }
                 .onEach { settings: UsageAndDiagnosticsSettings ->
+                    val consentSettings = ConsentSettings(
+                        usageAndDiagnostics = settings.usageAndDiagnostics,
+                        analyticsConsent = settings.analyticsConsent,
+                        adStorageConsent = settings.adStorageConsent,
+                        adUserDataConsent = settings.adUserDataConsent,
+                        adPersonalizationConsent = settings.adPersonalizationConsent,
+                    )
                     updateStateThreadSafe {
                         val updated = UsageAndDiagnosticsUiState(
                             usageAndDiagnostics = settings.usageAndDiagnostics,
@@ -86,8 +95,8 @@ class UsageAndDiagnosticsViewModel(
                         )
 
                         screenState.setSuccess(data = updated)
-                        updateConsent(settings)
                     }
+                    applyConsentSettingsUseCase(consentSettings)
                 }
                 .catchReport(action = Actions.OBSERVE_CONSENTS) {
                     updateStateThreadSafe {
@@ -183,12 +192,15 @@ class UsageAndDiagnosticsViewModel(
         }
     }
 
-    private fun updateConsent(settings: UsageAndDiagnosticsSettings) {
-        ConsentManagerHelper.updateConsent(
-            analyticsGranted = settings.analyticsConsent,
-            adStorageGranted = settings.adStorageConsent,
-            adUserDataGranted = settings.adUserDataConsent,
-            adPersonalizationGranted = settings.adPersonalizationConsent,
+    private suspend fun applyConsentSettings(settings: UsageAndDiagnosticsSettings) {
+        applyConsentSettingsUseCase(
+            ConsentSettings(
+                usageAndDiagnostics = settings.usageAndDiagnostics,
+                analyticsConsent = settings.analyticsConsent,
+                adStorageConsent = settings.adStorageConsent,
+                adUserDataConsent = settings.adUserDataConsent,
+                adPersonalizationConsent = settings.adPersonalizationConsent,
+            )
         )
     }
 

@@ -43,6 +43,7 @@ adsManager.showAdIfAvailable(activity, scope)
 ## Consent
 
 The consent feature lives under `apptoolkit/app/consent` and encapsulates UMP integration. The
-remote data source handles UMP request parameters, consent info updates, and form display, while
-the repository and use case expose a `Flow<DataState<Unit, Errors.UseCase>>` for UI layers to
-consume in view models.
+remote data source handles UMP request parameters, consent info updates, and form display. The
+repository also reads persisted consent flags from `CommonDataStore` and applies them to Firebase
+Analytics/Crashlytics/Performance at startup, while use cases expose both the consent request flow
+and consent application entry points for UI layers to consume in view models.
