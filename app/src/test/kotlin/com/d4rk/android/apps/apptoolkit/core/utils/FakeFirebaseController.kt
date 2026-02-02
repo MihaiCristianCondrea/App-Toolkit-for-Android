@@ -1,5 +1,6 @@
 package com.d4rk.android.apps.apptoolkit.core.utils
 
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 
 /**
@@ -37,6 +38,18 @@ class FakeFirebaseController : FirebaseController {
         throwable: Throwable,
         extraKeys: Map<String, String>,
     ) {
+        // no-op
+    }
+
+    override fun logEvent(event: AnalyticsEvent) {
+        // no-op
+    }
+
+    override fun logScreenView(screenName: String, screenClass: String?) {
+        // no-op
+    }
+
+    override fun setUserProperty(name: String, value: String?) {
         // no-op
     }
 }

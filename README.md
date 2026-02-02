@@ -81,7 +81,7 @@ dependencyResolutionManagement {
 }
 
 dependencies {
-    implementation("com.github.MihaiCristianCondrea:apptoolkit:2.0.0")
+    implementation("com.github.MihaiCristianCondrea:apptoolkit:2.0.1")
 }
 ```
 

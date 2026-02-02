@@ -18,6 +18,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import io.mockk.clearAllMocks
+import io.mockk.mockk
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -57,17 +58,19 @@ class MainViewModelTest {
         )
 
         val repo = FakeNavigationRepository(flowOf(expectedItems))
-        val firebaseController = FakeFirebaseController()
-        val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
-        val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
+        val useCase = GetNavigationDrawerItemsUseCase(
+            navigationRepository = repo,
+            firebaseController = mockk<FirebaseController>(relaxed = true)
+        )
+        val dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher)
 
         MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
             requestConsentUseCase = RequestConsentUseCase(
-                FakeConsentRepository(),
-                firebaseController
+                repository = FakeConsentRepository(),
+                firebaseController = mockk<FirebaseController>(relaxed = true)
             ),
-            firebaseController = firebaseController,
+            firebaseController = mockk<FirebaseController>(relaxed = true),
             dispatchers = dispatchers,
         )
 
@@ -90,7 +93,7 @@ class MainViewModelTest {
             )
 
             val repo = FakeNavigationRepository(flowOf(expectedItems))
-            val firebaseController = FakeFirebaseController()
+            val firebaseController = mockk<FirebaseController>(relaxed = true)
             val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
             val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
@@ -118,7 +121,7 @@ class MainViewModelTest {
     @Test
     fun `navigation load error shows snackbar`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = FakeNavigationRepository(upstream = flow { throw IllegalStateException("boom") })
-        val firebaseController = FakeFirebaseController()
+        val firebaseController = mockk<FirebaseController>(relaxed = true)
         val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
 
         val viewModel = MainViewModel(
@@ -163,7 +166,7 @@ class MainViewModelTest {
     @Test
     fun `empty navigation list sets no data state`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = FakeNavigationRepository(flowOf(emptyList()))
-        val firebaseController = FakeFirebaseController()
+        val firebaseController = mockk<FirebaseController>(relaxed = true)
         val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
 
         val viewModel = MainViewModel(
@@ -204,28 +207,6 @@ class MainViewModelTest {
             callCount++
             return upstream
         }
-    }
-
-    private class FakeFirebaseController : FirebaseController {
-        override fun updateConsent(
-            analyticsGranted: Boolean,
-            adStorageGranted: Boolean,
-            adUserDataGranted: Boolean,
-            adPersonalizationGranted: Boolean,
-        ) = Unit
-
-        override fun setAnalyticsEnabled(enabled: Boolean) = Unit
-        override fun setCrashlyticsEnabled(enabled: Boolean) = Unit
-        override fun setPerformanceEnabled(enabled: Boolean) = Unit
-
-        override fun logBreadcrumb(message: String, attributes: Map<String, String>) = Unit
-
-        override fun reportViewModelError(
-            viewModelName: String,
-            action: String,
-            throwable: Throwable,
-            extraKeys: Map<String, String>,
-        ) = Unit
     }
 
     private fun createIcon(): ImageVector =
