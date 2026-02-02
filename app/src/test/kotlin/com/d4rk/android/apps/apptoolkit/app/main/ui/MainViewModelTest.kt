@@ -7,6 +7,7 @@ import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatche
 import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
 import com.d4rk.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
@@ -224,4 +225,8 @@ private class FakeConsentRepository : ConsentRepository {
         host: ConsentHost,
         showIfRequired: Boolean,
     ) = flowOf(DataState.Success<Unit, Errors.UseCase>(Unit))
+
+    override suspend fun applyInitialConsent() = Unit
+
+    override suspend fun applyConsentSettings(settings: ConsentSettings) = Unit
 }

@@ -23,7 +23,8 @@ val usageAndDiagnosticsModule: Module =
             UsageAndDiagnosticsViewModel(
                 repository = get(),
                 firebaseController = get(),
-                dispatchers = get()
+                dispatchers = get(),
+                applyConsentSettingsUseCase = get(),
             )
         }
     }

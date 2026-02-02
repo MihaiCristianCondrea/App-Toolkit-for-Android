@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.d4rk.android.libs.apptoolkit.app.consent.data.local.ConsentPreferencesDataSource
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.local.UsageAndDiagnosticsPreferencesDataSource
 import com.d4rk.android.libs.apptoolkit.app.onboarding.data.local.OnboardingPreferencesDataSource
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
@@ -45,7 +46,7 @@ open class CommonDataStore(
     context: Context,
     dispatchers: DispatcherProvider = StandardDispatchers(),
     private val defaultAdsEnabled: Boolean = true,
-) : OnboardingPreferencesDataSource, UsageAndDiagnosticsPreferencesDataSource {
+) : OnboardingPreferencesDataSource, UsageAndDiagnosticsPreferencesDataSource, ConsentPreferencesDataSource {
     val dataStore: DataStore<Preferences> = context.commonDataStore
     private val scope = CoroutineScope(SupervisorJob() + dispatchers.io)
 

@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.startup.ui
 
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
@@ -94,6 +95,10 @@ private class FakeConsentRepository : ConsentRepository {
         DataState.Loading(),
         DataState.Success(Unit),
     )
+
+    override suspend fun applyInitialConsent() = Unit
+
+    override suspend fun applyConsentSettings(settings: ConsentSettings) = Unit
 }
 
 private class FakeConsentHost : ConsentHost {

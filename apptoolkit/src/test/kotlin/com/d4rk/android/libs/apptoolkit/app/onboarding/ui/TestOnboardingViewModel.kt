@@ -1,6 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui
 
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
@@ -183,4 +184,8 @@ private class FakeConsentRepository : ConsentRepository {
         host: ConsentHost,
         showIfRequired: Boolean,
     ): Flow<DataState<Unit, Errors.UseCase>> = flowOf(DataState.Success(Unit))
+
+    override suspend fun applyInitialConsent() = Unit
+
+    override suspend fun applyConsentSettings(settings: ConsentSettings) = Unit
 }
