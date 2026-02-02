@@ -224,4 +224,8 @@ private class FakeConsentPreferencesDataSource(
 
 private class FakeBuildInfoProvider(
     override val isDebugBuild: Boolean,
-) : BuildInfoProvider
+) : BuildInfoProvider {
+    override val appVersion: String = "1.0.0-test"
+    override val appVersionCode: Int = 1
+    override val packageName: String = "com.d4rk.android.libs.apptoolkit.test"
+}
