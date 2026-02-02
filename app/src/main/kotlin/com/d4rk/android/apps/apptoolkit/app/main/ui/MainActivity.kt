@@ -52,9 +52,11 @@ class MainActivity : AppCompatActivity() {
             registerForActivityResult(
                 contract = ActivityResultContracts.StartIntentSenderForResult()
             ) {}
+        val updateLauncher: ActivityResultLauncher<IntentSenderRequest> = updateResultLauncher
         updateHost = object : InAppUpdateHost {
             override val activity = this@MainActivity
-            override val updateResultLauncher = updateResultLauncher
+            override val updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
+                updateLauncher
         }
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { keepSplashVisible }
