@@ -49,7 +49,9 @@ class StartupViewModel(
             requestConsentUseCase.invoke(host = host)
                 .flowOn(dispatchers.main)
                 .onStart {
-                    screenState.setLoading()
+                    updateStateThreadSafe {
+                        screenState.setLoading()
+                    }
                 }
                 .catchReport(
                     action = Actions.REQUEST_CONSENT,
@@ -68,7 +70,11 @@ class StartupViewModel(
     }
 
     private fun markConsentFormLoaded() {
-        screenState.successData { copy(consentFormLoaded = true) }
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.successData { copy(consentFormLoaded = true) }
+            }
+        }
     }
 
     private object Actions {

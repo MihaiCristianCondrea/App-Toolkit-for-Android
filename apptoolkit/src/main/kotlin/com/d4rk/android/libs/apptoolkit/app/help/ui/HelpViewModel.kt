@@ -47,7 +47,11 @@ class HelpViewModel(
     override fun handleEvent(event: HelpEvent) {
         when (event) {
             is HelpEvent.LoadFaq -> loadFaq()
-            is HelpEvent.DismissSnackbar -> screenState.dismissSnackbar()
+            is HelpEvent.DismissSnackbar -> viewModelScope.launch {
+                updateStateThreadSafe {
+                    screenState.dismissSnackbar()
+                }
+            }
         }
     }
 
@@ -56,7 +60,11 @@ class HelpViewModel(
         observeJob = observeJob.restart {
             getFaqUseCase.invoke()
                 .flowOn(context = dispatchers.io)
-                .onStart { screenState.setLoading() }
+                .onStart {
+                    updateStateThreadSafe {
+                        screenState.setLoading()
+                    }
+                }
                 .onEach { result: DataState<List<FaqItem>, Errors> ->
                     result
                         .onSuccess { faqs: List<FaqItem> ->
@@ -76,7 +84,11 @@ class HelpViewModel(
                         }
                 }
                 .catchReport(action = "loadFaq") {
-                    screenState.setError(message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq))
+                    updateStateThreadSafe {
+                        screenState.setError(
+                            message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq)
+                        )
+                    }
                 }
                 .launchIn(scope = viewModelScope)
         }

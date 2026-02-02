@@ -94,7 +94,11 @@ class AdvancedSettingsViewModel(
     }
 
     private fun onMessageShown() {
-        screenState.copyData { copy(cacheClearMessage = null) }
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.copyData { copy(cacheClearMessage = null) }
+            }
+        }
     }
 
     private object Actions {

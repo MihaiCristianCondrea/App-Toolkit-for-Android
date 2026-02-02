@@ -56,8 +56,18 @@ class GeneralSettingsViewModel(
 
         if (!hasKey) {
             observeJob?.cancel()
-            screenState.setErrors(errors = listOf(UiSnackbar(message = UiTextHelper.StringResource(R.string.error_invalid_content_key))))
-            screenState.updateState(ScreenState.NoData())
+            viewModelScope.launch {
+                updateStateThreadSafe {
+                    screenState.setErrors(
+                        errors = listOf(
+                            UiSnackbar(
+                                message = UiTextHelper.StringResource(R.string.error_invalid_content_key)
+                            )
+                        )
+                    )
+                    screenState.updateState(ScreenState.NoData())
+                }
+            }
             return
         }
 

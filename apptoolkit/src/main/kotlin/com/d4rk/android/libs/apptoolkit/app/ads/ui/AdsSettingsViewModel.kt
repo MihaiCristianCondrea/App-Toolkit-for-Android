@@ -178,7 +178,11 @@ class AdsSettingsViewModel(
                     action = Actions.REQUEST_CONSENT,
                     extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
                 ) {
-                    screenState.showSnackbar(errorSnackbar(Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO.asUiText()))
+                    updateStateThreadSafe {
+                        screenState.showSnackbar(
+                            errorSnackbar(Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO.asUiText())
+                        )
+                    }
                 }
                 .launchIn(viewModelScope)
         }

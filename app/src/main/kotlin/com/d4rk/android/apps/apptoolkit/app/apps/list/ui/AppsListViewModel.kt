@@ -116,7 +116,9 @@ class AppsListViewModel(
                         }
                 }
                 .catchReport(action = Actions.OBSERVE_FETCH) {
-                    showLoadAppsError()
+                    updateStateThreadSafe {
+                        showLoadAppsError()
+                    }
                 }
                 .onEach { result ->
                     result
@@ -159,9 +161,11 @@ class AppsListViewModel(
                     withContext(dispatchers.io) { toggleFavoriteUseCase(packageName) }
                 },
                 onError = {
-                    screenState.setError(
-                        message = UiTextHelper.StringResource(R.string.error_failed_to_update_favorite),
-                    )
+                    updateStateThreadSafe {
+                        screenState.setError(
+                            message = UiTextHelper.StringResource(R.string.error_failed_to_update_favorite),
+                        )
+                    }
                 },
             )
         }

@@ -112,7 +112,11 @@ class FavoriteAppsViewModel(
 
                 }
                 .catchReport(action = Actions.OBSERVE_FAVORITES) {
-                    screenState.setError(message = UiTextHelper.StringResource(R.string.error_failed_to_load_apps))
+                    updateStateThreadSafe {
+                        screenState.setError(
+                            message = UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
+                        )
+                    }
                 }
                 .launchIn(viewModelScope)
         }

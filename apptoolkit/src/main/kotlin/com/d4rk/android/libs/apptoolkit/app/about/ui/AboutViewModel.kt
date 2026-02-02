@@ -50,7 +50,11 @@ open class AboutViewModel(
         when (event) {
             is AboutEvent.Load -> loadAboutInfo()
             is AboutEvent.CopyDeviceInfo -> copyDeviceInfo(label = event.label)
-            is AboutEvent.DismissSnackbar -> screenState.dismissSnackbar()
+            is AboutEvent.DismissSnackbar -> viewModelScope.launch {
+                updateStateThreadSafe {
+                    screenState.dismissSnackbar()
+                }
+            }
         }
     }
 
@@ -59,7 +63,11 @@ open class AboutViewModel(
         observeJob = observeJob.restart {
             getAboutInfo.invoke()
                 .flowOn(dispatchers.io)
-                .onStart { screenState.setLoading() }
+                .onStart {
+                    updateStateThreadSafe {
+                        screenState.setLoading()
+                    }
+                }
                 .onEach { result ->
                     result
                         .onSuccess { info ->
@@ -74,7 +82,11 @@ open class AboutViewModel(
                         }
                 }
                 .catchReport(action = Actions.LOAD_ABOUT_INFO) {
-                    screenState.setError(message = UiTextHelper.StringResource(R.string.snack_device_info_failed))
+                    updateStateThreadSafe {
+                        screenState.setError(
+                            message = UiTextHelper.StringResource(R.string.snack_device_info_failed)
+                        )
+                    }
                 }
                 .launchIn(viewModelScope)
         }
@@ -85,14 +97,18 @@ open class AboutViewModel(
         startOperation(action = Actions.COPY_DEVICE_INFO, extra = mapOf(ExtraKeys.LABEL to label))
 
         if (deviceInfo.isBlank()) {
-            screenState.showSnackbar(
-                UiSnackbar(
-                    message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
-                    isError = true,
-                    timeStamp = System.nanoTime(),
-                    type = ScreenMessageType.SNACKBAR,
-                )
-            )
+            viewModelScope.launch {
+                updateStateThreadSafe {
+                    screenState.showSnackbar(
+                        UiSnackbar(
+                            message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
+                            isError = true,
+                            timeStamp = System.nanoTime(),
+                            type = ScreenMessageType.SNACKBAR,
+                        )
+                    )
+                }
+            }
             return
         }
 
@@ -138,14 +154,16 @@ open class AboutViewModel(
                     action = Actions.COPY_DEVICE_INFO,
                     extra = mapOf(ExtraKeys.LABEL to label)
                 ) {
-                    screenState.showSnackbar(
-                        UiSnackbar(
-                            message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
-                            isError = true,
-                            timeStamp = System.nanoTime(),
-                            type = ScreenMessageType.SNACKBAR,
+                    updateStateThreadSafe {
+                        screenState.showSnackbar(
+                            UiSnackbar(
+                                message = UiTextHelper.StringResource(R.string.snack_device_info_failed),
+                                isError = true,
+                                timeStamp = System.nanoTime(),
+                                type = ScreenMessageType.SNACKBAR,
+                            )
                         )
-                    )
+                    }
                 }
                 .launchIn(viewModelScope)
         }

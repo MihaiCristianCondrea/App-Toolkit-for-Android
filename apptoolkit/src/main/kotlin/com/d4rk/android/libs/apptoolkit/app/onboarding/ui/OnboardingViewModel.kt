@@ -70,7 +70,11 @@ class OnboardingViewModel(
     }
 
     private fun updateCurrentTab(index: Int) {
-        screenState.copyData { copy(currentTabIndex = index) }
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.copyData { copy(currentTabIndex = index) }
+            }
+        }
     }
 
     private fun completeOnboarding() {
@@ -115,7 +119,11 @@ class OnboardingViewModel(
     }
 
     private fun setCrashlyticsDialogVisibility(isVisible: Boolean) {
-        screenState.copyData { copy(isCrashlyticsDialogVisible = isVisible) }
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.copyData { copy(isCrashlyticsDialogVisible = isVisible) }
+            }
+        }
     }
 
     private object Actions {
