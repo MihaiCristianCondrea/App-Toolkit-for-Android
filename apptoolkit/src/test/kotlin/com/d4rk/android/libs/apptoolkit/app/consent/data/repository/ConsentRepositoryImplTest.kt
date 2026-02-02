@@ -5,7 +5,6 @@ import com.d4rk.android.libs.apptoolkit.app.consent.data.remote.datasource.Conse
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
-import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
@@ -48,7 +47,6 @@ class ConsentRepositoryImplTest {
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
                 firebaseController = mockk(relaxed = true),
-                dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
             )
 
             val states = repository.requestConsent(
@@ -83,7 +81,6 @@ class ConsentRepositoryImplTest {
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
                 firebaseController = mockk(relaxed = true),
-                dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
             )
 
             val states = repository.requestConsent(
@@ -115,7 +112,6 @@ class ConsentRepositoryImplTest {
                 ),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = false),
                 firebaseController = firebaseController,
-                dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
             )
 
             repository.applyInitialConsent()
@@ -142,7 +138,6 @@ class ConsentRepositoryImplTest {
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = true),
                 firebaseController = firebaseController,
-                dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
             )
             val settings = ConsentSettings(
                 usageAndDiagnostics = false,
@@ -176,7 +171,6 @@ class ConsentRepositoryImplTest {
                 local = FakeConsentPreferencesDataSource(),
                 configProvider = FakeBuildInfoProvider(isDebugBuild = true),
                 firebaseController = firebaseController,
-                dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
             )
 
             repository.applyInitialConsent()

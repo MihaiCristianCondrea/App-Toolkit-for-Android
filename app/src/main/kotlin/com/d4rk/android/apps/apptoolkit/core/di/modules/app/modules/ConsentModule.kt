@@ -21,7 +21,6 @@ val consentModule: Module = module {
             local = get(),
             configProvider = get(),
             firebaseController = get(),
-            dispatchers = get(),
         )
     }
     single { RequestConsentUseCase(repository = get(), firebaseController = get()) }

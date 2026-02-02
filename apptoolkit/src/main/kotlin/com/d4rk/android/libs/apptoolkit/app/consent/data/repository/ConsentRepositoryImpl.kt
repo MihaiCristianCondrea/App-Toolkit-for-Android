@@ -6,7 +6,6 @@ import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
@@ -14,7 +13,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withContext
 
 /**
  * Implementation of [ConsentRepository] that delegates UMP work to a remote data source.
@@ -24,7 +22,6 @@ class ConsentRepositoryImpl(
     private val local: ConsentPreferencesDataSource,
     private val configProvider: BuildInfoProvider,
     private val firebaseController: FirebaseController,
-    private val dispatchers: DispatcherProvider,
 ) : ConsentRepository {
 
     override fun requestConsent(
@@ -35,22 +32,20 @@ class ConsentRepositoryImpl(
     }
 
     override suspend fun applyInitialConsent() {
-        val settings = withContext(dispatchers.io) { readPersistedSettings() }
+        val settings = readPersistedSettings()
         applyConsentSettings(settings)
     }
 
     override suspend fun applyConsentSettings(settings: ConsentSettings) {
-        withContext(dispatchers.io) {
-            firebaseController.updateConsent(
-                analyticsGranted = settings.analyticsConsent,
-                adStorageGranted = settings.adStorageConsent,
-                adUserDataGranted = settings.adUserDataConsent,
-                adPersonalizationGranted = settings.adPersonalizationConsent,
-            )
-            firebaseController.setAnalyticsEnabled(settings.usageAndDiagnostics)
-            firebaseController.setCrashlyticsEnabled(settings.usageAndDiagnostics)
-            firebaseController.setPerformanceEnabled(settings.usageAndDiagnostics)
-        }
+        firebaseController.updateConsent(
+            analyticsGranted = settings.analyticsConsent,
+            adStorageGranted = settings.adStorageConsent,
+            adUserDataGranted = settings.adUserDataConsent,
+            adPersonalizationGranted = settings.adPersonalizationConsent,
+        )
+        firebaseController.setAnalyticsEnabled(settings.usageAndDiagnostics)
+        firebaseController.setCrashlyticsEnabled(settings.usageAndDiagnostics)
+        firebaseController.setPerformanceEnabled(settings.usageAndDiagnostics)
     }
 
     private suspend fun readPersistedSettings(): ConsentSettings = coroutineScope {
