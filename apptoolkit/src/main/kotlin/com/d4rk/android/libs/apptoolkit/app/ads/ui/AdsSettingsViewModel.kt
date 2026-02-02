@@ -47,6 +47,8 @@ class AdsSettingsViewModel(
     firebaseController = firebaseController,
     screenName = "AdsSettings",
 ) {
+
+    private var observeJob: Job? = null
     private var persistJob: Job? = null
     private var consentJob: Job? = null
 
@@ -72,7 +74,7 @@ class AdsSettingsViewModel(
 
     private fun observe() {
         startOperation(action = Actions.OBSERVE_ADS_ENABLED)
-        generalJob = generalJob.restart {
+        observeJob = observeJob.restart {
             observeAdsEnabled.invoke()
                 .flowOn(dispatchers.io)
                 .onStart {

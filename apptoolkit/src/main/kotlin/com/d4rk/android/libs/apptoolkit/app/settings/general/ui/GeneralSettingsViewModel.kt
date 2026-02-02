@@ -22,6 +22,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -38,6 +39,8 @@ class GeneralSettingsViewModel(
     screenName = "GeneralSettings",
 ) {
 
+    private var observeJob: Job? = null
+
     override fun handleEvent(event: GeneralSettingsEvent) {
         when (event) {
             is GeneralSettingsEvent.Load -> loadContent(contentKey = event.contentKey)
@@ -52,13 +55,13 @@ class GeneralSettingsViewModel(
         )
 
         if (!hasKey) {
-            generalJob?.cancel()
+            observeJob?.cancel()
             screenState.setErrors(errors = listOf(UiSnackbar(message = UiTextHelper.StringResource(R.string.error_invalid_content_key))))
             screenState.updateState(ScreenState.NoData())
             return
         }
 
-        generalJob = generalJob.restart {
+        observeJob = observeJob.restart {
             repository.getContentKey(contentKey)
                 .flowOn(dispatchers.default)
                 .map<String, DataState<String, Errors>> { key -> DataState.Success(key) }

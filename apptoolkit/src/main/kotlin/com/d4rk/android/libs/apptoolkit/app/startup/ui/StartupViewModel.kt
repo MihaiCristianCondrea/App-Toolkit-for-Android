@@ -14,6 +14,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.successData
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -29,6 +30,8 @@ class StartupViewModel(
     screenName = "Startup",
 ) {
 
+    private var observeJob: Job? = null
+
     override fun handleEvent(event: StartupEvent) {
         when (event) {
             is StartupEvent.RequestConsent -> requestConsent(host = event.host)
@@ -42,7 +45,7 @@ class StartupViewModel(
             action = Actions.REQUEST_CONSENT,
             extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
         )
-        generalJob = generalJob.restart {
+        observeJob = observeJob.restart {
             requestConsentUseCase.invoke(host = host)
                 .flowOn(dispatchers.main)
                 .onStart {

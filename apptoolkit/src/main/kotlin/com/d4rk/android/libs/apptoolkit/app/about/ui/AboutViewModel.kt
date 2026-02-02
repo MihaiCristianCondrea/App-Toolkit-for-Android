@@ -39,6 +39,7 @@ open class AboutViewModel(
     firebaseController = firebaseController,
     screenName = "About",
 ) {
+    private var observeJob: Job? = null
     private var copyJob: Job? = null
 
     init {
@@ -55,7 +56,7 @@ open class AboutViewModel(
 
     private fun loadAboutInfo() {
         startOperation(action = Actions.LOAD_ABOUT_INFO)
-        generalJob = generalJob.restart {
+        observeJob = observeJob.restart {
             getAboutInfo.invoke()
                 .flowOn(dispatchers.io)
                 .onStart { screenState.setLoading() }

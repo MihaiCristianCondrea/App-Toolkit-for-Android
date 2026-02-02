@@ -20,6 +20,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.copyData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.dismissSnackbar
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -38,6 +39,7 @@ class AdvancedSettingsViewModel(
     firebaseController = firebaseController,
     screenName = "AdvancedSettings",
 ) {
+    private var observeJob: Job? = null
 
     override fun handleEvent(event: AdvancedSettingsEvent) {
         when (event) {
@@ -48,7 +50,7 @@ class AdvancedSettingsViewModel(
 
     private fun clearCache() {
         startOperation(action = Actions.CLEAR_CACHE)
-        generalJob = generalJob.restart {
+        observeJob = observeJob.restart {
             repository.clearCache()
                 .flowOn(dispatchers.io)
                 .map<Result<Unit>, DataState<Unit, Errors.Database>> { result ->

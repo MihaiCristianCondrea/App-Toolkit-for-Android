@@ -53,12 +53,9 @@ import kotlinx.coroutines.launch
 fun FirebaseConsentDialog(
     state: UsageAndDiagnosticsUiState,
     onDismissRequest: () -> Unit,
-    onApplyConsents: (
-        analyticsStorage: Boolean,
-        adStorage: Boolean,
-        adUserData: Boolean,
-        adPersonalization: Boolean,
-    ) -> Unit,
+    onAllowAll: () -> Unit,
+    onAllowEssentials: () -> Unit,
+    onConfirmSelection: () -> Unit,
     onAnalyticsConsentChanged: (Boolean) -> Unit,
     onAdStorageConsentChanged: (Boolean) -> Unit,
     onAdUserDataConsentChanged: (Boolean) -> Unit,
@@ -180,7 +177,7 @@ fun FirebaseConsentDialog(
                         onClick = {
                             view.playSoundEffect(SoundEffectConstants.CLICK)
                             hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
-                            onApplyConsents(true, true, true, true)
+                            onAllowAll()
                         },
                     )
 
@@ -194,12 +191,7 @@ fun FirebaseConsentDialog(
                             onClick = {
                                 view.playSoundEffect(SoundEffectConstants.CLICK)
                                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
-                                onApplyConsents(
-                                    state.analyticsConsent,
-                                    state.adStorageConsent,
-                                    state.adUserDataConsent,
-                                    state.adPersonalizationConsent,
-                                )
+                                onConfirmSelection()
                             },
                         )
 
@@ -209,7 +201,7 @@ fun FirebaseConsentDialog(
                             onClick = {
                                 view.playSoundEffect(SoundEffectConstants.CLICK)
                                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
-                                onApplyConsents(true, false, false, false)
+                                onAllowEssentials()
                             },
                         )
                     }

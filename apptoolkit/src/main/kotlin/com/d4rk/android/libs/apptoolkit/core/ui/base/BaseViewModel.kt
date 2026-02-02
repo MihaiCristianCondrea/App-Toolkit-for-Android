@@ -7,7 +7,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -48,13 +47,6 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
     protected val currentState: S
         get() = uiState.value
 
-    /**
-     * General-purpose job for screens that only need one cancellable operation at a time.
-     *
-     * Prefer specialized job properties when multiple concurrent jobs are required.
-     */
-    protected var generalJob: Job? = null
-
     /** Handles a new UI [event]. */
     abstract fun onEvent(event: E)
 
@@ -86,6 +78,7 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
      * adapted for [UiStateScreen] since [ScreenState] is not generic in this codebase.
      */
     protected suspend fun <T> updateSuccessState(
+        // FIXME: Function "updateSuccessState" is never used Find ussage in the existing code base
         screenData: MutableStateFlow<UiStateScreen<T>>,
         updateData: (T) -> T,
     ) {

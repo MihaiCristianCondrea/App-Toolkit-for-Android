@@ -47,6 +47,7 @@ class FavoriteAppsViewModel(
     screenName = "FavoriteApps",
 ) {
 
+    private var observeJob: Job? = null
     private var toggleJob: Job? = null
 
     val favorites = observeFavoritesUseCase().stateIn(
@@ -80,7 +81,7 @@ class FavoriteAppsViewModel(
     }
 
     private fun observe() {
-        generalJob = generalJob.restart {
+        observeJob = observeJob.restart {
             startOperation(action = Actions.OBSERVE_FAVORITES)
             observeFavoriteAppsUseCase.invoke()
                 .flowOn(context = dispatchers.io)

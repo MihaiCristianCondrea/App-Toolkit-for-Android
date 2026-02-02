@@ -22,6 +22,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -57,6 +58,8 @@ class PermissionsViewModel(
     screenName = "Permissions",
 ) {
 
+    private var observeJob: Job? = null
+
     override fun handleEvent(event: PermissionsEvent) {
         when (event) {
             PermissionsEvent.Load -> loadPermissions()
@@ -64,7 +67,7 @@ class PermissionsViewModel(
     }
 
     private fun loadPermissions() {
-        generalJob = generalJob.restart {
+        observeJob = observeJob.restart {
             startOperation(action = Actions.LOAD_PERMISSIONS)
 
             permissionsRepository.getPermissionsConfig()

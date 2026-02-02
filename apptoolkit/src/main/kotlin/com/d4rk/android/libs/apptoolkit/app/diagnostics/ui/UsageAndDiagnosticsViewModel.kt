@@ -22,6 +22,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.ConsentManagerHelper
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -36,6 +37,14 @@ class UsageAndDiagnosticsViewModel(
     firebaseController = firebaseController,
     screenName = "UsageAndDiagnostics",
 ) {
+
+    private var observeConsentsJob: Job? = null
+
+    private var setUsageAndDiagnosticsJob: Job? = null
+    private var setAnalyticsConsentJob: Job? = null
+    private var setAdStorageConsentJob: Job? = null
+    private var setAdUserDataConsentJob: Job? = null
+    private var setAdPersonalizationConsentJob: Job? = null
 
     init {
         onEvent(event = UsageAndDiagnosticsEvent.Initialize)
@@ -56,7 +65,8 @@ class UsageAndDiagnosticsViewModel(
 
     private fun observeConsents() {
         startOperation(action = Actions.OBSERVE_CONSENTS)
-        generalJob = generalJob.restart {
+
+        observeConsentsJob = observeConsentsJob.restart {
             repository.observeSettings()
                 .flowOn(dispatchers.io)
                 .onStart {
@@ -81,24 +91,26 @@ class UsageAndDiagnosticsViewModel(
                 }
                 .catchReport(action = Actions.OBSERVE_CONSENTS) {
                     updateStateThreadSafe {
-                        handleObservationError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
+                        handleObservationError(
+                            message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText()
+                        )
                     }
                 }
-                .launchIn(viewModelScope)
+                .launchIn(viewModelScope) // returns Job :contentReference[oaicite:2]{index=2}
         }
     }
 
     private fun updateUsageAndDiagnostics(enabled: Boolean) {
-        generalJob = generalJob.restart {
+        setUsageAndDiagnosticsJob = setUsageAndDiagnosticsJob.restart {
             launchReport(
                 action = Actions.SET_USAGE_AND_DIAGNOSTICS,
                 extra = mapOf(ExtraKeys.ENABLED to enabled.toString()),
-                block = {
-                    repository.setUsageAndDiagnostics(enabled)
-                },
+                block = { repository.setUsageAndDiagnostics(enabled) },
                 onError = {
                     updateStateThreadSafe {
-                        handleObservationError(message = UiTextHelper.StringResource(R.string.error_an_error_occurred))
+                        handleObservationError(
+                            message = UiTextHelper.StringResource(R.string.error_an_error_occurred)
+                        )
                     }
                 },
             )
@@ -106,14 +118,16 @@ class UsageAndDiagnosticsViewModel(
     }
 
     private fun updateAnalyticsConsent(granted: Boolean) {
-        generalJob = generalJob.restart {
+        setAnalyticsConsentJob = setAnalyticsConsentJob.restart {
             launchReport(
                 action = Actions.SET_ANALYTICS_CONSENT,
                 extra = mapOf(ExtraKeys.GRANTED to granted.toString()),
                 block = { repository.setAnalyticsConsent(granted) },
                 onError = {
                     updateStateThreadSafe {
-                        handleObservationError(message = UiTextHelper.StringResource(R.string.error_an_error_occurred))
+                        handleObservationError(
+                            message = UiTextHelper.StringResource(R.string.error_an_error_occurred)
+                        )
                     }
                 },
             )
@@ -121,14 +135,16 @@ class UsageAndDiagnosticsViewModel(
     }
 
     private fun updateAdStorageConsent(granted: Boolean) {
-        generalJob = generalJob.restart {
+        setAdStorageConsentJob = setAdStorageConsentJob.restart {
             launchReport(
                 action = Actions.SET_AD_STORAGE_CONSENT,
                 extra = mapOf(ExtraKeys.GRANTED to granted.toString()),
                 block = { repository.setAdStorageConsent(granted) },
                 onError = {
                     updateStateThreadSafe {
-                        handleObservationError(message = UiTextHelper.StringResource(R.string.error_an_error_occurred))
+                        handleObservationError(
+                            message = UiTextHelper.StringResource(R.string.error_an_error_occurred)
+                        )
                     }
                 },
             )
@@ -136,14 +152,16 @@ class UsageAndDiagnosticsViewModel(
     }
 
     private fun updateAdUserDataConsent(granted: Boolean) {
-        generalJob = generalJob.restart {
+        setAdUserDataConsentJob = setAdUserDataConsentJob.restart {
             launchReport(
                 action = Actions.SET_AD_USER_DATA_CONSENT,
                 extra = mapOf(ExtraKeys.GRANTED to granted.toString()),
                 block = { repository.setAdUserDataConsent(granted) },
                 onError = {
                     updateStateThreadSafe {
-                        handleObservationError(message = UiTextHelper.StringResource(R.string.error_an_error_occurred))
+                        handleObservationError(
+                            message = UiTextHelper.StringResource(R.string.error_an_error_occurred)
+                        )
                     }
                 },
             )
@@ -151,7 +169,7 @@ class UsageAndDiagnosticsViewModel(
     }
 
     private fun updateAdPersonalizationConsent(granted: Boolean) {
-        generalJob = generalJob.restart {
+        setAdPersonalizationConsentJob = setAdPersonalizationConsentJob.restart {
             launchReport(
                 action = Actions.SET_AD_PERSONALIZATION_CONSENT,
                 extra = mapOf(ExtraKeys.GRANTED to granted.toString()),
@@ -167,7 +185,6 @@ class UsageAndDiagnosticsViewModel(
 
     private fun updateConsent(settings: UsageAndDiagnosticsSettings) {
         ConsentManagerHelper.updateConsent(
-            // TODO: We should make the consent manager to something else, a use case or something that calls the firebase implementation
             analyticsGranted = settings.analyticsConsent,
             adStorageGranted = settings.adStorageConsent,
             adUserDataGranted = settings.adUserDataConsent,

@@ -23,6 +23,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -37,6 +38,7 @@ class HelpViewModel(
     firebaseController = firebaseController,
     screenName = "Help",
 ) {
+    private var observeJob: Job? = null
 
     init {
         onEvent(event = HelpEvent.LoadFaq)
@@ -51,7 +53,7 @@ class HelpViewModel(
 
     private fun loadFaq() {
         startOperation(action = "loadFaq")
-        generalJob = generalJob.restart {
+        observeJob = observeJob.restart {
             getFaqUseCase.invoke()
                 .flowOn(context = dispatchers.io)
                 .onStart { screenState.setLoading() }

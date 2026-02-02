@@ -23,6 +23,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -55,6 +56,7 @@ class SettingsViewModel(
     firebaseController = firebaseController,
     screenName = "Settings",
 ) {
+    private var observeJob: Job? = null
 
     override fun handleEvent(event: SettingsEvent) {
         when (event) {
@@ -67,7 +69,7 @@ class SettingsViewModel(
             action = Actions.LOAD_SETTINGS,
             extra = mapOf(ExtraKeys.CONTEXT to context::class.java.name)
         )
-        generalJob = generalJob.restart {
+        observeJob = observeJob.restart {
             flow {
                 val config = withContext(dispatchers.io) {
                     settingsProvider.provideSettingsConfig(context = context)

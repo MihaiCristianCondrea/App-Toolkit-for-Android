@@ -31,6 +31,7 @@ class OnboardingViewModel(
     screenName = "Onboarding",
 ) {
 
+    private var observerJob: Job? = null
     private var completeJob: Job? = null
     private var consentJob: Job? = null
 
@@ -51,7 +52,7 @@ class OnboardingViewModel(
 
     private fun observeCompletion() {
         startOperation(action = Actions.OBSERVE_COMPLETION)
-        generalJob = generalJob.restart {
+        observerJob = observerJob.restart {
             observeOnboardingCompletionUseCase.invoke()
                 .flowOn(dispatchers.io)
                 .onEach { completed ->

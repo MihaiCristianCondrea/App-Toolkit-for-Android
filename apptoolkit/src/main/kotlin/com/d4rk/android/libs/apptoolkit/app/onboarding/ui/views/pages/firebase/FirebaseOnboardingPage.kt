@@ -128,29 +128,31 @@ fun FirebaseOnboardingPage() {
             onDismissRequest = {
                 onboardingViewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
             },
-            onApplyConsents = { analyticsStorage, adStorage, adUserData, adPersonalization ->
-                diagnosticsViewModel.onEvent(
-                    UsageAndDiagnosticsEvent.SetAnalyticsConsent(
-                        analyticsStorage
-                    )
-                )
-                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(adStorage))
-                diagnosticsViewModel.onEvent(
-                    UsageAndDiagnosticsEvent.SetAdUserDataConsent(
-                        adUserData
-                    )
-                )
+            onAllowAll = {
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAnalyticsConsent(true))
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(true))
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdUserDataConsent(true))
                 diagnosticsViewModel.onEvent(
                     UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(
-                        adPersonalization
+                        true
                     )
                 )
-                val shouldEnableUsage: Boolean = analyticsStorage
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(true))
+                onboardingViewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
+            },
+            onAllowEssentials = {
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAnalyticsConsent(true))
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(true))
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetAdUserDataConsent(false))
                 diagnosticsViewModel.onEvent(
-                    UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(
-                        shouldEnableUsage
+                    UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(
+                        false
                     )
                 )
+                diagnosticsViewModel.onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(true))
+                onboardingViewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
+            },
+            onConfirmSelection = {
                 onboardingViewModel.onEvent(OnboardingEvent.HideCrashlyticsDialog)
             },
 
