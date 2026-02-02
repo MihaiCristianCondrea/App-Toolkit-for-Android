@@ -78,6 +78,13 @@ class UsageAndDiagnosticsViewModel(
                     }
                 }
                 .onEach { settings: UsageAndDiagnosticsSettings ->
+                    val consentSettings = ConsentSettings(
+                        usageAndDiagnostics = settings.usageAndDiagnostics,
+                        analyticsConsent = settings.analyticsConsent,
+                        adStorageConsent = settings.adStorageConsent,
+                        adUserDataConsent = settings.adUserDataConsent,
+                        adPersonalizationConsent = settings.adPersonalizationConsent,
+                    )
                     updateStateThreadSafe {
                         val updated = UsageAndDiagnosticsUiState(
                             usageAndDiagnostics = settings.usageAndDiagnostics,
@@ -88,8 +95,8 @@ class UsageAndDiagnosticsViewModel(
                         )
 
                         screenState.setSuccess(data = updated)
-                        applyConsentSettings(settings)
                     }
+                    applyConsentSettingsUseCase(consentSettings)
                 }
                 .catchReport(action = Actions.OBSERVE_CONSENTS) {
                     updateStateThreadSafe {
