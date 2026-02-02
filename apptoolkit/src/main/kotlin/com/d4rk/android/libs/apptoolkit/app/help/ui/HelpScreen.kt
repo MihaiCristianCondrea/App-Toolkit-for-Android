@@ -121,8 +121,7 @@ fun HelpScreen(
                 visible = true,
                 expanded = isFabExtended.value,
                 onClick = {
-                    val host = reviewHost
-                    if (host != null) {
+                    reviewHost?.let { host ->
                         viewModel.onEvent(HelpEvent.RequestReview(host = host))
                     }
                 },
@@ -140,7 +139,7 @@ fun HelpScreen(
                     } else {
                         Icons.AutoMirrored.Outlined.ContactSupport
                     }
-                    Icon(icon, contentDescription = null)
+                    Icon(imageVector = icon, contentDescription = null)
                 }
             )
         }

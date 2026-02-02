@@ -59,9 +59,8 @@ class MainActivity : AppCompatActivity() {
             coroutineScope {
                 val adsInitialization =
                     async(dispatchers.default) { MobileAds.initialize(this@MainActivity) {} }
-                val consentInitialization = async(dispatchers.io) {
-                    applyInitialConsentUseCase.invoke()
-                }
+                val consentInitialization =
+                    async(dispatchers.io) { applyInitialConsentUseCase.invoke() }
                 awaitAll(adsInitialization, consentInitialization)
             }
         }
@@ -69,9 +68,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleStartup() {
         lifecycleScope.launch {
-            val isFirstLaunch: Boolean = withContext(dispatchers.io) {
-                dataStore.startup.first()
-            }
+            val isFirstLaunch: Boolean =
+                withContext(context = dispatchers.io) { dataStore.startup.first() }
             keepSplashVisible = false
             if (isFirstLaunch) {
                 startStartupActivity()
@@ -106,16 +104,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleGmsEvents() {
-        val consentHost = gmsHostFactory.createConsentHost(activity = this)
-        viewModel.onEvent(MainEvent.RequestConsent(host = consentHost))
-
-        val reviewHost = gmsHostFactory.createReviewHost(activity = this)
-        viewModel.onEvent(MainEvent.RequestReview(host = reviewHost))
-
-        val updateHost = gmsHostFactory.createUpdateHost(
-            activity = this,
-            launcher = updateResultLauncher,
+        viewModel.onEvent(
+            event = MainEvent.RequestConsent(
+                host = gmsHostFactory.createConsentHost(
+                    activity = this
+                )
+            )
         )
-        viewModel.onEvent(MainEvent.RequestInAppUpdate(host = updateHost))
+        viewModel.onEvent(
+            event = MainEvent.RequestReview(
+                host = gmsHostFactory.createReviewHost(
+                    activity = this
+                )
+            )
+        )
+        viewModel.onEvent(
+            event = MainEvent.RequestInAppUpdate(
+                host = gmsHostFactory.createUpdateHost(
+                    activity = this,
+                    launcher = updateResultLauncher
+                )
+            )
+        )
     }
 }

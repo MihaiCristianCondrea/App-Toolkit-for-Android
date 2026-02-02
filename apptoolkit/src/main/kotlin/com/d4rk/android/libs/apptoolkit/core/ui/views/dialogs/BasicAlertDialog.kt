@@ -42,9 +42,9 @@ fun BasicAlertDialog(
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
     AlertDialog(onDismissRequest = onDismiss, icon = {
-        if (icon != null) {
+        icon?.let { vector ->
             Icon(
-                imageVector = icon,
+                imageVector = vector,
                 contentDescription = null,
                 tint = iconTint ?: LocalContentColor.current
             )

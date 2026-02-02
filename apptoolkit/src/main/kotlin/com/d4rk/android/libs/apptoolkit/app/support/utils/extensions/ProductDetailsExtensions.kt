@@ -7,12 +7,12 @@ internal fun ProductDetails.primaryOneTimePurchaseOffer(): ProductDetails.OneTim
     val offerList = runCatching { oneTimePurchaseOfferDetailsList }
         .getOrNull()
         ?.takeIf { it.isNotEmpty() }
-    if (offerList != null) {
-        return offerList.firstOrNull()
+
+    offerList?.let { details ->
+        return details.firstOrNull()
     }
 
-    return runCatching { oneTimePurchaseOfferDetails }
-        .getOrNull()
+    return runCatching { oneTimePurchaseOfferDetails }.getOrNull()
 }
 
 /**
