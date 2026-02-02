@@ -99,6 +99,8 @@
     <string name="follow_system">Urmărește setările sistemului</string>
     <string name="light_mode">Mod luminos</string>
     <string name="dark_mode">Mod întunecat</string>
+    <string name="color_palette">Paletă de culori</string>
+    <string name="theme_mode">Mod temă</string>
     <string name="summary_dark_theme">Tema întunecată folosește un fundal profund pentru a -ți extinde semnificativ durata de viață a bateriei. Pentru a -l activa, pur și simplu navigați la managerul de sistem Android și selectați tema preferată în</string>
     <string name="screen_and_display_settings">Setări de ecran și afișare.</string>
 

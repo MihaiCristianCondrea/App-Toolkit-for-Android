@@ -99,6 +99,8 @@
     <string name="follow_system">ตามการตั้งค่าระบบ</string>
     <string name="light_mode">โหมดสว่าง</string>
     <string name="dark_mode">โหมดมืด</string>
+    <string name="color_palette">พาเลตสี</string>
+    <string name="theme_mode">โหมดธีม</string>
     <string name="summary_dark_theme">ธีมมืดใช้ประโยชน์จากพื้นหลังลึกเพื่อยืดอายุการใช้งานแบตเตอรี่ของคุณอย่างมีนัยสำคัญ ในการเปิดใช้งานเพียงแค่นำทางไปยังตัวจัดการระบบของ Android และเลือกธีมที่คุณต้องการใน</string>
     <string name="screen_and_display_settings">การตั้งค่าหน้าจอและการแสดงผล</string>
 

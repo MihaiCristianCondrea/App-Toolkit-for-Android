@@ -99,6 +99,8 @@
     <string name="follow_system">Podążaj za ustawieniami systemu</string>
     <string name="light_mode">Tryb jasny</string>
     <string name="dark_mode">Tryb ciemny</string>
+    <string name="color_palette">Paleta kolorów</string>
+    <string name="theme_mode">Tryb motywu</string>
     <string name="summary_dark_theme">Mroczny motyw wykorzystuje głębokie tło, aby znacznie wydłużyć żywotność baterii. Aby go aktywować, po prostu przejdź do menedżera systemu Androida i wybierz preferowany motyw w</string>
     <string name="screen_and_display_settings">Ustawienia ekranu i wyświetlania.</string>
 

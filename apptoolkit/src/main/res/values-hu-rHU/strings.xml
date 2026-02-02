@@ -99,6 +99,8 @@
     <string name="follow_system">Rendszerbeállítás követése</string>
     <string name="light_mode">Világos mód</string>
     <string name="dark_mode">Sötét mód</string>
+    <string name="color_palette">Színpaletta</string>
+    <string name="theme_mode">Téma mód</string>
     <string name="summary_dark_theme">A sötét téma mély hátteret használ ki, hogy jelentősen meghosszabbítsa az akkumulátor élettartamát. Az aktiváláshoz egyszerűen keresse meg az Android Rendszerkezelőjét, és válassza ki a kívánt témát</string>
     <string name="screen_and_display_settings">képernyő és megjelenítés a beállítások.</string>
 

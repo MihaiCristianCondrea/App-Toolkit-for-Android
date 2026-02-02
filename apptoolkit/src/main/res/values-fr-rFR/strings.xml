@@ -99,6 +99,8 @@
     <string name="follow_system">Suivre le mode système</string>
     <string name="light_mode">Mode clair</string>
     <string name="dark_mode">Mode sombre</string>
+    <string name="color_palette">Palette de couleurs</string>
+    <string name="theme_mode">Mode du thème</string>
     <string name="summary_dark_theme">Le thème sombre exploite un fond profond pour étendre considérablement la durée de vie de votre batterie. Pour l\'activer, accédez simplement au gestionnaire de systèmes de votre Android et sélectionnez votre thème préféré dans</string>
     <string name="screen_and_display_settings">Paramètres d\'écran et d\'affichage.</string>
 

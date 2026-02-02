@@ -99,6 +99,8 @@
     <string name="follow_system">시스템 모드 따르기</string>
     <string name="light_mode">라이트 모드</string>
     <string name="dark_mode">다크 모드</string>
+    <string name="color_palette">색상 팔레트</string>
+    <string name="theme_mode">테마 모드</string>
     <string name="summary_dark_theme">다크 테마는 깊은 배경을 활용하여 배터리 수명을 크게 연장합니다. 활성화하려면 Android의 시스템 관리자로 이동하여 선호하는 테마를 선택하십시오.</string>
     <string name="screen_and_display_settings">화면 및 디스플레이 설정.</string>
 

@@ -99,6 +99,8 @@
     <string name="follow_system">Следовать за системой</string>
     <string name="light_mode">Светлый режим</string>
     <string name="dark_mode">Тёмный режим</string>
+    <string name="color_palette">Цветовая палитра</string>
+    <string name="theme_mode">Режим темы</string>
     <string name="summary_dark_theme">Темная тема использует глубокий фон, чтобы значительно продлить срок службы батареи. Чтобы активировать его, просто перейдите к системному менеджеру Android и выберите свою предпочтительную тему в</string>
     <string name="screen_and_display_settings">Настройки экрана и отображения.</string>
 

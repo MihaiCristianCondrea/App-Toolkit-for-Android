@@ -101,6 +101,8 @@
     <string name="follow_system">Follow system mode</string>
     <string name="light_mode">Light mode</string>
     <string name="dark_mode">Dark mode</string>
+    <string name="color_palette">Color palette</string>
+    <string name="theme_mode">Theme mode</string>
     <string name="summary_dark_theme">Dark theme leverages a deep background to significantly extend your battery life. To activate it, simply navigate to your Android\'s system manager and select your preferred theme in</string>
     <string name="screen_and_display_settings">screen and display settings.</string>
 

@@ -99,6 +99,8 @@
     <string name="follow_system">システムモードに従う</string>
     <string name="light_mode">ライトモード</string>
     <string name="dark_mode">ダークモード</string>
+    <string name="color_palette">カラーパレット</string>
+    <string name="theme_mode">テーマモード</string>
     <string name="summary_dark_theme">暗いテーマは、バッテリー寿命を大幅に延長するために深い背景を活用します。それをアクティブにするには、Androidのシステムマネージャーに移動して、希望するテーマを選択してください</string>
     <string name="screen_and_display_settings">画面と表示設定。</string>
 
