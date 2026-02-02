@@ -36,8 +36,7 @@ class MainActivity : AppCompatActivity() {
     private val dispatchers: DispatcherProvider by inject()
     private val viewModel: MainViewModel by viewModel()
     private val applyInitialConsentUseCase: ApplyInitialConsentUseCase by inject()
-    private var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
-        registerForActivityResult(contract = ActivityResultContracts.StartIntentSenderForResult()) {}
+    private lateinit var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest>
     private var keepSplashVisible: Boolean = true
     private val consentHost: ConsentHost = object : ConsentHost {
         override val activity = this@MainActivity
@@ -45,13 +44,18 @@ class MainActivity : AppCompatActivity() {
     private val reviewHost: ReviewHost = object : ReviewHost {
         override val activity = this@MainActivity
     }
-    private val updateHost: InAppUpdateHost = object : InAppUpdateHost {
-        override val activity = this@MainActivity
-        override val updateResultLauncher = updateResultLauncher
-    }
+    private lateinit var updateHost: InAppUpdateHost
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        updateResultLauncher =
+            registerForActivityResult(
+                contract = ActivityResultContracts.StartIntentSenderForResult()
+            ) {}
+        updateHost = object : InAppUpdateHost {
+            override val activity = this@MainActivity
+            override val updateResultLauncher = updateResultLauncher
+        }
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { keepSplashVisible }
         enableEdgeToEdge()
