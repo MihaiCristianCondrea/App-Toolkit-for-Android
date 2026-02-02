@@ -7,7 +7,7 @@ import android.content.Context
 import android.os.Build
 import android.os.PersistableBundle
 import android.util.Log
-import com.d4rk.android.libs.apptoolkit.core.logging.CLIPBOARD_HELPER_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.CLIPBOARD_HELPER_LOG_TAG
 
 /**
  * Copies [text] to the clipboard.

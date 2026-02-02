@@ -26,7 +26,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.RandomAppHandler
-import com.d4rk.android.apps.apptoolkit.core.logging.APPS_LIST_LOG_TAG
+import com.d4rk.android.apps.apptoolkit.core.utils.constants.logging.APPS_LIST_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen

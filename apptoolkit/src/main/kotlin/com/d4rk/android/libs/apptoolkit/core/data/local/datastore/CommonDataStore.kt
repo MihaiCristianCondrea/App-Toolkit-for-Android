@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.data.local.datastore
+package com.d4rk.android.libs.apptoolkit.core.data.local.datastore
 
 import android.content.Context
 import androidx.compose.runtime.mutableStateOf

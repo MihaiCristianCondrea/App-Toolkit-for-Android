@@ -1,7 +1,7 @@
 package com.d4rk.android.libs.apptoolkit.core.services.firebase.notifications
 
 import android.util.Log
-import com.d4rk.android.libs.apptoolkit.core.logging.FCM_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.FCM_LOG_TAG
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 

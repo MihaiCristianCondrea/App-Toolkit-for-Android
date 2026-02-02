@@ -1,4 +1,4 @@
-package com.d4rk.android.apps.apptoolkit.app.main.ui
+package com.d4rk.android.libs.apptoolkit.app.main.ui.factory
 
 import android.app.Activity
 import androidx.activity.result.ActivityResultLauncher

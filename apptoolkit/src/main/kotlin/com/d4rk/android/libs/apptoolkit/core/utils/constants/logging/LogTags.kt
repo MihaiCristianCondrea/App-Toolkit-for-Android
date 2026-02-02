@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.logging
+package com.d4rk.android.libs.apptoolkit.core.utils.constants.logging
 
 const val STARTUP_LOG_TAG: String = "StartupActivity"
 const val DISPLAY_SETTINGS_LOG_TAG: String = "DisplaySettings"

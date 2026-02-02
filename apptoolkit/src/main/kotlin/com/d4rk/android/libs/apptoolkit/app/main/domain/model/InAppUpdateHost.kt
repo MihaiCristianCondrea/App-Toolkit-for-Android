@@ -1,8 +1,8 @@
 package com.d4rk.android.libs.apptoolkit.app.main.domain.model
 
+import android.app.Activity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
-import android.app.Activity
 
 /**
  * Host abstraction for in-app update flows.

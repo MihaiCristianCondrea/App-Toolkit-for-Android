@@ -51,7 +51,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
 import com.d4rk.android.apps.apptoolkit.app.main.utils.defaults.MainNavigationDefaults
 import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
-import com.d4rk.android.apps.apptoolkit.core.logging.FAB_LOG_TAG
+import com.d4rk.android.apps.apptoolkit.core.utils.constants.logging.FAB_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.dialogs.ChangelogDialog
@@ -59,6 +59,7 @@ import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.BottomNavig
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.HideOnScrollBottomBar
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.LeftNavigationRail
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.MainTopAppBar
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.startupDestinationFlow
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
@@ -68,7 +69,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.BottomAppBarNativeAdBa
 import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
-import com.d4rk.android.libs.apptoolkit.data.local.datastore.startupDestinationFlow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged

@@ -3,8 +3,8 @@ package com.d4rk.android.libs.apptoolkit.app.main.data.repository
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateHost
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateResult
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.InAppUpdateRepository
-import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.coroutines.channels.awaitClose

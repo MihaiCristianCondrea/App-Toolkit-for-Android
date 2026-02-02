@@ -9,11 +9,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainAction
+import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
-import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateHost
+import com.d4rk.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
@@ -36,9 +36,7 @@ class MainActivity : AppCompatActivity() {
     private val applyInitialConsentUseCase: ApplyInitialConsentUseCase by inject()
     private val gmsHostFactory: GmsHostFactory by inject()
     private var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
-        registerForActivityResult(
-            contract = ActivityResultContracts.StartIntentSenderForResult()
-        ) {}
+        registerForActivityResult(contract = ActivityResultContracts.StartIntentSenderForResult()) {}
     private var keepSplashVisible: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 val adsInitialization =
                     async(dispatchers.default) { MobileAds.initialize(this@MainActivity) {} }
                 val consentInitialization = async(dispatchers.io) {
-                    applyInitialConsentUseCase()
+                    applyInitialConsentUseCase.invoke()
                 }
                 awaitAll(adsInitialization, consentInitialization)
             }

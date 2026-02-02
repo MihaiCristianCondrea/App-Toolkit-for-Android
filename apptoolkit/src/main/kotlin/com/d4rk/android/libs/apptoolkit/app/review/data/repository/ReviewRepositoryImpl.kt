@@ -2,9 +2,9 @@ package com.d4rk.android.libs.apptoolkit.app.review.data.repository
 
 import android.app.Activity
 import com.d4rk.android.libs.apptoolkit.app.review.domain.repository.ReviewRepository
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.hasPlayStore
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.isInstalledFromPlayStore
-import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await

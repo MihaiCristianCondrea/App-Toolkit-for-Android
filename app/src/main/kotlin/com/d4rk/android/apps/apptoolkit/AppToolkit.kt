@@ -13,12 +13,12 @@ import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppThemeConfig
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider
+import com.d4rk.android.libs.apptoolkit.core.BaseCoreManager
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.data.remote.ads.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isHalloweenSeason
-import com.d4rk.android.libs.apptoolkit.data.core.BaseCoreManager
-import com.d4rk.android.libs.apptoolkit.data.core.ads.AdsCoreManager
-import com.d4rk.android.libs.apptoolkit.data.local.datastore.CommonDataStore
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first

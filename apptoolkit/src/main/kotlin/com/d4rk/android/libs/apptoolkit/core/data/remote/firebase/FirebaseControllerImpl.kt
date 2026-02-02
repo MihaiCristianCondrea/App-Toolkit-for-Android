@@ -1,4 +1,4 @@
-package com.d4rk.android.libs.apptoolkit.core.data.firebase
+package com.d4rk.android.libs.apptoolkit.core.data.remote.firebase
 
 import android.os.Bundle
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
