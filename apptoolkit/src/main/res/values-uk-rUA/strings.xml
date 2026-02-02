@@ -99,6 +99,8 @@
     <string name="follow_system">Дотримуватися системного режиму</string>
     <string name="light_mode">Світла тема</string>
     <string name="dark_mode">Темна тема</string>
+    <string name="color_palette">Палітра кольорів</string>
+    <string name="theme_mode">Режим теми</string>
     <string name="summary_dark_theme">Темна тема використовує глибокий фон, щоб значно продовжити час роботи акумулятора. Щоб активувати його, просто перейдіть до системного менеджера Android та виберіть бажану тему в</string>
     <string name="screen_and_display_settings">Налаштування екрана та відображення.</string>
 

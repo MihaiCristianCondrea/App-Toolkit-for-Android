@@ -99,6 +99,8 @@
     <string name="follow_system">اتباع وضع النظام</string>
     <string name="light_mode">الوضع الفاتح</string>
     <string name="dark_mode">الوضع الداكن</string>
+    <string name="color_palette">لوحة الألوان</string>
+    <string name="theme_mode">وضع المظهر</string>
     <string name="summary_dark_theme">ﻲﻓ ﻚﻳﺪﻟ ﺔﻠﻀﻔﻤﻟﺍ ﺔﻤﺴﻟﺍ ﺩﺪﺣﻭ Android ﻡﺎﻈﻧ ﺮﻳﺪﻣ ﻰﻟﺇ ﻝﺎﻘﺘﻧﻻﺍ ﻯﻮﺳ ﻚﻴﻠﻋ ﺎﻣ ، ﻪﻠﻴﻌﻔﺘﻟ</string>
     <string name="screen_and_display_settings">.ﺽﺮﻌﻟﺍﻭ ﺔﺷﺎﺸﻟﺍ ﺕﺍﺩﺍﺪﻋﺇ</string>
 

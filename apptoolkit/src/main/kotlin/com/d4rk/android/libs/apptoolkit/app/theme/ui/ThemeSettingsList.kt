@@ -25,6 +25,8 @@ import androidx.compose.material.icons.filled.Contrast
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -41,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.DarkModePreview
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.LightModePreview
@@ -236,6 +239,19 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                 )
             }
 
+            item {
+                HorizontalDivider(modifier = Modifier.padding(all = SizeConstants.SmallSize))
+            }
+
+            item {
+                Text(
+                    modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+                    text = stringResource(id = R.string.color_palette),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
+
             if (supportsDynamic) {
                 item {
                     SingleChoiceSegmentedButtonRow(
@@ -404,6 +420,19 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                         }
                     }
                 }
+            }
+
+            item {
+                HorizontalDivider(modifier = Modifier.padding(all = SizeConstants.SmallSize))
+            }
+
+            item {
+                Text(
+                    modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+                    text = stringResource(id = R.string.theme_mode),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold,
+                )
             }
 
             item {

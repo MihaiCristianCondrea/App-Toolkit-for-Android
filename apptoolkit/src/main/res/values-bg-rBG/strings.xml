@@ -99,6 +99,8 @@
     <string name="follow_system">Следвай системния режим</string>
     <string name="light_mode">Светъл режим</string>
     <string name="dark_mode">Тъмен режим</string>
+    <string name="color_palette">Цветова палитра</string>
+    <string name="theme_mode">Режим на тема</string>
     <string name="summary_dark_theme">Тъмната тема използва дълбок фон, за да удължи значително живота на батерията ви. За да го активирате, просто отидете до системния мениджър на вашия Android и изберете предпочитаната от вас тема в</string>
     <string name="screen_and_display_settings">Настройки на екрана и дисплея.</string>
 

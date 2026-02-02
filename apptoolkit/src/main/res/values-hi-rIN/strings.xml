@@ -99,6 +99,8 @@
     <string name="follow_system">सिस्टम मोड का अनुसरण करें</string>
     <string name="light_mode">लाइट मोड</string>
     <string name="dark_mode">डार्क मोड</string>
+    <string name="color_palette">रंग पैलेट</string>
+    <string name="theme_mode">थीम मोड</string>
     <string name="summary_dark_theme">डार्क थीम एक गहरी पृष्ठभूमि का लाभ उठाती है ताकि आपके बैटरी जीवन को महत्वपूर्ण रूप से बढ़ाया जा सके। इसे सक्रिय करने के लिए, बस अपने Android के सिस्टम मैनेजर पर नेविगेट करें और अपने पसंदीदा विषय का चयन करें</string>
     <string name="screen_and_display_settings">स्क्रीन और प्रदर्शन सेटिंग्स।</string>
 

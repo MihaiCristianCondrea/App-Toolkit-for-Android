@@ -99,6 +99,8 @@
     <string name="follow_system">Segui modalità sistema</string>
     <string name="light_mode">Modalità chiara</string>
     <string name="dark_mode">Modalità scura</string>
+    <string name="color_palette">Palette colori</string>
+    <string name="theme_mode">Modalità tema</string>
     <string name="summary_dark_theme">Il tema oscuro sfrutta uno sfondo profondo per prolungare significativamente la durata della batteria. Per attivarlo, basta passare al gestore di sistemi del tuo Android e selezionare il tema preferito in</string>
     <string name="screen_and_display_settings">Impostazioni di schermata e visualizzazione.</string>
 

@@ -99,6 +99,8 @@
     <string name="follow_system">Seguir o sistema</string>
     <string name="light_mode">Modo claro</string>
     <string name="dark_mode">Modo escuro</string>
+    <string name="color_palette">Paleta de cores</string>
+    <string name="theme_mode">Modo de tema</string>
     <string name="summary_dark_theme">O tema escuro aproveita um fundo profundo para estender significativamente a vida útil da bateria. Para ativá -lo, simplesmente navegue para o gerente de sistema do seu Android e selecione seu tema preferido em</string>
     <string name="screen_and_display_settings">Configurações de tela e exibição.</string>
 

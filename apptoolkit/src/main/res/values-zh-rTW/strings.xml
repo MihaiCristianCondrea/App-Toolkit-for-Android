@@ -99,6 +99,8 @@
     <string name="follow_system">跟隨系統模式</string>
     <string name="light_mode">淺色模式</string>
     <string name="dark_mode">深色模式</string>
+    <string name="color_palette">色彩調色盤</string>
+    <string name="theme_mode">主題模式</string>
     <string name="summary_dark_theme">深色主題利用深厚的背景來顯著延長電池壽命。要激活它，只需導航到您的Android系統管理器，然後在</string>
     <string name="screen_and_display_settings">屏幕和顯示設置。</string>
 

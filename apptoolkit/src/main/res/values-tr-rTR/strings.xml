@@ -99,6 +99,8 @@
     <string name="follow_system">Sistem modunu takip et</string>
     <string name="light_mode">Aydınlık mod</string>
     <string name="dark_mode">Koyu mod</string>
+    <string name="color_palette">Renk paleti</string>
+    <string name="theme_mode">Tema modu</string>
     <string name="summary_dark_theme">Karanlık tema, pil ömrünüzü önemli ölçüde uzatmak için derin bir arka plandan yararlanır. Etkinleştirmek için, Android\'in sistem yöneticisine gidin ve tercih ettiğiniz temayı seçin</string>
     <string name="screen_and_display_settings">Ekran ve görüntüleme ayarları.</string>
 
