@@ -199,6 +199,19 @@ When you receive a `DataState`, handle it using the provided extension functions
 * Use `onFailure { ... }` for error UI.
 * Use `onLoading { ... }` only when you need to reflect loading state during active emission.
 
+---
+
+## Rule 6: Use `launchReport` for one-off, non-Flow work
+
+When a ViewModel needs to trigger a one-off operation that is not modeled as a `Flow`, use
+`launchReport` instead of ad-hoc `viewModelScope.launch` + `runCatching`.
+
+This keeps Firebase breadcrumbs, analytics, and error reporting consistent while ensuring errors
+are handled in one place.
+
+* Use `launchReport` for fire-and-forget work (e.g., billing launch, toggles without a `Flow`).
+* Reserve `viewModelScope.launch` for local UI state updates only.
+
 ### Example
 
 ```kotlin
