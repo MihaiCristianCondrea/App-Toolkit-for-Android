@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
-import org.mockito.kotlin.mock
+import io.mockk.mockk
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HelpViewModelTest {
@@ -39,7 +39,7 @@ class HelpViewModelTest {
 
     @BeforeEach
     fun setup() {
-        reviewUseCase = mock()
+        reviewUseCase = mockk(relaxed = true)
     }
 
     @Test

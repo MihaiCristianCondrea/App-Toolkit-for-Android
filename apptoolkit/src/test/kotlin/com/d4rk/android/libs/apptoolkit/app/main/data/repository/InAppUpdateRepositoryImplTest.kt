@@ -5,7 +5,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateHost
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateResult
-import com.google.android.gms.tasks.Tasks
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -45,7 +47,7 @@ class InAppUpdateRepositoryImplTest {
         val info = mockk<AppUpdateInfo>()
         mockkStatic(AppUpdateManagerFactory::class)
         every { AppUpdateManagerFactory.create(activity) } returns manager
-        every { manager.appUpdateInfo } returns Tasks.forResult(info)
+        every { manager.appUpdateInfo } returns successTask(info)
         every { info.updateAvailability() } returns UpdateAvailability.UPDATE_AVAILABLE
         every { info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) } returns true
         every {
@@ -69,7 +71,7 @@ class InAppUpdateRepositoryImplTest {
         val info = mockk<AppUpdateInfo>()
         mockkStatic(AppUpdateManagerFactory::class)
         every { AppUpdateManagerFactory.create(activity) } returns manager
-        every { manager.appUpdateInfo } returns Tasks.forResult(info)
+        every { manager.appUpdateInfo } returns successTask(info)
         every { info.updateAvailability() } returns UpdateAvailability.UPDATE_AVAILABLE
         every { info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) } returns false
 
@@ -90,7 +92,7 @@ class InAppUpdateRepositoryImplTest {
         val info = mockk<AppUpdateInfo>()
         mockkStatic(AppUpdateManagerFactory::class)
         every { AppUpdateManagerFactory.create(activity) } returns manager
-        every { manager.appUpdateInfo } returns Tasks.forResult(info)
+        every { manager.appUpdateInfo } returns successTask(info)
         every { info.updateAvailability() } returns UpdateAvailability.UPDATE_NOT_AVAILABLE
         every { info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) } returns true
 
@@ -110,10 +112,30 @@ class InAppUpdateRepositoryImplTest {
         val manager = mockk<AppUpdateManager>()
         mockkStatic(AppUpdateManagerFactory::class)
         every { AppUpdateManagerFactory.create(activity) } returns manager
-        every { manager.appUpdateInfo } returns Tasks.forException(Exception("boom"))
+        every { manager.appUpdateInfo } returns failureTask(Exception("boom"))
 
         val result = repository.requestUpdate(host = host).first()
 
         assertEquals(InAppUpdateResult.Failed, result)
+    }
+
+    private fun <T> successTask(result: T): Task<T> {
+        val task = mockk<Task<T>>(relaxed = true)
+        every { task.addOnSuccessListener(any()) } answers {
+            firstArg<OnSuccessListener<T>>().onSuccess(result)
+            task
+        }
+        every { task.addOnFailureListener(any()) } returns task
+        return task
+    }
+
+    private fun <T> failureTask(exception: Exception): Task<T> {
+        val task = mockk<Task<T>>(relaxed = true)
+        every { task.addOnSuccessListener(any()) } returns task
+        every { task.addOnFailureListener(any()) } answers {
+            firstArg<OnFailureListener>().onFailure(exception)
+            task
+        }
+        return task
     }
 }
