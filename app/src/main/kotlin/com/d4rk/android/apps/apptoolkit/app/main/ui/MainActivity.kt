@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
-import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateHost
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
@@ -36,18 +35,14 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModel()
     private val applyInitialConsentUseCase: ApplyInitialConsentUseCase by inject()
     private val gmsHostFactory: GmsHostFactory by inject()
-    private lateinit var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest>
+    private var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
+        registerForActivityResult(
+            contract = ActivityResultContracts.StartIntentSenderForResult()
+        ) {}
     private var keepSplashVisible: Boolean = true
-    private val consentHost: ConsentHost = object : ConsentHost {
-        override val activity = this@MainActivity
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateResultLauncher =
-            registerForActivityResult(
-                contract = ActivityResultContracts.StartIntentSenderForResult()
-            ) {}
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { keepSplashVisible }
         enableEdgeToEdge()
@@ -59,7 +54,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         handleGmsEvents()
-        checkUserConsent()
     }
 
     private fun initializeDependencies() {
@@ -102,10 +96,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkUserConsent() {
-        viewModel.onEvent(MainEvent.RequestConsent(host = consentHost))
-    }
-
     private fun observeActions() {
         lifecycleScope.launch {
             viewModel.actionEvent.collect { action ->
@@ -118,6 +108,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleGmsEvents() {
+        val consentHost = gmsHostFactory.createConsentHost(activity = this)
+        viewModel.onEvent(MainEvent.RequestConsent(host = consentHost))
+
         val reviewHost = gmsHostFactory.createReviewHost(activity = this)
         viewModel.onEvent(MainEvent.RequestReview(host = reviewHost))
 
