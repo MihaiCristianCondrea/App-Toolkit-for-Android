@@ -8,6 +8,9 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
+import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
+import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
+import com.d4rk.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
@@ -31,10 +34,12 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val getNavigationDrawerItemsUseCase: GetNavigationDrawerItemsUseCase,
     private val requestConsentUseCase: RequestConsentUseCase,
+    private val requestInAppReviewUseCase: RequestInAppReviewUseCase,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<MainUiState, MainEvent, MainAction>(
@@ -45,6 +50,7 @@ class MainViewModel(
 
     private var navigationJob: Job? = null
     private var consentJob: Job? = null
+    private var reviewJob: Job? = null
 
     init {
         onEvent(MainEvent.LoadNavigation)
@@ -54,6 +60,7 @@ class MainViewModel(
         when (event) {
             is MainEvent.LoadNavigation -> loadNavigationItems()
             is MainEvent.RequestConsent -> requestConsent(host = event.host)
+            is MainEvent.RequestReview -> requestReview(host = event.host)
         }
     }
 
@@ -147,9 +154,32 @@ class MainViewModel(
         }
     }
 
+    private fun requestReview(host: ReviewHost) {
+        startOperation(
+            action = Actions.REQUEST_REVIEW,
+            extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
+        )
+        reviewJob = reviewJob.restart {
+            launchReport(
+                action = Actions.REQUEST_REVIEW,
+                extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name),
+                block = {
+                    val outcome = withContext(dispatchers.io) {
+                        requestInAppReviewUseCase(host = host)
+                    }
+                    sendAction(action = MainAction.ReviewOutcomeReported(outcome = outcome))
+                },
+                onError = {
+                    sendAction(action = MainAction.ReviewOutcomeReported(outcome = ReviewOutcome.Failed))
+                }
+            )
+        }
+    }
+
     private object Actions {
         const val LOAD_NAVIGATION: String = "loadNavigationItems"
         const val REQUEST_CONSENT: String = "requestConsent"
+        const val REQUEST_REVIEW: String = "requestReview"
     }
 
     private object ExtraKeys {

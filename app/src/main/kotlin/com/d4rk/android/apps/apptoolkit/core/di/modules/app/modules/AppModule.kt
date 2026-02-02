@@ -5,6 +5,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.data.repository.MainNavigationR
 import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainViewModel
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
+import com.d4rk.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.developerAppsApiUrl
@@ -22,6 +23,7 @@ val appModule: Module = module {
         MainViewModel(
             getNavigationDrawerItemsUseCase = get(),
             requestConsentUseCase = get(),
+            requestInAppReviewUseCase = get<RequestInAppReviewUseCase>(),
             firebaseController = get(),
             dispatchers = get(),
         )

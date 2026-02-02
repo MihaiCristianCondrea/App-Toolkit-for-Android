@@ -10,18 +10,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
+import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.main.utils.InAppUpdateHelper
+import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
-import com.d4rk.android.libs.apptoolkit.core.utils.platform.ReviewHelper
 import com.google.android.gms.ads.MobileAds
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -43,6 +43,9 @@ class MainActivity : AppCompatActivity() {
     private val consentHost: ConsentHost = object : ConsentHost {
         override val activity = this@MainActivity
     }
+    private val reviewHost: ReviewHost = object : ReviewHost {
+        override val activity = this@MainActivity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         initializeDependencies()
         handleStartup()
+        observeActions()
         checkInAppReview()
     }
 
@@ -104,25 +108,17 @@ class MainActivity : AppCompatActivity() {
         viewModel.onEvent(MainEvent.RequestConsent(host = consentHost))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private fun checkInAppReview() {
+        viewModel.onEvent(MainEvent.RequestReview(host = reviewHost))
+    }
+
+    private fun observeActions() {
         lifecycleScope.launch {
-            val (sessionCount: Int, hasPrompted: Boolean) = coroutineScope {
-                val sessionCountDeferred = async(dispatchers.io) { dataStore.sessionCount.first() }
-                val hasPromptedDeferred =
-                    async(dispatchers.io) { dataStore.hasPromptedReview.first() }
-                awaitAll(sessionCountDeferred, hasPromptedDeferred)
-                sessionCountDeferred.getCompleted() to hasPromptedDeferred.getCompleted()
+            viewModel.actionEvent.collect { action ->
+                when (action) {
+                    is MainAction.ReviewOutcomeReported -> Unit
+                }
             }
-            ReviewHelper.launchInAppReviewIfEligible(
-                activity = this@MainActivity,
-                sessionCount = sessionCount,
-                hasPromptedBefore = hasPrompted,
-                scope = this
-            ) {
-                launch(dispatchers.io) { dataStore.setHasPromptedReview(value = true) }
-            }
-            withContext(dispatchers.io) { dataStore.incrementSessionCount() }
         }
     }
 
