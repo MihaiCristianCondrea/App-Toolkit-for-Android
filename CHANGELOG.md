@@ -1,4 +1,4 @@
-# Version 2.0.1
+# Version 2.0.2:
 
 - **Minor**: Redesigned the consent dialog to make it more user-friendly.
 - **Minor**: Redesigned theme settings with a fresh-new preview for the theme.
@@ -6,9 +6,11 @@
 - **Patch**: Fixed the buttons crashes when no icon is provided.
 - **Patch**: Fixed corner radius for various components.
 - **Patch**: Fixed a bug inside the color settings when the tab pager is not correctly selected.
+
+# Version 2.0.1:
 - **Patch**: Fixed other minor bugs for better overall experience.
 
-# Version 2.0.0
+# Version 2.0.0:
 
 - **New**: Added multiple new themes and color palettes for deeper personalization.
 - **New**: Introduced a seasonal themes to celebrate together Christmas and Halloween.
