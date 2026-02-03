@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.activity.compose.BackHandler
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -77,6 +78,12 @@ fun OnboardingScreen() {
 
     val pagerState: PagerState =
         rememberPagerState(initialPage = uiState.currentTabIndex) { pages.size }
+
+    BackHandler(enabled = pages.isNotEmpty() && pagerState.currentPage > 0) {
+        coroutineScope.launch {
+            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+        }
+    }
 
     LaunchedEffect(pagerState.currentPage) {
         viewModel.onEvent(OnboardingEvent.UpdateCurrentTab(pagerState.currentPage))
