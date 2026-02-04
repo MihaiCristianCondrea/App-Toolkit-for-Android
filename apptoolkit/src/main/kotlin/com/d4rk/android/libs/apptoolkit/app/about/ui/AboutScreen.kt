@@ -152,28 +152,30 @@ fun AboutScreen(
                             SettingsPreferenceItem(
                                 title = stringResource(id = R.string.app_build_version),
                                 summary = "${data.appVersionInfo.versionName.orEmpty()} (${data.appVersionInfo.versionCode})",
-                            ) {
-                                appVersionTotalTapCount += 1
-                                onVersionTap(appVersionTotalTapCount)
-                                appVersionTapCount += 1
-                                if (appVersionTapCount >= 5) {
-                                    appVersionTapCount = 0
-                                    showKonfettiAnimationForThisInstance = true
+                                onClick = {
+                                    appVersionTotalTapCount += 1
+                                    onVersionTap(appVersionTotalTapCount)
+                                    appVersionTapCount += 1
+                                    if (appVersionTapCount >= 5) {
+                                        appVersionTapCount = 0
+                                        showKonfettiAnimationForThisInstance = true
+                                    }
                                 }
-                            }
+                            )
                             ExtraTinyVerticalSpacer()
                             SettingsPreferenceItem(
                                 title = stringResource(id = R.string.oss_license_title),
-                                summary = stringResource(id = R.string.summary_preference_settings_oss)
-                            ) {
-                                val opened = context.openActivity(LicensesActivity::class.java)
-                                if (!opened) {
-                                    Log.w(
-                                        ABOUT_SETTINGS_LOG_TAG,
-                                        "Failed to open licenses screen from About settings"
-                                    )
+                                summary = stringResource(id = R.string.summary_preference_settings_oss),
+                                onClick = {
+                                    val opened = context.openActivity(LicensesActivity::class.java)
+                                    if (!opened) {
+                                        Log.w(
+                                            ABOUT_SETTINGS_LOG_TAG,
+                                            "Failed to open licenses screen from About settings"
+                                        )
+                                    }
                                 }
-                            }
+                            )
                         }
                     }
 
@@ -185,9 +187,13 @@ fun AboutScreen(
                                 .padding(horizontal = SizeConstants.LargeSize)
                                 .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
                         ) {
-                            SettingsPreferenceItem(title = deviceInfo, summary = data.deviceInfo) {
-                                viewModel.onEvent(event = AboutEvent.CopyDeviceInfo(label = deviceInfo))
-                            }
+                            SettingsPreferenceItem(
+                                title = deviceInfo,
+                                summary = data.deviceInfo,
+                                onClick = {
+                                    viewModel.onEvent(event = AboutEvent.CopyDeviceInfo(label = deviceInfo))
+                                }
+                            )
                         }
                     }
                 }

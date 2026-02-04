@@ -179,9 +179,10 @@ fun DisplaySettingsList(
                         title = stringResource(id = R.string.dynamic_colors),
                         summary = stringResource(id = R.string.summary_preference_settings_dynamic_colors),
                         checked = isDynamicColors,
-                    ) { isChecked ->
-                        coroutineScope.launch { dataStore.saveDynamicColors(isChecked = isChecked) }
-                    }
+                        onCheckedChange = { isChecked ->
+                            coroutineScope.launch { dataStore.saveDynamicColors(isChecked = isChecked) }
+                        }
+                    )
                 }
             }
         }
@@ -199,9 +200,10 @@ fun DisplaySettingsList(
                     title = stringResource(id = R.string.bounce_buttons),
                     summary = stringResource(id = R.string.summary_preference_settings_bounce_buttons),
                     checked = bouncyButtons,
-                ) { isChecked ->
-                    coroutineScope.launch { dataStore.saveBouncyButtons(isChecked = isChecked) }
-                }
+                    onCheckedChange = { isChecked ->
+                        coroutineScope.launch { dataStore.saveBouncyButtons(isChecked = isChecked) }
+                    }
+                )
             }
         }
 
@@ -233,9 +235,10 @@ fun DisplaySettingsList(
                         title = stringResource(id = R.string.show_labels_on_bottom_bar),
                         summary = stringResource(id = R.string.summary_preference_settings_show_labels_on_bottom_bar),
                         checked = showLabelsOnBottomBar,
-                    ) { isChecked ->
-                        coroutineScope.launch { dataStore.saveShowLabelsOnBottomBar(isChecked = isChecked) }
-                    }
+                        onCheckedChange = { isChecked ->
+                            coroutineScope.launch { dataStore.saveShowLabelsOnBottomBar(isChecked = isChecked) }
+                        }
+                    )
                 }
             }
         }
