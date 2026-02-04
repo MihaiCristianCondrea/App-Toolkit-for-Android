@@ -16,154 +16,15 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ButtonIconSpacer
 
 /**
- * A custom [IconButton] composable that adds a bounce click effect, sound feedback,
- * and haptic feedback to the standard Material Design icon button.
- *
- * This button displays an icon provided as an [ImageVector].
- * It wraps the `androidx.compose.material3.IconButton` and enhances the user experience
- * on interaction.
- *
- * @param modifier The [Modifier] to be applied to this icon button. Defaults to [Modifier].
- * @param onClick The lambda to be executed when this icon button is clicked.
- * @param enabled Controls the enabled state of the button. When `false`, this button will not
- * be clickable. Defaults to `true`.
- * @param iconContentDescription Text used by accessibility services to describe what the icon
- * represents. This is recommended for usability.
- * @param vectorIcon The [ImageVector] to be displayed inside the button.
- * @param painterIcon The [Painter] to be displayed if an [ImageVector] is not provided.
- * @param feedback The feedback configuration for sound and haptics.
- */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-fun IconButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    enabled: Boolean = true,
-    iconContentDescription: String? = null,
-    vectorIcon: ImageVector? = null,
-    painterIcon: Painter? = null,
-    feedback: ButtonFeedback = ButtonFeedback(),
-) {
-    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
-
-    androidx.compose.material3.IconButton(
-        onClick = {
-            feedback.performClick(view = view, hapticFeedback = hapticFeedback)
-            onClick()
-        },
-        enabled = enabled,
-        modifier = modifier.bounceClick(),
-        shapes = IconButtonDefaults.shapes()
-    ) {
-        IconContent(
-            icon = vectorIcon,
-            painter = painterIcon,
-            contentDescription = iconContentDescription
-        )
-    }
-}
-
-/**
- * An icon button with a filled background, providing a high-emphasis way to trigger an action.
- * This composable is a wrapper around [androidx.compose.material3.FilledIconButton] that
- * adds haptic feedback, a click sound, and a bounce click effect.
- *
- * @param modifier The [Modifier] to be applied to this button.
- * @param onClick Will be called when the user clicks the button.
- * @param enabled Controls the enabled state of the button. When `false`, this button will not
- * be clickable.
- * @param iconContentDescription Text used by accessibility services to describe what the icon
- * represents. This text should be provided if the icon is used for an action, but not if it is
- * purely decorative.
- * @param vectorIcon The icon to be displayed inside the button, as an [ImageVector].
- * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
- * @param feedback The feedback configuration for sound and haptics.
- */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-fun FilledIconButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    enabled: Boolean = true,
-    iconContentDescription: String? = null,
-    vectorIcon: ImageVector? = null,
-    painterIcon: Painter? = null,
-    feedback: ButtonFeedback = ButtonFeedback(),
-) {
-    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
-
-    androidx.compose.material3.FilledIconButton(
-        onClick = {
-            feedback.performClick(view = view, hapticFeedback = hapticFeedback)
-            onClick()
-        },
-        enabled = enabled,
-        modifier = modifier.bounceClick(),
-        shapes = IconButtonDefaults.shapes()
-    ) {
-        IconContent(
-            icon = vectorIcon,
-            painter = painterIcon,
-            contentDescription = iconContentDescription
-        )
-    }
-}
-
-/**
- * A composable that displays a filled tonal icon button. This is a wrapper around Material 3's
- * `FilledTonalIconButton` that adds haptic feedback, a click sound effect, and a bounce animation on click.
- *
- * Tonal icon buttons are a medium-emphasis alternative to standard icon buttons. They use a
- * secondary tonal color for the container.
- *
- * @param modifier The [Modifier] to be applied to this button.
- * @param onClick The lambda to be executed when the button is clicked.
- * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
- * @param iconContentDescription Text used by accessibility services to describe the icon's action.
- * @param vectorIcon The [ImageVector] to be displayed as the icon.
- * @param painterIcon The [Painter] to be displayed if no vector icon is provided.
- * @param feedback The feedback configuration for sound and haptics.
- */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-fun FilledTonalIconButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    enabled: Boolean = true,
-    iconContentDescription: String? = null,
-    vectorIcon: ImageVector? = null,
-    painterIcon: Painter? = null,
-    feedback: ButtonFeedback = ButtonFeedback(),
-) {
-    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
-
-    androidx.compose.material3.FilledTonalIconButton(
-        onClick = {
-            feedback.performClick(view = view, hapticFeedback = hapticFeedback)
-            onClick()
-        },
-        enabled = enabled,
-        modifier = modifier.bounceClick(),
-        shapes = IconButtonDefaults.shapes()
-    ) {
-        IconContent(
-            icon = vectorIcon,
-            painter = painterIcon,
-            contentDescription = iconContentDescription
-        )
-    }
-}
-
-/**
  * A Material Design [Button] that supports text-only, icon+text, or icon-only rendering.
- * When only an icon is provided, this composable falls back to [FilledIconButton].
+ * When only an icon is provided, this composable uses a filled icon button.
  *
  * @param modifier The [Modifier] to be applied to this button.
  * @param onClick A lambda function to be invoked when the button is clicked.
@@ -173,6 +34,8 @@ fun FilledTonalIconButton(
  * @param vectorIcon The [ImageVector] to be displayed as the leading icon.
  * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
  * @param feedback The feedback configuration for sound and haptics.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
 fun GeneralButton(
@@ -184,6 +47,8 @@ fun GeneralButton(
     vectorIcon: ImageVector? = null,
     painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -193,7 +58,7 @@ fun GeneralButton(
     require(hasIcon || hasLabel) { "GeneralButton requires a label, an icon, or both." }
 
     if (hasIcon && !hasLabel) {
-        FilledIconButton(
+        IconOnlyButton(
             modifier = modifier,
             onClick = onClick,
             enabled = enabled,
@@ -201,6 +66,9 @@ fun GeneralButton(
             vectorIcon = vectorIcon,
             painterIcon = painterIcon,
             feedback = feedback,
+            firebaseController = firebaseController,
+            ga4Event = ga4Event,
+            style = IconOnlyButtonStyle.Filled,
         )
         return
     }
@@ -208,6 +76,7 @@ fun GeneralButton(
     Button(
         onClick = {
             feedback.performClick(view = view, hapticFeedback = hapticFeedback)
+            firebaseController.logGa4Event(ga4Event)
             onClick()
         },
         enabled = enabled,
@@ -229,7 +98,7 @@ fun GeneralButton(
 
 /**
  * A filled tonal button that supports text-only, icon+text, or icon-only rendering.
- * When only an icon is provided, this composable falls back to [FilledTonalIconButton].
+ * When only an icon is provided, this composable uses a filled tonal icon button.
  *
  * @param modifier The [Modifier] to be applied to this button.
  * @param onClick A lambda function to be invoked when this button is clicked.
@@ -239,6 +108,8 @@ fun GeneralButton(
  * @param vectorIcon The [ImageVector] to be displayed as an icon at the start of the button.
  * @param painterIcon The [Painter] to be displayed when a vector icon is not provided.
  * @param feedback The feedback configuration for sound and haptics.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
 fun GeneralTonalButton(
@@ -250,6 +121,8 @@ fun GeneralTonalButton(
     vectorIcon: ImageVector? = null,
     painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -259,7 +132,7 @@ fun GeneralTonalButton(
     require(hasIcon || hasLabel) { "GeneralTonalButton requires a label, an icon, or both." }
 
     if (hasIcon && !hasLabel) {
-        FilledTonalIconButton(
+        IconOnlyButton(
             modifier = modifier,
             onClick = onClick,
             enabled = enabled,
@@ -267,6 +140,9 @@ fun GeneralTonalButton(
             vectorIcon = vectorIcon,
             painterIcon = painterIcon,
             feedback = feedback,
+            firebaseController = firebaseController,
+            ga4Event = ga4Event,
+            style = IconOnlyButtonStyle.FilledTonal,
         )
         return
     }
@@ -274,6 +150,7 @@ fun GeneralTonalButton(
     FilledTonalButton(
         onClick = {
             feedback.performClick(view = view, hapticFeedback = hapticFeedback)
+            firebaseController.logGa4Event(ga4Event)
             onClick()
         },
         enabled = enabled,
@@ -294,58 +171,8 @@ fun GeneralTonalButton(
 }
 
 /**
- * A composable for a Material Design outlined icon button. Outlined icon buttons are a
- * medium-emphasis alternative to filled or standard icon buttons, with a thin border.
- *
- * This function wraps the `androidx.compose.material3.OutlinedIconButton` and enhances it by adding:
- * - A click sound effect.
- * - Haptic feedback on click.
- * - A visual bounce effect on interaction via the `bounceClick` modifier.
- *
- * The icon is provided as an [ImageVector].
- *
- * @param modifier The [Modifier] to be applied to this button.
- * @param onClick The lambda to be executed when the button is clicked. Defaults to an empty lambda.
- * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
- * @param iconContentDescription Text used by accessibility services to describe what the icon represents.
- * @param vectorIcon The [ImageVector] to be displayed inside the button.
- * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
- * @param feedback The feedback configuration for sound and haptics.
- */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-fun OutlinedIconButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-    enabled: Boolean = true,
-    iconContentDescription: String? = null,
-    vectorIcon: ImageVector? = null,
-    painterIcon: Painter? = null,
-    feedback: ButtonFeedback = ButtonFeedback(),
-) {
-    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
-
-    androidx.compose.material3.OutlinedIconButton(
-        onClick = {
-            feedback.performClick(view = view, hapticFeedback = hapticFeedback)
-            onClick()
-        },
-        enabled = enabled,
-        modifier = modifier.bounceClick(),
-        shapes = IconButtonDefaults.shapes()
-    ) {
-        IconContent(
-            icon = vectorIcon,
-            painter = painterIcon,
-            contentDescription = iconContentDescription
-        )
-    }
-}
-
-/**
  * An outlined button that supports text-only, icon+text, or icon-only rendering.
- * When only an icon is provided, this composable falls back to [OutlinedIconButton].
+ * When only an icon is provided, this composable uses an outlined icon button.
  *
  * @param modifier The [Modifier] to be applied to this button.
  * @param onClick The lambda to be executed when the button is clicked.
@@ -355,6 +182,8 @@ fun OutlinedIconButton(
  * @param vectorIcon The [ImageVector] to be displayed inside the button.
  * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
  * @param feedback The feedback configuration for sound and haptics.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
 fun GeneralOutlinedButton(
@@ -366,6 +195,8 @@ fun GeneralOutlinedButton(
     vectorIcon: ImageVector? = null,
     painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -375,7 +206,7 @@ fun GeneralOutlinedButton(
     require(hasIcon || hasLabel) { "GeneralOutlinedButton requires a label, an icon, or both." }
 
     if (hasIcon && !hasLabel) {
-        OutlinedIconButton(
+        IconOnlyButton(
             modifier = modifier,
             onClick = onClick,
             enabled = enabled,
@@ -383,6 +214,9 @@ fun GeneralOutlinedButton(
             vectorIcon = vectorIcon,
             painterIcon = painterIcon,
             feedback = feedback,
+            firebaseController = firebaseController,
+            ga4Event = ga4Event,
+            style = IconOnlyButtonStyle.Outlined,
         )
         return
     }
@@ -390,6 +224,7 @@ fun GeneralOutlinedButton(
     OutlinedButton(
         onClick = {
             feedback.performClick(view = view, hapticFeedback = hapticFeedback)
+            firebaseController.logGa4Event(ga4Event)
             onClick()
         },
         enabled = enabled,
@@ -411,7 +246,7 @@ fun GeneralOutlinedButton(
 
 /**
  * A Material Design [TextButton] that supports text-only, icon+text, or icon-only rendering.
- * When only an icon is provided, this composable falls back to [IconButton].
+ * When only an icon is provided, this composable uses a standard icon button.
  *
  * @param modifier The [Modifier] to be applied to this button.
  * @param onClick A lambda function to be invoked when the button is clicked.
@@ -421,6 +256,8 @@ fun GeneralOutlinedButton(
  * @param vectorIcon The [ImageVector] to be displayed as the leading icon.
  * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
  * @param feedback The feedback configuration for sound and haptics.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
 fun GeneralTextButton(
@@ -432,6 +269,8 @@ fun GeneralTextButton(
     vectorIcon: ImageVector? = null,
     painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -441,7 +280,7 @@ fun GeneralTextButton(
     require(hasIcon || hasLabel) { "GeneralTextButton requires a label, an icon, or both." }
 
     if (hasIcon && !hasLabel) {
-        IconButton(
+        IconOnlyButton(
             modifier = modifier,
             onClick = onClick,
             enabled = enabled,
@@ -449,6 +288,9 @@ fun GeneralTextButton(
             vectorIcon = vectorIcon,
             painterIcon = painterIcon,
             feedback = feedback,
+            firebaseController = firebaseController,
+            ga4Event = ga4Event,
+            style = IconOnlyButtonStyle.Standard,
         )
         return
     }
@@ -456,6 +298,7 @@ fun GeneralTextButton(
     TextButton(
         onClick = {
             feedback.performClick(view = view, hapticFeedback = hapticFeedback)
+            firebaseController.logGa4Event(ga4Event)
             onClick()
         },
         enabled = enabled,
@@ -471,6 +314,92 @@ fun GeneralTextButton(
         }
         if (hasLabel) {
             Text(text = label.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis)
+        }
+    }
+}
+
+private enum class IconOnlyButtonStyle {
+    Filled,
+    FilledTonal,
+    Outlined,
+    Standard,
+}
+
+/**
+ * Change rationale: icon-only button APIs were consolidated into the General* buttons to reduce
+ * duplicate public composables while preserving the same visual styles and feedback behavior.
+ */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun IconOnlyButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    enabled: Boolean,
+    iconContentDescription: String? = null,
+    vectorIcon: ImageVector? = null,
+    painterIcon: Painter? = null,
+    feedback: ButtonFeedback,
+    firebaseController: FirebaseController?,
+    ga4Event: Ga4EventData?,
+    style: IconOnlyButtonStyle,
+) {
+    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
+    val view: View = LocalView.current
+
+    val onClickWithFeedback = {
+        feedback.performClick(view = view, hapticFeedback = hapticFeedback)
+        firebaseController.logGa4Event(ga4Event)
+        onClick()
+    }
+
+    when (style) {
+        IconOnlyButtonStyle.Filled -> androidx.compose.material3.FilledIconButton(
+            onClick = onClickWithFeedback,
+            enabled = enabled,
+            modifier = modifier.bounceClick(),
+            shapes = IconButtonDefaults.shapes(),
+        ) {
+            IconContent(
+                icon = vectorIcon,
+                painter = painterIcon,
+                contentDescription = iconContentDescription
+            )
+        }
+        IconOnlyButtonStyle.FilledTonal -> androidx.compose.material3.FilledTonalIconButton(
+            onClick = onClickWithFeedback,
+            enabled = enabled,
+            modifier = modifier.bounceClick(),
+            shapes = IconButtonDefaults.shapes(),
+        ) {
+            IconContent(
+                icon = vectorIcon,
+                painter = painterIcon,
+                contentDescription = iconContentDescription
+            )
+        }
+        IconOnlyButtonStyle.Outlined -> androidx.compose.material3.OutlinedIconButton(
+            onClick = onClickWithFeedback,
+            enabled = enabled,
+            modifier = modifier.bounceClick(),
+            shapes = IconButtonDefaults.shapes(),
+        ) {
+            IconContent(
+                icon = vectorIcon,
+                painter = painterIcon,
+                contentDescription = iconContentDescription
+            )
+        }
+        IconOnlyButtonStyle.Standard -> androidx.compose.material3.IconButton(
+            onClick = onClickWithFeedback,
+            enabled = enabled,
+            modifier = modifier.bounceClick(),
+            shapes = IconButtonDefaults.shapes(),
+        ) {
+            IconContent(
+                icon = vectorIcon,
+                painter = painterIcon,
+                contentDescription = iconContentDescription
+            )
         }
     }
 }

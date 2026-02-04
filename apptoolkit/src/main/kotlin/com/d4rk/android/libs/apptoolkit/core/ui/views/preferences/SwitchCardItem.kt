@@ -21,6 +21,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
@@ -35,6 +38,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param onSwitchToggled A callback function invoked when the switch is toggled, either by clicking the card or the switch itself.  It receives the new state of the switch (a `Boolean` value) as a parameter.
  *
  * The card has a rounded corner shape and provides a click sound effect upon interaction.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
 fun SwitchCardItem(
@@ -44,6 +49,8 @@ fun SwitchCardItem(
     switchState: State<Boolean>,
     onSwitchToggled: (Boolean) -> Unit,
     checkIcon: ImageVector = Icons.Filled.Check,
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val view: View = LocalView.current
     Card(
@@ -54,6 +61,7 @@ fun SwitchCardItem(
         onClick = {
             if (!enabled) return@Card
             view.playSoundEffect(SoundEffectConstants.CLICK)
+            firebaseController.logGa4Event(ga4Event)
             onSwitchToggled(!switchState.value)
         }
     ) {
@@ -74,6 +82,7 @@ fun SwitchCardItem(
                 checked = switchState.value,
                 enabled = enabled,
                 onCheckedChange = { isChecked ->
+                    firebaseController.logGa4Event(ga4Event)
                     onSwitchToggled(isChecked)
                 },
                 checkIcon = checkIcon

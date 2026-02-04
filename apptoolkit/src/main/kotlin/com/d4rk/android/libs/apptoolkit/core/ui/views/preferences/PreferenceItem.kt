@@ -25,6 +25,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
@@ -37,6 +40,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param title An optional main title text displayed for the preference item.
  * @param summary An optional secondary text displayed below the title for additional information about the preference.
  * @param onClick A callback function that is called when the entire preference item is clicked. If no action is needed on click, this can be left empty.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
 fun PreferenceItem(
@@ -45,7 +50,9 @@ fun PreferenceItem(
     summary: String? = null,
     enabled: Boolean = true,
     rippleEffectDp: Dp = SizeConstants.LargeSize,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -56,6 +63,7 @@ fun PreferenceItem(
             .clickable(enabled = enabled, onClick = {
                 view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                firebaseController.logGa4Event(ga4Event)
                 onClick()
             }), verticalAlignment = Alignment.CenterVertically
     ) {
@@ -104,6 +112,8 @@ fun PreferenceItem(
  *                      Defaults to [SizeConstants.ExtraTinySize].
  * @param onClick The lambda function to execute when the preference item is clicked.
  *                Defaults to an empty lambda, meaning no action will be performed by default.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
 fun SettingsPreferenceItem(
@@ -111,7 +121,9 @@ fun SettingsPreferenceItem(
     title: String? = null,
     summary: String? = null,
     rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     Card(
         modifier = Modifier
@@ -125,6 +137,9 @@ fun SettingsPreferenceItem(
             summary = summary,
             onClick = {
                 onClick()
-            })
+            },
+            firebaseController = firebaseController,
+            ga4Event = ga4Event,
+        )
     }
 }

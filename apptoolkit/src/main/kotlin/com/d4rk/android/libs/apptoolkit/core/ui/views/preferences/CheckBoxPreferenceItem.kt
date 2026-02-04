@@ -23,6 +23,9 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
@@ -38,6 +41,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param checked The current checked state of the checkbox.
  * @param onCheckedChange A callback function that is invoked when the checkbox state changes.
  *                       It receives the new checked state as a boolean parameter.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
 fun CheckBoxPreferenceItem(
@@ -45,7 +50,9 @@ fun CheckBoxPreferenceItem(
     title: String,
     summary: String? = null,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -56,6 +63,7 @@ fun CheckBoxPreferenceItem(
             .clickable {
                 view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                firebaseController.logGa4Event(ga4Event)
                 onCheckedChange(!checked)
             }, verticalAlignment = Alignment.CenterVertically
     ) {
@@ -83,6 +91,7 @@ fun CheckBoxPreferenceItem(
         Checkbox(checked = checked, onCheckedChange = { isChecked: Boolean ->
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+            firebaseController.logGa4Event(ga4Event)
             onCheckedChange(isChecked)
         }, modifier = Modifier.padding(start = SizeConstants.LargeSize))
     }

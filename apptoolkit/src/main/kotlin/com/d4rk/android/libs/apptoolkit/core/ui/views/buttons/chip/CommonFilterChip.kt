@@ -23,6 +23,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 
 /**
@@ -38,6 +41,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * @param modifier The [Modifier] to be applied to the chip.
  * @param leadingIcon An optional composable to be displayed at the start of the chip.
  *                    If null, a checkmark icon will be shown when the chip is selected.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
 fun CommonFilterChip(
@@ -45,7 +50,9 @@ fun CommonFilterChip(
     onClick: () -> Unit,
     label: String,
     modifier: Modifier = Modifier,
-    leadingIcon: (@Composable (() -> Unit))? = null
+    leadingIcon: (@Composable (() -> Unit))? = null,
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -56,6 +63,7 @@ fun CommonFilterChip(
         onClick = {
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+            firebaseController.logGa4Event(ga4Event)
             onClick()
         },
         label = { Text(text = label) },

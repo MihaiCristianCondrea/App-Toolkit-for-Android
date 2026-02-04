@@ -30,7 +30,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.OutlinedIconButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
@@ -91,7 +91,7 @@ fun QuestionCard(
                     modifier = Modifier.weight(weight = 1f)
                 )
 
-                OutlinedIconButton(
+                GeneralOutlinedButton(
                     onClick = { onToggleExpand() },
                     vectorIcon = Icons.Filled.ExpandMore,
                     modifier = Modifier.rotate(degrees = expandIconRotation),

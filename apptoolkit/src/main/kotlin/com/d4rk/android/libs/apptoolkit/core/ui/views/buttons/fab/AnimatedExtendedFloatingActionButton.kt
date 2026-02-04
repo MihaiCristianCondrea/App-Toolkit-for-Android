@@ -15,6 +15,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 
@@ -28,6 +31,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * @param expanded Determines whether the button is in its expanded state (with text) or collapsed (icon only).
  * @param modifier Modifier to apply to the button.
  * @param feedback The feedback configuration for sound and haptics.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
 fun AnimatedExtendedFloatingActionButton(
@@ -39,6 +44,8 @@ fun AnimatedExtendedFloatingActionButton(
     expanded: Boolean = true,
     containerColor: Color = FloatingActionButtonDefaults.containerColor,
     feedback: ButtonFeedback = ButtonFeedback(),
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val animatedScale: Float by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
@@ -53,6 +60,7 @@ fun AnimatedExtendedFloatingActionButton(
         ExtendedFloatingActionButton(
             onClick = {
                 feedback.performClick(view = view, hapticFeedback = hapticFeedback)
+                firebaseController.logGa4Event(ga4Event)
                 onClick()
             }, icon = icon, text = text ?: {}, expanded = expanded, modifier = modifier
                 .bounceClick()

@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.chip.CommonFilterChip
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallHorizontalSpacer
@@ -27,7 +29,9 @@ fun TopListFilters(
     filters: ImmutableList<String>,
     selectedFilter: String,
     onFilterSelected: (String) -> Unit,
-    label: String = stringResource(id = R.string.sort_by)
+    label: String = stringResource(id = R.string.sort_by),
+    firebaseController: FirebaseController? = null,
+    ga4EventProvider: ((String) -> Ga4EventData)? = null,
 ) {
     val listState: LazyListState = rememberLazyListState()
     val scope: CoroutineScope = rememberCoroutineScope()
@@ -44,10 +48,16 @@ fun TopListFilters(
         ) {
             items(filters.size) { index: Int ->
                 val filter: String = filters[index]
-                CommonFilterChip(selected = selectedFilter == filter, onClick = {
-                    onFilterSelected(filter)
-                    scope.launch { listState.animateScrollToItem(index) }
-                }, label = filter)
+                CommonFilterChip(
+                    selected = selectedFilter == filter,
+                    onClick = {
+                        onFilterSelected(filter)
+                        scope.launch { listState.animateScrollToItem(index) }
+                    },
+                    label = filter,
+                    firebaseController = firebaseController,
+                    ga4Event = ga4EventProvider?.invoke(filter),
+                )
                 if (index < filters.size - 1) {
                     SmallHorizontalSpacer()
                 }

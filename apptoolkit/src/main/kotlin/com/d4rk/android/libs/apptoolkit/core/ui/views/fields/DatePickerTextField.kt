@@ -28,6 +28,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.DatePickerDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import java.text.SimpleDateFormat
@@ -43,6 +46,8 @@ fun DatePickerTextField(
     textFieldIcon: ImageVector = Icons.Default.CalendarToday,
     textFieldReadOnly: Boolean = true,
     textFieldEnabled: Boolean = false,
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val formatter = remember { SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()) }
     val parser = remember { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()) }
@@ -79,6 +84,7 @@ fun DatePickerTextField(
             ) {
                 view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
+                firebaseController.logGa4Event(ga4Event)
                 showDialog = true
             }
     ) {

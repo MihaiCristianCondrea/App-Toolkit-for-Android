@@ -27,6 +27,9 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
@@ -46,6 +49,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param checked The initial state of the switch. Set to true for on and false for off.
  * @param onCheckedChange A callback function that is called whenever the switch is toggled. This function receives the new state of the switch (boolean) as a parameter.
  * @param onClick A callback function that is called when the entire preference item is clicked. If no action is needed on click, this can be left empty.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
 fun SwitchPreferenceItemWithDivider(
@@ -55,7 +60,9 @@ fun SwitchPreferenceItemWithDivider(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     onClick: () -> Unit,
-    onSwitchClick: (Boolean) -> Unit
+    onSwitchClick: (Boolean) -> Unit,
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -71,6 +78,7 @@ fun SwitchPreferenceItemWithDivider(
                 .clickable(onClick = {
                     view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                    firebaseController.logGa4Event(ga4Event)
                     onClick()
                 }), verticalAlignment = Alignment.CenterVertically
         ) {
@@ -111,6 +119,7 @@ fun SwitchPreferenceItemWithDivider(
             CustomSwitch(
                 checked = checked,
                 onCheckedChange = { isChecked ->
+                    firebaseController.logGa4Event(ga4Event)
                     onCheckedChange(isChecked)
                     onSwitchClick(isChecked)
                 },
