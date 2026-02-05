@@ -1,6 +1,5 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.views.buttons
 
-import android.view.View
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -8,9 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -18,10 +14,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.hapticfeedback.HapticFeedback
-import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
-import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 
 /**
  * An animated button that slides in and out horizontally with a fade effect.
@@ -29,7 +24,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * This composable provides an animated button that appears and disappears with a slide and fade animation.
  * The animation direction (from the left or right) and duration can be customized.
  *
- * @param modifier Modifier to be applied to the IconButton.
+ * @param modifier Modifier to be applied to the button.
  * @param visible Controls the visibility of the button. If true, the button will be visible, otherwise it will be hidden.
  * @param icon The icon to display within the button.
  * @param contentDescription The content description for the icon, used for accessibility.
@@ -40,14 +35,9 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * @param feedback The feedback configuration for sound and haptics.
  * @param fromRight If true, the button will slide in from the right and slide out to the right.
  *                  If false, the button will slide in from the left and slide out to the left. Defaults to false.
- *
- * Example Usage:
- * ```
- * import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
- *
- *  AnimatedButtonDirection(
- *      modifier = Modifier.padding(SizeConstants.LargeSize),
- *      visible = is */
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AnimatedIconButtonDirection(
@@ -59,13 +49,12 @@ fun AnimatedIconButtonDirection(
     durationMillis: Int = 500,
     autoAnimate: Boolean = true,
     feedback: ButtonFeedback = ButtonFeedback(),
-    fromRight: Boolean = false
+    fromRight: Boolean = false,
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val animatedVisibility: MutableState<Boolean> =
         rememberSaveable { mutableStateOf(value = false) }
-
-    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
 
     LaunchedEffect(visible) {
         if (autoAnimate && visible) {
@@ -86,11 +75,16 @@ fun AnimatedIconButtonDirection(
             animationSpec = tween(durationMillis = durationMillis)
         )
     ) {
-        IconButton(modifier = modifier.bounceClick(), onClick = {
-            feedback.performClick(view = view, hapticFeedback = hapticFeedback)
-            onClick()
-        }, shapes = IconButtonDefaults.shapes()) {
-            Icon(imageVector = icon, contentDescription = contentDescription)
-        }
+        IconOnlyButton(
+            modifier = modifier,
+            onClick = onClick,
+            enabled = true,
+            iconContentDescription = contentDescription,
+            vectorIcon = icon,
+            feedback = feedback,
+            firebaseController = firebaseController,
+            ga4Event = ga4Event,
+            style = IconOnlyButtonStyle.Standard,
+        )
     }
 }
