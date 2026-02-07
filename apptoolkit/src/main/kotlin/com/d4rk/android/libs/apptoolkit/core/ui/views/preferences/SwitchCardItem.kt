@@ -40,6 +40,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * The card has a rounded corner shape and provides a click sound effect upon interaction.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
+ * @param ga4EventProvider Optional provider for GA4 event data resolved using the toggled state.
  */
 @Composable
 fun SwitchCardItem(
@@ -51,6 +52,7 @@ fun SwitchCardItem(
     checkIcon: ImageVector = Icons.Filled.Check,
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
+    ga4EventProvider: ((Boolean) -> Ga4EventData?)? = null,
 ) {
     val view: View = LocalView.current
     Card(
@@ -60,9 +62,10 @@ fun SwitchCardItem(
         modifier = modifier,
         onClick = {
             if (!enabled) return@Card
+            val updatedValue = !switchState.value
             view.playSoundEffect(SoundEffectConstants.CLICK)
-            firebaseController.logGa4Event(ga4Event)
-            onSwitchToggled(!switchState.value)
+            firebaseController.logGa4Event(ga4EventProvider?.invoke(updatedValue) ?: ga4Event)
+            onSwitchToggled(updatedValue)
         }
     ) {
         Row(
@@ -82,7 +85,7 @@ fun SwitchCardItem(
                 checked = switchState.value,
                 enabled = enabled,
                 onCheckedChange = { isChecked ->
-                    firebaseController.logGa4Event(ga4Event)
+                    firebaseController.logGa4Event(ga4EventProvider?.invoke(isChecked) ?: ga4Event)
                     onSwitchToggled(isChecked)
                 },
                 checkIcon = checkIcon
