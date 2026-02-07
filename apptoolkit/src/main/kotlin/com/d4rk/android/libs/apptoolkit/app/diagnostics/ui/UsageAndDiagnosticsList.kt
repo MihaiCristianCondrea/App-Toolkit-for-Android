@@ -30,13 +30,16 @@ import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnos
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.views.cards.ConsentToggleCard
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.views.headers.ConsentSectionHeader
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.views.headers.ExpandableConsentSectionHeader
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import org.koin.compose.koinInject
@@ -95,6 +98,17 @@ fun UsageAndDiagnosticsList(
                 switchState = usageState,
                 onSwitchToggled = { isChecked ->
                     viewModel.onEvent(UsageAndDiagnosticsEvent.SetUsageAndDiagnostics(isChecked))
+                },
+                firebaseController = firebaseController,
+                ga4EventProvider = { isChecked ->
+                    Ga4EventData(
+                        name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
+                        params = mapOf(
+                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(USAGE_DIAGNOSTICS_SCREEN_NAME),
+                            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("usage_and_diagnostics"),
+                            SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
+                        ),
+                    )
                 }
             )
         }
@@ -123,6 +137,17 @@ fun UsageAndDiagnosticsList(
                         onCheckedChange = { isChecked ->
                             viewModel.onEvent(UsageAndDiagnosticsEvent.SetAnalyticsConsent(isChecked))
                         },
+                        firebaseController = firebaseController,
+                        ga4EventProvider = { isChecked ->
+                            Ga4EventData(
+                                name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
+                                params = mapOf(
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(USAGE_DIAGNOSTICS_SCREEN_NAME),
+                                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("analytics_consent"),
+                                    SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
+                                ),
+                            )
+                        },
                     )
 
                     SmallVerticalSpacer()
@@ -135,6 +160,17 @@ fun UsageAndDiagnosticsList(
                         icon = Icons.Outlined.Storage,
                         onCheckedChange = { isChecked ->
                             viewModel.onEvent(UsageAndDiagnosticsEvent.SetAdStorageConsent(isChecked))
+                        },
+                        firebaseController = firebaseController,
+                        ga4EventProvider = { isChecked ->
+                            Ga4EventData(
+                                name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
+                                params = mapOf(
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(USAGE_DIAGNOSTICS_SCREEN_NAME),
+                                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("ad_storage_consent"),
+                                    SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
+                                ),
+                            )
                         },
                     )
 
@@ -152,6 +188,17 @@ fun UsageAndDiagnosticsList(
                                 )
                             )
                         },
+                        firebaseController = firebaseController,
+                        ga4EventProvider = { isChecked ->
+                            Ga4EventData(
+                                name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
+                                params = mapOf(
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(USAGE_DIAGNOSTICS_SCREEN_NAME),
+                                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("ad_user_data_consent"),
+                                    SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
+                                ),
+                            )
+                        },
                     )
 
                     SmallVerticalSpacer()
@@ -166,6 +213,17 @@ fun UsageAndDiagnosticsList(
                                 UsageAndDiagnosticsEvent.SetAdPersonalizationConsent(
                                     isChecked
                                 )
+                            )
+                        },
+                        firebaseController = firebaseController,
+                        ga4EventProvider = { isChecked ->
+                            Ga4EventData(
+                                name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
+                                params = mapOf(
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(USAGE_DIAGNOSTICS_SCREEN_NAME),
+                                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("ad_personalization_consent"),
+                                    SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
+                                ),
                             )
                         },
                     )

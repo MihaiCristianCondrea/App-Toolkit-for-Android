@@ -19,7 +19,9 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.state.AdsSettingsUiState
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
@@ -30,6 +32,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessa
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import org.koin.compose.koinInject
@@ -92,6 +95,17 @@ fun AdsSettingsScreen() {
                             switchState = rememberUpdatedState(data.adsEnabled),
                             onSwitchToggled = { isChecked: Boolean ->
                                 viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(isChecked))
+                            },
+                            firebaseController = firebaseController,
+                            ga4EventProvider = { isChecked ->
+                                Ga4EventData(
+                                    name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
+                                    params = mapOf(
+                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
+                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("display_ads"),
+                                        SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
+                                    ),
+                                )
                             }
                         )
                     }
@@ -106,7 +120,15 @@ fun AdsSettingsScreen() {
                                     consentHost?.let { host ->
                                         viewModel.onEvent(AdsSettingsEvent.RequestConsent(host))
                                     }
-                                }
+                                },
+                                firebaseController = firebaseController,
+                                ga4Event = Ga4EventData(
+                                    name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+                                    params = mapOf(
+                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
+                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("personalized_ads"),
+                                    ),
+                                )
                             )
                         }
                     }

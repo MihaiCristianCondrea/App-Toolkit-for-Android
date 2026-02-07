@@ -42,6 +42,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param onClick A callback function that is called when the entire preference item is clicked. If no action is needed on click, this can be left empty.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
+ * @param ga4EventProvider Optional provider for GA4 event data resolved at click time.
  */
 @Composable
 fun PreferenceItem(
@@ -53,6 +54,7 @@ fun PreferenceItem(
     onClick: () -> Unit = {},
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
+    ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -63,7 +65,7 @@ fun PreferenceItem(
             .clickable(enabled = enabled, onClick = {
                 view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                firebaseController.logGa4Event(ga4Event)
+                firebaseController.logGa4Event(ga4EventProvider?.invoke() ?: ga4Event)
                 onClick()
             }), verticalAlignment = Alignment.CenterVertically
     ) {
@@ -114,6 +116,7 @@ fun PreferenceItem(
  *                Defaults to an empty lambda, meaning no action will be performed by default.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
+ * @param ga4EventProvider Optional provider for GA4 event data resolved at click time.
  */
 @Composable
 fun SettingsPreferenceItem(
@@ -124,6 +127,7 @@ fun SettingsPreferenceItem(
     onClick: () -> Unit = {},
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
+    ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
     Card(
         modifier = Modifier
@@ -140,6 +144,7 @@ fun SettingsPreferenceItem(
             },
             firebaseController = firebaseController,
             ga4Event = ga4Event,
+            ga4EventProvider = ga4EventProvider,
         )
     }
 }

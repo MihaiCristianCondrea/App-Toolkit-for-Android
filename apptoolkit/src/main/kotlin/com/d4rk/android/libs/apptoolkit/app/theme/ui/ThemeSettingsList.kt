@@ -66,6 +66,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePager
 import com.d4rk.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.DynamicPaletteVariant
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
@@ -267,7 +268,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                         AnalyticsEvent(
                                             name = "theme_tab_select",
                                             params = mapOf(
-                                                "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(THEME_SCREEN_NAME),
                                                 "tab" to AnalyticsValue.Str(
                                                     if (index == 0) "wallpaper" else "other"
                                                 ),
@@ -401,7 +402,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                         AnalyticsEvent(
                                             name = "theme_palette_select",
                                             params = mapOf(
-                                                "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(THEME_SCREEN_NAME),
                                                 "palette_type" to AnalyticsValue.Str("static"),
                                                 "palette_id" to AnalyticsValue.Str(id),
                                                 "seasonal" to AnalyticsValue.Str(
@@ -452,10 +453,10 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                             onClick = {
                                 firebase.value.logEvent(
                                     AnalyticsEvent(
-                                        name = "theme_mode_select",
+                                        name = SettingsAnalytics.Events.THEME_SWITCH,
                                         params = mapOf(
-                                            "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
-                                            "mode" to AnalyticsValue.Str(choice.key),
+                                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                            SettingsAnalytics.Params.THEME_MODE to AnalyticsValue.Str(choice.key),
                                         ),
                                     ),
                                 )
@@ -501,7 +502,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                             AnalyticsEvent(
                                 name = "theme_toggle_amoled",
                                 params = mapOf(
-                                    "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(THEME_SCREEN_NAME),
                                     "enabled" to AnalyticsValue.Str(isChecked.toString()),
                                 ),
                             ),
@@ -526,7 +527,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                             AnalyticsEvent(
                                 name = "theme_open_display_settings",
                                 params = mapOf(
-                                    "screen" to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(THEME_SCREEN_NAME),
                                     "opened" to AnalyticsValue.Str(opened.toString()),
                                 ),
                             ),

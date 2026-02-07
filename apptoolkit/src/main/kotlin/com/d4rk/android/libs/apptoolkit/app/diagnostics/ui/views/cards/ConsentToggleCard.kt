@@ -24,6 +24,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
@@ -45,6 +48,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  *             visually representing the consent category.
  * @param onCheckedChange A lambda function that is invoked when the user toggles the switch or
  *                        clicks the card. It receives the new boolean state of the consent.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4EventProvider Optional provider that builds GA4 event payload from the updated checked state.
  */
 @Composable
 fun ConsentToggleCard(
@@ -52,7 +57,9 @@ fun ConsentToggleCard(
     description: String,
     switchState: Boolean,
     icon: ImageVector,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    firebaseController: FirebaseController? = null,
+    ga4EventProvider: ((Boolean) -> Ga4EventData?)? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -61,9 +68,11 @@ fun ConsentToggleCard(
             .fillMaxWidth()
             .bounceClick(),
         onClick = {
+            val updatedValue = !switchState
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-            onCheckedChange(!switchState)
+            firebaseController.logGa4Event(ga4EventProvider?.invoke(updatedValue))
+            onCheckedChange(updatedValue)
         },
         shape = MaterialTheme.shapes.large, colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -102,7 +111,10 @@ fun ConsentToggleCard(
                 LargeHorizontalSpacer()
                 CustomSwitch(
                     checked = switchState,
-                    onCheckedChange = onCheckedChange,
+                    onCheckedChange = { isChecked ->
+                        firebaseController.logGa4Event(ga4EventProvider?.invoke(isChecked))
+                        onCheckedChange(isChecked)
+                    },
                 )
             }
         }
