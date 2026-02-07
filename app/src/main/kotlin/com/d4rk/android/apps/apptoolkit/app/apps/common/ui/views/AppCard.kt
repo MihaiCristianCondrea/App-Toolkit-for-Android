@@ -32,7 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import coil3.compose.AsyncImage
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.IconButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
@@ -69,12 +69,12 @@ fun AppCard(
                     alignment = Alignment.End
                 )
             ) {
-                IconButton(
+                GeneralTextButton(
                     onClick = onFavoriteToggle,
                     vectorIcon = if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarOutline,
                     iconContentDescription = null
                 )
-                IconButton(
+                GeneralTextButton(
                     onClick = { onShareClick(appInfo) },
                     vectorIcon = Icons.Outlined.Share,
                     iconContentDescription = null

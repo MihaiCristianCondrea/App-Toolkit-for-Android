@@ -16,6 +16,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
@@ -28,6 +31,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param isChecked Whether the radio button is currently checked.
  * @param onCheckedChange A callback that is invoked when the radio button's state changes.
  *                        It provides the new checked state as a Boolean parameter.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @Composable
 fun RadioButtonPreferenceItem(
@@ -35,7 +40,9 @@ fun RadioButtonPreferenceItem(
     text: String,
     isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -48,6 +55,7 @@ fun RadioButtonPreferenceItem(
                         .clickable {
                             view.playSoundEffect(SoundEffectConstants.CLICK)
                             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                            firebaseController.logGa4Event(ga4Event)
                             onCheckedChange(!isChecked)
                         }
                 } else base
@@ -58,6 +66,7 @@ fun RadioButtonPreferenceItem(
             selected = isChecked, enabled = enabled, onClick = {
                 view.playSoundEffect(SoundEffectConstants.CLICK)
                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                firebaseController.logGa4Event(ga4Event)
                 onCheckedChange(!isChecked)
             })
         Text(

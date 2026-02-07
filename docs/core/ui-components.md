@@ -6,9 +6,10 @@ This page groups common Jetpack Compose components available in AppToolkit.
 
 Use buttons to trigger actions. Compose offers `Button`, `OutlinedButton`, and `IconButton`.
 
-AppToolkit wraps `IconButton`, `FilledIconButton`, `FilledTonalIconButton`, and `OutlinedIconButton` with
-Material 3's expressive shape morphing via `IconButtonDefaults.shapes()`, providing round-to-square
-transitions in response to interaction states.
+AppToolkit standardizes button usage through `GeneralButton`, `GeneralTonalButton`,
+`GeneralOutlinedButton`, and `GeneralTextButton`, which each support text, icon+text, and icon-only
+rendering. Icon-only behavior uses Material 3 expressive shapes via
+`IconButtonDefaults.shapes()` for round-to-square transitions during interaction states.
 
 ```kotlin
 Button(onClick = { /* handle action */ }) {

@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.IconButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
@@ -56,7 +56,7 @@ fun BasicFullScreenDialog(
         Scaffold(
             modifier = Modifier.fillMaxSize(), topBar = {
                 CenterAlignedTopAppBar(navigationIcon = {
-                    IconButton(
+                    GeneralTextButton(
                         onClick = onDismiss,
                         vectorIcon = Icons.Filled.Close,
                         iconContentDescription = null

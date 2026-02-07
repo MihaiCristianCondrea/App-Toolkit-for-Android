@@ -22,6 +22,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -31,6 +34,8 @@ fun DropdownMenuBox(
     options: ImmutableList<String>,
     onOptionSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
@@ -41,6 +46,7 @@ fun DropdownMenuBox(
         onExpandedChange = { next ->
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(HapticFeedbackType.VirtualKey)
+            firebaseController.logGa4Event(ga4Event)
             expanded = next
         },
         modifier = modifier.fillMaxWidth(),
@@ -71,6 +77,7 @@ fun DropdownMenuBox(
                 DropdownMenuItem(
                     text = { Text(option) },
                     onClick = {
+                        firebaseController.logGa4Event(ga4Event)
                         onOptionSelected(option)
                         expanded = false
                     },

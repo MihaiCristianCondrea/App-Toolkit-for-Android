@@ -59,7 +59,11 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalS
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import kotlinx.collections.immutable.persistentListOf
+import org.koin.compose.koinInject
 import com.d4rk.android.libs.apptoolkit.R as ToolkitR
 
 /**
@@ -69,6 +73,7 @@ import com.d4rk.android.libs.apptoolkit.R as ToolkitR
 fun ComponentsRoute(
     paddingValues: PaddingValues,
 ) {
+    val firebaseController: FirebaseController = koinInject()
     val dropdownOptionOne = stringResource(id = R.string.components_option_alpha)
     val dropdownOptionTwo = stringResource(id = R.string.components_option_beta)
     val dropdownOptionThree = stringResource(id = R.string.components_option_gamma)
@@ -131,6 +136,7 @@ fun ComponentsRoute(
 
     ComponentsScreen(
         paddingValues = paddingValues,
+        firebaseController = firebaseController,
         state = state,
         onDropdownOptionSelected = { selectedDropdownOption = it },
         onDateSelected = { selectedDateMillis = it }, // FIXME: Assigned value is never read
@@ -152,6 +158,7 @@ fun ComponentsRoute(
 @Composable
 fun ComponentsScreen(
     paddingValues: PaddingValues,
+    firebaseController: FirebaseController,
     state: ComponentsUiState,
     onDropdownOptionSelected: (String) -> Unit,
     onDateSelected: (Long) -> Unit,
@@ -165,6 +172,18 @@ fun ComponentsScreen(
     val iconContentDescription = stringResource(id = R.string.components_icon_content_description)
     val menuLabel = stringResource(id = R.string.components_menu_label)
     val switchCardState: State<Boolean> = rememberUpdatedState(state.switchCardEnabled)
+    val screenParam = AnalyticsValue.Str("components")
+
+    fun ga4Event(component: String, variant: String? = null): Ga4EventData {
+        val params = buildMap {
+            put("screen", screenParam)
+            put("component", AnalyticsValue.Str(component))
+            if (variant != null) {
+                put("variant", AnalyticsValue.Str(variant))
+            }
+        }
+        return Ga4EventData(name = "components_click", params = params)
+    }
 
     LazyColumn(
         contentPadding = paddingValues,
@@ -180,6 +199,8 @@ fun ComponentsScreen(
                 GeneralButton(
                     label = stringResource(id = R.string.components_button_primary),
                     onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "button", variant = "primary"),
                 )
                 SmallVerticalSpacer()
                 GeneralButton(
@@ -187,17 +208,23 @@ fun ComponentsScreen(
                     vectorIcon = Icons.Outlined.StarOutline,
                     iconContentDescription = iconContentDescription,
                     onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "button", variant = "primary_icon"),
                 )
                 SmallVerticalSpacer()
                 GeneralButton(
                     vectorIcon = Icons.Outlined.StarOutline,
                     iconContentDescription = iconContentDescription,
                     onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "button", variant = "primary_icon_only"),
                 )
                 SmallVerticalSpacer()
                 GeneralTonalButton(
                     label = stringResource(id = R.string.components_button_tonal),
                     onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "button", variant = "tonal"),
                 )
                 SmallVerticalSpacer()
                 GeneralTonalButton(
@@ -205,17 +232,23 @@ fun ComponentsScreen(
                     vectorIcon = Icons.Outlined.Favorite,
                     iconContentDescription = iconContentDescription,
                     onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "button", variant = "tonal_icon"),
                 )
                 SmallVerticalSpacer()
                 GeneralTonalButton(
                     vectorIcon = Icons.Outlined.Favorite,
                     iconContentDescription = iconContentDescription,
                     onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "button", variant = "tonal_icon_only"),
                 )
                 SmallVerticalSpacer()
                 GeneralOutlinedButton(
                     label = stringResource(id = R.string.components_button_outlined),
                     onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "button", variant = "outlined"),
                 )
                 SmallVerticalSpacer()
                 GeneralOutlinedButton(
@@ -223,17 +256,23 @@ fun ComponentsScreen(
                     vectorIcon = Icons.Outlined.Info,
                     iconContentDescription = iconContentDescription,
                     onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "button", variant = "outlined_icon"),
                 )
                 SmallVerticalSpacer()
                 GeneralOutlinedButton(
                     vectorIcon = Icons.Outlined.Info,
                     iconContentDescription = iconContentDescription,
                     onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "button", variant = "outlined_icon_only"),
                 )
                 SmallVerticalSpacer()
                 GeneralTextButton(
                     label = stringResource(id = R.string.components_button_text),
                     onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "button", variant = "text"),
                 )
                 SmallVerticalSpacer()
                 GeneralTextButton(
@@ -241,12 +280,16 @@ fun ComponentsScreen(
                     vectorIcon = Icons.Outlined.Favorite,
                     iconContentDescription = iconContentDescription,
                     onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "button", variant = "text_icon"),
                 )
                 SmallVerticalSpacer()
                 GeneralTextButton(
                     vectorIcon = Icons.Outlined.Favorite,
                     iconContentDescription = iconContentDescription,
                     onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "button", variant = "text_icon_only"),
                 )
                 ExtraSmallVerticalSpacer()
             }
@@ -265,6 +308,8 @@ fun ComponentsScreen(
                         icon = Icons.Filled.Add,
                         contentDescription = iconContentDescription,
                         onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "fab", variant = "animated"),
                     )
                     SmallFloatingActionButton(
                         isVisible = true,
@@ -272,6 +317,8 @@ fun ComponentsScreen(
                         icon = Icons.Filled.Add,
                         contentDescription = iconContentDescription,
                         onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "fab", variant = "small"),
                     )
                 }
                 SmallVerticalSpacer()
@@ -281,6 +328,8 @@ fun ComponentsScreen(
                     expanded = true,
                     icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
                     text = { Text(text = stringResource(id = R.string.components_fab_extended)) },
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "fab", variant = "extended"),
                 )
             }
         }
@@ -299,6 +348,8 @@ fun ComponentsScreen(
                         vectorIcon = Icons.Filled.MoreVert,
                         iconContentDescription = iconContentDescription,
                         onClick = { showMenu = true },
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "dropdown", variant = "menu_button"),
                     )
                     DropdownMenu(
                         expanded = showMenu,
@@ -309,11 +360,15 @@ fun ComponentsScreen(
                             textResId = R.string.components_menu_option_primary,
                             icon = Icons.Outlined.Info,
                             onClick = { showMenu = false },
+                            firebaseController = firebaseController,
+                            ga4Event = ga4Event(component = "dropdown", variant = "menu_option_primary"),
                         )
                         CommonDropdownMenuItem(
                             textResId = R.string.components_menu_option_secondary,
                             icon = Icons.Outlined.Favorite,
                             onClick = { showMenu = false },
+                            firebaseController = firebaseController,
+                            ga4Event = ga4Event(component = "dropdown", variant = "menu_option_secondary"),
                         )
                     }
                 }
@@ -321,12 +376,16 @@ fun ComponentsScreen(
                 DatePickerTextField(
                     dateMillis = state.dateMillis,
                     onDateSelected = onDateSelected,
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "input", variant = "date_picker"),
                 )
                 SmallVerticalSpacer()
                 DropdownMenuBox(
                     selectedText = state.selectedDropdownOption,
                     options = state.dropdownOptions,
                     onOptionSelected = onDropdownOptionSelected,
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "input", variant = "dropdown"),
                 )
             }
         }
@@ -346,11 +405,15 @@ fun ComponentsScreen(
                         SettingsPreferenceItem(
                             title = stringResource(id = R.string.components_preference_title),
                             summary = stringResource(id = R.string.components_preference_summary),
+                            firebaseController = firebaseController,
+                            ga4Event = ga4Event(component = "preference", variant = "settings_primary"),
                         )
                         ExtraTinyVerticalSpacer()
                         PreferenceItem(
                             title = stringResource(id = R.string.components_preference_secondary_title),
                             summary = stringResource(id = R.string.components_preference_secondary_summary),
+                            firebaseController = firebaseController,
+                            ga4Event = ga4Event(component = "preference", variant = "secondary"),
                         )
                         ExtraTinyVerticalSpacer()
                         SwitchPreferenceItem(
@@ -359,6 +422,8 @@ fun ComponentsScreen(
                             summary = stringResource(id = R.string.components_switch_summary),
                             checked = state.switchEnabled,
                             onCheckedChange = onSwitchEnabledChanged,
+                            firebaseController = firebaseController,
+                            ga4Event = ga4Event(component = "preference", variant = "switch"),
                         )
                         ExtraTinyVerticalSpacer()
                         SwitchPreferenceItemWithDivider(
@@ -369,6 +434,8 @@ fun ComponentsScreen(
                             onCheckedChange = onSwitchWithDividerChanged,
                             onClick = {},
                             onSwitchClick = {},
+                            firebaseController = firebaseController,
+                            ga4Event = ga4Event(component = "preference", variant = "switch_divider"),
                         )
                         ExtraTinyVerticalSpacer()
                         SwitchCardItem(
@@ -378,6 +445,8 @@ fun ComponentsScreen(
                             title = stringResource(id = R.string.components_switch_card_title),
                             switchState = switchCardState,
                             onSwitchToggled = onSwitchCardChanged,
+                            firebaseController = firebaseController,
+                            ga4Event = ga4Event(component = "preference", variant = "switch_card"),
                         )
                         ExtraTinyVerticalSpacer()
                         CheckBoxPreferenceItem(
@@ -386,6 +455,8 @@ fun ComponentsScreen(
                             summary = stringResource(id = R.string.components_checkbox_summary),
                             checked = state.checkboxChecked,
                             onCheckedChange = onCheckboxChanged,
+                            firebaseController = firebaseController,
+                            ga4Event = ga4Event(component = "preference", variant = "checkbox"),
                         )
                         ExtraTinyVerticalSpacer()
                         state.radioOptions.forEach { option ->
@@ -393,6 +464,8 @@ fun ComponentsScreen(
                                 text = option,
                                 isChecked = state.selectedRadioOption == option,
                                 onCheckedChange = { onRadioOptionSelected(option) },
+                                firebaseController = firebaseController,
+                                ga4Event = ga4Event(component = "preference", variant = "radio_$option"),
                             )
                         }
                     }
@@ -406,6 +479,10 @@ fun ComponentsScreen(
                 filters = state.filters,
                 selectedFilter = state.selectedFilter,
                 onFilterSelected = onFilterSelected,
+                firebaseController = firebaseController,
+                ga4EventProvider = { filter ->
+                    ga4Event(component = "filter", variant = filter)
+                },
             )
         }
 

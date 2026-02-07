@@ -16,6 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 
@@ -30,6 +33,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * @param contentDescription Text used by accessibility services to describe what the icon represents.
  * @param onClick A lambda function to be invoked when the button is clicked.
  * @param feedback The feedback configuration for sound and haptics.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -40,6 +45,8 @@ fun AnimatedFloatingActionButton(
     contentDescription: String? = null,
     onClick: () -> Unit,
     feedback: ButtonFeedback = ButtonFeedback(),
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val haptics = LocalHapticFeedback.current
     val view = LocalView.current
@@ -54,6 +61,7 @@ fun AnimatedFloatingActionButton(
             checked = checkedState.value,
             onCheckedChange = { newChecked ->
                 feedback.performClick(view = view, hapticFeedback = haptics)
+                firebaseController.logGa4Event(ga4Event)
                 checkedState.value = newChecked
                 onClick()
             },
