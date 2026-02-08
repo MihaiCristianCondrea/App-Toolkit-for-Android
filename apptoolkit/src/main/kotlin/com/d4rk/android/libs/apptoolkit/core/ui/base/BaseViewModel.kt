@@ -51,7 +51,7 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
     abstract fun onEvent(event: E)
 
     /** Emits an [action] for the UI to handle. */
-    protected fun sendAction(action: A) {
+    fun sendAction(action: A) {
         viewModelScope.launch {
             _actionEvent.emit(action)
         }
@@ -78,7 +78,6 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
      * adapted for [UiStateScreen] since [ScreenState] is not generic in this codebase.
      */
     protected suspend fun <T> updateSuccessState(
-        // FIXME: Function "updateSuccessState" is never used Find ussage in the existing code base
         screenData: MutableStateFlow<UiStateScreen<T>>,
         updateData: (T) -> T,
     ) {

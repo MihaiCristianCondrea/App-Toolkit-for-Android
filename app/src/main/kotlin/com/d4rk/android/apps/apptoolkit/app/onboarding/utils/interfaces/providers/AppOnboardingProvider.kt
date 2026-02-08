@@ -56,7 +56,6 @@ class AppOnboardingProvider : OnboardingProvider {
                     FinishOnbardingPage()
                 }
             ),
-
             ).filter {
             when (it) {
                 is OnboardingPage.DefaultPage -> it.isEnabled

@@ -8,7 +8,9 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
@@ -94,10 +96,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeActions() {
         lifecycleScope.launch {
-            viewModel.actionEvent.collect { action ->
-                when (action) {
-                    is MainAction.ReviewOutcomeReported -> Unit
-                    is MainAction.InAppUpdateResultReported -> Unit
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.actionEvent.collect { action ->
+                    when (action) {
+                        is MainAction.ReviewOutcomeReported -> Unit
+                        is MainAction.InAppUpdateResultReported -> Unit
+                    }
                 }
             }
         }
