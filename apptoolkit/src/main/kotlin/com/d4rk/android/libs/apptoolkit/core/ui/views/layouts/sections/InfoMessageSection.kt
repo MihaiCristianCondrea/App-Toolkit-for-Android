@@ -27,9 +27,9 @@ import androidx.compose.ui.text.withStyle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.text.LearnMoreText
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.INFO_MESSAGE_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 
-private const val INFO_MESSAGE_TAG = "InfoMessageSection" // TODO: Move to log file
 
 /**
  * Displays an information message section with an optional "Learn More" link.
@@ -95,7 +95,7 @@ fun InfoMessageSection(
                                 !learnMoreUrl.isNullOrEmpty() -> {
                                     if (!context.openUrl(learnMoreUrl)) {
                                         Log.w(
-                                            INFO_MESSAGE_TAG,
+                                            INFO_MESSAGE_LOG_TAG,
                                             "Failed to open learn more url: $learnMoreUrl"
                                         )
                                     }
@@ -118,7 +118,7 @@ fun InfoMessageSection(
                             !learnMoreUrl.isNullOrEmpty() -> {
                                 if (!context.openUrl(learnMoreUrl)) {
                                     Log.w(
-                                        INFO_MESSAGE_TAG,
+                                        INFO_MESSAGE_LOG_TAG,
                                         "Failed to open learn more url: $learnMoreUrl"
                                     )
                                 }

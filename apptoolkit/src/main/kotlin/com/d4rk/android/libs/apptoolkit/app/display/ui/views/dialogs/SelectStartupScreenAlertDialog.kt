@@ -28,6 +28,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.SELECT_STARTUP_DIALOG_LOG_TAG
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
@@ -39,8 +40,6 @@ import org.koin.core.qualifier.named
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.min
 
-private const val SELECT_STARTUP_LOG_TAG =
-    "SelectStartupDialog" // TODO: Move to log tags file in library
 
 /**
  * A composable function that displays an [androidx.compose.material3.AlertDialog] allowing the user
@@ -72,7 +71,7 @@ fun SelectStartupScreenAlertDialog(
         .getStartupPage(default = defaultRoute)
         .collectDataStoreState(
             initial = { defaultRoute },
-            logTag = SELECT_STARTUP_LOG_TAG,
+            logTag = SELECT_STARTUP_DIALOG_LOG_TAG,
             onErrorReset = { mutableState -> mutableState.value = defaultRoute },
         )
     val startupRoute by startupRouteState

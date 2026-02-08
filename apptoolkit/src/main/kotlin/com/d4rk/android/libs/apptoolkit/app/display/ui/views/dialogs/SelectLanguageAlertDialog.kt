@@ -33,11 +33,11 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.SELECT_LANGUAGE_DIALOG_LOG_TAG
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 
-private const val SELECT_LANGUAGE_LOG_TAG = "SelectLanguageDialog" // TODO: Move to log tags file
 
 /**
  * A composable that displays an alert dialog for selecting the application language.
@@ -71,7 +71,7 @@ fun SelectLanguageAlertDialog(onDismiss: () -> Unit, onLanguageSelected: (String
     val currentLanguageState = dataStore.getLanguage()
         .collectDataStoreState(
             initial = { "" },
-            logTag = SELECT_LANGUAGE_LOG_TAG,
+            logTag = SELECT_LANGUAGE_DIALOG_LOG_TAG,
             onErrorReset = { mutableState ->
                 mutableState.value = ""
                 selectedLanguage.value = ""
@@ -95,7 +95,11 @@ fun SelectLanguageAlertDialog(onDismiss: () -> Unit, onLanguageSelected: (String
                 }
             },
             onError = { throwable, latest ->
-                Log.w(SELECT_LANGUAGE_LOG_TAG, "Failed to persist language selection.", throwable)
+                Log.w(
+                    SELECT_LANGUAGE_DIALOG_LOG_TAG,
+                    "Failed to persist language selection.",
+                    throwable
+                )
                 selectedLanguage.value = latest
             },
         )
