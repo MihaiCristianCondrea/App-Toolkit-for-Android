@@ -8,14 +8,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.PrivacySettingsProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
@@ -25,14 +30,17 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpace
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 private const val PRIVACY_SCREEN_NAME = "Privacy"
-private const val PRIVACY_SCREEN_CLASS = "PrivacySettingsList"
+private const val PRIVACY_SCREEN_CLASS = "PrivacySettingsScreen"
 
 @Composable
-fun PrivacySettingsList(
+fun PrivacySettingsScreen(
     paddingValues: PaddingValues = PaddingValues(),
 ) {
+    val viewModel: PrivacySettingsViewModel = koinViewModel()
+    val screenState: UiStateScreen<*> by viewModel.uiState.collectAsStateWithLifecycle()
     val provider: PrivacySettingsProvider = koinInject()
     val context: Context = LocalContext.current
 
@@ -45,9 +53,30 @@ fun PrivacySettingsList(
     TrackScreenState(
         firebaseController = firebaseController,
         screenName = PRIVACY_SCREEN_NAME,
-        screenState = ScreenState.Success(),
+        screenState = screenState.screenState,
     )
 
+    ScreenStateHandler(
+        screenState = screenState,
+        onLoading = { LoadingScreen() },
+        onEmpty = { NoDataScreen(paddingValues = paddingValues) },
+        onError = { NoDataScreen(isError = true, paddingValues = paddingValues) },
+        onSuccess = {
+            PrivacySettingsContent(
+                paddingValues = paddingValues,
+                provider = provider,
+                context = context,
+            )
+        }
+    )
+}
+
+@Composable
+private fun PrivacySettingsContent(
+    paddingValues: PaddingValues,
+    provider: PrivacySettingsProvider,
+    context: Context,
+) {
     LazyColumn(
         contentPadding = paddingValues,
         modifier = Modifier.fillMaxHeight(),

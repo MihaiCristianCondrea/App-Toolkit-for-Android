@@ -36,7 +36,7 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val ADVANCED_SETTINGS_SCREEN_NAME = "AdvancedSettings"
-private const val ADVANCED_SETTINGS_SCREEN_CLASS = "AdvancedSettingsList"
+private const val ADVANCED_SETTINGS_SCREEN_CLASS = "AdvancedSettingsScreen"
 
 /**
  * A Composable function that displays a list of advanced settings.
@@ -53,7 +53,7 @@ private const val ADVANCED_SETTINGS_SCREEN_CLASS = "AdvancedSettingsList"
  * typically provided by a Scaffold. Defaults to an empty `PaddingValues`.
  */
 @Composable
-fun AdvancedSettingsList(
+fun AdvancedSettingsScreen(
     paddingValues: PaddingValues = PaddingValues(),
 ) {
     val viewModel: AdvancedSettingsViewModel = koinViewModel()

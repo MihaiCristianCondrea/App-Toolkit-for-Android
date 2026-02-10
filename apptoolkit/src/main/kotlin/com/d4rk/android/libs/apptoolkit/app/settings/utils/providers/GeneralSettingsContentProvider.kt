@@ -4,10 +4,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import com.d4rk.android.libs.apptoolkit.app.about.ui.AboutScreen
-import com.d4rk.android.libs.apptoolkit.app.advanced.ui.AdvancedSettingsList
+import com.d4rk.android.libs.apptoolkit.app.advanced.ui.AdvancedSettingsScreen
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsList
-import com.d4rk.android.libs.apptoolkit.app.display.ui.DisplaySettingsList
-import com.d4rk.android.libs.apptoolkit.app.privacy.ui.PrivacySettingsList
+import com.d4rk.android.libs.apptoolkit.app.display.ui.DisplaySettingsScreen
+import com.d4rk.android.libs.apptoolkit.app.privacy.ui.PrivacySettingsScreen
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.ThemeSettingsList
 
@@ -34,9 +34,9 @@ class GeneralSettingsContentProvider(
                 }
             }
 
-            SettingsContent.ADVANCED -> AdvancedSettingsList(paddingValues = paddingValues)
-            SettingsContent.DISPLAY -> DisplaySettingsList(paddingValues = paddingValues)
-            SettingsContent.SECURITY_AND_PRIVACY -> PrivacySettingsList(paddingValues = paddingValues)
+            SettingsContent.ADVANCED -> AdvancedSettingsScreen(paddingValues = paddingValues)
+            SettingsContent.DISPLAY -> DisplaySettingsScreen(paddingValues = paddingValues)
+            SettingsContent.SECURITY_AND_PRIVACY -> PrivacySettingsScreen(paddingValues = paddingValues)
             SettingsContent.THEME -> ThemeSettingsList(paddingValues = paddingValues)
             SettingsContent.USAGE_AND_DIAGNOSTICS -> UsageAndDiagnosticsList(paddingValues = paddingValues)
             else -> customScreens[contentKey]?.invoke(paddingValues)

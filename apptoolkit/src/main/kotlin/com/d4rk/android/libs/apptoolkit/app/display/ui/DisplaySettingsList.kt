@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.core.os.LocaleListCompat
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.display.ui.views.dialogs.SelectLanguageAlertDialog
@@ -31,7 +32,10 @@ import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStor
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
-import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
@@ -47,10 +51,11 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.startActiv
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 
 private const val DISPLAY_SETTINGS_SCREEN_NAME = "DisplaySettings"
-private const val DISPLAY_SETTINGS_SCREEN_CLASS = "DisplaySettingsList"
+private const val DISPLAY_SETTINGS_SCREEN_CLASS = "DisplaySettingsScreen"
 
 /**
  * A composable function that displays a comprehensive list of display-related settings.
@@ -68,9 +73,11 @@ private const val DISPLAY_SETTINGS_SCREEN_CLASS = "DisplaySettingsList"
  * typically used to avoid overlap with system bars or scaffolds.
  */
 @Composable
-fun DisplaySettingsList(
+fun DisplaySettingsScreen(
     paddingValues: PaddingValues = PaddingValues(),
 ) {
+    val viewModel: DisplaySettingsViewModel = koinViewModel()
+    val screenState: UiStateScreen<*> by viewModel.uiState.collectAsStateWithLifecycle()
     val provider: DisplaySettingsProvider = koinInject()
     val firebaseController: FirebaseController = koinInject()
 
@@ -83,7 +90,7 @@ fun DisplaySettingsList(
     TrackScreenState(
         firebaseController = firebaseController,
         screenName = DISPLAY_SETTINGS_SCREEN_NAME,
-        screenState = ScreenState.Success(),
+        screenState = screenState.screenState,
     )
 
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -153,7 +160,13 @@ fun DisplaySettingsList(
         }
     }
 
-    LazyColumn(contentPadding = paddingValues, modifier = Modifier.fillMaxHeight()) {
+    ScreenStateHandler(
+        screenState = screenState,
+        onLoading = { LoadingScreen() },
+        onEmpty = { NoDataScreen(paddingValues = paddingValues) },
+        onError = { NoDataScreen(isError = true, paddingValues = paddingValues) },
+        onSuccess = {
+            LazyColumn(contentPadding = paddingValues, modifier = Modifier.fillMaxHeight()) {
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.appearance))
             SmallVerticalSpacer()
@@ -296,4 +309,7 @@ fun DisplaySettingsList(
             }
         }
     }
+            }
+        },
+    )
 }

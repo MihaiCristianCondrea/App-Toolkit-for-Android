@@ -1,13 +1,13 @@
 # Privacy
 
 ## Layers
-- **UI**: `PrivacySettingsList` provides privacy related preferences.
+- **UI**: `PrivacySettingsScreen` provides privacy related preferences.
 
 ## Primary Screens
-- `PrivacySettingsList` – toggles telemetry and data sharing options.
+- `PrivacySettingsScreen` – toggles telemetry and data sharing options.
 
 ## Integration
 ```kotlin
 val snackbarHostState = remember { SnackbarHostState() }
-PrivacySettingsList(snackbarHostState = snackbarHostState)
+PrivacySettingsScreen(snackbarHostState = snackbarHostState)
 ```
