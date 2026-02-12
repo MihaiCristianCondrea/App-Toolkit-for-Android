@@ -22,6 +22,8 @@ The `core` package provides foundational helpers and models:
 - Use `rememberWindowWidthSizeClass()` from `core.ui.window` to query the current width class in
   composables and toggle between phone and tablet experiences without relying on orientation
   heuristics.
+- For implementation guidance (imports, usage patterns, and breakpoints), see
+  `docs/compose/adaptive-window-size-classes.md`.
 
 ## Feature packages
 
