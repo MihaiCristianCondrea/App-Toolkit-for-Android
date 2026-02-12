@@ -1,3 +1,37 @@
+/*
+ * Copyright (c) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Copyright (c) $2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.d4rk.android.apps.apptoolkit.core.di.modules.apptoolkit.modules
 
 import com.d4rk.android.apps.apptoolkit.BuildConfig
@@ -20,35 +54,35 @@ import org.koin.dsl.module
 
 private val githubTokenQualifier = qualifier<GithubToken>()
 
-val issueReporterModule: Module =
-    module {
-        single { IssueReporterRemoteDataSource(client = get()) }
-        single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
-        single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get(), get()) }
-        single { SendIssueReportUseCase(get(), get(), get()) }
-
-        single(qualifier = named(name = "github_repository")) { "App-Toolkit-for-Android" }
-        single<GithubTarget> {
-            GithubTarget(
-                username = GithubConstants.GITHUB_USER,
-                repository = get(qualifier = named("github_repository")),
-            )
-        }
-
-        single(qualifier = named("github_changelog")) {
-            GithubConstants.githubChangelog(get<String>(named("github_repository")))
-        }
-
-        single(githubTokenQualifier) { BuildConfig.GITHUB_TOKEN.toToken() }
-
-        viewModel {
-            IssueReporterViewModel(
-                sendIssueReport = get(),
-                githubTarget = get(),
-                githubToken = get(githubTokenQualifier),
-                deviceInfoProvider = get(),
-                firebaseController = get(),
-                dispatchers = get(),
-            )
-        }
+val issueReporterModule: Module = module {
+    single<IssueReporterRemoteDataSource> { IssueReporterRemoteDataSource(client = get()) }
+    single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
+    single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get(), get()) }
+    single<SendIssueReportUseCase> { SendIssueReportUseCase(get(), get(), get()) }
+    single<String>(qualifier = named(name = "github_repository")) { "App-Toolkit-for-Android" }
+    single<GithubTarget> {
+        GithubTarget(
+            username = GithubConstants.GITHUB_USER,
+            repository = get(qualifier = named("github_repository"))
+        )
     }
+    single<String>(qualifier = named("github_changelog")) {
+        GithubConstants.githubChangelog(
+            get<String>(
+                named("github_repository")
+            )
+        )
+    }
+    single<String>(githubTokenQualifier) { BuildConfig.GITHUB_TOKEN.toToken() }
+
+    viewModel {
+        IssueReporterViewModel(
+            sendIssueReport = get(),
+            githubTarget = get(),
+            githubToken = get(githubTokenQualifier),
+            deviceInfoProvider = get(),
+            firebaseController = get(),
+            dispatchers = get(),
+        )
+    }
+}

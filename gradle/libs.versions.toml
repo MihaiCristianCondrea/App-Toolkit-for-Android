@@ -8,7 +8,7 @@ coil = "3.3.0"
 lottie = "6.7.1"
 datastorePreferences = "1.2.0"
 firebaseBom = "34.9.0"
-composeBom = "2026.01.01"
+composeBom = "2026.02.00"
 integrity = "1.6.0"
 konfettiCompose = "2.0.5"
 lifecycle = "2.10.0"
@@ -21,15 +21,15 @@ koin = "4.1.1"
 appUpdateKtx = "2.1.0"
 kotlin = "2.3.10"
 coreKtx = "1.17.0"
-activityCompose = "1.12.3"
-composeMaterial3 = "1.5.0-alpha13"
+activityCompose = "1.12.4"
+composeMaterial3 = "1.5.0-alpha14"
 composeMaterial3WindowSizeClass = "1.4.0"
 reviewKtx = "2.0.2"
 billing = "8.3.0"
 material = "1.13.0"
 playServicesAds = "24.9.0"
 multidex = "2.0.1"
-nav3 = "1.0.0"
+nav3 = "1.0.1"
 lifecycleViewmodelNav3 = "2.10.0"
 material3AdaptiveNav3 = "1.2.0"
 userMessagingPlatform = "4.0.0"
@@ -44,11 +44,11 @@ jupiter = "6.0.2"
 testCorutines = "1.10.2"
 testTurbine = "1.2.1"
 truth = "1.7.0"
-testManifestTestJunit4Android = "1.10.2"
+testManifestTestJunit4Android = "1.10.3"
 slf4j = "2.0.17"
 robolectric = "4.16.1"
 junit4 = "4.13.2"
-foundationLayout = "1.10.2"
+foundationLayout = "1.10.3"
 
 [libraries]
 # AndroidX & Material
@@ -151,7 +151,7 @@ androidx-compose-foundation-layout = { group = "androidx.compose.foundation", na
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 about-libraries = { id = "com.mikepenz.aboutlibraries.plugin.android", version.ref = "aboutlibraries" }
 googlePlayServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
