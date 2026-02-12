@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,10 @@ version = publishingVersion.get()
 
 plugins {
     alias(notation = libs.plugins.android.library)
+    alias(notation = libs.plugins.kotlin.compose)
+    alias(notation = libs.plugins.kotlin.serialization)
     alias(notation = libs.plugins.mannodermaus)
     alias(notation = libs.plugins.about.libraries)
-    alias(notation = libs.plugins.kotlin.serialization)
     `maven-publish`
 }
 
@@ -124,7 +125,7 @@ dependencies {
     // UI utilities
     api(dependencyNotation = libs.bundles.ui.effects)
     api(dependencyNotation = libs.bundles.ui.richtext)
-    implementation(libs.androidx.compose.foundation.layout)
+    api(dependencyNotation = libs.androidx.compose.foundation.layout)
 
     // Unit Tests
     testImplementation(dependencyNotation = libs.bundles.unitTest)

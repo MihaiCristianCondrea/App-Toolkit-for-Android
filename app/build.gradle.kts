@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,11 +22,12 @@ import java.util.Properties
 plugins {
     alias(notation = libs.plugins.android.application)
     alias(notation = libs.plugins.kotlin.compose)
+    alias(notation = libs.plugins.kotlin.serialization)
+    alias(notation = libs.plugins.google.mobile.services)
+    alias(notation = libs.plugins.firebase.crashlytics)
+    alias(notation = libs.plugins.firebase.perfromance)
     alias(notation = libs.plugins.about.libraries)
     alias(notation = libs.plugins.mannodermaus)
-    alias(notation = libs.plugins.googlePlayServices)
-    alias(notation = libs.plugins.googleFirebase)
-    alias(notation = libs.plugins.kotlin.serialization)
 }
 
 android {
