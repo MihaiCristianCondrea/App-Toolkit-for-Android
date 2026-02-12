@@ -50,7 +50,7 @@ kotlinxCoroutines = "1.10.2"
 kotlinxSerialization = "1.10.0"
 
 # --- Ktor ---
-ktorBom = "3.4.0"
+ktor = "3.4.0"
 
 # --- Koin ---
 koin = "4.1.1"
@@ -132,11 +132,11 @@ google-play-integrity = { module = "com.google.android.play:integrity", version.
 google-play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "googlePlayInAppReview" }
 
 # --- Networking (Ktor BOM) ---
-ktor-bom = { module = "io.ktor:ktor-bom", version.ref = "ktorBom" }
+ktor-bom = { module = "io.ktor:ktor-bom", version.ref = "ktor" }
 ktor-client-android = { module = "io.ktor:ktor-client-android" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging" }
-ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktorBom" }
+ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-client-serialization = { module = "io.ktor:ktor-client-serialization" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json" }
 
