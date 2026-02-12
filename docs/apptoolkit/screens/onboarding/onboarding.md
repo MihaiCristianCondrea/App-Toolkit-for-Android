@@ -236,7 +236,7 @@ Only contract requirement:
 
 ## Suggested doc placement (to match the Help doc style)
 
-* `docs/apptoolkit/screens/onboarding/integration.md` (how to launch, how to observe completion)
-* `docs/apptoolkit/screens/onboarding/pages.md` (DefaultPage vs CustomPage patterns)
-* `docs/apptoolkit/screens/onboarding/privacy-consent.md` (FirebaseConsentDialog + rules)
-* `docs/apptoolkit/screens/onboarding/theme.md` (theme mode + palettes + seasonal behavior)
+* `docs/apptoolkit/screens/onboarding/onboarding.md` (how to launch, state/events/actions, completion flow)
+* `docs/apptoolkit/screens/onboarding/pages/pages.md` (DefaultPage vs CustomPage patterns)
+* `docs/apptoolkit/screens/onboarding/pages/privacy-consent.md` (FirebaseConsentDialog + rules)
+* `docs/apptoolkit/screens/onboarding/pages/theme.md` (theme mode + palettes + seasonal behavior)
