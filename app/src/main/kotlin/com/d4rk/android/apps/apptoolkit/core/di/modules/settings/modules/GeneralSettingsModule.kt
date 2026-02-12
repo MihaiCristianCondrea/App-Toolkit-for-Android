@@ -22,6 +22,8 @@ import com.d4rk.android.apps.apptoolkit.app.components.ui.ComponentsUnlockViewMo
 import com.d4rk.android.apps.apptoolkit.app.settings.about.ui.AppAboutSettingsContent
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppDisplaySettingsProvider
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppPrivacySettingsProvider
+import com.d4rk.android.libs.apptoolkit.app.display.ui.DisplaySettingsViewModel
+import com.d4rk.android.libs.apptoolkit.app.privacy.ui.PrivacySettingsViewModel
 import com.d4rk.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.settings.general.domain.repository.GeneralSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsViewModel
@@ -62,5 +64,13 @@ val generalSettingsModule: Module = module {
             dispatchers = get(),
             firebaseController = get(),
         )
+    }
+
+    viewModel {
+        DisplaySettingsViewModel(firebaseController = get())
+    }
+
+    viewModel {
+        PrivacySettingsViewModel(firebaseController = get())
     }
 }
