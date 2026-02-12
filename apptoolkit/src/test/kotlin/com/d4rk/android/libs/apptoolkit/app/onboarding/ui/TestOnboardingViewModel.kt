@@ -185,11 +185,8 @@ class TestOnboardingViewModel {
 
     private fun createViewModel(repository: OnboardingRepository): OnboardingViewModel =
         OnboardingViewModel(
-            observeOnboardingCompletionUseCase = ObserveOnboardingCompletionUseCase(
-                repository,
-                firebaseController,
-            ),
-            completeOnboardingUseCase = CompleteOnboardingUseCase(repository, firebaseController),
+            observeOnboardingCompletionUseCase = ObserveOnboardingCompletionUseCase(repository),
+            completeOnboardingUseCase = CompleteOnboardingUseCase(repository),
             requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
             dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
             firebaseController = firebaseController,

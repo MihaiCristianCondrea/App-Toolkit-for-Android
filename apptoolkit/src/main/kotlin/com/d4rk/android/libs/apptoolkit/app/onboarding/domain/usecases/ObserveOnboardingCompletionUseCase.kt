@@ -24,14 +24,7 @@ import kotlinx.coroutines.flow.onStart
 
 class ObserveOnboardingCompletionUseCase(
     private val repository: OnboardingRepository,
-    private val firebaseController: FirebaseController,
 ) {
 
     operator fun invoke(): Flow<Boolean> = repository.observeOnboardingCompletion()
-        .onStart {
-            firebaseController.logBreadcrumb(
-                message = "Observe onboarding completion started",
-                attributes = mapOf("source" to "ObserveOnboardingCompletionUseCase"),
-            )
-        }
 }

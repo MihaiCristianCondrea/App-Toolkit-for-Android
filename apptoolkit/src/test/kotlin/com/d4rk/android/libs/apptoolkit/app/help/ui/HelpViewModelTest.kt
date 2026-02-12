@@ -77,7 +77,7 @@ class HelpViewModelTest {
                     )
             }
             val viewModel = HelpViewModel(
-                getFaqUseCase = GetFaqUseCase(repository, firebaseController),
+                getFaqUseCase = GetFaqUseCase(repository),
                 forceInAppReviewUseCase = reviewUseCase,
                 dispatchers = testDispatcherProvider(),
                 firebaseController = firebaseController,
@@ -103,7 +103,7 @@ class HelpViewModelTest {
                 }
             }
             val viewModel = HelpViewModel(
-                getFaqUseCase = GetFaqUseCase(repository, firebaseController),
+                getFaqUseCase = GetFaqUseCase(repository),
                 forceInAppReviewUseCase = reviewUseCase,
                 dispatchers = testDispatcherProvider(),
                 firebaseController = firebaseController,

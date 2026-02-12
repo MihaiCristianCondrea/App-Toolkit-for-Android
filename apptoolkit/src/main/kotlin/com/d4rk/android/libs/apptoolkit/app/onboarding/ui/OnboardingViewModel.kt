@@ -34,6 +34,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -76,6 +77,9 @@ class OnboardingViewModel(
         observerJob = observerJob.restart {
             observeOnboardingCompletionUseCase.invoke()
                 .flowOn(dispatchers.io)
+                .onStart {
+                    firebaseController.logBreadcrumb(message = "Observe onboarding completion started", attributes = mapOf("source" to "ObserveOnboardingCompletionUseCase"))
+                }
                 .onEach { completed ->
                     updateStateThreadSafe {
                         screenState.copyData { copy(isOnboardingCompleted = completed) }

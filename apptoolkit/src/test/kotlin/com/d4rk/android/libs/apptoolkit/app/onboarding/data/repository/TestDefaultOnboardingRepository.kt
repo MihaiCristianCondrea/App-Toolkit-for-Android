@@ -18,10 +18,8 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository
 
 import com.d4rk.android.libs.apptoolkit.app.onboarding.data.local.OnboardingPreferencesDataSource
-import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
-import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -51,10 +49,7 @@ class TestOnboardingRepositoryImpl {
     fun `observeOnboardingCompletion reflects data source state`() =
         runTest(dispatcherExtension.testDispatcher) {
             val dataSource = FakeOnboardingPreferencesDataSource()
-            val repository = OnboardingRepositoryImpl(
-                dataStore = dataSource,
-                firebaseController = mockk<FirebaseController>(relaxed = true),
-            )
+            val repository = OnboardingRepositoryImpl(dataStore = dataSource)
 
             assertThat(repository.observeOnboardingCompletion().first()).isFalse()
 
@@ -66,10 +61,7 @@ class TestOnboardingRepositoryImpl {
     fun `setOnboardingCompleted updates data source`() =
         runTest(dispatcherExtension.testDispatcher) {
             val dataSource = FakeOnboardingPreferencesDataSource()
-            val repository = OnboardingRepositoryImpl(
-                dataStore = dataSource,
-                firebaseController = mockk<FirebaseController>(relaxed = true),
-            )
+            val repository = OnboardingRepositoryImpl(dataStore = dataSource)
 
             repository.setOnboardingCompleted()
             advanceUntilIdle()

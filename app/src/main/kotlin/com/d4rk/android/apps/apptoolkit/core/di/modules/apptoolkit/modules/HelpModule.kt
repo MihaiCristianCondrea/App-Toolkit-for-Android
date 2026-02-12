@@ -46,7 +46,7 @@ val helpModule: Module = module {
             firebaseController = get(),
         )
     }
-    single<GetFaqUseCase> { GetFaqUseCase(repository = get(), firebaseController = get()) }
+    single<GetFaqUseCase> { GetFaqUseCase(repository = get()) }
 
     viewModel {
         HelpViewModel(

@@ -86,6 +86,7 @@ class HelpViewModel(
             getFaqUseCase.invoke()
                 .flowOn(context = dispatchers.io)
                 .onStart {
+                    firebaseController.logBreadcrumb(message = "FAQ fetch started", attributes = mapOf("source" to "GetFaqUseCase"))
                     updateStateThreadSafe {
                         screenState.setLoading()
                     }
