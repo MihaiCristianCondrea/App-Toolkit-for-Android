@@ -7,19 +7,19 @@ library. Follow these rules to keep ViewModels predictable, testable, and consis
 
 These rules apply to:
 
-- All ViewModels that extend `ScreenViewModel`
-- All flows collected in `viewModelScope`
-- All updates to `MutableStateFlow<UiStateScreen<T>>`
+- All ViewModels that extend `ScreenViewModel` (including `LoggedScreenViewModel`)
+- All `Flow` collections started from `viewModelScope`
+- All updates to `MutableStateFlow<UiStateScreen<T>>` (`screenState` in AppToolkit ViewModels)
 
 ---
 
 ## Rule 1: Prefer flows for ongoing work
 
-Prefer `Flow` when a use case can emit values over time or when you want consistent collection
-patterns.
+Prefer `Flow` when a use case can emit values over time (observe/stream) or when you want consistent
+collection patterns (`flowOn`, `onStart`, `catch`, `launchIn`).
 
 - Use `launchIn(viewModelScope)` for long-lived work.
-- Use `collect` only when you need to do work sequentially inside a coroutine.
+- Use `collect` only when you must do sequential suspending work per emission.
 
 ### Example
 
@@ -45,15 +45,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.update
+import kotlinx.collections*
 
 class HelpViewModel(
     private val getFaqUseCase: GetFaqUseCase,
@@ -89,6 +81,7 @@ class HelpViewModel(
                     .onSuccess { faqs: List<FaqItem> ->
                         val screenStateForData: ScreenState =
                             if (faqs.isEmpty()) ScreenState.NoData() else ScreenState.Success()
+
                         screenState.update { current: UiStateScreen<HelpUiState> ->
                             current.copy(
                                 screenState = screenStateForData,
@@ -100,25 +93,27 @@ class HelpViewModel(
                         screenState.setError(message = error.asUiText())
                     }
             }
-            .catch {
-                if (it is CancellationException) throw it
+            .catch { throwable ->
+                if (throwable is CancellationException) throw throwable
                 firebaseController.reportViewModelError(
                     viewModelName = "HelpViewModel",
                     action = "loadFaq",
-                    throwable = it,
+                    throwable = throwable,
                 )
-                screenState.setError(message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq))
+                screenState.setError(
+                    message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq)
+                )
             }
             .launchIn(scope = viewModelScope)
     }
 }
-```
+````
 
 ---
 
 ## Rule 2: Set coroutine context with `flowOn`
 
-Use `flowOn` to move upstream work off the main thread.
+Use `flowOn` to move upstream work off the main thread:
 
 * Use `dispatchers.io` for I/O (network, disk, database).
 * Use `dispatchers.default` for CPU-bound work.
@@ -127,7 +122,7 @@ Do not switch context inside flow builders with `withContext` to call `emit`. Us
 
 ---
 
-## Rule 3: Report ViewModel flow failures in `catch`
+## Rule 3: Report unexpected flow failures in `catch`
 
 When a flow fails unexpectedly, report it with `firebaseController.reportViewModelError` in `catch`.
 
@@ -177,7 +172,11 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 
-private fun <T> showLoadError(screenState: kotlinx.coroutines.flow.MutableStateFlow<com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen<T>>) {
+private fun <T> showLoadError(
+    screenState: kotlinx.coroutines.flow.MutableStateFlow<
+        com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen<T>
+    >
+) {
     screenState.showSnackbar(
         UiSnackbar(
             message = UiTextHelper.StringResource(R.string.error_failed_to_load_apps),
@@ -191,9 +190,9 @@ private fun <T> showLoadError(screenState: kotlinx.coroutines.flow.MutableStateF
 
 ---
 
-## Rule 5: Handle results with `onSuccess`, `onFailure`, and optional `onLoading`
+## Rule 5: Handle `DataState` using `onSuccess`, `onFailure`, and optional `onLoading`
 
-When you receive a `DataState`, handle it using the provided extension functions.
+When you receive a `DataState`, handle it using the provided extension functions:
 
 * Use `onSuccess { ... }` for success UI.
 * Use `onFailure { ... }` for error UI.
@@ -206,11 +205,11 @@ When you receive a `DataState`, handle it using the provided extension functions
 When a ViewModel needs to trigger a one-off operation that is not modeled as a `Flow`, use
 `launchReport` instead of ad-hoc `viewModelScope.launch` + `runCatching`.
 
-This keeps Firebase breadcrumbs, analytics, and error reporting consistent while ensuring errors
-are handled in one place.
+This keeps Firebase breadcrumbs, analytics, and error reporting consistent while ensuring errors are
+handled in one place.
 
 * Use `launchReport` for fire-and-forget work (e.g., billing launch, toggles without a `Flow`).
-* Reserve `viewModelScope.launch` for local UI state updates only.
+* Reserve `viewModelScope.launch` for local UI-only state updates.
 
 ### Example
 
@@ -233,9 +232,9 @@ private fun handleResult(result: DataState<Unit, Errors>) {
 
 ---
 
-## Rule 6: Trigger initial loading through an event in `init`
+## Rule 7: Trigger initial work through an event in `init`
 
-When a screen needs initial loading, dispatch it as an event from `init`.
+When a screen needs initial loading/observing, dispatch it as an event from `init`.
 
 Do not start loading directly in `init` without using the event contract.
 
@@ -254,7 +253,7 @@ class ExampleViewModel : androidx.lifecycle.ViewModel() {
 
 ---
 
-## Rule 7: Inject `DispatcherProvider` only in ViewModels
+## Rule 8: Inject `DispatcherProvider` only in ViewModels
 
 Inject `DispatcherProvider` into ViewModels to apply `flowOn` consistently.
 
@@ -275,7 +274,7 @@ interface DispatcherProvider {
 
 ---
 
-## Rule 8: Use `UiStateScreen(data = ...)` as the default initial state
+## Rule 9: Use `UiStateScreen(data = ...)` as the default initial state
 
 The default screen state is `ScreenState.IsLoading()`.
 
@@ -291,7 +290,7 @@ val initial = UiStateScreen(data = Any())
 
 ---
 
-## Rule 9: Set loading state with `onStart` and `setLoading()`
+## Rule 10: Set loading state with `onStart` and `setLoading()`
 
 If a flow represents a fetch/load operation, set loading in `onStart` using the existing extension:
 
@@ -304,16 +303,17 @@ If a flow represents a fetch/load operation, set loading in `onStart` using the 
 ```kotlin
 package com.d4rk.android.libs.apptoolkit.app.help.ui
 
-import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onStart
 
 fun <T> observeLoading(
-    screenState: kotlinx.coroutines.flow.MutableStateFlow<com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen<T>>,
+    screenState: kotlinx.coroutines.flow.MutableStateFlow<
+        com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen<T>
+    >,
     source: Flow<Unit>,
-    scope: androidx.lifecycle.LifecycleCoroutineScope,
+    scope: kotlinx.coroutines.CoroutineScope,
 ) {
     source
         .onStart { screenState.setLoading() }
@@ -323,7 +323,7 @@ fun <T> observeLoading(
 
 ---
 
-## Rule 10: Use mutex helpers for atomic UI updates
+## Rule 11: Use mutex helpers for atomic UI updates
 
 When multiple coroutines can update state concurrently, serialize UI updates:
 
@@ -367,11 +367,266 @@ Follow these rules:
 
 * Prefer flows and use `launchIn(viewModelScope)` for ongoing work.
 * Use `flowOn` to move upstream work off the main thread.
-* Log unexpected failures in `catch` with `firebaseController.reportViewModelError`.
+* Report unexpected failures in `catch` with `firebaseController.reportViewModelError`.
 * Show snackbars with `screenState.showSnackbar(UiSnackbar(...))`.
 * Handle results with `onSuccess` and `onFailure` (and optional `onLoading`).
-* Trigger initial loading through an event from `init`.
+* Trigger initial work through an event from `init`.
 * Inject `DispatcherProvider` only in ViewModels.
 * Use `UiStateScreen(data = ...)` as the default initial state.
 * Use `.onStart { screenState.setLoading() }` for loading transitions.
 * Serialize concurrent UI updates with mutex helpers.
+
+---
+
+# Thread-safe state updates in `BaseViewModel`
+
+This document describes the thread-safety helpers added to `BaseViewModel` in AppToolkit. Use these
+helpers to make state updates predictable when multiple coroutines can update the same UI state.
+
+## Background
+
+`MutableStateFlow` is safe to update from multiple threads. However, a *sequence of state updates*
+is not automatically atomic. If multiple coroutines update the same state around the same time,
+updates can interleave and produce inconsistent UI behavior, such as:
+
+* Lost updates (one update overwrites another)
+* Incorrect ordering of `Loading`, `Error`, and `Success` transitions
+* Snackbar updates that appear out of order
+* Multiple “single operation” jobs running at the same time
+
+To address these issues, AppToolkit adds a `Mutex` to `BaseViewModel` and provides helper functions
+that serialize state updates.
+
+## What changed in `BaseViewModel`
+
+`BaseViewModel` includes:
+
+* A private `Mutex` (`stateMutex`) for serializing state changes
+* `updateStateThreadSafe()` for atomic state mutations
+* `updateSuccessState()` for success-only updates to `UiStateScreen<T>`
+* `generalJob` for screens that need one cancellable operation at a time
+
+## Additions
+
+### `stateMutex`
+
+`BaseViewModel` includes a private mutex:
+
+```kotlin
+import kotlinx.coroutines.sync.Mutex
+
+private val stateMutex = Mutex()
+```
+
+Use the mutex through the helper functions described below. Keep mutex-protected sections short.
+
+### `updateStateThreadSafe()`
+
+Use `updateStateThreadSafe()` to apply multiple related state changes as a single atomic update.
+
+```kotlin
+import kotlinx.coroutines.sync.withLock
+
+protected suspend fun updateStateThreadSafe(update: () -> Unit) {
+    stateMutex.withLock { update() }
+}
+```
+
+#### When to use
+
+Use `updateStateThreadSafe()` when:
+
+* A collector updates state and UI messages together (for example, state + snackbar)
+* Multiple coroutines can update the same state concurrently
+* You need ordering guarantees for back-to-back emissions
+
+#### Example
+
+```kotlin
+import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
+import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
+
+updateStateThreadSafe {
+    screenState.updateState(ScreenState.Error())
+    screenState.showSnackbar(
+        UiSnackbar(
+            message = UiTextHelper.StringResource(R.string.error_generic),
+            isError = true,
+            timeStamp = System.currentTimeMillis(),
+            type = ScreenMessageType.SNACKBAR,
+        )
+    )
+}
+```
+
+#### Guidance
+
+* Do not perform IO inside the mutex.
+* Do not call suspend functions inside the `update` lambda.
+
+Do suspend work first, then lock only for the state update.
+
+### `updateSuccessState()` and `getSuccessData()`
+
+`updateSuccessState()` updates `UiStateScreen.data` only when the current screen state is
+`ScreenState.Success`.
+
+```kotlin
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.sync.withLock
+
+protected suspend fun <T> updateSuccessState(
+    screenData: MutableStateFlow<UiStateScreen<T>>,
+    updateData: (T) -> T,
+) {
+    stateMutex.withLock {
+        getSuccessData(screenData)?.let { data ->
+            screenData.value = screenData.value.copy(data = updateData(data))
+        }
+    }
+}
+
+protected fun <T> getSuccessData(screenData: MutableStateFlow<UiStateScreen<T>>): T? {
+    val current = screenData.value
+    if (current.screenState !is ScreenState.Success) return null
+    return current.data
+}
+```
+
+#### When to use
+
+Use `updateSuccessState()` when:
+
+* The screen is expected to have valid `data` only in `Success`
+* You want to ignore late updates while the screen is `Loading`, `Error`, or `NoData`
+
+This pattern is useful for changing a field in your `data` model without changing the overall
+screen state.
+
+#### Example
+
+```kotlin
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+
+private fun setBillingInProgress(inProgress: Boolean) {
+    viewModelScope.launch {
+        updateSuccessState(screenState) { current ->
+            current.copy(isBillingInProgress = inProgress)
+        }
+    }
+}
+```
+
+### `generalJob`
+
+`generalJob` is a shared job reference that supports the “one active operation” pattern.
+
+```kotlin
+import kotlinx.coroutines.Job
+
+protected var generalJob: Job? = null
+```
+
+#### When to use
+
+Use `generalJob` when the ViewModel only needs one cancellable operation at a time, such as:
+
+* Loading content (FAQ, settings content, navigation items)
+* Requesting consent
+* Sending a report
+* Clearing cache
+
+If the ViewModel needs multiple independent operations (for example, observing a list and toggling
+favorites), keep dedicated job properties.
+
+#### Example (Flow-based job)
+
+```kotlin
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+
+generalJob?.cancel()
+generalJob = getFaqUseCase()
+    .launchIn(viewModelScope)
+```
+
+#### Example (Coroutine job)
+
+```kotlin
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+
+generalJob?.cancel()
+generalJob = viewModelScope.launch {
+    // Work that should replace any previous general job.
+}
+```
+
+## Recommended patterns
+
+### Serialize collector updates
+
+If a flow collector performs multiple updates per emission, wrap the updates in
+`updateStateThreadSafe()`.
+
+```kotlin
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.updateData
+import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
+
+updateStateThreadSafe {
+    result
+        .onSuccess { data ->
+            screenState.updateData(newState = ScreenState.Success()) { current ->
+                current.copy(items = data)
+            }
+        }
+        .onFailure {
+            screenState.updateState(ScreenState.Error())
+        }
+}
+```
+
+### Keep mutex-protected sections small
+
+Lock only the code that must be atomic. Do not lock around:
+
+* IO work
+* long computations
+* delays
+* other suspend operations
+
+## Migration guidance
+
+When updating an existing ViewModel:
+
+1. Identify places where state is updated from multiple coroutines.
+2. Wrap multi-step state mutations in `updateStateThreadSafe()`.
+3. Use `updateSuccessState()` for success-only mutations to `UiStateScreen<T>.data`.
+4. Replace one-off job fields with `generalJob` when the ViewModel only needs one cancellable
+   operation.
+
+## Summary
+
+Use these helpers to make state updates reliable:
+
+* `updateStateThreadSafe { ... }` for atomic UI-state changes
+* `updateSuccessState(...)` for success-only updates to `UiStateScreen<T>`
+* `generalJob` for ViewModels that have one cancellable operation at a time
+
+```
+
+Key improvements made (without changing your references/essence):
+- Removed the pasted `onCompletion` operator KDoc (it’s generic Kotlin docs and creates noise).
+- Fixed the duplicate “Rule 6” numbering and reduced repeated wording.
+- Clarified what is allowed for `viewModelScope.launch` (UI-only updates) vs `launchReport`.
+- Made the loading helper example type-correct (`CoroutineScope` instead of `LifecycleCoroutineScope` + no unused import).
+- Kept your original code examples and naming, but cleaned indentation and tightened phrasing.

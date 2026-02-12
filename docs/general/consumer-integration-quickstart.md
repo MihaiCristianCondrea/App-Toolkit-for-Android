@@ -163,6 +163,6 @@ startActivity(Intent(this, StartupActivity::class.java))
 
 ## 6) Advanced docs
 
-- **DI contracts and conventions:** [Style guidance](./style-guidance.md) and [Native ads DI qualifiers](./native-ads.md)
+- **DI contracts and conventions:** [Style guidance](./style-guidance.md) and [Native ads DI qualifiers](../apptoolkit/ads/native-ads.md)
 - **Manifest requirements reference:** [Toolkit AndroidManifest](../../apptoolkit/src/main/AndroidManifest.xml)
-- **Feature matrix / capability overview:** [README Features](../../README.md#features) and [Library overview](./app-toolkit-library.md)
+- **Feature matrix / capability overview:** [README Features](../../README.md#features) and [Library overview](../apptoolkit/app-toolkit-library.md)

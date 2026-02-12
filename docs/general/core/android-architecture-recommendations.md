@@ -1,3 +1,7 @@
+# Architecture
+
+The project is split into three top-level modules, each with a clear responsibility.
+
 # Recommendations for Android architecture
 
 bookmark_border
