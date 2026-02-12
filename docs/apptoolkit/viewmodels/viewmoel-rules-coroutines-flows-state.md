@@ -16,7 +16,7 @@ These rules apply to:
 ## Rule 1: Prefer flows for ongoing work
 
 Prefer `Flow` when a use case can emit values over time (observe/stream) or when you want consistent
-collection patterns (`flowOn`, `onStart`, `catch`, `launchIn`).
+collection patterns (`flowOn`, `onStart`, `catchReport`, `launchIn`).
 
 - Use `launchIn(viewModelScope)` for long-lived work.
 - Use `collect` only when you must do sequential suspending work per emission.
@@ -93,15 +93,14 @@ class HelpViewModel(
                         screenState.setError(message = error.asUiText())
                     }
             }
-            .catch { throwable ->
-                if (throwable is CancellationException) throw throwable
-                firebaseController.reportViewModelError(
-                    viewModelName = "HelpViewModel",
-                    action = "loadFaq",
-                    throwable = throwable,
-                )
+            .catchReport(
+                action = "loadFaq",
+                fallbackMessage = UiTextHelper.StringResource(R.string.error_failed_to_load_faq),
+            ) { throwable ->
                 screenState.setError(
-                    message = UiTextHelper.StringResource(R.string.error_failed_to_load_faq)
+                    message = throwable.asUiText(
+                        fallback = UiTextHelper.StringResource(R.string.error_failed_to_load_faq)
+                    )
                 )
             }
             .launchIn(scope = viewModelScope)
@@ -122,32 +121,38 @@ Do not switch context inside flow builders with `withContext` to call `emit`. Us
 
 ---
 
-## Rule 3: Report unexpected flow failures in `catch`
+## Rule 3: Report unexpected flow failures with `catchReport`
 
-When a flow fails unexpectedly, report it with `firebaseController.reportViewModelError` in `catch`.
+Do not use simple `.catch { ... }` for ViewModel flow error reporting. Use `catchReport(...)` so
+logging/reporting and cancellation handling stay consistent.
 
-* Rethrow `CancellationException`.
-* Log the ViewModel name and the action where the error happened.
-* After logging, update UI state and show user feedback when appropriate.
+* Use `action = ...` so reports include where the error happened.
+* Keep user-facing UI state updates inside the `catchReport` lambda.
+* Provide `fallbackMessage` when the UI needs a safe default string.
 
 ### Example
 
 ```kotlin
 package com.d4rk.android.apps.apptoolkit.app.apps.list.ui
 
-import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import kotlin.coroutines.cancellation.CancellationException
+import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.core.ui.base.catchReport
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
+import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 
-private fun reportFlowFailure(
-    firebaseController: FirebaseController,
-    throwable: Throwable,
-) {
-    if (throwable is CancellationException) throw throwable
-    firebaseController.reportViewModelError(
-        viewModelName = "AppsListViewModel",
-        action = "observeFetch",
-        throwable = throwable,
-    )
+private fun observeApps() {
+    getAppsUseCase()
+        .catchReport(
+            action = "observeApps",
+            fallbackMessage = UiTextHelper.StringResource(R.string.error_failed_to_load_apps),
+        ) { throwable ->
+            screenState.setError(
+                message = throwable.asUiText(
+                    fallback = UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
+                )
+            )
+        }
+        .launchIn(viewModelScope)
 }
 ```
 
@@ -367,7 +372,7 @@ Follow these rules:
 
 * Prefer flows and use `launchIn(viewModelScope)` for ongoing work.
 * Use `flowOn` to move upstream work off the main thread.
-* Report unexpected failures in `catch` with `firebaseController.reportViewModelError`.
+* Report unexpected failures with `catchReport(...)` (not simple `.catch { ... }`).
 * Show snackbars with `screenState.showSnackbar(UiSnackbar(...))`.
 * Handle results with `onSuccess` and `onFailure` (and optional `onLoading`).
 * Trigger initial work through an event from `init`.
