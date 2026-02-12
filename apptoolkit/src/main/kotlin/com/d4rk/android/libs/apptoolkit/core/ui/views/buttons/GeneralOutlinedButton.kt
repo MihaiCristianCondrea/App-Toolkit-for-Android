@@ -103,7 +103,7 @@ fun GeneralOutlinedButton(
             ButtonIconSpacer()
         }
         if (hasLabel) {
-            Text(text = label.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(text = label, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }

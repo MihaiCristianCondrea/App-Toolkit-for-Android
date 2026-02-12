@@ -327,7 +327,7 @@ class BillingRepository private constructor(
                 message = "Billing flow result",
                 attributes = mapOf(
                     "responseCode" to billingResult.responseCode.toString(),
-                    "debugMessage" to billingResult.debugMessage.orEmpty(),
+                    "debugMessage" to billingResult.debugMessage,
                 ),
             )
 

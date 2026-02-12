@@ -3,7 +3,7 @@
 ##############################################
 
 # Kotlinx Serialization: keep generated serializers + companions
--keepattributes *Annotation*,InnerClasses,EnclosingMethod
+-keepattributes InnerClasses,EnclosingMethod
 
 -keep @kotlinx.serialization.Serializable class com.d4rk.android.libs.apptoolkit.** { *; }
 

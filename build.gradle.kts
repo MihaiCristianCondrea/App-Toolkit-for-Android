@@ -22,7 +22,7 @@ plugins {
     alias(notation = libs.plugins.kotlin.serialization) apply false
     alias(notation = libs.plugins.google.mobile.services) apply false
     alias(notation = libs.plugins.firebase.crashlytics) apply false
-    alias(notation = libs.plugins.firebase.perfromance) apply false
+    alias(notation = libs.plugins.firebase.performance) apply false
     alias(notation = libs.plugins.about.libraries) apply true
-    alias(notation = libs.plugins.mannodermaus) apply false
+    alias(notation = libs.plugins.mannodermaus.android.junit5) apply false
 }

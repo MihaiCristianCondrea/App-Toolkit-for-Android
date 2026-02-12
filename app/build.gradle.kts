@@ -25,9 +25,9 @@ plugins {
     alias(notation = libs.plugins.kotlin.serialization)
     alias(notation = libs.plugins.google.mobile.services)
     alias(notation = libs.plugins.firebase.crashlytics)
-    alias(notation = libs.plugins.firebase.perfromance)
+    alias(notation = libs.plugins.firebase.performance)
     alias(notation = libs.plugins.about.libraries)
-    alias(notation = libs.plugins.mannodermaus)
+    alias(notation = libs.plugins.mannodermaus.android.junit5)
 }
 
 android {
@@ -183,5 +183,5 @@ dependencies {
 
     // Instrumentation Tests
     androidTestImplementation(dependencyNotation = libs.bundles.instrumentationTest)
-    debugImplementation(dependencyNotation = libs.androidx.ui.test.manifest)
+    debugImplementation(dependencyNotation = libs.androidx.compose.ui.test.manifest)
 }

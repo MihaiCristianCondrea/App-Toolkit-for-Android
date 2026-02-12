@@ -43,10 +43,10 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable
 fun CustomSwitch(
+    modifier: Modifier = Modifier,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     enabled: Boolean = true,
-    modifier: Modifier = Modifier,
     checkIcon: ImageVector = Icons.Filled.Check,
     uncheckIcon: ImageVector = Icons.Filled.Close
 ) {

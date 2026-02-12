@@ -28,8 +28,8 @@ plugins {
     alias(notation = libs.plugins.android.library)
     alias(notation = libs.plugins.kotlin.compose)
     alias(notation = libs.plugins.kotlin.serialization)
-    alias(notation = libs.plugins.mannodermaus)
     alias(notation = libs.plugins.about.libraries)
+    alias(notation = libs.plugins.mannodermaus.android.junit5)
     `maven-publish`
 }
 
@@ -89,24 +89,24 @@ android {
 
 dependencies {
 
-    // AndroidX
+    // AndroidX (Core / platform)
     api(dependencyNotation = libs.bundles.androidx.core)
+    api(dependencyNotation = libs.androidx.window)
 
     // Compose
     api(dependencyNotation = platform(libs.androidx.compose.bom))
     api(dependencyNotation = libs.bundles.androidx.compose)
-    api(dependencyNotation = libs.bundles.androidx.navigation3)
-    api(dependencyNotation = libs.androidx.material3.window.size)
-    api(dependencyNotation = libs.androidx.window)
 
-    // Lifecycle
+    // Navigation3 + Lifecycle
+    api(dependencyNotation = libs.bundles.androidx.navigation3)
     api(dependencyNotation = libs.bundles.androidx.lifecycle)
 
     // Firebase
     api(dependencyNotation = platform(libs.firebase.bom))
     api(dependencyNotation = libs.bundles.firebase)
 
-    // Google Play services & Play Store APIs
+    // Google (Material + UMP + Ads) + Google Play (Billing/Review/Update/Integrity)
+    api(dependencyNotation = libs.bundles.google)
     api(dependencyNotation = libs.bundles.google.play)
 
     // Image loading
@@ -125,7 +125,6 @@ dependencies {
     // UI utilities
     api(dependencyNotation = libs.bundles.ui.effects)
     api(dependencyNotation = libs.bundles.ui.richtext)
-    api(dependencyNotation = libs.androidx.compose.foundation.layout)
 
     // Unit Tests
     testImplementation(dependencyNotation = libs.bundles.unitTest)
@@ -133,7 +132,7 @@ dependencies {
 
     // Instrumentation Tests
     androidTestImplementation(dependencyNotation = libs.bundles.instrumentationTest)
-    debugImplementation(dependencyNotation = libs.androidx.ui.test.manifest)
+    debugImplementation(dependencyNotation = libs.androidx.compose.ui.test.manifest)
 }
 
 publishing {
