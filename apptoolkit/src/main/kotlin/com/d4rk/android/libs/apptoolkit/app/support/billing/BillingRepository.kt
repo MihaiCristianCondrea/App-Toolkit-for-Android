@@ -31,7 +31,7 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.d4rk.android.libs.apptoolkit.app.support.utils.extensions.primaryOfferToken
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob

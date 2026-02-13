@@ -24,9 +24,9 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.multidex.MultiDexApplication
 import com.d4rk.android.libs.apptoolkit.app.support.billing.BillingRepository
 import com.d4rk.android.libs.apptoolkit.core.BaseCoreManager.Companion.isAppLoaded
+import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.StandardDispatchers
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.di.StandardDispatchers
 import com.google.firebase.Firebase
 import com.google.firebase.appcheck.appCheck
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory

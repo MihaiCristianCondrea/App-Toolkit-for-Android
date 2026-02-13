@@ -23,7 +23,7 @@ import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConse
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.state.StartupUiState
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController

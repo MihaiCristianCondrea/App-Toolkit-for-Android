@@ -25,7 +25,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalContext
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.shareApp
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isAppInstalled

@@ -15,28 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.libs.apptoolkit.core.di
+package com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers
 
-import androidx.compose.runtime.Stable
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 /**
- * Abstraction for providing coroutine dispatchers.
+ * Default implementation of [DispatcherProvider] that returns the standard
+ * coroutine dispatchers from [Dispatchers].
  *
- * Having an interface allows production code to use the standard dispatchers
- * while tests can supply their own implementations to control threading.
+ * Use this provider in production code where the default dispatchers are
+ * sufficient. Tests can supply a custom implementation to control threading.
  */
-@Stable
-interface DispatcherProvider {
-    /** Dispatcher for work on the main thread. */
-    val main: CoroutineDispatcher
-
-    /** Dispatcher for IO-bound tasks such as network or disk operations. */
-    val io: CoroutineDispatcher
-
-    /** Dispatcher for CPU-intensive work. */
-    val default: CoroutineDispatcher
-
-    /** Dispatcher that is not confined to any specific thread. */
-    val unconfined: CoroutineDispatcher
+class StandardDispatchers : DispatcherProvider {
+    override val main: CoroutineDispatcher get() = Dispatchers.Main
+    override val io: CoroutineDispatcher get() = Dispatchers.IO
+    override val default: CoroutineDispatcher get() = Dispatchers.Default
+    override val unconfined: CoroutineDispatcher get() = Dispatchers.Unconfined
 }
+

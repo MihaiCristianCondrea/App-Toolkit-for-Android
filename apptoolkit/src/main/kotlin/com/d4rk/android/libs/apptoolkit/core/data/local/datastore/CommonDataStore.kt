@@ -32,8 +32,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.d4rk.android.libs.apptoolkit.app.consent.data.local.ConsentPreferencesDataSource
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.local.UsageAndDiagnosticsPreferencesDataSource
 import com.d4rk.android.libs.apptoolkit.app.onboarding.data.local.OnboardingPreferencesDataSource
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.di.StandardDispatchers
+import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.StandardDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.DynamicPaletteVariant
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants

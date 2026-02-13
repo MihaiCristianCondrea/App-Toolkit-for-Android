@@ -28,6 +28,7 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIs
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterAction
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.state.IssueReporterUiState
+import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.onFailure
@@ -62,7 +63,7 @@ class IssueReporterViewModel(
     private val githubTarget: GithubTarget,
     @param:GithubToken private val githubToken: String,
     private val deviceInfoProvider: DeviceInfoProvider,
-    private val dispatchers: com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider,
+    private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<IssueReporterUiState, IssueReporterEvent, IssueReporterAction>(
     initialState = UiStateScreen(

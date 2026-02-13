@@ -20,7 +20,7 @@ package com.d4rk.android.libs.apptoolkit.core.utils.platform
 import android.content.Context
 import android.widget.Toast
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.core.di.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
 import kotlinx.coroutines.withContext
 

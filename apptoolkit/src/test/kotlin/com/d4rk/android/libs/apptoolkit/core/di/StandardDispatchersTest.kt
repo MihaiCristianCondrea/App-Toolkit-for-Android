@@ -17,6 +17,7 @@
 
 package com.d4rk.android.libs.apptoolkit.core.di
 
+import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.StandardDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.StandardDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
