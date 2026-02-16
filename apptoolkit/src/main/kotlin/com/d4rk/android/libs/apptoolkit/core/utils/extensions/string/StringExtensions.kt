@@ -22,6 +22,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiEnvironments
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiPaths
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
+import java.net.URI
+import java.net.URISyntaxException
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -43,10 +45,25 @@ fun String.developerAppsApiUrl(
 }
 
 /**
- * Sanitizes a URL string by trimming whitespace and returning `null` for blank inputs.
+ * Sanitizes URL-like input by trimming and validating strict http(s) absolute URLs.
+ *
+ * Returns `null` for blank values, malformed URLs, unsupported schemes, or URLs without host.
  */
-fun String?.sanitizeUrlOrNull(): String? =
-    this?.trim()?.takeIf { it.isNotEmpty() }
+fun String?.sanitizeUrlOrNull(): String? {
+    val candidate = this?.trim()?.takeIf { it.isNotEmpty() } ?: return null
+
+    val parsedUri = try {
+        URI(candidate)
+    } catch (_: URISyntaxException) {
+        return null
+    }
+
+    val normalizedScheme = parsedUri.scheme?.lowercase()
+    val hasAllowedScheme = normalizedScheme == "http" || normalizedScheme == "https"
+    val hasHost = !parsedUri.host.isNullOrBlank()
+
+    return candidate.takeIf { hasAllowedScheme && hasHost }
+}
 
 /**
  * Normalizes a navigation route by removing query/child segments and returning `null` for blanks.

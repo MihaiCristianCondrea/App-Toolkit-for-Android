@@ -98,6 +98,10 @@ class ExtensionsTest {
             { assertEquals("https://d4rk.dev", " https://d4rk.dev ".sanitizeUrlOrNull()) },
             { assertNull("   ".sanitizeUrlOrNull()) },
             { assertNull(null.sanitizeUrlOrNull()) },
+            { assertNull("https://host.com/image with spaces.png".sanitizeUrlOrNull()) },
+            { assertNull("www.host.com/image.png".sanitizeUrlOrNull()) },
+            { assertNull("ftp://host.com/image.png".sanitizeUrlOrNull()) },
+            { assertNull("https:///image.png".sanitizeUrlOrNull()) },
         )
     }
 
