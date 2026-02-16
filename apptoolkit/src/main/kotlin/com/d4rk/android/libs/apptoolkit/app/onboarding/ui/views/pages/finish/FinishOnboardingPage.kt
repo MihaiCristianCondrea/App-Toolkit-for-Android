@@ -58,7 +58,7 @@ import nl.dionsegijn.konfetti.core.emitter.Emitter
 import java.util.concurrent.TimeUnit
 
 @Composable
-fun FinishOnbardingPage() {
+fun FinishOnboardingPage() {
 
     val iconVisible = remember { mutableStateOf(false) }
     val showKonfetti = remember { mutableStateOf(false) }

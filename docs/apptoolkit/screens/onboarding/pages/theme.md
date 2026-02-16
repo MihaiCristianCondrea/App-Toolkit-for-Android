@@ -323,4 +323,4 @@ Keep the persistence rules consistent and avoid introducing blocking operations 
 
 * `pages.md` – onboarding page model and selection lifecycle
 * `privacy-consent.md` – consent UI and rules (Crashlytics / ads)
-* `integration.md` – host app integration and completion observation
+* `../onboarding.md` – host app integration and completion observation

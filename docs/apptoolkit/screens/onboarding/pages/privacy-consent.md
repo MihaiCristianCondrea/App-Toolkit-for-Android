@@ -276,4 +276,4 @@ Recommended guarantees (and currently aligned with the UI patterns in code):
 
 * `pages.md` – onboarding pages and selection rules (`isSelected`)
 * `theme.md` – theme onboarding page and DataStore persistence
-* `settings/privacy/ads.md` – ad consent and ad-related settings (if you surface them elsewhere)
+* `../../settings/privacy/ads.md` – ad consent and ad-related settings (if surfaced elsewhere)

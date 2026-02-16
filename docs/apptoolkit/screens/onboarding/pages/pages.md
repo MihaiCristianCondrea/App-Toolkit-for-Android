@@ -251,7 +251,7 @@ Both default and complex pages should handle small screens and large font sizes 
 
 ## Related docs
 
-* `overview.md` – feature overview and layer responsibilities
+* `../onboarding.md` – feature overview, architecture, and event/action contracts
 * `privacy-consent.md` – Crashlytics/ads consent UI and rules
 * `theme.md` – theme onboarding behavior and persistence
-* `integration.md` – how host apps start onboarding and observe completion
+* `../onboarding.md` – host app integration, launch flow, and completion handling

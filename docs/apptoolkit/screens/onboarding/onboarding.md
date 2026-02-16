@@ -101,7 +101,8 @@ Why this matters:
   - animated dot scaling for current page
 
 ### Finish page
-- `FinishOnbardingPage`
+
+- `FinishOnboardingPage`
   - enter animation (scale + alpha + translation)
   - Konfetti shown once globally using `FinalOnboardingKonfettiState`
 

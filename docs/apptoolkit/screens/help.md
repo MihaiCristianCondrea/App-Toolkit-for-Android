@@ -95,8 +95,8 @@ Implementation notes:
 - The ad rendering is handled by `HelpNativeAdCard(...)`.
 - The ad component should show an **“Ad”** label and maintain spacing so it never crowds content.
 
-For overall ad configuration, see: `docs/shared/guide/ads/index.md`
-(or your project’s equivalent “ads overview” doc).
+For overall ad configuration, see: `docs/apptoolkit/ads/native-ads.md`
+(or your project-specific ads overview, if your host app keeps a separate guide).
 
 ---
 
@@ -156,6 +156,6 @@ You can override pieces without rewriting the whole screen:
 
 ## Related docs
 
-* Common screen state pattern: `docs/apptoolkit/guide/ui/screen-state.md`
-* Ads overview + configs: `docs/shared/guide/ads/index.md`
-* Logging conventions: `docs/shared/guide/observability/logging.md`
+* ViewModel flow/state/error-handling rules: `docs/viewmodel-rules-coroutines-flows-state.md`
+* Native ad integration and layout guidance: `docs/apptoolkit/ads/native-ads.md`
+* Support entry point and host integration: `docs/apptoolkit/screens/support.md`

@@ -28,7 +28,7 @@ import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainActivity
 import com.d4rk.android.apps.apptoolkit.app.onboarding.utils.constants.OnboardingKeys
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.model.OnboardingPage
-import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.finish.FinishOnbardingPage
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.finish.FinishOnboardingPage
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.FirebaseOnboardingPage
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.ThemeOnboardingPageTab
 import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
@@ -70,7 +70,7 @@ class AppOnboardingProvider : OnboardingProvider {
             OnboardingPage.CustomPage(
                 key = OnboardingKeys.ONBOARDING_COMPLETE,
                 content = {
-                    FinishOnbardingPage()
+                    FinishOnboardingPage()
                 }
             ),
             ).filter {

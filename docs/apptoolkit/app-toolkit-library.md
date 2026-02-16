@@ -23,7 +23,7 @@ The `core` package provides foundational helpers and models:
   composables and toggle between phone and tablet experiences without relying on orientation
   heuristics.
 - For implementation guidance (imports, usage patterns, and breakpoints), see
-  `docs/compose/adaptive-window-size-classes.md`.
+  `docs/apptoolkit/compose/adaptive-window-size-classes.md`.
 
 ## Feature packages
 
