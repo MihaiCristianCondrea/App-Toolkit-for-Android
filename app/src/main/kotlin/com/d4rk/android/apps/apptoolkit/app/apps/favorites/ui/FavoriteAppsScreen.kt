@@ -42,6 +42,8 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.AppDetailsBotto
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.buildOnAppClick
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.buildOnShareClick
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.screens.AppsList
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.analytics.AppInteractionType
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.analytics.logAppInteraction
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.screens.loading.HomeLoadingScreen
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.contract.FavoriteAppsAction
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.contract.FavoriteAppsEvent
@@ -56,6 +58,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isAppInstalled
 import kotlinx.collections.immutable.ImmutableSet
@@ -99,9 +102,23 @@ fun FavoriteAppsRoute(
 
     val appDetailsAdsConfig: AdsConfig = koinInject(qualifier = named("app_details_native_ad"))
     val dispatchers: DispatcherProvider = koinInject()
+    val firebaseController: FirebaseController = koinInject()
 
     val onFavoriteToggle: (String) -> Unit =
-        remember(viewModel) { { pkg -> viewModel.toggleFavorite(pkg) } }
+        remember(viewModel, firebaseController, screenState.data?.apps, favorites) {
+            { pkg ->
+                val app = screenState.data?.apps?.firstOrNull { it.packageName == pkg }
+                val wasFavorite = favorites.contains(pkg)
+                if (app != null) {
+                    firebaseController.logAppInteraction(
+                        source = "favorite_apps",
+                        appInfo = app,
+                        interaction = if (wasFavorite) AppInteractionType.RemoveFavorite else AppInteractionType.AddFavorite,
+                    )
+                }
+                viewModel.toggleFavorite(pkg)
+            }
+        }
     val onRetry: () -> Unit =
         remember(viewModel) { { viewModel.onEvent(FavoriteAppsEvent.LoadFavorites) } }
 
@@ -109,7 +126,12 @@ fun FavoriteAppsRoute(
     val buildShareClick = buildOnShareClick()
 
     val openApp: (AppInfo) -> Unit = remember(dispatchers) { buildAppClick }
-    val onShareClick: (AppInfo) -> Unit = remember { buildShareClick }
+    val onShareClick: (AppInfo) -> Unit = remember(buildShareClick, firebaseController) {
+        { app ->
+            firebaseController.logAppInteraction(source = "favorite_apps", appInfo = app, interaction = AppInteractionType.Share)
+            buildShareClick(app)
+        }
+    }
 
     val onOpenInPlayStore: (AppInfo) -> Unit = remember(context) {
         { appInfo ->
@@ -157,12 +179,14 @@ fun FavoriteAppsRoute(
                 isAppInstalled = isSelectedAppInstalled,
                 onShareClick = { onShareClick(app) },
                 onOpenAppClick = {
+                    firebaseController.logAppInteraction(source = "favorite_apps", appInfo = app, interaction = AppInteractionType.OpenInstalledApp)
                     coroutineScope.launch {
                         selectedApp = null
                         openApp(app)
                     }
                 },
                 onOpenInPlayStoreClick = {
+                    firebaseController.logAppInteraction(source = "favorite_apps", appInfo = app, interaction = AppInteractionType.OpenInPlayStore)
                     coroutineScope.launch {
                         selectedApp = null
                         onOpenInPlayStore(app)
@@ -236,7 +260,10 @@ fun FavoriteAppsRoute(
                 paddingValues = paddingValues,
                 adsEnabled = adsEnabled,
                 onFavoriteToggle = onFavoriteToggle,
-                onAppClick = { app -> selectedApp = app },
+                onAppClick = { app ->
+                    firebaseController.logAppInteraction(source = "favorite_apps", appInfo = app, interaction = AppInteractionType.OpenDetailsBottomSheet)
+                    selectedApp = app
+                },
                 onShareClick = onShareClick,
                 windowWidthSizeClass = windowWidthSizeClass,
             )
