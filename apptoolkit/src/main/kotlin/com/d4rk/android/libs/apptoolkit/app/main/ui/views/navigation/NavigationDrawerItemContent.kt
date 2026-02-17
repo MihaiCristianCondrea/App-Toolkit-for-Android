@@ -38,6 +38,7 @@ import kotlinx.collections.immutable.persistentSetOf
 @Composable
 fun NavigationDrawerItemContent(
     item: NavigationDrawerItem,
+    selected: Boolean = false,
     dividerRoutes: ImmutableSet<String> = persistentSetOf(),
     handleNavigationItemClick: () -> Unit = {}
 ) {
@@ -45,7 +46,7 @@ fun NavigationDrawerItemContent(
     val view: View = LocalView.current
 
     NavigationDrawerItem(
-        label = { Text(text = title) }, selected = false, onClick = {
+        label = { Text(text = title) }, selected = selected, onClick = {
             view.playSoundEffect(SoundEffectConstants.CLICK)
             handleNavigationItemClick()
         }, icon = {
