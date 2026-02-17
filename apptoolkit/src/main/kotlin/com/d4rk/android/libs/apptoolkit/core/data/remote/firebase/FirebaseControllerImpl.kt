@@ -152,7 +152,7 @@ class FirebaseControllerImpl : FirebaseController {
 
     override fun logEvent(event: AnalyticsEvent) {
         val name = event.name
-        if (!isValidAnalyticsName(name)) {
+        if (!isValidEventName(name)) {
             logBreadcrumb(
                 message = "analytics_drop_invalid_event",
                 attributes = mapOf("name" to name)
@@ -165,7 +165,13 @@ class FirebaseControllerImpl : FirebaseController {
 
         for ((key, rawValue) in event.params) {
             if (count >= MAX_PARAMS) break
-            if (!isValidAnalyticsName(key)) continue
+            if (!isValidParamName(key)) {
+                logBreadcrumb(
+                    message = "analytics_drop_invalid_param",
+                    attributes = mapOf("event" to name, "param" to key)
+                )
+                continue
+            }
 
             when (rawValue) {
                 is AnalyticsValue.Str -> bundle.putString(
@@ -203,11 +209,25 @@ class FirebaseControllerImpl : FirebaseController {
 
     override fun setUserProperty(name: String, value: String?) {
         val trimmedName = name.take(MAX_USER_PROP_NAME_LEN)
+        if (!isValidUserPropertyName(trimmedName)) {
+            logBreadcrumb(
+                message = "analytics_drop_invalid_user_property",
+                attributes = mapOf("name" to name)
+            )
+            return
+        }
         val trimmedValue = value?.take(MAX_USER_PROP_VALUE_LEN)
         analytics.setUserProperty(trimmedName, trimmedValue)
     }
 
-    private fun isValidAnalyticsName(name: String): Boolean = NAME_REGEX.matches(name)
+    private fun isValidEventName(name: String): Boolean =
+        NAME_REGEX.matches(name) && RESERVED_EVENT_PREFIXES.none(name::startsWith)
+
+    private fun isValidParamName(name: String): Boolean =
+        NAME_REGEX.matches(name) && RESERVED_PARAM_PREFIXES.none(name::startsWith)
+
+    private fun isValidUserPropertyName(name: String): Boolean =
+        USER_PROPERTY_NAME_REGEX.matches(name) && RESERVED_USER_PROPERTY_PREFIXES.none(name::startsWith)
 
     private companion object {
         const val MAX_PARAMS = 25
@@ -216,5 +236,10 @@ class FirebaseControllerImpl : FirebaseController {
         const val MAX_USER_PROP_VALUE_LEN = 36
 
         val NAME_REGEX = Regex("^[A-Za-z][A-Za-z0-9_]{0,39}$")
+        val USER_PROPERTY_NAME_REGEX = Regex("^[A-Za-z][A-Za-z0-9_]{0,23}$")
+
+        val RESERVED_EVENT_PREFIXES = listOf("firebase_", "google_", "ga_")
+        val RESERVED_PARAM_PREFIXES = listOf("firebase_", "google_", "ga_", "_")
+        val RESERVED_USER_PROPERTY_PREFIXES = listOf("firebase_", "google_", "ga_")
     }
 }
