@@ -90,6 +90,10 @@ fun NavigationDrawer(
                 uiState.navigationDrawerItems.forEach { item: NavigationDrawerItem ->
                     NavigationDrawerItemContent(
                         item = item,
+                        selected = isDrawerItemSelected(
+                            itemRoute = item.route,
+                            currentRoute = navigationState.currentRoute,
+                        ),
                         dividerRoutes = persistentSetOf(NavigationRoutes.ROUTE_COMPONENTS),
                         handleNavigationItemClick = {
                             handleNavigationItemClick(
@@ -122,3 +126,14 @@ fun NavigationDrawer(
         )
     }
 }
+
+private fun isDrawerItemSelected(
+    itemRoute: String,
+    currentRoute: AppNavKey,
+): Boolean =
+    when (itemRoute) {
+        NavigationRoutes.ROUTE_APPS_LIST -> currentRoute == AppsListRoute
+        NavigationRoutes.ROUTE_FAVORITE_APPS -> currentRoute == FavoriteAppsRoute
+        NavigationRoutes.ROUTE_COMPONENTS -> currentRoute == ComponentsRoute
+        else -> false
+    }
