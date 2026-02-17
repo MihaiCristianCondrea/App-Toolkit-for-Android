@@ -33,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
-import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 
 /**
  * An animated button that slides in and out horizontally with a fade effect.

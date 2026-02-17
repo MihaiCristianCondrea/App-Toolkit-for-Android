@@ -1,9 +1,7 @@
 [versions]
 # --- Android (tooling + Android-owned libs) ---
 androidBilling = "8.3.0"
-androidGradlePlugin = "9.0.0"
-
-# --- AndroidX (Core / platform) ---
+androidGradlePlugin = "9.0.1"
 androidxAppCompat = "1.7.1"
 androidxCoreKtx = "1.17.0"
 androidxCoreSplashscreen = "1.2.0"
@@ -11,64 +9,42 @@ androidxDatastorePreferences = "1.2.0"
 androidxMultidex = "2.0.1"
 androidxWindow = "1.5.1"
 androidxWorkRuntime = "2.11.1"
-
-# --- AndroidX (Compose) ---
 androidxActivityCompose = "1.12.4"
 androidxComposeBom = "2026.02.00"
 androidxComposeFoundationLayout = "1.10.3"
 androidxComposeMaterial3 = "1.5.0-alpha14"
 androidxComposeMaterial3WindowSizeClass = "1.4.0"
 androidxMaterial3Adaptive = "1.2.0"
-
-# --- AndroidX (Lifecycle / Navigation3) ---
 androidxLifecycle = "2.10.0"
 androidxNavigation3 = "1.0.1"
-
-# --- Google ---
 googleMaterial = "1.13.0"
 googlePlayInAppReview = "2.0.2"
 googlePlayInAppUpdate = "2.1.0"
 googlePlayIntegrity = "1.6.0"
 googlePlayServicesAds = "24.9.0"
 googleUserMessagingPlatform = "4.0.0"
-
-# --- Firebase ---
 firebaseBom = "34.9.0"
-
-# Gradle plugin versions (suffix with Plugin)
 firebaseCrashlyticsPlugin = "3.0.6"
 firebasePerformancePlugin = "2.0.2"
-
-# --- Gradle plugin versions (suffix with Plugin) ---
 googleMobileServices = "4.4.4"
 mannodermausPlugin = "2.0.1"
-
-# --- Kotlin / kotlinx ---
 kotlin = "2.3.10"
 kotlinxCollectionsImmutable = "0.4.0"
 kotlinxCoroutines = "1.10.2"
 kotlinxSerialization = "1.10.0"
-
-# --- Ktor ---
 ktor = "3.4.0"
-
-# --- Koin ---
 koin = "4.1.1"
-
-# --- UI / utility ---
 aboutLibraries = "14.0.0-b02"
 coil = "3.3.0"
 composeMarkdown = "0.5.7"
 konfettiCompose = "2.0.5"
 lottie = "6.7.1"
 markwonCore = "4.6.2"
-
-# --- Testing ---
 androidxComposeUiTestManifest = "1.10.3"
 androidxEspressoCore = "3.7.0"
 androidxTestTruth = "1.7.0"
 testJupiter = "6.0.2"
-testKotlinCoroutines = "1.10.2" # (fixed typo from testKotlinCorutines)
+testKotlinCoroutines = "1.10.2"
 testMockk = "1.14.9"
 testRobolectric = "4.16.1"
 testSlf4jSimple = "2.0.17"
@@ -76,7 +52,7 @@ testTurbine = "1.2.1"
 
 
 [libraries]
-# --- AndroidX (Core / platform) ---
+# AndroidX
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidxAppCompat" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCoreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxCoreSplashscreen" }
@@ -84,8 +60,6 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "androidxMultidex" }
 androidx-window = { module = "androidx.window:window", version.ref = "androidxWindow" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWorkRuntime" }
-
-# --- AndroidX (Compose) ---
 androidx-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivityCompose" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "androidxComposeFoundationLayout" }
@@ -96,12 +70,8 @@ androidx-compose-material3-adaptive-navigation = { group = "androidx.compose.mat
 androidx-compose-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "androidxComposeMaterial3WindowSizeClass" }
 androidx-compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-
-# --- AndroidX (Navigation3) ---
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "androidxNavigation3" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "androidxNavigation3" }
-
-# --- AndroidX (Lifecycle) ---
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
@@ -110,7 +80,7 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "androidxLifecycle" }
 
-# --- Firebase (BOM-managed) ---
+# Firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-appcheck-playintegrity = { module = "com.google.firebase:firebase-appcheck-playintegrity" }
@@ -118,20 +88,18 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 firebase-perf = { module = "com.google.firebase:firebase-perf" }
 
-# --- Android-owned ---
+# Android
 android-billing = { module = "com.android.billingclient:billing", version.ref = "androidBilling" }
 
-# --- Google (UI / services) ---
+# Google
 google-material = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
 google-play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "googlePlayServicesAds" }
 google-user-messaging-platform = { module = "com.google.android.ump:user-messaging-platform", version.ref = "googleUserMessagingPlatform" }
-
-# --- Google Play (Play Core / Integrity / Review / Update) ---
 google-play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "googlePlayInAppUpdate" }
 google-play-integrity = { module = "com.google.android.play:integrity", version.ref = "googlePlayIntegrity" }
 google-play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "googlePlayInAppReview" }
 
-# --- Networking (Ktor BOM) ---
+# Ktor
 ktor-bom = { module = "io.ktor:ktor-bom", version.ref = "ktor" }
 ktor-client-android = { module = "io.ktor:ktor-client-android" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation" }
@@ -140,21 +108,21 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-client-serialization = { module = "io.ktor:ktor-client-serialization" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json" }
 
-# --- DI (Koin) ---
+# Koin
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" } # used in androidTest
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 test-koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin" }
 
-# --- Kotlin / kotlinx ---
+# Kotlin
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutines" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
-# --- UI / utility ---
+# Utility
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
@@ -164,7 +132,7 @@ konfetti-compose = { module = "nl.dionsegijn:konfetti-compose", version.ref = "k
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 markwon-core = { module = "io.noties.markwon:core", version.ref = "markwonCore" }
 
-# --- Testing (unit tests: test sourceSet) ---
+# Testing
 test-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "testJupiter" }
 test-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "testJupiter" }
 test-junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "testJupiter" }
@@ -173,13 +141,10 @@ test-mockk = { module = "io.mockk:mockk", version.ref = "testMockk" }
 test-robolectric = { module = "org.robolectric:robolectric", version.ref = "testRobolectric" }
 test-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "testSlf4jSimple" }
 test-turbine = { module = "app.cash.turbine:turbine", version.ref = "testTurbine" }
-
-# --- Testing (androidTest: instrumentation) ---
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "androidxComposeUiTestManifest" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspressoCore" }
 androidx-test-truth = { module = "androidx.test.ext:truth", version.ref = "androidxTestTruth" }
 test-mockk-android = { module = "io.mockk:mockk-android", version.ref = "testMockk" }
-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
