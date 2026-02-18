@@ -65,8 +65,11 @@ import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.Setti
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsPreference
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
@@ -80,6 +83,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpace
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import org.koin.compose.koinInject
@@ -87,6 +91,13 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val SETTINGS_SCREEN_NAME = "Settings"
 private const val SETTINGS_SCREEN_CLASS = "SettingsScreen"
+private const val UNKNOWN_PREFERENCE_KEY = "unknown"
+
+private object SettingsActionNames {
+    const val BACK_CLICK: String = "back_click"
+    const val RETRY_LOAD: String = "retry_load"
+    const val OPEN_HELP: String = "open_help"
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,7 +126,12 @@ fun SettingsScreen() {
 
     LargeTopAppBarWithScaffold(
         title = stringResource(id = R.string.settings),
-        onBackClicked = { (context as? android.app.Activity)?.finish() },
+        onBackClicked = {
+            firebaseController.logGa4Event(
+                ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.BACK_CLICK)
+            )
+            (context as? android.app.Activity)?.finish()
+        },
     ) { paddingValues ->
         ScreenStateHandler(
             screenState = screenState,
@@ -124,7 +140,12 @@ fun SettingsScreen() {
                 NoDataScreen(
                     icon = Icons.Outlined.Settings,
                     showRetry = true,
-                    onRetry = { viewModel.onEvent(event = SettingsEvent.Load(context = context)) },
+                    onRetry = {
+                        firebaseController.logGa4Event(
+                            ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.RETRY_LOAD)
+                        )
+                        viewModel.onEvent(event = SettingsEvent.Load(context = context))
+                    },
                     paddingValues = paddingValues,
                 )
             },
@@ -133,6 +154,7 @@ fun SettingsScreen() {
                     paddingValues = paddingValues,
                     settingsConfig = config,
                     contentProvider = contentProvider,
+                    firebaseController = firebaseController,
                 )
             },
         )
@@ -144,18 +166,21 @@ fun SettingsScreenContent(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
     contentProvider: GeneralSettingsContentProvider,
+    firebaseController: FirebaseController,
 ) {
     val windowWidthSizeClass: AppWindowWidthSizeClass = rememberWindowWidthSizeClass()
     if (windowWidthSizeClass == AppWindowWidthSizeClass.Compact) {
         PhoneSettingsScreen(
             paddingValues = paddingValues,
             settingsConfig = settingsConfig,
+            firebaseController = firebaseController,
         )
     } else {
         TabletSettingsScreen(
             paddingValues = paddingValues,
             settingsConfig = settingsConfig,
             contentProvider = contentProvider,
+            firebaseController = firebaseController,
         )
     }
 }
@@ -164,10 +189,12 @@ fun SettingsScreenContent(
 fun PhoneSettingsScreen(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
+    firebaseController: FirebaseController,
 ) {
     SettingsList(
         paddingValues = paddingValues,
         settingsConfig = settingsConfig,
+        firebaseController = firebaseController,
         onPreferenceClick = { preference -> preference.action() },
     )
 }
@@ -177,6 +204,7 @@ fun TabletSettingsScreen(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
     contentProvider: GeneralSettingsContentProvider,
+    firebaseController: FirebaseController,
 ) {
     var selected: SettingsPreference? by remember { mutableStateOf(null) }
 
@@ -185,6 +213,7 @@ fun TabletSettingsScreen(
             SettingsList(
                 paddingValues = paddingValues,
                 settingsConfig = settingsConfig,
+                firebaseController = firebaseController,
                 onPreferenceClick = { selected = it },
             )
         }
@@ -205,6 +234,7 @@ fun TabletSettingsScreen(
 @Composable
 fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
     val context: Context = LocalContext.current
+    val firebaseController: FirebaseController = koinInject()
 
     LazyColumn(
         contentPadding = paddingValues,
@@ -254,6 +284,8 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
                     },
                     vectorIcon = Icons.AutoMirrored.Outlined.ContactSupport,
                     label = stringResource(id = R.string.get_help),
+                    firebaseController = firebaseController,
+                    ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.OPEN_HELP),
                 )
             }
         }
@@ -302,6 +334,7 @@ fun SettingsDetail(
 fun SettingsList(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
+    firebaseController: FirebaseController,
     onPreferenceClick: (SettingsPreference) -> Unit = {},
 ) {
     LazyColumn(
@@ -321,6 +354,18 @@ fun SettingsList(
                             icon = preference.icon,
                             title = preference.title,
                             summary = preference.summary,
+                            firebaseController = firebaseController,
+                            ga4EventProvider = {
+                                Ga4EventData(
+                                    name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+                                    params = mapOf(
+                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(SETTINGS_SCREEN_NAME),
+                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
+                                            preference.key ?: UNKNOWN_PREFERENCE_KEY
+                                        ),
+                                    ),
+                                )
+                            },
                             onClick = { onPreferenceClick(preference) },
                         )
                         ExtraTinyVerticalSpacer()
@@ -329,4 +374,14 @@ fun SettingsList(
             }
         }
     }
+}
+
+private fun settingsActionGa4Event(actionName: String): Ga4EventData {
+    return Ga4EventData(
+        name = SettingsAnalytics.Events.ACTION,
+        params = mapOf(
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(SETTINGS_SCREEN_NAME),
+            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
+        ),
+    )
 }

@@ -37,7 +37,9 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.state.AdvancedSettingsUiState
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.IssueReporterActivity
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
@@ -47,6 +49,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import org.koin.compose.koinInject
@@ -54,6 +57,11 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val ADVANCED_SETTINGS_SCREEN_NAME = "AdvancedSettings"
 private const val ADVANCED_SETTINGS_SCREEN_CLASS = "AdvancedSettingsList"
+
+private object AdvancedPreferenceKeys {
+    const val BUG_REPORT: String = "bug_report"
+    const val CLEAR_CACHE: String = "clear_cache"
+}
 
 /**
  * A Composable function that displays a list of advanced settings.
@@ -127,6 +135,8 @@ fun AdvancedSettingsList(
                             onClick = {
                                 context.openActivity(IssueReporterActivity::class.java)
                             },
+                            firebaseController = firebaseController,
+                            ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.BUG_REPORT),
                         )
                     }
                 }
@@ -143,10 +153,22 @@ fun AdvancedSettingsList(
                             title = stringResource(id = R.string.clear_cache),
                             summary = stringResource(id = R.string.summary_preference_settings_clear_cache),
                             onClick = { viewModel.onEvent(AdvancedSettingsEvent.ClearCache) },
+                            firebaseController = firebaseController,
+                            ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.CLEAR_CACHE),
                         )
                     }
                 }
             }
         },
+    )
+}
+
+private fun advancedPreferenceTapEvent(preferenceKey: String): Ga4EventData {
+    return Ga4EventData(
+        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+        params = mapOf(
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADVANCED_SETTINGS_SCREEN_NAME),
+            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
+        ),
     )
 }
