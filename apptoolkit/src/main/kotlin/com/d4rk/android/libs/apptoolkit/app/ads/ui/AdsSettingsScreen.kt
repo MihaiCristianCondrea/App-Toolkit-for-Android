@@ -30,12 +30,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.d4rk.android.libs.apptoolkit.app.ads.ui.state.AdsSettingsUiState
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
@@ -52,11 +54,22 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 private const val ADS_SETTINGS_SCREEN_NAME = "AdsSettings"
 private const val ADS_SETTINGS_SCREEN_CLASS = "AdsSettingsScreen"
+
+private object AdsPreferenceKeys {
+    const val DISPLAY_ADS: String = "display_ads"
+    const val PERSONALIZED_ADS: String = "personalized_ads"
+    const val LEARN_MORE: String = "learn_more"
+}
+
+private object AdsActionNames {
+    const val BACK_CLICK: String = "back_click"
+}
 
 /** Compose screen displaying ad preferences. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,6 +79,7 @@ fun AdsSettingsScreen() {
     val screenState: UiStateScreen<AdsSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
     val firebaseController: FirebaseController = koinInject()
+    val context = LocalContext.current
 
     TrackScreenView(
         firebaseController = firebaseController,
@@ -90,7 +104,20 @@ fun AdsSettingsScreen() {
 
     LargeTopAppBarWithScaffold(
         title = stringResource(id = R.string.ads),
-        onBackClicked = remember(activity) { { activity?.finish() } }
+        onBackClicked = remember(activity) {
+            {
+                firebaseController.logEvent(
+                    AnalyticsEvent(
+                        name = SettingsAnalytics.Events.ACTION,
+                        params = mapOf(
+                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
+                            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(AdsActionNames.BACK_CLICK),
+                        ),
+                    )
+                )
+                activity?.finish()
+            }
+        }
     ) { paddingValues: PaddingValues ->
         ScreenStateHandler(
             screenState = screenState,
@@ -119,7 +146,7 @@ fun AdsSettingsScreen() {
                                     name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
                                     params = mapOf(
                                         SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
-                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("display_ads"),
+                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(AdsPreferenceKeys.DISPLAY_ADS),
                                         SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
                                     ),
                                 )
@@ -143,7 +170,7 @@ fun AdsSettingsScreen() {
                                     name = SettingsAnalytics.Events.PREFERENCE_VIEW,
                                     params = mapOf(
                                         SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
-                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("personalized_ads"),
+                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(AdsPreferenceKeys.PERSONALIZED_ADS),
                                     ),
                                 )
                             )
@@ -157,7 +184,18 @@ fun AdsSettingsScreen() {
                                 .padding(all = SizeConstants.MediumSize * 2),
                             message = stringResource(id = R.string.summary_ads),
                             learnMoreText = stringResource(id = R.string.learn_more),
-                            learnMoreUrl = AppLinks.ADS_HELP_CENTER
+                            learnMoreAction = {
+                                firebaseController.logEvent(
+                                    AnalyticsEvent(
+                                        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+                                        params = mapOf(
+                                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
+                                            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(AdsPreferenceKeys.LEARN_MORE),
+                                        ),
+                                    )
+                                )
+                                context.openUrl(url = AppLinks.ADS_HELP_CENTER)
+                            }
                         )
                     }
                 }

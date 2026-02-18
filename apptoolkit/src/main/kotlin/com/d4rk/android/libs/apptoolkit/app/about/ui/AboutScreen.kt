@@ -44,7 +44,9 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.d4rk.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.d4rk.android.libs.apptoolkit.app.licenses.ui.LicensesActivity
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
@@ -56,6 +58,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPrefer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.ABOUT_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
@@ -72,6 +75,12 @@ import java.util.concurrent.TimeUnit
 
 private const val ABOUT_SCREEN_NAME = "About"
 private const val ABOUT_SCREEN_CLASS = "AboutScreen"
+
+private object AboutPreferenceKeys {
+    const val APP_BUILD_VERSION: String = "app_build_version"
+    const val OSS_LICENSES: String = "oss_licenses"
+    const val DEVICE_INFO: String = "device_info"
+}
 
 /**
  * A Composable that displays the "About" screen's settings list.
@@ -177,7 +186,9 @@ fun AboutScreen(
                                         appVersionTapCount = 0
                                         showKonfettiAnimationForThisInstance = true
                                     }
-                                }
+                                },
+                                firebaseController = firebaseController,
+                                ga4Event = aboutPreferenceTapEvent(preferenceKey = AboutPreferenceKeys.APP_BUILD_VERSION),
                             )
                             ExtraTinyVerticalSpacer()
                             SettingsPreferenceItem(
@@ -191,7 +202,9 @@ fun AboutScreen(
                                             "Failed to open licenses screen from About settings"
                                         )
                                     }
-                                }
+                                },
+                                firebaseController = firebaseController,
+                                ga4Event = aboutPreferenceTapEvent(preferenceKey = AboutPreferenceKeys.OSS_LICENSES),
                             )
                         }
                     }
@@ -209,7 +222,9 @@ fun AboutScreen(
                                 summary = data.deviceInfo,
                                 onClick = {
                                     viewModel.onEvent(event = AboutEvent.CopyDeviceInfo(label = deviceInfo))
-                                }
+                                },
+                                firebaseController = firebaseController,
+                                ga4Event = aboutPreferenceTapEvent(preferenceKey = AboutPreferenceKeys.DEVICE_INFO),
                             )
                         }
                     }
@@ -230,5 +245,16 @@ fun AboutScreen(
         snackbarHostState = snackbarHostState,
         getDismissEvent = { AboutEvent.DismissSnackbar },
         onEvent = { viewModel.onEvent(it) }
+    )
+}
+
+
+private fun aboutPreferenceTapEvent(preferenceKey: String): Ga4EventData {
+    return Ga4EventData(
+        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+        params = mapOf(
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ABOUT_SCREEN_NAME),
+            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
+        ),
     )
 }

@@ -46,7 +46,10 @@ import com.d4rk.android.libs.apptoolkit.app.display.ui.views.dialogs.SelectLangu
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.DisplaySettingsProvider
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
@@ -59,6 +62,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalS
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.DISPLAY_SETTINGS_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
 import kotlinx.coroutines.CoroutineScope
@@ -68,6 +72,20 @@ import org.koin.compose.koinInject
 
 private const val DISPLAY_SETTINGS_SCREEN_NAME = "DisplaySettings"
 private const val DISPLAY_SETTINGS_SCREEN_CLASS = "DisplaySettingsList"
+
+private object DisplayPreferenceKeys {
+    const val THEME_SETTINGS: String = "theme_settings"
+    const val STARTUP_PAGE: String = "startup_page"
+    const val LANGUAGE: String = "language"
+}
+
+private object DisplayActionNames {
+    const val OPEN_THEME_SETTINGS: String = "open_theme_settings"
+    const val OPEN_STARTUP_DIALOG: String = "open_startup_dialog"
+    const val CHANGE_STARTUP_DESTINATION: String = "change_startup_destination"
+    const val OPEN_LANGUAGE_SETTINGS: String = "open_language_settings"
+    const val CHANGE_LANGUAGE: String = "change_language"
+}
 
 /**
  * A composable function that displays a comprehensive list of display-related settings.
@@ -186,7 +204,15 @@ fun DisplaySettingsList(
                     checked = isDarkThemeActive,
                     onCheckedChange = onDarkThemeChanged,
                     onSwitchClick = onDarkThemeChanged,
-                    onClick = { provider.openThemeSettings() }
+                    onClick = {
+                        firebaseController.logEvent(
+                            displayActionEvent(
+                                actionName = DisplayActionNames.OPEN_THEME_SETTINGS,
+                                preferenceKey = DisplayPreferenceKeys.THEME_SETTINGS,
+                            )
+                        )
+                        provider.openThemeSettings()
+                    }
                 )
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -237,13 +263,26 @@ fun DisplaySettingsList(
                     SettingsPreferenceItem(
                         title = stringResource(id = R.string.startup_page),
                         summary = stringResource(id = R.string.summary_preference_settings_startup_page),
-                        onClick = { showStartupDialog.value = true }
+                        onClick = { showStartupDialog.value = true },
+                        firebaseController = firebaseController,
+                        ga4Event = displayActionGa4Event(
+                            actionName = DisplayActionNames.OPEN_STARTUP_DIALOG,
+                            preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
+                        )
                     )
 
                     if (showStartupDialog.value) {
                         provider.StartupPageDialog(
                             onDismiss = { showStartupDialog.value = false }
-                        ) { }
+                        ) { selectedDestination: String ->
+                            firebaseController.logEvent(
+                                displayActionEvent(
+                                    actionName = DisplayActionNames.CHANGE_STARTUP_DESTINATION,
+                                    preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
+                                    value = selectedDestination,
+                                )
+                            )
+                        }
                     }
 
                     ExtraTinyVerticalSpacer()
@@ -290,10 +329,28 @@ fun DisplaySettingsList(
                             } else {
                                 false
                             }
+                            firebaseController.logEvent(
+                                displayActionEvent(
+                                    actionName = DisplayActionNames.OPEN_LANGUAGE_SETTINGS,
+                                    preferenceKey = DisplayPreferenceKeys.LANGUAGE,
+                                    value = when {
+                                        openedLocaleSettings -> "system_locale"
+                                        openedAppDetails -> "app_details"
+                                        else -> "in_app_dialog"
+                                    },
+                                )
+                            )
                             if (!openedLocaleSettings && !openedAppDetails) {
                                 showLanguageDialog.value = true
                             }
                         } else {
+                            firebaseController.logEvent(
+                                displayActionEvent(
+                                    actionName = DisplayActionNames.OPEN_LANGUAGE_SETTINGS,
+                                    preferenceKey = DisplayPreferenceKeys.LANGUAGE,
+                                    value = "in_app_dialog",
+                                )
+                            )
                             showLanguageDialog.value = true
                         }
                     }
@@ -305,6 +362,13 @@ fun DisplaySettingsList(
                     onDismiss = { showLanguageDialog.value = false },
                     onLanguageSelected = { newLanguageCode: String ->
                         showLanguageDialog.value = false
+                        firebaseController.logEvent(
+                            displayActionEvent(
+                                actionName = DisplayActionNames.CHANGE_LANGUAGE,
+                                preferenceKey = DisplayPreferenceKeys.LANGUAGE,
+                                value = newLanguageCode,
+                            )
+                        )
                         AppCompatDelegate.setApplicationLocales(
                             LocaleListCompat.forLanguageTags(newLanguageCode)
                         )
@@ -313,4 +377,34 @@ fun DisplaySettingsList(
             }
         }
     }
+}
+
+private fun displayActionGa4Event(actionName: String, preferenceKey: String): Ga4EventData {
+    return Ga4EventData(
+        name = SettingsAnalytics.Events.ACTION,
+        params = mapOf(
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(DISPLAY_SETTINGS_SCREEN_NAME),
+            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
+            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
+        ),
+    )
+}
+
+private fun displayActionEvent(
+    actionName: String,
+    preferenceKey: String,
+    value: String? = null,
+): AnalyticsEvent {
+    val base = mutableMapOf<String, AnalyticsValue>(
+        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(DISPLAY_SETTINGS_SCREEN_NAME),
+        SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(actionName),
+        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
+    )
+    if (value != null) {
+        base["value"] = AnalyticsValue.Str(value)
+    }
+    return AnalyticsEvent(
+        name = SettingsAnalytics.Events.ACTION,
+        params = base,
+    )
 }
