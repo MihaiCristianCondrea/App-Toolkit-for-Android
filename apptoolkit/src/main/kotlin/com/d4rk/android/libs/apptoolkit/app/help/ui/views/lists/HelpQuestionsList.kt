@@ -27,6 +27,9 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqId
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.cards.QuestionCard
@@ -35,7 +38,11 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun HelpQuestionsList(questions: ImmutableList<FaqItem>) {
+fun HelpQuestionsList(
+    questions: ImmutableList<FaqItem>,
+    firebaseController: FirebaseController,
+    ga4EventProvider: ((FaqItem) -> Ga4EventData)? = null,
+) {
     val expandedStates: SnapshotStateMap<FaqId, Boolean> = remember { mutableStateMapOf() }
     val cardShape = RoundedCornerShape(
         topStart = SizeConstants.LargeIncreasedSize,
@@ -57,6 +64,7 @@ fun HelpQuestionsList(questions: ImmutableList<FaqItem>) {
                         summary = question.answer,
                         isExpanded = isExpanded,
                         onToggleExpand = {
+                            firebaseController.logGa4Event(ga4EventProvider?.invoke(question))
                             expandedStates[question.id] = !isExpanded
                         },
                         modifier = Modifier.animateVisibility(index = index)

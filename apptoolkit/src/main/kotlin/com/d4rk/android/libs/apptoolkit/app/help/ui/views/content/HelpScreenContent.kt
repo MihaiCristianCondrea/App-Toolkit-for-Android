@@ -30,9 +30,13 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.cards.ContactUsCard
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.lists.HelpQuestionsList
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.HelpNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.sendEmailToDeveloper
 import kotlinx.collections.immutable.ImmutableList
@@ -42,7 +46,8 @@ import org.koin.core.qualifier.named
 @Composable
 fun HelpScreenContent(
     questions: ImmutableList<FaqItem>,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    firebaseController: FirebaseController,
 ) {
     val context = LocalContext.current
     val adsConfig: AdsConfig = koinInject(qualifier = named("help_large_banner_ad"))
@@ -62,7 +67,13 @@ fun HelpScreenContent(
         }
 
         item {
-            HelpQuestionsList(questions = questions)
+            HelpQuestionsList(
+                questions = questions,
+                firebaseController = firebaseController,
+                ga4EventProvider = {
+                    helpPreferenceTapEvent(preferenceKey = "faq_item")
+                },
+            )
         }
 
         item {
@@ -75,6 +86,9 @@ fun HelpScreenContent(
         item {
             ContactUsCard(
                 onClick = {
+                    firebaseController.logEvent(
+                        helpPreferenceTapEvent(preferenceKey = "contact_us").toAnalyticsEvent()
+                    )
                     context.sendEmailToDeveloper(
                         applicationNameRes = R.string.app_name
                     )
@@ -83,4 +97,15 @@ fun HelpScreenContent(
             repeat(3) { ExtraLargeVerticalSpacer() }
         }
     }
+}
+
+
+private fun helpPreferenceTapEvent(preferenceKey: String): Ga4EventData {
+    return Ga4EventData(
+        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+        params = mapOf(
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str("Help"),
+            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
+        ),
+    )
 }
