@@ -1,5 +1,4 @@
 [versions]
-# --- Android (tooling + Android-owned libs) ---
 androidBilling = "8.3.0"
 androidGradlePlugin = "9.0.1"
 androidxAppCompat = "1.7.1"
@@ -21,7 +20,7 @@ googleMaterial = "1.13.0"
 googlePlayInAppReview = "2.0.2"
 googlePlayInAppUpdate = "2.1.0"
 googlePlayIntegrity = "1.6.0"
-googlePlayServicesAds = "24.9.0"
+googlePlayServicesAds = "25.0.0"
 googleUserMessagingPlatform = "4.0.0"
 firebaseBom = "34.9.0"
 firebaseCrashlyticsPlugin = "3.0.6"
