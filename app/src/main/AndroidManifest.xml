@@ -71,5 +71,17 @@
                 <action android:name="com.d4rk.android.apps.apptoolkit.action.FAVORITES_CHANGED" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".app.widgets.apps.AppIconsWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_icons_widget_info" />
+        </receiver>
     </application>
 </manifest>
