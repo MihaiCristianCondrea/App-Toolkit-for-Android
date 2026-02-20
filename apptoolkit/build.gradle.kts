@@ -92,6 +92,9 @@ dependencies {
     // AndroidX (Core / platform)
     api(dependencyNotation = libs.bundles.androidx.core)
     api(dependencyNotation = libs.androidx.window)
+    api(dependencyNotation = libs.androidx.constraintlayout.compose)
+    api(dependencyNotation = libs.bundles.androidx.glance)
+
 
     // Compose
     api(dependencyNotation = platform(libs.androidx.compose.bom))

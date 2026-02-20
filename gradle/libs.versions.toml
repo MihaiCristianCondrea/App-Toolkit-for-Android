@@ -7,6 +7,7 @@ androidxCoreSplashscreen = "1.2.0"
 androidxDatastorePreferences = "1.2.0"
 androidxMultidex = "2.0.1"
 androidxWindow = "1.5.1"
+androidxConstraintlayoutCompose = "1.1.1"
 androidxWorkRuntime = "2.11.1"
 androidxActivityCompose = "1.12.4"
 androidxComposeBom = "2026.02.00"
@@ -16,6 +17,9 @@ androidxComposeMaterial3WindowSizeClass = "1.4.0"
 androidxMaterial3Adaptive = "1.2.0"
 androidxLifecycle = "2.10.0"
 androidxNavigation3 = "1.0.1"
+androidxGlance = "1.1.1"
+googleAccompanistDrawablePainter = "0.37.3"
+googleGuava = "33.5.0-android"
 googleMaterial = "1.13.0"
 googlePlayInAppReview = "2.0.2"
 googlePlayInAppUpdate = "2.1.0"
@@ -58,6 +62,7 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidxDatastorePreferences" }
 androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "androidxMultidex" }
 androidx-window = { module = "androidx.window:window", version.ref = "androidxWindow" }
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidxConstraintlayoutCompose" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWorkRuntime" }
 androidx-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivityCompose" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
@@ -78,6 +83,9 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "androidxLifecycle" }
+androidx-glance = { module = "androidx.glance:glance", version.ref = "androidxGlance" }
+androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "androidxGlance" }
+androidx-glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "androidxGlance" }
 
 # Firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -91,6 +99,8 @@ firebase-perf = { module = "com.google.firebase:firebase-perf" }
 android-billing = { module = "com.android.billingclient:billing", version.ref = "androidBilling" }
 
 # Google
+google-accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "googleAccompanistDrawablePainter" }
+google-guava = { module = "com.google.guava:guava", version.ref = "googleGuava" }
 google-material = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
 google-play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "googlePlayServicesAds" }
 google-user-messaging-platform = { module = "com.google.android.ump:user-messaging-platform", version.ref = "googleUserMessagingPlatform" }
@@ -194,6 +204,12 @@ androidx-lifecycle = [
     "androidx-lifecycle-viewmodel-navigation3",
 ]
 
+androidx-glance = [
+    "androidx-glance",
+    "androidx-glance-appwidget",
+    "androidx-glance-material3",
+]
+
 firebase = [
     "firebase-analytics",
     "firebase-appcheck-playintegrity",
@@ -203,6 +219,8 @@ firebase = [
 ]
 
 google = [
+    "google-accompanist-drawablepainter",
+    "google-guava",
     "google-material",
     "google-play-services-ads",
     "google-user-messaging-platform",
