@@ -43,7 +43,7 @@ android {
         applicationIdSuffix = ".apptoolkit"
         minSdk = 26
         targetSdk = 36
-        versionCode = 104
+        versionCode = 105
         versionName = providers.gradleProperty("PUBLISHING_VERSION").get()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         @Suppress("UnstableApiUsage")
