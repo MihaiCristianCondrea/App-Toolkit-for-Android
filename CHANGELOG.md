@@ -1,3 +1,10 @@
+# Version 2.0.3:
+
+- **New**: Added an animated splash screen for a more polished startup experience.
+- **Patch**: Fixed selected state for navigation drawer items.
+- **Minor**: Improved screen foundations for better large-screen support.
+- **Patch**: Updated dependencies to the latest stable versions.
+
 # Version 2.0.2:
 
 - **Minor**: Redesigned the consent dialog to make it more user-friendly.
