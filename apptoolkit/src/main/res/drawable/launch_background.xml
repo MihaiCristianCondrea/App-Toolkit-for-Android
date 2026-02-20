@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/launcherBackground" />
+
+    <item
+        android:gravity="center"
+        android:drawable="@drawable/ic_splash_logo" />
+
+    <item
+        android:width="200dp"
+        android:height="80dp"
+        android:drawable="@drawable/ic_branding"
+        android:gravity="center|bottom" />
+
+    <!-- If you want to add some padding between bottom of the screen and the branding image,
+        then add android:bottom property. For example: -->
+    <!-- <item
+        android:width="200dp"
+        android:height="80dp"
+        android:bottom="20dp"
+        android:drawable="@drawable/ic_branding"
+        android:gravity="center|bottom" /> -->
+
+</layer-list>

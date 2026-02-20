@@ -83,6 +83,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.rememberNavigationState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.BottomAppBarNativeAdBanner
+import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.RootContentContainer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
@@ -248,18 +249,23 @@ fun MainScaffoldContent(
             )
         }
     ) { paddingValues ->
-        AppNavigationHost(
+        RootContentContainer(
             modifier = Modifier
-                .consumeWindowInsets(paddingValues),
-            navigationState = navigationState,
-            navigator = navigator,
-            paddingValues = paddingValues,
+                .consumeWindowInsets(paddingValues)
+                .padding(paddingValues),
             windowWidthSizeClass = windowWidthSizeClass,
-            onRandomAppHandlerChanged = { route: AppNavKey, handler ->
-                if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] =
-                    handler
-            },
-        )
+        ) {
+            AppNavigationHost(
+                navigationState = navigationState,
+                navigator = navigator,
+                paddingValues = PaddingValues(),
+                windowWidthSizeClass = windowWidthSizeClass,
+                onRandomAppHandlerChanged = { route: AppNavKey, handler ->
+                    if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] =
+                        handler
+                },
+            )
+        }
     }
 }
 
@@ -363,16 +369,18 @@ fun MainScaffoldTabletContent(
                 )
             },
             content = {
-                AppNavigationHost(
-                    navigationState = navigationState,
-                    navigator = navigator,
-                    paddingValues = PaddingValues(),
-                    windowWidthSizeClass = windowWidthSizeClass,
-                    onRandomAppHandlerChanged = { route: AppNavKey, handler ->
-                        if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] =
-                            handler
-                    },
-                )
+                RootContentContainer(windowWidthSizeClass = windowWidthSizeClass) {
+                    AppNavigationHost(
+                        navigationState = navigationState,
+                        navigator = navigator,
+                        paddingValues = PaddingValues(),
+                        windowWidthSizeClass = windowWidthSizeClass,
+                        onRandomAppHandlerChanged = { route: AppNavKey, handler ->
+                            if (handler == null) randomAppHandlers.remove(route) else randomAppHandlers[route] =
+                                handler
+                        },
+                    )
+                }
             }
         )
     }

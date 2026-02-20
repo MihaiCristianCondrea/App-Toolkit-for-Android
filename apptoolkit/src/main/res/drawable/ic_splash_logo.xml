@@ -15,9 +15,5 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <color name="launcherBackground">@color/colorLauncherBackground</color>
-    <color name="colorLauncherBackground">#FFFFFF</color>
-    <color name="colorShortcutBackground">#C1E8FF</color>
-    <color name="colorShortcutForeground">#40484D</color>
-</resources>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/anim_splash" />
