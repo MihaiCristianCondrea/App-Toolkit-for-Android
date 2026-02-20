@@ -1,4 +1,4 @@
-# Version 2.0.3:
+# Version 2.0.5:
 
 - **New**: Added an animated splash screen for a more polished startup experience.
 - **Patch**: Fixed selected state for navigation drawer items.
