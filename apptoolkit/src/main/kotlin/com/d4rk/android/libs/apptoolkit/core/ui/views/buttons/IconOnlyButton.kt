@@ -48,14 +48,14 @@ internal enum class IconOnlyButtonStyle {
 internal fun IconOnlyButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    enabled: Boolean,
+    enabled: Boolean = true,
     iconContentDescription: String? = null,
     vectorIcon: ImageVector? = null,
     painterIcon: Painter? = null,
-    feedback: ButtonFeedback,
-    firebaseController: FirebaseController?,
-    ga4Event: Ga4EventData?,
-    style: IconOnlyButtonStyle,
+    feedback: ButtonFeedback = ButtonFeedback(),
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
+    style: IconOnlyButtonStyle = IconOnlyButtonStyle.Filled,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
