@@ -16,7 +16,6 @@
  */
 
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
 plugins {
@@ -78,6 +77,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        multiDexEnabled = true
 
         val githubProps = Properties()
         val githubFile = rootProject.file("github.properties")
@@ -119,27 +119,15 @@ android {
             } else {
                 null
             }
-            isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
-            configure<CrashlyticsExtension> {
-                mappingFileUploadEnabled = true
-            }
-        }
-        debug {
-            isDebuggable = true
-            isMinifyEnabled = false
-            isShrinkResources = false
-        }
-    }
-
-    buildTypes.forEach { buildType ->
-        with(receiver = buildType) {
-            multiDexEnabled = true
             proguardFiles(
                 getDefaultProguardFile(name = "proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = true
+            }
         }
     }
 
@@ -148,15 +136,15 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
 
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_21)
-        }
-    }
-
     buildFeatures {
         buildConfig = true
         compose = true
+    }
+
+    bundle {
+        storeArchive {
+            enable = true
+        }
     }
 
     packaging {
