@@ -18,18 +18,23 @@
 package com.d4rk.android.libs.apptoolkit.app.help.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.RateReview
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -44,6 +49,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -71,6 +77,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.findActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
@@ -226,43 +233,72 @@ fun HelpScreen(
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            FeedbackListItem(
-                title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
-                description = stringResource(id = R.string.help_feedback_sheet_feature_request_description),
-                icon = { Icon(imageVector = Icons.Outlined.Lightbulb, contentDescription = null) },
-                onClick = {
-                    firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.REQUEST_FEATURE))
-                    showFeedbackBottomSheet.value = false
-                    viewModel.onEvent(HelpEvent.OpenFeatureRequestForm)
-                }
-            )
-
-            FeedbackListItem(
-                title = stringResource(id = R.string.help_feedback_sheet_contact_title),
-                description = stringResource(id = R.string.help_feedback_sheet_contact_description),
-                icon = { Icon(imageVector = Icons.AutoMirrored.Outlined.ContactSupport, contentDescription = null) },
-                onClick = {
-                    firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.CONTACT_US))
-                    showFeedbackBottomSheet.value = false
-                    viewModel.onEvent(HelpEvent.OpenContactPage)
-                }
-            )
-
-            FeedbackListItem(
-                title = stringResource(id = R.string.help_feedback_sheet_review_title),
-                description = stringResource(id = R.string.help_feedback_sheet_review_description),
-                icon = { Icon(imageVector = Icons.Outlined.RateReview, contentDescription = null) },
-                onClick = {
-                    firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.LEAVE_REVIEW))
-                    showFeedbackBottomSheet.value = false
-                    reviewHost?.let { host ->
-                        viewModel.onEvent(HelpEvent.RequestReview(host = host))
+            FeedbackListSection {
+                FeedbackListItem(
+                    title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
+                    description = stringResource(id = R.string.help_feedback_sheet_feature_request_description),
+                    icon = { Icon(imageVector = Icons.Outlined.Lightbulb, contentDescription = null) },
+                    position = FeedbackItemPosition.First,
+                    onClick = {
+                        firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.REQUEST_FEATURE))
+                        showFeedbackBottomSheet.value = false
+                        viewModel.onEvent(HelpEvent.OpenFeatureRequestForm)
                     }
-                }
-            )
+                )
+
+                FeedbackListItem(
+                    title = stringResource(id = R.string.help_feedback_sheet_contact_title),
+                    description = stringResource(id = R.string.help_feedback_sheet_contact_description),
+                    icon = { Icon(imageVector = Icons.AutoMirrored.Outlined.ContactSupport, contentDescription = null) },
+                    position = FeedbackItemPosition.Middle,
+                    onClick = {
+                        firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.CONTACT_US))
+                        showFeedbackBottomSheet.value = false
+                        viewModel.onEvent(HelpEvent.OpenContactPage)
+                    }
+                )
+
+                FeedbackListItem(
+                    title = stringResource(id = R.string.help_feedback_sheet_review_title),
+                    description = stringResource(id = R.string.help_feedback_sheet_review_description),
+                    icon = { Icon(imageVector = Icons.Outlined.RateReview, contentDescription = null) },
+                    position = FeedbackItemPosition.Last,
+                    onClick = {
+                        firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.LEAVE_REVIEW))
+                        showFeedbackBottomSheet.value = false
+                        reviewHost?.let { host ->
+                            viewModel.onEvent(HelpEvent.RequestReview(host = host))
+                        }
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(24.dp))
         }
+    }
+}
+
+private enum class FeedbackItemPosition {
+    First,
+    Middle,
+    Last,
+}
+
+@Composable
+private fun FeedbackListSection(
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp),
+        shape = MaterialTheme.shapes.extraLarge,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+    ) {
+        Column(
+            modifier = Modifier.padding(all = 6.dp),
+            content = content
+        )
     }
 }
 
@@ -271,19 +307,52 @@ private fun FeedbackListItem(
     title: String,
     description: String,
     icon: @Composable () -> Unit,
+    position: FeedbackItemPosition,
     onClick: () -> Unit,
 ) {
-    ListItem(
-        headlineContent = { Text(text = title) },
-        supportingContent = { Text(text = description) },
-        leadingContent = icon,
-        colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp)
-            .clickable(onClick = onClick)
-    )
-    Spacer(modifier = Modifier.height(4.dp))
+    val topCorner = if (position == FeedbackItemPosition.First) {
+        SizeConstants.LargeSize
+    } else {
+        SizeConstants.ExtraTinySize
+    }
+    val bottomCorner = if (position == FeedbackItemPosition.Last) {
+        SizeConstants.LargeSize
+    } else {
+        SizeConstants.ExtraTinySize
+    }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(
+            topStart = topCorner,
+            topEnd = topCorner,
+            bottomStart = bottomCorner,
+            bottomEnd = bottomCorner,
+        ),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        ) {
+            icon()
+            Spacer(modifier = Modifier.width(12.dp))
+            Column {
+                Text(text = title)
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+    if (position != FeedbackItemPosition.Last) {
+        Spacer(modifier = Modifier.height(4.dp))
+    }
 }
 
 private fun helpPreferenceTapEvent(preferenceKey: String): Ga4EventData {

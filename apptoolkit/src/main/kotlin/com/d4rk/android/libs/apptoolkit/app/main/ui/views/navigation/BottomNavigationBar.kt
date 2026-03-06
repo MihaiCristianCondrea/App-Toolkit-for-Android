@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
@@ -78,6 +79,7 @@ fun <T : StableNavKey> BottomNavigationBar(
                 label = {
                     Text(
                         text = stringResource(id = item.title),
+                        fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.basicMarquee()
                     )
