@@ -289,6 +289,14 @@
     <string name="feedback">Geri bildirim</string>
     <string name="online_help">Çevrimiçi yardım</string>
 
+    <string name="help_feedback_sheet_title">Geri bildirimi nasıl paylaşmak istersiniz?</string>
+    <string name="help_feedback_sheet_feature_request_title">Özellik isteği gönder</string>
+    <string name="help_feedback_sheet_feature_request_description">Resmi form aracılığıyla uygulamalarımız için yeni fikirler önerin.</string>
+    <string name="help_feedback_sheet_contact_title">Benimle kişisel olarak iletişime geçin</string>
+    <string name="help_feedback_sheet_contact_description">Doğrudan destek için resmi iletişim sayfamı açın.</string>
+    <string name="help_feedback_sheet_review_title">Google Play’de değerlendirme bırakın</string>
+    <string name="help_feedback_sheet_review_description">Puanınızı paylaşın ve daha fazla kullanıcının uygulamayı keşfetmesine yardımcı olun.</string>
+
     <string name="updates">Güncellemeler</string>
 
     <string name="share">Paylaş</string>

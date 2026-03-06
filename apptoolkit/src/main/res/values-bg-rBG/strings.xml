@@ -289,6 +289,14 @@
     <string name="feedback">Обратна връзка</string>
     <string name="online_help">Онлайн помощ</string>
 
+    <string name="help_feedback_sheet_title">Как бихте искали да споделите обратна връзка?</string>
+    <string name="help_feedback_sheet_feature_request_title">Изпратете заявка за функция</string>
+    <string name="help_feedback_sheet_feature_request_description">Предложете нови идеи за някое от нашите приложения чрез официалната форма.</string>
+    <string name="help_feedback_sheet_contact_title">Свържете се с мен лично</string>
+    <string name="help_feedback_sheet_contact_description">Отворете официалната ми страница за контакт за директна помощ.</string>
+    <string name="help_feedback_sheet_review_title">Оставете отзив в Google Play</string>
+    <string name="help_feedback_sheet_review_description">Споделете оценката си и помогнете на повече потребители да открият приложението.</string>
+
     <string name="updates">Актуализации</string>
 
     <string name="share">Споделяне</string>

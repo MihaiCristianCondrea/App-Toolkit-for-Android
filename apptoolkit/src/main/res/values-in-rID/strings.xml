@@ -289,6 +289,14 @@
     <string name="feedback">Umpan balik</string>
     <string name="online_help">Bantuan online</string>
 
+    <string name="help_feedback_sheet_title">Bagaimana Anda ingin membagikan masukan?</string>
+    <string name="help_feedback_sheet_feature_request_title">Kirim permintaan fitur</string>
+    <string name="help_feedback_sheet_feature_request_description">Sarankan ide baru untuk aplikasi kami melalui formulir resmi.</string>
+    <string name="help_feedback_sheet_contact_title">Hubungi saya secara pribadi</string>
+    <string name="help_feedback_sheet_contact_description">Buka halaman kontak resmi saya untuk dukungan langsung.</string>
+    <string name="help_feedback_sheet_review_title">Beri ulasan di Google Play</string>
+    <string name="help_feedback_sheet_review_description">Bagikan penilaian Anda dan bantu lebih banyak pengguna menemukan aplikasi ini.</string>
+
     <string name="updates">Pembaruan</string>
 
     <string name="share">Bagikan</string>

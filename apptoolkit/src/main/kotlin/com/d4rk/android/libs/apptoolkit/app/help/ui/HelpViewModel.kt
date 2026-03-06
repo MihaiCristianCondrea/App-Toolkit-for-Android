@@ -5,14 +5,6 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.d4rk.android.libs.apptoolkit.app.help.ui
@@ -40,7 +32,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setNoData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
@@ -52,9 +44,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/**
- * ViewModel for the FAQ/help screen.
- */
 class HelpViewModel(
     private val getFaqUseCase: GetFaqUseCase,
     private val forceInAppReviewUseCase: ForceInAppReviewUseCase,
@@ -76,6 +65,8 @@ class HelpViewModel(
         when (event) {
             is HelpEvent.LoadFaq -> loadFaq()
             is HelpEvent.DismissSnackbar -> dismissSnackbar()
+            is HelpEvent.OpenFeatureRequestForm -> sendAction(HelpAction.OpenUrl(AppLinks.FEATURE_REQUESTS_FORM))
+            is HelpEvent.OpenContactPage -> sendAction(HelpAction.OpenUrl(AppLinks.CONTACT_PAGE))
             is HelpEvent.RequestReview -> requestReview(host = event.host)
         }
     }
@@ -86,14 +77,17 @@ class HelpViewModel(
             getFaqUseCase.invoke()
                 .flowOn(context = dispatchers.io)
                 .onStart {
-                    firebaseController.logBreadcrumb(message = "FAQ fetch started", attributes = mapOf("source" to "GetFaqUseCase"))
+                    firebaseController.logBreadcrumb(
+                        message = "FAQ fetch started",
+                        attributes = mapOf("source" to "GetFaqUseCase")
+                    )
                     updateStateThreadSafe {
                         screenState.setLoading()
                     }
                 }
                 .onEach { result: DataState<List<FaqItem>, Errors> ->
                     result
-                        .onSuccess { faqs: List<FaqItem> ->
+                        .onSuccess { faqs ->
                             updateStateThreadSafe {
                                 val data = HelpUiState(questions = faqs.toImmutableList())
                                 if (faqs.isEmpty()) {
@@ -103,7 +97,7 @@ class HelpViewModel(
                                 }
                             }
                         }
-                        .onFailure { error: Errors ->
+                        .onFailure { error ->
                             updateStateThreadSafe {
                                 screenState.setError(message = error.asUiText())
                             }
@@ -139,17 +133,17 @@ class HelpViewModel(
                     }
                     sendAction(action = HelpAction.ReviewOutcomeReported(outcome = outcome))
                     if (outcome != ReviewOutcome.Launched) {
-                        sendAction(action = HelpAction.OpenOnlineHelp(url = HelpConstants.FAQ_BASE_URL))
+                        sendAction(action = HelpAction.OpenPlayStoreReview)
                     }
                 },
                 onError = {
-                    sendAction(action = HelpAction.OpenOnlineHelp(url = HelpConstants.FAQ_BASE_URL))
+                    sendAction(action = HelpAction.OpenPlayStoreReview)
                 }
             )
         }
     }
 
     private object Actions {
-        const val REQUEST_REVIEW: String = "requestReview"
+        const val REQUEST_REVIEW = "requestReview"
     }
 }

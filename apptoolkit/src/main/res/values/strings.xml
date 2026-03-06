@@ -293,6 +293,14 @@
     <string name="feedback">Feedback</string>
     <string name="online_help">Online help</string>
 
+    <string name="help_feedback_sheet_title">How would you like to share feedback?</string>
+    <string name="help_feedback_sheet_feature_request_title">Send feature request</string>
+    <string name="help_feedback_sheet_feature_request_description">Suggest new ideas for any of our apps through the official form.</string>
+    <string name="help_feedback_sheet_contact_title">Contact me personally</string>
+    <string name="help_feedback_sheet_contact_description">Open my official contact page for direct support.</string>
+    <string name="help_feedback_sheet_review_title">Leave a Google Play review</string>
+    <string name="help_feedback_sheet_review_description">Share your rating and help more users discover the app.</string>
+
     <string name="updates">Updates</string>
 
     <string name="share">Share</string>

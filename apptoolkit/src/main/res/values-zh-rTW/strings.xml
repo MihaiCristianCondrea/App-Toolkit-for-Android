@@ -289,6 +289,14 @@
     <string name="feedback">反饋</string>
     <string name="online_help">線上說明</string>
 
+    <string name="help_feedback_sheet_title">您想如何提供意見回饋？</string>
+    <string name="help_feedback_sheet_feature_request_title">提交功能請求</string>
+    <string name="help_feedback_sheet_feature_request_description">透過官方表單為我們的任何應用程式提出新想法。</string>
+    <string name="help_feedback_sheet_contact_title">與我個人聯絡</string>
+    <string name="help_feedback_sheet_contact_description">開啟我的官方聯絡頁面以獲得直接支援。</string>
+    <string name="help_feedback_sheet_review_title">在 Google Play 留下評論</string>
+    <string name="help_feedback_sheet_review_description">分享您的評分，幫助更多使用者發現此應用程式。</string>
+
     <string name="updates">更新</string>
 
     <string name="share">分享</string>

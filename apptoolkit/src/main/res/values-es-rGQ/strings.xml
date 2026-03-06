@@ -289,6 +289,14 @@
     <string name="feedback">Comentarios</string>
     <string name="online_help">Ayuda en línea</string>
 
+    <string name="help_feedback_sheet_title">¿Cómo te gustaría compartir comentarios?</string>
+    <string name="help_feedback_sheet_feature_request_title">Enviar solicitud de función</string>
+    <string name="help_feedback_sheet_feature_request_description">Sugiere nuevas ideas para cualquiera de nuestras apps mediante el formulario oficial.</string>
+    <string name="help_feedback_sheet_contact_title">Contáctame personalmente</string>
+    <string name="help_feedback_sheet_contact_description">Abre mi página oficial de contacto para recibir soporte directo.</string>
+    <string name="help_feedback_sheet_review_title">Deja una reseña en Google Play</string>
+    <string name="help_feedback_sheet_review_description">Comparte tu valoración y ayuda a más usuarios a descubrir la app.</string>
+
     <string name="updates">Actualizaciones</string>
 
     <string name="share">Compartir</string>

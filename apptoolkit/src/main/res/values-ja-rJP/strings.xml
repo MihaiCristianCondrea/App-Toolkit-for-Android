@@ -289,6 +289,14 @@
     <string name="feedback">フィードバック</string>
     <string name="online_help">オンラインヘルプ</string>
 
+    <string name="help_feedback_sheet_title">どのようにフィードバックを共有しますか？</string>
+    <string name="help_feedback_sheet_feature_request_title">機能リクエストを送信</string>
+    <string name="help_feedback_sheet_feature_request_description">公式フォームから、各アプリへの新しいアイデアを提案してください。</string>
+    <string name="help_feedback_sheet_contact_title">個別に連絡する</string>
+    <string name="help_feedback_sheet_contact_description">直接サポートのために、私の公式コンタクトページを開きます。</string>
+    <string name="help_feedback_sheet_review_title">Google Playでレビューする</string>
+    <string name="help_feedback_sheet_review_description">評価を共有して、より多くのユーザーがアプリを見つけられるようにしてください。</string>
+
     <string name="updates">更新情報</string>
 
     <string name="share">共有</string>
