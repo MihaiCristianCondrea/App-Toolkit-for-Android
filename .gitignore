@@ -4,6 +4,7 @@
 # Gradle build cache and output
 .gradle/
 build/
+/gradle/gradle/gradle-daemon-jvm.properties
 generated/
 
 # Ignore generated binaries and other typical build artifacts
