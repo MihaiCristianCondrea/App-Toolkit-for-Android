@@ -17,16 +17,13 @@
 
 package com.d4rk.android.libs.apptoolkit.core.ui.views.buttons
 
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 private const val IconRequirementMessage: String = "Either icon or painter must be provided"
 
@@ -38,7 +35,8 @@ internal fun IconContent(
 ) {
     require(icon != null || painter != null) { IconRequirementMessage }
 
-    val iconModifier: Modifier = remember { Modifier.size(size = SizeConstants.ButtonIconSize) }
+    val iconModifier: Modifier = Modifier
+    //.size(size = SizeConstants.ButtonIconSize) // REMINDER: Enable it later when compose team adds the correct value
     val stableIcon by rememberUpdatedState(newValue = icon)
     val stablePainter by rememberUpdatedState(newValue = painter)
     when {
