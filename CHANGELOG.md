@@ -2,6 +2,7 @@
 
 - **Minor**: Made selected labels bold for the bottom navigation bar and navigation rail.
 - **Patch**: Fixed feedback sheet icons alignment with preference content on the Help screen.
+- **Patch**: Restyled the Help feedback sheet to use grouped preference cards with rounded-section corners.
 
 # Version 2.0.6:
 
