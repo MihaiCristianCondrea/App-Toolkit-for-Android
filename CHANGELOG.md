@@ -1,3 +1,7 @@
+# Version 2.0.7:
+
+- **Minor**: Made selected labels bold for the bottom navigation bar and navigation rail.
+
 # Version 2.0.6:
 
 - **Minor**: Added a new feature request form from where you guys can suggest new features for the

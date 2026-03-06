@@ -49,6 +49,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
@@ -142,6 +143,7 @@ fun <T : StableNavKey> LeftNavigationRail(
                         ) {
                             Text(
                                 text = stringResource(id = item.title),
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
