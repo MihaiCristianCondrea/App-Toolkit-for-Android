@@ -1,6 +1,7 @@
 # Version 2.0.7:
 
 - **Minor**: Made selected labels bold for the bottom navigation bar and navigation rail.
+- **Patch**: Fixed feedback sheet icons alignment with preference content on the Help screen.
 
 # Version 2.0.6:
 
