@@ -128,7 +128,12 @@ fun FavoriteAppsRoute(
     val openApp: (AppInfo) -> Unit = remember(dispatchers) { buildAppClick }
     val onShareClick: (AppInfo) -> Unit = remember(buildShareClick, firebaseController) {
         { app ->
-            firebaseController.logAppInteraction(source = "favorite_apps", appInfo = app, interaction = AppInteractionType.Share)
+            firebaseController.logAppInteraction(
+                source = "favorite_apps",
+                appInfo = app,
+                interaction = AppInteractionType.Share,
+                interactionContext = "grid_share"
+            )
             buildShareClick(app)
         }
     }
@@ -167,6 +172,11 @@ fun FavoriteAppsRoute(
             modifier = Modifier.fillMaxHeight(),
             sheetState = sheetState,
             onDismissRequest = {
+                firebaseController.logAppInteraction(
+                    source = "favorite_apps",
+                    appInfo = app,
+                    interaction = AppInteractionType.CloseDetailsBottomSheet
+                )
                 coroutineScope.launch {
                     sheetState.hide()
                     selectedApp = null
@@ -177,7 +187,15 @@ fun FavoriteAppsRoute(
                 appInfo = app,
                 isFavorite = favorites.contains(app.packageName),
                 isAppInstalled = isSelectedAppInstalled,
-                onShareClick = { onShareClick(app) },
+                onShareClick = {
+                    firebaseController.logAppInteraction(
+                        source = "favorite_apps",
+                        appInfo = app,
+                        interaction = AppInteractionType.Share,
+                        interactionContext = "details_bottom_sheet"
+                    )
+                    buildShareClick(app)
+                },
                 onOpenAppClick = {
                     firebaseController.logAppInteraction(source = "favorite_apps", appInfo = app, interaction = AppInteractionType.OpenInstalledApp)
                     coroutineScope.launch {
@@ -265,6 +283,13 @@ fun FavoriteAppsRoute(
                     selectedApp = app
                 },
                 onShareClick = onShareClick,
+                onFirstVisibleAppChanged = { firstVisibleApp ->
+                    firebaseController.logAppInteraction(
+                        source = "favorite_apps",
+                        appInfo = firstVisibleApp,
+                        interaction = AppInteractionType.GridAppImpression
+                    )
+                },
                 windowWidthSizeClass = windowWidthSizeClass,
             )
         }

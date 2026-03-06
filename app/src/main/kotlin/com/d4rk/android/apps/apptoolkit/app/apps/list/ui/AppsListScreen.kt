@@ -127,7 +127,12 @@ fun AppsListRoute(
     val openApp: (AppInfo) -> Unit = remember(dispatchers) { buildAppClick }
     val onShareClick: (AppInfo) -> Unit = remember(buildShareClick, firebaseController) {
         { app ->
-            firebaseController.logAppInteraction(source = "apps_list", appInfo = app, interaction = AppInteractionType.Share)
+            firebaseController.logAppInteraction(
+                source = "apps_list",
+                appInfo = app,
+                interaction = AppInteractionType.Share,
+                interactionContext = "grid_share"
+            )
             buildShareClick(app)
         }
     }
@@ -169,6 +174,11 @@ fun AppsListRoute(
             modifier = Modifier.fillMaxHeight(),
             sheetState = sheetState,
             onDismissRequest = {
+                firebaseController.logAppInteraction(
+                    source = "apps_list",
+                    appInfo = app,
+                    interaction = AppInteractionType.CloseDetailsBottomSheet
+                )
                 coroutineScope.launch {
                     sheetState.hide()
                     selectedApp = null
@@ -179,7 +189,15 @@ fun AppsListRoute(
                 appInfo = app,
                 isFavorite = favorites.contains(app.packageName),
                 isAppInstalled = isSelectedAppInstalled,
-                onShareClick = { onShareClick(app) },
+                onShareClick = {
+                    firebaseController.logAppInteraction(
+                        source = "apps_list",
+                        appInfo = app,
+                        interaction = AppInteractionType.Share,
+                        interactionContext = "details_bottom_sheet"
+                    )
+                    buildShareClick(app)
+                },
                 onOpenAppClick = {
                     firebaseController.logAppInteraction(source = "apps_list", appInfo = app, interaction = AppInteractionType.OpenInstalledApp)
                     coroutineScope.launch {
@@ -251,6 +269,13 @@ fun AppsListRoute(
                     selectedApp = app
                 },
                 onShareClick = onShareClick,
+                onFirstVisibleAppChanged = { firstVisibleApp ->
+                    firebaseController.logAppInteraction(
+                        source = "apps_list",
+                        appInfo = firstVisibleApp,
+                        interaction = AppInteractionType.GridAppImpression
+                    )
+                },
                 windowWidthSizeClass = windowWidthSizeClass,
             )
         }

@@ -49,8 +49,8 @@ import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.rememberCommon
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
@@ -60,9 +60,9 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItemWithDivider
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.DISPLAY_SETTINGS_LOG_TAG
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
 import kotlinx.coroutines.CoroutineScope
@@ -81,6 +81,7 @@ private object DisplayPreferenceKeys {
 
 private object DisplayActionNames {
     const val OPEN_THEME_SETTINGS: String = "open_theme_settings"
+    const val THEME_REDIRECT: String = "theme_redirect"
     const val OPEN_STARTUP_DIALOG: String = "open_startup_dialog"
     const val CHANGE_STARTUP_DESTINATION: String = "change_startup_destination"
     const val OPEN_LANGUAGE_SETTINGS: String = "open_language_settings"
@@ -179,12 +180,23 @@ fun DisplaySettingsList(
         }
     }
 
-    val onDarkThemeChanged: (Boolean) -> Unit = remember(setThemeMode) {
+    val onDarkThemeChanged: (Boolean) -> Unit = remember(setThemeMode, firebaseController) {
         { isChecked: Boolean ->
-            setThemeMode(
+            val targetMode =
                 if (isChecked) DataStoreNamesConstants.THEME_MODE_DARK
                 else DataStoreNamesConstants.THEME_MODE_LIGHT
+            firebaseController.logEvent(
+                AnalyticsEvent(
+                    name = SettingsAnalytics.Events.THEME_SWITCH,
+                    params = mapOf(
+                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                            DISPLAY_SETTINGS_SCREEN_NAME
+                        ),
+                        SettingsAnalytics.Params.THEME_MODE to AnalyticsValue.Str(targetMode),
+                    ),
+                )
             )
+            setThemeMode(targetMode)
         }
     }
 
@@ -209,6 +221,7 @@ fun DisplaySettingsList(
                             displayActionEvent(
                                 actionName = DisplayActionNames.OPEN_THEME_SETTINGS,
                                 preferenceKey = DisplayPreferenceKeys.THEME_SETTINGS,
+                                value = DisplayActionNames.THEME_REDIRECT,
                             )
                         )
                         provider.openThemeSettings()

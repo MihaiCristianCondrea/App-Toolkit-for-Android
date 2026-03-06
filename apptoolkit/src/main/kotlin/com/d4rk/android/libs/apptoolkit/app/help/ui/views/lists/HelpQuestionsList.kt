@@ -27,12 +27,12 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
-import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
-import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqId
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.cards.QuestionCard
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
@@ -41,7 +41,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun HelpQuestionsList(
     questions: ImmutableList<FaqItem>,
     firebaseController: FirebaseController,
-    ga4EventProvider: ((FaqItem) -> Ga4EventData)? = null,
+    ga4EventProvider: ((item: FaqItem, index: Int, expanded: Boolean) -> Ga4EventData)? = null,
 ) {
     val expandedStates: SnapshotStateMap<FaqId, Boolean> = remember { mutableStateMapOf() }
     val cardShape = RoundedCornerShape(
@@ -64,8 +64,15 @@ fun HelpQuestionsList(
                         summary = question.answer,
                         isExpanded = isExpanded,
                         onToggleExpand = {
-                            firebaseController.logGa4Event(ga4EventProvider?.invoke(question))
-                            expandedStates[question.id] = !isExpanded
+                            val expanded = !isExpanded
+                            firebaseController.logGa4Event(
+                                ga4EventProvider?.invoke(
+                                    question,
+                                    index,
+                                    expanded
+                                )
+                            )
+                            expandedStates[question.id] = expanded
                         },
                         modifier = Modifier.animateVisibility(index = index)
                     )

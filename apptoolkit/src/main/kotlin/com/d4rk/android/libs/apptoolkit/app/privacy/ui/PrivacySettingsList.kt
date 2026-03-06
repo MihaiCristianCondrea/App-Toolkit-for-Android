@@ -31,7 +31,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.PrivacySettingsProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
@@ -39,12 +41,24 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCate
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import org.koin.compose.koinInject
 
 private const val PRIVACY_SCREEN_NAME = "Privacy"
 private const val PRIVACY_SCREEN_CLASS = "PrivacySettingsList"
+
+private object PrivacyPreferenceKeys {
+    const val PRIVACY_POLICY: String = "privacy_policy"
+    const val TERMS_OF_SERVICE: String = "terms_of_service"
+    const val CODE_OF_CONDUCT: String = "code_of_conduct"
+    const val PERMISSIONS: String = "permissions"
+    const val ADS: String = "ads"
+    const val USAGE_AND_DIAGNOSTICS: String = "usage_and_diagnostics"
+    const val LEGAL_NOTICES: String = "legal_notices"
+    const val LICENSE: String = "license"
+}
 
 @Composable
 fun PrivacySettingsList(
@@ -82,6 +96,8 @@ fun PrivacySettingsList(
                     title = stringResource(id = R.string.privacy_policy),
                     summary = stringResource(id = R.string.summary_preference_settings_privacy_policy),
                     onClick = { context.openUrl(provider.privacyPolicyUrl) },
+                    firebaseController = firebaseController,
+                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.PRIVACY_POLICY),
                 )
                 ExtraTinyVerticalSpacer()
 
@@ -89,6 +105,8 @@ fun PrivacySettingsList(
                     title = stringResource(id = R.string.terms_of_service),
                     summary = stringResource(id = R.string.summary_preference_settings_terms_of_service),
                     onClick = { context.openUrl(provider.termsOfServiceUrl) },
+                    firebaseController = firebaseController,
+                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.TERMS_OF_SERVICE),
                 )
                 ExtraTinyVerticalSpacer()
 
@@ -96,6 +114,8 @@ fun PrivacySettingsList(
                     title = stringResource(id = R.string.code_of_conduct),
                     summary = stringResource(id = R.string.summary_preference_settings_code_of_conduct),
                     onClick = { context.openUrl(provider.codeOfConductUrl) },
+                    firebaseController = firebaseController,
+                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.CODE_OF_CONDUCT),
                 )
                 ExtraTinyVerticalSpacer()
 
@@ -103,6 +123,8 @@ fun PrivacySettingsList(
                     title = stringResource(id = R.string.permissions),
                     summary = stringResource(id = R.string.summary_preference_settings_permissions),
                     onClick = { provider.openPermissionsScreen() },
+                    firebaseController = firebaseController,
+                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.PERMISSIONS),
                 )
                 ExtraTinyVerticalSpacer()
 
@@ -110,6 +132,8 @@ fun PrivacySettingsList(
                     title = stringResource(id = R.string.ads),
                     summary = stringResource(id = R.string.summary_preference_settings_ads),
                     onClick = { provider.openAdsScreen() },
+                    firebaseController = firebaseController,
+                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.ADS),
                 )
                 ExtraTinyVerticalSpacer()
 
@@ -117,6 +141,8 @@ fun PrivacySettingsList(
                     title = stringResource(id = R.string.usage_and_diagnostics),
                     summary = stringResource(id = R.string.summary_preference_settings_usage_and_diagnostics),
                     onClick = { provider.openUsageAndDiagnosticsScreen() },
+                    firebaseController = firebaseController,
+                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.USAGE_AND_DIAGNOSTICS),
                 )
             }
         }
@@ -134,6 +160,8 @@ fun PrivacySettingsList(
                     title = stringResource(id = R.string.legal_notices),
                     summary = stringResource(id = R.string.summary_preference_settings_legal_notices),
                     onClick = { context.openUrl(provider.legalNoticesUrl) },
+                    firebaseController = firebaseController,
+                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.LEGAL_NOTICES),
                 )
                 ExtraTinyVerticalSpacer()
 
@@ -141,8 +169,20 @@ fun PrivacySettingsList(
                     title = stringResource(id = R.string.license),
                     summary = stringResource(id = R.string.summary_preference_settings_license),
                     onClick = { context.openUrl(provider.licenseUrl) },
+                    firebaseController = firebaseController,
+                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.LICENSE),
                 )
             }
         }
     }
+}
+
+private fun privacyPreferenceTapEvent(preferenceKey: String): Ga4EventData {
+    return Ga4EventData(
+        name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+        params = mapOf(
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(PRIVACY_SCREEN_NAME),
+            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
+        ),
+    )
 }

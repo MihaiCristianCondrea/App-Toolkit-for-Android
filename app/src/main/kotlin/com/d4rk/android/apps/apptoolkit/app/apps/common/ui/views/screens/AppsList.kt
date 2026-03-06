@@ -29,9 +29,11 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
@@ -47,6 +49,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filterNotNull
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
@@ -75,6 +79,7 @@ fun AppsList(
     onFavoriteToggle: (String) -> Unit,
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
+    onFirstVisibleAppChanged: (AppInfo) -> Unit = {},
     adFrequency: Int = BuildConfig.APPS_LIST_AD_FREQUENCY,
     windowWidthSizeClass: AppWindowWidthSizeClass,
 ) {
@@ -109,6 +114,7 @@ fun AppsList(
         onFavoriteToggle = onFavoriteToggle,
         onAppClick = onAppClick,
         onShareClick = onShareClick,
+        onFirstVisibleAppChanged = onFirstVisibleAppChanged,
         adUnitId = adsConfig.bannerAdUnitId
     )
 }
@@ -140,8 +146,21 @@ private fun AppsGrid(
     onFavoriteToggle: (String) -> Unit,
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
+    onFirstVisibleAppChanged: (AppInfo) -> Unit,
     adUnitId: String,
 ) {
+    LaunchedEffect(items) {
+        snapshotFlow {
+            listState.layoutInfo.visibleItemsInfo
+                .firstNotNullOfOrNull { visibleItem ->
+                    (items.getOrNull(visibleItem.index) as? AppListItem.App)?.appInfo
+                }
+        }
+            .filterNotNull()
+            .distinctUntilChangedBy(AppInfo::packageName)
+            .collect(onFirstVisibleAppChanged)
+    }
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = columnCount),
         state = listState,

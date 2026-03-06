@@ -32,8 +32,8 @@ import com.d4rk.android.libs.apptoolkit.app.help.ui.views.cards.ContactUsCard
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.lists.HelpQuestionsList
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.HelpNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
@@ -47,7 +47,7 @@ import org.koin.core.qualifier.named
 fun HelpScreenContent(
     questions: ImmutableList<FaqItem>,
     paddingValues: PaddingValues,
-    firebaseController: FirebaseController,
+    firebaseController: FirebaseController, // FIXME: Parameter 'firebaseController' has runtime-determined stability
 ) {
     val context = LocalContext.current
     val adsConfig: AdsConfig = koinInject(qualifier = named("help_large_banner_ad"))
@@ -70,8 +70,13 @@ fun HelpScreenContent(
             HelpQuestionsList(
                 questions = questions,
                 firebaseController = firebaseController,
-                ga4EventProvider = {
-                    helpPreferenceTapEvent(preferenceKey = "faq_item")
+                ga4EventProvider = { item, index, expanded ->
+                    helpPreferenceTapEvent(
+                        preferenceKey = "faq_item",
+                        faqId = item.id.value,
+                        faqPosition = index,
+                        expanded = expanded,
+                    )
                 },
             )
         }
@@ -100,12 +105,25 @@ fun HelpScreenContent(
 }
 
 
-private fun helpPreferenceTapEvent(preferenceKey: String): Ga4EventData {
+private fun helpPreferenceTapEvent(
+    preferenceKey: String,
+    faqId: String? = null,
+    faqPosition: Int? = null,
+    expanded: Boolean? = null,
+): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str("Help"),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-        ),
+        params = buildMap {
+            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str("Help"))
+            put(SettingsAnalytics.Params.PREFERENCE_KEY, AnalyticsValue.Str(preferenceKey))
+            faqId?.let { put(SettingsAnalytics.Params.FAQ_ID, AnalyticsValue.Str(it)) }
+            faqPosition?.let {
+                put(
+                    SettingsAnalytics.Params.FAQ_POSITION,
+                    AnalyticsValue.LongVal(it.toLong())
+                )
+            }
+            expanded?.let { put(SettingsAnalytics.Params.EXPANDED, AnalyticsValue.Bool(it)) }
+        },
     )
 }

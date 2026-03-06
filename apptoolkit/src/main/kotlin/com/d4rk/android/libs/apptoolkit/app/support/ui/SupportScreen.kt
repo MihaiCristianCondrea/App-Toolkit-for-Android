@@ -81,6 +81,8 @@ private object SupportPreferenceKeys {
     const val DONATE_HIGH: String = "donate_high"
     const val DONATE_EXTREME: String = "donate_extreme"
     const val WEB_AD: String = "web_ad"
+    const val PRODUCT_ID: String = "product_id"
+    const val DESTINATION: String = "destination"
 }
 
 private object SupportActionNames {
@@ -215,7 +217,10 @@ fun SupportScreenContent(
                                     onDonateClick(DonationProductIds.LOW_DONATION)
                                 },
                                 firebaseController = firebaseController,
-                                ga4Event = supportPreferenceTapEvent(preferenceKey = SupportPreferenceKeys.DONATE_LOW),
+                                ga4Event = supportPreferenceTapEvent(
+                                    preferenceKey = SupportPreferenceKeys.DONATE_LOW,
+                                    productId = DonationProductIds.LOW_DONATION,
+                                ),
                                 enabled = lowDonation?.isEligible == true && !isBillingInProgress,
                                 vectorIcon = Icons.Outlined.Paid,
                                 label = if (lowDonation?.isEligible == true) {
@@ -232,7 +237,10 @@ fun SupportScreenContent(
                                     onDonateClick(DonationProductIds.NORMAL_DONATION)
                                 },
                                 firebaseController = firebaseController,
-                                ga4Event = supportPreferenceTapEvent(preferenceKey = SupportPreferenceKeys.DONATE_NORMAL),
+                                ga4Event = supportPreferenceTapEvent(
+                                    preferenceKey = SupportPreferenceKeys.DONATE_NORMAL,
+                                    productId = DonationProductIds.NORMAL_DONATION,
+                                ),
                                 enabled = normalDonation?.isEligible == true && !isBillingInProgress,
                                 vectorIcon = Icons.Outlined.Paid,
                                 label = if (normalDonation?.isEligible == true) {
@@ -258,7 +266,10 @@ fun SupportScreenContent(
                                     onDonateClick(DonationProductIds.HIGH_DONATION)
                                 },
                                 firebaseController = firebaseController,
-                                ga4Event = supportPreferenceTapEvent(preferenceKey = SupportPreferenceKeys.DONATE_HIGH),
+                                ga4Event = supportPreferenceTapEvent(
+                                    preferenceKey = SupportPreferenceKeys.DONATE_HIGH,
+                                    productId = DonationProductIds.HIGH_DONATION,
+                                ),
                                 enabled = highDonation?.isEligible == true && !isBillingInProgress,
                                 vectorIcon = Icons.Outlined.Paid,
                                 label = if (highDonation?.isEligible == true) {
@@ -275,7 +286,10 @@ fun SupportScreenContent(
                                     onDonateClick(DonationProductIds.EXTREME_DONATION)
                                 },
                                 firebaseController = firebaseController,
-                                ga4Event = supportPreferenceTapEvent(preferenceKey = SupportPreferenceKeys.DONATE_EXTREME),
+                                ga4Event = supportPreferenceTapEvent(
+                                    preferenceKey = SupportPreferenceKeys.DONATE_EXTREME,
+                                    productId = DonationProductIds.EXTREME_DONATION,
+                                ),
                                 enabled = extremeDonation?.isEligible == true && !isBillingInProgress,
                                 vectorIcon = Icons.Outlined.Paid,
                                 label = if (extremeDonation?.isEligible == true) {
@@ -305,7 +319,10 @@ fun SupportScreenContent(
                     context.openUrl(ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK)
                 },
                 firebaseController = firebaseController,
-                ga4Event = supportPreferenceTapEvent(preferenceKey = SupportPreferenceKeys.WEB_AD),
+                ga4Event = supportPreferenceTapEvent(
+                    preferenceKey = SupportPreferenceKeys.WEB_AD,
+                    destination = ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK,
+                ),
                 vectorIcon = Icons.Outlined.Paid,
                 label = stringResource(id = R.string.web_ad)
             )
@@ -322,13 +339,19 @@ fun SupportScreenContent(
 }
 
 
-private fun supportPreferenceTapEvent(preferenceKey: String): Ga4EventData {
+private fun supportPreferenceTapEvent(
+    preferenceKey: String,
+    productId: String? = null,
+    destination: String? = null,
+): Ga4EventData {
     return Ga4EventData(
         name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-        params = mapOf(
-            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(SUPPORT_SCREEN_NAME),
-            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(preferenceKey),
-        ),
+        params = buildMap {
+            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(SUPPORT_SCREEN_NAME))
+            put(SettingsAnalytics.Params.PREFERENCE_KEY, AnalyticsValue.Str(preferenceKey))
+            productId?.let { put(SupportPreferenceKeys.PRODUCT_ID, AnalyticsValue.Str(it)) }
+            destination?.let { put(SupportPreferenceKeys.DESTINATION, AnalyticsValue.Str(it)) }
+        },
     )
 }
 

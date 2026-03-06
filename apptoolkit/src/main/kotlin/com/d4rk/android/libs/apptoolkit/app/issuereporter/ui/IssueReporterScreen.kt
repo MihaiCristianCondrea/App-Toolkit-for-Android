@@ -99,6 +99,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHa
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraExtraLargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import kotlinx.coroutines.Dispatchers
@@ -108,6 +109,15 @@ import org.koin.compose.viewmodel.koinViewModel
 
 private const val ISSUE_REPORTER_SCREEN_NAME = "IssueReporter"
 private const val ISSUE_REPORTER_SCREEN_CLASS = "IssueReporterScreen"
+
+private object IssueReporterActionNames {
+    const val BACK_CLICK: String = "back_click"
+    const val OPEN_ISSUES_LIST: String = "open_issues_list"
+    const val SEND_ISSUE: String = "send_issue"
+    const val OPEN_CREATED_ISSUE: String = "open_created_issue"
+    const val TOGGLE_DEVICE_INFO: String = "toggle_device_info"
+    const val SET_ANONYMOUS_MODE: String = "set_anonymous_mode"
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -143,7 +153,14 @@ fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
     )
 
     val defaultBackClicked: () -> Unit = remember(activity) { { activity?.finish() } }
-    val backClicked: () -> Unit = onBackClicked ?: defaultBackClicked
+    val backClicked: () -> Unit = remember(onBackClicked, defaultBackClicked, firebaseController) {
+        {
+            firebaseController.logEvent(
+                issueReporterActionEvent(actionName = IssueReporterActionNames.BACK_CLICK)
+            )
+            (onBackClicked ?: defaultBackClicked).invoke()
+        }
+    }
 
     val issuesUrl = remember(target) {
         "https://github.com/${target.username}/${target.repository}/issues"
@@ -163,12 +180,7 @@ fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
                     icon = Icons.Outlined.Link,
                     onClick = {
                         firebaseController.logEvent(
-                            AnalyticsEvent(
-                                name = "issue_open_issues",
-                                params = mapOf(
-                                    "screen" to AnalyticsValue.Str(ISSUE_REPORTER_SCREEN_NAME),
-                                ),
-                            ),
+                            issueReporterActionEvent(actionName = IssueReporterActionNames.OPEN_ISSUES_LIST)
                         )
                         context.openUrl(issuesUrl)
                     }
@@ -179,12 +191,21 @@ fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
                     expanded = isFabExtended,
                     onClick = {
                         firebaseController.logEvent(
-                            AnalyticsEvent(
-                                name = "issue_send_click",
+                            issueReporterActionEvent(
+                                actionName = IssueReporterActionNames.SEND_ISSUE,
                                 params = mapOf(
-                                    "screen" to AnalyticsValue.Str(ISSUE_REPORTER_SCREEN_NAME),
+                                    "title_length" to AnalyticsValue.LongVal(
+                                        uiStateScreen.data?.title?.length?.toLong() ?: 0L
+                                    ),
+                                    "description_length" to AnalyticsValue.LongVal(
+                                        uiStateScreen.data?.description?.length?.toLong() ?: 0L
+                                    ),
+                                    "has_email" to AnalyticsValue.Bool(!uiStateScreen.data?.email.isNullOrBlank()),
+                                    "anonymous" to AnalyticsValue.Bool(
+                                        uiStateScreen.data?.anonymous ?: true
+                                    ),
                                 ),
-                            ),
+                            )
                         )
                         viewModel.onEvent(IssueReporterEvent.Send)
                     },
@@ -293,14 +314,12 @@ fun IssueReporterScreenContent(
                             GeneralOutlinedButton(
                                 onClick = {
                                     firebaseController.logEvent(
-                                        AnalyticsEvent(
-                                            name = "issue_open_in_browser",
+                                        issueReporterActionEvent(
+                                            actionName = IssueReporterActionNames.OPEN_CREATED_ISSUE,
                                             params = mapOf(
-                                                "screen" to AnalyticsValue.Str(
-                                                    ISSUE_REPORTER_SCREEN_NAME
-                                                ),
+                                                "has_issue_url" to AnalyticsValue.Bool(data.issueUrl.isNotBlank()),
                                             ),
-                                        ),
+                                        )
                                     )
                                     data.issueUrl.let(uriHandler::openUri)
                                 },
@@ -386,6 +405,12 @@ fun IssueReporterScreenContent(
                         isChecked = data.anonymous,
                         onCheckedChange = { checked ->
                             if (checked) {
+                                firebaseController.logEvent(
+                                    issueReporterActionEvent(
+                                        actionName = IssueReporterActionNames.SET_ANONYMOUS_MODE,
+                                        params = mapOf("anonymous" to AnalyticsValue.Bool(true)),
+                                    )
+                                )
                                 onEvent(IssueReporterEvent.SetAnonymous(anonymous = true))
                             }
                         }
@@ -422,15 +447,10 @@ fun IssueReporterScreenContent(
                                 deviceExpanded.value = newValue
 
                                 firebaseController.logEvent(
-                                    AnalyticsEvent(
-                                        name = "issue_device_info_toggle",
-                                        params = mapOf(
-                                            "screen" to AnalyticsValue.Str(
-                                                ISSUE_REPORTER_SCREEN_NAME
-                                            ),
-                                            "expanded" to AnalyticsValue.Str(if (newValue) "true" else "false"),
-                                        ),
-                                    ),
+                                    issueReporterActionEvent(
+                                        actionName = IssueReporterActionNames.TOGGLE_DEVICE_INFO,
+                                        params = mapOf("expanded" to AnalyticsValue.Bool(newValue)),
+                                    )
                                 )
                             }
                             .fillMaxWidth()
@@ -468,4 +488,18 @@ fun IssueReporterScreenContent(
             }
         }
     }
+}
+
+private fun issueReporterActionEvent(
+    actionName: String,
+    params: Map<String, AnalyticsValue> = emptyMap(),
+): AnalyticsEvent {
+    return AnalyticsEvent(
+        name = SettingsAnalytics.Events.ACTION,
+        params = buildMap {
+            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(ISSUE_REPORTER_SCREEN_NAME))
+            put(SettingsAnalytics.Params.ACTION_NAME, AnalyticsValue.Str(actionName))
+            putAll(params)
+        },
+    )
 }

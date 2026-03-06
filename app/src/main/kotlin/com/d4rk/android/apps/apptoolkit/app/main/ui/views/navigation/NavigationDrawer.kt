@@ -41,12 +41,16 @@ import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.NavigationDrawerItemContent
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.hapticDrawerSwipe
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.CoroutineScope
@@ -65,6 +69,7 @@ fun NavigationDrawer(
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
     val changelogUrl: String = koinInject(qualifier = named("github_changelog"))
+    val firebaseController: FirebaseController = koinInject()
 
     val showChangelog = rememberSaveable { mutableStateOf(false) }
     val appRouteHandlers = remember(navigator) {
@@ -96,6 +101,7 @@ fun NavigationDrawer(
                         ),
                         dividerRoutes = persistentSetOf(NavigationRoutes.ROUTE_COMPONENTS),
                         handleNavigationItemClick = {
+                            firebaseController.logEvent(drawerItemClickEvent(route = item.route))
                             handleNavigationItemClick(
                                 context = context,
                                 item = item,
@@ -137,3 +143,13 @@ private fun isDrawerItemSelected(
         NavigationRoutes.ROUTE_COMPONENTS -> currentRoute == ComponentsRoute
         else -> false
     }
+
+private fun drawerItemClickEvent(route: String): AnalyticsEvent =
+    AnalyticsEvent(
+        name = SettingsAnalytics.Events.ACTION,
+        params = mapOf(
+            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str("MainNavigationDrawer"),
+            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str("navigation_item_click"),
+            SettingsAnalytics.Params.NAVIGATION_ROUTE to AnalyticsValue.Str(route),
+        ),
+    )

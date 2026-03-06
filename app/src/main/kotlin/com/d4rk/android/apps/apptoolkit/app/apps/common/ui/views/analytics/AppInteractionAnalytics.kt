@@ -32,6 +32,8 @@ enum class AppInteractionType {
     OpenDetailsBottomSheet,
     OpenInPlayStore,
     OpenInstalledApp,
+    CloseDetailsBottomSheet,
+    GridAppImpression,
 }
 
 /**
@@ -41,16 +43,20 @@ fun FirebaseController.logAppInteraction(
     source: String,
     appInfo: AppInfo,
     interaction: AppInteractionType,
+    interactionContext: String? = null,
 ) {
     logEvent(
         event = AnalyticsEvent(
             name = "app_card_interaction",
-            params = mapOf(
-                "source" to AnalyticsValue.Str(source),
-                "interaction" to AnalyticsValue.Str(interaction.name.lowercase()),
-                "package_name" to AnalyticsValue.Str(appInfo.packageName),
-                "app_name" to AnalyticsValue.Str(appInfo.name),
-            )
+            params = buildMap {
+                put("source", AnalyticsValue.Str(source))
+                put("interaction", AnalyticsValue.Str(interaction.name.lowercase()))
+                put("package_name", AnalyticsValue.Str(appInfo.packageName))
+                put("app_name", AnalyticsValue.Str(appInfo.name))
+                appInfo.category?.id?.let { put("app_category_id", AnalyticsValue.Str(it)) }
+                appInfo.category?.label?.let { put("app_category_label", AnalyticsValue.Str(it)) }
+                interactionContext?.let { put("interaction_context", AnalyticsValue.Str(it)) }
+            }
         )
     )
 }

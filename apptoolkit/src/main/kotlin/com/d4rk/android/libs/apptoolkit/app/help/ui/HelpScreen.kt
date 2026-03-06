@@ -83,7 +83,6 @@ private const val HELP_SCREEN_CLASS: String = "HelpScreen"
 
 private object HelpPreferenceKeys {
     const val FEEDBACK: String = "feedback"
-    const val FAQ_ITEM: String = "faq_item"
     const val CONTACT_US: String = "contact_us"
     const val REQUEST_FEATURE: String = "request_feature"
     const val LEAVE_REVIEW: String = "leave_review"
