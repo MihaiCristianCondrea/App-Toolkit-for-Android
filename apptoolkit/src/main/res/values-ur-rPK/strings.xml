@@ -289,6 +289,14 @@
     <string name="feedback">رائے</string>
     <string name="online_help">آن لائن مدد</string>
 
+    <string name="help_feedback_sheet_title">آپ اپنی رائے کیسے شیئر کرنا چاہتے ہیں؟</string>
+    <string name="help_feedback_sheet_feature_request_title">فیچر کی درخواست بھیجیں</string>
+    <string name="help_feedback_sheet_feature_request_description">سرکاری فارم کے ذریعے ہماری کسی بھی ایپ کے لیے نئے آئیڈیاز تجویز کریں۔</string>
+    <string name="help_feedback_sheet_contact_title">مجھ سے ذاتی طور پر رابطہ کریں</string>
+    <string name="help_feedback_sheet_contact_description">براہِ راست مدد کے لیے میرا سرکاری رابطہ صفحہ کھولیں۔</string>
+    <string name="help_feedback_sheet_review_title">Google Play پر جائزہ دیں</string>
+    <string name="help_feedback_sheet_review_description">اپنی ریٹنگ شیئر کریں اور مزید صارفین کو ایپ دریافت کرنے میں مدد دیں۔</string>
+
     <string name="updates">اپ ڈیٹس</string>
 
     <string name="share">شیئر کریں</string>

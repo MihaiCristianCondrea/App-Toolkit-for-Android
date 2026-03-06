@@ -17,14 +17,25 @@
 
 package com.d4rk.android.libs.apptoolkit.app.help.ui
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ContactSupport
+import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,8 +44,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.help.ui.contract.HelpAction
@@ -46,9 +59,10 @@ import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
@@ -57,25 +71,28 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.activity.isInAppReviewAvailable
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.findActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val HELP_SCREEN_NAME = "Help"
-private const val HELP_SCREEN_CLASS = "HelpScreen"
+private const val HELP_SCREEN_NAME: String = "Help"
+private const val HELP_SCREEN_CLASS: String = "HelpScreen"
 
 private object HelpPreferenceKeys {
-    const val REVIEW_OR_ONLINE_HELP: String = "review_or_online_help"
+    const val FEEDBACK: String = "feedback"
     const val FAQ_ITEM: String = "faq_item"
     const val CONTACT_US: String = "contact_us"
+    const val REQUEST_FEATURE: String = "request_feature"
+    const val LEAVE_REVIEW: String = "leave_review"
 }
 
 private object HelpActionNames {
     const val BACK_CLICK: String = "back_click"
     const val RETRY_LOAD: String = "retry_load"
+    const val FEEDBACK_SHEET_OPENED: String = "feedback_sheet_opened"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,7 +105,6 @@ fun HelpScreen(
 
     val context = LocalContext.current
     val activity = remember(context) { context.findActivity() }
-    val isInAppReviewAvailable = rememberSaveable { mutableStateOf(false) }
     val reviewHost = remember(activity) {
         activity?.let { hostActivity ->
             object : ReviewHost {
@@ -96,10 +112,13 @@ fun HelpScreen(
             }
         }
     }
+
     val scrollBehavior: TopAppBarScrollBehavior =
         TopAppBarDefaults.enterAlwaysScrollBehavior(state = rememberTopAppBarState())
     val isFabExtended = rememberSaveable { mutableStateOf(true) }
     val showDialog = rememberSaveable { mutableStateOf(false) }
+    val showFeedbackBottomSheet = rememberSaveable { mutableStateOf(false) }
+    val feedbackBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val screenState: UiStateScreen<HelpUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -116,14 +135,10 @@ fun HelpScreen(
     )
 
     LaunchedEffect(Unit) {
-        isInAppReviewAvailable.value =
-            activity?.isInAppReviewAvailable() ?: false
-    }
-
-    LaunchedEffect(Unit) {
         viewModel.actionEvent.collect { action ->
             when (action) {
-                is HelpAction.OpenOnlineHelp -> context.openUrl(action.url)
+                is HelpAction.OpenUrl -> context.openUrl(action.url)
+                is HelpAction.OpenPlayStoreReview -> context.openPlayStoreForApp(context.packageName)
                 is HelpAction.ReviewOutcomeReported -> Unit
             }
         }
@@ -140,9 +155,7 @@ fun HelpScreen(
     LargeTopAppBarWithScaffold(
         title = stringResource(id = R.string.help),
         onBackClicked = {
-            firebaseController.logEvent(
-                helpActionEvent(actionName = HelpActionNames.BACK_CLICK)
-            )
+            firebaseController.logEvent(helpActionEvent(actionName = HelpActionNames.BACK_CLICK))
             activity?.finish()
         },
         actions = {
@@ -158,28 +171,13 @@ fun HelpScreen(
                 visible = true,
                 expanded = isFabExtended.value,
                 onClick = {
-                    reviewHost?.let { host ->
-                        viewModel.onEvent(HelpEvent.RequestReview(host = host))
-                    }
+                    firebaseController.logEvent(helpActionEvent(actionName = HelpActionNames.FEEDBACK_SHEET_OPENED))
+                    showFeedbackBottomSheet.value = true
                 },
                 firebaseController = firebaseController,
-                ga4Event = helpPreferenceTapEvent(preferenceKey = HelpPreferenceKeys.REVIEW_OR_ONLINE_HELP),
-                text = {
-                    val textRes = if (isInAppReviewAvailable.value) {
-                        R.string.feedback
-                    } else {
-                        R.string.online_help
-                    }
-                    Text(text = stringResource(id = textRes))
-                },
-                icon = {
-                    val icon = if (isInAppReviewAvailable.value) {
-                        Icons.Outlined.RateReview
-                    } else {
-                        Icons.AutoMirrored.Outlined.ContactSupport
-                    }
-                    Icon(imageVector = icon, contentDescription = null)
-                }
+                ga4Event = helpPreferenceTapEvent(preferenceKey = HelpPreferenceKeys.FEEDBACK),
+                text = { Text(text = stringResource(id = R.string.feedback)) },
+                icon = { Icon(imageVector = Icons.Outlined.RateReview, contentDescription = null) },
             )
         }
     ) { paddingValues ->
@@ -216,8 +214,78 @@ fun HelpScreen(
             }
         )
     }
+
+    if (showFeedbackBottomSheet.value) {
+        ModalBottomSheet(
+            onDismissRequest = { showFeedbackBottomSheet.value = false },
+            sheetState = feedbackBottomSheetState,
+        ) {
+            Text(
+                text = stringResource(id = R.string.help_feedback_sheet_title),
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            FeedbackListItem(
+                title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
+                description = stringResource(id = R.string.help_feedback_sheet_feature_request_description),
+                icon = { Icon(imageVector = Icons.Outlined.Lightbulb, contentDescription = null) },
+                onClick = {
+                    firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.REQUEST_FEATURE))
+                    showFeedbackBottomSheet.value = false
+                    viewModel.onEvent(HelpEvent.OpenFeatureRequestForm)
+                }
+            )
+
+            FeedbackListItem(
+                title = stringResource(id = R.string.help_feedback_sheet_contact_title),
+                description = stringResource(id = R.string.help_feedback_sheet_contact_description),
+                icon = { Icon(imageVector = Icons.AutoMirrored.Outlined.ContactSupport, contentDescription = null) },
+                onClick = {
+                    firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.CONTACT_US))
+                    showFeedbackBottomSheet.value = false
+                    viewModel.onEvent(HelpEvent.OpenContactPage)
+                }
+            )
+
+            FeedbackListItem(
+                title = stringResource(id = R.string.help_feedback_sheet_review_title),
+                description = stringResource(id = R.string.help_feedback_sheet_review_description),
+                icon = { Icon(imageVector = Icons.Outlined.RateReview, contentDescription = null) },
+                onClick = {
+                    firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.LEAVE_REVIEW))
+                    showFeedbackBottomSheet.value = false
+                    reviewHost?.let { host ->
+                        viewModel.onEvent(HelpEvent.RequestReview(host = host))
+                    }
+                }
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+    }
 }
 
+@Composable
+private fun FeedbackListItem(
+    title: String,
+    description: String,
+    icon: @Composable () -> Unit,
+    onClick: () -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(text = title) },
+        supportingContent = { Text(text = description) },
+        leadingContent = icon,
+        colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp)
+            .clickable(onClick = onClick)
+    )
+    Spacer(modifier = Modifier.height(4.dp))
+}
 
 private fun helpPreferenceTapEvent(preferenceKey: String): Ga4EventData {
     return Ga4EventData(

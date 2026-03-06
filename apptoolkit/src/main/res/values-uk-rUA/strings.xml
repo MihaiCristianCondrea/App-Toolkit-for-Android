@@ -289,6 +289,14 @@
     <string name="feedback">Зворотній зв\'язок</string>
     <string name="online_help">Онлайн-довідка</string>
 
+    <string name="help_feedback_sheet_title">Як ви хочете надіслати відгук?</string>
+    <string name="help_feedback_sheet_feature_request_title">Надіслати запит на функцію</string>
+    <string name="help_feedback_sheet_feature_request_description">Запропонуйте нові ідеї для будь-якого з наших застосунків через офіційну форму.</string>
+    <string name="help_feedback_sheet_contact_title">Зв’яжіться зі мною особисто</string>
+    <string name="help_feedback_sheet_contact_description">Відкрийте мою офіційну сторінку контактів для прямої підтримки.</string>
+    <string name="help_feedback_sheet_review_title">Залишити відгук у Google Play</string>
+    <string name="help_feedback_sheet_review_description">Поділіться своєю оцінкою та допоможіть більшій кількості користувачів знайти застосунок.</string>
+
     <string name="updates">Оновлення</string>
 
     <string name="share">Поділитися</string>

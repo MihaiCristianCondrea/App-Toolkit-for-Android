@@ -289,6 +289,14 @@
     <string name="feedback">Visszajelzés</string>
     <string name="online_help">Online súgó</string>
 
+    <string name="help_feedback_sheet_title">Hogyan szeretnél visszajelzést küldeni?</string>
+    <string name="help_feedback_sheet_feature_request_title">Funkciókérés küldése</string>
+    <string name="help_feedback_sheet_feature_request_description">Javasolj új ötleteket bármelyik alkalmazásunkhoz a hivatalos űrlapon keresztül.</string>
+    <string name="help_feedback_sheet_contact_title">Lépj velem kapcsolatba személyesen</string>
+    <string name="help_feedback_sheet_contact_description">Nyisd meg a hivatalos kapcsolatfelvételi oldalamat közvetlen támogatásért.</string>
+    <string name="help_feedback_sheet_review_title">Írj értékelést a Google Playen</string>
+    <string name="help_feedback_sheet_review_description">Oszd meg az értékelésedet, és segíts, hogy többen felfedezzék az alkalmazást.</string>
+
     <string name="updates">Frissítések</string>
 
     <string name="share">Megosztás</string>

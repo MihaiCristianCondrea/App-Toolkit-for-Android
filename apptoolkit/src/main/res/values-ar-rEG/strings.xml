@@ -289,6 +289,14 @@
     <string name="feedback">الملاحظات</string>
     <string name="online_help">المساعدة عبر الإنترنت</string>
 
+    <string name="help_feedback_sheet_title">كيف تود مشاركة ملاحظاتك؟</string>
+    <string name="help_feedback_sheet_feature_request_title">إرسال طلب ميزة</string>
+    <string name="help_feedback_sheet_feature_request_description">اقترح أفكارًا جديدة لأي من تطبيقاتنا عبر النموذج الرسمي.</string>
+    <string name="help_feedback_sheet_contact_title">تواصل معي شخصيًا</string>
+    <string name="help_feedback_sheet_contact_description">افتح صفحة الاتصال الرسمية الخاصة بي للحصول على دعم مباشر.</string>
+    <string name="help_feedback_sheet_review_title">اترك مراجعة على Google Play</string>
+    <string name="help_feedback_sheet_review_description">شارك تقييمك وساعد المزيد من المستخدمين على اكتشاف التطبيق.</string>
+
     <string name="updates">التحديثات</string>
 
     <string name="share">مشاركة</string>

@@ -289,6 +289,14 @@
     <string name="feedback">Feedback</string>
     <string name="online_help">Online na tulong</string>
 
+    <string name="help_feedback_sheet_title">Paano mo gustong magbahagi ng feedback?</string>
+    <string name="help_feedback_sheet_feature_request_title">Magpadala ng kahilingan ng feature</string>
+    <string name="help_feedback_sheet_feature_request_description">Magmungkahi ng mga bagong ideya para sa alinman sa aming mga app sa pamamagitan ng opisyal na form.</string>
+    <string name="help_feedback_sheet_contact_title">Makipag-ugnayan sa akin nang personal</string>
+    <string name="help_feedback_sheet_contact_description">Buksan ang aking opisyal na contact page para sa direktang suporta.</string>
+    <string name="help_feedback_sheet_review_title">Mag-iwan ng review sa Google Play</string>
+    <string name="help_feedback_sheet_review_description">Ibahagi ang iyong rating at tulungan ang mas maraming user na matuklasan ang app.</string>
+
     <string name="updates">Mga Update</string>
 
     <string name="share">Ibahagi</string>

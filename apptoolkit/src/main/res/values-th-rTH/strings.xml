@@ -289,6 +289,14 @@
     <string name="feedback">ข้อเสนอแนะ</string>
     <string name="online_help">ความช่วยเหลือออนไลน์</string>
 
+    <string name="help_feedback_sheet_title">คุณต้องการส่งความคิดเห็นอย่างไร?</string>
+    <string name="help_feedback_sheet_feature_request_title">ส่งคำขอฟีเจอร์</string>
+    <string name="help_feedback_sheet_feature_request_description">เสนอไอเดียใหม่สำหรับแอปของเราผ่านแบบฟอร์มอย่างเป็นทางการ</string>
+    <string name="help_feedback_sheet_contact_title">ติดต่อฉันโดยตรง</string>
+    <string name="help_feedback_sheet_contact_description">เปิดหน้าติดต่ออย่างเป็นทางการของฉันเพื่อรับการช่วยเหลือโดยตรง</string>
+    <string name="help_feedback_sheet_review_title">ให้รีวิวบน Google Play</string>
+    <string name="help_feedback_sheet_review_description">แบ่งปันคะแนนของคุณและช่วยให้ผู้ใช้มากขึ้นค้นพบแอปนี้</string>
+
     <string name="updates">การอัปเดต</string>
 
     <string name="share">แชร์</string>

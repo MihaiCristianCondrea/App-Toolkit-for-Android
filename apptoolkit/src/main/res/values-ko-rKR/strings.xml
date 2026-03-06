@@ -289,6 +289,14 @@
     <string name="feedback">의견</string>
     <string name="online_help">온라인 도움말</string>
 
+    <string name="help_feedback_sheet_title">어떤 방식으로 피드백을 보내시겠어요?</string>
+    <string name="help_feedback_sheet_feature_request_title">기능 요청 보내기</string>
+    <string name="help_feedback_sheet_feature_request_description">공식 양식을 통해 앱에 대한 새로운 아이디어를 제안해 주세요.</string>
+    <string name="help_feedback_sheet_contact_title">개인적으로 연락하기</string>
+    <string name="help_feedback_sheet_contact_description">직접 지원을 위해 내 공식 연락처 페이지를 여세요.</string>
+    <string name="help_feedback_sheet_review_title">Google Play 리뷰 남기기</string>
+    <string name="help_feedback_sheet_review_description">평점을 남겨 더 많은 사용자가 앱을 발견하도록 도와주세요.</string>
+
     <string name="updates">업데이트</string>
 
     <string name="share">공유</string>
