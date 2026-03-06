@@ -22,11 +22,23 @@ plugins {
     alias(notation = libs.plugins.android.application)
     alias(notation = libs.plugins.kotlin.compose)
     alias(notation = libs.plugins.kotlin.serialization)
-    alias(notation = libs.plugins.google.mobile.services)
-    alias(notation = libs.plugins.firebase.crashlytics)
-    alias(notation = libs.plugins.firebase.performance)
+    alias(notation = libs.plugins.google.mobile.services) apply false
+    alias(notation = libs.plugins.firebase.crashlytics) apply false
+    alias(notation = libs.plugins.firebase.performance) apply false
     alias(notation = libs.plugins.about.libraries)
     alias(notation = libs.plugins.mannodermaus.android.junit5)
+}
+
+val hasGoogleServicesConfig: Boolean = listOf(
+    "google-services.json",
+    "src/debug/google-services.json",
+    "src/release/google-services.json",
+).any { path -> file(path).exists() }
+
+if (hasGoogleServicesConfig) {
+    apply(plugin = libs.plugins.google.mobile.services.get().pluginId)
+    apply(plugin = libs.plugins.firebase.crashlytics.get().pluginId)
+    apply(plugin = libs.plugins.firebase.performance.get().pluginId)
 }
 
 android {
@@ -125,8 +137,10 @@ android {
                 getDefaultProguardFile(name = "proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            configure<CrashlyticsExtension> {
-                mappingFileUploadEnabled = true
+            if (hasGoogleServicesConfig) {
+                configure<CrashlyticsExtension> {
+                    mappingFileUploadEnabled = true
+                }
             }
         }
     }
