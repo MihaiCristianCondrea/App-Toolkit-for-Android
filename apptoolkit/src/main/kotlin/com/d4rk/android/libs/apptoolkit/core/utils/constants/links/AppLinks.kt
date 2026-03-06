@@ -40,4 +40,5 @@ object AppLinks {
     const val GPL_V3: String = "https://www.gnu.org/licenses/gpl-3.0"
 
     const val CONTACT_EMAIL: String = "contact.mihaicristiancondrea@gmail.com"
+    const val FEATURE_REQUESTS_FORM: String = "https://forms.gle/RM5Ar8C6T3iWcjbCA"
 }

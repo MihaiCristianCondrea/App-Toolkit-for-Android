@@ -52,6 +52,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.components.ui.state.ComponentsUiState
+import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
@@ -76,9 +79,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalS
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
-import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.koinInject
 import com.d4rk.android.libs.apptoolkit.R as ToolkitR

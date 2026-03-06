@@ -1,3 +1,10 @@
+# Version 2.0.6:
+
+- **Minor**: Added a new feature request form from where you guys can suggest new features for the
+  apps.
+- **Minor**: Updated and fixed some of the internal resources
+- **Minor**: Updated dependencies to the latest stable versions.
+
 # Version 2.0.5:
 
 - **New**: Added an animated splash screen for a more polished startup experience.
