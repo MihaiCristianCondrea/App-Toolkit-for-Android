@@ -38,6 +38,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -132,7 +133,9 @@ fun <T : StableNavKey> LeftNavigationRail(
                         Icon(
                             imageVector = if (isSelected) item.selectedIcon else item.icon,
                             contentDescription = stringResource(item.title),
-                            modifier = Modifier.bounceClick()
+                            modifier = Modifier
+                                .size(size = SizeConstants.TwentyFourSize)
+                                .bounceClick()
                         )
                     },
                     label = {
@@ -160,7 +163,9 @@ fun <T : StableNavKey> LeftNavigationRail(
                         Icon(
                             imageVector = item.selectedIcon,
                             contentDescription = stringResource(id = item.title),
-                            modifier = Modifier.bounceClick()
+                            modifier = Modifier
+                                .size(size = SizeConstants.TwentyFourSize)
+                                .bounceClick()
                         )
                     },
                     label = {

@@ -20,6 +20,7 @@ package com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation
 import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationDrawerItem
@@ -50,7 +51,11 @@ fun NavigationDrawerItemContent(
             view.playSoundEffect(SoundEffectConstants.CLICK)
             handleNavigationItemClick()
         }, icon = {
-            Icon(item.selectedIcon, contentDescription = title)
+            Icon(
+                imageVector = item.selectedIcon,
+                contentDescription = title,
+                modifier = Modifier.size(size = SizeConstants.TwentyFourSize),
+            )
         }, badge = {
             if (item.badgeText.isNotBlank()) {
                 Text(text = item.badgeText)

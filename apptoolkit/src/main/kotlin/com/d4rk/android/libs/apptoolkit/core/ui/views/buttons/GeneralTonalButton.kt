@@ -18,6 +18,7 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.views.buttons
 
 import android.view.View
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
@@ -58,6 +60,7 @@ fun GeneralTonalButton(
     label: String? = null,
     vectorIcon: ImageVector? = null,
     painterIcon: Painter? = null,
+    iconSize: Dp = ButtonDefaults.IconSize,
     feedback: ButtonFeedback = ButtonFeedback(),
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
@@ -99,6 +102,7 @@ fun GeneralTonalButton(
                 icon = vectorIcon,
                 painter = painterIcon,
                 contentDescription = iconContentDescription,
+                size = iconSize,
             )
             ButtonIconSpacer()
         }
