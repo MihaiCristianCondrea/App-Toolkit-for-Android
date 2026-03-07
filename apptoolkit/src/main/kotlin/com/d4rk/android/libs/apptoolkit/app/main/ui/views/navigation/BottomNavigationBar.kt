@@ -79,7 +79,7 @@ fun <T : StableNavKey> BottomNavigationBar(
                 label = {
                     Text(
                         text = stringResource(id = item.title),
-                        fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                        fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.basicMarquee()
                     )

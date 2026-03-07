@@ -146,7 +146,7 @@ fun <T : StableNavKey> LeftNavigationRail(
                         ) {
                             Text(
                                 text = stringResource(id = item.title),
-                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
