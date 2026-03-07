@@ -28,11 +28,13 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ButtonIconSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 /**
  * A filled tonal button that supports text-only, icon+text, or icon-only rendering.
@@ -58,6 +60,7 @@ fun GeneralTonalButton(
     label: String? = null,
     vectorIcon: ImageVector? = null,
     painterIcon: Painter? = null,
+    iconSize: Dp = SizeConstants.ButtonIconSize,
     feedback: ButtonFeedback = ButtonFeedback(),
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
@@ -81,6 +84,7 @@ fun GeneralTonalButton(
             firebaseController = firebaseController,
             ga4Event = ga4Event,
             style = IconOnlyButtonStyle.FilledTonal,
+            iconSize = iconSize,
         )
         return
     }
@@ -99,6 +103,7 @@ fun GeneralTonalButton(
                 icon = vectorIcon,
                 painter = painterIcon,
                 contentDescription = iconContentDescription,
+                size = iconSize,
             )
             ButtonIconSpacer()
         }

@@ -27,10 +27,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.Dp
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 internal enum class IconOnlyButtonStyle {
     Filled,
@@ -56,6 +58,7 @@ internal fun IconOnlyButton(
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
     style: IconOnlyButtonStyle = IconOnlyButtonStyle.Filled,
+    iconSize: Dp = SizeConstants.TwentyFourSize,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -76,7 +79,8 @@ internal fun IconOnlyButton(
             IconContent(
                 icon = vectorIcon,
                 painter = painterIcon,
-                contentDescription = iconContentDescription
+                contentDescription = iconContentDescription,
+                size = iconSize,
             )
         }
         IconOnlyButtonStyle.FilledTonal -> androidx.compose.material3.FilledTonalIconButton(
@@ -88,7 +92,8 @@ internal fun IconOnlyButton(
             IconContent(
                 icon = vectorIcon,
                 painter = painterIcon,
-                contentDescription = iconContentDescription
+                contentDescription = iconContentDescription,
+                size = iconSize,
             )
         }
         IconOnlyButtonStyle.Outlined -> androidx.compose.material3.OutlinedIconButton(
@@ -100,7 +105,8 @@ internal fun IconOnlyButton(
             IconContent(
                 icon = vectorIcon,
                 painter = painterIcon,
-                contentDescription = iconContentDescription
+                contentDescription = iconContentDescription,
+                size = iconSize,
             )
         }
         IconOnlyButtonStyle.Standard -> androidx.compose.material3.IconButton(
@@ -112,7 +118,8 @@ internal fun IconOnlyButton(
             IconContent(
                 icon = vectorIcon,
                 painter = painterIcon,
-                contentDescription = iconContentDescription
+                contentDescription = iconContentDescription,
+                size = iconSize,
             )
         }
     }

@@ -23,7 +23,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.NewReleases
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.CircularWavyProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,6 +49,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ChangelogDialog(
     changelogUrl: String,
@@ -103,7 +105,7 @@ fun ChangelogDialog(
 
             when {
                 currentChangelogText == null && !currentIsError -> Row(verticalAlignment = Alignment.CenterVertically) {
-                    CircularProgressIndicator()
+                    CircularWavyProgressIndicator()
                     LargeHorizontalSpacer()
                     Text(text = stringResource(id = R.string.loading_changelog_message))
                 }

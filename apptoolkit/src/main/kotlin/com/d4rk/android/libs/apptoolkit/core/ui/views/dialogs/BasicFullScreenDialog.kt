@@ -76,7 +76,7 @@ fun BasicFullScreenDialog(
                     GeneralTextButton(
                         onClick = onDismiss,
                         vectorIcon = Icons.Filled.Close,
-                        iconContentDescription = null
+                        iconContentDescription = title
                     )
                 }, title = { Text(text = title) }, actions = {
                     TextButton(modifier = Modifier.bounceClick(), onClick = {

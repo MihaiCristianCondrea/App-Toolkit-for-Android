@@ -20,8 +20,8 @@ package com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import io.mockk.mockk
 import io.mockk.coVerify
+import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test

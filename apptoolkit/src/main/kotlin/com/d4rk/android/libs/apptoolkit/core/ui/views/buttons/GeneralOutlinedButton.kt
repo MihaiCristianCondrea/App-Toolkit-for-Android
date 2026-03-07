@@ -28,11 +28,13 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ButtonIconSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 /**
  * An outlined button that supports text-only, icon+text, or icon-only rendering.
@@ -45,6 +47,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ButtonIconSpacer
  * @param label The text to be displayed on the button, or `null` for icon-only usage.
  * @param vectorIcon The [ImageVector] to be displayed inside the button.
  * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
+ * @param iconSize The icon size used when this composable renders icon + text content.
  * @param feedback The feedback configuration for sound and haptics.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
@@ -58,6 +61,7 @@ fun GeneralOutlinedButton(
     label: String? = null,
     vectorIcon: ImageVector? = null,
     painterIcon: Painter? = null,
+    iconSize: Dp = SizeConstants.ButtonIconSize,
     feedback: ButtonFeedback = ButtonFeedback(),
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
@@ -81,6 +85,7 @@ fun GeneralOutlinedButton(
             firebaseController = firebaseController,
             ga4Event = ga4Event,
             style = IconOnlyButtonStyle.Outlined,
+            iconSize = iconSize,
         )
         return
     }
@@ -99,6 +104,7 @@ fun GeneralOutlinedButton(
                 icon = vectorIcon,
                 painter = painterIcon,
                 contentDescription = iconContentDescription,
+                size = iconSize,
             )
             ButtonIconSpacer()
         }
