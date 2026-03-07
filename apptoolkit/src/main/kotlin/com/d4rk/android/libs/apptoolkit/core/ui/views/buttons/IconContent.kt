@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 private const val IconRequirementMessage: String = "Either icon or painter must be provided"
 
@@ -34,11 +35,11 @@ internal fun IconContent(
     icon: ImageVector?,
     painter: Painter?,
     contentDescription: String?,
-    size: Dp? = null,
+    size: Dp = SizeConstants.ButtonIconSize,
 ) {
     require(icon != null || painter != null) { IconRequirementMessage }
 
-    val iconModifier: Modifier = if (size != null) Modifier.size(size = size) else Modifier
+    val iconModifier: Modifier = Modifier.size(size = size)
     val stableIcon by rememberUpdatedState(newValue = icon)
     val stablePainter by rememberUpdatedState(newValue = painter)
     when {

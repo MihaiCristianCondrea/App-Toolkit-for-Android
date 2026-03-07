@@ -76,7 +76,6 @@ fun PrivacyPolicySection() {
                 }
             },
             vectorIcon = Icons.AutoMirrored.Filled.Launch,
-            iconContentDescription = null,
             label = stringResource(id = R.string.learn_more_privacy_policy)
         )
     }

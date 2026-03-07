@@ -1,8 +1,13 @@
 # Version 2.0.7:
 
 - **Minor**: Made selected labels bold for the bottom navigation bar and navigation rail.
+- **Minor**: Improved icon sizing consistency across buttons, the top app bar, navigation drawer,
+  and navigation rail.
+- **Minor**: Refined some loading indicators for a more expressive look and feel.
 - **Patch**: Fixed feedback sheet icons alignment with preference content on the Help screen.
 - **Patch**: Restyled the Help feedback sheet to use grouped preference cards with rounded-section corners.
+- **Patch**: Improved accessibility for some icon-only buttons and dialog actions.
+- **Patch**: Updated dependencies and polished internal resources.
 
 # Version 2.0.6:
 

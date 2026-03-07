@@ -41,7 +41,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -152,7 +152,7 @@ fun AppDetailsBottomSheet(
                 }
 
                 null -> {
-                    CircularProgressIndicator()
+                    CircularWavyProgressIndicator()
                 }
             }
         }

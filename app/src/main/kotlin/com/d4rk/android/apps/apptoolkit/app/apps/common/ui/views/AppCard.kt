@@ -89,12 +89,10 @@ fun AppCard(
                 GeneralTextButton(
                     onClick = onFavoriteToggle,
                     vectorIcon = if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarOutline,
-                    iconContentDescription = null
                 )
                 GeneralTextButton(
                     onClick = { onShareClick(appInfo) },
                     vectorIcon = Icons.Outlined.Share,
-                    iconContentDescription = null
                 )
             }
             Column(

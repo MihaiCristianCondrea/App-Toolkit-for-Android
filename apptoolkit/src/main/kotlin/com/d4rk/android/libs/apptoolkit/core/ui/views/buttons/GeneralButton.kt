@@ -19,7 +19,6 @@ package com.d4rk.android.libs.apptoolkit.core.ui.views.buttons
 
 import android.view.View
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -35,6 +34,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ButtonIconSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 /**
  * A Material Design [Button] that supports text-only, icon+text, or icon-only rendering.
@@ -61,7 +61,7 @@ fun GeneralButton(
     label: String? = null,
     vectorIcon: ImageVector? = null,
     painterIcon: Painter? = null,
-    iconSize: Dp = ButtonDefaults.IconSize,
+    iconSize: Dp = SizeConstants.ButtonIconSize,
     feedback: ButtonFeedback = ButtonFeedback(),
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
@@ -85,6 +85,7 @@ fun GeneralButton(
             firebaseController = firebaseController,
             ga4Event = ga4Event,
             style = IconOnlyButtonStyle.Filled,
+            iconSize = iconSize,
         )
         return
     }
