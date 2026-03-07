@@ -1,12 +1,16 @@
-# Version 2.0.7:
+# Version 2.0.8:
 
 - **Minor**: Made selected labels bold for the bottom navigation bar and navigation rail.
 - **Minor**: Improved icon sizing consistency across buttons, the top app bar, navigation drawer,
   and navigation rail.
 - **Minor**: Refined some loading indicators for a more expressive look and feel.
 - **Patch**: Fixed feedback sheet icons alignment with preference content on the Help screen.
-- **Patch**: Restyled the Help feedback sheet to use grouped preference cards with rounded-section corners.
+- **Patch**: Restyled the Help feedback sheet to use grouped preference cards with rounded-section
+  corners.
 - **Patch**: Improved accessibility for some icon-only buttons and dialog actions.
+
+# Version 2.0.7:
+
 - **Patch**: Updated dependencies and polished internal resources.
 
 # Version 2.0.6:
@@ -33,6 +37,7 @@
 - **Patch**: Fixed a bug inside the color settings when the tab pager is not correctly selected.
 
 # Version 2.0.1:
+
 - **Patch**: Fixed other minor bugs for better overall experience.
 
 # Version 2.0.0:
@@ -66,7 +71,8 @@
 # Version 1.1.1:
 
 - **Patch**: Corrected the close button colors in snackbars for better visibility.
-- **Patch**: Resolved User Messaging Platform (UMP) crashes that occurred on certain devices and in specific scenarios.
+- **Patch**: Resolved User Messaging Platform (UMP) crashes that occurred on certain devices and in
+  specific scenarios.
 - **Minor**: Implemented several small quality of life improvements.
 - **Patch**: Addressed various minor bugs to enhance overall stability.
 
@@ -89,9 +95,12 @@
 # Version 1.0.6:
 
 - **Minor**: We've made some improvements to how the side navigation menu looks and works.
-- **Minor**: We've updated the temporary screens you see while content is loading, making them look better and adding some subtle animations.
-- **Build**: We've made some technical updates to keep the app running smoothly and up-to-date with the latest technologies.
-- **Minor**: We've tidied up the screen you see when you don't have any favorite items yet by removing an unnecessary button.
+- **Minor**: We've updated the temporary screens you see while content is loading, making them look
+  better and adding some subtle animations.
+- **Build**: We've made some technical updates to keep the app running smoothly and up-to-date with
+  the latest technologies.
+- **Minor**: We've tidied up the screen you see when you don't have any favorite items yet by
+  removing an unnecessary button.
 - **Patch**: We've made it easier for the app to gather information if you need to report an issue.
 
 # Version 1.0.5:
@@ -107,7 +116,8 @@
 
 - **New**: Added a new issue reporter (might not work as expected)
 - **Minor**: Updated the about libraries to use the new compose module
-- **Minor**: This update includes small under-the-hood improvements to make the app run smoother and prepare for future updates.
+- **Minor**: This update includes small under-the-hood improvements to make the app run smoother and
+  prepare for future updates.
 
 # Version 1.0.2:
 
@@ -128,4 +138,5 @@
 - **Minor**: Ensured click sound feedback across onboarding and privacy settings.
 
 # Version 1.0.0:
+
 - Initial stable version.
