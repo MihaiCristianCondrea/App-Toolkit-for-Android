@@ -215,7 +215,6 @@ fun HelpScreen(
                 HelpScreenContent(
                     questions = data.questions,
                     paddingValues = paddingValues,
-                    firebaseController = firebaseController,
                 )
             }
         )

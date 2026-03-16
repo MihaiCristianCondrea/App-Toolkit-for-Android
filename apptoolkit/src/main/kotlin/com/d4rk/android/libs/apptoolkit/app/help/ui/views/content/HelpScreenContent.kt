@@ -47,8 +47,8 @@ import org.koin.core.qualifier.named
 fun HelpScreenContent(
     questions: ImmutableList<FaqItem>,
     paddingValues: PaddingValues,
-    firebaseController: FirebaseController, // FIXME: Parameter 'firebaseController' has runtime-determined stability
 ) {
+    val firebaseController: FirebaseController = koinInject()
     val context = LocalContext.current
     val adsConfig: AdsConfig = koinInject(qualifier = named("help_large_banner_ad"))
 

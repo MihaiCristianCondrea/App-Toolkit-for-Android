@@ -156,14 +156,14 @@ fun ComponentsRoute(
         firebaseController = firebaseController,
         state = state,
         onDropdownOptionSelected = { selectedDropdownOption = it },
-        onDateSelected = { selectedDateMillis = it }, // FIXME: Assigned value is never read
-        onFilterSelected = { selectedFilter = it }, // FIXME: Assigned value is never read
-        onSwitchEnabledChanged = { switchEnabled = it }, // FIXME: Assigned value is never read
+        onDateSelected = { selectedDateMillis = it },
+        onFilterSelected = { selectedFilter = it },
+        onSwitchEnabledChanged = { switchEnabled = it },
         onSwitchWithDividerChanged = {
             switchWithDividerEnabled = it
-        }, // FIXME: Assigned value is never read
-        onSwitchCardChanged = { switchCardEnabled = it }, // FIXME: Assigned value is never read
-        onCheckboxChanged = { checkboxChecked = it }, // FIXME: Assigned value is never read
+        },
+        onSwitchCardChanged = { switchCardEnabled = it },
+        onCheckboxChanged = { checkboxChecked = it },
         onRadioOptionSelected = { selectedRadioOption = it },
     )
 }
