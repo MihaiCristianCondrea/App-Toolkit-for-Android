@@ -39,8 +39,6 @@ import kotlin.test.assertNull
 
 class AppSettingsProviderTest {
 
-    private val provider = AppSettingsProvider()
-
     private val defaultStrings = mapOf(
         R.string.settings to "Settings",
         R.string.notifications to "Notifications",
@@ -63,12 +61,13 @@ class AppSettingsProviderTest {
     @Test
     fun `provideSettingsConfig returns expected configuration`() {
         val context = createContext(defaultStrings)
+        val provider = AppSettingsProvider(context)
         mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextIntentExtensionsKt")
         mockkObject(GeneralSettingsActivity.Companion)
         every { context.openAppNotificationSettings() } returns true
         every { GeneralSettingsActivity.start(any(), any(), any()) } just Runs
 
-        val config = provider.provideSettingsConfig(context)
+        val config = provider.provideSettingsConfig()
 
         assertEquals(defaultStrings[R.string.settings], config.title)
         assertEquals(2, config.categories.size)
@@ -166,12 +165,13 @@ class AppSettingsProviderTest {
     @Test
     fun `notifications preference falls back to privacy screen when system settings cannot open`() {
         val context = createContext(defaultStrings)
+        val provider = AppSettingsProvider(context)
         mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextIntentExtensionsKt")
         mockkObject(GeneralSettingsActivity.Companion)
         every { context.openAppNotificationSettings() } returns false
         every { GeneralSettingsActivity.start(any(), any(), any()) } just Runs
 
-        val config = provider.provideSettingsConfig(context)
+        val config = provider.provideSettingsConfig()
         val notifications = config.categories.first().preferences.first()
 
         assertDoesNotThrow { notifications.action.invoke() }
@@ -189,23 +189,15 @@ class AppSettingsProviderTest {
     @Test
     fun `provideSettingsConfig handles missing resources without crashing`() {
         val context = createContext(emptyMap()) { "<missing>" }
+        val provider = AppSettingsProvider(context)
 
-        val config = assertDoesNotThrow { provider.provideSettingsConfig(context) }
+        val config = assertDoesNotThrow { provider.provideSettingsConfig() }
 
         assertEquals("<missing>", config.title)
         config.categories.flatMap { it.preferences }.forEach { preference ->
             assertEquals("<missing>", preference.title)
             assertEquals("<missing>", preference.summary)
         }
-    }
-
-    @Test
-    fun `provideSettingsConfig handles null context safely`() {
-        val result = assertDoesNotThrow {
-            null
-        }
-
-        assertNull(result)
     }
 
     private fun createContext(
