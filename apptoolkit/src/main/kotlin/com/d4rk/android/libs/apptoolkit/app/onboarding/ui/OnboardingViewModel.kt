@@ -18,8 +18,6 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui
 
 import androidx.lifecycle.viewModelScope
-import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteOnboardingUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOnboardingCompletionUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
@@ -44,7 +42,6 @@ import kotlinx.coroutines.withContext
 class OnboardingViewModel(
     private val observeOnboardingCompletionUseCase: ObserveOnboardingCompletionUseCase,
     private val completeOnboardingUseCase: CompleteOnboardingUseCase,
-    private val requestConsentUseCase: RequestConsentUseCase,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<OnboardingUiState, OnboardingEvent, OnboardingAction>(
@@ -55,7 +52,6 @@ class OnboardingViewModel(
 
     private var observerJob: Job? = null
     private var completeJob: Job? = null
-    private var consentJob: Job? = null
 
     init {
         handleEvent(OnboardingEvent.ObserveCompletion)
@@ -66,7 +62,7 @@ class OnboardingViewModel(
             is OnboardingEvent.ObserveCompletion -> observeCompletion()
             is OnboardingEvent.UpdateCurrentTab -> updateCurrentTab(event.index)
             is OnboardingEvent.CompleteOnboarding -> completeOnboarding()
-            is OnboardingEvent.RequestConsent -> requestConsent(event.host)
+            is OnboardingEvent.RequestConsent -> requestConsent()
             is OnboardingEvent.ShowCrashlyticsDialog -> setCrashlyticsDialogVisibility(isVisible = true)
             is OnboardingEvent.HideCrashlyticsDialog -> setCrashlyticsDialogVisibility(isVisible = false)
         }
@@ -129,20 +125,10 @@ class OnboardingViewModel(
         }
     }
 
-    private fun requestConsent(host: ConsentHost) {
-        val hostName = host.activity::class.java.name
-        startOperation(action = Actions.REQUEST_CONSENT, extra = mapOf(ExtraKeys.HOST to hostName))
-        consentJob = consentJob.restart {
-            requestConsentUseCase.invoke(host = host)
-                .flowOn(dispatchers.main)
-                .catchReport(
-                    action = Actions.REQUEST_CONSENT,
-                    extra = mapOf(ExtraKeys.HOST to hostName)
-                ) {
-                    // No UI change requested for consent failures in onboarding.
-                    // If needed later: updateStateThreadSafe { screenState.setError(...) } or showSnackbar(...)
-                }
-                .launchIn(viewModelScope)
+    private fun requestConsent() {
+        startOperation(action = Actions.REQUEST_CONSENT)
+        viewModelScope.launch {
+            sendAction(OnboardingAction.RequestConsentUi)
         }
     }
 
@@ -160,7 +146,4 @@ class OnboardingViewModel(
         const val REQUEST_CONSENT: String = "requestConsent"
     }
 
-    private object ExtraKeys {
-        const val HOST: String = "host"
-    }
 }

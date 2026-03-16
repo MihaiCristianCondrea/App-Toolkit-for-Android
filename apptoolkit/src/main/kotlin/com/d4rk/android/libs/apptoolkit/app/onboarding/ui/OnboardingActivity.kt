@@ -22,18 +22,23 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
+import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OnboardingActivity : ComponentActivity() {
 
     private val viewModel: OnboardingViewModel by viewModel()
-    private val consentHost: ConsentHost = object : ConsentHost {
-        override val activity = this@OnboardingActivity
-    }
+    private val requestConsentUseCase: RequestConsentUseCase by inject()
     private val lifecycleObserver = object : DefaultLifecycleObserver {
         override fun onResume(owner: LifecycleOwner) {
             checkUserConsent()
@@ -43,6 +48,7 @@ class OnboardingActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycle.addObserver(lifecycleObserver)
+        observeActions()
         enableEdgeToEdge()
         setContent {
             AppTheme {
@@ -52,6 +58,28 @@ class OnboardingActivity : ComponentActivity() {
     }
 
     private fun checkUserConsent() {
-        viewModel.onEvent(OnboardingEvent.RequestConsent(host = consentHost))
+        viewModel.onEvent(OnboardingEvent.RequestConsent)
+    }
+
+    private fun observeActions() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.actionEvent.collect { action ->
+                    when (action) {
+                        OnboardingAction.RequestConsentUi -> requestConsentFromUi()
+                        OnboardingAction.OnboardingCompleted -> Unit
+                    }
+                }
+            }
+        }
+    }
+
+    private fun requestConsentFromUi() {
+        val host: ConsentHost = object : ConsentHost {
+            override val activity = this@OnboardingActivity
+        }
+        lifecycleScope.launch {
+            requestConsentUseCase.invoke(host = host).collect { }
+        }
     }
 }

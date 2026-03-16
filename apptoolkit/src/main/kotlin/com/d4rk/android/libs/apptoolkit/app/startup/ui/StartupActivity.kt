@@ -28,9 +28,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
 import com.d4rk.android.libs.apptoolkit.app.startup.utils.interfaces.providers.StartupProvider
+import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.ui.base.BaseActivity
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.STARTUP_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
@@ -42,12 +44,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class StartupActivity : BaseActivity() {
     private val provider: StartupProvider by inject()
+    private val requestConsentUseCase: RequestConsentUseCase by inject()
     private val viewModel: StartupViewModel by viewModel()
     private val permissionLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
-    private val consentHost: ConsentHost = object : ConsentHost {
-        override val activity = this@StartupActivity
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +66,7 @@ class StartupActivity : BaseActivity() {
                     }
                     .collect { action: StartupAction ->
                         when (action) {
+                            StartupAction.RequestConsentUi -> performConsentRequest()
                             StartupAction.NavigateNext -> navigateToNext()
                         }
                     }
@@ -101,6 +102,20 @@ class StartupActivity : BaseActivity() {
     }
 
     private fun checkUserConsent() {
-        viewModel.onEvent(StartupEvent.RequestConsent(host = consentHost))
+        viewModel.onEvent(StartupEvent.RequestConsent)
+    }
+
+    private fun performConsentRequest() {
+        val host: ConsentHost = object : ConsentHost {
+            override val activity = this@StartupActivity
+        }
+
+        lifecycleScope.launch {
+            requestConsentUseCase.invoke(host = host).collect { result ->
+                if (result !is DataState.Loading) {
+                    viewModel.onEvent(StartupEvent.ConsentFormLoaded)
+                }
+            }
+        }
     }
 }

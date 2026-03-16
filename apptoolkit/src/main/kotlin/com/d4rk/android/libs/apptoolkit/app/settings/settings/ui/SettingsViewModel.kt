@@ -17,7 +17,6 @@
 
 package com.d4rk.android.libs.apptoolkit.app.settings.settings.ui
 
-import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
@@ -47,7 +46,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.withContext
 
 /**
  * ViewModel responsible for managing the state and logic of the settings screen.
@@ -77,22 +75,14 @@ class SettingsViewModel(
 
     override fun handleEvent(event: SettingsEvent) {
         when (event) {
-            is SettingsEvent.Load -> loadSettings(context = event.context)
+            is SettingsEvent.Load -> loadSettings()
         }
     }
 
-    private fun loadSettings(context: Context) {
-        startOperation(
-            action = Actions.LOAD_SETTINGS,
-            extra = mapOf(ExtraKeys.CONTEXT to context::class.java.name)
-        )
+    private fun loadSettings() {
+        startOperation(action = Actions.LOAD_SETTINGS)
         observeJob = observeJob.restart {
-            flow {
-                val config = withContext(dispatchers.io) {
-                    settingsProvider.provideSettingsConfig(context = context)
-                }
-                emit(config)
-            }
+            flow { emit(settingsProvider.provideSettingsConfig()) }
                 .flowOn(dispatchers.io)
                 .map<SettingsConfig, DataState<SettingsConfig, Errors>> { config ->
                     if (config.categories.isEmpty()) {
@@ -107,10 +97,7 @@ class SettingsViewModel(
                         screenState.setLoading()
                     }
                 }
-                .catchReport(
-                    action = Actions.LOAD_SETTINGS,
-                    extra = mapOf(ExtraKeys.CONTEXT to context::class.java.name)
-                ) {
+                .catchReport(action = Actions.LOAD_SETTINGS) {
                     emit(DataState.Error(error = Errors.UseCase.INVALID_STATE))
                 }
                 .onEach { result ->
@@ -159,7 +146,4 @@ class SettingsViewModel(
         const val LOAD_SETTINGS: String = "loadSettings"
     }
 
-    private object ExtraKeys {
-        const val CONTEXT: String = "context"
-    }
 }

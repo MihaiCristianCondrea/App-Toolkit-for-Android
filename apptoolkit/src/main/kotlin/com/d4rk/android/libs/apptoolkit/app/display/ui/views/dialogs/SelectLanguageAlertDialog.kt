@@ -74,15 +74,13 @@ fun SelectLanguageAlertDialog(onDismiss: () -> Unit, onLanguageSelected: (String
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val selectedLanguage = remember { mutableStateOf(value = "") }
 
-    val preferenceLanguageEntries =
-        stringArrayResource(id = R.array.preference_language_entries).toList().toImmutableList()
-    val preferenceLanguageValues =
-        stringArrayResource(id = R.array.preference_language_values).toList().toImmutableList()
-    val languageEntries: ImmutableList<String> = remember {
-        preferenceLanguageEntries
+    val preferenceLanguageEntries = stringArrayResource(id = R.array.preference_language_entries)
+    val preferenceLanguageValues = stringArrayResource(id = R.array.preference_language_values)
+    val languageEntries: ImmutableList<String> = remember(preferenceLanguageEntries) {
+        preferenceLanguageEntries.toList().toImmutableList()
     }
-    val languageValues: ImmutableList<String> = remember {
-        preferenceLanguageValues
+    val languageValues: ImmutableList<String> = remember(preferenceLanguageValues) {
+        preferenceLanguageValues.toList().toImmutableList()
     }
 
     val currentLanguageState = dataStore.getLanguage()

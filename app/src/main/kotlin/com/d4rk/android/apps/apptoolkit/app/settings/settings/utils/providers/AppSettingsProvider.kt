@@ -34,8 +34,12 @@ import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsCon
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openAppNotificationSettings
 
-class AppSettingsProvider : SettingsProvider {
-    override fun provideSettingsConfig(context: Context): SettingsConfig {
+class AppSettingsProvider(
+    context: Context,
+) : SettingsProvider {
+    private val context: Context = context.applicationContext
+
+    override fun provideSettingsConfig(): SettingsConfig {
         return SettingsConfig(
             title = context.getString(R.string.settings),
             categories = listOf(
