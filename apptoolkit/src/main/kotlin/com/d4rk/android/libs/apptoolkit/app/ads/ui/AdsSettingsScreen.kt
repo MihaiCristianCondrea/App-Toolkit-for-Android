@@ -110,8 +110,12 @@ fun AdsSettingsScreen() {
                     AnalyticsEvent(
                         name = SettingsAnalytics.Events.ACTION,
                         params = mapOf(
-                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
-                            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(AdsActionNames.BACK_CLICK),
+                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                ADS_SETTINGS_SCREEN_NAME
+                            ),
+                            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(
+                                AdsActionNames.BACK_CLICK
+                            ),
                         ),
                     )
                 )
@@ -145,9 +149,15 @@ fun AdsSettingsScreen() {
                                 Ga4EventData(
                                     name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
                                     params = mapOf(
-                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
-                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(AdsPreferenceKeys.DISPLAY_ADS),
-                                        SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
+                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                            ADS_SETTINGS_SCREEN_NAME
+                                        ),
+                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
+                                            AdsPreferenceKeys.DISPLAY_ADS
+                                        ),
+                                        SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(
+                                            isChecked.toString()
+                                        ),
                                     ),
                                 )
                             }
@@ -169,8 +179,12 @@ fun AdsSettingsScreen() {
                                 ga4Event = Ga4EventData(
                                     name = SettingsAnalytics.Events.PREFERENCE_VIEW,
                                     params = mapOf(
-                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
-                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(AdsPreferenceKeys.PERSONALIZED_ADS),
+                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                            ADS_SETTINGS_SCREEN_NAME
+                                        ),
+                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
+                                            AdsPreferenceKeys.PERSONALIZED_ADS
+                                        ),
                                     ),
                                 )
                             )
@@ -189,8 +203,12 @@ fun AdsSettingsScreen() {
                                     AnalyticsEvent(
                                         name = SettingsAnalytics.Events.PREFERENCE_VIEW,
                                         params = mapOf(
-                                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(ADS_SETTINGS_SCREEN_NAME),
-                                            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(AdsPreferenceKeys.LEARN_MORE),
+                                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                                ADS_SETTINGS_SCREEN_NAME
+                                            ),
+                                            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
+                                                AdsPreferenceKeys.LEARN_MORE
+                                            ),
                                         ),
                                     )
                                 )

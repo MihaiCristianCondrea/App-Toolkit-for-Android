@@ -285,7 +285,9 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                         AnalyticsEvent(
                                             name = "theme_tab_select",
                                             params = mapOf(
-                                                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                                    THEME_SCREEN_NAME
+                                                ),
                                                 "tab" to AnalyticsValue.Str(
                                                     if (index == 0) "wallpaper" else "other"
                                                 ),
@@ -419,7 +421,9 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                         AnalyticsEvent(
                                             name = "theme_palette_select",
                                             params = mapOf(
-                                                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                                    THEME_SCREEN_NAME
+                                                ),
                                                 "palette_type" to AnalyticsValue.Str("static"),
                                                 "palette_id" to AnalyticsValue.Str(id),
                                                 "seasonal" to AnalyticsValue.Str(
@@ -472,8 +476,12 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                     AnalyticsEvent(
                                         name = SettingsAnalytics.Events.THEME_SWITCH,
                                         params = mapOf(
-                                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(THEME_SCREEN_NAME),
-                                            SettingsAnalytics.Params.THEME_MODE to AnalyticsValue.Str(choice.key),
+                                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                                THEME_SCREEN_NAME
+                                            ),
+                                            SettingsAnalytics.Params.THEME_MODE to AnalyticsValue.Str(
+                                                choice.key
+                                            ),
                                         ),
                                     ),
                                 )
@@ -519,7 +527,9 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                             AnalyticsEvent(
                                 name = "theme_toggle_amoled",
                                 params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                        THEME_SCREEN_NAME
+                                    ),
                                     "enabled" to AnalyticsValue.Str(isChecked.toString()),
                                 ),
                             ),
@@ -544,7 +554,9 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                             AnalyticsEvent(
                                 name = "theme_open_display_settings",
                                 params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(THEME_SCREEN_NAME),
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                        THEME_SCREEN_NAME
+                                    ),
                                     "opened" to AnalyticsValue.Str(opened.toString()),
                                 ),
                             ),

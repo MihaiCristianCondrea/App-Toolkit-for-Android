@@ -121,7 +121,9 @@ fun UsageAndDiagnosticsList(
                     Ga4EventData(
                         name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
                         params = mapOf(
-                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(USAGE_DIAGNOSTICS_SCREEN_NAME),
+                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                USAGE_DIAGNOSTICS_SCREEN_NAME
+                            ),
                             SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("usage_and_diagnostics"),
                             SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
                         ),
@@ -159,7 +161,9 @@ fun UsageAndDiagnosticsList(
                             Ga4EventData(
                                 name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
                                 params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(USAGE_DIAGNOSTICS_SCREEN_NAME),
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                        USAGE_DIAGNOSTICS_SCREEN_NAME
+                                    ),
                                     SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("analytics_consent"),
                                     SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
                                 ),
@@ -183,7 +187,9 @@ fun UsageAndDiagnosticsList(
                             Ga4EventData(
                                 name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
                                 params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(USAGE_DIAGNOSTICS_SCREEN_NAME),
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                        USAGE_DIAGNOSTICS_SCREEN_NAME
+                                    ),
                                     SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("ad_storage_consent"),
                                     SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
                                 ),
@@ -210,7 +216,9 @@ fun UsageAndDiagnosticsList(
                             Ga4EventData(
                                 name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
                                 params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(USAGE_DIAGNOSTICS_SCREEN_NAME),
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                        USAGE_DIAGNOSTICS_SCREEN_NAME
+                                    ),
                                     SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("ad_user_data_consent"),
                                     SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
                                 ),
@@ -237,7 +245,9 @@ fun UsageAndDiagnosticsList(
                             Ga4EventData(
                                 name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
                                 params = mapOf(
-                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(USAGE_DIAGNOSTICS_SCREEN_NAME),
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                        USAGE_DIAGNOSTICS_SCREEN_NAME
+                                    ),
                                     SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str("ad_personalization_consent"),
                                     SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(isChecked.toString()),
                                 ),

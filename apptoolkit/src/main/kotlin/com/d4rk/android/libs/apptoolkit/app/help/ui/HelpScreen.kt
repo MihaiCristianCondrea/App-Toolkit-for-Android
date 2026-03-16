@@ -236,7 +236,12 @@ fun HelpScreen(
                 FeedbackListItem(
                     title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
                     description = stringResource(id = R.string.help_feedback_sheet_feature_request_description),
-                    icon = { Icon(imageVector = Icons.Outlined.Lightbulb, contentDescription = null) },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Lightbulb,
+                            contentDescription = null
+                        )
+                    },
                     position = FeedbackItemPosition.First,
                     onClick = {
                         firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.REQUEST_FEATURE))
@@ -248,7 +253,12 @@ fun HelpScreen(
                 FeedbackListItem(
                     title = stringResource(id = R.string.help_feedback_sheet_contact_title),
                     description = stringResource(id = R.string.help_feedback_sheet_contact_description),
-                    icon = { Icon(imageVector = Icons.AutoMirrored.Outlined.ContactSupport, contentDescription = null) },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.ContactSupport,
+                            contentDescription = null
+                        )
+                    },
                     position = FeedbackItemPosition.Middle,
                     onClick = {
                         firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.CONTACT_US))
@@ -260,7 +270,12 @@ fun HelpScreen(
                 FeedbackListItem(
                     title = stringResource(id = R.string.help_feedback_sheet_review_title),
                     description = stringResource(id = R.string.help_feedback_sheet_review_description),
-                    icon = { Icon(imageVector = Icons.Outlined.RateReview, contentDescription = null) },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Outlined.RateReview,
+                            contentDescription = null
+                        )
+                    },
                     position = FeedbackItemPosition.Last,
                     onClick = {
                         firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.LEAVE_REVIEW))

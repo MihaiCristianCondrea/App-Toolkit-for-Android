@@ -187,7 +187,10 @@ class TestOnboardingViewModel {
         OnboardingViewModel(
             observeOnboardingCompletionUseCase = ObserveOnboardingCompletionUseCase(repository),
             completeOnboardingUseCase = CompleteOnboardingUseCase(repository),
-            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
+            requestConsentUseCase = RequestConsentUseCase(
+                FakeConsentRepository(),
+                firebaseController
+            ),
             dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
             firebaseController = firebaseController,
         )

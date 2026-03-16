@@ -23,7 +23,6 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiPaths
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
 import java.net.URI
-import java.net.URISyntaxException
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -51,13 +50,9 @@ fun String.developerAppsApiUrl(
  */
 fun String?.sanitizeUrlOrNull(): String? {
     val candidate = this?.trim()?.takeIf { it.isNotEmpty() } ?: return null
-
-    val parsedUri = try {
+    val parsedUri = runCatching {
         URI(candidate)
-    } catch (_: URISyntaxException) {
-        return null
-    }
-
+    }.getOrNull() ?: return null
     val normalizedScheme = parsedUri.scheme?.lowercase()
     val hasAllowedScheme = normalizedScheme == "http" || normalizedScheme == "https"
     val hasHost = !parsedUri.host.isNullOrBlank()

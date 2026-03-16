@@ -96,16 +96,15 @@ class TestAboutRepositoryImpl {
             context = context,
             sdkIntProvider = { Build.VERSION_CODES.S_V2 },
         )
-
-        val copyResult = try {
+        val copyResult = runCatching {
             repo.copyDeviceInfo(
                 "label",
                 "info"
             )
-        } finally {
+        }.also {
             unmockkStatic(ClipData::class)
             unmockkStatic(Log::class)
-        }
+        }.getOrThrow()
 
         verify { clipboardManager.setPrimaryClip(any()) }
         assertThat(copyResult).isEqualTo(

@@ -1,3 +1,7 @@
+# Version 2.0.9:
+
+- **Minor**: Updated dependencies to the latest stable versions.
+
 # Version 2.0.8:
 
 - **Minor**: Made selected labels bold for the bottom navigation bar and navigation rail.

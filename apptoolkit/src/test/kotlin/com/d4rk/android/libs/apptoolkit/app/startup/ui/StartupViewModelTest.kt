@@ -53,7 +53,10 @@ class StartupViewModelTest {
     fun `consent event updates state`() = runTest(dispatcherExtension.testDispatcher) {
         val firebaseController = FakeFirebaseController()
         val viewModel = StartupViewModel(
-            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
+            requestConsentUseCase = RequestConsentUseCase(
+                FakeConsentRepository(),
+                firebaseController
+            ),
             dispatchers = testDispatcherProvider(),
             firebaseController = firebaseController,
         )
@@ -67,7 +70,10 @@ class StartupViewModelTest {
     fun `continue event emits navigation action`() = runTest(dispatcherExtension.testDispatcher) {
         val firebaseController = FakeFirebaseController()
         val viewModel = StartupViewModel(
-            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
+            requestConsentUseCase = RequestConsentUseCase(
+                FakeConsentRepository(),
+                firebaseController
+            ),
             dispatchers = testDispatcherProvider(),
             firebaseController = firebaseController,
         )
@@ -84,7 +90,10 @@ class StartupViewModelTest {
         runTest(dispatcherExtension.testDispatcher) {
             val firebaseController = FakeFirebaseController()
             val viewModel = StartupViewModel(
-                requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
+                requestConsentUseCase = RequestConsentUseCase(
+                    FakeConsentRepository(),
+                    firebaseController
+                ),
                 dispatchers = testDispatcherProvider(),
                 firebaseController = firebaseController,
             )

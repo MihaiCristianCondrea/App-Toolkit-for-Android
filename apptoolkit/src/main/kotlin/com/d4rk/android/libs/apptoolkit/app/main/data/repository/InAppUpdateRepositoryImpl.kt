@@ -47,16 +47,13 @@ class InAppUpdateRepositoryImpl : InAppUpdateRepository {
                         if (isImmediateAllowed) {
                             val updateOptions =
                                 AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
-                            val started = try {
+                            val started = runCatching {
                                 appUpdateManager.startUpdateFlowForResult(
                                     appUpdateInfo,
                                     host.updateResultLauncher,
                                     updateOptions,
                                 )
-                                true
-                            } catch (_: Exception) {
-                                false
-                            }
+                            }.getOrDefault(false)
                             trySend(
                                 if (started) {
                                     InAppUpdateResult.Started

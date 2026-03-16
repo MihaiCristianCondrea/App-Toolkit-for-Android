@@ -32,12 +32,8 @@ import kotlinx.coroutines.CancellationException
  */
 suspend inline fun <T> runSuspendCatching(
     crossinline block: suspend () -> T,
-): Result<T> {
-    return try {
-        Result.success(block())
-    } catch (e: CancellationException) {
-        throw e
-    } catch (t: Throwable) {
-        Result.failure(t)
-    }
+): Result<T> = runCatching {
+    block()
+}.onFailure { e ->
+    if (e is CancellationException) throw e
 }

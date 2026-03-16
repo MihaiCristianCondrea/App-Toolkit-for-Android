@@ -46,7 +46,8 @@ class GmsHostFactory {
     ): InAppUpdateHost {
         return object : InAppUpdateHost {
             override val activity: Activity = activity
-            override val updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> = launcher
+            override val updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
+                launcher
         }
     }
 }

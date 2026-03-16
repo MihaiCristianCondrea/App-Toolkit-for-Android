@@ -237,6 +237,7 @@ class IssueReporterViewModel(
 
         data class Http(val status: HttpStatusCode, override val message: String?) :
             IssueReporterError
+
         data class Generic(override val message: String?) : IssueReporterError
     }
 

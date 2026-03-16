@@ -78,7 +78,10 @@ class OnboardingViewModel(
             observeOnboardingCompletionUseCase.invoke()
                 .flowOn(dispatchers.io)
                 .onStart {
-                    firebaseController.logBreadcrumb(message = "Observe onboarding completion started", attributes = mapOf("source" to "ObserveOnboardingCompletionUseCase"))
+                    firebaseController.logBreadcrumb(
+                        message = "Observe onboarding completion started",
+                        attributes = mapOf("source" to "ObserveOnboardingCompletionUseCase")
+                    )
                 }
                 .onEach { completed ->
                     updateStateThreadSafe {

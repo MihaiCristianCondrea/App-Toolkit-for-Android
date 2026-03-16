@@ -83,6 +83,7 @@ internal fun IconOnlyButton(
                 size = iconSize,
             )
         }
+
         IconOnlyButtonStyle.FilledTonal -> androidx.compose.material3.FilledTonalIconButton(
             onClick = onClickWithFeedback,
             enabled = enabled,
@@ -96,6 +97,7 @@ internal fun IconOnlyButton(
                 size = iconSize,
             )
         }
+
         IconOnlyButtonStyle.Outlined -> androidx.compose.material3.OutlinedIconButton(
             onClick = onClickWithFeedback,
             enabled = enabled,
@@ -109,6 +111,7 @@ internal fun IconOnlyButton(
                 size = iconSize,
             )
         }
+
         IconOnlyButtonStyle.Standard -> androidx.compose.material3.IconButton(
             onClick = onClickWithFeedback,
             enabled = enabled,

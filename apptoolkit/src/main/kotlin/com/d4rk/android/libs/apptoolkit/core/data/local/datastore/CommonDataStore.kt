@@ -63,7 +63,8 @@ open class CommonDataStore(
     context: Context,
     dispatchers: DispatcherProvider = StandardDispatchers(),
     private val defaultAdsEnabled: Boolean = true,
-) : OnboardingPreferencesDataSource, UsageAndDiagnosticsPreferencesDataSource, ConsentPreferencesDataSource {
+) : OnboardingPreferencesDataSource, UsageAndDiagnosticsPreferencesDataSource,
+    ConsentPreferencesDataSource {
     val dataStore: DataStore<Preferences> = context.commonDataStore
     private val scope = CoroutineScope(SupervisorJob() + dispatchers.io)
 

@@ -359,7 +359,9 @@ fun SettingsList(
                                 Ga4EventData(
                                     name = SettingsAnalytics.Events.PREFERENCE_VIEW,
                                     params = mapOf(
-                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(SETTINGS_SCREEN_NAME),
+                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                            SETTINGS_SCREEN_NAME
+                                        ),
                                         SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
                                             preference.key ?: UNKNOWN_PREFERENCE_KEY
                                         ),

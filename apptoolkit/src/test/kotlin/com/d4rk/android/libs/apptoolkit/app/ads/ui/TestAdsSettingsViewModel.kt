@@ -81,7 +81,10 @@ class TestAdsSettingsViewModel {
         return AdsSettingsViewModel(
             observeAdsEnabled = observeUseCase,
             setAdsEnabled = setUseCase,
-            requestConsentUseCase = RequestConsentUseCase(FakeConsentRepository(), firebaseController),
+            requestConsentUseCase = RequestConsentUseCase(
+                FakeConsentRepository(),
+                firebaseController
+            ),
             repository = repository,
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,
