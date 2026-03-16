@@ -109,6 +109,7 @@ fun OnboardingScreen() {
     LaunchedEffect(Unit) {
         viewModel.actionEvent.collect { action ->
             when (action) {
+                OnboardingAction.RequestConsentUi -> Unit
                 OnboardingAction.OnboardingCompleted -> onboardingProvider.onOnboardingFinished(
                     context
                 )
