@@ -33,7 +33,7 @@ internal fun Iterable<FaqQuestionDto>.toFaqItems(): List<FaqItem> = map(FaqQuest
  *
  * @return A [FaqItem] containing the mapped ID, question, and answer.
  */
-internal fun FaqQuestionDto.toDomain(): FaqItem = // TODO: move to domain/mapper
+internal fun FaqQuestionDto.toDomain(): FaqItem =
     FaqItem(
         id = FaqId(id),
         question = question,

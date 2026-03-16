@@ -106,6 +106,10 @@ class FavoriteAppsViewModel(
             observeFavoriteAppsUseCase.invoke()
                 .flowOn(context = dispatchers.io)
                 .onStart {
+                    breadcrumb(
+                        message = "Observe favorite apps collecting",
+                        attributes = mapOf("source" to "FavoriteAppsViewModel"),
+                    )
                     updateStateThreadSafe {
                         screenState.dismissSnackbar()
                         screenState.setLoading()

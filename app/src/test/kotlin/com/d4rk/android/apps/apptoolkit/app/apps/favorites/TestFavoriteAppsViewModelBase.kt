@@ -47,7 +47,7 @@ open class TestFavoriteAppsViewModelBase {
     ) {
         println("\uD83E\uDDEA [SETUP] Initial favorites: $initialFavorites")
         val developerAppsRepository = FakeDeveloperAppsRepository(fetchApps)
-        val fetchUseCase = FetchDeveloperAppsUseCase(developerAppsRepository, firebaseController)
+        val fetchUseCase = FetchDeveloperAppsUseCase(developerAppsRepository)
         val favoritesRepository =
             FakeFavoritesRepository(initialFavorites, favoritesFlow, toggleError)
         val observeFavoritesUseCase = ObserveFavoritesUseCase(favoritesRepository, firebaseController)
@@ -55,7 +55,6 @@ open class TestFavoriteAppsViewModelBase {
         val observeFavoriteAppsUseCase = ObserveFavoriteAppsUseCase(
             fetchUseCase,
             observeFavoritesUseCase,
-            firebaseController,
         )
         viewModel = FavoriteAppsViewModel(
             observeFavoriteAppsUseCase = observeFavoriteAppsUseCase,

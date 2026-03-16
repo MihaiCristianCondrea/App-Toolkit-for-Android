@@ -126,6 +126,10 @@ class AppsListViewModel(
                     fetchDeveloperAppsUseCase()
                         .flowOn(dispatchers.io)
                         .onStart {
+                            breadcrumb(
+                                message = "Fetch developer apps collecting",
+                                attributes = mapOf("source" to "AppsListViewModel"),
+                            )
                             updateStateThreadSafe {
                                 screenState.dismissSnackbar()
                                 screenState.setLoading()

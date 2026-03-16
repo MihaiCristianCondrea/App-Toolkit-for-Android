@@ -43,7 +43,7 @@ val appsListModule: Module = module {
         )
     }
 
-    single { FetchDeveloperAppsUseCase(repository = get(), firebaseController = get()) }
+    single { FetchDeveloperAppsUseCase(repository = get()) }
     viewModel {
         AppsListViewModel(
             fetchDeveloperAppsUseCase = get(),
@@ -63,7 +63,6 @@ val appsListModule: Module = module {
         ObserveFavoriteAppsUseCase(
             fetchDeveloperAppsUseCase = get(),
             observeFavoritesUseCase = get(),
-            firebaseController = get(),
         )
     }
 
