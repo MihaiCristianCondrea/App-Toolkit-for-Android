@@ -126,7 +126,7 @@ class AppsListViewModel(
                     fetchDeveloperAppsUseCase()
                         .flowOn(dispatchers.io)
                         .onStart {
-                            logBreadcrumb(
+                            breadcrumb(
                                 message = "Fetch developer apps collecting",
                                 attributes = mapOf("source" to "AppsListViewModel"),
                             )
