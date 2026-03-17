@@ -17,17 +17,11 @@
 
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui
 
-import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
-import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
-import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteOnboardingUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOnboardingCompletionUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
@@ -35,7 +29,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -187,22 +180,7 @@ class TestOnboardingViewModel {
         OnboardingViewModel(
             observeOnboardingCompletionUseCase = ObserveOnboardingCompletionUseCase(repository),
             completeOnboardingUseCase = CompleteOnboardingUseCase(repository),
-            requestConsentUseCase = RequestConsentUseCase(
-                FakeConsentRepository(),
-                firebaseController
-            ),
             dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
             firebaseController = firebaseController,
         )
-}
-
-private class FakeConsentRepository : ConsentRepository {
-    override fun requestConsent(
-        host: ConsentHost,
-        showIfRequired: Boolean,
-    ): Flow<DataState<Unit, Errors.UseCase>> = flowOf(DataState.Success(Unit))
-
-    override suspend fun applyInitialConsent() = Unit
-
-    override suspend fun applyConsentSettings(settings: ConsentSettings) = Unit
 }

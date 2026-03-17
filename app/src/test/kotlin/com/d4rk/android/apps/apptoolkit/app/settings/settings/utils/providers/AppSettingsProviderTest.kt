@@ -205,6 +205,7 @@ class AppSettingsProviderTest {
         fallback: (Int) -> String = { id -> "missing-$id" }
     ): Context {
         val context = mockk<Context>(relaxed = true)
+        every { context.applicationContext } returns context
         every { context.getString(any()) } answers { overrides[arg<Int>(0)] ?: fallback(arg(0)) }
         return context
     }
