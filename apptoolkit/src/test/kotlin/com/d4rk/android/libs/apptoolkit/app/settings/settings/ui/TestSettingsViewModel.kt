@@ -17,7 +17,6 @@
 
 package com.d4rk.android.libs.apptoolkit.app.settings.settings.ui
 
-import android.content.Context
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsCategory
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsEvent
@@ -52,7 +51,7 @@ class TestSettingsViewModel {
 
     private fun setup(config: SettingsConfig) {
         provider = mockk()
-        every { provider.provideSettingsConfig(any()) } returns config
+        every { provider.provideSettingsConfig() } returns config
         val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
         viewModel = SettingsViewModel(provider, dispatchers, firebaseController)
     }
@@ -63,10 +62,9 @@ class TestSettingsViewModel {
             title = "Title",
             categories = listOf(SettingsCategory(title = "c", preferences = emptyList()))
         )
-        val context = mockk<Context>(relaxed = true)
         setup(config)
 
-        viewModel.onEvent(SettingsEvent.Load(context))
+        viewModel.onEvent(SettingsEvent.Load)
         advanceUntilIdle()
 
         assertThat(viewModel.uiState.value.data?.title).isEqualTo("Title")
@@ -76,10 +74,9 @@ class TestSettingsViewModel {
     @Test
     fun `load settings no data`() = runTest(dispatcherExtension.testDispatcher) {
         val config = SettingsConfig(title = "", categories = emptyList())
-        val context = mockk<Context>(relaxed = true)
         setup(config)
 
-        viewModel.onEvent(SettingsEvent.Load(context))
+        viewModel.onEvent(SettingsEvent.Load)
         advanceUntilIdle()
 
         assertThat(viewModel.uiState.value.screenState).isInstanceOf(ScreenState.NoData::class.java)
@@ -93,18 +90,17 @@ class TestSettingsViewModel {
                 title = "Title",
                 categories = listOf(SettingsCategory(title = "c", preferences = emptyList()))
             )
-            val context = mockk<Context>(relaxed = true)
             provider = mockk()
-            every { provider.provideSettingsConfig(any()) } returnsMany listOf(empty, valid)
+            every { provider.provideSettingsConfig() } returnsMany listOf(empty, valid)
             val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
             viewModel = SettingsViewModel(provider, dispatchers, firebaseController)
 
-            viewModel.onEvent(SettingsEvent.Load(context))
+            viewModel.onEvent(SettingsEvent.Load)
             advanceUntilIdle()
             assertThat(viewModel.uiState.value.screenState).isInstanceOf(ScreenState.NoData::class.java)
             assertThat(viewModel.uiState.value.errors).isNotEmpty()
 
-            viewModel.onEvent(SettingsEvent.Load(context))
+            viewModel.onEvent(SettingsEvent.Load)
             advanceUntilIdle()
             assertThat(viewModel.uiState.value.screenState).isInstanceOf(ScreenState.Success::class.java)
             assertThat(viewModel.uiState.value.errors).isEmpty()
@@ -116,15 +112,14 @@ class TestSettingsViewModel {
             title = "Title",
             categories = listOf(SettingsCategory(title = "c", preferences = emptyList()))
         )
-        val context = mockk<Context>(relaxed = true)
         provider = mockk()
-        every { provider.provideSettingsConfig(any()) } returns config
+        every { provider.provideSettingsConfig() } returns config
         val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
         viewModel = SettingsViewModel(provider, dispatchers, firebaseController)
 
-        viewModel.onEvent(SettingsEvent.Load(context))
+        viewModel.onEvent(SettingsEvent.Load)
         advanceUntilIdle()
 
-        verify(exactly = 1) { provider.provideSettingsConfig(context) }
+        verify(exactly = 1) { provider.provideSettingsConfig() }
     }
 }

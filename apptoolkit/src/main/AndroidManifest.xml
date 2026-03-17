@@ -74,13 +74,15 @@
             android:name=".app.onboarding.ui.OnboardingActivity"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- Internal settings entry screen. No cross-app launch contract is exposed. -->
         <activity
             android:name=".app.settings.settings.ui.SettingsActivity"
-            android:exported="true" />
+            android:exported="false" />
 
+        <!-- Internal settings detail host. Not part of a public contract; keep non-exported. -->
         <activity
             android:name=".app.settings.general.ui.GeneralSettingsActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".app.permissions.ui.PermissionsActivity"
@@ -95,25 +97,30 @@
             </intent-filter>
         </activity>
 
+        <!-- Internal ads/preferences screen launched only from in-app navigation. -->
         <activity
             android:name=".app.ads.ui.AdsSettingsActivity"
-            android:exported="true" />
+            android:exported="false" />
 
+        <!-- Internal help center screen. External apps should not deep-link directly. -->
         <activity
             android:name=".app.help.ui.HelpActivity"
-            android:exported="true" />
+            android:exported="false" />
 
+        <!-- Internal licenses screen displayed from settings/help flows only. -->
         <activity
             android:name=".app.licenses.ui.LicensesActivity"
-            android:exported="true" />
+            android:exported="false" />
 
+        <!-- Internal support entry screen. Keep private to reduce intent spoofing surface. -->
         <activity
             android:name=".app.support.ui.SupportActivity"
-            android:exported="true" />
+            android:exported="false" />
 
+        <!-- Internal issue reporter screen; not intended as an externally callable API. -->
         <activity
             android:name=".app.issuereporter.ui.IssueReporterActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/Theme.Material3.DayNight.NoActionBar" />
 
         <service

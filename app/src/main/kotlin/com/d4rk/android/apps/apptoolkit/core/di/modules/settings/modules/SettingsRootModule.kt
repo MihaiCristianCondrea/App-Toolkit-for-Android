@@ -25,7 +25,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val settingsRootModule: Module = module {
-    single<SettingsProvider> { AppSettingsProvider() }
+    single<SettingsProvider> { AppSettingsProvider(context = get()) }
 
     viewModel {
         SettingsViewModel(

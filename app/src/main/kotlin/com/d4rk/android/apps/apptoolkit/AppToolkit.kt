@@ -36,18 +36,22 @@ import com.d4rk.android.libs.apptoolkit.core.data.remote.ads.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isHalloweenSeason
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.getKoin
 import java.time.LocalDate
 import java.time.ZoneId
 
 class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     private var currentActivity: Activity? = null
+    private val appScope = CoroutineScope(SupervisorJob() + dispatchers.io)
 
     private val adsCoreManager: AdsCoreManager by lazy { getKoin().get<AdsCoreManager>() }
 
@@ -68,21 +72,26 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     }
 
     private fun applyDefaultColorPalette() {
-        val colorPalette: ColorPalette = resolveDefaultColorPalette()
-        AppThemeConfig.customLightScheme = colorPalette.lightColorScheme
-        AppThemeConfig.customDarkScheme = colorPalette.darkColorScheme
-        ThemePaletteProvider.defaultPalette = colorPalette
+        // Change rationale: startup palette resolution previously used runBlocking DataStore reads on
+        // the main thread, increasing cold-start latency risk. We now apply a deterministic palette
+        // immediately and reconcile seasonal preferences asynchronously.
+        val initialPalette: ColorPalette = getKoin().get()
+        applyColorPalette(initialPalette)
+
+        appScope.launch {
+            val palette = resolvePreferredColorPalette()
+            withContext(dispatchers.main) {
+                applyColorPalette(palette)
+            }
+        }
     }
 
-    private fun resolveDefaultColorPalette(): ColorPalette {
+    private suspend fun resolvePreferredColorPalette(): ColorPalette {
         val dataStore: CommonDataStore = CommonDataStore.getInstance(context = this)
-
-        val hasInteractedWithSettings: Boolean = runBlocking {
-            dataStore.settingsInteracted.first()
-        }
+        val hasInteractedWithSettings: Boolean = dataStore.settingsInteracted.first()
 
         if (!hasInteractedWithSettings) {
-            val staticPaletteId: String = runBlocking { dataStore.staticPaletteId.first() }
+            val staticPaletteId: String = dataStore.staticPaletteId.first()
             val today: LocalDate = LocalDate.now(ZoneId.systemDefault())
             val shouldUseSeasonalPalette: Boolean = staticPaletteId == StaticPaletteIds.DEFAULT
 
@@ -96,6 +105,12 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
         }
 
         return getKoin().get()
+    }
+
+    private fun applyColorPalette(colorPalette: ColorPalette) {
+        AppThemeConfig.customLightScheme = colorPalette.lightColorScheme
+        AppThemeConfig.customDarkScheme = colorPalette.darkColorScheme
+        ThemePaletteProvider.defaultPalette = colorPalette
     }
 
     override fun onStart(owner: LifecycleOwner) {
@@ -124,5 +139,10 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
         if (currentActivity === activity) {
             currentActivity = null
         }
+    }
+
+    override fun onTerminate() {
+        appScope.cancel()
+        super.onTerminate()
     }
 }

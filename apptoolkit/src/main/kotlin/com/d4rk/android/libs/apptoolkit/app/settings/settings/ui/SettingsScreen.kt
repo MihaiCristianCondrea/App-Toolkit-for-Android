@@ -121,7 +121,7 @@ fun SettingsScreen() {
     )
 
     LaunchedEffect(Unit) {
-        viewModel.onEvent(event = SettingsEvent.Load(context = context))
+        viewModel.onEvent(event = SettingsEvent.Load)
     }
 
     LargeTopAppBarWithScaffold(
@@ -144,7 +144,7 @@ fun SettingsScreen() {
                         firebaseController.logGa4Event(
                             ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.RETRY_LOAD)
                         )
-                        viewModel.onEvent(event = SettingsEvent.Load(context = context))
+                        viewModel.onEvent(event = SettingsEvent.Load)
                     },
                     paddingValues = paddingValues,
                 )
