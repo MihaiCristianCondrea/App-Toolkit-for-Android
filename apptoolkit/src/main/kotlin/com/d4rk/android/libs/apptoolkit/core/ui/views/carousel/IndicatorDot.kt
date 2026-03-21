@@ -27,6 +27,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 
+/**
+ * Draws a circular dot used by pagination indicators.
+ *
+ * State ownership:
+ * - Callers own [size], [color], and optional [modifier].
+ * - This composable is render-only and emits no side effects.
+ *
+ * Guardrails:
+ * - Provide a [size] greater than `0.dp` so the dot remains visible.
+ *
+ * @param modifier Modifier applied to the dot container.
+ * @param size Diameter of the dot.
+ * @param color Fill color of the dot.
+ */
 @Composable
 fun IndicatorDot(
     modifier: Modifier = Modifier,

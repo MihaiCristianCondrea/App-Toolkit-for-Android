@@ -30,6 +30,27 @@ import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
 
+/**
+ * Renders trusted HTML content inside Compose using an Android [TextView] host.
+ *
+ * The HTML is parsed with [HtmlCompat.FROM_HTML_MODE_COMPACT], which supports common inline and
+ * block formatting while collapsing unnecessary whitespace. Links are interactive because the
+ * embedded [TextView] uses [LinkMovementMethod].
+ *
+ * Styling behavior:
+ * - Text color follows `MaterialTheme.colorScheme.onSurface`.
+ * - Font size uses [style] when specified, otherwise falls back to
+ *   `MaterialTheme.typography.bodyMedium.fontSize`.
+ *
+ * Prefer this component when the content source is already HTML and you need clickable links.
+ * Prefer Compose `Text` for plain strings or rich text produced fully in Compose.
+ *
+ * Security note: pass trusted or sanitized HTML input only.
+ *
+ * @param text HTML string to parse and display.
+ * @param modifier Modifier applied to the host view.
+ * @param style Base text style used to derive visual typography.
+ */
 @Composable
 fun HtmlText(
     text: String,

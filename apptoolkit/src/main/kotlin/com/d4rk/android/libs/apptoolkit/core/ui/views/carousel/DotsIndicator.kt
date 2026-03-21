@@ -34,6 +34,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyHorizontalSpacer
 
+/**
+ * Renders an animated row of dots that reflects the currently selected carousel page.
+ *
+ * State ownership:
+ * - Callers own [totalDots], [selectedIndex], sizing, colors, and animation timing.
+ * - This composable derives the visual selected/unselected state for each dot.
+ *
+ * Guardrails:
+ * - Keep [selectedIndex] in `0 until totalDots` to ensure a valid selected item.
+ * - Use [dotSize] values greater than `0.dp`.
+ * - Keep [animationDuration] non-negative.
+ *
+ * @param modifier Modifier applied to the indicator row.
+ * @param totalDots Total number of dots to render.
+ * @param selectedIndex Currently selected dot index.
+ * @param selectedColor Color used for the selected dot.
+ * @param unSelectedColor Color used for unselected dots.
+ * @param dotSize Base size of each dot before the selection animation is applied.
+ * @param animationDuration Duration (in milliseconds) of the dot size transition.
+ */
 @Composable
 fun DotsIndicator(
     modifier: Modifier = Modifier,

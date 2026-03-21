@@ -36,6 +36,36 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.toImmutableList
 import kotlin.math.absoluteValue
 
+/**
+ * Displays a horizontally swipeable carousel with a synchronized animated dot indicator.
+ *
+ * State ownership:
+ * - Callers own [items], [sidePadding], and [pagerState].
+ * - This composable derives page offset animations and the selected dot from [pagerState].
+ *
+ * Guardrails:
+ * - Keep [items] stable across recompositions for predictable paging and animation behavior.
+ * - Provide a [pagerState] whose page count matches [items] to avoid invalid page access.
+ * - Use non-negative [sidePadding] so content remains readable.
+ *
+ * Example:
+ * ```
+ * val items = remember { listOf("One", "Two", "Three") }
+ * val pagerState = rememberPagerState(pageCount = { items.size })
+ * CustomCarousel(
+ *     items = items,
+ *     sidePadding = 16.dp,
+ *     pagerState = pagerState,
+ * ) { item ->
+ *     Text(text = item)
+ * }
+ * ```
+ *
+ * @param items Ordered list of models rendered page-by-page.
+ * @param sidePadding Horizontal inset applied on both sides of the pager content.
+ * @param pagerState Shared pager state that controls and reports current page selection.
+ * @param itemContent Composable renderer for each carousel item.
+ */
 @Composable
 fun <T> CustomCarousel(
     items: List<T>,
