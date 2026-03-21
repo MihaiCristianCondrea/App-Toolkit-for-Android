@@ -58,6 +58,13 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param checked The current checked state of the checkbox.
  * @param onCheckedChange A callback function that is invoked when the checkbox state changes.
  *                       It receives the new checked state as a boolean parameter.
+ *
+ * State ownership:
+ * - [checked] is caller-owned state and should come from immutable UI state.
+ * - This composable should not perform persistence or repository calls.
+ *
+ * Accessibility:
+ * - Keep [title] clear and [summary] short to preserve readability on smaller screens.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  */

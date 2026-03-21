@@ -40,6 +40,14 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * A Material Design [TextButton] that supports text-only, icon+text, or icon-only rendering.
  * When only an icon is provided, this composable uses a standard icon button.
  *
+ * State ownership:
+ * - The caller owns button enabled state and click side effects.
+ * - This composable only renders and dispatches interactions.
+ *
+ * Accessibility:
+ * - Provide [iconContentDescription] for icon-only usage.
+ * - Keep [label] concise because it is rendered on a single line with ellipsis.
+ *
  * @param modifier The [Modifier] to be applied to this button.
  * @param onClick A lambda function to be invoked when the button is clicked.
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.

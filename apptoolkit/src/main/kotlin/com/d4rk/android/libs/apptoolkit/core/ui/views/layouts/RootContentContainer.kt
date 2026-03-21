@@ -36,6 +36,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
  *
  * The container computes a target content width based on [windowWidthSizeClass], applies bounded
  * horizontal gutters and size-class-aware vertical spacing, and centers the content.
+ *
+ * Usage guidance:
+ * - Use as a layout shell only.
+ * - Keep navigation, side effects, and business rules outside this container.
  */
 @Composable
 fun RootContentContainer(

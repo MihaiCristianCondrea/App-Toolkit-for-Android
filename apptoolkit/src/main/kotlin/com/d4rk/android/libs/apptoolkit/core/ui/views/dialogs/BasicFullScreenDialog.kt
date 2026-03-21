@@ -48,6 +48,17 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
+/**
+ * Full-screen dialog shell with a top app bar, close action, confirm action, and scrollable body.
+ *
+ * State hoisting contract:
+ * - The caller owns visibility state and must close the dialog from [onDismiss]/[onConfirm].
+ * - [content] should receive already-prepared UI state and avoid business logic.
+ *
+ * Dismissal contract:
+ * - Back press, outside click, and close button dispatch [onDismiss].
+ * - Confirm action dispatches [onConfirm] when [confirmEnabled] is true.
+ */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun BasicFullScreenDialog(

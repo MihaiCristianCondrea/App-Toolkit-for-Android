@@ -48,6 +48,13 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param isChecked Whether the radio button is currently checked.
  * @param onCheckedChange A callback that is invoked when the radio button's state changes.
  *                        It provides the new checked state as a Boolean parameter.
+ *
+ * State ownership:
+ * - [isChecked] is owned by the caller.
+ * - This composable only emits user intent via [onCheckedChange].
+ *
+ * Accessibility:
+ * - Keep [text] specific enough to be read independently from nearby options.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  */

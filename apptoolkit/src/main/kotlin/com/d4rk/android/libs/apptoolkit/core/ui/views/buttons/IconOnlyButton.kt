@@ -42,8 +42,18 @@ internal enum class IconOnlyButtonStyle {
 }
 
 /**
+ * Internal icon-only button renderer shared by all `General*Button` APIs.
+ *
  * Change rationale: icon-only button APIs were consolidated into the General* buttons to reduce
  * duplicate public composables while preserving the same visual styles and feedback behavior.
+ *
+ * Accessibility note:
+ * - Prefer a meaningful [iconContentDescription] whenever the icon communicates an action.
+ * - Callers own semantics decisions and should keep content descriptions localized.
+ *
+ * State ownership:
+ * - This composable is stateless. Enabled state, click handling, and analytics payloads are
+ *   provided by callers.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

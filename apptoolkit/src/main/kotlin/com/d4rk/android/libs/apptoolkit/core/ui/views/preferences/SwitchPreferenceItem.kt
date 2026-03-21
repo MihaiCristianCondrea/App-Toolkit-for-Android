@@ -57,6 +57,14 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param summary An optional secondary text displayed below the title for additional information about the preference.
  * @param checked The initial state of the switch. Set to true for on and false for off.
  * @param onCheckedChange A callback function that is called whenever the switch is toggled. This function receives the new state of the switch (boolean) as a parameter.
+ *
+ * State ownership:
+ * - [checked] is source-of-truth from the caller (typically ViewModel state).
+ * - This composable never persists values directly.
+ *
+ * Accessibility:
+ * - [title] should be a concise action-oriented label.
+ * - [summary] should clarify impact when the toggle changes behavior.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  */

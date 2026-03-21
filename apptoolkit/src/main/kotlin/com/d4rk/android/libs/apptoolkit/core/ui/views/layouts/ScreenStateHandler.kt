@@ -40,6 +40,11 @@ import kotlinx.coroutines.delay
  * based on its [ScreenState]. Loading and empty states receive their own
  * composables while successful data is passed to [onSuccess].
  *
+ * Usage guidance:
+ * - Use this as a pure presentation switch for `Loading / Empty / Success / Error`.
+ * - Keep data fetching, retries, and mapping logic in ViewModel/domain layers.
+ * - Provide already-prepared UI models via [screenState].
+ *
  * @param screenState The state holder describing screen status and data.
  * @param onLoading Composable displayed while loading.
  * @param onEmpty Composable shown when there is no data.

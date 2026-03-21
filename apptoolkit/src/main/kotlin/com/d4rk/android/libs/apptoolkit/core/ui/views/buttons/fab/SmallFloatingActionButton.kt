@@ -41,6 +41,13 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * This composable provides a small floating action button with animated visibility, scaling in and out.
  * It also includes a click sound effect and a bounce click animation.
  *
+ * State ownership:
+ * - [isVisible], [isExtended], and click side effects are controlled by the caller.
+ * - This composable does not own business logic, navigation decisions, or persistence.
+ *
+ * Accessibility:
+ * - Provide a meaningful [contentDescription] for assistive technologies.
+ *
  * @param modifier Modifier to be applied to the button.
  * @param isVisible Controls the visibility of the button. The button is only visible if this is true.
  * @param isExtended Controls if the button is extended. The button is only visible if this is true.
