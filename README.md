@@ -81,9 +81,12 @@ dependencyResolutionManagement {
 }
 
 dependencies {
-    implementation("com.github.MihaiCristianCondrea:apptoolkit:2.0.2")
+    implementation("com.github.MihaiCristianCondrea:apptoolkit:2.0.9")
 }
 ```
+
+> Version note: this value is sourced from `gradle.properties` as `PUBLISHING_VERSION`.  
+> Please bump this snippet alongside each release to keep docs in sync.
 
 # Feedback
 

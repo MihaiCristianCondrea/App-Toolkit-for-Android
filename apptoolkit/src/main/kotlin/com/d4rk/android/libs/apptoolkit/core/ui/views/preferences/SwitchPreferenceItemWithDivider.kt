@@ -66,6 +66,13 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param checked The initial state of the switch. Set to true for on and false for off.
  * @param onCheckedChange A callback function that is called whenever the switch is toggled. This function receives the new state of the switch (boolean) as a parameter.
  * @param onClick A callback function that is called when the entire preference item is clicked. If no action is needed on click, this can be left empty.
+ *
+ * State ownership:
+ * - [checked] is caller-owned state.
+ * - This composable emits click/toggle intent only and does not persist settings.
+ *
+ * Accessibility:
+ * - Keep [title] short and [summary] descriptive to clarify what the trailing switch controls.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  */

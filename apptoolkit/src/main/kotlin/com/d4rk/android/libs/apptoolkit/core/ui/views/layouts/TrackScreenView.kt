@@ -21,6 +21,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 
+/**
+ * Emits a screen-view analytics event when [screenName] changes.
+ *
+ * Usage guidance:
+ * - Call from top-level screen composables.
+ * - Keep event naming stable and pass domain-safe strings.
+ * - This helper is side-effect only; it should not own UI state.
+ */
 @Composable
 fun TrackScreenView(
     firebaseController: FirebaseController,

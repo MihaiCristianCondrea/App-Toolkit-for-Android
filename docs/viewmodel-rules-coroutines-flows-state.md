@@ -4,7 +4,7 @@ This is the canonical entry point for AppToolkit ViewModel rules referenced acro
 
 For the full specification (rules, examples, and helper APIs), see:
 
-- `docs/apptoolkit/viewmodels/viewmoel-rules-coroutines-flows-state.md`
+- `docs/apptoolkit/viewmodels/viewmodel-rules-coroutines-flows-state.md`
 
 ## Why this file exists
 

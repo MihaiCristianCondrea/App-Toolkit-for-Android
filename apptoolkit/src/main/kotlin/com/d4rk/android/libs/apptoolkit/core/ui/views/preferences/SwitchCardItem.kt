@@ -54,6 +54,13 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param switchState A [State] object holding the current on/off state of the switch. Use `true` for the 'on' state and `false` for the 'off' state.
  * @param onSwitchToggled A callback function invoked when the switch is toggled, either by clicking the card or the switch itself.  It receives the new state of the switch (a `Boolean` value) as a parameter.
  *
+ * State ownership:
+ * - [switchState] is provided by the caller and acts as single source-of-truth.
+ * - This composable emits intent only; persistence/business logic belongs to higher layers.
+ *
+ * Accessibility:
+ * - Keep [title] actionable because it doubles as the primary spoken label.
+ *
  * The card has a rounded corner shape and provides a click sound effect upon interaction.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.

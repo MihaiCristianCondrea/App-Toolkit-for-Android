@@ -44,6 +44,13 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * The button animates in and out of view based on the `isVisible` parameter.
  * It also includes haptic feedback and a click sound effect on interaction.
  *
+ * State ownership:
+ * - Visibility and click behavior are controlled by the caller.
+ * - This composable does not perform business logic; it only renders and dispatches events.
+ *
+ * Accessibility:
+ * - Use a meaningful [contentDescription] for screen readers.
+ *
  * @param modifier The [Modifier] to be applied to the button.
  * @param isVisible A boolean that controls the visibility of the FAB. If true, the button animates in; if false, it animates out.
  * @param icon The [ImageVector] to be displayed inside the FAB.

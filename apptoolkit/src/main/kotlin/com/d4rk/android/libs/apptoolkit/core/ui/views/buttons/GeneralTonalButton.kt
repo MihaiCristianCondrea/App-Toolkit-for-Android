@@ -40,6 +40,14 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * A filled tonal button that supports text-only, icon+text, or icon-only rendering.
  * When only an icon is provided, this composable uses a filled tonal icon button.
  *
+ * State ownership:
+ * - The caller owns button enabled state and click side effects.
+ * - This composable stays presentation-focused and forwards callbacks.
+ *
+ * Accessibility:
+ * - Provide [iconContentDescription] for icon-only usage.
+ * - Keep [label] concise because button text is single-line with ellipsis.
+ *
  * @param modifier The [Modifier] to be applied to this button.
  * @param onClick A lambda function to be invoked when this button is clicked.
  * @param enabled A boolean indicating whether this button is enabled and can be interacted with.

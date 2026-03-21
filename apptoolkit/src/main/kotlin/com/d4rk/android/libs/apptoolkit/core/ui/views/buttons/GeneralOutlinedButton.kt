@@ -40,6 +40,14 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * An outlined button that supports text-only, icon+text, or icon-only rendering.
  * When only an icon is provided, this composable uses an outlined icon button.
  *
+ * State ownership:
+ * - The caller owns button enabled state and click side effects.
+ * - This composable is render-only and forwards interaction callbacks.
+ *
+ * Accessibility:
+ * - Provide [iconContentDescription] for icon-only usage.
+ * - Keep [label] short because it is constrained to one line.
+ *
  * @param modifier The [Modifier] to be applied to this button.
  * @param onClick The lambda to be executed when the button is clicked.
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.

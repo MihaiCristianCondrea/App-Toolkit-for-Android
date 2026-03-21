@@ -41,6 +41,13 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 /**
  * An animated extended floating action button that scales in and out based on its visibility.
  *
+ * State ownership:
+ * - The caller owns [visible], [expanded], and click side effects.
+ * - This composable is intended as a render-only wrapper with shared interaction feedback.
+ *
+ * Accessibility:
+ * - Ensure the passed [icon] and [text] communicate the same action intent.
+ *
  * @param visible Controls the visibility of the button. When true, the button is fully visible; when false, it's scaled down to nothing.
  * @param onClick The action to perform when the button is clicked.
  * @param icon The icon to display within the button.

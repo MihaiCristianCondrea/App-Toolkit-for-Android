@@ -15,6 +15,13 @@ The `core` package provides foundational helpers and models:
 - Domain models for results, errors, navigation drawer items and reusable UI elements.
 - Composable UI components such as dialogs, text fields, carousels, snackbars and preference items.
 
+### Core UI catalog
+
+For a grouped inventory of reusable UI building blocks (buttons, dialogs, layouts, preferences, ads,
+and text), see:
+
+- `docs/apptoolkit/core/ui-components-catalog.md`
+
 ## Adaptive layout support
 
 - Material 3 window size classes are exported as API dependencies so apps using the toolkit inherit
@@ -42,6 +49,18 @@ Each feature lives in its own package with actions, events, repositories, UI sta
 - **Display & Theme** – dialogs and lists for appearance preferences.
 - **About** – app information and links to licenses.
 - **Issue Reporter** – collect device info and create GitHub issues.
+
+### Feature inventory quick map
+
+| Feature | Package root | Typical entrypoint |
+| --- | --- | --- |
+| Main | `app/main` | `MainViewModel`, `AppNavigationHost` |
+| Startup | `app/startup` | `StartupActivity`, `StartupScreen`, `StartupViewModel` |
+| Onboarding | `app/onboarding` | `OnboardingScreen`, `OnboardingViewModel` |
+| Help | `app/help` | `HelpActivity`, `HelpScreen`, `HelpViewModel` |
+| Support | `app/support` | `SupportScreen`, `SupportViewModel` |
+| Settings | `app/settings` | `SettingsActivity`, `SettingsScreen`, `SettingsViewModel` |
+| About | `app/about` | `AboutScreen`, `AboutViewModel` |
 
 ## Data layer
 

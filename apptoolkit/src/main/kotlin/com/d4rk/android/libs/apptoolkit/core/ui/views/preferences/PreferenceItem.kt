@@ -56,6 +56,13 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * @param icon An optional icon to be displayed at the start of the preference item. If provided, it should be an `ImageVector` object.
  * @param title An optional main title text displayed for the preference item.
  * @param summary An optional secondary text displayed below the title for additional information about the preference.
+ *
+ * Accessibility:
+ * - Keep [title] meaningful when read on its own.
+ * - Use [summary] for supporting context, not duplicate wording.
+ *
+ * State ownership:
+ * - This composable is stateless and should receive already-derived UI text.
  * @param onClick A callback function that is called when the entire preference item is clicked. If no action is needed on click, this can be left empty.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.

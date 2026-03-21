@@ -79,6 +79,11 @@ import com.google.android.gms.ads.nativead.NativeAdView
  * - Shows a `HelpNativeAdPreview` placeholder in Jetpack Compose preview mode.
  * - The ad will not be displayed if ads are disabled by the user or if the ad unit ID is missing.
  *
+ * Integration and compliance notes:
+ * - Render this composable only after consent/ads settings allow ad personalization or serving.
+ * - Keep an explicit ad disclosure label (`"Ad"`) in host templates/previews.
+ * - Treat this composable as a view-layer primitive; placement policy is owned by the screen.
+ *
  * @param modifier The modifier to be applied to the ad card.
  */
 @SuppressLint("InflateParams")

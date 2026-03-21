@@ -39,6 +39,17 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Date-picker dialog that returns a selected date string in `yyyy-MM-dd` format.
+ *
+ * State hoisting contract:
+ * - The caller controls visibility and must hide the dialog in [onDismiss].
+ * - The selected value is emitted via [onDateSelected]; storage and validation are caller concerns.
+ *
+ * Dismissal contract:
+ * - Cancel always dispatches [onDismiss].
+ * - Confirm dispatches [onDismiss] and then [onDateSelected] when a date is selected.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerDialog(onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {

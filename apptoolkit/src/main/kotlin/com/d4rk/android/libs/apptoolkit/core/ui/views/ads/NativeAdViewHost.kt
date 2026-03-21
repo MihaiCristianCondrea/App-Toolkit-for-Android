@@ -27,6 +27,10 @@ import com.google.android.gms.ads.nativead.NativeAdView
 /**
  * A small helper to inflate and remember a [NativeAdView] inside Compose.
  *
+ * Integration notes:
+ * - This is a render bridge only; loading, consent gating, and lifecycle decisions remain in the caller.
+ * - Callers should clear/destroy ad objects when leaving composition.
+ *
  * @param modifier Modifiers applied to the hosting view.
  * @param layoutResId The XML layout resource used to inflate the [NativeAdView].
  * @param onNativeAdViewReady Called after the view is created or updated so the caller can store it.

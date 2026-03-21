@@ -41,6 +41,17 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 
+/**
+ * Reusable alert dialog with optional icon, custom body content, and confirm/dismiss actions.
+ *
+ * State hoisting contract:
+ * - Visibility is owned by the caller.
+ * - [onDismiss], [onConfirm], and [onCancel] should update caller-managed state.
+ *
+ * Dismissal contract:
+ * - Back press/outside tap dispatches [onDismiss].
+ * - Secondary button dispatches [onCancel] (defaults to [onDismiss]).
+ */
 @Composable
 fun BasicAlertDialog(
     onDismiss: () -> Unit,
