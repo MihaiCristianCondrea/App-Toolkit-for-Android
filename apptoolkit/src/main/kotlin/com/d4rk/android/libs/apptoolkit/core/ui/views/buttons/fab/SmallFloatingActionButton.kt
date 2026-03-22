@@ -29,9 +29,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
-import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
-import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 
@@ -55,8 +52,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * @param contentDescription Optional description of the icon for accessibility.
  * @param onClick The action to be performed when the button is clicked.
  * @param feedback The feedback configuration for sound and haptics.
- * @param firebaseController Optional Firebase controller used to log GA4 events.
- * @param ga4Event Optional GA4 event data to log on click.
+ * @param onLogClick Optional analytics hook invoked before [onClick].
  */
 @Composable
 fun SmallFloatingActionButton(
@@ -67,8 +63,7 @@ fun SmallFloatingActionButton(
     contentDescription: String? = null,
     onClick: () -> Unit,
     feedback: ButtonFeedback = ButtonFeedback(),
-    firebaseController: FirebaseController? = null, // FIXME: Parameter 'firebaseController' has runtime-determined stability
-    ga4Event: Ga4EventData? = null, // FIXME: Parameter 'ga4Event' has runtime-determined stability
+    onLogClick: (() -> Unit)? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -80,7 +75,7 @@ fun SmallFloatingActionButton(
     ) {
         SmallFloatingActionButton(onClick = {
             feedback.performClick(view = view, hapticFeedback = hapticFeedback)
-            firebaseController.logGa4Event(ga4Event)
+            onLogClick?.invoke()
             onClick()
         }, modifier = modifier.bounceClick()) {
             Icon(imageVector = icon, contentDescription = contentDescription)
