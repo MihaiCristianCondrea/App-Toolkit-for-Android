@@ -65,8 +65,8 @@ internal fun IconOnlyButton(
     vectorIcon: ImageVector? = null,
     painterIcon: Painter? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
-    firebaseController: FirebaseController? = null, // FIXME: Parameter 'firebaseController' has runtime-determined stability
-    ga4Event: Ga4EventData? = null, // FIXME: Parameter 'ga4Event' has runtime-determined stability
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
     style: IconOnlyButtonStyle = IconOnlyButtonStyle.Filled,
     iconSize: Dp = SizeConstants.TwentyFourSize,
 ) {

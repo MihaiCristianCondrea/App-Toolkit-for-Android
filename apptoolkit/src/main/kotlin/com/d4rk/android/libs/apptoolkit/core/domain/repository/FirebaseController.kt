@@ -17,6 +17,7 @@
 
 package com.d4rk.android.libs.apptoolkit.core.domain.repository
 
+import androidx.compose.runtime.Stable
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
 
 /**
@@ -26,6 +27,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEve
  * the rest of the codebase can toggle analytics, Crashlytics, and related
  * features through dependency injection.
  */
+@Stable
 interface FirebaseController {
 
     /**

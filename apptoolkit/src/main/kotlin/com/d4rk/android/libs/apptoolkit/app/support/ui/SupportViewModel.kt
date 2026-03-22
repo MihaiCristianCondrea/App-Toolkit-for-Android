@@ -54,6 +54,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.toPersistentMap
 
 private const val BILLING_LAUNCH_TIMEOUT_MS = 20_000L
 
@@ -111,7 +113,7 @@ class SupportViewModel(
         if (!activity.isValidForBilling()) return
         if (screenData?.isBillingInProgress == true) return
 
-        val option = screenData?.donationOptions?.firstOrNull { it.productId == productId }
+        val option = screenData?.donationOptions?.get(productId)
         if (option?.isEligible != true) {
             showOfferUnavailable()
             return
@@ -295,15 +297,15 @@ class SupportViewModel(
         }
     }
 
-    private fun buildDonationOptions(detailsMap: Map<String, ProductDetails>): List<DonationOptionUiState> {
-        return donationProductIds.map { productId ->
+    private fun buildDonationOptions(detailsMap: Map<String, ProductDetails>): ImmutableMap<String, DonationOptionUiState> {
+        return donationProductIds.associateWith { productId ->
             val details = detailsMap[productId]
             DonationOptionUiState(
                 productId = productId,
                 formattedPrice = details?.primaryFormattedPrice(),
                 isEligible = details?.hasOneTimePurchaseOffer() == true,
             )
-        }
+        }.toPersistentMap()
     }
 
     private fun dismissSnackbar() {

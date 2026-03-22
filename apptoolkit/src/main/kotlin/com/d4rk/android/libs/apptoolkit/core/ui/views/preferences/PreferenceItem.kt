@@ -76,8 +76,8 @@ fun PreferenceItem(
     enabled: Boolean = true,
     rippleEffectDp: Dp = SizeConstants.LargeSize,
     onClick: () -> Unit = {},
-    firebaseController: FirebaseController? = null, // FIXME: Parameter 'firebaseController' has runtime-determined stability
-    ga4Event: Ga4EventData? = null, // FIXME: Parameter 'ga4Event' has runtime-determined stability
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
@@ -149,8 +149,8 @@ fun SettingsPreferenceItem(
     summary: String? = null,
     rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
     onClick: () -> Unit = {},
-    firebaseController: FirebaseController? = null, // FIXME: Parameter 'firebaseController' has runtime-determined stability
-    ga4Event: Ga4EventData? = null, // FIXME: Parameter 'ga4Event' has runtime-determined stability
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
     Card(
