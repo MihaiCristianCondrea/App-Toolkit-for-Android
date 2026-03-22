@@ -26,7 +26,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 
 @Composable
 fun TrackScreenState(
-    firebaseController: FirebaseController,
+    firebaseController: FirebaseController, // FIXME: Parameter 'firebaseController' has runtime-determined stability
     screenName: String,
     screenState: ScreenState,
 ) {

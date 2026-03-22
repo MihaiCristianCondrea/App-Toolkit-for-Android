@@ -169,9 +169,9 @@ fun SupportComposable() {
 @Composable
 fun SupportScreenContent(
     paddingValues: PaddingValues,
-    donationOptions: Map<String, DonationOptionUiState>,
+    donationOptions: Map<String, DonationOptionUiState>, // FIXME: Parameter 'donationOptions' has runtime-determined stability
     isBillingInProgress: Boolean,
-    firebaseController: FirebaseController,
+    firebaseController: FirebaseController, // FIXME: Parameter 'firebaseController' has runtime-determined stability
     onDonateClick: (String) -> Unit,
 ) {
     val context: Context = LocalContext.current

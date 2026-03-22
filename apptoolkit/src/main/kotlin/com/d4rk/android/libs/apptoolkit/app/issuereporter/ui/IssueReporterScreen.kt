@@ -247,7 +247,7 @@ fun IssueReporterScreen(onBackClicked: (() -> Unit)? = null) {
 
 @Composable
 fun IssueReporterScreenContent(
-    firebaseController: FirebaseController,
+    firebaseController: FirebaseController, // FIXME: Parameter 'firebaseController' has runtime-determined stability
     paddingValues: PaddingValues,
     onEvent: (IssueReporterEvent) -> Unit,
     data: IssueReporterUiState,

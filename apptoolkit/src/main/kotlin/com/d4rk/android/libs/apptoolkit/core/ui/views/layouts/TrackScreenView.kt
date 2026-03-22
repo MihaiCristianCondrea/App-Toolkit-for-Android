@@ -31,7 +31,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseControlle
  */
 @Composable
 fun TrackScreenView(
-    firebaseController: FirebaseController,
+    firebaseController: FirebaseController, // FIXME: Parameter 'firebaseController' has runtime-determined stability
     screenName: String,
     screenClass: String? = null,
 ) {

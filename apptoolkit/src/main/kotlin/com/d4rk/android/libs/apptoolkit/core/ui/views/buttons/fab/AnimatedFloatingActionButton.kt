@@ -69,8 +69,8 @@ fun AnimatedFloatingActionButton(
     contentDescription: String? = null,
     onClick: () -> Unit,
     feedback: ButtonFeedback = ButtonFeedback(),
-    firebaseController: FirebaseController? = null,
-    ga4Event: Ga4EventData? = null,
+    firebaseController: FirebaseController? = null, // FIXME: Parameter 'firebaseController' has runtime-determined stability
+    ga4Event: Ga4EventData? = null, // FIXME: Parameter 'ga4Event' has runtime-determined stability
 ) {
     val haptics = LocalHapticFeedback.current
     val view = LocalView.current
