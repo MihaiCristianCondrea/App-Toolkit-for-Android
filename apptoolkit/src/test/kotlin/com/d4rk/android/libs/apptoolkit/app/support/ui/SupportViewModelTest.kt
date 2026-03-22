@@ -87,7 +87,7 @@ class SupportViewModelTest {
     }
 
     @Test
-    fun `products update screenState to success with mapped list`() =
+    fun `products update screenState to success with mapped donation options`() =
         runTest(dispatcherExtension.testDispatcher) {
             val p1 = mockProductDetails(DonationProductIds.LOW_DONATION, "€0.99")
             val p2 = mockProductDetails(DonationProductIds.NORMAL_DONATION, "€1.99")
@@ -108,7 +108,7 @@ class SupportViewModelTest {
                 assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
 
                 val donationOptions = requireNotNull(state.data).donationOptions
-                assertThat(donationOptions.map { it.productId })
+                assertThat(donationOptions.keys)
                     .containsAtLeast(
                         DonationProductIds.LOW_DONATION,
                         DonationProductIds.NORMAL_DONATION
@@ -207,7 +207,7 @@ class SupportViewModelTest {
             // Ensure VM reached a usable state before clicking.
             viewModel.uiState.test {
                 var state = awaitItem()
-                while (state.data?.donationOptions?.any { it.productId == DonationProductIds.LOW_DONATION } != true) {
+                while (state.data?.donationOptions?.containsKey(DonationProductIds.LOW_DONATION) != true) {
                     state = awaitItem()
                 }
                 cancelAndIgnoreRemainingEvents()
