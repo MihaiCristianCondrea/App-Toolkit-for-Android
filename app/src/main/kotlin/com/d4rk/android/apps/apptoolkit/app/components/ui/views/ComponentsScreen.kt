@@ -59,6 +59,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralTonalButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedFloatingActionButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.SmallFloatingActionButton
@@ -334,8 +335,11 @@ fun ComponentsScreen(
                         icon = Icons.Filled.Add,
                         contentDescription = iconContentDescription,
                         onClick = {},
-                        firebaseController = firebaseController,
-                        ga4Event = ga4Event(component = "fab", variant = "small"),
+                        onLogClick = {
+                            firebaseController.logGa4Event(
+                                ga4Event(component = "fab", variant = "small")
+                            )
+                        },
                     )
                 }
                 SmallVerticalSpacer()
