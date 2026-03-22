@@ -17,6 +17,7 @@
 
 package com.d4rk.android.libs.apptoolkit.core.ui.model.analytics
 
+import androidx.compose.runtime.Immutable
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 
@@ -26,6 +27,7 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsVal
  * @param name The GA4 event name to log.
  * @param params Optional event parameters using the analytics domain value types.
  */
+@Immutable
 data class Ga4EventData(
     val name: String,
     val params: Map<String, AnalyticsValue> = emptyMap(),

@@ -74,8 +74,8 @@ fun SwitchCardItem(
     switchState: State<Boolean>,
     onSwitchToggled: (Boolean) -> Unit,
     checkIcon: ImageVector = Icons.Filled.Check,
-    firebaseController: FirebaseController? = null, // FIXME: Parameter 'firebaseController' has runtime-determined stability
-    ga4Event: Ga4EventData? = null, // FIXME: Parameter 'ga4Event' has runtime-determined stability
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
     ga4EventProvider: ((Boolean) -> Ga4EventData?)? = null,
 ) {
     val view: View = LocalView.current

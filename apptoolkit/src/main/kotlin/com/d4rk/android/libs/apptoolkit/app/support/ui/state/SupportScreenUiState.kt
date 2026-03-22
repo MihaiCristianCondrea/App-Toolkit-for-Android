@@ -17,12 +17,18 @@
 
 package com.d4rk.android.libs.apptoolkit.app.support.ui.state
 
+import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
+
+@Immutable
 data class SupportScreenUiState(
     val error: String? = null,
-    val donationOptions: List<DonationOptionUiState> = emptyList(),
+    val donationOptions: ImmutableMap<String, DonationOptionUiState> = persistentMapOf(),
     val isBillingInProgress: Boolean = false,
 )
 
+@Immutable
 data class DonationOptionUiState(
     val productId: String,
     val formattedPrice: String?,

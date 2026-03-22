@@ -166,7 +166,7 @@ fun SettingsScreenContent(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
     contentProvider: GeneralSettingsContentProvider,
-    firebaseController: FirebaseController, // FIXME: Parameter 'firebaseController' has runtime-determined stability
+    firebaseController: FirebaseController,
 ) {
     val windowWidthSizeClass: AppWindowWidthSizeClass = rememberWindowWidthSizeClass()
     if (windowWidthSizeClass == AppWindowWidthSizeClass.Compact) {
@@ -189,7 +189,7 @@ fun SettingsScreenContent(
 fun PhoneSettingsScreen(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
-    firebaseController: FirebaseController, // FIXME: Parameter 'firebaseController' has runtime-determined stability
+    firebaseController: FirebaseController,
 ) {
     SettingsList(
         paddingValues = paddingValues,
@@ -204,7 +204,7 @@ fun TabletSettingsScreen(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
     contentProvider: GeneralSettingsContentProvider,
-    firebaseController: FirebaseController, // FIXME: Parameter 'firebaseController' has runtime-determined stability
+    firebaseController: FirebaseController,
 ) {
     var selected: SettingsPreference? by remember { mutableStateOf(null) }
 
@@ -334,7 +334,7 @@ fun SettingsDetail(
 fun SettingsList(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
-    firebaseController: FirebaseController, // FIXME: Parameter 'firebaseController' has runtime-determined stability
+    firebaseController: FirebaseController,
     onPreferenceClick: (SettingsPreference) -> Unit = {},
 ) {
     LazyColumn(

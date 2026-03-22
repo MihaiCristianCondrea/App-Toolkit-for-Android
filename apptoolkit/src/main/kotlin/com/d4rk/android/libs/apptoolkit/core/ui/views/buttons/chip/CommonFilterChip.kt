@@ -68,8 +68,8 @@ fun CommonFilterChip(
     label: String,
     modifier: Modifier = Modifier,
     leadingIcon: (@Composable (() -> Unit))? = null,
-    firebaseController: FirebaseController? = null, // FIXME: Parameter 'firebaseController' has runtime-determined stability
-    ga4Event: Ga4EventData? = null, // FIXME: Parameter 'ga4Event' has runtime-determined stability
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current

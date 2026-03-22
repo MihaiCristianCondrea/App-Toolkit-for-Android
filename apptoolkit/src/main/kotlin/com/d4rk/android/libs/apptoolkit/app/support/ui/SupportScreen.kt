@@ -23,10 +23,13 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoneyOff
@@ -68,6 +71,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHa
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
+import kotlinx.collections.immutable.ImmutableMap
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -142,12 +146,9 @@ fun SupportComposable() {
                 )
             },
             onSuccess = { data: SupportScreenUiState ->
-                val optionsById = remember(data.donationOptions) {
-                    data.donationOptions.associateBy(DonationOptionUiState::productId)
-                }
                 SupportScreenContent(
                     paddingValues = paddingValues,
-                    donationOptions = optionsById,
+                    donationOptions = data.donationOptions,
                     isBillingInProgress = data.isBillingInProgress,
                     firebaseController = firebaseController,
                     onDonateClick = { productId ->
@@ -169,9 +170,9 @@ fun SupportComposable() {
 @Composable
 fun SupportScreenContent(
     paddingValues: PaddingValues,
-    donationOptions: Map<String, DonationOptionUiState>, // FIXME: Parameter 'donationOptions' has runtime-determined stability
+    donationOptions: ImmutableMap<String, DonationOptionUiState>,
     isBillingInProgress: Boolean,
-    firebaseController: FirebaseController, // FIXME: Parameter 'firebaseController' has runtime-determined stability
+    firebaseController: FirebaseController,
     onDonateClick: (String) -> Unit,
 ) {
     val context: Context = LocalContext.current
@@ -202,7 +203,7 @@ fun SupportScreenContent(
                         text = stringResource(id = R.string.summary_donations),
                         modifier = Modifier.padding(all = SizeConstants.LargeSize)
                     )
-                    LazyRow(
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = SizeConstants.LargeSize),
@@ -210,48 +211,41 @@ fun SupportScreenContent(
                     ) {
                         val lowDonation = donationOptions[DonationProductIds.LOW_DONATION]
                         val normalDonation = donationOptions[DonationProductIds.NORMAL_DONATION]
-                        item {
-                            GeneralTonalButton(
-                                modifier = Modifier.fillMaxWidth(),
-                                onClick = {
-                                    onDonateClick(DonationProductIds.LOW_DONATION)
-                                },
-                                firebaseController = firebaseController,
-                                ga4Event = supportPreferenceTapEvent(
-                                    preferenceKey = SupportPreferenceKeys.DONATE_LOW,
-                                    productId = DonationProductIds.LOW_DONATION,
-                                ),
-                                enabled = lowDonation?.isEligible == true && !isBillingInProgress,
-                                vectorIcon = Icons.Outlined.Paid,
-                                label = if (lowDonation?.isEligible == true) {
-                                    lowDonation.formattedPrice.orEmpty()
-                                } else {
-                                    stringResource(id = R.string.support_offer_unavailable)
-                                }
-                            )
-                        }
-                        item {
-                            GeneralTonalButton(
-                                modifier = Modifier.fillMaxWidth(),
-                                onClick = {
-                                    onDonateClick(DonationProductIds.NORMAL_DONATION)
-                                },
-                                firebaseController = firebaseController,
-                                ga4Event = supportPreferenceTapEvent(
-                                    preferenceKey = SupportPreferenceKeys.DONATE_NORMAL,
-                                    productId = DonationProductIds.NORMAL_DONATION,
-                                ),
-                                enabled = normalDonation?.isEligible == true && !isBillingInProgress,
-                                vectorIcon = Icons.Outlined.Paid,
-                                label = if (normalDonation?.isEligible == true) {
-                                    normalDonation.formattedPrice.orEmpty()
-                                } else {
-                                    stringResource(id = R.string.support_offer_unavailable)
-                                }
-                            )
-                        }
+                        GeneralTonalButton(
+                            modifier = Modifier.weight(1f),
+                            onClick = { onDonateClick(DonationProductIds.LOW_DONATION) },
+                            firebaseController = firebaseController,
+                            ga4Event = supportPreferenceTapEvent(
+                                preferenceKey = SupportPreferenceKeys.DONATE_LOW,
+                                productId = DonationProductIds.LOW_DONATION,
+                            ),
+                            enabled = lowDonation?.isEligible == true && !isBillingInProgress,
+                            vectorIcon = Icons.Outlined.Paid,
+                            label = if (lowDonation?.isEligible == true) {
+                                lowDonation.formattedPrice.orEmpty()
+                            } else {
+                                stringResource(id = R.string.support_offer_unavailable)
+                            }
+                        )
+                        Spacer(modifier = Modifier.width(SizeConstants.MediumSize))
+                        GeneralTonalButton(
+                            modifier = Modifier.weight(1f),
+                            onClick = { onDonateClick(DonationProductIds.NORMAL_DONATION) },
+                            firebaseController = firebaseController,
+                            ga4Event = supportPreferenceTapEvent(
+                                preferenceKey = SupportPreferenceKeys.DONATE_NORMAL,
+                                productId = DonationProductIds.NORMAL_DONATION,
+                            ),
+                            enabled = normalDonation?.isEligible == true && !isBillingInProgress,
+                            vectorIcon = Icons.Outlined.Paid,
+                            label = if (normalDonation?.isEligible == true) {
+                                normalDonation.formattedPrice.orEmpty()
+                            } else {
+                                stringResource(id = R.string.support_offer_unavailable)
+                            }
+                        )
                     }
-                    LazyRow(
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(all = SizeConstants.LargeSize),
@@ -259,46 +253,39 @@ fun SupportScreenContent(
                     ) {
                         val highDonation = donationOptions[DonationProductIds.HIGH_DONATION]
                         val extremeDonation = donationOptions[DonationProductIds.EXTREME_DONATION]
-                        item {
-                            GeneralTonalButton(
-                                modifier = Modifier.fillMaxWidth(),
-                                onClick = {
-                                    onDonateClick(DonationProductIds.HIGH_DONATION)
-                                },
-                                firebaseController = firebaseController,
-                                ga4Event = supportPreferenceTapEvent(
-                                    preferenceKey = SupportPreferenceKeys.DONATE_HIGH,
-                                    productId = DonationProductIds.HIGH_DONATION,
-                                ),
-                                enabled = highDonation?.isEligible == true && !isBillingInProgress,
-                                vectorIcon = Icons.Outlined.Paid,
-                                label = if (highDonation?.isEligible == true) {
-                                    highDonation.formattedPrice.orEmpty()
-                                } else {
-                                    stringResource(id = R.string.support_offer_unavailable)
-                                }
-                            )
-                        }
-                        item {
-                            GeneralTonalButton(
-                                modifier = Modifier.fillMaxWidth(),
-                                onClick = {
-                                    onDonateClick(DonationProductIds.EXTREME_DONATION)
-                                },
-                                firebaseController = firebaseController,
-                                ga4Event = supportPreferenceTapEvent(
-                                    preferenceKey = SupportPreferenceKeys.DONATE_EXTREME,
-                                    productId = DonationProductIds.EXTREME_DONATION,
-                                ),
-                                enabled = extremeDonation?.isEligible == true && !isBillingInProgress,
-                                vectorIcon = Icons.Outlined.Paid,
-                                label = if (extremeDonation?.isEligible == true) {
-                                    extremeDonation.formattedPrice.orEmpty()
-                                } else {
-                                    stringResource(id = R.string.support_offer_unavailable)
-                                }
-                            )
-                        }
+                        GeneralTonalButton(
+                            modifier = Modifier.weight(1f),
+                            onClick = { onDonateClick(DonationProductIds.HIGH_DONATION) },
+                            firebaseController = firebaseController,
+                            ga4Event = supportPreferenceTapEvent(
+                                preferenceKey = SupportPreferenceKeys.DONATE_HIGH,
+                                productId = DonationProductIds.HIGH_DONATION,
+                            ),
+                            enabled = highDonation?.isEligible == true && !isBillingInProgress,
+                            vectorIcon = Icons.Outlined.Paid,
+                            label = if (highDonation?.isEligible == true) {
+                                highDonation.formattedPrice.orEmpty()
+                            } else {
+                                stringResource(id = R.string.support_offer_unavailable)
+                            }
+                        )
+                        Spacer(modifier = Modifier.width(SizeConstants.MediumSize))
+                        GeneralTonalButton(
+                            modifier = Modifier.weight(1f),
+                            onClick = { onDonateClick(DonationProductIds.EXTREME_DONATION) },
+                            firebaseController = firebaseController,
+                            ga4Event = supportPreferenceTapEvent(
+                                preferenceKey = SupportPreferenceKeys.DONATE_EXTREME,
+                                productId = DonationProductIds.EXTREME_DONATION,
+                            ),
+                            enabled = extremeDonation?.isEligible == true && !isBillingInProgress,
+                            vectorIcon = Icons.Outlined.Paid,
+                            label = if (extremeDonation?.isEligible == true) {
+                                extremeDonation.formattedPrice.orEmpty()
+                            } else {
+                                stringResource(id = R.string.support_offer_unavailable)
+                            }
+                        )
                     }
                 }
             }
