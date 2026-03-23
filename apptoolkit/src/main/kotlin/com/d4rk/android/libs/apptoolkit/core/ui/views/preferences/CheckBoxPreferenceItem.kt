@@ -77,7 +77,12 @@ fun CheckBoxPreferenceItem(
                 fontWeight = FontWeight.SemiBold
             )
             summary?.let {
-                Text(text = it, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
         Checkbox(checked = checked, onCheckedChange = { isChecked: Boolean ->

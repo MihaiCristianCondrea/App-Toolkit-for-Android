@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.NoDataNativeAdCard
@@ -92,7 +93,9 @@ fun NoDataScreen(
         Text(
             text = stringResource(id = textMessage),
             style = MaterialTheme.typography.displaySmall.copy(textAlign = TextAlign.Center),
-            color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground
+            color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground,
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis
         )
         if (showRetry) {
             LargeVerticalSpacer()

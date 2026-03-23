@@ -83,7 +83,12 @@ fun SwitchPreferenceItem(
                     overflow = TextOverflow.Ellipsis
                 )
                 summary?.let {
-                    Text(text = it, style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
             CustomSwitch(

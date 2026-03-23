@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 
 /**
@@ -60,7 +61,14 @@ fun LargeTopAppBarWithScaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
-                title = { Text(modifier = Modifier.animateContentSize(), text = title) },
+                title = {
+                    Text(
+                        modifier = Modifier.animateContentSize(),
+                        text = title,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
                 navigationIcon = {
                     AnimatedIconButtonDirection(
                         icon = Icons.AutoMirrored.Filled.ArrowBack,
@@ -119,7 +127,14 @@ fun TopAppBarScaffold(
         modifier = Modifier.nestedScroll(connection = scrollBehaviorState.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
-                title = { Text(modifier = Modifier.animateContentSize(), text = title) },
+                title = {
+                    Text(
+                        modifier = Modifier.animateContentSize(),
+                        text = title,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
                 scrollBehavior = scrollBehaviorState
             )
         },

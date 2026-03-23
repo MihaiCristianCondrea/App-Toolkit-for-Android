@@ -80,7 +80,9 @@ fun PreferenceItem(
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = if (!enabled) LocalContentColor.current.copy(alpha = 0.38f) else LocalContentColor.current
+                    color = if (!enabled) LocalContentColor.current.copy(alpha = 0.38f) else LocalContentColor.current,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }

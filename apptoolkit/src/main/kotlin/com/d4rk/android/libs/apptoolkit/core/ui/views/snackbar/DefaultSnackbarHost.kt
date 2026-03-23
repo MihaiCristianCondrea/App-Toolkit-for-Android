@@ -23,6 +23,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.style.TextOverflow
 import com.d4rk.android.libs.apptoolkit.core.ui.model.CustomSnackbarVisuals
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
@@ -62,7 +63,11 @@ fun DefaultSnackbarHost(snackbarState: SnackbarHostState, modifier: Modifier = M
                         )
                     }
                 }) {
-                Text(text = visuals.message)
+                Text(
+                    text = visuals.message,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
     }
