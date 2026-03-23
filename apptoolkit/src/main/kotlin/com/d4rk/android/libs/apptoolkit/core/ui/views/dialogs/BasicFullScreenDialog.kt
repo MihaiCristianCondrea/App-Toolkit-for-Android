@@ -25,6 +25,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.IconButton
@@ -61,13 +62,23 @@ fun BasicFullScreenDialog(
                         icon = Icons.Filled.Close,
                         iconContentDescription = null
                     )
-                }, title = { Text(text = title) }, actions = {
+                }, title = {
+                    Text(
+                        text = title,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }, actions = {
                     TextButton(modifier = Modifier.bounceClick(), onClick = {
                         view.playSoundEffect(SoundEffectConstants.CLICK)
                         hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                         onConfirm()
                     }, enabled = confirmEnabled) {
-                        Text(confirmButtonText)
+                        Text(
+                            text = confirmButtonText,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                 })
             }) { innerPadding: PaddingValues ->

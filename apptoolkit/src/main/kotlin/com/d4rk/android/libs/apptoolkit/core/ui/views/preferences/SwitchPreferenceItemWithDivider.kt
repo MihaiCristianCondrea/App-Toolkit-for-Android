@@ -93,7 +93,12 @@ fun SwitchPreferenceItemWithDivider(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                Text(text = summary, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = summary,
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
             ExtraSmallHorizontalSpacer()
             Icon(

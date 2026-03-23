@@ -22,6 +22,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 
 @Composable
@@ -51,7 +52,11 @@ fun BasicAlertDialog(
         }
     }, title = {
         if (!title.isNullOrEmpty()) {
-            Text(text = title)
+            Text(
+                text = title,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }, text = {
         AnimatedContent(
@@ -71,7 +76,11 @@ fun BasicAlertDialog(
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
             onConfirm()
         }, enabled = confirmEnabled) {
-            Text(text = confirmButtonText ?: stringResource(id = android.R.string.ok))
+            Text(
+                text = confirmButtonText ?: stringResource(id = android.R.string.ok),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }, dismissButton = {
         if (showDismissButton) {
@@ -80,7 +89,11 @@ fun BasicAlertDialog(
                 hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
                 onCancel()
             }, enabled = dismissEnabled) {
-                Text(text = dismissButtonText ?: stringResource(id = android.R.string.cancel))
+                Text(
+                    text = dismissButtonText ?: stringResource(id = android.R.string.cancel),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
     })

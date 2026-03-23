@@ -16,6 +16,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.style.TextOverflow
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
@@ -61,9 +62,13 @@ fun RadioButtonPreferenceItem(
                 onCheckedChange(!isChecked)
             })
         Text(
-            text = text, style = MaterialTheme.typography.bodyMedium, modifier = Modifier
+            text = text,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier
                 .weight(weight = 1f)
-                .padding(end = SizeConstants.LargeSize, start = SizeConstants.LargeSize)
+                .padding(end = SizeConstants.LargeSize, start = SizeConstants.LargeSize),
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
