@@ -34,11 +34,13 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 class FetchDeveloperAppsUseCaseTest {
 
     @Test
     fun `use case mirrors repository emissions without prepending loading state`() = runTest {
+        var flowCollected = false
         val apps = listOf(
             AppInfo(
                 name = "App",
@@ -55,21 +57,29 @@ class FetchDeveloperAppsUseCaseTest {
             ),
         )
         val repository = mockk<DeveloperAppsRepository> {
-            every { fetchDeveloperApps() } returns repositoryEmissions.asFlow()
+            every { fetchDeveloperApps() } returns flow {
+                flowCollected = true
+                repositoryEmissions.asFlow().collect { emit(it) }
+            }
         }
         val useCase = FetchDeveloperAppsUseCase(repository)
 
         val result = useCase().toList()
 
         assertEquals(repositoryEmissions, result)
-        verify(exactly = 1) { repository.fetchDeveloperApps() } // FIXME: Flow is constructed but not used
+        assertTrue(flowCollected)
+        verify(exactly = 1) { repository.fetchDeveloperApps() }
     }
 
     @Test
     fun `use case propagates synchronous repository exceptions`() = runTest {
         val exception = IllegalStateException("boom")
+        var flowCollected = false
         val repository = mockk<DeveloperAppsRepository> {
-            every { fetchDeveloperApps() } returns flow { throw exception }
+            every { fetchDeveloperApps() } returns flow {
+                flowCollected = true
+                throw exception
+            }
         }
         val useCase = FetchDeveloperAppsUseCase(repository)
 
@@ -78,6 +88,7 @@ class FetchDeveloperAppsUseCaseTest {
         }
 
         assertSame(exception, thrown)
-        verify(exactly = 1) { repository.fetchDeveloperApps() } // FIXME: Flow is constructed but not used
+        assertTrue(flowCollected)
+        verify(exactly = 1) { repository.fetchDeveloperApps() }
     }
 }
