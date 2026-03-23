@@ -24,9 +24,10 @@ import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStor
 import com.d4rk.android.libs.apptoolkit.core.data.remote.ads.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.interfaces.OnShowAdCompleteListener
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.appopen.AppOpenAd
+import com.google.android.libraries.ads.mobile.sdk.MobileAds
+import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAd
+import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAdEventCallback
+import com.google.android.libraries.ads.mobile.sdk.common.AdLoadCallback
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -69,10 +70,10 @@ class TestAdsCoreManager {
         storeField.set(manager, dataStore)
 
         mockkStatic(MobileAds::class)
-        justRun { MobileAds.initialize(context) }
+        justRun { MobileAds.initialize(context, any(), any()) }
 
         runBlocking { manager.initializeAds("id") }
-        verify { MobileAds.initialize(context) }
+        verify { MobileAds.initialize(context, any(), any()) }
         println("🏁 [TEST DONE] initializeAds triggers MobileAds")
     }
 
@@ -116,7 +117,7 @@ class TestAdsCoreManager {
             isAccessible = true
             invoke(inner, context)
         }
-        verify(exactly = 0) { AppOpenAd.load(any(), any(), any(), any()) }
+        verify(exactly = 0) { AppOpenAd.load(any(), any()) }
 
         loadingField.setBoolean(inner, false)
         val adField = inner.javaClass.getDeclaredField("appOpenAd")
@@ -130,7 +131,7 @@ class TestAdsCoreManager {
             isAccessible = true
             invoke(inner, context)
         }
-        verify(exactly = 0) { AppOpenAd.load(any(), any(), any(), any()) }
+        verify(exactly = 0) { AppOpenAd.load(any(), any()) }
         println("🏁 [TEST DONE] loadAd does not load when already loading or available")
     }
 
@@ -149,7 +150,7 @@ class TestAdsCoreManager {
         runBlocking { manager.initializeAds("unit") }
 
         mockkStatic(AppOpenAd::class)
-        justRun { AppOpenAd.load(any(), any(), any(), any()) }
+        justRun { AppOpenAd.load(any(), any()) }
 
         var completed = false
         val mgrField2 = AdsCoreManager::class.java.getDeclaredField("appOpenAdManager")
@@ -170,7 +171,7 @@ class TestAdsCoreManager {
         method.invoke(inner2, mockk<Activity>(), listener, noopContinuation)
 
         assert(completed)
-        verify { AppOpenAd.load(any(), any(), any(), any()) }
+        verify { AppOpenAd.load(any(), any()) }
         println("🏁 [TEST DONE] showAdIfAvailable loads when no ad")
     }
 
@@ -197,10 +198,10 @@ class TestAdsCoreManager {
         adField.set(inner3, ad)
 
         mockkStatic(AppOpenAd::class)
-        justRun { AppOpenAd.load(any(), any(), any(), any()) }
+        justRun { AppOpenAd.load(any(), any()) }
 
-        val slot = slot<FullScreenContentCallback>()
-        every { ad.fullScreenContentCallback = capture(slot) } returns Unit
+        val slot = slot<AppOpenAdEventCallback>()
+        every { ad.adEventCallback = capture(slot) } returns Unit
 
         val method2 = inner3.javaClass.getDeclaredMethod(
             "showAdIfAvailable",
@@ -218,7 +219,7 @@ class TestAdsCoreManager {
         val showField = inner3.javaClass.getDeclaredField("isShowingAd")
         showField.isAccessible = true
         assertFalse(showField.getBoolean(inner3))
-        verify { AppOpenAd.load(any(), any(), any(), any()) }
+        verify { AppOpenAd.load(any(), any()) }
         println("🏁 [TEST DONE] callback dismiss reloads ad")
     }
 
@@ -237,12 +238,12 @@ class TestAdsCoreManager {
         runBlocking { manager.initializeAds("unit") }
 
         mockkStatic(AppOpenAd::class)
-        justRun { AppOpenAd.load(any(), any(), any(), any()) }
+        justRun { AppOpenAd.load(any(), any()) }
 
         val activity = mockk<Activity>()
         manager.showAdIfAvailable(activity, testScope)
 
-        verify(exactly = 0) { AppOpenAd.load(any(), any(), any(), any()) }
+        verify(exactly = 0) { AppOpenAd.load(any(), any()) }
         println("🏁 [TEST DONE] ads disabled skips load and show")
     }
 
@@ -265,9 +266,9 @@ class TestAdsCoreManager {
         val inner = mgrField.get(manager)!!
 
         mockkStatic(AppOpenAd::class)
-        val slot = slot<AppOpenAd.AppOpenAdLoadCallback>()
+        val slot = slot<AdLoadCallback<AppOpenAd>>()
         every {
-            AppOpenAd.load(any(), any(), any(), capture(slot))
+            AppOpenAd.load(any(), capture(slot))
         } answers {
             slot.captured.onAdFailedToLoad(mockk())
         }
@@ -305,7 +306,7 @@ class TestAdsCoreManager {
         showingField.setBoolean(inner, true)
 
         mockkStatic(AppOpenAd::class)
-        justRun { AppOpenAd.load(any(), any(), any(), any()) }
+        justRun { AppOpenAd.load(any(), any()) }
 
         val method = inner.javaClass.getDeclaredMethod(
             "showAdIfAvailable",
@@ -316,7 +317,7 @@ class TestAdsCoreManager {
         method.isAccessible = true
         method.invoke(inner, mockk<Activity>(), mockk<OnShowAdCompleteListener>(), noopContinuation)
 
-        verify(exactly = 0) { AppOpenAd.load(any(), any(), any(), any()) }
+        verify(exactly = 0) { AppOpenAd.load(any(), any()) }
         println("🏁 [TEST DONE] showAdIfAvailable ignores when already showing")
     }
 
@@ -339,8 +340,8 @@ class TestAdsCoreManager {
         val inner = mgrField.get(manager)!!
 
         mockkStatic(AppOpenAd::class)
-        val slot = slot<AppOpenAd.AppOpenAdLoadCallback>()
-        every { AppOpenAd.load(any(), any(), any(), capture(slot)) } answers {}
+        val slot = slot<AdLoadCallback<AppOpenAd>>()
+        every { AppOpenAd.load(any(), capture(slot)) } answers {}
 
         inner.javaClass.getDeclaredMethod("loadAd", Context::class.java).apply {
             isAccessible = true
@@ -351,7 +352,7 @@ class TestAdsCoreManager {
             invoke(inner, context)
         }
 
-        verify(exactly = 1) { AppOpenAd.load(any(), any(), any(), any()) }
+        verify(exactly = 1) { AppOpenAd.load(any(), any()) }
 
         slot.captured.onAdLoaded(mockk())
 
@@ -360,7 +361,7 @@ class TestAdsCoreManager {
             invoke(inner, context)
         }
 
-        verify(exactly = 2) { AppOpenAd.load(any(), any(), any(), any()) }
+        verify(exactly = 2) { AppOpenAd.load(any(), any()) }
         println("🏁 [TEST DONE] concurrent load requests chain correctly")
     }
 
@@ -383,7 +384,7 @@ class TestAdsCoreManager {
         val inner = mgrField.get(manager)!!
 
         mockkStatic(AppOpenAd::class)
-        every { AppOpenAd.load(any(), any(), any(), any()) } throws RuntimeException("fail")
+        every { AppOpenAd.load(any(), any()) } throws RuntimeException("fail")
 
         val method = inner.javaClass.getDeclaredMethod("loadAd", Context::class.java)
         method.isAccessible = true
@@ -413,12 +414,12 @@ class TestAdsCoreManager {
         runBlocking { manager.initializeAds("unit") }
 
         mockkStatic(AppOpenAd::class)
-        justRun { AppOpenAd.load(any(), any(), any(), any()) }
+        justRun { AppOpenAd.load(any(), any()) }
 
         manager.showAdIfAvailable(mockk(), testScope)
 
         assert(!slot.captured)
-        verify(exactly = 0) { AppOpenAd.load(any(), any(), any(), any()) }
+        verify(exactly = 0) { AppOpenAd.load(any(), any()) }
         println("🏁 [TEST DONE] ads disabled by default when debug build")
     }
 
@@ -439,12 +440,12 @@ class TestAdsCoreManager {
         runBlocking { manager.initializeAds("unit") }
 
         mockkStatic(AppOpenAd::class)
-        justRun { AppOpenAd.load(any(), any(), any(), any()) }
+        justRun { AppOpenAd.load(any(), any()) }
 
         manager.showAdIfAvailable(mockk(), testScope)
 
         assert(slot.captured)
-        verify { AppOpenAd.load(any(), any(), any(), any()) }
+        verify { AppOpenAd.load(any(), any()) }
         println("🏁 [TEST DONE] ads enabled by default when release build")
     }
 

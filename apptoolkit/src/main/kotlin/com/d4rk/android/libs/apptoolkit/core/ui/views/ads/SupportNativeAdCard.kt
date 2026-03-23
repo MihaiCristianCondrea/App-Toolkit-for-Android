@@ -18,6 +18,8 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.views.ads
 
 import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
@@ -34,7 +36,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
@@ -43,14 +44,13 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdLoader
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.nativead.MediaView
-import com.google.android.gms.ads.nativead.NativeAd
-import com.google.android.gms.ads.nativead.NativeAdOptions
-import com.google.android.gms.ads.nativead.NativeAdView
+import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
+import com.google.android.libraries.ads.mobile.sdk.nativead.MediaView
+import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
+import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoader
+import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoaderCallback
+import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdRequest
+import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
 
 /**
  * A Composable that displays a native ad from Google AdMob within a card.
@@ -79,8 +79,6 @@ fun SupportNativeAdCard(
     modifier: Modifier = Modifier,
     adUnitId: String,
 ) {
-    val context = LocalContext.current
-    val appContext = remember(context) { context.applicationContext }
     val inspectionMode = LocalInspectionMode.current
 
     val dataStore: CommonDataStore = rememberCommonDataStore()
@@ -89,7 +87,7 @@ fun SupportNativeAdCard(
     if (inspectionMode) return
     if (!showAds || adUnitId.isBlank()) return
 
-    val adRequest: AdRequest = remember { AdRequest.Builder().build() }
+    val mainHandler: Handler = remember { Handler(Looper.getMainLooper()) }
 
     var nativeAdView by remember { mutableStateOf<NativeAdView?>(null) }
     var currentNativeAd by remember { mutableStateOf<NativeAd?>(null) }
@@ -121,34 +119,34 @@ fun SupportNativeAdCard(
     LaunchedEffect(nativeAdView, adUnitId) {
         val view: NativeAdView = nativeAdView ?: return@LaunchedEffect
 
-        val adLoader: AdLoader = AdLoader.Builder(appContext, adUnitId)
-            .forNativeAd { nativeAd ->
-                currentNativeAd?.destroy()
-                currentNativeAd = nativeAd
-
-                bindSupportNativeAd(adView = view, nativeAd = nativeAd)
-                view.isVisible = true
-            }
-            .withNativeAdOptions(
-                NativeAdOptions.Builder()
-                    .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT)
-                    .build()
-            )
-            .withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    view.isVisible = false
-                }
-            })
-            .build()
+        val adRequest: NativeAdRequest = NativeAdRequest.Builder(
+            adUnitId,
+            listOf(NativeAd.NativeAdType.NATIVE)
+        ).build()
 
         view.isVisible = false
-        adLoader.loadAd(adRequest)
+        NativeAdLoader.load(
+            adRequest,
+            object : NativeAdLoaderCallback {
+                override fun onNativeAdLoaded(nativeAd: NativeAd) {
+                    mainHandler.post {
+                        currentNativeAd?.destroy()
+                        currentNativeAd = nativeAd
+                        bindSupportNativeAd(adView = view, nativeAd = nativeAd)
+                        view.isVisible = true
+                    }
+                }
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mainHandler.post { view.isVisible = false }
+                }
+            }
+        )
     }
 }
 
 private fun bindSupportNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
     val mediaView: MediaView = adView.findViewById(R.id.native_ad_media)
-    adView.mediaView = mediaView
     val mediaContent = nativeAd.mediaContent
     if (mediaContent == null) {
         mediaView.isVisible = false
@@ -201,5 +199,5 @@ private fun bindSupportNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
         callToActionView.isVisible = true
     }
 
-    adView.setNativeAd(nativeAd)
+    adView.registerNativeAd(nativeAd, mediaView)
 }

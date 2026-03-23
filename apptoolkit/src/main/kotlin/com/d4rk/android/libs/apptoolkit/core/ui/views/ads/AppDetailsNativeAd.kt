@@ -18,6 +18,8 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.views.ads
 
 import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
@@ -34,19 +36,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdLoader
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.nativead.NativeAd
-import com.google.android.gms.ads.nativead.NativeAdOptions
-import com.google.android.gms.ads.nativead.NativeAdView
+import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
+import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
+import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoader
+import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoaderCallback
+import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdRequest
+import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
 import com.google.android.material.button.MaterialButton
 
 /**
@@ -76,7 +76,6 @@ fun AppDetailsNativeAd(
     modifier: Modifier = Modifier,
     adsConfig: AdsConfig
 ) {
-    val context = LocalContext.current
     val inspectionMode = LocalInspectionMode.current
     val showAds: Boolean = rememberAdsEnabled()
 
@@ -89,7 +88,7 @@ fun AppDetailsNativeAd(
         return
     }
 
-    val adRequest: AdRequest = remember { AdRequest.Builder().build() }
+    val mainHandler: Handler = remember { Handler(Looper.getMainLooper()) }
 
     var nativeAdView by remember { mutableStateOf<NativeAdView?>(null) }
     var currentNativeAd by remember { mutableStateOf<NativeAd?>(null) }
@@ -114,30 +113,32 @@ fun AppDetailsNativeAd(
         }
     )
 
-    LaunchedEffect(nativeAdView, adsConfig.bannerAdUnitId, adRequest) {
+    LaunchedEffect(nativeAdView, adsConfig.bannerAdUnitId) {
         val view: NativeAdView = nativeAdView ?: return@LaunchedEffect
 
-        val adLoader: AdLoader = AdLoader.Builder(context, adsConfig.bannerAdUnitId)
-            .forNativeAd { nativeAd ->
-                currentNativeAd?.destroy()
-                currentNativeAd = nativeAd
-                bindAppDetailsNativeAd(adView = view, nativeAd = nativeAd)
-                view.isVisible = true
-            }
-            .withNativeAdOptions(
-                NativeAdOptions.Builder()
-                    .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT)
-                    .build()
-            )
-            .withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    view.isVisible = false
+        val adRequest: NativeAdRequest = NativeAdRequest.Builder(
+            adsConfig.bannerAdUnitId,
+            listOf(NativeAd.NativeAdType.NATIVE)
+        ).build()
+        NativeAdLoader.load(
+            adRequest,
+            object : NativeAdLoaderCallback {
+                override fun onNativeAdLoaded(nativeAd: NativeAd) {
+                    mainHandler.post {
+                        currentNativeAd?.destroy()
+                        currentNativeAd = nativeAd
+                        bindAppDetailsNativeAd(adView = view, nativeAd = nativeAd)
+                        view.isVisible = true
+                    }
                 }
-            })
-            .build()
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mainHandler.post { view.isVisible = false }
+                }
+            }
+        )
 
         view.isVisible = false
-        adLoader.loadAd(adRequest)
     }
 }
 
@@ -201,5 +202,5 @@ private fun bindAppDetailsNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
         callToActionView.isVisible = true
     }
 
-    adView.setNativeAd(nativeAd)
+    adView.registerNativeAd(nativeAd, null)
 }
