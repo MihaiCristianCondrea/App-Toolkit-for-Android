@@ -41,14 +41,6 @@ if (hasGoogleServicesConfig) {
     apply(plugin = libs.plugins.firebase.performance.get().pluginId)
 }
 
-configurations.configureEach {
-    exclude(group = "org.chromium.net", module = "cronet-fallback")
-    exclude(group = "org.chromium.net", module = "httpengine-native-provider")
-    exclude(group = "org.chromium.net", module = "cronet-common")
-    exclude(group = "org.chromium.net", module = "cronet-api")
-    exclude(group = "org.chromium.net", module = "cronet-shared")
-}
-
 android {
     namespace = "com.d4rk.android.apps.apptoolkit"
     compileSdk {
