@@ -22,7 +22,7 @@ import android.content.Context
 import android.os.Build
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.getVersionInfo
 
-class DeviceInfo() {
+class DeviceInfo {
     private var versionCode: Long = -1
     private var versionName: String? = null
     private val buildVersion: String = Build.VERSION.INCREMENTAL ?: Build.UNKNOWN

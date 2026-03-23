@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ThemePalettePager(
     pagerState: PagerState,
-    pages: List<@Composable () -> Unit>,
+    pages: List<@Composable () -> Unit>, // FIXME: Parameter 'pages' has runtime-determined stability
     modifier: Modifier = Modifier,
 ) {
     HorizontalPager(

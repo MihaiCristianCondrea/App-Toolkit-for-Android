@@ -89,7 +89,7 @@ fun GeneralSettingsScreen(
 @Composable
 fun GeneralSettingsContent(
     screenState: UiStateScreen<GeneralSettingsUiState>,
-    contentProvider: GeneralSettingsContentProvider,
+    contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
     paddingValues: PaddingValues,
     snackbarHostState: SnackbarHostState,
 ) {

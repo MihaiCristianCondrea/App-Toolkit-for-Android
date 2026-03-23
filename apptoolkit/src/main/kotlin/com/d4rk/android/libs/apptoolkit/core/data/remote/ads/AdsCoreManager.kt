@@ -93,7 +93,7 @@ open class AdsCoreManager(
         private var loadTime: Long = 0
 
         /** Loads a new ad if none is available. */
-        fun loadAd(context: Context) {
+        fun loadAd(context: Context) { // FIXME: Parameter "context" is never used
             if (isLoadingAd || isAdAvailable()) {
                 return
             }
@@ -107,7 +107,7 @@ open class AdsCoreManager(
                         loadTime = Date().time
                     }
 
-                    override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    override fun onAdFailedToLoad(adError: LoadAdError) {
                         isLoadingAd = false
                     }
                 })
