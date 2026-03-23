@@ -88,7 +88,6 @@ android {
 }
 
 dependencies {
-
     // AndroidX (Core / platform)
     api(dependencyNotation = libs.bundles.androidx.core)
     api(dependencyNotation = libs.androidx.window)
