@@ -77,7 +77,7 @@ fun AdBanner(
         AdView(context)
     }
 
-    LaunchedEffect(key1 = adView, key2 = showAds, key3 = adsConfig.bannerAdUnitId, key4 = adsConfig.adSize) {
+    LaunchedEffect(adView, showAds, adsConfig.bannerAdUnitId, adsConfig.adSize) {
         if (!showAds) {
             isAdLoaded = false
             return@LaunchedEffect
@@ -90,7 +90,7 @@ fun AdBanner(
         ).build()
         adView.loadAd(
             adRequest,
-            object : AdLoadCallback<BannerAd>() {
+            object : AdLoadCallback<BannerAd> {
                 override fun onAdLoaded(ad: BannerAd) {
                     mainHandler.post { isAdLoaded = true }
                 }

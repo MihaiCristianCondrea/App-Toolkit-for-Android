@@ -100,7 +100,7 @@ open class AdsCoreManager(
             isLoadingAd = true
             val request = AdRequest.Builder(appOpenUnitId).build()
             AppOpenAd.load(
-                request, object : AdLoadCallback<AppOpenAd>() {
+                request, object : AdLoadCallback<AppOpenAd> {
                     override fun onAdLoaded(ad: AppOpenAd) {
                         appOpenAd = ad
                         isLoadingAd = false
