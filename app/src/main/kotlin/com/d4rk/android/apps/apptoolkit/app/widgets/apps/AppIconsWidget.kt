@@ -70,7 +70,7 @@ class AppIconsWidget : GlanceAppWidget() {
         provideContent { AppIconsWidgetContent(apps = apps) }
     }
 
-    private suspend fun loadApps(context: Context): List<WidgetAppEntry> {
+    private suspend fun loadApps(context: Context): ImmutableList<WidgetAppEntry> {
         val fetchAppsUseCase = GlobalContext.get().get<FetchDeveloperAppsUseCase>()
         val apps = when (val state = fetchAppsUseCase().first { it !is DataState.Loading }) {
             is DataState.Success -> state.data
@@ -80,11 +80,11 @@ class AppIconsWidget : GlanceAppWidget() {
 
         return apps.ifEmpty { listOf(createFallbackEntry(context)) }
             .map { app ->
-            WidgetAppEntry(
-                app = app,
-                icon = resolveAppIcon(context = context, packageName = app.packageName),
-            )
-        }
+                WidgetAppEntry(
+                    app = app,
+                    icon = resolveAppIcon(context = context, packageName = app.packageName),
+                )
+            }
             .toImmutableList()
     }
 
