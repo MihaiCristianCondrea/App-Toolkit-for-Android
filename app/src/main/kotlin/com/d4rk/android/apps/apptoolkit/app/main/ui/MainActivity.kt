@@ -30,7 +30,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
-import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
@@ -82,7 +81,8 @@ class MainActivity : AppCompatActivity() {
                     async(dispatchers.default) {
                         MobileAds.initialize(
                             this@MainActivity,
-                            InitializationConfig.Builder(getString(R.string.ad_mob_app_id)).build()
+                            InitializationConfig.Builder(getString(com.d4rk.android.libs.apptoolkit.R.string.ad_mob_app_id))
+                                .build()
                         ) {}
                     }
                 val consentInitialization =
