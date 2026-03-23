@@ -18,13 +18,14 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.views.ads
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,10 +36,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
+import com.google.android.libraries.ads.mobile.sdk.banner.AdView
+import com.google.android.libraries.ads.mobile.sdk.banner.BannerAd
+import com.google.android.libraries.ads.mobile.sdk.banner.BannerAdRequest
+import com.google.android.libraries.ads.mobile.sdk.common.AdLoadCallback
+import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
 
 /**
  * A Composable function that displays a banner ad from Google AdMob.
@@ -68,38 +71,35 @@ fun AdBanner(
 
     var isAdLoaded by remember(adsConfig.bannerAdUnitId) { mutableStateOf(false) }
 
-    val adRequest = remember { AdRequest.Builder().build() }
+    val mainHandler: Handler = remember { Handler(Looper.getMainLooper()) }
 
     val adView = remember(adsConfig.bannerAdUnitId, adsConfig.adSize) {
-        AdView(context).apply {
-            this.adUnitId = adsConfig.bannerAdUnitId
-            setAdSize(adsConfig.adSize)
-        }
+        AdView(context)
     }
 
-    DisposableEffect(key1 = adView) {
-        onDispose {
-            adView.destroy()
-        }
-    }
-
-    LaunchedEffect(key1 = adView, key2 = adRequest, key3 = showAds) {
+    LaunchedEffect(adView, showAds, adsConfig.bannerAdUnitId, adsConfig.adSize) {
         if (!showAds) {
             isAdLoaded = false
             return@LaunchedEffect
         }
 
         isAdLoaded = false
-        adView.adListener = object : com.google.android.gms.ads.AdListener() {
-            override fun onAdLoaded() {
-                isAdLoaded = true
-            }
+        val adRequest = BannerAdRequest.Builder(
+            adsConfig.bannerAdUnitId,
+            adsConfig.adSize
+        ).build()
+        adView.loadAd(
+            adRequest,
+            object : AdLoadCallback<BannerAd> {
+                override fun onAdLoaded(ad: BannerAd) {
+                    mainHandler.post { isAdLoaded = true }
+                }
 
-            override fun onAdFailedToLoad(loadAdError: com.google.android.gms.ads.LoadAdError) {
-                isAdLoaded = false
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mainHandler.post { isAdLoaded = false }
+                }
             }
-        }
-        adView.loadAd(adRequest)
+        )
     }
 
     AnimatedVisibility(
@@ -113,12 +113,5 @@ fun AdBanner(
                 .height(adsConfig.adSize.height.dp),
             factory = { adView }
         )
-
-        LifecycleResumeEffect(key1 = adView) {
-            adView.resume()
-            onPauseOrDispose {
-                adView.pause()
-            }
-        }
     }
 }

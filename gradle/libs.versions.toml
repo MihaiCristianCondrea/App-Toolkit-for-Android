@@ -24,7 +24,7 @@ googleMaterial = "1.13.0"
 googlePlayInAppReview = "2.0.2"
 googlePlayInAppUpdate = "2.1.0"
 googlePlayIntegrity = "1.6.0"
-googlePlayServicesAds = "25.1.0"
+googleAdsMobileSdk = "0.24.0-beta03"
 googleUserMessagingPlatform = "4.0.0"
 firebaseBom = "34.11.0"
 firebaseCrashlyticsPlugin = "3.0.6"
@@ -102,7 +102,7 @@ android-billing = { module = "com.android.billingclient:billing", version.ref = 
 google-accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "googleAccompanistDrawablePainter" }
 google-guava = { module = "com.google.guava:guava", version.ref = "googleGuava" }
 google-material = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
-google-play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "googlePlayServicesAds" }
+google-ads-mobile-sdk = { module = "com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk", version.ref = "googleAdsMobileSdk" }
 google-user-messaging-platform = { module = "com.google.android.ump:user-messaging-platform", version.ref = "googleUserMessagingPlatform" }
 google-play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "googlePlayInAppUpdate" }
 google-play-integrity = { module = "com.google.android.play:integrity", version.ref = "googlePlayIntegrity" }
@@ -222,7 +222,7 @@ google = [
     "google-accompanist-drawablepainter",
     "google-guava",
     "google-material",
-    "google-play-services-ads",
+    "google-ads-mobile-sdk",
     "google-user-messaging-platform",
 ]
 

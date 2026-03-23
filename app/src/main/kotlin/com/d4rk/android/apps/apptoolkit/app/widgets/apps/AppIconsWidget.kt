@@ -24,6 +24,7 @@ import android.graphics.drawable.Drawable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.createBitmap
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
@@ -74,7 +75,8 @@ class AppIconsWidget : GlanceAppWidget() {
             is DataState.Loading -> emptyList()
         }
 
-        val source = if (apps.isNotEmpty()) apps else listOf(createFallbackEntry(context))
+        val source =
+            if (apps.isNotEmpty()) apps else listOf(createFallbackEntry(context)) // FIXME: Replace with 'ifEmpty {...}'
         return source.map { app ->
             WidgetAppEntry(
                 app = app,
@@ -107,7 +109,9 @@ class AppIconsWidget : GlanceAppWidget() {
 }
 
 @Composable
-private fun AppIconsWidgetContent(apps: List<WidgetAppEntry>) {
+private fun AppIconsWidgetContent(
+    apps: List<WidgetAppEntry> // FIXME: Unstable parameter 'apps' prevents composable from being skippable
+) {
     LazyColumn(
         modifier = GlanceModifier
             .fillMaxSize()
@@ -152,7 +156,7 @@ private fun GlanceModifier.appWidgetClickAction(packageName: String): GlanceModi
 private fun Drawable.toBitmap(sizePx: Int): Bitmap {
     val width = intrinsicWidth.takeIf { it > 0 } ?: sizePx
     val height = intrinsicHeight.takeIf { it > 0 } ?: sizePx
-    return Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).also { bitmap ->
+    return createBitmap(width, height).also { bitmap ->
         val canvas = Canvas(bitmap)
         setBounds(0, 0, canvas.width, canvas.height)
         draw(canvas)

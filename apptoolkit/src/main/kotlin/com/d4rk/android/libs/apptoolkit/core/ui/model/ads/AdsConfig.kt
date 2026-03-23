@@ -18,7 +18,7 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.model.ads
 
 import androidx.compose.runtime.Immutable
-import com.google.android.gms.ads.AdSize
+import com.google.android.libraries.ads.mobile.sdk.banner.AdSize
 
 /**
  * Data class representing the configuration for displaying ads.

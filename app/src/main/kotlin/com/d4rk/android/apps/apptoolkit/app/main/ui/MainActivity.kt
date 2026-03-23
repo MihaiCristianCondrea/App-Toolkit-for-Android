@@ -37,7 +37,8 @@ import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
-import com.google.android.gms.ads.MobileAds
+import com.google.android.libraries.ads.mobile.sdk.MobileAds
+import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -77,7 +78,13 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             coroutineScope {
                 val adsInitialization =
-                    async(dispatchers.default) { MobileAds.initialize(this@MainActivity) {} }
+                    async(dispatchers.default) {
+                        MobileAds.initialize(
+                            this@MainActivity,
+                            InitializationConfig.Builder(getString(com.d4rk.android.libs.apptoolkit.R.string.ad_mob_app_id))
+                                .build()
+                        ) {}
+                    }
                 val consentInitialization =
                     async(dispatchers.io) { applyInitialConsentUseCase.invoke() }
                 awaitAll(adsInitialization, consentInitialization)

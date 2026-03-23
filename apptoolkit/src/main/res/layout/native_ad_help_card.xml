@@ -15,7 +15,7 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -135,4 +135,4 @@
             tools:text="Install" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.gms.ads.nativead.NativeAdView>
+</com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView>

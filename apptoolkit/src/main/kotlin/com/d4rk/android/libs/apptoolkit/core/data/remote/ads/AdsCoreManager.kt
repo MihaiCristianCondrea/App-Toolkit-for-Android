@@ -19,16 +19,19 @@ package com.d4rk.android.libs.apptoolkit.core.data.remote.ads
 
 import android.app.Activity
 import android.content.Context
+import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.utils.interfaces.OnShowAdCompleteListener
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.appopen.AppOpenAd
+import com.google.android.libraries.ads.mobile.sdk.MobileAds
+import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAd
+import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAdEventCallback
+import com.google.android.libraries.ads.mobile.sdk.common.AdLoadCallback
+import com.google.android.libraries.ads.mobile.sdk.common.AdRequest
+import com.google.android.libraries.ads.mobile.sdk.common.FullScreenContentError
+import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
+import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -58,7 +61,12 @@ open class AdsCoreManager(
             dataStore.ads(default = !buildInfoProvider.isDebugBuild).first()
         }
         if (isAdsChecked) {
-            withContext(dispatchers.io) { MobileAds.initialize(context) }
+            withContext(dispatchers.io) {
+                MobileAds.initialize(
+                    context,
+                    InitializationConfig.Builder(context.getString(R.string.ad_mob_app_id)).build()
+                ) {}
+            }
             appOpenAdManager = AppOpenAdManager(appOpenUnitId)
         }
     }
@@ -85,22 +93,21 @@ open class AdsCoreManager(
         private var loadTime: Long = 0
 
         /** Loads a new ad if none is available. */
-        fun loadAd(context: Context) {
+        fun loadAd(context: Context) { // FIXME: Parameter "context" is never used
             if (isLoadingAd || isAdAvailable()) {
                 return
             }
             isLoadingAd = true
-            val request = AdRequest.Builder().build()
-            val appContext = context.applicationContext ?: context
+            val request = AdRequest.Builder(appOpenUnitId).build()
             AppOpenAd.load(
-                appContext, appOpenUnitId, request, object : AppOpenAd.AppOpenAdLoadCallback() {
+                request, object : AdLoadCallback<AppOpenAd> {
                     override fun onAdLoaded(ad: AppOpenAd) {
                         appOpenAd = ad
                         isLoadingAd = false
                         loadTime = Date().time
                     }
 
-                    override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    override fun onAdFailedToLoad(adError: LoadAdError) {
                         isLoadingAd = false
                     }
                 })
@@ -143,7 +150,7 @@ open class AdsCoreManager(
                 return
             }
 
-            appOpenAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+            appOpenAd?.adEventCallback = object : AppOpenAdEventCallback {
                 override fun onAdDismissedFullScreenContent() {
                     appOpenAd = null
                     isShowingAd = false
@@ -151,7 +158,7 @@ open class AdsCoreManager(
                     loadAd(context = this@AdsCoreManager.context)
                 }
 
-                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                override fun onAdFailedToShowFullScreenContent(fullScreenContentError: FullScreenContentError) {
                     appOpenAd = null
                     isShowingAd = false
                     onShowAdCompleteListener.onShowAdComplete()
