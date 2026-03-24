@@ -22,6 +22,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
@@ -50,6 +51,8 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.widgets.apps.domain.actions.OpenAppOrStoreAction
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.first
 import org.koin.core.context.GlobalContext
 
@@ -67,7 +70,7 @@ class AppIconsWidget : GlanceAppWidget() {
         provideContent { AppIconsWidgetContent(apps = apps) }
     }
 
-    private suspend fun loadApps(context: Context): List<WidgetAppEntry> {
+    private suspend fun loadApps(context: Context): ImmutableList<WidgetAppEntry> {
         val fetchAppsUseCase = GlobalContext.get().get<FetchDeveloperAppsUseCase>()
         val apps = when (val state = fetchAppsUseCase().first { it !is DataState.Loading }) {
             is DataState.Success -> state.data
@@ -75,14 +78,14 @@ class AppIconsWidget : GlanceAppWidget() {
             is DataState.Loading -> emptyList()
         }
 
-        val source =
-            if (apps.isNotEmpty()) apps else listOf(createFallbackEntry(context)) // FIXME: Replace with 'ifEmpty {...}'
-        return source.map { app ->
-            WidgetAppEntry(
-                app = app,
-                icon = resolveAppIcon(context = context, packageName = app.packageName),
-            )
-        }
+        return apps.ifEmpty { listOf(createFallbackEntry(context)) }
+            .map { app ->
+                WidgetAppEntry(
+                    app = app,
+                    icon = resolveAppIcon(context = context, packageName = app.packageName),
+                )
+            }
+            .toImmutableList()
     }
 
     private fun createFallbackEntry(context: Context): AppInfo {
@@ -110,7 +113,7 @@ class AppIconsWidget : GlanceAppWidget() {
 
 @Composable
 private fun AppIconsWidgetContent(
-    apps: List<WidgetAppEntry> // FIXME: Unstable parameter 'apps' prevents composable from being skippable
+    apps: ImmutableList<WidgetAppEntry>,
 ) {
     LazyColumn(
         modifier = GlanceModifier
@@ -141,6 +144,7 @@ private fun AppIconsWidgetContent(
     }
 }
 
+@Immutable
 private data class WidgetAppEntry(
     val app: AppInfo,
     val icon: Bitmap,

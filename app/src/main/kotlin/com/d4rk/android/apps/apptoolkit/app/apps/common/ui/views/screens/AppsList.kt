@@ -30,8 +30,6 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -85,22 +83,20 @@ fun AppsList(
 ) {
     val apps: ImmutableList<AppInfo> = uiHomeScreen.apps
 
-    val columnCount by remember(windowWidthSizeClass) {
-        derivedStateOf {
-            when (windowWidthSizeClass) {
-                AppWindowWidthSizeClass.Compact -> 2
-                AppWindowWidthSizeClass.Medium -> 3
-                AppWindowWidthSizeClass.Expanded -> 4
-                AppWindowWidthSizeClass.Large -> 5
-                AppWindowWidthSizeClass.ExtraLarge -> 6
-            }
+    val columnCount = remember(windowWidthSizeClass) {
+        when (windowWidthSizeClass) {
+            AppWindowWidthSizeClass.Compact -> 2
+            AppWindowWidthSizeClass.Medium -> 3
+            AppWindowWidthSizeClass.Expanded -> 4
+            AppWindowWidthSizeClass.Large -> 5
+            AppWindowWidthSizeClass.ExtraLarge -> 6
         }
     }
 
     val listState = rememberLazyGridState()
 
-    val items: ImmutableList<AppListItem> by remember(apps, adsEnabled, adFrequency) {
-        derivedStateOf { buildAppListItems(apps , adsEnabled , adFrequency) }
+    val items: ImmutableList<AppListItem> = remember(apps, adsEnabled, adFrequency) {
+        buildAppListItems(apps, adsEnabled, adFrequency)
     }
 
     val adsConfig: AdsConfig = koinInject(qualifier = named("apps_list_native_ad"))
@@ -115,7 +111,7 @@ fun AppsList(
         onAppClick = onAppClick,
         onShareClick = onShareClick,
         onFirstVisibleAppChanged = onFirstVisibleAppChanged,
-        adUnitId = adsConfig.bannerAdUnitId
+        adUnitId = adsConfig.bannerAdUnitId,
     )
 }
 
@@ -195,9 +191,7 @@ private fun AppsGrid(
             when (item) {
                 is AppListItem.App -> {
                     val packageName = item.appInfo.packageName
-                    val isFavorite by remember(favorites, packageName) {
-                        derivedStateOf { favorites.contains(packageName) }
-                    }
+                    val isFavorite = favorites.contains(packageName)
                     AppCardItem(
                         item = item,
                         isFavorite = isFavorite,
@@ -250,10 +244,11 @@ private fun AppCardItem(
 ) {
     val appInfo = item.appInfo
     AppCard(
-        appInfo = appInfo ,
-            isFavorite = isFavorite ,
-            onFavoriteToggle = { onFavoriteToggle(appInfo.packageName) } ,
-            onAppClick = onAppClick ,
-            onShareClick = onShareClick ,
-            modifier = modifier)
+        appInfo = appInfo,
+        isFavorite = isFavorite,
+        onFavoriteToggle = { onFavoriteToggle(appInfo.packageName) },
+        onAppClick = onAppClick,
+        onShareClick = onShareClick,
+        modifier = modifier,
+    )
 }

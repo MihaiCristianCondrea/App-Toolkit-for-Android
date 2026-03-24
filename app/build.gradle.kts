@@ -45,7 +45,6 @@ configurations.configureEach {
     exclude(group = "org.chromium.net", module = "cronet-fallback")
     exclude(group = "org.chromium.net", module = "httpengine-native-provider")
     exclude(group = "org.chromium.net", module = "cronet-common")
-    exclude(group = "org.chromium.net", module = "cronet-api")
     exclude(group = "org.chromium.net", module = "cronet-shared")
 }
 
