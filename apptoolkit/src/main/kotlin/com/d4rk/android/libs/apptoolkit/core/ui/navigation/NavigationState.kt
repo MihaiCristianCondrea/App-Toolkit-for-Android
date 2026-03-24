@@ -87,7 +87,7 @@ fun <T : StableNavKey> rememberTypedNavBackStack(
     return rememberSaveable(
         saver = navBackStackSaver()
     ) {
-        NavBackStack(*initialElements.toTypedArray())
+        buildNavBackStack(initialElements)
     }
 }
 
@@ -97,8 +97,13 @@ fun <T : StableNavKey> rememberTypedNavBackStack(
 private fun <T : StableNavKey> navBackStackSaver(): Saver<NavBackStack<T>, List<T>> =
     Saver(
         save = { backStack -> backStack.toList() },
-        restore = { savedRoutes -> NavBackStack(*savedRoutes.toTypedArray()) }
+        restore = { savedRoutes -> buildNavBackStack(savedRoutes) }
     )
+
+private fun <T : StableNavKey> buildNavBackStack(routes: List<T>): NavBackStack<T> =
+    NavBackStack<T>().apply {
+        routes.forEach(::add)
+    }
 
 @Stable
 class NavigationState<T : StableNavKey>(
