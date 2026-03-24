@@ -10,6 +10,7 @@ androidxWindow = "1.5.1"
 androidxConstraintlayoutCompose = "1.1.1"
 androidxWorkRuntime = "2.11.1"
 androidxActivityCompose = "1.13.0"
+animationGraphics = "1.10.5"
 androidxComposeBom = "2026.03.00"
 androidxComposeFoundationLayout = "1.10.5"
 androidxComposeMaterial3 = "1.5.0-alpha15"
@@ -65,6 +66,7 @@ androidx-window = { module = "androidx.window:window", version.ref = "androidxWi
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidxConstraintlayoutCompose" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWorkRuntime" }
 androidx-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivityCompose" }
+androidx-compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics", version.ref = "animationGraphics" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "androidxComposeFoundationLayout" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
@@ -179,6 +181,7 @@ androidx-core = [
 
 androidx-compose = [
     "androidx-compose-activity",
+    "androidx-compose-animation-graphics",
     "androidx-compose-foundation-layout",
     "androidx-compose-material-icons-extended",
     "androidx-compose-material3",
