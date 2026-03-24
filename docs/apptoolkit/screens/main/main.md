@@ -24,6 +24,8 @@ still giving host apps a ready-to-go default shell that can be customized or rep
 ### Navigation behavior helpers
 - **`handleNavigationItemClick(...)`**: default drawer click handling for common routes:
   Settings, Help & Feedback, Updates (changelog), Share with support for host overrides.
+- Navigation key/state serialization guidance: see
+  [`docs/general/core/serialization-boundaries.md`](../../../general/core/serialization-boundaries.md).
 
 ### App update & GMS host abstractions
 - **In-app update flow** (Play Core):

@@ -27,6 +27,7 @@ version = publishingVersion.get()
 plugins {
     alias(notation = libs.plugins.android.library)
     alias(notation = libs.plugins.kotlin.compose)
+    alias(notation = libs.plugins.kotlin.parcelize)
     alias(notation = libs.plugins.kotlin.serialization)
     alias(notation = libs.plugins.about.libraries)
     alias(notation = libs.plugins.mannodermaus.android.junit5)

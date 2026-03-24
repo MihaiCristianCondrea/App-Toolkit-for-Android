@@ -24,20 +24,18 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSerializable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntryDecorator
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import androidx.navigation3.runtime.serialization.NavBackStackSerializer
-import androidx.savedstate.compose.serialization.serializers.MutableStateSerializer
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.serialization.serializer
 
 /**
  * Remembers navigation state for a set of top-level destinations.
@@ -45,15 +43,14 @@ import kotlinx.serialization.serializer
  * Generic + type-safe: keeps your NavBackStack typed as T instead of collapsing to NavKey.
  */
 @Composable
-inline fun <reified T : StableNavKey> rememberNavigationState(
+fun <T : StableNavKey> rememberNavigationState(
     startRoute: T,
     topLevelRoutes: ImmutableSet<T>,
 ): NavigationState<T> {
     val stableStartRoute by rememberUpdatedState(newValue = startRoute)
-    val topLevelRouteState: MutableState<T> = rememberSerializable(
+    val topLevelRouteState: MutableState<T> = rememberSaveable(
         stableStartRoute,
-        topLevelRoutes,
-        serializer = MutableStateSerializer(serializer<T>())
+        topLevelRoutes
     ) {
         mutableStateOf(stableStartRoute)
     }
@@ -76,23 +73,37 @@ inline fun <reified T : StableNavKey> rememberNavigationState(
 /**
  * Remembers a type-safe [NavBackStack] that is preserved across process death and configuration changes.
  *
- * This function uses [rememberSerializable] to persist the back stack, ensuring that the
- * navigation history of type [T] is restored correctly.
+ * This function uses [rememberSaveable] with Parcelable route keys to persist the back stack,
+ * ensuring that navigation history of type [T] is restored correctly without JSON serialization.
  *
  * @param T The type of the navigation keys, which must implement [StableNavKey].
  * @param initialElements The initial list of destinations to populate the back stack with.
  * @return A [NavBackStack] instance initialized with the provided elements.
  */
 @Composable
-inline fun <reified T : StableNavKey> rememberTypedNavBackStack(
+fun <T : StableNavKey> rememberTypedNavBackStack(
     initialElements: ImmutableList<T> = persistentListOf(),
 ): NavBackStack<T> {
-    return rememberSerializable(
-        serializer = NavBackStackSerializer(elementSerializer = serializer<T>())
+    return rememberSaveable(
+        saver = navBackStackSaver()
     ) {
-        NavBackStack(*initialElements.toTypedArray())
+        buildNavBackStack(initialElements)
     }
 }
+
+/**
+ * Saves and restores [NavBackStack] using Bundle-compatible Parcelable route keys.
+ */
+private fun <T : StableNavKey> navBackStackSaver(): Saver<NavBackStack<T>, List<T>> =
+    Saver(
+        save = { backStack -> backStack.toList() },
+        restore = { savedRoutes -> buildNavBackStack(savedRoutes) }
+    )
+
+private fun <T : StableNavKey> buildNavBackStack(routes: List<T>): NavBackStack<T> =
+    NavBackStack<T>().apply {
+        routes.forEach(::add)
+    }
 
 @Stable
 class NavigationState<T : StableNavKey>(

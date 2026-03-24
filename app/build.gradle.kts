@@ -21,6 +21,7 @@ import java.util.Properties
 plugins {
     alias(notation = libs.plugins.android.application)
     alias(notation = libs.plugins.kotlin.compose)
+    alias(notation = libs.plugins.kotlin.parcelize)
     alias(notation = libs.plugins.kotlin.serialization)
     alias(notation = libs.plugins.google.mobile.services) apply false
     alias(notation = libs.plugins.firebase.crashlytics) apply false
