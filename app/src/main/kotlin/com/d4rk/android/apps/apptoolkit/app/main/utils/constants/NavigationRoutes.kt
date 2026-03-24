@@ -21,19 +21,18 @@ import androidx.compose.runtime.Immutable
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.serialization.Serializable
+import kotlinx.parcelize.Parcelize
 
 @Immutable
-@Serializable
 sealed interface AppNavKey : StableNavKey
 
-@Serializable
+@Parcelize
 data object AppsListRoute : AppNavKey
 
-@Serializable
+@Parcelize
 data object FavoriteAppsRoute : AppNavKey
 
-@Serializable
+@Parcelize
 data object ComponentsRoute : AppNavKey
 
 object NavigationRoutes {

@@ -17,6 +17,7 @@
 
 package com.d4rk.android.libs.apptoolkit.core.ui.model.navigation
 
+import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.navigation3.runtime.NavKey
@@ -29,4 +30,4 @@ import androidx.navigation3.runtime.NavKey
  */
 @Immutable
 @Stable
-interface StableNavKey : NavKey
+interface StableNavKey : NavKey, Parcelable
