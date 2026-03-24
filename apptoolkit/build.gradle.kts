@@ -36,6 +36,10 @@ plugins {
 configurations.configureEach {
     exclude(group = "com.google.android.gms", module = "play-services-ads")
     exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
+    exclude(group = "org.chromium.net", module = "cronet-fallback")
+    exclude(group = "org.chromium.net", module = "httpengine-native-provider")
+    exclude(group = "org.chromium.net", module = "cronet-common")
+    exclude(group = "org.chromium.net", module = "cronet-shared")
 }
 
 android {
