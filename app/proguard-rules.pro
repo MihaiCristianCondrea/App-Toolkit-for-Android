@@ -23,3 +23,10 @@
 # Optional noise suppression (safe)
 -dontwarn kotlinx.coroutines.**
 -dontwarn io.ktor.**
+
+# Cronet classes are optional at runtime for the ads stack. In CI/release shrinking
+# environments where Cronet artifacts are not packaged, avoid failing R8 on these
+# references.
+-dontwarn org.chromium.net.**
+-dontwarn org.chromium.net.apihelpers.**
+-dontwarn org.chromium.net.impl.**
