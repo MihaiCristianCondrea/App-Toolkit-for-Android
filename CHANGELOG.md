@@ -1,3 +1,8 @@
+# Version 2.0.10:
+
+- **Minor**: Updated some color palettes
+- **Minor**: Updated dependencies to the latest stable versions.
+
 # Version 2.0.9:
 
 - **Minor**: Updated dependencies to the latest stable versions.
