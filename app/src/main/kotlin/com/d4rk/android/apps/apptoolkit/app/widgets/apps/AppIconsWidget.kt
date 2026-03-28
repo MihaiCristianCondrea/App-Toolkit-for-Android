@@ -85,16 +85,6 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
         }
     }
 
-    override suspend fun providePreview(context: Context, widgetCategory: Int) {
-        val previewApps = previewEntries(context = context)
-        provideContent {
-            AppIconsWidgetContent(
-                apps = previewApps,
-                widgetTitle = context.getString(R.string.widget_apps_title),
-            )
-        }
-    }
-
     override fun onCompositionError(
         context: Context,
         glanceId: GlanceId,
@@ -126,21 +116,6 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
             }
             .toImmutableList()
     }
-
-    private fun previewEntries(context: Context): ImmutableList<WidgetAppEntry> = listOf(
-        createFallbackEntry(context),
-        createFallbackEntry(context).copy(
-            name = context.getString(R.string.widget_apps_preview_secondary_item),
-        ),
-        createFallbackEntry(context).copy(
-            name = context.getString(R.string.widget_apps_preview_third_item),
-        ),
-    ).map { app ->
-        WidgetAppEntry(
-            app = app,
-            icon = resolveAppIcon(context = context, packageName = app.packageName),
-        )
-    }.toImmutableList()
 
     private fun createFallbackEntry(context: Context): AppInfo {
         val appName = context.applicationInfo.loadLabel(context.packageManager).toString()

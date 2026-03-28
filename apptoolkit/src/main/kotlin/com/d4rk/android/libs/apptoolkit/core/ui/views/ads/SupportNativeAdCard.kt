@@ -147,13 +147,8 @@ fun SupportNativeAdCard(
 
 private fun bindSupportNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
     val mediaView: MediaView = adView.findViewById(R.id.native_ad_media)
-    val mediaContent = nativeAd.mediaContent
-    if (mediaContent == null) {
-        mediaView.isVisible = false
-    } else {
-        mediaView.mediaContent = mediaContent
-        mediaView.isVisible = true
-    }
+    mediaView.mediaContent = nativeAd.mediaContent
+    mediaView.isVisible = true
 
     val headlineView: TextView = adView.findViewById(R.id.native_ad_headline)
     adView.headlineView = headlineView

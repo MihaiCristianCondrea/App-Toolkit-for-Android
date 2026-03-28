@@ -16,7 +16,6 @@ This document describes the current App Toolkit app widget implementation in
 ## Reliability and UX safeguards
 
 - `provideGlance` loads app data on `Dispatchers.IO` before composition, to keep main-thread work minimal.
-- `providePreview` supplies generated preview content for widget pickers where supported.
 - `onCompositionError` falls back to `widget_app_icons_error.xml`, with a retry button that triggers a full widget refresh.
 
 ## Update model
