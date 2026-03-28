@@ -20,6 +20,8 @@ package com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation
 import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -70,11 +72,21 @@ fun <T : StableNavKey> BottomNavigationBar(
                 selected = selected,
                 alwaysShowLabel = showLabels,
                 icon = {
-                    Icon(
-                        imageVector = if (selected) item.selectedIcon else item.icon,
-                        contentDescription = stringResource(id = item.title),
-                        modifier = Modifier.bounceClick()
-                    )
+                    BadgedBox(
+                        badge = {
+                            if (item.badgeText.isNotBlank()) {
+                                Badge {
+                                    Text(text = item.badgeText)
+                                }
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = if (selected) item.selectedIcon else item.icon,
+                            contentDescription = stringResource(id = item.title),
+                            modifier = Modifier.bounceClick()
+                        )
+                    }
                 },
                 label = {
                     Text(
