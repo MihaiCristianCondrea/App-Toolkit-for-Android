@@ -92,4 +92,13 @@
     <string name="components_switch_card_title">Картка перемикача</string>
     <string name="components_checkbox_title">Налаштування прапорця</string>
     <string name="components_checkbox_summary">Показує прапорець з необов’язковим описом.</string>
+
+
+    <!-- Home screen widget -->
+    <string name="widget_apps_title">Застосунки від Mihai-Cristian Condrea</string>
+    <string name="widget_apps_description">Швидко відкривайте рекомендовані застосунки від Mihai-Cristian Condrea.</string>
+    <string name="widget_apps_error_message">Зараз не вдається завантажити застосунки.</string>
+    <string name="widget_apps_error_retry">Спробувати ще раз</string>
+    <string name="widget_apps_preview_secondary_item">Календар</string>
+    <string name="widget_apps_preview_third_item">Нотатки</string>
 </resources>

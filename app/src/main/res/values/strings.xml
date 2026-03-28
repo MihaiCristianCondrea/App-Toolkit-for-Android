@@ -94,4 +94,12 @@
     <string name="summary_preference_faq_8">Your feedback on App Toolkit and its listed apps is appreciated. You can usually find a "Feedback" or "Contact" option within App Toolkit\'s settings or on the developer page on the Play Store. Feedback on the AppToolkit library itself is also welcome through the appropriate channels.</string>
     <string name="question_9">Is my data safe when using App Toolkit to find your other apps?</string>
     <string name="summary_preference_faq_9">App Toolkit primarily fetches publicly available information about listed apps. When you choose to install or use one of these apps, that app\'s own Privacy Policy applies, so be sure to review it. App Toolkit\'s data handling is outlined in its Privacy Policy.</string>
+
+    <!-- Home screen widget -->
+    <string name="widget_apps_title">Apps by Mihai-Cristian Condrea</string>
+    <string name="widget_apps_description">Quickly open featured apps by Mihai-Cristian Condrea.</string>
+    <string name="widget_apps_error_message">Unable to load apps right now.</string>
+    <string name="widget_apps_error_retry">Try again</string>
+    <string name="widget_apps_preview_secondary_item">Calendar</string>
+    <string name="widget_apps_preview_third_item">Notes</string>
 </resources>

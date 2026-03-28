@@ -92,4 +92,13 @@
     <string name="components_switch_card_title">Tarjeta de interruptor</string>
     <string name="components_checkbox_title">Preferencia de casilla</string>
     <string name="components_checkbox_summary">Muestra una casilla con un resumen opcional.</string>
+
+
+    <!-- Home screen widget -->
+    <string name="widget_apps_title">Apps de Mihai-Cristian Condrea</string>
+    <string name="widget_apps_description">Abre rápidamente apps destacadas de Mihai-Cristian Condrea.</string>
+    <string name="widget_apps_error_message">No se pueden cargar las apps en este momento.</string>
+    <string name="widget_apps_error_retry">Intentar de nuevo</string>
+    <string name="widget_apps_preview_secondary_item">Calendario</string>
+    <string name="widget_apps_preview_third_item">Notas</string>
 </resources>

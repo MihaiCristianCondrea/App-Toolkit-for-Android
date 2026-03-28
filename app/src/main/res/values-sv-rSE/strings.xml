@@ -92,4 +92,13 @@
     <string name="components_switch_card_title">Växelkort</string>
     <string name="components_checkbox_title">Kryssruteinställning</string>
     <string name="components_checkbox_summary">Visar en kryssruta med valfri sammanfattning.</string>
+
+
+    <!-- Home screen widget -->
+    <string name="widget_apps_title">Appar av Mihai-Cristian Condrea</string>
+    <string name="widget_apps_description">Öppna snabbt utvalda appar av Mihai-Cristian Condrea.</string>
+    <string name="widget_apps_error_message">Det går inte att läsa in appar just nu.</string>
+    <string name="widget_apps_error_retry">Försök igen</string>
+    <string name="widget_apps_preview_secondary_item">Kalender</string>
+    <string name="widget_apps_preview_third_item">Anteckningar</string>
 </resources>

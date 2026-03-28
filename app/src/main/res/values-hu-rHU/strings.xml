@@ -92,4 +92,13 @@
     <string name="components_switch_card_title">Kapcsoló kártya</string>
     <string name="components_checkbox_title">Jelölőnégyzet beállítás</string>
     <string name="components_checkbox_summary">Jelölőnégyzetet mutat opcionális összefoglalóval.</string>
+
+
+    <!-- Home screen widget -->
+    <string name="widget_apps_title">Mihai-Cristian Condrea alkalmazásai</string>
+    <string name="widget_apps_description">Nyisd meg gyorsan Mihai-Cristian Condrea kiemelt alkalmazásait.</string>
+    <string name="widget_apps_error_message">Az alkalmazások jelenleg nem tölthetők be.</string>
+    <string name="widget_apps_error_retry">Próbáld újra</string>
+    <string name="widget_apps_preview_secondary_item">Naptár</string>
+    <string name="widget_apps_preview_third_item">Jegyzetek</string>
 </resources>

@@ -16,20 +16,25 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:description="@string/widget_apps_description"
-    android:initialLayout="@layout/widget_app_icons_loading"
-    android:minHeight="120dp"
-    android:minWidth="120dp"
-    android:minResizeHeight="120dp"
-    android:minResizeWidth="120dp"
-    android:maxResizeHeight="250dp"
-    android:maxResizeWidth="250dp"
-    android:previewImage="@drawable/ic_launcher_foreground"
-    android:resizeMode="horizontal|vertical"
-    android:targetCellHeight="2"
-    android:targetCellWidth="2"
-    android:updatePeriodMillis="0"
-    android:widgetCategory="home_screen"
-    tools:targetApi="31" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/widget_apps_error_message"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/widget_error_action_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/widget_apps_error_retry" />
+
+</LinearLayout>
