@@ -21,10 +21,20 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 
+/**
+ * Represents an item rendered in bottom navigation surfaces (bottom bar and navigation rail).
+ *
+ * @property route Stable route key used for navigation.
+ * @property icon Icon displayed when the destination is not selected.
+ * @property selectedIcon Icon displayed when the destination is selected.
+ * @property title String resource id used for both label and content description.
+ * @property badgeText Optional badge text. When blank, no badge is shown.
+ */
 @Immutable
 data class BottomBarItem<T : StableNavKey>(
     val route: T,
     val icon: ImageVector,
     val selectedIcon: ImageVector,
-    val title: Int
+    val title: Int,
+    val badgeText: String = "",
 )

@@ -41,6 +41,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
@@ -130,13 +132,23 @@ fun <T : StableNavKey> LeftNavigationRail(
                         }
                     },
                     icon = {
-                        Icon(
-                            imageVector = if (isSelected) item.selectedIcon else item.icon,
-                            contentDescription = stringResource(item.title),
-                            modifier = Modifier
-                                .size(size = SizeConstants.TwentyFourSize)
-                                .bounceClick()
-                        )
+                        BadgedBox(
+                            badge = {
+                                if (item.badgeText.isNotBlank()) {
+                                    Badge {
+                                        Text(text = item.badgeText)
+                                    }
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = if (isSelected) item.selectedIcon else item.icon,
+                                contentDescription = stringResource(item.title),
+                                modifier = Modifier
+                                    .size(size = SizeConstants.TwentyFourSize)
+                                    .bounceClick()
+                            )
+                        }
                     },
                     label = {
                         AnimatedVisibility(
