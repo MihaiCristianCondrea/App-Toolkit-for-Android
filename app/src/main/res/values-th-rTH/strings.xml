@@ -92,4 +92,13 @@
     <string name="components_switch_card_title">การ์ดสวิตช์</string>
     <string name="components_checkbox_title">การตั้งค่ากล่องกาเครื่องหมาย</string>
     <string name="components_checkbox_summary">แสดงกล่องกาเครื่องหมายพร้อมสรุปแบบเลือกได้</string>
+
+
+    <!-- Home screen widget -->
+    <string name="widget_apps_title">แอปโดย Mihai-Cristian Condrea</string>
+    <string name="widget_apps_description">เปิดแอปเด่นจาก Mihai-Cristian Condrea ได้อย่างรวดเร็ว</string>
+    <string name="widget_apps_error_message">ไม่สามารถโหลดแอปได้ในขณะนี้</string>
+    <string name="widget_apps_error_retry">ลองอีกครั้ง</string>
+    <string name="widget_apps_preview_secondary_item">ปฏิทิน</string>
+    <string name="widget_apps_preview_third_item">บันทึกย่อ</string>
 </resources>

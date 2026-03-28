@@ -92,4 +92,13 @@
     <string name="components_switch_card_title">Anahtar kartı</string>
     <string name="components_checkbox_title">Onay kutusu tercihi</string>
     <string name="components_checkbox_summary">İsteğe bağlı özetli onay kutusu gösterir.</string>
+
+
+    <!-- Home screen widget -->
+    <string name="widget_apps_title">Mihai-Cristian Condrea uygulamaları</string>
+    <string name="widget_apps_description">Mihai-Cristian Condrea tarafından öne çıkan uygulamaları hızla açın.</string>
+    <string name="widget_apps_error_message">Uygulamalar şu anda yüklenemiyor.</string>
+    <string name="widget_apps_error_retry">Tekrar dene</string>
+    <string name="widget_apps_preview_secondary_item">Takvim</string>
+    <string name="widget_apps_preview_third_item">Notlar</string>
 </resources>

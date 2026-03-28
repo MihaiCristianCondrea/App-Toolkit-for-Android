@@ -92,4 +92,13 @@
     <string name="components_switch_card_title">切換卡片</string>
     <string name="components_checkbox_title">核取方塊偏好設定</string>
     <string name="components_checkbox_summary">顯示具有可選摘要的核取方塊。</string>
+
+
+    <!-- Home screen widget -->
+    <string name="widget_apps_title">Mihai-Cristian Condrea 的應用程式</string>
+    <string name="widget_apps_description">快速開啟 Mihai-Cristian Condrea 精選的應用程式。</string>
+    <string name="widget_apps_error_message">目前無法載入應用程式。</string>
+    <string name="widget_apps_error_retry">再試一次</string>
+    <string name="widget_apps_preview_secondary_item">日曆</string>
+    <string name="widget_apps_preview_third_item">筆記</string>
 </resources>

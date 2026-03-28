@@ -17,12 +17,35 @@
 
 package com.d4rk.android.apps.apptoolkit.app.widgets.apps
 
+import android.content.Context
+import android.content.Intent
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
+import androidx.glance.appwidget.updateAll
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 /**
  * Broadcast receiver entry point for the scrollable developer apps widget.
  */
 class AppIconsWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = AppIconsWidget()
+
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
+        if (intent.action == ACTION_REFRESH_WIDGET) {
+            receiverScope.launch {
+                AppIconsWidget().updateAll(context)
+            }
+        }
+    }
+
+    companion object {
+        const val ACTION_REFRESH_WIDGET: String =
+            "com.d4rk.android.apps.apptoolkit.action.APP_ICONS_WIDGET_REFRESH"
+
+        private val receiverScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    }
 }

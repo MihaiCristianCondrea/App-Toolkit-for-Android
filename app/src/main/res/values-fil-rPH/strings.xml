@@ -92,4 +92,13 @@
     <string name="components_switch_card_title">Switch card</string>
     <string name="components_checkbox_title">Kagustuhan sa checkbox</string>
     <string name="components_checkbox_summary">Ipinapakita ang checkbox na may opsyonal na buod.</string>
+
+
+    <!-- Home screen widget -->
+    <string name="widget_apps_title">Mga app ni Mihai-Cristian Condrea</string>
+    <string name="widget_apps_description">Mabilis na buksan ang mga tampok na app ni Mihai-Cristian Condrea.</string>
+    <string name="widget_apps_error_message">Hindi ma-load ang mga app ngayon.</string>
+    <string name="widget_apps_error_retry">Subukan muli</string>
+    <string name="widget_apps_preview_secondary_item">Kalendaryo</string>
+    <string name="widget_apps_preview_third_item">Mga Tala</string>
 </resources>

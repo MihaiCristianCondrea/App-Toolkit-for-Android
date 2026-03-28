@@ -92,4 +92,13 @@
     <string name="components_switch_card_title">সুইচ কার্ড</string>
     <string name="components_checkbox_title">চেকবক্স পছন্দ</string>
     <string name="components_checkbox_summary">ঐচ্ছিক সারাংশসহ চেকবক্স দেখায়।</string>
+
+
+    <!-- Home screen widget -->
+    <string name="widget_apps_title">Mihai-Cristian Condrea-এর অ্যাপসমূহ</string>
+    <string name="widget_apps_description">Mihai-Cristian Condrea-এর নির্বাচিত অ্যাপ দ্রুত খুলুন।</string>
+    <string name="widget_apps_error_message">এই মুহূর্তে অ্যাপ লোড করা যাচ্ছে না।</string>
+    <string name="widget_apps_error_retry">আবার চেষ্টা করুন</string>
+    <string name="widget_apps_preview_secondary_item">ক্যালেন্ডার</string>
+    <string name="widget_apps_preview_third_item">নোটস</string>
 </resources>

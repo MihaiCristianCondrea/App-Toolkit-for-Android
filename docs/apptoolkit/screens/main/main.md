@@ -42,6 +42,10 @@ still giving host apps a ready-to-go default shell that can be customized or rep
 - **`ChangelogDialog`**: loads a markdown changelog from a URL (typically a GitHub changelog md file),
   extracts the section for the current app version, and renders it.
 
+### Home screen widgets (Glance)
+- **`AppIconsWidget`**: responsive, scrollable app launcher widget built with Jetpack Glance.
+- Widget implementation guide: [`widgets.md`](./widgets.md).
+
 ---
 
 ## Layering and boundaries (why it’s built this way)
