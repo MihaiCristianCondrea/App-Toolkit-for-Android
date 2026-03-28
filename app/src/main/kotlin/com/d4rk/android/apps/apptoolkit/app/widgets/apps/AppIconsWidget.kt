@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalSize
@@ -40,20 +41,19 @@ import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionRunCallback
-import androidx.glance.appwidget.lazy.LazyColumn
-import androidx.glance.appwidget.lazy.items
+import androidx.glance.appwidget.appWidgetBackground
+import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
+import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
-import androidx.glance.layout.Spacer
+import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
-import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
-import androidx.glance.text.Text
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
@@ -67,7 +67,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.context.GlobalContext
 
 /**
- * Scrollable widget that lists developer app icons and opens app/install page on tap.
+ * A highly expressive, resizable 3x3 grid widget that purely focuses on iconography.
  */
 class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons_error) {
 
@@ -78,10 +78,7 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val apps = loadApps(context = context)
         provideContent {
-            AppIconsWidgetContent(
-                apps = apps,
-                widgetTitle = context.getString(R.string.widget_apps_title),
-            )
+            AppIconsWidgetContent(apps = apps)
         }
     }
 
@@ -159,58 +156,72 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
 }
 
 @Composable
-private fun AppIconsWidgetContent(
-    apps: ImmutableList<WidgetAppEntry>,
-    widgetTitle: String,
-) {
-    val widgetSize = LocalSize.current
-    val showHeader = widgetSize.width >= AppIconsWidget.MEDIUM_SIZE.width
-    val maxVisibleItems = when {
-        widgetSize.height >= AppIconsWidget.LARGE_SIZE.height -> 7
-        widgetSize.height >= AppIconsWidget.MEDIUM_SIZE.height -> 5
-        else -> 3
-    }
-
-    Column(
-        modifier = GlanceModifier
-            .fillMaxSize()
-            .padding(8.dp),
-    ) {
-        if (showHeader) {
-            Box(
-                modifier = GlanceModifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 6.dp, vertical = 4.dp),
-                contentAlignment = Alignment.CenterStart,
-            ) {
-                Text(text = widgetTitle, maxLines = 1)
-            }
-            Spacer(modifier = GlanceModifier.height(2.dp))
+private fun AppIconsWidgetContent(apps: ImmutableList<WidgetAppEntry>) {
+    GlanceTheme {
+        val widgetSize = LocalSize.current
+        val iconSize = when {
+            widgetSize.width < 150.dp -> 26.dp
+            widgetSize.width < 200.dp -> 38.dp
+            else -> 48.dp
         }
 
-        LazyColumn(
-            modifier = GlanceModifier.fillMaxSize(),
+        Box(
+            modifier = GlanceModifier
+                .fillMaxSize()
+                .appWidgetBackground()
+                .background(GlanceTheme.colors.surface)
+                .padding(8.dp), // Outer breathing room
+            contentAlignment = Alignment.Center
         ) {
-            items(items = apps.take(maxVisibleItems)) { item ->
-                Row(
-                    modifier = GlanceModifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 6.dp, vertical = 4.dp)
-                        .appWidgetClickAction(item.app.packageName),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Image(
-                        provider = ImageProvider(item.icon),
-                        contentDescription = item.app.name,
-                        modifier = GlanceModifier.size(36.dp),
-                    )
-                    Spacer(modifier = GlanceModifier.size(10.dp))
-                    Text(
-                        text = item.app.name,
-                        maxLines = 1,
-                    )
+            Column(
+                modifier = GlanceModifier
+                    .fillMaxSize()
+                    .background(GlanceTheme.colors.secondaryContainer)
+                    .cornerRadius(16.dp)
+                    .padding(4.dp)
+            ) {
+                val appsToDisplay = apps.take(9)
+                val rows = appsToDisplay.chunked(3)
+
+                for (rowIndex in 0 until 3) {
+                    val rowApps = rows.getOrNull(rowIndex) ?: emptyList()
+
+                    Row(
+                        modifier = GlanceModifier
+                            .fillMaxWidth()
+                            .defaultWeight()
+                    ) {
+                        for (colIndex in 0 until 3) {
+                            val item = rowApps.getOrNull(colIndex)
+
+                            if (item != null) {
+                                Box(
+                                    modifier = GlanceModifier
+                                        .defaultWeight()
+                                        .fillMaxHeight()
+                                        .padding(4.dp) // Spacing between the grid cells
+                                        .background(GlanceTheme.colors.primaryContainer)
+                                        .cornerRadius(4.dp)
+                                        .appWidgetClickAction(item.app.packageName),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Image(
+                                        provider = ImageProvider(item.icon),
+                                        contentDescription = item.app.name,
+                                        modifier = GlanceModifier.size(iconSize)
+                                    )
+                                }
+                            } else {
+                                Box(
+                                    modifier = GlanceModifier
+                                        .defaultWeight()
+                                        .fillMaxHeight()
+                                        .padding(4.dp)
+                                ) {}
+                            }
+                        }
+                    }
                 }
-                Spacer(modifier = GlanceModifier.height(4.dp))
             }
         }
     }

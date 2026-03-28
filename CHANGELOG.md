@@ -1,3 +1,8 @@
+# Version 2.0.11:
+
+- **Minor**: Updated dependencies to the latest stable versions.
+- **Patch**: Fixed the widget interactions.
+
 # Version 2.0.10:
 
 - **Minor**: Updated some color palettes
