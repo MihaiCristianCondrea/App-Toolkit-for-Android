@@ -35,6 +35,7 @@ import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.action.actionParametersOf
 import androidx.glance.action.clickable
@@ -54,6 +55,9 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
+import androidx.glance.text.FontWeight
+import androidx.glance.text.Text
+import androidx.glance.text.TextStyle
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
@@ -67,7 +71,13 @@ import kotlinx.coroutines.withContext
 import org.koin.core.context.GlobalContext
 
 /**
- * A highly expressive, resizable 3x3 grid widget that purely focuses on iconography.
+ * A highly expressive, resizable 3x3 grid widget that focuses on fast app launching.
+ *
+ * Change rationale:
+ * - Previously, the widget resolved package icons for the full app list even though only the first
+ *   3x3 slots were rendered.
+ * - Now, app loading is capped to the visible 9 entries before icon decoding, reducing background
+ *   work and memory pressure for each update.
  */
 class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons_error) {
 
@@ -104,7 +114,9 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
             is DataState.Loading -> emptyList()
         }
 
-        apps.ifEmpty { listOf(createFallbackEntry(context)) }
+        apps
+            .ifEmpty { listOf(createFallbackEntry(context)) }
+            .take(MAX_GRID_ITEMS)
             .map { app ->
                 WidgetAppEntry(
                     app = app,
@@ -133,7 +145,7 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
             context.packageManager.getApplicationIcon(context.packageName)
         }
 
-        return drawable.toBitmap(sizePx = 96)
+        return drawable.toBitmap(sizePx = DEFAULT_ICON_BITMAP_SIZE_PX)
     }
 
     private fun createRefreshIntent(context: Context): PendingIntent {
@@ -149,6 +161,11 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
     }
 
     companion object {
+        const val GRID_COLUMNS: Int = 3
+        const val GRID_ROWS: Int = 3
+        private const val MAX_GRID_ITEMS: Int = GRID_COLUMNS * GRID_ROWS
+        private const val DEFAULT_ICON_BITMAP_SIZE_PX: Int = 72
+
         val SMALL_SIZE: DpSize = DpSize(width = 120.dp, height = 120.dp)
         val MEDIUM_SIZE: DpSize = DpSize(width = 180.dp, height = 180.dp)
         val LARGE_SIZE: DpSize = DpSize(width = 250.dp, height = 250.dp)
@@ -159,9 +176,10 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
 private fun AppIconsWidgetContent(apps: ImmutableList<WidgetAppEntry>) {
     GlanceTheme {
         val widgetSize = LocalSize.current
+        val showTitle = widgetSize.width >= AppIconsWidget.MEDIUM_SIZE.width
         val iconSize = when {
-            widgetSize.width < 150.dp -> 26.dp
-            widgetSize.width < 200.dp -> 38.dp
+            widgetSize.width < 150.dp -> 28.dp
+            widgetSize.width < 200.dp -> 36.dp
             else -> 48.dp
         }
 
@@ -170,7 +188,7 @@ private fun AppIconsWidgetContent(apps: ImmutableList<WidgetAppEntry>) {
                 .fillMaxSize()
                 .appWidgetBackground()
                 .background(GlanceTheme.colors.surface)
-                .padding(8.dp), // Outer breathing room
+                .padding(8.dp),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -178,12 +196,19 @@ private fun AppIconsWidgetContent(apps: ImmutableList<WidgetAppEntry>) {
                     .fillMaxSize()
                     .background(GlanceTheme.colors.secondaryContainer)
                     .cornerRadius(16.dp)
-                    .padding(4.dp)
+                    .padding(horizontal = 6.dp, vertical = 4.dp)
             ) {
-                val appsToDisplay = apps.take(9)
-                val rows = appsToDisplay.chunked(3)
+                if (showTitle) {
+                    Text(
+                        text = LocalContext.current.getString(R.string.widget_apps_title),
+                        style = TextStyle(fontWeight = FontWeight.Medium),
+                        modifier = GlanceModifier.padding(start = 4.dp, top = 2.dp, bottom = 2.dp)
+                    )
+                }
 
-                for (rowIndex in 0 until 3) {
+                val rows = apps.chunked(AppIconsWidget.GRID_COLUMNS)
+
+                for (rowIndex in 0 until AppIconsWidget.GRID_ROWS) {
                     val rowApps = rows.getOrNull(rowIndex) ?: emptyList()
 
                     Row(
@@ -191,7 +216,7 @@ private fun AppIconsWidgetContent(apps: ImmutableList<WidgetAppEntry>) {
                             .fillMaxWidth()
                             .defaultWeight()
                     ) {
-                        for (colIndex in 0 until 3) {
+                        for (colIndex in 0 until AppIconsWidget.GRID_COLUMNS) {
                             val item = rowApps.getOrNull(colIndex)
 
                             if (item != null) {
@@ -199,9 +224,9 @@ private fun AppIconsWidgetContent(apps: ImmutableList<WidgetAppEntry>) {
                                     modifier = GlanceModifier
                                         .defaultWeight()
                                         .fillMaxHeight()
-                                        .padding(4.dp) // Spacing between the grid cells
+                                        .padding(4.dp)
                                         .background(GlanceTheme.colors.primaryContainer)
-                                        .cornerRadius(4.dp)
+                                        .cornerRadius(8.dp)
                                         .appWidgetClickAction(item.app.packageName),
                                     contentAlignment = Alignment.Center
                                 ) {

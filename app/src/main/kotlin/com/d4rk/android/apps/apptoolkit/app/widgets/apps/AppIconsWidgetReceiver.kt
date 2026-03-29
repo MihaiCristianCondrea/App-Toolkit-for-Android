@@ -28,7 +28,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 /**
- * Broadcast receiver entry point for the scrollable developer apps widget.
+ * Broadcast receiver entry point for the Glance app icons grid widget.
  */
 class AppIconsWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = AppIconsWidget()

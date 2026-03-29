@@ -26,7 +26,7 @@
     android:minResizeWidth="120dp"
     android:maxResizeHeight="250dp"
     android:maxResizeWidth="250dp"
-    android:previewImage="@drawable/ic_launcher_foreground"
+    android:previewImage="@drawable/widget_app_icons_preview"
     android:resizeMode="horizontal|vertical"
     android:targetCellHeight="2"
     android:targetCellWidth="2"
