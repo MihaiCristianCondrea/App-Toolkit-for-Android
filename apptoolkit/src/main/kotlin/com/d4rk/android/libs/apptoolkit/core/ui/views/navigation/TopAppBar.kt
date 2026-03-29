@@ -131,20 +131,3 @@ fun TopAppBarScaffold(
         content(paddingValues)
     }
 }
-
-/**
- * Creates and remembers a [TopAppBarScrollBehavior] that is initialized in a collapsed state.
- *
- * This is useful for screens where the [LargeTopAppBar] should start in its smaller,
- * collapsed form rather than expanded, while still allowing for expansion or
- * further scroll-driven animations based on user interaction.
- *
- * @return A [TopAppBarScrollBehavior] with its scroll state initialized to a collapsed offset.
- */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun rememberCollapsedLargeTopAppBarScrollBehavior(): TopAppBarScrollBehavior {
-    val topAppBarState = rememberCollapsedTopAppBarState()
-
-    return TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-}

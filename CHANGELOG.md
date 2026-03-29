@@ -2,6 +2,7 @@
 
 - **Minor**: Updated dependencies to the latest stable versions.
 - **Patch**: Fixed the widget interactions.
+- **Patch**: Fixed a bug within library related to Collapsed Toolbar State.
 
 # Version 2.0.10:
 
