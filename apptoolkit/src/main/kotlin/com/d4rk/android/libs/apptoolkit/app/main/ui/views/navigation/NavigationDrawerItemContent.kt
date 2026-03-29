@@ -21,6 +21,7 @@ import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Badge
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationDrawerItem
@@ -58,7 +59,9 @@ fun NavigationDrawerItemContent(
             )
         }, badge = {
             if (item.badgeText.isNotBlank()) {
-                Text(text = item.badgeText)
+                Badge {
+                    Text(text = item.badgeText)
+                }
             }
         }, modifier = Modifier
             .padding(paddingValues = NavigationDrawerItemDefaults.ItemPadding)
