@@ -53,6 +53,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Error as RootError
 
 /**
@@ -82,6 +83,7 @@ class IssueReporterViewModel(
             is IssueReporterEvent.UpdateDescription -> updateDescription(event.value)
             is IssueReporterEvent.UpdateEmail -> updateEmail(event.value)
             is IssueReporterEvent.SetAnonymous -> updateAnonymous(event.anonymous)
+            is IssueReporterEvent.RequestDeviceInfo -> loadDeviceInfoIfNeeded()
             is IssueReporterEvent.Send -> sendReport()
             is IssueReporterEvent.DismissSnackbar -> dismissSnackbar()
         }
@@ -175,6 +177,29 @@ class IssueReporterViewModel(
                     showFailureSnackbar()
                 },
             )
+        }
+    }
+
+    /**
+     * Loads device information lazily the first time the UI expands the section.
+     *
+     * Threading rationale:
+     * - Device-info capture and string formatting are done off-main via [dispatchers.default]
+     *   to avoid blocking Compose recompositions.
+     */
+    private fun loadDeviceInfoIfNeeded() {
+        val currentDeviceInfo = screenData?.deviceInfoText
+        if (currentDeviceInfo != null) return
+
+        viewModelScope.launch {
+            val captured = withContext(dispatchers.default) {
+                deviceInfoProvider.capture().toString()
+            }
+            updateStateThreadSafe {
+                screenState.copyData {
+                    if (deviceInfoText != null) this else copy(deviceInfoText = captured)
+                }
+            }
         }
     }
 

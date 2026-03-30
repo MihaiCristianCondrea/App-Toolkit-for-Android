@@ -94,7 +94,7 @@ open class CommonDataStore(
         longPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_LAST_USED)
     val lastUsed: Flow<Long> = dataStore.data.map { preferences: Preferences ->
         preferences[lastUsedKey] ?: 0
-    }
+    }.distinctUntilChanged()
 
     suspend fun saveLastUsed(timestamp: Long) {
         dataStore.edit { preferences: MutablePreferences ->
@@ -107,7 +107,7 @@ open class CommonDataStore(
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_STARTUP)
     override val startup: Flow<Boolean> = dataStore.data.map { preferences: Preferences ->
         preferences[startupKey] != false
-    }
+    }.distinctUntilChanged()
 
     private val startupPageKey =
         stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_STARTUP_PAGE)
@@ -119,7 +119,7 @@ open class CommonDataStore(
      */
     fun getStartupPage(default: String = ""): Flow<String> = dataStore.data.map { preferences ->
         preferences[startupPageKey] ?: default
-    }
+    }.distinctUntilChanged()
 
     /** Stores whether the app has completed its first-time startup flow. */
     override suspend fun saveStartup(isFirstTime: Boolean) {
@@ -141,7 +141,7 @@ open class CommonDataStore(
         stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_THEME_MODE)
     val themeMode: Flow<String> = dataStore.data.map { preferences: Preferences ->
         preferences[themeModeKey] ?: DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
-    }
+    }.distinctUntilChanged()
 
     suspend fun saveThemeMode(mode: String) {
         dataStore.edit { preferences: MutablePreferences ->
@@ -153,7 +153,7 @@ open class CommonDataStore(
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_AMOLED_MODE)
     val amoledMode: Flow<Boolean> = dataStore.data.map { preferences: Preferences ->
         preferences[amoledModeKey] == true
-    }
+    }.distinctUntilChanged()
 
     suspend fun saveAmoledMode(isChecked: Boolean) {
         dataStore.edit { preferences: MutablePreferences ->
@@ -165,7 +165,7 @@ open class CommonDataStore(
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_DYNAMIC_COLORS)
     val dynamicColors: Flow<Boolean> = dataStore.data.map { preferences ->
         preferences[dynamicColorsKey] != false
-    }
+    }.distinctUntilChanged()
 
     suspend fun saveDynamicColors(isChecked: Boolean) {
         dataStore.edit { preferences: MutablePreferences ->
@@ -177,7 +177,7 @@ open class CommonDataStore(
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SETTINGS_INTERACTED)
     val settingsInteracted: Flow<Boolean> = dataStore.data.map { preferences ->
         preferences[settingsInteractedKey] == true
-    }
+    }.distinctUntilChanged()
 
     suspend fun markSettingsInteracted() {
         dataStore.edit { preferences: MutablePreferences ->
@@ -223,7 +223,7 @@ open class CommonDataStore(
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_BOUNCY_BUTTONS)
     val bouncyButtons: Flow<Boolean> = dataStore.data.map { preferences ->
         preferences[bouncyButtonsKey] != false
-    }
+    }.distinctUntilChanged()
 
     suspend fun saveBouncyButtons(isChecked: Boolean) {
         dataStore.edit { preferences: MutablePreferences ->
@@ -234,7 +234,7 @@ open class CommonDataStore(
     fun getShowBottomBarLabels(): Flow<Boolean> {
         return dataStore.data.map { preferences ->
             preferences[booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SHOW_BOTTOM_BAR_LABELS)] != false
-        }
+        }.distinctUntilChanged()
     }
 
     suspend fun saveShowLabelsOnBottomBar(isChecked: Boolean) {
@@ -249,7 +249,7 @@ open class CommonDataStore(
 
     fun getLanguage(): Flow<String> = dataStore.data.map { preferences: Preferences ->
         preferences[languageKey] ?: "en"
-    }
+    }.distinctUntilChanged()
 
     suspend fun saveLanguage(language: String) {
         dataStore.edit { preferences: MutablePreferences ->
@@ -261,7 +261,7 @@ open class CommonDataStore(
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_COMPONENTS_SHOWCASE_UNLOCKED)
     val componentsShowcaseUnlocked: Flow<Boolean> = dataStore.data.map { preferences ->
         preferences[componentsShowcaseUnlockedKey] == true
-    }
+    }.distinctUntilChanged()
 
     suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean) {
         dataStore.edit { preferences ->
@@ -276,7 +276,7 @@ open class CommonDataStore(
     override fun usageAndDiagnostics(default: Boolean): Flow<Boolean> =
         dataStore.data.map { preferences: Preferences ->
             preferences[usageAndDiagnosticsKey] ?: default
-        }
+        }.distinctUntilChanged()
 
     override suspend fun saveUsageAndDiagnostics(isChecked: Boolean) {
         dataStore.edit { preferences: MutablePreferences ->
@@ -291,7 +291,7 @@ open class CommonDataStore(
     override fun analyticsConsent(default: Boolean): Flow<Boolean> =
         dataStore.data.map { preferences: Preferences ->
             preferences[analyticsConsentKey] ?: default
-        }
+        }.distinctUntilChanged()
 
     override suspend fun saveAnalyticsConsent(isGranted: Boolean) {
         dataStore.edit { preferences: MutablePreferences ->
@@ -306,7 +306,7 @@ open class CommonDataStore(
     override fun adStorageConsent(default: Boolean): Flow<Boolean> =
         dataStore.data.map { preferences: Preferences ->
             preferences[adStorageConsentKey] ?: default
-        }
+        }.distinctUntilChanged()
 
     override suspend fun saveAdStorageConsent(isGranted: Boolean) {
         dataStore.edit { preferences: MutablePreferences ->
@@ -321,7 +321,7 @@ open class CommonDataStore(
     override fun adUserDataConsent(default: Boolean): Flow<Boolean> =
         dataStore.data.map { preferences: Preferences ->
             preferences[adUserDataConsentKey] ?: default
-        }
+        }.distinctUntilChanged()
 
     override suspend fun saveAdUserDataConsent(isGranted: Boolean) {
         dataStore.edit { preferences: MutablePreferences ->
@@ -336,7 +336,7 @@ open class CommonDataStore(
     override fun adPersonalizationConsent(default: Boolean): Flow<Boolean> =
         dataStore.data.map { preferences: Preferences ->
             preferences[adPersonalizationConsentKey] ?: default
-        }
+        }.distinctUntilChanged()
 
     override suspend fun saveAdPersonalizationConsent(isGranted: Boolean) {
         dataStore.edit { preferences: MutablePreferences ->
@@ -348,7 +348,7 @@ open class CommonDataStore(
     private val adsKey = booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_ADS)
     fun ads(default: Boolean): Flow<Boolean> = dataStore.data.map { prefs: Preferences ->
         prefs[adsKey] ?: default
-    }
+    }.distinctUntilChanged()
 
     val adsEnabledFlow: StateFlow<Boolean> =
         ads(default = defaultAdsEnabled).stateIn(
@@ -368,7 +368,7 @@ open class CommonDataStore(
         stringSetPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_FAVORITE_APPS)
     val favoriteApps: Flow<Set<String>> = dataStore.data.map { prefs: Preferences ->
         prefs[favoriteAppsKey] ?: emptySet()
-    }
+    }.distinctUntilChanged()
 
     suspend fun toggleFavoriteApp(packageName: String) {
         dataStore.edit { prefs: MutablePreferences ->
@@ -385,13 +385,13 @@ open class CommonDataStore(
         longPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SESSION_COUNT)
     val sessionCount: Flow<Int> = dataStore.data.map { prefs: Preferences ->
         (prefs[sessionCountKey] ?: 0L).toInt()
-    }
+    }.distinctUntilChanged()
 
     private val reviewPromptedKey =
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_REVIEW_PROMPTED)
     val hasPromptedReview: Flow<Boolean> = dataStore.data.map { prefs: Preferences ->
         prefs[reviewPromptedKey] == true
-    }
+    }.distinctUntilChanged()
 
     // Last seen changelog version
     private val lastSeenVersionKey =
@@ -400,7 +400,7 @@ open class CommonDataStore(
     fun getLastSeenVersion(default: String = ""): Flow<String> =
         dataStore.data.map { prefs: Preferences ->
             prefs[lastSeenVersionKey] ?: default
-        }
+        }.distinctUntilChanged()
 
     suspend fun saveLastSeenVersion(version: String) {
         dataStore.edit { prefs: MutablePreferences ->
@@ -415,7 +415,7 @@ open class CommonDataStore(
     fun getCachedChangelog(default: String = ""): Flow<String> =
         dataStore.data.map { prefs: Preferences ->
             prefs[cachedChangelogKey] ?: default
-        }
+        }.distinctUntilChanged()
 
     suspend fun saveCachedChangelog(changelog: String) {
         dataStore.edit { prefs: MutablePreferences ->

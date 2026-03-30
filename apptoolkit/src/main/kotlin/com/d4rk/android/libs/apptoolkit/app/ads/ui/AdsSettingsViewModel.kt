@@ -186,7 +186,7 @@ class AdsSettingsViewModel(
         )
         consentJob = consentJob.restart {
             requestConsentUseCase.invoke(host = host, showIfRequired = false)
-                .flowOn(dispatchers.main)
+                // Keep upstream consent work off Main by not applying flowOn(main) here.
                 .onEach { result ->
                     result.onFailure { error ->
                         updateStateThreadSafe {

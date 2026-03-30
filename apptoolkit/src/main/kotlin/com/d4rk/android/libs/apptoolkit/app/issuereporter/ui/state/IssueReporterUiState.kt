@@ -25,5 +25,6 @@ data class IssueReporterUiState(
     val description: String = "",
     val email: String = "",
     val anonymous: Boolean = true,
-    val issueUrl: String? = null
+    val issueUrl: String? = null,
+    val deviceInfoText: String? = null,
 )

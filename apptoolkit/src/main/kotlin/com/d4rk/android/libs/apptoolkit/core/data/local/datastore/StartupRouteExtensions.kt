@@ -19,6 +19,7 @@ package com.d4rk.android.libs.apptoolkit.core.data.local.datastore
 
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 /**
@@ -33,4 +34,4 @@ fun <T : StableNavKey> CommonDataStore.startupDestinationFlow(
 ): Flow<T> = getStartupPage(default = defaultRoute).map { route ->
     val safeRoute = route.ifBlank { defaultRoute }
     mapToKey(safeRoute)
-}
+}.distinctUntilChanged()
