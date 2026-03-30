@@ -10,10 +10,10 @@ App Toolkit for Android
 App Toolkit is a clean and lightweight demo app that showcases the reusable screens, components, and
 architecture powering my Android projects.
 
-It includes a live preview of all the shared UI elements I’ve built for my apps — such as Settings,
-Help, Support, and more — as well as a dynamic list of my published apps from Google Play.
+It includes a live preview of all the shared UI elements I've built for my apps - such as Settings,
+Help, Support, and more - as well as a dynamic list of my published apps from Google Play.
 
-Whether you’re a developer, designer, or just curious about how modern Android apps are structured,
+Whether you're a developer, designer, or just curious about how modern Android apps are structured,
 App Toolkit gives you a hands-on look at the foundational UI blocks behind my work.
 
 Our app is designed to be simple and easy to use, while also being fast and lightweight. Plus, it's
@@ -48,8 +48,8 @@ free and open-source software!
 # How it works
 
 App Toolkit uses a modular architecture with a shared core that powers every screen. The home screen
-dynamically fetches all apps I’ve published on Google Play and allows you to open or install them
-with one tap. Every screen is live and functional — just like it appears in real apps.
+dynamically fetches all apps I've published on Google Play and allows you to open or install them
+with one tap. Every screen is live and functional - just like it appears in real apps.
 
 # Get started today
 
@@ -61,10 +61,10 @@ any project.
 
 [![Release](https://jitpack.io/v/MihaiCristianCondrea/App-Toolkit-for-Android.svg)](https://jitpack.io/#MihaiCristianCondrea/App-Toolkit-for-Android)
 
-App Toolkit’s shared components are available exclusively through JitPack. Add the JitPack
+App Toolkit's shared components are available exclusively through JitPack. Add the JitPack
 repository
 at the end of your list so Gradle resolves other dependencies first, and scope lookups to this
-library’s coordinates for faster resolution.
+library's coordinates for faster resolution.
 
 ### Gradle (Kotlin DSL)
 
