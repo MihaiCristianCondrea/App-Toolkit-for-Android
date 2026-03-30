@@ -76,7 +76,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.state.IssueReporterUiState
@@ -102,8 +101,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpace
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -253,20 +250,10 @@ fun IssueReporterScreenContent(
     data: IssueReporterUiState,
 ) {
     val uriHandler = LocalUriHandler.current
-    val context = LocalContext.current
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
 
     val deviceExpanded = rememberSaveable { mutableStateOf(false) }
-    val deviceInfoText = rememberSaveable { mutableStateOf<String?>(null) }
-
-    LaunchedEffect(deviceExpanded.value) {
-        if (deviceExpanded.value && deviceInfoText.value == null) {
-            deviceInfoText.value = withContext(Dispatchers.Default) {
-                DeviceInfo.create(context).toString()
-            }
-        }
-    }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -445,6 +432,9 @@ fun IssueReporterScreenContent(
 
                                 val newValue = !deviceExpanded.value
                                 deviceExpanded.value = newValue
+                                if (newValue) {
+                                    onEvent(IssueReporterEvent.RequestDeviceInfo)
+                                }
 
                                 firebaseController.logEvent(
                                     issueReporterActionEvent(
@@ -473,7 +463,7 @@ fun IssueReporterScreenContent(
 
                     AnimatedVisibility(visible = deviceExpanded.value) {
                         Text(
-                            text = deviceInfoText.value.orEmpty(),
+                            text = data.deviceInfoText.orEmpty(),
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier
                                 .padding(SizeConstants.LargeSize)

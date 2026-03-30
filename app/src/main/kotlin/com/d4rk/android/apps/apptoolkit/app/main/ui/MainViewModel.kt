@@ -143,7 +143,8 @@ class MainViewModel(
         )
         consentJob = consentJob.restart {
             requestConsentUseCase.invoke(host = host)
-                .flowOn(dispatchers.main)
+                // Keep consent flow collection on ViewModel scope (main-safe for UI updates)
+                // and avoid forcing the whole upstream chain onto Main via flowOn(main).
                 .onEach { result: DataState<Unit, Errors> ->
                     result.onFailure { error ->
                         updateStateThreadSafe {

@@ -36,8 +36,13 @@ class AppIconsWidgetReceiver : GlanceAppWidgetReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action == ACTION_REFRESH_WIDGET) {
-            receiverScope.launch {
-                AppIconsWidget().updateAll(context)
+            val pendingResult = goAsync()
+            CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+                try {
+                    AppIconsWidget().updateAll(context)
+                } finally {
+                    pendingResult.finish()
+                }
             }
         }
     }
@@ -45,7 +50,5 @@ class AppIconsWidgetReceiver : GlanceAppWidgetReceiver() {
     companion object {
         const val ACTION_REFRESH_WIDGET: String =
             "com.d4rk.android.apps.apptoolkit.action.APP_ICONS_WIDGET_REFRESH"
-
-        private val receiverScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     }
 }
