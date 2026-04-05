@@ -49,6 +49,21 @@ import org.koin.android.ext.android.getKoin
 import java.time.LocalDate
 import java.time.ZoneId
 
+/**
+ * Main application class for AppToolkit that handles core system initialization,
+ * lifecycle management, and global configurations.
+ *
+ * This class extends [BaseCoreManager] and implements [DefaultLifecycleObserver] to:
+ * - Initialize Dependency Injection via Koin.
+ * - Manage global ad initialization and display (App Open ads).
+ * - Handle dynamic color palette switching, including seasonal themes (Halloween, Christmas).
+ * - Monitor activity lifecycles to track the current UI context.
+ * - Process billing and purchases on application resume.
+ *
+ * @property currentActivity The currently active [Activity] instance, used for showing ads.
+ * @property appScope A [CoroutineScope] tied to the application's lifecycle for background tasks.
+ * @property adsCoreManager Manager responsible for handling advertisement logic.
+ */
 class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     private var currentActivity: Activity? = null
     private val appScope = CoroutineScope(SupervisorJob() + dispatchers.io)
@@ -72,9 +87,6 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     }
 
     private fun applyDefaultColorPalette() {
-        // Change rationale: startup palette resolution previously used runBlocking DataStore reads on
-        // the main thread, increasing cold-start latency risk. We now apply a deterministic palette
-        // immediately and reconcile seasonal preferences asynchronously.
         val initialPalette: ColorPalette = getKoin().get()
         applyColorPalette(initialPalette)
 
