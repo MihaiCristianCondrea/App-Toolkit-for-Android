@@ -22,10 +22,12 @@ import app.cash.turbine.test
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
 import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
+import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
@@ -36,9 +38,11 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import io.mockk.clearAllMocks
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -84,6 +88,7 @@ class MainViewModelTest {
 
         MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
+            applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true),
             requestConsentUseCase = RequestConsentUseCase(
                 repository = FakeConsentRepository(),
                 firebaseController = mockk<FirebaseController>(relaxed = true)
@@ -98,6 +103,33 @@ class MainViewModelTest {
         advanceUntilIdle()
 
         assertEquals(1, repo.callCount)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `initialization applies persisted consent once`() = runTest(dispatcherExtension.testDispatcher) {
+        val applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true)
+
+        MainViewModel(
+            getNavigationDrawerItemsUseCase = GetNavigationDrawerItemsUseCase(
+                navigationRepository = FakeNavigationRepository(flowOf(emptyList())),
+                firebaseController = mockk(relaxed = true)
+            ),
+            applyInitialConsentUseCase = applyInitialConsentUseCase,
+            requestConsentUseCase = RequestConsentUseCase(
+                repository = FakeConsentRepository(),
+                firebaseController = mockk(relaxed = true)
+            ),
+            requestInAppReviewUseCase = mockk(relaxed = true),
+            requestInAppUpdateUseCase = mockk(relaxed = true),
+            firebaseController = mockk<FirebaseController>(relaxed = true),
+            dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
+        )
+
+        runCurrent()
+        advanceUntilIdle()
+
+        coVerify(exactly = 1) { applyInitialConsentUseCase.invoke() }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -119,6 +151,7 @@ class MainViewModelTest {
 
             val viewModel = MainViewModel(
                 getNavigationDrawerItemsUseCase = useCase,
+                applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true),
                 requestConsentUseCase = RequestConsentUseCase(
                     FakeConsentRepository(),
                     firebaseController
@@ -148,6 +181,7 @@ class MainViewModelTest {
 
         val viewModel = MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
+            applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true),
             requestConsentUseCase = RequestConsentUseCase(
                 FakeConsentRepository(),
                 firebaseController
@@ -195,6 +229,7 @@ class MainViewModelTest {
 
         val viewModel = MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
+            applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true),
             requestConsentUseCase = RequestConsentUseCase(
                 FakeConsentRepository(),
                 firebaseController
@@ -223,6 +258,45 @@ class MainViewModelTest {
         assertEquals(1, repo.callCount)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `requestConsent skips overlapping calls while one is in progress`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val firebaseController = mockk<FirebaseController>(relaxed = true)
+            val consentRepository = CountingConsentRepository(
+                upstream = flow {
+                    emit(DataState.Loading<Unit, Errors.UseCase>())
+                    awaitCancellation()
+                }
+            )
+
+            val viewModel = MainViewModel(
+                getNavigationDrawerItemsUseCase = GetNavigationDrawerItemsUseCase(
+                    navigationRepository = FakeNavigationRepository(flowOf(emptyList())),
+                    firebaseController = firebaseController
+                ),
+                applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true),
+                requestConsentUseCase = RequestConsentUseCase(
+                    repository = consentRepository,
+                    firebaseController = firebaseController
+                ),
+                requestInAppReviewUseCase = mockk(relaxed = true),
+                requestInAppUpdateUseCase = mockk(relaxed = true),
+                firebaseController = firebaseController,
+                dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
+            )
+
+            val host = object : ConsentHost {
+                override val activity = mockk<android.app.Activity>(relaxed = true)
+            }
+            viewModel.onEvent(MainEvent.RequestConsent(host = host))
+            viewModel.onEvent(MainEvent.RequestConsent(host = host))
+
+            runCurrent()
+
+            assertEquals(1, consentRepository.callCount)
+        }
+
     private class FakeNavigationRepository(
         private val upstream: Flow<List<NavigationDrawerItem>>
     ) : NavigationRepository {
@@ -250,6 +324,25 @@ private class FakeConsentRepository : ConsentRepository {
         host: ConsentHost,
         showIfRequired: Boolean,
     ) = flowOf(DataState.Success<Unit, Errors.UseCase>(Unit))
+
+    override suspend fun applyInitialConsent() = Unit
+
+    override suspend fun applyConsentSettings(settings: ConsentSettings) = Unit
+}
+
+private class CountingConsentRepository(
+    private val upstream: Flow<DataState<Unit, Errors.UseCase>>,
+) : ConsentRepository {
+    var callCount: Int = 0
+        private set
+
+    override fun requestConsent(
+        host: ConsentHost,
+        showIfRequired: Boolean,
+    ): Flow<DataState<Unit, Errors.UseCase>> {
+        callCount++
+        return upstream
+    }
 
     override suspend fun applyInitialConsent() = Unit
 

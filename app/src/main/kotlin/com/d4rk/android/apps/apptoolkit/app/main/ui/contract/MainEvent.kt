@@ -23,6 +23,7 @@ import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
 sealed interface MainEvent : UiEvent {
+    data object ApplyInitialConsent : MainEvent
     data object LoadNavigation : MainEvent
     data class RequestConsent(val host: ConsentHost) : MainEvent
     data class RequestReview(val host: ReviewHost) : MainEvent

@@ -24,6 +24,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateHost
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateResult
@@ -58,6 +59,7 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val getNavigationDrawerItemsUseCase: GetNavigationDrawerItemsUseCase,
+    private val applyInitialConsentUseCase: ApplyInitialConsentUseCase,
     private val requestConsentUseCase: RequestConsentUseCase,
     private val requestInAppReviewUseCase: RequestInAppReviewUseCase,
     private val requestInAppUpdateUseCase: RequestInAppUpdateUseCase,
@@ -70,16 +72,19 @@ class MainViewModel(
 ) {
 
     private var navigationJob: Job? = null
+    private var initialConsentJob: Job? = null
     private var consentJob: Job? = null
     private var reviewJob: Job? = null
     private var updateJob: Job? = null
 
     init {
+        onEvent(MainEvent.ApplyInitialConsent)
         onEvent(MainEvent.LoadNavigation)
     }
 
     override fun handleEvent(event: MainEvent) {
         when (event) {
+            is MainEvent.ApplyInitialConsent -> applyInitialConsent()
             is MainEvent.LoadNavigation -> loadNavigationItems()
             is MainEvent.RequestConsent -> requestConsent(host = event.host)
             is MainEvent.RequestReview -> requestReview(host = event.host)
@@ -136,7 +141,39 @@ class MainViewModel(
         }
     }
 
+    private fun applyInitialConsent() {
+        initialConsentJob = initialConsentJob.restart {
+            launchReport(
+                action = Actions.APPLY_INITIAL_CONSENT,
+                block = {
+                    withContext(dispatchers.io) {
+                        applyInitialConsentUseCase.invoke()
+                    }
+                },
+                onError = {
+                    breadcrumb(
+                        message = "consent_initialization_failed",
+                        attributes = mapOf(
+                            ExtraKeys.ERROR to (it::class.java.simpleName ?: "Throwable")
+                        )
+                    )
+                }
+            )
+        }
+    }
+
     private fun requestConsent(host: ConsentHost) {
+        if (consentJob?.isActive == true) {
+            breadcrumb(
+                message = "consent_request_skipped",
+                attributes = mapOf(
+                    ExtraKeys.HOST to host.activity::class.java.name,
+                    ExtraKeys.REASON to "already_in_progress"
+                )
+            )
+            return
+        }
+
         startOperation(
             action = Actions.REQUEST_CONSENT,
             extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
@@ -146,16 +183,48 @@ class MainViewModel(
                 // Keep consent flow collection on ViewModel scope (main-safe for UI updates)
                 // and avoid forcing the whole upstream chain onto Main via flowOn(main).
                 .onEach { result: DataState<Unit, Errors> ->
-                    result.onFailure { error ->
-                        updateStateThreadSafe {
-                            screenState.showSnackbar(
-                                UiSnackbar(
-                                    type = ScreenMessageType.SNACKBAR,
-                                    message = error.asUiText(),
-                                    isError = true,
-                                    timeStamp = System.nanoTime(),
+                    when (result) {
+                        is DataState.Loading -> {
+                            breadcrumb(
+                                message = "consent_request_state",
+                                attributes = mapOf(
+                                    ExtraKeys.HOST to host.activity::class.java.name,
+                                    ExtraKeys.STAGE to "loading"
                                 )
                             )
+                        }
+
+                        is DataState.Success -> {
+                            breadcrumb(
+                                message = "consent_request_state",
+                                attributes = mapOf(
+                                    ExtraKeys.HOST to host.activity::class.java.name,
+                                    ExtraKeys.STAGE to "success"
+                                )
+                            )
+                        }
+
+                        is DataState.Error -> {
+                            breadcrumb(
+                                message = "consent_request_state",
+                                attributes = mapOf(
+                                    ExtraKeys.HOST to host.activity::class.java.name,
+                                    ExtraKeys.STAGE to "error",
+                                    ExtraKeys.ERROR to result.error.toString()
+                                )
+                            )
+                            result.onFailure { error ->
+                                updateStateThreadSafe {
+                                    screenState.showSnackbar(
+                                        UiSnackbar(
+                                            type = ScreenMessageType.SNACKBAR,
+                                            message = error.asUiText(),
+                                            isError = true,
+                                            timeStamp = System.nanoTime(),
+                                        )
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -216,6 +285,7 @@ class MainViewModel(
     }
 
     private object Actions {
+        const val APPLY_INITIAL_CONSENT: String = "applyInitialConsent"
         const val LOAD_NAVIGATION: String = "loadNavigationItems"
         const val REQUEST_CONSENT: String = "requestConsent"
         const val REQUEST_REVIEW: String = "requestReview"
@@ -224,5 +294,8 @@ class MainViewModel(
 
     private object ExtraKeys {
         const val HOST: String = "host"
+        const val STAGE: String = "stage"
+        const val ERROR: String = "error"
+        const val REASON: String = "reason"
     }
 }
