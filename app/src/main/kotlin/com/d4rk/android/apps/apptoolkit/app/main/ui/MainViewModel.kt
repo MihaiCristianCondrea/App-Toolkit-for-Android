@@ -24,6 +24,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateHost
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateResult
@@ -52,13 +53,13 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val getNavigationDrawerItemsUseCase: GetNavigationDrawerItemsUseCase,
+    private val applyInitialConsentUseCase: ApplyInitialConsentUseCase,
     private val requestConsentUseCase: RequestConsentUseCase,
     private val requestInAppReviewUseCase: RequestInAppReviewUseCase,
     private val requestInAppUpdateUseCase: RequestInAppUpdateUseCase,
@@ -71,17 +72,19 @@ class MainViewModel(
 ) {
 
     private var navigationJob: Job? = null
+    private var initialConsentJob: Job? = null
     private var consentJob: Job? = null
     private var reviewJob: Job? = null
     private var updateJob: Job? = null
-    private var isConsentRequestInProgress: Boolean = false
 
     init {
+        onEvent(MainEvent.ApplyInitialConsent)
         onEvent(MainEvent.LoadNavigation)
     }
 
     override fun handleEvent(event: MainEvent) {
         when (event) {
+            is MainEvent.ApplyInitialConsent -> applyInitialConsent()
             is MainEvent.LoadNavigation -> loadNavigationItems()
             is MainEvent.RequestConsent -> requestConsent(host = event.host)
             is MainEvent.RequestReview -> requestReview(host = event.host)
@@ -138,8 +141,29 @@ class MainViewModel(
         }
     }
 
+    private fun applyInitialConsent() {
+        initialConsentJob = initialConsentJob.restart {
+            launchReport(
+                action = Actions.APPLY_INITIAL_CONSENT,
+                block = {
+                    withContext(dispatchers.io) {
+                        applyInitialConsentUseCase.invoke()
+                    }
+                },
+                onError = {
+                    breadcrumb(
+                        message = "consent_initialization_failed",
+                        attributes = mapOf(
+                            ExtraKeys.ERROR to (it::class.java.simpleName ?: "Throwable")
+                        )
+                    )
+                }
+            )
+        }
+    }
+
     private fun requestConsent(host: ConsentHost) {
-        if (isConsentRequestInProgress) {
+        if (consentJob?.isActive == true) {
             breadcrumb(
                 message = "consent_request_skipped",
                 attributes = mapOf(
@@ -150,7 +174,6 @@ class MainViewModel(
             return
         }
 
-        isConsentRequestInProgress = true
         startOperation(
             action = Actions.REQUEST_CONSENT,
             extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
@@ -204,9 +227,6 @@ class MainViewModel(
                             }
                         }
                     }
-                }
-                .onCompletion {
-                    isConsentRequestInProgress = false
                 }
                 .catchReport(
                     action = Actions.REQUEST_CONSENT,
@@ -265,6 +285,7 @@ class MainViewModel(
     }
 
     private object Actions {
+        const val APPLY_INITIAL_CONSENT: String = "applyInitialConsent"
         const val LOAD_NAVIGATION: String = "loadNavigationItems"
         const val REQUEST_CONSENT: String = "requestConsent"
         const val REQUEST_REVIEW: String = "requestReview"

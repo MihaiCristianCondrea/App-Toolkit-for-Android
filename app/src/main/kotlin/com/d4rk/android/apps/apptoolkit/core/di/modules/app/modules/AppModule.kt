@@ -46,6 +46,7 @@ val appModule: Module = module {
     viewModel {
         MainViewModel(
             getNavigationDrawerItemsUseCase = get(),
+            applyInitialConsentUseCase = get(),
             requestConsentUseCase = get(),
             requestInAppReviewUseCase = get<RequestInAppReviewUseCase>(),
             requestInAppUpdateUseCase = get<RequestInAppUpdateUseCase>(),
