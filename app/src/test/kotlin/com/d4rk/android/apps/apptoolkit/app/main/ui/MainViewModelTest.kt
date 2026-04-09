@@ -42,8 +42,8 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -264,8 +264,9 @@ class MainViewModelTest {
         runTest(dispatcherExtension.testDispatcher) {
             val firebaseController = mockk<FirebaseController>(relaxed = true)
             val consentRepository = CountingConsentRepository(
-                upstream = MutableSharedFlow(extraBufferCapacity = 2).apply {
-                    tryEmit(DataState.Loading())
+                upstream = flow {
+                    emit(DataState.Loading<Unit, Errors.UseCase>())
+                    awaitCancellation()
                 }
             )
 
@@ -285,7 +286,9 @@ class MainViewModelTest {
                 dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
             )
 
-            val host = ConsentHost(activity = mockk(relaxed = true))
+            val host = object : ConsentHost {
+                override val activity = mockk<android.app.Activity>(relaxed = true)
+            }
             viewModel.onEvent(MainEvent.RequestConsent(host = host))
             viewModel.onEvent(MainEvent.RequestConsent(host = host))
 
