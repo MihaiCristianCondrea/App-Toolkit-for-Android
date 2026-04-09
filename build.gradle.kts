@@ -43,10 +43,33 @@ buildscript {
                 because("Mitigates Netty decoder DoS vulnerabilities (including CVE-2025-58057)")
             }
             classpath("io.netty:netty-codec-http:4.1.132.Final") {
-                because("Mitigates CRLF injection/request smuggling vulnerability (CVE-2025-67735)")
+                because("Mitigates HTTP request smuggling in chunked extension quoted-string parsing (CVE-2026-33870)")
+            }
+            classpath("org.codehaus.plexus:plexus-utils:3.6.1") {
+                because("Mitigates Directory Traversal in Expand.extractFile (CVE-2025-67030)")
             }
             classpath("org.bitbucket.b_c:jose4j:0.9.6") {
                 because("Mitigates DoS via compressed JWE content (CVE-2024-29371)")
+            }
+        }
+    }
+}
+
+
+allprojects {
+    configurations.configureEach {
+        resolutionStrategy.eachDependency {
+            when (requested.group) {
+                "io.netty" -> when (requested.name) {
+                    "netty-handler",
+                    "netty-codec",
+                    "netty-codec-http",
+                    "netty-codec-http2" -> useVersion("4.1.132.Final")
+                }
+
+                "org.codehaus.plexus" -> when (requested.name) {
+                    "plexus-utils" -> useVersion("3.6.1")
+                }
             }
         }
     }
