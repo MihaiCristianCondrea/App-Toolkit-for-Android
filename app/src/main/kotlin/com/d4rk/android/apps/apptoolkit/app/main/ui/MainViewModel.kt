@@ -52,6 +52,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
@@ -73,6 +74,7 @@ class MainViewModel(
     private var consentJob: Job? = null
     private var reviewJob: Job? = null
     private var updateJob: Job? = null
+    private var isConsentRequestInProgress: Boolean = false
 
     init {
         onEvent(MainEvent.LoadNavigation)
@@ -137,6 +139,18 @@ class MainViewModel(
     }
 
     private fun requestConsent(host: ConsentHost) {
+        if (isConsentRequestInProgress) {
+            breadcrumb(
+                message = "consent_request_skipped",
+                attributes = mapOf(
+                    ExtraKeys.HOST to host.activity::class.java.name,
+                    ExtraKeys.REASON to "already_in_progress"
+                )
+            )
+            return
+        }
+
+        isConsentRequestInProgress = true
         startOperation(
             action = Actions.REQUEST_CONSENT,
             extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
@@ -146,18 +160,53 @@ class MainViewModel(
                 // Keep consent flow collection on ViewModel scope (main-safe for UI updates)
                 // and avoid forcing the whole upstream chain onto Main via flowOn(main).
                 .onEach { result: DataState<Unit, Errors> ->
-                    result.onFailure { error ->
-                        updateStateThreadSafe {
-                            screenState.showSnackbar(
-                                UiSnackbar(
-                                    type = ScreenMessageType.SNACKBAR,
-                                    message = error.asUiText(),
-                                    isError = true,
-                                    timeStamp = System.nanoTime(),
+                    when (result) {
+                        is DataState.Loading -> {
+                            breadcrumb(
+                                message = "consent_request_state",
+                                attributes = mapOf(
+                                    ExtraKeys.HOST to host.activity::class.java.name,
+                                    ExtraKeys.STAGE to "loading"
                                 )
                             )
                         }
+
+                        is DataState.Success -> {
+                            breadcrumb(
+                                message = "consent_request_state",
+                                attributes = mapOf(
+                                    ExtraKeys.HOST to host.activity::class.java.name,
+                                    ExtraKeys.STAGE to "success"
+                                )
+                            )
+                        }
+
+                        is DataState.Error -> {
+                            breadcrumb(
+                                message = "consent_request_state",
+                                attributes = mapOf(
+                                    ExtraKeys.HOST to host.activity::class.java.name,
+                                    ExtraKeys.STAGE to "error",
+                                    ExtraKeys.ERROR to result.error.name
+                                )
+                            )
+                            result.onFailure { error ->
+                                updateStateThreadSafe {
+                                    screenState.showSnackbar(
+                                        UiSnackbar(
+                                            type = ScreenMessageType.SNACKBAR,
+                                            message = error.asUiText(),
+                                            isError = true,
+                                            timeStamp = System.nanoTime(),
+                                        )
+                                    )
+                                }
+                            }
+                        }
                     }
+                }
+                .onCompletion {
+                    isConsentRequestInProgress = false
                 }
                 .catchReport(
                     action = Actions.REQUEST_CONSENT,
@@ -224,5 +273,8 @@ class MainViewModel(
 
     private object ExtraKeys {
         const val HOST: String = "host"
+        const val STAGE: String = "stage"
+        const val ERROR: String = "error"
+        const val REASON: String = "reason"
     }
 }
