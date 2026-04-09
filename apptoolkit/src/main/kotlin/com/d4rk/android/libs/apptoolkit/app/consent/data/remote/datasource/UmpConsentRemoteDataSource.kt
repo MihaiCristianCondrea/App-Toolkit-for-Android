@@ -35,6 +35,16 @@ import kotlinx.coroutines.flow.callbackFlow
  */
 class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
 
+    private companion object {
+        /**
+         * Canonical AdMob app id format used by UMP.
+         *
+         * Example: `ca-app-pub-3940256099942544~3347511713`
+         */
+        val AD_MOB_APP_ID_REGEX: Regex =
+            Regex(pattern = "^ca-app-pub-[0-9]{16}~[0-9]{10}$")
+    }
+
     override fun requestConsent(
         host: ConsentHost,
         showIfRequired: Boolean,
@@ -130,19 +140,23 @@ class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
     /**
      * Builds the request parameters for UMP.
      *
-     * Change rationale: previously the AdMob app id was always passed to UMP. If the host app
-     * provided a blank or malformed id, the SDK could crash while parsing it. We now validate the
-     * id before setting it to avoid runtime exceptions while still allowing consent requests.
+     * Change rationale: we previously accepted any id prefixed with `ca-app-pub-`, which still
+     * allowed malformed values to reach UMP internals. Those malformed values can crash parsing in
+     * the consent SDK, so we now gate `setAdMobAppId` behind the canonical AdMob app id regex and
+     * skip invalid values safely.
      */
     private fun buildRequestParameters(activity: android.app.Activity): ConsentRequestParameters {
         val appId = activity.getString(R.string.ad_mob_app_id).trim()
         val builder = ConsentRequestParameters.Builder()
             .setTagForUnderAgeOfConsent(false)
 
-        if (appId.isNotBlank() && appId.startsWith("ca-app-pub-")) {
+        if (appId.matches(AD_MOB_APP_ID_REGEX)) {
             builder.setAdMobAppId(appId)
         } else {
-            Log.w(CONSENT_LOG_TAG, "Skipping AdMob app id because it is blank or malformed.")
+            Log.w(
+                CONSENT_LOG_TAG,
+                "Skipping AdMob app id because it does not match canonical format."
+            )
         }
 
         return builder.build()
