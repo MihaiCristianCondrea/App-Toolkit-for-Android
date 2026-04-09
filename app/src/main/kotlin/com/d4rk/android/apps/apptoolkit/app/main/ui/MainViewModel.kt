@@ -210,7 +210,7 @@ class MainViewModel(
                                 attributes = mapOf(
                                     ExtraKeys.HOST to host.activity::class.java.name,
                                     ExtraKeys.STAGE to "error",
-                                    ExtraKeys.ERROR to result.error.name
+                                    ExtraKeys.ERROR to result.error.toString()
                                 )
                             )
                             result.onFailure { error ->
