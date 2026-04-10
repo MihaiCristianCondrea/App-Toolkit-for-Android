@@ -62,6 +62,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 fun AnimatedIconButtonDirection(
     modifier: Modifier = Modifier,
     visible: Boolean = true,
+    enabled: Boolean = true,
     icon: ImageVector,
     contentDescription: String?,
     onClick: () -> Unit,
@@ -98,7 +99,7 @@ fun AnimatedIconButtonDirection(
         IconOnlyButton(
             modifier = modifier,
             onClick = onClick,
-            enabled = true,
+            enabled = enabled,
             iconContentDescription = contentDescription,
             vectorIcon = icon,
             iconSize = iconSize,
