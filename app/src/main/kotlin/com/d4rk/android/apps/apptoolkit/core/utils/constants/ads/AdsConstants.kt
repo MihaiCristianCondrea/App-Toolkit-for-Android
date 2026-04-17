@@ -22,6 +22,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.DebugAdsConstan
 
 object AdsConstants {
 
+    // TODO: Ensure this is in libarry
     private fun bannerAdUnitId(releaseId: String): String =
         if (BuildConfig.DEBUG) {
             DebugAdsConstants.BANNER_AD_UNIT_ID
@@ -29,6 +30,7 @@ object AdsConstants {
             releaseId
         }
 
+    // TODO: Ensure this is in libarry
     private fun nativeAdUnitId(releaseId: String): String =
         if (BuildConfig.DEBUG) {
             DebugAdsConstants.NATIVE_AD_UNIT_ID
