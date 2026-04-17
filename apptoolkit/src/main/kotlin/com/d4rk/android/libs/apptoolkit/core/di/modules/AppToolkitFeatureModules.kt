@@ -40,6 +40,7 @@ import com.d4rk.android.libs.apptoolkit.app.startup.utils.interfaces.providers.S
 import com.d4rk.android.libs.apptoolkit.app.support.billing.BillingRepository
 import com.d4rk.android.libs.apptoolkit.app.support.ui.SupportViewModel
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.di.GithubToken
 import com.d4rk.android.libs.apptoolkit.core.di.model.AppToolkitHostBuildConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
@@ -140,15 +141,17 @@ private fun issueReporterModule(hostBuildConfig: AppToolkitHostBuildConfig): Mod
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
     single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get(), get()) }
     single<SendIssueReportUseCase> { SendIssueReportUseCase(get(), get(), get()) }
-    single<String>(qualifier = named(name = "github_repository")) { hostBuildConfig.githubRepository }
+    single<String>(qualifier = named(name = AppToolkitDiConstants.GITHUB_REPOSITORY)) {
+        hostBuildConfig.githubRepository
+    }
     single<GithubTarget> {
         GithubTarget(
             username = GithubConstants.GITHUB_USER,
-            repository = get(qualifier = named("github_repository")),
+            repository = get(qualifier = named(AppToolkitDiConstants.GITHUB_REPOSITORY)),
         )
     }
-    single<String>(qualifier = named("github_changelog")) {
-        GithubConstants.githubChangelog(get<String>(named("github_repository")))
+    single<String>(qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG)) {
+        GithubConstants.githubChangelog(get<String>(named(AppToolkitDiConstants.GITHUB_REPOSITORY)))
     }
     single<String>(githubTokenQualifier) { hostBuildConfig.githubToken.toToken() }
 

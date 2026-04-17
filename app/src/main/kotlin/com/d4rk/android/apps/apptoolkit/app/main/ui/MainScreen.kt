@@ -77,6 +77,7 @@ import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.HideOnScrol
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.LeftNavigationRail
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.MainTopAppBar
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.startupDestinationFlow
+import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
@@ -302,7 +303,9 @@ fun MainScaffoldTabletContent(
 
     val context: Context = LocalContext.current
     remember { SnackbarHostState() }
-    val changelogUrl: String = koinInject(qualifier = named("github_changelog"))
+    val changelogUrl: String = koinInject(
+        qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG)
+    )
 
     val showChangelog = rememberSaveable { mutableStateOf(false) }
 

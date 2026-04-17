@@ -25,8 +25,16 @@ import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRep
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyConsentSettingsUseCase
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
+import com.d4rk.android.libs.apptoolkit.app.main.data.repository.InAppUpdateRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.InAppUpdateRepository
+import com.d4rk.android.libs.apptoolkit.app.main.domain.usecases.RequestInAppUpdateUseCase
 import com.d4rk.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
+import com.d4rk.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.ObserveAdsEnabledUseCase
+import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.SetAdsEnabledUseCase
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
+import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.StandardDispatchers
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
@@ -53,6 +61,7 @@ fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): Lis
     corePlatformModule(hostBuildConfig = hostBuildConfig),
     consentModule(),
     mainSharedModule(hostBuildConfig = hostBuildConfig),
+    adsSettingsSharedModule(),
 )
 
 private fun dispatchersModule(): Module = module {
@@ -104,9 +113,28 @@ private fun consentModule(): Module = module {
 
 private fun mainSharedModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single { GmsHostFactory() }
-    single<String>(qualifier = named(name = "developer_apps_api_url")) {
+    single<InAppUpdateRepository> { InAppUpdateRepositoryImpl() }
+    single { RequestInAppUpdateUseCase(repository = get()) }
+    single<String>(qualifier = named(name = AppToolkitDiConstants.DEVELOPER_APPS_API_URL)) {
         hostBuildConfig.isDebugBuild
             .toApiEnvironment()
             .developerAppsApiUrl(language = ApiLanguages.DEFAULT)
     }
+}
+
+private fun adsSettingsSharedModule(): Module = module {
+    single<AdsSettingsRepository> {
+        AdsSettingsRepositoryImpl(
+            dataStore = get(),
+            buildInfoProvider = get(),
+            firebaseController = get(),
+        )
+    }
+    single<ObserveAdsEnabledUseCase> {
+        ObserveAdsEnabledUseCase(
+            repo = get(),
+            firebaseController = get(),
+        )
+    }
+    single<SetAdsEnabledUseCase> { SetAdsEnabledUseCase(repo = get(), firebaseController = get()) }
 }

@@ -41,6 +41,7 @@ import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.NavigationDrawerItemContent
+import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
@@ -68,7 +69,7 @@ fun NavigationDrawer(
     val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
-    val changelogUrl: String = koinInject(qualifier = named("github_changelog"))
+    val changelogUrl: String = koinInject(qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG))
     val firebaseController: FirebaseController = koinInject()
 
     val showChangelog = rememberSaveable { mutableStateOf(false) }

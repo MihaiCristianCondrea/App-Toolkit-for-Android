@@ -78,6 +78,7 @@ Toolkit modules are intentionally loaded by the **host application**. Use:
 - `appToolkitFoundationModules(...)` for platform/core wiring (dispatchers, datastore, ktor, consent, GMS host factory).
 - `appToolkitSettingsModules()` for reusable settings-focused bindings.
 - `appToolkitFeatureModules(...)` to obtain toolkit Koin modules and add them to the host `startKoin {}` call.
+- `AppToolkitDiConstants` for named qualifiers (for example `GITHUB_CHANGELOG`, `DEVELOPER_APPS_API_URL`, and `DEFAULT_THEME_PALETTE`).
 
 This keeps `BuildConfig` ownership in the host app while moving reusable toolkit bindings into the library itself.
 

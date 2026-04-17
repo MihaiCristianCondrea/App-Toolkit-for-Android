@@ -43,6 +43,7 @@ import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.rose.rosePalet
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.special.christmas.christmasPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.special.skin.skinPalette
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -156,13 +157,16 @@ private fun usageAndDiagnosticsModule(): Module = module {
 }
 
 private fun themeModule(): Module = module {
-    single<ColorPalette>(named("monochromePalette")) { monochromePalette }
-    single<ColorPalette>(named("bluePalette")) { bluePalette }
-    single<ColorPalette>(named("greenPalette")) { greenPalette }
-    single<ColorPalette>(named("redPalette")) { redPalette }
-    single<ColorPalette>(named("yellowPalette")) { yellowPalette }
-    single<ColorPalette>(named("rosePalette")) { rosePalette }
-    single<ColorPalette>(named("christmasPalette")) { christmasPalette }
-    single<ColorPalette>(named("skinPalette")) { skinPalette }
-    single<ColorPalette> { get(named("bluePalette")) }
+    single<ColorPalette>(named(AppToolkitDiConstants.MONOCHROME_THEME_PALETTE)) { monochromePalette }
+    single<ColorPalette>(named(AppToolkitDiConstants.BLUE_THEME_PALETTE)) { bluePalette }
+    single<ColorPalette>(named(AppToolkitDiConstants.GREEN_THEME_PALETTE)) { greenPalette }
+    single<ColorPalette>(named(AppToolkitDiConstants.RED_THEME_PALETTE)) { redPalette }
+    single<ColorPalette>(named(AppToolkitDiConstants.YELLOW_THEME_PALETTE)) { yellowPalette }
+    single<ColorPalette>(named(AppToolkitDiConstants.ROSE_THEME_PALETTE)) { rosePalette }
+    single<ColorPalette>(named(AppToolkitDiConstants.CHRISTMAS_THEME_PALETTE)) { christmasPalette }
+    single<ColorPalette>(named(AppToolkitDiConstants.SKIN_THEME_PALETTE)) { skinPalette }
+    single<ColorPalette> {
+        getOrNull<ColorPalette>(named(AppToolkitDiConstants.DEFAULT_THEME_PALETTE))
+            ?: get(named(AppToolkitDiConstants.BLUE_THEME_PALETTE))
+    }
 }
