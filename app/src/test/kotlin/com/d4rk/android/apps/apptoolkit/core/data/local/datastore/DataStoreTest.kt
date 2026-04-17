@@ -20,8 +20,8 @@ package com.d4rk.android.apps.apptoolkit.core.data.local.datastore
 import android.app.Application
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.test.core.app.ApplicationProvider
-import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,7 +42,7 @@ class DataStoreTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
         val context = ApplicationProvider.getApplicationContext<Application>()
         val dispatchers = TestDispatcherProvider(dispatcher)
-        val dataStore = DataStore(context = context, dispatchers = dispatchers)
+        val dataStore = CommonDataStore(context = context, dispatchers = dispatchers)
 
         val dataStoreFile =
             context.preferencesDataStoreFile(DataStoreNamesConstants.DATA_STORE_SETTINGS)

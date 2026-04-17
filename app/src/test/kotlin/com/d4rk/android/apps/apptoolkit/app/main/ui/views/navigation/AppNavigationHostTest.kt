@@ -21,7 +21,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
-import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.startupDestinationFlow
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -37,7 +37,7 @@ import kotlin.test.assertEquals
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppNavigationHostTest {
 
-    private val dataStore: DataStore = mockk()
+    private val dataStore: CommonDataStore = mockk()
 
     @AfterEach
     fun tearDown() {

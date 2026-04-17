@@ -18,27 +18,14 @@
 package com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules
 
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
-import com.d4rk.android.libs.apptoolkit.app.ads.ui.AdsSettingsViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import com.google.android.libraries.ads.mobile.sdk.banner.AdSize
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val adsModule: Module = module {
-    viewModel {
-        AdsSettingsViewModel(
-            repository = get(),
-            dispatchers = get(),
-            observeAdsEnabled = get(),
-            setAdsEnabled = get(),
-            requestConsentUseCase = get(),
-            firebaseController = get(),
-        )
-    }
-
     single<AdsConfig>(named(name = AdsQualifiers.NATIVE_AD)) {
         AdsConfig(bannerAdUnitId = AdsConstants.NATIVE_AD_UNIT_ID)
     }

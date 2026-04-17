@@ -33,6 +33,7 @@ import com.d4rk.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepos
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.ObserveAdsEnabledUseCase
 import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.SetAdsEnabledUseCase
+import com.d4rk.android.libs.apptoolkit.app.ads.ui.AdsSettingsViewModel
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
@@ -47,6 +48,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.developerAppsApiUrl
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -137,4 +139,14 @@ private fun adsSettingsSharedModule(): Module = module {
         )
     }
     single<SetAdsEnabledUseCase> { SetAdsEnabledUseCase(repo = get(), firebaseController = get()) }
+    viewModel {
+        AdsSettingsViewModel(
+            repository = get(),
+            dispatchers = get(),
+            observeAdsEnabled = get(),
+            setAdsEnabled = get(),
+            requestConsentUseCase = get(),
+            firebaseController = get(),
+        )
+    }
 }
