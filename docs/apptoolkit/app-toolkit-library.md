@@ -70,6 +70,15 @@ Common networking is handled by a shared `KtorClient`, while persistent preferen
 
 Apps can depend on the library module and selectively enable features. Each screen exposes an accompanying Activity for easy integration or the underlying composable functions for custom navigation setups.
 
+## Host-driven Koin integration
+
+Toolkit modules are intentionally loaded by the **host application**. Use:
+
+- `AppToolkitHostBuildConfig` for host-specific build/runtime values.
+- `appToolkitFeatureModules(...)` to obtain toolkit Koin modules and add them to the host `startKoin {}` call.
+
+This keeps `BuildConfig` ownership in the host app while moving reusable toolkit bindings into the library itself.
+
 ## Testing
 
 The project includes unit tests for view models, repositories and utility classes. Run `./gradlew test` to execute the full test suite.

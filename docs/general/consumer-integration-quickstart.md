@@ -85,6 +85,9 @@ android {
 ```kotlin
 // HostApplication.kt
 import android.app.Application
+import com.d4rk.android.libs.apptoolkit.core.di.model.AppToolkitHostBuildConfig
+import com.d4rk.android.libs.apptoolkit.core.di.modules.appToolkitFeatureModules
+import com.yourapp.startup.YourStartupProvider
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -93,18 +96,32 @@ class HostApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        val toolkitBuildConfig = AppToolkitHostBuildConfig(
+            isDebugBuild = BuildConfig.DEBUG,
+            versionName = BuildConfig.VERSION_NAME,
+            versionCode = BuildConfig.VERSION_CODE.toLong(),
+            githubToken = BuildConfig.GITHUB_TOKEN, // optional if issue reporting is disabled
+            faqProductId = "com.yourapp.id",
+            githubRepository = "your-repository-name"
+        )
+
         startKoin {
             androidContext(this@HostApplication)
             modules(
                 module {
                     // Register/bridge host implementations required by toolkit contracts.
-                    // Add toolkit + host modules here.
-                }
+                },
+                *appToolkitFeatureModules(
+                    hostBuildConfig = toolkitBuildConfig,
+                    startupProviderFactory = ::YourStartupProvider
+                ).toTypedArray()
             )
         }
     }
 }
 ```
+
+> Koin must be started by the host app (Application.onCreate). The toolkit only contributes feature modules.
 
 ### Step B — Launch a toolkit Activity
 
