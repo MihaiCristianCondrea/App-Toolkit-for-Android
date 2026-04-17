@@ -19,7 +19,6 @@ package com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules
 
 import com.d4rk.android.apps.apptoolkit.core.data.local.datastore.DataStore
 import com.d4rk.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
-import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -27,14 +26,13 @@ import org.koin.dsl.module
  * Host datastore bindings.
  *
  * Change rationale:
- * - Before: only [CommonDataStore] was registered from shared foundation modules.
- * - Now: app DI exposes a host-owned [DataStore] and [DatastoreInterface] while still satisfying
- *   existing [CommonDataStore] injections.
+ * - Before: only CommonDataStore was registered from shared foundation modules.
+ * - Now: app DI exposes a host-owned [DataStore] and [DatastoreInterface], while shared
+ *   foundation modules continue to provide CommonDataStore for existing consumers.
  * - Better because host-only dependencies can target [DatastoreInterface] without leaking shared
  *   implementation details into app features.
  */
 val dataStoreModule: Module = module {
     single<DataStore> { DataStore(context = get(), dispatchers = get()) }
     single<DatastoreInterface> { get<DataStore>() }
-    single<CommonDataStore>(override = true) { get<DataStore>() }
 }
