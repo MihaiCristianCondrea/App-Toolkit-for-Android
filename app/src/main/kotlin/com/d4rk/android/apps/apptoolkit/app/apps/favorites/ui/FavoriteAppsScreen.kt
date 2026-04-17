@@ -66,6 +66,7 @@ import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -100,7 +101,7 @@ fun FavoriteAppsRoute(
     val context = LocalContext.current
     val adsEnabled = rememberAdsEnabled()
 
-    val appDetailsAdsConfig: AdsConfig = koinInject(qualifier = named("app_details_native_ad"))
+    val appDetailsAdsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.APP_DETAILS_NATIVE_AD))
     val dispatchers: DispatcherProvider = koinInject()
     val firebaseController: FirebaseController = koinInject()
 

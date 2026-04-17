@@ -71,6 +71,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsA
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import kotlinx.collections.immutable.ImmutableMap
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -175,7 +176,7 @@ fun SupportScreenContent(
     onDonateClick: (String) -> Unit,
 ) {
     val context: Context = LocalContext.current
-    val nativeAdsConfig: AdsConfig = koinInject(qualifier = named(name = "support_native_ad"))
+    val nativeAdsConfig: AdsConfig = koinInject(qualifier = named(name = AdsQualifiers.SUPPORT_NATIVE_AD))
 
     LazyColumn(
         modifier = Modifier.padding(paddingValues),

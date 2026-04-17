@@ -40,6 +40,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsA
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.sendEmailToDeveloper
 import kotlinx.collections.immutable.ImmutableList
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
@@ -50,7 +51,7 @@ fun HelpScreenContent(
 ) {
     val firebaseController: FirebaseController = koinInject()
     val context = LocalContext.current
-    val adsConfig: AdsConfig = koinInject(qualifier = named("help_large_banner_ad"))
+    val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.HELP_LARGE_BANNER_AD))
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
