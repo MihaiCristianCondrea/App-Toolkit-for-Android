@@ -22,7 +22,13 @@ package com.d4rk.android.libs.apptoolkit.core.utils.constants.ads
  * bindings.
  */
 object AdsQualifiers {
-    // TODO: Add the qualifiers for normal ad banner, medium ad rectangle, full banner, and all type of default ads
+    const val BANNER_AD: String = "banner_ad"
+    const val LARGE_BANNER_AD: String = "large_banner_ad"
+    const val MEDIUM_RECTANGLE_AD: String = "medium_rectangle_ad"
+    const val FULL_BANNER_AD: String = "full_banner_ad"
+    const val LEADERBOARD_AD: String = "leaderboard_ad"
+    const val FLUID_AD: String = "fluid_ad"
+
     const val NATIVE_AD: String = "native_ad"
     const val APPS_LIST_NATIVE_AD: String = "apps_list_native_ad" // TODO: Move to app module
     const val APP_DETAILS_NATIVE_AD: String = "app_details_native_ad" // TODO: Move to app module
