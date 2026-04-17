@@ -17,24 +17,25 @@
 
 package com.d4rk.android.apps.apptoolkit.core.di.modules.settings.modules
 
+import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppAboutSettingsProvider
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppAdvancedSettingsProvider
-import com.d4rk.android.libs.apptoolkit.app.advanced.data.repository.CacheRepositoryImpl
-import com.d4rk.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
-import com.d4rk.android.libs.apptoolkit.app.advanced.ui.AdvancedSettingsViewModel
+import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppSettingsProvider
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.google.blue.bluePalette
+import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
+import com.d4rk.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
+import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AdvancedSettingsProvider
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val advancedSettingsModule: Module = module {
+/**
+ * Host-only provider bindings consumed by toolkit settings modules.
+ */
+val hostSettingsProvidersModule: Module = module {
+    single<SettingsProvider> { AppSettingsProvider(context = get()) }
+    single<AboutSettingsProvider> { AppAboutSettingsProvider(context = get()) }
     single<AdvancedSettingsProvider> { AppAdvancedSettingsProvider(context = get()) }
-    single<CacheRepository> { CacheRepositoryImpl(context = get(), firebaseController = get()) }
-
-    viewModel {
-        AdvancedSettingsViewModel(
-            repository = get(),
-            dispatchers = get(),
-            firebaseController = get(),
-        )
-    }
+    single<ColorPalette>(named(AppToolkitDiConstants.DEFAULT_THEME_PALETTE)) { bluePalette }
 }

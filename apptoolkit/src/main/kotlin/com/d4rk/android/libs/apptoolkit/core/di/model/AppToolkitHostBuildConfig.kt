@@ -15,15 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.core.data.local
+package com.d4rk.android.libs.apptoolkit.core.di.model
 
-import android.content.Context
-import com.d4rk.android.apps.apptoolkit.BuildConfig
-import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
-import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-
-class DataStore(
-    context: Context,
-    dispatchers: DispatcherProvider,
-    defaultAdsEnabled: Boolean = !BuildConfig.DEBUG,
-) : CommonDataStore(context, dispatchers, defaultAdsEnabled)
+/**
+ * Host-owned build/runtime values required by AppToolkit DI modules.
+ *
+ * The toolkit is published as a library, so it cannot rely on a host app's generated BuildConfig directly.
+ * Passing these values explicitly keeps module boundaries clean while still allowing host-specific behavior.
+ */
+data class AppToolkitHostBuildConfig(
+    val applicationId: String,
+    val isDebugBuild: Boolean,
+    val versionName: String,
+    val versionCode: Long,
+    val githubToken: String,
+    val faqProductId: String,
+    val githubRepository: String = "App-Toolkit-for-Android",
+)

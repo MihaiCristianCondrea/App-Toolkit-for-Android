@@ -18,34 +18,50 @@
 package com.d4rk.android.apps.apptoolkit.core.di
 
 import android.content.Context
+import com.d4rk.android.apps.apptoolkit.BuildConfig
+import com.d4rk.android.apps.apptoolkit.app.startup.utils.interfaces.providers.AppStartupProvider
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.adsModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.appModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.appsListModule
-import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.consentModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.onboardingModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.startupModule
-import com.d4rk.android.apps.apptoolkit.core.di.modules.apptoolkit.appToolkitModules
-import com.d4rk.android.apps.apptoolkit.core.di.modules.core.modules.coreModule
-import com.d4rk.android.apps.apptoolkit.core.di.modules.core.modules.dispatchersModule
-import com.d4rk.android.apps.apptoolkit.core.di.modules.settings.modules.themeModule
-import com.d4rk.android.apps.apptoolkit.core.di.modules.settings.settingsModules
+import com.d4rk.android.apps.apptoolkit.core.di.modules.settings.modules.generalSettingsModule
+import com.d4rk.android.apps.apptoolkit.core.di.modules.settings.modules.hostSettingsProvidersModule
+import com.d4rk.android.apps.apptoolkit.core.utils.constants.help.HelpConstants
+import com.d4rk.android.libs.apptoolkit.core.di.model.AppToolkitHostBuildConfig
+import com.d4rk.android.libs.apptoolkit.core.di.modules.appToolkitFeatureModules
+import com.d4rk.android.libs.apptoolkit.core.di.modules.appToolkitFoundationModules
+import com.d4rk.android.libs.apptoolkit.core.di.modules.appToolkitSettingsModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 fun initializeKoin(context: Context) {
+    val appToolkitBuildConfig = AppToolkitHostBuildConfig(
+        applicationId = BuildConfig.APPLICATION_ID,
+        isDebugBuild = BuildConfig.DEBUG,
+        versionName = BuildConfig.VERSION_NAME,
+        versionCode = BuildConfig.VERSION_CODE.toLong(),
+        githubToken = BuildConfig.GITHUB_TOKEN,
+        faqProductId = HelpConstants.FAQ_PRODUCT_ID,
+    )
+
     startKoin {
         androidContext(androidContext = context)
         modules(
             modules = buildList {
-                add(dispatchersModule)
-                add(coreModule)
+                addAll(appToolkitFoundationModules(hostBuildConfig = appToolkitBuildConfig))
                 add(appModule)
-                addAll(settingsModules)
+                add(hostSettingsProvidersModule)
+                addAll(appToolkitSettingsModules())
+                add(generalSettingsModule)
                 add(adsModule)
                 add(appsListModule)
-                add(consentModule)
-                addAll(appToolkitModules)
-                add(themeModule)
+                addAll(
+                    appToolkitFeatureModules(
+                        hostBuildConfig = appToolkitBuildConfig,
+                        startupProviderFactory = ::AppStartupProvider,
+                    )
+                )
                 add(onboardingModule)
                 add(startupModule)
             }

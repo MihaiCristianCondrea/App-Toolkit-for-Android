@@ -29,6 +29,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveF
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.FavoriteAppsViewModel
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
+import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -38,7 +39,7 @@ val appsListModule: Module = module {
     single<DeveloperAppsRepository> {
         DeveloperAppsRepositoryImpl(
             client = get(),
-            baseUrl = get(qualifier = named(name = "developer_apps_api_url")),
+            baseUrl = get(qualifier = named(name = AppToolkitDiConstants.DEVELOPER_APPS_API_URL)),
             firebaseController = get(),
         )
     }

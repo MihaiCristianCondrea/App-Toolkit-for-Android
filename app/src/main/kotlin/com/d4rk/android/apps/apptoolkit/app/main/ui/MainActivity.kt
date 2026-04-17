@@ -30,7 +30,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
-import com.d4rk.android.apps.apptoolkit.core.data.local.DataStore
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
@@ -46,7 +46,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val dataStore: DataStore by inject()
+    private val dataStore: CommonDataStore by inject()
     private val dispatchers: DispatcherProvider by inject()
     private val viewModel: MainViewModel by viewModel()
     private val gmsHostFactory: GmsHostFactory by inject()
