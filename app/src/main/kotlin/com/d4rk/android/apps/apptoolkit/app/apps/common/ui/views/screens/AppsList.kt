@@ -49,6 +49,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filterNotNull
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
@@ -99,7 +100,7 @@ fun AppsList(
         buildAppListItems(apps, adsEnabled, adFrequency)
     }
 
-    val adsConfig: AdsConfig = koinInject(qualifier = named("apps_list_native_ad"))
+    val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.APPS_LIST_NATIVE_AD))
 
     AppsGrid(
         items = items,

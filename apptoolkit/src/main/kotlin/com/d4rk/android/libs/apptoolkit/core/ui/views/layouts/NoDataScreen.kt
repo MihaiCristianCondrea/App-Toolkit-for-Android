@@ -47,6 +47,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.NoDataNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
@@ -78,7 +79,7 @@ fun NoDataScreen(
     paddingValues: PaddingValues = PaddingValues(),
 ) {
     val adUnitId = koinInject<AdsConfig>(
-        qualifier = named(name = "no_data_native_ad")
+        qualifier = named(name = AdsQualifiers.NO_DATA_NATIVE_AD)
     ).bannerAdUnitId
     Column(
         modifier = Modifier

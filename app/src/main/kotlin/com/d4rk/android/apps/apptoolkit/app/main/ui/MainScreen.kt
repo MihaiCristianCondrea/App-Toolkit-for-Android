@@ -91,6 +91,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -214,7 +215,7 @@ fun MainScaffoldContent(
         },
         snackbarHost = { DefaultSnackbarHost(snackbarState = snackBarHostState) },
         bottomBar = {
-            val adsConfig: AdsConfig = koinInject(qualifier = named("bottom_nav_bar_native_ad"))
+            val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.BOTTOM_NAV_BAR_NATIVE_AD))
             HideOnScrollBottomBar(scrollBehavior = bottomAppBarScrollBehavior) {
                 BottomAppBarNativeAdBanner(
                     adUnitId = adsConfig.bannerAdUnitId
