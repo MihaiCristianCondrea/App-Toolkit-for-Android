@@ -87,6 +87,8 @@ android {
 import android.app.Application
 import com.d4rk.android.libs.apptoolkit.core.di.model.AppToolkitHostBuildConfig
 import com.d4rk.android.libs.apptoolkit.core.di.modules.appToolkitFeatureModules
+import com.d4rk.android.libs.apptoolkit.core.di.modules.appToolkitFoundationModules
+import com.d4rk.android.libs.apptoolkit.core.di.modules.appToolkitSettingsModules
 import com.yourapp.startup.YourStartupProvider
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -97,6 +99,7 @@ class HostApplication : Application() {
         super.onCreate()
 
         val toolkitBuildConfig = AppToolkitHostBuildConfig(
+            applicationId = BuildConfig.APPLICATION_ID,
             isDebugBuild = BuildConfig.DEBUG,
             versionName = BuildConfig.VERSION_NAME,
             versionCode = BuildConfig.VERSION_CODE.toLong(),
@@ -110,7 +113,10 @@ class HostApplication : Application() {
             modules(
                 module {
                     // Register/bridge host implementations required by toolkit contracts.
+                    // e.g. SettingsProvider / AboutSettingsProvider / AdvancedSettingsProvider
                 },
+                *appToolkitFoundationModules(hostBuildConfig = toolkitBuildConfig).toTypedArray(),
+                *appToolkitSettingsModules().toTypedArray(),
                 *appToolkitFeatureModules(
                     hostBuildConfig = toolkitBuildConfig,
                     startupProviderFactory = ::YourStartupProvider

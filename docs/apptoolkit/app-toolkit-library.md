@@ -75,6 +75,8 @@ Apps can depend on the library module and selectively enable features. Each scre
 Toolkit modules are intentionally loaded by the **host application**. Use:
 
 - `AppToolkitHostBuildConfig` for host-specific build/runtime values.
+- `appToolkitFoundationModules(...)` for platform/core wiring (dispatchers, datastore, ktor, consent, GMS host factory).
+- `appToolkitSettingsModules()` for reusable settings-focused bindings.
 - `appToolkitFeatureModules(...)` to obtain toolkit Koin modules and add them to the host `startKoin {}` call.
 
 This keeps `BuildConfig` ownership in the host app while moving reusable toolkit bindings into the library itself.

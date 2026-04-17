@@ -24,6 +24,7 @@ package com.d4rk.android.libs.apptoolkit.core.di.model
  * Passing these values explicitly keeps module boundaries clean while still allowing host-specific behavior.
  */
 data class AppToolkitHostBuildConfig(
+    val applicationId: String,
     val isDebugBuild: Boolean,
     val versionName: String,
     val versionCode: Long,
