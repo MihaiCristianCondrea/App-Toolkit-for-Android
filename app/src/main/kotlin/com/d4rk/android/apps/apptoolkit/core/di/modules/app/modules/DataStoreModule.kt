@@ -15,20 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.components.domain.usecase
+package com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules
 
+import com.d4rk.android.apps.apptoolkit.core.data.local.datastore.DataStore
 import com.d4rk.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
+import org.koin.core.module.Module
+import org.koin.dsl.module
 
 /**
- * Persists the unlocked state for the components showcase so it can be shown in release builds.
+ * Host datastore bindings.
  *
- * This use case isolates the datastore write from UI layers and can be triggered after
- * meeting the unlock criteria (e.g., multiple About screen taps).
+ * Change rationale:
+ * - Before: app layers consumed [com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore] directly.
+ * - Now: app DI exposes [DatastoreInterface] backed by [DataStore], keeping app contracts app-owned.
+ * - Better because host data/domain layers are decoupled from shared datastore implementation details.
  */
-class UnlockComponentsShowcaseUseCase(
-    private val dataStore: DatastoreInterface,
-) {
-    suspend operator fun invoke() {
-        dataStore.saveComponentsShowcaseUnlocked(true)
-    }
+val dataStoreModule: Module = module {
+    single<DataStore> { DataStore(commonDataStore = get()) }
+    single<DatastoreInterface> { get<DataStore>() }
 }

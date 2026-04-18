@@ -67,7 +67,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
 import com.d4rk.android.apps.apptoolkit.app.main.utils.defaults.MainNavigationDefaults
-import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
+import com.d4rk.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.logging.FAB_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
@@ -76,7 +76,6 @@ import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.BottomNavig
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.HideOnScrollBottomBar
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.LeftNavigationRail
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.MainTopAppBar
-import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.startupDestinationFlow
 import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationState
@@ -119,7 +118,7 @@ fun MainScreen() {
     val screenState: UiStateScreen<MainUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
     val bottomItems: ImmutableList<BottomBarItem<AppNavKey>> = MainNavigationDefaults.bottomBarItems
-    val dataStore: CommonDataStore = koinInject()
+    val dataStore: DatastoreInterface = koinInject()
     val startupRoute: AppNavKey by dataStore
         .startupDestinationFlow(
             defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
