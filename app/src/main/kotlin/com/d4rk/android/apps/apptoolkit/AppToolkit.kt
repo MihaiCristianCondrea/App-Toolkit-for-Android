@@ -26,12 +26,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.d4rk.android.apps.apptoolkit.core.di.initializeKoin
+import com.d4rk.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppThemeConfig
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider
 import com.d4rk.android.libs.apptoolkit.core.BaseCoreManager
-import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.data.remote.ads.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
@@ -99,7 +99,7 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     }
 
     private suspend fun resolvePreferredColorPalette(): ColorPalette {
-        val dataStore: CommonDataStore = CommonDataStore.getInstance(context = this)
+        val dataStore: DatastoreInterface = getKoin().get()
         val hasInteractedWithSettings: Boolean = dataStore.settingsInteracted.first()
 
         if (!hasInteractedWithSettings) {

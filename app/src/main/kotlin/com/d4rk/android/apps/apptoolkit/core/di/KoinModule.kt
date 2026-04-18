@@ -23,6 +23,7 @@ import com.d4rk.android.apps.apptoolkit.app.startup.utils.interfaces.providers.A
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.adsModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.appModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.appsListModule
+import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.dataStoreModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.onboardingModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules.startupModule
 import com.d4rk.android.apps.apptoolkit.core.di.modules.settings.modules.generalSettingsModule
@@ -50,6 +51,7 @@ fun initializeKoin(context: Context) {
         modules(
             modules = buildList {
                 addAll(appToolkitFoundationModules(hostBuildConfig = appToolkitBuildConfig))
+                add(dataStoreModule)
                 add(appModule)
                 add(hostSettingsProvidersModule)
                 addAll(appToolkitSettingsModules())

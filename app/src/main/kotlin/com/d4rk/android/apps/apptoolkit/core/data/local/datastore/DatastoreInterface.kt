@@ -15,18 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.apps.common.data.local
+package com.d4rk.android.apps.apptoolkit.core.data.local.datastore
 
-import com.d4rk.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import kotlinx.coroutines.flow.Flow
 
-class FavoritesLocalDataSourceImpl(
-    private val dataStore: DatastoreInterface,
-) : FavoritesLocalDataSource {
+/**
+ * App-owned datastore contract consumed by host app data/domain layers.
+ *
+ * This boundary prevents app features from depending on the shared [CommonDataStore] concrete type.
+ */
+interface DatastoreInterface {
+    val startup: Flow<Boolean>
+    val componentsShowcaseUnlocked: Flow<Boolean>
+    val favoriteApps: Flow<Set<String>>
+    val settingsInteracted: Flow<Boolean>
+    val staticPaletteId: Flow<String>
 
-    override fun observeFavorites(): Flow<Set<String>> = dataStore.favoriteApps
+    fun <T> startupDestinationFlow(defaultRoute: String, mapToKey: (String) -> T): Flow<T>
 
-    override suspend fun toggleFavorite(packageName: String) {
-        dataStore.toggleFavoriteApp(packageName)
-    }
+    suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean)
+    suspend fun toggleFavoriteApp(packageName: String)
 }

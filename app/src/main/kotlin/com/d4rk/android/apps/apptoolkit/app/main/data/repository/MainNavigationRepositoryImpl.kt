@@ -25,8 +25,8 @@ import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Widgets
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.R
+import com.d4rk.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
-import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.onStart
 import com.d4rk.android.libs.apptoolkit.R as ToolkitR
 
 class MainNavigationRepositoryImpl(
-    private val dataStore: CommonDataStore,
+    private val dataStore: DatastoreInterface,
     private val firebaseController: FirebaseController,
 ) : NavigationRepository {
     override fun getNavigationDrawerItems(): Flow<List<NavigationDrawerItem>> =
