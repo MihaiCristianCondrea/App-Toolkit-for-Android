@@ -18,6 +18,7 @@
 package com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation
 
 import android.content.Context
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.VolunteerActivism
@@ -27,6 +28,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +51,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivi
  * The actions menu currently contains a "Support Us" item that opens the [SupportActivity].
  * The navigation icon's action is configurable.
  *
+ * @param title is the optional title that can be provided by the host app
  * @param navigationIcon The [ImageVector] to be displayed as the navigation icon.
  * @param onNavigationIconClick A lambda to be executed when the navigation icon is clicked.
  * @param scrollBehavior A [TopAppBarScrollBehavior] to be applied to the top app bar,
@@ -57,14 +60,16 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivi
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MainTopAppBar(
+    title: String = stringResource(id = R.string.app_name),
     navigationIcon: ImageVector,
     onNavigationIconClick: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior
+    scrollBehavior: TopAppBarScrollBehavior,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
 ) {
     val context: Context = LocalContext.current
 
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.app_name)) },
+        title = { Text(text = title) },
         navigationIcon = {
             AnimatedIconButtonDirection(
                 icon = navigationIcon,
@@ -75,7 +80,7 @@ fun MainTopAppBar(
             )
         },
         actions = {
-            val (expandedMenu, setExpandedMenu) = remember { mutableStateOf(false) }
+            val (expandedMenu, setExpandedMenu) = remember { mutableStateOf(value = false) }
 
             AnimatedIconButtonDirection(
                 fromRight = true,
@@ -88,7 +93,7 @@ fun MainTopAppBar(
             DropdownMenu(
                 expanded = expandedMenu,
                 shape = MaterialTheme.shapes.largeIncreased,
-                onDismissRequest = { setExpandedMenu(false) }
+                onDismissRequest = { setExpandedMenu(false) },
             ) {
                 CommonDropdownMenuItem(
                     textResId = R.string.support_us,
@@ -96,10 +101,11 @@ fun MainTopAppBar(
                     onClick = {
                         setExpandedMenu(false)
                         context.openActivity(SupportActivity::class.java)
-                    }
+                    },
                 )
             }
         },
-        scrollBehavior = scrollBehavior
+        scrollBehavior = scrollBehavior,
+        windowInsets = windowInsets,
     )
 }

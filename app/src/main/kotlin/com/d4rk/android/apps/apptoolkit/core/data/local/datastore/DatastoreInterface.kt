@@ -17,6 +17,7 @@
 
 package com.d4rk.android.apps.apptoolkit.core.data.local.datastore
 
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -31,7 +32,10 @@ interface DatastoreInterface {
     val settingsInteracted: Flow<Boolean>
     val staticPaletteId: Flow<String>
 
-    fun <T> startupDestinationFlow(defaultRoute: String, mapToKey: (String) -> T): Flow<T>
+    fun <T : StableNavKey> startupDestinationFlow(
+        defaultRoute: String,
+        mapToKey: (String) -> T
+    ): Flow<T>
 
     suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean)
     suspend fun toggleFavoriteApp(packageName: String)

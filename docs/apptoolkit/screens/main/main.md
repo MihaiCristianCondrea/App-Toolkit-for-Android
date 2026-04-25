@@ -1,7 +1,8 @@
 # Main (AppToolkit)
 
 The **Main** feature provides reusable "app shell" building blocks used across AppToolkit-powered apps:
-navigation chrome (top app bar, bottom bar, rail, drawer), common navigation handling, and Google Play
+navigation chrome (top app bar, adaptive navigation suite, drawer), common navigation handling, and
+Google Play
 Services (GMS) host abstractions used by in-app update / review / consent flows.
 
 This module exists to keep **UI**, **domain contracts**, and **data implementations** separated, while
@@ -16,10 +17,9 @@ still giving host apps a ready-to-go default shell that can be customized or rep
 
 ### Navigation 3 UI (Compose + Material 3)
 - **`MainTopAppBar`**: the default top app bar (title + navigation icon + overflow actions).
-- **`BottomNavigationBar`**: bottom bar for compact layouts, with haptics + click sounds, and optional labels.
-- **`LeftNavigationRail`**: navigation rail for tablets/foldables/large screens (collapsed/expanded).
+- **`NavigationSuiteScaffold`**: adaptive destination chrome that switches between bottom navigation
+  bar and navigation rail based on window size class.
 - **`NavigationDrawerItemContent`**: a single drawer item row with optional dividers.
-- **`HideOnScrollBottomBar`**: bottom bar container that collapses as content scrolls.
 
 ### Navigation behavior helpers
 - **`handleNavigationItemClick(...)`**: default drawer click handling for common routes:
@@ -79,7 +79,8 @@ This feature exists because the author maintains many apps and wanted a consiste
 that feels native and is ready to ship:
 
 - The **navigation rail** supports tablets/foldables/large screens.
-- The **navigation drawer** supports phone-first layouts.
+- The **navigation drawer** remains available for app-wide actions (settings/help/updates/share),
+  while top-level destinations are managed by `NavigationSuiteScaffold`.
 - The **changelog dialog** is used to display "what changed" for apps, typically sourced from GitHub,
   keeping release notes discoverable inside the app.
 - **GMS host abstractions** exist to avoid leaking concrete `Activity` dependencies into domain/data,
@@ -92,7 +93,8 @@ Host apps can adopt the defaults or override any part (UI, routes, handlers, or 
 ## Key types
 
 ### `BottomBarItem`
-Represents a top-level destination for the bottom bar / navigation rail.
+
+Represents a top-level destination for adaptive navigation UI (navigation bar / rail).
 
 ```kotlin
 @Immutable
@@ -127,20 +129,29 @@ MainTopAppBar(
 )
 ```
 
-### 2) Bottom navigation (`BottomNavigationBar`)
+### 2) Adaptive top-level navigation (`NavigationSuiteScaffold`)
 
-`BottomNavigationBar` supports:
+`NavigationSuiteScaffold` supports:
 
 * current route selection
-* optional label visibility (driven by the library’s common DataStore)
-* click sounds + context haptics
+* automatic switching between navigation bar and navigation rail
+* a single item definition reused across navigation layouts
 
 ```kotlin
-BottomNavigationBar(
-    currentRoute = currentRoute,
-    items = items,
-    onNavigate = { route -> /* navigate */ },
-)
+NavigationSuiteScaffold(
+    navigationSuiteItems = {
+        items.forEach { item ->
+            item(
+                icon = { /* destination icon */ },
+                label = { Text(stringResource(item.title)) },
+                selected = item.route == currentRoute,
+                onClick = { onNavigate(item.route) },
+            )
+        }
+    },
+) {
+    /* destination content */
+}
 ```
 
 ### 3) Drawer item click handling (`handleNavigationItemClick`)
@@ -185,7 +196,7 @@ Host apps may replace any of the following:
 
 * **UI**
 
-    * Provide your own top bar / bottom bar / rail / drawer UI.
+    * Provide your own top bar / adaptive navigation / drawer UI.
     * Keep `BottomBarItem` and routes, or define your own equivalents.
 
 * **Navigation**

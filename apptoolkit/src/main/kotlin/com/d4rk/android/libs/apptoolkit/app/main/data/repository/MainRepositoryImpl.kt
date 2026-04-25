@@ -41,21 +41,25 @@ class MainRepositoryImpl(
                     NavigationDrawerItem(
                         title = R.string.settings,
                         selectedIcon = Icons.Outlined.Settings,
+                        icon = Icons.Outlined.Settings,
                         route = NavigationDrawerRoutes.ROUTE_SETTINGS,
                     ),
                     NavigationDrawerItem(
                         title = R.string.help_and_feedback,
                         selectedIcon = Icons.AutoMirrored.Outlined.HelpOutline,
+                        icon = Icons.AutoMirrored.Outlined.HelpOutline,
                         route = NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK,
                     ),
                     NavigationDrawerItem(
                         title = R.string.updates,
                         selectedIcon = Icons.AutoMirrored.Outlined.EventNote,
+                        icon = Icons.AutoMirrored.Outlined.EventNote,
                         route = NavigationDrawerRoutes.ROUTE_UPDATES,
                     ),
                     NavigationDrawerItem(
                         title = R.string.share,
                         selectedIcon = Icons.Outlined.Share,
+                        icon = Icons.Outlined.Share,
                         route = NavigationDrawerRoutes.ROUTE_SHARE,
                     )
                 )

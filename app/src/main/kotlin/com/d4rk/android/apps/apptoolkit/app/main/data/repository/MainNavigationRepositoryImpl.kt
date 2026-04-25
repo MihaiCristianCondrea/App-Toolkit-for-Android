@@ -25,8 +25,8 @@ import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Widgets
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.R
-import com.d4rk.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
+import com.d4rk.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
@@ -47,6 +47,7 @@ class MainNavigationRepositoryImpl(
                     add(
                         NavigationDrawerItem(
                             title = R.string.components_title,
+                            icon = Icons.Outlined.Widgets,
                             selectedIcon = Icons.Outlined.Widgets,
                             route = NavigationRoutes.ROUTE_COMPONENTS,
                         )
@@ -56,6 +57,7 @@ class MainNavigationRepositoryImpl(
                     NavigationDrawerItem(
                         title = ToolkitR.string.settings,
                         selectedIcon = Icons.Outlined.Settings,
+                        icon = Icons.Outlined.Settings,
                         route = NavigationDrawerRoutes.ROUTE_SETTINGS,
                     ),
                 )
@@ -63,6 +65,7 @@ class MainNavigationRepositoryImpl(
                     NavigationDrawerItem(
                         title = ToolkitR.string.help_and_feedback,
                         selectedIcon = Icons.AutoMirrored.Outlined.HelpOutline,
+                        icon = Icons.AutoMirrored.Outlined.HelpOutline,
                         route = NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK,
                     ),
                 )
@@ -70,6 +73,7 @@ class MainNavigationRepositoryImpl(
                     NavigationDrawerItem(
                         title = ToolkitR.string.updates,
                         selectedIcon = Icons.AutoMirrored.Outlined.EventNote,
+                        icon = Icons.AutoMirrored.Outlined.EventNote,
                         route = NavigationDrawerRoutes.ROUTE_UPDATES,
                     ),
                 )
@@ -77,6 +81,7 @@ class MainNavigationRepositoryImpl(
                     NavigationDrawerItem(
                         title = ToolkitR.string.share,
                         selectedIcon = Icons.Outlined.Share,
+                        icon = Icons.Outlined.Share,
                         route = NavigationDrawerRoutes.ROUTE_SHARE,
                     ),
                 )

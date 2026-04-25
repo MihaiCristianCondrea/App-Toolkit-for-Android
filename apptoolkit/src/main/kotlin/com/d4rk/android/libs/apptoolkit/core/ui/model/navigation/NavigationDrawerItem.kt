@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @Immutable
 data class NavigationDrawerItem(
     val title: Int,
+    val icon: ImageVector,
     val selectedIcon: ImageVector,
     val route: String,
     val badgeText: String = "",

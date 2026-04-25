@@ -19,6 +19,7 @@ package com.d4rk.android.apps.apptoolkit.core.data.local.datastore
 
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.startupDestinationFlow
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -33,8 +34,14 @@ class DataStore(
     override val settingsInteracted: Flow<Boolean> = commonDataStore.settingsInteracted
     override val staticPaletteId: Flow<String> = commonDataStore.staticPaletteId
 
-    override fun <T> startupDestinationFlow(defaultRoute: String, mapToKey: (String) -> T): Flow<T> =
-        commonDataStore.startupDestinationFlow(defaultRoute = defaultRoute, mapToKey = mapToKey)
+    override fun <T : StableNavKey> startupDestinationFlow(
+        defaultRoute: String,
+        mapToKey: (String) -> T
+    ): Flow<T> =
+        commonDataStore.startupDestinationFlow(
+            defaultRoute = defaultRoute,
+            mapToKey = mapToKey
+        )
 
     override suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean) {
         commonDataStore.saveComponentsShowcaseUnlocked(isUnlocked)

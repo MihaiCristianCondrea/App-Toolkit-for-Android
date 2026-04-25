@@ -57,4 +57,5 @@ private fun defaultAppNavigationEntryBuilders(
     appsListEntryBuilder(context),
     favoriteAppsEntryBuilder(context),
     componentsEntryBuilder(context),
+    libraryExtrasEntryBuilder(context),
 )
