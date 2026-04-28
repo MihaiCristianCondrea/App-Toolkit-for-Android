@@ -20,6 +20,7 @@ package com.d4rk.android.libs.apptoolkit.app.settings.utils.providers
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import com.d4rk.android.libs.apptoolkit.app.about.ui.AboutScreen
 import com.d4rk.android.libs.apptoolkit.app.advanced.ui.AdvancedSettingsList
 import com.d4rk.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsList
@@ -28,6 +29,10 @@ import com.d4rk.android.libs.apptoolkit.app.privacy.ui.PrivacySettingsList
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.ThemeSettingsList
 
+/**
+ * Provider class that handles rendering of different settings sections.
+ */
+@Stable
 class GeneralSettingsContentProvider(
     private val customScreens: Map<String, @Composable (PaddingValues) -> Unit> = emptyMap(),
     private val aboutContent: (@Composable (PaddingValues, SnackbarHostState) -> Unit)? = null,

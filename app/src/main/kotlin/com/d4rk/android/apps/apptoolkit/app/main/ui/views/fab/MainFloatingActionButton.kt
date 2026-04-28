@@ -31,6 +31,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtend
 fun MainFloatingActionButton(
     modifier: Modifier = Modifier,
     visible: Boolean,
+    enabled: Boolean = true,
     expanded: Boolean,
     onClick: () -> Unit,
 ) {
@@ -38,6 +39,7 @@ fun MainFloatingActionButton(
     AnimatedExtendedFloatingActionButton(
         modifier = modifier,
         visible = visible,
+        enabled = enabled,
         onClick = onClick,
         icon = {
             Icon(

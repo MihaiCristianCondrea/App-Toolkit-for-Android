@@ -61,7 +61,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivi
 @Composable
 fun MainTopAppBar(
     title: String = stringResource(id = R.string.app_name),
-    navigationIcon: ImageVector,
+    navigationIcon: ImageVector?,
     onNavigationIconClick: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
@@ -71,13 +71,15 @@ fun MainTopAppBar(
     TopAppBar(
         title = { Text(text = title) },
         navigationIcon = {
-            AnimatedIconButtonDirection(
-                icon = navigationIcon,
-                contentDescription = stringResource(id = R.string.go_back),
-                onClick = onNavigationIconClick,
-                feedback = ButtonFeedback(hapticFeedbackType = null),
-                iconSize = SizeConstants.TwentyFourSize,
-            )
+            if (navigationIcon != null) {
+                AnimatedIconButtonDirection(
+                    icon = navigationIcon,
+                    contentDescription = stringResource(id = R.string.go_back),
+                    onClick = onNavigationIconClick,
+                    feedback = ButtonFeedback(hapticFeedbackType = null),
+                    iconSize = SizeConstants.TwentyFourSize,
+                )
+            }
         },
         actions = {
             val (expandedMenu, setExpandedMenu) = remember { mutableStateOf(value = false) }

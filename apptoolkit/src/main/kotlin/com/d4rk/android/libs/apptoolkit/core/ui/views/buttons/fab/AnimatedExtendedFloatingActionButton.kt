@@ -21,10 +21,15 @@ import android.view.View
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
@@ -49,6 +54,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
  * - Ensure the passed [icon] and [text] communicate the same action intent.
  *
  * @param visible Controls the visibility of the button. When true, the button is fully visible; when false, it's scaled down to nothing.
+ * @param enabled Controls the enabled state of the button. When false, the button is dimmed and unclickable.
  * @param onClick The action to perform when the button is clicked.
  * @param icon The icon to display within the button.
  * @param text Optional text to display alongside the icon in the button.
@@ -62,6 +68,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 fun AnimatedExtendedFloatingActionButton(
     modifier: Modifier = Modifier,
     visible: Boolean = true,
+    enabled: Boolean = true,
     onClick: () -> Unit,
     icon: @Composable () -> Unit,
     text: (@Composable () -> Unit)? = null,
@@ -81,18 +88,42 @@ fun AnimatedExtendedFloatingActionButton(
     val view: View = LocalView.current
 
     if (animatedScale > 0f) {
-        ExtendedFloatingActionButton(
-            onClick = {
-                feedback.performClick(view = view, hapticFeedback = hapticFeedback)
-                firebaseController.logGa4Event(ga4Event)
-                onClick()
-            }, icon = icon, text = text ?: {}, expanded = expanded, modifier = modifier
-                .bounceClick()
+        Box(
+            modifier = modifier
                 .graphicsLayer {
                     scaleX = animatedScale
                     scaleY = animatedScale
+                    alpha = if (enabled) 1f else 0.38f
                     transformOrigin = TransformOrigin(pivotFractionX = 1f, pivotFractionY = 1f)
-                }
-                .bounceClick(), containerColor = containerColor)
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            ExtendedFloatingActionButton(
+                onClick = {
+                    if (enabled) {
+                        feedback.performClick(view = view, hapticFeedback = hapticFeedback)
+                        firebaseController.logGa4Event(ga4Event)
+                        onClick()
+                    }
+                },
+                icon = icon,
+                text = text ?: {},
+                expanded = expanded,
+                modifier = Modifier.bounceClick(animationEnabled = enabled),
+                containerColor = containerColor
+            )
+
+            if (!enabled) {
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = {}
+                        )
+                )
+            }
+        }
     }
 }
