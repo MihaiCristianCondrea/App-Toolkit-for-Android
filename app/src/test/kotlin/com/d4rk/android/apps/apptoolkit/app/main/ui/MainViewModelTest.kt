@@ -17,6 +17,8 @@
 
 package com.d4rk.android.apps.apptoolkit.app.main.ui
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Android
 import androidx.compose.ui.graphics.vector.ImageVector
 import app.cash.turbine.test
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
@@ -74,6 +76,7 @@ class MainViewModelTest {
         val expectedItems = listOf(
             NavigationDrawerItem(
                 title = 1,
+                icon = Icons.Outlined.Android,
                 selectedIcon = createIcon(),
                 route = "route"
             )
@@ -139,6 +142,7 @@ class MainViewModelTest {
             val expectedItems = listOf(
                 NavigationDrawerItem(
                     title = 1,
+                    icon = Icons.Outlined.Android,
                     selectedIcon = createIcon(),
                     route = "route"
                 )

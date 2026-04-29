@@ -348,7 +348,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
                             windowWidthSizeClass,
                         ) {
                             val entryContext = AppNavigationEntryContext(
-                                paddingValues = paddingValues,
+                                paddingValues = PaddingValues(),
                                 windowWidthSizeClass = windowWidthSizeClass,
                                 onRandomAppHandlerChanged = onRandomAppHandlerChanged,
                             )

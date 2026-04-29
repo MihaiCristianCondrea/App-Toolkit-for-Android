@@ -20,8 +20,9 @@ package com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.screens
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -33,6 +34,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppListItem
@@ -44,12 +46,12 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.AppsListNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filterNotNull
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
@@ -158,15 +160,19 @@ private fun AppsGrid(
             .collect(onFirstVisibleAppChanged)
     }
 
+    val layoutDirection = LocalLayoutDirection.current
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = columnCount),
         state = listState,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
-        contentPadding = PaddingValues(SizeConstants.LargeSize),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(
+            top = paddingValues.calculateTopPadding() + SizeConstants.LargeSize,
+            bottom = paddingValues.calculateBottomPadding() + SizeConstants.LargeSize,
+            start = paddingValues.calculateStartPadding(layoutDirection) + SizeConstants.LargeSize,
+            end = paddingValues.calculateEndPadding(layoutDirection) + SizeConstants.LargeSize,
+        ),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize)
+        horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
     ) {
         itemsIndexed(
             items = items,

@@ -18,12 +18,12 @@
 package com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation
 
 import android.content.Context
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material3.DrawerState
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpActivity
 import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
-import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
@@ -55,6 +55,7 @@ class NavigationItemClickTest {
 
     private fun navigationItem(route: String) = NavigationDrawerItem(
         title = 0,
+        icon = Icons.Outlined.Android,
         selectedIcon = ImageVector.Builder(
             name = "test",
             defaultWidth = SizeConstants.TwentyFourSize,
@@ -76,8 +77,8 @@ class NavigationItemClickTest {
     }
 
     @Test
-    fun `settings route opens settings activity and closes drawer`() = runTest {
-        every { context.openActivity(SettingsActivity::class.java) } returns true
+    fun `settings route triggers internal navigation and closes drawer`() = runTest {
+        val onInternalNavigationRequested = mockk<(String) -> Unit>(relaxed = true)
         val drawerState = mockk<DrawerState>()
         coEvery { drawerState.close() } just Runs
 
@@ -85,18 +86,19 @@ class NavigationItemClickTest {
             context = context,
             item = navigationItem(NavigationDrawerRoutes.ROUTE_SETTINGS),
             drawerState = drawerState,
-            coroutineScope = this
+            coroutineScope = this,
+            onInternalNavigationRequested = onInternalNavigationRequested
         )
         advanceUntilIdle()
 
-        verify(exactly = 1) { context.openActivity(SettingsActivity::class.java) }
+        verify(exactly = 1) { onInternalNavigationRequested(NavigationDrawerRoutes.ROUTE_SETTINGS) }
         coVerify(exactly = 1) { drawerState.close() }
         confirmVerified(drawerState)
     }
 
     @Test
-    fun `help and feedback route opens help activity and closes drawer`() = runTest {
-        every { context.openActivity(HelpActivity::class.java) } returns true
+    fun `help and feedback route triggers internal navigation and closes drawer`() = runTest {
+        val onInternalNavigationRequested = mockk<(String) -> Unit>(relaxed = true)
         val drawerState = mockk<DrawerState>()
         coEvery { drawerState.close() } just Runs
 
@@ -104,11 +106,12 @@ class NavigationItemClickTest {
             context = context,
             item = navigationItem(NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK),
             drawerState = drawerState,
-            coroutineScope = this
+            coroutineScope = this,
+            onInternalNavigationRequested = onInternalNavigationRequested
         )
         advanceUntilIdle()
 
-        verify(exactly = 1) { context.openActivity(HelpActivity::class.java) }
+        verify(exactly = 1) { onInternalNavigationRequested(NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK) }
         coVerify(exactly = 1) { drawerState.close() }
         confirmVerified(drawerState)
     }
