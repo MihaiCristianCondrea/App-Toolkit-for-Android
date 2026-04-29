@@ -18,6 +18,7 @@
 package com.d4rk.android.libs.apptoolkit.app.licenses.ui
 
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,7 +48,10 @@ private const val LICENSES_SCREEN_CLASS = "LicensesScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LicensesScreen(onBackClicked: (() -> Unit)? = null) {
+fun LicensesScreen(
+    onBackClicked: (() -> Unit)? = null,
+    isEmbedded: Boolean = false,
+) {
     val firebaseController: FirebaseController = koinInject()
 
     TrackScreenView(
@@ -63,11 +67,7 @@ fun LicensesScreen(onBackClicked: (() -> Unit)? = null) {
     val defaultBackClicked: () -> Unit = remember(activity) { { activity?.finish() } }
     val backClicked: () -> Unit = onBackClicked ?: defaultBackClicked
 
-    LargeTopAppBarWithScaffold(
-        title = stringResource(id = R.string.oss_license_title),
-        onBackClicked = backClicked,
-        scrollBehavior = scrollBehavior
-    ) { paddingValues ->
+    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
         val libraries: Libs? by produceLibraries(resId = R.raw.aboutlibraries)
 
         val state = if (libraries == null) ScreenState.IsLoading() else ScreenState.Success()
@@ -87,6 +87,17 @@ fun LicensesScreen(onBackClicked: (() -> Unit)? = null) {
             dimensions = LibraryDefaults.libraryDimensions(),
             showDescription = true,
             showFundingBadges = true,
+        )
+    }
+
+    if (isEmbedded) {
+        content(PaddingValues())
+    } else {
+        LargeTopAppBarWithScaffold(
+            title = stringResource(id = R.string.oss_license_title),
+            onBackClicked = backClicked,
+            scrollBehavior = scrollBehavior,
+            content = content
         )
     }
 }

@@ -18,10 +18,13 @@
 package com.d4rk.android.libs.apptoolkit.app.help.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -105,6 +108,7 @@ private object HelpActionNames {
 @Composable
 fun HelpScreen(
     config: AppVersionInfo,
+    isEmbedded: Boolean = false,
 ) {
     val viewModel: HelpViewModel = koinViewModel()
     val firebaseController: FirebaseController = koinInject()
@@ -158,35 +162,7 @@ fun HelpScreen(
             }
     }
 
-    LargeTopAppBarWithScaffold(
-        title = stringResource(id = R.string.help),
-        onBackClicked = {
-            firebaseController.logEvent(helpActionEvent(actionName = HelpActionNames.BACK_CLICK))
-            activity?.finish()
-        },
-        actions = {
-            HelpScreenMenuActions(
-                config = config,
-                showDialog = showDialog.value,
-                onShowDialogChange = { showDialog.value = it }
-            )
-        },
-        scrollBehavior = scrollBehavior,
-        floatingActionButton = {
-            AnimatedExtendedFloatingActionButton(
-                visible = true,
-                expanded = isFabExtended.value,
-                onClick = {
-                    firebaseController.logEvent(helpActionEvent(actionName = HelpActionNames.FEEDBACK_SHEET_OPENED))
-                    showFeedbackBottomSheet.value = true
-                },
-                firebaseController = firebaseController,
-                ga4Event = helpPreferenceTapEvent(preferenceKey = HelpPreferenceKeys.FEEDBACK),
-                text = { Text(text = stringResource(id = R.string.feedback)) },
-                icon = { Icon(imageVector = Icons.Outlined.RateReview, contentDescription = null) },
-            )
-        }
-    ) { paddingValues ->
+    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
         ScreenStateHandler(
             screenState = screenState,
             onLoading = { LoadingScreen() },
@@ -217,6 +193,71 @@ fun HelpScreen(
                     paddingValues = paddingValues,
                 )
             }
+        )
+    }
+
+    if (isEmbedded) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            content(PaddingValues())
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(all = SizeConstants.LargeSize)
+            ) {
+                AnimatedExtendedFloatingActionButton(
+                    visible = true,
+                    expanded = isFabExtended.value,
+                    onClick = {
+                        firebaseController.logEvent(helpActionEvent(actionName = HelpActionNames.FEEDBACK_SHEET_OPENED))
+                        showFeedbackBottomSheet.value = true
+                    },
+                    firebaseController = firebaseController,
+                    ga4Event = helpPreferenceTapEvent(preferenceKey = HelpPreferenceKeys.FEEDBACK),
+                    text = { Text(text = stringResource(id = R.string.feedback)) },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Outlined.RateReview,
+                            contentDescription = null
+                        )
+                    },
+                )
+            }
+        }
+    } else {
+        LargeTopAppBarWithScaffold(
+            title = stringResource(id = R.string.help),
+            onBackClicked = {
+                firebaseController.logEvent(helpActionEvent(actionName = HelpActionNames.BACK_CLICK))
+                activity?.finish()
+            },
+            actions = {
+                HelpScreenMenuActions(
+                    config = config,
+                    showDialog = showDialog.value,
+                    onShowDialogChange = { showDialog.value = it }
+                )
+            },
+            scrollBehavior = scrollBehavior,
+            floatingActionButton = {
+                AnimatedExtendedFloatingActionButton(
+                    visible = true,
+                    expanded = isFabExtended.value,
+                    onClick = {
+                        firebaseController.logEvent(helpActionEvent(actionName = HelpActionNames.FEEDBACK_SHEET_OPENED))
+                        showFeedbackBottomSheet.value = true
+                    },
+                    firebaseController = firebaseController,
+                    ga4Event = helpPreferenceTapEvent(preferenceKey = HelpPreferenceKeys.FEEDBACK),
+                    text = { Text(text = stringResource(id = R.string.feedback)) },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Outlined.RateReview,
+                            contentDescription = null
+                        )
+                    },
+                )
+            },
+            content = content
         )
     }
 

@@ -102,7 +102,9 @@ private object SettingsActionNames {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    isEmbedded: Boolean = false,
+) {
     val viewModel: SettingsViewModel = koinViewModel()
     val contentProvider: GeneralSettingsContentProvider = koinInject()
     val screenState: UiStateScreen<SettingsConfig> by viewModel.uiState.collectAsStateWithLifecycle()
@@ -124,15 +126,7 @@ fun SettingsScreen() {
         viewModel.onEvent(event = SettingsEvent.Load)
     }
 
-    LargeTopAppBarWithScaffold(
-        title = stringResource(id = R.string.settings),
-        onBackClicked = {
-            firebaseController.logGa4Event(
-                ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.BACK_CLICK)
-            )
-            (context as? android.app.Activity)?.finish()
-        },
-    ) { paddingValues ->
+    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
         ScreenStateHandler(
             screenState = screenState,
             onLoading = { LoadingScreen() },
@@ -157,6 +151,21 @@ fun SettingsScreen() {
                     firebaseController = firebaseController,
                 )
             },
+        )
+    }
+
+    if (isEmbedded) {
+        content(PaddingValues())
+    } else {
+        LargeTopAppBarWithScaffold(
+            title = stringResource(id = R.string.settings),
+            onBackClicked = {
+                firebaseController.logGa4Event(
+                    ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.BACK_CLICK)
+                )
+                (context as? android.app.Activity)?.finish()
+            },
+            content = content
         )
     }
 }

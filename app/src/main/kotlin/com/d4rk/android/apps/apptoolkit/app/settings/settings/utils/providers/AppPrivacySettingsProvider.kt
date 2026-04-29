@@ -18,29 +18,33 @@
 package com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers
 
 import android.content.Context
+import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AdsSettingsRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.PermissionsRoute
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.ads.ui.AdsSettingsActivity
-import com.d4rk.android.libs.apptoolkit.app.permissions.ui.PermissionsActivity
-import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.PrivacySettingsProvider
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 
-class AppPrivacySettingsProvider(val context: Context) : PrivacySettingsProvider {
+class AppPrivacySettingsProvider(
+    private val context: Context,
+    private val navigationManager: NavigationManager,
+) : PrivacySettingsProvider {
 
     override fun openPermissionsScreen() {
-        context.openActivity(PermissionsActivity::class.java)
+        navigationManager.navigateTo(PermissionsRoute)
     }
 
     override fun openAdsScreen() {
-        context.openActivity(AdsSettingsActivity::class.java)
+        navigationManager.navigateTo(AdsSettingsRoute)
     }
 
     override fun openUsageAndDiagnosticsScreen() {
-        GeneralSettingsActivity.start(
-            context = context,
-            title = context.getString(R.string.usage_and_diagnostics),
-            contentKey = SettingsContent.USAGE_AND_DIAGNOSTICS
+        navigationManager.navigateTo(
+            GeneralSettingsRoute(
+                title = context.getString(R.string.usage_and_diagnostics),
+                contentKey = SettingsContent.USAGE_AND_DIAGNOSTICS
+            )
         )
     }
 }

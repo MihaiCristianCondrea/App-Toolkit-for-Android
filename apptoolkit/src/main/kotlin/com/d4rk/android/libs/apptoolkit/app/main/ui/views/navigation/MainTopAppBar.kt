@@ -18,6 +18,13 @@
 package com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation
 
 import android.content.Context
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreVert
@@ -33,6 +40,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -69,7 +77,25 @@ fun MainTopAppBar(
     val context: Context = LocalContext.current
 
     TopAppBar(
-        title = { Text(text = title) },
+        title = {
+            AnimatedContent(
+                targetState = title,
+                transitionSpec = {
+                    (fadeIn(animationSpec = tween(durationMillis = 220, delayMillis = 90)) +
+                            scaleIn(
+                                initialScale = 0.92f,
+                                animationSpec = tween(durationMillis = 220, delayMillis = 90)
+                            ))
+                        .togetherWith(fadeOut(animationSpec = tween(durationMillis = 90)))
+                },
+                label = "MainTopAppBarTitleAnimation",
+            ) { targetTitle ->
+                Text(
+                    text = targetTitle,
+                    modifier = Modifier.animateContentSize(),
+                )
+            }
+        },
         navigationIcon = {
             if (navigationIcon != null) {
                 AnimatedIconButtonDirection(

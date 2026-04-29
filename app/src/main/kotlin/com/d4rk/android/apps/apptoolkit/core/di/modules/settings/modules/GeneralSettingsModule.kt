@@ -33,8 +33,18 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val generalSettingsModule: Module = module {
-    single<DisplaySettingsProvider> { AppDisplaySettingsProvider(context = get()) }
-    single<PrivacySettingsProvider> { AppPrivacySettingsProvider(context = get()) }
+    single<DisplaySettingsProvider> {
+        AppDisplaySettingsProvider(
+            context = get(),
+            navigationManager = get()
+        )
+    }
+    single<PrivacySettingsProvider> {
+        AppPrivacySettingsProvider(
+            context = get(),
+            navigationManager = get()
+        )
+    }
     single<UnlockComponentsShowcaseUseCase> { UnlockComponentsShowcaseUseCase(dataStore = get()) }
     single<GeneralSettingsContentProvider> {
         GeneralSettingsContentProvider(

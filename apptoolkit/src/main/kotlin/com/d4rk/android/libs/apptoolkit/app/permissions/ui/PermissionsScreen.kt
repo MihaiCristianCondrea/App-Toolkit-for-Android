@@ -59,7 +59,9 @@ private const val PERMISSIONS_SCREEN_CLASS = "PermissionsScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PermissionsScreen() {
+fun PermissionsScreen(
+    isEmbedded: Boolean = false,
+) {
     val viewModel: PermissionsViewModel = koinViewModel()
     val screenState: UiStateScreen<SettingsConfig> by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -80,10 +82,7 @@ fun PermissionsScreen() {
         viewModel.onEvent(PermissionsEvent.Load)
     }
 
-    LargeTopAppBarWithScaffold(
-        title = stringResource(id = R.string.permissions),
-        onBackClicked = { (context as Activity).finish() },
-    ) { paddingValues ->
+    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
         ScreenStateHandler(
             screenState = screenState,
             onLoading = { LoadingScreen() },
@@ -110,6 +109,16 @@ fun PermissionsScreen() {
                     settingsConfig = settingsConfig,
                 )
             },
+        )
+    }
+
+    if (isEmbedded) {
+        content(PaddingValues())
+    } else {
+        LargeTopAppBarWithScaffold(
+            title = stringResource(id = R.string.permissions),
+            onBackClicked = { (context as Activity).finish() },
+            content = content
         )
     }
 }

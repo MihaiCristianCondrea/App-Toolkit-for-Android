@@ -78,6 +78,10 @@ class GeneralSettingsActivity : BaseActivity() {
 
     @Composable
     override fun ScreenContent() {
-        GeneralSettingsScreen(title = title, contentKey = contentKey) { finish() }
+        GeneralSettingsScreen(
+            title = title,
+            contentKey = contentKey,
+            onBackClicked = { finish() },
+        )
     }
 }

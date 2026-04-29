@@ -74,7 +74,9 @@ private object AdsActionNames {
 /** Compose screen displaying ad preferences. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdsSettingsScreen() {
+fun AdsSettingsScreen(
+    isEmbedded: Boolean = false,
+) {
     val viewModel: AdsSettingsViewModel = koinViewModel()
     val screenState: UiStateScreen<AdsSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -102,27 +104,7 @@ fun AdsSettingsScreen() {
         }
     }
 
-    LargeTopAppBarWithScaffold(
-        title = stringResource(id = R.string.ads),
-        onBackClicked = remember(activity) {
-            {
-                firebaseController.logEvent(
-                    AnalyticsEvent(
-                        name = SettingsAnalytics.Events.ACTION,
-                        params = mapOf(
-                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                ADS_SETTINGS_SCREEN_NAME
-                            ),
-                            SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(
-                                AdsActionNames.BACK_CLICK
-                            ),
-                        ),
-                    )
-                )
-                activity?.finish()
-            }
-        }
-    ) { paddingValues: PaddingValues ->
+    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
         ScreenStateHandler(
             screenState = screenState,
             onLoading = { LoadingScreen() },
@@ -218,6 +200,33 @@ fun AdsSettingsScreen() {
                     }
                 }
             }
+        )
+    }
+
+    if (isEmbedded) {
+        content(PaddingValues())
+    } else {
+        LargeTopAppBarWithScaffold(
+            title = stringResource(id = R.string.ads),
+            onBackClicked = remember(activity) {
+                {
+                    firebaseController.logEvent(
+                        AnalyticsEvent(
+                            name = SettingsAnalytics.Events.ACTION,
+                            params = mapOf(
+                                SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                    ADS_SETTINGS_SCREEN_NAME
+                                ),
+                                SettingsAnalytics.Params.ACTION_NAME to AnalyticsValue.Str(
+                                    AdsActionNames.BACK_CLICK
+                                ),
+                            ),
+                        )
+                    )
+                    activity?.finish()
+                }
+            },
+            content = content
         )
     }
 }

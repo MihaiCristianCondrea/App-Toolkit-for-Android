@@ -38,6 +38,24 @@ data object ComponentsRoute : AppNavKey
 @Parcelize
 data object LibraryExtrasRoute : AppNavKey
 
+@Parcelize
+data object SettingsRoute : AppNavKey
+
+@Parcelize
+data class GeneralSettingsRoute(val title: String, val contentKey: String) : AppNavKey
+
+@Parcelize
+data object HelpRoute : AppNavKey
+
+@Parcelize
+data object AdsSettingsRoute : AppNavKey
+
+@Parcelize
+data object PermissionsRoute : AppNavKey
+
+@Parcelize
+data object LicensesRoute : AppNavKey
+
 object NavigationRoutes {
     const val ROUTE_APPS_LIST: String = "apps_list"
     const val ROUTE_FAVORITE_APPS: String = "favorite_apps"

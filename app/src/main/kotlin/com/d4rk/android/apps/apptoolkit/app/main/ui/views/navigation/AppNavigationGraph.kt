@@ -58,4 +58,10 @@ private fun defaultAppNavigationEntryBuilders(
     favoriteAppsEntryBuilder(context),
     componentsEntryBuilder(context),
     libraryExtrasEntryBuilder(context),
+    settingsEntryBuilder(),
+    generalSettingsEntryBuilder(),
+    helpEntryBuilder(),
+    adsSettingsEntryBuilder(),
+    permissionsEntryBuilder(),
+    licensesEntryBuilder(),
 )

@@ -24,9 +24,10 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Security
+import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.constants.SettingsConstants
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsCategory
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsPreference
@@ -36,6 +37,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openAppNot
 
 class AppSettingsProvider(
     context: Context,
+    private val navigationManager: NavigationManager,
 ) : SettingsProvider {
     private val context: Context = context.applicationContext
 
@@ -53,10 +55,11 @@ class AppSettingsProvider(
                             action = {
                                 val opened = context.openAppNotificationSettings()
                                 if (!opened) {
-                                    GeneralSettingsActivity.start(
-                                        context = context,
-                                        title = context.getString(R.string.security_and_privacy),
-                                        contentKey = SettingsContent.SECURITY_AND_PRIVACY,
+                                    navigationManager.navigateTo(
+                                        GeneralSettingsRoute(
+                                            title = context.getString(R.string.security_and_privacy),
+                                            contentKey = SettingsContent.SECURITY_AND_PRIVACY,
+                                        )
                                     )
                                 }
                             },
@@ -67,10 +70,11 @@ class AppSettingsProvider(
                             title = context.getString(R.string.display),
                             summary = context.getString(R.string.summary_preference_settings_display),
                             action = {
-                                GeneralSettingsActivity.start(
-                                    context = context,
-                                    title = context.getString(R.string.display),
-                                    contentKey = SettingsContent.DISPLAY,
+                                navigationManager.navigateTo(
+                                    GeneralSettingsRoute(
+                                        title = context.getString(R.string.display),
+                                        contentKey = SettingsContent.DISPLAY,
+                                    )
                                 )
                             },
                         ),
@@ -84,10 +88,11 @@ class AppSettingsProvider(
                             title = context.getString(R.string.security_and_privacy),
                             summary = context.getString(R.string.summary_preference_settings_privacy_and_security),
                             action = {
-                                GeneralSettingsActivity.start(
-                                    context = context,
-                                    title = context.getString(R.string.security_and_privacy),
-                                    contentKey = SettingsContent.SECURITY_AND_PRIVACY,
+                                navigationManager.navigateTo(
+                                    GeneralSettingsRoute(
+                                        title = context.getString(R.string.security_and_privacy),
+                                        contentKey = SettingsContent.SECURITY_AND_PRIVACY,
+                                    )
                                 )
                             },
                         ),
@@ -97,10 +102,11 @@ class AppSettingsProvider(
                             title = context.getString(R.string.advanced),
                             summary = context.getString(R.string.summary_preference_settings_advanced),
                             action = {
-                                GeneralSettingsActivity.start(
-                                    context = context,
-                                    title = context.getString(R.string.advanced),
-                                    contentKey = SettingsContent.ADVANCED,
+                                navigationManager.navigateTo(
+                                    GeneralSettingsRoute(
+                                        title = context.getString(R.string.advanced),
+                                        contentKey = SettingsContent.ADVANCED,
+                                    )
                                 )
                             },
                         ),
@@ -110,10 +116,11 @@ class AppSettingsProvider(
                             title = context.getString(R.string.about),
                             summary = context.getString(R.string.summary_preference_settings_about),
                             action = {
-                                GeneralSettingsActivity.start(
-                                    context = context,
-                                    title = context.getString(R.string.about),
-                                    contentKey = SettingsContent.ABOUT,
+                                navigationManager.navigateTo(
+                                    GeneralSettingsRoute(
+                                        title = context.getString(R.string.about),
+                                        contentKey = SettingsContent.ABOUT,
+                                    )
                                 )
                             },
                         ),

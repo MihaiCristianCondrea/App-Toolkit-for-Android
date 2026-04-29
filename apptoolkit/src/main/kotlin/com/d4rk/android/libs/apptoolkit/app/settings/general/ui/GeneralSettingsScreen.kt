@@ -48,6 +48,7 @@ fun GeneralSettingsScreen(
     title: String,
     contentKey: String?,
     onBackClicked: () -> Unit,
+    isEmbedded: Boolean = false,
 ) {
     val viewModel: GeneralSettingsViewModel = koinViewModel()
     val contentProvider: GeneralSettingsContentProvider = koinInject()
@@ -64,11 +65,7 @@ fun GeneralSettingsScreen(
         viewModel.onEvent(GeneralSettingsEvent.Load(contentKey = contentKey))
     }
 
-    LargeTopAppBarWithScaffold(
-        title = title,
-        onBackClicked = onBackClicked,
-        snackbarHostState = snackbarHostState,
-    ) { paddingValues: PaddingValues ->
+    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
         val screenState: UiStateScreen<GeneralSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
         TrackScreenState(
@@ -82,6 +79,17 @@ fun GeneralSettingsScreen(
             contentProvider = contentProvider,
             paddingValues = paddingValues,
             snackbarHostState = snackbarHostState,
+        )
+    }
+
+    if (isEmbedded) {
+        content(PaddingValues())
+    } else {
+        LargeTopAppBarWithScaffold(
+            title = title,
+            onBackClicked = onBackClicked,
+            snackbarHostState = snackbarHostState,
+            content = content
         )
     }
 }

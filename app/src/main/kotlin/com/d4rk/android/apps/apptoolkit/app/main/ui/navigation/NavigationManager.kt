@@ -15,28 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.libs.apptoolkit.core.ui.views.layouts
+package com.d4rk.android.apps.apptoolkit.app.main.ui.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 /**
- * Root container for screen content.
- *
- * Usage guidance:
- * - Use as a layout shell only.
- * - Keep navigation, side effects, and business rules outside this container.
+ * A manager that allows different components to request navigation events
+ * that can be handled by the main navigation container.
  */
-@Composable
-fun RootContentContainer(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-    ) {
-        content()
+class NavigationManager {
+    private val _navigationRequests = MutableSharedFlow<AppNavKey>(extraBufferCapacity = 1)
+    val navigationRequests: SharedFlow<AppNavKey> = _navigationRequests.asSharedFlow()
+
+    fun navigateTo(route: AppNavKey) {
+        _navigationRequests.tryEmit(route)
     }
 }

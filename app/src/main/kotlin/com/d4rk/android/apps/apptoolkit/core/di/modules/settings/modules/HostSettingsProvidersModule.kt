@@ -20,12 +20,12 @@ package com.d4rk.android.apps.apptoolkit.core.di.modules.settings.modules
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppAboutSettingsProvider
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppAdvancedSettingsProvider
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers.AppSettingsProvider
-import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.google.blue.bluePalette
-import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AdvancedSettingsProvider
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.google.blue.bluePalette
+import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -34,7 +34,7 @@ import org.koin.dsl.module
  * Host-only provider bindings consumed by toolkit settings modules.
  */
 val hostSettingsProvidersModule: Module = module {
-    single<SettingsProvider> { AppSettingsProvider(context = get()) }
+    single<SettingsProvider> { AppSettingsProvider(context = get(), navigationManager = get()) }
     single<AboutSettingsProvider> { AppAboutSettingsProvider(context = get()) }
     single<AdvancedSettingsProvider> { AppAdvancedSettingsProvider(context = get()) }
     single<ColorPalette>(named(AppToolkitDiConstants.DEFAULT_THEME_PALETTE)) { bluePalette }

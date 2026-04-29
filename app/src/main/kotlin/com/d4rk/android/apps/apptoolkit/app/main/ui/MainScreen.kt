@@ -19,7 +19,6 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -58,20 +57,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
+import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
 import com.d4rk.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.fab.MainFloatingActionButton
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.AppNavigationEntryContext
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.RandomAppHandler
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.appNavigationEntryBuilders
+import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.isDrawerItemSelected
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AdsSettingsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.HelpRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.LicensesRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.PermissionsRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.SettingsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.defaults.MainNavigationDefaults
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.MainTopAppBar
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.NavigationDrawerItemContent
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
@@ -98,14 +108,14 @@ import org.koin.core.qualifier.named
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
+fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
     val uiStateScreen by viewModel.uiState.collectAsState()
     val uiState = uiStateScreen.data ?: MainUiState()
 
     val context = LocalContext.current
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val scrollBehavior: TopAppBarScrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+        TopAppBarDefaults.pinnedScrollBehavior()
 
     val navigationState = rememberNavigationState(
         startRoute = AppsListRoute,
@@ -120,7 +130,15 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
     val appBarTitleResId: Int = remember(currentRoute) {
         MainNavigationDefaults.bottomBarItems
             .find { item: BottomBarItem<AppNavKey> -> item.route == currentRoute }?.title
-            ?: com.d4rk.android.libs.apptoolkit.R.string.app_name
+            ?: when (currentRoute) {
+                is SettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.settings
+                is GeneralSettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.settings // Or more specific title if needed
+                is HelpRoute -> com.d4rk.android.libs.apptoolkit.R.string.help
+                is AdsSettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.ads
+                is PermissionsRoute -> com.d4rk.android.libs.apptoolkit.R.string.permissions
+                is LicensesRoute -> com.d4rk.android.libs.apptoolkit.R.string.oss_license_title
+                else -> com.d4rk.android.libs.apptoolkit.R.string.app_name
+            }
     }
 
     val windowWidthSizeClass: AppWindowWidthSizeClass =
@@ -134,9 +152,28 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
         }
     }
 
+    val showNavigationSuite: Boolean by remember(currentRoute, layoutType) {
+        derivedStateOf {
+            val isTopLevel = currentRoute in NavigationRoutes.topLevelRoutes
+            val isRail = layoutType == NavigationSuiteType.NavigationRail
+
+            // Always show the navigation suite if it's a rail (tablet global nav)
+            // or if we are on a top-level screen.
+            isRail || isTopLevel
+        }
+    }
+
     val modalDrawerEnabled: Boolean = windowWidthSizeClass == AppWindowWidthSizeClass.Compact
     val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
+
+    val navigationManager: NavigationManager = koinInject()
+
+    LaunchedEffect(navigationManager, navigator) {
+        navigationManager.navigationRequests.collect { route ->
+            navigator.navigate(route)
+        }
+    }
 
     val changelogUrl: String = koinInject(qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG))
 
@@ -155,7 +192,22 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
     val bottomItems: ImmutableList<BottomBarItem<AppNavKey>> = MainNavigationDefaults.bottomBarItems
     var showChangelog by remember { mutableStateOf(false) }
 
-    val onNavigationDrawerItemClick: (NavigationDrawerItem, DrawerState, CoroutineScope) -> Unit =
+    val appRouteHandlers: Map<String, (NavigationDrawerItem) -> Unit> = remember(navigator) {
+        mapOf(
+            NavigationRoutes.ROUTE_APPS_LIST to { navigator.navigate(AppsListRoute) },
+            NavigationRoutes.ROUTE_FAVORITE_APPS to { navigator.navigate(FavoriteAppsRoute) },
+            NavigationRoutes.ROUTE_COMPONENTS to { navigator.navigate(ComponentsRoute) },
+        )
+    }
+
+    val railDrawerItems: Pair<List<NavigationDrawerItem>, List<NavigationDrawerItem>> =
+        remember(uiState.navigationDrawerItems) {
+            uiState.navigationDrawerItems.partition { item: NavigationDrawerItem ->
+                item.route !in BottomDrawerActionRoutes
+            }
+        }
+
+    val onNavigationDrawerItemClick: (NavigationDrawerItem, DrawerState?, CoroutineScope?) -> Unit =
         { item, state, scope ->
             handleNavigationItemClick(
                 context = context,
@@ -163,13 +215,22 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
                 drawerState = state,
                 coroutineScope = scope,
                 onChangelogRequested = { showChangelog = true },
+                onInternalNavigationRequested = { route ->
+                    when (route) {
+                        NavigationDrawerRoutes.ROUTE_SETTINGS -> navigator.navigate(SettingsRoute)
+                        NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> navigator.navigate(
+                            HelpRoute
+                        )
+                    }
+                },
+                additionalHandlers = appRouteHandlers,
             )
         }
 
     val shellContent: @Composable () -> Unit = {
         NavigationSuiteScaffold(
             modifier = Modifier.imePadding(),
-            layoutType = layoutType,
+            layoutType = if (showNavigationSuite) layoutType else NavigationSuiteType.None,
             navigationSuiteItems = {
                 bottomItems.forEach { item: BottomBarItem<AppNavKey> ->
                     val isSelected: Boolean = navigator.state.currentRoute == item.route
@@ -186,6 +247,58 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
                         selected = isSelected,
                         onClick = { navigator.navigate(route = item.route) },
                     )
+                }
+
+                if (!modalDrawerEnabled) {
+                    railDrawerItems.first.forEach { item: NavigationDrawerItem ->
+                        val isSelected: Boolean = isDrawerItemSelected(
+                            itemRoute = item.route,
+                            currentRoute = currentRoute,
+                        )
+                        item(
+                            selected = isSelected,
+                            onClick = { onNavigationDrawerItemClick(item, null, null) },
+                            icon = {
+                                Icon(
+                                    imageVector = if (isSelected) {
+                                        item.selectedIcon
+                                    } else {
+                                        item.icon
+                                    },
+                                    contentDescription = stringResource(item.title),
+                                )
+                            },
+                            label = { Text(text = stringResource(item.title)) },
+                        )
+                    }
+
+                    // We cannot easily add a Spacer with weight(1f) inside NavigationSuiteScope's item list
+                    // as it expects discrete items. However, we can add a dummy disabled item if needed,
+                    // or just accept that they are listed sequentially.
+                    // The user's provided code used a Column inside a label of a single item() as a hack.
+                    // Let's try to match the user's intent if possible, but the standard way is just adding items.
+
+                    railDrawerItems.second.forEach { item: NavigationDrawerItem ->
+                        val isSelected: Boolean = isDrawerItemSelected(
+                            itemRoute = item.route,
+                            currentRoute = currentRoute,
+                        )
+                        item(
+                            selected = isSelected,
+                            onClick = { onNavigationDrawerItemClick(item, null, null) },
+                            icon = {
+                                Icon(
+                                    imageVector = if (isSelected) {
+                                        item.selectedIcon
+                                    } else {
+                                        item.icon
+                                    },
+                                    contentDescription = stringResource(item.title),
+                                )
+                            },
+                            label = { Text(text = stringResource(item.title)) },
+                        )
+                    }
                 }
             },
         ) {
@@ -209,10 +322,8 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
                             }
                         },
                         scrollBehavior = scrollBehavior,
-                        windowInsets = WindowInsets(0, 0, 0, 0),
                     )
                 },
-                contentWindowInsets = WindowInsets(0, 0, 0, 0),
                 floatingActionButton = {
                     val fabEnabled = isFabVisible && randomAppHandler != null
                     MainFloatingActionButton(
@@ -230,7 +341,6 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
                     modifier = Modifier
                         .padding(paddingValues)
                         .consumeWindowInsets(paddingValues),
-                    windowWidthSizeClass = windowWidthSizeClass,
                 ) {
                     val entryBuilders: List<NavigationEntryBuilder<AppNavKey>> =
                         remember(
@@ -328,3 +438,10 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
         )
     }
 }
+
+private val BottomDrawerActionRoutes = persistentSetOf(
+    NavigationDrawerRoutes.ROUTE_SETTINGS,
+    NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK,
+    NavigationDrawerRoutes.ROUTE_UPDATES,
+    NavigationDrawerRoutes.ROUTE_SHARE,
+)
