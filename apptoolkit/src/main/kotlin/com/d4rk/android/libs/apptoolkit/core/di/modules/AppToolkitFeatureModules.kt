@@ -77,6 +77,13 @@ fun appToolkitFeatureModules(
     reviewModule(),
 )
 
+/**
+ * DI lifetime checklist (see docs/apptoolkit/core/di-lifetime-policy.md):
+ * - Use `single` for heavy/stateful managers (billing, datastore, network clients).
+ * - Use `factory` for lightweight builders or objects that may later capture Activity/screen refs.
+ * - Keep `viewModel` bindings unchanged because lifecycle is managed by Koin ViewModel DSL.
+ * - Add one-line rationale for non-obvious bindings, especially `*Factory` types.
+ */
 private fun appToolkitCoreModule(
     hostBuildConfig: AppToolkitHostBuildConfig,
     startupProviderFactory: () -> StartupProvider,
@@ -95,7 +102,7 @@ private fun appToolkitCoreModule(
 }
 
 private fun supportModule(): Module = module {
-    single<BillingRepository>(createdAtStart = true) {
+    single<BillingRepository>(createdAtStart = true) { // Heavy stateful billing manager with long-lived scope; eager init avoids purchase flow lag.
         val dispatchers = get<DispatcherProvider>()
         BillingRepository.getInstance(
             context = get(),

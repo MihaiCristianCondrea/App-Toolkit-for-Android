@@ -46,7 +46,9 @@ val generalSettingsModule: Module = module {
         )
     }
     single<UnlockComponentsShowcaseUseCase> { UnlockComponentsShowcaseUseCase(dataStore = get()) }
-    single<GeneralSettingsContentProvider> {
+    // Keep as factory: this provider carries composable content lambdas and should stay short-lived
+    // to avoid accidental capture of screen-scoped references in global state.
+    factory<GeneralSettingsContentProvider> {
         GeneralSettingsContentProvider(
             aboutContent = { paddingValues, snackbarHostState ->
                 AppAboutSettingsContent(
