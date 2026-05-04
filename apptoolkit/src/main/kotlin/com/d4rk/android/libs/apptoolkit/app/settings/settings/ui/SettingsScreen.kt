@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.Settings
@@ -49,7 +48,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -77,7 +75,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedPreferenceColumn
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedItemShape
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
@@ -353,12 +354,14 @@ fun SettingsList(
         settingsConfig.categories.forEach { category: SettingsCategory ->
             item {
                 LargeVerticalSpacer()
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = SizeConstants.LargeSize)
-                        .clip(shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize)),
-                ) {
-                    category.preferences.forEach { preference: SettingsPreference ->
+                GroupedPreferenceColumn {
+                    category.preferences.forEachIndexed { index: Int, preference: SettingsPreference ->
+                        val position = when {
+                            category.preferences.size == 1 -> GroupedItemPosition.SINGLE
+                            index == 0 -> GroupedItemPosition.FIRST
+                            index == category.preferences.lastIndex -> GroupedItemPosition.LAST
+                            else -> GroupedItemPosition.MIDDLE
+                        }
                         SettingsPreferenceItem(
                             icon = preference.icon,
                             title = preference.title,
@@ -378,8 +381,9 @@ fun SettingsList(
                                 )
                             },
                             onClick = { onPreferenceClick(preference) },
+                            shape = groupedItemShape(position = position),
                         )
-                        ExtraTinyVerticalSpacer()
+                        if (index != category.preferences.lastIndex) ExtraTinyVerticalSpacer()
                     }
                 }
             }

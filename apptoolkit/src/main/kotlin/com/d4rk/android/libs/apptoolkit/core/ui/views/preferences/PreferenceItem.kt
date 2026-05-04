@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -148,6 +149,7 @@ fun SettingsPreferenceItem(
     title: String? = null,
     summary: String? = null,
     rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
+    shape: Shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
     onClick: () -> Unit = {},
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
@@ -156,7 +158,7 @@ fun SettingsPreferenceItem(
     Card(
         modifier = Modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
+        shape = shape,
     ) {
         PreferenceItem(
             rippleEffectDp = rippleEffectDp,
