@@ -49,7 +49,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -78,7 +77,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
@@ -353,34 +353,33 @@ fun SettingsList(
         settingsConfig.categories.forEach { category: SettingsCategory ->
             item {
                 LargeVerticalSpacer()
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = SizeConstants.LargeSize)
-                        .clip(shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize)),
-                ) {
-                    category.preferences.forEach { preference: SettingsPreference ->
-                        SettingsPreferenceItem(
-                            icon = preference.icon,
-                            title = preference.title,
-                            summary = preference.summary,
-                            firebaseController = firebaseController,
-                            ga4EventProvider = {
-                                Ga4EventData(
-                                    name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-                                    params = mapOf(
-                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                            SETTINGS_SCREEN_NAME
-                                        ),
-                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-                                            preference.key ?: UNKNOWN_PREFERENCE_KEY
-                                        ),
+                category.preferences.forEachIndexed { index: Int, preference: SettingsPreference ->
+                    SettingsPreferenceItem(
+                        icon = preference.icon,
+                        title = preference.title,
+                        summary = preference.summary,
+                        firebaseController = firebaseController,
+                        ga4EventProvider = {
+                            Ga4EventData(
+                                name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+                                params = mapOf(
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                        SETTINGS_SCREEN_NAME
                                     ),
-                                )
-                            },
-                            onClick = { onPreferenceClick(preference) },
-                        )
-                        ExtraTinyVerticalSpacer()
-                    }
+                                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
+                                        preference.key ?: UNKNOWN_PREFERENCE_KEY
+                                    ),
+                                ),
+                            )
+                        },
+                        onClick = { onPreferenceClick(preference) },
+                        modifier = Modifier.groupedPreferenceItem(
+                            position = groupedItemPosition(
+                                index = index,
+                                size = category.preferences.size
+                            )
+                        ),
+                    )
                 }
             }
         }
