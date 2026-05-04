@@ -133,7 +133,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
             .find { item: BottomBarItem<StableNavKey> -> item.route == currentRoute }?.title
             ?: when (currentRoute) {
                 is SettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.settings
-                is GeneralSettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.settings // Or more specific title if needed
+                is GeneralSettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.settings
                 is HelpRoute -> com.d4rk.android.libs.apptoolkit.R.string.help
                 is AdsSettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.ads
                 is PermissionsRoute -> com.d4rk.android.libs.apptoolkit.R.string.permissions
