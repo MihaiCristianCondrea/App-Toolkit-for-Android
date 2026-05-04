@@ -79,7 +79,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarW
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
@@ -354,11 +353,7 @@ fun SettingsList(
         settingsConfig.categories.forEach { category: SettingsCategory ->
             item {
                 LargeVerticalSpacer()
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = SizeConstants.LargeSize),
-                ) {
-                    category.preferences.forEachIndexed { index: Int, preference: SettingsPreference ->
+                category.preferences.forEachIndexed { index: Int, preference: SettingsPreference ->
                         val position = when {
                             category.preferences.size == 1 -> GroupedItemPosition.SINGLE
                             index == 0 -> GroupedItemPosition.FIRST
@@ -384,11 +379,11 @@ fun SettingsList(
                                 )
                             },
                             onClick = { onPreferenceClick(preference) },
-                            modifier = Modifier.groupedCorners(position = position),
+                            modifier = Modifier
+                                .padding(horizontal = SizeConstants.LargeSize)
+                                .groupedCorners(position = position),
                         )
-                        if (index != category.preferences.lastIndex) ExtraTinyVerticalSpacer()
                     }
-                }
             }
         }
     }
