@@ -17,7 +17,7 @@
 
 package com.d4rk.android.apps.apptoolkit.app.main.ui.navigation
 
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -27,10 +27,10 @@ import kotlinx.coroutines.flow.asSharedFlow
  * that can be handled by the main navigation container.
  */
 class NavigationManager {
-    private val _navigationRequests = MutableSharedFlow<AppNavKey>(extraBufferCapacity = 1)
-    val navigationRequests: SharedFlow<AppNavKey> = _navigationRequests.asSharedFlow()
+    private val _navigationRequests = MutableSharedFlow<StableNavKey>(extraBufferCapacity = 1)
+    val navigationRequests: SharedFlow<StableNavKey> = _navigationRequests.asSharedFlow()
 
-    fun navigateTo(route: AppNavKey) {
+    fun navigateTo(route: StableNavKey) {
         _navigationRequests.tryEmit(route)
     }
 }

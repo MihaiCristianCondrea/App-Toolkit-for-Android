@@ -8,7 +8,9 @@ and access purchase/donation entry points when billing is enabled.
 
 ## Responsibilities
 
-- Expose a dedicated support UI (`SupportScreen`) hosted by `SupportActivity`.
+- Expose a dedicated support UI (`SupportScreen`) that can be hosted by `SupportActivity` or
+  embedded
+  in a Navigation 3 app shell.
 - Centralize support-oriented actions (contact links, review/rating entry points, optional billing).
 - Keep host-app wiring simple with one screen-level integration point.
 
@@ -23,8 +25,10 @@ and access purchase/donation entry points when billing is enabled.
 
 ### UI
 
-- `SupportActivity` is the entry activity for the support surface.
-- `SupportScreen` renders support actions and host-configurable links.
+- `SupportActivity` is the standalone entry activity for the support surface.
+- `SupportScreen(isEmbedded = false)` renders support actions with its own top app bar.
+- `SupportScreen(isEmbedded = true)` renders the same content without its own top app bar for
+  host-provided navigation chrome.
 
 ### Billing
 
@@ -38,16 +42,24 @@ and access purchase/donation entry points when billing is enabled.
 
 ## Host app integration
 
-Open the support feature from any context:
+Open the support feature as a standalone screen from any context:
 
 ```kotlin
 startActivity(Intent(context, SupportActivity::class.java))
 ```
 
+Embed it in a shared Navigation 3 shell by adding the library builders:
+
+```kotlin
+val builders = appToolkitNavigationEntryBuilders()
+```
+
 Typical usage:
 
-1. Add a “Support”/“Help & feedback” menu item in settings or main navigation.
-2. Launch `SupportActivity`.
+1. Add a “Support” entry in settings or an app bar action menu.
+2. Navigate to the shared `SupportRoute` when the host shell embeds AppToolkit destinations, or
+   launch
+   `SupportActivity` for standalone flows.
 3. Let users complete support or donation actions and return to previous flow.
 
 ---

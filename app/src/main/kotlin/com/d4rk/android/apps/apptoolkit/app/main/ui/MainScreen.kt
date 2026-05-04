@@ -64,26 +64,27 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.AppNavigati
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.RandomAppHandler
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.appNavigationEntryBuilders
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.isDrawerItemSelected
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AdsSettingsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.HelpRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.LicensesRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.PermissionsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.SettingsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.defaults.MainNavigationDefaults
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.dialogs.ChangelogDialog
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.MainTopAppBar
 import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.NavigationDrawerItemContent
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.AdsSettingsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.HelpRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.LicensesRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.PermissionsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.SettingsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.SupportRoute
 import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
@@ -117,19 +118,19 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
     val scrollBehavior: TopAppBarScrollBehavior =
         TopAppBarDefaults.pinnedScrollBehavior()
 
-    val navigationState = rememberNavigationState(
+    val navigationState = rememberNavigationState<StableNavKey>(
         startRoute = AppsListRoute,
         topLevelRoutes = NavigationRoutes.topLevelRoutes
     )
     val navigator = remember(navigationState) { Navigator(state = navigationState) }
 
-    val currentRoute: AppNavKey = navigator.state.currentRoute
+    val currentRoute: StableNavKey = navigator.state.currentRoute
     val isScrollingUp: Boolean =
         scrollBehavior.state.contentOffset > -SizeConstants.MediumSize.value
 
     val appBarTitleResId: Int = remember(currentRoute) {
         MainNavigationDefaults.bottomBarItems
-            .find { item: BottomBarItem<AppNavKey> -> item.route == currentRoute }?.title
+            .find { item: BottomBarItem<StableNavKey> -> item.route == currentRoute }?.title
             ?: when (currentRoute) {
                 is SettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.settings
                 is GeneralSettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.settings // Or more specific title if needed
@@ -137,6 +138,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
                 is AdsSettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.ads
                 is PermissionsRoute -> com.d4rk.android.libs.apptoolkit.R.string.permissions
                 is LicensesRoute -> com.d4rk.android.libs.apptoolkit.R.string.oss_license_title
+                is SupportRoute -> com.d4rk.android.libs.apptoolkit.R.string.support_us
                 else -> com.d4rk.android.libs.apptoolkit.R.string.app_name
             }
     }
@@ -178,7 +180,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
     val changelogUrl: String = koinInject(qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG))
 
     var randomAppHandler: (() -> Unit)? by remember { mutableStateOf(null) }
-    val onRandomAppHandlerChanged: (AppNavKey, RandomAppHandler?) -> Unit = { _, handler ->
+    val onRandomAppHandlerChanged: (StableNavKey, RandomAppHandler?) -> Unit = { _, handler ->
         randomAppHandler = handler
     }
 
@@ -189,7 +191,8 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
         derivedStateOf { isScrollingUp }
     }
 
-    val bottomItems: ImmutableList<BottomBarItem<AppNavKey>> = MainNavigationDefaults.bottomBarItems
+    val bottomItems: ImmutableList<BottomBarItem<StableNavKey>> =
+        MainNavigationDefaults.bottomBarItems
     var showChangelog by remember { mutableStateOf(false) }
 
     val appRouteHandlers: Map<String, (NavigationDrawerItem) -> Unit> = remember(navigator) {
@@ -221,6 +224,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
                         NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> navigator.navigate(
                             HelpRoute
                         )
+                        NavigationDrawerRoutes.ROUTE_SUPPORT -> navigator.navigate(SupportRoute)
                     }
                 },
                 additionalHandlers = appRouteHandlers,
@@ -232,7 +236,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
             modifier = Modifier.imePadding(),
             layoutType = if (showNavigationSuite) layoutType else NavigationSuiteType.None,
             navigationSuiteItems = {
-                bottomItems.forEach { item: BottomBarItem<AppNavKey> ->
+                bottomItems.forEach { item: BottomBarItem<StableNavKey> ->
                     val isSelected: Boolean = navigator.state.currentRoute == item.route
                     item(
                         icon = {
@@ -321,6 +325,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
                                 modalDrawerEnabled -> coroutineScope.launch { drawerState.open() }
                             }
                         },
+                        onSupportClick = { navigator.navigate(SupportRoute) },
                         scrollBehavior = scrollBehavior,
                     )
                 },
@@ -342,7 +347,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
                         .padding(paddingValues)
                         .consumeWindowInsets(paddingValues),
                 ) {
-                    val entryBuilders: List<NavigationEntryBuilder<AppNavKey>> =
+                    val entryBuilders: List<NavigationEntryBuilder<StableNavKey>> =
                         remember(
                             paddingValues,
                             windowWidthSizeClass,
@@ -359,9 +364,9 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
                             )
                         }
 
-                    val entryDecorators = rememberNavigationEntryDecorators<AppNavKey>()
+                    val entryDecorators = rememberNavigationEntryDecorators<StableNavKey>()
 
-                    val entryProvider: (AppNavKey) -> NavEntry<AppNavKey> =
+                    val entryProvider: (StableNavKey) -> NavEntry<StableNavKey> =
                         remember(entryBuilders) {
                             entryProviderFor(entryBuilders)
                         }
@@ -442,6 +447,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
 private val BottomDrawerActionRoutes = persistentSetOf(
     NavigationDrawerRoutes.ROUTE_SETTINGS,
     NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK,
+    NavigationDrawerRoutes.ROUTE_SUPPORT,
     NavigationDrawerRoutes.ROUTE_UPDATES,
     NavigationDrawerRoutes.ROUTE_SHARE,
 )

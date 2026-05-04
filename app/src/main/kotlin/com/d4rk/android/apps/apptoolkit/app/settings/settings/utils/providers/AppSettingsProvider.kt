@@ -25,9 +25,9 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Security
 import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.constants.SettingsConstants
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsCategory
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsPreference

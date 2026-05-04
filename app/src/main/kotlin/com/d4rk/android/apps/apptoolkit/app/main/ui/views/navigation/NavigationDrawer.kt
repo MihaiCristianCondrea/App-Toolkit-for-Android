@@ -17,22 +17,23 @@
 
 package com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation
 
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.HelpRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.SettingsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.HelpRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.SettingsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.SupportRoute
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 
 fun isDrawerItemSelected(
     itemRoute: String,
-    currentRoute: AppNavKey,
+    currentRoute: StableNavKey,
 ): Boolean =
     when (itemRoute) {
         NavigationRoutes.ROUTE_APPS_LIST -> currentRoute == AppsListRoute
@@ -40,6 +41,7 @@ fun isDrawerItemSelected(
         NavigationRoutes.ROUTE_COMPONENTS -> currentRoute == ComponentsRoute
         NavigationDrawerRoutes.ROUTE_SETTINGS -> currentRoute is SettingsRoute || currentRoute is GeneralSettingsRoute
         NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> currentRoute is HelpRoute
+        NavigationDrawerRoutes.ROUTE_SUPPORT -> currentRoute is SupportRoute
         else -> false
     }
 

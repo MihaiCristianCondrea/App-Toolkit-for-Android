@@ -19,10 +19,10 @@ package com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers
 
 import android.content.Context
 import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AdsSettingsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.PermissionsRoute
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.AdsSettingsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.PermissionsRoute
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.PrivacySettingsProvider
 

@@ -20,9 +20,9 @@ package com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers
 import android.content.Context
 import androidx.compose.runtime.Composable
 import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.display.ui.views.dialogs.SelectStartupScreenAlertDialog
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.DisplaySettingsProvider
 

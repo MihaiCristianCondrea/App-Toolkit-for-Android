@@ -35,41 +35,21 @@ data object FavoriteAppsRoute : AppNavKey
 @Parcelize
 data object ComponentsRoute : AppNavKey
 
-@Parcelize
-data object LibraryExtrasRoute : AppNavKey
-
-@Parcelize
-data object SettingsRoute : AppNavKey
-
-@Parcelize
-data class GeneralSettingsRoute(val title: String, val contentKey: String) : AppNavKey
-
-@Parcelize
-data object HelpRoute : AppNavKey
-
-@Parcelize
-data object AdsSettingsRoute : AppNavKey
-
-@Parcelize
-data object PermissionsRoute : AppNavKey
-
-@Parcelize
-data object LicensesRoute : AppNavKey
-
 object NavigationRoutes {
     const val ROUTE_APPS_LIST: String = "apps_list"
     const val ROUTE_FAVORITE_APPS: String = "favorite_apps"
     const val ROUTE_COMPONENTS: String = "components"
-    const val ROUTE_LIBRARY_EXTRAS: String = "library_extras"
 
-    val topLevelRoutes: ImmutableSet<AppNavKey> =
-        persistentSetOf(AppsListRoute, FavoriteAppsRoute, ComponentsRoute, LibraryExtrasRoute)
+    val topLevelRoutes: ImmutableSet<StableNavKey> =
+        persistentSetOf<StableNavKey>(
+            AppsListRoute,
+            FavoriteAppsRoute,
+        )
 }
 
-fun String.toNavKeyOrDefault(): AppNavKey =
+fun String.toNavKeyOrDefault(): StableNavKey =
     when (this) {
         NavigationRoutes.ROUTE_FAVORITE_APPS -> FavoriteAppsRoute
         NavigationRoutes.ROUTE_COMPONENTS -> ComponentsRoute
-        NavigationRoutes.ROUTE_LIBRARY_EXTRAS -> LibraryExtrasRoute
         else -> AppsListRoute
     }

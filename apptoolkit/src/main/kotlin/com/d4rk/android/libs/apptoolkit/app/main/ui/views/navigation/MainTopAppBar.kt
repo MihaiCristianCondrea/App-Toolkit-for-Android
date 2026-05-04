@@ -56,12 +56,15 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivi
  * A top app bar for the main screen of the application.
  *
  * It includes the application title, a navigation icon, and an actions menu.
- * The actions menu currently contains a "Support Us" item that opens the [SupportActivity].
+ * The actions menu currently contains a "Support Us" item that uses the host callback or opens the
+ * [SupportActivity].
  * The navigation icon's action is configurable.
  *
  * @param title is the optional title that can be provided by the host app
  * @param navigationIcon The [ImageVector] to be displayed as the navigation icon.
  * @param onNavigationIconClick A lambda to be executed when the navigation icon is clicked.
+ * @param onSupportClick Optional host callback for opening Support inside an existing navigation
+ * shell. When null, the default behavior opens [SupportActivity].
  * @param scrollBehavior A [TopAppBarScrollBehavior] to be applied to the top app bar,
  * which defines its behavior when content is scrolled.
  */
@@ -71,6 +74,7 @@ fun MainTopAppBar(
     title: String = stringResource(id = R.string.app_name),
     navigationIcon: ImageVector?,
     onNavigationIconClick: () -> Unit,
+    onSupportClick: (() -> Unit)? = null,
     scrollBehavior: TopAppBarScrollBehavior,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
 ) {
@@ -128,7 +132,8 @@ fun MainTopAppBar(
                     icon = Icons.Outlined.VolunteerActivism,
                     onClick = {
                         setExpandedMenu(false)
-                        context.openActivity(SupportActivity::class.java)
+                        onSupportClick?.invoke()
+                            ?: context.openActivity(SupportActivity::class.java)
                     },
                 )
             }

@@ -19,27 +19,24 @@ package com.d4rk.android.apps.apptoolkit.app.main.utils.defaults
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Apps
-import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.rounded.Apps
-import androidx.compose.material.icons.rounded.Build
 import androidx.compose.material.icons.rounded.Star
 import com.d4rk.android.apps.apptoolkit.R
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.LibraryExtrasRoute
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 internal object MainNavigationDefaults {
-    val fabSupportedRoutes: Set<AppNavKey> = setOf(
+    val fabSupportedRoutes: Set<StableNavKey> = setOf(
         AppsListRoute,
         FavoriteAppsRoute
     )
 
-    val bottomBarItems: ImmutableList<BottomBarItem<AppNavKey>> = persistentListOf(
+    val bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>> = persistentListOf(
         BottomBarItem(
             route = AppsListRoute,
             icon = Icons.Outlined.Apps,
@@ -51,12 +48,6 @@ internal object MainNavigationDefaults {
             icon = Icons.Outlined.StarOutline,
             selectedIcon = Icons.Rounded.Star,
             title = R.string.favorite_apps
-        ),
-        BottomBarItem(
-            route = LibraryExtrasRoute,
-            icon = Icons.Outlined.Build,
-            selectedIcon = Icons.Rounded.Build,
-            title = R.string.components_title
         )
     )
 }

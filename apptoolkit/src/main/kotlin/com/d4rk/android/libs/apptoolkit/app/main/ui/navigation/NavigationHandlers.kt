@@ -51,6 +51,11 @@ fun handleNavigationItemClick(
             true
         }
 
+        NavigationDrawerRoutes.ROUTE_SUPPORT -> {
+            onInternalNavigationRequested(item.route)
+            true
+        }
+
         NavigationDrawerRoutes.ROUTE_UPDATES -> onChangelogRequested().let { true }
         NavigationDrawerRoutes.ROUTE_SHARE -> context.shareApp(
             shareMessageFormat = com.d4rk.android.libs.apptoolkit.R.string.summary_share_message

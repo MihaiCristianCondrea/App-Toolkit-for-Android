@@ -67,11 +67,11 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 import kotlinx.collections.immutable.ImmutableMap
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -96,6 +96,18 @@ private object SupportActionNames {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SupportComposable() {
+    SupportScreen()
+}
+
+/**
+ * Renders the support and donation screen.
+ *
+ * @param isEmbedded When true, the screen omits its own top app bar so a host navigation shell can
+ * provide app-level chrome.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SupportScreen(isEmbedded: Boolean = false) {
     val viewModel: SupportViewModel = koinViewModel()
     val activity = LocalActivity.current
     val screenState: UiStateScreen<SupportScreenUiState> by viewModel.uiState.collectAsStateWithLifecycle()
@@ -125,14 +137,7 @@ fun SupportComposable() {
         screenState = screenState.screenState,
     )
 
-    LargeTopAppBarWithScaffold(
-        title = stringResource(id = R.string.support_us),
-        onBackClicked = {
-            firebaseController.logEvent(supportActionEvent(actionName = SupportActionNames.BACK_CLICK))
-            activity?.finish()
-        },
-        snackbarHostState = snackbarHostState
-    ) { paddingValues ->
+    val content: @Composable (PaddingValues) -> Unit = { paddingValues ->
         ScreenStateHandler(
             screenState = screenState,
             onLoading = { LoadingScreen() },
@@ -163,6 +168,20 @@ fun SupportComposable() {
             snackbarHostState = snackbarHostState,
             getDismissEvent = { SupportEvent.DismissSnackbar },
             onEvent = { viewModel.onEvent(it) }
+        )
+    }
+
+    if (isEmbedded) {
+        content(PaddingValues())
+    } else {
+        LargeTopAppBarWithScaffold(
+            title = stringResource(id = R.string.support_us),
+            onBackClicked = {
+                firebaseController.logEvent(supportActionEvent(actionName = SupportActionNames.BACK_CLICK))
+                activity?.finish()
+            },
+            snackbarHostState = snackbarHostState,
+            content = content,
         )
     }
 }

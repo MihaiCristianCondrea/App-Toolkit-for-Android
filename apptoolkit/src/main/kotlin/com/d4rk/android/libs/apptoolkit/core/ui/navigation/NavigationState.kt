@@ -122,12 +122,23 @@ class NavigationState<T : StableNavKey>(
 
 @Stable
 class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
+    /**
+     * Navigates by mutating the app-owned Navigation 3 back stack.
+     *
+     * Top-level destinations select their own stack and clear sub-routes so bottom navigation and
+     * rail taps always reveal the requested root destination. Other destinations are pushed onto the
+     * active stack unless they are already current.
+     */
     fun navigate(route: T) {
+        if (route == state.currentRoute) return
+
         if (route in state.backStacks.keys) {
             state.topLevelRoute = route
-        } else {
-            state.currentBackStack.add(route)
+            state.currentBackStack.popToRoot()
+            return
         }
+
+        state.currentBackStack.add(route)
     }
 
     /**
@@ -160,6 +171,12 @@ class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
         }
 
         return false
+    }
+}
+
+private fun <T : StableNavKey> NavBackStack<T>.popToRoot() {
+    while (size > 1) {
+        removeLastOrNull()
     }
 }
 

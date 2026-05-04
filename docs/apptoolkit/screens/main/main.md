@@ -24,6 +24,11 @@ still giving host apps a ready-to-go default shell that can be customized or rep
 ### Navigation behavior helpers
 - **`handleNavigationItemClick(...)`**: default drawer click handling for common routes:
   Settings, Help & Feedback, Updates (changelog), Share with support for host overrides.
+- **`appToolkitNavigationEntryBuilders(...)`**: shared Navigation 3 entries for library-owned
+  destinations such as Settings, Help, Support, permissions, licenses, ads settings, and library
+  extras.
+- **Shared route keys**: library destinations are exposed as `StableNavKey` implementations from the
+  library, so host apps can combine them with app-owned route keys in one `NavDisplay`.
 - Navigation key/state serialization guidance: see
   [`docs/general/core/serialization-boundaries.md`](../../../general/core/serialization-boundaries.md).
 
@@ -203,6 +208,8 @@ Host apps may replace any of the following:
 
     * Replace `handleNavigationItemClick` with your own handler.
     * Or keep it and provide `additionalHandlers` for app-specific routes.
+  * Use `appToolkitNavigationEntryBuilders(...)` when the host shell embeds library-owned
+    destinations instead of launching separate activities.
 
 * **Data**
 

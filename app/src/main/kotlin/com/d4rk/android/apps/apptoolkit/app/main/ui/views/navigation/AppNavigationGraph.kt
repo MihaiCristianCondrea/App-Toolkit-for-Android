@@ -22,7 +22,8 @@ import androidx.compose.runtime.Stable
 import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.navigation.favoriteAppsEntryBuilder
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.navigation.appsListEntryBuilder
 import com.d4rk.android.apps.apptoolkit.app.components.ui.navigation.componentsEntryBuilder
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppNavKey
+import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.appToolkitNavigationEntryBuilders
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 
@@ -33,9 +34,9 @@ import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 data class AppNavigationEntryContext(
     val paddingValues: PaddingValues,
     val windowWidthSizeClass: AppWindowWidthSizeClass,
-    val onRandomAppHandlerChanged: (AppNavKey, RandomAppHandler?) -> Unit,
+    val onRandomAppHandlerChanged: (StableNavKey, RandomAppHandler?) -> Unit,
 ) {
-    fun registerRandomAppHandlerFor(route: AppNavKey): (RandomAppHandler?) -> Unit = { handler ->
+    fun registerRandomAppHandlerFor(route: StableNavKey): (RandomAppHandler?) -> Unit = { handler ->
         onRandomAppHandlerChanged(route, handler)
     }
 }
@@ -45,23 +46,21 @@ data class AppNavigationEntryContext(
  */
 fun appNavigationEntryBuilders(
     context: AppNavigationEntryContext,
-    additionalEntryBuilders: List<NavigationEntryBuilder<AppNavKey>> = emptyList(),
-): List<NavigationEntryBuilder<AppNavKey>> = buildList {
+    additionalEntryBuilders: List<NavigationEntryBuilder<StableNavKey>> = emptyList(),
+): List<NavigationEntryBuilder<StableNavKey>> = buildList {
     addAll(defaultAppNavigationEntryBuilders(context))
     addAll(additionalEntryBuilders)
 }
 
 private fun defaultAppNavigationEntryBuilders(
     context: AppNavigationEntryContext
-): List<NavigationEntryBuilder<AppNavKey>> = listOf(
-    appsListEntryBuilder(context),
-    favoriteAppsEntryBuilder(context),
-    componentsEntryBuilder(context),
-    libraryExtrasEntryBuilder(context),
-    settingsEntryBuilder(),
-    generalSettingsEntryBuilder(),
-    helpEntryBuilder(),
-    adsSettingsEntryBuilder(),
-    permissionsEntryBuilder(),
-    licensesEntryBuilder(),
-)
+): List<NavigationEntryBuilder<StableNavKey>> = buildList {
+    addAll(
+        listOf(
+            appsListEntryBuilder(context),
+            favoriteAppsEntryBuilder(context),
+            componentsEntryBuilder(context),
+        )
+    )
+    addAll(appToolkitNavigationEntryBuilders(paddingValues = context.paddingValues))
+}
