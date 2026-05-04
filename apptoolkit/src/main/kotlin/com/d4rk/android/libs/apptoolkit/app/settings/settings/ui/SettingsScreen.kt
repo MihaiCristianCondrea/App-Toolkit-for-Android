@@ -360,6 +360,23 @@ fun SettingsList(
                             index == category.preferences.lastIndex -> GroupedItemPosition.LAST
                             else -> GroupedItemPosition.MIDDLE
                         }
+                        val itemModifier = Modifier
+                            .padding(
+                                start = SizeConstants.LargeSize,
+                                end = SizeConstants.LargeSize,
+                                top = if (position == GroupedItemPosition.SINGLE) {
+                                    SizeConstants.ExtraTinySize
+                                } else {
+                                    SizeConstants.ZeroSize
+                                },
+                                bottom = if (position == GroupedItemPosition.SINGLE) {
+                                    SizeConstants.ExtraTinySize
+                                } else {
+                                    SizeConstants.ZeroSize
+                                },
+                            )
+                            .groupedCorners(position = position)
+
                         SettingsPreferenceItem(
                             icon = preference.icon,
                             title = preference.title,
@@ -379,9 +396,7 @@ fun SettingsList(
                                 )
                             },
                             onClick = { onPreferenceClick(preference) },
-                            modifier = Modifier
-                                .padding(horizontal = SizeConstants.LargeSize)
-                                .groupedCorners(position = position),
+                            modifier = itemModifier,
                         )
                     }
             }
