@@ -76,7 +76,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
-import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
@@ -355,34 +354,33 @@ fun SettingsList(
             item {
                 LargeVerticalSpacer()
                 category.preferences.forEachIndexed { index: Int, preference: SettingsPreference ->
-                        val position = groupedItemPosition(
-                            index = index,
-                            size = category.preferences.size,
-                        )
-                        val itemModifier = Modifier.groupedPreferenceItem(position = position)
-
-                        SettingsPreferenceItem(
-                            icon = preference.icon,
-                            title = preference.title,
-                            summary = preference.summary,
-                            firebaseController = firebaseController,
-                            ga4EventProvider = {
-                                Ga4EventData(
-                                    name = SettingsAnalytics.Events.PREFERENCE_VIEW,
-                                    params = mapOf(
-                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                            SETTINGS_SCREEN_NAME
-                                        ),
-                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-                                            preference.key ?: UNKNOWN_PREFERENCE_KEY
-                                        ),
+                    SettingsPreferenceItem(
+                        icon = preference.icon,
+                        title = preference.title,
+                        summary = preference.summary,
+                        firebaseController = firebaseController,
+                        ga4EventProvider = {
+                            Ga4EventData(
+                                name = SettingsAnalytics.Events.PREFERENCE_VIEW,
+                                params = mapOf(
+                                    SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                        SETTINGS_SCREEN_NAME
                                     ),
-                                )
-                            },
-                            onClick = { onPreferenceClick(preference) },
-                            modifier = itemModifier,
-                        )
-                    }
+                                    SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
+                                        preference.key ?: UNKNOWN_PREFERENCE_KEY
+                                    ),
+                                ),
+                            )
+                        },
+                        onClick = { onPreferenceClick(preference) },
+                        modifier = Modifier.groupedPreferenceItem(
+                            position = groupedItemPosition(
+                                index = index,
+                                size = category.preferences.size
+                            )
+                        ),
+                    )
+                }
             }
         }
     }
