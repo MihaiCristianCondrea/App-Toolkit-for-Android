@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,7 +35,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -148,17 +148,17 @@ fun SettingsPreferenceItem(
     icon: ImageVector? = null,
     title: String? = null,
     summary: String? = null,
+    modifier: Modifier = Modifier,
     rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
-    shape: Shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
     onClick: () -> Unit = {},
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
     ga4EventProvider: (() -> Ga4EventData?)? = null,
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
-        shape = shape,
+        shape = RectangleShape,
     ) {
         PreferenceItem(
             rippleEffectDp = rippleEffectDp,

@@ -1,65 +1,46 @@
 package com.d4rk.android.libs.apptoolkit.core.ui.views.preferences
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 /**
- * Position of a row inside a grouped preference container.
+ * Position of an item inside a grouped list.
  */
 enum class GroupedItemPosition {
     FIRST, MIDDLE, LAST, SINGLE
 }
 
 /**
- * Provides the adaptive shape used by grouped preference rows.
+ * Clips an item with adaptive grouped-corner radii based on [position].
+ *
+ * Modifier ordering matters: apply this modifier before drawing modifiers like `background`
+ * so the drawn content respects the rounded clipping.
  */
-fun groupedItemShape(
+fun Modifier.groupedCorners(
     position: GroupedItemPosition,
-    outerRadiusDp: Int = 16,
-    innerRadiusDp: Int = 2,
-): Shape {
-    val outer = outerRadiusDp.dp
-    val inner = innerRadiusDp.dp
-    return when (position) {
+    outerRadius: Dp = 16.dp,
+    innerRadius: Dp = 2.dp,
+): Modifier {
+    val shape = when (position) {
         GroupedItemPosition.FIRST -> RoundedCornerShape(
-            topStart = outer,
-            topEnd = outer,
-            bottomStart = inner,
-            bottomEnd = inner,
+            topStart = outerRadius,
+            topEnd = outerRadius,
+            bottomStart = innerRadius,
+            bottomEnd = innerRadius,
         )
 
-        GroupedItemPosition.MIDDLE -> RoundedCornerShape(inner)
+        GroupedItemPosition.MIDDLE -> RoundedCornerShape(innerRadius)
         GroupedItemPosition.LAST -> RoundedCornerShape(
-            topStart = inner,
-            topEnd = inner,
-            bottomStart = outer,
-            bottomEnd = outer,
+            topStart = innerRadius,
+            topEnd = innerRadius,
+            bottomStart = outerRadius,
+            bottomEnd = outerRadius,
         )
 
-        GroupedItemPosition.SINGLE -> RoundedCornerShape(outer)
+        GroupedItemPosition.SINGLE -> RoundedCornerShape(outerRadius)
     }
-}
-
-/**
- * Shared grouped container used by settings-style lists.
- */
-@Composable
-fun GroupedPreferenceColumn(
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    Column(
-        modifier = modifier
-            .padding(horizontal = SizeConstants.LargeSize)
-            .background(shape = RoundedCornerShape(SizeConstants.ExtraLargeSize), color = androidx.compose.material3.MaterialTheme.colorScheme.surfaceContainerHigh),
-        content = content,
-    )
+    return this.clip(shape)
 }

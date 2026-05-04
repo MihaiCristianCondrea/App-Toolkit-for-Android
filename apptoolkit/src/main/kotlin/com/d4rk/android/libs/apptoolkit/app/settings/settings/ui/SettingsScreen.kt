@@ -76,9 +76,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedPreferenceColumn
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedItemShape
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
@@ -354,7 +353,10 @@ fun SettingsList(
         settingsConfig.categories.forEach { category: SettingsCategory ->
             item {
                 LargeVerticalSpacer()
-                GroupedPreferenceColumn {
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = SizeConstants.LargeSize),
+                ) {
                     category.preferences.forEachIndexed { index: Int, preference: SettingsPreference ->
                         val position = when {
                             category.preferences.size == 1 -> GroupedItemPosition.SINGLE
@@ -381,7 +383,7 @@ fun SettingsList(
                                 )
                             },
                             onClick = { onPreferenceClick(preference) },
-                            shape = groupedItemShape(position = position),
+                            modifier = Modifier.groupedCorners(position = position),
                         )
                         if (index != category.preferences.lastIndex) ExtraTinyVerticalSpacer()
                     }
