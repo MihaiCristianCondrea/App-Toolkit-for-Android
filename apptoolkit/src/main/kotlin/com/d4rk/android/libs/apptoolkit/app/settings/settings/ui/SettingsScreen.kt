@@ -78,7 +78,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
@@ -354,28 +355,11 @@ fun SettingsList(
             item {
                 LargeVerticalSpacer()
                 category.preferences.forEachIndexed { index: Int, preference: SettingsPreference ->
-                        val position = when {
-                            category.preferences.size == 1 -> GroupedItemPosition.SINGLE
-                            index == 0 -> GroupedItemPosition.FIRST
-                            index == category.preferences.lastIndex -> GroupedItemPosition.LAST
-                            else -> GroupedItemPosition.MIDDLE
-                        }
-                        val itemModifier = Modifier
-                            .padding(
-                                start = SizeConstants.LargeSize,
-                                end = SizeConstants.LargeSize,
-                                top = if (position == GroupedItemPosition.SINGLE) {
-                                    SizeConstants.ExtraTinySize
-                                } else {
-                                    SizeConstants.ZeroSize
-                                },
-                                bottom = if (position == GroupedItemPosition.SINGLE) {
-                                    SizeConstants.ExtraTinySize
-                                } else {
-                                    SizeConstants.ZeroSize
-                                },
-                            )
-                            .groupedCorners(position = position)
+                        val position = groupedItemPosition(
+                            index = index,
+                            size = category.preferences.size,
+                        )
+                        val itemModifier = Modifier.groupedPreferenceItem(position = position)
 
                         SettingsPreferenceItem(
                             icon = preference.icon,
