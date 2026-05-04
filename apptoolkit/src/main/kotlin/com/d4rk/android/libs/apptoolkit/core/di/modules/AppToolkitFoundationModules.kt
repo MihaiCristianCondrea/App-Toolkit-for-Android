@@ -66,6 +66,13 @@ fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): Lis
     adsSettingsSharedModule(),
 )
 
+/**
+ * DI lifetime checklist (see docs/apptoolkit/core/di-lifetime-policy.md):
+ * - Use `single` for heavy/stateful managers (datastore, ads manager, network clients).
+ * - Use `factory` for lightweight builders or objects that may later capture Activity/screen refs.
+ * - Keep `viewModel` bindings unchanged because lifecycle is managed by Koin ViewModel DSL.
+ * - Add one-line rationale for non-obvious bindings, especially `*Factory` types.
+ */
 private fun dispatchersModule(): Module = module {
     single<DispatcherProvider> { StandardDispatchers() }
 }
@@ -114,7 +121,7 @@ private fun consentModule(): Module = module {
 }
 
 private fun mainSharedModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
-    single { GmsHostFactory() }
+    single { GmsHostFactory() } // Lightweight creator without screen references; safe as singleton.
     single<InAppUpdateRepository> { InAppUpdateRepositoryImpl() }
     single { RequestInAppUpdateUseCase(repository = get()) }
     single<String>(qualifier = named(name = AppToolkitDiConstants.DEVELOPER_APPS_API_URL)) {
