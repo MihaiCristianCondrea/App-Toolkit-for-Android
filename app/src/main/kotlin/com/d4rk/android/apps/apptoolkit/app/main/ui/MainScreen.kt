@@ -18,8 +18,17 @@
 package com.d4rk.android.apps.apptoolkit.app.main.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -36,7 +45,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
@@ -56,6 +64,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.scene.Scene
+import androidx.navigation3.scene.SceneStrategy
+import androidx.navigation3.scene.SceneStrategyScope
 import androidx.navigation3.ui.NavDisplay
 import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
 import com.d4rk.android.apps.apptoolkit.app.main.ui.state.MainUiState
@@ -77,6 +88,7 @@ import com.d4rk.android.libs.apptoolkit.app.main.ui.views.navigation.NavigationD
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.AdsSettingsRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.HelpRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.LibraryExtrasRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.LicensesRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.PermissionsRoute
@@ -85,7 +97,6 @@ import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.SupportRoute
 import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
-import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.entryProviderFor
@@ -113,10 +124,8 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
     val uiStateScreen by viewModel.uiState.collectAsState()
     val uiState = uiStateScreen.data ?: MainUiState()
 
-    val context = LocalContext.current
+    LocalContext.current
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val scrollBehavior: TopAppBarScrollBehavior =
-        TopAppBarDefaults.pinnedScrollBehavior()
 
     val navigationState = rememberNavigationState<StableNavKey>(
         startRoute = AppsListRoute,
@@ -124,24 +133,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
     )
     val navigator = remember(navigationState) { Navigator(state = navigationState) }
 
-    val currentRoute: StableNavKey = navigator.state.currentRoute
-    val isScrollingUp: Boolean =
-        scrollBehavior.state.contentOffset > -SizeConstants.MediumSize.value
-
-    val appBarTitleResId: Int = remember(currentRoute) {
-        MainNavigationDefaults.bottomBarItems
-            .find { item: BottomBarItem<StableNavKey> -> item.route == currentRoute }?.title
-            ?: when (currentRoute) {
-                is SettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.settings
-                is GeneralSettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.settings
-                is HelpRoute -> com.d4rk.android.libs.apptoolkit.R.string.help
-                is AdsSettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.ads
-                is PermissionsRoute -> com.d4rk.android.libs.apptoolkit.R.string.permissions
-                is LicensesRoute -> com.d4rk.android.libs.apptoolkit.R.string.oss_license_title
-                is SupportRoute -> com.d4rk.android.libs.apptoolkit.R.string.support_us
-                else -> com.d4rk.android.libs.apptoolkit.R.string.app_name
-            }
-    }
+    navigator.state.currentRoute
 
     val windowWidthSizeClass: AppWindowWidthSizeClass =
         currentWindowAdaptiveInfo().windowSizeClass.toAppWindowWidthSizeClass()
@@ -154,19 +146,6 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
         }
     }
 
-    val showNavigationSuite: Boolean by remember(currentRoute, layoutType) {
-        derivedStateOf {
-            val isTopLevel = currentRoute in NavigationRoutes.topLevelRoutes
-            val isRail = layoutType == NavigationSuiteType.NavigationRail
-
-            // Always show the navigation suite if it's a rail (tablet global nav)
-            // or if we are on a top-level screen.
-            isRail || isTopLevel
-        }
-    }
-
-    val modalDrawerEnabled: Boolean = windowWidthSizeClass == AppWindowWidthSizeClass.Compact
-    val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
 
     val navigationManager: NavigationManager = koinInject()
@@ -184,15 +163,6 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
         randomAppHandler = handler
     }
 
-    val isFabVisible: Boolean by remember(currentRoute) {
-        derivedStateOf { MainNavigationDefaults.fabSupportedRoutes.contains(currentRoute) }
-    }
-    val isFabExtended: Boolean by remember(isScrollingUp) {
-        derivedStateOf { isScrollingUp }
-    }
-
-    val bottomItems: ImmutableList<BottomBarItem<StableNavKey>> =
-        MainNavigationDefaults.bottomBarItems
     var showChangelog by remember { mutableStateOf(false) }
 
     val appRouteHandlers: Map<String, (NavigationDrawerItem) -> Unit> = remember(navigator) {
@@ -203,244 +173,405 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) { // FIXME: Unstable 
         )
     }
 
-    val railDrawerItems: Pair<List<NavigationDrawerItem>, List<NavigationDrawerItem>> =
-        remember(uiState.navigationDrawerItems) {
-            uiState.navigationDrawerItems.partition { item: NavigationDrawerItem ->
-                item.route !in BottomDrawerActionRoutes
-            }
-        }
+    val entryBuilders: List<NavigationEntryBuilder<StableNavKey>> =
+        remember(windowWidthSizeClass) {
+            val entryContext = AppNavigationEntryContext(
+                paddingValues = PaddingValues(),
+                windowWidthSizeClass = windowWidthSizeClass,
+                onRandomAppHandlerChanged = onRandomAppHandlerChanged,
+            )
 
-    val onNavigationDrawerItemClick: (NavigationDrawerItem, DrawerState?, CoroutineScope?) -> Unit =
-        { item, state, scope ->
-            handleNavigationItemClick(
-                context = context,
-                item = item,
-                drawerState = state,
-                coroutineScope = scope,
-                onChangelogRequested = { showChangelog = true },
-                onInternalNavigationRequested = { route ->
-                    when (route) {
-                        NavigationDrawerRoutes.ROUTE_SETTINGS -> navigator.navigate(SettingsRoute)
-                        NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> navigator.navigate(
-                            HelpRoute
-                        )
-                        NavigationDrawerRoutes.ROUTE_SUPPORT -> navigator.navigate(SupportRoute)
-                    }
-                },
-                additionalHandlers = appRouteHandlers,
+            appNavigationEntryBuilders(
+                context = entryContext,
+                additionalEntryBuilders = persistentListOf(),
             )
         }
 
-    val shellContent: @Composable () -> Unit = {
-        NavigationSuiteScaffold(
-            modifier = Modifier.imePadding(),
-            layoutType = if (showNavigationSuite) layoutType else NavigationSuiteType.None,
-            navigationSuiteItems = {
-                bottomItems.forEach { item: BottomBarItem<StableNavKey> ->
-                    val isSelected: Boolean = navigator.state.currentRoute == item.route
-                    item(
-                        icon = {
-                            Icon(
-                                imageVector = if (isSelected) item.selectedIcon else item.icon,
-                                contentDescription = stringResource(id = item.title),
-                            )
-                        },
-                        label = {
-                            Text(text = stringResource(id = item.title))
-                        },
-                        selected = isSelected,
-                        onClick = { navigator.navigate(route = item.route) },
-                    )
-                }
+    val entryDecorators = rememberNavigationEntryDecorators<StableNavKey>()
 
-                if (!modalDrawerEnabled) {
-                    railDrawerItems.first.forEach { item: NavigationDrawerItem ->
-                        val isSelected: Boolean = isDrawerItemSelected(
-                            itemRoute = item.route,
-                            currentRoute = currentRoute,
-                        )
-                        item(
-                            selected = isSelected,
-                            onClick = { onNavigationDrawerItemClick(item, null, null) },
-                            icon = {
-                                Icon(
-                                    imageVector = if (isSelected) {
-                                        item.selectedIcon
-                                    } else {
-                                        item.icon
-                                    },
-                                    contentDescription = stringResource(item.title),
-                                )
-                            },
-                            label = { Text(text = stringResource(item.title)) },
-                        )
-                    }
-
-                    // We cannot easily add a Spacer with weight(1f) inside NavigationSuiteScope's item list
-                    // as it expects discrete items. However, we can add a dummy disabled item if needed,
-                    // or just accept that they are listed sequentially.
-                    // The user's provided code used a Column inside a label of a single item() as a hack.
-                    // Let's try to match the user's intent if possible, but the standard way is just adding items.
-
-                    railDrawerItems.second.forEach { item: NavigationDrawerItem ->
-                        val isSelected: Boolean = isDrawerItemSelected(
-                            itemRoute = item.route,
-                            currentRoute = currentRoute,
-                        )
-                        item(
-                            selected = isSelected,
-                            onClick = { onNavigationDrawerItemClick(item, null, null) },
-                            icon = {
-                                Icon(
-                                    imageVector = if (isSelected) {
-                                        item.selectedIcon
-                                    } else {
-                                        item.icon
-                                    },
-                                    contentDescription = stringResource(item.title),
-                                )
-                            },
-                            label = { Text(text = stringResource(item.title)) },
-                        )
-                    }
-                }
-            },
-        ) {
-            Scaffold(
-                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                containerColor = Color.Transparent,
-                topBar = {
-                    MainTopAppBar(
-                        title = stringResource(appBarTitleResId),
-                        navigationIcon = when {
-                            drawerState.isOpen -> Icons.AutoMirrored.Outlined.MenuOpen
-                            navigator.canGoBack() -> Icons.AutoMirrored.Outlined.ArrowBack
-                            modalDrawerEnabled -> Icons.Outlined.Menu
-                            else -> null
-                        },
-                        onNavigationIconClick = {
-                            when {
-                                drawerState.isOpen -> coroutineScope.launch { drawerState.close() }
-                                navigator.canGoBack() -> navigator.goBack()
-                                modalDrawerEnabled -> coroutineScope.launch { drawerState.open() }
-                            }
-                        },
-                        onSupportClick = { navigator.navigate(SupportRoute) },
-                        scrollBehavior = scrollBehavior,
-                    )
-                },
-                floatingActionButton = {
-                    val fabEnabled = isFabVisible && randomAppHandler != null
-                    MainFloatingActionButton(
-                        visible = fabEnabled,
-                        enabled = fabEnabled,
-                        expanded = isFabExtended,
-                        onClick = { randomAppHandler?.invoke() },
-                    )
-                },
-                snackbarHost = {
-                    DefaultSnackbarHost(snackbarState = snackBarHostState)
-                },
-            ) { paddingValues: PaddingValues ->
-                RootContentContainer(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .consumeWindowInsets(paddingValues),
-                ) {
-                    val entryBuilders: List<NavigationEntryBuilder<StableNavKey>> =
-                        remember(
-                            paddingValues,
-                            windowWidthSizeClass,
-                        ) {
-                            val entryContext = AppNavigationEntryContext(
-                                paddingValues = PaddingValues(),
-                                windowWidthSizeClass = windowWidthSizeClass,
-                                onRandomAppHandlerChanged = onRandomAppHandlerChanged,
-                            )
-
-                            appNavigationEntryBuilders(
-                                context = entryContext,
-                                additionalEntryBuilders = persistentListOf(),
-                            )
-                        }
-
-                    val entryDecorators = rememberNavigationEntryDecorators<StableNavKey>()
-
-                    val entryProvider: (StableNavKey) -> NavEntry<StableNavKey> =
-                        remember(entryBuilders) {
-                            entryProviderFor(entryBuilders)
-                        }
-
-                    NavDisplay(
-                        backStack = navigationState.currentBackStack,
-                        entryDecorators = entryDecorators,
-                        entryProvider = entryProvider,
-                        onBack = {
-                            if (!drawerState.isOpen && navigator.canGoBack()) {
-                                navigator.goBack()
-                            }
-                        },
-                        transitionSpec = { NavigationAnimations.default() },
-                        popTransitionSpec = { NavigationAnimations.default() },
-                        predictivePopTransitionSpec = { NavigationAnimations.default() },
-                    )
-                }
-            }
+    val entryProvider: (StableNavKey) -> NavEntry<StableNavKey> =
+        remember(entryBuilders) {
+            entryProviderFor(entryBuilders)
         }
-    }
 
-    LaunchedEffect(modalDrawerEnabled) {
-        if (!modalDrawerEnabled && drawerState.isOpen) {
-            drawerState.close()
-        }
-    }
-
-    if (modalDrawerEnabled) {
-        ModalNavigationDrawer(
-            modifier = Modifier.hapticDrawerSwipe(state = drawerState),
-            drawerState = drawerState,
-            gesturesEnabled = true,
-            drawerContent = {
-                ModalDrawerSheet(drawerState = drawerState) {
-                    LargeVerticalSpacer()
-
-                    uiState.navigationDrawerItems.forEach { item: NavigationDrawerItem ->
-                        NavigationDrawerItemContent(
-                            item = item,
-                            selected = false,
-                            dividerRoutes = persistentSetOf(),
-                            handleNavigationItemClick = {
-                                onNavigationDrawerItemClick(
-                                    item,
-                                    drawerState,
-                                    coroutineScope,
-                                )
-                            },
-                        )
-                    }
-                }
-            },
-            content = shellContent,
+    val sceneStrategy = remember(
+        uiState,
+        coroutineScope,
+        navigator,
+        layoutType,
+        windowWidthSizeClass,
+        snackBarHostState,
+        randomAppHandler,
+        appRouteHandlers,
+    ) {
+        MainSceneStrategy(
+            uiState = uiState,
+            coroutineScope = coroutineScope,
+            navigator = navigator,
+            layoutType = layoutType,
+            windowWidthSizeClass = windowWidthSizeClass,
+            snackBarHostState = snackBarHostState,
+            onChangelogRequested = { showChangelog = true },
+            randomAppHandler = randomAppHandler,
+            appRouteHandlers = appRouteHandlers,
         )
-    } else {
-        shellContent()
     }
 
-    BackHandler(enabled = navigator.canGoBack() || drawerState.isOpen) {
-        coroutineScope.launch {
-            if (drawerState.isOpen) {
-                drawerState.close()
-            } else {
-                navigator.goBack()
-            }
-        }
-    }
+    NavDisplay(
+        backStack = navigationState.currentBackStack,
+        entryDecorators = entryDecorators,
+        entryProvider = entryProvider,
+        onBack = { navigator.goBack() },
+        sceneStrategies = listOf(sceneStrategy),
+        transitionSpec = { nativeSlideEnter togetherWith nativeSlideExit },
+        popTransitionSpec = { nativeSlidePopEnter togetherWith nativeSlidePopExit },
+        predictivePopTransitionSpec = { nativeSlidePopEnter togetherWith nativeSlidePopExit },
+    )
 
     if (showChangelog) {
         ChangelogDialog(
             changelogUrl = changelogUrl,
             onDismiss = { showChangelog = false },
         )
+    }
+}
+
+private const val SLIDE_TIME = 400
+private val materialEasing = CubicBezierEasing(0.05f, 0.7f, 0.1f, 1f)
+private val nativeSlideEnter = slideInHorizontally(
+    initialOffsetX = { it },
+    animationSpec = tween(SLIDE_TIME, easing = materialEasing)
+) + fadeIn(animationSpec = tween(SLIDE_TIME, easing = materialEasing))
+private val nativeSlideExit = slideOutHorizontally(
+    targetOffsetX = { -it / 3 },
+    animationSpec = tween(SLIDE_TIME, easing = materialEasing)
+) + fadeOut(animationSpec = tween(SLIDE_TIME, easing = materialEasing))
+private val nativeSlidePopEnter = slideInHorizontally(
+    initialOffsetX = { -it / 3 },
+    animationSpec = tween(SLIDE_TIME, easing = materialEasing)
+) + fadeIn(animationSpec = tween(SLIDE_TIME, easing = materialEasing))
+private val nativeSlidePopExit = slideOutHorizontally(
+    targetOffsetX = { it },
+    animationSpec = tween(SLIDE_TIME, easing = materialEasing)
+) + fadeOut(animationSpec = tween(SLIDE_TIME, easing = materialEasing))
+
+private class MainSceneStrategy(
+    private val uiState: MainUiState,
+    private val coroutineScope: CoroutineScope,
+    private val navigator: Navigator<StableNavKey>,
+    private val layoutType: NavigationSuiteType,
+    private val windowWidthSizeClass: AppWindowWidthSizeClass,
+    private val snackBarHostState: SnackbarHostState,
+    private val onChangelogRequested: () -> Unit,
+    private val randomAppHandler: (() -> Unit)?,
+    private val appRouteHandlers: Map<String, (NavigationDrawerItem) -> Unit>,
+) : SceneStrategy<StableNavKey> {
+    override fun SceneStrategyScope<StableNavKey>.calculateScene(
+        entries: List<NavEntry<StableNavKey>>
+    ): Scene<StableNavKey>? {
+        val currentEntry = entries.lastOrNull() ?: return null
+        val currentRoute = navigator.state.currentBackStack.last()
+
+        return if (currentRoute in NavigationRoutes.topLevelRoutes) {
+            MainShellScene(
+                key = "main-shell",
+                entry = currentEntry,
+                previousEntries = entries.dropLast(1),
+                uiState = uiState,
+                coroutineScope = coroutineScope,
+                navigator = navigator,
+                layoutType = layoutType,
+                windowWidthSizeClass = windowWidthSizeClass,
+                snackBarHostState = snackBarHostState,
+                onChangelogRequested = onChangelogRequested,
+                randomAppHandler = randomAppHandler,
+                appRouteHandlers = appRouteHandlers,
+            )
+        } else {
+            SubScreenScene(
+                key = currentRoute,
+                entry = currentEntry,
+                previousEntries = entries.dropLast(1),
+                onBack = onBack,
+            )
+        }
+    }
+}
+
+private class MainShellScene(
+    override val key: Any,
+    private val entry: NavEntry<StableNavKey>,
+    override val previousEntries: List<NavEntry<StableNavKey>>,
+    private val uiState: MainUiState,
+    private val coroutineScope: CoroutineScope,
+    private val navigator: Navigator<StableNavKey>,
+    private val layoutType: NavigationSuiteType,
+    private val windowWidthSizeClass: AppWindowWidthSizeClass,
+    private val snackBarHostState: SnackbarHostState,
+    private val onChangelogRequested: () -> Unit,
+    private val randomAppHandler: (() -> Unit)?,
+    private val appRouteHandlers: Map<String, (NavigationDrawerItem) -> Unit>,
+) : Scene<StableNavKey> {
+    override val entries: List<NavEntry<StableNavKey>> = listOf(entry)
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    override val content: @Composable () -> Unit = {
+        val context = LocalContext.current
+        val currentRoute = navigator.state.currentBackStack.last()
+        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        val modalDrawerEnabled = windowWidthSizeClass == AppWindowWidthSizeClass.Compact
+
+        val isScrollingUp: Boolean =
+            scrollBehavior.state.contentOffset > -SizeConstants.MediumSize.value
+
+        val appBarTitleResId: Int = remember(currentRoute) {
+            MainNavigationDefaults.bottomBarItems
+                .find { item: BottomBarItem<StableNavKey> -> item.route == currentRoute }?.title
+                ?: com.d4rk.android.libs.apptoolkit.R.string.app_name
+        }
+
+        val onNavigationDrawerItemClick: (NavigationDrawerItem, DrawerState?, CoroutineScope?) -> Unit =
+            { item, state, scope ->
+                handleNavigationItemClick(
+                    context = context,
+                    item = item,
+                    drawerState = state,
+                    coroutineScope = scope,
+                    onChangelogRequested = onChangelogRequested,
+                    onInternalNavigationRequested = { route ->
+                        when (route) {
+                            NavigationDrawerRoutes.ROUTE_SETTINGS -> navigator.navigate(
+                                SettingsRoute
+                            )
+
+                            NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> navigator.navigate(
+                                HelpRoute
+                            )
+
+                            NavigationDrawerRoutes.ROUTE_SUPPORT -> navigator.navigate(SupportRoute)
+                        }
+                    },
+                    additionalHandlers = appRouteHandlers,
+                )
+            }
+
+        val isFabVisible: Boolean by remember(currentRoute) {
+            derivedStateOf { MainNavigationDefaults.fabSupportedRoutes.contains(currentRoute) }
+        }
+        val isFabExtended: Boolean by remember(isScrollingUp) {
+            derivedStateOf { isScrollingUp }
+        }
+
+        val bottomItems: ImmutableList<BottomBarItem<StableNavKey>> =
+            MainNavigationDefaults.bottomBarItems
+
+        val railDrawerItems: Pair<List<NavigationDrawerItem>, List<NavigationDrawerItem>> =
+            remember(uiState.navigationDrawerItems) {
+                uiState.navigationDrawerItems.partition { item: NavigationDrawerItem ->
+                    item.route !in BottomDrawerActionRoutes
+                }
+            }
+
+        val shellContent: @Composable () -> Unit = {
+            BackHandler(enabled = drawerState.isOpen) {
+                coroutineScope.launch { drawerState.close() }
+            }
+
+            NavigationSuiteScaffold(
+                modifier = Modifier.imePadding(),
+                layoutType = layoutType,
+                navigationSuiteItems = {
+                    bottomItems.forEach { item: BottomBarItem<StableNavKey> ->
+                        val isSelected: Boolean = currentRoute == item.route
+                        item(
+                            icon = {
+                                Icon(
+                                    imageVector = if (isSelected) item.selectedIcon else item.icon,
+                                    contentDescription = stringResource(id = item.title),
+                                )
+                            },
+                            label = {
+                                Text(text = stringResource(id = item.title))
+                            },
+                            selected = isSelected,
+                            onClick = { navigator.navigate(route = item.route) },
+                        )
+                    }
+
+                    if (!modalDrawerEnabled) {
+                        railDrawerItems.first.forEach { item: NavigationDrawerItem ->
+                            val isSelected: Boolean = isDrawerItemSelected(
+                                itemRoute = item.route,
+                                currentRoute = currentRoute,
+                            )
+                            item(
+                                selected = isSelected,
+                                onClick = { onNavigationDrawerItemClick(item, null, null) },
+                                icon = {
+                                    Icon(
+                                        imageVector = if (isSelected) {
+                                            item.selectedIcon
+                                        } else {
+                                            item.icon
+                                        },
+                                        contentDescription = stringResource(item.title),
+                                    )
+                                },
+                                label = { Text(text = stringResource(item.title)) },
+                            )
+                        }
+
+                        railDrawerItems.second.forEach { item: NavigationDrawerItem ->
+                            val isSelected: Boolean = isDrawerItemSelected(
+                                itemRoute = item.route,
+                                currentRoute = currentRoute,
+                            )
+                            item(
+                                selected = isSelected,
+                                onClick = { onNavigationDrawerItemClick(item, null, null) },
+                                icon = {
+                                    Icon(
+                                        imageVector = if (isSelected) {
+                                            item.selectedIcon
+                                        } else {
+                                            item.icon
+                                        },
+                                        contentDescription = stringResource(item.title),
+                                    )
+                                },
+                                label = { Text(text = stringResource(item.title)) },
+                            )
+                        }
+                    }
+                },
+            ) {
+                Scaffold(
+                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                    containerColor = Color.Transparent,
+                    topBar = {
+                        MainTopAppBar(
+                            title = stringResource(appBarTitleResId),
+                            navigationIcon = when {
+                                drawerState.isOpen -> Icons.AutoMirrored.Outlined.MenuOpen
+                                modalDrawerEnabled -> Icons.Outlined.Menu
+                                else -> null
+                            },
+                            onNavigationIconClick = {
+                                when {
+                                    drawerState.isOpen -> coroutineScope.launch { drawerState.close() }
+                                    modalDrawerEnabled -> coroutineScope.launch { drawerState.open() }
+                                }
+                            },
+                            onSupportClick = { navigator.navigate(SupportRoute) },
+                            scrollBehavior = scrollBehavior,
+                        )
+                    },
+                    floatingActionButton = {
+                        val fabEnabled = isFabVisible && randomAppHandler != null
+                        MainFloatingActionButton(
+                            visible = fabEnabled,
+                            enabled = fabEnabled,
+                            expanded = isFabExtended,
+                            onClick = { randomAppHandler?.invoke() },
+                        )
+                    },
+                    snackbarHost = {
+                        DefaultSnackbarHost(snackbarState = snackBarHostState)
+                    },
+                ) { paddingValues: PaddingValues ->
+                    RootContentContainer(
+                        modifier = Modifier
+                            .padding(paddingValues)
+                            .consumeWindowInsets(paddingValues),
+                    ) {
+                        entry.Content()
+                    }
+                }
+            }
+        }
+
+        if (modalDrawerEnabled) {
+            ModalNavigationDrawer(
+                modifier = Modifier.hapticDrawerSwipe(state = drawerState),
+                drawerState = drawerState,
+                gesturesEnabled = true,
+                drawerContent = {
+                    ModalDrawerSheet(drawerState = drawerState) {
+                        LargeVerticalSpacer()
+
+                        uiState.navigationDrawerItems.forEach { item: NavigationDrawerItem ->
+                            NavigationDrawerItemContent(
+                                item = item,
+                                selected = false,
+                                dividerRoutes = persistentSetOf(),
+                                handleNavigationItemClick = {
+                                    onNavigationDrawerItemClick(
+                                        item,
+                                        drawerState,
+                                        coroutineScope,
+                                    )
+                                },
+                            )
+                        }
+                    }
+                },
+                content = shellContent,
+            )
+        } else {
+            shellContent()
+        }
+    }
+}
+
+private class SubScreenScene(
+    override val key: Any,
+    private val entry: NavEntry<StableNavKey>,
+    override val previousEntries: List<NavEntry<StableNavKey>>,
+    private val onBack: () -> Unit,
+) : Scene<StableNavKey> {
+    override val entries: List<NavEntry<StableNavKey>> = listOf(entry)
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    override val content: @Composable () -> Unit = {
+        val currentRoute = key as StableNavKey
+        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+        val appBarTitleResId: Int = remember(currentRoute) {
+            when (currentRoute) {
+                is SettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.settings
+                is GeneralSettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.settings
+                is HelpRoute -> com.d4rk.android.libs.apptoolkit.R.string.help
+                is AdsSettingsRoute -> com.d4rk.android.libs.apptoolkit.R.string.ads
+                is PermissionsRoute -> com.d4rk.android.libs.apptoolkit.R.string.permissions
+                is LicensesRoute -> com.d4rk.android.libs.apptoolkit.R.string.oss_license_title
+                is SupportRoute -> com.d4rk.android.libs.apptoolkit.R.string.support_us
+                is LibraryExtrasRoute -> com.d4rk.android.libs.apptoolkit.R.string.app_name
+                is ComponentsRoute -> com.d4rk.android.apps.apptoolkit.R.string.components_title
+                else -> com.d4rk.android.libs.apptoolkit.R.string.app_name
+            }
+        }
+
+        Scaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = {
+                MainTopAppBar(
+                    title = stringResource(appBarTitleResId),
+                    navigationIcon = Icons.AutoMirrored.Outlined.ArrowBack,
+                    onNavigationIconClick = onBack,
+                    scrollBehavior = scrollBehavior,
+                )
+            },
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+            ) {
+                entry.Content()
+            }
+        }
     }
 }
 
