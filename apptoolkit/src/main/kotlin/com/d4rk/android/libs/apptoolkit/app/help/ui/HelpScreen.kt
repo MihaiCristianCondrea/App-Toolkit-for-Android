@@ -40,10 +40,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -107,7 +108,7 @@ private object HelpActionNames {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HelpScreen(
-    config: AppVersionInfo,
+    config: AppVersionInfo, // FIXME: Unstable parameter 'config' prevents composable from being skippable
     isEmbedded: Boolean = false,
 ) {
     val viewModel: HelpViewModel = koinViewModel()
@@ -128,7 +129,7 @@ fun HelpScreen(
     val isFabExtended = rememberSaveable { mutableStateOf(true) }
     val showDialog = rememberSaveable { mutableStateOf(false) }
     val showFeedbackBottomSheet = rememberSaveable { mutableStateOf(false) }
-    val feedbackBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val feedbackBottomSheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
 
     val screenState: UiStateScreen<HelpUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
