@@ -33,16 +33,16 @@ buildscript {
             classpath("org.jdom:jdom2:2.0.6.1") {
                 because("Mitigates CVE-2021-33813 (XXE) from AGP transitive dependency chain")
             }
-            classpath("io.netty:netty-handler:4.1.132.Final") {
+            classpath("io.netty:netty-handler:4.2.14.Final") {
                 because("Mitigates known Netty handler vulnerabilities (native crash and SNI allocation DoS)")
             }
-            classpath("io.netty:netty-codec-http2:4.1.132.Final") {
+            classpath("io.netty:netty-codec-http2:4.2.14.Final") {
                 because("Mitigates known HTTP/2 vulnerabilities, including Rapid Reset, MadeYouReset, and CONTINUATION flood DoS (CVE-2026-33871)")
             }
-            classpath("io.netty:netty-codec:4.1.132.Final") {
+            classpath("io.netty:netty-codec:4.2.14.Final") {
                 because("Mitigates Netty decoder DoS vulnerabilities (including CVE-2025-58057)")
             }
-            classpath("io.netty:netty-codec-http:4.1.132.Final") {
+            classpath("io.netty:netty-codec-http:4.2.14.Final") {
                 because("Mitigates HTTP request smuggling in chunked extension quoted-string parsing (CVE-2026-33870)")
             }
             classpath("org.codehaus.plexus:plexus-utils:3.6.1") {
@@ -64,7 +64,7 @@ allprojects {
                     "netty-handler",
                     "netty-codec",
                     "netty-codec-http",
-                    "netty-codec-http2" -> useVersion("4.1.132.Final")
+                    "netty-codec-http2" -> useVersion("4.2.14.Final")
                 }
 
                 "org.codehaus.plexus" -> when (requested.name) {
