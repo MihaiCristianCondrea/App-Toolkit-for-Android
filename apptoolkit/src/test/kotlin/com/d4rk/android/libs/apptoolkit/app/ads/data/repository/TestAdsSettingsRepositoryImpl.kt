@@ -18,7 +18,7 @@
 package com.d4rk.android.libs.apptoolkit.app.ads.data.repository
 
 import app.cash.turbine.test
-import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.domain.model.Result
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
@@ -134,3 +134,4 @@ class TestAdsSettingsRepositoryImpl {
         assertThat(repository.defaultAdsEnabled).isTrue()
     }
 }
+

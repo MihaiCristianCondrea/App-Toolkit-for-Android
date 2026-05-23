@@ -17,7 +17,7 @@
 
 package com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository
 
-import com.d4rk.android.libs.apptoolkit.app.onboarding.data.local.OnboardingPreferencesDataSource
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.interfaces.OnboardingPreferencesDataSource
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -36,3 +36,4 @@ class OnboardingRepositoryImpl(
         dataStore.saveStartup(isFirstTime = false)
     }
 }
+

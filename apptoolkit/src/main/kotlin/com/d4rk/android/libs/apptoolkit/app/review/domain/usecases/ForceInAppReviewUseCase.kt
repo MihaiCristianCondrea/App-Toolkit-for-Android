@@ -19,7 +19,7 @@ package com.d4rk.android.libs.apptoolkit.app.review.domain.usecases
 
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
-import com.d4rk.android.libs.apptoolkit.app.review.domain.repository.ReviewRepository
+import com.d4rk.android.libs.apptoolkit.playservices.review.domain.repository.ReviewRepository
 
 /**
  * Forces the in-app review flow to launch if it is available on the device.

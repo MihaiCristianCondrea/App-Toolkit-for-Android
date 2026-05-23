@@ -17,9 +17,9 @@
 
 package com.d4rk.android.libs.apptoolkit.app.main.domain.usecases
 
-import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateHost
-import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateResult
-import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.InAppUpdateRepository
+import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
+import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateResult
+import com.d4rk.android.libs.apptoolkit.playservices.update.domain.repository.InAppUpdateRepository
 import kotlinx.coroutines.flow.Flow
 
 /**

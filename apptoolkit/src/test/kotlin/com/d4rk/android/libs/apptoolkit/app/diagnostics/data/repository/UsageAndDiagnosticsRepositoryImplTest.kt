@@ -17,8 +17,8 @@
 
 package com.d4rk.android.libs.apptoolkit.app.diagnostics.data.repository
 
-import com.d4rk.android.libs.apptoolkit.app.diagnostics.data.local.UsageAndDiagnosticsPreferencesDataSource
-import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.interfaces.UsageAndDiagnosticsPreferencesDataSource
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
@@ -101,3 +101,5 @@ class UsageAndDiagnosticsRepositoryImplTest {
             assertThat(repository.observeSettings().first().usageAndDiagnostics).isFalse()
         }
 }
+
+

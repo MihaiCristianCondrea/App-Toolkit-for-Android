@@ -25,7 +25,7 @@ import android.util.Log
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
-import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat

@@ -17,7 +17,7 @@
 
 package com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository
 
-import com.d4rk.android.libs.apptoolkit.app.onboarding.data.local.OnboardingPreferencesDataSource
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.interfaces.OnboardingPreferencesDataSource
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -70,3 +70,4 @@ class TestOnboardingRepositoryImpl {
             assertThat(repository.observeOnboardingCompletion().first()).isTrue()
         }
 }
+

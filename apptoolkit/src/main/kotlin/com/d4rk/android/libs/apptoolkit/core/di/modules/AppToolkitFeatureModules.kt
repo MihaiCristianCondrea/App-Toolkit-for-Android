@@ -31,8 +31,8 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.providers.Devic
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.IssueReporterViewModel
-import com.d4rk.android.libs.apptoolkit.app.review.data.repository.ReviewRepositoryImpl
-import com.d4rk.android.libs.apptoolkit.app.review.domain.repository.ReviewRepository
+import com.d4rk.android.libs.apptoolkit.playservices.review.data.repository.ReviewRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.playservices.review.domain.repository.ReviewRepository
 import com.d4rk.android.libs.apptoolkit.app.review.domain.usecases.ForceInAppReviewUseCase
 import com.d4rk.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupViewModel

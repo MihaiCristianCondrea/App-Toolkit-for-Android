@@ -25,7 +25,7 @@ import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfo
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.GetAboutInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
-import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
@@ -269,3 +269,4 @@ class TestAboutViewModel {
         assertThat(state.data?.deviceInfo).isEqualTo(deviceProvider.deviceInfo)
     }
 }
+

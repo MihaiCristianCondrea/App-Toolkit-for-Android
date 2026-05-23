@@ -18,6 +18,7 @@
 package com.d4rk.android.libs.apptoolkit.app.main.utils.constants
 
 import androidx.compose.runtime.Immutable
+import com.d4rk.android.libs.apptoolkit.navigation.models.NavigationDestinationType
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.parcelize.Parcelize
 
@@ -25,7 +26,10 @@ import kotlinx.parcelize.Parcelize
  * Shared AppToolkit navigation destinations that can be embedded in a host app shell.
  */
 @Immutable
-sealed interface AppToolkitNavKey : StableNavKey
+sealed interface AppToolkitNavKey : StableNavKey {
+    override val destinationType: NavigationDestinationType
+        get() = NavigationDestinationType.TopLevel
+}
 
 /** Library extras destination. */
 @Parcelize
@@ -37,7 +41,10 @@ data object SettingsRoute : AppToolkitNavKey
 
 /** Destination for a settings category identified by [contentKey]. */
 @Parcelize
-data class GeneralSettingsRoute(val title: String, val contentKey: String) : AppToolkitNavKey
+data class GeneralSettingsRoute(val title: String, val contentKey: String) : AppToolkitNavKey {
+    override val destinationType: NavigationDestinationType
+        get() = NavigationDestinationType.Nested
+}
 
 /** Help and feedback FAQ destination. */
 @Parcelize

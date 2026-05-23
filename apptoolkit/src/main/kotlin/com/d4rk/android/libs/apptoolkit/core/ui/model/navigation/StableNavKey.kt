@@ -20,7 +20,7 @@ package com.d4rk.android.libs.apptoolkit.core.ui.model.navigation
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import androidx.navigation3.runtime.NavKey
+import com.d4rk.android.libs.apptoolkit.navigation.models.NavigationDestination
 
 /**
  * Marker interface to signal Compose stability for navigation keys.
@@ -30,4 +30,4 @@ import androidx.navigation3.runtime.NavKey
  */
 @Immutable
 @Stable
-interface StableNavKey : NavKey, Parcelable
+interface StableNavKey : NavigationDestination, Parcelable

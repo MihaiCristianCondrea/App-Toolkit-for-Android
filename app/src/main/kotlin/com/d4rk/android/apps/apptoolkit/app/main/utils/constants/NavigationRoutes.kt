@@ -18,13 +18,17 @@
 package com.d4rk.android.apps.apptoolkit.app.main.utils.constants
 
 import androidx.compose.runtime.Immutable
+import com.d4rk.android.libs.apptoolkit.navigation.models.NavigationDestinationType
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.parcelize.Parcelize
 
 @Immutable
-sealed interface AppNavKey : StableNavKey
+sealed interface AppNavKey : StableNavKey {
+    override val destinationType: NavigationDestinationType
+        get() = NavigationDestinationType.TopLevel
+}
 
 @Parcelize
 data object AppsListRoute : AppNavKey

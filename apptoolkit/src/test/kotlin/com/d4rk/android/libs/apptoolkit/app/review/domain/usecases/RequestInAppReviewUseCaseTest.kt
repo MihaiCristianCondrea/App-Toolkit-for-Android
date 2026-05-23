@@ -20,7 +20,7 @@ package com.d4rk.android.libs.apptoolkit.app.review.domain.usecases
 import android.app.Activity
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
-import com.d4rk.android.libs.apptoolkit.app.review.domain.repository.ReviewRepository
+import com.d4rk.android.libs.apptoolkit.playservices.review.domain.repository.ReviewRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -90,3 +90,4 @@ class RequestInAppReviewUseCaseTest {
         coVerify(exactly = 1) { reviewRepository.incrementSessionCount() }
     }
 }
+

@@ -32,7 +32,7 @@ import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppThemeConfig
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider
 import com.d4rk.android.libs.apptoolkit.core.BaseCoreManager
-import com.d4rk.android.libs.apptoolkit.core.data.remote.ads.AdsCoreManager
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.colorscheme.StaticPaletteIds
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isHalloweenSeason
@@ -79,7 +79,7 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     }
 
     override suspend fun onInitializeApp(): Unit = supervisorScope {
-        listOf(async { initializeAds() }).awaitAll()
+        initializeAds()
     }
 
     private suspend fun initializeAds() {
@@ -158,3 +158,4 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
         super.onTerminate()
     }
 }
+

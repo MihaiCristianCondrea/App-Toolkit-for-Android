@@ -20,8 +20,9 @@ package com.d4rk.android.libs.apptoolkit.app.main.data.repository
 import android.app.Activity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
-import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateHost
-import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateResult
+import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
+import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateResult
+import com.d4rk.android.libs.apptoolkit.playservices.update.data.repository.InAppUpdateRepositoryImpl
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
@@ -156,3 +157,6 @@ class InAppUpdateRepositoryImplTest {
         return task
     }
 }
+
+
+

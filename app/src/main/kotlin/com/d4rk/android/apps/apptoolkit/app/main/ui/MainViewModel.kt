@@ -26,8 +26,8 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
-import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateHost
-import com.d4rk.android.libs.apptoolkit.app.main.domain.model.InAppUpdateResult
+import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
+import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateResult
 import com.d4rk.android.libs.apptoolkit.app.main.domain.usecases.RequestInAppUpdateUseCase
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
@@ -299,3 +299,5 @@ class MainViewModel(
         const val REASON: String = "reason"
     }
 }
+
+

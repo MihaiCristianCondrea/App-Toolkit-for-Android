@@ -17,7 +17,11 @@
 
 package com.d4rk.android.libs.apptoolkit.core.di.modules
 
-import com.d4rk.android.libs.apptoolkit.app.consent.data.local.ConsentPreferencesDataSource
+import com.d4rk.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
+import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.ObserveAdsEnabledUseCase
+import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.SetAdsEnabledUseCase
+import com.d4rk.android.libs.apptoolkit.app.ads.ui.AdsSettingsViewModel
 import com.d4rk.android.libs.apptoolkit.app.consent.data.remote.datasource.ConsentRemoteDataSource
 import com.d4rk.android.libs.apptoolkit.app.consent.data.remote.datasource.UmpConsentRemoteDataSource
 import com.d4rk.android.libs.apptoolkit.app.consent.data.repository.ConsentRepositoryImpl
@@ -25,28 +29,26 @@ import com.d4rk.android.libs.apptoolkit.app.consent.domain.repository.ConsentRep
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyConsentSettingsUseCase
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
-import com.d4rk.android.libs.apptoolkit.app.main.data.repository.InAppUpdateRepositoryImpl
-import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.InAppUpdateRepository
 import com.d4rk.android.libs.apptoolkit.app.main.domain.usecases.RequestInAppUpdateUseCase
 import com.d4rk.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
-import com.d4rk.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepositoryImpl
-import com.d4rk.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
-import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.ObserveAdsEnabledUseCase
-import com.d4rk.android.libs.apptoolkit.app.ads.domain.usecases.SetAdsEnabledUseCase
-import com.d4rk.android.libs.apptoolkit.app.ads.ui.AdsSettingsViewModel
-import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.BuildInfoProvider
-import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.StandardDispatchers
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.d4rk.android.libs.apptoolkit.core.data.remote.ads.AdsCoreManager
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.interfaces.ConsentPreferencesDataSource
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.interfaces.OnboardingPreferencesDataSource
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.interfaces.UsageAndDiagnosticsPreferencesDataSource
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.core.data.remote.client.KtorClient
-import com.d4rk.android.libs.apptoolkit.core.data.remote.firebase.FirebaseControllerImpl
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseControllerImpl
+import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.di.model.AppToolkitHostBuildConfig
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.developerAppsApiUrl
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
+import com.d4rk.android.libs.apptoolkit.playservices.update.data.repository.InAppUpdateRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.playservices.update.domain.repository.InAppUpdateRepository
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -58,21 +60,15 @@ import org.koin.dsl.module
  * Includes dispatchers, datastore, firebase, ktor, consent wiring, and shared main-feature
  * dependencies such as [GmsHostFactory].
  */
-fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> = listOf(
-    dispatchersModule(),
-    corePlatformModule(hostBuildConfig = hostBuildConfig),
-    consentModule(),
-    mainSharedModule(hostBuildConfig = hostBuildConfig),
-    adsSettingsSharedModule(),
-)
+fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> =
+    listOf(
+        dispatchersModule(),
+        corePlatformModule(hostBuildConfig = hostBuildConfig),
+        consentModule(),
+        mainSharedModule(hostBuildConfig = hostBuildConfig),
+        adsSettingsSharedModule(),
+    )
 
-/**
- * DI lifetime checklist (see docs/apptoolkit/core/di-lifetime-policy.md):
- * - Use `single` for heavy/stateful managers (datastore, ads manager, network clients).
- * - Use `factory` for lightweight builders or objects that may later capture Activity/screen refs.
- * - Keep `viewModel` bindings unchanged because lifecycle is managed by Koin ViewModel DSL.
- * - Add one-line rationale for non-obvious bindings, especially `*Factory` types.
- */
 private fun dispatchersModule(): Module = module {
     single<DispatcherProvider> { StandardDispatchers() }
 }
@@ -139,21 +135,20 @@ private fun adsSettingsSharedModule(): Module = module {
             firebaseController = get(),
         )
     }
-    single<ObserveAdsEnabledUseCase> {
-        ObserveAdsEnabledUseCase(
-            repo = get(),
-            firebaseController = get(),
-        )
-    }
-    single<SetAdsEnabledUseCase> { SetAdsEnabledUseCase(repo = get(), firebaseController = get()) }
+    single { ObserveAdsEnabledUseCase(repo = get(), firebaseController = get()) }
+    single { SetAdsEnabledUseCase(repo = get(), firebaseController = get()) }
+
     viewModel {
         AdsSettingsViewModel(
-            repository = get(),
-            dispatchers = get(),
             observeAdsEnabled = get(),
             setAdsEnabled = get(),
             requestConsentUseCase = get(),
+            repository = get(),
+            dispatchers = get(),
             firebaseController = get(),
         )
     }
 }
+
+
+

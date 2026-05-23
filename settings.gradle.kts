@@ -49,3 +49,6 @@ plugins {
 rootProject.name = "App Toolkit for Android"
 include(":app")
 include(":apptoolkit")
+include(":core")
+include(":navigation")
+include(":playservices")

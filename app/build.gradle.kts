@@ -42,26 +42,15 @@ if (hasGoogleServicesConfig) {
     apply(plugin = libs.plugins.firebase.performance.get().pluginId)
 }
 
-configurations.configureEach {
-    exclude(group = "org.chromium.net", module = "cronet-fallback")
-    exclude(group = "org.chromium.net", module = "httpengine-native-provider")
-    exclude(group = "org.chromium.net", module = "cronet-common")
-    exclude(group = "org.chromium.net", module = "cronet-shared")
-}
-
 android {
     namespace = "com.d4rk.android.apps.apptoolkit"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.d4rk.android.apps"
         applicationIdSuffix = ".apptoolkit"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 115
         versionName = providers.gradleProperty("PUBLISHING_VERSION").get()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

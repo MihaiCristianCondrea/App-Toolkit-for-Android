@@ -1,0 +1,5 @@
+<resources>
+
+    <!--The default cast app id from the Cast SDK-->
+    <string name="cast_app_id">CC1AD845</string>
+</resources>

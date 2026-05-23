@@ -34,23 +34,10 @@ plugins {
     `maven-publish`
 }
 
-configurations.configureEach {
-    exclude(group = "com.google.android.gms", module = "play-services-ads")
-    exclude(group = "com.google.android.gms", module = "play-services-ads-lite")
-    exclude(group = "org.chromium.net", module = "cronet-fallback")
-    exclude(group = "org.chromium.net", module = "httpengine-native-provider")
-    exclude(group = "org.chromium.net", module = "cronet-common")
-    exclude(group = "org.chromium.net", module = "cronet-shared")
-}
-
 android {
 
     namespace = "com.d4rk.android.libs.apptoolkit"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 26
@@ -98,6 +85,11 @@ android {
 }
 
 dependencies {
+    // Internal modules
+    api(project(":core"))
+    api(project(":navigation"))
+    api(project(":playservices"))
+
     // AndroidX (Core / platform)
     api(dependencyNotation = libs.bundles.androidx.core)
     api(dependencyNotation = libs.androidx.window)
