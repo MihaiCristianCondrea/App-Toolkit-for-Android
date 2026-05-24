@@ -58,19 +58,19 @@ fun appToolkitNavigationEntryBuilders(
 private fun libraryExtrasEntryBuilder(
     paddingValues: PaddingValues = PaddingValues(),
 ): NavigationEntryBuilder<StableNavKey> = {
-    entry<LibraryExtrasRoute> {
+    entry<LibraryExtrasRoute>(clazzContentKey = { route -> route }) {
         LibraryExtrasScreen(paddingValues = paddingValues)
     }
 }
 
 private fun settingsEntryBuilder(): NavigationEntryBuilder<StableNavKey> = {
-    entry<SettingsRoute> {
+    entry<SettingsRoute>(clazzContentKey = { route -> route }) {
         SettingsScreen(isEmbedded = true)
     }
 }
 
 private fun generalSettingsEntryBuilder(): NavigationEntryBuilder<StableNavKey> = {
-    entry<GeneralSettingsRoute> { route ->
+    entry<GeneralSettingsRoute>(clazzContentKey = { route -> route }) { route ->
         GeneralSettingsScreen(
             title = route.title,
             contentKey = route.contentKey,
@@ -81,32 +81,32 @@ private fun generalSettingsEntryBuilder(): NavigationEntryBuilder<StableNavKey> 
 }
 
 private fun helpEntryBuilder(): NavigationEntryBuilder<StableNavKey> = {
-    entry<HelpRoute> {
+    entry<HelpRoute>(clazzContentKey = { route -> route }) {
         val config: AppVersionInfo = koinInject()
         HelpScreen(config = config, isEmbedded = true)
     }
 }
 
 private fun supportEntryBuilder(): NavigationEntryBuilder<StableNavKey> = {
-    entry<SupportRoute> {
+    entry<SupportRoute>(clazzContentKey = { route -> route }) {
         SupportScreen(isEmbedded = true)
     }
 }
 
 private fun adsSettingsEntryBuilder(): NavigationEntryBuilder<StableNavKey> = {
-    entry<AdsSettingsRoute> {
+    entry<AdsSettingsRoute>(clazzContentKey = { route -> route }) {
         AdsSettingsScreen(isEmbedded = true)
     }
 }
 
 private fun permissionsEntryBuilder(): NavigationEntryBuilder<StableNavKey> = {
-    entry<PermissionsRoute> {
+    entry<PermissionsRoute>(clazzContentKey = { route -> route }) {
         PermissionsScreen(isEmbedded = true)
     }
 }
 
 private fun licensesEntryBuilder(): NavigationEntryBuilder<StableNavKey> = {
-    entry<LicensesRoute> {
+    entry<LicensesRoute>(clazzContentKey = { route -> route }) {
         LicensesScreen(isEmbedded = true)
     }
 }

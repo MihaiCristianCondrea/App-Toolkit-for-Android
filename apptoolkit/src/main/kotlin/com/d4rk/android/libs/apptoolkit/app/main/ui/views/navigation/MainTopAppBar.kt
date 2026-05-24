@@ -25,6 +25,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreVert
@@ -55,9 +56,9 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivi
 /**
  * A top app bar for the main screen of the application.
  *
- * It includes the application title, a navigation icon, and an actions menu.
- * The actions menu currently contains a "Support Us" item that uses the host callback or opens the
- * [SupportActivity].
+ * It includes the application title, a navigation icon, and route-specific actions.
+ * By default, it shows a "Support Us" overflow item that uses the host callback or opens the
+ * [SupportActivity]. Hosts can disable that default action and provide their destination's actions.
  * The navigation icon's action is configurable.
  *
  * @param title is the optional title that can be provided by the host app
@@ -65,6 +66,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivi
  * @param onNavigationIconClick A lambda to be executed when the navigation icon is clicked.
  * @param onSupportClick Optional host callback for opening Support inside an existing navigation
  * shell. When null, the default behavior opens [SupportActivity].
+ * @param showSupportAction Whether to render the built-in Support overflow action.
+ * @param actions Additional destination-owned app bar actions.
  * @param scrollBehavior A [TopAppBarScrollBehavior] to be applied to the top app bar,
  * which defines its behavior when content is scrolled.
  */
@@ -75,11 +78,11 @@ fun MainTopAppBar(
     navigationIcon: ImageVector?,
     onNavigationIconClick: () -> Unit,
     onSupportClick: (() -> Unit)? = null,
+    showSupportAction: Boolean = true,
+    actions: @Composable RowScope.() -> Unit = {},
     scrollBehavior: TopAppBarScrollBehavior,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
 ) {
-    val context: Context = LocalContext.current
-
     TopAppBar(
         title = {
             AnimatedContent(
@@ -112,33 +115,43 @@ fun MainTopAppBar(
             }
         },
         actions = {
-            val (expandedMenu, setExpandedMenu) = remember { mutableStateOf(value = false) }
-
-            AnimatedIconButtonDirection(
-                fromRight = true,
-                icon = Icons.Outlined.MoreVert,
-                contentDescription = stringResource(id = R.string.content_description_more_options),
-                onClick = { setExpandedMenu(true) },
-                iconSize = SizeConstants.TwentyFourSize,
-            )
-
-            DropdownMenu(
-                expanded = expandedMenu,
-                shape = MaterialTheme.shapes.largeIncreased,
-                onDismissRequest = { setExpandedMenu(false) },
-            ) {
-                CommonDropdownMenuItem(
-                    textResId = R.string.support_us,
-                    icon = Icons.Outlined.VolunteerActivism,
-                    onClick = {
-                        setExpandedMenu(false)
-                        onSupportClick?.invoke()
-                            ?: context.openActivity(SupportActivity::class.java)
-                    },
-                )
+            if (showSupportAction) {
+                SupportMenuAction(onSupportClick = onSupportClick)
             }
+            actions()
         },
         scrollBehavior = scrollBehavior,
         windowInsets = windowInsets,
     )
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun SupportMenuAction(onSupportClick: (() -> Unit)?) {
+    val context: Context = LocalContext.current
+    val (expandedMenu, setExpandedMenu) = remember { mutableStateOf(value = false) }
+
+    AnimatedIconButtonDirection(
+        fromRight = true,
+        icon = Icons.Outlined.MoreVert,
+        contentDescription = stringResource(id = R.string.content_description_more_options),
+        onClick = { setExpandedMenu(true) },
+        iconSize = SizeConstants.TwentyFourSize,
+    )
+
+    DropdownMenu(
+        expanded = expandedMenu,
+        shape = MaterialTheme.shapes.largeIncreased,
+        onDismissRequest = { setExpandedMenu(false) },
+    ) {
+        CommonDropdownMenuItem(
+            textResId = R.string.support_us,
+            icon = Icons.Outlined.VolunteerActivism,
+            onClick = {
+                setExpandedMenu(false)
+                onSupportClick?.invoke()
+                    ?: context.openActivity(SupportActivity::class.java)
+            },
+        )
+    }
 }

@@ -158,7 +158,8 @@ class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
      * Handles a back action, returning true when navigation consumed the request.
      */
     fun goBack(): Boolean {
-        val currentRoute = state.currentBackStack.lastOrNull() ?: return false
+        val currentBackStack = state.currentBackStack
+        val currentRoute = currentBackStack.lastOrNull() ?: return false
 
         if (currentRoute == state.topLevelRoute) {
             if (state.topLevelRoute != state.startRoute) {
@@ -166,7 +167,7 @@ class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
                 return true
             }
         } else {
-            state.currentBackStack.removeLastOrNull()
+            currentBackStack.removeLastOrNull()
             return true
         }
 

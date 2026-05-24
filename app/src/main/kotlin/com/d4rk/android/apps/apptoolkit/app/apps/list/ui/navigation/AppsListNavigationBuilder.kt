@@ -26,7 +26,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilde
 fun appsListEntryBuilder(
     context: AppNavigationEntryContext,
 ): NavigationEntryBuilder<StableNavKey> = {
-    entry<AppsListRoute> {
+    entry<AppsListRoute>(clazzContentKey = { route -> route }) {
         AppsListRoute(
             paddingValues = context.paddingValues,
             windowWidthSizeClass = context.windowWidthSizeClass,

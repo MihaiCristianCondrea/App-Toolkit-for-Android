@@ -26,7 +26,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilde
 fun favoriteAppsEntryBuilder(
     context: AppNavigationEntryContext,
 ): NavigationEntryBuilder<StableNavKey> = {
-    entry<FavoriteAppsRoute> {
+    entry<FavoriteAppsRoute>(clazzContentKey = { route -> route }) {
         FavoriteAppsRoute(
             paddingValues = context.paddingValues,
             windowWidthSizeClass = context.windowWidthSizeClass,

@@ -25,12 +25,43 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 
+/**
+ * Remembers and provides bottom navigation (fade) transitions.
+ */
 @Composable
 fun rememberBottomNavTransitions(): BottomNavTransitions {
     return remember { BottomNavTransitions() }
 }
 
+/**
+ * Class providing standard fade transitions for top-level navigation.
+ */
 class BottomNavTransitions {
+
+    /**
+     * Standard forward navigation transition.
+     */
+    fun forward(): ContentTransform {
+        return transition()
+    }
+
+    /**
+     * Standard pop (back) navigation transition.
+     */
+    fun pop(): ContentTransform {
+        return transition()
+    }
+
+    /**
+     * Predictive back navigation transition.
+     */
+    fun predictivePop(): ContentTransform {
+        return transition()
+    }
+
+    /**
+     * Generic fade transition.
+     */
     fun transition(): ContentTransform {
         return fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
     }

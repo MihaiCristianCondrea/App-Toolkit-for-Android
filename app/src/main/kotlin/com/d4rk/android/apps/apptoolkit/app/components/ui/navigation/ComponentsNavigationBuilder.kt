@@ -29,7 +29,7 @@ import com.d4rk.android.apps.apptoolkit.app.components.ui.views.ComponentsRoute 
 fun componentsEntryBuilder(
     context: AppNavigationEntryContext,
 ): NavigationEntryBuilder<StableNavKey> = {
-    entry<ComponentsRoute> {
+    entry<ComponentsRoute>(clazzContentKey = { route -> route }) {
         ComponentsScreenRoute(
             paddingValues = context.paddingValues,
         )

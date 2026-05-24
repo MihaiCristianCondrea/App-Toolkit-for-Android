@@ -1,7 +1,8 @@
 # Main (AppToolkit)
 
 The **Main** feature provides reusable "app shell" building blocks used across AppToolkit-powered apps:
-navigation chrome (top app bar, adaptive navigation suite, drawer), common navigation handling, and
+navigation chrome (top app bar, adaptive navigation bar/rail, drawer), common navigation handling,
+and
 Google Play
 Services (GMS) host abstractions used by in-app update / review / consent flows.
 
@@ -17,8 +18,8 @@ still giving host apps a ready-to-go default shell that can be customized or rep
 
 ### Navigation 3 UI (Compose + Material 3)
 - **`MainTopAppBar`**: the default top app bar (title + navigation icon + overflow actions).
-- **`NavigationSuiteScaffold`**: adaptive destination chrome that switches between bottom navigation
-  bar and navigation rail based on window size class.
+- **Host-owned shell scaffolding**: the sample app composes a stable `Scaffold` with a bottom
+  navigation bar on compact windows and a navigation rail on larger windows.
 - **`NavigationDrawerItemContent`**: a single drawer item row with optional dividers.
 
 ### Navigation behavior helpers
@@ -29,6 +30,11 @@ still giving host apps a ready-to-go default shell that can be customized or rep
   extras.
 - **Shared route keys**: library destinations are exposed as `StableNavKey` implementations from the
   library, so host apps can combine them with app-owned route keys in one `NavDisplay`.
+- **Scene-specific motion**: host apps can use a stable main-shell `Scene` for top-level routes and
+  focused sub-screen scenes whose Nav3 metadata defines activity-like push and pop transitions.
+- **Typed entry identity**: scene-based hosts must register each `NavEntry` with its
+  `StableNavKey` as `contentKey`; Nav3 otherwise defaults to a string and typed scene routing
+  cannot identify the shell destination.
 - Navigation key/state serialization guidance: see
   [`docs/general/core/serialization-boundaries.md`](../../../general/core/serialization-boundaries.md).
 
@@ -85,7 +91,7 @@ that feels native and is ready to ship:
 
 - The **navigation rail** supports tablets/foldables/large screens.
 - The **navigation drawer** remains available for app-wide actions (settings/help/updates/share),
-  while top-level destinations are managed by `NavigationSuiteScaffold`.
+  while a host-owned shell keeps top-level navigation chrome stable as tab content changes.
 - The **changelog dialog** is used to display "what changed" for apps, typically sourced from GitHub,
   keeping release notes discoverable inside the app.
 - **GMS host abstractions** exist to avoid leaking concrete `Activity` dependencies into domain/data,
@@ -124,42 +130,63 @@ data class BottomBarItem<T : StableNavKey>(
 ### 1) Top app bar (`MainTopAppBar`)
 
 `MainTopAppBar` is designed for the library’s default main screen. It supports scroll behavior and a
-navigation icon callback.
+navigation icon callback. Hosts can hide the default Support overflow and supply destination-owned
+actions, such as the Help overflow menu.
 
 ```kotlin
 MainTopAppBar(
     navigationIcon = Icons.AutoMirrored.Outlined.ArrowBack,
     onNavigationIconClick = { /* open drawer or navigate up */ },
+    showSupportAction = false,
+    actions = { /* destination-specific actions, if any */ },
     scrollBehavior = scrollBehavior,
 )
 ```
 
-### 2) Adaptive top-level navigation (`NavigationSuiteScaffold`)
+### 2) Adaptive top-level navigation shell
 
-`NavigationSuiteScaffold` supports:
-
-* current route selection
-* automatic switching between navigation bar and navigation rail
-* a single item definition reused across navigation layouts
+The sample app owns the scaffold explicitly so navigation bars do not enter or exit with
+destination content. It selects `NavigationBar` on compact windows and `NavigationRail` on larger
+windows while reusing the same item contract.
 
 ```kotlin
-NavigationSuiteScaffold(
-    navigationSuiteItems = {
-        items.forEach { item ->
-            item(
-                icon = { /* destination icon */ },
-                label = { Text(stringResource(item.title)) },
-                selected = item.route == currentRoute,
-                onClick = { onNavigate(item.route) },
-            )
+Scaffold(
+    bottomBar = {
+        if (compactWindow) {
+            NavigationBar {
+                items.forEach { item ->
+                    NavigationBarItem(
+                        selected = item.route == currentRoute,
+                        onClick = { onNavigate(item.route) },
+                        icon = { /* destination icon */ },
+                        label = { Text(stringResource(item.title)) },
+                    )
+                }
+            }
         }
     },
-) {
-    /* destination content */
+) { paddingValues ->
+    /* Animated destination content inside stable chrome */
 }
 ```
 
-### 3) Drawer item click handling (`handleNavigationItemClick`)
+For expanded layouts, render the same `items` through `NavigationRailItem` before additional
+drawer destinations so every top-level route remains reachable.
+
+### 3) Nav3 scenes and motion
+
+Use a stable main-shell scene key for top-level destinations and a dedicated sub-screen scene for
+Settings, Help, Support, and other pushed destinations. Assign transition metadata on each scene:
+top-level tab content uses a fade within the mounted shell; transitions crossing between the shell
+and a pushed destination, plus transitions between pushed destinations, use activity-like forward,
+pop, and predictive-pop motion. This avoids animating the app bar and navigation chrome when
+switching tabs and preserves native back motion when returning from a pushed screen. Values
+reported by destination content, such as FAB actions, must be delivered through stable state
+holders rather than scene-strategy identity so returning content cannot restart an active motion.
+Pushed settings, Help, Support, and similar destinations retain their expanded large top app bars
+inside the sub-screen shell; only the persistent top-level shell uses the compact app bar.
+
+### 4) Drawer item click handling (`handleNavigationItemClick`)
 
 Use the default drawer handler and override only what you need:
 
@@ -176,7 +203,7 @@ handleNavigationItemClick(
 )
 ```
 
-### 4) In-app update flow (Play Core via `RequestInAppUpdateUseCase`)
+### 5) In-app update flow (Play Core via `RequestInAppUpdateUseCase`)
 
 The host app provides an `ActivityResultLauncher<IntentSenderRequest>` and builds an `InAppUpdateHost`.
 The update request emits a result as a `Flow`.

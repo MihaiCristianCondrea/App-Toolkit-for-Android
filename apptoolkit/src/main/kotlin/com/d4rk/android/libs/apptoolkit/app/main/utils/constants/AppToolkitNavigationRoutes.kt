@@ -18,8 +18,8 @@
 package com.d4rk.android.libs.apptoolkit.app.main.utils.constants
 
 import androidx.compose.runtime.Immutable
-import com.d4rk.android.libs.apptoolkit.navigation.models.NavigationDestinationType
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
+import com.d4rk.android.libs.apptoolkit.navigation.models.NavigationDestinationType
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -28,7 +28,7 @@ import kotlinx.parcelize.Parcelize
 @Immutable
 sealed interface AppToolkitNavKey : StableNavKey {
     override val destinationType: NavigationDestinationType
-        get() = NavigationDestinationType.TopLevel
+        get() = NavigationDestinationType.ActivityLike
 }
 
 /** Library extras destination. */

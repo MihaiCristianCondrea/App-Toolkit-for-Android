@@ -17,12 +17,25 @@
 
 package com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.AdsSettingsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.HelpRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.LibraryExtrasRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.LicensesRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.PermissionsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.SettingsRoute
+import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.SupportRoute
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.startupDestinationFlow
+import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
+import com.d4rk.android.libs.apptoolkit.core.ui.navigation.entryProviderFor
+import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -70,5 +83,35 @@ class AppNavigationHostTest {
         ).first()
 
         assertEquals(FavoriteAppsRoute, startDestination)
+    }
+
+    @Test
+    fun `navigation entries retain typed content keys required by scene routing`() {
+        val entryProvider = entryProviderFor(
+            appNavigationEntryBuilders(
+                context = AppNavigationEntryContext(
+                    paddingValues = PaddingValues(),
+                    windowWidthSizeClass = AppWindowWidthSizeClass.Compact,
+                    onRandomAppHandlerChanged = { _, _ -> },
+                ),
+            )
+        )
+        val routes: List<StableNavKey> = listOf(
+            AppsListRoute,
+            FavoriteAppsRoute,
+            ComponentsRoute,
+            LibraryExtrasRoute,
+            SettingsRoute,
+            GeneralSettingsRoute(title = "Display", contentKey = "display"),
+            HelpRoute,
+            SupportRoute,
+            AdsSettingsRoute,
+            PermissionsRoute,
+            LicensesRoute,
+        )
+
+        routes.forEach { route ->
+            assertEquals(route, entryProvider(route).contentKey)
+        }
     }
 }
