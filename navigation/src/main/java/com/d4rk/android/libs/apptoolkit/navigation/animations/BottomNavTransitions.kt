@@ -21,6 +21,8 @@ import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -64,5 +66,22 @@ class BottomNavTransitions {
      */
     fun transition(): ContentTransform {
         return fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
+    }
+
+    /**
+     * Directional bottom-bar transition used when moving between tab indices.
+     */
+    fun betweenTabs(forward: Boolean): ContentTransform {
+        val enter = slideInHorizontally(
+            animationSpec = tween(260),
+            initialOffsetX = { fullWidth -> if (forward) fullWidth / 5 else -fullWidth / 5 },
+        ) + fadeIn(animationSpec = tween(220))
+
+        val exit = slideOutHorizontally(
+            animationSpec = tween(260),
+            targetOffsetX = { fullWidth -> if (forward) -fullWidth / 8 else fullWidth / 8 },
+        ) + fadeOut(animationSpec = tween(220))
+
+        return enter togetherWith exit
     }
 }
