@@ -509,7 +509,21 @@ private fun MainShell(
                     AnimatedContent(
                         targetState = entry,
                         contentKey = { targetEntry -> targetEntry.contentKey },
-                        transitionSpec = { bottomNavTransitions.transition() },
+                        transitionSpec = {
+                            val initialIndex = MainNavigationDefaults.bottomBarItems.indexOfFirst {
+                                it.route == (initialState.contentKey as? StableNavKey)
+                            }
+                            val targetIndex = MainNavigationDefaults.bottomBarItems.indexOfFirst {
+                                it.route == (targetState.contentKey as? StableNavKey)
+                            }
+                            val isBottomBarRouteSwitch = initialIndex >= 0 && targetIndex >= 0
+
+                            if (isBottomBarRouteSwitch) {
+                                bottomNavTransitions.betweenTabs(forward = targetIndex >= initialIndex)
+                            } else {
+                                bottomNavTransitions.transition()
+                            }
+                        },
                         label = "TabAnimation",
                     ) { targetEntry ->
                         targetEntry.Content()

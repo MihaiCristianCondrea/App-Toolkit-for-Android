@@ -23,6 +23,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.Saver
@@ -118,6 +119,8 @@ class NavigationState<T : StableNavKey>(
 
     val currentRoute: T
         get() = currentBackStack.last()
+
+    val topLevelHistory = mutableStateListOf<T>()
 }
 
 @Stable
@@ -133,6 +136,9 @@ class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
         if (route == state.currentRoute) return
 
         if (route in state.backStacks.keys) {
+            if (state.topLevelRoute != route) {
+                state.topLevelHistory.add(state.topLevelRoute)
+            }
             state.topLevelRoute = route
             state.currentBackStack.popToRoot()
             return
@@ -162,6 +168,13 @@ class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
         val currentRoute = currentBackStack.lastOrNull() ?: return false
 
         if (currentRoute == state.topLevelRoute) {
+            val previousTopLevelRoute = state.topLevelHistory.removeLastOrNull()
+            if (previousTopLevelRoute != null && previousTopLevelRoute != state.topLevelRoute) {
+                state.topLevelRoute = previousTopLevelRoute
+                state.currentBackStack.popToRoot()
+                return true
+            }
+
             if (state.topLevelRoute != state.startRoute) {
                 state.topLevelRoute = state.startRoute
                 return true
