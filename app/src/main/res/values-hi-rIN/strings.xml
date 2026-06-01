@@ -41,6 +41,28 @@
     <string name="app_details_about_title">इस ऐप के बारे में</string>
     <string name="app_details_screenshots_title">स्क्रीनशॉट</string>
     <string name="app_details_open_app">ऐप खोलें</string>
+    <string name="app_details_app_info">App info</string>
+    <string name="app_details_installed">Installed</string>
+    <string name="app_details_not_installed">Not installed</string>
+    <string name="app_details_checking_install_state">Checking install status</string>
+    <string name="app_details_version">Version %1$s</string>
+    <string name="app_details_quick_actions_title">Quick actions</string>
+    <string name="app_details_notifications">Notifications</string>
+    <string name="app_details_permissions">Permissions</string>
+    <string name="app_details_storage">Storage</string>
+    <string name="app_details_battery">Battery</string>
+    <string name="app_details_share">Share</string>
+    <string name="app_details_play_store">Play Store</string>
+    <string name="app_details_copy_package">Copy package</string>
+    <string name="app_details_share_title">Share app</string>
+    <string name="app_details_share_text">Check out %1$s:\n%2$s</string>
+    <string name="app_details_package_name_clip_label">Package name</string>
+    <string name="app_details_package_name_copied">Package name copied</string>
+    <string name="app_details_links_title">Links</string>
+    <string name="app_details_github_repository">GitHub Repository</string>
+    <string name="app_details_github_repository_summary">View source code and contribute</string>
+    <string name="app_details_privacy_policy">Privacy Policy</string>
+    <string name="app_details_privacy_policy_summary">Read our privacy policy</string>
 
     <!-- Help screen -->
     <string name="question_1">App Toolkit क्या है?</string>

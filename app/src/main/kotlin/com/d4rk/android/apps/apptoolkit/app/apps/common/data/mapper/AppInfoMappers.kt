@@ -37,6 +37,8 @@ fun AppInfoDto.toDomain(): AppInfo = AppInfo(
         }
         .orEmpty(),
     category = category?.toDomain(),
+    githubUrl = githubUrl.sanitizeUrlOrNull(),
+    privacyPolicyUrl = privacyPolicyUrl.sanitizeUrlOrNull(),
 )
 
 fun AppCategoryDto.toDomain(): AppCategory = AppCategory(
