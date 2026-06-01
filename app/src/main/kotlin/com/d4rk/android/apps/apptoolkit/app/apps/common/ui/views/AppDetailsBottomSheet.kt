@@ -22,6 +22,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -32,7 +33,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -357,24 +357,43 @@ private fun QuickActionsPanel(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         ),
     ) {
-        FlowRow(
-            modifier = Modifier.padding(SizeConstants.MediumSize),
-            maxItemsInEachRow = 4,
-            horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-        ) {
-            quickActions.forEach { quickAction ->
-                QuickActionTile(quickAction = quickAction)
+        BoxWithConstraints(modifier = Modifier.padding(SizeConstants.MediumSize)) {
+            val columnCount = if (maxWidth < SizeConstants.TwoHundredFortySize * 2) {
+                COMPACT_QUICK_ACTION_COLUMNS
+            } else {
+                EXPANDED_QUICK_ACTION_COLUMNS
+            }
+
+            Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
+                quickActions.chunked(columnCount).forEach { rowActions ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+                    ) {
+                        rowActions.forEach { quickAction ->
+                            QuickActionTile(
+                                quickAction = quickAction,
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
+                        repeat(columnCount - rowActions.size) {
+                            Box(modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun QuickActionTile(quickAction: QuickActionUi) {
+private fun QuickActionTile(
+    quickAction: QuickActionUi,
+    modifier: Modifier = Modifier,
+) {
     ElevatedCard(
         onClick = quickAction.onClick,
-        modifier = Modifier.widthIn(min = SizeConstants.ExtraExtraLargeSize * 2),
+        modifier = modifier.height(SizeConstants.NinetySixSize),
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
         ),
@@ -491,6 +510,9 @@ private fun AppLinksSection(
         }
     }
 }
+
+private const val COMPACT_QUICK_ACTION_COLUMNS: Int = 2
+private const val EXPANDED_QUICK_ACTION_COLUMNS: Int = 4
 
 @Immutable
 private data class QuickActionUi(
