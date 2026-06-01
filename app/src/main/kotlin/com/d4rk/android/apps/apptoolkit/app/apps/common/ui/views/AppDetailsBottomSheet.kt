@@ -22,10 +22,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -86,7 +83,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSp
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo as InstalledAppVersionInfo
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AppDetailsBottomSheet(
     appInfo: AppInfo,
@@ -108,7 +105,9 @@ fun AppDetailsBottomSheet(
         AppDetailsHeader(
             appInfo = appInfo,
             isAppInstalled = isAppInstalled,
+            isFavorite = isFavorite,
             actionLauncher = actionLauncher,
+            onFavoriteClick = onFavoriteClick,
         )
         LargeVerticalSpacer()
         AppMetadataChips(
@@ -172,12 +171,6 @@ fun AppDetailsBottomSheet(
         }
         AppLinksSection(appInfo = appInfo, actionLauncher = actionLauncher)
         LargeVerticalSpacer()
-        GeneralOutlinedButton(
-            onClick = onFavoriteClick,
-            vectorIcon = if (isFavorite) Icons.Outlined.Verified else Icons.Outlined.CheckBox,
-            label = stringResource(id = R.string.favorite_apps)
-        )
-        LargeVerticalSpacer()
     }
 }
 
@@ -185,7 +178,9 @@ fun AppDetailsBottomSheet(
 private fun AppDetailsHeader(
     appInfo: AppInfo,
     isAppInstalled: Boolean?,
+    isFavorite: Boolean,
     actionLauncher: AppActionLauncher,
+    onFavoriteClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -239,44 +234,47 @@ private fun AppDetailsHeader(
                 null -> CircularWavyProgressIndicator()
             }
             GeneralOutlinedButton(
-                onClick = { actionLauncher.openAppInfo(appInfo.packageName) },
-                vectorIcon = Icons.Outlined.Info,
-                label = stringResource(id = R.string.app_details_app_info)
+                onClick = onFavoriteClick,
+                vectorIcon = if (isFavorite) Icons.Outlined.Verified else Icons.Outlined.CheckBox,
+                label = stringResource(id = R.string.favorite_apps)
             )
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun AppMetadataChips(
     appInfo: AppInfo,
     isAppInstalled: Boolean?,
     installedVersionInfo: InstalledAppVersionInfo?,
 ) {
-    FlowRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = SizeConstants.LargeSize),
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-    ) {
-        AppInfoChip(
+    val chipItems = listOfNotNull(
+        AppInfoChipUi(
             icon = Icons.Outlined.CheckBox,
             label = when (isAppInstalled) {
                 true -> stringResource(id = R.string.app_details_installed)
                 false -> stringResource(id = R.string.app_details_not_installed)
                 null -> stringResource(id = R.string.app_details_checking_install_state)
             }
-        )
+        ),
         appInfo.category?.label?.takeIf { it.isNotBlank() }?.let { category ->
-            AppInfoChip(icon = Icons.Outlined.Category, label = category)
-        }
+            AppInfoChipUi(icon = Icons.Outlined.Category, label = category)
+        },
         installedVersionInfo?.versionName?.takeIf { it.isNotBlank() }?.let { versionName ->
-            AppInfoChip(
+            AppInfoChipUi(
                 icon = Icons.Outlined.Verified,
                 label = stringResource(id = R.string.app_details_version, versionName)
             )
+        },
+    )
+
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
+        horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+    ) {
+        items(chipItems) { chipItem ->
+            AppInfoChip(icon = chipItem.icon, label = chipItem.label)
         }
     }
 }
@@ -325,9 +323,6 @@ private fun QuickActionsPanel(
             QuickActionUi(R.string.app_details_battery, Icons.Outlined.BatteryFull) {
                 actionLauncher.openBattery(appInfo.packageName)
             },
-            QuickActionUi(R.string.app_details_app_info, Icons.Outlined.Info) {
-                actionLauncher.openAppInfo(appInfo.packageName)
-            },
             QuickActionUi(R.string.app_details_share, Icons.Outlined.Share) {
                 actionLauncher.shareApp(appInfo.packageName, appInfo.name)
             },
@@ -357,28 +352,23 @@ private fun QuickActionsPanel(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         ),
     ) {
-        BoxWithConstraints(modifier = Modifier.padding(SizeConstants.MediumSize)) {
-            val columnCount = if (maxWidth < SizeConstants.TwoHundredFortySize * 2) {
-                COMPACT_QUICK_ACTION_COLUMNS
-            } else {
-                EXPANDED_QUICK_ACTION_COLUMNS
-            }
-
-            Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
-                quickActions.chunked(columnCount).forEach { rowActions ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-                    ) {
-                        rowActions.forEach { quickAction ->
-                            QuickActionTile(
-                                quickAction = quickAction,
-                                modifier = Modifier.weight(1f),
-                            )
-                        }
-                        repeat(columnCount - rowActions.size) {
-                            Box(modifier = Modifier.weight(1f))
-                        }
+        Column(
+            modifier = Modifier.padding(SizeConstants.MediumSize),
+            verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+        ) {
+            quickActions.chunked(QUICK_ACTION_COLUMNS).forEach { rowActions ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+                ) {
+                    rowActions.forEach { quickAction ->
+                        QuickActionTile(
+                            quickAction = quickAction,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+                    repeat(QUICK_ACTION_COLUMNS - rowActions.size) {
+                        Box(modifier = Modifier.weight(1f))
                     }
                 }
             }
@@ -511,8 +501,13 @@ private fun AppLinksSection(
     }
 }
 
-private const val COMPACT_QUICK_ACTION_COLUMNS: Int = 2
-private const val EXPANDED_QUICK_ACTION_COLUMNS: Int = 4
+private const val QUICK_ACTION_COLUMNS: Int = 3
+
+@Immutable
+private data class AppInfoChipUi(
+    val icon: ImageVector,
+    val label: String,
+)
 
 @Immutable
 private data class QuickActionUi(

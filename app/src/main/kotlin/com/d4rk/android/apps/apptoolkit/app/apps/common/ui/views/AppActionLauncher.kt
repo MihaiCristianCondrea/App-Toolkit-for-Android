@@ -71,15 +71,24 @@ class AndroidAppActionLauncher(
         }
     }
 
-    override fun openAppInfo(packageName: String): Boolean = context.startActivitySafely(
-        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = Uri.fromParts("package", packageName, null)
+    override fun openAppInfo(packageName: String): Boolean {
+        val appDetails = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", packageName, null),
+        ).apply {
+            addCategory(Intent.CATEGORY_DEFAULT)
         }
-    )
+
+        return context.startActivitySafely(appDetails) ||
+            context.startActivitySafely(Intent(Settings.ACTION_APPLICATION_SETTINGS)) ||
+            context.startActivitySafely(Intent(Settings.ACTION_SETTINGS))
+    }
 
     override fun openNotifications(packageName: String): Boolean {
         val notificationIntent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
             putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+            putExtra("app_package", packageName)
+            putExtra("android.provider.extra.APP_PACKAGE", packageName)
         }
         return context.startActivitySafely(notificationIntent) || openAppInfo(packageName)
     }
@@ -97,8 +106,13 @@ class AndroidAppActionLauncher(
         ).apply {
             setPackage(PLAY_STORE_PACKAGE_NAME)
         }
+        val marketChooserIntent = Intent(
+            Intent.ACTION_VIEW,
+            "${AppLinks.MARKET_APP_PAGE}$packageName".toUri(),
+        )
 
         return context.startActivitySafely(marketIntent) ||
+            context.startActivitySafely(marketChooserIntent) ||
             context.openUrl("${AppLinks.PLAY_STORE_APP}$packageName")
     }
 
