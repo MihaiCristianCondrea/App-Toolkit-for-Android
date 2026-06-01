@@ -19,6 +19,12 @@ package com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model
 
 import androidx.compose.runtime.Immutable
 
+/**
+ * Catalog entry rendered by the app list and app detail control panel.
+ *
+ * Link fields are optional because not every listed app exposes source-code or privacy pages in
+ * the remote catalog.
+ */
 @Immutable
 data class AppInfo(
     val name: String,
@@ -27,8 +33,11 @@ data class AppInfo(
     val description: String,
     val screenshots: List<String>,
     val category: AppCategory? = null,
+    val githubUrl: String? = null,
+    val privacyPolicyUrl: String? = null,
 )
 
+/** Category metadata provided by the remote developer-app catalog. */
 @Immutable
 data class AppCategory(
     val label: String,

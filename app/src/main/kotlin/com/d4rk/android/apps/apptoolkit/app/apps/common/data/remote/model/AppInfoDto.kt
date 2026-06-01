@@ -27,7 +27,9 @@ data class AppInfoDto(
     @SerialName("iconLogo") val iconUrl: String,
     @SerialName("category") val category: AppCategoryDto? = null,
     @SerialName("description") val description: String? = null,
-    @SerialName("screenshots") val screenshots: List<AppScreenshotDto>? = null
+    @SerialName("screenshots") val screenshots: List<AppScreenshotDto>? = null,
+    @SerialName("githubUrl") val githubUrl: String? = null,
+    @SerialName("privacyPolicyUrl") val privacyPolicyUrl: String? = null,
 )
 
 @Serializable

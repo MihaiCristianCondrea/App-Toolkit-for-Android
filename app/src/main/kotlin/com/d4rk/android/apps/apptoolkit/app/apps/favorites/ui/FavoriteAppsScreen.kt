@@ -26,7 +26,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.AndroidAppActionLauncher
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.AppDetailsBottomSheet
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.analytics.AppInteractionType
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.analytics.logAppInteraction
@@ -61,17 +61,18 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openPlayStoreForApp
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.getVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isAppInstalled
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
+import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo as InstalledAppVersionInfo
 
 /**
  * A composable that represents the "Favorite Apps" screen.
@@ -141,29 +142,25 @@ fun FavoriteAppsRoute(
         }
     }
 
-    val onOpenInPlayStore: (AppInfo) -> Unit = remember(context) {
-        { appInfo ->
-            if (appInfo.packageName.isNotEmpty()) {
-                val opened = context.openPlayStoreForApp(appInfo.packageName)
-                if (!opened) {
-                    Log.w(FAVORITES_LOG_TAG, "Unable to open Play Store for ${appInfo.packageName}")
-                }
-            }
-        }
-    }
-
     var selectedApp: AppInfo? by remember { mutableStateOf(null) }
     var isSelectedAppInstalled: Boolean? by remember { mutableStateOf(null) }
+    var selectedAppVersionInfo: InstalledAppVersionInfo? by remember { mutableStateOf(null) }
+    val appActionLauncher = remember(context) { AndroidAppActionLauncher(context) }
 
     val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(selectedApp?.packageName) {
-        isSelectedAppInstalled = selectedApp?.let { app ->
-            if (app.packageName.isNotEmpty()) {
-                withContext(dispatchers.io) {
-                    context.isAppInstalled(app.packageName)
+        val app = selectedApp
+        selectedAppVersionInfo = null
+        isSelectedAppInstalled = app?.let { selected ->
+            if (selected.packageName.isNotEmpty()) {
+                val installState = withContext(dispatchers.io) {
+                    context.packageManager.getVersionInfo(selected.packageName) to
+                            context.isAppInstalled(selected.packageName)
                 }
+                selectedAppVersionInfo = installState.first
+                installState.second
             } else {
                 false
             }
@@ -190,29 +187,8 @@ fun FavoriteAppsRoute(
                 appInfo = app,
                 isFavorite = favorites.contains(app.packageName),
                 isAppInstalled = isSelectedAppInstalled,
-                onShareClick = {
-                    firebaseController.logAppInteraction(
-                        source = "favorite_apps",
-                        appInfo = app,
-                        interaction = AppInteractionType.Share,
-                        interactionContext = "details_bottom_sheet"
-                    )
-                    buildShareClick(app)
-                },
-                onOpenAppClick = {
-                    firebaseController.logAppInteraction(source = "favorite_apps", appInfo = app, interaction = AppInteractionType.OpenInstalledApp)
-                    coroutineScope.launch {
-                        selectedApp = null
-                        openApp(app)
-                    }
-                },
-                onOpenInPlayStoreClick = {
-                    firebaseController.logAppInteraction(source = "favorite_apps", appInfo = app, interaction = AppInteractionType.OpenInPlayStore)
-                    coroutineScope.launch {
-                        selectedApp = null
-                        onOpenInPlayStore(app)
-                    }
-                },
+                installedVersionInfo = selectedAppVersionInfo,
+                actionLauncher = appActionLauncher,
                 onFavoriteClick = { onFavoriteToggle(app.packageName) },
                 adsConfig = appDetailsAdsConfig
             )
@@ -245,6 +221,7 @@ fun FavoriteAppsRoute(
                     if (sheetState.isVisible) sheetState.hide()
                     selectedApp = null
                     isSelectedAppInstalled = null
+                    selectedAppVersionInfo = null
                     openApp(action.app)
                 }
             }
