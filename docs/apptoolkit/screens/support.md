@@ -58,8 +58,9 @@ Typical usage:
 
 1. Add a “Support” entry in settings or an app bar action menu.
 2. Navigate to the shared `SupportRoute` when the host shell embeds AppToolkit destinations, or
-   launch
-   `SupportActivity` for standalone flows.
+   launch `SupportActivity` for standalone flows. The sample app uses `SupportRoute` from its
+   top-app-bar support action and drawer support entry so the Navigation 3 activity-like scene owns
+   toolbar and back behavior consistently.
 3. Let users complete support or donation actions and return to previous flow.
 
 ---

@@ -24,7 +24,7 @@ still giving host apps a ready-to-go default shell that can be customized or rep
 
 ### Navigation behavior helpers
 - **`handleNavigationItemClick(...)`**: default drawer click handling for common routes:
-  Settings, Help & Feedback, Updates (changelog), Share with support for host overrides.
+  Settings, Help & Feedback, Support, Updates (changelog), Share with support for host overrides.
 - **`appToolkitNavigationEntryBuilders(...)`**: shared Navigation 3 entries for library-owned
   destinations such as Settings, Help, Support, permissions, licenses, ads settings, and library
   extras.
@@ -176,7 +176,7 @@ drawer destinations so every top-level route remains reachable.
 ### 3) Nav3 scenes and motion
 
 Use a stable main-shell scene key for top-level destinations and a dedicated sub-screen scene for
-Settings, Help, Support, and other pushed destinations. Assign transition metadata on each scene:
+embedded Settings, Help, Support, and other pushed destinations. Assign transition metadata on each scene:
 top-level tab content uses a fade within the mounted shell; transitions crossing between the shell
 and a pushed destination, plus transitions between pushed destinations, use activity-like forward,
 pop, and predictive-pop motion. This avoids animating the app bar and navigation chrome when
@@ -184,7 +184,10 @@ switching tabs and preserves native back motion when returning from a pushed scr
 reported by destination content, such as FAB actions, must be delivered through stable state
 holders rather than scene-strategy identity so returning content cannot restart an active motion.
 Pushed settings, Help, Support, and similar destinations retain their expanded large top app bars
-inside the sub-screen shell; only the persistent top-level shell uses the compact app bar.
+inside the sub-screen shell; only the persistent top-level shell uses the compact app bar. Routes
+whose `destinationType` is `ActivityLike`, such as Components and Support, should be pushed through
+the Navigation 3 back stack so the navigation module can provide native activity-like motion without
+creating a separate Android `Activity`.
 
 ### 4) Drawer item click handling (`handleNavigationItemClick`)
 
@@ -198,10 +201,15 @@ handleNavigationItemClick(
     coroutineScope = scope,
     onChangelogRequested = { showChangelogDialog = true },
     additionalHandlers = mapOf(
-        "route_custom" to { /* custom action */ }
+        "route_custom" to { /* custom action */ },
+        NavigationRoutes.ROUTE_COMPONENTS to { navigator.navigate(ComponentsRoute) },
     ),
 )
 ```
+
+When a destination is declared as `NavigationDestinationType.ActivityLike`, prefer pushing its
+`StableNavKey` through the app `Navigator`. This keeps the screen inside the Navigation 3 graph while
+still applying the activity-like transitions supplied by the navigation module.
 
 ### 5) In-app update flow (Play Core via `RequestInAppUpdateUseCase`)
 
