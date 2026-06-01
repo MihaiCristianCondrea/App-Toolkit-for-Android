@@ -43,16 +43,24 @@ data object FavoriteAppsRoute : AppNavKey {
 }
 
 @Parcelize
+data object ToolkitTilesRoute : AppNavKey {
+    override val destinationType: NavigationDestinationType
+        get() = NavigationDestinationType.TopLevel
+}
+
+@Parcelize
 data object ComponentsRoute : AppNavKey
 
 object NavigationRoutes {
     const val ROUTE_APPS_LIST: String = "apps_list"
     const val ROUTE_FAVORITE_APPS: String = "favorite_apps"
+    const val ROUTE_TOOLKIT_TILES: String = "toolkit_tiles"
     const val ROUTE_COMPONENTS: String = "components"
 
     val topLevelRoutes: ImmutableSet<StableNavKey> =
         persistentSetOf<StableNavKey>(
             AppsListRoute,
+            ToolkitTilesRoute,
             FavoriteAppsRoute,
         )
 }
@@ -60,6 +68,7 @@ object NavigationRoutes {
 fun String.toNavKeyOrDefault(): StableNavKey =
     when (this) {
         NavigationRoutes.ROUTE_FAVORITE_APPS -> FavoriteAppsRoute
+        NavigationRoutes.ROUTE_TOOLKIT_TILES -> ToolkitTilesRoute
         NavigationRoutes.ROUTE_COMPONENTS -> ComponentsRoute
         else -> AppsListRoute
     }

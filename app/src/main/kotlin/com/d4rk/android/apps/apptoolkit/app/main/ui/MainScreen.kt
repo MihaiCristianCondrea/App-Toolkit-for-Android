@@ -79,6 +79,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.defaults.MainNavigationDefaults
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.dropdowns.HelpScreenMenuActions
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
@@ -328,6 +329,7 @@ private fun MainShell(
         mapOf(
             NavigationRoutes.ROUTE_APPS_LIST to { navigator.navigate(AppsListRoute) },
             NavigationRoutes.ROUTE_FAVORITE_APPS to { navigator.navigate(FavoriteAppsRoute) },
+            NavigationRoutes.ROUTE_TOOLKIT_TILES to { navigator.navigate(ToolkitTilesRoute) },
             NavigationRoutes.ROUTE_COMPONENTS to { navigator.navigate(ComponentsRoute) },
         )
     }
