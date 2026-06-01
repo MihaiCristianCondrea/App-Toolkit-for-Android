@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
                 MobileAds.initialize(
                     this@MainActivity,
                     InitializationConfig.Builder(getString(com.d4rk.android.libs.apptoolkit.R.string.ad_mob_app_id))
+                        .setNativeValidatorDisabled()
                         .build()
                 ) {}
             }

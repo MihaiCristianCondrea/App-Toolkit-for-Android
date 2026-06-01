@@ -176,6 +176,8 @@ android {
 dependencies {
     implementation(dependencyNotation = project(path = ":apptoolkit"))
 
+    implementation("org.chromium.net:cronet-fallback:143.7445.0")
+
     // Unit Tests
     testImplementation(dependencyNotation = libs.bundles.unitTest)
     testRuntimeOnly(dependencyNotation = libs.bundles.unitTestRuntime)
