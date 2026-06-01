@@ -21,6 +21,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.HelpRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
@@ -38,6 +39,7 @@ fun isDrawerItemSelected(
     when (itemRoute) {
         NavigationRoutes.ROUTE_APPS_LIST -> currentRoute == AppsListRoute
         NavigationRoutes.ROUTE_FAVORITE_APPS -> currentRoute == FavoriteAppsRoute
+        NavigationRoutes.ROUTE_TOOLKIT_TILES -> currentRoute == ToolkitTilesRoute
         NavigationRoutes.ROUTE_COMPONENTS -> currentRoute == ComponentsRoute
         NavigationDrawerRoutes.ROUTE_SETTINGS -> currentRoute is SettingsRoute || currentRoute is GeneralSettingsRoute
         NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> currentRoute is HelpRoute
