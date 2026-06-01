@@ -22,8 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.Saver
@@ -31,7 +31,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavEntryDecorator
+import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.collections.immutable.ImmutableList
@@ -121,6 +123,40 @@ class NavigationState<T : StableNavKey>(
         get() = currentBackStack.last()
 
     val topLevelHistory = mutableStateListOf<T>()
+
+    /**
+     * Returns the top-level routes that should be visible to a content-area `NavDisplay`.
+     *
+     * The list mirrors the tab history maintained by [Navigator]: previous top-level roots are
+     * listed first and the selected top-level route is last, so Navigation 3 can treat bottom-bar
+     * back navigation as a real pop while each tab keeps its own independent stack.
+     */
+    val topLevelRoutesInUse: List<T>
+        get() = (topLevelHistory + topLevelRoute).distinct()
+
+    /**
+     * Converts each active top-level root into a decorated [NavEntry] for content-only NavDisplays.
+     *
+     * This follows the Navigation 3 multiple-back-stacks recipe by decorating entries per top-level
+     * stack. Only the root entry from historical stacks is exposed here because pushed destinations
+     * are still rendered by the outer activity-like NavDisplay.
+     */
+    @Composable
+    fun toDecoratedTopLevelEntries(
+        entryProvider: (T) -> NavEntry<T>,
+    ): List<NavEntry<T>> {
+        val decoratedEntriesByStack = backStacks.mapValues { (_, stack) ->
+            rememberDecoratedNavEntries(
+                backStack = stack,
+                entryDecorators = rememberNavigationEntryDecorators(),
+                entryProvider = entryProvider,
+            )
+        }
+
+        return topLevelRoutesInUse.mapNotNull { route ->
+            decoratedEntriesByStack[route]?.firstOrNull()
+        }
+    }
 }
 
 @Stable
@@ -137,6 +173,7 @@ class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
 
         if (route in state.backStacks.keys) {
             if (state.topLevelRoute != route) {
+                state.topLevelHistory.remove(route)
                 state.topLevelHistory.add(state.topLevelRoute)
             }
             state.topLevelRoute = route
@@ -154,7 +191,7 @@ class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
         val currentRoute = state.currentBackStack.lastOrNull() ?: return false
 
         return if (currentRoute == state.topLevelRoute) {
-            state.topLevelRoute != state.startRoute
+            state.topLevelHistory.isNotEmpty() || state.topLevelRoute != state.startRoute
         } else {
             true
         }
@@ -168,11 +205,13 @@ class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
         val currentRoute = currentBackStack.lastOrNull() ?: return false
 
         if (currentRoute == state.topLevelRoute) {
-            val previousTopLevelRoute = state.topLevelHistory.removeLastOrNull()
-            if (previousTopLevelRoute != null && previousTopLevelRoute != state.topLevelRoute) {
-                state.topLevelRoute = previousTopLevelRoute
-                state.currentBackStack.popToRoot()
-                return true
+            while (state.topLevelHistory.isNotEmpty()) {
+                val previousTopLevelRoute = state.topLevelHistory.removeLastOrNull()
+                if (previousTopLevelRoute != null && previousTopLevelRoute != state.topLevelRoute) {
+                    state.topLevelRoute = previousTopLevelRoute
+                    state.currentBackStack.popToRoot()
+                    return true
+                }
             }
 
             if (state.topLevelRoute != state.startRoute) {

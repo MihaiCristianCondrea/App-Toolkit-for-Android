@@ -138,7 +138,7 @@ class ToolkitTilesViewModel(
         }
     }
 
-    private fun handleTileSetup(tileId: String) {
+    private fun handleTileSetup(tileId: String) { // FIXME: Parameter "tileId" is never used
         // Here we could navigate to a specific setup screen based on tileId
         // For now, we still show the message, but it's handled as a deliberate action
         showSetupMessage()

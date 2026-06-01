@@ -19,7 +19,6 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -111,6 +110,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpace
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.ui.window.toAppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.d4rk.android.libs.apptoolkit.navigation.animations.BottomNavTransitions
 import com.d4rk.android.libs.apptoolkit.navigation.animations.NativeActivityTransitions
 import com.d4rk.android.libs.apptoolkit.navigation.animations.rememberBottomNavTransitions
 import com.d4rk.android.libs.apptoolkit.navigation.animations.rememberNativeActivityTransitions
@@ -193,6 +193,7 @@ private fun MainScreenContent(uiState: MainUiState) {
         snackBarHostState,
         randomAppHandlerState,
         nativeActivityTransitions,
+        entryProvider,
     ) {
         MainSceneStrategy(
             uiState = uiState,
@@ -202,6 +203,7 @@ private fun MainScreenContent(uiState: MainUiState) {
             onChangelogRequested = { showChangelog = true },
             randomAppHandlerState = randomAppHandlerState,
             nativeActivityTransitions = nativeActivityTransitions,
+            entryProvider = entryProvider,
         )
     }
 
@@ -241,6 +243,7 @@ private class MainSceneStrategy(
     private val onChangelogRequested: () -> Unit,
     private val randomAppHandlerState: State<(() -> Unit)?>,
     private val nativeActivityTransitions: NativeActivityTransitions,
+    private val entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
 ) : SceneStrategy<StableNavKey> {
     override fun SceneStrategyScope<StableNavKey>.calculateScene(
         entries: List<NavEntry<StableNavKey>>
@@ -263,6 +266,7 @@ private class MainSceneStrategy(
                 randomAppHandlerState = randomAppHandlerState,
                 onBack = onBack,
                 nativeActivityTransitions = nativeActivityTransitions,
+                entryProvider = entryProvider,
             )
         } else {
             SubScreenScene(
@@ -271,6 +275,7 @@ private class MainSceneStrategy(
                 previousEntries = entries.dropLast(1),
                 onBack = onBack,
                 nativeActivityTransitions = nativeActivityTransitions,
+                entryProvider = entryProvider
             )
         }
     }
@@ -288,6 +293,7 @@ private data class MainShellScene(
     private val randomAppHandlerState: State<(() -> Unit)?>,
     private val onBack: () -> Unit,
     private val nativeActivityTransitions: NativeActivityTransitions,
+    private val entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
 ) : Scene<StableNavKey> {
     override val entries: List<NavEntry<StableNavKey>> = listOf(entry)
     override val metadata: Map<String, Any> = metadata {
@@ -305,7 +311,7 @@ private data class MainShellScene(
             onChangelogRequested = onChangelogRequested,
             randomAppHandlerState = randomAppHandlerState,
             onBack = onBack,
-            entry = entry,
+            entryProvider = entryProvider,
         )
     }
 }
@@ -320,7 +326,7 @@ private fun MainShell(
     onChangelogRequested: () -> Unit,
     randomAppHandlerState: State<(() -> Unit)?>,
     onBack: () -> Unit,
-    entry: NavEntry<StableNavKey>,
+    entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val bottomNavTransitions = rememberBottomNavTransitions()
@@ -388,12 +394,8 @@ private fun MainShell(
         }
 
     val shellContent: @Composable () -> Unit = {
-        BackHandler(enabled = true) {
-            if (drawerState.isOpen) {
-                coroutineScope.launch { drawerState.close() }
-            } else {
-                onBack()
-            }
+        BackHandler(enabled = drawerState.isOpen) {
+            coroutineScope.launch { drawerState.close() }
         }
 
         Row(modifier = Modifier
@@ -506,29 +508,15 @@ private fun MainShell(
                         .padding(paddingValues)
                         .consumeWindowInsets(paddingValues),
                 ) {
-                    // Preserve each tab entry during the fade while leaving app chrome mounted.
-                    AnimatedContent(
-                        targetState = entry,
-                        contentKey = { targetEntry -> targetEntry.contentKey },
-                        transitionSpec = {
-                            val initialIndex = MainNavigationDefaults.bottomBarItems.indexOfFirst {
-                                it.route == (initialState.contentKey as? StableNavKey)
-                            }
-                            val targetIndex = MainNavigationDefaults.bottomBarItems.indexOfFirst {
-                                it.route == (targetState.contentKey as? StableNavKey)
-                            }
-                            val isBottomBarRouteSwitch = initialIndex >= 0 && targetIndex >= 0
-
-                            if (isBottomBarRouteSwitch) {
-                                bottomNavTransitions.betweenTabs(forward = targetIndex >= initialIndex)
-                            } else {
-                                bottomNavTransitions.transition()
-                            }
-                        },
-                        label = "TabAnimation",
-                    ) { targetEntry ->
-                        targetEntry.Content()
-                    }
+                    // Keep the chrome mounted, but let a content-only NavDisplay own tab motion and
+                    // predictive-pop progress. This preserves the existing bottom-tab animation style
+                    // without making the whole app shell part of the predictive back scene.
+                    TopLevelContentNavDisplay(
+                        navigator = navigator,
+                        entryProvider = entryProvider,
+                        onBack = onBack,
+                        bottomNavTransitions = bottomNavTransitions,
+                    )
                 }
             }
         }
@@ -565,12 +553,61 @@ private fun MainShell(
     }
 }
 
+@Composable
+private fun TopLevelContentNavDisplay(
+    navigator: Navigator<StableNavKey>,
+    entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
+    onBack: () -> Unit,
+    bottomNavTransitions: BottomNavTransitions, // FIXME: Unstable parameter 'bottomNavTransitions' prevents composable from being skippable
+) {
+    NavDisplay(
+        entries = navigator.state.toDecoratedTopLevelEntries(entryProvider),
+        onBack = onBack,
+        transitionSpec = {
+            bottomNavTransitions.betweenTabEntries(
+                initialState = initialState,
+                targetState = targetState,
+            )
+        },
+        popTransitionSpec = {
+            bottomNavTransitions.betweenTabEntries(
+                initialState = initialState,
+                targetState = targetState,
+            )
+        },
+        predictivePopTransitionSpec = {
+            bottomNavTransitions.betweenTabEntries(
+                initialState = initialState,
+                targetState = targetState,
+            )
+        },
+    )
+}
+
+private fun BottomNavTransitions.betweenTabEntries(
+    initialState: Any?,
+    targetState: Any?,
+) = when {
+    tabIndex(initialState) >= 0 && tabIndex(targetState) >= 0 -> {
+        betweenTabs(forward = tabIndex(targetState) >= tabIndex(initialState))
+    }
+
+    else -> transition()
+}
+
+private fun tabIndex(state: Any?): Int {
+    val entry = (state as? List<*>)?.lastOrNull() as? NavEntry<*>
+    val route = entry?.contentKey as? StableNavKey
+    return MainNavigationDefaults.bottomBarItems.indexOfFirst { item -> item.route == route }
+}
+
 private data class SubScreenScene(
     override val key: Any,
     private val entry: NavEntry<StableNavKey>,
     override val previousEntries: List<NavEntry<StableNavKey>>,
     private val onBack: () -> Unit,
     private val nativeActivityTransitions: NativeActivityTransitions,
+    private val entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
 ) : Scene<StableNavKey> {
     override val entries: List<NavEntry<StableNavKey>> = listOf(entry)
     override val metadata: Map<String, Any> = metadata {
