@@ -24,7 +24,7 @@ import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,7 +41,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.VolumeUp
@@ -92,11 +91,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -125,6 +125,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
+import com.d4rk.android.libs.apptoolkit.R as ToolkitR
 
 /** Route-level composable for the Toolkit Tiles catalog. */
 @Composable
@@ -426,12 +427,15 @@ private fun TileIconBadge(
     val colors = icon.iconColors()
     val size = if (large) SizeConstants.ExtraExtraLargeSize + SizeConstants.SmallSize else SizeConstants.FortyFourSize
     Box(
-        modifier = Modifier
-            .size(size)
-            .clip(CircleShape)
-            .background(colors.container.copy(alpha = 0.15f)),
+        modifier = Modifier.size(size),
         contentAlignment = Alignment.Center,
     ) {
+        Image(
+            painter = painterResource(id = icon.backgroundDrawableRes()),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            colorFilter = ColorFilter.tint(colors.container.copy(alpha = 0.15f)),
+        )
         Icon(
             imageVector = icon.imageVector(),
             contentDescription = null,
@@ -564,6 +568,32 @@ private fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Music -> Icons.Outlined.MusicNote
     ToolkitTileIcon.Breathing -> Icons.Outlined.FavoriteBorder
     ToolkitTileIcon.Sos -> Icons.Outlined.WarningAmber
+}
+
+private fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
+    ToolkitTileIcon.Level,
+    ToolkitTileIcon.Compass,
+    ToolkitTileIcon.Lux -> ToolkitR.drawable.background_8_sided_cookie
+
+    ToolkitTileIcon.Temperature,
+    ToolkitTileIcon.Caffeine,
+    ToolkitTileIcon.Breathing -> ToolkitR.drawable.background_soft_burst
+
+    ToolkitTileIcon.Screenshot,
+    ToolkitTileIcon.Volume,
+    ToolkitTileIcon.Sound -> ToolkitR.drawable.background_flower
+
+    ToolkitTileIcon.Network -> ToolkitR.drawable.background_sunny
+
+    ToolkitTileIcon.Coin,
+    ToolkitTileIcon.Dice,
+    ToolkitTileIcon.Counter -> ToolkitR.drawable.background_12_sided_cookie
+
+    ToolkitTileIcon.Lock,
+    ToolkitTileIcon.Power,
+    ToolkitTileIcon.Sos -> ToolkitR.drawable.background_gem
+
+    else -> ToolkitR.drawable.background_circle
 }
 
 private fun ToolkitTileStatus.labelResId(): Int = when (this) {
