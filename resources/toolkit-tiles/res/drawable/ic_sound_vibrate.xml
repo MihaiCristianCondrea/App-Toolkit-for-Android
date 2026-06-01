@@ -1,0 +1,26 @@
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M8 21c-0.55 0-1.02-0.2-1.41-0.59C6.19 20.02 6 19.55 6 19V5c0-0.55 0.2-1.02 0.59-1.41C6.98 3.19 7.45 3 8 3h8c0.55 0 1.02 0.2 1.41 0.59C17.81 3.98 18 4.45 18 5v14c0 0.55-0.2 1.02-0.59 1.41C17.02 20.81 16.55 21 16 21H8Zm-8-7v-4c0-0.28 0.1-0.52 0.29-0.71C0.48 9.09 0.72 9 1 9c0.28 0 0.52 0.1 0.71 0.29C1.91 9.48 2 9.72 2 10v4c0 0.28-0.1 0.52-0.29 0.71C1.52 14.91 1.28 15 1 15c-0.28 0-0.52-0.1-0.71-0.29C0.09 14.52 0 14.28 0 14Zm3 2V8c0-0.28 0.1-0.52 0.29-0.71C3.48 7.09 3.72 7 4 7c0.28 0 0.52 0.1 0.71 0.29C4.91 7.48 5 7.72 5 8v8c0 0.28-0.1 0.52-0.29 0.71C4.52 16.91 4.28 17 4 17c-0.28 0-0.52-0.1-0.71-0.29C3.09 16.52 3 16.28 3 16Zm19-2v-4c0-0.28 0.1-0.52 0.29-0.71C22.48 9.09 22.72 9 23 9c0.28 0 0.52 0.1 0.71 0.29C23.91 9.48 24 9.72 24 10v4c0 0.28-0.1 0.52-0.29 0.71C23.52 14.91 23.28 15 23 15c-0.28 0-0.52-0.1-0.71-0.29C22.09 14.52 22 14.28 22 14Zm-3 2V8c0-0.28 0.1-0.52 0.29-0.71C19.48 7.09 19.72 7 20 7c0.28 0 0.52 0.1 0.71 0.29C20.91 7.48 21 7.72 21 8v8c0 0.28-0.1 0.52-0.29 0.71C20.52 16.91 20.28 17 20 17c-0.28 0-0.52-0.1-0.71-0.29C19.09 16.52 19 16.28 19 16Z" />
+</vector>

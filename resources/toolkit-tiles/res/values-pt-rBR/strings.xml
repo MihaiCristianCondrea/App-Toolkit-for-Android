@@ -1,0 +1,269 @@
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <!--app about section -->
+
+    <string name="about_description">Tiles simples e leves que oferecem acesso instantâneo a recursos úteis, sem precisar de apps extras</string>
+    <string name="about_version">Versão %s</string>
+    <!--links-->
+    <string name="about_developer">Desenvolvedor</string>
+
+    <string name="about_repository">Repositório com o código fonte</string>
+
+    <string name="about_license">Licença</string>
+    <string name="about_license_summary">Apache License 2.0</string>
+
+    <string name="about_used_library">Bibliotecas</string>
+    <string name="about_used_library_summary">Licenças de código aberto</string>
+
+    <!--update checker-->
+
+    <string name="updater_title">Nova atualização disponível!</string>
+    <string name="updater_version">Versão %s</string>
+    <string name="updater_no_update_message">Nenhuma atualização disponível</string>
+    <string name="updater_no_internet_message">Sem conexão com a internet</string>
+    <string name="updater_generic_error_message">Algo deu errado. Tente novamente mais tarde</string>
+    <string name="updater_download_button">Download</string>
+    <string name="updater_github_button">Ver no GitHub</string>
+
+    <!--free android warn dialog-->
+
+    <string name="free_android_warn_title">Informação importante</string>
+    <string name="free_android_warn_message">O Google anunciou que, a partir de 2026/2027, todos os aplicativos em dispositivos Android certificados exigirão que o desenvolvedor envie dados de identidade pessoal diretamente ao Google. Como os desenvolvedores deste aplicativo não concordam com esse requisito, este aplicativo não funcionará mais em dispositivos Android certificados após esse período.</string>
+    <string name="free_android_warn_link"><u>Mais informações</u></string>
+    <string name="free_android_warn_solution_button">Solução</string>
+
+    <!--notification foreground service-->
+
+    <string name="channel_name">Serviços do atalho</string>
+    <string name="notification_title">Serviço em execução</string>
+    <string name="notification_label">Algum atalho está em execução, desative o atalho no painel de configurações rápidas ou toque aqui para ocultar esta notificação</string>
+
+    <!--accessibility service-->
+
+    <string name="accessibility_service_description">Este aplicativo usa serviços de acessibilidade para que alguns dos seus atalhos no painel de configurações rápidas funcionem. Essa permissão é essencial para que esses atalhos funcionem corretamente e forneçam acesso rápido a determinados recursos do dispositivo.</string>
+
+    <!--permission messages-->
+
+    <!--accessibility-->
+    <string name="accessibility_permission_message">Permissão de acessibilidade necessária. Por favor, ative-a primeiro</string>
+    <!--dnd-->
+    <string name="dnd_access_permission_message">Permissão de acesso ao Não Perturbe necessária. Por favor, ative-a primeiro</string>
+    <!--write settings-->
+    <string name="write_settings_permission_message">Permissão para modificar as configurações do sistema necessária. Por favor, ative-a primeiro</string>
+    <!--write secure settings-->
+    <string name="write_secure_settings_clipboard_message">Comando copiado para a área de transferência</string>
+
+    <!--write secure settings command dialog-->
+
+    <string name="write_secure_settings_title">Permissão ADB necessária</string>
+    <string name="write_secure_settings_message">Este recurso requer a permissão WRITE_SECURE_SETTINGS, que só pode ser concedida via ADB. Execute o comando abaixo no seu terminal com a depuração USB ativada:</string>
+    <string name="write_secure_settings_support">Após executar o comando, toque no atalho novamente para ativá-lo. Você só precisa fazer isso uma vez.</string>
+    <!--buttons-->
+    <string name="copy_clipboard">Copiar comando</string>
+    <string name="close">Fechar</string>
+
+    <!--general messages-->
+
+    <string name="not_supported">Seu dispositivo não suporta este recurso</string>
+    <string name="clipboard_cleared">Área de transferência limpa</string>
+    <string name="google_not_found">Atividade de pesquisar música não encontrada. Por favor, instale ou ative o aplicativo Google</string>
+
+    <!--general tiles subtitles-->
+
+    <string name="tile_on">Ligado</string>
+    <string name="tile_off">Desligado</string>
+    <string name="tile_open">Toque para abrir</string>
+    <string name="tile_start">Toque para iniciar</string>
+    <string name="tile_setup">Toque para configurar</string>
+    <string name="tile_switch">Toque para alternar</string>
+    <string name="tile_unavailable">Indisponível</string>
+    <string name="tile_not_supported">Não suportado</string>
+
+    <!--compass tile-->
+
+    <string name="compass_tile">Bússola</string>
+    <!--directions-->
+    <string name="N">Norte</string>
+    <string name="NE">Nordeste</string>
+    <string name="E">Leste</string>
+    <string name="SE">Sudeste</string>
+    <string name="S">Sul</string>
+    <string name="SW">Sudoeste</string>
+    <string name="W">Oeste</string>
+    <string name="NW">Noroeste</string>
+
+    <!--bubble level tile-->
+
+    <string name="level_tile">Nível</string>
+
+    <!--lux meter tile-->
+
+    <string name="lux_meter_tile">Luxímetro</string>
+
+    <!--lock screen tile-->
+
+    <string name="lock_tile">Bloquear</string>
+
+    <!--coin flip tile-->
+
+    <string name="coin_flip_tile">Jogar moeda</string>
+    <string name="coin_flip_tile_tap">Toque para jogar</string>
+    <!--sides-->
+    <string name="coin_tile_heads">Cara</string>
+    <string name="coin_tile_tails">Coroa</string>
+    <!--sides counter-->
+    <string name="coin_flip_tile_count">Cara: %1$d Coroa: %2$d</string>
+
+    <!--dice roll tile-->
+
+    <string name="dice_roll_tile">Rolar dado</string>
+    <string name="dice_roll_tile_tap">Toque para jogar</string>
+    <string name="dice_roll_tile_rolling">Rolando…</string>
+    <!--numbers-->
+    <string name="dice_tile_1">Um</string>
+    <string name="dice_tile_2">Dois</string>
+    <string name="dice_tile_3">Três</string>
+    <string name="dice_tile_4">Quatro</string>
+    <string name="dice_tile_5">Cinco</string>
+    <string name="dice_tile_6">Seis</string>
+
+    <!--sos tile-->
+
+    <string name="sos_tile">SOS</string>
+
+    <!--counter tile-->
+
+    <string name="counter_tile">Contador</string>
+    <!--values-->
+    <string name="counter_tile_add">Adicionar</string>
+    <string name="counter_tile_remove">Remover</string>
+    <string name="counter_tile_reset">Resetar</string>
+
+    <!--screenshot tile-->
+
+    <string name="screenshot_tile">Captura de tela</string>
+
+    <!--sound mode tile-->
+
+    <string name="sound_mode_tile">Modo de som</string>
+    <!--sound modes-->
+    <string name="sound_tile_normal">Normal</string>
+    <string name="sound_tile_silent">Silencioso</string>
+    <string name="sound_tile_vibrate">Vibrar</string>
+
+    <!--caffeine tile-->
+
+    <string name="caffeine_tile">Cafeína</string>
+    <!--timeouts-->
+    <string name="caffeine_tile_minutes">%1$d minutos</string>
+    <string name="caffeine_tile_infinite">Infinito</string>
+
+    <!--device memory tile-->
+
+    <string name="memory_tile">Memória</string>
+    <string name="memory_tile_format">%1$s de %2$s</string>
+    <!--memory type-->
+    <string name="memory_tile_ram">%s em uso</string>
+    <string name="memory_tile_storage">%s livres</string>
+
+    <!--device temperature tile-->
+
+    <string name="temperature_tile">Temperatura</string>
+
+    <!--media output tile-->
+
+    <string name="media_output_tile">Saída de mídia</string>
+
+    <!--auto brightness tile-->
+
+    <string name="auto_brightness_tile">Brilho automático</string>
+
+    <!--breathing tile-->
+
+    <string name="breathing_tile">Respirar</string>
+    <string name="breathing_tile_prepare">Siga o círculo</string>
+    <!--steps-->
+    <string name="breathing_tile_inhale">Inspire</string>
+    <string name="breathing_tile_exhale">Expire</string>
+    <string name="breathing_tile_pause">Pause</string>
+    <string name="breathing_tile_relax">Relaxe</string>
+
+    <!--network traffic tile-->
+
+    <string name="network_traffic_tile">Rede</string>
+    <!--direction-->
+    <string name="network_traffic_tile_download">Download</string>
+    <string name="network_traffic_tile_upload">Upload</string>
+
+    <!--battery tile-->
+
+    <string name="battery_tile">Bateria</string>
+    <!--status-->
+    <string name="battery_tile_status_full">Totalmente carregada</string>
+    <string name="battery_tile_status_low">Bateria fraca</string>
+    <string name="battery_tile_status_saver">Modo economia</string>
+    <string name="battery_tile_status_discharging">Descarregando</string>
+    <!--charging source-->
+    <string name="battery_tile_charging">Carregando</string>
+    <string name="battery_tile_charging_ac">Carregando · AC</string>
+    <string name="battery_tile_charging_usb">Carregando · USB</string>
+    <string name="battery_tile_charging_wireless">Carregando · Sem fio</string>
+    <string name="battery_tile_charging_dock">Carregando · Dock</string>
+    <!--health-->
+    <string name="battery_tile_health_good">Boa</string>
+    <string name="battery_tile_health_overheat">Superaquecendo</string>
+    <string name="battery_tile_health_dead">Morta</string>
+    <string name="battery_tile_health_overvoltage">Sobretensão</string>
+    <string name="battery_tile_health_failure">Falha</string>
+    <string name="battery_tile_health_cold">Fria</string>
+    <string name="battery_tile_health_unknown">Desconhecida</string>
+
+    <!--dns tile-->
+
+    <string name="dns_tile">DNS</string>
+    <string name="dns_tile_automatic">Automático</string>
+    <!--providers-->
+    <string name="dns_tile_provider_block_adult_content">Bloquear conteúdo adulto</string>
+
+    <!--usb debugging tile-->
+
+    <string name="usb_debugging_tile">Depuração USB</string>
+
+    <!--nfc tile-->
+
+    <string name="nfc_tile">NFC</string>
+
+    <!--power menu tile-->
+
+    <string name="power_tile">Menu de energia</string>
+
+    <!--volume panel tile-->
+
+    <string name="volume_tile">Volume</string>
+
+    <!--clipboard cleaner tile-->
+
+    <string name="clipboard_tile">Área de transferência</string>
+    <string name="clipboard_tile_tap">Toque para limpar</string>
+
+    <!--music search tile-->
+
+    <string name="music_search_tile">Pesquisar música</string>
+</resources>

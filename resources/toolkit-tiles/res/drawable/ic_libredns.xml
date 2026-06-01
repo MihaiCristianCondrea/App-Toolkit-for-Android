@@ -1,0 +1,26 @@
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M7 9.26L4.26 12 7 14.74V17l-5-5 5-5v2.26ZM22 12l-5 5v-2.26L19.74 12 17 9.26V7l5 5ZM8.4 11c0.66 0 1.2 0.54 1.2 1.2 0 0.66-0.54 1.2-1.2 1.2-0.66 0-1.2-0.54-1.2-1.2 0-0.66 0.54-1.2 1.2-1.2Zm3.6 0c0.66 0 1.2 0.54 1.2 1.2 0 0.66-0.54 1.2-1.2 1.2-0.66 0-1.2-0.54-1.2-1.2 0-0.66 0.54-1.2 1.2-1.2Zm3.6 0c0.66 0 1.2 0.54 1.2 1.2 0 0.66-0.54 1.2-1.2 1.2-0.66 0-1.2-0.54-1.2-1.2 0-0.66 0.54-1.2 1.2-1.2Z" />
+</vector>

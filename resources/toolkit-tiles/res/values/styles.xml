@@ -1,0 +1,77 @@
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- components theme styles -->
+
+    <style name="Theme.Component.Material.AlertDialog" parent="@style/ThemeOverlay.Material3Expressive.MaterialAlertDialog.Centered">
+        <item name="android:colorBackground">?attr/colorSurfaceContainer</item>
+        <item name="android:windowAnimationStyle">@style/MaterialAlertDialog.Material3.Animation
+        </item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="dialogCornerRadius">28dp</item>
+        <item name="android:listPreferredItemHeightSmall">60dp</item>
+        <item name="android:windowMinWidthMajor">91%</item>
+        <item name="android:windowMinWidthMinor">91%</item>
+    </style>
+
+    <style name="Theme.Component.Material.Snackbar" parent="Widget.Material3.Snackbar">
+        <item name="android:layout_margin">24dp</item>
+        <item name="animationMode">slide</item>
+    </style>
+
+    <style name="Theme.Component.Material.BottomSheet" parent="@style/ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Theme.Component.BottomSheet.Modal</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.Component.BottomSheet.Modal" parent="@style/Widget.Material3.BottomSheet">
+        <item name="backgroundTint">?attr/colorSurfaceContainer</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.ListItem.First" parent="" tools:override="true">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSizeTopLeft">?attr/shapeCornerSizeLarge</item>
+        <item name="cornerSizeTopRight">?attr/shapeCornerSizeLarge</item>
+        <item name="cornerSizeBottomLeft">?attr/shapeCornerSizeExtraSmall</item>
+        <item name="cornerSizeBottomRight">?attr/shapeCornerSizeExtraSmall</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.ListItem.Middle" parent="" tools:override="true">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSize">?attr/shapeCornerSizeExtraSmall</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.ListItem.Last" parent="" tools:override="true">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSizeTopLeft">?attr/shapeCornerSizeExtraSmall</item>
+        <item name="cornerSizeTopRight">?attr/shapeCornerSizeExtraSmall</item>
+        <item name="cornerSizeBottomLeft">?attr/shapeCornerSizeLarge</item>
+        <item name="cornerSizeBottomRight">?attr/shapeCornerSizeLarge</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.ListItem.Single" parent="" tools:override="true">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSize">?attr/shapeCornerSizeLarge</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.ListItem.Checked" parent="" tools:override="true">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSize">?attr/shapeCornerSizeLarge</item>
+    </style>
+</resources>

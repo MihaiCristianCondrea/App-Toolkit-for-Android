@@ -1,0 +1,299 @@
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <!--app names-->
+
+    <string name="app_name" translatable="false">Toolkit Tiles</string>
+
+    <!--app about section -->
+
+    <string name="about_description">Simple, lightweight Quick Settings tiles that give you instant access to useful features without extra apps</string>
+    <string name="about_version">Version %s</string>
+    <!--links-->
+    <string name="about_wstxda" translatable="false">WSTxda</string>
+    <string name="about_developer">Developer</string>
+
+    <string name="about_github" translatable="false">Github</string>
+    <string name="about_repository">Source code repository</string>
+
+    <string name="about_license">Licence</string>
+    <string name="about_license_summary">Apache License 2.0</string>
+
+    <string name="about_used_library">Libraries</string>
+    <string name="about_used_library_summary">Open source licenses</string>
+
+    <!--update checker-->
+
+    <string name="updater_title">New update available!</string>
+    <string name="updater_version">Version %s</string>
+    <string name="updater_no_update_message">No update available</string>
+    <string name="updater_no_internet_message">No internet connection</string>
+    <string name="updater_generic_error_message">Something went wrong. Please try again later</string>
+    <string name="updater_download_button">Download</string>
+    <string name="updater_github_button">Open in GitHub</string>
+
+    <!--free android warn dialog-->
+
+    <string name="free_android_warn_title">Important information</string>
+    <string name="free_android_warn_message">Google has announced that, starting in 2026/2027, all apps on certified Android devices will require the developer to submit personal identity details directly to Google. Since the developers of this app do not agree to this requirement, this app will no longer work on certified Android devices after that time.</string>
+    <string name="free_android_warn_link"><u>More info</u></string>
+    <string name="free_android_warn_solution_button">Solution</string>
+
+    <!--notification foreground service-->
+
+    <string name="channel_name">Tiles services</string>
+    <string name="notification_title">Service running</string>
+    <string name="notification_label">A tile is running, disable the tile in the quick settings panel or tap here to hide this notification</string>
+
+    <!--accessibility service-->
+
+    <string name="accessibility_service_description">This application uses accessibility services so that some of its tiles in the quick settings panel work. This permission is essential for these tiles to work correctly and provide quick access to certain device features.</string>
+
+    <!--permission messages-->
+
+    <!--accessibility-->
+    <string name="accessibility_permission_message">Accessibility permission required. Please enable it first</string>
+    <!--dnd-->
+    <string name="dnd_access_permission_message">Do Not Disturb access permission required. Please enable it first</string>
+    <!--write settings-->
+    <string name="write_settings_permission_message">Write system settings permission required. Please enable it first</string>
+    <!--write secure settings-->
+    <string name="write_secure_settings_clipboard_message">Command copied to clipboard</string>
+
+    <!--write secure settings command dialog-->
+
+    <string name="write_secure_settings_title">ADB permission required</string>
+    <string name="write_secure_settings_message">This feature requires the WRITE_SECURE_SETTINGS permission, which can only be granted via ADB. Run the command below in your terminal with USB debugging enabled:</string>
+    <string name="write_secure_settings_support">After running the command, tap the tile again to enable it. You only need to do this once.</string>
+    <!--buttons-->
+    <string name="copy_clipboard">Copy to clipboard</string>
+    <string name="close">Close</string>
+
+    <!--general messages-->
+
+    <string name="not_supported">Your device does not support this feature</string>
+    <string name="clipboard_cleared">Clipboard cleared</string>
+    <string name="google_not_found">Music search activity not found. Please install or enable Google App</string>
+
+    <!--general tiles subtitles-->
+
+    <string name="tile_on">On</string>
+    <string name="tile_off">Off</string>
+    <string name="tile_open">Tap to open</string>
+    <string name="tile_start">Tap to start</string>
+    <string name="tile_setup">Tap to setup</string>
+    <string name="tile_switch">Tap to switch</string>
+    <string name="tile_unavailable">Unavailable</string>
+    <string name="tile_not_supported">Not supported</string>
+
+    <!--compass tile-->
+
+    <string name="compass_tile">Compass</string>
+    <string name="compass_tile_degrees" translatable="false">%1$d° %2$s</string>
+    <!--directions-->
+    <string name="N">N</string>
+    <string name="NE">NE</string>
+    <string name="E">E</string>
+    <string name="SE">SE</string>
+    <string name="S">S</string>
+    <string name="SW">SW</string>
+    <string name="W">W</string>
+    <string name="NW">NW</string>
+
+    <!--bubble level tile-->
+
+    <string name="level_tile">Level</string>
+    <string name="level_tile_degrees" translatable="false">%d°</string>
+    <!--perfect level-->
+    <string name="level_tile_zero" translatable="false">0°</string>
+
+    <!--lux meter tile-->
+
+    <string name="lux_meter_tile">Lux Meter</string>
+    <string name="lux_meter_tile_lux" translatable="false">%d lx</string>
+
+    <!--lock screen tile-->
+
+    <string name="lock_tile">Lock</string>
+
+    <!--coin flip tile-->
+
+    <string name="coin_flip_tile">Coin Flip</string>
+    <string name="coin_flip_tile_tap">Tap to flip</string>
+    <!--sides-->
+    <string name="coin_tile_heads">Heads</string>
+    <string name="coin_tile_tails">Tails</string>
+    <!--sides counter-->
+    <string name="coin_flip_tile_count">Heads: %1$d Tails: %2$d</string>
+
+    <!--dice roll tile-->
+
+    <string name="dice_roll_tile">Dice Roll</string>
+    <string name="dice_roll_tile_tap">Tap to roll</string>
+    <string name="dice_roll_tile_rolling">Rolling…</string>
+    <!--numbers-->
+    <string name="dice_tile_1">One</string>
+    <string name="dice_tile_2">Two</string>
+    <string name="dice_tile_3">Three</string>
+    <string name="dice_tile_4">Four</string>
+    <string name="dice_tile_5">Five</string>
+    <string name="dice_tile_6">Six</string>
+
+    <!--sos tile-->
+
+    <string name="sos_tile">SOS</string>
+
+    <!--counter tile-->
+
+    <string name="counter_tile">Counter</string>
+    <!--values-->
+    <string name="counter_tile_add">Add</string>
+    <string name="counter_tile_remove">Remove</string>
+    <string name="counter_tile_reset">Reset</string>
+
+    <!--screenshot tile-->
+
+    <string name="screenshot_tile">Screenshot</string>
+
+    <!--sound mode tile-->
+
+    <string name="sound_mode_tile">Sound mode</string>
+    <!--sound modes-->
+    <string name="sound_tile_normal">Normal</string>
+    <string name="sound_tile_silent">Silent</string>
+    <string name="sound_tile_vibrate">Vibrate</string>
+
+    <!--caffeine tile-->
+
+    <string name="caffeine_tile">Caffeine</string>
+    <!--timeouts-->
+    <string name="caffeine_tile_minutes">%1$d minutes</string>
+    <string name="caffeine_tile_infinite">Infinite</string>
+
+    <!--device memory tile-->
+
+    <string name="memory_tile">Memory</string>
+    <string name="memory_tile_format">%1$s of %2$s</string>
+    <!--memory type-->
+    <string name="memory_tile_ram">%s in use</string>
+    <string name="memory_tile_storage">%s free</string>
+
+    <!--device temperature tile-->
+
+    <string name="temperature_tile">Temperature</string>
+    <string name="temperature_tile_format" translatable="false">%.1f°C</string>
+
+    <!--media output tile-->
+
+    <string name="media_output_tile">Media output</string>
+
+    <!--auto brightness tile-->
+
+    <string name="auto_brightness_tile">Auto brightness</string>
+
+    <!--breathing tile-->
+
+    <string name="breathing_tile">Breathe</string>
+    <string name="breathing_tile_prepare">Follow the circle</string>
+    <!--steps-->
+    <string name="breathing_tile_inhale">Inhale</string>
+    <string name="breathing_tile_exhale">Exhale</string>
+    <string name="breathing_tile_pause">Pause</string>
+    <string name="breathing_tile_relax">Relax</string>
+
+    <!--network traffic tile-->
+
+    <string name="network_traffic_tile">Network</string>
+    <!--speed units-->
+    <string name="network_traffic_tile_kb" translatable="false">%.1f kB</string>
+    <string name="network_traffic_tile_mb" translatable="false">%.1f MB</string>
+    <!--direction-->
+    <string name="network_traffic_tile_download">Download</string>
+    <string name="network_traffic_tile_upload">Upload</string>
+
+    <!--battery tile-->
+
+    <string name="battery_tile">Battery</string>
+    <!--info-->
+    <string name="battery_tile_percent" translatable="false">%d%%</string>
+    <string name="battery_tile_voltage" translatable="false">%.2f V</string>
+    <string name="battery_tile_current" translatable="false">%d mA</string>
+    <string name="battery_tile_wattage" translatable="false">%.1f W</string>
+    <string name="battery_tile_temperature" translatable="false">%.1f°C</string>
+    <!--status-->
+    <string name="battery_tile_status_full">Fully charged</string>
+    <string name="battery_tile_status_low">Low battery</string>
+    <string name="battery_tile_status_saver">Power saver</string>
+    <string name="battery_tile_status_discharging">Discharging</string>
+    <!--charging source-->
+    <string name="battery_tile_charging">Charging</string>
+    <string name="battery_tile_charging_ac">Charging · AC</string>
+    <string name="battery_tile_charging_usb">Charging · USB</string>
+    <string name="battery_tile_charging_wireless">Charging · Wireless</string>
+    <string name="battery_tile_charging_dock">Charging · Dock</string>
+    <!--health-->
+    <string name="battery_tile_health_good">Good</string>
+    <string name="battery_tile_health_overheat">Overheating</string>
+    <string name="battery_tile_health_dead">Dead</string>
+    <string name="battery_tile_health_overvoltage">Overvoltage</string>
+    <string name="battery_tile_health_failure">Failure</string>
+    <string name="battery_tile_health_cold">Cold</string>
+    <string name="battery_tile_health_unknown">Unknown</string>
+
+    <!--dns tile-->
+
+    <string name="dns_tile">DNS</string>
+    <string name="dns_tile_automatic">Automatic</string>
+    <!--providers-->
+    <string name="dns_tile_provider_block_adult_content">Block adult content</string>
+    <string name="dns_tile_provider_google" translatable="false">Google</string>
+    <string name="dns_tile_provider_cloudflare" translatable="false">Cloudflare</string>
+    <string name="dns_tile_provider_adguard" translatable="false">AdGuard</string>
+    <string name="dns_tile_provider_opendns" translatable="false">OpenDNS</string>
+    <string name="dns_tile_provider_quad9" translatable="false">Quad9</string>
+    <string name="dns_tile_provider_nextdns" translatable="false">NextDNS</string>
+    <string name="dns_tile_provider_mullvad" translatable="false">Mullvad</string>
+    <string name="dns_tile_provider_controld" translatable="false">Control D</string>
+    <string name="dns_tile_provider_libredns" translatable="false">LibreDNS</string>
+
+    <!--usb debugging tile-->
+
+    <string name="usb_debugging_tile">USB debugging</string>
+
+    <!--nfc tile-->
+
+    <string name="nfc_tile">NFC</string>
+
+    <!--power menu tile-->
+
+    <string name="power_tile">Power menu</string>
+
+    <!--volume panel tile-->
+
+    <string name="volume_tile">Volume</string>
+
+    <!--clipboard cleaner tile-->
+
+    <string name="clipboard_tile">Clipboard</string>
+    <string name="clipboard_tile_tap">Tap to clear</string>
+
+    <!--music search tile-->
+
+    <string name="music_search_tile">Music search</string>
+</resources>

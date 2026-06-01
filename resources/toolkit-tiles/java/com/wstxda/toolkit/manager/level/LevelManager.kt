@@ -1,0 +1,139 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.wstxda.toolkit.manager.level
+
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.hardware.display.DisplayManager
+import android.view.Display
+import androidx.core.content.getSystemService
+import com.wstxda.toolkit.services.sensors.Orientation
+import com.wstxda.toolkit.services.sensors.getOrientation
+import com.wstxda.toolkit.services.sensors.getTilt
+import com.wstxda.toolkit.ui.utils.Haptics
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlin.math.roundToInt
+
+class LevelManager(context: Context) : SensorEventListener {
+
+    private val appContext = context.applicationContext
+    private val haptics = Haptics(appContext)
+
+    private val _isEnabled = MutableStateFlow(false)
+    val isEnabled = _isEnabled.asStateFlow()
+
+    private val _orientation = MutableStateFlow(Orientation(0f, 0f, 0f, LevelMode.Dot))
+    val orientation = _orientation.asStateFlow()
+    private val _degrees = MutableStateFlow(0)
+    val degrees = _degrees.asStateFlow()
+    private var isResumed = false
+    private var isSensorRegistered = false
+    private var lastHapticFeedback = 0L
+    private val rotationMatrix = FloatArray(16)
+    private val remappedMatrix = FloatArray(16)
+    private val orientationArray = FloatArray(3)
+
+    private val sensorManager: SensorManager?
+        get() = appContext.getSystemService()
+
+    private val rotationSensor: Sensor?
+        get() = sensorManager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+
+    private val display: Display?
+        get() = appContext.getSystemService(DisplayManager::class.java)
+            ?.getDisplay(Display.DEFAULT_DISPLAY)
+
+    fun toggle() {
+        _isEnabled.value = !_isEnabled.value
+        updateSensorState()
+    }
+
+    fun resume() {
+        isResumed = true
+        updateSensorState()
+    }
+
+    fun pause() {
+        isResumed = false
+        updateSensorState()
+    }
+
+    private fun updateSensorState() {
+        if (_isEnabled.value && isResumed) {
+            registerSensor()
+        } else {
+            unregisterSensor()
+        }
+    }
+
+    private fun registerSensor() {
+        val sensor = rotationSensor ?: return
+        if (!isSensorRegistered) {
+            sensorManager?.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI)
+            isSensorRegistered = true
+        }
+    }
+
+    private fun unregisterSensor() {
+        if (isSensorRegistered) {
+            sensorManager?.unregisterListener(this)
+            isSensorRegistered = false
+        }
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event == null) return
+
+        val rotation = display?.rotation ?: 0
+
+        val orient = getOrientation(
+            event, rotation, rotationMatrix, remappedMatrix, orientationArray
+        )
+        _orientation.value = orient
+
+        val deg = when (orient.mode) {
+            LevelMode.Line -> orient.balance.roundToInt()
+            LevelMode.Dot -> getTilt(orient.pitch, orient.roll)
+        }
+
+        _degrees.value = deg
+
+        if (deg == 0) vibrateOnZero()
+    }
+
+    private fun vibrateOnZero() {
+        val now = System.currentTimeMillis()
+        if (now - lastHapticFeedback > 500) {
+            haptics.veryHigh()
+            lastHapticFeedback = now
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
+
+    companion object {
+        fun isSupported(context: Context): Boolean {
+            val sm = context.getSystemService<SensorManager>()
+            return sm?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) != null
+        }
+    }
+}
