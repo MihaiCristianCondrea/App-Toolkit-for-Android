@@ -40,6 +40,7 @@ val appModule: Module = module {
         ToolkitTilesViewModel(
             getToolkitTilesUseCase = get(),
             dispatchers = get(),
+            context = get(),
             firebaseController = get(),
         )
     }

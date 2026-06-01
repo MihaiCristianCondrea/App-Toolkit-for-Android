@@ -20,7 +20,7 @@ package com.d4rk.android.apps.apptoolkit.app.tiles.ui.state
 import androidx.compose.runtime.Immutable
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -29,7 +29,7 @@ import kotlinx.collections.immutable.persistentSetOf
 data class ToolkitTilesUiState(
     val categories: ImmutableList<ToolkitTileCategory> = persistentListOf(),
     val selectedFilter: ToolkitTilesFilter = ToolkitTilesFilter.All,
-    val expandedCategoryIds: ImmutableSet<String> = persistentSetOf(),
+    val expandedCategoryIds: PersistentSet<String> = persistentSetOf(),
 )
 
 enum class ToolkitTilesFilter {

@@ -22,6 +22,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
 sealed interface ToolkitTilesEvent : UiEvent {
     data object Initialize : ToolkitTilesEvent
+    data object Refresh : ToolkitTilesEvent
     data class FilterSelected(val filter: ToolkitTilesFilter) : ToolkitTilesEvent
     data class CategoryToggled(val categoryId: String) : ToolkitTilesEvent
     data class AddTileClicked(val requestKey: String?) : ToolkitTilesEvent
