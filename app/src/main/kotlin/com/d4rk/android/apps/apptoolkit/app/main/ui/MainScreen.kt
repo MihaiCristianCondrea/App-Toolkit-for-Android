@@ -114,6 +114,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.navigation.animations.NativeActivityTransitions
 import com.d4rk.android.libs.apptoolkit.navigation.animations.rememberBottomNavTransitions
 import com.d4rk.android.libs.apptoolkit.navigation.animations.rememberNativeActivityTransitions
+import com.d4rk.android.libs.apptoolkit.navigation.models.isTopLevel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
@@ -249,7 +250,7 @@ private class MainSceneStrategy(
             "Main navigation entries must use their StableNavKey as NavEntry.contentKey."
         }
 
-        return if (currentRoute in NavigationRoutes.topLevelRoutes) {
+        return if (currentRoute.isTopLevel) {
             MainShellScene(
                 key = "main-shell",
                 entry = currentEntry,
