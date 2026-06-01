@@ -17,14 +17,10 @@
 
 package com.d4rk.android.apps.apptoolkit.app.tiles.ui
 
-import android.content.Context
-import android.provider.Settings
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.apps.apptoolkit.R
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.getTileServiceRequests
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetToolkitTilesUseCase
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.SyncToolkitTileStatusesUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesEvent
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
@@ -37,6 +33,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setError
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setLoading
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
+import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.Job
@@ -49,8 +46,8 @@ import kotlinx.coroutines.flow.update
 /** Coordinates the static Toolkit Tiles catalog, filtering, and add-tile requests. */
 class ToolkitTilesViewModel(
     private val getToolkitTilesUseCase: GetToolkitTilesUseCase,
+    private val syncToolkitTileStatusesUseCase: SyncToolkitTileStatusesUseCase,
     private val dispatchers: DispatcherProvider,
-    private val context: Context,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<ToolkitTilesUiState, ToolkitTilesEvent, ToolkitTilesAction>(
     initialState = UiStateScreen(data = ToolkitTilesUiState()),
@@ -65,8 +62,8 @@ class ToolkitTilesViewModel(
 
     override fun handleEvent(event: ToolkitTilesEvent) {
         when (event) {
-            ToolkitTilesEvent.Initialize -> loadTiles()
-            ToolkitTilesEvent.Refresh -> refreshStatuses()
+            is ToolkitTilesEvent.Initialize -> loadTiles()
+            is ToolkitTilesEvent.Refresh -> refreshStatuses()
             is ToolkitTilesEvent.FilterSelected -> selectFilter(event.filter)
             is ToolkitTilesEvent.CategoryToggled -> toggleCategory(event.categoryId)
             is ToolkitTilesEvent.AddTileClicked -> handleAddTile(event.requestKey)
@@ -91,7 +88,7 @@ class ToolkitTilesViewModel(
                         .map { category -> category.id }
                         .toPersistentSet()
 
-                    val syncedCategories = syncTileStatuses(categories)
+                    val syncedCategories = syncToolkitTileStatusesUseCase(categories)
                     
                     screenState.setSuccess(
                         data = (screenData ?: ToolkitTilesUiState()).copy(
@@ -107,32 +104,8 @@ class ToolkitTilesViewModel(
     private fun refreshStatuses() {
         screenState.update { current ->
             val data = current.data ?: return@update current
-            current.copy(data = data.copy(categories = syncTileStatuses(data.categories).toImmutableList()))
+            current.copy(data = data.copy(categories = syncToolkitTileStatusesUseCase(data.categories).toImmutableList()))
         }
-    }
-
-    private fun syncTileStatuses(
-        categories: List<ToolkitTileCategory>,
-    ): List<ToolkitTileCategory> {
-        val activeTiles = getActiveQuickSettingsTiles()
-        return categories.map { category ->
-            category.copy(
-                tiles = category.tiles.map { tile ->
-                    val request = tile.requestKey?.let { getTileServiceRequests()[it] }
-                    val componentName = request?.componentName(context)?.flattenToString()
-                    if (componentName != null && componentName in activeTiles) {
-                        tile.copy(status = ToolkitTileStatus.Added)
-                    } else {
-                        tile
-                    }
-                }.toImmutableList()
-            )
-        }
-    }
-
-    private fun getActiveQuickSettingsTiles(): Set<String> {
-        val tiles = Settings.Secure.getString(context.contentResolver, "sysui_qs_tiles") ?: ""
-        return tiles.split(",").toSet()
     }
 
     private fun selectFilter(filter: ToolkitTilesFilter) {
@@ -145,10 +118,12 @@ class ToolkitTilesViewModel(
         screenState.update { current ->
             val data = current.data ?: return@update current
             val expandedIds = data.expandedCategoryIds
-            val updated = if (categoryId in expandedIds) {
-                expandedIds.remove(categoryId)
-            } else {
-                expandedIds.add(categoryId)
+            val updated = expandedIds.mutate {
+                if (categoryId in it) {
+                    it.remove(categoryId)
+                } else {
+                    it.add(categoryId)
+                }
             }
             current.copy(data = data.copy(expandedCategoryIds = updated))
         }

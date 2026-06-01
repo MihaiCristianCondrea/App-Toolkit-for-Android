@@ -21,10 +21,14 @@ import com.d4rk.android.apps.apptoolkit.app.main.data.repository.MainNavigationR
 import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainViewModel
 import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
+import com.d4rk.android.apps.apptoolkit.app.tiles.data.repository.ToolkitTilesRepositoryImpl
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.ToolkitTilesRepository
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetToolkitTilesUseCase
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.SyncToolkitTileStatusesUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesViewModel
 import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.d4rk.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -36,11 +40,13 @@ val appModule: Module = module {
         GetNavigationDrawerItemsUseCase(navigationRepository = get(), firebaseController = get())
     }
     single { GetToolkitTilesUseCase() }
+    single { SyncToolkitTileStatusesUseCase(repository = get()) }
+    single<ToolkitTilesRepository> { ToolkitTilesRepositoryImpl(context = androidContext()) }
     viewModel {
         ToolkitTilesViewModel(
             getToolkitTilesUseCase = get(),
+            syncToolkitTileStatusesUseCase = get(),
             dispatchers = get(),
-            context = get(),
             firebaseController = get(),
         )
     }
