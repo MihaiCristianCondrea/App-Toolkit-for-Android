@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,14 +35,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
@@ -57,7 +59,7 @@ import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import java.util.Locale
 
-/** Dialog-only quick tool that previews the current app and Android Material You palettes. */
+/** Full-height expanded tool that previews the current app and Android Material You palettes. */
 @Composable
 fun MaterialColorsToolDialog(
     onClose: () -> Unit,
@@ -73,9 +75,19 @@ fun MaterialColorsToolDialog(
         emptyList()
     }
 
-    AlertDialog(
-        onDismissRequest = {},
-        title = {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    ModalBottomSheet(
+        modifier = Modifier.fillMaxHeight(),
+        sheetState = sheetState,
+        onDismissRequest = onClose,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(horizontal = SizeConstants.LargeSize),
+            verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -92,9 +104,8 @@ fun MaterialColorsToolDialog(
                     )
                 }
             }
-        },
-        text = {
             LazyColumn(
+                modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
             ) {
                 item {
@@ -124,9 +135,8 @@ fun MaterialColorsToolDialog(
                     }
                 }
             }
-        },
-        confirmButton = {},
-    )
+        }
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
