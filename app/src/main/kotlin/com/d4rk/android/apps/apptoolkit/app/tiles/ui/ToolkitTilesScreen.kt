@@ -792,6 +792,14 @@ private fun ToolkitTileIcon.iconColors(): StatusColors {
             container = if (isDark) Color(0xFFB10000) else Color(0xFFEE0000),
             content = if (isDark) Color(0xFFFFDAD6) else Color(0xFFB10000),
         )
+
+        // TODO: we need to add the rest of the colors
+        else -> {
+            StatusColors(
+                container = if (isDark) Color(0xFFB10000) else Color(0xFFEE0000),
+                content = if (isDark) Color(0xFFFFDAD6) else Color(0xFFB10000),
+            )
+        }
     }
 }
 

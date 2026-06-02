@@ -102,7 +102,7 @@ class AppsListViewModel(
 
     init {
         observeFetch()
-        fetchAppsTrigger.tryEmit(Unit)
+        onEvent(HomeEvent.FetchApps)
     }
 
     override fun handleEvent(event: HomeEvent) {

@@ -58,6 +58,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.getVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isAppInstalled
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
@@ -103,7 +104,7 @@ fun AppsListRoute(
     val canOpenRandomApp by viewModel.canOpenRandomApp.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
-    var installedPackages by remember { mutableStateOf(persistentSetOf<String>()) }
+    var installedPackages by remember { mutableStateOf<ImmutableSet<String>>(persistentSetOf()) }
     val adsEnabled = rememberAdsEnabled()
 
     val appDetailsAdsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.APP_DETAILS_NATIVE_AD))
@@ -147,6 +148,7 @@ fun AppsListRoute(
     var selectedAppVersionInfo: InstalledAppVersionInfo? by remember { mutableStateOf(null) }
     val appActionLauncher = remember(context) { AndroidAppActionLauncher(context) }
 
+    // TODO: This is usually winside the view model
     LaunchedEffect(screenState.data?.apps) {
         val apps = screenState.data?.apps.orEmpty()
         installedPackages = withContext(dispatchers.io) {
