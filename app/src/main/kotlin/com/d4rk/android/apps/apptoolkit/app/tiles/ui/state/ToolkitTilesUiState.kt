@@ -36,5 +36,7 @@ enum class ToolkitTilesFilter {
     All,
     Added,
     NeedsSetup,
-    Unsupported,
+    Unsupported;
+
+    companion object {}
 }

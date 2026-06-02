@@ -21,13 +21,18 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.data.local.FavoritesLoca
 import com.d4rk.android.apps.apptoolkit.app.apps.common.data.local.FavoritesLocalDataSourceImpl
 import com.d4rk.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepositoryImpl
 import com.d4rk.android.apps.apptoolkit.app.apps.common.data.repository.FavoritesRepositoryImpl
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.repository.InstalledAppsRepositoryImpl
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.DeveloperAppsRepository
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.FavoritesRepository
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.InstalledAppsRepository
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.GetAppInstallInfoUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.GetInstalledPackagesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
 import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -43,9 +48,14 @@ val appsListModule: Module = module {
     }
 
     single { FetchDeveloperAppsUseCase(repository = get()) }
+    single<InstalledAppsRepository> { InstalledAppsRepositoryImpl(context = androidContext()) }
+    single { GetInstalledPackagesUseCase(repository = get()) }
+    single { GetAppInstallInfoUseCase(repository = get()) }
     viewModel {
         AppsListViewModel(
             fetchDeveloperAppsUseCase = get(),
+            getInstalledPackagesUseCase = get(),
+            getAppInstallInfoUseCase = get(),
             observeFavoritesUseCase = get(),
             toggleFavoriteUseCase = get(),
             dispatchers = get(),

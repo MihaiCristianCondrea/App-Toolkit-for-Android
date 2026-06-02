@@ -19,14 +19,19 @@ package com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state
 
 import androidx.compose.runtime.Immutable
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInstallInfo
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 
 /** State rendered by the Apps List screen. */
 @Immutable
 data class AppListUiState(
     val apps: ImmutableList<AppInfo> = persistentListOf(),
     val selectedFilter: AppsListFilter = AppsListFilter.All,
+    val installedPackages: ImmutableSet<String> = persistentSetOf(),
+    val selectedAppInstallInfo: AppInstallInfo? = null,
 )
 
 /** Filters available in the Apps List chip row. */

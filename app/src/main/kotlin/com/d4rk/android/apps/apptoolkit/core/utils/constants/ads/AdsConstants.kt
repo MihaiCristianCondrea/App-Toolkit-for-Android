@@ -19,24 +19,16 @@ package com.d4rk.android.apps.apptoolkit.core.utils.constants.ads
 
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.DebugAdsConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.bannerAdUnitId as selectBannerAdUnitId
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.nativeAdUnitId as selectNativeAdUnitId
 
 object AdsConstants {
 
-    // TODO: Ensure this is in libarry
     private fun bannerAdUnitId(releaseId: String): String =
-        if (BuildConfig.DEBUG) {
-            DebugAdsConstants.BANNER_AD_UNIT_ID
-        } else {
-            releaseId
-        }
+        selectBannerAdUnitId(isDebug = BuildConfig.DEBUG, releaseId = releaseId)
 
-    // TODO: Ensure this is in libarry
     private fun nativeAdUnitId(releaseId: String): String =
-        if (BuildConfig.DEBUG) {
-            DebugAdsConstants.NATIVE_AD_UNIT_ID
-        } else {
-            releaseId
-        }
+        selectNativeAdUnitId(isDebug = BuildConfig.DEBUG, releaseId = releaseId)
 
     val APP_OPEN_UNIT_ID: String
         get() = if (BuildConfig.DEBUG) {

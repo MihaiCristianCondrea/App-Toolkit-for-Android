@@ -45,7 +45,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.VolumeUp
 import androidx.compose.material.icons.outlined.BatteryChargingFull
-import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Close
@@ -56,7 +55,6 @@ import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.GraphicEq
-import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Memory
@@ -115,6 +113,8 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitToolKind
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.getTileServiceRequests
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesEvent
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.mapper.items
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.mapper.toNewTaskIntent
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesUiState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
@@ -127,7 +127,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPos
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 import com.d4rk.android.libs.apptoolkit.R as ToolkitR
@@ -271,7 +270,7 @@ private fun TilesFilters(
             .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
     ) {
-        FilterItems.forEach { item ->
+        ToolkitTilesFilter.items().forEach { item ->
             FilterChip(
                 selected = selectedFilter == item.filter,
                 onClick = { onFilterSelected(item.filter) },
@@ -633,19 +632,6 @@ private fun HowToAddTilesCard() {
     }
 }
 
-private data class FilterItem(
-    val filter: ToolkitTilesFilter,
-    val labelResId: Int,
-    val icon: ImageVector,
-)
-
-private val FilterItems: ImmutableList<FilterItem> = persistentListOf(
-    FilterItem(ToolkitTilesFilter.All, R.string.tiles_filter_all, Icons.Outlined.GridView),
-    FilterItem(ToolkitTilesFilter.Added, R.string.tiles_filter_added, Icons.Outlined.CheckCircle),
-    FilterItem(ToolkitTilesFilter.NeedsSetup, R.string.tiles_filter_needs_setup, Icons.Outlined.WarningAmber),
-    FilterItem(ToolkitTilesFilter.Unsupported, R.string.tiles_filter_unsupported, Icons.Outlined.Block),
-)
-
 private fun ImmutableList<ToolkitTileCategory>.filterFor(
     filter: ToolkitTilesFilter,
 ): List<ToolkitTileCategory> = when (filter) {
@@ -788,18 +774,15 @@ private fun ToolkitTileIcon.iconColors(): StatusColors {
             content = if (isDark) Color(0xFFC8BFFF) else Color(0xFF3F0091),
         )
 
+        ToolkitTileIcon.Palette -> StatusColors(
+            container = if (isDark) Color(0xFF7A4E00) else Color(0xFFFFB84D),
+            content = if (isDark) Color(0xFFFFDDA8) else Color(0xFF7A4E00),
+        )
+
         ToolkitTileIcon.Sos -> StatusColors(
             container = if (isDark) Color(0xFFB10000) else Color(0xFFEE0000),
             content = if (isDark) Color(0xFFFFDAD6) else Color(0xFFB10000),
         )
-
-        // TODO: we need to add the rest of the colors
-        else -> {
-            StatusColors(
-                container = if (isDark) Color(0xFFB10000) else Color(0xFFEE0000),
-                content = if (isDark) Color(0xFFFFDAD6) else Color(0xFFB10000),
-            )
-        }
     }
 }
 
@@ -834,7 +817,7 @@ private fun requestQuickSettingsTile(
 ) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
         Toast.makeText(context, R.string.tiles_add_pre_android_13, Toast.LENGTH_LONG).show()
-        context.startActivity(Settings.ACTION_SETTINGS.toIntent())
+        context.startActivity(Settings.ACTION_SETTINGS.toNewTaskIntent())
         return
     }
 
@@ -859,5 +842,3 @@ private fun requestQuickSettingsTile(
         Toast.makeText(context, messageResId, Toast.LENGTH_SHORT).show()
     }
 }
-
-private fun String.toIntent(): android.content.Intent = android.content.Intent(this).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)

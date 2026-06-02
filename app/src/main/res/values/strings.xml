@@ -26,22 +26,6 @@
     <string name="onboarding_personalization_description">This app demonstrates how the AppToolkit library builds versatile, user-focused applications. Explore the sample apps to see different features and implementations of the library.</string>
 
     <!-- Landing screen -->
-    <string name="landing_title">Home</string>
-    <string name="landing_good_morning">Good morning</string>
-    <string name="landing_good_afternoon">Good afternoon</string>
-    <string name="landing_good_evening">Good evening</string>
-    <string name="landing_good_night">Good night</string>
-    <string name="landing_recent_tool">Recent Tool</string>
-    <string name="landing_recent_tool_bubble_level">Bubble Level</string>
-    <string name="landing_recent_tool_summary">Jump back into the last quick tool you used.</string>
-    <string name="landing_favorite_app">Favorite App</string>
-    <string name="landing_favorite_app_cleaner">Cleaner</string>
-    <string name="landing_favorite_app_summary">Open Apps &amp; Tools to manage favorite apps.</string>
-    <string name="landing_quick_actions">Quick Actions</string>
-    <string name="landing_quick_action_flashlight">Flashlight</string>
-    <string name="landing_latest_update">Latest Update</string>
-    <string name="landing_latest_update_toolkit_2">Toolkit 2.0</string>
-    <string name="landing_latest_update_summary">Quick Tools are becoming interactive tile-ready utilities.</string>
 
     <!-- Home screen -->
     <string name="apps_tools_title">Apps &amp; Tools</string>

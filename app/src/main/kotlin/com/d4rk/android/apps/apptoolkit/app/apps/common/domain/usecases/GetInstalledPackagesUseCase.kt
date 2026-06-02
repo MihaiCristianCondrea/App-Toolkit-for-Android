@@ -15,15 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract
+package com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases
 
-import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
-import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.InstalledAppsRepository
 
-sealed class HomeEvent : UiEvent {
-    data object FetchApps : HomeEvent()
-    data object OpenRandomApp : HomeEvent()
-    data class FilterSelected(val filter: AppsListFilter) : HomeEvent()
-    data class AppSelected(val packageName: String) : HomeEvent()
-    data object AppDetailsDismissed : HomeEvent()
+/** Returns the subset of [packageNames] currently installed on the device. */
+class GetInstalledPackagesUseCase(
+    private val repository: InstalledAppsRepository,
+) {
+    operator fun invoke(packageNames: Collection<String>): Set<String> = repository.getInstalledPackages(packageNames)
 }

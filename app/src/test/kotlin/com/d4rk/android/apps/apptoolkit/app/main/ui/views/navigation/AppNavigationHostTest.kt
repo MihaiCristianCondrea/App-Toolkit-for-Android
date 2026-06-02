@@ -20,7 +20,6 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.LandingRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
@@ -59,31 +58,31 @@ class AppNavigationHostTest {
     }
 
     @Test
-    fun `blank startup page defaults to landing`() = runTest {
-        every { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_LANDING) } returns flowOf(
+    fun `blank startup page defaults to apps list`() = runTest {
+        every { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) } returns flowOf(
             ""
         )
 
         val startDestination = dataStore.startupDestinationFlow(
-            defaultRoute = NavigationRoutes.ROUTE_LANDING,
+            defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
             mapToKey = { route -> route.toNavKeyOrDefault() }
         ).first()
 
-        assertEquals(LandingRoute, startDestination)
+        assertEquals(AppsListRoute, startDestination)
     }
 
     @Test
-    fun `legacy favorite startup page falls back to landing`() = runTest {
+    fun `legacy favorite startup page falls back to apps list`() = runTest {
         every {
-            dataStore.getStartupPage(default = NavigationRoutes.ROUTE_LANDING)
+            dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST)
         } returns flowOf("favorite_apps")
 
         val startDestination = dataStore.startupDestinationFlow(
-            defaultRoute = NavigationRoutes.ROUTE_LANDING,
+            defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
             mapToKey = { route -> route.toNavKeyOrDefault() }
         ).first()
 
-        assertEquals(LandingRoute, startDestination)
+        assertEquals(AppsListRoute, startDestination)
     }
 
     @Test
@@ -98,7 +97,6 @@ class AppNavigationHostTest {
             )
         )
         val routes: List<StableNavKey> = listOf(
-            LandingRoute,
             AppsListRoute,
             ToolkitTilesRoute,
             ComponentsRoute,

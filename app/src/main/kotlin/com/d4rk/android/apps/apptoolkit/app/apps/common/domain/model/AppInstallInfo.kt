@@ -15,15 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract
+package com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model
 
-import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
-import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
+import androidx.compose.runtime.Immutable
+import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 
-sealed class HomeEvent : UiEvent {
-    data object FetchApps : HomeEvent()
-    data object OpenRandomApp : HomeEvent()
-    data class FilterSelected(val filter: AppsListFilter) : HomeEvent()
-    data class AppSelected(val packageName: String) : HomeEvent()
-    data object AppDetailsDismissed : HomeEvent()
-}
+/** Package-manager install metadata for a catalog app. */
+@Immutable
+data class AppInstallInfo(
+    val isInstalled: Boolean,
+    val versionInfo: AppVersionInfo?,
+)

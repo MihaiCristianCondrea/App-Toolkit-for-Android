@@ -15,15 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract
+package com.d4rk.android.apps.apptoolkit.app.tiles.ui.mapper
 
-import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
-import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
+import android.content.Intent
 
-sealed class HomeEvent : UiEvent {
-    data object FetchApps : HomeEvent()
-    data object OpenRandomApp : HomeEvent()
-    data class FilterSelected(val filter: AppsListFilter) : HomeEvent()
-    data class AppSelected(val packageName: String) : HomeEvent()
-    data object AppDetailsDismissed : HomeEvent()
-}
+/** Maps an Android Settings action string to a task-safe [Intent]. */
+fun String.toNewTaskIntent(): Intent = Intent(this).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

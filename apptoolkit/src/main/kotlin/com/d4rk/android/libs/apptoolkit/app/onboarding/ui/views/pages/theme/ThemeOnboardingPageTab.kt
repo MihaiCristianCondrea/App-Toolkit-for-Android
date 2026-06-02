@@ -76,6 +76,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.applyD
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.datastore.rememberThemePreferencesState
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSeason
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isHalloweenSeason
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -284,7 +285,7 @@ fun ThemeOnboardingPageTab() {
 
             ThemePalettePager(
                 pagerState = pagerState,
-                pages = listOf(
+                pages = persistentListOf(
                     {
                         LazyRow(
                             contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),

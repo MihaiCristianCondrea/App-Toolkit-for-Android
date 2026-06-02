@@ -19,14 +19,11 @@ package com.d4rk.android.apps.apptoolkit.app.main.utils.defaults
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Apps
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.rounded.Apps
-import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.GridView
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.LandingRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
@@ -39,12 +36,6 @@ internal object MainNavigationDefaults {
     )
 
     val bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>> = persistentListOf(
-        BottomBarItem(
-            route = LandingRoute,
-            icon = Icons.Outlined.Home,
-            selectedIcon = Icons.Rounded.Home,
-            title = R.string.landing_title
-        ),
         BottomBarItem(
             route = AppsListRoute,
             icon = Icons.Outlined.Apps,

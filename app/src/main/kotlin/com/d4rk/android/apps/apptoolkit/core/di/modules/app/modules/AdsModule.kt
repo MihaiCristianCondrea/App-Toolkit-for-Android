@@ -20,6 +20,7 @@ package com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
+import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
 import com.google.android.libraries.ads.mobile.sdk.banner.AdSize
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
@@ -30,11 +31,11 @@ val adsModule: Module = module {
         AdsConfig(bannerAdUnitId = AdsConstants.NATIVE_AD_UNIT_ID)
     }
 
-    single<AdsConfig>(named(name = AdsQualifiers.APPS_LIST_NATIVE_AD)) {
+    single<AdsConfig>(named(name = AppAdsQualifiers.APPS_LIST_NATIVE_AD)) {
         AdsConfig(bannerAdUnitId = AdsConstants.APPS_LIST_NATIVE_AD_UNIT_ID)
     }
 
-    single<AdsConfig>(named(name = AdsQualifiers.APP_DETAILS_NATIVE_AD)) {
+    single<AdsConfig>(named(name = AppAdsQualifiers.APP_DETAILS_NATIVE_AD)) {
         AdsConfig(bannerAdUnitId = AdsConstants.APP_DETAILS_NATIVE_AD_UNIT_ID)
     }
 

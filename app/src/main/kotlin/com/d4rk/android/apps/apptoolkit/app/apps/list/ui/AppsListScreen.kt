@@ -47,7 +47,6 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.RandomAppHandler
-import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
@@ -55,19 +54,12 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.getVersionInfo
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isAppInstalled
-import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toImmutableSet
+import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
-import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo as InstalledAppVersionInfo
 
 /**
  * A route-level composable that orchestrates the display of the apps list screen.
@@ -104,11 +96,9 @@ fun AppsListRoute(
     val canOpenRandomApp by viewModel.canOpenRandomApp.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
-    var installedPackages by remember { mutableStateOf<ImmutableSet<String>>(persistentSetOf()) }
     val adsEnabled = rememberAdsEnabled()
 
-    val appDetailsAdsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.APP_DETAILS_NATIVE_AD))
-    val dispatchers: DispatcherProvider = koinInject()
+    val appDetailsAdsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APP_DETAILS_NATIVE_AD))
     val firebaseController: FirebaseController = koinInject()
 
     val onFavoriteToggle: (String) -> Unit =
@@ -128,9 +118,9 @@ fun AppsListRoute(
         }
     val onRetry: () -> Unit = remember(viewModel) { { viewModel.onEvent(HomeEvent.FetchApps) } }
 
-    val buildAppClick = buildOnAppClick(dispatchers)
+    val buildAppClick = buildOnAppClick()
     val buildShareClick = buildOnShareClick()
-    val openApp: (AppInfo) -> Unit = remember(dispatchers) { buildAppClick }
+    val openApp: (AppInfo) -> Unit = remember { buildAppClick }
     val onShareClick: (AppInfo) -> Unit = remember(buildShareClick, firebaseController) {
         { app ->
             firebaseController.logAppInteraction(
@@ -144,42 +134,11 @@ fun AppsListRoute(
     }
 
     var selectedApp: AppInfo? by remember { mutableStateOf(null) }
-    var isSelectedAppInstalled: Boolean? by remember { mutableStateOf(null) }
-    var selectedAppVersionInfo: InstalledAppVersionInfo? by remember { mutableStateOf(null) }
+    val selectedAppInstallInfo = screenState.data?.selectedAppInstallInfo
     val appActionLauncher = remember(context) { AndroidAppActionLauncher(context) }
-
-    // TODO: This is usually winside the view model
-    LaunchedEffect(screenState.data?.apps) {
-        val apps = screenState.data?.apps.orEmpty()
-        installedPackages = withContext(dispatchers.io) {
-            apps
-                .asSequence()
-                .filter { app -> context.isAppInstalled(app.packageName) }
-                .map(AppInfo::packageName)
-                .toSet()
-                .toImmutableSet()
-        }
-    }
 
     val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(selectedApp?.packageName) {
-        val app = selectedApp
-        selectedAppVersionInfo = null
-        isSelectedAppInstalled = app?.let { selected ->
-            if (selected.packageName.isNotEmpty()) {
-                val installState = withContext(dispatchers.io) {
-                    context.packageManager.getVersionInfo(selected.packageName) to
-                            context.isAppInstalled(selected.packageName)
-                }
-                selectedAppVersionInfo = installState.first
-                installState.second
-            } else {
-                false
-            }
-        }
-    }
 
     selectedApp?.let { app ->
         ModalBottomSheet(
@@ -194,14 +153,15 @@ fun AppsListRoute(
                 coroutineScope.launch {
                     sheetState.hide()
                     selectedApp = null
+                    viewModel.onEvent(HomeEvent.AppDetailsDismissed)
                 }
             }
         ) {
             AppDetailsBottomSheet(
                 appInfo = app,
                 isFavorite = favorites.contains(app.packageName),
-                isAppInstalled = isSelectedAppInstalled,
-                installedVersionInfo = selectedAppVersionInfo,
+                isAppInstalled = selectedAppInstallInfo?.isInstalled,
+                installedVersionInfo = selectedAppInstallInfo?.versionInfo,
                 actionLauncher = appActionLauncher,
                 onFavoriteClick = { onFavoriteToggle(app.packageName) },
                 adsConfig = appDetailsAdsConfig
@@ -224,8 +184,7 @@ fun AppsListRoute(
                 is HomeAction.OpenRandomApp -> {
                     if (sheetState.isVisible) sheetState.hide()
                     selectedApp = null
-                    isSelectedAppInstalled = null
-                    selectedAppVersionInfo = null
+                    viewModel.onEvent(HomeEvent.AppDetailsDismissed)
                     openApp(action.app)
                 }
             }
@@ -253,7 +212,7 @@ fun AppsListRoute(
             AppsList(
                 uiHomeScreen = uiHomeScreen,
                 favorites = favorites,
-                installedPackages = installedPackages,
+                installedPackages = uiHomeScreen.installedPackages,
                 paddingValues = paddingValues,
                 adsEnabled = adsEnabled,
                 onFilterSelected = { filter -> viewModel.onEvent(HomeEvent.FilterSelected(filter)) },
@@ -261,6 +220,7 @@ fun AppsListRoute(
                 onAppClick = { app ->
                     firebaseController.logAppInteraction(source = "apps_list", appInfo = app, interaction = AppInteractionType.OpenDetailsBottomSheet)
                     selectedApp = app
+                    viewModel.onEvent(HomeEvent.AppSelected(app.packageName))
                 },
                 onShareClick = onShareClick,
                 onFirstVisibleAppChanged = { firstVisibleApp ->
