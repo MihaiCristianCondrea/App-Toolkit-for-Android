@@ -18,10 +18,14 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.list
 
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.extension.RegisterExtension
 
 class TestAppsListViewModel : TestAppsListViewModelBase() {
@@ -45,6 +49,17 @@ class TestAppsListViewModel : TestAppsListViewModelBase() {
         }
         setup(fetchApps = apps, dispatchers = TestDispatchers(dispatcherExtension.testDispatcher))
         viewModel.uiState.testSuccess(expectedSize = apps.size)
+    }
+
+
+    @Test
+    fun `select filter updates apps list state`() = runTest(dispatcherExtension.testDispatcher) {
+        setup(fetchApps = emptyList(), dispatchers = TestDispatchers(dispatcherExtension.testDispatcher))
+
+        viewModel.onEvent(HomeEvent.FilterSelected(AppsListFilter.Favorites))
+        advanceUntilIdle()
+
+        assertEquals(AppsListFilter.Favorites, viewModel.uiState.value.data?.selectedFilter)
     }
 
     @Test

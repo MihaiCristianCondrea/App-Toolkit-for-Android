@@ -1,7 +1,7 @@
-# Toolkit Tiles screen
+# Quick Tools screen
 
-The Toolkit Tiles screen is a top-level destination in the host app. It presents a Material 3
-catalog of Quick Settings tile ideas inspired by the preview-only `resources/toolkit-tiles` project
+The Quick Tools screen is a top-level destination in the host app. It presents a Material 3
+catalog of Quick Settings-ready tools inspired by the preview-only `resources/toolkit-tiles` project
 without depending on that preview source at runtime.
 
 ## Architecture
@@ -14,9 +14,11 @@ without depending on that preview source at runtime.
 - `ToolkitTilesRoute` handles Android platform add-tile requests after receiving
   `ToolkitTilesAction.RequestAddTile`; the ViewModel never receives an Android `Context`.
 
-## Runtime tile services
+## Runtime tile services and previews
 
-The first usable Quick Settings services are intentionally small and self-contained:
+The first usable Quick Settings services are intentionally small and self-contained. Tool cards
+remain tile-ready, and click previews show contained dialogs for tools such as Coin Flip, Compass,
+Bubble Level, and Flashlight without making the ViewModel own Android UI objects:
 
 - Battery: refreshes the current battery percentage.
 - Clipboard Cleaner: clears the clipboard on tap.
@@ -24,5 +26,8 @@ The first usable Quick Settings services are intentionally small and self-contai
 - Counter: increments an in-memory count while the tile service remains alive.
 - Dice Roll: rolls a six-sided die.
 
-Tiles that require sensors, accessibility, notification-policy access, or privileged settings are
-shown as **Needs setup** or **Unsupported** until their permissions and platform behavior are added.
+Clicking a Quick Tool card opens a contained preview dialog. The dialog intentionally ignores
+outside/back dismiss and closes only from its explicit Close button so tool content can own a clear,
+deliberate interaction flow. Tiles that require sensors, accessibility, notification-policy access,
+or privileged settings are shown as **Needs setup** or **Unsupported** until their permissions and
+platform behavior are added.

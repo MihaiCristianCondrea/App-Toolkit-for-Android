@@ -19,7 +19,8 @@ still giving host apps a ready-to-go default shell that can be customized or rep
 ### Navigation 3 UI (Compose + Material 3)
 - **`MainTopAppBar`**: the default top app bar (title + navigation icon + overflow actions).
 - **Host-owned shell scaffolding**: the sample app composes a stable `Scaffold` with a bottom
-  navigation bar on compact windows and a navigation rail on larger windows.
+  navigation bar on compact windows and a navigation rail on larger windows. The default bottom
+  destinations are Landing, Apps & Tools, and Quick Tools.
 - **`NavigationDrawerItemContent`**: a single drawer item row with optional dividers.
 
 ### Navigation behavior helpers

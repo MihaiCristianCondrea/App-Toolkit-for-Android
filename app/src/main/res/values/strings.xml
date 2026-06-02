@@ -25,8 +25,28 @@
     <string name="onboarding_personalization_title">See the AppToolkit library in action</string>
     <string name="onboarding_personalization_description">This app demonstrates how the AppToolkit library builds versatile, user-focused applications. Explore the sample apps to see different features and implementations of the library.</string>
 
+    <!-- Landing screen -->
+    <string name="landing_title">Home</string>
+    <string name="landing_good_morning">Good morning</string>
+    <string name="landing_good_afternoon">Good afternoon</string>
+    <string name="landing_good_evening">Good evening</string>
+    <string name="landing_good_night">Good night</string>
+    <string name="landing_recent_tool">Recent Tool</string>
+    <string name="landing_recent_tool_bubble_level">Bubble Level</string>
+    <string name="landing_recent_tool_summary">Jump back into the last quick tool you used.</string>
+    <string name="landing_favorite_app">Favorite App</string>
+    <string name="landing_favorite_app_cleaner">Cleaner</string>
+    <string name="landing_favorite_app_summary">Open Apps &amp; Tools to manage favorite apps.</string>
+    <string name="landing_quick_actions">Quick Actions</string>
+    <string name="landing_quick_action_flashlight">Flashlight</string>
+    <string name="landing_latest_update">Latest Update</string>
+    <string name="landing_latest_update_toolkit_2">Toolkit 2.0</string>
+    <string name="landing_latest_update_summary">Quick Tools are becoming interactive tile-ready utilities.</string>
+
     <!-- Home screen -->
+    <string name="apps_tools_title">Apps &amp; Tools</string>
     <string name="all_apps">All apps</string>
+    <string name="apps_filter_all">All</string>
     <string name="favorite_apps">Favorites</string>
     <string name="no_apps_added_to_favorites">No apps added to favorites</string>
     <string name="error_failed_to_fetch_our_apps">Failed to load app listings</string>
@@ -70,7 +90,7 @@
 
 
     <!-- Toolkit Tiles screen -->
-    <string name="tiles_title">Tiles</string>
+    <string name="tiles_title">Quick Tools</string>
     <string name="tiles_subtitle">Add powerful tools to your Quick Settings.</string>
     <string name="tiles_filter_all">All tiles</string>
     <string name="tiles_filter_added">Added</string>
@@ -93,6 +113,11 @@
     <string name="tiles_filter_empty">No tiles match this filter yet.</string>
     <string name="tiles_how_to_add_title">How to add tiles</string>
     <string name="tiles_how_to_add_summary">Tap Add on Android 13 or newer, or open Quick Settings edit mode and drag App Toolkit tiles into your active panel.</string>
+    <string name="tile_preview_close">Close</string>
+    <string name="tile_preview_coin_result">Heads</string>
+    <string name="tile_preview_compass_result">NE 45°</string>
+    <string name="tile_preview_level_result">Level</string>
+    <string name="tile_preview_default_result">Preview coming soon</string>
     <string name="tiles_setup_required_message">This tile needs more setup before it can be added.</string>
     <string name="tiles_error_failed_to_load">Failed to load Toolkit Tiles</string>
     <string name="tiles_add_pre_android_13">Android 12 and older require adding tiles from Quick Settings edit mode.</string>

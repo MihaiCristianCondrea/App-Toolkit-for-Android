@@ -71,7 +71,9 @@ import androidx.compose.material.icons.outlined.Thermostat
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material.icons.outlined.WbSunny
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -187,6 +189,7 @@ fun ToolkitTilesScreen(
     paddingValues: PaddingValues,
     onEvent: (ToolkitTilesEvent) -> Unit,
 ) {
+    var previewTile by remember { mutableStateOf<ToolkitTile?>(null) }
     val filteredCategories = remember(state.categories, state.selectedFilter) {
         state.categories.filterFor(state.selectedFilter)
     }
@@ -223,6 +226,7 @@ fun ToolkitTilesScreen(
                     onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
                     onAddTile = { tile -> onEvent(ToolkitTilesEvent.AddTileClicked(tile.requestKey)) },
                     onSetupTile = { tile -> onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) },
+                    onPreviewTile = { tile -> previewTile = tile },
                 )
             }
         }
@@ -232,6 +236,13 @@ fun ToolkitTilesScreen(
         item {
             NavigationBarSpacer()
         }
+    }
+
+    previewTile?.let { tile ->
+        ToolkitTilePreviewDialog(
+            tile = tile,
+            onClose = { previewTile = null },
+        )
     }
 }
 
@@ -270,6 +281,7 @@ private fun TileCategorySection(
     onToggle: () -> Unit,
     onAddTile: (ToolkitTile) -> Unit,
     onSetupTile: (ToolkitTile) -> Unit,
+    onPreviewTile: (ToolkitTile) -> Unit,
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -311,6 +323,7 @@ private fun TileCategorySection(
                             position = groupedItemPosition(index, category.tiles.size),
                             onAddTile = { onAddTile(tile) },
                             onSetupTile = { onSetupTile(tile) },
+                            onPreviewTile = { onPreviewTile(tile) },
                         )
                     }
                 }
@@ -325,10 +338,12 @@ private fun ToolkitTileCard(
     position: GroupedItemPosition,
     onAddTile: () -> Unit,
     onSetupTile: () -> Unit,
+    onPreviewTile: () -> Unit,
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
     Card(
+        onClick = onPreviewTile,
         modifier = Modifier
             .fillMaxWidth()
             .groupedCorners(position),
@@ -417,6 +432,33 @@ private fun ToolkitTileCard(
             }
         }
     }
+}
+
+@Composable
+private fun ToolkitTilePreviewDialog(
+    tile: ToolkitTile,
+    onClose: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = {},
+        icon = { TileIconBadge(icon = tile.icon, large = true) },
+        title = { Text(text = stringResource(id = tile.titleResId)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
+                Text(text = stringResource(id = tile.summaryResId))
+                Text(
+                    text = stringResource(id = tile.previewTextResId()),
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
+        },
+        confirmButton = {
+            Button(onClick = onClose) {
+                Text(text = stringResource(id = R.string.tile_preview_close))
+            }
+        },
+    )
 }
 
 @Composable
@@ -545,6 +587,13 @@ private fun ImmutableList<ToolkitTileCategory>.filterByStatus(
 ): List<ToolkitTileCategory> = mapNotNull { category ->
     val tiles = category.tiles.filter { tile -> tile.status == status }
     if (tiles.isEmpty()) null else category.copy(tiles = tiles.toImmutableList())
+}
+
+private fun ToolkitTile.previewTextResId(): Int = when (id) {
+    "coin_flip" -> R.string.tile_preview_coin_result
+    "compass" -> R.string.tile_preview_compass_result
+    "level" -> R.string.tile_preview_level_result
+    else -> R.string.tile_preview_default_result
 }
 
 private fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
