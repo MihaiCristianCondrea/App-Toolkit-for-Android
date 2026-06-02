@@ -43,6 +43,7 @@ enum class ToolkitTileIcon {
     Music,
     Breathing,
     Sos,
+    Palette,
 }
 
 /** Installation/setup state shown by the toolkit tile catalog. */
@@ -51,6 +52,17 @@ enum class ToolkitTileStatus {
     Available,
     NeedsSetup,
     Unsupported,
+}
+
+/** Defines whether a catalog entry opens inline as a quick tool or as a fuller workflow. */
+enum class ToolkitToolKind {
+    Quick,
+    Expanded,
+}
+
+/** Identifies quick tools that render custom in-app dialogs. */
+enum class ToolkitQuickTool {
+    MaterialColors,
 }
 
 /** Groups related Quick Settings tile ideas in the Tiles screen. */
@@ -64,10 +76,11 @@ data class ToolkitTileCategory(
 )
 
 /**
- * Describes one Quick Settings tile shown in the catalog.
+ * Describes one tool shown in the Quick Tools catalog.
  *
- * Text is stored as resource IDs so UI can resolve localized copy at render time, and [requestKey]
- * keeps platform add-tile wiring outside of the domain layer.
+ * Text is stored as resource IDs so UI can resolve localized copy at render time, [kind]
+ * distinguishes dialog-first quick tools from expanded workflows, [quickTool] identifies custom
+ * dialog content, and [requestKey] keeps platform add-tile wiring outside of the domain layer.
  */
 @Immutable
 data class ToolkitTile(
@@ -76,5 +89,7 @@ data class ToolkitTile(
     @StringRes val summaryResId: Int,
     val icon: ToolkitTileIcon,
     val status: ToolkitTileStatus,
+    val kind: ToolkitToolKind = ToolkitToolKind.Expanded,
+    val quickTool: ToolkitQuickTool? = null,
     val requestKey: String? = null,
 )

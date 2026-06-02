@@ -22,6 +22,8 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileIcon
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitQuickTool
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitToolKind
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
@@ -110,6 +112,15 @@ class GetToolkitTilesUseCase {
                         icon = ToolkitTileIcon.Clipboard,
                         status = ToolkitTileStatus.Available,
                         requestKey = "clipboard",
+                    ),
+                    ToolkitTile(
+                        id = "material_colors",
+                        titleResId = R.string.tool_material_colors_title,
+                        summaryResId = R.string.tool_material_colors_summary,
+                        icon = ToolkitTileIcon.Palette,
+                        status = ToolkitTileStatus.Available,
+                        kind = ToolkitToolKind.Quick,
+                        quickTool = ToolkitQuickTool.MaterialColors,
                     ),
                     ToolkitTile(
                         id = "music_search",

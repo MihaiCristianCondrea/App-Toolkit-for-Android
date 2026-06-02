@@ -63,6 +63,7 @@ import androidx.compose.material.icons.outlined.Memory
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.MusicNote
+import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.PowerSettingsNew
 import androidx.compose.material.icons.outlined.Screenshot
 import androidx.compose.material.icons.outlined.Straighten
@@ -109,6 +110,8 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileIcon
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitQuickTool
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitToolKind
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.getTileServiceRequests
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesEvent
@@ -190,6 +193,7 @@ fun ToolkitTilesScreen(
     onEvent: (ToolkitTilesEvent) -> Unit,
 ) {
     var previewTile by remember { mutableStateOf<ToolkitTile?>(null) }
+    var quickToolDialog by remember { mutableStateOf<ToolkitQuickTool?>(null) }
     val filteredCategories = remember(state.categories, state.selectedFilter) {
         state.categories.filterFor(state.selectedFilter)
     }
@@ -226,7 +230,13 @@ fun ToolkitTilesScreen(
                     onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
                     onAddTile = { tile -> onEvent(ToolkitTilesEvent.AddTileClicked(tile.requestKey)) },
                     onSetupTile = { tile -> onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) },
-                    onPreviewTile = { tile -> previewTile = tile },
+                    onPreviewTile = { tile ->
+                        if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
+                            quickToolDialog = ToolkitQuickTool.MaterialColors
+                        } else {
+                            previewTile = tile
+                        }
+                    },
                 )
             }
         }
@@ -243,6 +253,10 @@ fun ToolkitTilesScreen(
             tile = tile,
             onClose = { previewTile = null },
         )
+    }
+
+    if (quickToolDialog == ToolkitQuickTool.MaterialColors) {
+        MaterialColorsToolDialog(onClose = { quickToolDialog = null })
     }
 }
 
@@ -341,6 +355,7 @@ private fun ToolkitTileCard(
     onPreviewTile: () -> Unit,
 ) {
     var showMenu by remember { mutableStateOf(false) }
+    val showActions = tile.requestKey != null || tile.status != ToolkitTileStatus.Available
 
     Card(
         onClick = onPreviewTile,
@@ -364,7 +379,10 @@ private fun ToolkitTileCard(
             ) {
                 TileIconBadge(icon = tile.icon, large = true)
                 Spacer(modifier = Modifier.width(SizeConstants.LargeSize))
-                Column(modifier = Modifier.weight(1f)) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+                ) {
                     Text(
                         text = stringResource(id = tile.titleResId),
                         style = MaterialTheme.typography.titleMedium,
@@ -375,46 +393,50 @@ private fun ToolkitTileCard(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
+                    ToolkitToolChips(tile = tile)
                 }
-                Box {
-                    IconButton(onClick = { showMenu = true }) {
-                        Icon(
-                            imageVector = Icons.Outlined.MoreVert,
-                            contentDescription = stringResource(id = R.string.tiles_more_options),
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = showMenu,
-                        onDismissRequest = { showMenu = false },
-                        shape = RoundedCornerShape(SizeConstants.LargeSize),
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text(text = stringResource(id = R.string.tiles_add)) },
-                            onClick = {
-                                showMenu = false
-                                onAddTile()
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Outlined.CheckCircle,
-                                    contentDescription = null,
-                                )
-                            },
-                            enabled = tile.status == ToolkitTileStatus.Available,
-                        )
-                        DropdownMenuItem(
-                            text = { Text(text = stringResource(id = R.string.tiles_setup)) },
-                            onClick = {
-                                showMenu = false
-                                onSetupTile()
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Outlined.WarningAmber,
-                                    contentDescription = null,
-                                )
-                            },
-                        )
+                if (showActions) {
+                    Box {
+                        IconButton(onClick = { showMenu = true }) {
+                            Icon(
+                                imageVector = Icons.Outlined.MoreVert,
+                                contentDescription = stringResource(id = R.string.tiles_more_options),
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false },
+                            shape = RoundedCornerShape(SizeConstants.LargeSize),
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(id = R.string.tiles_add)) },
+                                onClick = {
+                                    showMenu = false
+                                    onAddTile()
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.CheckCircle,
+                                        contentDescription = null,
+                                    )
+                                },
+                                enabled = tile.status == ToolkitTileStatus.Available && tile.requestKey != null,
+                            )
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(id = R.string.tiles_setup)) },
+                                onClick = {
+                                    showMenu = false
+                                    onSetupTile()
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.WarningAmber,
+                                        contentDescription = null,
+                                    )
+                                },
+                                enabled = tile.status != ToolkitTileStatus.Available,
+                            )
+                        }
                     }
                 }
             }
@@ -484,6 +506,57 @@ private fun TileIconBadge(
             tint = colors.content,
         )
     }
+}
+
+@Composable
+private fun ToolkitToolChips(tile: ToolkitTile) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        ToolTypeChip(kind = tile.kind)
+        if (tile.requestKey != null) {
+            TileAvailabilityChip()
+        }
+    }
+}
+
+@Composable
+private fun ToolTypeChip(kind: ToolkitToolKind) {
+    val labelResId = when (kind) {
+        ToolkitToolKind.Quick -> R.string.tiles_chip_quick_tool
+        ToolkitToolKind.Expanded -> R.string.tiles_chip_expanded_tool
+    }
+    AssistChip(
+        onClick = {},
+        label = { Text(text = stringResource(id = labelResId)) },
+        colors = androidx.compose.material3.AssistChipDefaults.assistChipColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            labelColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        ),
+        border = null,
+    )
+}
+
+@Composable
+private fun TileAvailabilityChip() {
+    AssistChip(
+        onClick = {},
+        label = { Text(text = stringResource(id = R.string.tiles_chip_tile)) },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Outlined.CheckCircle,
+                contentDescription = null,
+                modifier = Modifier.size(SizeConstants.ButtonIconSize),
+            )
+        },
+        colors = androidx.compose.material3.AssistChipDefaults.assistChipColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            labelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            leadingIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        ),
+        border = null,
+    )
 }
 
 @Composable
@@ -617,6 +690,7 @@ private fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Music -> Icons.Outlined.MusicNote
     ToolkitTileIcon.Breathing -> Icons.Outlined.FavoriteBorder
     ToolkitTileIcon.Sos -> Icons.Outlined.WarningAmber
+    ToolkitTileIcon.Palette -> Icons.Outlined.Palette
 }
 
 private fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
