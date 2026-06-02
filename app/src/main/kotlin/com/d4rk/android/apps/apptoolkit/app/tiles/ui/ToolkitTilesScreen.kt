@@ -70,7 +70,6 @@ import androidx.compose.material.icons.outlined.Thermostat
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material.icons.outlined.WbSunny
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -191,7 +190,7 @@ fun ToolkitTilesScreen(
     paddingValues: PaddingValues,
     onEvent: (ToolkitTilesEvent) -> Unit,
 ) {
-    var previewTile by remember { mutableStateOf<ToolkitTile?>(null) }
+    var selectedTile by remember { mutableStateOf<ToolkitTile?>(null) }
     var quickToolDialog by remember { mutableStateOf<ToolkitQuickTool?>(null) }
     val filteredCategories = remember(state.categories, state.selectedFilter) {
         state.categories.filterFor(state.selectedFilter)
@@ -233,7 +232,7 @@ fun ToolkitTilesScreen(
                         if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
                             quickToolDialog = ToolkitQuickTool.MaterialColors
                         } else {
-                            previewTile = tile
+                            selectedTile = tile
                         }
                     },
                 )
@@ -247,10 +246,12 @@ fun ToolkitTilesScreen(
         }
     }
 
-    previewTile?.let { tile ->
-        ToolkitTilePreviewDialog(
+    selectedTile?.let { tile ->
+        ToolkitToolBottomSheet(
             tile = tile,
-            onClose = { previewTile = null },
+            onClose = { selectedTile = null },
+            onAddTile = { onEvent(ToolkitTilesEvent.AddTileClicked(tile.requestKey)) },
+            onSetupTile = { onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) },
         )
     }
 
@@ -444,47 +445,7 @@ private fun ToolkitTileCard(
 }
 
 @Composable
-private fun ToolkitTilePreviewDialog(
-    tile: ToolkitTile,
-    onClose: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onClose,
-        icon = { TileIconBadge(icon = tile.icon, large = true) },
-        title = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = stringResource(id = tile.titleResId),
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.weight(1f),
-                )
-                IconButton(onClick = onClose) {
-                    Icon(
-                        imageVector = Icons.Outlined.Close,
-                        contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
-                    )
-                }
-            }
-        },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
-                Text(text = stringResource(id = tile.summaryResId))
-                Text(
-                    text = stringResource(id = tile.previewTextResId()),
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
-        },
-        confirmButton = {},
-    )
-}
-
-@Composable
-private fun TileIconBadge(
+internal fun TileIconBadge(
     icon: ToolkitTileIcon,
     large: Boolean = false,
 ) {
@@ -655,10 +616,10 @@ private fun ImmutableList<ToolkitTileCategory>.filterByStatus(
     if (tiles.isEmpty()) null else category.copy(tiles = tiles.toImmutableList())
 }
 
-private fun ToolkitTile.previewTextResId(): Int = when (id) {
+internal fun ToolkitTile.previewTextResId(): Int = when (id) {
     "coin_flip" -> R.string.tile_preview_coin_result
     "compass" -> R.string.tile_preview_compass_result
-    "level" -> R.string.tile_preview_level_result
+    "bubble_level" -> R.string.tile_preview_level_result
     else -> R.string.tile_preview_default_result
 }
 
