@@ -92,7 +92,7 @@ fun AppDetailsBottomSheet(
     appInfo: AppInfo,
     isFavorite: Boolean,
     isAppInstalled: Boolean?,
-    installedVersionInfo: InstalledAppVersionInfo?, // FIXME: Unstable parameter 'installedVersionInfo' prevents composable from being skippable && Parameter 'actionLauncher' has runtime-determined stability
+    installedVersionInfo: InstalledAppVersionInfo?,
     actionLauncher: AppActionLauncher,
     onFavoriteClick: () -> Unit,
     adsConfig: AdsConfig,
@@ -187,7 +187,7 @@ fun AppDetailsBottomSheet(
 private fun AppDetailsHeader(
     appInfo: AppInfo,
     isAppInstalled: Boolean?,
-    actionLauncher: AppActionLauncher, // FIXME: Parameter 'actionLauncher' has runtime-determined stability
+    actionLauncher: AppActionLauncher,
 ) {
     Row(
         modifier = Modifier
@@ -250,7 +250,7 @@ private fun AppDetailsHeader(
 private fun AppMetadataChips(
     appInfo: AppInfo,
     isAppInstalled: Boolean?,
-    installedVersionInfo: InstalledAppVersionInfo?, // FIXME: Unstable parameter 'installedVersionInfo' prevents composable from being skippable
+    installedVersionInfo: InstalledAppVersionInfo?,
 ) {
     val chipItems = listOfNotNull(
         AppInfoChipUi(
@@ -313,7 +313,7 @@ private fun QuickActionsPanel(
     appInfo: AppInfo,
     isFavorite: Boolean,
     isAppInstalled: Boolean?,
-    actionLauncher: AppActionLauncher, // FIXME: Parameter 'actionLauncher' has runtime-determined stability
+    actionLauncher: AppActionLauncher,
     onFavoriteClick: () -> Unit,
 ) {
     val quickActions =
@@ -447,7 +447,7 @@ private fun AppSection(
 @Composable
 private fun AppLinksSection(
     appInfo: AppInfo,
-    actionLauncher: AppActionLauncher, // FIXME: Parameter 'actionLauncher' has runtime-determined stability
+    actionLauncher: AppActionLauncher,
 ) {
     val links = listOfNotNull(
         appInfo.githubUrl?.let {

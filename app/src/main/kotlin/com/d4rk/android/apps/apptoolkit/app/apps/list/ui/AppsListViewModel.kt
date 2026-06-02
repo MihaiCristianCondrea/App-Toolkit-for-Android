@@ -20,6 +20,8 @@ package com.d4rk.android.apps.apptoolkit.app.apps.list.ui
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.GetAppInstallInfoUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.GetInstalledPackagesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
@@ -41,6 +43,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.setNoData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -63,6 +66,8 @@ import kotlinx.coroutines.withContext
  * It observes changes in favorite apps and updates the UI state accordingly.
  *
  * @param fetchDeveloperAppsUseCase Use case to fetch the list of applications.
+ * @param getInstalledPackagesUseCase Use case to resolve installed catalog packages.
+ * @param getAppInstallInfoUseCase Use case to resolve selected-app install metadata.
  * @param observeFavoritesUseCase Use case to observe the set of favorite app package names.
  * @param toggleFavoriteUseCase Use case to add or remove an app from favorites.
  * @param dispatchers Provides coroutine dispatchers for different contexts (IO, Main, etc.).
@@ -71,6 +76,8 @@ import kotlinx.coroutines.withContext
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppsListViewModel(
     private val fetchDeveloperAppsUseCase: FetchDeveloperAppsUseCase,
+    private val getInstalledPackagesUseCase: GetInstalledPackagesUseCase,
+    private val getAppInstallInfoUseCase: GetAppInstallInfoUseCase,
     observeFavoritesUseCase: ObserveFavoritesUseCase,
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
     private val dispatchers: DispatcherProvider,
@@ -110,6 +117,8 @@ class AppsListViewModel(
             HomeEvent.FetchApps -> fetchAppsTrigger.tryEmit(Unit)
 
             is HomeEvent.FilterSelected -> selectFilter(event.filter)
+            is HomeEvent.AppSelected -> loadSelectedAppInstallInfo(event.packageName)
+            HomeEvent.AppDetailsDismissed -> clearSelectedAppInstallInfo()
 
             HomeEvent.OpenRandomApp -> {
                 val randomApp = screenData?.apps?.randomOrNull() ?: return
@@ -148,10 +157,18 @@ class AppsListViewModel(
                 .onEach { result ->
                     result
                         .onSuccess { apps ->
+                            val list = apps.toImmutableList()
+                            val installedPackages = withContext(dispatchers.io) {
+                                getInstalledPackagesUseCase(
+                                    packageNames = list.map { app -> app.packageName },
+                                ).toImmutableSet()
+                            }
                             updateStateThreadSafe {
-                                val list = apps.toImmutableList()
                                 val base = screenData ?: AppListUiState()
-                                val updated = base.copy(apps = list)
+                                val updated = base.copy(
+                                    apps = list,
+                                    installedPackages = installedPackages,
+                                )
 
                                 if (list.isEmpty()) {
                                     screenState.setNoData(data = updated)
@@ -173,6 +190,45 @@ class AppsListViewModel(
     private fun selectFilter(filter: AppsListFilter) {
         screenState.update { current ->
             current.copy(data = (current.data ?: AppListUiState()).copy(selectedFilter = filter))
+        }
+    }
+
+    private fun loadSelectedAppInstallInfo(packageName: String) {
+        screenState.update { current ->
+            current.copy(data = current.data?.copy(selectedAppInstallInfo = null))
+        }
+        if (packageName.isBlank()) {
+            screenState.update { current ->
+                current.copy(
+                    data = current.data?.copy(
+                        selectedAppInstallInfo = getAppInstallInfoUseCase(packageName),
+                    ),
+                )
+            }
+            return
+        }
+        launchReport(
+            action = Actions.LOAD_APP_INSTALL_INFO,
+            extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
+            block = {
+                val installInfo = withContext(dispatchers.io) {
+                    getAppInstallInfoUseCase(packageName)
+                }
+                screenState.update { current ->
+                    current.copy(data = current.data?.copy(selectedAppInstallInfo = installInfo))
+                }
+            },
+            onError = {
+                screenState.update { current ->
+                    current.copy(data = current.data?.copy(selectedAppInstallInfo = null))
+                }
+            },
+        )
+    }
+
+    private fun clearSelectedAppInstallInfo() {
+        screenState.update { current ->
+            current.copy(data = current.data?.copy(selectedAppInstallInfo = null))
         }
     }
 
@@ -206,6 +262,7 @@ class AppsListViewModel(
         const val OBSERVE_FETCH: String = "observeFetch"
         const val TOGGLE_FAVORITE: String = "toggleFavorite"
         const val OPEN_RANDOM_APP: String = "openRandomApp"
+        const val LOAD_APP_INSTALL_INFO: String = "loadAppInstallInfo"
     }
 
     private object ExtraKeys {

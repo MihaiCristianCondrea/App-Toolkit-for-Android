@@ -138,9 +138,11 @@ class ToolkitTilesViewModel(
         }
     }
 
-    private fun handleTileSetup(tileId: String) { // FIXME: Parameter "tileId" is never used
-        // Here we could navigate to a specific setup screen based on tileId
-        // For now, we still show the message, but it's handled as a deliberate action
+    private fun handleTileSetup(tileId: String) {
+        startOperation(
+            action = Actions.OPEN_TILE_SETUP,
+            extra = mapOf(ExtraKeys.TILE_ID to tileId),
+        )
         showSetupMessage()
     }
 
@@ -151,5 +153,10 @@ class ToolkitTilesViewModel(
     private object Actions {
         const val LOAD_TILES: String = "loadTiles"
         const val ADD_TILE: String = "addTile"
+        const val OPEN_TILE_SETUP: String = "openTileSetup"
+    }
+
+    private object ExtraKeys {
+        const val TILE_ID: String = "tileId"
     }
 }

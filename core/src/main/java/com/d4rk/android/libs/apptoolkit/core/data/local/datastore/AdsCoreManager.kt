@@ -93,7 +93,7 @@ open class AdsCoreManager(
         private var loadTime: Long = 0
 
         /** Loads a new ad if none is available. */
-        fun loadAd(context: Context) { // FIXME: Parameter "context" is never used
+        fun loadAd() {
             if (isLoadingAd || isAdAvailable()) {
                 return
             }
@@ -146,7 +146,7 @@ open class AdsCoreManager(
             }
             if (!isAdAvailable()) {
                 onShowAdCompleteListener.onShowAdComplete()
-                loadAd(context = this@AdsCoreManager.context)
+                loadAd()
                 return
             }
 
@@ -155,14 +155,14 @@ open class AdsCoreManager(
                     appOpenAd = null
                     isShowingAd = false
                     onShowAdCompleteListener.onShowAdComplete()
-                    loadAd(context = this@AdsCoreManager.context)
+                    loadAd()
                 }
 
                 override fun onAdFailedToShowFullScreenContent(fullScreenContentError: FullScreenContentError) {
                     appOpenAd = null
                     isShowingAd = false
                     onShowAdCompleteListener.onShowAdComplete()
-                    loadAd(context = this@AdsCoreManager.context)
+                    loadAd()
                 }
 
                 override fun onAdShowedFullScreenContent() {

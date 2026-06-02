@@ -15,15 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract
+package com.d4rk.android.libs.apptoolkit.core.utils.constants.ads
 
-import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
-import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
+/** Selects a banner ad unit ID while keeping debug IDs centralized in the toolkit library. */
+fun bannerAdUnitId(isDebug: Boolean, releaseId: String): String =
+    if (isDebug) DebugAdsConstants.BANNER_AD_UNIT_ID else releaseId
 
-sealed class HomeEvent : UiEvent {
-    data object FetchApps : HomeEvent()
-    data object OpenRandomApp : HomeEvent()
-    data class FilterSelected(val filter: AppsListFilter) : HomeEvent()
-    data class AppSelected(val packageName: String) : HomeEvent()
-    data object AppDetailsDismissed : HomeEvent()
-}
+/** Selects a native ad unit ID while keeping debug IDs centralized in the toolkit library. */
+fun nativeAdUnitId(isDebug: Boolean, releaseId: String): String =
+    if (isDebug) DebugAdsConstants.NATIVE_AD_UNIT_ID else releaseId

@@ -27,6 +27,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
+import androidx.compose.runtime.Stable
 import androidx.core.net.toUri
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
@@ -40,6 +41,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
  * skins while still giving users fast access to notifications, permissions, storage, battery,
  * sharing, and store pages.
  */
+@Stable
 interface AppActionLauncher {
     fun openApp(packageName: String): Boolean
     fun openAppInfo(packageName: String): Boolean

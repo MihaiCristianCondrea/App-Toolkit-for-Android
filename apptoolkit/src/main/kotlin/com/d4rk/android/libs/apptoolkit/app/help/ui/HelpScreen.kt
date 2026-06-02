@@ -108,7 +108,7 @@ private object HelpActionNames {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HelpScreen(
-    config: AppVersionInfo, // FIXME: Unstable parameter 'config' prevents composable from being skippable
+    config: AppVersionInfo,
     isEmbedded: Boolean = false,
 ) {
     val viewModel: HelpViewModel = koinViewModel()

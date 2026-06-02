@@ -19,7 +19,6 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation
 
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.LandingRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
@@ -37,7 +36,6 @@ fun isDrawerItemSelected(
     currentRoute: StableNavKey,
 ): Boolean =
     when (itemRoute) {
-        NavigationRoutes.ROUTE_LANDING -> currentRoute == LandingRoute
         NavigationRoutes.ROUTE_APPS_LIST -> currentRoute == AppsListRoute
         NavigationRoutes.ROUTE_TOOLKIT_TILES -> currentRoute == ToolkitTilesRoute
         NavigationRoutes.ROUTE_COMPONENTS -> currentRoute == ComponentsRoute

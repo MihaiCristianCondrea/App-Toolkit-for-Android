@@ -62,7 +62,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.AppsListNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
+import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
@@ -135,7 +135,7 @@ fun AppsList(
         buildAppListItems(apps, adsEnabled, adFrequency)
     }
 
-    val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.APPS_LIST_NATIVE_AD))
+    val adsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APPS_LIST_NATIVE_AD))
 
     AppsGrid(
         items = items,

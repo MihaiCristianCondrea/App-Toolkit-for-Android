@@ -175,7 +175,7 @@ fun SettingsScreen(
 fun SettingsScreenContent(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
-    contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
+    contentProvider: GeneralSettingsContentProvider,
     firebaseController: FirebaseController,
 ) {
     val windowWidthSizeClass: AppWindowWidthSizeClass = rememberWindowWidthSizeClass()
@@ -213,7 +213,7 @@ fun PhoneSettingsScreen(
 fun TabletSettingsScreen(
     paddingValues: PaddingValues,
     settingsConfig: SettingsConfig,
-    contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
+    contentProvider: GeneralSettingsContentProvider,
     firebaseController: FirebaseController,
 ) {
     var selected: SettingsPreference? by remember { mutableStateOf(null) }
@@ -306,7 +306,7 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
 fun SettingsDetail(
     preference: SettingsPreference,
     paddingValues: PaddingValues,
-    contentProvider: GeneralSettingsContentProvider, // FIXME: Parameter 'contentProvider' has runtime-determined stability
+    contentProvider: GeneralSettingsContentProvider,
 ) {
     val viewModel: GeneralSettingsViewModel = koinViewModel()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }

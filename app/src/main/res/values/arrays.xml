@@ -17,13 +17,11 @@
 
 <resources>
     <string-array name="preference_startup_entries">
-        <item>@string/landing_title</item>
         <item>@string/apps_tools_title</item>
         <item>@string/tiles_title</item>
     </string-array>
 
     <string-array name="preference_startup_values">
-        <item>landing</item>
         <item>apps_list</item>
         <item>toolkit_tiles</item>
     </string-array>

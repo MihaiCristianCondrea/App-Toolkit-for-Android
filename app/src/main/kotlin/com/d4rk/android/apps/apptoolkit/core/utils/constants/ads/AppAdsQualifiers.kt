@@ -15,15 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract
+package com.d4rk.android.apps.apptoolkit.core.utils.constants.ads
 
-import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
-import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-
-sealed class HomeEvent : UiEvent {
-    data object FetchApps : HomeEvent()
-    data object OpenRandomApp : HomeEvent()
-    data class FilterSelected(val filter: AppsListFilter) : HomeEvent()
-    data class AppSelected(val packageName: String) : HomeEvent()
-    data object AppDetailsDismissed : HomeEvent()
+/** App-module Koin qualifier names for app-specific native ad placements. */
+object AppAdsQualifiers {
+    const val APPS_LIST_NATIVE_AD: String = "apps_list_native_ad"
+    const val APP_DETAILS_NATIVE_AD: String = "app_details_native_ad"
 }

@@ -74,7 +74,6 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.AppNavigati
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.appNavigationEntryBuilders
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.isDrawerItemSelected
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.LandingRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
@@ -139,7 +138,7 @@ private fun MainScreenContent(uiState: MainUiState) {
     val activity = LocalActivity.current
 
     val navigationState = rememberNavigationState(
-        startRoute = LandingRoute,
+        startRoute = AppsListRoute,
         topLevelRoutes = NavigationRoutes.topLevelRoutes
     )
     val navigator = remember(navigationState) { Navigator(state = navigationState) }
@@ -332,7 +331,6 @@ private fun MainShell(
     val bottomNavTransitions = rememberBottomNavTransitions()
     val appRouteHandlers: Map<String, (NavigationDrawerItem) -> Unit> = remember(navigator) {
         mapOf(
-            NavigationRoutes.ROUTE_LANDING to { navigator.navigate(LandingRoute) },
             NavigationRoutes.ROUTE_APPS_LIST to { navigator.navigate(AppsListRoute) },
             NavigationRoutes.ROUTE_TOOLKIT_TILES to { navigator.navigate(ToolkitTilesRoute) },
             NavigationRoutes.ROUTE_COMPONENTS to { navigator.navigate(ComponentsRoute) },
@@ -558,7 +556,7 @@ private fun TopLevelContentNavDisplay(
     navigator: Navigator<StableNavKey>,
     entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
     onBack: () -> Unit,
-    bottomNavTransitions: BottomNavTransitions, // FIXME: Unstable parameter 'bottomNavTransitions' prevents composable from being skippable
+    bottomNavTransitions: BottomNavTransitions,
 ) {
     NavDisplay(
         entries = navigator.state.toDecoratedTopLevelEntries(entryProvider),

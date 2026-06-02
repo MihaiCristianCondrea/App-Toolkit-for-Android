@@ -31,12 +31,6 @@ sealed interface AppNavKey : StableNavKey {
 }
 
 @Parcelize
-data object LandingRoute : AppNavKey {
-    override val destinationType: NavigationDestinationType
-        get() = NavigationDestinationType.TopLevel
-}
-
-@Parcelize
 data object AppsListRoute : AppNavKey {
     override val destinationType: NavigationDestinationType
         get() = NavigationDestinationType.TopLevel
@@ -52,14 +46,12 @@ data object ToolkitTilesRoute : AppNavKey {
 data object ComponentsRoute : AppNavKey
 
 object NavigationRoutes {
-    const val ROUTE_LANDING: String = "landing"
     const val ROUTE_APPS_LIST: String = "apps_list"
     const val ROUTE_TOOLKIT_TILES: String = "toolkit_tiles"
     const val ROUTE_COMPONENTS: String = "components"
 
     val topLevelRoutes: ImmutableSet<StableNavKey> =
         persistentSetOf<StableNavKey>(
-            LandingRoute,
             AppsListRoute,
             ToolkitTilesRoute,
         )
@@ -67,9 +59,8 @@ object NavigationRoutes {
 
 fun String.toNavKeyOrDefault(): StableNavKey =
     when (this) {
-        NavigationRoutes.ROUTE_LANDING -> LandingRoute
         NavigationRoutes.ROUTE_APPS_LIST -> AppsListRoute
         NavigationRoutes.ROUTE_TOOLKIT_TILES -> ToolkitTilesRoute
         NavigationRoutes.ROUTE_COMPONENTS -> ComponentsRoute
-        else -> LandingRoute
+        else -> AppsListRoute
     }

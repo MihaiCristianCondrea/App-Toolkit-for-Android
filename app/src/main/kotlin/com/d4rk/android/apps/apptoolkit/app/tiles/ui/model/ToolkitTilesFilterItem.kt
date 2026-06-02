@@ -15,15 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract
+package com.d4rk.android.apps.apptoolkit.app.tiles.ui.model
 
-import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
-import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
+import androidx.annotation.StringRes
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
 
-sealed class HomeEvent : UiEvent {
-    data object FetchApps : HomeEvent()
-    data object OpenRandomApp : HomeEvent()
-    data class FilterSelected(val filter: AppsListFilter) : HomeEvent()
-    data class AppSelected(val packageName: String) : HomeEvent()
-    data object AppDetailsDismissed : HomeEvent()
-}
+/** UI metadata for a Toolkit Tiles filter chip. */
+@Immutable
+data class ToolkitTilesFilterItem(
+    val filter: ToolkitTilesFilter,
+    @StringRes val labelResId: Int,
+    val icon: ImageVector,
+)

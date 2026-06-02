@@ -6,9 +6,9 @@ This project follows modern Android design practices to create consistent and ac
 - Implement layouts and components using Material Design 3.
 - Leverage dynamic color, expressive shapes, and typography to convey hierarchy and personality.
 
-## Provide a meaningful landing screen
-- Present the app name and primary actions immediately.
-- Give users a clear starting point to explore functionality.
+## Provide a meaningful first screen
+- Open directly on the primary user task instead of adding an extra landing page.
+- Present primary actions immediately and give users a clear starting point to explore functionality.
 
 ## Delay sign-in prompts
 - Offer as much functionality as possible before requiring authentication.

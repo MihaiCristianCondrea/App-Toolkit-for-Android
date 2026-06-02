@@ -21,6 +21,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import kotlinx.collections.immutable.ImmutableList
 
 /**
  * A horizontal pager used for theme palette selection.
@@ -31,7 +32,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ThemePalettePager(
     pagerState: PagerState,
-    pages: List<@Composable () -> Unit>, // FIXME: Parameter 'pages' has runtime-determined stability
+    pages: ImmutableList<@Composable () -> Unit>,
     modifier: Modifier = Modifier,
 ) {
     HorizontalPager(
