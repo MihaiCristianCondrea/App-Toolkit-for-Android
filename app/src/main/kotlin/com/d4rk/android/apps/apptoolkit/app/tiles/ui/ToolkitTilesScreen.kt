@@ -72,8 +72,8 @@ import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
@@ -362,8 +362,8 @@ private fun ToolkitTileCard(
             .fillMaxWidth()
             .groupedCorners(position),
         shape = RectangleShape,
-        colors = androidx.compose.material3.CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
         ),
     ) {
         Column(
@@ -439,18 +439,6 @@ private fun ToolkitTileCard(
                     }
                 }
             }
-            if (tile.status != ToolkitTileStatus.Available && tile.status != ToolkitTileStatus.NeedsSetup) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(
-                        SizeConstants.SmallSize,
-                        Alignment.End
-                    ),
-                ) {
-                    TileStatusChip(status = tile.status)
-                }
-            }
         }
     }
 }
@@ -461,9 +449,26 @@ private fun ToolkitTilePreviewDialog(
     onClose: () -> Unit,
 ) {
     AlertDialog(
-        onDismissRequest = {},
+        onDismissRequest = onClose,
         icon = { TileIconBadge(icon = tile.icon, large = true) },
-        title = { Text(text = stringResource(id = tile.titleResId)) },
+        title = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(id = tile.titleResId),
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.weight(1f),
+                )
+                IconButton(onClick = onClose) {
+                    Icon(
+                        imageVector = Icons.Outlined.Close,
+                        contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
+                    )
+                }
+            }
+        },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
                 Text(text = stringResource(id = tile.summaryResId))
@@ -474,11 +479,7 @@ private fun ToolkitTilePreviewDialog(
                 )
             }
         },
-        confirmButton = {
-            Button(onClick = onClose) {
-                Text(text = stringResource(id = R.string.tile_preview_close))
-            }
-        },
+        confirmButton = {},
     )
 }
 
@@ -510,12 +511,18 @@ private fun TileIconBadge(
 @Composable
 private fun ToolkitToolChips(tile: ToolkitTile) {
     Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         ToolTypeChip(kind = tile.kind)
         if (tile.requestKey != null) {
             TileAvailabilityChip()
+        }
+        if (tile.status != ToolkitTileStatus.Available) {
+            TileStatusChip(status = tile.status)
         }
     }
 }

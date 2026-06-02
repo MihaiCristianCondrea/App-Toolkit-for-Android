@@ -28,7 +28,7 @@
     <!-- Landing screen -->
 
     <!-- Home screen -->
-    <string name="apps_tools_title">Apps &amp; Tools</string>
+    <string name="apps_tools_title">Apps</string>
     <string name="all_apps">All apps</string>
     <string name="apps_filter_all">All</string>
     <string name="favorite_apps">Favorites</string>

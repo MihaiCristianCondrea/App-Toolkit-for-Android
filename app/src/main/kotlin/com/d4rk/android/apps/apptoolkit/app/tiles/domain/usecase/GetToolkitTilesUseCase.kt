@@ -119,7 +119,7 @@ class GetToolkitTilesUseCase {
                         summaryResId = R.string.tool_material_colors_summary,
                         icon = ToolkitTileIcon.Palette,
                         status = ToolkitTileStatus.Available,
-                        kind = ToolkitToolKind.Quick,
+                        kind = ToolkitToolKind.Expanded,
                         quickTool = ToolkitQuickTool.MaterialColors,
                     ),
                     ToolkitTile(
