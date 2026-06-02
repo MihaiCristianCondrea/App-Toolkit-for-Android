@@ -38,12 +38,14 @@ import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
@@ -60,6 +62,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import java.util.Locale
 
 /** Full-height expanded tool that previews the current app and Android Material You palettes. */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MaterialColorsToolDialog(
     onClose: () -> Unit,
@@ -75,7 +78,7 @@ fun MaterialColorsToolDialog(
         emptyList()
     }
 
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden, enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded))
 
     ModalBottomSheet(
         modifier = Modifier.fillMaxHeight(),
@@ -233,6 +236,12 @@ private fun androidx.compose.material3.ColorScheme.toAppColorTable(title: String
         ColorSwatchData("scrim", scrim),
     ),
 )
+
+
+//TODO: move all these from below to ui.mappers or ui.model etc, where is relevant
+
+
+
 
 private fun Color.toHexString(): String = String.format(Locale.US, "#%08X", toArgb())
 
