@@ -58,6 +58,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.getVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.packagemanager.isAppInstalled
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -102,6 +103,7 @@ fun AppsListRoute(
     val canOpenRandomApp by viewModel.canOpenRandomApp.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
+    var installedPackages by remember { mutableStateOf(persistentSetOf<String>()) }
     val adsEnabled = rememberAdsEnabled()
 
     val appDetailsAdsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.APP_DETAILS_NATIVE_AD))
@@ -144,6 +146,18 @@ fun AppsListRoute(
     var isSelectedAppInstalled: Boolean? by remember { mutableStateOf(null) }
     var selectedAppVersionInfo: InstalledAppVersionInfo? by remember { mutableStateOf(null) }
     val appActionLauncher = remember(context) { AndroidAppActionLauncher(context) }
+
+    LaunchedEffect(screenState.data?.apps) {
+        val apps = screenState.data?.apps.orEmpty()
+        installedPackages = withContext(dispatchers.io) {
+            apps
+                .asSequence()
+                .filter { app -> context.isAppInstalled(app.packageName) }
+                .map(AppInfo::packageName)
+                .toSet()
+                .toImmutableSet()
+        }
+    }
 
     val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -237,8 +251,10 @@ fun AppsListRoute(
             AppsList(
                 uiHomeScreen = uiHomeScreen,
                 favorites = favorites,
+                installedPackages = installedPackages,
                 paddingValues = paddingValues,
                 adsEnabled = adsEnabled,
+                onFilterSelected = { filter -> viewModel.onEvent(HomeEvent.FilterSelected(filter)) },
                 onFavoriteToggle = onFavoriteToggle,
                 onAppClick = { app ->
                     firebaseController.logAppInteraction(source = "apps_list", appInfo = app, interaction = AppInteractionType.OpenDetailsBottomSheet)

@@ -15,22 +15,28 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.navigation
+package com.d4rk.android.apps.apptoolkit.app.landing.ui.navigation
 
-import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.FavoriteAppsRoute
+import com.d4rk.android.apps.apptoolkit.app.landing.ui.LandingRoute as LandingScreenRoute
+import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.AppNavigationEntryContext
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.LandingRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
+import org.koin.compose.koinInject
 
-fun favoriteAppsEntryBuilder(
+/** Builds the top-level landing entry and wires its cards to existing top-level destinations. */
+fun landingEntryBuilder(
     context: AppNavigationEntryContext,
 ): NavigationEntryBuilder<StableNavKey> = {
-    entry<FavoriteAppsRoute>(clazzContentKey = { route -> route }) {
-        FavoriteAppsRoute(
+    entry<LandingRoute>(clazzContentKey = { route -> route }) {
+        val navigationManager: NavigationManager = koinInject()
+        LandingScreenRoute(
             paddingValues = context.paddingValues,
-            windowWidthSizeClass = context.windowWidthSizeClass,
-            onRegisterRandomAppHandler = context.registerRandomAppHandlerFor(FavoriteAppsRoute),
+            onAppsClick = { navigationManager.navigateTo(AppsListRoute) },
+            onQuickToolsClick = { navigationManager.navigateTo(ToolkitTilesRoute) },
         )
     }
 }

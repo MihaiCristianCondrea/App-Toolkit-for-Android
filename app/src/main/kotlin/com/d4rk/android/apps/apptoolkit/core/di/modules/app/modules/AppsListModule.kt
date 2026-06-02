@@ -24,10 +24,8 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.data.repository.Favorite
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.DeveloperAppsRepository
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.FavoritesRepository
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
-import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoriteAppsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
-import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.FavoriteAppsViewModel
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
 import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import org.koin.core.module.Module
@@ -60,20 +58,4 @@ val appsListModule: Module = module {
 
     single { ObserveFavoritesUseCase(repository = get(), firebaseController = get()) }
     single { ToggleFavoriteUseCase(repository = get(), firebaseController = get()) }
-    single {
-        ObserveFavoriteAppsUseCase(
-            fetchDeveloperAppsUseCase = get(),
-            observeFavoritesUseCase = get(),
-        )
-    }
-
-    viewModel {
-        FavoriteAppsViewModel(
-            observeFavoriteAppsUseCase = get(),
-            observeFavoritesUseCase = get(),
-            toggleFavoriteUseCase = get(),
-            dispatchers = get(),
-            firebaseController = get(),
-        )
-    }
 }

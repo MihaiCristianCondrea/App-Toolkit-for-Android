@@ -22,7 +22,17 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+/** State rendered by the Apps List screen. */
 @Immutable
 data class AppListUiState(
-    val apps: ImmutableList<AppInfo> = persistentListOf()
+    val apps: ImmutableList<AppInfo> = persistentListOf(),
+    val selectedFilter: AppsListFilter = AppsListFilter.All,
 )
+
+/** Filters available in the Apps List chip row. */
+enum class AppsListFilter {
+    All,
+    Installed,
+    NotInstalled,
+    Favorites,
+}

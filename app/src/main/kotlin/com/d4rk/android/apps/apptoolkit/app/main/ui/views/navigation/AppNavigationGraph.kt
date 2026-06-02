@@ -19,8 +19,8 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Stable
-import com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui.navigation.favoriteAppsEntryBuilder
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.navigation.appsListEntryBuilder
+import com.d4rk.android.apps.apptoolkit.app.landing.ui.navigation.landingEntryBuilder
 import com.d4rk.android.apps.apptoolkit.app.components.ui.navigation.componentsEntryBuilder
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.navigation.toolkitTilesEntryBuilder
 import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.appToolkitNavigationEntryBuilders
@@ -58,8 +58,8 @@ private fun defaultAppNavigationEntryBuilders(
 ): List<NavigationEntryBuilder<StableNavKey>> = buildList {
     addAll(
         listOf(
+            landingEntryBuilder(context),
             appsListEntryBuilder(context),
-            favoriteAppsEntryBuilder(context),
             toolkitTilesEntryBuilder(context),
             componentsEntryBuilder(context),
         )

@@ -219,7 +219,7 @@ handled in one place.
 ### Example
 
 ```kotlin
-package com.d4rk.android.apps.apptoolkit.app.apps.favorites.ui
+package com.d4rk.android.apps.apptoolkit.app.apps.list.ui
 
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors

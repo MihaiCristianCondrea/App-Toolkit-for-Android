@@ -15,19 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.apps.favorites
+package com.d4rk.android.apps.apptoolkit.app.apps.list
 
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.FavoritesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-/**
- * Simple in-memory implementation of [FavoritesRepository] for tests.
- *
- * The repository holds favorites in a mutable flow so that tests can observe
- * changes and toggle values without relying on mocking frameworks.
- */
+/** In-memory [FavoritesRepository] used by apps-list ViewModel tests. */
 class FakeFavoritesRepository(
     initialFavorites: Set<String> = emptySet(),
     favoritesFlow: Flow<Set<String>>? = null,
@@ -66,7 +61,6 @@ class FakeFavoritesRepository(
             }
 
             else -> {
-                // Non-mutable flow provided; toggling will be no-op
                 stateFlow = null
                 sharedFlow = null
                 flow = favoritesFlow
@@ -80,9 +74,7 @@ class FakeFavoritesRepository(
         toggleError?.let { throw it }
         val current = when {
             stateFlow != null -> stateFlow.value.toMutableSet()
-            sharedFlow != null -> sharedFlow.replayCache.lastOrNull()?.toMutableSet()
-                ?: mutableSetOf()
-
+            sharedFlow != null -> sharedFlow.replayCache.lastOrNull()?.toMutableSet() ?: mutableSetOf()
             else -> return
         }
         if (!current.add(packageName)) {
@@ -94,4 +86,3 @@ class FakeFavoritesRepository(
         }
     }
 }
-

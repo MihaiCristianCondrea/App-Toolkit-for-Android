@@ -20,8 +20,9 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.LandingRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.AdsSettingsRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
@@ -58,31 +59,31 @@ class AppNavigationHostTest {
     }
 
     @Test
-    fun `blank startup page defaults to apps list`() = runTest {
-        every { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) } returns flowOf(
+    fun `blank startup page defaults to landing`() = runTest {
+        every { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_LANDING) } returns flowOf(
             ""
         )
 
         val startDestination = dataStore.startupDestinationFlow(
-            defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
+            defaultRoute = NavigationRoutes.ROUTE_LANDING,
             mapToKey = { route -> route.toNavKeyOrDefault() }
         ).first()
 
-        assertEquals(AppsListRoute, startDestination)
+        assertEquals(LandingRoute, startDestination)
     }
 
     @Test
-    fun `favorite startup page starts with favorites`() = runTest {
+    fun `legacy favorite startup page falls back to landing`() = runTest {
         every {
-            dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST)
-        } returns flowOf(NavigationRoutes.ROUTE_FAVORITE_APPS)
+            dataStore.getStartupPage(default = NavigationRoutes.ROUTE_LANDING)
+        } returns flowOf("favorite_apps")
 
         val startDestination = dataStore.startupDestinationFlow(
-            defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
+            defaultRoute = NavigationRoutes.ROUTE_LANDING,
             mapToKey = { route -> route.toNavKeyOrDefault() }
         ).first()
 
-        assertEquals(FavoriteAppsRoute, startDestination)
+        assertEquals(LandingRoute, startDestination)
     }
 
     @Test
@@ -97,8 +98,9 @@ class AppNavigationHostTest {
             )
         )
         val routes: List<StableNavKey> = listOf(
+            LandingRoute,
             AppsListRoute,
-            FavoriteAppsRoute,
+            ToolkitTilesRoute,
             ComponentsRoute,
             LibraryExtrasRoute,
             SettingsRoute,

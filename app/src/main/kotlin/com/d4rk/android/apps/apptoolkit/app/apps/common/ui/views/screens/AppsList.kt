@@ -18,29 +18,45 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Apps
+import androidx.compose.material.icons.outlined.Block
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.LocalLayoutDirection
 import com.d4rk.android.apps.apptoolkit.BuildConfig
+import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppListItem
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.AppCard
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.utils.buildAppListItems
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
+import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.AppsListNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
@@ -50,6 +66,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filterNotNull
 import org.koin.compose.koinInject
@@ -63,8 +81,10 @@ import org.koin.core.qualifier.named
  *
  * @param uiHomeScreen The state object containing the list of apps to display.
  * @param favorites A set of package names for the apps marked as favorite.
+ * @param installedPackages A set of package names detected as installed on the current device.
  * @param paddingValues Padding to be applied from the outside, typically from a Scaffold.
  * @param adsEnabled A boolean flag to determine if ads should be displayed in the list.
+ * @param onFilterSelected A callback invoked when the user chooses an app filter chip.
  * @param onFavoriteToggle A lambda function to be invoked when the favorite icon on an app card is toggled. It receives the package name.
  * @param onAppClick A lambda function to be invoked when an app card is clicked. It receives the [AppInfo] of the clicked app.
  * @param onShareClick A lambda function to be invoked when the share icon on an app card is clicked. It receives the [AppInfo] of the app to be shared.
@@ -75,8 +95,10 @@ import org.koin.core.qualifier.named
 fun AppsList(
     uiHomeScreen: AppListUiState,
     favorites: ImmutableSet<String>,
+    installedPackages: ImmutableSet<String>,
     paddingValues: PaddingValues,
     adsEnabled: Boolean,
+    onFilterSelected: (AppsListFilter) -> Unit,
     onFavoriteToggle: (String) -> Unit,
     onAppClick: (AppInfo) -> Unit,
     onShareClick: (AppInfo) -> Unit,
@@ -84,7 +106,18 @@ fun AppsList(
     adFrequency: Int = BuildConfig.APPS_LIST_AD_FREQUENCY,
     windowWidthSizeClass: AppWindowWidthSizeClass,
 ) {
-    val apps: ImmutableList<AppInfo> = uiHomeScreen.apps
+    val apps: ImmutableList<AppInfo> = remember(
+        uiHomeScreen.apps,
+        uiHomeScreen.selectedFilter,
+        installedPackages,
+        favorites,
+    ) {
+        uiHomeScreen.apps.filterFor(
+            filter = uiHomeScreen.selectedFilter,
+            installedPackages = installedPackages,
+            favorites = favorites,
+        ).toImmutableList()
+    }
 
     val columnCount = remember(windowWidthSizeClass) {
         when (windowWidthSizeClass) {
@@ -107,6 +140,8 @@ fun AppsList(
     AppsGrid(
         items = items,
         favorites = favorites,
+        selectedFilter = uiHomeScreen.selectedFilter,
+        onFilterSelected = onFilterSelected,
         paddingValues = paddingValues,
         columnCount = columnCount,
         listState = listState,
@@ -126,6 +161,8 @@ fun AppsList(
  *
  * @param items The list of [AppListItem]s to display, which can be either an app or an ad.
  * @param favorites A set of package names for the apps that are marked as favorites.
+ * @param selectedFilter The currently selected chip filter.
+ * @param onFilterSelected A callback invoked when the user chooses an app filter chip.
  * @param paddingValues Padding to be applied from the parent composable, typically from a Scaffold.
  * @param columnCount The number of columns in the grid.
  * @param listState The state object to be used for the [LazyVerticalGrid], allowing for observation and control of the scroll position.
@@ -139,6 +176,8 @@ fun AppsList(
 private fun AppsGrid(
     items: ImmutableList<AppListItem>,
     favorites: ImmutableSet<String>,
+    selectedFilter: AppsListFilter,
+    onFilterSelected: (AppsListFilter) -> Unit,
     paddingValues: PaddingValues,
     columnCount: Int,
     listState: LazyGridState,
@@ -174,6 +213,13 @@ private fun AppsGrid(
         verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
     ) {
+        item(span = { GridItemSpan(columnCount) }, contentType = "filters") {
+            AppsListFilters(
+                selectedFilter = selectedFilter,
+                onFilterSelected = onFilterSelected,
+            )
+        }
+
         itemsIndexed(
             items = items,
             key = { index, item ->
@@ -226,6 +272,57 @@ private fun AppsGrid(
             NavigationBarSpacer()
         }
     }
+}
+
+@Composable
+private fun AppsListFilters(
+    selectedFilter: AppsListFilter,
+    onFilterSelected: (AppsListFilter) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+    ) {
+        AppsFilterItems.forEach { item ->
+            FilterChip(
+                selected = selectedFilter == item.filter,
+                onClick = { onFilterSelected(item.filter) },
+                label = { Text(text = stringResource(id = item.labelResId)) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = null,
+                    )
+                },
+            )
+        }
+    }
+}
+
+private data class AppsFilterItem(
+    val filter: AppsListFilter,
+    val labelResId: Int,
+    val icon: ImageVector,
+)
+
+private val AppsFilterItems: ImmutableList<AppsFilterItem> = persistentListOf(
+    AppsFilterItem(AppsListFilter.All, R.string.apps_filter_all, Icons.Outlined.Apps),
+    AppsFilterItem(AppsListFilter.Installed, R.string.app_details_installed, Icons.Outlined.CheckCircle),
+    AppsFilterItem(AppsListFilter.NotInstalled, R.string.app_details_not_installed, Icons.Outlined.Block),
+    AppsFilterItem(AppsListFilter.Favorites, R.string.favorite_apps, Icons.Outlined.StarOutline),
+)
+
+private fun ImmutableList<AppInfo>.filterFor(
+    filter: AppsListFilter,
+    installedPackages: ImmutableSet<String>,
+    favorites: ImmutableSet<String>,
+): List<AppInfo> = when (filter) {
+    AppsListFilter.All -> this
+    AppsListFilter.Installed -> filter { app -> app.packageName in installedPackages }
+    AppsListFilter.NotInstalled -> filter { app -> app.packageName !in installedPackages }
+    AppsListFilter.Favorites -> filter { app -> app.packageName in favorites }
 }
 
 /**

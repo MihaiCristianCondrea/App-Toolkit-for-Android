@@ -74,8 +74,8 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.AppNavigati
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.appNavigationEntryBuilders
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.isDrawerItemSelected
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
+import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.LandingRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.FavoriteAppsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.defaults.MainNavigationDefaults
@@ -139,7 +139,7 @@ private fun MainScreenContent(uiState: MainUiState) {
     val activity = LocalActivity.current
 
     val navigationState = rememberNavigationState(
-        startRoute = AppsListRoute,
+        startRoute = LandingRoute,
         topLevelRoutes = NavigationRoutes.topLevelRoutes
     )
     val navigator = remember(navigationState) { Navigator(state = navigationState) }
@@ -332,8 +332,8 @@ private fun MainShell(
     val bottomNavTransitions = rememberBottomNavTransitions()
     val appRouteHandlers: Map<String, (NavigationDrawerItem) -> Unit> = remember(navigator) {
         mapOf(
+            NavigationRoutes.ROUTE_LANDING to { navigator.navigate(LandingRoute) },
             NavigationRoutes.ROUTE_APPS_LIST to { navigator.navigate(AppsListRoute) },
-            NavigationRoutes.ROUTE_FAVORITE_APPS to { navigator.navigate(FavoriteAppsRoute) },
             NavigationRoutes.ROUTE_TOOLKIT_TILES to { navigator.navigate(ToolkitTilesRoute) },
             NavigationRoutes.ROUTE_COMPONENTS to { navigator.navigate(ComponentsRoute) },
         )
