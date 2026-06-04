@@ -585,16 +585,25 @@ private fun TopLevelContentNavDisplay(
 private fun BottomNavTransitions.betweenTabEntries(
     initialState: Any?,
     targetState: Any?,
-) = when {
-    tabIndex(initialState) >= 0 && tabIndex(targetState) >= 0 -> {
-        betweenTabs(forward = tabIndex(targetState) >= tabIndex(initialState))
-    }
+) = run {
+    val initialTabIndex = tabIndex(initialState)
+    val targetTabIndex = tabIndex(targetState)
 
-    else -> transition()
+    if (initialTabIndex >= 0 && targetTabIndex >= 0) {
+        betweenTabs(forward = targetTabIndex >= initialTabIndex)
+    } else {
+        transition()
+    }
 }
 
 private fun tabIndex(state: Any?): Int {
-    val entry = (state as? List<*>)?.lastOrNull() as? NavEntry<*>
+    val entry: NavEntry<*>? = when (state) {
+        // Navigation 3 transition scopes animate Scene objects; read their visible entry so
+        // predictive back between bottom tabs can use the same tab-direction motion as taps.
+        is Scene<*> -> state.entries.lastOrNull()
+        is List<*> -> state.lastOrNull() as? NavEntry<*>
+        else -> null
+    }
     val route = entry?.contentKey as? StableNavKey
     return MainNavigationDefaults.bottomBarItems.indexOfFirst { item -> item.route == route }
 }
