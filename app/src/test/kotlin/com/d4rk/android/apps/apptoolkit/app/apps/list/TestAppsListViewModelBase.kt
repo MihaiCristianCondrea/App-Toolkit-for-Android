@@ -21,6 +21,8 @@ import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.GetAppInstallInfoUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.GetInstalledPackagesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
@@ -54,16 +56,21 @@ open class TestAppsListViewModelBase {
         println("\uD83E\uDDEA [SETUP] Initial favorites: $initialFavorites")
         val developerAppsRepository = FakeDeveloperAppsRepository(fetchApps, fetchError)
         val fetchUseCase = FetchDeveloperAppsUseCase(developerAppsRepository)
+        val installedAppsRepository = FakeInstalledAppsRepository()
+        val getInstalledPackagesUseCase = GetInstalledPackagesUseCase(installedAppsRepository)
+        val getAppInstallInfoUseCase = GetAppInstallInfoUseCase(installedAppsRepository)
         val favoritesRepository =
             FakeFavoritesRepository(initialFavorites, favoritesFlow, toggleError)
         val observeFavoritesUseCase = ObserveFavoritesUseCase(favoritesRepository, firebaseController)
         val toggleFavoriteUseCase = ToggleFavoriteUseCase(favoritesRepository, firebaseController)
         viewModel = AppsListViewModel(
-            fetchUseCase,
-            observeFavoritesUseCase,
-            toggleFavoriteUseCase,
-            dispatchers,
-            firebaseController
+            fetchDeveloperAppsUseCase = fetchUseCase,
+            getInstalledPackagesUseCase = getInstalledPackagesUseCase,
+            getAppInstallInfoUseCase = getAppInstallInfoUseCase,
+            observeFavoritesUseCase = observeFavoritesUseCase,
+            toggleFavoriteUseCase = toggleFavoriteUseCase,
+            dispatchers = dispatchers,
+            firebaseController = firebaseController
         )
         println("\u2705 [SETUP] ViewModel initialized")
     }
