@@ -96,7 +96,7 @@ fun VersionInfoAlertDialogContent(
         AsyncImage(
             model = appIcon,
             contentDescription = null,
-            modifier = Modifier.size(size = SizeConstants.ExtraExtraLargeSize),
+            modifier = Modifier.size(size = SizeConstants.LauncherIconSize),
             imageLoader = imageLoader
         )
         LargeHorizontalSpacer()

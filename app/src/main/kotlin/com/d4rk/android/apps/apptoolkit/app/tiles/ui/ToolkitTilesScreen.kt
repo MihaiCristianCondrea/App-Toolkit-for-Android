@@ -373,8 +373,11 @@ private fun ToolkitTileCard(
         onClick = onPreviewTile,
         modifier = Modifier
             .fillMaxWidth()
-            .groupedCorners(position),
-        shape = RectangleShape, // TODO: make the corner radius bigger
+            .groupedCorners(
+                position = position,
+                outerRadius = SizeConstants.LargeExpandedSize,
+            ),
+        shape = RectangleShape,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
         ),
@@ -462,7 +465,8 @@ internal fun TileIconBadge(
     large: Boolean = false,
 ) {
     val colors = icon.iconColors()
-    val size = if (large) SizeConstants.ExtraExtraLargeSize + SizeConstants.SmallSize else SizeConstants.FortyFourSize
+    val size =
+        if (large) SizeConstants.LauncherIconSize + SizeConstants.SmallSize else SizeConstants.FortyFourSize
     Box(
         modifier = Modifier.size(size),
         contentAlignment = Alignment.Center,

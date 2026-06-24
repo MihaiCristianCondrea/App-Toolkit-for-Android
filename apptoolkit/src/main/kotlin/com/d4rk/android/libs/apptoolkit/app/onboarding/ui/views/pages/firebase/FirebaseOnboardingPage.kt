@@ -88,7 +88,7 @@ fun FirebaseOnboardingPage(isSelected: Boolean) {
             Icon(
                 imageVector = Icons.Outlined.Analytics,
                 contentDescription = null,
-                modifier = Modifier.size(size = SizeConstants.ExtraExtraLargeSize + SizeConstants.LargeSize),
+                modifier = Modifier.size(size = SizeConstants.LauncherIconSize + SizeConstants.LargeSize),
                 tint = MaterialTheme.colorScheme.primary
             )
 

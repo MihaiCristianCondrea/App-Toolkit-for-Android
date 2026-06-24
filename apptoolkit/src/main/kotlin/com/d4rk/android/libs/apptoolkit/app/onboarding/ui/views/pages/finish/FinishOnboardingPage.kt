@@ -135,7 +135,7 @@ fun FinishOnboardingPage() {
                 imageVector = Icons.Filled.CheckCircle,
                 contentDescription = stringResource(id = R.string.onboarding_complete_icon_desc),
                 modifier = Modifier
-                    .size(size = SizeConstants.ExtraExtraLargeSize + SizeConstants.ExtraLargeIncreasedSize)
+                    .size(size = SizeConstants.LauncherIconSize + SizeConstants.ExtraLargeIncreasedSize)
                     .graphicsLayer {
                         scaleX = iconSettleScale
                         scaleY = iconSettleScale

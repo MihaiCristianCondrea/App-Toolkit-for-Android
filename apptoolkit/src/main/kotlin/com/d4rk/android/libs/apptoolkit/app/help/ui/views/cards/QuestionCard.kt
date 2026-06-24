@@ -93,7 +93,7 @@ fun QuestionCard(
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
-                        .size(size = SizeConstants.ExtraExtraLargeSize)
+                        .size(size = SizeConstants.LauncherIconSize)
                         .background(
                             color = MaterialTheme.colorScheme.primaryContainer, shape = CircleShape
                         )

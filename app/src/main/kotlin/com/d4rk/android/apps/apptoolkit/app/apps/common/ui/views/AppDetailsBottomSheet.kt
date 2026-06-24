@@ -200,7 +200,7 @@ private fun AppDetailsHeader(
             AsyncImage(
                 model = appInfo.iconUrl,
                 contentDescription = appInfo.name,
-                modifier = Modifier.size(SizeConstants.ExtraExtraLargeSize * 2)
+                modifier = Modifier.size(SizeConstants.LauncherIconSize * 2)
             )
         }
         Column(modifier = Modifier.weight(1f)) {

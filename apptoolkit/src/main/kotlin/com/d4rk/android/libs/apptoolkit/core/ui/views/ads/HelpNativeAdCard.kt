@@ -181,7 +181,7 @@ private fun HelpNativeAdPreview(modifier: Modifier) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
-                        .size(SizeConstants.ExtraExtraLargeSize)
+                        .size(SizeConstants.LauncherIconSize)
                         .clip(RoundedCornerShape(SizeConstants.LargeSize))
                         .background(MaterialTheme.colorScheme.primaryContainer),
                     contentAlignment = Alignment.Center

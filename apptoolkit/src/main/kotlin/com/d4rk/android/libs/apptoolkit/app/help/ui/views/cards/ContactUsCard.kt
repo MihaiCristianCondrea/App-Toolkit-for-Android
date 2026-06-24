@@ -80,7 +80,7 @@ fun ContactUsCard(onClick: () -> Unit) {
         ) {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.size(size = SizeConstants.ExtraExtraLargeSize)
+                modifier = Modifier.size(size = SizeConstants.LauncherIconSize)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.shape_scalloped),

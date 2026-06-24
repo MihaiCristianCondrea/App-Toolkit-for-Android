@@ -56,7 +56,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -283,7 +282,7 @@ fun IssueReporterScreenContent(
                             imageVector = Icons.Outlined.CheckCircleOutline,
                             contentDescription = stringResource(id = R.string.issue_submitted_successfully),
                             tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(SizeConstants.ExtraExtraLargeSize)
+                            modifier = Modifier.size(SizeConstants.LauncherIconSize)
                         )
                         SmallVerticalSpacer()
                         Text(

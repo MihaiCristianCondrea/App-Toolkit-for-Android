@@ -48,7 +48,7 @@ fun ShimmerPlaceholderAppCard(modifier: Modifier = Modifier, aspectRatio: Float 
             LargeVerticalSpacer()
             Box(
                 modifier = Modifier
-                    .size(SizeConstants.ExtraExtraLargeSize + SizeConstants.LargeSize + SizeConstants.SmallSize)
+                    .size(SizeConstants.LauncherIconSize + SizeConstants.LargeSize + SizeConstants.SmallSize)
                     .clip(shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize))
                     .shimmerEffect()
             )

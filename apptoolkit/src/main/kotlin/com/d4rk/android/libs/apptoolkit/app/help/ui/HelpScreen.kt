@@ -270,7 +270,7 @@ fun HelpScreen(
             Text(
                 text = stringResource(id = R.string.help_feedback_sheet_title),
                 style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(horizontal = 24.dp)
+                modifier = Modifier.padding(horizontal = SizeConstants.ExtraLargeCompactSize)
             )
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -329,7 +329,7 @@ fun HelpScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(SizeConstants.ExtraLargeCompactSize))
         }
     }
 }

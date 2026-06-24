@@ -22,7 +22,8 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.view.WindowManager
+import android.hardware.display.DisplayManager
+import android.view.Display
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SensorRepository
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import kotlinx.coroutines.channels.awaitClose
@@ -32,12 +33,15 @@ import kotlinx.coroutines.flow.flowOn
 import kotlin.math.roundToInt
 
 class SensorRepositoryImpl(
-    private val context: Context,
+    context: Context,
     private val dispatchers: DispatcherProvider,
 ) : SensorRepository {
 
     private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-    private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    private val displayManager = context.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+
+    private val rotation: Int
+        get() = displayManager.getDisplay(Display.DEFAULT_DISPLAY)?.rotation ?: 0
 
     override fun getCompassAzimuth(): Flow<Float> = callbackFlow {
         val rotationMatrix = FloatArray(9)
@@ -48,13 +52,6 @@ class SensorRepositoryImpl(
             override fun onSensorChanged(event: SensorEvent?) {
                 event?.let {
                     SensorManager.getRotationMatrixFromVector(rotationMatrix, it.values)
-                    val rotation =
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-                            context.display.rotation
-                        } else {
-                            @Suppress("DEPRECATION")
-                            windowManager.defaultDisplay.rotation
-                        }
                     remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
                     SensorManager.getOrientation(remappedMatrix, orientation)
                     val azimuth =
@@ -87,13 +84,6 @@ class SensorRepositoryImpl(
             override fun onSensorChanged(event: SensorEvent?) {
                 event?.let {
                     SensorManager.getRotationMatrixFromVector(rotationMatrix, it.values)
-                    val rotation =
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-                            context.display.rotation
-                        } else {
-                            @Suppress("DEPRECATION")
-                            windowManager.defaultDisplay.rotation
-                        }
                     remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
                     SensorManager.getOrientation(remappedMatrix, orientation)
                     val pitch = Math.toDegrees(orientation[1].toDouble()).toFloat()

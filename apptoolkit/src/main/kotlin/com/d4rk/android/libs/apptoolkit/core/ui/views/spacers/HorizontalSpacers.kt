@@ -25,7 +25,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable
 fun ExtraExtraLargeHorizontalSpacer() {
-    Spacer(modifier = Modifier.width(width = SizeConstants.ExtraExtraLargeSize))
+    Spacer(modifier = Modifier.width(width = SizeConstants.LauncherIconSize))
 }
 
 @Composable

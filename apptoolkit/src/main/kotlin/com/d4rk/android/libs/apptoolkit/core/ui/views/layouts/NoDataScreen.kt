@@ -46,8 +46,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.NoDataNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
@@ -102,7 +102,7 @@ fun NoDataScreen(
                 imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(size = SizeConstants.ExtraExtraLargeSize + SizeConstants.SmallSize + SizeConstants.ExtraTinySize),
+                    .size(size = SizeConstants.LauncherIconSize + SizeConstants.SmallSize + SizeConstants.ExtraTinySize),
                 tint = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primaryContainer
             )
         }

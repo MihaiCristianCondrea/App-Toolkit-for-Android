@@ -105,7 +105,7 @@ fun AppCard(
                     model = appInfo.iconUrl,
                     contentDescription = appInfo.name,
                     modifier = Modifier
-                        .size(size = SizeConstants.ExtraExtraLargeSize + SizeConstants.LargeSize + SizeConstants.SmallSize)
+                        .size(size = SizeConstants.LauncherIconSize + SizeConstants.LargeSize + SizeConstants.SmallSize)
                         .clip(shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize)),
                     contentScale = ContentScale.Fit
                 )

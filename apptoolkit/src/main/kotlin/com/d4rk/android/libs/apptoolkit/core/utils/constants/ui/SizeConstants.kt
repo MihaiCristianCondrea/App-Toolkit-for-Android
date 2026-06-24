@@ -25,32 +25,36 @@ import androidx.compose.ui.unit.dp
 object SizeConstants {
     // Spacers
     val ButtonIcon: Dp = ButtonDefaults.IconSpacing
+    val ButtonIconSize: Dp = ButtonDefaults.IconSize
+    val SwitchIconSize: Dp = SwitchDefaults.IconSize
 
     // Sizes
-    val ExtraExtraLargeSize: Dp = 48.dp
+    val LauncherIconSize: Dp = 48.dp
     val ExtraLargeIncreasedSize: Dp = 32.dp
     val ExtraLargeSize: Dp = 28.dp
+    val ExtraLargeCompactSize: Dp = 24.dp
+    val LargeExpandedSize: Dp = 22.dp
     val LargeIncreasedSize: Dp = 20.dp
+    val LargeMediumSize: Dp = 18.dp
     val LargeSize: Dp = 16.dp
     val MediumSize: Dp = 12.dp
     val SmallSize: Dp = 8.dp
     val ExtraSmallSize: Dp = 4.dp
     val ExtraTinySize: Dp = 2.dp
     val ZeroSize: Dp = 0.dp
+
     val TwentyFourSize: Dp = LargeSize + SmallSize
     val FortyFourSize: Dp = ExtraLargeSize + LargeSize
-    val SeventyTwoSize: Dp = ExtraExtraLargeSize + LargeIncreasedSize + ExtraSmallSize
-    val EightySize: Dp = ExtraExtraLargeSize + ExtraLargeIncreasedSize
-    val NinetySixSize: Dp = ExtraExtraLargeSize * 2
+    val SeventyTwoSize: Dp = LauncherIconSize + LargeIncreasedSize + ExtraSmallSize
+    val EightySize: Dp = LauncherIconSize + ExtraLargeIncreasedSize
+    val NinetySixSize: Dp = LauncherIconSize * 2
     val OneHundredSize: Dp = ExtraLargeIncreasedSize * 3 + ExtraSmallSize
-    val OneFortyFourSize: Dp = ExtraExtraLargeSize * 3
+    val OneFortyFourSize: Dp = LauncherIconSize * 3
     val OneEightySize: Dp = OneFortyFourSize + LargeIncreasedSize + LargeSize
-    val TwoHundredSize: Dp = ExtraExtraLargeSize * 4 + SmallSize
-    val TwoHundredTwentySize: Dp = ExtraExtraLargeSize * 4 + ExtraLargeSize
-    val TwoHundredFortySize: Dp = ExtraExtraLargeSize * 5
+    val TwoHundredSize: Dp = LauncherIconSize * 4 + SmallSize
+    val TwoHundredTwentySize: Dp = LauncherIconSize * 4 + ExtraLargeSize
+    val TwoHundredFortySize: Dp = LauncherIconSize * 5
     val TwoHundredFiftySixSize: Dp = TwoHundredFortySize + LargeSize
     val TwoHundredFiftyEightSize: Dp =
         TwoHundredFortySize + MediumSize + ExtraSmallSize + ExtraTinySize
-    val ButtonIconSize: Dp = ButtonDefaults.IconSize
-    val SwitchIconSize: Dp = SwitchDefaults.IconSize
 }
