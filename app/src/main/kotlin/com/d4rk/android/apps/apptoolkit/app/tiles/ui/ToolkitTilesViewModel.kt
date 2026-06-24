@@ -19,10 +19,14 @@ package com.d4rk.android.apps.apptoolkit.app.tiles.ui
 
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.apps.apptoolkit.R
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetBreathingDataUseCase
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetSensorDataUseCase
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetSystemDataUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetToolkitTilesUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.SyncToolkitTileStatusesUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesEvent
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitSensorData
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesUiState
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
@@ -42,10 +46,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 /** Coordinates the static Toolkit Tiles catalog, filtering, and add-tile requests. */
 class ToolkitTilesViewModel(
     private val getToolkitTilesUseCase: GetToolkitTilesUseCase,
+    private val getSensorDataUseCase: GetSensorDataUseCase,
+    private val getBreathingDataUseCase: GetBreathingDataUseCase,
+    private val getSystemDataUseCase: GetSystemDataUseCase,
     private val syncToolkitTileStatusesUseCase: SyncToolkitTileStatusesUseCase,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
@@ -55,6 +63,7 @@ class ToolkitTilesViewModel(
     screenName = "ToolkitTiles",
 ) {
     private var loadJob: Job? = null
+    private var sensorJob: Job? = null
 
     init {
         onEvent(ToolkitTilesEvent.Initialize)
@@ -68,6 +77,8 @@ class ToolkitTilesViewModel(
             is ToolkitTilesEvent.CategoryToggled -> toggleCategory(event.categoryId)
             is ToolkitTilesEvent.AddTileClicked -> handleAddTile(event.requestKey)
             is ToolkitTilesEvent.TileSetupClicked -> handleTileSetup(event.tileId)
+            is ToolkitTilesEvent.TilePreviewOpened -> startSensorTracking(event.tileId)
+            is ToolkitTilesEvent.TilePreviewClosed -> stopSensorTracking()
         }
     }
 
@@ -144,6 +155,79 @@ class ToolkitTilesViewModel(
             extra = mapOf(ExtraKeys.TILE_ID to tileId),
         )
         showSetupMessage()
+    }
+
+    private fun startSensorTracking(tileId: String) {
+        sensorJob?.cancel()
+        sensorJob = viewModelScope.launch(dispatchers.default) {
+            when (tileId) {
+                "compass" -> {
+                    getSensorDataUseCase.getCompassAzimuth()
+                        .onEach { azimuth ->
+                            updateSensorData { it.copy(compassAzimuth = azimuth) }
+                        }
+                        .launchIn(this)
+                }
+
+                "bubble_level" -> {
+                    getSensorDataUseCase.getLevelOrientation()
+                        .onEach { (pitch, roll) ->
+                            updateSensorData { it.copy(levelPitch = pitch, levelRoll = roll) }
+                        }
+                        .launchIn(this)
+                }
+
+                "lux_meter" -> {
+                    getSensorDataUseCase.getLuxLevel()
+                        .onEach { lux ->
+                            updateSensorData { it.copy(luxLevel = lux) }
+                        }
+                        .launchIn(this)
+                }
+
+                "breathing" -> {
+                    getBreathingDataUseCase.start()
+                    getBreathingDataUseCase.breathingState
+                        .onEach { state ->
+                            screenState.update { current ->
+                                val data = current.data ?: return@update current
+                                current.copy(data = data.copy(breathingState = state))
+                            }
+                        }
+                        .launchIn(this)
+                }
+
+                "memory" -> {
+                    getSystemDataUseCase.getMemoryInfo()
+                        .onEach { info ->
+                            screenState.update { it.copy(data = it.data?.copy(memoryInfo = info)) }
+                        }
+                        .launchIn(this)
+                }
+
+                "network_traffic" -> {
+                    getSystemDataUseCase.getNetworkTraffic()
+                        .onEach { traffic ->
+                            screenState.update { it.copy(data = it.data?.copy(networkTraffic = traffic)) }
+                        }
+                        .launchIn(this)
+                }
+            }
+        }
+    }
+
+    private fun stopSensorTracking() {
+        sensorJob?.cancel()
+        sensorJob = null
+        getBreathingDataUseCase.stop()
+        updateSensorData { ToolkitSensorData() }
+    }
+
+    private fun updateSensorData(update: (ToolkitSensorData) -> ToolkitSensorData) {
+        screenState.update { current ->
+            val data = current.data ?: return@update current
+            current.copy(data = data.copy(sensorData = update(data.sensorData)))
+        }
     }
 
     private fun showSetupMessage() {

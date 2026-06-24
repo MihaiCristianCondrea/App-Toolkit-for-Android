@@ -182,6 +182,7 @@
     <string name="tile_breathing_summary">Start a short guided breathing pause</string>
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sos_summary">Keep emergency actions close</string>
+    <string name="tile_service_azimuth_format" translatable="false">%1$d°</string>
     <string name="tile_service_percent" translatable="false">%1$d%%</string>
     <string name="tile_service_clipboard_cleared">Clipboard cleared</string>
     <string name="tile_service_heads">Heads</string>

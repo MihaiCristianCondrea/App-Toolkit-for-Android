@@ -27,4 +27,6 @@ sealed interface ToolkitTilesEvent : UiEvent {
     data class CategoryToggled(val categoryId: String) : ToolkitTilesEvent
     data class AddTileClicked(val requestKey: String?) : ToolkitTilesEvent
     data class TileSetupClicked(val tileId: String) : ToolkitTilesEvent
+    data class TilePreviewOpened(val tileId: String) : ToolkitTilesEvent
+    data object TilePreviewClosed : ToolkitTilesEvent
 }

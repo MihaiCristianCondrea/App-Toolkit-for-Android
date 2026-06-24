@@ -18,6 +18,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name=".AppToolkit"
         android:appCategory="productivity"
@@ -47,6 +49,11 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
+
+        <activity
+            android:name=".app.components.ui.views.ComponentsActivity"
+            android:exported="false"
+            android:label="@string/components_title" />
 
         <service
             android:name=".app.tiles.service.BatteryTileService"

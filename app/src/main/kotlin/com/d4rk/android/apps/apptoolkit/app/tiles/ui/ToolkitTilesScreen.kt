@@ -103,11 +103,11 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.apps.apptoolkit.R
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitQuickTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileIcon
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitQuickTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitToolKind
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.getTileServiceRequests
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
@@ -196,6 +196,14 @@ fun ToolkitTilesScreen(
         state.categories.filterFor(state.selectedFilter)
     }
 
+    LaunchedEffect(selectedTile) {
+        selectedTile?.let { tile ->
+            onEvent(ToolkitTilesEvent.TilePreviewOpened(tile.id))
+        } ?: run {
+            onEvent(ToolkitTilesEvent.TilePreviewClosed)
+        }
+    }
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(
@@ -249,6 +257,10 @@ fun ToolkitTilesScreen(
     selectedTile?.let { tile ->
         ToolkitToolBottomSheet(
             tile = tile,
+            sensorData = state.sensorData,
+            breathingState = state.breathingState,
+            memoryInfo = state.memoryInfo,
+            networkTraffic = state.networkTraffic,
             onClose = { selectedTile = null },
             onAddTile = { onEvent(ToolkitTilesEvent.AddTileClicked(tile.requestKey)) },
             onSetupTile = { onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) },
@@ -362,7 +374,7 @@ private fun ToolkitTileCard(
         modifier = Modifier
             .fillMaxWidth()
             .groupedCorners(position),
-        shape = RectangleShape,
+        shape = RectangleShape, // TODO: make the corner radius bigger
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
         ),

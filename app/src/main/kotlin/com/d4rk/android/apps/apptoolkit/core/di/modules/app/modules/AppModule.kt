@@ -21,8 +21,17 @@ import com.d4rk.android.apps.apptoolkit.app.main.data.repository.MainNavigationR
 import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainViewModel
 import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
+import com.d4rk.android.apps.apptoolkit.app.tiles.data.repository.BreathingRepositoryImpl
+import com.d4rk.android.apps.apptoolkit.app.tiles.data.repository.SensorRepositoryImpl
+import com.d4rk.android.apps.apptoolkit.app.tiles.data.repository.SystemMonitorRepositoryImpl
 import com.d4rk.android.apps.apptoolkit.app.tiles.data.repository.ToolkitTilesRepositoryImpl
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.BreathingRepository
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SensorRepository
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SystemMonitorRepository
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.ToolkitTilesRepository
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetBreathingDataUseCase
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetSensorDataUseCase
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetSystemDataUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetToolkitTilesUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.SyncToolkitTileStatusesUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesViewModel
@@ -40,12 +49,36 @@ val appModule: Module = module {
         GetNavigationDrawerItemsUseCase(navigationRepository = get(), firebaseController = get())
     }
     single { GetToolkitTilesUseCase() }
+    single { GetSensorDataUseCase(sensorRepository = get()) }
+    single { GetBreathingDataUseCase(breathingRepository = get()) }
+    single { GetSystemDataUseCase(repository = get()) }
     single { SyncToolkitTileStatusesUseCase(repository = get()) }
     single<ToolkitTilesRepository> { ToolkitTilesRepositoryImpl(context = androidContext()) }
+    single<SensorRepository> {
+        SensorRepositoryImpl(
+            context = androidContext(),
+            dispatchers = get()
+        )
+    }
+    single<BreathingRepository> {
+        BreathingRepositoryImpl(
+            context = androidContext(),
+            dispatchers = get()
+        )
+    }
+    single<SystemMonitorRepository> {
+        SystemMonitorRepositoryImpl(
+            context = androidContext(),
+            dispatchers = get()
+        )
+    }
     viewModel {
         ToolkitTilesViewModel(
             getToolkitTilesUseCase = get(),
             syncToolkitTileStatusesUseCase = get(),
+            getSensorDataUseCase = get(),
+            getBreathingDataUseCase = get(),
+            getSystemDataUseCase = get(),
             dispatchers = get(),
             firebaseController = get(),
         )

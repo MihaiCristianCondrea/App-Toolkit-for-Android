@@ -20,7 +20,6 @@ package com.d4rk.android.libs.apptoolkit.app.licenses.ui
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -37,9 +36,9 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mikepenz.aboutlibraries.Libs
-import com.mikepenz.aboutlibraries.ui.compose.LibraryDefaults
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
+import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryBadges
 import org.koin.compose.koinInject
 
 
@@ -80,13 +79,12 @@ fun LicensesScreen(
 
         LibrariesContainer(
             libraries = libraries,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues = paddingValues),
-            padding = LibraryDefaults.libraryPadding(),
-            dimensions = LibraryDefaults.libraryDimensions(),
-            showDescription = true,
-            showFundingBadges = true,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = paddingValues,
+            badges = LibraryBadges(
+                description = true,
+                funding = true,
+            ),
         )
     }
 

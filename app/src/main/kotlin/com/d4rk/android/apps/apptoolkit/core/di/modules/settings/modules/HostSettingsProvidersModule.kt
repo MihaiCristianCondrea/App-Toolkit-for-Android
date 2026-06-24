@@ -34,7 +34,7 @@ import org.koin.dsl.module
  * Host-only provider bindings consumed by toolkit settings modules.
  */
 val hostSettingsProvidersModule: Module = module {
-    single<SettingsProvider> { AppSettingsProvider(context = get(), navigationManager = get()) }
+    single<SettingsProvider> { AppSettingsProvider(context = get()) }
     single<AboutSettingsProvider> { AppAboutSettingsProvider(context = get()) }
     single<AdvancedSettingsProvider> { AppAdvancedSettingsProvider(context = get()) }
     single<ColorPalette>(named(AppToolkitDiConstants.DEFAULT_THEME_PALETTE)) { bluePalette }

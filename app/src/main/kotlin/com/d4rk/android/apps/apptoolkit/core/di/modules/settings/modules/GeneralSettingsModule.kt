@@ -34,16 +34,10 @@ import org.koin.dsl.module
 
 val generalSettingsModule: Module = module {
     single<DisplaySettingsProvider> {
-        AppDisplaySettingsProvider(
-            context = get(),
-            navigationManager = get()
-        )
+        AppDisplaySettingsProvider(context = get())
     }
     single<PrivacySettingsProvider> {
-        AppPrivacySettingsProvider(
-            context = get(),
-            navigationManager = get()
-        )
+        AppPrivacySettingsProvider(context = get())
     }
     single<UnlockComponentsShowcaseUseCase> { UnlockComponentsShowcaseUseCase(dataStore = get()) }
     // Keep as factory: this provider carries composable content lambdas and should stay short-lived

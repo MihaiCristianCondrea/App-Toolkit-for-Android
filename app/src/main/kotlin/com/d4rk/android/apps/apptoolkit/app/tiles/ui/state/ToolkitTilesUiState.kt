@@ -19,6 +19,9 @@ package com.d4rk.android.apps.apptoolkit.app.tiles.ui.state
 
 import androidx.compose.runtime.Immutable
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.BreathingState
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.MemoryInfo
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.NetworkTraffic
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentListOf
@@ -30,6 +33,18 @@ data class ToolkitTilesUiState(
     val categories: ImmutableList<ToolkitTileCategory> = persistentListOf(),
     val selectedFilter: ToolkitTilesFilter = ToolkitTilesFilter.All,
     val expandedCategoryIds: PersistentSet<String> = persistentSetOf(),
+    val sensorData: ToolkitSensorData = ToolkitSensorData(),
+    val breathingState: BreathingState = BreathingState(),
+    val memoryInfo: MemoryInfo? = null,
+    val networkTraffic: NetworkTraffic? = null,
+)
+
+@Immutable
+data class ToolkitSensorData(
+    val compassAzimuth: Float = 0f,
+    val levelPitch: Float = 0f,
+    val levelRoll: Float = 0f,
+    val luxLevel: Float = 0f,
 )
 
 enum class ToolkitTilesFilter {

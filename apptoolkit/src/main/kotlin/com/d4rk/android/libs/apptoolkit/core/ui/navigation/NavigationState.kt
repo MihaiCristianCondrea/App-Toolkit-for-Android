@@ -27,8 +27,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
@@ -58,17 +60,27 @@ fun <T : StableNavKey> rememberNavigationState(
         mutableStateOf(stableStartRoute)
     }
 
+    val topLevelHistory = rememberSaveable(
+        saver = listSaver(
+            save = { it.toList() },
+            restore = { mutableStateListOf<T>().apply { addAll(it) } }
+        )
+    ) {
+        mutableStateListOf<T>()
+    }
+
     val backStacks: Map<T, NavBackStack<T>> = buildMap {
         for (route in topLevelRoutes) {
             put(route, rememberTypedNavBackStack(persistentListOf(route)))
         }
     }
 
-    return remember(stableStartRoute, topLevelRoutes, topLevelRouteState.value) {
+    return remember(stableStartRoute, topLevelRoutes, topLevelRouteState.value, topLevelHistory) {
         NavigationState(
             startRoute = stableStartRoute,
             topLevelRoute = topLevelRouteState,
-            backStacks = backStacks
+            backStacks = backStacks,
+            topLevelHistory = topLevelHistory
         )
     }
 }
@@ -112,7 +124,8 @@ private fun <T : StableNavKey> buildNavBackStack(routes: List<T>): NavBackStack<
 class NavigationState<T : StableNavKey>(
     val startRoute: T,
     topLevelRoute: MutableState<T>,
-    val backStacks: Map<T, NavBackStack<T>>
+    val backStacks: Map<T, NavBackStack<T>>,
+    val topLevelHistory: SnapshotStateList<T>
 ) {
     var topLevelRoute: T by topLevelRoute
 
@@ -121,8 +134,6 @@ class NavigationState<T : StableNavKey>(
 
     val currentRoute: T
         get() = currentBackStack.last()
-
-    val topLevelHistory = mutableStateListOf<T>()
 
     /**
      * Returns the top-level routes that should be visible to a content-area `NavDisplay`.
@@ -175,9 +186,10 @@ class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
             if (state.topLevelRoute != route) {
                 state.topLevelHistory.remove(route)
                 state.topLevelHistory.add(state.topLevelRoute)
+                state.topLevelRoute = route
+            } else {
+                state.currentBackStack.popToRoot()
             }
-            state.topLevelRoute = route
-            state.currentBackStack.popToRoot()
             return
         }
 
@@ -209,7 +221,6 @@ class Navigator<T : StableNavKey>(val state: NavigationState<T>) {
                 val previousTopLevelRoute = state.topLevelHistory.removeLastOrNull()
                 if (previousTopLevelRoute != null && previousTopLevelRoute != state.topLevelRoute) {
                     state.topLevelRoute = previousTopLevelRoute
-                    state.currentBackStack.popToRoot()
                     return true
                 }
             }

@@ -28,7 +28,7 @@
     <string name="loading">Đang tải…</string>
 
     <string name="skip_button_text">Bỏ qua</string>
-    <string name="skip_button_content_description">Bỏ qua\"</string>
+    <string name="skip_button_content_description">Bỏ qua</string>
     <string name="back_button_content_description">Quay lại</string>
     <string name="back_button_text">Quay lại</string>
     <string name="done_button_content_description">Xong</string>

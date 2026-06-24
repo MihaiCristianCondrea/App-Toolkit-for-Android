@@ -37,16 +37,16 @@ internal object MainNavigationDefaults {
 
     val bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>> = persistentListOf(
         BottomBarItem(
-            route = AppsListRoute,
-            icon = Icons.Outlined.Apps,
-            selectedIcon = Icons.Rounded.Apps,
-            title = R.string.apps_tools_title
-        ),
-        BottomBarItem(
             route = ToolkitTilesRoute,
             icon = Icons.Outlined.GridView,
             selectedIcon = Icons.Rounded.GridView,
             title = R.string.tiles_title
+        ),
+        BottomBarItem(
+            route = AppsListRoute,
+            icon = Icons.Outlined.Apps,
+            selectedIcon = Icons.Rounded.Apps,
+            title = R.string.apps_tools_title
         )
     )
 }

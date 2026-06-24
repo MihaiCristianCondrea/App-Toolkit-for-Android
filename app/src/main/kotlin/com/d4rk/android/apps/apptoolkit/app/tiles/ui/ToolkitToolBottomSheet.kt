@@ -35,23 +35,32 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowDownward
+import androidx.compose.material.icons.outlined.ArrowUpward
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.ContentPasteOff
+import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -75,12 +84,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.BreathingPhase
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.BreathingState
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.MemoryInfo
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.NetworkTraffic
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitSensorData
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlin.random.Random
 
@@ -94,6 +112,10 @@ import kotlin.random.Random
 @Composable
 fun ToolkitToolBottomSheet(
     tile: ToolkitTile,
+    sensorData: ToolkitSensorData,
+    breathingState: BreathingState,
+    memoryInfo: MemoryInfo?,
+    networkTraffic: NetworkTraffic?,
     onClose: () -> Unit,
     onAddTile: () -> Unit,
     onSetupTile: () -> Unit,
@@ -117,7 +139,13 @@ fun ToolkitToolBottomSheet(
             ToolSheetHeader(tile = tile, onClose = onClose)
             ToolStatusSummary(tile = tile)
             HorizontalDivider()
-            ToolInteractiveContent(tile = tile)
+            ToolInteractiveContent(
+                tile = tile,
+                sensorData = sensorData,
+                breathingState = breathingState,
+                memoryInfo = memoryInfo,
+                networkTraffic = networkTraffic,
+            )
             ToolSheetActions(
                 tile = tile,
                 onAddTile = onAddTile,
@@ -198,13 +226,25 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
 }
 
 @Composable
-private fun ToolInteractiveContent(tile: ToolkitTile) {
+private fun ToolInteractiveContent(
+    tile: ToolkitTile,
+    sensorData: ToolkitSensorData,
+    breathingState: BreathingState,
+    memoryInfo: MemoryInfo?,
+    networkTraffic: NetworkTraffic?,
+) {
     when (tile.id) {
         "coin_flip" -> CoinFlipTool()
         "dice_roll" -> DiceRollTool()
         "counter" -> CounterTool()
         "clipboard" -> ClipboardTool()
         "battery" -> BatteryTool()
+        "compass" -> CompassTool(azimuth = sensorData.compassAzimuth)
+        "bubble_level" -> LevelTool(pitch = sensorData.levelPitch, roll = sensorData.levelRoll)
+        "lux_meter" -> LuxMeterTool(lux = sensorData.luxLevel)
+        "breathing" -> BreathingTool(state = breathingState)
+        "memory" -> MemoryTool(info = memoryInfo)
+        "network_traffic" -> NetworkTrafficTool(traffic = networkTraffic)
         else -> GenericToolPreview(tile = tile)
     }
 }
@@ -335,6 +375,237 @@ private fun BatteryTool() {
             Spacer(modifier = Modifier.width(SizeConstants.SmallSize))
             Text(text = stringResource(id = R.string.tool_battery_refresh))
         }
+    }
+}
+
+@Composable
+private fun CompassTool(azimuth: Float) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ResultPill(
+            label = stringResource(
+                id = R.string.tile_service_azimuth_format,
+                azimuth.toInt()
+            )
+        )
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Explore,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(SizeConstants.LargeSize)
+                    .rotate(-azimuth),
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Box(
+                modifier = Modifier
+                    .width(2.dp)
+                    .height(20.dp)
+                    .background(MaterialTheme.colorScheme.error)
+                    .align(Alignment.TopCenter)
+            )
+        }
+    }
+}
+
+@Composable
+private fun LevelTool(pitch: Float, roll: Float) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
+            ResultPill(label = "P: ${pitch.toInt()}°")
+            ResultPill(label = "R: ${roll.toInt()}°")
+        }
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            // Target center circle
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(Color.Transparent, CircleShape)
+                    .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape)
+            )
+            // Moving bubble
+            Box(
+                modifier = Modifier
+                    .size(30.dp)
+                    .graphicsLayer {
+                        translationX = (roll.coerceIn(-45f, 45f) / 45f) * 80.dp.toPx()
+                        translationY = (pitch.coerceIn(-45f, 45f) / 45f) * 80.dp.toPx()
+                    }
+                    .background(
+                        if (kotlin.math.abs(pitch) < 1f && kotlin.math.abs(roll) < 1f)
+                            MaterialTheme.colorScheme.primary
+                        else
+                            MaterialTheme.colorScheme.secondary,
+                        CircleShape
+                    )
+            )
+        }
+    }
+}
+
+@Composable
+private fun LuxMeterTool(lux: Float) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ResultPill(label = "${lux.toInt()} lx")
+        Icon(
+            imageVector = Icons.Outlined.WbSunny,
+            contentDescription = null,
+            modifier = Modifier.size(120.dp),
+            tint = MaterialTheme.colorScheme.primary
+        )
+        LinearProgressIndicator(
+            progress = { (lux / 1000f).coerceIn(0f, 1f) },
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.surfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun BreathingTool(state: BreathingState) {
+    val scale by animateFloatAsState(
+        targetValue = state.progress,
+        animationSpec = spring(),
+        label = "breathing-scale"
+    )
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ResultPill(label = state.phase.name.replace("_", " "))
+            ResultPill(label = "${state.secondsLeft}s")
+        }
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .scale(scale)
+                .background(
+                    when (state.phase) {
+                        BreathingPhase.INHALE -> MaterialTheme.colorScheme.primaryContainer
+                        BreathingPhase.EXHALE -> MaterialTheme.colorScheme.secondaryContainer
+                        else -> MaterialTheme.colorScheme.surfaceVariant
+                    },
+                    CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.FavoriteBorder,
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+                tint = when (state.phase) {
+                    BreathingPhase.INHALE -> MaterialTheme.colorScheme.primary
+                    BreathingPhase.EXHALE -> MaterialTheme.colorScheme.secondary
+                    else -> MaterialTheme.colorScheme.onSurfaceVariant
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun MemoryTool(info: MemoryInfo?) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        if (info != null) {
+            val usedBytes = info.totalBytes - info.availableBytes
+            val usedPercent = (usedBytes.toFloat() / info.totalBytes.toFloat()).coerceIn(0f, 1f)
+
+            ResultPill(
+                label = "${(usedBytes / 1024 / 1024 / 1024f).format(1)} GB / ${
+                    (info.totalBytes / 1024 / 1024 / 1024f).format(
+                        1
+                    )
+                } GB"
+            )
+
+            Box(contentAlignment = Alignment.Center) {
+                androidx.compose.material3.CircularProgressIndicator(
+                    progress = { usedPercent },
+                    modifier = Modifier.size(120.dp),
+                    strokeWidth = 12.dp,
+                    color = if (info.isLowMemory) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = "${(usedPercent * 100).toInt()}%",
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+        } else {
+            ResultPill(label = stringResource(id = R.string.tile_preview_default_result))
+        }
+    }
+}
+
+@Composable
+private fun NetworkTrafficTool(traffic: NetworkTraffic?) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        if (traffic != null) {
+            Row(horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize)) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(imageVector = Icons.Outlined.ArrowDownward, contentDescription = null)
+                    Text(
+                        text = traffic.rxBytesPerSecond.toSpeedString(),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(text = "Download", style = MaterialTheme.typography.labelSmall)
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(imageVector = Icons.Outlined.ArrowUpward, contentDescription = null)
+                    Text(
+                        text = traffic.txBytesPerSecond.toSpeedString(),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(text = "Upload", style = MaterialTheme.typography.labelSmall)
+                }
+            }
+        } else {
+            ResultPill(label = stringResource(id = R.string.tile_preview_default_result))
+        }
+    }
+}
+
+private fun Float.format(digits: Int) = "%.${digits}f".format(java.util.Locale.ENGLISH, this)
+
+private fun Long.toSpeedString(): String {
+    val kb = this / 1024f
+    return if (kb > 1024) {
+        "${(kb / 1024f).format(1)} MB/s"
+    } else {
+        "${kb.toInt()} KB/s"
     }
 }
 

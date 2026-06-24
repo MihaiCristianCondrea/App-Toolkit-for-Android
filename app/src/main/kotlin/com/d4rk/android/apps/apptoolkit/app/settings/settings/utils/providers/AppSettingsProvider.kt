@@ -24,10 +24,9 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Security
-import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.constants.SettingsConstants
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
+import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsCategory
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsPreference
@@ -35,10 +34,7 @@ import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsCon
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openAppNotificationSettings
 
-class AppSettingsProvider(
-    context: Context,
-    private val navigationManager: NavigationManager,
-) : SettingsProvider {
+class AppSettingsProvider(context: Context) : SettingsProvider {
     private val context: Context = context.applicationContext
 
     override fun provideSettingsConfig(): SettingsConfig {
@@ -55,11 +51,10 @@ class AppSettingsProvider(
                             action = {
                                 val opened = context.openAppNotificationSettings()
                                 if (!opened) {
-                                    navigationManager.navigateTo(
-                                        GeneralSettingsRoute(
-                                            title = context.getString(R.string.security_and_privacy),
-                                            contentKey = SettingsContent.SECURITY_AND_PRIVACY,
-                                        )
+                                    GeneralSettingsActivity.start(
+                                        context = context,
+                                        title = context.getString(R.string.security_and_privacy),
+                                        contentKey = SettingsContent.SECURITY_AND_PRIVACY,
                                     )
                                 }
                             },
@@ -70,11 +65,10 @@ class AppSettingsProvider(
                             title = context.getString(R.string.display),
                             summary = context.getString(R.string.summary_preference_settings_display),
                             action = {
-                                navigationManager.navigateTo(
-                                    GeneralSettingsRoute(
-                                        title = context.getString(R.string.display),
-                                        contentKey = SettingsContent.DISPLAY,
-                                    )
+                                GeneralSettingsActivity.start(
+                                    context = context,
+                                    title = context.getString(R.string.display),
+                                    contentKey = SettingsContent.DISPLAY,
                                 )
                             },
                         ),
@@ -88,11 +82,10 @@ class AppSettingsProvider(
                             title = context.getString(R.string.security_and_privacy),
                             summary = context.getString(R.string.summary_preference_settings_privacy_and_security),
                             action = {
-                                navigationManager.navigateTo(
-                                    GeneralSettingsRoute(
-                                        title = context.getString(R.string.security_and_privacy),
-                                        contentKey = SettingsContent.SECURITY_AND_PRIVACY,
-                                    )
+                                GeneralSettingsActivity.start(
+                                    context = context,
+                                    title = context.getString(R.string.security_and_privacy),
+                                    contentKey = SettingsContent.SECURITY_AND_PRIVACY,
                                 )
                             },
                         ),
@@ -102,11 +95,10 @@ class AppSettingsProvider(
                             title = context.getString(R.string.advanced),
                             summary = context.getString(R.string.summary_preference_settings_advanced),
                             action = {
-                                navigationManager.navigateTo(
-                                    GeneralSettingsRoute(
-                                        title = context.getString(R.string.advanced),
-                                        contentKey = SettingsContent.ADVANCED,
-                                    )
+                                GeneralSettingsActivity.start(
+                                    context = context,
+                                    title = context.getString(R.string.advanced),
+                                    contentKey = SettingsContent.ADVANCED,
                                 )
                             },
                         ),
@@ -116,11 +108,10 @@ class AppSettingsProvider(
                             title = context.getString(R.string.about),
                             summary = context.getString(R.string.summary_preference_settings_about),
                             action = {
-                                navigationManager.navigateTo(
-                                    GeneralSettingsRoute(
-                                        title = context.getString(R.string.about),
-                                        contentKey = SettingsContent.ABOUT,
-                                    )
+                                GeneralSettingsActivity.start(
+                                    context = context,
+                                    title = context.getString(R.string.about),
+                                    contentKey = SettingsContent.ABOUT,
                                 )
                             },
                         ),

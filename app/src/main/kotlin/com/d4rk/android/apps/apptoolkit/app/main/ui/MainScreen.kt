@@ -17,6 +17,8 @@
 
 package com.d4rk.android.apps.apptoolkit.app.main.ui
 
+import android.content.Context
+import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
@@ -67,6 +69,7 @@ import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
 import androidx.navigation3.ui.NavDisplay
+import com.d4rk.android.apps.apptoolkit.app.components.ui.views.ComponentsActivity
 import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
 import com.d4rk.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.fab.MainFloatingActionButton
@@ -78,6 +81,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.defaults.MainNavigationDefaults
+import com.d4rk.android.libs.apptoolkit.app.help.ui.HelpActivity
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.dropdowns.HelpScreenMenuActions
 import com.d4rk.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.d4rk.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
@@ -93,10 +97,13 @@ import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawe
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.PermissionsRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.SettingsRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.SupportRoute
+import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
+import com.d4rk.android.libs.apptoolkit.app.support.ui.SupportActivity
 import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
+import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.Navigator
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.entryProviderFor
@@ -109,6 +116,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpace
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.ui.window.toAppWindowWidthSizeClass
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
 import com.d4rk.android.libs.apptoolkit.navigation.animations.BottomNavTransitions
 import com.d4rk.android.libs.apptoolkit.navigation.animations.NativeActivityTransitions
 import com.d4rk.android.libs.apptoolkit.navigation.animations.rememberBottomNavTransitions
@@ -138,7 +146,7 @@ private fun MainScreenContent(uiState: MainUiState) {
     val activity = LocalActivity.current
 
     val navigationState = rememberNavigationState(
-        startRoute = AppsListRoute,
+        startRoute = ToolkitTilesRoute,
         topLevelRoutes = NavigationRoutes.topLevelRoutes
     )
     val navigator = remember(navigationState) { Navigator(state = navigationState) }
@@ -152,9 +160,11 @@ private fun MainScreenContent(uiState: MainUiState) {
 
     val navigationManager: NavigationManager = koinInject()
 
-    LaunchedEffect(navigationManager, navigator) {
+    LaunchedEffect(activity, navigationManager, navigator) {
         navigationManager.navigationRequests.collect { route ->
-            navigator.navigate(route)
+            if (!launchStandaloneToolkitActivity(activity, route)) {
+                navigator.navigate(route)
+            }
         }
     }
 
@@ -216,6 +226,8 @@ private fun MainScreenContent(uiState: MainUiState) {
             }
         },
         sceneStrategies = listOf(sceneStrategy),
+        transitionSpec = { NavigationAnimations.default() },
+        popTransitionSpec = { NavigationAnimations.default() },
     )
 
     if (showChangelog) {
@@ -224,6 +236,19 @@ private fun MainScreenContent(uiState: MainUiState) {
             onDismiss = { showChangelog = false },
         )
     }
+}
+
+private fun launchStandaloneToolkitActivity(context: Context?, route: StableNavKey): Boolean {
+    val targetActivity = when (route) {
+        is SettingsRoute -> SettingsActivity::class.java
+        is HelpRoute -> HelpActivity::class.java
+        is SupportRoute -> SupportActivity::class.java
+        is ComponentsRoute -> ComponentsActivity::class.java
+        else -> return false
+    }
+
+    val safeContext = context ?: return false
+    return safeContext.startActivitySafely(Intent(safeContext, targetActivity))
 }
 
 /**
@@ -327,16 +352,21 @@ private fun MainShell(
     onBack: () -> Unit,
     entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
 ) {
+    val context = LocalContext.current
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val bottomNavTransitions = rememberBottomNavTransitions()
     val appRouteHandlers: Map<String, (NavigationDrawerItem) -> Unit> = remember(navigator) {
         mapOf(
             NavigationRoutes.ROUTE_APPS_LIST to { navigator.navigate(AppsListRoute) },
             NavigationRoutes.ROUTE_TOOLKIT_TILES to { navigator.navigate(ToolkitTilesRoute) },
-            NavigationRoutes.ROUTE_COMPONENTS to { navigator.navigate(ComponentsRoute) },
+            NavigationRoutes.ROUTE_COMPONENTS to {
+                launchStandaloneToolkitActivity(
+                    context,
+                    ComponentsRoute
+                )
+            },
         )
     }
-    val context = LocalContext.current
     val currentRoute = navigator.state.currentBackStack.last()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -362,12 +392,20 @@ private fun MainShell(
                 onChangelogRequested = onChangelogRequested,
                 onInternalNavigationRequested = { route ->
                     when (route) {
-                        NavigationDrawerRoutes.ROUTE_SETTINGS -> navigator.navigate(SettingsRoute)
-                        NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> navigator.navigate(
+                        NavigationDrawerRoutes.ROUTE_SETTINGS -> launchStandaloneToolkitActivity(
+                            context,
+                            SettingsRoute
+                        )
+
+                        NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> launchStandaloneToolkitActivity(
+                            context,
                             HelpRoute
                         )
 
-                        NavigationDrawerRoutes.ROUTE_SUPPORT -> navigator.navigate(SupportRoute)
+                        NavigationDrawerRoutes.ROUTE_SUPPORT -> launchStandaloneToolkitActivity(
+                            context,
+                            SupportRoute
+                        )
                     }
                 },
                 additionalHandlers = appRouteHandlers,
@@ -464,7 +502,7 @@ private fun MainShell(
                                 modalDrawerEnabled -> coroutineScope.launch { drawerState.open() }
                             }
                         },
-                        onSupportClick = { navigator.navigate(SupportRoute) },
+                        onSupportClick = { launchStandaloneToolkitActivity(context, SupportRoute) },
                         showSupportAction = NavigationRoutes.topLevelRoutes.contains(currentRoute),
                         scrollBehavior = scrollBehavior,
                     )

@@ -17,6 +17,7 @@
 
 package com.d4rk.android.apps.apptoolkit.app.components.ui.views
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -67,6 +68,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.fields.DatePickerTextField
 import com.d4rk.android.libs.apptoolkit.core.ui.views.fields.DropdownMenuBox
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.TopListFilters
+import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.CheckBoxPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
@@ -89,84 +91,99 @@ import com.d4rk.android.libs.apptoolkit.R as ToolkitR
  */
 @Composable
 fun ComponentsRoute(
-    paddingValues: PaddingValues,
+    paddingValues: PaddingValues = PaddingValues(),
+    isEmbedded: Boolean = true,
 ) {
     val firebaseController: FirebaseController = koinInject()
-    val dropdownOptionOne = stringResource(id = R.string.components_option_alpha)
-    val dropdownOptionTwo = stringResource(id = R.string.components_option_beta)
-    val dropdownOptionThree = stringResource(id = R.string.components_option_gamma)
-    val dropdownOptions = remember(dropdownOptionOne, dropdownOptionTwo, dropdownOptionThree) {
-        persistentListOf(dropdownOptionOne, dropdownOptionTwo, dropdownOptionThree)
-    }
+    val activity = LocalActivity.current
 
-    val filterPopular = stringResource(id = R.string.components_filter_popular)
-    val filterRecent = stringResource(id = R.string.components_filter_recent)
-    val filterFavorites = stringResource(id = R.string.favorite_apps)
-    val filters = remember(filterPopular, filterRecent, filterFavorites) {
-        persistentListOf(filterPopular, filterRecent, filterFavorites)
-    }
-
-    val radioSystem = stringResource(id = ToolkitR.string.follow_system)
-    val radioLight = stringResource(id = ToolkitR.string.light_mode)
-    val radioDark = stringResource(id = ToolkitR.string.dark_mode)
-    val radioOptions = remember(radioSystem, radioLight, radioDark) {
-        persistentListOf(radioSystem, radioLight, radioDark)
-    }
-
-    var selectedDropdownOption by rememberSaveable { mutableStateOf(dropdownOptions.first()) }
-    var selectedFilter by rememberSaveable { mutableStateOf(filters.first()) }
-    var selectedRadioOption by rememberSaveable { mutableStateOf(radioOptions.first()) }
-    var selectedDateMillis by rememberSaveable { mutableLongStateOf(System.currentTimeMillis()) }
-    var switchEnabled by rememberSaveable { mutableStateOf(true) }
-    var switchWithDividerEnabled by rememberSaveable { mutableStateOf(false) }
-    var switchCardEnabled by rememberSaveable { mutableStateOf(false) }
-    var checkboxChecked by rememberSaveable { mutableStateOf(false) }
-
-    LaunchedEffect(dropdownOptions) {
-        if (selectedDropdownOption !in dropdownOptions) {
-            selectedDropdownOption = dropdownOptions.first()
+    val content: @Composable (PaddingValues) -> Unit = { innerPadding ->
+        val dropdownOptionOne = stringResource(id = R.string.components_option_alpha)
+        val dropdownOptionTwo = stringResource(id = R.string.components_option_beta)
+        val dropdownOptionThree = stringResource(id = R.string.components_option_gamma)
+        val dropdownOptions = remember(dropdownOptionOne, dropdownOptionTwo, dropdownOptionThree) {
+            persistentListOf(dropdownOptionOne, dropdownOptionTwo, dropdownOptionThree)
         }
-    }
-    LaunchedEffect(filters) {
-        if (selectedFilter !in filters) {
-            selectedFilter = filters.first()
+
+        val filterPopular = stringResource(id = R.string.components_filter_popular)
+        val filterRecent = stringResource(id = R.string.components_filter_recent)
+        val filterFavorites = stringResource(id = R.string.favorite_apps)
+        val filters = remember(filterPopular, filterRecent, filterFavorites) {
+            persistentListOf(filterPopular, filterRecent, filterFavorites)
         }
-    }
-    LaunchedEffect(radioOptions) {
-        if (selectedRadioOption !in radioOptions) {
-            selectedRadioOption = radioOptions.first()
+
+        val radioSystem = stringResource(id = ToolkitR.string.follow_system)
+        val radioLight = stringResource(id = ToolkitR.string.light_mode)
+        val radioDark = stringResource(id = ToolkitR.string.dark_mode)
+        val radioOptions = remember(radioSystem, radioLight, radioDark) {
+            persistentListOf(radioSystem, radioLight, radioDark)
         }
+
+        var selectedDropdownOption by rememberSaveable { mutableStateOf(dropdownOptions.first()) }
+        var selectedFilter by rememberSaveable { mutableStateOf(filters.first()) }
+        var selectedRadioOption by rememberSaveable { mutableStateOf(radioOptions.first()) }
+        var selectedDateMillis by rememberSaveable { mutableLongStateOf(System.currentTimeMillis()) }
+        var switchEnabled by rememberSaveable { mutableStateOf(true) }
+        var switchWithDividerEnabled by rememberSaveable { mutableStateOf(false) }
+        var switchCardEnabled by rememberSaveable { mutableStateOf(false) }
+        var checkboxChecked by rememberSaveable { mutableStateOf(false) }
+
+        LaunchedEffect(dropdownOptions) {
+            if (selectedDropdownOption !in dropdownOptions) {
+                selectedDropdownOption = dropdownOptions.first()
+            }
+        }
+        LaunchedEffect(filters) {
+            if (selectedFilter !in filters) {
+                selectedFilter = filters.first()
+            }
+        }
+        LaunchedEffect(radioOptions) {
+            if (selectedRadioOption !in radioOptions) {
+                selectedRadioOption = radioOptions.first()
+            }
+        }
+
+        val state = ComponentsUiState(
+            dropdownOptions = dropdownOptions,
+            selectedDropdownOption = selectedDropdownOption,
+            dateMillis = selectedDateMillis,
+            filters = filters,
+            selectedFilter = selectedFilter,
+            switchEnabled = switchEnabled,
+            switchWithDividerEnabled = switchWithDividerEnabled,
+            switchCardEnabled = switchCardEnabled,
+            checkboxChecked = checkboxChecked,
+            radioOptions = radioOptions,
+            selectedRadioOption = selectedRadioOption,
+        )
+
+        ComponentsScreen(
+            paddingValues = innerPadding,
+            firebaseController = firebaseController,
+            state = state,
+            onDropdownOptionSelected = { selectedDropdownOption = it },
+            onDateSelected = { selectedDateMillis = it },
+            onFilterSelected = { selectedFilter = it },
+            onSwitchEnabledChanged = { switchEnabled = it },
+            onSwitchWithDividerChanged = {
+                switchWithDividerEnabled = it
+            },
+            onSwitchCardChanged = { switchCardEnabled = it },
+            onCheckboxChanged = { checkboxChecked = it },
+            onRadioOptionSelected = { selectedRadioOption = it },
+        )
     }
 
-    val state = ComponentsUiState(
-        dropdownOptions = dropdownOptions,
-        selectedDropdownOption = selectedDropdownOption,
-        dateMillis = selectedDateMillis,
-        filters = filters,
-        selectedFilter = selectedFilter,
-        switchEnabled = switchEnabled,
-        switchWithDividerEnabled = switchWithDividerEnabled,
-        switchCardEnabled = switchCardEnabled,
-        checkboxChecked = checkboxChecked,
-        radioOptions = radioOptions,
-        selectedRadioOption = selectedRadioOption,
-    )
-
-    ComponentsScreen(
-        paddingValues = paddingValues,
-        firebaseController = firebaseController,
-        state = state,
-        onDropdownOptionSelected = { selectedDropdownOption = it },
-        onDateSelected = { selectedDateMillis = it },
-        onFilterSelected = { selectedFilter = it },
-        onSwitchEnabledChanged = { switchEnabled = it },
-        onSwitchWithDividerChanged = {
-            switchWithDividerEnabled = it
-        },
-        onSwitchCardChanged = { switchCardEnabled = it },
-        onCheckboxChanged = { checkboxChecked = it },
-        onRadioOptionSelected = { selectedRadioOption = it },
-    )
+    if (isEmbedded) {
+        content(paddingValues)
+    } else {
+        LargeTopAppBarWithScaffold(
+            title = stringResource(id = R.string.components_title),
+            onBackClicked = { activity?.finish() },
+            content = content
+        )
+    }
 }
 
 /**

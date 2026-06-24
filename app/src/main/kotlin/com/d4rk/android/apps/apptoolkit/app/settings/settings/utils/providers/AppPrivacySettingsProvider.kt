@@ -18,33 +18,32 @@
 package com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers
 
 import android.content.Context
-import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
+import android.content.Intent
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.AdsSettingsRoute
-import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
-import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.PermissionsRoute
+import com.d4rk.android.libs.apptoolkit.app.ads.ui.AdsSettingsActivity
+import com.d4rk.android.libs.apptoolkit.app.permissions.ui.PermissionsActivity
+import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.PrivacySettingsProvider
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
 
 class AppPrivacySettingsProvider(
     private val context: Context,
-    private val navigationManager: NavigationManager,
 ) : PrivacySettingsProvider {
 
     override fun openPermissionsScreen() {
-        navigationManager.navigateTo(PermissionsRoute)
+        context.startActivitySafely(Intent(context, PermissionsActivity::class.java))
     }
 
     override fun openAdsScreen() {
-        navigationManager.navigateTo(AdsSettingsRoute)
+        context.startActivitySafely(Intent(context, AdsSettingsActivity::class.java))
     }
 
     override fun openUsageAndDiagnosticsScreen() {
-        navigationManager.navigateTo(
-            GeneralSettingsRoute(
-                title = context.getString(R.string.usage_and_diagnostics),
-                contentKey = SettingsContent.USAGE_AND_DIAGNOSTICS
-            )
+        GeneralSettingsActivity.start(
+            context = context,
+            title = context.getString(R.string.usage_and_diagnostics),
+            contentKey = SettingsContent.USAGE_AND_DIAGNOSTICS,
         )
     }
 }

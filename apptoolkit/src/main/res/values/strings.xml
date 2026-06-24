@@ -28,7 +28,7 @@
 
     <string name="loading">Loading…</string>
     <string name="skip_button_text">Skip</string>
-    <string name="skip_button_content_description">Skip"</string>
+    <string name="skip_button_content_description">Skip</string>
     <string name="back_button_content_description">Back</string>
     <string name="back_button_text">Back</string>
     <string name="done_button_content_description">Done</string>
