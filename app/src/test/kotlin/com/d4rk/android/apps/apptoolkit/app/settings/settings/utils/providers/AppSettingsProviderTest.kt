@@ -18,7 +18,6 @@
 package com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.providers
 
 import android.content.Context
-import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
 import com.d4rk.android.apps.apptoolkit.app.settings.settings.utils.constants.SettingsConstants
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
@@ -54,8 +53,6 @@ class AppSettingsProviderTest {
         R.string.summary_preference_settings_about to "Learn more about the app"
     )
 
-    private val navigationManager = mockk<NavigationManager>(relaxed = true)
-
     @AfterEach
     fun tearDown() {
         unmockkAll()
@@ -64,7 +61,7 @@ class AppSettingsProviderTest {
     @Test
     fun `provideSettingsConfig returns expected configuration`() {
         val context = createContext(defaultStrings)
-        val provider = AppSettingsProvider(context, navigationManager)
+        val provider = AppSettingsProvider(context)
         mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextIntentExtensionsKt")
         mockkObject(GeneralSettingsActivity.Companion)
         every { context.openAppNotificationSettings() } returns true
@@ -118,27 +115,27 @@ class AppSettingsProviderTest {
         notifications.action.invoke()
         verify(exactly = 1) { context.openAppNotificationSettings() }
         verify(exactly = 0) {
-            navigationManager.navigateTo(any())
+            GeneralSettingsActivity.start(any(), any(), any())
         }
 
         display.action.invoke()
         verify(exactly = 1) {
-            navigationManager.navigateTo(any())
+            GeneralSettingsActivity.start(any(), any(), any())
         }
 
         security.action.invoke()
         verify(exactly = 2) {
-            navigationManager.navigateTo(any())
+            GeneralSettingsActivity.start(any(), any(), any())
         }
 
         advanced.action.invoke()
         verify(exactly = 3) {
-            navigationManager.navigateTo(any())
+            GeneralSettingsActivity.start(any(), any(), any())
         }
 
         about.action.invoke()
         verify(exactly = 4) {
-            navigationManager.navigateTo(any())
+            GeneralSettingsActivity.start(any(), any(), any())
         }
 
         assertNull(config.categories[0].title)
@@ -148,7 +145,7 @@ class AppSettingsProviderTest {
     @Test
     fun `notifications preference falls back to privacy screen when system settings cannot open`() {
         val context = createContext(defaultStrings)
-        val provider = AppSettingsProvider(context, navigationManager)
+        val provider = AppSettingsProvider(context)
         mockkStatic("com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.ContextIntentExtensionsKt")
         mockkObject(GeneralSettingsActivity.Companion)
         every { context.openAppNotificationSettings() } returns false
@@ -161,14 +158,14 @@ class AppSettingsProviderTest {
 
         verify(exactly = 1) { context.openAppNotificationSettings() }
         verify(exactly = 1) {
-            navigationManager.navigateTo(any())
+            GeneralSettingsActivity.start(any(), any(), any())
         }
     }
 
     @Test
     fun `provideSettingsConfig handles missing resources without crashing`() {
         val context = createContext(emptyMap()) { "<missing>" }
-        val provider = AppSettingsProvider(context, navigationManager)
+        val provider = AppSettingsProvider(context)
 
         val config = assertDoesNotThrow { provider.provideSettingsConfig() }
 

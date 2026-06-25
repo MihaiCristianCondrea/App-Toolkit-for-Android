@@ -48,6 +48,7 @@ open class TestAppsListViewModelBase {
     protected fun setup(
         fetchApps: List<AppInfo>,
         initialFavorites: Set<String> = emptySet(),
+        installedPackages: Set<String> = emptySet(),
         favoritesFlow: Flow<Set<String>>? = null,
         toggleError: Throwable? = null,
         fetchError: AppErrors? = null,
@@ -56,7 +57,8 @@ open class TestAppsListViewModelBase {
         println("\uD83E\uDDEA [SETUP] Initial favorites: $initialFavorites")
         val developerAppsRepository = FakeDeveloperAppsRepository(fetchApps, fetchError)
         val fetchUseCase = FetchDeveloperAppsUseCase(developerAppsRepository)
-        val installedAppsRepository = FakeInstalledAppsRepository()
+        val installedAppsRepository =
+            FakeInstalledAppsRepository(installedPackages = installedPackages)
         val getInstalledPackagesUseCase = GetInstalledPackagesUseCase(installedAppsRepository)
         val getAppInstallInfoUseCase = GetAppInstallInfoUseCase(installedAppsRepository)
         val favoritesRepository =

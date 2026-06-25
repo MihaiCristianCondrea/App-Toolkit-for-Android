@@ -48,6 +48,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -109,6 +110,7 @@ class AppsListViewModel(
 
     init {
         observeFetch()
+        observeFilterValidity()
         onEvent(HomeEvent.FetchApps)
     }
 
@@ -185,6 +187,29 @@ class AppsListViewModel(
                 }
                 .launchIn(viewModelScope)
         }
+    }
+
+    private fun observeFilterValidity() {
+        screenState
+            .map { it.data }
+            .filterNotNull()
+            .onEach { state ->
+                val allAppsCount = state.apps.size
+                val installedPackagesCount = state.installedPackages.size
+                val favoritesCount = favorites.value.size
+
+                val isFilterValid = when (state.selectedFilter) {
+                    AppsListFilter.All -> true
+                    AppsListFilter.Installed -> installedPackagesCount > 0
+                    AppsListFilter.NotInstalled -> installedPackagesCount > 0 && installedPackagesCount < allAppsCount
+                    AppsListFilter.Favorites -> favoritesCount > 0
+                }
+
+                if (!isFilterValid) {
+                    selectFilter(AppsListFilter.All)
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun selectFilter(filter: AppsListFilter) {

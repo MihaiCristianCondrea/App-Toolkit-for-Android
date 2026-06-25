@@ -15,6 +15,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.d4rk.android.apps.apptoolkit.app.apps.list
 
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
@@ -22,6 +24,8 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
 import com.d4rk.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -53,13 +57,58 @@ class TestAppsListViewModel : TestAppsListViewModelBase() {
 
 
     @Test
-    fun `select filter updates apps list state`() = runTest(dispatcherExtension.testDispatcher) {
-        setup(fetchApps = emptyList(), dispatchers = TestDispatchers(dispatcherExtension.testDispatcher))
+    fun `select filter updates apps list state`() = runTest {
+        val apps = listOf(
+            AppInfo(
+                name = "App",
+                packageName = "pkg",
+                iconUrl = "url",
+                description = "Description",
+                screenshots = emptyList(),
+            )
+        )
+        // Setup with 1 app and initial favorites so Favorites filter is valid
+        setup(
+            fetchApps = apps,
+            initialFavorites = setOf("pkg"),
+            installedPackages = setOf("pkg"),
+            dispatchers = TestDispatchers(UnconfinedTestDispatcher())
+        )
 
+        // Favorites is valid because we have one favorite
         viewModel.onEvent(HomeEvent.FilterSelected(AppsListFilter.Favorites))
-        advanceUntilIdle()
 
         assertEquals(AppsListFilter.Favorites, viewModel.uiState.value.data?.selectedFilter)
+    }
+
+    @Test
+    fun `filter resets to All when current filter becomes invalid`() = runTest {
+        val apps = listOf(
+            AppInfo(
+                name = "App",
+                packageName = "pkg",
+                iconUrl = "url",
+                description = "Description",
+                screenshots = emptyList(),
+            )
+        )
+        setup(
+            fetchApps = apps,
+            initialFavorites = setOf("pkg"),
+            installedPackages = setOf("pkg"),
+            dispatchers = TestDispatchers(UnconfinedTestDispatcher())
+        )
+
+        // Set to Favorites
+        viewModel.onEvent(HomeEvent.FilterSelected(AppsListFilter.Favorites))
+        assertEquals(AppsListFilter.Favorites, viewModel.uiState.value.data?.selectedFilter)
+
+        // Remove favorite
+        viewModel.toggleFavorite("pkg")
+        advanceUntilIdle() // Wait for toggleFavorite job
+
+        // Should reset to All
+        assertEquals(AppsListFilter.All, viewModel.uiState.value.data?.selectedFilter)
     }
 
     @Test

@@ -39,7 +39,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -59,7 +59,6 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Memory
 import androidx.compose.material.icons.outlined.MonetizationOn
-import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.PowerSettingsNew
@@ -73,8 +72,6 @@ import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -212,7 +209,7 @@ fun ToolkitTilesScreen(
             end = SizeConstants.LargeSize,
             bottom = paddingValues.calculateBottomPadding() + SizeConstants.LargeSize,
         ),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
     ) {
         item {
             TilesFilters(
@@ -220,22 +217,22 @@ fun ToolkitTilesScreen(
                 onFilterSelected = { filter -> onEvent(ToolkitTilesEvent.FilterSelected(filter)) },
             )
         }
+        item { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
         if (filteredCategories.isEmpty()) {
             item {
                 EmptyFilterCard()
             }
         } else {
-            items(
+            itemsIndexed(
                 items = filteredCategories,
-                key = ToolkitTileCategory::id,
-            ) { category ->
+                key = { _, category -> category.id },
+            ) { index, category ->
                 val expanded = category.id in state.expandedCategoryIds
                 TileCategorySection(
                     category = category,
+                    position = groupedItemPosition(index, filteredCategories.size),
                     expanded = expanded,
                     onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
-                    onAddTile = { tile -> onEvent(ToolkitTilesEvent.AddTileClicked(tile.requestKey)) },
-                    onSetupTile = { tile -> onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) },
                     onPreviewTile = { tile ->
                         if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
                             quickToolDialog = ToolkitQuickTool.MaterialColors
@@ -246,6 +243,7 @@ fun ToolkitTilesScreen(
                 )
             }
         }
+        item { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
         item {
             HowToAddTilesCard()
         }
@@ -303,16 +301,20 @@ private fun TilesFilters(
 @Composable
 private fun TileCategorySection(
     category: ToolkitTileCategory,
+    position: GroupedItemPosition,
     expanded: Boolean,
     onToggle: () -> Unit,
-    onAddTile: (ToolkitTile) -> Unit,
-    onSetupTile: (ToolkitTile) -> Unit,
     onPreviewTile: (ToolkitTile) -> Unit,
 ) {
     Surface(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .groupedCorners(
+                position = position,
+                outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+            ),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        shape = RoundedCornerShape(SizeConstants.ExtraLargeIncreasedSize),
+        shape = RectangleShape,
     ) {
         Column(modifier = Modifier.padding(SizeConstants.MediumSize)) {
             Row(
@@ -347,8 +349,6 @@ private fun TileCategorySection(
                         ToolkitTileCard(
                             tile = tile,
                             position = groupedItemPosition(index, category.tiles.size),
-                            onAddTile = { onAddTile(tile) },
-                            onSetupTile = { onSetupTile(tile) },
                             onPreviewTile = { onPreviewTile(tile) },
                         )
                     }
@@ -362,13 +362,8 @@ private fun TileCategorySection(
 private fun ToolkitTileCard(
     tile: ToolkitTile,
     position: GroupedItemPosition,
-    onAddTile: () -> Unit,
-    onSetupTile: () -> Unit,
     onPreviewTile: () -> Unit,
 ) {
-    var showMenu by remember { mutableStateOf(false) }
-    val showActions = tile.requestKey != null || tile.status != ToolkitTileStatus.Available
-
     Card(
         onClick = onPreviewTile,
         modifier = Modifier
@@ -386,7 +381,7 @@ private fun ToolkitTileCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(SizeConstants.LargeSize),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+            verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -408,53 +403,9 @@ private fun ToolkitTileCard(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    ToolkitToolChips(tile = tile)
-                }
-                if (showActions) {
-                    Box {
-                        IconButton(onClick = { showMenu = true }) {
-                            Icon(
-                                imageVector = Icons.Outlined.MoreVert,
-                                contentDescription = stringResource(id = R.string.tiles_more_options),
-                            )
-                        }
-                        DropdownMenu(
-                            expanded = showMenu,
-                            onDismissRequest = { showMenu = false },
-                            shape = RoundedCornerShape(SizeConstants.LargeSize),
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text(text = stringResource(id = R.string.tiles_add)) },
-                                onClick = {
-                                    showMenu = false
-                                    onAddTile()
-                                },
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = Icons.Outlined.CheckCircle,
-                                        contentDescription = null,
-                                    )
-                                },
-                                enabled = tile.status == ToolkitTileStatus.Available && tile.requestKey != null,
-                            )
-                            DropdownMenuItem(
-                                text = { Text(text = stringResource(id = R.string.tiles_setup)) },
-                                onClick = {
-                                    showMenu = false
-                                    onSetupTile()
-                                },
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = Icons.Outlined.WarningAmber,
-                                        contentDescription = null,
-                                    )
-                                },
-                                enabled = tile.status != ToolkitTileStatus.Available,
-                            )
-                        }
-                    }
                 }
             }
+            ToolkitToolChips(tile = tile)
         }
     }
 }

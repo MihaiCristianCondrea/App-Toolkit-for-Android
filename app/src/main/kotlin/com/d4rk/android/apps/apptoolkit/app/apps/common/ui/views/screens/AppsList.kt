@@ -139,7 +139,9 @@ fun AppsList(
 
     AppsGrid(
         items = items,
+        allAppsCount = uiHomeScreen.apps.size,
         favorites = favorites,
+        installedPackages = installedPackages,
         selectedFilter = uiHomeScreen.selectedFilter,
         onFilterSelected = onFilterSelected,
         paddingValues = paddingValues,
@@ -160,7 +162,9 @@ fun AppsList(
  * This function is responsible for the layout and rendering of individual app cards and ad cards within the grid.
  *
  * @param items The list of [AppListItem]s to display, which can be either an app or an ad.
+ * @param allAppsCount Total number of available apps.
  * @param favorites A set of package names for the apps that are marked as favorites.
+ * @param installedPackages A set of package names for the apps that are installed.
  * @param selectedFilter The currently selected chip filter.
  * @param onFilterSelected A callback invoked when the user chooses an app filter chip.
  * @param paddingValues Padding to be applied from the parent composable, typically from a Scaffold.
@@ -175,7 +179,9 @@ fun AppsList(
 @Composable
 private fun AppsGrid(
     items: ImmutableList<AppListItem>,
+    allAppsCount: Int,
     favorites: ImmutableSet<String>,
+    installedPackages: ImmutableSet<String>,
     selectedFilter: AppsListFilter,
     onFilterSelected: (AppsListFilter) -> Unit,
     paddingValues: PaddingValues,
@@ -215,6 +221,9 @@ private fun AppsGrid(
     ) {
         item(span = { GridItemSpan(columnCount) }, contentType = "filters") {
             AppsListFilters(
+                allAppsCount = allAppsCount,
+                installedPackages = installedPackages,
+                favorites = favorites,
                 selectedFilter = selectedFilter,
                 onFilterSelected = onFilterSelected,
             )
@@ -276,16 +285,37 @@ private fun AppsGrid(
 
 @Composable
 private fun AppsListFilters(
+    allAppsCount: Int,
+    installedPackages: ImmutableSet<String>,
+    favorites: ImmutableSet<String>,
     selectedFilter: AppsListFilter,
     onFilterSelected: (AppsListFilter) -> Unit,
 ) {
+    val filters = remember(allAppsCount, installedPackages, favorites) {
+        val list = mutableListOf<AppsFilterItem>()
+        list.add(AppsFilterItems[0]) // All
+
+        if (installedPackages.isNotEmpty()) {
+            list.add(AppsFilterItems[1]) // Installed
+        }
+
+        if (installedPackages.isNotEmpty() && installedPackages.size < allAppsCount) {
+            list.add(AppsFilterItems[2]) // Not Installed
+        }
+
+        if (favorites.isNotEmpty()) {
+            list.add(AppsFilterItems[3]) // Favorites
+        }
+        list.toImmutableList()
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
     ) {
-        AppsFilterItems.forEach { item ->
+        filters.forEach { item ->
             FilterChip(
                 selected = selectedFilter == item.filter,
                 onClick = { onFilterSelected(item.filter) },
