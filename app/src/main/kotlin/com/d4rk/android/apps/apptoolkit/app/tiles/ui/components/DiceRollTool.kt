@@ -90,9 +90,9 @@ fun DiceWithButtonAndProceduralDice(
     var rollRequest: Int by remember { mutableIntStateOf(0) }
     var rolling: Boolean by remember { mutableStateOf(false) }
 
-    val rotationX = remember { Animatable(SettledRotationX) }
-    val rotationY = remember { Animatable(SettledRotationY) }
-    val rotationZ = remember { Animatable(SettledRotationZ) }
+    val rotationX = remember { Animatable(targetAnglesFor(displayedResult).first) }
+    val rotationY = remember { Animatable(targetAnglesFor(displayedResult).second) }
+    val rotationZ = remember { Animatable(0f) }
     val scale = remember { Animatable(1f) }
     val translationY = remember { Animatable(0f) }
 
@@ -106,26 +106,15 @@ fun DiceWithButtonAndProceduralDice(
             maximumValue = MaxDiceValue,
         )
 
+        val (targetX, targetY) = targetAnglesFor(finalResult)
+
         coroutineScope {
-            launch {
-                repeat(times = 14) { index: Int ->
-                    displayedResult = Random.nextInt(
-                        from = MinDiceValue,
-                        until = MaxDiceValue + 1,
-                    )
-
-                    delay(timeMillis = 42L + index * 3L)
-                }
-
-                displayedResult = finalResult
-            }
-
             launch {
                 rotationX.animateTo(
                     targetValue = nextSettledAngle(
                         currentValue = rotationX.value,
                         extraTurns = 3,
-                        settledDegrees = SettledRotationX,
+                        settledDegrees = targetX,
                     ),
                     animationSpec = tween(
                         durationMillis = RollDurationMillis,
@@ -139,7 +128,7 @@ fun DiceWithButtonAndProceduralDice(
                     targetValue = nextSettledAngle(
                         currentValue = rotationY.value,
                         extraTurns = 4,
-                        settledDegrees = SettledRotationY,
+                        settledDegrees = targetY,
                     ),
                     animationSpec = tween(
                         durationMillis = RollDurationMillis,
@@ -153,7 +142,7 @@ fun DiceWithButtonAndProceduralDice(
                     targetValue = nextSettledAngle(
                         currentValue = rotationZ.value,
                         extraTurns = 5,
-                        settledDegrees = SettledRotationZ,
+                        settledDegrees = 0f,
                     ),
                     animationSpec = tween(
                         durationMillis = RollDurationMillis,
@@ -302,33 +291,30 @@ private fun MaterialProceduralDice3D(
         }
     }
 
+    val path = remember { Path() }
+
     Canvas(modifier = modifier) {
         drawProceduralDiceCube(
-            value = value,
             rotationX = rotationX,
             rotationY = rotationY,
             rotationZ = rotationZ,
             colors = colors,
             fillPaint = fillPaint,
             strokePaint = strokePaint,
+            reusablePath = path,
         )
     }
 }
 
 private fun DrawScope.drawProceduralDiceCube(
-    value: Int,
     rotationX: Float,
     rotationY: Float,
     rotationZ: Float,
     colors: ProceduralDiceColors,
     fillPaint: Paint,
     strokePaint: Paint,
+    reusablePath: Path,
 ) {
-    val safeValue: Int = value.coerceIn(
-        minimumValue = MinDiceValue,
-        maximumValue = MaxDiceValue,
-    )
-
     val center = Offset(
         x = size.width / 2f,
         y = size.height / 2f,
@@ -342,10 +328,6 @@ private fun DrawScope.drawProceduralDiceCube(
     val rotationXRadians: Double = rotationX.toRadians()
     val rotationYRadians: Double = rotationY.toRadians()
     val rotationZRadians: Double = rotationZ.toRadians()
-
-    val faceNumbers: Map<DiceCubeFace, Int> = createFaceNumbers(
-        resultValue = safeValue,
-    )
 
     val renderedFaces: List<RenderedDiceFace> = DiceFaceDefinitions
         .map { faceDefinition: DiceFaceDefinition ->
@@ -375,18 +357,18 @@ private fun DrawScope.drawProceduralDiceCube(
                 depth = rotatedVertices.sumOf { vertex: Vec3 ->
                     vertex.z.toDouble()
                 }.toFloat() / rotatedVertices.size,
-                number = faceNumbers.getValue(faceDefinition.face),
+                number = ConstantFaceNumbers.getValue(faceDefinition.face),
             )
         }
         .filter { face: RenderedDiceFace ->
-            face.facingCamera > 0f
+            face.facingCamera > 0.05f // Filter out extremely thin/back faces
         }
         .sortedBy { face: RenderedDiceFace ->
             face.depth
         }
 
-    val edgeWidth: Float = cubeHalfSize * 0.08f // Adjusted thickness relative to curves
-    val cornerRadius: Float = cubeHalfSize * 0.48f // Applied to corner path effect for curved edges
+    val edgeWidth: Float = cubeHalfSize * 0.08f
+    val cornerRadius: Float = cubeHalfSize * 0.18f // Reduced corner radius for stability
     val cornerEffect = PathEffect.cornerPathEffect(cornerRadius)
 
     fillPaint.pathEffect = cornerEffect
@@ -394,7 +376,8 @@ private fun DrawScope.drawProceduralDiceCube(
     strokePaint.strokeWidth = edgeWidth
 
     renderedFaces.forEach { face: RenderedDiceFace ->
-        val path = Path().apply {
+        reusablePath.apply {
+            reset()
             moveTo(
                 x = face.corners[0].x,
                 y = face.corners[0].y,
@@ -412,10 +395,10 @@ private fun DrawScope.drawProceduralDiceCube(
 
         drawIntoCanvas { canvas ->
             fillPaint.color = colors.colorFor(face.face)
-            canvas.drawPath(path, fillPaint)
+            canvas.drawPath(reusablePath, fillPaint)
 
             strokePaint.color = colors.edgeColor
-            canvas.drawPath(path, strokePaint)
+            canvas.drawPath(reusablePath, strokePaint)
         }
 
         drawProjectedPips(
@@ -528,37 +511,26 @@ private fun pipCentersFor(value: Int): List<Offset> {
     }
 }
 
-private fun createFaceNumbers(resultValue: Int): Map<DiceCubeFace, Int> {
-    val oppositePairs = listOf(
-        1 to 6,
-        2 to 5,
-        3 to 4,
-    )
-
-    val resultPair = oppositePairs.first { pair: Pair<Int, Int> ->
-        pair.first == resultValue || pair.second == resultValue
+internal fun targetAnglesFor(value: Int): Pair<Float, Float> {
+    return when (value) {
+        1 -> -90f to 0f
+        2 -> 0f to 0f
+        3 -> 0f to -90f
+        4 -> 0f to 90f
+        5 -> 0f to 180f
+        6 -> 90f to 0f
+        else -> 0f to 0f
     }
-
-    val remainingPairs = oppositePairs.filterNot { pair: Pair<Int, Int> ->
-        pair == resultPair
-    }
-
-    val bottomValue = if (resultPair.first == resultValue) {
-        resultPair.second
-    } else {
-        resultPair.first
-    }
-
-    // Map resultValue to Top so it's visible from above
-    return mapOf(
-        DiceCubeFace.Top to resultValue,
-        DiceCubeFace.Bottom to bottomValue,
-        DiceCubeFace.Front to remainingPairs[0].first,
-        DiceCubeFace.Back to remainingPairs[0].second,
-        DiceCubeFace.Right to remainingPairs[1].first,
-        DiceCubeFace.Left to remainingPairs[1].second,
-    )
 }
+
+internal val ConstantFaceNumbers = mapOf(
+    DiceCubeFace.Top to 1,
+    DiceCubeFace.Bottom to 6,
+    DiceCubeFace.Front to 2,
+    DiceCubeFace.Back to 5,
+    DiceCubeFace.Right to 3,
+    DiceCubeFace.Left to 4,
+)
 
 private fun ProceduralDiceColors.colorFor(face: DiceCubeFace): Color {
     return when (face) {
@@ -674,7 +646,7 @@ private fun Float.toRadians(): Double {
     return this.toDouble() * PI / 180.0
 }
 
-private enum class DiceCubeFace {
+internal enum class DiceCubeFace {
     Front,
     Back,
     Left,
@@ -691,13 +663,13 @@ private data class ProceduralDiceColors(
     val pipColor: Color,
 )
 
-private data class Vec3(
+internal data class Vec3(
     val x: Float,
     val y: Float,
     val z: Float,
 )
 
-private data class DiceFaceDefinition(
+internal data class DiceFaceDefinition(
     val face: DiceCubeFace,
     val vertices: List<Vec3>,
     val normal: Vec3,
@@ -711,7 +683,7 @@ private data class RenderedDiceFace(
     val number: Int,
 )
 
-private val DiceFaceDefinitions: List<DiceFaceDefinition> = listOf(
+internal val DiceFaceDefinitions: List<DiceFaceDefinition> = listOf(
     DiceFaceDefinition(
         face = DiceCubeFace.Front,
         vertices = listOf(
@@ -777,7 +749,7 @@ private val DiceFaceDefinitions: List<DiceFaceDefinition> = listOf(
 private const val MinDiceValue = 1
 private const val MaxDiceValue = 6
 
-// Setting `SettledRotationX` to a steep -80f to give it a much clearer "top-down" view.
+// Settled rotation for the result face to be visible from a "top-down" view.
 private const val SettledRotationX = -90f
 private const val SettledRotationY = 0f
 private const val SettledRotationZ = 0f
