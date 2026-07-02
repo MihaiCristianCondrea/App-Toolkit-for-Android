@@ -37,6 +37,11 @@ class FirebaseNotificationsService : FirebaseMessagingService() {
         Log.d(FCM_LOG_TAG, "Refreshed FCM token: $token")
     }
 
+    override fun onRegistered(installationId: String) {
+        super.onRegistered(installationId)
+        Log.d(FCM_LOG_TAG, "Registered installation: $installationId")
+    }
+
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         Log.d(FCM_LOG_TAG, "Received FCM message from ${message.from}")
