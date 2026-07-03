@@ -43,7 +43,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.VolumeUp
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -55,7 +54,6 @@ import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Palette
@@ -262,20 +260,13 @@ fun ToolkitTilesScreen(
             breathingState = state.breathingState,
             caffeineState = state.caffeineState,
             ringerMode = state.ringerMode,
-            isAccessibilityEnabled = state.isAccessibilityEnabled,
             isSosActive = state.isSosActive,
-            networkTraffic = state.networkTraffic,
             onClose = { selectedTile = null },
             onAddTile = { onEvent(ToolkitTilesEvent.AddTileClicked(tile.requestKey)) },
             onSetupTile = { onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) },
             onCaffeineCycle = { onEvent(ToolkitTilesEvent.CaffeineCycleClicked) },
             onSoundModeCycle = { current -> onEvent(ToolkitTilesEvent.SoundModeClicked(current)) },
-            onVolumePanelShow = { onEvent(ToolkitTilesEvent.VolumePanelClicked) },
             onMusicSearchLaunch = { onEvent(ToolkitTilesEvent.MusicSearchClicked) },
-            onScreenshotClick = { onEvent(ToolkitTilesEvent.ScreenshotClicked) },
-            onLockScreenClick = { onEvent(ToolkitTilesEvent.LockScreenClicked) },
-            onPowerMenuClick = { onEvent(ToolkitTilesEvent.PowerMenuClicked) },
-            onAccessibilitySetup = { onEvent(ToolkitTilesEvent.AccessibilitySetupClicked) },
             onSosToggle = { onEvent(ToolkitTilesEvent.SosClicked) },
         )
     }
@@ -609,7 +600,6 @@ private fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Level -> Icons.Outlined.Straighten
     ToolkitTileIcon.Compass -> Icons.Outlined.Explore
     ToolkitTileIcon.Lux -> Icons.Outlined.WbSunny
-    ToolkitTileIcon.Network -> Icons.Outlined.SyncAlt
     ToolkitTileIcon.Temperature -> Icons.Outlined.Thermostat
     ToolkitTileIcon.Coin -> Icons.Outlined.MonetizationOn
     ToolkitTileIcon.Dice -> Icons.Outlined.Casino
@@ -617,10 +607,6 @@ private fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Battery -> Icons.Outlined.BatteryChargingFull
     ToolkitTileIcon.Caffeine -> Icons.Outlined.Timer
     ToolkitTileIcon.Sound -> Icons.Outlined.GraphicEq
-    ToolkitTileIcon.Volume -> Icons.AutoMirrored.Outlined.VolumeUp
-    ToolkitTileIcon.Screenshot -> Icons.Outlined.Screenshot
-    ToolkitTileIcon.Lock -> Icons.Outlined.Lock
-    ToolkitTileIcon.Power -> Icons.Outlined.PowerSettingsNew
     ToolkitTileIcon.Music -> Icons.Outlined.MusicNote
     ToolkitTileIcon.Breathing -> Icons.Outlined.FavoriteBorder
     ToolkitTileIcon.Sos -> Icons.Outlined.WarningAmber
@@ -636,18 +622,12 @@ private fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
     ToolkitTileIcon.Caffeine,
     ToolkitTileIcon.Breathing -> ToolkitR.drawable.background_soft_burst
 
-    ToolkitTileIcon.Screenshot,
-    ToolkitTileIcon.Volume,
     ToolkitTileIcon.Sound -> ToolkitR.drawable.background_flower
-
-    ToolkitTileIcon.Network -> ToolkitR.drawable.background_sunny
 
     ToolkitTileIcon.Coin,
     ToolkitTileIcon.Dice,
     ToolkitTileIcon.Counter -> ToolkitR.drawable.background_12_sided_cookie
 
-    ToolkitTileIcon.Lock,
-    ToolkitTileIcon.Power,
     ToolkitTileIcon.Sos -> ToolkitR.drawable.background_gem
 
     else -> ToolkitR.drawable.background_circle
@@ -678,11 +658,6 @@ private fun ToolkitTileIcon.iconColors(): StatusColors {
             content = if (isDark) Color(0xFF74DED1) else Color(0xFF006A60),
         )
 
-        ToolkitTileIcon.Network -> StatusColors(
-            container = if (isDark) Color(0xFF004A77) else Color(0xFF0095EF),
-            content = if (isDark) Color(0xFF70CFFF) else Color(0xFF004A77),
-        )
-
         ToolkitTileIcon.Battery -> StatusColors(
             container = if (isDark) Color(0xFF5A2D91) else Color(0xFF9158E2),
             content = if (isDark) Color(0xFFD3BFFF) else Color(0xFF5A2D91),
@@ -702,17 +677,9 @@ private fun ToolkitTileIcon.iconColors(): StatusColors {
             content = if (isDark) Color(0xFFFBE44D) else Color(0xFF6B5E00),
         )
 
-        ToolkitTileIcon.Screenshot,
-        ToolkitTileIcon.Volume,
         ToolkitTileIcon.Sound -> StatusColors(
             container = if (isDark) Color(0xFF91005A) else Color(0xFFE2008E),
             content = if (isDark) Color(0xFFFFB0D3) else Color(0xFF91005A),
-        )
-
-        ToolkitTileIcon.Lock,
-        ToolkitTileIcon.Power -> StatusColors(
-            container = if (isDark) Color(0xFF910000) else Color(0xFFFF2626),
-            content = if (isDark) Color(0xFFFFB4B4) else Color(0xFF910000),
         )
 
         ToolkitTileIcon.Music -> StatusColors(

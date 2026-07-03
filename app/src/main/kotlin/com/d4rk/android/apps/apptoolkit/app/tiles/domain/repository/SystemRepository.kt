@@ -26,7 +26,7 @@ enum class RingerMode {
 }
 
 /**
- * Repository for performing system-level actions (sound, volume, etc.).
+ * Repository for performing system-level actions (sound, etc.).
  */
 interface SystemRepository {
     /** Emits the current ringer mode. */
@@ -35,24 +35,6 @@ interface SystemRepository {
     /** Sets the ringer mode. */
     fun setRingerMode(mode: RingerMode)
 
-    /** Opens the system volume panel. */
-    fun showVolumePanel()
-
     /** Launches the system music search activity. */
     fun launchMusicSearch()
-
-    /** Takes a screenshot. */
-    fun takeScreenshot()
-
-    /** Locks the screen. */
-    fun lockScreen()
-
-    /** Opens the power menu. */
-    fun openPowerMenu()
-
-    /** Returns true if the accessibility service is enabled. */
-    fun isAccessibilityServiceEnabled(): Boolean
-
-    /** Opens the accessibility settings. */
-    fun openAccessibilitySettings()
 }

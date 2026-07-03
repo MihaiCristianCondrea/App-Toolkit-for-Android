@@ -17,16 +17,9 @@
 
 package com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository
 
-import kotlinx.coroutines.flow.Flow
-
 /**
  * Repository for monitoring system resources.
  */
 interface SystemMonitorRepository {
-    fun getNetworkTraffic(): Flow<NetworkTraffic>
+    // Reserved for future system monitoring tools
 }
-
-data class NetworkTraffic(
-    val rxBytesPerSecond: Long,
-    val txBytesPerSecond: Long,
-)

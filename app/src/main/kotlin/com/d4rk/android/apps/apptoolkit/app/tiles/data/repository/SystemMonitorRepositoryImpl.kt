@@ -18,46 +18,12 @@
 package com.d4rk.android.apps.apptoolkit.app.tiles.data.repository
 
 import android.content.Context
-import android.net.TrafficStats
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.NetworkTraffic
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SystemMonitorRepository
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlin.time.Duration.Companion.milliseconds
 
 class SystemMonitorRepositoryImpl(
     private val context: Context,
     private val dispatchers: DispatcherProvider,
 ) : SystemMonitorRepository {
-
-    override fun getNetworkTraffic(): Flow<NetworkTraffic> = flow {
-        var lastRx = TrafficStats.getTotalRxBytes()
-        var lastTx = TrafficStats.getTotalTxBytes()
-        var lastTime = System.currentTimeMillis()
-
-        while (true) {
-            delay(REFRESH_INTERVAL_MS.milliseconds)
-            val currentRx = TrafficStats.getTotalRxBytes()
-            val currentTx = TrafficStats.getTotalTxBytes()
-            val currentTime = System.currentTimeMillis()
-
-            val timeDiffSec = (currentTime - lastTime) / 1000.0
-            if (timeDiffSec > 0) {
-                val rxSpeed = ((currentRx - lastRx) / timeDiffSec).toLong().coerceAtLeast(0)
-                val txSpeed = ((currentTx - lastTx) / timeDiffSec).toLong().coerceAtLeast(0)
-                emit(NetworkTraffic(rxSpeed, txSpeed))
-            }
-
-            lastRx = currentRx
-            lastTx = currentTx
-            lastTime = currentTime
-        }
-    }.flowOn(dispatchers.default)
-
-    companion object {
-        private const val REFRESH_INTERVAL_MS = 2000L
-    }
+    // Reserved for future system monitoring tools
 }

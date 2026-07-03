@@ -28,9 +28,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.PowerSettingsNew
-import androidx.compose.material.icons.outlined.Screenshot
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,9 +50,7 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.CaffeineState
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.BreathingState
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.NetworkTraffic
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
-import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.AccessibilityActionTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.BatteryTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.BreathingTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.CaffeineTool
@@ -67,11 +62,9 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.GenericToolPrevi
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.LevelTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.LuxMeterTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.MusicSearchTool
-import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.NetworkTrafficTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.SosTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.SoundModeTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.TemperatureTool
-import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.VolumePanelTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitSensorData
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
@@ -89,20 +82,13 @@ fun ToolkitToolBottomSheet(
     breathingState: BreathingState,
     caffeineState: CaffeineState,
     ringerMode: RingerMode,
-    isAccessibilityEnabled: Boolean,
     isSosActive: Boolean,
-    networkTraffic: NetworkTraffic?,
     onClose: () -> Unit,
     onAddTile: () -> Unit,
     onSetupTile: () -> Unit,
     onCaffeineCycle: () -> Unit,
     onSoundModeCycle: (RingerMode) -> Unit,
-    onVolumePanelShow: () -> Unit,
     onMusicSearchLaunch: () -> Unit,
-    onScreenshotClick: () -> Unit,
-    onLockScreenClick: () -> Unit,
-    onPowerMenuClick: () -> Unit,
-    onAccessibilitySetup: () -> Unit,
     onSosToggle: () -> Unit,
 ) {
     val sheetState = rememberBottomSheetState(
@@ -130,17 +116,10 @@ fun ToolkitToolBottomSheet(
                 breathingState = breathingState,
                 caffeineState = caffeineState,
                 ringerMode = ringerMode,
-                isAccessibilityEnabled = isAccessibilityEnabled,
                 isSosActive = isSosActive,
-                networkTraffic = networkTraffic,
                 onCaffeineCycle = onCaffeineCycle,
                 onSoundModeCycle = onSoundModeCycle,
-                onVolumePanelShow = onVolumePanelShow,
                 onMusicSearchLaunch = onMusicSearchLaunch,
-                onScreenshotClick = onScreenshotClick,
-                onLockScreenClick = onLockScreenClick,
-                onPowerMenuClick = onPowerMenuClick,
-                onAccessibilitySetup = onAccessibilitySetup,
                 onSosToggle = onSosToggle,
             )
             ToolSheetActions(
@@ -188,6 +167,15 @@ private fun ToolSheetHeader(
 
 @Composable
 private fun ToolStatusSummary(tile: ToolkitTile) {
+    val helperTitle = stringResource(id = tile.status.helperTitleResId())
+    val helperSummary = stringResource(id = tile.status.helperSummaryResId())
+
+    val customInfo = when (tile.id) {
+        "lux_meter" -> stringResource(id = R.string.tile_lux_meter_info)
+        "temperature" -> stringResource(id = R.string.tile_temperature_info)
+        else -> null
+    }
+
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(SizeConstants.LargeSize),
@@ -208,15 +196,23 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
                 tint = MaterialTheme.colorScheme.primary,
             )
             Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
-                Text(
-                    text = stringResource(id = tile.status.helperTitleResId()),
-                    style = MaterialTheme.typography.titleSmall,
-                )
-                Text(
-                    text = stringResource(id = tile.status.helperSummaryResId()),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                if (customInfo != null) {
+                    Text(
+                        text = customInfo,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                } else {
+                    Text(
+                        text = helperTitle,
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                    Text(
+                        text = helperSummary,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
         }
     }
@@ -229,17 +225,10 @@ private fun ToolInteractiveContent(
     breathingState: BreathingState,
     caffeineState: CaffeineState,
     ringerMode: RingerMode,
-    isAccessibilityEnabled: Boolean,
     isSosActive: Boolean,
-    networkTraffic: NetworkTraffic?,
     onCaffeineCycle: () -> Unit,
     onSoundModeCycle: (RingerMode) -> Unit,
-    onVolumePanelShow: () -> Unit,
     onMusicSearchLaunch: () -> Unit,
-    onScreenshotClick: () -> Unit,
-    onLockScreenClick: () -> Unit,
-    onPowerMenuClick: () -> Unit,
-    onAccessibilitySetup: () -> Unit,
     onSosToggle: () -> Unit,
 ) {
     when (tile.id) {
@@ -253,36 +242,9 @@ private fun ToolInteractiveContent(
         "temperature" -> TemperatureTool(celsius = sensorData.batteryTemperature)
         "caffeine" -> CaffeineTool(state = caffeineState, onCycle = onCaffeineCycle)
         "sound_mode" -> SoundModeTool(mode = ringerMode, onCycle = { onSoundModeCycle(ringerMode) })
-        "volume_panel" -> VolumePanelTool(onShow = onVolumePanelShow)
         "music_search" -> MusicSearchTool(onLaunch = onMusicSearchLaunch)
-        "screenshot" -> AccessibilityActionTool(
-            icon = Icons.Outlined.Screenshot,
-            isServiceEnabled = isAccessibilityEnabled,
-            actionLabel = "Take Screenshot",
-            onAction = onScreenshotClick,
-            onSetup = onAccessibilitySetup
-        )
-
-        "lock_screen" -> AccessibilityActionTool(
-            icon = Icons.Outlined.Lock,
-            isServiceEnabled = isAccessibilityEnabled,
-            actionLabel = "Lock Screen",
-            onAction = onLockScreenClick,
-            onSetup = onAccessibilitySetup
-        )
-
-        "power_menu" -> AccessibilityActionTool(
-            icon = Icons.Outlined.PowerSettingsNew,
-            isServiceEnabled = isAccessibilityEnabled,
-            actionLabel = "Power Menu",
-            onAction = onPowerMenuClick,
-            onSetup = onAccessibilitySetup
-        )
-
         "sos" -> SosTool(isActive = isSosActive, onToggle = onSosToggle)
-
         "breathing" -> BreathingTool(state = breathingState)
-        "network_traffic" -> NetworkTrafficTool(traffic = networkTraffic)
         else -> GenericToolPreview(tile = tile)
     }
 }

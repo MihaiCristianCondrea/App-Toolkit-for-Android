@@ -119,8 +119,10 @@
     <string name="tile_lux_meter_summary">Ambient light intensity (lux)</string>
     <string name="tile_network_traffic_title">Network Traffic</string>
     <string name="tile_network_traffic_summary">Monitor real-time network speed</string>
+    <string name="tile_lux_meter_info">Ambient light intensity monitoring. Note: This feature depends on a physical hardware sensor and may not work on all devices.</string>
     <string name="tile_temperature_title">Temperature</string>
     <string name="tile_temperature_summary">Battery temperature</string>
+    <string name="tile_temperature_info">Displays the real-time internal temperature of your device battery. This can help monitor heat during intensive tasks or charging.</string>
     <string name="tile_coin_flip_title">Coin Flip</string>
     <string name="tile_coin_flip_summary">Flip heads or tails instantly</string>
     <string name="tile_dice_roll_title">Dice Roll</string>

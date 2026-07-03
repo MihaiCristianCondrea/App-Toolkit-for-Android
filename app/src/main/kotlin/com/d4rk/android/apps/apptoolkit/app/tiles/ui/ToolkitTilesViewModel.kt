@@ -25,7 +25,6 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SosRepositor
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SystemRepository
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetBreathingDataUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetSensorDataUseCase
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetSystemDataUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetToolkitTilesUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.SyncToolkitTileStatusesUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
@@ -57,7 +56,6 @@ class ToolkitTilesViewModel(
     private val getToolkitTilesUseCase: GetToolkitTilesUseCase,
     private val getSensorDataUseCase: GetSensorDataUseCase,
     private val getBreathingDataUseCase: GetBreathingDataUseCase,
-    private val getSystemDataUseCase: GetSystemDataUseCase,
     private val caffeineRepository: CaffeineRepository,
     private val systemRepository: SystemRepository,
     private val sosRepository: SosRepository,
@@ -79,10 +77,7 @@ class ToolkitTilesViewModel(
     override fun handleEvent(event: ToolkitTilesEvent) {
         when (event) {
             is ToolkitTilesEvent.Initialize -> loadTiles()
-            is ToolkitTilesEvent.Refresh -> {
-                refreshStatuses()
-                refreshAccessibilityStatus()
-            }
+            is ToolkitTilesEvent.Refresh -> refreshStatuses()
             is ToolkitTilesEvent.FilterSelected -> selectFilter(event.filter)
             is ToolkitTilesEvent.CategoryToggled -> toggleCategory(event.categoryId)
             is ToolkitTilesEvent.AddTileClicked -> handleAddTile(event.requestKey)
@@ -91,12 +86,7 @@ class ToolkitTilesViewModel(
             is ToolkitTilesEvent.TilePreviewClosed -> stopSensorTracking()
             is ToolkitTilesEvent.CaffeineCycleClicked -> caffeineRepository.cycleState()
             is ToolkitTilesEvent.SoundModeClicked -> handleSoundModeCycle(event.current)
-            is ToolkitTilesEvent.VolumePanelClicked -> systemRepository.showVolumePanel()
             is ToolkitTilesEvent.MusicSearchClicked -> systemRepository.launchMusicSearch()
-            is ToolkitTilesEvent.ScreenshotClicked -> systemRepository.takeScreenshot()
-            is ToolkitTilesEvent.LockScreenClicked -> systemRepository.lockScreen()
-            is ToolkitTilesEvent.PowerMenuClicked -> systemRepository.openPowerMenu()
-            is ToolkitTilesEvent.AccessibilitySetupClicked -> systemRepository.openAccessibilitySettings()
             is ToolkitTilesEvent.SosClicked -> sosRepository.toggle()
         }
     }
@@ -135,13 +125,6 @@ class ToolkitTilesViewModel(
         screenState.update { current ->
             val data = current.data ?: return@update current
             current.copy(data = data.copy(categories = syncToolkitTileStatusesUseCase(data.categories).toImmutableList()))
-        }
-    }
-
-    private fun refreshAccessibilityStatus() {
-        screenState.update { current ->
-            val data = current.data ?: return@update current
-            current.copy(data = data.copy(isAccessibilityEnabled = systemRepository.isAccessibilityServiceEnabled()))
         }
     }
 
@@ -241,10 +224,6 @@ class ToolkitTilesViewModel(
                         .launchIn(this)
                 }
 
-                "power_menu" -> {
-                    refreshAccessibilityStatus()
-                }
-
                 "sos" -> {
                     sosRepository.isActive
                         .onEach { active ->
@@ -264,14 +243,6 @@ class ToolkitTilesViewModel(
                                 val data = current.data ?: return@update current
                                 current.copy(data = data.copy(breathingState = state))
                             }
-                        }
-                        .launchIn(this)
-                }
-
-                "network_traffic" -> {
-                    getSystemDataUseCase.getNetworkTraffic()
-                        .onEach { traffic ->
-                            screenState.update { it.copy(data = it.data?.copy(networkTraffic = traffic)) }
                         }
                         .launchIn(this)
                 }

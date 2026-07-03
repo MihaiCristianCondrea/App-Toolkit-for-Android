@@ -32,11 +32,6 @@ sealed interface ToolkitTilesEvent : UiEvent {
     data object TilePreviewClosed : ToolkitTilesEvent
     data object CaffeineCycleClicked : ToolkitTilesEvent
     data class SoundModeClicked(val current: RingerMode) : ToolkitTilesEvent
-    data object VolumePanelClicked : ToolkitTilesEvent
     data object MusicSearchClicked : ToolkitTilesEvent
-    data object ScreenshotClicked : ToolkitTilesEvent
-    data object LockScreenClicked : ToolkitTilesEvent
-    data object PowerMenuClicked : ToolkitTilesEvent
-    data object AccessibilitySetupClicked : ToolkitTilesEvent
     data object SosClicked : ToolkitTilesEvent
 }

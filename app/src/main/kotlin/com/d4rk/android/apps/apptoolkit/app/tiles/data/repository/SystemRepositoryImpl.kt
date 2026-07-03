@@ -17,18 +17,15 @@
 
 package com.d4rk.android.apps.apptoolkit.app.tiles.data.repository
 
-import android.accessibilityservice.AccessibilityService
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
-import android.os.Build
 import android.provider.Settings
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SystemRepository
-import com.d4rk.android.apps.apptoolkit.app.tiles.service.TileAccessibilityService
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -75,18 +72,10 @@ class SystemRepositoryImpl(
             }
             audioManager.ringerMode = systemMode
         } catch (_: SecurityException) {
-            // Fallback for some OEMs that might still throw even if granted
+            throw SecurityException("Do Not Disturb access not granted")
         } catch (_: Exception) {
             // General safety
         }
-    }
-
-    override fun showVolumePanel() {
-        audioManager.adjustStreamVolume(
-            AudioManager.STREAM_RING,
-            AudioManager.ADJUST_SAME,
-            AudioManager.FLAG_SHOW_UI
-        )
     }
 
     override fun launchMusicSearch() {
@@ -97,32 +86,8 @@ class SystemRepositoryImpl(
             }
             context.startActivity(intent)
         } catch (_: Exception) {
-            // Fallback or Toast
+            // Fallback
         }
-    }
-
-    override fun takeScreenshot() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            TileAccessibilityService.performAction(context, AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
-        }
-    }
-
-    override fun lockScreen() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            TileAccessibilityService.performAction(context, AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
-        }
-    }
-
-    override fun openPowerMenu() {
-        TileAccessibilityService.performAction(context, AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
-    }
-
-    override fun isAccessibilityServiceEnabled(): Boolean {
-        return TileAccessibilityService.isAccessibilityServiceEnabled(context)
-    }
-
-    override fun openAccessibilitySettings() {
-        TileAccessibilityService.openSettings(context)
     }
 
     private fun currentRingerMode(): RingerMode = when (audioManager.ringerMode) {
