@@ -33,7 +33,6 @@ enum class ToolkitTileIcon {
     Counter,
     Clipboard,
     Battery,
-    Memory,
     Caffeine,
     Sound,
     Volume,

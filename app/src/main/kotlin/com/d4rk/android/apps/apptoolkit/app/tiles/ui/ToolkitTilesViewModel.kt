@@ -197,14 +197,6 @@ class ToolkitTilesViewModel(
                         .launchIn(this)
                 }
 
-                "memory" -> {
-                    getSystemDataUseCase.getMemoryInfo()
-                        .onEach { info ->
-                            screenState.update { it.copy(data = it.data?.copy(memoryInfo = info)) }
-                        }
-                        .launchIn(this)
-                }
-
                 "network_traffic" -> {
                     getSystemDataUseCase.getNetworkTraffic()
                         .onEach { traffic ->

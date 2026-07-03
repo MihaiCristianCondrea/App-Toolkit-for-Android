@@ -164,8 +164,6 @@
     <string name="tile_music_search_summary">Identify music with a shortcut</string>
     <string name="tile_battery_title">Battery</string>
     <string name="tile_battery_summary">Show current battery level</string>
-    <string name="tile_memory_title">Memory</string>
-    <string name="tile_memory_summary">Check RAM and storage at a glance</string>
     <string name="tile_caffeine_title">Caffeine</string>
     <string name="tile_caffeine_summary">Keep the screen awake temporarily</string>
     <string name="tile_sound_mode_title">Sound Mode</string>

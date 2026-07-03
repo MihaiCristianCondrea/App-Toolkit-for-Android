@@ -17,10 +17,8 @@
 
 package com.d4rk.android.apps.apptoolkit.app.tiles.data.repository
 
-import android.app.ActivityManager
 import android.content.Context
 import android.net.TrafficStats
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.MemoryInfo
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.NetworkTraffic
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SystemMonitorRepository
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
@@ -34,25 +32,6 @@ class SystemMonitorRepositoryImpl(
     private val context: Context,
     private val dispatchers: DispatcherProvider,
 ) : SystemMonitorRepository {
-
-    private val activityManager =
-        context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-
-    override fun getMemoryInfo(): Flow<MemoryInfo> = flow {
-        val outInfo = ActivityManager.MemoryInfo()
-        while (true) {
-            activityManager.getMemoryInfo(outInfo)
-            emit(
-                MemoryInfo(
-                    availableBytes = outInfo.availMem,
-                    totalBytes = outInfo.totalMem,
-                    thresholdBytes = outInfo.threshold,
-                    isLowMemory = outInfo.lowMemory
-                )
-            )
-            delay(REFRESH_INTERVAL_MS.milliseconds)
-        }
-    }.flowOn(dispatchers.default)
 
     override fun getNetworkTraffic(): Flow<NetworkTraffic> = flow {
         var lastRx = TrafficStats.getTotalRxBytes()

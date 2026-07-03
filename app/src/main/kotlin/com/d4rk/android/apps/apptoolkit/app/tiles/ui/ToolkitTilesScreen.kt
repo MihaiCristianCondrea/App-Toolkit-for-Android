@@ -57,7 +57,6 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Memory
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Palette
@@ -257,7 +256,6 @@ fun ToolkitTilesScreen(
             tile = tile,
             sensorData = state.sensorData,
             breathingState = state.breathingState,
-            memoryInfo = state.memoryInfo,
             networkTraffic = state.networkTraffic,
             onClose = { selectedTile = null },
             onAddTile = { onEvent(ToolkitTilesEvent.AddTileClicked(tile.requestKey)) },
@@ -601,7 +599,6 @@ private fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Counter -> Icons.Outlined.Dehaze
     ToolkitTileIcon.Clipboard -> Icons.Outlined.ContentPasteOff
     ToolkitTileIcon.Battery -> Icons.Outlined.BatteryChargingFull
-    ToolkitTileIcon.Memory -> Icons.Outlined.Memory
     ToolkitTileIcon.Caffeine -> Icons.Outlined.Timer
     ToolkitTileIcon.Sound -> Icons.Outlined.GraphicEq
     ToolkitTileIcon.Volume -> Icons.AutoMirrored.Outlined.VolumeUp
@@ -670,8 +667,7 @@ private fun ToolkitTileIcon.iconColors(): StatusColors {
             content = if (isDark) Color(0xFF70CFFF) else Color(0xFF004A77),
         )
 
-        ToolkitTileIcon.Battery,
-        ToolkitTileIcon.Memory -> StatusColors(
+        ToolkitTileIcon.Battery -> StatusColors(
             container = if (isDark) Color(0xFF5A2D91) else Color(0xFF9158E2),
             content = if (isDark) Color(0xFFD3BFFF) else Color(0xFF5A2D91),
         )

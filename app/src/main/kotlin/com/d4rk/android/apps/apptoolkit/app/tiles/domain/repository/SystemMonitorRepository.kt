@@ -23,16 +23,8 @@ import kotlinx.coroutines.flow.Flow
  * Repository for monitoring system resources.
  */
 interface SystemMonitorRepository {
-    fun getMemoryInfo(): Flow<MemoryInfo>
     fun getNetworkTraffic(): Flow<NetworkTraffic>
 }
-
-data class MemoryInfo(
-    val availableBytes: Long,
-    val totalBytes: Long,
-    val thresholdBytes: Long,
-    val isLowMemory: Boolean,
-)
 
 data class NetworkTraffic(
     val rxBytesPerSecond: Long,

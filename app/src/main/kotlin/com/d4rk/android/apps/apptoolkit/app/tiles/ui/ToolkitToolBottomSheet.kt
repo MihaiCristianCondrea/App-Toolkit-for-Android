@@ -49,7 +49,6 @@ import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.BreathingState
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.MemoryInfo
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.NetworkTraffic
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.BatteryTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.BreathingTool
@@ -61,7 +60,6 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.DiceRollTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.GenericToolPreview
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.LevelTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.LuxMeterTool
-import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.MemoryTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.NetworkTrafficTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitSensorData
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
@@ -78,7 +76,6 @@ fun ToolkitToolBottomSheet(
     tile: ToolkitTile,
     sensorData: ToolkitSensorData,
     breathingState: BreathingState,
-    memoryInfo: MemoryInfo?,
     networkTraffic: NetworkTraffic?,
     onClose: () -> Unit,
     onAddTile: () -> Unit,
@@ -107,7 +104,6 @@ fun ToolkitToolBottomSheet(
                 tile = tile,
                 sensorData = sensorData,
                 breathingState = breathingState,
-                memoryInfo = memoryInfo,
                 networkTraffic = networkTraffic,
             )
             ToolSheetActions(
@@ -194,7 +190,6 @@ private fun ToolInteractiveContent(
     tile: ToolkitTile,
     sensorData: ToolkitSensorData,
     breathingState: BreathingState,
-    memoryInfo: MemoryInfo?,
     networkTraffic: NetworkTraffic?,
 ) {
     when (tile.id) {
@@ -207,7 +202,6 @@ private fun ToolInteractiveContent(
         "bubble_level" -> LevelTool(pitch = sensorData.levelPitch, roll = sensorData.levelRoll)
         "lux_meter" -> LuxMeterTool(lux = sensorData.luxLevel)
         "breathing" -> BreathingTool(state = breathingState)
-        "memory" -> MemoryTool(info = memoryInfo)
         "network_traffic" -> NetworkTrafficTool(traffic = networkTraffic)
         else -> GenericToolPreview(tile = tile)
     }

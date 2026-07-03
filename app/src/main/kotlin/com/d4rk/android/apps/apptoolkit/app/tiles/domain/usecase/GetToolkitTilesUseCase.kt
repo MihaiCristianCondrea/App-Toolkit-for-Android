@@ -145,13 +145,6 @@ class GetToolkitTilesUseCase {
                         requestKey = "battery",
                     ),
                     ToolkitTile(
-                        id = "memory",
-                        titleResId = R.string.tile_memory_title,
-                        summaryResId = R.string.tile_memory_summary,
-                        icon = ToolkitTileIcon.Memory,
-                        status = ToolkitTileStatus.Available,
-                    ),
-                    ToolkitTile(
                         id = "caffeine",
                         titleResId = R.string.tile_caffeine_title,
                         summaryResId = R.string.tile_caffeine_summary,

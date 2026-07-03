@@ -20,7 +20,6 @@ package com.d4rk.android.apps.apptoolkit.app.tiles.ui.state
 import androidx.compose.runtime.Immutable
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.BreathingState
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.MemoryInfo
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.NetworkTraffic
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentSet
@@ -35,7 +34,6 @@ data class ToolkitTilesUiState(
     val expandedCategoryIds: PersistentSet<String> = persistentSetOf(),
     val sensorData: ToolkitSensorData = ToolkitSensorData(),
     val breathingState: BreathingState = BreathingState(),
-    val memoryInfo: MemoryInfo? = null,
     val networkTraffic: NetworkTraffic? = null,
 )
 

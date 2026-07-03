@@ -17,7 +17,6 @@
 
 package com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase
 
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.MemoryInfo
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.NetworkTraffic
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SystemMonitorRepository
 import kotlinx.coroutines.flow.Flow
@@ -26,6 +25,5 @@ import kotlinx.coroutines.flow.Flow
  * Use cases for monitoring system data.
  */
 class GetSystemDataUseCase(private val repository: SystemMonitorRepository) {
-    fun getMemoryInfo(): Flow<MemoryInfo> = repository.getMemoryInfo()
     fun getNetworkTraffic(): Flow<NetworkTraffic> = repository.getNetworkTraffic()
 }
