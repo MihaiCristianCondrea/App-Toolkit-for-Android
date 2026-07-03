@@ -26,8 +26,6 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
-import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
-import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateResult
 import com.d4rk.android.libs.apptoolkit.app.main.domain.usecases.RequestInAppUpdateUseCase
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
@@ -49,6 +47,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.asUiText
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
+import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateResult
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn

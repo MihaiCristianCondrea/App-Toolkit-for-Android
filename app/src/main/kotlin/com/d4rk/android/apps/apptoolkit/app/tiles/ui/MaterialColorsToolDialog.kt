@@ -36,13 +36,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
@@ -78,7 +78,10 @@ fun MaterialColorsToolDialog(
         emptyList()
     }
 
-    val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden, enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded))
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+    )
 
     ModalBottomSheet(
         modifier = Modifier.fillMaxHeight(),
@@ -219,28 +222,27 @@ private fun ColorSwatch(
     }
 }
 
-private fun androidx.compose.material3.ColorScheme.toAppColorTable(title: String): ColorTable = ColorTable(
-    title = title,
-    colors = listOf(
-        ColorSwatchData("primary", primary),
-        ColorSwatchData("on primary", onPrimary),
-        ColorSwatchData("primary container", primaryContainer),
-        ColorSwatchData("secondary", secondary),
-        ColorSwatchData("tertiary", tertiary),
-        ColorSwatchData("error", error),
-        ColorSwatchData("background", background),
-        ColorSwatchData("surface", surface),
-        ColorSwatchData("surface variant", surfaceVariant),
-        ColorSwatchData("outline", outline),
-        ColorSwatchData("inverse surface", inverseSurface),
-        ColorSwatchData("scrim", scrim),
-    ),
-)
+private fun androidx.compose.material3.ColorScheme.toAppColorTable(title: String): ColorTable =
+    ColorTable(
+        title = title,
+        colors = listOf(
+            ColorSwatchData("primary", primary),
+            ColorSwatchData("on primary", onPrimary),
+            ColorSwatchData("primary container", primaryContainer),
+            ColorSwatchData("secondary", secondary),
+            ColorSwatchData("tertiary", tertiary),
+            ColorSwatchData("error", error),
+            ColorSwatchData("background", background),
+            ColorSwatchData("surface", surface),
+            ColorSwatchData("surface variant", surfaceVariant),
+            ColorSwatchData("outline", outline),
+            ColorSwatchData("inverse surface", inverseSurface),
+            ColorSwatchData("scrim", scrim),
+        ),
+    )
 
 
 //TODO: move all these from below to ui.mappers or ui.model etc, where is relevant
-
-
 
 
 private fun Color.toHexString(): String = String.format(Locale.US, "#%08X", toArgb())

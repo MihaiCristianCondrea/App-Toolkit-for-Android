@@ -18,7 +18,6 @@
 package com.d4rk.android.apps.apptoolkit.core.di.modules.app.modules
 
 import com.d4rk.android.apps.apptoolkit.app.onboarding.utils.interfaces.providers.AppOnboardingProvider
-import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.interfaces.OnboardingPreferencesDataSource
 import com.d4rk.android.libs.apptoolkit.app.onboarding.data.repository.OnboardingRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
 import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteOnboardingUseCase
@@ -26,6 +25,7 @@ import com.d4rk.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOn
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.OnboardingViewModel
 import com.d4rk.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.interfaces.OnboardingPreferencesDataSource
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module

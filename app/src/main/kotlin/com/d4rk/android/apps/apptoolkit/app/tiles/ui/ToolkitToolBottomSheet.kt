@@ -68,8 +68,8 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.LevelTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.LuxMeterTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.MusicSearchTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.NetworkTrafficTool
-import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.SoundModeTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.SosTool
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.SoundModeTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.TemperatureTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.VolumePanelTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitSensorData

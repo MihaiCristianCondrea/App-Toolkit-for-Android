@@ -21,7 +21,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -66,7 +65,10 @@ fun CaffeineTool(
         }
 
         ResultPill(
-            label = if (state == CaffeineState.Off) label else stringResource(id = R.string.tool_caffeine_remaining, label)
+            label = if (state == CaffeineState.Off) label else stringResource(
+                id = R.string.tool_caffeine_remaining,
+                label
+            )
         )
 
         Box(
@@ -79,9 +81,9 @@ fun CaffeineTool(
                 imageVector = Icons.Outlined.Coffee,
                 contentDescription = null,
                 modifier = Modifier.size(100.dp),
-                tint = if (state != CaffeineState.Off) 
-                    MaterialTheme.colorScheme.primary 
-                else 
+                tint = if (state != CaffeineState.Off)
+                    MaterialTheme.colorScheme.primary
+                else
                     MaterialTheme.colorScheme.outline
             )
         }

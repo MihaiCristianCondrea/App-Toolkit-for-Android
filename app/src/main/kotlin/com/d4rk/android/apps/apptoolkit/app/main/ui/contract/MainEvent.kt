@@ -18,9 +18,9 @@
 package com.d4rk.android.apps.apptoolkit.app.main.ui.contract
 
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
+import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
 
 sealed interface MainEvent : UiEvent {
     data object ApplyInitialConsent : MainEvent

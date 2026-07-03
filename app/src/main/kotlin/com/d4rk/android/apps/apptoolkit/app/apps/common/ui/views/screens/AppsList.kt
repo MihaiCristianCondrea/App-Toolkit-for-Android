@@ -20,8 +20,8 @@ package com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.screens
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,8 +47,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import com.d4rk.android.apps.apptoolkit.BuildConfig
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
@@ -57,12 +57,12 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.AppCard
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.utils.buildAppListItems
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
+import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.AppsListNativeAdCard
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
-import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
@@ -339,8 +339,16 @@ private data class AppsFilterItem(
 
 private val AppsFilterItems: ImmutableList<AppsFilterItem> = persistentListOf(
     AppsFilterItem(AppsListFilter.All, R.string.apps_filter_all, Icons.Outlined.Apps),
-    AppsFilterItem(AppsListFilter.Installed, R.string.app_details_installed, Icons.Outlined.CheckCircle),
-    AppsFilterItem(AppsListFilter.NotInstalled, R.string.app_details_not_installed, Icons.Outlined.Block),
+    AppsFilterItem(
+        AppsListFilter.Installed,
+        R.string.app_details_installed,
+        Icons.Outlined.CheckCircle
+    ),
+    AppsFilterItem(
+        AppsListFilter.NotInstalled,
+        R.string.app_details_not_installed,
+        Icons.Outlined.Block
+    ),
     AppsFilterItem(AppsListFilter.Favorites, R.string.favorite_apps, Icons.Outlined.StarOutline),
 )
 

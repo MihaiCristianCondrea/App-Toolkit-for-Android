@@ -47,6 +47,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.RandomAppHandler
+import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
@@ -54,7 +55,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
-import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -99,7 +99,8 @@ fun AppsListRoute(
     val context = LocalContext.current
     val adsEnabled = rememberAdsEnabled()
 
-    val appDetailsAdsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APP_DETAILS_NATIVE_AD))
+    val appDetailsAdsConfig: AdsConfig =
+        koinInject(qualifier = named(AppAdsQualifiers.APP_DETAILS_NATIVE_AD))
     val firebaseController: FirebaseController = koinInject()
 
     val onFavoriteToggle: (String) -> Unit =
@@ -219,7 +220,11 @@ fun AppsListRoute(
                 onFilterSelected = { filter -> viewModel.onEvent(HomeEvent.FilterSelected(filter)) },
                 onFavoriteToggle = onFavoriteToggle,
                 onAppClick = { app ->
-                    firebaseController.logAppInteraction(source = "apps_list", appInfo = app, interaction = AppInteractionType.OpenDetailsBottomSheet)
+                    firebaseController.logAppInteraction(
+                        source = "apps_list",
+                        appInfo = app,
+                        interaction = AppInteractionType.OpenDetailsBottomSheet
+                    )
                     selectedApp = app
                     viewModel.onEvent(HomeEvent.AppSelected(app.packageName))
                 },

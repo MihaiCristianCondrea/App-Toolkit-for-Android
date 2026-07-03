@@ -25,8 +25,8 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.d4rk.android.apps.apptoolkit.core.di.initializeKoin
 import com.d4rk.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
+import com.d4rk.android.apps.apptoolkit.core.di.initializeKoin
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppThemeConfig
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
@@ -38,8 +38,6 @@ import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isChristmasSe
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.date.isHalloweenSeason
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
