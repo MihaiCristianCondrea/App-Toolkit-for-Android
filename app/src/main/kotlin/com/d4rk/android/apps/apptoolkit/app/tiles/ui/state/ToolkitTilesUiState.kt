@@ -38,6 +38,7 @@ data class ToolkitTilesUiState(
     val caffeineState: CaffeineState = CaffeineState.Off,
     val ringerMode: RingerMode = RingerMode.Normal,
     val isSosActive: Boolean = false,
+    val loadedAdIds: PersistentSet<String> = persistentSetOf(),
 )
 
 @Immutable

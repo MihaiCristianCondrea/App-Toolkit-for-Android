@@ -69,6 +69,7 @@ fun QuickToolsNativeAdCard(
     modifier: Modifier = Modifier,
     adUnitId: String,
     position: GroupedItemPosition,
+    onStatusChanged: (Boolean) -> Unit = {},
 ) {
     val inspectionMode = LocalInspectionMode.current
     val showAds: Boolean = rememberAdsEnabled()
@@ -83,6 +84,10 @@ fun QuickToolsNativeAdCard(
     var isAdLoaded by remember(adUnitId) { mutableStateOf(false) }
     var nativeAdView by remember { mutableStateOf<NativeAdView?>(null) }
     var currentNativeAd by remember { mutableStateOf<NativeAd?>(null) }
+
+    LaunchedEffect(isAdLoaded) {
+        onStatusChanged(isAdLoaded)
+    }
 
     DisposableEffect(Unit) {
         onDispose {

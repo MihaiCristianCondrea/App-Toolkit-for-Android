@@ -57,7 +57,6 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Screenshot
 import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.SyncAlt
 import androidx.compose.material.icons.outlined.Thermostat
@@ -201,13 +200,22 @@ fun ToolkitTilesScreen(
                 if ((index + 1) % 2 == 0) {
                     add(
                         ToolkitTilesListItem.Ad(
-                            id = "ad_${index}_${AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID}",
+                            id = "ad_after_${category.id}",
                             adUnitId = AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID,
                         )
                     )
                 }
             }
         }.toImmutableList()
+    }
+
+    val visibleListItems = remember(listItems, state.loadedAdIds) {
+        listItems.filter { item ->
+            when (item) {
+                is ToolkitTilesListItem.Category -> true
+                is ToolkitTilesListItem.Ad -> item.id in state.loadedAdIds
+            }
+        }
     }
 
     LaunchedEffect(selectedTile) {
@@ -248,8 +256,15 @@ fun ToolkitTilesScreen(
                         is ToolkitTilesListItem.Ad -> item.id
                     }
                 },
-            ) { index, item ->
-                val position = groupedItemPosition(index, listItems.size)
+            ) { _, item ->
+                // Recalculate position for every item based on the latest visible list
+                val visibleIndex = visibleListItems.indexOf(item)
+                val isVisible = visibleIndex != -1
+                val position = if (isVisible) {
+                    groupedItemPosition(visibleIndex, visibleListItems.size)
+                } else {
+                    GroupedItemPosition.MIDDLE // Default for items not yet in the visible list
+                }
 
                 when (item) {
                     is ToolkitTilesListItem.Category -> {
@@ -272,8 +287,12 @@ fun ToolkitTilesScreen(
 
                     is ToolkitTilesListItem.Ad -> {
                         QuickToolsNativeAdCard(
+                            modifier = Modifier,
                             adUnitId = item.adUnitId,
                             position = position,
+                            onStatusChanged = { isLoaded ->
+                                onEvent(ToolkitTilesEvent.AdStatusChanged(item.id, isLoaded))
+                            }
                         )
                     }
                 }

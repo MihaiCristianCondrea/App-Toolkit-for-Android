@@ -34,4 +34,5 @@ sealed interface ToolkitTilesEvent : UiEvent {
     data class SoundModeClicked(val current: RingerMode) : ToolkitTilesEvent
     data object MusicSearchClicked : ToolkitTilesEvent
     data object SosClicked : ToolkitTilesEvent
+    data class AdStatusChanged(val adId: String, val isLoaded: Boolean) : ToolkitTilesEvent
 }

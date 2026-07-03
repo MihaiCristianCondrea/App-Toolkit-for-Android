@@ -88,6 +88,17 @@ class ToolkitTilesViewModel(
             is ToolkitTilesEvent.SoundModeClicked -> handleSoundModeCycle(event.current)
             is ToolkitTilesEvent.MusicSearchClicked -> systemRepository.launchMusicSearch()
             is ToolkitTilesEvent.SosClicked -> sosRepository.toggle()
+            is ToolkitTilesEvent.AdStatusChanged -> updateAdStatus(event.adId, event.isLoaded)
+        }
+    }
+
+    private fun updateAdStatus(adId: String, isLoaded: Boolean) {
+        screenState.update { current ->
+            val data = current.data ?: return@update current
+            val updated = data.loadedAdIds.mutate {
+                if (isLoaded) it.add(adId) else it.remove(adId)
+            }
+            current.copy(data = data.copy(loadedAdIds = updated))
         }
     }
 
