@@ -15,17 +15,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase
+package com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository
 
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SensorRepository
-import kotlinx.coroutines.flow.Flow
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.CaffeineState
+import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Use cases for accessing real-time sensor data.
+ * Repository for managing the Caffeine tool state (screen-on timer).
  */
-class GetSensorDataUseCase(private val sensorRepository: SensorRepository) {
-    fun getCompassAzimuth(): Flow<Float> = sensorRepository.getCompassAzimuth()
-    fun getLevelOrientation(): Flow<Pair<Float, Float>> = sensorRepository.getLevelOrientation()
-    fun getLuxLevel(): Flow<Float> = sensorRepository.getLuxLevel()
-    fun getBatteryTemperature(): Flow<Float> = sensorRepository.getBatteryTemperature()
+interface CaffeineRepository {
+    /** The current active caffeine state. */
+    val currentState: StateFlow<CaffeineState>
+
+    /** Cycles to the next caffeine state in the sequence. */
+    fun cycleState()
+
+    /** Forcefully resets the state to [CaffeineState.Off]. */
+    fun reset()
 }

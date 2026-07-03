@@ -17,6 +17,7 @@
 
 package com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract
 
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
 import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
@@ -29,4 +30,13 @@ sealed interface ToolkitTilesEvent : UiEvent {
     data class TileSetupClicked(val tileId: String) : ToolkitTilesEvent
     data class TilePreviewOpened(val tileId: String) : ToolkitTilesEvent
     data object TilePreviewClosed : ToolkitTilesEvent
+    data object CaffeineCycleClicked : ToolkitTilesEvent
+    data class SoundModeClicked(val current: RingerMode) : ToolkitTilesEvent
+    data object VolumePanelClicked : ToolkitTilesEvent
+    data object MusicSearchClicked : ToolkitTilesEvent
+    data object ScreenshotClicked : ToolkitTilesEvent
+    data object LockScreenClicked : ToolkitTilesEvent
+    data object PowerMenuClicked : ToolkitTilesEvent
+    data object AccessibilitySetupClicked : ToolkitTilesEvent
+    data object SosClicked : ToolkitTilesEvent
 }

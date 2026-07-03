@@ -18,9 +18,11 @@
 package com.d4rk.android.apps.apptoolkit.app.tiles.ui.state
 
 import androidx.compose.runtime.Immutable
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.CaffeineState
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.BreathingState
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.NetworkTraffic
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentListOf
@@ -34,6 +36,10 @@ data class ToolkitTilesUiState(
     val expandedCategoryIds: PersistentSet<String> = persistentSetOf(),
     val sensorData: ToolkitSensorData = ToolkitSensorData(),
     val breathingState: BreathingState = BreathingState(),
+    val caffeineState: CaffeineState = CaffeineState.Off,
+    val ringerMode: RingerMode = RingerMode.Normal,
+    val isAccessibilityEnabled: Boolean = false,
+    val isSosActive: Boolean = false,
     val networkTraffic: NetworkTraffic? = null,
 )
 
@@ -43,6 +49,7 @@ data class ToolkitSensorData(
     val levelPitch: Float = 0f,
     val levelRoll: Float = 0f,
     val luxLevel: Float = 0f,
+    val batteryTemperature: Float = 0f,
 )
 
 enum class ToolkitTilesFilter {

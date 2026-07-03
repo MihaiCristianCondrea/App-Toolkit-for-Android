@@ -18,22 +18,28 @@
 package com.d4rk.android.apps.apptoolkit.app.tiles.data.repository
 
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.hardware.display.DisplayManager
+import android.os.BatteryManager
 import android.view.Display
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SensorRepository
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 class SensorRepositoryImpl(
-    context: Context,
+    private val context: Context,
     private val dispatchers: DispatcherProvider,
 ) : SensorRepository {
 
@@ -122,6 +128,18 @@ class SensorRepositoryImpl(
         }
 
         awaitClose { sensorManager.unregisterListener(listener) }
+    }.flowOn(dispatchers.default)
+
+    override fun getBatteryTemperature(): Flow<Float> = callbackFlow {
+        val job = launch {
+            while (isActive) {
+                val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+                val temperature = intent?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) ?: 0
+                trySend(temperature / 10f)
+                delay(2000)
+            }
+        }
+        awaitClose { job.cancel() }
     }.flowOn(dispatchers.default)
 
     override fun isSensorAvailable(sensorType: Int): Boolean {

@@ -32,6 +32,9 @@ interface SensorRepository {
     /** Emits illuminance in lux. */
     fun getLuxLevel(): Flow<Float>
 
+    /** Emits the device battery temperature in Celsius. */
+    fun getBatteryTemperature(): Flow<Float>
+
     /** Checks if a specific sensor is available on the device. */
     fun isSensorAvailable(sensorType: Int): Boolean
 }

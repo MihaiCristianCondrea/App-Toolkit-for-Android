@@ -182,6 +182,26 @@
     <string name="tile_service_tails">Tails</string>
     <string name="tile_service_dice_value">Rolled %1$d</string>
 
+    <!-- Caffeine Tool -->
+    <string name="caffeine_notification_channel_name" translatable="false">Caffeine Tool</string>
+    <string name="caffeine_notification_channel_description" translatable="false">Active when the Caffeine screen-on timer is running.</string>
+    <string name="caffeine_notification_text" translatable="false">Keeping your screen awake…</string>
+    <string name="tool_caffeine_remaining" translatable="false">Active: %1$s</string>
+    <string name="tool_caffeine_infinite" translatable="false">Infinite</string>
+    <string name="tool_caffeine_off" translatable="false">Off</string>
+    <string name="tool_caffeine_5m" translatable="false">5m</string>
+    <string name="tool_caffeine_10m" translatable="false">10m</string>
+    <string name="tool_caffeine_30m" translatable="false">30m</string>
+    <string name="tool_caffeine_1h" translatable="false">1h</string>
+    <string name="tool_system_cycle_mode" translatable="false">Cycle Mode</string>
+    <string name="tool_system_open_volume" translatable="false">Open Volume Panel</string>
+
+    <!-- Accessibility Service -->
+    <string name="accessibility_service_description" translatable="false">Provides system-level actions like taking screenshots, locking the screen, and opening the power menu for the Quick Tools catalog.</string>
+    <string name="accessibility_service_status_active" translatable="false">Service Active</string>
+    <string name="accessibility_service_status_inactive" translatable="false">Service Inactive</string>
+    <string name="accessibility_service_setup_action" translatable="false">Grant Permission</string>
+
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Share app</string>
     <string name="app_details_view_on_play_store">View on Google Play</string>

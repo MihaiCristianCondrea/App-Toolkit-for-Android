@@ -19,6 +19,10 @@ package com.d4rk.android.apps.apptoolkit.app.tiles.ui
 
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.apps.apptoolkit.R
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.CaffeineRepository
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SosRepository
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SystemRepository
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetBreathingDataUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetSensorDataUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetSystemDataUseCase
@@ -54,6 +58,9 @@ class ToolkitTilesViewModel(
     private val getSensorDataUseCase: GetSensorDataUseCase,
     private val getBreathingDataUseCase: GetBreathingDataUseCase,
     private val getSystemDataUseCase: GetSystemDataUseCase,
+    private val caffeineRepository: CaffeineRepository,
+    private val systemRepository: SystemRepository,
+    private val sosRepository: SosRepository,
     private val syncToolkitTileStatusesUseCase: SyncToolkitTileStatusesUseCase,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
@@ -72,13 +79,25 @@ class ToolkitTilesViewModel(
     override fun handleEvent(event: ToolkitTilesEvent) {
         when (event) {
             is ToolkitTilesEvent.Initialize -> loadTiles()
-            is ToolkitTilesEvent.Refresh -> refreshStatuses()
+            is ToolkitTilesEvent.Refresh -> {
+                refreshStatuses()
+                refreshAccessibilityStatus()
+            }
             is ToolkitTilesEvent.FilterSelected -> selectFilter(event.filter)
             is ToolkitTilesEvent.CategoryToggled -> toggleCategory(event.categoryId)
             is ToolkitTilesEvent.AddTileClicked -> handleAddTile(event.requestKey)
             is ToolkitTilesEvent.TileSetupClicked -> handleTileSetup(event.tileId)
             is ToolkitTilesEvent.TilePreviewOpened -> startSensorTracking(event.tileId)
             is ToolkitTilesEvent.TilePreviewClosed -> stopSensorTracking()
+            is ToolkitTilesEvent.CaffeineCycleClicked -> caffeineRepository.cycleState()
+            is ToolkitTilesEvent.SoundModeClicked -> handleSoundModeCycle(event.current)
+            is ToolkitTilesEvent.VolumePanelClicked -> systemRepository.showVolumePanel()
+            is ToolkitTilesEvent.MusicSearchClicked -> systemRepository.launchMusicSearch()
+            is ToolkitTilesEvent.ScreenshotClicked -> systemRepository.takeScreenshot()
+            is ToolkitTilesEvent.LockScreenClicked -> systemRepository.lockScreen()
+            is ToolkitTilesEvent.PowerMenuClicked -> systemRepository.openPowerMenu()
+            is ToolkitTilesEvent.AccessibilitySetupClicked -> systemRepository.openAccessibilitySettings()
+            is ToolkitTilesEvent.SosClicked -> sosRepository.toggle()
         }
     }
 
@@ -116,6 +135,13 @@ class ToolkitTilesViewModel(
         screenState.update { current ->
             val data = current.data ?: return@update current
             current.copy(data = data.copy(categories = syncToolkitTileStatusesUseCase(data.categories).toImmutableList()))
+        }
+    }
+
+    private fun refreshAccessibilityStatus() {
+        screenState.update { current ->
+            val data = current.data ?: return@update current
+            current.copy(data = data.copy(isAccessibilityEnabled = systemRepository.isAccessibilityServiceEnabled()))
         }
     }
 
@@ -185,6 +211,51 @@ class ToolkitTilesViewModel(
                         .launchIn(this)
                 }
 
+                "temperature" -> {
+                    getSensorDataUseCase.getBatteryTemperature()
+                        .onEach { temperature ->
+                            updateSensorData { it.copy(batteryTemperature = temperature) }
+                        }
+                        .launchIn(this)
+                }
+
+                "caffeine" -> {
+                    caffeineRepository.currentState
+                        .onEach { state ->
+                            screenState.update { current ->
+                                val data = current.data ?: return@update current
+                                current.copy(data = data.copy(caffeineState = state))
+                            }
+                        }
+                        .launchIn(this)
+                }
+
+                "sound_mode" -> {
+                    systemRepository.getRingerMode()
+                        .onEach { mode ->
+                            screenState.update { current ->
+                                val data = current.data ?: return@update current
+                                current.copy(data = data.copy(ringerMode = mode))
+                            }
+                        }
+                        .launchIn(this)
+                }
+
+                "power_menu" -> {
+                    refreshAccessibilityStatus()
+                }
+
+                "sos" -> {
+                    sosRepository.isActive
+                        .onEach { active ->
+                            screenState.update { current ->
+                                val data = current.data ?: return@update current
+                                current.copy(data = data.copy(isSosActive = active))
+                            }
+                        }
+                        .launchIn(this)
+                }
+
                 "breathing" -> {
                     getBreathingDataUseCase.start()
                     getBreathingDataUseCase.breathingState
@@ -212,6 +283,7 @@ class ToolkitTilesViewModel(
         sensorJob?.cancel()
         sensorJob = null
         getBreathingDataUseCase.stop()
+        sosRepository.cleanup()
         updateSensorData { ToolkitSensorData() }
     }
 
@@ -224,6 +296,15 @@ class ToolkitTilesViewModel(
 
     private fun showSetupMessage() {
         sendAction(ToolkitTilesAction.ShowSetupRequiredMessage)
+    }
+
+    private fun handleSoundModeCycle(current: RingerMode) {
+        val next = when (current) {
+            RingerMode.Normal -> RingerMode.Vibrate
+            RingerMode.Vibrate -> RingerMode.Silent
+            RingerMode.Silent -> RingerMode.Normal
+        }
+        systemRepository.setRingerMode(next)
     }
 
     private object Actions {

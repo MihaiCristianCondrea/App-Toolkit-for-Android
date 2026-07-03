@@ -15,17 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase
+package com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository
 
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SensorRepository
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Use cases for accessing real-time sensor data.
+ * Repository for managing the SOS emergency signal (Flashlight Morse code).
  */
-class GetSensorDataUseCase(private val sensorRepository: SensorRepository) {
-    fun getCompassAzimuth(): Flow<Float> = sensorRepository.getCompassAzimuth()
-    fun getLevelOrientation(): Flow<Pair<Float, Float>> = sensorRepository.getLevelOrientation()
-    fun getLuxLevel(): Flow<Float> = sensorRepository.getLuxLevel()
-    fun getBatteryTemperature(): Flow<Float> = sensorRepository.getBatteryTemperature()
+interface SosRepository {
+    /** True if the SOS signal is currently active. */
+    val isActive: StateFlow<Boolean>
+
+    /** Toggles the SOS signal on or off. */
+    fun toggle()
+
+    /** Stops and cleans up resources. */
+    fun cleanup()
 }

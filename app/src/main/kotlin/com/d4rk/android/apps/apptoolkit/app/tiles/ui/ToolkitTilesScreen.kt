@@ -255,10 +255,23 @@ fun ToolkitTilesScreen(
             tile = tile,
             sensorData = state.sensorData,
             breathingState = state.breathingState,
+            caffeineState = state.caffeineState,
+            ringerMode = state.ringerMode,
+            isAccessibilityEnabled = state.isAccessibilityEnabled,
+            isSosActive = state.isSosActive,
             networkTraffic = state.networkTraffic,
             onClose = { selectedTile = null },
             onAddTile = { onEvent(ToolkitTilesEvent.AddTileClicked(tile.requestKey)) },
             onSetupTile = { onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) },
+            onCaffeineCycle = { onEvent(ToolkitTilesEvent.CaffeineCycleClicked) },
+            onSoundModeCycle = { current -> onEvent(ToolkitTilesEvent.SoundModeClicked(current)) },
+            onVolumePanelShow = { onEvent(ToolkitTilesEvent.VolumePanelClicked) },
+            onMusicSearchLaunch = { onEvent(ToolkitTilesEvent.MusicSearchClicked) },
+            onScreenshotClick = { onEvent(ToolkitTilesEvent.ScreenshotClicked) },
+            onLockScreenClick = { onEvent(ToolkitTilesEvent.LockScreenClicked) },
+            onPowerMenuClick = { onEvent(ToolkitTilesEvent.PowerMenuClicked) },
+            onAccessibilitySetup = { onEvent(ToolkitTilesEvent.AccessibilitySetupClicked) },
+            onSosToggle = { onEvent(ToolkitTilesEvent.SosClicked) },
         )
     }
 

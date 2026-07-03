@@ -22,12 +22,18 @@ import com.d4rk.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDr
 import com.d4rk.android.apps.apptoolkit.app.main.ui.MainViewModel
 import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
 import com.d4rk.android.apps.apptoolkit.app.tiles.data.repository.BreathingRepositoryImpl
+import com.d4rk.android.apps.apptoolkit.app.tiles.data.repository.CaffeineRepositoryImpl
 import com.d4rk.android.apps.apptoolkit.app.tiles.data.repository.SensorRepositoryImpl
+import com.d4rk.android.apps.apptoolkit.app.tiles.data.repository.SosRepositoryImpl
 import com.d4rk.android.apps.apptoolkit.app.tiles.data.repository.SystemMonitorRepositoryImpl
+import com.d4rk.android.apps.apptoolkit.app.tiles.data.repository.SystemRepositoryImpl
 import com.d4rk.android.apps.apptoolkit.app.tiles.data.repository.ToolkitTilesRepositoryImpl
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.BreathingRepository
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.CaffeineRepository
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SensorRepository
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SosRepository
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SystemMonitorRepository
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SystemRepository
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.ToolkitTilesRepository
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetBreathingDataUseCase
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.usecase.GetSensorDataUseCase
@@ -66,8 +72,25 @@ val appModule: Module = module {
             dispatchers = get()
         )
     }
+    single<CaffeineRepository> {
+        CaffeineRepositoryImpl(
+            context = androidContext()
+        )
+    }
+    single<SosRepository> {
+        SosRepositoryImpl(
+            context = androidContext(),
+            dispatchers = get()
+        )
+    }
     single<SystemMonitorRepository> {
         SystemMonitorRepositoryImpl(
+            context = androidContext(),
+            dispatchers = get()
+        )
+    }
+    single<SystemRepository> {
+        SystemRepositoryImpl(
             context = androidContext(),
             dispatchers = get()
         )
@@ -79,6 +102,9 @@ val appModule: Module = module {
             getSensorDataUseCase = get(),
             getBreathingDataUseCase = get(),
             getSystemDataUseCase = get(),
+            caffeineRepository = get(),
+            systemRepository = get(),
+            sosRepository = get(),
             dispatchers = get(),
             firebaseController = get(),
         )

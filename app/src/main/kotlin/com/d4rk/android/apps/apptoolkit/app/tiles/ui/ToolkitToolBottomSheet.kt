@@ -28,6 +28,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.PowerSettingsNew
+import androidx.compose.material.icons.outlined.Screenshot
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,12 +49,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.apps.apptoolkit.R
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.CaffeineState
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.BreathingState
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.NetworkTraffic
+import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.AccessibilityActionTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.BatteryTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.BreathingTool
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.CaffeineTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.CoinFlipTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.CompassTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.CounterTool
@@ -59,7 +66,12 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.DiceRollTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.GenericToolPreview
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.LevelTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.LuxMeterTool
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.MusicSearchTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.NetworkTrafficTool
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.SoundModeTool
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.SosTool
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.TemperatureTool
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.VolumePanelTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitSensorData
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
@@ -75,10 +87,23 @@ fun ToolkitToolBottomSheet(
     tile: ToolkitTile,
     sensorData: ToolkitSensorData,
     breathingState: BreathingState,
+    caffeineState: CaffeineState,
+    ringerMode: RingerMode,
+    isAccessibilityEnabled: Boolean,
+    isSosActive: Boolean,
     networkTraffic: NetworkTraffic?,
     onClose: () -> Unit,
     onAddTile: () -> Unit,
     onSetupTile: () -> Unit,
+    onCaffeineCycle: () -> Unit,
+    onSoundModeCycle: (RingerMode) -> Unit,
+    onVolumePanelShow: () -> Unit,
+    onMusicSearchLaunch: () -> Unit,
+    onScreenshotClick: () -> Unit,
+    onLockScreenClick: () -> Unit,
+    onPowerMenuClick: () -> Unit,
+    onAccessibilitySetup: () -> Unit,
+    onSosToggle: () -> Unit,
 ) {
     val sheetState = rememberBottomSheetState(
         initialValue = SheetValue.Hidden,
@@ -103,7 +128,20 @@ fun ToolkitToolBottomSheet(
                 tile = tile,
                 sensorData = sensorData,
                 breathingState = breathingState,
+                caffeineState = caffeineState,
+                ringerMode = ringerMode,
+                isAccessibilityEnabled = isAccessibilityEnabled,
+                isSosActive = isSosActive,
                 networkTraffic = networkTraffic,
+                onCaffeineCycle = onCaffeineCycle,
+                onSoundModeCycle = onSoundModeCycle,
+                onVolumePanelShow = onVolumePanelShow,
+                onMusicSearchLaunch = onMusicSearchLaunch,
+                onScreenshotClick = onScreenshotClick,
+                onLockScreenClick = onLockScreenClick,
+                onPowerMenuClick = onPowerMenuClick,
+                onAccessibilitySetup = onAccessibilitySetup,
+                onSosToggle = onSosToggle,
             )
             ToolSheetActions(
                 tile = tile,
@@ -189,7 +227,20 @@ private fun ToolInteractiveContent(
     tile: ToolkitTile,
     sensorData: ToolkitSensorData,
     breathingState: BreathingState,
+    caffeineState: CaffeineState,
+    ringerMode: RingerMode,
+    isAccessibilityEnabled: Boolean,
+    isSosActive: Boolean,
     networkTraffic: NetworkTraffic?,
+    onCaffeineCycle: () -> Unit,
+    onSoundModeCycle: (RingerMode) -> Unit,
+    onVolumePanelShow: () -> Unit,
+    onMusicSearchLaunch: () -> Unit,
+    onScreenshotClick: () -> Unit,
+    onLockScreenClick: () -> Unit,
+    onPowerMenuClick: () -> Unit,
+    onAccessibilitySetup: () -> Unit,
+    onSosToggle: () -> Unit,
 ) {
     when (tile.id) {
         "coin_flip" -> CoinFlipTool()
@@ -199,6 +250,37 @@ private fun ToolInteractiveContent(
         "compass" -> CompassTool(azimuth = sensorData.compassAzimuth)
         "bubble_level" -> LevelTool(pitch = sensorData.levelPitch, roll = sensorData.levelRoll)
         "lux_meter" -> LuxMeterTool(lux = sensorData.luxLevel)
+        "temperature" -> TemperatureTool(celsius = sensorData.batteryTemperature)
+        "caffeine" -> CaffeineTool(state = caffeineState, onCycle = onCaffeineCycle)
+        "sound_mode" -> SoundModeTool(mode = ringerMode, onCycle = { onSoundModeCycle(ringerMode) })
+        "volume_panel" -> VolumePanelTool(onShow = onVolumePanelShow)
+        "music_search" -> MusicSearchTool(onLaunch = onMusicSearchLaunch)
+        "screenshot" -> AccessibilityActionTool(
+            icon = Icons.Outlined.Screenshot,
+            isServiceEnabled = isAccessibilityEnabled,
+            actionLabel = "Take Screenshot",
+            onAction = onScreenshotClick,
+            onSetup = onAccessibilitySetup
+        )
+
+        "lock_screen" -> AccessibilityActionTool(
+            icon = Icons.Outlined.Lock,
+            isServiceEnabled = isAccessibilityEnabled,
+            actionLabel = "Lock Screen",
+            onAction = onLockScreenClick,
+            onSetup = onAccessibilitySetup
+        )
+
+        "power_menu" -> AccessibilityActionTool(
+            icon = Icons.Outlined.PowerSettingsNew,
+            isServiceEnabled = isAccessibilityEnabled,
+            actionLabel = "Power Menu",
+            onAction = onPowerMenuClick,
+            onSetup = onAccessibilitySetup
+        )
+
+        "sos" -> SosTool(isActive = isSosActive, onToggle = onSosToggle)
+
         "breathing" -> BreathingTool(state = breathingState)
         "network_traffic" -> NetworkTrafficTool(traffic = networkTraffic)
         else -> GenericToolPreview(tile = tile)
