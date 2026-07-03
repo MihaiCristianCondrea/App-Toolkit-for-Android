@@ -22,4 +22,5 @@ import com.d4rk.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 sealed interface ToolkitTilesAction : ActionEvent {
     data class RequestAddTile(val requestKey: String) : ToolkitTilesAction
     data object ShowSetupRequiredMessage : ToolkitTilesAction
+    data class ShowMessage(val message: String) : ToolkitTilesAction
 }

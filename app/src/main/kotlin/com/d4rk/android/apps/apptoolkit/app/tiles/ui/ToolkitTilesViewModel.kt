@@ -304,7 +304,13 @@ class ToolkitTilesViewModel(
             RingerMode.Vibrate -> RingerMode.Silent
             RingerMode.Silent -> RingerMode.Normal
         }
-        systemRepository.setRingerMode(next)
+        try {
+            systemRepository.setRingerMode(next)
+        } catch (_: SecurityException) {
+            sendAction(ToolkitTilesAction.ShowMessage("Grant Do Not Disturb access to cycle sound modes"))
+        } catch (_: Exception) {
+            sendAction(ToolkitTilesAction.ShowMessage("Unable to change sound mode"))
+        }
     }
 
     private object Actions {

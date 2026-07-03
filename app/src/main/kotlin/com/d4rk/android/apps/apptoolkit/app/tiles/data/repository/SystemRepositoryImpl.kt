@@ -18,12 +18,14 @@
 package com.d4rk.android.apps.apptoolkit.app.tiles.data.repository
 
 import android.accessibilityservice.AccessibilityService
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
 import android.os.Build
+import android.provider.Settings
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SystemRepository
 import com.d4rk.android.apps.apptoolkit.app.tiles.service.TileAccessibilityService
@@ -39,6 +41,7 @@ class SystemRepositoryImpl(
 ) : SystemRepository {
 
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     override fun getRingerMode(): Flow<RingerMode> = callbackFlow {
         val receiver = object : BroadcastReceiver() {
@@ -56,12 +59,26 @@ class SystemRepositoryImpl(
     }.flowOn(dispatchers.default)
 
     override fun setRingerMode(mode: RingerMode) {
-        val systemMode = when (mode) {
-            RingerMode.Normal -> AudioManager.RINGER_MODE_NORMAL
-            RingerMode.Vibrate -> AudioManager.RINGER_MODE_VIBRATE
-            RingerMode.Silent -> AudioManager.RINGER_MODE_SILENT
+        try {
+            if (!notificationManager.isNotificationPolicyAccessGranted) {
+                val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                context.startActivity(intent)
+                throw SecurityException("Do Not Disturb access not granted")
+            }
+
+            val systemMode = when (mode) {
+                RingerMode.Normal -> AudioManager.RINGER_MODE_NORMAL
+                RingerMode.Vibrate -> AudioManager.RINGER_MODE_VIBRATE
+                RingerMode.Silent -> AudioManager.RINGER_MODE_SILENT
+            }
+            audioManager.ringerMode = systemMode
+        } catch (_: SecurityException) {
+            // Fallback for some OEMs that might still throw even if granted
+        } catch (_: Exception) {
+            // General safety
         }
-        audioManager.ringerMode = systemMode
     }
 
     override fun showVolumePanel() {

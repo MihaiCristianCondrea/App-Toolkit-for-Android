@@ -159,6 +159,11 @@ fun ToolkitTilesRoute(
                     R.string.tiles_setup_required_message,
                     Toast.LENGTH_SHORT,
                 ).show()
+                is ToolkitTilesAction.ShowMessage -> Toast.makeText(
+                    context,
+                    action.message,
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
         }
     }

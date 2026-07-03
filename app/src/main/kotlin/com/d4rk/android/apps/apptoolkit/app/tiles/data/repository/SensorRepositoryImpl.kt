@@ -26,6 +26,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.hardware.display.DisplayManager
 import android.os.BatteryManager
+import android.os.Build
 import android.view.Display
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.SensorRepository
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
@@ -47,7 +48,19 @@ class SensorRepositoryImpl(
     private val displayManager = context.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
 
     private val rotation: Int
-        get() = displayManager.getDisplay(Display.DEFAULT_DISPLAY)?.rotation ?: 0
+        get() = try {
+            val display = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // On Android 11+, display manager is safer for background contexts
+                displayManager.getDisplay(Display.DEFAULT_DISPLAY)
+                    ?: displayManager.displays.firstOrNull()
+            } else {
+                @Suppress("DEPRECATION")
+                displayManager.getDisplay(Display.DEFAULT_DISPLAY)
+            }
+            display?.rotation ?: 0
+        } catch (_: Exception) {
+            0
+        }
 
     override fun getCompassAzimuth(): Flow<Float> = callbackFlow {
         val rotationMatrix = FloatArray(9)
