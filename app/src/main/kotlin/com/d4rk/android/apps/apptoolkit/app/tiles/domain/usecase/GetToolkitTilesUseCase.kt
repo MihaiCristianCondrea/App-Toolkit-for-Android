@@ -106,14 +106,6 @@ class GetToolkitTilesUseCase {
                         requestKey = "counter",
                     ),
                     ToolkitTile(
-                        id = "clipboard",
-                        titleResId = R.string.tile_clipboard_title,
-                        summaryResId = R.string.tile_clipboard_summary,
-                        icon = ToolkitTileIcon.Clipboard,
-                        status = ToolkitTileStatus.Available,
-                        requestKey = "clipboard",
-                    ),
-                    ToolkitTile(
                         id = "material_colors",
                         titleResId = R.string.tool_material_colors_title,
                         summaryResId = R.string.tool_material_colors_summary,

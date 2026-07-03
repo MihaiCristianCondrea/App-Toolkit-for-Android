@@ -21,7 +21,6 @@ import android.content.ComponentName
 import android.content.Context
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.tiles.service.BatteryTileService
-import com.d4rk.android.apps.apptoolkit.app.tiles.service.ClipboardTileService
 import com.d4rk.android.apps.apptoolkit.app.tiles.service.CoinFlipTileService
 import com.d4rk.android.apps.apptoolkit.app.tiles.service.CounterTileService
 import com.d4rk.android.apps.apptoolkit.app.tiles.service.DiceRollTileService
@@ -39,11 +38,6 @@ fun getTileServiceRequests(): Map<String, TileServiceRequest> = mapOf(
         BatteryTileService::class.java,
         R.string.tile_battery_title,
         R.drawable.ic_tile_battery
-    ),
-    "clipboard" to TileServiceRequest(
-        ClipboardTileService::class.java,
-        R.string.tile_clipboard_title,
-        R.drawable.ic_tile_clipboard
     ),
     "coin_flip" to TileServiceRequest(
         CoinFlipTileService::class.java,

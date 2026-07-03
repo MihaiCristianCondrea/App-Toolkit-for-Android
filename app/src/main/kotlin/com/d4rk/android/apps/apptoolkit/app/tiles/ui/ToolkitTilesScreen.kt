@@ -48,7 +48,6 @@ import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.ContentPasteOff
 import androidx.compose.material.icons.outlined.Dehaze
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
@@ -597,7 +596,6 @@ private fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Coin -> Icons.Outlined.MonetizationOn
     ToolkitTileIcon.Dice -> Icons.Outlined.Casino
     ToolkitTileIcon.Counter -> Icons.Outlined.Dehaze
-    ToolkitTileIcon.Clipboard -> Icons.Outlined.ContentPasteOff
     ToolkitTileIcon.Battery -> Icons.Outlined.BatteryChargingFull
     ToolkitTileIcon.Caffeine -> Icons.Outlined.Timer
     ToolkitTileIcon.Sound -> Icons.Outlined.GraphicEq
@@ -686,7 +684,6 @@ private fun ToolkitTileIcon.iconColors(): StatusColors {
             content = if (isDark) Color(0xFFFBE44D) else Color(0xFF6B5E00),
         )
 
-        ToolkitTileIcon.Clipboard,
         ToolkitTileIcon.Screenshot,
         ToolkitTileIcon.Volume,
         ToolkitTileIcon.Sound -> StatusColors(

@@ -127,8 +127,6 @@
     <string name="tile_dice_roll_summary">Roll a six-sided die</string>
     <string name="tile_counter_title">Counter</string>
     <string name="tile_counter_summary">Increment a quick running count</string>
-    <string name="tile_clipboard_title">Clipboard Cleaner</string>
-    <string name="tile_clipboard_summary">Clear clipboard contents</string>
     <string name="tool_material_colors_title">Material Colors</string>
     <string name="tool_material_colors_summary">Preview the app palette and Android Material You tonal colors</string>
     <string name="tool_material_colors_description">Compare the current application color scheme with Android system accent and neutral palettes.</string>
@@ -154,8 +152,6 @@
     <string name="tool_dice_roll_action">Roll die</string>
     <string name="tool_counter_increment">Increment</string>
     <string name="tool_counter_reset">Reset</string>
-    <string name="tool_clipboard_clear_action">Clear clipboard</string>
-    <string name="tool_clipboard_cleared">Clipboard cleared</string>
     <string name="tool_battery_refresh">Refresh battery</string>
     <string name="tool_battery_unknown">Battery unknown</string>
     <string name="tool_generic_available_summary">This tool is ready for an expanded implementation and now has a Material preview so behavior can be validated before deeper integration.</string>
@@ -182,7 +178,6 @@
     <string name="tile_sos_summary">Keep emergency actions close</string>
     <string name="tile_service_azimuth_format" translatable="false">%1$d°</string>
     <string name="tile_service_percent" translatable="false">%1$d%%</string>
-    <string name="tile_service_clipboard_cleared">Clipboard cleared</string>
     <string name="tile_service_heads">Heads</string>
     <string name="tile_service_tails">Tails</string>
     <string name="tile_service_dice_value">Rolled %1$d</string>

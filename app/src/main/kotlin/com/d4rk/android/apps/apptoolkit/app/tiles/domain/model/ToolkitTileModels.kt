@@ -31,7 +31,6 @@ enum class ToolkitTileIcon {
     Coin,
     Dice,
     Counter,
-    Clipboard,
     Battery,
     Caffeine,
     Sound,

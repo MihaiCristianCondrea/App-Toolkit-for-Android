@@ -52,7 +52,6 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.BreathingSta
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.NetworkTraffic
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.BatteryTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.BreathingTool
-import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.ClipboardTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.CoinFlipTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.CompassTool
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.CounterTool
@@ -196,7 +195,6 @@ private fun ToolInteractiveContent(
         "coin_flip" -> CoinFlipTool()
         "dice_roll" -> DiceRollTool()
         "counter" -> CounterTool()
-        "clipboard" -> ClipboardTool()
         "battery" -> BatteryTool()
         "compass" -> CompassTool(azimuth = sensorData.compassAzimuth)
         "bubble_level" -> LevelTool(pitch = sensorData.levelPitch, roll = sensorData.levelRoll)
