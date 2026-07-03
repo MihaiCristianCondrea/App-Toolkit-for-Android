@@ -62,6 +62,12 @@ import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoaderCallba
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdRequest
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
 
+/**
+ * Loads and renders the native ad row used between Toolkit Tiles categories.
+ *
+ * [initiallyLoaded] keeps an already reported ad visible while this composable is moved from the
+ * hidden preloader slot into the visible list, avoiding a transient status reset and layout gap.
+ */
 @SuppressLint("InflateParams")
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -69,6 +75,7 @@ fun QuickToolsNativeAdCard(
     modifier: Modifier = Modifier,
     adUnitId: String,
     position: GroupedItemPosition,
+    initiallyLoaded: Boolean = false,
     onStatusChanged: (Boolean) -> Unit = {},
 ) {
     val inspectionMode = LocalInspectionMode.current
@@ -81,13 +88,9 @@ fun QuickToolsNativeAdCard(
 
     val mainHandler: Handler = remember { Handler(Looper.getMainLooper()) }
 
-    var isAdLoaded by remember(adUnitId) { mutableStateOf(false) }
+    var isAdLoaded by remember(adUnitId) { mutableStateOf(initiallyLoaded) }
     var nativeAdView by remember { mutableStateOf<NativeAdView?>(null) }
     var currentNativeAd by remember { mutableStateOf<NativeAd?>(null) }
-
-    LaunchedEffect(isAdLoaded) {
-        onStatusChanged(isAdLoaded)
-    }
 
     DisposableEffect(Unit) {
         onDispose {
@@ -102,10 +105,10 @@ fun QuickToolsNativeAdCard(
             currentNativeAd?.destroy()
             currentNativeAd = null
             isAdLoaded = false
+            onStatusChanged(false)
             return@LaunchedEffect
         }
 
-        isAdLoaded = false
         val adRequest: NativeAdRequest = NativeAdRequest.Builder(
             adUnitId,
             listOf(NativeAd.NativeAdType.NATIVE)
@@ -124,6 +127,7 @@ fun QuickToolsNativeAdCard(
                             view.isVisible = true
                         }
                         isAdLoaded = true
+                        onStatusChanged(true)
                     }
                 }
 
@@ -131,6 +135,7 @@ fun QuickToolsNativeAdCard(
                     mainHandler.post {
                         nativeAdView?.isVisible = false
                         isAdLoaded = false
+                        onStatusChanged(false)
                     }
                 }
             }
