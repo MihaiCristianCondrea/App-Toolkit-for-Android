@@ -89,6 +89,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -210,12 +211,23 @@ fun ToolkitTilesScreen(
     }
 
     val visibleListItems = remember(listItems, state.loadedAdIds) {
-        listItems.filter { item ->
-            when (item) {
-                is ToolkitTilesListItem.Category -> true
-                is ToolkitTilesListItem.Ad -> item.id in state.loadedAdIds
+        listItems
+            .filter { item -> item.isVisible(loadedAdIds = state.loadedAdIds) }
+            .let { visibleItems ->
+                visibleItems.mapIndexed { index, item ->
+                    PositionedToolkitTilesListItem(
+                        item = item,
+                        position = groupedItemPosition(index, visibleItems.size),
+                    )
+                }
             }
-        }
+            .toImmutableList()
+    }
+    val preloadedAdItems = remember(listItems, state.loadedAdIds) {
+        listItems
+            .filterIsInstance<ToolkitTilesListItem.Ad>()
+            .filterNot { adItem -> adItem.id in state.loadedAdIds }
+            .toImmutableList()
     }
 
     LaunchedEffect(selectedTile) {
@@ -226,85 +238,81 @@ fun ToolkitTilesScreen(
         }
     }
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(
-            start = SizeConstants.LargeSize,
-            top = paddingValues.calculateTopPadding() + SizeConstants.LargeSize,
-            end = SizeConstants.LargeSize,
-            bottom = paddingValues.calculateBottomPadding() + SizeConstants.LargeSize,
-        ),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
-    ) {
-        item {
-            TilesFilters(
-                selectedFilter = state.selectedFilter,
-                onFilterSelected = { filter -> onEvent(ToolkitTilesEvent.FilterSelected(filter)) },
-            )
-        }
-        item { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
-        if (listItems.isEmpty()) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(
+                start = SizeConstants.LargeSize,
+                top = paddingValues.calculateTopPadding() + SizeConstants.LargeSize,
+                end = SizeConstants.LargeSize,
+                bottom = paddingValues.calculateBottomPadding() + SizeConstants.LargeSize,
+            ),
+        ) {
             item {
-                EmptyFilterCard()
+                TilesFilters(
+                    selectedFilter = state.selectedFilter,
+                    onFilterSelected = { filter -> onEvent(ToolkitTilesEvent.FilterSelected(filter)) },
+                )
             }
-        } else {
-            itemsIndexed(
-                items = listItems,
-                key = { _, item ->
+            item { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
+            if (listItems.isEmpty()) {
+                item {
+                    EmptyFilterCard()
+                }
+            } else {
+                itemsIndexed(
+                    items = visibleListItems,
+                    key = { _, positionedItem -> positionedItem.item.stableKey },
+                ) { _, positionedItem ->
+                    val item = positionedItem.item
+                    val position = positionedItem.position
+
                     when (item) {
-                        is ToolkitTilesListItem.Category -> item.category.id
-                        is ToolkitTilesListItem.Ad -> item.id
-                    }
-                },
-            ) { _, item ->
-                // Recalculate position for every item based on the latest visible list
-                val visibleIndex = visibleListItems.indexOf(item)
-                val isVisible = visibleIndex != -1
-                val position = if (isVisible) {
-                    groupedItemPosition(visibleIndex, visibleListItems.size)
-                } else {
-                    GroupedItemPosition.MIDDLE // Default for items not yet in the visible list
-                }
+                        is ToolkitTilesListItem.Category -> {
+                            val category = item.category
+                            val expanded = category.id in state.expandedCategoryIds
+                            TileCategorySection(
+                                category = category,
+                                position = position,
+                                expanded = expanded,
+                                onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
+                                onPreviewTile = { tile ->
+                                    if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
+                                        quickToolDialog = ToolkitQuickTool.MaterialColors
+                                    } else {
+                                        selectedTile = tile
+                                    }
+                                },
+                            )
+                        }
 
-                when (item) {
-                    is ToolkitTilesListItem.Category -> {
-                        val category = item.category
-                        val expanded = category.id in state.expandedCategoryIds
-                        TileCategorySection(
-                            category = category,
-                            position = position,
-                            expanded = expanded,
-                            onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
-                            onPreviewTile = { tile ->
-                                if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
-                                    quickToolDialog = ToolkitQuickTool.MaterialColors
-                                } else {
-                                    selectedTile = tile
-                                }
-                            },
-                        )
-                    }
-
-                    is ToolkitTilesListItem.Ad -> {
-                        QuickToolsNativeAdCard(
-                            modifier = Modifier,
-                            adUnitId = item.adUnitId,
-                            position = position,
-                            onStatusChanged = { isLoaded ->
-                                onEvent(ToolkitTilesEvent.AdStatusChanged(item.id, isLoaded))
-                            }
-                        )
+                        is ToolkitTilesListItem.Ad -> {
+                            QuickToolsNativeAdCard(
+                                modifier = Modifier,
+                                adUnitId = item.adUnitId,
+                                position = position,
+                                initiallyLoaded = item.id in state.loadedAdIds,
+                                onStatusChanged = { isLoaded ->
+                                    onEvent(ToolkitTilesEvent.AdStatusChanged(item.id, isLoaded))
+                                },
+                            )
+                        }
                     }
                 }
             }
+            item { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
+            item {
+                HowToAddTilesCard()
+            }
+            item {
+                NavigationBarSpacer()
+            }
         }
-        item { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
-        item {
-            HowToAddTilesCard()
-        }
-        item {
-            NavigationBarSpacer()
-        }
+
+        HiddenAdPreloaders(
+            adItems = preloadedAdItems,
+            onEvent = onEvent,
+        )
     }
 
     selectedTile?.let { tile ->
@@ -327,6 +335,25 @@ fun ToolkitTilesScreen(
 
     if (quickToolDialog == ToolkitQuickTool.MaterialColors) {
         MaterialColorsToolDialog(onClose = { quickToolDialog = null })
+    }
+}
+
+
+@Composable
+private fun HiddenAdPreloaders(
+    adItems: ImmutableList<ToolkitTilesListItem.Ad>,
+    onEvent: (ToolkitTilesEvent) -> Unit,
+) {
+    Box(modifier = Modifier.size(0.dp)) {
+        adItems.forEach { item ->
+            QuickToolsNativeAdCard(
+                adUnitId = item.adUnitId,
+                position = GroupedItemPosition.MIDDLE,
+                onStatusChanged = { isLoaded ->
+                    onEvent(ToolkitTilesEvent.AdStatusChanged(item.id, isLoaded))
+                },
+            )
+        }
     }
 }
 
@@ -777,6 +804,22 @@ private data class StatusColors(
     val container: Color,
     val content: Color,
 )
+
+private data class PositionedToolkitTilesListItem(
+    val item: ToolkitTilesListItem,
+    val position: GroupedItemPosition,
+)
+
+private val ToolkitTilesListItem.stableKey: String
+    get() = when (this) {
+        is ToolkitTilesListItem.Category -> category.id
+        is ToolkitTilesListItem.Ad -> id
+    }
+
+private fun ToolkitTilesListItem.isVisible(loadedAdIds: Set<String>): Boolean = when (this) {
+    is ToolkitTilesListItem.Category -> true
+    is ToolkitTilesListItem.Ad -> id in loadedAdIds
+}
 
 private sealed class ToolkitTilesListItem {
     data class Category(val category: ToolkitTileCategory) : ToolkitTilesListItem()
