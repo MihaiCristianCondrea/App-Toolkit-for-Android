@@ -52,6 +52,9 @@ object AdsConstants {
     val BOTTOM_NAV_BAR_NATIVE_AD_UNIT_ID: String
         get() = nativeAdUnitId("ca-app-pub-5294151573817700/6982251485")
 
+    val QUICK_TOOLS_NATIVE_AD_UNIT_ID: String
+        get() = nativeAdUnitId("ca-app-pub-5294151573817700/7704036670")
+
     val HELP_NATIVE_AD_UNIT_ID: String
         get() = nativeAdUnitId("ca-app-pub-5294151573817700/7512912137")
 

@@ -146,52 +146,52 @@ fun SupportNativeAdCard(
 }
 
 private fun bindSupportNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
-    val mediaView: MediaView = adView.findViewById(R.id.native_ad_media)
-    mediaView.mediaContent = nativeAd.mediaContent
-    mediaView.isVisible = true
+    val mediaView: MediaView? = adView.findViewById(R.id.native_ad_media)
+    mediaView?.mediaContent = nativeAd.mediaContent
+    mediaView?.isVisible = true
 
-    val headlineView: TextView = adView.findViewById(R.id.native_ad_headline)
+    val headlineView: TextView? = adView.findViewById(R.id.native_ad_headline)
     adView.headlineView = headlineView
-    headlineView.text = nativeAd.headline
+    headlineView?.text = nativeAd.headline
 
-    val bodyView: TextView = adView.findViewById(R.id.native_ad_body)
+    val bodyView: TextView? = adView.findViewById(R.id.native_ad_body)
     adView.bodyView = bodyView
     val bodyText: CharSequence? = nativeAd.body
     if (bodyText.isNullOrEmpty()) {
-        bodyView.isVisible = false
+        bodyView?.isVisible = false
     } else {
-        bodyView.text = bodyText
-        bodyView.isVisible = true
+        bodyView?.text = bodyText
+        bodyView?.isVisible = true
     }
 
-    val advertiserView: TextView = adView.findViewById(R.id.native_ad_advertiser)
+    val advertiserView: TextView? = adView.findViewById(R.id.native_ad_advertiser)
     adView.advertiserView = advertiserView
     val advertiserText: CharSequence? = nativeAd.advertiser
     if (advertiserText.isNullOrEmpty()) {
-        advertiserView.isVisible = false
+        advertiserView?.isVisible = false
     } else {
-        advertiserView.text = advertiserText
-        advertiserView.isVisible = true
+        advertiserView?.text = advertiserText
+        advertiserView?.isVisible = true
     }
 
-    val iconView: ImageView = adView.findViewById(R.id.native_ad_icon)
+    val iconView: ImageView? = adView.findViewById(R.id.native_ad_icon)
     adView.iconView = iconView
     val icon = nativeAd.icon
     if (icon == null) {
-        iconView.isVisible = false
+        iconView?.isVisible = false
     } else {
-        iconView.setImageDrawable(icon.drawable)
-        iconView.isVisible = true
+        iconView?.setImageDrawable(icon.drawable)
+        iconView?.isVisible = true
     }
 
-    val callToActionView: Button = adView.findViewById(R.id.native_ad_call_to_action)
+    val callToActionView: Button? = adView.findViewById(R.id.native_ad_call_to_action)
     adView.callToActionView = callToActionView
     val callToActionText: CharSequence? = nativeAd.callToAction
     if (callToActionText.isNullOrEmpty()) {
-        callToActionView.isVisible = false
+        callToActionView?.isVisible = false
     } else {
-        callToActionView.text = callToActionText
-        callToActionView.isVisible = true
+        callToActionView?.text = callToActionText
+        callToActionView?.isVisible = true
     }
 
     adView.registerNativeAd(nativeAd, mediaView)

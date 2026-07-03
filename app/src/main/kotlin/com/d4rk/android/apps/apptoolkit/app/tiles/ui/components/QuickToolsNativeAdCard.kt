@@ -15,17 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.libs.apptoolkit.core.ui.views.ads
+package com.d4rk.android.apps.apptoolkit.app.tiles.ui.components
 
 import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Looper
-import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,13 +32,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -51,11 +45,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.NativeAdViewHost
+import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
@@ -64,49 +62,25 @@ import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoaderCallba
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdRequest
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
 
-/**
- * A Composable that displays a native ad in a card format, specifically styled for a "help" or "discovery" context.
- *
- * This function handles the entire ad loading and display lifecycle. It checks for user preferences
- * (whether ads are enabled) and the validity of the ad configuration before attempting to load an ad.
- *
- * Features:
- * - Fetches ad enabled status from `CommonDataStore`.
- * - Uses `AndroidView` to inflate a traditional XML layout (`R.layout.native_ad_help_card`) for the native ad.
- * - Loads a native ad using the Google Mobile Ads SDK.
- * - Binds the loaded `NativeAd` data to the corresponding views within the inflated layout.
- * - Manages the ad's lifecycle, destroying it when the composable leaves the composition.
- * - Shows a `HelpNativeAdPreview` placeholder in Jetpack Compose preview mode.
- * - The ad will not be displayed if ads are disabled by the user or if the ad unit ID is missing.
- *
- * Integration and compliance notes:
- * - Render this composable only after consent/ads settings allow ad personalization or serving.
- * - Keep an explicit ad disclosure label (`"Ad"`) in host templates/previews.
- * - Treat this composable as a view-layer primitive; placement policy is owned by the screen.
- *
- * @param modifier The modifier to be applied to the ad card.
- */
 @SuppressLint("InflateParams")
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun HelpNativeAdCard(
+fun QuickToolsNativeAdCard(
     modifier: Modifier = Modifier,
-    adUnitId: String
+    adUnitId: String,
+    position: GroupedItemPosition,
 ) {
     val inspectionMode = LocalInspectionMode.current
     val showAds: Boolean = rememberAdsEnabled()
 
     if (inspectionMode) {
-        HelpNativeAdPreview(modifier = modifier)
-        return
-    }
-
-    if (!showAds || adUnitId.isBlank()) {
+        QuickToolsNativeAdPreview(modifier = modifier, position = position)
         return
     }
 
     val mainHandler: Handler = remember { Handler(Looper.getMainLooper()) }
 
+    var isAdLoaded by remember(adUnitId) { mutableStateOf(false) }
     var nativeAdView by remember { mutableStateOf<NativeAdView?>(null) }
     var currentNativeAd by remember { mutableStateOf<NativeAd?>(null) }
 
@@ -117,30 +91,22 @@ fun HelpNativeAdCard(
         }
     }
 
-    Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(size = SizeConstants.ExtraSmallSize),
-    ) {
-        NativeAdViewHost(
-            modifier = Modifier.fillMaxWidth(),
-            layoutResId = R.layout.native_ad_help_card,
-            onNativeAdViewReady = { view ->
-                if (nativeAdView !== view) {
-                    nativeAdView = view
-                }
-            }
-        )
-    }
+    LaunchedEffect(adUnitId, showAds) {
+        if (!showAds || adUnitId.isBlank()) {
+            nativeAdView?.isVisible = false
+            currentNativeAd?.destroy()
+            currentNativeAd = null
+            isAdLoaded = false
+            return@LaunchedEffect
+        }
 
-    LaunchedEffect(nativeAdView, adUnitId) {
-        val view: NativeAdView = nativeAdView ?: return@LaunchedEffect
-
+        isAdLoaded = false
         val adRequest: NativeAdRequest = NativeAdRequest.Builder(
             adUnitId,
             listOf(NativeAd.NativeAdType.NATIVE)
         ).build()
 
-        view.isVisible = false
+        nativeAdView?.isVisible = false
         NativeAdLoader.load(
             adRequest,
             object : NativeAdLoaderCallback {
@@ -148,73 +114,112 @@ fun HelpNativeAdCard(
                     mainHandler.post {
                         currentNativeAd?.destroy()
                         currentNativeAd = nativeAd
-                        bindHelpNativeAd(adView = view, nativeAd = nativeAd)
-                        view.isVisible = true
+                        nativeAdView?.let { view ->
+                            bindQuickToolsNativeAd(adView = view, nativeAd = nativeAd)
+                            view.isVisible = true
+                        }
+                        isAdLoaded = true
                     }
                 }
 
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    mainHandler.post { view.isVisible = false }
+                    mainHandler.post {
+                        nativeAdView?.isVisible = false
+                        isAdLoaded = false
+                    }
                 }
             }
         )
     }
-}
 
-@Composable
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-private fun HelpNativeAdPreview(modifier: Modifier) {
-    Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(size = SizeConstants.ExtraSmallSize),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(SizeConstants.ExtraTinySize)
-        )
-    ) {
-        Row(
-            modifier = Modifier
+    if (isAdLoaded) {
+        Surface(
+            modifier = modifier
                 .fillMaxWidth()
-                .padding(SizeConstants.LargeSize),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                .groupedCorners(
+                    position = position,
+                    outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+                ),
+            color = MaterialTheme.colorScheme.surfaceContainerLow,
+            shape = RectangleShape,
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(SizeConstants.LauncherIconSize)
-                        .clip(RoundedCornerShape(SizeConstants.LargeSize))
-                        .background(MaterialTheme.colorScheme.primaryContainer),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Ad",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-                Spacer(modifier = Modifier.width(SizeConstants.LargeSize))
-                Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraSmallSize)) {
-                    Text(
-                        text = "Discover helpful tools",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = "Ad preview placeholder",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-            OutlinedButton(onClick = { }, enabled = false) {
-                Text(text = "Learn more")
+            Box(modifier = Modifier.padding(SizeConstants.MediumSize)) {
+                NativeAdViewHost(
+                    modifier = Modifier.fillMaxWidth(),
+                    layoutResId = R.layout.native_ad_quick_tools_row,
+                    onNativeAdViewReady = { adView ->
+                        if (nativeAdView !== adView) {
+                            nativeAdView = adView
+                        }
+                    },
+                    onUpdate = { view ->
+                        view.isVisible = isAdLoaded
+                        if (isAdLoaded) {
+                            currentNativeAd?.let { nativeAd ->
+                                bindQuickToolsNativeAd(adView = view, nativeAd = nativeAd)
+                            }
+                        }
+                    }
+                )
             }
         }
     }
 }
 
-private fun bindHelpNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
+@Composable
+private fun QuickToolsNativeAdPreview(
+    modifier: Modifier,
+    position: GroupedItemPosition,
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .groupedCorners(
+                position = position,
+                outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+            ),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = RectangleShape,
+    ) {
+        Box(modifier = Modifier.padding(SizeConstants.MediumSize)) {
+            Row(
+                modifier = Modifier
+                    .padding(SizeConstants.LargeSize)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .background(
+                            MaterialTheme.colorScheme.primaryContainer,
+                            RoundedCornerShape(SizeConstants.MediumSize)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Ad", style = MaterialTheme.typography.labelSmall)
+                }
+
+                Spacer(modifier = Modifier.width(SizeConstants.LargeSize))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Native Ad Preview",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "This is how the ad row will look in the list.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    }
+}
+
+private fun bindQuickToolsNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
     val headlineView: TextView? = adView.findViewById(R.id.native_ad_headline)
     adView.headlineView = headlineView
     headlineView?.text = nativeAd.headline
@@ -239,8 +244,6 @@ private fun bindHelpNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
         advertiserView?.isVisible = true
     }
 
-    val iconContainer: View? = adView.findViewById(R.id.native_ad_icon_container)
-    val iconBackground: ImageView? = adView.findViewById(R.id.native_ad_icon_background)
     val iconView: ImageView? = adView.findViewById(R.id.native_ad_icon)
     adView.iconView = iconView
     val icon = nativeAd.icon
@@ -249,18 +252,6 @@ private fun bindHelpNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
     } else {
         iconView?.setImageDrawable(icon.drawable)
         iconView?.isVisible = true
-    }
-    iconBackground?.isVisible = true
-    iconContainer?.isVisible = true
-
-    val callToActionView: Button? = adView.findViewById(R.id.native_ad_call_to_action)
-    adView.callToActionView = callToActionView
-    val callToActionText: CharSequence? = nativeAd.callToAction
-    if (callToActionText.isNullOrEmpty()) {
-        callToActionView?.isVisible = false
-    } else {
-        callToActionView?.text = callToActionText
-        callToActionView?.isVisible = true
     }
 
     adView.registerNativeAd(nativeAd, null)

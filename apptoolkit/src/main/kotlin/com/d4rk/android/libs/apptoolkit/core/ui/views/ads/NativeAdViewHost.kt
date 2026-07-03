@@ -38,7 +38,7 @@ import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
  */
 @Composable
 @UiComposable
-internal fun NativeAdViewHost(
+fun NativeAdViewHost(
     modifier: Modifier = Modifier,
     layoutResId: Int,
     onNativeAdViewReady: (NativeAdView) -> Unit,

@@ -169,38 +169,38 @@ private fun AppsListNativeAdPreview(modifier: Modifier) {
 }
 
 private fun bindAppsListNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
-    val headlineView: TextView = adView.findViewById(R.id.native_ad_headline)
+    val headlineView: TextView? = adView.findViewById(R.id.native_ad_headline)
     adView.headlineView = headlineView
-    headlineView.text = nativeAd.headline
+    headlineView?.text = nativeAd.headline
 
-    val bodyView: TextView = adView.findViewById(R.id.native_ad_body)
+    val bodyView: TextView? = adView.findViewById(R.id.native_ad_body)
     adView.bodyView = bodyView
     val bodyText: CharSequence? = nativeAd.body
     if (bodyText.isNullOrEmpty()) {
-        bodyView.isVisible = false
+        bodyView?.isVisible = false
     } else {
-        bodyView.text = bodyText
-        bodyView.isVisible = true
+        bodyView?.text = bodyText
+        bodyView?.isVisible = true
     }
 
-    val advertiserView: TextView = adView.findViewById(R.id.native_ad_advertiser)
+    val advertiserView: TextView? = adView.findViewById(R.id.native_ad_advertiser)
     adView.advertiserView = advertiserView
     val advertiserText: CharSequence? = nativeAd.advertiser
     if (advertiserText.isNullOrEmpty()) {
-        advertiserView.isVisible = false
+        advertiserView?.isVisible = false
     } else {
-        advertiserView.text = advertiserText
-        advertiserView.isVisible = true
+        advertiserView?.text = advertiserText
+        advertiserView?.isVisible = true
     }
 
-    val iconView: ImageView = adView.findViewById(R.id.native_ad_icon)
+    val iconView: ImageView? = adView.findViewById(R.id.native_ad_icon)
     adView.iconView = iconView
     val icon = nativeAd.icon
     if (icon == null) {
-        iconView.isVisible = false
+        iconView?.isVisible = false
     } else {
-        iconView.setImageDrawable(icon.drawable)
-        iconView.isVisible = true
+        iconView?.setImageDrawable(icon.drawable)
+        iconView?.isVisible = true
     }
 
     adView.registerNativeAd(nativeAd, null)

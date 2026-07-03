@@ -57,7 +57,6 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.PowerSettingsNew
 import androidx.compose.material.icons.outlined.Screenshot
 import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.SyncAlt
@@ -103,12 +102,14 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileIcon
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitToolKind
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.getTileServiceRequests
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.QuickToolsNativeAdCard
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesEvent
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.mapper.items
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.mapper.toNewTaskIntent
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesUiState
+import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
@@ -193,6 +194,21 @@ fun ToolkitTilesScreen(
     val filteredCategories = remember(state.categories, state.selectedFilter) {
         state.categories.filterFor(state.selectedFilter)
     }
+    val listItems = remember(filteredCategories) {
+        buildList {
+            filteredCategories.forEachIndexed { index, category ->
+                add(ToolkitTilesListItem.Category(category))
+                if ((index + 1) % 2 == 0) {
+                    add(
+                        ToolkitTilesListItem.Ad(
+                            id = "ad_${index}_${AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID}",
+                            adUnitId = AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID,
+                        )
+                    )
+                }
+            }
+        }.toImmutableList()
+    }
 
     LaunchedEffect(selectedTile) {
         selectedTile?.let { tile ->
@@ -219,29 +235,48 @@ fun ToolkitTilesScreen(
             )
         }
         item { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
-        if (filteredCategories.isEmpty()) {
+        if (listItems.isEmpty()) {
             item {
                 EmptyFilterCard()
             }
         } else {
             itemsIndexed(
-                items = filteredCategories,
-                key = { _, category -> category.id },
-            ) { index, category ->
-                val expanded = category.id in state.expandedCategoryIds
-                TileCategorySection(
-                    category = category,
-                    position = groupedItemPosition(index, filteredCategories.size),
-                    expanded = expanded,
-                    onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
-                    onPreviewTile = { tile ->
-                        if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
-                            quickToolDialog = ToolkitQuickTool.MaterialColors
-                        } else {
-                            selectedTile = tile
-                        }
-                    },
-                )
+                items = listItems,
+                key = { _, item ->
+                    when (item) {
+                        is ToolkitTilesListItem.Category -> item.category.id
+                        is ToolkitTilesListItem.Ad -> item.id
+                    }
+                },
+            ) { index, item ->
+                val position = groupedItemPosition(index, listItems.size)
+
+                when (item) {
+                    is ToolkitTilesListItem.Category -> {
+                        val category = item.category
+                        val expanded = category.id in state.expandedCategoryIds
+                        TileCategorySection(
+                            category = category,
+                            position = position,
+                            expanded = expanded,
+                            onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
+                            onPreviewTile = { tile ->
+                                if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
+                                    quickToolDialog = ToolkitQuickTool.MaterialColors
+                                } else {
+                                    selectedTile = tile
+                                }
+                            },
+                        )
+                    }
+
+                    is ToolkitTilesListItem.Ad -> {
+                        QuickToolsNativeAdCard(
+                            adUnitId = item.adUnitId,
+                            position = position,
+                        )
+                    }
+                }
             }
         }
         item { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
@@ -723,6 +758,11 @@ private data class StatusColors(
     val container: Color,
     val content: Color,
 )
+
+private sealed class ToolkitTilesListItem {
+    data class Category(val category: ToolkitTileCategory) : ToolkitTilesListItem()
+    data class Ad(val id: String, val adUnitId: String) : ToolkitTilesListItem()
+}
 
 private fun requestQuickSettingsTile(
     context: Context,
