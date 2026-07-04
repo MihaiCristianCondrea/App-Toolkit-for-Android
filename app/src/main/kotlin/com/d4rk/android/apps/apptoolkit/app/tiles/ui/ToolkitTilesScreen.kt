@@ -114,6 +114,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
@@ -209,6 +210,14 @@ fun ToolkitTilesScreen(
                     )
                 }
             }
+            if (isNotEmpty() && last() !is ToolkitTilesListItem.Ad) {
+                add(
+                    ToolkitTilesListItem.Ad(
+                        id = "ad_trailing",
+                        adUnitId = AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID,
+                    )
+                )
+            }
         }.toImmutableList()
     }
 
@@ -254,6 +263,7 @@ fun ToolkitTilesScreen(
         ) {
             item {
                 TilesFilters(
+                    categories = state.categories,
                     selectedFilter = state.selectedFilter,
                     onFilterSelected = { filter -> onEvent(ToolkitTilesEvent.FilterSelected(filter)) },
                 )
@@ -267,7 +277,7 @@ fun ToolkitTilesScreen(
                 itemsIndexed(
                     items = visibleListItems,
                     key = { _, positionedItem -> positionedItem.item.stableKey },
-                ) { _, positionedItem ->
+                ) { index, positionedItem ->
                     val item = positionedItem.item
                     val position = positionedItem.position
 
@@ -279,6 +289,9 @@ fun ToolkitTilesScreen(
                                 category = category,
                                 position = position,
                                 expanded = expanded,
+                                modifier = Modifier
+                                    .animateItem()
+                                    .animateVisibility(index = index),
                                 onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
                                 onPreviewTile = { tile ->
                                     if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
@@ -292,7 +305,9 @@ fun ToolkitTilesScreen(
 
                         is ToolkitTilesListItem.Ad -> {
                             QuickToolsNativeAdCard(
-                                modifier = Modifier,
+                                modifier = Modifier
+                                    .animateItem()
+                                    .animateVisibility(index = index),
                                 adUnitId = item.adUnitId,
                                 position = position,
                                 initiallyLoaded = item.id in state.loadedAdIds,
@@ -363,28 +378,45 @@ private fun HiddenAdPreloaders(
 
 @Composable
 private fun TilesFilters(
+    categories: ImmutableList<ToolkitTileCategory>,
     selectedFilter: ToolkitTilesFilter,
     onFilterSelected: (ToolkitTilesFilter) -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-    ) {
-        ToolkitTilesFilter.items().forEach { item ->
-            FilterChip(
-                selected = selectedFilter == item.filter,
-                onClick = { onFilterSelected(item.filter) },
-                label = { Text(text = stringResource(id = item.labelResId)) },
-                leadingIcon = {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = null,
-                        modifier = Modifier.size(SizeConstants.ButtonIconSize),
-                    )
-                },
-            )
+    val filters = remember(categories) {
+        val allTiles = categories.flatMap { it.tiles }
+        val statuses = allTiles.map { it.status }.toSet()
+
+        ToolkitTilesFilter.items().filter { item ->
+            when (item.filter) {
+                ToolkitTilesFilter.All -> true
+                ToolkitTilesFilter.Added -> statuses.contains(ToolkitTileStatus.Added)
+                ToolkitTilesFilter.NeedsSetup -> statuses.contains(ToolkitTileStatus.NeedsSetup)
+                ToolkitTilesFilter.Unsupported -> statuses.contains(ToolkitTileStatus.Unsupported)
+            }
+        }.toImmutableList()
+    }
+
+    if (filters.size > 1) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+        ) {
+            filters.forEach { item ->
+                FilterChip(
+                    selected = selectedFilter == item.filter,
+                    onClick = { onFilterSelected(item.filter) },
+                    label = { Text(text = stringResource(id = item.labelResId)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = item.icon,
+                            contentDescription = null,
+                            modifier = Modifier.size(SizeConstants.ButtonIconSize),
+                        )
+                    },
+                )
+            }
         }
     }
 }
@@ -394,11 +426,12 @@ private fun TileCategorySection(
     category: ToolkitTileCategory,
     position: GroupedItemPosition,
     expanded: Boolean,
+    modifier: Modifier = Modifier,
     onToggle: () -> Unit,
     onPreviewTile: (ToolkitTile) -> Unit,
 ) {
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .groupedCorners(
                 position = position,
@@ -440,6 +473,7 @@ private fun TileCategorySection(
                         ToolkitTileCard(
                             tile = tile,
                             position = groupedItemPosition(index, category.tiles.size),
+                            modifier = Modifier.animateVisibility(index = index),
                             onPreviewTile = { onPreviewTile(tile) },
                         )
                     }
@@ -453,11 +487,12 @@ private fun TileCategorySection(
 private fun ToolkitTileCard(
     tile: ToolkitTile,
     position: GroupedItemPosition,
+    modifier: Modifier = Modifier,
     onPreviewTile: () -> Unit,
 ) {
     Card(
         onClick = onPreviewTile,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .groupedCorners(
                 position = position,

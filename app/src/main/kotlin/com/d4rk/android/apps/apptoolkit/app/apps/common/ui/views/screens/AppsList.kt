@@ -309,24 +309,26 @@ private fun AppsListFilters(
         list.toImmutableList()
     }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-    ) {
-        filters.forEach { item ->
-            FilterChip(
-                selected = selectedFilter == item.filter,
-                onClick = { onFilterSelected(item.filter) },
-                label = { Text(text = stringResource(id = item.labelResId)) },
-                leadingIcon = {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = null,
-                    )
-                },
-            )
+    if (filters.size > 1) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+        ) {
+            filters.forEach { item ->
+                FilterChip(
+                    selected = selectedFilter == item.filter,
+                    onClick = { onFilterSelected(item.filter) },
+                    label = { Text(text = stringResource(id = item.labelResId)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = item.icon,
+                            contentDescription = null,
+                        )
+                    },
+                )
+            }
         }
     }
 }

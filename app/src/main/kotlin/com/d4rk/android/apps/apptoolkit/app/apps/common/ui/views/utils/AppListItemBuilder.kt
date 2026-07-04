@@ -34,11 +34,15 @@ fun buildAppListItems(
         return apps.map { AppListItem.App(it) }.toImmutableList()
     }
 
-    val listItems = ArrayList<AppListItem>(apps.size + (apps.size / adFrequency))
+    val listItems = ArrayList<AppListItem>(apps.size + (apps.size / adFrequency) + 1)
     apps.forEachIndexed { index, app ->
         listItems += AppListItem.App(app)
         val isTimeForAd = (index + 1) % adFrequency == 0
         if (isTimeForAd) listItems += AppListItem.Ad
+    }
+
+    if (listItems.isNotEmpty() && listItems.last() !is AppListItem.Ad) {
+        listItems += AppListItem.Ad
     }
     return listItems.toImmutableList()
 }
