@@ -76,6 +76,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -276,7 +277,7 @@ fun ToolkitTilesScreen(
             } else {
                 itemsIndexed(
                     items = visibleListItems,
-                    key = { _, positionedItem -> positionedItem.item.stableKey },
+                    key = { _, positionedItem -> "${state.selectedFilter}_${positionedItem.item.stableKey}" },
                 ) { index, positionedItem ->
                     val item = positionedItem.item
                     val position = positionedItem.position
@@ -292,6 +293,7 @@ fun ToolkitTilesScreen(
                                 modifier = Modifier
                                     .animateItem()
                                     .animateVisibility(index = index),
+                                selectedFilter = state.selectedFilter,
                                 onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
                                 onPreviewTile = { tile ->
                                     if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
@@ -427,6 +429,7 @@ private fun TileCategorySection(
     position: GroupedItemPosition,
     expanded: Boolean,
     modifier: Modifier = Modifier,
+    selectedFilter: ToolkitTilesFilter = ToolkitTilesFilter.All,
     onToggle: () -> Unit,
     onPreviewTile: (ToolkitTile) -> Unit,
 ) {
@@ -474,6 +477,7 @@ private fun TileCategorySection(
                             tile = tile,
                             position = groupedItemPosition(index, category.tiles.size),
                             modifier = Modifier.animateVisibility(index = index),
+                            key = "${selectedFilter}_${tile.id}",
                             onPreviewTile = { onPreviewTile(tile) },
                         )
                     }
@@ -488,50 +492,53 @@ private fun ToolkitTileCard(
     tile: ToolkitTile,
     position: GroupedItemPosition,
     modifier: Modifier = Modifier,
+    key: Any? = null,
     onPreviewTile: () -> Unit,
 ) {
-    Card(
-        onClick = onPreviewTile,
-        modifier = modifier
-            .fillMaxWidth()
-            .groupedCorners(
-                position = position,
-                outerRadius = SizeConstants.LargeExpandedSize,
-            ),
-        shape = RectangleShape,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        ),
-    ) {
-        Column(
-            modifier = Modifier
+    key(key) {
+        Card(
+            onClick = onPreviewTile,
+            modifier = modifier
                 .fillMaxWidth()
-                .padding(SizeConstants.LargeSize),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+                .groupedCorners(
+                    position = position,
+                    outerRadius = SizeConstants.LargeExpandedSize,
+                ),
+            shape = RectangleShape,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            ),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SizeConstants.LargeSize),
+                verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
             ) {
-                TileIconBadge(icon = tile.icon, large = true)
-                Spacer(modifier = Modifier.width(SizeConstants.LargeSize))
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
-                        text = stringResource(id = tile.titleResId),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    Text(
-                        text = stringResource(id = tile.summaryResId),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+                    TileIconBadge(icon = tile.icon, large = true)
+                    Spacer(modifier = Modifier.width(SizeConstants.LargeSize))
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+                    ) {
+                        Text(
+                            text = stringResource(id = tile.titleResId),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                        Text(
+                            text = stringResource(id = tile.summaryResId),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
+                ToolkitToolChips(tile = tile)
             }
-            ToolkitToolChips(tile = tile)
         }
     }
 }

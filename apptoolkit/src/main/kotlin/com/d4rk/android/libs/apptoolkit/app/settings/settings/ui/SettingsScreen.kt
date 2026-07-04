@@ -390,7 +390,10 @@ fun SettingsList(
                             )
                         },
                         onClick = { onPreferenceClick(preference) },
-                        modifier = Modifier.groupedPreferenceItem(position = position),
+                        modifier = Modifier.groupedPreferenceItem(
+                            position = position,
+                            outerRadius = SizeConstants.ExtraLargeSize,
+                        ),
                     )
                 }
             }

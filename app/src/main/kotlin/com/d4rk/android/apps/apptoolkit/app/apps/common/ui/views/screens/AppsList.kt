@@ -232,10 +232,11 @@ private fun AppsGrid(
         itemsIndexed(
             items = items,
             key = { index, item ->
-                when (item) {
+                val baseKey = when (item) {
                     is AppListItem.App -> item.appInfo.packageName
                     AppListItem.Ad -> "ad_$index"
                 }
+                "${selectedFilter}_$baseKey"
             },
             span = { _, item ->
                 when (item) {

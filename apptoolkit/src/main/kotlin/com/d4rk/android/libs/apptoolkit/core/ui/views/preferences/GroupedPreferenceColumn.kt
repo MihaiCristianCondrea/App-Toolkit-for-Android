@@ -81,6 +81,7 @@ fun Modifier.groupedCorners(
  */
 fun Modifier.groupedPreferenceItem(
     position: GroupedItemPosition,
+    outerRadius: Dp = 16.dp,
     horizontalPadding: Dp = SizeConstants.LargeSize,
     singleItemVerticalPadding: Dp = SizeConstants.ExtraTinySize,
 ): Modifier {
@@ -97,5 +98,8 @@ fun Modifier.groupedPreferenceItem(
             top = verticalPadding,
             bottom = verticalPadding,
         )
-        .groupedCorners(position = position)
+        .groupedCorners(
+            position = position,
+            outerRadius = outerRadius,
+        )
 }
