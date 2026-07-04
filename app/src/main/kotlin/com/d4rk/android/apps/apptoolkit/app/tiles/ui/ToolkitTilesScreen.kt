@@ -58,7 +58,6 @@ import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Straighten
-import androidx.compose.material.icons.outlined.SyncAlt
 import androidx.compose.material.icons.outlined.Thermostat
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.WarningAmber
@@ -111,6 +110,7 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesUiState
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
@@ -120,6 +120,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPos
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 import com.d4rk.android.libs.apptoolkit.R as ToolkitR
@@ -189,6 +190,7 @@ fun ToolkitTilesScreen(
     paddingValues: PaddingValues,
     onEvent: (ToolkitTilesEvent) -> Unit,
 ) {
+    val showAds = rememberAdsEnabled()
     var selectedTile by remember { mutableStateOf<ToolkitTile?>(null) }
     var quickToolDialog by remember { mutableStateOf<ToolkitQuickTool?>(null) }
     val filteredCategories = remember(state.categories, state.selectedFilter) {
@@ -210,9 +212,9 @@ fun ToolkitTilesScreen(
         }.toImmutableList()
     }
 
-    val visibleListItems = remember(listItems, state.loadedAdIds) {
+    val visibleListItems = remember(listItems, state.loadedAdIds, showAds) {
         listItems
-            .filter { item -> item.isVisible(loadedAdIds = state.loadedAdIds) }
+            .filter { item -> item.isVisible(loadedAdIds = state.loadedAdIds, showAds = showAds) }
             .let { visibleItems ->
                 visibleItems.mapIndexed { index, item ->
                     PositionedToolkitTilesListItem(
@@ -223,7 +225,8 @@ fun ToolkitTilesScreen(
             }
             .toImmutableList()
     }
-    val preloadedAdItems = remember(listItems, state.loadedAdIds) {
+    val preloadedAdItems = remember(listItems, state.loadedAdIds, showAds) {
+        if (!showAds) return@remember persistentListOf()
         listItems
             .filterIsInstance<ToolkitTilesListItem.Ad>()
             .filterNot { adItem -> adItem.id in state.loadedAdIds }
@@ -241,6 +244,7 @@ fun ToolkitTilesScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
             contentPadding = PaddingValues(
                 start = SizeConstants.LargeSize,
                 top = paddingValues.calculateTopPadding() + SizeConstants.LargeSize,
@@ -816,9 +820,12 @@ private val ToolkitTilesListItem.stableKey: String
         is ToolkitTilesListItem.Ad -> id
     }
 
-private fun ToolkitTilesListItem.isVisible(loadedAdIds: Set<String>): Boolean = when (this) {
+private fun ToolkitTilesListItem.isVisible(
+    loadedAdIds: Set<String>,
+    showAds: Boolean,
+): Boolean = when (this) {
     is ToolkitTilesListItem.Category -> true
-    is ToolkitTilesListItem.Ad -> id in loadedAdIds
+    is ToolkitTilesListItem.Ad -> showAds && id in loadedAdIds
 }
 
 private sealed class ToolkitTilesListItem {
