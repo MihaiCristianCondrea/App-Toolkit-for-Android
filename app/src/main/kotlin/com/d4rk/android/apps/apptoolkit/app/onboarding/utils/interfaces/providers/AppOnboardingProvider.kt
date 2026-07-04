@@ -73,7 +73,7 @@ class AppOnboardingProvider : OnboardingProvider {
                     FinishOnboardingPage()
                 }
             ),
-            ).filter {
+        ).filter {
             when (it) {
                 is OnboardingPage.DefaultPage -> it.isEnabled
                 is OnboardingPage.CustomPage -> it.isEnabled

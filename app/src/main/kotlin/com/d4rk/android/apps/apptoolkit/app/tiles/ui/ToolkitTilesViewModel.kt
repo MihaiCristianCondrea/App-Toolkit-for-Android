@@ -120,7 +120,7 @@ class ToolkitTilesViewModel(
                         .toPersistentSet()
 
                     val syncedCategories = syncToolkitTileStatusesUseCase(categories)
-                    
+
                     screenState.setSuccess(
                         data = (screenData ?: ToolkitTilesUiState()).copy(
                             categories = syncedCategories.toImmutableList(),

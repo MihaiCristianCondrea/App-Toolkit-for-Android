@@ -30,8 +30,24 @@ import kotlinx.collections.immutable.persistentListOf
 
 /** Returns stable UI chip metadata for every Toolkit Tiles filter. */
 fun ToolkitTilesFilter.Companion.items(): ImmutableList<ToolkitTilesFilterItem> = persistentListOf(
-    ToolkitTilesFilterItem(ToolkitTilesFilter.All, R.string.tiles_filter_all, Icons.Outlined.GridView),
-    ToolkitTilesFilterItem(ToolkitTilesFilter.Added, R.string.tiles_filter_added, Icons.Outlined.CheckCircle),
-    ToolkitTilesFilterItem(ToolkitTilesFilter.NeedsSetup, R.string.tiles_filter_needs_setup, Icons.Outlined.WarningAmber),
-    ToolkitTilesFilterItem(ToolkitTilesFilter.Unsupported, R.string.tiles_filter_unsupported, Icons.Outlined.Block),
+    ToolkitTilesFilterItem(
+        ToolkitTilesFilter.All,
+        R.string.tiles_filter_all,
+        Icons.Outlined.GridView
+    ),
+    ToolkitTilesFilterItem(
+        ToolkitTilesFilter.Added,
+        R.string.tiles_filter_added,
+        Icons.Outlined.CheckCircle
+    ),
+    ToolkitTilesFilterItem(
+        ToolkitTilesFilter.NeedsSetup,
+        R.string.tiles_filter_needs_setup,
+        Icons.Outlined.WarningAmber
+    ),
+    ToolkitTilesFilterItem(
+        ToolkitTilesFilter.Unsupported,
+        R.string.tiles_filter_unsupported,
+        Icons.Outlined.Block
+    ),
 )

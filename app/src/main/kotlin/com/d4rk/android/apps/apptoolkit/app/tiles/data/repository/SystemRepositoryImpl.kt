@@ -38,7 +38,8 @@ class SystemRepositoryImpl(
 ) : SystemRepository {
 
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     override fun getRingerMode(): Flow<RingerMode> = callbackFlow {
         val receiver = object : BroadcastReceiver() {
@@ -48,10 +49,10 @@ class SystemRepositoryImpl(
                 }
             }
         }
-        
+
         context.registerReceiver(receiver, IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION))
         trySend(currentRingerMode())
-        
+
         awaitClose { context.unregisterReceiver(receiver) }
     }.flowOn(dispatchers.default)
 

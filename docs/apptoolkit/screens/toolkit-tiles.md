@@ -7,7 +7,9 @@ entries show an explicit **Tile** chip so they are distinguishable from app-only
 
 ## Architecture
 
-- Domain models live under `app/tiles/domain/model` and expose resource IDs for UI text, quick-versus-expanded tool kind, optional quick-tool dialog identity, and optional tile request keys.
+- Domain models live under `app/tiles/domain/model` and expose resource IDs for UI text,
+  quick-versus-expanded tool kind, optional quick-tool dialog identity, and optional tile request
+  keys.
 - `GetToolkitTilesUseCase` builds the curated catalog as a `Flow` so the ViewModel follows the same
   flow-based loading contract as the rest of App Toolkit.
 - `ToolkitTilesViewModel` extends `LoggedScreenViewModel`, dispatches initialization through

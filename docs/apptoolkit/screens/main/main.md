@@ -1,15 +1,18 @@
 # Main (AppToolkit)
 
-The **Main** feature provides reusable "app shell" building blocks used across AppToolkit-powered apps:
+The **Main** feature provides reusable "app shell" building blocks used across AppToolkit-powered
+apps:
 navigation chrome (top app bar, adaptive navigation bar/rail, drawer), common navigation handling,
 and
 Google Play
 Services (GMS) host abstractions used by in-app update / review / consent flows.
 
-This module exists to keep **UI**, **domain contracts**, and **data implementations** separated, while
+This module exists to keep **UI**, **domain contracts**, and **data implementations** separated,
+while
 still giving host apps a ready-to-go default shell that can be customized or replaced.
 
-> If you are integrating AppToolkit into a host app, you can use these defaults as-is, or selectively
+> If you are integrating AppToolkit into a host app, you can use these defaults as-is, or
+> selectively
 > adopt only the components you want and replace the rest with your own UI.
 
 ---
@@ -17,6 +20,7 @@ still giving host apps a ready-to-go default shell that can be customized or rep
 ## What’s included
 
 ### Navigation 3 UI (Compose + Material 3)
+
 - **`MainTopAppBar`**: the default top app bar (title + navigation icon + overflow actions).
 - **Host-owned shell scaffolding**: the sample app composes a stable `Scaffold` with a bottom
   navigation bar on compact windows and a navigation rail on larger windows. The default bottom
@@ -24,6 +28,7 @@ still giving host apps a ready-to-go default shell that can be customized or rep
 - **`NavigationDrawerItemContent`**: a single drawer item row with optional dividers.
 
 ### Navigation behavior helpers
+
 - **`handleNavigationItemClick(...)`**: default drawer click handling for common routes:
   Settings, Help & Feedback, Support, Updates (changelog), Share with support for host overrides.
 - **`appToolkitNavigationEntryBuilders(...)`**: shared Navigation 3 entries for library-owned
@@ -37,24 +42,29 @@ still giving host apps a ready-to-go default shell that can be customized or rep
   `StableNavKey` as `contentKey`; Nav3 otherwise defaults to a string and typed scene routing
   cannot identify the shell destination.
 - Navigation key/state serialization guidance: see
-  [`docs/general/core/serialization-boundaries.md`](../../../general/core/serialization-boundaries.md).
+  [
+  `docs/general/core/serialization-boundaries.md`](../../../general/core/serialization-boundaries.md).
 
 ### App update & GMS host abstractions
+
 - **In-app update flow** (Play Core):
-  - `InAppUpdateRepository` (domain contract)
-  - `InAppUpdateRepositoryImpl` (data implementation)
-  - `RequestInAppUpdateUseCase` (domain use case)
-  - `InAppUpdateHost` + `InAppUpdateResult` (domain models)
+    - `InAppUpdateRepository` (domain contract)
+    - `InAppUpdateRepositoryImpl` (data implementation)
+    - `RequestInAppUpdateUseCase` (domain use case)
+    - `InAppUpdateHost` + `InAppUpdateResult` (domain models)
 - **`GmsHostFactory`**: creates host abstractions for:
-  - consent (`ConsentHost`)
-  - in-app review (`ReviewHost`)
-  - in-app updates (`InAppUpdateHost`)
+    - consent (`ConsentHost`)
+    - in-app review (`ReviewHost`)
+    - in-app updates (`InAppUpdateHost`)
 
 ### Changelog UI
-- **`ChangelogDialog`**: loads a markdown changelog from a URL (typically a GitHub changelog md file),
+
+- **`ChangelogDialog`**: loads a markdown changelog from a URL (typically a GitHub changelog md
+  file),
   extracts the section for the current app version, and renders it.
 
 ### Home screen widgets (Glance)
+
 - **`AppIconsWidget`**: responsive, scrollable app launcher widget built with Jetpack Glance.
 - Widget implementation guide: [`widgets.md`](./widgets.md).
 
@@ -65,20 +75,20 @@ still giving host apps a ready-to-go default shell that can be customized or rep
 AppToolkit enforces **UI → Domain → Data** direction:
 
 - **UI**
-  - Contains Compose components and navigation handlers.
-  - Does **not** directly talk to Play Core / HTTP / DataStore without going through appropriate
-    abstractions or helper modules.
+    - Contains Compose components and navigation handlers.
+    - Does **not** directly talk to Play Core / HTTP / DataStore without going through appropriate
+      abstractions or helper modules.
 
 - **Domain**
-  - Declares stable contracts and models:
-    - `InAppUpdateRepository`, `NavigationRepository`
-    - `InAppUpdateHost`, `InAppUpdateResult`, `BottomBarItem`
-  - Exposes use cases such as `RequestInAppUpdateUseCase`.
+    - Declares stable contracts and models:
+        - `InAppUpdateRepository`, `NavigationRepository`
+        - `InAppUpdateHost`, `InAppUpdateResult`, `BottomBarItem`
+    - Exposes use cases such as `RequestInAppUpdateUseCase`.
 
 - **Data**
-  - Implements domain contracts:
-    - `InAppUpdateRepositoryImpl` wraps Play Core APIs.
-    - `MainRepositoryImpl` provides default navigation drawer items.
+    - Implements domain contracts:
+        - `InAppUpdateRepositoryImpl` wraps Play Core APIs.
+        - `MainRepositoryImpl` provides default navigation drawer items.
 
 This structure keeps the library maintainable and testable, and allows host apps to replace pieces
 without rewriting everything.
@@ -93,9 +103,11 @@ that feels native and is ready to ship:
 - The **navigation rail** supports tablets/foldables/large screens.
 - The **navigation drawer** remains available for app-wide actions (settings/help/updates/share),
   while a host-owned shell keeps top-level navigation chrome stable as tab content changes.
-- The **changelog dialog** is used to display "what changed" for apps, typically sourced from GitHub,
+- The **changelog dialog** is used to display "what changed" for apps, typically sourced from
+  GitHub,
   keeping release notes discoverable inside the app.
-- **GMS host abstractions** exist to avoid leaking concrete `Activity` dependencies into domain/data,
+- **GMS host abstractions** exist to avoid leaking concrete `Activity` dependencies into
+  domain/data,
   while still making Play Core flows easy to wire in host apps.
 
 Host apps can adopt the defaults or override any part (UI, routes, handlers, or repositories).
@@ -216,12 +228,14 @@ handleNavigationItemClick(
 ```
 
 When a destination is declared as `NavigationDestinationType.ActivityLike`, prefer pushing its
-`StableNavKey` through the app `Navigator`. This keeps the screen inside the Navigation 3 graph while
+`StableNavKey` through the app `Navigator`. This keeps the screen inside the Navigation 3 graph
+while
 still applying the activity-like transitions supplied by the navigation module.
 
 ### 5) In-app update flow (Play Core via `RequestInAppUpdateUseCase`)
 
-The host app provides an `ActivityResultLauncher<IntentSenderRequest>` and builds an `InAppUpdateHost`.
+The host app provides an `ActivityResultLauncher<IntentSenderRequest>` and builds an
+`InAppUpdateHost`.
 The update request emits a result as a `Flow`.
 
 ```kotlin
@@ -251,8 +265,8 @@ Host apps may replace any of the following:
 
     * Replace `handleNavigationItemClick` with your own handler.
     * Or keep it and provide `additionalHandlers` for app-specific routes.
-  * Use `appToolkitNavigationEntryBuilders(...)` when the host shell embeds library-owned
-    destinations instead of launching separate activities.
+    * Use `appToolkitNavigationEntryBuilders(...)` when the host shell embeds library-owned
+      destinations instead of launching separate activities.
 
 * **Data**
 

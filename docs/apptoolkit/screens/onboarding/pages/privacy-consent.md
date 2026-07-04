@@ -5,12 +5,13 @@ choices to the user. The UI is inspired by **Cookiebot-style consent dialogs**, 
 **natively with Jetpack Compose** (no WebView, no embedded third-party UI).
 
 It consists of:
+
 - An onboarding page (`FirebaseOnboardingPage`)
 - A toggle card (`UsageAndDiagnosticsToggleCard`)
 - A multi-tab dialog (`FirebaseConsentDialog`) with pager pages:
-  - `ConsentPage`
-  - `DetailsPage`
-  - `AboutPage`
+    - `ConsentPage`
+    - `DetailsPage`
+    - `AboutPage`
 - Reusable consent item UI (`ConsentExpandableItemCard`)
 - A privacy policy section (`PrivacyPolicySection`)
 
@@ -23,9 +24,9 @@ The Firebase consent page should:
 - Explain why "Usage & diagnostics" exists (Crashlytics / diagnostics / measurement)
 - Allow users to **enable/disable usage & diagnostics** quickly
 - Provide a **clear, Cookiebot-like** consent dialog:
-  - Simple intro (Consent tab)
-  - Granular controls (Details tab)
-  - More context (About tab)
+    - Simple intro (Consent tab)
+    - Granular controls (Details tab)
+    - More context (About tab)
 - Persist consent choices through the diagnostics feature module (`UsageAndDiagnosticsViewModel`)
 - Keep onboarding state simple: show/hide dialog and continue onboarding flow
 
@@ -38,14 +39,15 @@ The Firebase consent page should:
 This page composes **two view models**:
 
 - `OnboardingViewModel`
-  - Controls onboarding-only UI state (dialog visibility, current tab, completion flow)
-  - State: `OnboardingUiState(isCrashlyticsDialogVisible, ...)`
+    - Controls onboarding-only UI state (dialog visibility, current tab, completion flow)
+    - State: `OnboardingUiState(isCrashlyticsDialogVisible, ...)`
 
 - `UsageAndDiagnosticsViewModel`
-  - Owns the actual consent values and persistence
-  - State: `UsageAndDiagnosticsUiState(...)`
+    - Owns the actual consent values and persistence
+    - State: `UsageAndDiagnosticsUiState(...)`
 
 The onboarding page itself is "dumb":
+
 - It renders UI from both states
 - It forwards events to the appropriate ViewModel
 

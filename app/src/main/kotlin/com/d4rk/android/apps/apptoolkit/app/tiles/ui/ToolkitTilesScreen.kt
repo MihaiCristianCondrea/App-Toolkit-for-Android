@@ -156,11 +156,13 @@ fun ToolkitTilesRoute(
                     context = context,
                     requestKey = action.requestKey,
                 )
+
                 ToolkitTilesAction.ShowSetupRequiredMessage -> Toast.makeText(
                     context,
                     R.string.tiles_setup_required_message,
                     Toast.LENGTH_SHORT,
                 ).show()
+
                 is ToolkitTilesAction.ShowMessage -> Toast.makeText(
                     context,
                     action.message,
@@ -832,14 +834,17 @@ private fun ToolkitTileStatus.statusColors(): StatusColors = when (this) {
         container = MaterialTheme.colorScheme.primaryContainer,
         content = MaterialTheme.colorScheme.onPrimaryContainer,
     )
+
     ToolkitTileStatus.Available -> StatusColors(
         container = MaterialTheme.colorScheme.secondaryContainer,
         content = MaterialTheme.colorScheme.onSecondaryContainer,
     )
+
     ToolkitTileStatus.NeedsSetup -> StatusColors(
         container = MaterialTheme.colorScheme.tertiaryContainer,
         content = MaterialTheme.colorScheme.onTertiaryContainer,
     )
+
     ToolkitTileStatus.Unsupported -> StatusColors(
         container = MaterialTheme.colorScheme.errorContainer,
         content = MaterialTheme.colorScheme.onErrorContainer,

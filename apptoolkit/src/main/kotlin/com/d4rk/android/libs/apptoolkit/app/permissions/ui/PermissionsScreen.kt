@@ -18,12 +18,11 @@
 package com.d4rk.android.libs.apptoolkit.app.permissions.ui
 
 import android.app.Activity
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,7 +30,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,8 +46,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -131,29 +129,29 @@ fun PermissionsContent(
     LazyColumn(
         contentPadding = paddingValues,
         modifier = Modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
         settingsConfig.categories.forEach { category ->
+
             item {
                 category.title?.let { title ->
                     PreferenceCategoryItem(title = title)
-                    SmallVerticalSpacer()
                 }
+            }
 
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = SizeConstants.LargeSize)
-                        .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize)),
-                ) {
-                    category.preferences.forEach { preference ->
-                        SettingsPreferenceItem(
-                            icon = preference.icon,
-                            title = preference.title,
-                            summary = preference.summary,
-                            onClick = { preference.action.invoke() },
-                        )
-                        ExtraTinyVerticalSpacer()
-                    }
-                }
+            itemsIndexed(category.preferences) { index, preference ->
+                SettingsPreferenceItem(
+                    title = preference.title,
+                    summary = preference.summary,
+                    onClick = { preference.action.invoke() },
+                    modifier = Modifier.groupedPreferenceItem(
+                        position = groupedItemPosition(
+                            index = index,
+                            size = category.preferences.size
+                        ),
+                        outerRadius = SizeConstants.LargeMediumSize,
+                    )
+                )
             }
         }
     }

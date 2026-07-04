@@ -64,7 +64,12 @@ val appsListModule: Module = module {
     }
 
     single<FavoritesLocalDataSource> { FavoritesLocalDataSourceImpl(dataStore = get()) }
-    single<FavoritesRepository> { FavoritesRepositoryImpl(local = get(), firebaseController = get()) }
+    single<FavoritesRepository> {
+        FavoritesRepositoryImpl(
+            local = get(),
+            firebaseController = get()
+        )
+    }
 
     single { ObserveFavoritesUseCase(repository = get(), firebaseController = get()) }
     single { ToggleFavoriteUseCase(repository = get(), firebaseController = get()) }

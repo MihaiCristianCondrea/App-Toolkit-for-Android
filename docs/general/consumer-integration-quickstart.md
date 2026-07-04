@@ -37,7 +37,8 @@ Derived from `apptoolkit/build.gradle.kts`:
 
 - **`minSdk = 26`**.
 - **Compose must be enabled** in the host Android module (`buildFeatures { compose = true }`).
-- Toolkit is built with **Java 21 + Kotlin JVM target 21**. Keep host-side Kotlin/JVM settings compatible.
+- Toolkit is built with **Java 21 + Kotlin JVM target 21**. Keep host-side Kotlin/JVM settings
+  compatible.
 
 Suggested host module baseline:
 
@@ -67,16 +68,19 @@ android {
 ## 3) Minimal startup checklist (host app)
 
 1. **Initialize DI at app startup**
-   - The toolkit uses Koin for injected services and ViewModels.
-   - If your app already uses Koin, include toolkit-related modules/providers in your existing graph.
-   - If not, initialize Koin (or provide an equivalent setup) before launching toolkit screens.
+    - The toolkit uses Koin for injected services and ViewModels.
+    - If your app already uses Koin, include toolkit-related modules/providers in your existing
+      graph.
+    - If not, initialize Koin (or provide an equivalent setup) before launching toolkit screens.
 
 2. **Launch one toolkit screen**
-   - Start with `StartupActivity` to validate end-to-end wiring quickly.
+    - Start with `StartupActivity` to validate end-to-end wiring quickly.
 
 3. **Validate runtime dependencies**
-   - Confirm merged manifest/service metadata for Google Play services and Firebase-related integrations.
-   - Verify required runtime libraries/resources are packaged (Gradle sync + app startup smoke test).
+    - Confirm merged manifest/service metadata for Google Play services and Firebase-related
+      integrations.
+    - Verify required runtime libraries/resources are packaged (Gradle sync + app startup smoke
+      test).
 
 ## 4) “5-minute integration” snippet
 
@@ -133,7 +137,8 @@ class HostApplication : Application() {
 }
 ```
 
-> Koin must be started by the host app (Application.onCreate). The toolkit only contributes feature modules.
+> Koin must be started by the host app (Application.onCreate). The toolkit only contributes feature
+> modules.
 
 ### Step B — Launch a toolkit Activity
 
@@ -155,9 +160,11 @@ startActivity(Intent(this, StartupActivity::class.java))
 ### Missing DI binding
 
 **Symptom**
+
 - `NoBeanDefFoundException`, `No definition found for ...`, or ViewModel creation errors.
 
 **Fix**
+
 - Ensure Koin is initialized in `Application.onCreate()`.
 - Register required toolkit contracts and any host-provided implementations.
 - Verify qualifier names match exactly when named dependencies are used.
@@ -165,9 +172,11 @@ startActivity(Intent(this, StartupActivity::class.java))
 ### Activity not found
 
 **Symptom**
+
 - `ActivityNotFoundException` or failure to resolve toolkit Activity class.
 
 **Fix**
+
 - Confirm the dependency is added to the correct module and Gradle sync completed.
 - Use the fully-qualified toolkit Activity import.
 - Rebuild after cache cleanup if classpath looks stale.
@@ -175,25 +184,33 @@ startActivity(Intent(this, StartupActivity::class.java))
 ### Missing service metadata / Google services config
 
 **Symptom**
+
 - Runtime failures around Firebase Messaging, Analytics, or Ads startup.
 
 **Fix**
+
 - Verify your merged manifest includes required service and `<meta-data>` entries.
 - Ensure host app includes required Google/Firebase configuration for enabled features.
-- Compare with toolkit manifest requirements and disable unsupported features until configuration is complete.
+- Compare with toolkit manifest requirements and disable unsupported features until configuration is
+  complete.
 
 ### Compose/runtime mismatch
 
 **Symptom**
+
 - Build errors from Compose compiler, JVM target mismatch, or desugaring/toolchain incompatibility.
 
 **Fix**
+
 - Align host module Java/Kotlin targets with toolkit compatibility.
 - Ensure Compose is enabled in the consuming module.
 - Re-import Gradle project after version alignment.
 
 ## 6) Advanced docs
 
-- **DI contracts and conventions:** [Style guidance](./style-guidance.md) and [Native ads DI qualifiers](../apptoolkit/ads/native-ads.md)
-- **Manifest requirements reference:** [Toolkit AndroidManifest](../../apptoolkit/src/main/AndroidManifest.xml)
-- **Feature matrix / capability overview:** [README Features](../../README.md#features) and [Library overview](../apptoolkit/app-toolkit-library.md)
+- **DI contracts and conventions:** [Style guidance](./style-guidance.md)
+  and [Native ads DI qualifiers](../apptoolkit/ads/native-ads.md)
+- **Manifest requirements reference:
+  ** [Toolkit AndroidManifest](../../apptoolkit/src/main/AndroidManifest.xml)
+- **Feature matrix / capability overview:** [README Features](../../README.md#features)
+  and [Library overview](../apptoolkit/app-toolkit-library.md)

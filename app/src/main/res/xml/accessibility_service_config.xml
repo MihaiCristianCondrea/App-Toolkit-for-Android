@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (©) 2026 Mihai-Cristian Condrea
   ~
   ~ This program is free software: you can redistribute it and/or modify
@@ -19,6 +18,6 @@
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:accessibilityFeedbackType="feedbackGeneric"
     android:accessibilityFlags="flagDefault"
-    android:canRetrieveWindowContent="false"
     android:canPerformGestures="false"
+    android:canRetrieveWindowContent="false"
     android:description="@string/accessibility_service_description" />

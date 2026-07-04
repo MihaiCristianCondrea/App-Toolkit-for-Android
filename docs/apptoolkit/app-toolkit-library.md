@@ -1,10 +1,13 @@
 # Library Overview
 
-This page documents the **AppToolkit** library and its major components. The library is organized into feature-based packages that can be mixed and matched in Android apps.
+This page documents the **AppToolkit** library and its major components. The library is organized
+into feature-based packages that can be mixed and matched in Android apps.
 
 ## Architecture
 
-AppToolkit follows a modular architecture with clean separation between *data*, *domain*, and *UI* layers. View models handle user events and expose immutable UI state. Repositories abstract data sources such as network clients or `DataStore`.
+AppToolkit follows a modular architecture with clean separation between *data*, *domain*, and *UI*
+layers. View models handle user events and expose immutable UI state. Repositories abstract data
+sources such as network clients or `DataStore`.
 
 ## Core utilities
 
@@ -52,40 +55,50 @@ Each feature lives in its own package with actions, events, repositories, UI sta
 
 ### Feature inventory quick map
 
-| Feature | Package root | Typical entrypoint |
-| --- | --- | --- |
-| Main | `app/main` | `MainViewModel`, `AppNavigationHost` |
-| Startup | `app/startup` | `StartupActivity`, `StartupScreen`, `StartupViewModel` |
-| Onboarding | `app/onboarding` | `OnboardingScreen`, `OnboardingViewModel` |
-| Help | `app/help` | `HelpActivity`, `HelpScreen`, `HelpViewModel` |
-| Support | `app/support` | `SupportScreen`, `SupportViewModel` |
-| Settings | `app/settings` | `SettingsActivity`, `SettingsScreen`, `SettingsViewModel` |
-| About | `app/about` | `AboutScreen`, `AboutViewModel` |
+| Feature    | Package root     | Typical entrypoint                                        |
+|------------|------------------|-----------------------------------------------------------|
+| Main       | `app/main`       | `MainViewModel`, `AppNavigationHost`                      |
+| Startup    | `app/startup`    | `StartupActivity`, `StartupScreen`, `StartupViewModel`    |
+| Onboarding | `app/onboarding` | `OnboardingScreen`, `OnboardingViewModel`                 |
+| Help       | `app/help`       | `HelpActivity`, `HelpScreen`, `HelpViewModel`             |
+| Support    | `app/support`    | `SupportScreen`, `SupportViewModel`                       |
+| Settings   | `app/settings`   | `SettingsActivity`, `SettingsScreen`, `SettingsViewModel` |
+| About      | `app/about`      | `AboutScreen`, `AboutViewModel`                           |
 
 ## Data layer
 
-Common networking is handled by a shared `KtorClient`, while persistent preferences rely on a reusable `CommonDataStore`. Specialized repositories such as `FaqRepositoryImpl` or `OnboardingRepositoryImpl` extend this infrastructure.
+Common networking is handled by a shared `KtorClient`, while persistent preferences rely on a
+reusable `CommonDataStore`. Specialized repositories such as `FaqRepositoryImpl` or
+`OnboardingRepositoryImpl` extend this infrastructure.
 
 ## Extensibility
 
-Apps can depend on the library module and selectively enable features. Each screen exposes an accompanying Activity for easy integration or the underlying composable functions for custom navigation setups.
+Apps can depend on the library module and selectively enable features. Each screen exposes an
+accompanying Activity for easy integration or the underlying composable functions for custom
+navigation setups.
 
 ## Host-driven Koin integration
 
 Toolkit modules are intentionally loaded by the **host application**. Use:
 
 - `AppToolkitHostBuildConfig` for host-specific build/runtime values.
-- `appToolkitFoundationModules(...)` for platform/core wiring (dispatchers, datastore, ktor, consent, GMS host factory).
+- `appToolkitFoundationModules(...)` for platform/core wiring (dispatchers, datastore, ktor,
+  consent, GMS host factory).
 - `appToolkitSettingsModules()` for reusable settings-focused bindings.
-- `appToolkitFeatureModules(...)` to obtain toolkit Koin modules and add them to the host `startKoin {}` call.
-- `AppToolkitDiConstants` for named qualifiers (for example `GITHUB_CHANGELOG`, `DEVELOPER_APPS_API_URL`, and `DEFAULT_THEME_PALETTE`).
+- `appToolkitFeatureModules(...)` to obtain toolkit Koin modules and add them to the host
+  `startKoin {}` call.
+- `AppToolkitDiConstants` for named qualifiers (for example `GITHUB_CHANGELOG`,
+  `DEVELOPER_APPS_API_URL`, and `DEFAULT_THEME_PALETTE`).
 
-This keeps `BuildConfig` ownership in the host app while moving reusable toolkit bindings into the library itself.
+This keeps `BuildConfig` ownership in the host app while moving reusable toolkit bindings into the
+library itself.
 
 ## Testing
 
-The project includes unit tests for view models, repositories and utility classes. Run `./gradlew test` to execute the full test suite.
+The project includes unit tests for view models, repositories and utility classes. Run
+`./gradlew test` to execute the full test suite.
 
 ## Next steps
 
-See the README for installation instructions and explore the source code for implementation details. Contributions and improvements to this documentation are welcome.
+See the README for installation instructions and explore the source code for implementation details.
+Contributions and improvements to this documentation are welcome.

@@ -1,7 +1,9 @@
 Boost app engagement by reaching your users where they are. Integrate Engage SDK
 to deliver personalized recommendations and continuation content directly to
 users across multiple on-device surfaces, like
+
 *
+
 *[Collections](https://android-developers.googleblog.com/2024/07/introducing-collections-powered-by-engage-sdk.html)
 ** , **[Entertainment
 Space](https://blog.google/products/android/entertainment-space/)** , and the Play Store. The
@@ -401,8 +403,10 @@ contact engage-developers@google.com.
 
 > [!NOTE]
 > **Note:** We highly recommend keeping a periodic job running to check if the service becomes
-> available at a later point in time. The availability of the service may change with Android version
-> upgrades, app upgrades, installs, and uninstalls. By ensuring periodic job checks at a certain time
+> available at a later point in time. The availability of the service may change with Android
+> version
+> upgrades, app upgrades, installs, and uninstalls. By ensuring periodic job checks at a certain
+> time
 > interval, data can be published once the service becomes available.
 
 #### `publishRecommendationClusters`
@@ -420,7 +424,8 @@ A `RecommendationCluster` object can have the following attributes:
 
 > [!IMPORTANT]
 > **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
-> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently.
 
 ### Kotlin
 
@@ -461,7 +466,8 @@ This API is used to publish a `FeaturedCluster` object.
 
 > [!IMPORTANT]
 > **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
-> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently.
 
 ### Kotlin
 
@@ -500,7 +506,8 @@ merchant name in the title when using this API.
 
 > [!IMPORTANT]
 > **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
-> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently.
 
 ### Kotlin
 
@@ -537,7 +544,8 @@ This API is used to publish a list of `ShoppingList` objects.
 
 > [!IMPORTANT]
 > **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
-> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently.
 
 ### Kotlin
 
@@ -574,7 +582,8 @@ This API is used to publish a `ShoppingReorderCluster` object.
 
 > [!IMPORTANT]
 > **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
-> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently.
 
 ### Kotlin
 
@@ -611,7 +620,8 @@ This API is used to publish a `ShoppingOrderTrackingCluster` object.
 
 > [!IMPORTANT]
 > **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
-> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently.
 
 ### Kotlin
 
@@ -660,7 +670,8 @@ The following metadata is part of the Sign In Card -
 
 > [!IMPORTANT]
 > **Important:** The publish APIs are upsert APIs; it replaces the existing content. **Don't** call
-> delete and publish APIs subsequently to replace the content as the publish APIs do that inherently.
+> delete and publish APIs subsequently to replace the content as the publish APIs do that
+> inherently.
 
 ### Kotlin
 

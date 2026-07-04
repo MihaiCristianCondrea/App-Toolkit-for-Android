@@ -48,7 +48,7 @@ dependencies {
 
     // Google Play Services
     api(libs.bundles.google.play)
-    
+
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.play.services)

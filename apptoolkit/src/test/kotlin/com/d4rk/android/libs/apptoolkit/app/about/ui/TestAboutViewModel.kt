@@ -25,12 +25,12 @@ import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfo
 import com.d4rk.android.libs.apptoolkit.app.about.domain.usecases.GetAboutInfoUseCase
 import com.d4rk.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
-import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.FakeFirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest

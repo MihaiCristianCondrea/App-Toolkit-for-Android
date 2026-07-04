@@ -10,8 +10,8 @@ This document describes the App Toolkit home-screen widget implementation in
 - It renders a **3x3 app-launch grid** (up to 9 actions) and uses
   `OpenAppOrStoreAction` to open the installed app first, then fallback to the Play Store.
 - It uses responsive breakpoints (`120dp`, `180dp`, `250dp`) through `SizeMode.Responsive`.
-  - small: icon-first compact grid
-  - medium/large: grid plus a lightweight title row for orientation
+    - small: icon-first compact grid
+    - medium/large: grid plus a lightweight title row for orientation
 
 ## Reliability and UX safeguards
 

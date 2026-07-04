@@ -6,7 +6,8 @@ The API lives in:
 
 - `com.d4rk.android.libs.apptoolkit.core.ui.window`
 
-It extends Material 3 adaptive width handling with two additional width buckets (`Large`, `ExtraLarge`) so your UI can better adapt to tablets, desktop windows, and large displays.
+It extends Material 3 adaptive width handling with two additional width buckets (`Large`,
+`ExtraLarge`) so your UI can better adapt to tablets, desktop windows, and large displays.
 
 ## What this API offers
 
@@ -67,7 +68,8 @@ fun AppsScreen() {
 - Compute the window class once at the screen entry point.
 - Pass `windowWidthSizeClass` down as a parameter to child composables.
 - Keep business logic in the ViewModel; use size class only for layout decisions.
-- Avoid orientation-only branching (`isLandscape`) when width classes can represent the UI intent more accurately.
+- Avoid orientation-only branching (`isLandscape`) when width classes can represent the UI intent
+  more accurately.
 
 ## Example in this repository
 

@@ -2,7 +2,8 @@ This document contains release notes for the Google Play Billing Library.
 
 > [!NOTE]
 > **Note:** You can use
-> the [Play Billing Library Version Upgrade Skill](https://github.com/android/skills/tree/main/play/play-billing-library-version-upgrade)
+>
+the [Play Billing Library Version Upgrade Skill](https://github.com/android/skills/tree/main/play/play-billing-library-version-upgrade)
 > to automate your upgrade to the latest version.
 
 ## Google Play Billing Library 9.1.0 Release (2026-06-18)
@@ -218,10 +219,12 @@ Version 8.1.0 of the Google Play Billing Library and Kotlin extensions are now a
 - Updated `minSdkVersion` to 23.
 
 -
+
 Enabled [pre-order APIs for one-time products](https://developer.android.com/google/play/billing/one-time-product-multi-purchase-options-offers#pre-order)
 
 The `ProductDetails.oneTimePurchaseOfferDetails.getPreorderDetails()` API
 that gets the pre-order details is now available for use.
+
 - Google Play Billing Library now
   supports [Kotlin version 2.2.0](https://kotlinlang.org/docs/whatsnew22.html).
 
@@ -933,7 +936,8 @@ contains the following changes.
 
 > [!NOTE]
 > **Note:** This requirement applies only to apps that use the Google Play Billing Library version
-> 2.0 and newer. This requirement doesn't apply if you use an older version of the Google Play Billing
+> 2.0 and newer. This requirement doesn't apply if you use an older version of the Google Play
+> Billing
 > Library, or if you use the AIDL API.
 
 Google Play supports purchasing products from inside of your app (in-app) or
@@ -1078,7 +1082,8 @@ purchase state is `PURCHASED` and not `PENDING`.
 > cards, license testers have access to two new test instruments for delayed forms of payment which
 > automatically complete or cancel after a couple of minutes. While testing your application, you
 > should verify that your application does not grant entitlement or acknowledge the purchase
-> immediately after purchasing with either of these two new instruments. When purchasing using the new
+> immediately after purchasing with either of these two new instruments. When purchasing using the
+> new
 > test instrument that automatically completes, you should verify that your application grants
 > entitlement and acknowledges the purchase once the purchase completes.
 
@@ -1336,7 +1341,9 @@ Version 1.1 of the Google Play Billing library contains the following behavior
 changes.
 
 #### Developers can set `replaceSkusProrationMode` in [
-`BillingFlowParams`](https://developer.android.com/reference/com/android/billingclient/api/BillingFlowParams) class
+
+`BillingFlowParams`](https://developer.android.com/reference/com/android/billingclient/api/BillingFlowParams)
+class
 
 A `ProrationMode` provides further details on the type of proration when
 upgrading or downgrading a user's subscription.
@@ -1381,7 +1388,9 @@ only available for subscription upgrade. |
 charged on next recurrence time. The billing cycle stays the same. |
 
 ### `replaceSkusProration` is no longer supported in [
-`BillingFlowParams`](https://developer.android.com/reference/com/android/billingclient/api/BillingFlowParams.html) class
+
+`BillingFlowParams`](https://developer.android.com/reference/com/android/billingclient/api/BillingFlowParams.html)
+class
 
 Developers used to be able to set a boolean flag to charge a prorated amount for
 a subscription upgrade request. Given that we are supporting `ProrationMode`,
@@ -1389,7 +1398,9 @@ which contains more detailed proration instruction, this boolean flag is no
 longer supported.
 
 ### [
-`launchBillingFlow()`](https://developer.android.com/reference/com/android/billingclient/api/BillingClient.html#launchBillingFlow(android.app.Activity,%20com.android.billingclient.api.BillingFlowParams)) now triggers a callback for failed responses
+
+`launchBillingFlow()`](https://developer.android.com/reference/com/android/billingclient/api/BillingClient.html#launchBillingFlow(android.app.Activity,%20com.android.billingclient.api.BillingFlowParams))
+now triggers a callback for failed responses
 
 The Billing Library will always trigger the
 [

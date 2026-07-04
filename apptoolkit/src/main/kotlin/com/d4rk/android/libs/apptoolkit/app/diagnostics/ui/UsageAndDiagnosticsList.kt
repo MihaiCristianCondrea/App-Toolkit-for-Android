@@ -20,6 +20,7 @@ package com.d4rk.android.libs.apptoolkit.app.diagnostics.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,6 +56,7 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.links.AppLinks
@@ -104,13 +106,18 @@ fun UsageAndDiagnosticsList(
     LazyColumn(
         contentPadding = paddingValues,
         modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
     ) {
+        item {
+            LargeVerticalSpacer()
+        }
+
         item {
             val usageState = rememberUpdatedState(newValue = uiState.usageAndDiagnostics)
             SwitchCardItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(all = SizeConstants.MediumSize * 2),
+                    .padding(horizontal = SizeConstants.LargeSize),
                 title = stringResource(id = R.string.usage_and_diagnostics),
                 switchState = usageState,
                 onSwitchToggled = { isChecked ->
@@ -146,7 +153,10 @@ fun UsageAndDiagnosticsList(
                 enter = expandVertically(expandFrom = Alignment.Top),
                 exit = shrinkVertically(shrinkTowards = Alignment.Top),
             ) {
-                Column(modifier = Modifier.padding(horizontal = SizeConstants.SmallSize)) {
+                Column(
+                    modifier = Modifier.padding(horizontal = SizeConstants.SmallSize),
+                    verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
+                ) {
                     ConsentSectionHeader(title = stringResource(id = R.string.consent_category_analytics_title))
                     ConsentToggleCard(
                         title = stringResource(id = R.string.consent_analytics_storage_title),

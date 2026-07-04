@@ -5,20 +5,29 @@ The project is split into three top-level modules, each with a clear responsibil
 # Recommendations for Android architecture
 
 bookmark_border
-This page presents several Architecture best practices and recommendations. Adopt them to improve your app’s quality, robustness, and scalability. They also make it easier to maintain and test your app.
+This page presents several Architecture best practices and recommendations. Adopt them to improve
+your app’s quality, robustness, and scalability. They also make it easier to maintain and test your
+app.
 
-> Note: You should treat the recommendations in the document as recommendations and not strict requirements. Adapt them to your app as needed.
+> Note: You should treat the recommendations in the document as recommendations and not strict
+> requirements. Adapt them to your app as needed.
 
-The best practices below are grouped by topic. Each has a priority that reflects how strongly the team recommends it. The list of priorities is as follows:
+The best practices below are grouped by topic. Each has a priority that reflects how strongly the
+team recommends it. The list of priorities is as follows:
 
-- **Strongly recommended**: You should implement this practice unless it clashes fundamentally with your approach.
+- **Strongly recommended**: You should implement this practice unless it clashes fundamentally with
+  your approach.
 - **Recommended**: This practice is likely to improve your app.
 - **Optional**: This practice can improve your app in certain circumstances.
 
-> Note: In order to understand these recommendations, you should be familiar with the Architecture guidance.
+> Note: In order to understand these recommendations, you should be familiar with the Architecture
+> guidance.
 
 ## Layered architecture
-Our recommended layered architecture favors separation of concerns. It drives UI from data models, complies with the single source of truth principle, and follows unidirectional data flow principles. Here are some best practices for layered architecture:
+
+Our recommended layered architecture favors separation of concerns. It drives UI from data models,
+complies with the single source of truth principle, and follows unidirectional data flow principles.
+Here are some best practices for layered architecture:
 
 | Recommendation                                                    | Description                                                                                                                                                                                                                                                                                                                                                 |
 |-------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -29,7 +38,9 @@ Our recommended layered architecture favors separation of concerns. It drives UI
 | Use a domain layer.                                               | **Recommended in big apps**<br>Use a domain layer, use cases, if you need to reuse business logic that interacts with the data layer across multiple ViewModels, or you want to simplify the business logic complexity of a particular ViewModel                                                                                                            |
 
 ## UI layer
-The role of the UI layer is to display the application data on the screen and serve as the primary point of user interaction. Here are some best practices for the UI layer:
+
+The role of the UI layer is to display the application data on the screen and serve as the primary
+point of user interaction. Here are some best practices for the UI layer:
 
 | Recommendation                                          | Description                                                                                                                                                                                                                                                                                                  |
 |---------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -43,6 +54,7 @@ The role of the UI layer is to display the application data on the screen and se
 The following snippet outlines how to collect the UI state in a lifecycle-aware manner:
 
 ### Views
+
 ```kotlin
 class MyFragment : Fragment() {
 
@@ -63,12 +75,15 @@ class MyFragment : Fragment() {
 ```
 
 ### Compose
+
 ```kotlin
 // Compose snippet omitted for brevity
 ```
 
 ## ViewModel
-ViewModels are responsible for providing the UI state and access to the data layer. Here are some best practices for ViewModels:
+
+ViewModels are responsible for providing the UI state and access to the data layer. Here are some
+best practices for ViewModels:
 
 | Recommendation                                            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 |-----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -102,6 +117,7 @@ class BookmarksViewModel @Inject constructor(
 ```
 
 ## Lifecycle
+
 The following are some best practices for working with the Android lifecycle:
 
 | Recommendation                                                | Description                                                                                                                                                                                                                                                             |
@@ -111,6 +127,7 @@ The following are some best practices for working with the Android lifecycle:
 The following snippet outlines how to perform operations given a certain Lifecycle state:
 
 ### Views
+
 ```kotlin
 class MyFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -129,11 +146,13 @@ class MyFragment: Fragment() {
 ```
 
 ### Compose
+
 ```kotlin
 // Compose snippet omitted for brevity
 ```
 
 ## Handle dependencies
+
 There are several best practices you should observe when managing dependencies between components:
 
 | Recommendation                       | Description                                                                                                                                                                                                                                                                                                                         |
@@ -143,6 +162,7 @@ There are several best practices you should observe when managing dependencies b
 | Use Hilt.                            | **Recommended**<br>Use Hilt or manual dependency injection in simple apps. Use Hilt if your project is complex enough. For example, if you have:<br><br>- Multiple screens with ViewModels—integration<br>- WorkManager usage—integration<br>- Advance usage of Navigation, such as ViewModels scoped to the nav graph—integration. |
 
 ## Testing
+
 The following are some best practices for testing:
 
 | Recommendation         | Description                                                                                                                                                                                                                                                                                                                    |
@@ -152,6 +172,7 @@ The following are some best practices for testing:
 | Test StateFlows.       | **Strongly recommended**<br>When testing StateFlow:<br>- Assert on the `value` property whenever possible<br>- You should create a `collectJob` if using `WhileSubscribed`<br>For more information, check the *What to test in Android* DAC guide.                                                                             |
 
 ## Models
+
 You should observe these best practices when developing models in your apps:
 
 | Recommendation                            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -159,6 +180,7 @@ You should observe these best practices when developing models in your apps:
 | Create a model per layer in complex apps. | **Recommended**<br>In complex apps, create new models in different layers or components when it makes sense. Consider the following examples:<br><br>- A remote data source can map the model that it receives through the network to a simpler class with just the data the app needs<br>- Repositories can map DAO models to simpler data classes with just the information the UI layer needs.<br>- ViewModel can include data layer models in `UiState` classes. |
 
 ## Naming conventions
+
 When naming your codebase, you should be aware of the following best practices:
 
 | Recommendation                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                      |

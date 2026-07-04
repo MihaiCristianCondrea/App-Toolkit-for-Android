@@ -18,14 +18,14 @@ Upgrading from `com.google.android.gms:play-services-ads` to GMA Next-Gen SDK ca
 ## Core migration checklist
 
 1. Replace dependency:
-   - Remove: `com.google.android.gms:play-services-ads`
-   - Add: `com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk`
+    - Remove: `com.google.android.gms:play-services-ads`
+    - Add: `com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk`
 2. If mediation adapters are present, globally exclude:
-   - `com.google.android.gms:play-services-ads`
-   - `com.google.android.gms:play-services-ads-lite`
+    - `com.google.android.gms:play-services-ads`
+    - `com.google.android.gms:play-services-ads-lite`
 3. Verify SDK levels:
-   - `minSdk >= 24`
-   - `compileSdk >= 34` (or higher if required by current guidance)
+    - `minSdk >= 24`
+    - `compileSdk >= 34` (or higher if required by current guidance)
 4. Keep `com.google.android.gms.ads.APPLICATION_ID` in manifest for UMP compatibility.
 5. Initialize `MobileAds` before loading any ad or calling most SDK APIs.
 6. Pass AdMob App ID via `InitializationConfig.Builder("<APP_ID>")`.

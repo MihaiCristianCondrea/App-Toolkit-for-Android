@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (©) 2026 Mihai-Cristian Condrea
   ~
   ~ This program is free software: you can redistribute it and/or modify
@@ -20,16 +19,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:description="@string/widget_apps_description"
     android:initialLayout="@layout/widget_app_icons_loading"
-    android:minHeight="120dp"
-    android:minWidth="120dp"
-    android:minResizeHeight="120dp"
-    android:minResizeWidth="120dp"
-    android:maxResizeHeight="250dp"
     android:maxResizeWidth="250dp"
+    android:maxResizeHeight="250dp"
+    android:minWidth="120dp"
+    android:minHeight="120dp"
+    android:minResizeWidth="120dp"
+    android:minResizeHeight="120dp"
     android:previewImage="@drawable/widget_app_icons_preview"
     android:resizeMode="horizontal|vertical"
-    android:targetCellHeight="2"
     android:targetCellWidth="2"
+    android:targetCellHeight="2"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen"
     tools:targetApi="31" />

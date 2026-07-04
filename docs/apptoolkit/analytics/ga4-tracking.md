@@ -1,6 +1,7 @@
 # GA4 Tracking Guide (Composables, Screens, and ViewModels)
 
-This guide explains how to use AppToolkit’s GA4 tracking APIs so host apps can instrument UI and business flows consistently.
+This guide explains how to use AppToolkit’s GA4 tracking APIs so host apps can instrument UI and
+business flows consistently.
 
 The library gives you three tracking layers:
 
@@ -8,7 +9,8 @@ The library gives you three tracking layers:
 2. **Screen impression/state tracking** with `TrackScreenView(...)` and `TrackScreenState(...)`
 3. **ViewModel lifecycle/operation/error tracking** with `LoggedScreenViewModel`
 
-Use all three together to get complete observability: **what users saw, what they tapped, and what happened in the data flow**.
+Use all three together to get complete observability: **what users saw, what they tapped, and what
+happened in the data flow**.
 
 ---
 
@@ -55,13 +57,14 @@ If invalid, the event/param is dropped and a Crashlytics breadcrumb is written.
 
 ## 2) Tracking custom composables
 
-For reusable UI components (buttons, preferences, chips, dropdown items, FABs, etc.), the pattern is:
+For reusable UI components (buttons, preferences, chips, dropdown items, FABs, etc.), the pattern
+is:
 
 1. Add optional parameters to your composable:
-   - `firebaseController: FirebaseController? = null`
-   - `ga4Event: Ga4EventData? = null`
+    - `firebaseController: FirebaseController? = null`
+    - `ga4Event: Ga4EventData? = null`
 2. On the user action callback, call:
-   - `firebaseController.logGa4Event(ga4Event)`
+    - `firebaseController.logGa4Event(ga4Event)`
 3. Then execute the business callback (`onClick()`, `onCheckedChange(...)`, etc.)
 
 Helper path: `apptoolkit/core/ui/views/analytics/Ga4EventLogger.kt`
@@ -99,10 +102,10 @@ Recommended schema:
 
 - Event name: `<feature>_click` or `<feature>_toggle`
 - Params:
-  - `component` (e.g., `button`, `switch`, `chip`)
-  - `variant` (e.g., `primary`, `outlined`, `danger`)
-  - `screen` (optional but useful for cross-screen shared components)
-  - `value` (for toggles/selection changes)
+    - `component` (e.g., `button`, `switch`, `chip`)
+    - `variant` (e.g., `primary`, `outlined`, `danger`)
+    - `screen` (optional but useful for cross-screen shared components)
+    - `value` (for toggles/selection changes)
 
 Example payload:
 
@@ -160,7 +163,8 @@ TrackScreenState(
 
 ### 3.3 Track explicit user actions at screen level
 
-For screen-specific actions not covered by reusable components (top-bar back, retry buttons, menu actions), call:
+For screen-specific actions not covered by reusable components (top-bar back, retry buttons, menu
+actions), call:
 
 ```kotlin
 firebaseController.logEvent(
@@ -229,18 +233,19 @@ class ExampleViewModel(
 Apply this checklist to each feature/screen you integrate:
 
 1. **Screen mount**
-   - Call `TrackScreenView(...)`
+    - Call `TrackScreenView(...)`
 2. **State transitions**
-   - Call `TrackScreenState(...)` with `uiState.screenState`
+    - Call `TrackScreenState(...)` with `uiState.screenState`
 3. **Reusable UI interactions**
-   - Pass `firebaseController` + `ga4Event` into AppToolkit composables
+    - Pass `firebaseController` + `ga4Event` into AppToolkit composables
 4. **Screen-local interactions**
-   - Call `firebaseController.logEvent(...)` for actions not tied to reusable components
+    - Call `firebaseController.logEvent(...)` for actions not tied to reusable components
 5. **ViewModel operations/errors**
-   - Prefer `LoggedScreenViewModel`
-   - Wrap flows with `catchReport(...)` and operation launches with `launchReport(...)`
+    - Prefer `LoggedScreenViewModel`
+    - Wrap flows with `catchReport(...)` and operation launches with `launchReport(...)`
 
-If all five are used, you can usually reconstruct the entire user journey and failure path from GA4 + Crashlytics.
+If all five are used, you can usually reconstruct the entire user journey and failure path from
+GA4 + Crashlytics.
 
 ---
 
@@ -252,10 +257,10 @@ To avoid noisy/inconsistent telemetry, standardize names and params across the a
 
 - Keep names short, lowercase snake_case
 - Prefix by feature, e.g.:
-  - `help_action`
-  - `settings_toggle`
-  - `onboarding_click`
-  - `screen_state`
+    - `help_action`
+    - `settings_toggle`
+    - `onboarding_click`
+    - `screen_state`
 
 ### 6.2 Common params
 
@@ -270,7 +275,8 @@ Use a shared baseline whenever possible:
 
 ### 6.3 Avoid high-cardinality values
 
-Do not send raw free text, unique IDs, stack traces, email addresses, or other personal data in event params.
+Do not send raw free text, unique IDs, stack traces, email addresses, or other personal data in
+event params.
 
 Instead, send normalized categories (`"network_error"`, `"faq_item"`, `"dark"`, `"enabled"`).
 
@@ -279,22 +285,22 @@ Instead, send normalized categories (`"network_error"`, `"faq_item"`, `"dark"`, 
 ## 7) Common mistakes and how to avoid them
 
 1. **Not passing `firebaseController` into reusable composables**
-   - Result: no event even though `ga4Event` is provided.
+    - Result: no event even though `ga4Event` is provided.
 
 2. **Invalid event names/params**
-   - Result: dropped by `FirebaseControllerImpl`.
-   - Fix: use alphanumeric + underscore, start with a letter, avoid reserved prefixes.
+    - Result: dropped by `FirebaseControllerImpl`.
+    - Fix: use alphanumeric + underscore, start with a letter, avoid reserved prefixes.
 
 3. **Tracking only clicks, not screen/state**
-   - Result: impossible to correlate interactions with page/session context.
+    - Result: impossible to correlate interactions with page/session context.
 
 4. **Using only manual ViewModel logging**
-   - Result: inconsistent error metadata.
-   - Fix: use `LoggedScreenViewModel` helpers for standard telemetry shape.
+    - Result: inconsistent error metadata.
+    - Fix: use `LoggedScreenViewModel` helpers for standard telemetry shape.
 
 5. **Over-tracking rapid UI changes**
-   - Result: noisy analytics and inflated event volume.
-   - Fix: track meaningful transitions and final selections.
+    - Result: noisy analytics and inflated event volume.
+    - Fix: track meaningful transitions and final selections.
 
 ---
 
@@ -341,16 +347,17 @@ launchReport(
 ## 9) Quick reference
 
 - `Ga4EventData`:
-  - `core/ui/model/analytics/Ga4EventData.kt`
+    - `core/ui/model/analytics/Ga4EventData.kt`
 - `logGa4Event` helper:
-  - `core/ui/views/analytics/Ga4EventLogger.kt`
+    - `core/ui/views/analytics/Ga4EventLogger.kt`
 - Screen tracking composables:
-  - `core/ui/views/layouts/TrackScreenView.kt`
-  - `core/ui/views/layouts/TrackScreenState.kt`
+    - `core/ui/views/layouts/TrackScreenView.kt`
+    - `core/ui/views/layouts/TrackScreenState.kt`
 - ViewModel telemetry base class:
-  - `core/ui/base/LoggedScreenViewModel.kt`
+    - `core/ui/base/LoggedScreenViewModel.kt`
 - Firebase contract + implementation:
-  - `core/domain/repository/FirebaseController.kt`
-  - `core/data/remote/firebase/FirebaseControllerImpl.kt`
+    - `core/domain/repository/FirebaseController.kt`
+    - `core/data/remote/firebase/FirebaseControllerImpl.kt`
 
-Use these APIs together to give host apps full-funnel tracking with a consistent, maintainable structure.
+Use these APIs together to give host apps full-funnel tracking with a consistent, maintainable
+structure.

@@ -51,9 +51,24 @@ class DiceRollToolTest {
         assertEquals(4, ConstantFaceNumbers[DiceCubeFace.Left])
 
         // Verify opposite faces sum to 7 (standard dice)
-        assertEquals(7, ConstantFaceNumbers.getValue(DiceCubeFace.Top) + ConstantFaceNumbers.getValue(DiceCubeFace.Bottom))
-        assertEquals(7, ConstantFaceNumbers.getValue(DiceCubeFace.Front) + ConstantFaceNumbers.getValue(DiceCubeFace.Back))
-        assertEquals(7, ConstantFaceNumbers.getValue(DiceCubeFace.Right) + ConstantFaceNumbers.getValue(DiceCubeFace.Left))
+        assertEquals(
+            7,
+            ConstantFaceNumbers.getValue(DiceCubeFace.Top) + ConstantFaceNumbers.getValue(
+                DiceCubeFace.Bottom
+            )
+        )
+        assertEquals(
+            7,
+            ConstantFaceNumbers.getValue(DiceCubeFace.Front) + ConstantFaceNumbers.getValue(
+                DiceCubeFace.Back
+            )
+        )
+        assertEquals(
+            7,
+            ConstantFaceNumbers.getValue(DiceCubeFace.Right) + ConstantFaceNumbers.getValue(
+                DiceCubeFace.Left
+            )
+        )
     }
 
     @Test

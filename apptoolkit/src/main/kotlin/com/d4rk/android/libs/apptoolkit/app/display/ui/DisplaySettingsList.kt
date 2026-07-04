@@ -24,12 +24,10 @@ import android.os.Build
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.LocaleListCompat
@@ -54,12 +51,12 @@ import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItemWithDivider
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.DISPLAY_SETTINGS_LOG_TAG
@@ -83,7 +80,8 @@ private object DisplayActionNames {
     const val OPEN_THEME_SETTINGS: String = "open_theme_settings"
     const val THEME_REDIRECT: String = "theme_redirect"
     const val OPEN_STARTUP_DIALOG: String = "open_startup_dialog"
-    const val CHANGE_STARTUP_DESTINATION: String = "change_startup_destination"
+    const val CHANGE_STARTUP_DESTINATION: String =
+        "change_startup_destination" // FIXME: Property "CHANGE_STARTUP_DESTINATION" is never used
     const val OPEN_LANGUAGE_SETTINGS: String = "open_language_settings"
     const val CHANGE_LANGUAGE: String = "change_language"
 }
@@ -200,194 +198,189 @@ fun DisplaySettingsList(
         }
     }
 
-    LazyColumn(contentPadding = paddingValues, modifier = Modifier.fillMaxHeight()) {
+    if (showLanguageDialog.value) {
+        SelectLanguageAlertDialog(
+            onDismiss = { showLanguageDialog.value = false },
+            onLanguageSelected = { newLanguageCode: String ->
+                showLanguageDialog.value = false
+                firebaseController.logEvent(
+                    displayActionEvent(
+                        actionName = DisplayActionNames.CHANGE_LANGUAGE,
+                        preferenceKey = DisplayPreferenceKeys.LANGUAGE,
+                        value = newLanguageCode,
+                    )
+                )
+                AppCompatDelegate.setApplicationLocales(
+                    LocaleListCompat.forLanguageTags(newLanguageCode)
+                )
+            }
+        )
+    }
+
+    LazyColumn(
+        contentPadding = paddingValues,
+        modifier = Modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+    ) {
+
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.appearance))
-            SmallVerticalSpacer()
+        }
 
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = SizeConstants.LargeSize)
-                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
-            ) {
-                SwitchPreferenceItemWithDivider(
-                    title = stringResource(id = R.string.dark_theme),
-                    summary = themeSummary,
-                    checked = isDarkThemeActive,
-                    onCheckedChange = onDarkThemeChanged,
-                    onSwitchClick = onDarkThemeChanged,
-                    onClick = {
-                        firebaseController.logEvent(
-                            displayActionEvent(
-                                actionName = DisplayActionNames.OPEN_THEME_SETTINGS,
-                                preferenceKey = DisplayPreferenceKeys.THEME_SETTINGS,
-                                value = DisplayActionNames.THEME_REDIRECT,
-                            )
+        item {
+            SwitchPreferenceItemWithDivider(
+                title = stringResource(id = R.string.dark_theme),
+                summary = themeSummary,
+                checked = isDarkThemeActive,
+                onCheckedChange = onDarkThemeChanged,
+                onSwitchClick = onDarkThemeChanged,
+                onClick = {
+                    firebaseController.logEvent(
+                        displayActionEvent(
+                            actionName = DisplayActionNames.OPEN_THEME_SETTINGS,
+                            preferenceKey = DisplayPreferenceKeys.THEME_SETTINGS,
+                            value = DisplayActionNames.THEME_REDIRECT,
                         )
-                        provider.openThemeSettings()
-                    }
-                )
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    ExtraTinyVerticalSpacer()
-
-                    SwitchPreferenceItem(
-                        title = stringResource(id = R.string.dynamic_colors),
-                        summary = stringResource(id = R.string.summary_preference_settings_dynamic_colors),
-                        checked = isDynamicColors,
-                        onCheckedChange = { isChecked ->
-                            coroutineScope.launch { dataStore.saveDynamicColors(isChecked = isChecked) }
-                        }
                     )
-                }
+                    provider.openThemeSettings()
+                },
+                modifier = Modifier.groupedPreferenceItem(
+                    position = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) GroupedItemPosition.FIRST else GroupedItemPosition.SINGLE,
+                    outerRadius = SizeConstants.LargeMediumSize,
+                )
+            )
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            item {
+                SwitchPreferenceItem(
+                    title = stringResource(id = R.string.dynamic_colors),
+                    summary = stringResource(id = R.string.summary_preference_settings_dynamic_colors),
+                    checked = isDynamicColors,
+                    onCheckedChange = { isChecked ->
+                        coroutineScope.launch { dataStore.saveDynamicColors(isChecked = isChecked) }
+                    },
+                    modifier = Modifier.groupedPreferenceItem(
+                        position = GroupedItemPosition.LAST,
+                        outerRadius = SizeConstants.LargeMediumSize,
+                    )
+                )
             }
         }
 
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.app_behavior))
-            SmallVerticalSpacer()
+        }
 
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = SizeConstants.LargeSize)
-                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
-            ) {
-                SwitchPreferenceItem(
-                    title = stringResource(id = R.string.bounce_buttons),
-                    summary = stringResource(id = R.string.summary_preference_settings_bounce_buttons),
-                    checked = bouncyButtons,
-                    onCheckedChange = { isChecked ->
-                        coroutineScope.launch { dataStore.saveBouncyButtons(isChecked = isChecked) }
-                    }
+        item {
+            SwitchPreferenceItem(
+                title = stringResource(id = R.string.bounce_buttons),
+                summary = stringResource(id = R.string.summary_preference_settings_bounce_buttons),
+                checked = bouncyButtons,
+                onCheckedChange = { isChecked ->
+                    coroutineScope.launch { dataStore.saveBouncyButtons(isChecked = isChecked) }
+                },
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.SINGLE,
+                    outerRadius = SizeConstants.LargeMediumSize,
                 )
-            }
+            )
         }
 
         if (provider.supportsStartupPage) {
             item {
                 PreferenceCategoryItem(title = stringResource(id = R.string.navigation))
-                SmallVerticalSpacer()
+            }
 
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = SizeConstants.LargeSize)
-                        .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
-                ) {
-                    SettingsPreferenceItem(
-                        title = stringResource(id = R.string.startup_page),
-                        summary = stringResource(id = R.string.summary_preference_settings_startup_page),
-                        onClick = { showStartupDialog.value = true },
-                        firebaseController = firebaseController,
-                        ga4Event = displayActionGa4Event(
-                            actionName = DisplayActionNames.OPEN_STARTUP_DIALOG,
-                            preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
-                        )
+            item {
+                SettingsPreferenceItem(
+                    title = stringResource(id = R.string.startup_page),
+                    summary = stringResource(id = R.string.summary_preference_settings_startup_page),
+                    onClick = { showStartupDialog.value = true },
+                    firebaseController = firebaseController,
+                    ga4Event = displayActionGa4Event(
+                        actionName = DisplayActionNames.OPEN_STARTUP_DIALOG,
+                        preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
+                    ),
+                    modifier = Modifier.groupedPreferenceItem(
+                        position = GroupedItemPosition.FIRST,
+                        outerRadius = SizeConstants.LargeMediumSize,
                     )
+                )
+            }
 
-                    if (showStartupDialog.value) {
-                        provider.StartupPageDialog(
-                            onDismiss = { showStartupDialog.value = false }
-                        ) { selectedDestination: String ->
-                            firebaseController.logEvent(
-                                displayActionEvent(
-                                    actionName = DisplayActionNames.CHANGE_STARTUP_DESTINATION,
-                                    preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
-                                    value = selectedDestination,
-                                )
-                            )
-                        }
-                    }
-
-                    ExtraTinyVerticalSpacer()
-
-                    SwitchPreferenceItem(
-                        title = stringResource(id = R.string.show_labels_on_bottom_bar),
-                        summary = stringResource(id = R.string.summary_preference_settings_show_labels_on_bottom_bar),
-                        checked = showLabelsOnBottomBar,
-                        onCheckedChange = { isChecked ->
-                            coroutineScope.launch { dataStore.saveShowLabelsOnBottomBar(isChecked = isChecked) }
-                        }
+            item {
+                SwitchPreferenceItem(
+                    title = stringResource(id = R.string.show_labels_on_bottom_bar),
+                    summary = stringResource(id = R.string.summary_preference_settings_show_labels_on_bottom_bar),
+                    checked = showLabelsOnBottomBar,
+                    onCheckedChange = { isChecked ->
+                        coroutineScope.launch { dataStore.saveShowLabelsOnBottomBar(isChecked = isChecked) }
+                    },
+                    modifier = Modifier.groupedPreferenceItem(
+                        position = GroupedItemPosition.LAST,
+                        outerRadius = SizeConstants.LargeMediumSize,
                     )
-                }
+                )
             }
         }
 
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.language))
-            SmallVerticalSpacer()
+        }
 
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = SizeConstants.LargeSize)
-                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
-            ) {
-                SettingsPreferenceItem(
-                    title = stringResource(id = R.string.language),
-                    summary = stringResource(id = R.string.summary_preference_settings_language),
-                    onClick = {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            val localeIntent: Intent =
-                                Intent(Settings.ACTION_APP_LOCALE_SETTINGS).setData(
-                                    Uri.fromParts("package", context.packageName, null)
-                                )
-                            val detailsIntent: Intent =
-                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(
-                                    Uri.fromParts("package", context.packageName, null)
-                                )
-
-                            val openedLocaleSettings =
-                                context.startActivitySafely(intent = localeIntent)
-                            val openedAppDetails = if (!openedLocaleSettings) {
-                                context.startActivitySafely(intent = detailsIntent)
-                            } else {
-                                false
-                            }
-                            firebaseController.logEvent(
-                                displayActionEvent(
-                                    actionName = DisplayActionNames.OPEN_LANGUAGE_SETTINGS,
-                                    preferenceKey = DisplayPreferenceKeys.LANGUAGE,
-                                    value = when {
-                                        openedLocaleSettings -> "system_locale"
-                                        openedAppDetails -> "app_details"
-                                        else -> "in_app_dialog"
-                                    },
-                                )
+        item {
+            SettingsPreferenceItem(
+                title = stringResource(id = R.string.language),
+                summary = stringResource(id = R.string.summary_preference_settings_language),
+                onClick = {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        val localeIntent: Intent =
+                            Intent(Settings.ACTION_APP_LOCALE_SETTINGS).setData(
+                                Uri.fromParts("package", context.packageName, null)
                             )
-                            if (!openedLocaleSettings && !openedAppDetails) {
-                                showLanguageDialog.value = true
-                            }
+                        val detailsIntent: Intent =
+                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(
+                                Uri.fromParts("package", context.packageName, null)
+                            )
+
+                        val openedLocaleSettings =
+                            context.startActivitySafely(intent = localeIntent)
+                        val openedAppDetails = if (!openedLocaleSettings) {
+                            context.startActivitySafely(intent = detailsIntent)
                         } else {
-                            firebaseController.logEvent(
-                                displayActionEvent(
-                                    actionName = DisplayActionNames.OPEN_LANGUAGE_SETTINGS,
-                                    preferenceKey = DisplayPreferenceKeys.LANGUAGE,
-                                    value = "in_app_dialog",
-                                )
-                            )
-                            showLanguageDialog.value = true
+                            false
                         }
-                    }
-                )
-            }
-
-            if (showLanguageDialog.value) {
-                SelectLanguageAlertDialog(
-                    onDismiss = { showLanguageDialog.value = false },
-                    onLanguageSelected = { newLanguageCode: String ->
-                        showLanguageDialog.value = false
                         firebaseController.logEvent(
                             displayActionEvent(
-                                actionName = DisplayActionNames.CHANGE_LANGUAGE,
+                                actionName = DisplayActionNames.OPEN_LANGUAGE_SETTINGS,
                                 preferenceKey = DisplayPreferenceKeys.LANGUAGE,
-                                value = newLanguageCode,
+                                value = when {
+                                    openedLocaleSettings -> "system_locale"
+                                    openedAppDetails -> "app_details"
+                                    else -> "in_app_dialog"
+                                },
                             )
                         )
-                        AppCompatDelegate.setApplicationLocales(
-                            LocaleListCompat.forLanguageTags(newLanguageCode)
+                        if (!openedLocaleSettings && !openedAppDetails) {
+                            showLanguageDialog.value = true
+                        }
+                    } else {
+                        firebaseController.logEvent(
+                            displayActionEvent(
+                                actionName = DisplayActionNames.OPEN_LANGUAGE_SETTINGS,
+                                preferenceKey = DisplayPreferenceKeys.LANGUAGE,
+                                value = "in_app_dialog",
+                            )
                         )
+                        showLanguageDialog.value = true
                     }
+                },
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.SINGLE,
+                    outerRadius = SizeConstants.LargeMediumSize,
                 )
-            }
+            )
         }
     }
 }

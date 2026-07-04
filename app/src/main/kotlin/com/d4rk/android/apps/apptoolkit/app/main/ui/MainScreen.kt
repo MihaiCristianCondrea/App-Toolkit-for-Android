@@ -434,9 +434,11 @@ private fun MainShell(
             coroutineScope.launch { drawerState.close() }
         }
 
-        Row(modifier = Modifier
-            .fillMaxSize()
-            .imePadding()) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .imePadding()
+        ) {
             if (!modalDrawerEnabled) {
                 NavigationRail {
                     bottomItems.forEach { item ->

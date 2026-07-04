@@ -74,7 +74,9 @@ class FakeFavoritesRepository(
         toggleError?.let { throw it }
         val current = when {
             stateFlow != null -> stateFlow.value.toMutableSet()
-            sharedFlow != null -> sharedFlow.replayCache.lastOrNull()?.toMutableSet() ?: mutableSetOf()
+            sharedFlow != null -> sharedFlow.replayCache.lastOrNull()?.toMutableSet()
+                ?: mutableSetOf()
+
             else -> return
         }
         if (!current.add(packageName)) {

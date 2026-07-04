@@ -29,7 +29,8 @@ class DataStore(
     private val commonDataStore: CommonDataStore,
 ) : DatastoreInterface {
     override val startup: Flow<Boolean> = commonDataStore.startup
-    override val componentsShowcaseUnlocked: Flow<Boolean> = commonDataStore.componentsShowcaseUnlocked
+    override val componentsShowcaseUnlocked: Flow<Boolean> =
+        commonDataStore.componentsShowcaseUnlocked
     override val favoriteApps: Flow<Set<String>> = commonDataStore.favoriteApps
     override val settingsInteracted: Flow<Boolean> = commonDataStore.settingsInteracted
     override val staticPaletteId: Flow<String> = commonDataStore.staticPaletteId

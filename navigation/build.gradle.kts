@@ -50,7 +50,7 @@ android {
 dependencies {
     // Navigation3
     api(libs.bundles.androidx.navigation3)
-    
+
     // Compose
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.compose.material3)

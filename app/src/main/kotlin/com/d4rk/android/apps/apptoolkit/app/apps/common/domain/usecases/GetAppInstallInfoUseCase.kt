@@ -24,5 +24,6 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.Instal
 class GetAppInstallInfoUseCase(
     private val repository: InstalledAppsRepository,
 ) {
-    operator fun invoke(packageName: String): AppInstallInfo = repository.getInstallInfo(packageName)
+    operator fun invoke(packageName: String): AppInstallInfo =
+        repository.getInstallInfo(packageName)
 }

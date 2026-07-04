@@ -45,7 +45,7 @@ class CaffeineRepositoryImpl(
         val currentIndex = stateCycle.indexOf(_currentState.value)
         val nextState = stateCycle[(currentIndex + 1) % stateCycle.size]
         _currentState.value = nextState
-        
+
         if (nextState == CaffeineState.Off) {
             CaffeineService.stop(context)
         } else {

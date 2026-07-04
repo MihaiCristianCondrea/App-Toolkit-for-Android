@@ -18,18 +18,15 @@
 package com.d4rk.android.libs.apptoolkit.app.advanced.ui
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -46,9 +43,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
@@ -119,44 +117,46 @@ fun AdvancedSettingsList(
         onSuccess = {
             LazyColumn(
                 contentPadding = paddingValues,
-                modifier = Modifier.fillMaxHeight()
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
             ) {
+
                 item {
                     PreferenceCategoryItem(title = stringResource(id = R.string.error_reporting))
-                    SmallVerticalSpacer()
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = SizeConstants.LargeSize)
-                            .clip(RoundedCornerShape(size = SizeConstants.LargeSize))
-                    ) {
-                        SettingsPreferenceItem(
-                            title = stringResource(id = R.string.bug_report),
-                            summary = stringResource(id = R.string.summary_preference_settings_bug_report),
-                            onClick = {
-                                context.openActivity(IssueReporterActivity::class.java)
-                            },
-                            firebaseController = firebaseController,
-                            ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.BUG_REPORT),
+                }
+
+                item {
+                    SettingsPreferenceItem(
+                        title = stringResource(id = R.string.bug_report),
+                        summary = stringResource(id = R.string.summary_preference_settings_bug_report),
+                        onClick = {
+                            context.openActivity(IssueReporterActivity::class.java)
+                        },
+                        firebaseController = firebaseController,
+                        ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.BUG_REPORT),
+                        modifier = Modifier.groupedPreferenceItem(
+                            position = GroupedItemPosition.SINGLE,
+                            outerRadius = SizeConstants.LargeMediumSize,
                         )
-                    }
+                    )
                 }
 
                 item {
                     PreferenceCategoryItem(title = stringResource(id = R.string.cache_management))
-                    SmallVerticalSpacer()
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = SizeConstants.LargeSize)
-                            .clip(RoundedCornerShape(size = SizeConstants.LargeSize))
-                    ) {
-                        SettingsPreferenceItem(
-                            title = stringResource(id = R.string.clear_cache),
-                            summary = stringResource(id = R.string.summary_preference_settings_clear_cache),
-                            onClick = { viewModel.onEvent(AdvancedSettingsEvent.ClearCache) },
-                            firebaseController = firebaseController,
-                            ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.CLEAR_CACHE),
+                }
+
+                item {
+                    SettingsPreferenceItem(
+                        title = stringResource(id = R.string.clear_cache),
+                        summary = stringResource(id = R.string.summary_preference_settings_clear_cache),
+                        onClick = { viewModel.onEvent(AdvancedSettingsEvent.ClearCache) },
+                        firebaseController = firebaseController,
+                        ga4Event = advancedPreferenceTapEvent(preferenceKey = AdvancedPreferenceKeys.CLEAR_CACHE),
+                        modifier = Modifier.groupedPreferenceItem(
+                            position = GroupedItemPosition.SINGLE,
+                            outerRadius = SizeConstants.LargeMediumSize,
                         )
-                    }
+                    )
                 }
             }
         },

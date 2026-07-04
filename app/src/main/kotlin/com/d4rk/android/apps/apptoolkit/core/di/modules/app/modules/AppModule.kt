@@ -50,7 +50,12 @@ import org.koin.dsl.module
 
 val appModule: Module = module {
     single { NavigationManager() }
-    single<NavigationRepository> { MainNavigationRepositoryImpl(dataStore = get(), firebaseController = get()) }
+    single<NavigationRepository> {
+        MainNavigationRepositoryImpl(
+            dataStore = get(),
+            firebaseController = get()
+        )
+    }
     single<GetNavigationDrawerItemsUseCase> {
         GetNavigationDrawerItemsUseCase(navigationRepository = get(), firebaseController = get())
     }
@@ -101,7 +106,7 @@ val appModule: Module = module {
             syncToolkitTileStatusesUseCase = get(),
             getSensorDataUseCase = get(),
             getBreathingDataUseCase = get(),
-             caffeineRepository = get(),
+            caffeineRepository = get(),
             systemRepository = get(),
             sosRepository = get(),
             dispatchers = get(),

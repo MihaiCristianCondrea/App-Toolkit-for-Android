@@ -110,30 +110,31 @@ class MainViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `initialization applies persisted consent once`() = runTest(dispatcherExtension.testDispatcher) {
-        val applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true)
+    fun `initialization applies persisted consent once`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true)
 
-        MainViewModel(
-            getNavigationDrawerItemsUseCase = GetNavigationDrawerItemsUseCase(
-                navigationRepository = FakeNavigationRepository(flowOf(emptyList())),
-                firebaseController = mockk(relaxed = true)
-            ),
-            applyInitialConsentUseCase = applyInitialConsentUseCase,
-            requestConsentUseCase = RequestConsentUseCase(
-                repository = FakeConsentRepository(),
-                firebaseController = mockk(relaxed = true)
-            ),
-            requestInAppReviewUseCase = mockk(relaxed = true),
-            requestInAppUpdateUseCase = mockk(relaxed = true),
-            firebaseController = mockk<FirebaseController>(relaxed = true),
-            dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
-        )
+            MainViewModel(
+                getNavigationDrawerItemsUseCase = GetNavigationDrawerItemsUseCase(
+                    navigationRepository = FakeNavigationRepository(flowOf(emptyList())),
+                    firebaseController = mockk(relaxed = true)
+                ),
+                applyInitialConsentUseCase = applyInitialConsentUseCase,
+                requestConsentUseCase = RequestConsentUseCase(
+                    repository = FakeConsentRepository(),
+                    firebaseController = mockk(relaxed = true)
+                ),
+                requestInAppReviewUseCase = mockk(relaxed = true),
+                requestInAppUpdateUseCase = mockk(relaxed = true),
+                firebaseController = mockk<FirebaseController>(relaxed = true),
+                dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
+            )
 
-        runCurrent()
-        advanceUntilIdle()
+            runCurrent()
+            advanceUntilIdle()
 
-        coVerify(exactly = 1) { applyInitialConsentUseCase.invoke() }
-    }
+            coVerify(exactly = 1) { applyInitialConsentUseCase.invoke() }
+        }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test

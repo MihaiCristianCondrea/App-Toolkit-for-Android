@@ -33,5 +33,6 @@ class FetchDeveloperAppsUseCase(
      * original semantics. Loading UI should be driven by the ViewModel using `onStart` to keep
      * presentation concerns out of the domain layer.
      */
-    operator fun invoke(): Flow<DataState<List<AppInfo>, AppErrors>> = repository.fetchDeveloperApps()
+    operator fun invoke(): Flow<DataState<List<AppInfo>, AppErrors>> =
+        repository.fetchDeveloperApps()
 }

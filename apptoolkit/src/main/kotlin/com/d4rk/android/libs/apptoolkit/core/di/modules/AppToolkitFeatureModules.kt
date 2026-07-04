@@ -31,8 +31,6 @@ import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.providers.Devic
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.d4rk.android.libs.apptoolkit.app.issuereporter.ui.IssueReporterViewModel
-import com.d4rk.android.libs.apptoolkit.playservices.review.data.repository.ReviewRepositoryImpl
-import com.d4rk.android.libs.apptoolkit.playservices.review.domain.repository.ReviewRepository
 import com.d4rk.android.libs.apptoolkit.app.review.domain.usecases.ForceInAppReviewUseCase
 import com.d4rk.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupViewModel
@@ -48,6 +46,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.github.GithubConsta
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.help.HelpConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.faqCatalogUrl
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.toToken
+import com.d4rk.android.libs.apptoolkit.playservices.review.data.repository.ReviewRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.playservices.review.domain.repository.ReviewRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
@@ -70,7 +70,10 @@ fun appToolkitFeatureModules(
     hostBuildConfig: AppToolkitHostBuildConfig,
     startupProviderFactory: () -> StartupProvider,
 ): List<Module> = listOf(
-    appToolkitCoreModule(hostBuildConfig = hostBuildConfig, startupProviderFactory = startupProviderFactory),
+    appToolkitCoreModule(
+        hostBuildConfig = hostBuildConfig,
+        startupProviderFactory = startupProviderFactory
+    ),
     supportModule(),
     helpModule(hostBuildConfig = hostBuildConfig),
     issueReporterModule(hostBuildConfig = hostBuildConfig),

@@ -21,8 +21,8 @@ The theme onboarding page should:
 - Let users choose **theme mode**: Light / Dark / Follow system
 - Optionally enable **AMOLED** (only when allowed for the current theme mode)
 - Let users pick colors:
-  - **Dynamic** (Android 12+ / API 31+), with **variant** selection
-  - **Static palettes**, including **seasonal** palettes (Halloween / Christmas)
+    - **Dynamic** (Android 12+ / API 31+), with **variant** selection
+    - **Static palettes**, including **seasonal** palettes (Halloween / Christmas)
 - Persist choices immediately in DataStore
 - Preview choices clearly in the UI
 
@@ -234,7 +234,8 @@ This ensures:
 
 ### Swatch generation
 
-Each static palette ID maps to a palette object (`paletteById(id)`), and then picks light/dark scheme
+Each static palette ID maps to a palette object (`paletteById(id)`), and then picks light/dark
+scheme
 based on the current system theme:
 
 ```kotlin

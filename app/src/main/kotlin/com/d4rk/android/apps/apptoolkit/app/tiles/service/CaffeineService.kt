@@ -42,7 +42,7 @@ class CaffeineService : Service() {
 
     private val repository: CaffeineRepository by inject()
     private val serviceScope = CoroutineScope(Dispatchers.Main + Job())
-    
+
     private var wakeLock: PowerManager.WakeLock? = null
     private var timerJob: Job? = null
 
@@ -55,10 +55,10 @@ class CaffeineService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val durationMillis = intent?.getLongExtra(EXTRA_DURATION, -1L) ?: -1L
-        
+
         startForeground(NOTIFICATION_ID, createNotification())
         acquireWakeLock()
-        
+
         timerJob?.cancel()
         if (durationMillis > 0) {
             timerJob = serviceScope.launch {
@@ -67,13 +67,13 @@ class CaffeineService : Service() {
                 stopSelf()
             }
         }
-        
+
         return START_NOT_STICKY
     }
 
     private fun acquireWakeLock() {
         if (wakeLock?.isHeld == true) return
-        
+
         val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
         wakeLock = powerManager.newWakeLock(
             PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE,

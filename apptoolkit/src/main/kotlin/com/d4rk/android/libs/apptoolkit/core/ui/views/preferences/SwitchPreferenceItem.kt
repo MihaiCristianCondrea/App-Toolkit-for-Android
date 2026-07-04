@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -70,6 +70,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  */
 @Composable
 fun SwitchPreferenceItem(
+    modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     title: String,
     summary: String? = null,
@@ -81,9 +82,9 @@ fun SwitchPreferenceItem(
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
+        shape = RectangleShape,
     ) {
         Row(
             modifier = Modifier

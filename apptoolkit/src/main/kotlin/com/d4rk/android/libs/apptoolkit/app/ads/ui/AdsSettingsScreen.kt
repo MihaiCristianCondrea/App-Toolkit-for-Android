@@ -18,6 +18,7 @@
 package com.d4rk.android.libs.apptoolkit.app.ads.ui
 
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -114,13 +115,15 @@ fun AdsSettingsScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(paddingValues = paddingValues)
+                        .padding(paddingValues = paddingValues),
+                    verticalArrangement = Arrangement.spacedBy(space = SizeConstants.LargeSize),
                 ) {
+
                     item {
                         SwitchCardItem(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(all = SizeConstants.MediumSize * 2),
+                                .padding(horizontal = SizeConstants.LargeSize),
                             title = stringResource(id = R.string.display_ads),
                             switchState = rememberUpdatedState(data.adsEnabled),
                             onSwitchToggled = { isChecked: Boolean ->
@@ -177,7 +180,7 @@ fun AdsSettingsScreen(
                         InfoMessageSection(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(all = SizeConstants.MediumSize * 2),
+                                .padding(horizontal = SizeConstants.MediumSize * 2),
                             message = stringResource(id = R.string.summary_ads),
                             learnMoreText = stringResource(id = R.string.learn_more),
                             learnMoreAction = {

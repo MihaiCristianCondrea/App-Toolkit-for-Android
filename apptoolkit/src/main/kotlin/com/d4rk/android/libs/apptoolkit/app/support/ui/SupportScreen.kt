@@ -195,7 +195,8 @@ fun SupportScreenContent(
     onDonateClick: (String) -> Unit,
 ) {
     val context: Context = LocalContext.current
-    val nativeAdsConfig: AdsConfig = koinInject(qualifier = named(name = AdsQualifiers.SUPPORT_NATIVE_AD))
+    val nativeAdsConfig: AdsConfig =
+        koinInject(qualifier = named(name = AdsQualifiers.SUPPORT_NATIVE_AD))
 
     LazyColumn(
         modifier = Modifier.padding(paddingValues),

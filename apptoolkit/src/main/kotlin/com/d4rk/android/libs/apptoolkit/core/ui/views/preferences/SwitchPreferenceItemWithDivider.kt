@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material3.Card
@@ -37,6 +36,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -78,6 +78,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  */
 @Composable
 fun SwitchPreferenceItemWithDivider(
+    modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     title: String,
     summary: String,
@@ -92,9 +93,9 @@ fun SwitchPreferenceItemWithDivider(
     val view: View = LocalView.current
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
+        shape = RectangleShape,
     ) {
         Row(
             modifier = Modifier

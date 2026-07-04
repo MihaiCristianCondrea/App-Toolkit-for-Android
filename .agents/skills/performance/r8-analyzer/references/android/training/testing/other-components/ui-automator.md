@@ -3,10 +3,13 @@ interact with user apps and system apps.
 
 > [!NOTE]
 > **Note:** This documentation covers the modern approach to writing UI Automator tests, introduced
-> with [UI Automator 2.4](https://developer.android.com/jetpack/androidx/releases/test-uiautomator#2.4.0).
-> This approach makes your tests more concise, readable, and robust. The API is under development, and
+>
+with [UI Automator 2.4](https://developer.android.com/jetpack/androidx/releases/test-uiautomator#2.4.0).
+> This approach makes your tests more concise, readable, and robust. The API is under development,
+> and
 > we strongly recommend using it for any new development with UI Automator.
-> The [legacy API guidance](https://developer.android.com/training/testing/other-components/ui-automator-legacy)
+>
+The [legacy API guidance](https://developer.android.com/training/testing/other-components/ui-automator-legacy)
 > is also available.
 
 ## Introduction to modern UI Automator testing
@@ -214,7 +217,8 @@ before interacting with it.
 
 > [!NOTE]
 > **Note:** In most cases, `waitForStable()` isn't strictly necessary when using `onElement { ... }`
-> because `onElement` already includes a timeout. Use `waitForStable()` primarily in combination with
+> because `onElement` already includes a timeout. Use `waitForStable()` primarily in combination
+> with
 `onElements { ... }` to verify that all UI elements are visible, when you know that the UI is in an
 > unstable state, or for specific screenshot testing scenarios where you need the UI to completely
 > settle before capturing. `waitForStable()` works by waiting until no changes are detected in the

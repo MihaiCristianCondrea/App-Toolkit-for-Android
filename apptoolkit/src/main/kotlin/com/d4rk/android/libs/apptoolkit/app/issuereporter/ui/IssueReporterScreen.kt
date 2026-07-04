@@ -33,7 +33,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
@@ -63,7 +62,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
@@ -92,7 +90,9 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraExtraLargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
@@ -375,46 +375,36 @@ fun IssueReporterScreenContent(
         }
 
         item {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize)),
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
-            ) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
-                ) {
-                    RadioButtonPreferenceItem(
-                        text = stringResource(id = R.string.send_anonymously),
-                        isChecked = data.anonymous,
-                        onCheckedChange = { checked ->
-                            if (checked) {
-                                firebaseController.logEvent(
-                                    issueReporterActionEvent(
-                                        actionName = IssueReporterActionNames.SET_ANONYMOUS_MODE,
-                                        params = mapOf("anonymous" to AnalyticsValue.Bool(true)),
-                                    )
-                                )
-                                onEvent(IssueReporterEvent.SetAnonymous(anonymous = true))
-                            }
-                        }
-                    )
-                }
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(size = SizeConstants.ExtraTinySize),
-                ) {
-                    RadioButtonPreferenceItem(
-                        text = stringResource(id = R.string.use_github_account),
-                        isChecked = !data.anonymous,
-                        onCheckedChange = { /* disabled */ },
-                        enabled = false
-                    )
-                }
-            }
+            RadioButtonPreferenceItem(
+                text = stringResource(id = R.string.send_anonymously),
+                isChecked = data.anonymous,
+                onCheckedChange = { checked ->
+                    if (checked) {
+                        firebaseController.logEvent(
+                            issueReporterActionEvent(
+                                actionName = IssueReporterActionNames.SET_ANONYMOUS_MODE,
+                                params = mapOf("anonymous" to AnalyticsValue.Bool(true)),
+                            )
+                        )
+                        onEvent(IssueReporterEvent.SetAnonymous(anonymous = true))
+                    }
+                },
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.FIRST,
+                    outerRadius = SizeConstants.LargeMediumSize,
+                )
+            )
+
+            RadioButtonPreferenceItem(
+                text = stringResource(id = R.string.use_github_account),
+                isChecked = !data.anonymous,
+                onCheckedChange = { /* disabled */ },
+                enabled = false,
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.LAST,
+                    outerRadius = SizeConstants.LargeMediumSize,
+                )
+            )
         }
 
         item {

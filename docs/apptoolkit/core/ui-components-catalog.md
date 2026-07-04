@@ -11,9 +11,12 @@ Use this page as an adoption entrypoint before diving into file-level KDoc.
 ## Buttons (`core/ui/views/buttons`)
 
 ### Problem it solves
-Provides consistent, expressive button primitives with shared feedback behavior (haptics, click sound, optional GA4 event logging) and icon/text composition patterns.
+
+Provides consistent, expressive button primitives with shared feedback behavior (haptics, click
+sound, optional GA4 event logging) and icon/text composition patterns.
 
 ### Key composables and signatures
+
 - `GeneralButton(...)`
 - `GeneralOutlinedButton(...)`
 - `GeneralTextButton(...)`
@@ -23,6 +26,7 @@ Provides consistent, expressive button primitives with shared feedback behavior 
 - `AnimatedExtendedFloatingActionButton(...)`
 
 ### Minimal usage
+
 ```kotlin
 GeneralButton(
     label = "Save",
@@ -31,6 +35,7 @@ GeneralButton(
 ```
 
 ### Behavioral notes
+
 - Prefer state hoisting: pass `enabled`, labels, and click handlers from the caller.
 - `GeneralButton` requires at least a label or icon.
 - Keep `iconContentDescription` non-null for icon-only affordances when meaningful.
@@ -41,15 +46,19 @@ GeneralButton(
 ## Dialogs (`core/ui/views/dialogs`)
 
 ### Problem it solves
-Reusable modal primitives for confirm/cancel flows, date picking, full-screen dialogs, and app/version info.
+
+Reusable modal primitives for confirm/cancel flows, date picking, full-screen dialogs, and
+app/version info.
 
 ### Key composables and signatures
+
 - `BasicAlertDialog(...)`
 - `BasicFullScreenDialog(...)`
 - `DatePickerDialog(...)`
 - `VersionInfoAlertDialog(...)`
 
 ### Minimal usage
+
 ```kotlin
 BasicAlertDialog(
     title = "Delete item",
@@ -60,6 +69,7 @@ BasicAlertDialog(
 ```
 
 ### Behavioral notes
+
 - Keep visibility state in the screen/view-model state, not inside dialog composables.
 - Ensure destructive actions use explicit confirmation copy.
 - Provide clear dismiss behavior and avoid ambiguous “outside tap only” exits for critical flows.
@@ -69,9 +79,12 @@ BasicAlertDialog(
 ## Layouts (`core/ui/views/layouts`)
 
 ### Problem it solves
-Standardized screen-state rendering, tracking wrappers, loading/empty placeholders, and reusable structural containers.
+
+Standardized screen-state rendering, tracking wrappers, loading/empty placeholders, and reusable
+structural containers.
 
 ### Key composables and signatures
+
 - `ScreenStateHandler(screenState, onLoading, onEmpty, onSuccess, onError)`
 - `RootContentContainer(...)`
 - `LoadingScreen(...)`
@@ -81,6 +94,7 @@ Standardized screen-state rendering, tracking wrappers, loading/empty placeholde
 - `NonLazyGrid(...)`
 
 ### Minimal usage
+
 ```kotlin
 ScreenStateHandler(
     screenState = state,
@@ -91,6 +105,7 @@ ScreenStateHandler(
 ```
 
 ### Behavioral notes
+
 - Treat `UiStateScreen<T>` as the single render source for screen content.
 - Keep business logic out of layout wrappers; they should remain presentation-only.
 - Prefer these standardized wrappers to avoid per-screen loading/error divergence.
@@ -100,9 +115,12 @@ ScreenStateHandler(
 ## Preferences (`core/ui/views/preferences`)
 
 ### Problem it solves
-Shared settings-row components for switches, radio buttons, checkboxes, and grouped preference categories.
+
+Shared settings-row components for switches, radio buttons, checkboxes, and grouped preference
+categories.
 
 ### Key composables and signatures
+
 - `PreferenceItem(...)`
 - `PreferenceCategoryItem(...)`
 - `SwitchPreferenceItem(...)`
@@ -112,6 +130,7 @@ Shared settings-row components for switches, radio buttons, checkboxes, and grou
 - `CheckBoxPreferenceItem(...)`
 
 ### Minimal usage
+
 ```kotlin
 SwitchPreferenceItem(
     title = "Enable notifications",
@@ -121,18 +140,23 @@ SwitchPreferenceItem(
 ```
 
 ### Behavioral notes
+
 - Hoist `checked` and callbacks from the caller.
 - Keep preference rows accessible (touch target, label clarity, role semantics).
 - Avoid coupling preference rows to persistence APIs directly; persist in ViewModel/domain.
+- **Icon Usage Rule:** Icons must ONLY be used for preference items in the General Settings (main)
+  screen. Inner settings screens (e.g., Display, About, Privacy) must not use icons.
 
 ---
 
 ## Ads (`core/ui/views/ads`)
 
 ### Problem it solves
+
 Composable hosts and card variants for native/banner ad placements used across screens.
 
 ### Key composables and signatures
+
 - `HelpNativeAdCard(modifier, adUnitId)`
 - `SupportNativeAdCard(...)`
 - `AppsListNativeAdCard(...)`
@@ -142,6 +166,7 @@ Composable hosts and card variants for native/banner ad placements used across s
 - `NativeAdViewHost(...)`
 
 ### Minimal usage
+
 ```kotlin
 HelpNativeAdCard(
     adUnitId = helpAdUnitId,
@@ -149,6 +174,7 @@ HelpNativeAdCard(
 ```
 
 ### Behavioral notes
+
 - Always maintain clear ad disclosure labeling (for example “Ad”) in rendered templates.
 - Respect user ad/consent settings before loading ad content.
 - Keep ad content visually separated from functional app controls.
@@ -158,13 +184,16 @@ HelpNativeAdCard(
 ## Text (`core/ui/views/text`)
 
 ### Problem it solves
+
 Reusable text renderers for HTML-like content and “learn more” actions.
 
 ### Key composables and signatures
+
 - `HtmlText(...)`
 - `LearnMoreText(...)`
 
 ### Minimal usage
+
 ```kotlin
 LearnMoreText(
     text = "Learn more",
@@ -173,6 +202,7 @@ LearnMoreText(
 ```
 
 ### Behavioral notes
+
 - Prefer these components when rendering mixed-format text or link affordances repeatedly.
 - Keep link actions explicit and auditable through screen-level event handling.
 
@@ -186,5 +216,6 @@ LearnMoreText(
 - Common spacing primitives: `core/ui/views/spacers/*`
 
 For architecture and ViewModel event/state contracts, see:
+
 - `docs/apptoolkit/app-toolkit-library.md`
 - `docs/viewmodel-rules-coroutines-flows-state.md`

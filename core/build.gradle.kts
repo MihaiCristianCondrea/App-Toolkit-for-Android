@@ -44,7 +44,7 @@ android {
 dependencies {
     // DataStore
     api(libs.androidx.datastore.preferences)
-    
+
     // Coroutines
     api(libs.kotlinx.coroutines.android)
 

@@ -146,7 +146,8 @@ class SensorRepositoryImpl(
     override fun getBatteryTemperature(): Flow<Float> = callbackFlow {
         val job = launch {
             while (isActive) {
-                val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+                val intent =
+                    context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
                 val temperature = intent?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) ?: 0
                 trySend(temperature / 10f)
                 delay(2000)

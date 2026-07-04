@@ -106,25 +106,26 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
         AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, remoteViews)
     }
 
-    private suspend fun loadApps(context: Context): ImmutableList<WidgetAppEntry> = withContext(Dispatchers.IO) {
-        val fetchAppsUseCase = GlobalContext.get().get<FetchDeveloperAppsUseCase>()
-        val apps = when (val state = fetchAppsUseCase().first { it !is DataState.Loading }) {
-            is DataState.Success -> state.data
-            is DataState.Error -> state.data ?: emptyList()
-            is DataState.Loading -> emptyList()
-        }
-
-        apps
-            .ifEmpty { listOf(createFallbackEntry(context)) }
-            .take(MAX_GRID_ITEMS)
-            .map { app ->
-                WidgetAppEntry(
-                    app = app,
-                    icon = resolveAppIcon(context = context, packageName = app.packageName),
-                )
+    private suspend fun loadApps(context: Context): ImmutableList<WidgetAppEntry> =
+        withContext(Dispatchers.IO) {
+            val fetchAppsUseCase = GlobalContext.get().get<FetchDeveloperAppsUseCase>()
+            val apps = when (val state = fetchAppsUseCase().first { it !is DataState.Loading }) {
+                is DataState.Success -> state.data
+                is DataState.Error -> state.data ?: emptyList()
+                is DataState.Loading -> emptyList()
             }
-            .toImmutableList()
-    }
+
+            apps
+                .ifEmpty { listOf(createFallbackEntry(context)) }
+                .take(MAX_GRID_ITEMS)
+                .map { app ->
+                    WidgetAppEntry(
+                        app = app,
+                        icon = resolveAppIcon(context = context, packageName = app.packageName),
+                    )
+                }
+                .toImmutableList()
+        }
 
     private fun createFallbackEntry(context: Context): AppInfo {
         val appName = context.applicationInfo.loadLabel(context.packageManager).toString()

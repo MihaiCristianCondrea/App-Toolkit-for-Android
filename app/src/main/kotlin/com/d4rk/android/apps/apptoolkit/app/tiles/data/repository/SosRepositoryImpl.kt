@@ -54,7 +54,8 @@ class SosRepositoryImpl(
         cameraManager.cameraIdList.find { id ->
             val c = cameraManager.getCameraCharacteristics(id)
             val hasFlash = c.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
-            val isBack = c.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK
+            val isBack =
+                c.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK
             hasFlash && isBack
         }
     } catch (_: Exception) {

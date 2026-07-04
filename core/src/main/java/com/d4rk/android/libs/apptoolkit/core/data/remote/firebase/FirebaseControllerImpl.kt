@@ -20,7 +20,6 @@ package com.d4rk.android.libs.apptoolkit.core.domain.repository
 import android.os.Bundle
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsEvent
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
-import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.asConsentStatus
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics

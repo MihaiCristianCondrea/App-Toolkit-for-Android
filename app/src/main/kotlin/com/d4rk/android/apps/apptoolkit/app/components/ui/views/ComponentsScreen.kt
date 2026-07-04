@@ -399,14 +399,20 @@ fun ComponentsScreen(
                             icon = Icons.Outlined.Info,
                             onClick = { showMenu = false },
                             firebaseController = firebaseController,
-                            ga4Event = ga4Event(component = "dropdown", variant = "menu_option_primary"),
+                            ga4Event = ga4Event(
+                                component = "dropdown",
+                                variant = "menu_option_primary"
+                            ),
                         )
                         CommonDropdownMenuItem(
                             textResId = R.string.components_menu_option_secondary,
                             icon = Icons.Outlined.Favorite,
                             onClick = { showMenu = false },
                             firebaseController = firebaseController,
-                            ga4Event = ga4Event(component = "dropdown", variant = "menu_option_secondary"),
+                            ga4Event = ga4Event(
+                                component = "dropdown",
+                                variant = "menu_option_secondary"
+                            ),
                         )
                     }
                 }
@@ -444,7 +450,10 @@ fun ComponentsScreen(
                             title = stringResource(id = R.string.components_preference_title),
                             summary = stringResource(id = R.string.components_preference_summary),
                             firebaseController = firebaseController,
-                            ga4Event = ga4Event(component = "preference", variant = "settings_primary"),
+                            ga4Event = ga4Event(
+                                component = "preference",
+                                variant = "settings_primary"
+                            ),
                         )
                         ExtraTinyVerticalSpacer()
                         PreferenceItem(
@@ -473,7 +482,10 @@ fun ComponentsScreen(
                             onClick = {},
                             onSwitchClick = {},
                             firebaseController = firebaseController,
-                            ga4Event = ga4Event(component = "preference", variant = "switch_divider"),
+                            ga4Event = ga4Event(
+                                component = "preference",
+                                variant = "switch_divider"
+                            ),
                         )
                         ExtraTinyVerticalSpacer()
                         SwitchCardItem(
@@ -503,7 +515,10 @@ fun ComponentsScreen(
                                 isChecked = state.selectedRadioOption == option,
                                 onCheckedChange = { onRadioOptionSelected(option) },
                                 firebaseController = firebaseController,
-                                ga4Event = ga4Event(component = "preference", variant = "radio_$option"),
+                                ga4Event = ga4Event(
+                                    component = "preference",
+                                    variant = "radio_$option"
+                                ),
                             )
                         }
                     }

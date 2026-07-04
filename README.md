@@ -90,17 +90,21 @@ dependencies {
 
 # Feedback
 
-We are constantly updating and improving App Toolkit to give you the best possible experience. If you
+We are constantly updating and improving App Toolkit to give you the best possible experience. If
+you
 have any suggested features or improvements, please leave a review. In case something is not working
 correctly please let me know. When posting a low rating please describe what is wrong to give the
 possibility to fix that issue.
 
-Thank you for choosing App Toolkit! We hope you enjoy using our app as much as we enjoyed creating it
+Thank you for choosing App Toolkit! We hope you enjoy using our app as much as we enjoyed creating
+it
 for you!
 
 # License
 
-__Privacy Policy__ [here](https://mihaicristiancondrea.github.io/profile/#privacy-policy-end-user-software).
-__Terms of Service__ [here](https://mihaicristiancondrea.github.io/profile/#terms-of-service-end-user-software).
+__Privacy Policy
+__ [here](https://mihaicristiancondrea.github.io/profile/#privacy-policy-end-user-software).
+__Terms of Service
+__ [here](https://mihaicristiancondrea.github.io/profile/#terms-of-service-end-user-software).
 
 ![license](https://imgur.com/QQlcEVT.png)

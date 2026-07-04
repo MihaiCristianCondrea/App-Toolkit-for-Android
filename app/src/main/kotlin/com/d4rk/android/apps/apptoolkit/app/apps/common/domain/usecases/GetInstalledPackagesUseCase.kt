@@ -23,5 +23,6 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.Instal
 class GetInstalledPackagesUseCase(
     private val repository: InstalledAppsRepository,
 ) {
-    operator fun invoke(packageNames: Collection<String>): Set<String> = repository.getInstalledPackages(packageNames)
+    operator fun invoke(packageNames: Collection<String>): Set<String> =
+        repository.getInstalledPackages(packageNames)
 }

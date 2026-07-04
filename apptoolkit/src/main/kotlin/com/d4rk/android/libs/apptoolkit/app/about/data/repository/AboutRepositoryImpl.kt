@@ -24,10 +24,10 @@ import com.d4rk.android.libs.apptoolkit.app.about.domain.model.AboutInfo
 import com.d4rk.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
 import com.d4rk.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.d4rk.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
-import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.CLIPBOARD_HELPER_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.copyTextToClipboard
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
 
 /**
  * Provides About-related data and handles clipboard interactions for device info.

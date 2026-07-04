@@ -63,7 +63,8 @@ open class TestAppsListViewModelBase {
         val getAppInstallInfoUseCase = GetAppInstallInfoUseCase(installedAppsRepository)
         val favoritesRepository =
             FakeFavoritesRepository(initialFavorites, favoritesFlow, toggleError)
-        val observeFavoritesUseCase = ObserveFavoritesUseCase(favoritesRepository, firebaseController)
+        val observeFavoritesUseCase =
+            ObserveFavoritesUseCase(favoritesRepository, firebaseController)
         val toggleFavoriteUseCase = ToggleFavoriteUseCase(favoritesRepository, firebaseController)
         viewModel = AppsListViewModel(
             fetchDeveloperAppsUseCase = fetchUseCase,

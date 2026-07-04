@@ -19,14 +19,12 @@ package com.d4rk.android.libs.apptoolkit.app.about.ui
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,7 +34,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -53,11 +50,11 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.ABOUT_SETTINGS_LOG_TAG
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
@@ -161,72 +158,89 @@ fun AboutScreen(
             onLoading = { LoadingScreen() },
             onEmpty = { NoDataScreen(paddingValues = paddingValues) },
             onSuccess = { data: AboutUiState ->
-                LazyColumn(modifier = Modifier.fillMaxHeight(), contentPadding = paddingValues) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxHeight(),
+                    contentPadding = paddingValues,
+                    verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
+                ) {
+
                     item {
                         PreferenceCategoryItem(title = stringResource(id = R.string.app_info))
-                        SmallVerticalSpacer()
-                        Column(
-                            modifier = Modifier
-                                .padding(horizontal = SizeConstants.LargeSize)
-                                .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
-                        ) {
-                            SettingsPreferenceItem(
-                                title = stringResource(id = R.string.app_full_name),
-                                summary = stringResource(id = R.string.copyright)
+                    }
+
+                    item {
+                        SettingsPreferenceItem(
+                            title = stringResource(id = R.string.app_full_name),
+                            summary = stringResource(id = R.string.copyright),
+                            modifier = Modifier.groupedPreferenceItem(
+                                position = GroupedItemPosition.FIRST,
+                                outerRadius = SizeConstants.LargeMediumSize,
                             )
-                            ExtraTinyVerticalSpacer()
-                            SettingsPreferenceItem(
-                                title = stringResource(id = R.string.app_build_version),
-                                summary = "${data.appVersionInfo.versionName.orEmpty()} (${data.appVersionInfo.versionCode})",
-                                onClick = {
-                                    appVersionTotalTapCount += 1
-                                    onVersionTap(appVersionTotalTapCount)
-                                    appVersionTapCount += 1
-                                    if (appVersionTapCount >= 5) {
-                                        appVersionTapCount = 0
-                                        showKonfettiAnimationForThisInstance = true
-                                    }
-                                },
-                                firebaseController = firebaseController,
-                                ga4Event = aboutPreferenceTapEvent(preferenceKey = AboutPreferenceKeys.APP_BUILD_VERSION),
+                        )
+                    }
+
+                    item {
+                        SettingsPreferenceItem(
+                            title = stringResource(id = R.string.app_build_version),
+                            summary = "${data.appVersionInfo.versionName.orEmpty()} (${data.appVersionInfo.versionCode})",
+                            onClick = {
+                                appVersionTotalTapCount += 1
+                                onVersionTap(appVersionTotalTapCount)
+                                appVersionTapCount += 1
+                                if (appVersionTapCount >= 5) {
+                                    appVersionTapCount = 0
+                                    showKonfettiAnimationForThisInstance = true
+                                }
+                            },
+                            firebaseController = firebaseController,
+                            ga4Event = aboutPreferenceTapEvent(preferenceKey = AboutPreferenceKeys.APP_BUILD_VERSION),
+                            modifier = Modifier.groupedPreferenceItem(
+                                position = GroupedItemPosition.MIDDLE,
+                                outerRadius = SizeConstants.LargeMediumSize,
                             )
-                            ExtraTinyVerticalSpacer()
-                            SettingsPreferenceItem(
-                                title = stringResource(id = R.string.oss_license_title),
-                                summary = stringResource(id = R.string.summary_preference_settings_oss),
-                                onClick = {
-                                    val opened = context.openActivity(LicensesActivity::class.java)
-                                    if (!opened) {
-                                        Log.w(
-                                            ABOUT_SETTINGS_LOG_TAG,
-                                            "Failed to open licenses screen from About settings"
-                                        )
-                                    }
-                                },
-                                firebaseController = firebaseController,
-                                ga4Event = aboutPreferenceTapEvent(preferenceKey = AboutPreferenceKeys.OSS_LICENSES),
+                        )
+                    }
+
+                    item {
+                        SettingsPreferenceItem(
+                            title = stringResource(id = R.string.oss_license_title),
+                            summary = stringResource(id = R.string.summary_preference_settings_oss),
+                            onClick = {
+                                val opened = context.openActivity(LicensesActivity::class.java)
+                                if (!opened) {
+                                    Log.w(
+                                        ABOUT_SETTINGS_LOG_TAG,
+                                        "Failed to open licenses screen from About settings"
+                                    )
+                                }
+                            },
+                            firebaseController = firebaseController,
+                            ga4Event = aboutPreferenceTapEvent(preferenceKey = AboutPreferenceKeys.OSS_LICENSES),
+                            modifier = Modifier.groupedPreferenceItem(
+                                position = GroupedItemPosition.LAST,
+                                outerRadius = SizeConstants.LargeMediumSize,
                             )
-                        }
+                        )
                     }
 
                     item {
                         PreferenceCategoryItem(title = deviceInfo)
-                        SmallVerticalSpacer()
-                        Column(
-                            modifier = Modifier
-                                .padding(horizontal = SizeConstants.LargeSize)
-                                .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize))
-                        ) {
-                            SettingsPreferenceItem(
-                                title = deviceInfo,
-                                summary = data.deviceInfo,
-                                onClick = {
-                                    viewModel.onEvent(event = AboutEvent.CopyDeviceInfo(label = deviceInfo))
-                                },
-                                firebaseController = firebaseController,
-                                ga4Event = aboutPreferenceTapEvent(preferenceKey = AboutPreferenceKeys.DEVICE_INFO),
+                    }
+
+                    item {
+                        SettingsPreferenceItem(
+                            title = deviceInfo,
+                            summary = data.deviceInfo,
+                            onClick = {
+                                viewModel.onEvent(event = AboutEvent.CopyDeviceInfo(label = deviceInfo))
+                            },
+                            firebaseController = firebaseController,
+                            ga4Event = aboutPreferenceTapEvent(preferenceKey = AboutPreferenceKeys.DEVICE_INFO),
+                            modifier = Modifier.groupedPreferenceItem(
+                                position = GroupedItemPosition.SINGLE,
+                                outerRadius = SizeConstants.LargeMediumSize,
                             )
-                        }
+                        )
                     }
                 }
             }

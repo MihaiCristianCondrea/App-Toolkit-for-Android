@@ -2,7 +2,8 @@
 
 This document describes how onboarding content is modeled and rendered in AppToolkit using
 `OnboardingPage`. It covers the two page types (**DefaultPage** and **CustomPage**), how the
-selection lifecycle works (`isSelected`), and recommended patterns for performant, predictable pages.
+selection lifecycle works (`isSelected`), and recommended patterns for performant, predictable
+pages.
 
 ---
 

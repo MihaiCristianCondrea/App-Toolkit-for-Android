@@ -42,7 +42,8 @@ class CoinFlipTileService : TileService() {
         qsTile?.apply {
             label = getString(R.string.tile_coin_flip_title)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                subtitle = getString(if (Random.nextBoolean()) R.string.tile_service_heads else R.string.tile_service_tails)
+                subtitle =
+                    getString(if (Random.nextBoolean()) R.string.tile_service_heads else R.string.tile_service_tails)
             }
             state = Tile.STATE_ACTIVE
             updateTile()

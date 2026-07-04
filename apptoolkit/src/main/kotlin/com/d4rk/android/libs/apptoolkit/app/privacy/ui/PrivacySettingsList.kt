@@ -18,15 +18,12 @@
 package com.d4rk.android.libs.apptoolkit.app.privacy.ui
 
 import android.content.Context
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
@@ -37,10 +34,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openUrl
@@ -82,97 +79,127 @@ fun PrivacySettingsList(
     LazyColumn(
         contentPadding = paddingValues,
         modifier = Modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
+
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.privacy))
-            SmallVerticalSpacer()
+        }
 
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = SizeConstants.LargeSize)
-                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize)),
-            ) {
-                SettingsPreferenceItem(
-                    title = stringResource(id = R.string.privacy_policy),
-                    summary = stringResource(id = R.string.summary_preference_settings_privacy_policy),
-                    onClick = { context.openUrl(provider.privacyPolicyUrl) },
-                    firebaseController = firebaseController,
-                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.PRIVACY_POLICY),
+        item {
+            SettingsPreferenceItem(
+                title = stringResource(id = R.string.privacy_policy),
+                summary = stringResource(id = R.string.summary_preference_settings_privacy_policy),
+                onClick = { context.openUrl(provider.privacyPolicyUrl) },
+                firebaseController = firebaseController,
+                ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.PRIVACY_POLICY),
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.FIRST,
+                    outerRadius = SizeConstants.LargeMediumSize,
                 )
-                ExtraTinyVerticalSpacer()
+            )
+        }
 
-                SettingsPreferenceItem(
-                    title = stringResource(id = R.string.terms_of_service),
-                    summary = stringResource(id = R.string.summary_preference_settings_terms_of_service),
-                    onClick = { context.openUrl(provider.termsOfServiceUrl) },
-                    firebaseController = firebaseController,
-                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.TERMS_OF_SERVICE),
+        item {
+            SettingsPreferenceItem(
+                title = stringResource(id = R.string.terms_of_service),
+                summary = stringResource(id = R.string.summary_preference_settings_terms_of_service),
+                onClick = { context.openUrl(provider.termsOfServiceUrl) },
+                firebaseController = firebaseController,
+                ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.TERMS_OF_SERVICE),
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.MIDDLE,
+                    outerRadius = SizeConstants.LargeMediumSize,
                 )
-                ExtraTinyVerticalSpacer()
+            )
+        }
 
-                SettingsPreferenceItem(
-                    title = stringResource(id = R.string.code_of_conduct),
-                    summary = stringResource(id = R.string.summary_preference_settings_code_of_conduct),
-                    onClick = { context.openUrl(provider.codeOfConductUrl) },
-                    firebaseController = firebaseController,
-                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.CODE_OF_CONDUCT),
+        item {
+            SettingsPreferenceItem(
+                title = stringResource(id = R.string.code_of_conduct),
+                summary = stringResource(id = R.string.summary_preference_settings_code_of_conduct),
+                onClick = { context.openUrl(provider.codeOfConductUrl) },
+                firebaseController = firebaseController,
+                ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.CODE_OF_CONDUCT),
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.MIDDLE,
+                    outerRadius = SizeConstants.LargeMediumSize,
                 )
-                ExtraTinyVerticalSpacer()
+            )
+        }
 
-                SettingsPreferenceItem(
-                    title = stringResource(id = R.string.permissions),
-                    summary = stringResource(id = R.string.summary_preference_settings_permissions),
-                    onClick = { provider.openPermissionsScreen() },
-                    firebaseController = firebaseController,
-                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.PERMISSIONS),
+        item {
+            SettingsPreferenceItem(
+                title = stringResource(id = R.string.permissions),
+                summary = stringResource(id = R.string.summary_preference_settings_permissions),
+                onClick = { provider.openPermissionsScreen() },
+                firebaseController = firebaseController,
+                ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.PERMISSIONS),
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.MIDDLE,
+                    outerRadius = SizeConstants.LargeMediumSize,
                 )
-                ExtraTinyVerticalSpacer()
+            )
+        }
 
-                SettingsPreferenceItem(
-                    title = stringResource(id = R.string.ads),
-                    summary = stringResource(id = R.string.summary_preference_settings_ads),
-                    onClick = { provider.openAdsScreen() },
-                    firebaseController = firebaseController,
-                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.ADS),
+        item {
+            SettingsPreferenceItem(
+                title = stringResource(id = R.string.ads),
+                summary = stringResource(id = R.string.summary_preference_settings_ads),
+                onClick = { provider.openAdsScreen() },
+                firebaseController = firebaseController,
+                ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.ADS),
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.MIDDLE,
+                    outerRadius = SizeConstants.LargeMediumSize,
                 )
-                ExtraTinyVerticalSpacer()
+            )
+        }
 
-                SettingsPreferenceItem(
-                    title = stringResource(id = R.string.usage_and_diagnostics),
-                    summary = stringResource(id = R.string.summary_preference_settings_usage_and_diagnostics),
-                    onClick = { provider.openUsageAndDiagnosticsScreen() },
-                    firebaseController = firebaseController,
-                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.USAGE_AND_DIAGNOSTICS),
+        item {
+            SettingsPreferenceItem(
+                title = stringResource(id = R.string.usage_and_diagnostics),
+                summary = stringResource(id = R.string.summary_preference_settings_usage_and_diagnostics),
+                onClick = { provider.openUsageAndDiagnosticsScreen() },
+                firebaseController = firebaseController,
+                ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.USAGE_AND_DIAGNOSTICS),
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.LAST,
+                    outerRadius = SizeConstants.LargeMediumSize,
                 )
-            }
+            )
         }
 
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.legal))
-            SmallVerticalSpacer()
+        }
 
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = SizeConstants.LargeSize)
-                    .clip(shape = RoundedCornerShape(size = SizeConstants.LargeSize)),
-            ) {
-                SettingsPreferenceItem(
-                    title = stringResource(id = R.string.legal_notices),
-                    summary = stringResource(id = R.string.summary_preference_settings_legal_notices),
-                    onClick = { context.openUrl(provider.legalNoticesUrl) },
-                    firebaseController = firebaseController,
-                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.LEGAL_NOTICES),
+        item {
+            SettingsPreferenceItem(
+                title = stringResource(id = R.string.legal_notices),
+                summary = stringResource(id = R.string.summary_preference_settings_legal_notices),
+                onClick = { context.openUrl(provider.legalNoticesUrl) },
+                firebaseController = firebaseController,
+                ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.LEGAL_NOTICES),
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.FIRST,
+                    outerRadius = SizeConstants.LargeMediumSize,
                 )
-                ExtraTinyVerticalSpacer()
+            )
+        }
 
-                SettingsPreferenceItem(
-                    title = stringResource(id = R.string.license),
-                    summary = stringResource(id = R.string.summary_preference_settings_license),
-                    onClick = { context.openUrl(provider.licenseUrl) },
-                    firebaseController = firebaseController,
-                    ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.LICENSE),
+        item {
+            SettingsPreferenceItem(
+                title = stringResource(id = R.string.license),
+                summary = stringResource(id = R.string.summary_preference_settings_license),
+                onClick = { context.openUrl(provider.licenseUrl) },
+                firebaseController = firebaseController,
+                ga4Event = privacyPreferenceTapEvent(preferenceKey = PrivacyPreferenceKeys.LICENSE),
+                modifier = Modifier.groupedPreferenceItem(
+                    position = GroupedItemPosition.LAST,
+                    outerRadius = SizeConstants.LargeMediumSize,
                 )
-            }
+            )
         }
     }
 }

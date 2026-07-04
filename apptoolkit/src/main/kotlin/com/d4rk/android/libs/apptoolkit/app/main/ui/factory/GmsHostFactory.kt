@@ -21,8 +21,8 @@ import android.app.Activity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
 import com.d4rk.android.libs.apptoolkit.app.review.domain.model.ReviewHost
+import com.d4rk.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
 
 /**
  * Builds GMS host abstractions for in-app review and update flows.

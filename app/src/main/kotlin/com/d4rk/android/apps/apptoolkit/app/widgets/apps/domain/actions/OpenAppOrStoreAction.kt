@@ -44,6 +44,7 @@ class OpenAppOrStoreAction : ActionCallback {
     }
 
     companion object {
-        val PACKAGE_NAME_KEY: ActionParameters.Key<String> = ActionParameters.Key(name = "package_name")
+        val PACKAGE_NAME_KEY: ActionParameters.Key<String> =
+            ActionParameters.Key(name = "package_name")
     }
 }

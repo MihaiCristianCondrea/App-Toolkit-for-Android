@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (©) 2026 Mihai-Cristian Condrea
   ~
   ~ This program is free software: you can redistribute it and/or modify
@@ -24,19 +23,29 @@
         </shape>
     </item>
 
-    <item android:left="12dp" android:top="12dp" android:right="12dp" android:bottom="12dp">
+    <item
+        android:bottom="12dp"
+        android:left="12dp"
+        android:right="12dp"
+        android:top="12dp">
         <shape android:shape="rectangle">
             <corners android:radius="16dp" />
             <solid android:color="#FFC5CAE9" />
         </shape>
     </item>
 
-    <item android:left="28dp" android:top="28dp" android:right="28dp" android:bottom="28dp">
+    <item
+        android:bottom="28dp"
+        android:left="28dp"
+        android:right="28dp"
+        android:top="28dp">
         <shape android:shape="rectangle">
             <corners android:radius="12dp" />
             <solid android:color="#FF9FA8DA" />
         </shape>
     </item>
 
-    <item android:drawable="@drawable/ic_launcher_foreground" android:gravity="center" />
+    <item
+        android:drawable="@drawable/ic_launcher_foreground"
+        android:gravity="center" />
 </layer-list>
