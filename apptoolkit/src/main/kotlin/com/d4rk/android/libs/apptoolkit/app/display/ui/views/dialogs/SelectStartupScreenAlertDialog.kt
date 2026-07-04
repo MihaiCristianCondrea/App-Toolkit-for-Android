@@ -17,11 +17,12 @@
 
 package com.d4rk.android.libs.apptoolkit.app.display.ui.views.dialogs
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Text
@@ -35,7 +36,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
@@ -44,8 +44,11 @@ import com.d4rk.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
 import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.SELECT_STARTUP_DIALOG_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
@@ -147,14 +150,28 @@ fun SelectStartupScreenAlertDialogContent(
 ) {
     val count = min(startupEntries.size, startupValues.size)
 
-    Column {
+    Column(
+        modifier = Modifier.fillMaxHeight(fraction = 0.6f)
+    ) {
         Text(text = stringResource(id = R.string.dialog_startup_subtitle))
-        Box(modifier = Modifier.fillMaxWidth()) {
-            LazyColumn {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize)
+            ) {
                 items(count) { index ->
                     val currentValue = startupValues[index]
                     RadioButtonPreferenceItem(
-                        modifier = Modifier.clip(shape = CircleShape),
+                        modifier = Modifier.groupedPreferenceItem(
+                            position = groupedItemPosition(
+                                index = index,
+                                size = count
+                            ),
+                            outerRadius = SizeConstants.LargeMediumSize,
+                            horizontalPadding = SizeConstants.ZeroSize
+                        ),
                         text = startupEntries[index],
                         isChecked = selectedPage == currentValue,
                         onCheckedChange = { onSelectedPageChange(currentValue) }

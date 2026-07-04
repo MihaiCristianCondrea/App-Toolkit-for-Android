@@ -57,6 +57,8 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPrefer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItemWithDivider
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
+import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.DISPLAY_SETTINGS_LOG_TAG
@@ -80,8 +82,7 @@ private object DisplayActionNames {
     const val OPEN_THEME_SETTINGS: String = "open_theme_settings"
     const val THEME_REDIRECT: String = "theme_redirect"
     const val OPEN_STARTUP_DIALOG: String = "open_startup_dialog"
-    const val CHANGE_STARTUP_DESTINATION: String =
-        "change_startup_destination" // FIXME: Property "CHANGE_STARTUP_DESTINATION" is never used
+    const val CHANGE_STARTUP_DESTINATION: String = "change_startup_destination" // FIXME: Property "CHANGE_STARTUP_DESTINATION" is never used
     const val OPEN_LANGUAGE_SETTINGS: String = "open_language_settings"
     const val CHANGE_LANGUAGE: String = "change_language"
 }
@@ -198,6 +199,20 @@ fun DisplaySettingsList(
         }
     }
 
+    if (showStartupDialog.value) {
+        provider.StartupPageDialog(
+            onDismiss = { showStartupDialog.value = false }
+        ) { selectedDestination: String ->
+            firebaseController.logEvent(
+                displayActionEvent(
+                    actionName = DisplayActionNames.CHANGE_STARTUP_DESTINATION,
+                    preferenceKey = DisplayPreferenceKeys.STARTUP_PAGE,
+                    value = selectedDestination,
+                )
+            )
+        }
+    }
+
     if (showLanguageDialog.value) {
         SelectLanguageAlertDialog(
             onDismiss = { showLanguageDialog.value = false },
@@ -222,6 +237,9 @@ fun DisplaySettingsList(
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
+        item {
+            LargeVerticalSpacer()
+        }
 
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.appearance))
@@ -269,6 +287,10 @@ fun DisplaySettingsList(
         }
 
         item {
+            LargeVerticalSpacer()
+        }
+
+        item {
             PreferenceCategoryItem(title = stringResource(id = R.string.app_behavior))
         }
 
@@ -288,6 +310,10 @@ fun DisplaySettingsList(
         }
 
         if (provider.supportsStartupPage) {
+            item {
+                LargeVerticalSpacer()
+            }
+
             item {
                 PreferenceCategoryItem(title = stringResource(id = R.string.navigation))
             }
@@ -323,6 +349,10 @@ fun DisplaySettingsList(
                     )
                 )
             }
+        }
+
+        item {
+            LargeVerticalSpacer()
         }
 
         item {

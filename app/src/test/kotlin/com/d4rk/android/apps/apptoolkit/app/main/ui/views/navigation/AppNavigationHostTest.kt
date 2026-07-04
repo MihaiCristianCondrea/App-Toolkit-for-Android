@@ -19,7 +19,6 @@ package com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
-import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
@@ -99,7 +98,6 @@ class AppNavigationHostTest {
         val routes: List<StableNavKey> = listOf(
             AppsListRoute,
             ToolkitTilesRoute,
-            ComponentsRoute,
             LibraryExtrasRoute,
             SettingsRoute,
             GeneralSettingsRoute(title = "Display", contentKey = "display"),

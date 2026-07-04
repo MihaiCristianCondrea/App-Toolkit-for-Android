@@ -21,10 +21,9 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.Text
@@ -36,9 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
@@ -49,8 +46,11 @@ import com.d4rk.android.libs.apptoolkit.core.ui.effects.persistChanges
 import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.SELECT_LANGUAGE_DIALOG_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -146,34 +146,38 @@ fun SelectLanguageAlertDialogContent(
     languageEntries: ImmutableList<String>,
     languageValues: ImmutableList<String>
 ) {
-    Column {
+    Column(
+        modifier = Modifier.fillMaxHeight(fraction = 0.6f)
+    ) {
         Text(text = stringResource(id = R.string.dialog_language_subtitle))
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(weight = 1f)
         ) {
-            LazyColumn {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize)
+            ) {
                 items(count = languageEntries.size) { index: Int ->
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        RadioButtonPreferenceItem(
-                            modifier = Modifier.clip(shape = CircleShape),
-                            text = languageEntries[index],
-                            isChecked = selectedLanguage.value == languageValues[index],
-                            onCheckedChange = {
-                                selectedLanguage.value = languageValues[index]
-                            }
-                        )
-                    }
+                    RadioButtonPreferenceItem(
+                        modifier = Modifier.groupedPreferenceItem(
+                            position = groupedItemPosition(
+                                index = index,
+                                size = languageEntries.size
+                            ),
+                            outerRadius = SizeConstants.LargeMediumSize,
+                            horizontalPadding = SizeConstants.ZeroSize
+                        ),
+                        text = languageEntries[index],
+                        isChecked = selectedLanguage.value == languageValues[index],
+                        onCheckedChange = {
+                            selectedLanguage.value = languageValues[index]
+                        }
+                    )
                 }
             }
         }
         MediumVerticalSpacer()
         InfoMessageSection(message = stringResource(id = R.string.dialog_info_language))
     }
-
 }
