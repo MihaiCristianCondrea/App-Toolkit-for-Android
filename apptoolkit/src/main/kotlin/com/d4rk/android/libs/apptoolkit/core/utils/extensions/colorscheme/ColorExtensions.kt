@@ -15,20 +15,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.libs.apptoolkit.app.settings.settings.domain.model
+package com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme
 
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.graphics.ColorUtils
 
-@Immutable
-data class SettingsPreference(
-    val key: String? = null,
-    val icon: ImageVector? = null,
-    val useIconContainer: Boolean = false,
-    val iconColor: Color? = null,
-    val iconContainerColor: Color? = null,
-    val title: String? = null,
-    val summary: String? = null,
-    val action: () -> Unit = {},
-)
+/**
+ * Darkens the color by a given [factor].
+ *
+ * @param factor The factor to darken the color by (0.0 to 1.0).
+ * @return The darkened color.
+ */
+fun Color.darken(factor: Float = 0.5f): Color {
+    val hsl = FloatArray(3)
+    ColorUtils.colorToHSL(this.toArgb(), hsl)
+    hsl[2] *= factor
+    return Color(ColorUtils.HSLToColor(hsl))
+}

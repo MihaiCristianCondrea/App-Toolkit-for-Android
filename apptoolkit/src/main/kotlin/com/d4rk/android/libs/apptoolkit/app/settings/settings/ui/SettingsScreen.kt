@@ -375,6 +375,9 @@ fun SettingsList(
                         icon = preference.icon,
                         title = preference.title,
                         summary = preference.summary,
+                        useIconContainer = preference.useIconContainer,
+                        iconColor = preference.iconColor,
+                        iconContainerColor = preference.iconContainerColor,
                         firebaseController = firebaseController,
                         ga4EventProvider = {
                             Ga4EventData(

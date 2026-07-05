@@ -20,20 +20,25 @@ package com.d4rk.android.libs.apptoolkit.core.ui.views.preferences
 import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
@@ -43,11 +48,13 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.colorscheme.darken
 
 /**
  * Creates a clickable preference item for app preference screens.
@@ -74,6 +81,9 @@ fun PreferenceItem(
     icon: ImageVector? = null,
     title: String? = null,
     summary: String? = null,
+    useIconContainer: Boolean = false,
+    iconColor: Color? = null,
+    iconContainerColor: Color? = null,
     enabled: Boolean = true,
     rippleEffectDp: Dp = SizeConstants.LargeSize,
     onClick: () -> Unit = {},
@@ -96,7 +106,28 @@ fun PreferenceItem(
     ) {
         icon?.let {
             LargeHorizontalSpacer()
-            Icon(imageVector = it, contentDescription = null)
+            if (useIconContainer) {
+                val containerColor =
+                    iconContainerColor ?: MaterialTheme.colorScheme.secondaryContainer
+                val tint = iconColor ?: containerColor.darken(factor = 0.6f)
+
+                Surface(
+                    modifier = Modifier.size(40.dp),
+                    shape = CircleShape,
+                    color = containerColor
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = it,
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp),
+                            tint = if (iconColor == null && iconContainerColor == null) MaterialTheme.colorScheme.onSecondaryContainer else tint
+                        )
+                    }
+                }
+            } else {
+                Icon(imageVector = it, contentDescription = null)
+            }
         }
         Column(
             modifier = Modifier.padding(all = SizeConstants.LargeSize)
@@ -145,10 +176,13 @@ fun PreferenceItem(
  */
 @Composable
 fun SettingsPreferenceItem(
+    modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     title: String? = null,
     summary: String? = null,
-    modifier: Modifier = Modifier,
+    useIconContainer: Boolean = false,
+    iconColor: Color? = null,
+    iconContainerColor: Color? = null,
     rippleEffectDp: Dp = SizeConstants.ExtraTinySize,
     onClick: () -> Unit = {},
     firebaseController: FirebaseController? = null,
@@ -165,6 +199,9 @@ fun SettingsPreferenceItem(
             icon = icon,
             title = title,
             summary = summary,
+            useIconContainer = useIconContainer,
+            iconColor = iconColor,
+            iconContainerColor = iconContainerColor,
             onClick = {
                 onClick()
             },

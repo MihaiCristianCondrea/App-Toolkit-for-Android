@@ -57,8 +57,6 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SettingsPrefer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItemWithDivider
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
-import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.datastore.DataStoreNamesConstants
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.DISPLAY_SETTINGS_LOG_TAG
@@ -237,9 +235,6 @@ fun DisplaySettingsList(
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
-        item {
-            LargeVerticalSpacer()
-        }
 
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.appearance))
@@ -287,10 +282,6 @@ fun DisplaySettingsList(
         }
 
         item {
-            LargeVerticalSpacer()
-        }
-
-        item {
             PreferenceCategoryItem(title = stringResource(id = R.string.app_behavior))
         }
 
@@ -310,9 +301,6 @@ fun DisplaySettingsList(
         }
 
         if (provider.supportsStartupPage) {
-            item {
-                LargeVerticalSpacer()
-            }
 
             item {
                 PreferenceCategoryItem(title = stringResource(id = R.string.navigation))
@@ -349,10 +337,6 @@ fun DisplaySettingsList(
                     )
                 )
             }
-        }
-
-        item {
-            LargeVerticalSpacer()
         }
 
         item {
