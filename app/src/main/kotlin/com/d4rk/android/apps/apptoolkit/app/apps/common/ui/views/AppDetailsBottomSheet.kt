@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -79,6 +80,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.AppDetailsNativeAd
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
@@ -106,6 +108,10 @@ fun AppDetailsBottomSheet(
     ) {
         LargeVerticalSpacer()
         AppDetailsHeader(
+            appInfo = appInfo,
+        )
+        LargeVerticalSpacer()
+        AppDetailsActions(
             appInfo = appInfo,
             isAppInstalled = isAppInstalled,
             actionLauncher = actionLauncher,
@@ -186,8 +192,6 @@ fun AppDetailsBottomSheet(
 @Composable
 private fun AppDetailsHeader(
     appInfo: AppInfo,
-    isAppInstalled: Boolean?,
-    actionLauncher: AppActionLauncher,
 ) {
     Row(
         modifier = Modifier
@@ -217,30 +221,58 @@ private fun AppDetailsHeader(
                 color = MaterialTheme.colorScheme.primary,
             )
         }
-        Column(
-            horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)
-        ) {
-            when (isAppInstalled) {
-                true -> GeneralButton(
+    }
+}
+
+@Composable
+private fun AppDetailsActions(
+    appInfo: AppInfo,
+    isAppInstalled: Boolean?,
+    actionLauncher: AppActionLauncher,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = SizeConstants.LargeSize),
+        horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        when (isAppInstalled) {
+            true -> {
+                GeneralOutlinedButton(
+                    onClick = { actionLauncher.shareApp(appInfo.packageName, appInfo.name) },
+                    vectorIcon = Icons.Outlined.Share,
+                    label = stringResource(id = R.string.app_details_share),
+                    modifier = Modifier.weight(1f)
+                )
+                GeneralButton(
                     onClick = { actionLauncher.openApp(appInfo.packageName) },
                     vectorIcon = Icons.AutoMirrored.Outlined.OpenInNew,
-                    label = stringResource(id = R.string.app_details_open_app)
+                    label = stringResource(id = R.string.app_details_open_app),
+                    modifier = Modifier.weight(1f)
                 )
+            }
 
-                false -> Image(
+            false -> {
+                Spacer(modifier = Modifier.weight(1f))
+                Image(
                     painter = painterResource(id = R.drawable.get_it_on_google_play),
                     contentDescription = stringResource(R.string.app_details_view_on_play_store),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
+                        .height(SizeConstants.LauncherIconSize)
                         .bounceClick()
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,
                         ) { actionLauncher.openPlayStore(appInfo.packageName) }
                 )
+            }
 
-                null -> CircularWavyProgressIndicator()
+            null -> {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    CircularWavyProgressIndicator()
+                }
             }
         }
     }
@@ -336,9 +368,6 @@ private fun QuickActionsPanel(
                     icon = if (isFavorite) Icons.Outlined.Star else Icons.Default.Star,
                     onClick = onFavoriteClick,
                 ),
-                QuickActionUi(R.string.app_details_share, Icons.Outlined.Share) {
-                    actionLauncher.shareApp(appInfo.packageName, appInfo.name)
-                },
                 QuickActionUi(R.string.app_details_play_store, Icons.Outlined.PlayArrow) {
                     actionLauncher.openPlayStore(appInfo.packageName)
                 },
