@@ -21,8 +21,6 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
         android:name=".AppToolkit"
@@ -106,11 +104,7 @@
         <service
             android:name=".app.tiles.service.CaffeineService"
             android:exported="false"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_TYPE"
-                android:value="Caffeine tool keeps the screen on for a user-specified duration using a WakeLock." />
-        </service>
+            android:foregroundServiceType="shortService" />
 
         <service
             android:name=".app.tiles.service.TileAccessibilityService"

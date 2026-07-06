@@ -283,13 +283,11 @@ class ToolkitTilesViewModel(
     private fun handleSoundModeCycle(current: RingerMode) {
         val next = when (current) {
             RingerMode.Normal -> RingerMode.Vibrate
-            RingerMode.Vibrate -> RingerMode.Silent
+            RingerMode.Vibrate,
             RingerMode.Silent -> RingerMode.Normal
         }
         try {
             systemRepository.setRingerMode(next)
-        } catch (_: SecurityException) {
-            sendAction(ToolkitTilesAction.ShowMessage("Grant Do Not Disturb access to cycle sound modes"))
         } catch (_: Exception) {
             sendAction(ToolkitTilesAction.ShowMessage("Unable to change sound mode"))
         }
