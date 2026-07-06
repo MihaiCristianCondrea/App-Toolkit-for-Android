@@ -91,15 +91,6 @@ class PermissionsRepositoryImpl(
                                 ),
                             ),
                         ),
-                        SettingsCategory(
-                            title = context.getString(R.string.special),
-                            preferences = listOf(
-                                SettingsPreference(
-                                    title = context.getString(R.string.access_notification_policy),
-                                    summary = context.getString(R.string.summary_preference_permissions_access_notification_policy),
-                                ),
-                            ),
-                        ),
                     ),
                 ),
             )
