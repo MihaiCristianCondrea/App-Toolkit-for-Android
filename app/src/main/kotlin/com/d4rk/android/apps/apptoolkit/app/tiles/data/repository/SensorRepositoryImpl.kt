@@ -67,28 +67,74 @@ class SensorRepositoryImpl(
         val remappedMatrix = FloatArray(9)
         val orientation = FloatArray(3)
 
+        val gravity = FloatArray(3)
+        val geomagnetic = FloatArray(3)
+        var hasGravity = false
+        var hasGeomagnetic = false
+
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent?) {
-                event?.let {
-                    SensorManager.getRotationMatrixFromVector(rotationMatrix, it.values)
-                    remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
-                    SensorManager.getOrientation(remappedMatrix, orientation)
-                    val azimuth =
-                        (Math.toDegrees(orientation[0].toDouble()).roundToInt() + 360) % 360f
-                    trySend(azimuth)
+                event ?: return
+                when (event.sensor.type) {
+                    Sensor.TYPE_ROTATION_VECTOR,
+                    Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR -> {
+                        SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values)
+                        remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
+                        SensorManager.getOrientation(remappedMatrix, orientation)
+                        val azimuth =
+                            (Math.toDegrees(orientation[0].toDouble()).roundToInt() + 360) % 360f
+                        trySend(azimuth)
+                    }
+
+                    Sensor.TYPE_ACCELEROMETER -> {
+                        System.arraycopy(event.values, 0, gravity, 0, event.values.size)
+                        hasGravity = true
+                        calculateAzimuthFromAccMag()
+                    }
+
+                    Sensor.TYPE_MAGNETIC_FIELD -> {
+                        System.arraycopy(event.values, 0, geomagnetic, 0, event.values.size)
+                        hasGeomagnetic = true
+                        calculateAzimuthFromAccMag()
+                    }
+                }
+            }
+
+            private fun calculateAzimuthFromAccMag() {
+                if (hasGravity && hasGeomagnetic) {
+                    if (SensorManager.getRotationMatrix(
+                            rotationMatrix,
+                            null,
+                            gravity,
+                            geomagnetic
+                        )
+                    ) {
+                        remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
+                        SensorManager.getOrientation(remappedMatrix, orientation)
+                        val azimuth =
+                            (Math.toDegrees(orientation[0].toDouble()).roundToInt() + 360) % 360f
+                        trySend(azimuth)
+                    }
                 }
             }
 
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
         }
 
-        val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+        val rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
             ?: sensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR)
 
-        if (sensor != null) {
-            sensorManager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_UI)
+        if (rotationSensor != null) {
+            sensorManager.registerListener(listener, rotationSensor, SensorManager.SENSOR_DELAY_UI)
         } else {
-            close()
+            val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+            val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+            if (accelerometer != null && magnetometer != null) {
+                sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
+                sensorManager.registerListener(listener, magnetometer, SensorManager.SENSOR_DELAY_UI)
+            } else {
+                close()
+            }
         }
 
         awaitClose { sensorManager.unregisterListener(listener) }
@@ -99,26 +145,88 @@ class SensorRepositoryImpl(
         val remappedMatrix = FloatArray(9)
         val orientation = FloatArray(3)
 
+        val gravity = FloatArray(3)
+        val geomagnetic = FloatArray(3)
+        var hasGravity = false
+        var hasGeomagnetic = false
+
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent?) {
-                event?.let {
-                    SensorManager.getRotationMatrixFromVector(rotationMatrix, it.values)
-                    remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
-                    SensorManager.getOrientation(remappedMatrix, orientation)
-                    val pitch = Math.toDegrees(orientation[1].toDouble()).toFloat()
-                    val roll = Math.toDegrees(orientation[2].toDouble()).toFloat()
-                    trySend(pitch to roll)
+                event ?: return
+                when (event.sensor.type) {
+                    Sensor.TYPE_ROTATION_VECTOR,
+                    Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR -> {
+                        SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values)
+                        remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
+                        SensorManager.getOrientation(remappedMatrix, orientation)
+                        val pitch = Math.toDegrees(orientation[1].toDouble()).toFloat()
+                        val roll = Math.toDegrees(orientation[2].toDouble()).toFloat()
+                        trySend(pitch to roll)
+                    }
+
+                    Sensor.TYPE_ACCELEROMETER -> {
+                        System.arraycopy(event.values, 0, gravity, 0, event.values.size)
+                        hasGravity = true
+                        calculateOrientationFromAccMag()
+                    }
+
+                    Sensor.TYPE_MAGNETIC_FIELD -> {
+                        System.arraycopy(event.values, 0, geomagnetic, 0, event.values.size)
+                        hasGeomagnetic = true
+                        calculateOrientationFromAccMag()
+                    }
+                }
+            }
+
+            private fun calculateOrientationFromAccMag() {
+                if (hasGravity && hasGeomagnetic) {
+                    if (SensorManager.getRotationMatrix(
+                            rotationMatrix,
+                            null,
+                            gravity,
+                            geomagnetic
+                        )
+                    ) {
+                        remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
+                        SensorManager.getOrientation(remappedMatrix, orientation)
+                        val pitch = Math.toDegrees(orientation[1].toDouble()).toFloat()
+                        val roll = Math.toDegrees(orientation[2].toDouble()).toFloat()
+                        trySend(pitch to roll)
+                    }
+                } else if (hasGravity && !hasGeomagnetic) {
+                    // Fallback to accelerometer-only for pitch/roll if magnetometer is missing
+                    // This is less stable but better than nothing
+                    val normGravity = gravity[0] * gravity[0] + gravity[1] * gravity[1] + gravity[2] * gravity[2]
+                    if (normGravity > 0.1f) {
+                        val pitch = Math.toDegrees(Math.atan2(gravity[1].toDouble(), gravity[2].toDouble())).toFloat()
+                        val roll = Math.toDegrees(Math.atan2(-gravity[0].toDouble(), Math.sqrt((gravity[1] * gravity[1] + gravity[2] * gravity[2]).toDouble()))).toFloat()
+                        trySend(pitch to roll)
+                    }
                 }
             }
 
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
         }
 
-        val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
-        if (sensor != null) {
-            sensorManager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_UI)
+        val rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+            ?: sensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR)
+
+        if (rotationSensor != null) {
+            sensorManager.registerListener(listener, rotationSensor, SensorManager.SENSOR_DELAY_UI)
         } else {
-            close()
+            val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+            val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+            
+            if (accelerometer != null) {
+                sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
+            }
+            if (magnetometer != null) {
+                sensorManager.registerListener(listener, magnetometer, SensorManager.SENSOR_DELAY_UI)
+            }
+            
+            if (accelerometer == null) {
+                close()
+            }
         }
 
         awaitClose { sensorManager.unregisterListener(listener) }

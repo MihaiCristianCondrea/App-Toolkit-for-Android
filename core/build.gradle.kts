@@ -16,17 +16,21 @@
  */
 
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.d4rk.android.apptoolkit.buildlogic.VersioningExtension
 
 plugins {
     alias(libs.plugins.android.library)
+    id("com.d4rk.android.apptoolkit.versioning")
 }
+
+val versioning = extensions.getByType<VersioningExtension>()
 
 android {
     namespace = "com.d4rk.android.libs.apptoolkit.core"
-    compileSdk = 37
+    compileSdk = versioning.compileSdk
 
     defaultConfig {
-        minSdk = 26
+        minSdk = versioning.minSdk
     }
 
     compileOptions {

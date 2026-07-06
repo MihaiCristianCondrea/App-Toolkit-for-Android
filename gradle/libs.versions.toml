@@ -100,6 +100,7 @@ firebase-perf = { module = "com.google.firebase:firebase-perf" }
 
 # Android
 android-billing = { module = "com.android.billingclient:billing", version.ref = "androidBilling" }
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 
 # Google
 google-accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "googleAccompanistDrawablePainter" }
@@ -128,6 +129,7 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 test-koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin" }
 
 # Kotlin
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutines" }

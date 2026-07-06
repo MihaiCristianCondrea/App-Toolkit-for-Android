@@ -1,3 +1,8 @@
+# Version 26.07.1:
+
+- **New**: Centralized versioning system with automated `versionCode` and `versionName` generation.
+- **New**: Added support for release-specific metadata via `release.properties`.
+
 # Version 2.0.11:
 
 - **Minor**: Updated dependencies to the latest stable versions.

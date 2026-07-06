@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +38,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 @Composable
 fun LevelTool(pitch: Float, roll: Float) {
     Column(
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -62,8 +64,8 @@ fun LevelTool(pitch: Float, roll: Float) {
                 modifier = Modifier
                     .size(30.dp)
                     .graphicsLayer {
-                        translationX = (roll.coerceIn(-45f, 45f) / 45f) * 80.dp.toPx()
-                        translationY = (pitch.coerceIn(-45f, 45f) / 45f) * 80.dp.toPx()
+                        translationX = -(roll.coerceIn(-45f, 45f) / 45f) * 80.dp.toPx()
+                        translationY = -(pitch.coerceIn(-45f, 45f) / 45f) * 80.dp.toPx()
                     }
                     .background(
                         if (kotlin.math.abs(pitch) < 1f && kotlin.math.abs(roll) < 1f)

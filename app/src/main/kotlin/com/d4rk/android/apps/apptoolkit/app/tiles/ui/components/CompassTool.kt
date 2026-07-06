@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -43,6 +44,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 @Composable
 fun CompassTool(azimuth: Float) {
     Column(
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -64,7 +66,7 @@ fun CompassTool(azimuth: Float) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(SizeConstants.LargeSize)
-                    .rotate(-azimuth),
+                    .rotate(-azimuth - 45f),
                 tint = MaterialTheme.colorScheme.primary
             )
             Box(

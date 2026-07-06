@@ -16,6 +16,7 @@
  */
 
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.d4rk.android.apptoolkit.buildlogic.VersioningExtension
 
 val publishingArtifactId = providers.gradleProperty("PUBLISHING_ARTIFACT_ID")
 val jitpackGroupId = providers.gradleProperty("JITPACK_GROUP_ID")
@@ -31,16 +32,19 @@ plugins {
     alias(notation = libs.plugins.kotlin.serialization)
     alias(notation = libs.plugins.about.libraries)
     alias(notation = libs.plugins.mannodermaus.android.junit5)
+    id("com.d4rk.android.apptoolkit.versioning")
     `maven-publish`
 }
+
+val versioning = extensions.getByType<VersioningExtension>()
 
 android {
 
     namespace = "com.d4rk.android.libs.apptoolkit"
-    compileSdk = 37
+    compileSdk = versioning.compileSdk
 
     defaultConfig {
-        minSdk = 26
+        minSdk = versioning.minSdk
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

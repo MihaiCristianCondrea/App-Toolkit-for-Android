@@ -16,6 +16,7 @@
  */
 
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
+import com.d4rk.android.apptoolkit.buildlogic.VersioningExtension
 import java.util.Properties
 
 plugins {
@@ -28,6 +29,7 @@ plugins {
     alias(notation = libs.plugins.firebase.performance) apply false
     alias(notation = libs.plugins.about.libraries)
     alias(notation = libs.plugins.mannodermaus.android.junit5)
+    id("com.d4rk.android.apptoolkit.versioning")
 }
 
 val hasGoogleServicesConfig: Boolean = listOf(
@@ -42,17 +44,20 @@ if (hasGoogleServicesConfig) {
     apply(plugin = libs.plugins.firebase.performance.get().pluginId)
 }
 
+val versioning = extensions.getByType<VersioningExtension>()
+val appVersion = versioning.phoneVersion()
+
 android {
     namespace = "com.d4rk.android.apps.apptoolkit"
-    compileSdk = 37
+    compileSdk = appVersion.compileSdk
 
     defaultConfig {
         applicationId = "com.d4rk.android.apps"
         applicationIdSuffix = ".apptoolkit"
-        minSdk = 26
-        targetSdk = 37
-        versionCode = 127
-        versionName = providers.gradleProperty("PUBLISHING_VERSION").get()
+        minSdk = appVersion.minSdk
+        targetSdk = appVersion.targetSdk
+        versionCode = appVersion.versionCode
+        versionName = appVersion.versionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         @Suppress("UnstableApiUsage")
         androidResources.localeFilters += listOf(

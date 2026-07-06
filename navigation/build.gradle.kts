@@ -16,19 +16,23 @@
  */
 
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.d4rk.android.apptoolkit.buildlogic.VersioningExtension
 
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.parcelize)
+    id("com.d4rk.android.apptoolkit.versioning")
 }
+
+val versioning = extensions.getByType<VersioningExtension>()
 
 android {
     namespace = "com.d4rk.android.libs.apptoolkit.navigation"
-    compileSdk = 37
+    compileSdk = versioning.compileSdk
 
     defaultConfig {
-        minSdk = 26
+        minSdk = versioning.minSdk
     }
 
     compileOptions {
