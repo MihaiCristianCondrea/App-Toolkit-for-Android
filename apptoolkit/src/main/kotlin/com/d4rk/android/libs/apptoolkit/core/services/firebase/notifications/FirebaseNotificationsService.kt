@@ -32,14 +32,14 @@ import com.google.firebase.messaging.RemoteMessage
  * @see com.google.firebase.messaging.RemoteMessage
  */
 class FirebaseNotificationsService : FirebaseMessagingService() {
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-        Log.d(FCM_LOG_TAG, "Refreshed FCM token: $token")
-    }
-
     override fun onRegistered(installationId: String) {
         super.onRegistered(installationId)
         Log.d(FCM_LOG_TAG, "Registered installation: $installationId")
+    }
+
+    override fun onUnregistered(installationId: String) {
+        super.onUnregistered(installationId)
+        Log.d(FCM_LOG_TAG, "Unregistered installation: $installationId")
     }
 
     override fun onMessageReceived(message: RemoteMessage) {

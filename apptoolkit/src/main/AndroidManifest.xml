@@ -133,11 +133,16 @@
 
         <service
             android:name=".core.services.firebase.notifications.FirebaseNotificationsService"
+            android:directBootAware="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <meta-data
+            android:name="firebase_messaging_installation_id_enabled"
+            android:value="true" />
 
         <meta-data
             android:name="com.google.android.gms.version"
