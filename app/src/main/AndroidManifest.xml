@@ -103,7 +103,8 @@
 
         <service
             android:name=".app.tiles.service.CaffeineService"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="shortService" />
 
         <service
             android:name=".app.tiles.service.TileAccessibilityService"
