@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Beralih mode normal, getar, dan senyap</string>
     <string name="tile_volume_panel_title">Panel Volume</string>
     <string name="tile_volume_panel_summary">Buka kontrol volume dengan cepat</string>
-    <string name="tile_screenshot_title">Tangkapan layar</string>
-    <string name="tile_screenshot_summary">Tangkap layar Anda lebih cepat</string>
-    <string name="tile_lock_screen_title">Layar Kunci</string>
-    <string name="tile_lock_screen_summary">Kunci perangkat dari Pengaturan Cepat</string>
-    <string name="tile_power_menu_title">Menu Daya</string>
-    <string name="tile_power_menu_summary">Kontrol daya sistem terbuka</string>
     <string name="tile_breathing_title">Bernafas</string>
     <string name="tile_breathing_summary">Mulailah jeda pernapasan singkat yang dipandu</string>
     <string name="tile_sos_title">SOS</string>

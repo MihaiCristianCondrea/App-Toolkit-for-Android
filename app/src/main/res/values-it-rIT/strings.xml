@@ -185,7 +185,7 @@
     <string name="tool_material_colors_summary">Visualizza l\'anteprima della tavolozza dell\'app e dei colori tonali di Android Material You</string>
     <string name="tool_material_colors_description">Confronta la combinazione di colori dell\'applicazione corrente con gli accenti del sistema Android e le tavolozze neutre.</string>
     <string name="tool_material_colors_app_scheme">Combinazione di colori dell\'app</string>
-    <string name="tool_material_colors_android_accent_1">Accento Android1</string>
+    <string name="tool_material_colors_android_accent_1">Accento Android 1</string>
     <string name="tool_material_colors_android_accent_2">Accento Android 2</string>
     <string name="tool_material_colors_android_accent_3">Accento Android 3</string>
     <string name="tool_material_colors_android_neutral_1">Android neutrale 1</string>
@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Cambia la modalità normale, vibrazione e silenziosa</string>
     <string name="tile_volume_panel_title">Pannello del volume</string>
     <string name="tile_volume_panel_summary">Apri rapidamente i controlli del volume</string>
-    <string name="tile_screenshot_title">Schermata</string>
-    <string name="tile_screenshot_summary">Cattura il tuo schermo più velocemente</string>
-    <string name="tile_lock_screen_title">Schermata di blocco</string>
-    <string name="tile_lock_screen_summary">Blocca il dispositivo dalle Impostazioni rapide</string>
-    <string name="tile_power_menu_title">Menù di accensione</string>
-    <string name="tile_power_menu_summary">Apri i controlli di alimentazione del sistema</string>
     <string name="tile_breathing_title">Respira</string>
     <string name="tile_breathing_summary">Inizia una breve pausa respiratoria guidata</string>
     <string name="tile_sos_title">SOS</string>

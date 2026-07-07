@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Chuyển đổi chế độ bình thường, rung và im lặng</string>
     <string name="tile_volume_panel_title">Bảng điều khiển âm lượng</string>
     <string name="tile_volume_panel_summary">Mở nhanh nút điều chỉnh âm lượng</string>
-    <string name="tile_screenshot_title">Ảnh chụp màn hình</string>
-    <string name="tile_screenshot_summary">Chụp màn hình của bạn nhanh hơn</string>
-    <string name="tile_lock_screen_title">Màn hình khóa</string>
-    <string name="tile_lock_screen_summary">Khóa thiết bị từ Cài đặt nhanh</string>
-    <string name="tile_power_menu_title">Menu nguồn</string>
-    <string name="tile_power_menu_summary">Điều khiển nguồn hệ thống mở</string>
     <string name="tile_breathing_title">thở</string>
     <string name="tile_breathing_summary">Bắt đầu tạm dừng hơi thở có hướng dẫn ngắn</string>
     <string name="tile_sos_title">SOS</string>

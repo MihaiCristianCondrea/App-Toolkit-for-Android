@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Перемикайте звичайний, вібраційний і беззвучний режими</string>
     <string name="tile_volume_panel_title">Панель гучності</string>
     <string name="tile_volume_panel_summary">Швидко відкривайте регулятори гучності</string>
-    <string name="tile_screenshot_title">Скріншот</string>
-    <string name="tile_screenshot_summary">Швидше знімайте свій екран</string>
-    <string name="tile_lock_screen_title">Екран блокування</string>
-    <string name="tile_lock_screen_summary">Заблокуйте пристрій із швидких налаштувань</string>
-    <string name="tile_power_menu_title">Меню живлення</string>
-    <string name="tile_power_menu_summary">Відкрийте елементи керування живленням системи</string>
     <string name="tile_breathing_title">Дихайте</string>
     <string name="tile_breathing_summary">Почніть коротку дихальну паузу</string>
     <string name="tile_sos_title">SOS</string>

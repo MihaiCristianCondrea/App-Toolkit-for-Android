@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Przełączaj tryby normalny, wibracyjny i cichy</string>
     <string name="tile_volume_panel_title">Panel głośności</string>
     <string name="tile_volume_panel_summary">Szybko otwieraj elementy sterujące głośnością</string>
-    <string name="tile_screenshot_title">Zrzut ekranu</string>
-    <string name="tile_screenshot_summary">Szybciej przechwytuj ekran</string>
-    <string name="tile_lock_screen_title">Zablokuj ekran</string>
-    <string name="tile_lock_screen_summary">Zablokuj urządzenie w Szybkich ustawieniach</string>
-    <string name="tile_power_menu_title">Menu zasilania</string>
-    <string name="tile_power_menu_summary">Otwórz elementy sterujące zasilaniem systemu</string>
     <string name="tile_breathing_title">Oddychaj</string>
     <string name="tile_breathing_summary">Rozpocznij krótką sterowaną pauzę oddechową</string>
     <string name="tile_sos_title">SOS</string>

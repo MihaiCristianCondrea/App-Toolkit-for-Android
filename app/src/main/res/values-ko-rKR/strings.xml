@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">일반, 진동, 무음 모드 전환</string>
     <string name="tile_volume_panel_title">볼륨 패널</string>
     <string name="tile_volume_panel_summary">빠르게 볼륨 컨트롤 열기</string>
-    <string name="tile_screenshot_title">스크린샷</string>
-    <string name="tile_screenshot_summary">화면을 더 빠르게 캡처하세요</string>
-    <string name="tile_lock_screen_title">잠금 화면</string>
-    <string name="tile_lock_screen_summary">빠른 설정에서 장치 잠금</string>
-    <string name="tile_power_menu_title">전원 메뉴</string>
-    <string name="tile_power_menu_summary">개방형 시스템 전원 제어</string>
     <string name="tile_breathing_title">숨을 쉬다</string>
     <string name="tile_breathing_summary">짧은 유도 호흡 일시정지 시작</string>
     <string name="tile_sos_title">조난 신호</string>

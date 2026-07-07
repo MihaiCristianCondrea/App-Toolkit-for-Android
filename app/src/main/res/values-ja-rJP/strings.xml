@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">通常モード、振動モード、サイレントモードを切り替える</string>
     <string name="tile_volume_panel_title">ボリュームパネル</string>
     <string name="tile_volume_panel_summary">音量コントロールをすばやく開きます</string>
-    <string name="tile_screenshot_title">スクリーンショット</string>
-    <string name="tile_screenshot_summary">画面をより速くキャプチャできます</string>
-    <string name="tile_lock_screen_title">ロック画面</string>
-    <string name="tile_lock_screen_summary">クイック設定からデバイスをロックする</string>
-    <string name="tile_power_menu_title">パワーメニュー</string>
-    <string name="tile_power_menu_summary">オープンシステムの電源制御</string>
     <string name="tile_breathing_title">呼吸する</string>
     <string name="tile_breathing_summary">ガイド付きの短い呼吸停止を開始します</string>
     <string name="tile_sos_title">SOS</string>

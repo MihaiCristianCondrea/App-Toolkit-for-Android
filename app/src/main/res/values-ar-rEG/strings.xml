@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">قم بالتبديل بين الأوضاع العادية والاهتزازية والصامتة</string>
     <string name="tile_volume_panel_title">لوحة الحجم</string>
     <string name="tile_volume_panel_summary">افتح عناصر التحكم في مستوى الصوت بسرعة</string>
-    <string name="tile_screenshot_title">لقطة الشاشة</string>
-    <string name="tile_screenshot_summary">التقط شاشتك بشكل أسرع</string>
-    <string name="tile_lock_screen_title">قفل الشاشة</string>
-    <string name="tile_lock_screen_summary">قفل الجهاز من الإعدادات السريعة</string>
-    <string name="tile_power_menu_title">قائمة الطاقة</string>
-    <string name="tile_power_menu_summary">افتح عناصر التحكم في طاقة النظام</string>
     <string name="tile_breathing_title">يتنفس</string>
     <string name="tile_breathing_summary">ابدأ وقفة تنفس قصيرة موجهة</string>
     <string name="tile_sos_title">SOS</string>

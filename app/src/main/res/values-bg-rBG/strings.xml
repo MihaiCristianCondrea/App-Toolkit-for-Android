@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Превключване на нормален, вибриращ и безшумен режим</string>
     <string name="tile_volume_panel_title">Панел за сила на звука</string>
     <string name="tile_volume_panel_summary">Отворете бързо контролите за сила на звука</string>
-    <string name="tile_screenshot_title">Екранна снимка</string>
-    <string name="tile_screenshot_summary">Снимайте екрана си по-бързо</string>
-    <string name="tile_lock_screen_title">Заключен екран</string>
-    <string name="tile_lock_screen_summary">Заключете устройството от Бързи настройки</string>
-    <string name="tile_power_menu_title">Меню за захранване</string>
-    <string name="tile_power_menu_summary">Отворете контролите за захранване на системата</string>
     <string name="tile_breathing_title">Дишайте</string>
     <string name="tile_breathing_summary">Започнете кратка насочена дихателна пауза</string>
     <string name="tile_sos_title">SOS</string>

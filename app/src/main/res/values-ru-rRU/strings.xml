@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Переключение обычного режима, режима вибрации и беззвучного режима.</string>
     <string name="tile_volume_panel_title">Панель громкости</string>
     <string name="tile_volume_panel_summary">Быстро открывайте регуляторы громкости</string>
-    <string name="tile_screenshot_title">Скриншот</string>
-    <string name="tile_screenshot_summary">Снимайте экран быстрее</string>
-    <string name="tile_lock_screen_title">Экран блокировки</string>
-    <string name="tile_lock_screen_summary">Заблокируйте устройство в быстрых настройках</string>
-    <string name="tile_power_menu_title">Меню питания</string>
-    <string name="tile_power_menu_summary">Открытая система управления питанием</string>
     <string name="tile_breathing_title">Дышите</string>
     <string name="tile_breathing_summary">Сделайте короткую управляемую дыхательную паузу.</string>
     <string name="tile_sos_title">SOS</string>

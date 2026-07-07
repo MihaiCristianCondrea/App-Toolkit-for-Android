@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Växla normalt, vibrerande och tyst läge</string>
     <string name="tile_volume_panel_title">Volympanel</string>
     <string name="tile_volume_panel_summary">Öppna volymkontrollerna snabbt</string>
-    <string name="tile_screenshot_title">Skärmdump</string>
-    <string name="tile_screenshot_summary">Fånga din skärm snabbare</string>
-    <string name="tile_lock_screen_title">Låsskärm</string>
-    <string name="tile_lock_screen_summary">Lås enheten från Snabbinställningar</string>
-    <string name="tile_power_menu_title">Strömmeny</string>
-    <string name="tile_power_menu_summary">Öppna systemets strömkontroller</string>
     <string name="tile_breathing_title">Andas</string>
     <string name="tile_breathing_summary">Starta en kort guidad andningspaus</string>
     <string name="tile_sos_title">SOS</string>

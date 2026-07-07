@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">สลับโหมดปกติ สั่น และเงียบ</string>
     <string name="tile_volume_panel_title">แผงระดับเสียง</string>
     <string name="tile_volume_panel_summary">เปิดส่วนควบคุมระดับเสียงอย่างรวดเร็ว</string>
-    <string name="tile_screenshot_title">ภาพหน้าจอ</string>
-    <string name="tile_screenshot_summary">จับภาพหน้าจอของคุณเร็วขึ้น</string>
-    <string name="tile_lock_screen_title">ล็อคหน้าจอ</string>
-    <string name="tile_lock_screen_summary">ล็อคอุปกรณ์จากการตั้งค่าด่วน</string>
-    <string name="tile_power_menu_title">เมนูพลังงาน</string>
-    <string name="tile_power_menu_summary">เปิดการควบคุมพลังงานของระบบ</string>
     <string name="tile_breathing_title">หายใจเข้า</string>
     <string name="tile_breathing_summary">เริ่มการหยุดหายใจสั้นๆ ตามคำแนะนำ</string>
     <string name="tile_sos_title">สัญญาณขอความช่วยเหลือ</string>

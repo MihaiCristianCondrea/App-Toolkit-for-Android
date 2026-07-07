@@ -168,12 +168,6 @@
     <string name="tile_sound_mode_summary">Switch normal, vibrate, and silent modes</string>
     <string name="tile_volume_panel_title">Volume Panel</string>
     <string name="tile_volume_panel_summary">Open volume controls quickly</string>
-    <string name="tile_screenshot_title">Screenshot</string>
-    <string name="tile_screenshot_summary">Capture your screen faster</string>
-    <string name="tile_lock_screen_title">Lock Screen</string>
-    <string name="tile_lock_screen_summary">Lock the device from Quick Settings</string>
-    <string name="tile_power_menu_title">Power Menu</string>
-    <string name="tile_power_menu_summary">Open system power controls</string>
     <string name="tile_breathing_title">Breathe</string>
     <string name="tile_breathing_summary">Start a short guided breathing pause</string>
     <string name="tile_sos_title">SOS</string>
@@ -197,12 +191,6 @@
     <string name="tool_caffeine_1h" translatable="false">1h</string>
     <string name="tool_system_cycle_mode" translatable="false">Cycle Mode</string>
     <string name="tool_system_open_volume" translatable="false">Open Volume Panel</string>
-
-    <!-- Accessibility Service -->
-    <string name="accessibility_service_description" translatable="false">Provides system-level actions like taking screenshots, locking the screen, and opening the power menu for the Quick Tools catalog.</string>
-    <string name="accessibility_service_status_active" translatable="false">Service Active</string>
-    <string name="accessibility_service_status_inactive" translatable="false">Service Inactive</string>
-    <string name="accessibility_service_setup_action" translatable="false">Grant Permission</string>
 
     <!-- App details bottom sheet -->
     <string name="app_details_share_content_description">Share app</string>

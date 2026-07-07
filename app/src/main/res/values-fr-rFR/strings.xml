@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Changer les modes normal, vibreur et silencieux</string>
     <string name="tile_volume_panel_title">Panneau de volume</string>
     <string name="tile_volume_panel_summary">Ouvrez rapidement les commandes de volume</string>
-    <string name="tile_screenshot_title">Capture d\'écran</string>
-    <string name="tile_screenshot_summary">Capturez votre écran plus rapidement</string>
-    <string name="tile_lock_screen_title">Écran de verrouillage</string>
-    <string name="tile_lock_screen_summary">Verrouiller l\'appareil à partir des paramètres rapides</string>
-    <string name="tile_power_menu_title">Menu d\'alimentation</string>
-    <string name="tile_power_menu_summary">Contrôles d\'alimentation du système ouvert</string>
     <string name="tile_breathing_title">Respirer</string>
     <string name="tile_breathing_summary">Commencez une courte pause respiratoire guidée</string>
     <string name="tile_sos_title">SOS</string>

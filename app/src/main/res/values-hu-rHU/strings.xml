@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Váltás normál, rezgő és néma üzemmódok között</string>
     <string name="tile_volume_panel_title">Hangerő panel</string>
     <string name="tile_volume_panel_summary">Nyissa meg gyorsan a hangerőszabályzót</string>
-    <string name="tile_screenshot_title">Képernyőkép</string>
-    <string name="tile_screenshot_summary">Gyorsabban rögzítse a képernyőt</string>
-    <string name="tile_lock_screen_title">Képernyőzár</string>
-    <string name="tile_lock_screen_summary">Zárja le az eszközt a Gyorsbeállításokban</string>
-    <string name="tile_power_menu_title">Tápellátás menü</string>
-    <string name="tile_power_menu_summary">Nyissa meg a rendszer teljesítményvezérlőit</string>
     <string name="tile_breathing_title">Lélegezz</string>
     <string name="tile_breathing_summary">Kezdjen egy rövid irányított légzési szünetet</string>
     <string name="tile_sos_title">SOS</string>

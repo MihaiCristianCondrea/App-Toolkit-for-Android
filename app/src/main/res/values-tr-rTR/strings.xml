@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Normal, titreşim ve sessiz modları arasında geçiş yapın</string>
     <string name="tile_volume_panel_title">Ses Paneli</string>
     <string name="tile_volume_panel_summary">Ses kontrollerini hızlı bir şekilde açın</string>
-    <string name="tile_screenshot_title">Ekran görüntüsü</string>
-    <string name="tile_screenshot_summary">Ekranınızı daha hızlı yakalayın</string>
-    <string name="tile_lock_screen_title">Kilit Ekranı</string>
-    <string name="tile_lock_screen_summary">Cihazı Hızlı Ayarlar\'dan kilitleyin</string>
-    <string name="tile_power_menu_title">Güç Menüsü</string>
-    <string name="tile_power_menu_summary">Açık sistem güç kontrolleri</string>
     <string name="tile_breathing_title">Nefes al</string>
     <string name="tile_breathing_summary">Kısa bir rehberli nefes duraklaması başlatın</string>
     <string name="tile_sos_title">Acil Durum</string>

@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Comutați modurile normal, vibrație și silențios</string>
     <string name="tile_volume_panel_title">Panoul de volum</string>
     <string name="tile_volume_panel_summary">Deschideți rapid comenzile de volum</string>
-    <string name="tile_screenshot_title">Captură de ecran</string>
-    <string name="tile_screenshot_summary">Capturați-vă ecranul mai repede</string>
-    <string name="tile_lock_screen_title">Blocare ecran</string>
-    <string name="tile_lock_screen_summary">Blocați dispozitivul din Setări rapide</string>
-    <string name="tile_power_menu_title">Meniul Power</string>
-    <string name="tile_power_menu_summary">Deschideți comenzile de alimentare ale sistemului</string>
     <string name="tile_breathing_title">Respiră</string>
     <string name="tile_breathing_summary">Începeți o scurtă pauză de respirație ghidată</string>
     <string name="tile_sos_title">SOS</string>

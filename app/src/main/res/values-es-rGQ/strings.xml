@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Cambia los modos normal, vibración y silencio</string>
     <string name="tile_volume_panel_title">Panel de volumen</string>
     <string name="tile_volume_panel_summary">Abre los controles de volumen rápidamente</string>
-    <string name="tile_screenshot_title">Captura de pantalla</string>
-    <string name="tile_screenshot_summary">Captura tu pantalla más rápido</string>
-    <string name="tile_lock_screen_title">Pantalla de bloqueo</string>
-    <string name="tile_lock_screen_summary">Bloquear el dispositivo desde Configuración rápida</string>
-    <string name="tile_power_menu_title">Menú de energía</string>
-    <string name="tile_power_menu_summary">Controles de energía del sistema abierto</string>
     <string name="tile_breathing_title">respirar</string>
     <string name="tile_breathing_summary">Iniciar una breve pausa de respiración guiada.</string>
     <string name="tile_sos_title">SOS</string>

@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">نارمل، وائبریٹ، اور سائلنٹ موڈز کو سوئچ کریں۔</string>
     <string name="tile_volume_panel_title">والیوم پینل</string>
     <string name="tile_volume_panel_summary">والیوم کنٹرولز کو تیزی سے کھولیں۔</string>
-    <string name="tile_screenshot_title">اسکرین شاٹ</string>
-    <string name="tile_screenshot_summary">اپنی اسکرین کو تیزی سے کیپچر کریں۔</string>
-    <string name="tile_lock_screen_title">لاک اسکرین</string>
-    <string name="tile_lock_screen_summary">فوری ترتیبات سے ڈیوائس کو لاک کریں۔</string>
-    <string name="tile_power_menu_title">پاور مینو</string>
-    <string name="tile_power_menu_summary">سسٹم پاور کنٹرولز کھولیں۔</string>
     <string name="tile_breathing_title">سانس لینا</string>
     <string name="tile_breathing_summary">ایک مختصر ہدایت کے ساتھ سانس لینے کا وقفہ شروع کریں۔</string>
     <string name="tile_sos_title">SOS</string>

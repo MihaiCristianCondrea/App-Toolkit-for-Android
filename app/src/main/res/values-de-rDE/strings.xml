@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Wechseln Sie zwischen Normal-, Vibrations- und Lautlosmodus</string>
     <string name="tile_volume_panel_title">Lautstärke-Panel</string>
     <string name="tile_volume_panel_summary">Lautstärkeregler schnell öffnen</string>
-    <string name="tile_screenshot_title">Screenshot</string>
-    <string name="tile_screenshot_summary">Erfassen Sie Ihren Bildschirm schneller</string>
-    <string name="tile_lock_screen_title">Bildschirm sperren</string>
-    <string name="tile_lock_screen_summary">Sperren Sie das Gerät über die Schnelleinstellungen</string>
-    <string name="tile_power_menu_title">Power-Menü</string>
-    <string name="tile_power_menu_summary">Offene Systemleistungssteuerungen</string>
     <string name="tile_breathing_title">Atme</string>
     <string name="tile_breathing_summary">Beginnen Sie eine kurze angeleitete Atempause</string>
     <string name="tile_sos_title">SOS</string>

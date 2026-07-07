@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">सामान्य, कंपन और मौन मोड स्विच करें</string>
     <string name="tile_volume_panel_title">वॉल्यूम पैनल</string>
     <string name="tile_volume_panel_summary">वॉल्यूम नियंत्रण शीघ्रता से खोलें</string>
-    <string name="tile_screenshot_title">स्क्रीनशॉट</string>
-    <string name="tile_screenshot_summary">अपनी स्क्रीन तेज़ी से कैप्चर करें</string>
-    <string name="tile_lock_screen_title">लॉक स्क्रीन</string>
-    <string name="tile_lock_screen_summary">त्वरित सेटिंग्स से डिवाइस को लॉक करें</string>
-    <string name="tile_power_menu_title">पावर मेनू</string>
-    <string name="tile_power_menu_summary">सिस्टम पावर नियंत्रण खोलें</string>
     <string name="tile_breathing_title">साँस लें</string>
     <string name="tile_breathing_summary">एक छोटा सा निर्देशित श्वास विराम प्रारंभ करें</string>
     <string name="tile_sos_title">एसओएस</string>

@@ -220,12 +220,6 @@
     <string name="tile_sound_mode_summary">Lumipat ng normal, vibrate, at silent mode</string>
     <string name="tile_volume_panel_title">Volume Panel</string>
     <string name="tile_volume_panel_summary">Buksan ang mga kontrol ng volume nang mabilis</string>
-    <string name="tile_screenshot_title">Screenshot</string>
-    <string name="tile_screenshot_summary">Kunin ang iyong screen nang mas mabilis</string>
-    <string name="tile_lock_screen_title">Lock Screen</string>
-    <string name="tile_lock_screen_summary">I-lock ang device mula sa Mga Mabilisang Setting</string>
-    <string name="tile_power_menu_title">Power Menu</string>
-    <string name="tile_power_menu_summary">Buksan ang mga kontrol sa kapangyarihan ng system</string>
     <string name="tile_breathing_title">huminga</string>
     <string name="tile_breathing_summary">Magsimula ng isang maikling guided breathing pause</string>
     <string name="tile_sos_title">SOS</string>
