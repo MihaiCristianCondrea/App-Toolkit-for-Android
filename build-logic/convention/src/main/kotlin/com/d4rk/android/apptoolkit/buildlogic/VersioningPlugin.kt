@@ -20,6 +20,7 @@ package com.d4rk.android.apptoolkit.buildlogic
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import java.util.Properties
+import java.util.Locale
 import java.time.ZonedDateTime
 import java.time.ZoneId
 
@@ -57,30 +58,39 @@ open class VersioningExtension(private val project: Project) {
         val minSdk = getProperty("MIN_SDK").toInt()
         val targetSdk = getProperty("TARGET_SDK").toInt()
         val compileSdk = getProperty("COMPILE_SDK").toInt()
-        val major = getProperty("VERSION_MAJOR").toInt()
-        val minor = getProperty("VERSION_MINOR").toInt()
 
         // Safety checks
         check(minSdk <= targetSdk) { "MIN_SDK ($minSdk) must be <= TARGET_SDK ($targetSdk)" }
         check(targetSdk <= compileSdk) { "TARGET_SDK ($targetSdk) must be <= COMPILE_SDK ($compileSdk)" }
-        check(major in 0..9) { "VERSION_MAJOR ($major) must be in 0..9" }
-        check(minor in 0..99) { "VERSION_MINOR ($minor) must be in 0..99" }
         check(productFamily in 1..9) { "PRODUCT_FAMILY ($productFamily) must be in 1..9" }
-        check(upload in 1..999) { "UPLOAD ($upload) must be in 1..999" }
+        check(upload in 1..9999) { "UPLOAD ($upload) must be in 1..9999" }
 
-        val appVersion = major * 100 + minor
         val now = ZonedDateTime.now(ZoneId.of("Europe/Bucharest"))
         val year = now.year % 100
         val month = now.monthValue
         
-        val versionName = String.format("%02d.%02d.%d", year, month, upload)
+        // Version Name: YY.MM.UUUU
+        // Human-readable representation of the release date and sequence.
+        val versionName = String.format(
+            Locale.ROOT,
+            "%02d.%02d.%d",
+            year,
+            month,
+            upload
+        )
 
-        // Version code: PP VVV UUU (8 digits)
-        // Previous was 127 (3 digits). 
-        // 1 * 10,000,000 + 37 * 100,000 = 13,700,000 (8 digits)
-        // This is safely above 127.
-        val versionCodeBase = productFamily.toLong() * 10_000_000 + targetSdk.toLong() * 100_000
-        val versionCode = versionCodeBase + appVersion.toLong() * 1_000 + upload
+        // Version code: P SS UUUU (up to 7 digits)
+        // P:   Product Family (1=Phone, 2=TV, 3=Wear)
+        // SS:  Target SDK (2 digits, e.g., 37)
+        // UUUU: Global upload counter (4 digits, max 9999)
+        //
+        // This scheme ensures that version codes are unique, monotonically increasing, 
+        // and safely under the Google Play 2.1 billion limit.
+        // Example: P=1, SDK=37, Upload=42 -> 1,370,042
+
+        val versionCode = productFamily.toLong() * 1_000_000 + // Product Family (Millions)
+                targetSdk.toLong() * 10_000 +                 // Target SDK (Ten Thousands)
+                upload                                        // Upload Counter
 
         check(versionCode <= 2_100_000_000) { "versionCode ($versionCode) exceeds Google Play limit" }
 

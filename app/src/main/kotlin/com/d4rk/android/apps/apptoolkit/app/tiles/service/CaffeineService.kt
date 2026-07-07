@@ -24,7 +24,6 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
@@ -37,6 +36,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import kotlin.time.Duration.Companion.milliseconds
 
 class CaffeineService : Service() {
 
@@ -62,7 +62,7 @@ class CaffeineService : Service() {
         timerJob?.cancel()
         if (durationMillis > 0) {
             timerJob = serviceScope.launch {
-                delay(durationMillis)
+                delay(durationMillis.milliseconds)
                 repository.reset()
                 stopSelf()
             }
@@ -74,12 +74,12 @@ class CaffeineService : Service() {
     private fun acquireWakeLock() {
         if (wakeLock?.isHeld == true) return
 
-        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        val powerManager = getSystemService(POWER_SERVICE) as PowerManager
         wakeLock = powerManager.newWakeLock(
-            PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE,
+            PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE, // FIXME: 'static field SCREEN_BRIGHT_WAKE_LOCK: Int' is deprecated. Deprecated in Java.
             "AppToolkit:CaffeineWakeLock"
         ).apply {
-            acquire()
+            acquire(10*60*1000L /*10 minutes*/)
         }
     }
 
@@ -93,17 +93,15 @@ class CaffeineService : Service() {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                getString(R.string.caffeine_notification_channel_name),
-                NotificationManager.IMPORTANCE_LOW
-            ).apply {
-                description = getString(R.string.caffeine_notification_channel_description)
-            }
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            getString(R.string.caffeine_notification_channel_name),
+            NotificationManager.IMPORTANCE_LOW
+        ).apply {
+            description = getString(R.string.caffeine_notification_channel_description)
         }
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
     }
 
     private fun createNotification(): Notification {
@@ -136,11 +134,7 @@ class CaffeineService : Service() {
             val intent = Intent(context, CaffeineService::class.java).apply {
                 durationMillis?.let { putExtra(EXTRA_DURATION, it) }
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(intent)
-            } else {
-                context.startService(intent)
-            }
+            context.startForegroundService(intent)
         }
 
         fun stop(context: Context) {
