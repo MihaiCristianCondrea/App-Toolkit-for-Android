@@ -22,9 +22,6 @@ val publishingArtifactId = providers.gradleProperty("PUBLISHING_ARTIFACT_ID")
 val jitpackGroupId = providers.gradleProperty("JITPACK_GROUP_ID")
 val publishingVersion = providers.gradleProperty("PUBLISHING_VERSION")
 
-group = jitpackGroupId.get()
-version = publishingVersion.get()
-
 plugins {
     alias(notation = libs.plugins.android.library)
     alias(notation = libs.plugins.kotlin.compose)
@@ -82,7 +79,6 @@ android {
     publishing {
         singleVariant("release") {
             withSourcesJar()
-            withJavadocJar()
         }
     }
 }
@@ -145,36 +141,12 @@ dependencies {
 publishing {
     publications {
         register<MavenPublication>("release") {
-            groupId = group.toString()
+            groupId = jitpackGroupId.get()
             artifactId = publishingArtifactId.get()
             version = publishingVersion.get()
 
             afterEvaluate {
                 from(components["release"])
-            }
-
-            pom {
-                name.set("App Toolkit for Android")
-                description.set("Reusable Compose toolkit with common UI and infrastructure building blocks.")
-                url.set("https://github.com/MihaiCristianCondrea/App-Toolkit-for-Android")
-                licenses {
-                    license {
-                        name.set("GNU General Public License v3.0")
-                        url.set("https://www.gnu.org/licenses/gpl-3.0.html")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("MihaiCristianCondrea")
-                        name.set("Mihai-Cristian Condrea")
-                        url.set("https://github.com/MihaiCristianCondrea")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git://github.com/MihaiCristianCondrea/App-Toolkit-for-Android.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/MihaiCristianCondrea/App-Toolkit-for-Android.git")
-                    url.set("https://github.com/MihaiCristianCondrea/App-Toolkit-for-Android")
-                }
             }
         }
     }
