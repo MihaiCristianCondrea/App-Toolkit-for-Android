@@ -26,3 +26,11 @@ plugins {
     alias(notation = libs.plugins.about.libraries) apply true
     alias(notation = libs.plugins.mannodermaus.android.junit5) apply false
 }
+
+val publishingGroupId = providers.gradleProperty("JITPACK_GROUP_ID")
+val publishingVersion = providers.gradleProperty("PUBLISHING_VERSION")
+
+subprojects {
+    group = publishingGroupId.get()
+    version = publishingVersion.get()
+}

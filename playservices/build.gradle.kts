@@ -22,6 +22,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.parcelize)
     id("com.d4rk.android.apptoolkit.versioning")
+    `maven-publish`
 }
 
 val versioning = extensions.getByType<VersioningExtension>()
@@ -44,6 +45,12 @@ android {
             jvmTarget.set(JvmTarget.JVM_21)
         }
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 dependencies {
@@ -56,4 +63,18 @@ dependencies {
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.play.services)
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }

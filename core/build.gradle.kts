@@ -21,6 +21,7 @@ import com.d4rk.android.apptoolkit.buildlogic.VersioningExtension
 plugins {
     alias(libs.plugins.android.library)
     id("com.d4rk.android.apptoolkit.versioning")
+    `maven-publish`
 }
 
 val versioning = extensions.getByType<VersioningExtension>()
@@ -41,6 +42,12 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_21)
+        }
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
         }
     }
 }
@@ -71,4 +78,18 @@ dependencies {
     api(libs.ktor.client.content.negotiation)
     api(libs.ktor.client.logging)
     api(libs.ktor.serialization.kotlinx.json)
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }
