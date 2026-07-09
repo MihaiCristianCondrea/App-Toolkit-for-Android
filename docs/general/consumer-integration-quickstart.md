@@ -23,7 +23,7 @@ dependencyResolutionManagement {
 ```kotlin
 // app/build.gradle.kts (or the host module that consumes the toolkit)
 dependencies {
-    implementation("com.github.MihaiCristianCondrea:apptoolkit:2.0.9")
+    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:2.0.17")
 }
 ```
 
