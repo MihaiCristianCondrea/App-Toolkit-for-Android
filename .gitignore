@@ -103,3 +103,4 @@ lint/tmp/
 # KOTLIN
 ###############################################################################
 .kotlin
+/gradle/gradle-daemon-jvm.properties
