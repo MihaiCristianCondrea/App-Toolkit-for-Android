@@ -23,18 +23,26 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.help.domain.model.FaqItem
 import com.d4rk.android.libs.apptoolkit.app.help.ui.views.cards.ContactUsCard
-import com.d4rk.android.libs.apptoolkit.app.help.ui.views.lists.HelpQuestionsList
+import com.d4rk.android.libs.apptoolkit.app.help.ui.views.cards.QuestionCard
 import com.d4rk.android.libs.apptoolkit.core.domain.model.analytics.AnalyticsValue
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.HelpNativeAdCard
+import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
+import com.d4rk.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
+import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.analytics.SettingsAnalytics
@@ -52,6 +60,9 @@ fun HelpScreenContent(
     val firebaseController: FirebaseController = koinInject()
     val context = LocalContext.current
     val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.HELP_LARGE_BANNER_AD))
+    val adsEnabled = rememberAdsEnabled()
+    val hasAdSlot = adsEnabled && adsConfig.bannerAdUnitId.isNotBlank()
+    val groupItemCount = questions.size + 1 + if (hasAdSlot) 1 else 0
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -67,30 +78,55 @@ fun HelpScreenContent(
             Text(text = stringResource(id = R.string.popular_help_resources))
         }
 
-        item {
-            HelpQuestionsList(
-                questions = questions,
-                firebaseController = firebaseController,
-                ga4EventProvider = { item, index, expanded ->
-                    helpPreferenceTapEvent(
-                        preferenceKey = "faq_item",
-                        faqId = item.id.value,
-                        faqPosition = index,
-                        expanded = expanded,
-                    )
-                },
-            )
+        questions.forEachIndexed { index: Int, question: FaqItem ->
+            item(key = question.id.value) {
+                var isExpanded by rememberSaveable(question.id.value) {
+                    mutableStateOf(false)
+                }
+                QuestionCard(
+                    title = question.question,
+                    summary = question.answer,
+                    isExpanded = isExpanded,
+                    groupedPosition = groupedItemPosition(
+                        index = index,
+                        size = groupItemCount,
+                    ),
+                    onToggleExpand = {
+                        val expanded = !isExpanded
+                        firebaseController.logGa4Event(
+                            helpPreferenceTapEvent(
+                                preferenceKey = "faq_item",
+                                faqId = question.id.value,
+                                faqPosition = index,
+                                expanded = expanded,
+                            )
+                        )
+                        isExpanded = expanded
+                    },
+                    modifier = Modifier.animateVisibility(index = index),
+                )
+            }
         }
 
-        item {
-            HelpNativeAdCard(
-                adUnitId = adsConfig.bannerAdUnitId,
-                modifier = Modifier.animateItem()
-            )
+        if (hasAdSlot) {
+            item {
+                HelpNativeAdCard(
+                    adUnitId = adsConfig.bannerAdUnitId,
+                    groupedPosition = groupedItemPosition(
+                        index = questions.size,
+                        size = groupItemCount,
+                    ),
+                    modifier = Modifier.animateItem()
+                )
+            }
         }
 
         item {
             ContactUsCard(
+                groupedPosition = groupedItemPosition(
+                    index = groupItemCount - 1,
+                    size = groupItemCount,
+                ),
                 onClick = {
                     firebaseController.logEvent(
                         helpPreferenceTapEvent(preferenceKey = "contact_us").toAnalyticsEvent()

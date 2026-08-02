@@ -24,7 +24,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -43,17 +42,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
-import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
-import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.d4rk.android.libs.apptoolkit.core.ui.views.text.HtmlText
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
+/**
+ * Displays one expandable FAQ entry.
+ *
+ * @param groupedPosition Optional position in the Help content group. When supplied, the card
+ * uses grouped corners and a compact layout; when omitted, the standalone shape is kept.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun QuestionCard(
@@ -61,7 +68,8 @@ fun QuestionCard(
     summary: String,
     isExpanded: Boolean,
     onToggleExpand: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    groupedPosition: GroupedItemPosition? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
@@ -69,13 +77,21 @@ fun QuestionCard(
         targetValue = if (isExpanded) 180f else 0f,
         label = "ExpandIconRotation"
     )
+    val cardModifier = modifier
+        .fillMaxWidth()
+        .let { currentModifier ->
+            groupedPosition?.let {
+                currentModifier.groupedCorners(
+                    position = it,
+                    outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+                )
+            } ?: currentModifier
+        }
+        .animateContentSize()
+
     Card(
-        modifier = modifier
-            .bounceClick()
-            .padding(all = SizeConstants.LargeSize)
-            .animateContentSize()
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(size = SizeConstants.MediumSize),
+        modifier = cardModifier,
+        shape = groupedPosition?.let { RectangleShape } ?: RoundedCornerShape(size = SizeConstants.MediumSize),
         onClick = {
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
@@ -83,7 +99,9 @@ fun QuestionCard(
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = SizeConstants.MediumSize)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()
@@ -95,7 +113,8 @@ fun QuestionCard(
                     modifier = Modifier
                         .size(size = SizeConstants.LauncherIconSize)
                         .background(
-                            color = MaterialTheme.colorScheme.primaryContainer, shape = CircleShape
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            shape = CircleShape
                         )
                         .padding(all = SizeConstants.SmallSize)
                 )
@@ -108,7 +127,7 @@ fun QuestionCard(
                     modifier = Modifier.weight(weight = 1f)
                 )
 
-                GeneralOutlinedButton(
+                GeneralTextButton(
                     onClick = { onToggleExpand() },
                     vectorIcon = Icons.Filled.ExpandMore,
                     modifier = Modifier.rotate(degrees = expandIconRotation),

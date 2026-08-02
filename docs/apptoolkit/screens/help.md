@@ -56,9 +56,9 @@ data sources, ad config, links, and UI pieces while keeping the same contracts.
 - **Content**
     - `HelpScreenContent` renders:
         1. title ("Popular help resources")
-        2. FAQ list (`HelpQuestionsList`)
-        3. native ad (`HelpNativeAdCard`)
-        4. "Contact us" card
+        2. grouped FAQ rows rendered directly as lazy items by `HelpScreenContent`
+        3. optional native ad (`HelpNativeAdCard`)
+        4. grouped "Contact us" card
 - **Components**
     - `QuestionCard` (expand/collapse, animated size, haptics + click sound)
     - `ContactUsCard` (haptics + click sound)
@@ -67,6 +67,8 @@ data sources, ad config, links, and UI pieces while keeping the same contracts.
 ---
 
 ## Data flow (how the screen works)
+
+The Help content uses one grouped-corner sequence for the FAQ rows, the optional native ad slot, and the Contact Us action. Each question is an independent compact expandable card. When the ad is disabled or not configured, its slot is omitted and the remaining cards are repositioned.
 
 ### FAQ loading
 

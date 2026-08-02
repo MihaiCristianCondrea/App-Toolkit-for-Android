@@ -38,6 +38,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -46,30 +47,48 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
+/**
+ * Displays the Help screen Contact Us action.
+ *
+ * @param onClick Invoked when the card is selected.
+ * @param groupedPosition Optional position in a grouped Help content section.
+ */
 @Composable
-fun ContactUsCard(onClick: () -> Unit) {
+fun ContactUsCard(
+    onClick: () -> Unit,
+    groupedPosition: GroupedItemPosition? = null,
+) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
-    val cardShape = RoundedCornerShape(
-        topStart = SizeConstants.ExtraSmallSize,
-        topEnd = SizeConstants.ExtraSmallSize,
-        bottomStart = SizeConstants.LargeIncreasedSize,
-        bottomEnd = SizeConstants.LargeIncreasedSize,
-    )
+    val cardModifier = Modifier
+        .fillMaxWidth()
+        .let { currentModifier ->
+            groupedPosition?.let {
+                currentModifier.groupedCorners(
+                    position = it,
+                    outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+                )
+            } ?: currentModifier
+        }
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .bounceClick(),
+        modifier = cardModifier,
         onClick = {
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
             onClick()
         },
-        shape = cardShape
+        shape = groupedPosition?.let { RectangleShape }
+            ?: RoundedCornerShape(
+                topStart = SizeConstants.ExtraSmallSize,
+                topEnd = SizeConstants.ExtraSmallSize,
+                bottomStart = SizeConstants.LargeIncreasedSize,
+                bottomEnd = SizeConstants.LargeIncreasedSize,
+            ),
     ) {
         Row(
             modifier = Modifier

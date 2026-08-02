@@ -52,10 +52,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.core.view.isVisible
 import com.d4rk.android.libs.apptoolkit.R
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
@@ -85,19 +88,24 @@ import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
  * - Treat this composable as a view-layer primitive; placement policy is owned by the screen.
  *
  * @param modifier The modifier to be applied to the ad card.
+ * @param groupedPosition Optional position in a grouped Help content section.
  */
 @SuppressLint("InflateParams")
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun HelpNativeAdCard(
     modifier: Modifier = Modifier,
-    adUnitId: String
+    adUnitId: String,
+    groupedPosition: GroupedItemPosition? = null,
 ) {
     val inspectionMode = LocalInspectionMode.current
     val showAds: Boolean = rememberAdsEnabled()
 
     if (inspectionMode) {
-        HelpNativeAdPreview(modifier = modifier)
+        HelpNativeAdPreview(
+            modifier = modifier,
+            groupedPosition = groupedPosition,
+        )
         return
     }
 
@@ -118,8 +126,16 @@ fun HelpNativeAdCard(
     }
 
     Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(size = SizeConstants.ExtraSmallSize),
+        modifier = modifier.let { currentModifier ->
+            groupedPosition?.let {
+                currentModifier.groupedCorners(
+                    position = it,
+                    outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+                )
+            } ?: currentModifier
+        },
+        shape = groupedPosition?.let { RectangleShape }
+            ?: RoundedCornerShape(size = SizeConstants.ExtraSmallSize),
     ) {
         NativeAdViewHost(
             modifier = Modifier.fillMaxWidth(),
@@ -163,12 +179,25 @@ fun HelpNativeAdCard(
 
 @Composable
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
-private fun HelpNativeAdPreview(modifier: Modifier) {
+private fun HelpNativeAdPreview(
+    modifier: Modifier,
+    groupedPosition: GroupedItemPosition?,
+) {
     Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(size = SizeConstants.ExtraSmallSize),
+        modifier = modifier.let { currentModifier ->
+            groupedPosition?.let {
+                currentModifier.groupedCorners(
+                    position = it,
+                    outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+                )
+            } ?: currentModifier
+        },
+        shape = groupedPosition?.let { RectangleShape }
+            ?: RoundedCornerShape(size = SizeConstants.ExtraSmallSize),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(SizeConstants.ExtraTinySize)
+            containerColor = groupedPosition?.let {
+                MaterialTheme.colorScheme.surfaceContainerLow
+            } ?: MaterialTheme.colorScheme.surfaceColorAtElevation(SizeConstants.ExtraTinySize)
         )
     ) {
         Row(
