@@ -20,19 +20,23 @@ package com.d4rk.android.libs.apptoolkit.core.ui.views.carousel
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.util.lerp
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable
 fun <T> CarouselItem(
     item: T,
     pageOffset: Float,
-    itemContent: @Composable (item: T) -> Unit
+    shapeSize: Dp = SizeConstants.MediumSize,
+    itemContent: @Composable (item: T) -> Unit,
 ) {
     val stableItem by rememberUpdatedState(newValue = item)
     val scale = animateFloatAsState(
@@ -50,7 +54,9 @@ fun <T> CarouselItem(
                 scaleX = scale
                 scaleY = scale
                 this.alpha = alpha
-            }) {
+            },
+        shape = RoundedCornerShape(size = shapeSize),
+    ) {
         itemContent(stableItem)
     }
 }

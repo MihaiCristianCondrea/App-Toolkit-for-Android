@@ -70,6 +70,7 @@ import kotlin.math.absoluteValue
 fun <T> CustomCarousel(
     items: List<T>,
     sidePadding: Dp,
+    shapeSize: Dp = SizeConstants.MediumSize,
     pagerState: PagerState,
     itemContent: @Composable (item: T) -> Unit
 ) {
@@ -92,7 +93,8 @@ fun <T> CustomCarousel(
             CarouselItem(
                 item = currentItems[page],
                 pageOffset = pageOffset,
-                itemContent = itemContent
+                itemContent = itemContent,
+                shapeSize = shapeSize
             )
         }
 
