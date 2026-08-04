@@ -31,4 +31,5 @@ import com.d4rk.android.libs.apptoolkit.core.utils.platform.UiTextHelper
 fun AppErrors.toErrorMessage(): UiTextHelper = when (this) {
     is AppErrors.Common -> value.asUiText()
     AppErrors.UseCase.FAILED_TO_LOAD_APPS -> UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
+    AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS -> UiTextHelper.StringResource(R.string.error_failed_to_load_apps)
 }

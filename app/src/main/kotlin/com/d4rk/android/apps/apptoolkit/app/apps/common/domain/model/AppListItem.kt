@@ -31,7 +31,7 @@ sealed interface AppListItem {
      * such as an actual application or an advertisement.
      */
     @Immutable
-    data class App(val appInfo: AppInfo) : AppListItem
+    data class App(val appInfo: AppSummary) : AppListItem
 
     /**
      * Represents an advertisement placeholder in the app list.

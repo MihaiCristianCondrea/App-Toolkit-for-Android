@@ -18,13 +18,16 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.common.data.repository
 
 import com.d4rk.android.apps.apptoolkit.app.apps.common.data.mapper.toDomain
-import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.ApiResponseDto
-import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppDetailsResponseDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppsListResponseDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppDetails
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppSummary
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.DeveloperAppsRepository
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiHost
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.result.runSuspendCatching
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -49,29 +52,74 @@ class DeveloperAppsRepositoryImpl(
     private val firebaseController: FirebaseController,
 ) : DeveloperAppsRepository {
 
-    override fun fetchDeveloperApps(): Flow<DataState<List<AppInfo>, AppErrors>> = flow {
+    override fun fetchDeveloperApps(): Flow<DataState<List<AppSummary>, AppErrors>> = flow {
+        val requestUrl = ApiHost.appsUrl(baseUrl)
         firebaseController.logBreadcrumb(
             message = "Developer apps fetch",
-            attributes = mapOf("baseUrl" to baseUrl),
+            attributes = mapOf("url" to requestUrl),
         )
-        runSuspendCatching {
-            client.get(baseUrl)
-        }.onSuccess { response ->
+        val result: DataState<List<AppSummary>, AppErrors> = runSuspendCatching {
+            val response = client.get(requestUrl)
             if (!response.status.isSuccess()) {
-                emit(DataState.Error(error = mapHttpStatusToError(response.status)))
-                return@flow
+                return@runSuspendCatching DataState.Error<List<AppSummary>, AppErrors>(
+                    error = mapHttpStatusToError(response.status),
+                )
             }
 
-            val dto = response.body<ApiResponseDto>()
+            val dto = response.body<AppsListResponseDto>()
             val apps = dto.data.apps
                 .map { it.toDomain() }
                 .sortedBy { it.name.lowercase() }
 
-            emit(DataState.Success(apps))
-        }.onFailure { throwable ->
-            if (throwable is CancellationException) throw throwable
-            emit(DataState.Error(error = mapThrowableToError(throwable)))
+            DataState.Success<List<AppSummary>, AppErrors>(data = apps)
+        }.fold(
+            onSuccess = { state -> state },
+            onFailure = { throwable ->
+                DataState.Error<List<AppSummary>, AppErrors>(
+                    error = mapThrowableToError(
+                        throwable = throwable,
+                        default = AppErrors.UseCase.FAILED_TO_LOAD_APPS,
+                    ),
+                )
+            },
+        )
+        emit(result)
+    }
+
+    override fun fetchAppDetails(
+        packageName: String,
+    ): Flow<DataState<AppDetails, AppErrors>> = flow {
+        if (packageName.isBlank()) {
+            emit(DataState.Error(error = AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS))
+            return@flow
         }
+        val requestUrl = ApiHost.appDetailsUrl(packageName = packageName, baseUrl = baseUrl)
+        firebaseController.logBreadcrumb(
+            message = "Developer app details fetch",
+            attributes = mapOf("packageName" to packageName),
+        )
+        val result: DataState<AppDetails, AppErrors> = runSuspendCatching {
+            val response = client.get(requestUrl)
+            if (!response.status.isSuccess()) {
+                return@runSuspendCatching DataState.Error<AppDetails, AppErrors>(
+                    error = mapHttpStatusToError(response.status),
+                )
+            }
+            DataState.Success<AppDetails, AppErrors>(
+                data = response.body<AppDetailsResponseDto>().data.app.toDomain(),
+            )
+        }.fold(
+            onSuccess = { state -> state },
+            onFailure = { throwable ->
+                DataState.Error<AppDetails, AppErrors>(
+                    error = mapThrowableToError(
+                        throwable = throwable,
+                        default = AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS,
+                    ),
+                )
+            },
+        )
+        emit(result)
     }
 
     private fun mapHttpStatusToError(status: HttpStatusCode): AppErrors {
@@ -85,19 +133,22 @@ class DeveloperAppsRepositoryImpl(
         }
     }
 
-    private fun mapThrowableToError(t: Throwable): AppErrors {
-        return when (t) {
-            is CancellationException -> throw t
+    private fun mapThrowableToError(
+        throwable: Throwable,
+        default: AppErrors.UseCase,
+    ): AppErrors {
+        return when (throwable) {
+            is CancellationException -> throw throwable
             is HttpRequestTimeoutException, is SocketTimeoutException ->
                 AppErrors.Common(Errors.Network.REQUEST_TIMEOUT)
 
             is UnknownHostException -> AppErrors.Common(Errors.Network.NO_INTERNET)
             is IOException -> AppErrors.Common(Errors.Network.CONNECTION_ERROR)
             is SerializationException -> AppErrors.Common(Errors.Network.SERIALIZATION)
-            is RedirectResponseException -> mapHttpStatusToError(t.response.status)
-            is ClientRequestException -> mapHttpStatusToError(t.response.status)
-            is ServerResponseException -> mapHttpStatusToError(t.response.status)
-            else -> AppErrors.UseCase.FAILED_TO_LOAD_APPS
+            is RedirectResponseException -> mapHttpStatusToError(throwable.response.status)
+            is ClientRequestException -> mapHttpStatusToError(throwable.response.status)
+            is ServerResponseException -> mapHttpStatusToError(throwable.response.status)
+            else -> default
         }
     }
 }

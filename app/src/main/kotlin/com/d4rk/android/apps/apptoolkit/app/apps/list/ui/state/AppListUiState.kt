@@ -19,6 +19,7 @@ package com.d4rk.android.apps.apptoolkit.app.apps.list.ui.state
 
 import androidx.compose.runtime.Immutable
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppDetails
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInstallInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
@@ -31,6 +32,10 @@ data class AppListUiState(
     val apps: ImmutableList<AppInfo> = persistentListOf(),
     val selectedFilter: AppsListFilter = AppsListFilter.All,
     val installedPackages: ImmutableSet<String> = persistentSetOf(),
+    val selectedApp: AppInfo? = null,
+    val selectedAppDetails: AppDetails? = null,
+    val isAppDetailsLoading: Boolean = false,
+    val hasAppDetailsError: Boolean = false,
     val selectedAppInstallInfo: AppInstallInfo? = null,
 )
 

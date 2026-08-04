@@ -17,7 +17,7 @@
 
 package com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases
 
-import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppSummary
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.DeveloperAppsRepository
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
@@ -33,6 +33,6 @@ class FetchDeveloperAppsUseCase(
      * original semantics. Loading UI should be driven by the ViewModel using `onStart` to keep
      * presentation concerns out of the domain layer.
      */
-    operator fun invoke(): Flow<DataState<List<AppInfo>, AppErrors>> =
+    operator fun invoke(): Flow<DataState<List<AppSummary>, AppErrors>> =
         repository.fetchDeveloperApps()
 }

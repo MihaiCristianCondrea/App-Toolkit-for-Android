@@ -69,6 +69,37 @@ class StringExtensionsTest {
     }
 
     @Test
+    fun `extractChangesForVersion ignores release note mentions and partial versions`() {
+        val markdown = """
+            # Changelog
+            - Migrated from 2.0.0
+            # 12.0.00
+            - Different release
+        """.trimIndent()
+
+        val result = markdown.extractChangesForVersion("2.0.0")
+
+        assertEquals("", result)
+    }
+
+    @Test
+    fun `extractChangesForVersion supports decorated version heading`() {
+        val markdown = """
+            ## [2.0.0] - 2026-08-02
+            - Current release
+            ## [1.0.0] - 2025-01-01
+            - Previous release
+        """.trimIndent()
+
+        val result = markdown.extractChangesForVersion("2.0.0")
+
+        assertEquals(
+            "## [2.0.0] - 2026-08-02\n- Current release",
+            result,
+        )
+    }
+
+    @Test
     fun `decodeBase64OrEmpty returns decoded value`() {
         val encoded = "Z2l0aHViLXRva2Vu"
 

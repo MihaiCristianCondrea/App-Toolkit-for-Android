@@ -99,7 +99,6 @@ import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.SettingsRoute
 import com.d4rk.android.libs.apptoolkit.app.main.utils.constants.SupportRoute
 import com.d4rk.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.d4rk.android.libs.apptoolkit.app.support.ui.SupportActivity
-import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
@@ -129,7 +128,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.qualifier.named
 
 /** Hosts the adaptive app shell and pushed navigation destinations. */
 @Composable
@@ -167,8 +165,6 @@ private fun MainScreenContent(uiState: MainUiState) {
             }
         }
     }
-
-    val changelogUrl: String = koinInject(qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG))
 
     var randomAppHandler: (() -> Unit)? by remember { mutableStateOf(null) }
     val randomAppHandlerState: State<(() -> Unit)?> = rememberUpdatedState(randomAppHandler)
@@ -232,7 +228,6 @@ private fun MainScreenContent(uiState: MainUiState) {
 
     if (showChangelog) {
         ChangelogDialog(
-            changelogUrl = changelogUrl,
             onDismiss = { showChangelog = false },
         )
     }

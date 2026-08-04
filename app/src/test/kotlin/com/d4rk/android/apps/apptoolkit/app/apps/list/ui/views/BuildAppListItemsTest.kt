@@ -21,7 +21,6 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppListItem
 import com.d4rk.android.apps.apptoolkit.app.apps.common.ui.views.utils.buildAppListItems
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -73,8 +72,7 @@ class BuildAppListItemsTest {
                 name = "App$i",
                 packageName = "pkg$i",
                 iconUrl = "icon$i",
-                description = "Description $i",
-                screenshots = persistentListOf(),
+                shortDescription = "Description $i",
             )
         }.toImmutableList()
 

@@ -20,6 +20,7 @@ package com.d4rk.android.apps.apptoolkit.app.apps.list.ui
 import androidx.lifecycle.viewModelScope
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchAppDetailsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.GetAppInstallInfoUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.GetInstalledPackagesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
@@ -77,6 +78,7 @@ import kotlinx.coroutines.withContext
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppsListViewModel(
     private val fetchDeveloperAppsUseCase: FetchDeveloperAppsUseCase,
+    private val fetchAppDetailsUseCase: FetchAppDetailsUseCase,
     private val getInstalledPackagesUseCase: GetInstalledPackagesUseCase,
     private val getAppInstallInfoUseCase: GetAppInstallInfoUseCase,
     observeFavoritesUseCase: ObserveFavoritesUseCase,
@@ -91,6 +93,8 @@ class AppsListViewModel(
 
     private val fetchAppsTrigger = MutableSharedFlow<Unit>(replay = 1)
     private var fetchJob: Job? = null
+    private var appDetailsJob: Job? = null
+    private var appInstallInfoJob: Job? = null
     private var toggleJob: Job? = null
 
     val favorites = observeFavoritesUseCase()
@@ -119,7 +123,8 @@ class AppsListViewModel(
             HomeEvent.FetchApps -> fetchAppsTrigger.tryEmit(Unit)
 
             is HomeEvent.FilterSelected -> selectFilter(event.filter)
-            is HomeEvent.AppSelected -> loadSelectedAppInstallInfo(event.packageName)
+            is HomeEvent.AppSelected -> selectApp(event.packageName)
+            HomeEvent.RetryAppDetails -> screenData?.selectedApp?.packageName?.let(::loadSelectedAppDetails)
             HomeEvent.AppDetailsDismissed -> clearSelectedAppInstallInfo()
 
             HomeEvent.OpenRandomApp -> {
@@ -218,10 +223,84 @@ class AppsListViewModel(
         }
     }
 
-    private fun loadSelectedAppInstallInfo(packageName: String) {
+    private fun selectApp(packageName: String) {
+        val selectedApp = screenData?.apps?.firstOrNull { it.packageName == packageName } ?: return
         screenState.update { current ->
-            current.copy(data = current.data?.copy(selectedAppInstallInfo = null))
+            current.copy(
+                data = current.data?.copy(
+                    selectedApp = selectedApp,
+                    selectedAppDetails = null,
+                    isAppDetailsLoading = true,
+                    hasAppDetailsError = false,
+                    selectedAppInstallInfo = null,
+                ),
+            )
         }
+        loadSelectedAppDetails(packageName)
+        loadSelectedAppInstallInfo(packageName)
+    }
+
+    private fun loadSelectedAppDetails(packageName: String) {
+        appDetailsJob = appDetailsJob.restart {
+            fetchAppDetailsUseCase(packageName)
+                .flowOn(dispatchers.io)
+                .onStart {
+                    screenState.update { current ->
+                        current.copy(
+                            data = current.data?.copy(
+                                selectedAppDetails = null,
+                                isAppDetailsLoading = true,
+                                hasAppDetailsError = false,
+                            ),
+                        )
+                    }
+                }
+                .catchReport(
+                    action = Actions.LOAD_APP_DETAILS,
+                    extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
+                ) {
+                    updateAppDetailsFailure(packageName)
+                }
+                .onEach { result ->
+                    result
+                        .onSuccess { details ->
+                            screenState.update { current ->
+                                val data = current.data ?: return@update current
+                                // A cancelled request can still finish at the transport boundary.
+                                // Never apply its detail document to a newer sheet selection.
+                                if (data.selectedApp?.packageName != packageName) return@update current
+                                current.copy(
+                                    data = data.copy(
+                                        selectedAppDetails = details,
+                                        isAppDetailsLoading = false,
+                                        hasAppDetailsError = false,
+                                    ),
+                                )
+                            }
+                        }
+                        .onFailure {
+                            updateAppDetailsFailure(packageName)
+                        }
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    private fun updateAppDetailsFailure(packageName: String) {
+        screenState.update { current ->
+            val data = current.data ?: return@update current
+            if (data.selectedApp?.packageName != packageName) return@update current
+            current.copy(
+                data = data.copy(
+                    selectedAppDetails = null,
+                    isAppDetailsLoading = false,
+                    hasAppDetailsError = true,
+                ),
+            )
+        }
+    }
+
+    private fun loadSelectedAppInstallInfo(packageName: String) {
         if (packageName.isBlank()) {
             screenState.update { current ->
                 current.copy(
@@ -232,28 +311,44 @@ class AppsListViewModel(
             }
             return
         }
-        launchReport(
-            action = Actions.LOAD_APP_INSTALL_INFO,
-            extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
-            block = {
-                val installInfo = withContext(dispatchers.io) {
-                    getAppInstallInfoUseCase(packageName)
-                }
-                screenState.update { current ->
-                    current.copy(data = current.data?.copy(selectedAppInstallInfo = installInfo))
-                }
-            },
-            onError = {
-                screenState.update { current ->
-                    current.copy(data = current.data?.copy(selectedAppInstallInfo = null))
-                }
-            },
-        )
+        appInstallInfoJob = appInstallInfoJob.restart {
+            launchReport(
+                action = Actions.LOAD_APP_INSTALL_INFO,
+                extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
+                block = {
+                    val installInfo = withContext(dispatchers.io) {
+                        getAppInstallInfoUseCase(packageName)
+                    }
+                    screenState.update { current ->
+                        val data = current.data ?: return@update current
+                        if (data.selectedApp?.packageName != packageName) return@update current
+                        current.copy(data = data.copy(selectedAppInstallInfo = installInfo))
+                    }
+                },
+                onError = {
+                    screenState.update { current ->
+                        val data = current.data ?: return@update current
+                        if (data.selectedApp?.packageName != packageName) return@update current
+                        current.copy(data = data.copy(selectedAppInstallInfo = null))
+                    }
+                },
+            )
+        }
     }
 
     private fun clearSelectedAppInstallInfo() {
+        appDetailsJob?.cancel()
+        appInstallInfoJob?.cancel()
         screenState.update { current ->
-            current.copy(data = current.data?.copy(selectedAppInstallInfo = null))
+            current.copy(
+                data = current.data?.copy(
+                    selectedApp = null,
+                    selectedAppDetails = null,
+                    isAppDetailsLoading = false,
+                    hasAppDetailsError = false,
+                    selectedAppInstallInfo = null,
+                ),
+            )
         }
     }
 
@@ -288,6 +383,7 @@ class AppsListViewModel(
         const val TOGGLE_FAVORITE: String = "toggleFavorite"
         const val OPEN_RANDOM_APP: String = "openRandomApp"
         const val LOAD_APP_INSTALL_INFO: String = "loadAppInstallInfo"
+        const val LOAD_APP_DETAILS: String = "loadAppDetails"
     }
 
     private object ExtraKeys {

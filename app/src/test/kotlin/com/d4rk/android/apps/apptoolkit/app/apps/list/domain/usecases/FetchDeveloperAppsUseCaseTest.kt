@@ -46,8 +46,7 @@ class FetchDeveloperAppsUseCaseTest {
                 name = "App",
                 packageName = "pkg",
                 iconUrl = "icon",
-                description = "Description",
-                screenshots = emptyList(),
+                shortDescription = "Description",
             )
         )
         val repositoryEmissions = listOf(

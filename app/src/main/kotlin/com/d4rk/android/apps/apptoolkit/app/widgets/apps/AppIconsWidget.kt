@@ -133,8 +133,6 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
             name = appName,
             packageName = context.packageName,
             iconUrl = "",
-            description = "",
-            screenshots = emptyList(),
             category = null,
         )
     }

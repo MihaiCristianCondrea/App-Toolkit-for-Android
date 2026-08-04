@@ -47,10 +47,8 @@ import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.icons.outlined.Source
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material.icons.outlined.Verified
@@ -77,6 +75,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import coil3.compose.AsyncImage
 import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppDetails
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppLink
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.AppDetailsNativeAd
 import com.d4rk.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
@@ -92,11 +92,15 @@ import com.d4rk.android.libs.apptoolkit.core.ui.model.AppVersionInfo as Installe
 @Composable
 fun AppDetailsBottomSheet(
     appInfo: AppInfo,
+    appDetails: AppDetails?,
+    isDetailsLoading: Boolean,
+    hasDetailsError: Boolean,
     isFavorite: Boolean,
     isAppInstalled: Boolean?,
     installedVersionInfo: InstalledAppVersionInfo?,
     actionLauncher: AppActionLauncher,
     onFavoriteClick: () -> Unit,
+    onRetryDetails: () -> Unit,
     adsConfig: AdsConfig,
     modifier: Modifier = Modifier,
 ) {
@@ -119,6 +123,7 @@ fun AppDetailsBottomSheet(
         LargeVerticalSpacer()
         AppMetadataChips(
             appInfo = appInfo,
+            appDetails = appDetails,
             isAppInstalled = isAppInstalled,
             installedVersionInfo = installedVersionInfo,
         )
@@ -143,18 +148,42 @@ fun AppDetailsBottomSheet(
             adsConfig = adsConfig
         )
 
-        if (appInfo.description.isNotEmpty()) {
+        when {
+            isDetailsLoading -> Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SizeConstants.ExtraLargeSize),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularWavyProgressIndicator()
+            }
+
+            hasDetailsError -> Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SizeConstants.LargeSize),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+            ) {
+                Text(text = stringResource(id = R.string.error_failed_to_load_apps))
+                GeneralButton(
+                    onClick = onRetryDetails,
+                    label = stringResource(id = com.d4rk.android.libs.apptoolkit.R.string.try_again),
+                )
+            }
+        }
+        if (appDetails?.description?.isNotEmpty() == true) {
             AppSection(
                 title = stringResource(id = R.string.app_details_about_title),
                 icon = Icons.Outlined.Info,
             ) {
                 Text(
-                    text = appInfo.description,
+                    text = appDetails.description,
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
         }
-        if (appInfo.screenshots.isNotEmpty()) {
+        if (!appDetails?.screenshots.isNullOrEmpty()) {
             LargeVerticalSpacer()
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
@@ -168,15 +197,15 @@ fun AppDetailsBottomSheet(
                     contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
                     horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize)
                 ) {
-                    items(appInfo.screenshots) { screenshotUrl ->
+                    items(appDetails.screenshots) { screenshot ->
                         Card(shape = RoundedCornerShape(SizeConstants.LargeSize)) {
                             AsyncImage(
-                                model = screenshotUrl,
+                                model = screenshot.url,
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
                                     .height(SizeConstants.TwoHundredFortySize)
-                                    .aspectRatio(9f / 16f)
+                                    .aspectRatio(screenshot.aspectRatio.toDisplayRatio())
                                     .clip(RoundedCornerShape(SizeConstants.LargeSize))
                             )
                         }
@@ -184,7 +213,9 @@ fun AppDetailsBottomSheet(
                 }
             }
         }
-        AppLinksSection(appInfo = appInfo, actionLauncher = actionLauncher)
+        appDetails?.let { details ->
+            AppLinksSection(links = details.links, actionLauncher = actionLauncher)
+        }
         LargeVerticalSpacer()
     }
 }
@@ -220,6 +251,14 @@ private fun AppDetailsHeader(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary,
             )
+            appInfo.shortDescription.takeIf(String::isNotBlank)?.let { shortDescription ->
+                Text(
+                    text = shortDescription,
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }
@@ -281,6 +320,7 @@ private fun AppDetailsActions(
 @Composable
 private fun AppMetadataChips(
     appInfo: AppInfo,
+    appDetails: AppDetails?,
     isAppInstalled: Boolean?,
     installedVersionInfo: InstalledAppVersionInfo?,
 ) {
@@ -301,6 +341,9 @@ private fun AppMetadataChips(
                 icon = Icons.Outlined.Verified,
                 label = stringResource(id = R.string.app_details_version, versionName)
             )
+        },
+        appDetails?.latestVersion?.versionName?.takeIf { it.isNotBlank() }?.let { versionName ->
+            AppInfoChipUi(icon = Icons.Outlined.Verified, label = versionName)
         },
     )
 
@@ -475,27 +518,9 @@ private fun AppSection(
 
 @Composable
 private fun AppLinksSection(
-    appInfo: AppInfo,
+    links: List<AppLink>,
     actionLauncher: AppActionLauncher,
 ) {
-    val links = listOfNotNull(
-        appInfo.githubUrl?.let {
-            AppLinkUi(
-                titleRes = R.string.app_details_github_repository,
-                summaryRes = R.string.app_details_github_repository_summary,
-                icon = Icons.Outlined.Source,
-                url = it,
-            )
-        },
-        appInfo.privacyPolicyUrl?.let {
-            AppLinkUi(
-                titleRes = R.string.app_details_privacy_policy,
-                summaryRes = R.string.app_details_privacy_policy_summary,
-                icon = Icons.Outlined.PrivacyTip,
-                url = it,
-            )
-        },
-    )
     if (links.isEmpty()) return
 
     AppSection(
@@ -512,17 +537,13 @@ private fun AppLinksSection(
                         .padding(vertical = SizeConstants.SmallSize),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(imageVector = link.icon, contentDescription = null)
+                    Icon(imageVector = Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = null)
                     MediumHorizontalSpacer()
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = stringResource(id = link.titleRes),
+                            text = link.label,
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.SemiBold,
-                        )
-                        Text(
-                            text = stringResource(id = link.summaryRes),
-                            style = MaterialTheme.typography.bodyMedium,
                         )
                     }
                     Icon(
@@ -550,10 +571,13 @@ private data class QuickActionUi(
     val onClick: () -> Unit,
 )
 
-@Immutable
-private data class AppLinkUi(
-    val titleRes: Int,
-    val summaryRes: Int,
-    val icon: ImageVector,
-    val url: String,
-)
+private fun String.toDisplayRatio(): Float {
+    val parts = split(':', limit = 2)
+    val width = parts.getOrNull(0)?.toFloatOrNull()
+    val height = parts.getOrNull(1)?.toFloatOrNull()
+    return if (width != null && height != null && width > 0f && height > 0f) {
+        width / height
+    } else {
+        9f / 16f
+    }
+}

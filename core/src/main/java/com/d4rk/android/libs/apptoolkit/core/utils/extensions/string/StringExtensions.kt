@@ -17,31 +17,10 @@
 
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions.string
 
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiEnvironments
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiPaths
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
 import java.net.URI
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
-
-/**
- * Builds the developer apps API URL using the provided environment, language, and path segments.
- */
-fun String.developerAppsApiUrl(
-    language: String = ApiLanguages.DEFAULT,
-    baseRepositoryUrl: String = ApiConstants.BASE_REPOSITORY_URL,
-    path: String = ApiPaths.DEVELOPER_APPS_API,
-): String {
-    val environmentSegment = lowercase().takeIf { it == ApiEnvironments.ENV_DEBUG }
-        ?: ApiEnvironments.ENV_RELEASE
-    val languageSegment = language.lowercase().ifBlank { ApiLanguages.DEFAULT }
-    val normalizedPath = path.trimStart('/')
-
-    return listOf(baseRepositoryUrl, environmentSegment, languageSegment, normalizedPath)
-        .joinToString(separator = "/")
-}
 
 /**
  * Sanitizes URL-like input by trimming and validating strict http(s) absolute URLs.
@@ -76,29 +55,26 @@ fun String.toToken(): String =
     runCatching { String(Base64.decode(this), Charsets.UTF_8) }.getOrDefault("")
 
 /**
- * Extracts the changelog section for the first line that contains [version].
+ * Extracts the Markdown section whose heading identifies [version].
  *
- * Compatibility/behavior (matches your current implementation + unit tests):
- * - Finds the first line where `line.contains(version)` is true.
- * - Includes that matching line.
- * - Includes subsequent lines until the next Markdown header (a line starting with '#'),
- *   or until end of content.
- * - Returns the extracted block trimmed; returns an empty string if [version] isn't found
- *   (or if the receiver is blank).
- *
- * Implementation notes:
- * - Uses [lineSequence] to avoid allocating a full list of lines. :contentReference[oaicite:1]{index=1}
- * - Uses lazy sequence operators ([dropWhile], [takeWhile]) for clean, idiomatic flow. :contentReference[oaicite:2]{index=2}
+ * Exact heading matching avoids selecting a version mentioned in release notes or accidentally
+ * matching `1.2.3` inside `11.2.30`. Common headings such as `# 1.2.3`,
+ * `## Version 1.2.3`, and `## [1.2.3] - 2026-08-02` are supported.
  */
 fun String.extractChangesForVersion(version: String): String {
+    if (isBlank() || version.isBlank()) return ""
+    val versionHeading = Regex(
+        pattern = """^#{1,6}\s*(?:\[)?(?:(?:Version\s+)|v)?${Regex.escape(version.trim())}(?:])?(?:\s*[-:].*)?\s*$""",
+        option = RegexOption.IGNORE_CASE,
+    )
     val versionLinesIterator = lineSequence()
-        .dropWhile { currentLine -> !currentLine.contains(version) }
+        .dropWhile { currentLine -> !versionHeading.matches(currentLine.trim()) }
         .iterator()
     if (!versionLinesIterator.hasNext()) return ""
     val versionHeaderLine = versionLinesIterator.next()
     val changelogSectionLines =
         sequenceOf(versionHeaderLine) + generateSequence { if (versionLinesIterator.hasNext()) versionLinesIterator.next() else null }.takeWhile { currentLine ->
-            !currentLine.startsWith("#")
+            !currentLine.trimStart().startsWith("#")
         }
     return buildString {
         changelogSectionLines.forEach { appendLine(it) }

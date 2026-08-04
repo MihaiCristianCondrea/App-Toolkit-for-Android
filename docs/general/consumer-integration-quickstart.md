@@ -107,6 +107,7 @@ class HostApplication : Application() {
         super.onCreate()
 
         val toolkitBuildConfig = AppToolkitHostBuildConfig(
+            // Used by package-specific Worker metadata such as the changelog endpoint.
             applicationId = BuildConfig.APPLICATION_ID,
             isDebugBuild = BuildConfig.DEBUG,
             versionName = BuildConfig.VERSION_NAME,
@@ -139,6 +140,11 @@ class HostApplication : Application() {
 
 > Koin must be started by the host app (Application.onCreate). The toolkit only contributes feature
 > modules.
+>
+> `applicationId` and `versionName` must describe the installed host app. App Toolkit injects
+> them through `BuildInfoProvider` to request
+> `/api/v1/apps/{applicationId}/changelog.md` and select the current release section. If the
+> package is not registered by the metadata Worker, the existing raw GitHub changelog is used.
 
 ### Step B — Launch a toolkit Activity
 

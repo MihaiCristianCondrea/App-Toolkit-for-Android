@@ -17,6 +17,10 @@
 
 package com.d4rk.android.libs.apptoolkit.core.di.modules
 
+import com.d4rk.android.libs.apptoolkit.app.main.data.repository.ChangelogRepositoryImpl
+import com.d4rk.android.libs.apptoolkit.app.main.domain.repository.ChangelogRepository
+import com.d4rk.android.libs.apptoolkit.app.main.domain.usecases.GetChangelogUseCase
+import com.d4rk.android.libs.apptoolkit.app.main.ui.ChangelogViewModel
 import com.d4rk.android.libs.apptoolkit.app.help.data.local.HelpLocalDataSource
 import com.d4rk.android.libs.apptoolkit.app.help.data.remote.HelpRemoteDataSource
 import com.d4rk.android.libs.apptoolkit.app.help.data.repository.FaqRepositoryImpl
@@ -76,6 +80,7 @@ fun appToolkitFeatureModules(
     ),
     supportModule(),
     helpModule(hostBuildConfig = hostBuildConfig),
+    changelogModule(),
     issueReporterModule(hostBuildConfig = hostBuildConfig),
     reviewModule(),
 )
@@ -97,6 +102,12 @@ private fun appToolkitCoreModule(
             versionName = hostBuildConfig.versionName,
             versionCode = hostBuildConfig.versionCode,
         )
+    }
+    single<String>(qualifier = named(name = AppToolkitDiConstants.GITHUB_REPOSITORY)) {
+        hostBuildConfig.githubRepository
+    }
+    single<String>(qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG)) {
+        GithubConstants.githubChangelog(get<String>(named(AppToolkitDiConstants.GITHUB_REPOSITORY)))
     }
 
     viewModel {
@@ -146,22 +157,44 @@ private fun helpModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = mod
     }
 }
 
+private fun changelogModule(): Module = module {
+    single<ChangelogRepository> {
+        ChangelogRepositoryImpl(
+            client = get(),
+            apiBaseUrl = get(
+                qualifier = named(AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL),
+            ),
+            legacyChangelogUrl = get(
+                qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG),
+            ),
+            firebaseController = get(),
+        )
+    }
+    single<GetChangelogUseCase> {
+        GetChangelogUseCase(
+            repository = get(),
+            buildInfoProvider = get(),
+        )
+    }
+    viewModel {
+        ChangelogViewModel(
+            getChangelogUseCase = get(),
+            dispatchers = get(),
+            firebaseController = get(),
+        )
+    }
+}
+
 private fun issueReporterModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<IssueReporterRemoteDataSource> { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
     single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get(), get()) }
     single<SendIssueReportUseCase> { SendIssueReportUseCase(get(), get(), get()) }
-    single<String>(qualifier = named(name = AppToolkitDiConstants.GITHUB_REPOSITORY)) {
-        hostBuildConfig.githubRepository
-    }
     single<GithubTarget> {
         GithubTarget(
             username = GithubConstants.GITHUB_USER,
             repository = get(qualifier = named(AppToolkitDiConstants.GITHUB_REPOSITORY)),
         )
-    }
-    single<String>(qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG)) {
-        GithubConstants.githubChangelog(get<String>(named(AppToolkitDiConstants.GITHUB_REPOSITORY)))
     }
     single<String>(githubTokenQualifier) { hostBuildConfig.githubToken.toToken() }
 

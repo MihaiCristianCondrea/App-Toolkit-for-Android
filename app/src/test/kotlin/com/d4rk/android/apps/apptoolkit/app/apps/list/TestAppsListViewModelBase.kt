@@ -21,6 +21,7 @@ import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchAppDetailsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.GetAppInstallInfoUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.GetInstalledPackagesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
@@ -57,6 +58,7 @@ open class TestAppsListViewModelBase {
         println("\uD83E\uDDEA [SETUP] Initial favorites: $initialFavorites")
         val developerAppsRepository = FakeDeveloperAppsRepository(fetchApps, fetchError)
         val fetchUseCase = FetchDeveloperAppsUseCase(developerAppsRepository)
+        val fetchDetailsUseCase = FetchAppDetailsUseCase(developerAppsRepository)
         val installedAppsRepository =
             FakeInstalledAppsRepository(installedPackages = installedPackages)
         val getInstalledPackagesUseCase = GetInstalledPackagesUseCase(installedAppsRepository)
@@ -68,6 +70,7 @@ open class TestAppsListViewModelBase {
         val toggleFavoriteUseCase = ToggleFavoriteUseCase(favoritesRepository, firebaseController)
         viewModel = AppsListViewModel(
             fetchDeveloperAppsUseCase = fetchUseCase,
+            fetchAppDetailsUseCase = fetchDetailsUseCase,
             getInstalledPackagesUseCase = getInstalledPackagesUseCase,
             getAppInstallInfoUseCase = getAppInstallInfoUseCase,
             observeFavoritesUseCase = observeFavoritesUseCase,

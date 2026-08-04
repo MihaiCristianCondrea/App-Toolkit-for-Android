@@ -25,5 +25,6 @@ sealed class HomeEvent : UiEvent {
     data object OpenRandomApp : HomeEvent()
     data class FilterSelected(val filter: AppsListFilter) : HomeEvent()
     data class AppSelected(val packageName: String) : HomeEvent()
+    data object RetryAppDetails : HomeEvent()
     data object AppDetailsDismissed : HomeEvent()
 }

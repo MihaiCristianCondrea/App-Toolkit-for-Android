@@ -18,30 +18,66 @@
 package com.d4rk.android.apps.apptoolkit.app.apps.common.data.mapper
 
 import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppCategoryDto
-import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppInfoDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppDetailsDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppLatestVersionDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppLinkDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppScreenshotDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppSummaryDto
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppCategory
-import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppDetails
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppDeviceType
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppLatestVersion
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppLink
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppScreenshot
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppSummary
 import com.d4rk.android.apps.apptoolkit.app.apps.list.utils.constants.PlayStoreUrls
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.sanitizeUrlOrNull
 
-fun AppInfoDto.toDomain(): AppInfo = AppInfo(
+fun AppSummaryDto.toDomain(): AppSummary = AppSummary(
     name = name,
     packageName = packageName,
     iconUrl = iconUrl.sanitizeUrlOrNull() ?: PlayStoreUrls.DEFAULT_ICON_URL,
-    description = description.orEmpty(),
-    screenshots = screenshots
-        ?.mapNotNull { s ->
-            val ratio = s.aspectRatio?.trim()
-            val url = s.url?.sanitizeUrlOrNull()
-            if (ratio == "9:16") url else null
-        }
-        .orEmpty(),
+    shortDescription = shortDescription.orEmpty(),
     category = category?.toDomain(),
-    githubUrl = githubUrl.sanitizeUrlOrNull(),
-    privacyPolicyUrl = privacyPolicyUrl.sanitizeUrlOrNull(),
+)
+
+fun AppDetailsDto.toDomain(): AppDetails = AppDetails(
+    name = name,
+    packageName = packageName,
+    iconUrl = iconUrl.sanitizeUrlOrNull() ?: PlayStoreUrls.DEFAULT_ICON_URL,
+    description = description,
+    shortDescription = shortDescription.orEmpty(),
+    category = category?.toDomain(),
+    screenshots = screenshots.mapNotNull(AppScreenshotDto::toDomain),
+    links = links.mapNotNull(AppLinkDto::toDomain),
+    latestVersion = latestVersion?.toDomain(),
 )
 
 fun AppCategoryDto.toDomain(): AppCategory = AppCategory(
     label = label,
     id = categoryId,
+)
+
+private fun AppScreenshotDto.toDomain(): AppScreenshot? = AppScreenshot(
+    url = url.sanitizeUrlOrNull() ?: return null,
+    aspectRatio = aspectRatio,
+    deviceType = when (deviceType.lowercase()) {
+        "phone" -> AppDeviceType.Phone
+        "tablet" -> AppDeviceType.Tablet
+        "wear" -> AppDeviceType.Wear
+        "desktop" -> AppDeviceType.Desktop
+        else -> AppDeviceType.Unknown
+    },
+)
+
+private fun AppLinkDto.toDomain(): AppLink? = AppLink(
+    label = label.trim().takeIf(String::isNotEmpty) ?: return null,
+    url = url.sanitizeUrlOrNull() ?: return null,
+)
+
+private fun AppLatestVersionDto.toDomain(): AppLatestVersion = AppLatestVersion(
+    versionName = versionName,
+    versionCode = versionCode,
+    releasedAt = releasedAt,
+    summary = summary,
 )

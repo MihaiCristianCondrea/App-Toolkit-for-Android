@@ -26,11 +26,9 @@ import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -135,7 +133,10 @@ fun AppsListRoute(
         }
     }
 
-    var selectedApp: AppInfo? by remember { mutableStateOf(null) }
+    val selectedApp: AppInfo? = screenState.data?.selectedApp
+    val selectedAppDetails = screenState.data?.selectedAppDetails
+    val isAppDetailsLoading = screenState.data?.isAppDetailsLoading == true
+    val hasAppDetailsError = screenState.data?.hasAppDetailsError == true
     val selectedAppInstallInfo = screenState.data?.selectedAppInstallInfo
     val appActionLauncher = remember(context) { AndroidAppActionLauncher(context) }
 
@@ -154,18 +155,21 @@ fun AppsListRoute(
                 )
                 coroutineScope.launch {
                     sheetState.hide()
-                    selectedApp = null
                     viewModel.onEvent(HomeEvent.AppDetailsDismissed)
                 }
             }
         ) {
             AppDetailsBottomSheet(
                 appInfo = app,
+                appDetails = selectedAppDetails,
+                isDetailsLoading = isAppDetailsLoading,
+                hasDetailsError = hasAppDetailsError,
                 isFavorite = favorites.contains(app.packageName),
                 isAppInstalled = selectedAppInstallInfo?.isInstalled,
                 installedVersionInfo = selectedAppInstallInfo?.versionInfo,
                 actionLauncher = appActionLauncher,
                 onFavoriteClick = { onFavoriteToggle(app.packageName) },
+                onRetryDetails = { viewModel.onEvent(HomeEvent.RetryAppDetails) },
                 adsConfig = appDetailsAdsConfig
             )
         }
@@ -185,7 +189,6 @@ fun AppsListRoute(
             when (action) {
                 is HomeAction.OpenRandomApp -> {
                     if (sheetState.isVisible) sheetState.hide()
-                    selectedApp = null
                     viewModel.onEvent(HomeEvent.AppDetailsDismissed)
                     openApp(action.app)
                 }
@@ -225,7 +228,6 @@ fun AppsListRoute(
                         appInfo = app,
                         interaction = AppInteractionType.OpenDetailsBottomSheet
                     )
-                    selectedApp = app
                     viewModel.onEvent(HomeEvent.AppSelected(app.packageName))
                 },
                 onShareClick = onShareClick,

@@ -21,21 +21,47 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AppInfoDto(
+
+data class AppSummaryDto(
     @SerialName("name") val name: String,
-    @SerialName("packageName") val packageName: String,
-    @SerialName("iconLogo") val iconUrl: String,
+    @SerialName("package_name") val packageName: String,
+    @SerialName("icon_logo") val iconUrl: String,
+    @SerialName("short_description") val shortDescription: String? = null,
     @SerialName("category") val category: AppCategoryDto? = null,
-    @SerialName("description") val description: String? = null,
-    @SerialName("screenshots") val screenshots: List<AppScreenshotDto>? = null,
-    @SerialName("githubUrl") val githubUrl: String? = null,
-    @SerialName("privacyPolicyUrl") val privacyPolicyUrl: String? = null,
+)
+
+@Serializable
+data class AppDetailsDto(
+    @SerialName("name") val name: String,
+    @SerialName("package_name") val packageName: String,
+    @SerialName("icon_logo") val iconUrl: String,
+    @SerialName("description") val description: String,
+    @SerialName("short_description") val shortDescription: String? = null,
+    @SerialName("category") val category: AppCategoryDto? = null,
+    @SerialName("screenshots") val screenshots: List<AppScreenshotDto> = emptyList(),
+    @SerialName("links") val links: List<AppLinkDto> = emptyList(),
+    @SerialName("latest_version") val latestVersion: AppLatestVersionDto? = null,
 )
 
 @Serializable
 data class AppScreenshotDto(
-    @SerialName("url") val url: String? = null,
-    @SerialName("aspectRatio") val aspectRatio: String? = null,
+    @SerialName("url") val url: String,
+    @SerialName("aspect_ratio") val aspectRatio: String,
+    @SerialName("device_type") val deviceType: String,
+)
+
+@Serializable
+data class AppLinkDto(
+    @SerialName("label") val label: String,
+    @SerialName("url") val url: String,
+)
+
+@Serializable
+data class AppLatestVersionDto(
+    @SerialName("version_name") val versionName: String,
+    @SerialName("version_code") val versionCode: Long,
+    @SerialName("released_at") val releasedAt: String? = null,
+    @SerialName("summary") val summary: String? = null,
 )
 
 @Serializable

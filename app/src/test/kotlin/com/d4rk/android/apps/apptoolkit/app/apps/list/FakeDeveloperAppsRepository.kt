@@ -17,7 +17,8 @@
 
 package com.d4rk.android.apps.apptoolkit.app.apps.list
 
-import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppDetails
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppSummary
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.DeveloperAppsRepository
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
@@ -29,14 +30,41 @@ import kotlinx.coroutines.flow.flow
  * It can optionally emit an error when [fetchDeveloperApps] is called.
  */
 class FakeDeveloperAppsRepository(
-    private val apps: List<AppInfo>,
+    private val apps: List<AppSummary>,
     private val fetchError: AppErrors? = null,
+    private val detailsError: AppErrors? = null,
 ) : DeveloperAppsRepository {
-    override fun fetchDeveloperApps(): Flow<DataState<List<AppInfo>, AppErrors>> = flow {
+    override fun fetchDeveloperApps(): Flow<DataState<List<AppSummary>, AppErrors>> = flow {
         fetchError?.let {
             emit(DataState.Error(error = it))
             return@flow
         }
         emit(DataState.Success(apps))
+    }
+
+    override fun fetchAppDetails(
+        packageName: String,
+    ): Flow<DataState<AppDetails, AppErrors>> = flow {
+        detailsError?.let { error ->
+            emit(DataState.Error(error = error))
+            return@flow
+        }
+        val app = apps.firstOrNull { it.packageName == packageName }
+        if (app == null) {
+            emit(DataState.Error(error = AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS))
+            return@flow
+        }
+        emit(
+            DataState.Success(
+                data = AppDetails(
+                    name = app.name,
+                    packageName = app.packageName,
+                    iconUrl = app.iconUrl,
+                    description = app.shortDescription,
+                    shortDescription = app.shortDescription,
+                    category = app.category,
+                ),
+            ),
+        )
     }
 }

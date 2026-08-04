@@ -4,6 +4,21 @@ The Apps & Tools screen is a top-level destination in the host app. It presents 
 catalog in a Material 3 grid and now owns favorites filtering directly in the same surface instead
 of sending users to a separate Favorites destination.
 
+## Metadata loading
+
+The screen uses the public Android Apps Metadata API in two stages:
+
+- `GET /api/v1/apps` supplies compact `AppSummary` values for the grid.
+- `GET /api/v1/apps/{package_name}` supplies `AppDetails` only after an item is selected.
+
+The compact summary lets the details sheet open immediately while the full description,
+screenshots, links, and optional latest-version metadata load. A failed details request keeps the
+summary visible and exposes a scoped retry action. Responses are guarded by package name so an
+older request cannot replace the currently selected app.
+
+See [Android Apps Metadata API](../network/android-apps-metadata-api.md) for the endpoint, DTO,
+mapping, Koin, and fallback contracts.
+
 ## Filtering
 
 The screen exposes a horizontal row of Material 3 filter chips above the app grid:

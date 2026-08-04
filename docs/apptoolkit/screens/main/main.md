@@ -59,9 +59,14 @@ still giving host apps a ready-to-go default shell that can be customized or rep
 
 ### Changelog UI
 
-- **`ChangelogDialog`**: loads a markdown changelog from a URL (typically a GitHub changelog md
-  file),
-  extracts the section for the current app version, and renders it.
+- **`ChangelogDialog`**: renders immutable state from `ChangelogViewModel`.
+- **`GetChangelogUseCase`**: selects the exact current-version section, or the full history when
+  the returned Markdown has no matching version section.
+- **`ChangelogRepositoryImpl`**: loads the public Worker package changelog and uses the existing
+  raw GitHub changelog only when the package is blank or absent from the Worker.
+
+The host application's injected application ID and version determine the package route and section
+selection. See [Android Apps Metadata API](../../network/android-apps-metadata-api.md).
 
 ### Home screen widgets (Glance)
 
@@ -103,9 +108,8 @@ that feels native and is ready to ship:
 - The **navigation rail** supports tablets/foldables/large screens.
 - The **navigation drawer** remains available for app-wide actions (settings/help/updates/share),
   while a host-owned shell keeps top-level navigation chrome stable as tab content changes.
-- The **changelog dialog** is used to display "what changed" for apps, typically sourced from
-  GitHub,
-  keeping release notes discoverable inside the app.
+- The **changelog dialog** keeps release notes discoverable while using package metadata supplied
+  by the host's Koin configuration.
 - **GMS host abstractions** exist to avoid leaking concrete `Activity` dependencies into
   domain/data,
   while still making Play Core flows easy to wire in host apps.
@@ -275,4 +279,5 @@ Host apps may replace any of the following:
 
 * **Changelog**
 
-    * Change the URL source, the parsing strategy, or remove the feature entirely.
+    * Override `ChangelogRepository` or the metadata base-URL Koin binding, customize the parsing
+      strategy, or remove the feature entirely.

@@ -21,7 +21,7 @@ package com.d4rk.android.libs.apptoolkit.core.di
 object AppToolkitDiConstants {
     const val GITHUB_REPOSITORY = "github_repository"
     const val GITHUB_CHANGELOG = "github_changelog"
-    const val DEVELOPER_APPS_API_URL = "developer_apps_api_url"
+    const val ANDROID_APPS_METADATA_API_BASE_URL = "android_apps_metadata_api_base_url"
 
     const val DEFAULT_THEME_PALETTE = "default_theme_palette"
     const val MONOCHROME_THEME_PALETTE = "monochromePalette"

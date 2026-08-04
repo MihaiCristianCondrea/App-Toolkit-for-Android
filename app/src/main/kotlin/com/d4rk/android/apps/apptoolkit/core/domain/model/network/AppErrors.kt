@@ -32,6 +32,7 @@ sealed interface AppErrors : Error {
     data class Common(val value: Errors) : AppErrors
 
     enum class UseCase : AppErrors {
-        FAILED_TO_LOAD_APPS
+        FAILED_TO_LOAD_APPS,
+        FAILED_TO_LOAD_APP_DETAILS,
     }
 }

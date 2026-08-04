@@ -1,18 +1,10 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (C) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.d4rk.android.libs.apptoolkit.app.main.ui.views.dialogs
@@ -27,67 +19,43 @@ import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.app.main.ui.ChangelogViewModel
+import com.d4rk.android.libs.apptoolkit.app.main.ui.contract.ChangelogEvent
+import com.d4rk.android.libs.apptoolkit.app.main.ui.state.ChangelogUiState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.extractChangesForVersion
-import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
 import dev.jeziellago.compose.markdowntext.MarkdownText
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ * Displays the host application's package-aware changelog.
+ *
+ * Network and fallback decisions are owned by the injected [ChangelogViewModel]; this composable
+ * only renders state and sends retry intent.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ChangelogDialog(
-    changelogUrl: String,
     onDismiss: () -> Unit,
 ) {
-    val dispatchers: DispatcherProvider = koinInject()
-    val buildInfoProvider: BuildInfoProvider = koinInject()
-    val noNewUpdatesText = stringResource(id = R.string.no_new_updates_message)
-    val changelogText: MutableState<String?> = remember {
-        mutableStateOf(null)
-    }
-    val isError = remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-    val httpClient: HttpClient = koinInject()
-
-    suspend fun loadChangelog() {
-        withContext(dispatchers.io) {
-            runCatching {
-                val content: String = httpClient.get(changelogUrl).body()
-                val section = content.extractChangesForVersion(buildInfoProvider.appVersion)
-                changelogText.value = section.ifBlank { noNewUpdatesText }
-            }.onFailure {
-                isError.value = true
-            }
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        loadChangelog()
-    }
+    val viewModel: ChangelogViewModel = koinViewModel()
+    val screenState: UiStateScreen<ChangelogUiState> by
+        viewModel.uiState.collectAsStateWithLifecycle()
+    val isError = screenState.screenState is ScreenState.Error
 
     BasicAlertDialog(
         onDismiss = onDismiss,
         onConfirm = {
-            if (isError.value) {
-                isError.value = false
-                changelogText.value = null
-                scope.launch { loadChangelog() }
+            if (isError) {
+                viewModel.onEvent(event = ChangelogEvent.Retry)
             } else {
                 onDismiss()
             }
@@ -95,31 +63,43 @@ fun ChangelogDialog(
         icon = Icons.Outlined.NewReleases,
         onCancel = onDismiss,
         showDismissButton = false,
-        confirmButtonText = if (isError.value) stringResource(id = R.string.try_again) else stringResource(
-            id = R.string.done_button_content_description
-        ),
+        confirmButtonText = if (isError) {
+            stringResource(id = R.string.try_again)
+        } else {
+            stringResource(id = R.string.done_button_content_description)
+        },
         title = stringResource(id = R.string.changelog_title),
         content = {
-            val currentChangelogText = changelogText.value
-            val currentIsError = isError.value
-
-            when {
-                currentChangelogText == null && !currentIsError -> Row(verticalAlignment = Alignment.CenterVertically) {
-                    CircularWavyProgressIndicator()
-                    LargeHorizontalSpacer()
-                    Text(text = stringResource(id = R.string.loading_changelog_message))
-                }
-
-                currentIsError -> Column(verticalArrangement = Arrangement.Center) {
-                    Text(text = stringResource(id = R.string.error_loading_changelog_message))
-                }
-
-                else -> currentChangelogText?.let { markdownContent ->
-                    MarkdownText(
-                        modifier = Modifier.fillMaxWidth(), markdown = markdownContent
-                    )
-                }
-            }
-        })
+            ChangelogDialogContent(screenState = screenState)
+        },
+    )
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun ChangelogDialogContent(
+    screenState: UiStateScreen<ChangelogUiState>,
+) {
+    when (screenState.screenState) {
+        is ScreenState.IsLoading -> Row(verticalAlignment = Alignment.CenterVertically) {
+            CircularWavyProgressIndicator()
+            LargeHorizontalSpacer()
+            Text(text = stringResource(id = R.string.loading_changelog_message))
+        }
+
+        is ScreenState.Error -> Column(verticalArrangement = Arrangement.Center) {
+            Text(text = stringResource(id = R.string.error_loading_changelog_message))
+        }
+
+        is ScreenState.NoData,
+        is ScreenState.Success -> {
+            val markdown = screenState.data?.markdown.orEmpty().ifBlank {
+                stringResource(id = R.string.no_new_updates_message)
+            }
+            MarkdownText(
+                modifier = Modifier.fillMaxWidth(),
+                markdown = markdown,
+            )
+        }
+    }
+}

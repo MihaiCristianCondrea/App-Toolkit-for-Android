@@ -18,13 +18,9 @@
 package com.d4rk.android.libs.apptoolkit.core.utils.extensions
 
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiConstants
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiEnvironments
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiPaths
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiHost
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.errors.toError
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.developerAppsApiUrl
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.normalizeRoute
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.sanitizeUrlOrNull
 import kotlinx.serialization.SerializationException
@@ -36,7 +32,7 @@ import java.net.SocketTimeoutException
 import java.sql.SQLException
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import kotlin.test.assertFailsWith
 
 @Config(sdk = [34])
 class ExtensionsTest {
@@ -44,52 +40,44 @@ class ExtensionsTest {
     @Test
     fun `toApiEnvironment maps debug flag to environment`() {
         assertAll(
-            { assertEquals(ApiEnvironments.ENV_DEBUG, true.toApiEnvironment()) },
-            { assertEquals(ApiEnvironments.ENV_RELEASE, false.toApiEnvironment()) },
+            { assertEquals("debug", true.toApiEnvironment()) },
+            { assertEquals("release", false.toApiEnvironment()) },
         )
     }
 
     @Test
-    fun `developerAppsApiUrl appends environment language and path segments`() {
-        val baseUrl = "https://example.com/repository"
+    fun `ApiHost builds public metadata routes and encodes packages`() {
+        val baseUrl = "https://example.com/"
 
         assertAll(
             {
                 assertEquals(
-                    "$baseUrl/${ApiEnvironments.ENV_DEBUG}/${ApiLanguages.DEFAULT}/${ApiPaths.DEVELOPER_APPS_API}",
-                    ApiEnvironments.ENV_DEBUG.developerAppsApiUrl(
-                        baseRepositoryUrl = baseUrl,
-                        language = ApiLanguages.DEFAULT,
-                    )
+                    "https://example.com/api/v1/apps",
+                    ApiHost.appsUrl(baseUrl),
                 )
             },
             {
                 assertEquals(
-                    "$baseUrl/${ApiEnvironments.ENV_RELEASE}/${ApiLanguages.DEFAULT}/${ApiPaths.DEVELOPER_APPS_API}",
-                    ApiEnvironments.ENV_RELEASE.developerAppsApiUrl(
-                        baseRepositoryUrl = baseUrl,
-                        language = ApiLanguages.DEFAULT,
-                    )
+                    "https://example.com/api/v1/apps/com.example%2Fapp%20name",
+                    ApiHost.appDetailsUrl(
+                        packageName = "com.example/app name",
+                        baseUrl = baseUrl,
+                    ),
                 )
             },
             {
                 assertEquals(
-                    "$baseUrl/${ApiEnvironments.ENV_RELEASE}/${ApiLanguages.DEFAULT}/${ApiPaths.DEVELOPER_APPS_API}",
-                    "unknown".developerAppsApiUrl(
-                        baseRepositoryUrl = baseUrl,
-                        language = ApiLanguages.DEFAULT,
-                    )
-                )
-            },
-            {
-                assertTrue(
-                    ApiConstants.BASE_REPOSITORY_URL.developerAppsApiUrl()
-                        .contains(ApiConstants.BASE_REPOSITORY_URL) &&
-                            ApiConstants.BASE_REPOSITORY_URL.developerAppsApiUrl()
-                                .contains(ApiLanguages.DEFAULT)
+                    "https://example.com/api/v1/apps/com.example.app/changelog.md",
+                    ApiHost.appChangelogUrl(
+                        packageName = "com.example.app",
+                        baseUrl = baseUrl,
+                    ),
                 )
             },
         )
+        assertFailsWith<IllegalArgumentException> {
+            ApiHost.appDetailsUrl(packageName = " ", baseUrl = baseUrl)
+        }
     }
 
     @Test

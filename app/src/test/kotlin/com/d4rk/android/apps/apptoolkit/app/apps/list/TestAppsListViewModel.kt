@@ -47,8 +47,7 @@ class TestAppsListViewModel : TestAppsListViewModelBase() {
                 name = "App$it",
                 packageName = "pkg$it",
                 iconUrl = "url$it",
-                description = "Description $it",
-                screenshots = emptyList(),
+                shortDescription = "Description $it",
             )
         }
         setup(fetchApps = apps, dispatchers = TestDispatchers(dispatcherExtension.testDispatcher))
@@ -63,8 +62,7 @@ class TestAppsListViewModel : TestAppsListViewModelBase() {
                 name = "App",
                 packageName = "pkg",
                 iconUrl = "url",
-                description = "Description",
-                screenshots = emptyList(),
+                shortDescription = "Description",
             )
         )
         // Setup with 1 app and initial favorites so Favorites filter is valid
@@ -88,8 +86,7 @@ class TestAppsListViewModel : TestAppsListViewModelBase() {
                 name = "App",
                 packageName = "pkg",
                 iconUrl = "url",
-                description = "Description",
-                screenshots = emptyList(),
+                shortDescription = "Description",
             )
         )
         setup(
@@ -118,12 +115,35 @@ class TestAppsListViewModel : TestAppsListViewModelBase() {
                 name = "App",
                 packageName = "pkg",
                 iconUrl = "url",
-                description = "Description",
-                screenshots = emptyList(),
+                shortDescription = "Description",
             )
         )
         setup(fetchApps = apps, dispatchers = TestDispatchers(dispatcherExtension.testDispatcher))
         toggleAndAssert(packageName = "pkg", expected = true)
         toggleAndAssert(packageName = "pkg", expected = false)
+    }
+
+    @Test
+    fun `selecting an app loads package details`() = runTest {
+        val app = AppInfo(
+            name = "App",
+            packageName = "pkg",
+            iconUrl = "url",
+            shortDescription = "Expanded description",
+        )
+        setup(
+            fetchApps = listOf(app),
+            dispatchers = TestDispatchers(UnconfinedTestDispatcher()),
+        )
+        advanceUntilIdle()
+
+        viewModel.onEvent(HomeEvent.AppSelected(packageName = app.packageName))
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value.data
+        assertEquals(app, state?.selectedApp)
+        assertEquals("Expanded description", state?.selectedAppDetails?.description)
+        assertEquals(false, state?.isAppDetailsLoading)
+        assertEquals(false, state?.hasAppDetailsError)
     }
 }

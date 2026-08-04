@@ -21,11 +21,21 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiResponseDto(
-    @SerialName("data") val data: AppDataWrapperDto = AppDataWrapperDto()
+data class AppsListResponseDto(
+    @SerialName("data") val data: AppsListDataDto = AppsListDataDto()
 )
 
 @Serializable
-data class AppDataWrapperDto(
-    @SerialName("apps") val apps: List<AppInfoDto> = emptyList()
+data class AppsListDataDto(
+    @SerialName("apps") val apps: List<AppSummaryDto> = emptyList()
+)
+
+@Serializable
+data class AppDetailsResponseDto(
+    @SerialName("data") val data: AppDetailsDataDto,
+)
+
+@Serializable
+data class AppDetailsDataDto(
+    @SerialName("app") val app: AppDetailsDto,
 )

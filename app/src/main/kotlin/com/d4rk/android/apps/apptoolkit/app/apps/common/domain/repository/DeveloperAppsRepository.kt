@@ -17,11 +17,18 @@
 
 package com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository
 
-import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppDetails
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppSummary
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import kotlinx.coroutines.flow.Flow
 
+/** Domain contract for compact catalog and package-specific application metadata. */
 interface DeveloperAppsRepository {
-    fun fetchDeveloperApps(): Flow<DataState<List<AppInfo>, AppErrors>>
+
+    /** Returns compact summaries for every public application. */
+    fun fetchDeveloperApps(): Flow<DataState<List<AppSummary>, AppErrors>>
+
+    /** Returns the full public metadata document for [packageName]. */
+    fun fetchAppDetails(packageName: String): Flow<DataState<AppDetails, AppErrors>>
 }

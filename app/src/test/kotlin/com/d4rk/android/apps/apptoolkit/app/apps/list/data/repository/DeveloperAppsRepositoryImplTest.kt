@@ -1,29 +1,27 @@
 /*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (C) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.d4rk.android.apps.apptoolkit.app.apps.list.data.repository
 
-import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.ApiResponseDto
 import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppCategoryDto
-import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppDataWrapperDto
-import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppInfoDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppDetailsDataDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppDetailsDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppDetailsResponseDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppLatestVersionDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppLinkDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppScreenshotDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppSummaryDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppsListDataDto
+import com.d4rk.android.apps.apptoolkit.app.apps.common.data.remote.model.AppsListResponseDto
 import com.d4rk.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepositoryImpl
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppCategory
-import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.model.AppDeviceType
 import com.d4rk.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
@@ -47,192 +45,161 @@ import kotlin.test.assertEquals
 class DeveloperAppsRepositoryImplTest {
 
     @Test
-    fun `fetchDeveloperApps returns apps list`() = runTest {
-        val apps = listOf(
-            AppInfo(
-                name = "App",
-                packageName = "pkg",
-                iconUrl = "icon",
-                description = "Description",
-                screenshots = emptyList(),
-            )
-        )
-        val response = ApiResponseDto(AppDataWrapperDto(apps.map {
-            AppInfoDto(
-                it.name,
-                it.packageName,
-                it.iconUrl
-            )
-        }))
-        val json = Json.encodeToString(response)
-        val client = HttpClient(MockEngine { request ->
-            respond(
-                content = json,
-                status = HttpStatusCode.OK,
-                headers = headersOf(
-                    HttpHeaders.ContentType,
-                    ContentType.Application.Json.toString()
-                )
-            )
-        }) {
-            install(ContentNegotiation) { json() }
-        }
-        val repository = DeveloperAppsRepositoryImpl(
-            client = client,
-            baseUrl = "https://example.com",
-            firebaseController = mockk<FirebaseController>(relaxed = true)
-        )
-
-        val result = repository.fetchDeveloperApps().first()
-        val success = result as DataState.Success
-        assertEquals(apps, success.data)
-    }
-
-    @Test
-    fun `fetchDeveloperApps maps category information`() = runTest {
-        val expectedCategory = AppCategory(label = "Education", id = "education")
-        val response = ApiResponseDto(
-            AppDataWrapperDto(
-                listOf(
-                    AppInfoDto(
+    fun `fetchDeveloperApps maps compact list data and category`() = runTest {
+        val response = AppsListResponseDto(
+            data = AppsListDataDto(
+                apps = listOf(
+                    AppSummaryDto(
                         name = "App",
                         packageName = "pkg",
-                        iconUrl = "icon",
+                        iconUrl = "https://example.com/icon.png",
+                        shortDescription = "Short",
                         category = AppCategoryDto(
-                            label = expectedCategory.label,
-                            categoryId = expectedCategory.id
+                            label = "Education",
+                            categoryId = "education",
                         ),
+                    ),
+                ),
+            ),
+        )
+        val repository = repositoryReturning(Json.encodeToString(response))
+
+        val result = repository.fetchDeveloperApps().first() as DataState.Success
+        val app = result.data.single()
+
+        assertEquals("App", app.name)
+        assertEquals("pkg", app.packageName)
+        assertEquals("Short", app.shortDescription)
+        assertEquals(AppCategory(label = "Education", id = "education"), app.category)
+    }
+
+    @Test
+    fun `fetchDeveloperApps sorts names alphabetically ignoring case`() = runTest {
+        val response = AppsListResponseDto(
+            data = AppsListDataDto(
+                apps = listOf("zeta", "Alpha", "beta").mapIndexed { index, name ->
+                    AppSummaryDto(
+                        name = name,
+                        packageName = "pkg$index",
+                        iconUrl = "https://example.com/$index.png",
                     )
-                )
-            )
+                },
+            ),
         )
-        val json = Json.encodeToString(response)
-        val client = HttpClient(MockEngine { request ->
-            respond(
-                content = json,
-                status = HttpStatusCode.OK,
-                headers = headersOf(
-                    HttpHeaders.ContentType,
-                    ContentType.Application.Json.toString()
-                )
-            )
-        }) {
-            install(ContentNegotiation) { json() }
-        }
-        val repository = DeveloperAppsRepositoryImpl(
-            client = client,
-            baseUrl = "https://example.com",
-            firebaseController = mockk<FirebaseController>(relaxed = true)
-        )
+        val repository = repositoryReturning(Json.encodeToString(response))
 
         val result = repository.fetchDeveloperApps().first() as DataState.Success
-        val category = result.data.first().category
 
-        assertEquals(expectedCategory, category)
+        assertEquals(listOf("Alpha", "beta", "zeta"), result.data.map { it.name })
     }
 
     @Test
-    fun `fetchDeveloperApps emits timeout error`() = runTest {
-        val client = HttpClient(MockEngine { _ ->
-            respond(
-                content = "",
-                status = HttpStatusCode.RequestTimeout,
-                headers = headersOf(
-                    HttpHeaders.ContentType,
-                    ContentType.Application.Json.toString()
-                )
-            )
-        }) {
+    fun `fetchAppDetails requests package route and maps full metadata`() = runTest {
+        val response = AppDetailsResponseDto(
+            data = AppDetailsDataDto(
+                app = AppDetailsDto(
+                    name = "App",
+                    packageName = "com.example.app",
+                    iconUrl = "https://example.com/icon.png",
+                    description = "Full description",
+                    shortDescription = "Short",
+                    screenshots = listOf(
+                        AppScreenshotDto(
+                            url = "https://example.com/phone.png",
+                            aspectRatio = "9:16",
+                            deviceType = "phone",
+                        ),
+                    ),
+                    links = listOf(
+                        AppLinkDto(
+                            label = "Play Store",
+                            url = "https://example.com/store",
+                        ),
+                    ),
+                    latestVersion = AppLatestVersionDto(
+                        versionName = "2.0.0",
+                        versionCode = 20,
+                    ),
+                ),
+            ),
+        )
+        val client = HttpClient(
+            MockEngine { request ->
+                assertEquals("/api/v1/apps/com.example.app", request.url.encodedPath)
+                respondJson(Json.encodeToString(response))
+            },
+        ) {
             install(ContentNegotiation) { json() }
         }
-        val repository = DeveloperAppsRepositoryImpl(
-            client = client,
-            baseUrl = "https://example.com",
-            firebaseController = mockk<FirebaseController>(relaxed = true)
-        )
+        val repository = createRepository(client)
 
-        val result = repository.fetchDeveloperApps().first()
-        val error = result as DataState.Error
-        assertEquals(AppErrors.Common(Errors.Network.REQUEST_TIMEOUT), error.error)
+        val result = repository.fetchAppDetails("com.example.app").first() as DataState.Success
+        val details = result.data
+
+        assertEquals("Full description", details.description)
+        assertEquals(AppDeviceType.Phone, details.screenshots.single().deviceType)
+        assertEquals("Play Store", details.links.single().label)
+        assertEquals("2.0.0", details.latestVersion?.versionName)
     }
 
     @Test
-    fun `fetchDeveloperApps sorts apps alphabetically ignoring case`() = runTest {
-        val unsorted = listOf(
-            AppInfo(
-                name = "zeta",
-                packageName = "pkg1",
-                iconUrl = "icon",
-                description = "Description",
-                screenshots = emptyList(),
-            ),
-            AppInfo(
-                name = "Alpha",
-                packageName = "pkg2",
-                iconUrl = "icon",
-                description = "Description",
-                screenshots = emptyList(),
-            ),
-            AppInfo(
-                name = "beta",
-                packageName = "pkg3",
-                iconUrl = "icon",
-                description = "Description",
-                screenshots = emptyList(),
-            ),
-        )
-        val response = ApiResponseDto(AppDataWrapperDto(unsorted.map {
-            AppInfoDto(
-                it.name,
-                it.packageName,
-                it.iconUrl
-            )
-        }))
-        val json = Json.encodeToString(response)
-        val client = HttpClient(MockEngine { request ->
-            respond(
-                content = json,
-                status = HttpStatusCode.OK,
-                headers = headersOf(
-                    HttpHeaders.ContentType,
-                    ContentType.Application.Json.toString()
-                )
-            )
-        }) {
-            install(ContentNegotiation) { json() }
-        }
-        val repository = DeveloperAppsRepositoryImpl(
-            client = client,
-            baseUrl = "https://example.com",
-            firebaseController = mockk<FirebaseController>(relaxed = true)
-        )
+    fun `fetchDeveloperApps maps timeout status`() = runTest {
+        val repository = repositoryWithStatus(HttpStatusCode.RequestTimeout)
 
-        val result = repository.fetchDeveloperApps().first() as DataState.Success
-        assertEquals(listOf("Alpha", "beta", "zeta"), result.data.map(AppInfo::name))
+        val result = repository.fetchDeveloperApps().first() as DataState.Error
+
+        assertEquals(AppErrors.Common(Errors.Network.REQUEST_TIMEOUT), result.error)
     }
 
     @Test
-    fun `fetchDeveloperApps emits failed to load error on http error`() = runTest {
-        val client = HttpClient(MockEngine { _ ->
-            respond(
-                content = "",
-                status = HttpStatusCode.BadRequest,
-                headers = headersOf(
-                    HttpHeaders.ContentType,
-                    ContentType.Application.Json.toString()
-                )
-            )
-        }) {
+    fun `fetchAppDetails rejects a blank package`() = runTest {
+        val repository = repositoryReturning("{}")
+
+        val result = repository.fetchAppDetails(" ").first() as DataState.Error
+
+        assertEquals(AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS, result.error)
+    }
+
+    private fun repositoryReturning(json: String): DeveloperAppsRepositoryImpl {
+        val client = HttpClient(MockEngine { respondJson(json) }) {
             install(ContentNegotiation) { json() }
         }
-        val repository = DeveloperAppsRepositoryImpl(
+        return createRepository(client)
+    }
+
+    private fun repositoryWithStatus(status: HttpStatusCode): DeveloperAppsRepositoryImpl {
+        val client = HttpClient(
+            MockEngine {
+                respond(
+                    content = "",
+                    status = status,
+                    headers = headersOf(
+                        HttpHeaders.ContentType,
+                        ContentType.Application.Json.toString(),
+                    ),
+                )
+            },
+        ) {
+            install(ContentNegotiation) { json() }
+        }
+        return createRepository(client)
+    }
+
+    private fun createRepository(client: HttpClient): DeveloperAppsRepositoryImpl =
+        DeveloperAppsRepositoryImpl(
             client = client,
             baseUrl = "https://example.com",
-            firebaseController = mockk<FirebaseController>(relaxed = true)
+            firebaseController = mockk<FirebaseController>(relaxed = true),
         )
-
-        val result = repository.fetchDeveloperApps().first()
-        val error = result as DataState.Error
-        assertEquals(AppErrors.Common(Errors.Network.HTTP_CLIENT_ERROR), error.error)
-    }
 }
+
+private fun io.ktor.client.engine.mock.MockRequestHandleScope.respondJson(
+    json: String,
+) = respond(
+    content = json,
+    status = HttpStatusCode.OK,
+    headers = headersOf(
+        HttpHeaders.ContentType,
+        ContentType.Application.Json.toString(),
+    ),
+)

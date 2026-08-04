@@ -41,9 +41,7 @@ import com.d4rk.android.libs.apptoolkit.core.di.AppToolkitDiConstants
 import com.d4rk.android.libs.apptoolkit.core.di.model.AppToolkitHostBuildConfig
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseControllerImpl
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiLanguages
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.boolean.toApiEnvironment
-import com.d4rk.android.libs.apptoolkit.core.utils.extensions.string.developerAppsApiUrl
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiHost
 import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
 import com.d4rk.android.libs.apptoolkit.playservices.update.data.repository.InAppUpdateRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.playservices.update.domain.repository.InAppUpdateRepository
@@ -63,7 +61,7 @@ fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): Lis
         dispatchersModule(),
         corePlatformModule(hostBuildConfig = hostBuildConfig),
         consentModule(),
-        mainSharedModule(hostBuildConfig = hostBuildConfig),
+        mainSharedModule(),
         adsSettingsSharedModule(),
     )
 
@@ -114,14 +112,12 @@ private fun consentModule(): Module = module {
     single { ApplyConsentSettingsUseCase(repository = get(), firebaseController = get()) }
 }
 
-private fun mainSharedModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
+private fun mainSharedModule(): Module = module {
     single { GmsHostFactory() } // Lightweight creator without screen references; safe as singleton.
     single<InAppUpdateRepository> { InAppUpdateRepositoryImpl() }
     single { RequestInAppUpdateUseCase(repository = get()) }
-    single<String>(qualifier = named(name = AppToolkitDiConstants.DEVELOPER_APPS_API_URL)) {
-        hostBuildConfig.isDebugBuild
-            .toApiEnvironment()
-            .developerAppsApiUrl(language = ApiLanguages.DEFAULT)
+    single<String>(qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL)) {
+        ApiHost.BASE_URL
     }
 }
 

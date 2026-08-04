@@ -26,6 +26,7 @@ import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.Develo
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.FavoritesRepository
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.repository.InstalledAppsRepository
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
+import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchAppDetailsUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.GetAppInstallInfoUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.GetInstalledPackagesUseCase
 import com.d4rk.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
@@ -42,18 +43,20 @@ val appsListModule: Module = module {
     single<DeveloperAppsRepository> {
         DeveloperAppsRepositoryImpl(
             client = get(),
-            baseUrl = get(qualifier = named(name = AppToolkitDiConstants.DEVELOPER_APPS_API_URL)),
+            baseUrl = get(qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL)),
             firebaseController = get(),
         )
     }
 
     single { FetchDeveloperAppsUseCase(repository = get()) }
+    single { FetchAppDetailsUseCase(repository = get()) }
     single<InstalledAppsRepository> { InstalledAppsRepositoryImpl(context = androidContext()) }
     single { GetInstalledPackagesUseCase(repository = get()) }
     single { GetAppInstallInfoUseCase(repository = get()) }
     viewModel {
         AppsListViewModel(
             fetchDeveloperAppsUseCase = get(),
+            fetchAppDetailsUseCase = get(),
             getInstalledPackagesUseCase = get(),
             getAppInstallInfoUseCase = get(),
             observeFavoritesUseCase = get(),
