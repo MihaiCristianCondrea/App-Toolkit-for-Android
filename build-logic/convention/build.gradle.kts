@@ -16,7 +16,7 @@
  */
 
 plugins {
-    `kotlin-dsl`
+    id("org.gradle.kotlin.kotlin-dsl") version "6.7.6"
 }
 
 group = "com.d4rk.android.apptoolkit.buildlogic"
