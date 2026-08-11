@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views
+package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.previews
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +27,7 @@ import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.previewTextResId
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.ResultPill
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable

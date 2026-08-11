@@ -103,7 +103,7 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileIcon
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitToolKind
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.getTileServiceRequests
-import com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.QuickToolsNativeAdCard
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.ads.QuickToolsNativeAdCard
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesEvent
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.mapper.items

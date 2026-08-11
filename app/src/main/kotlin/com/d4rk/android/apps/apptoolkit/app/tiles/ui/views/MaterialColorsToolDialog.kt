@@ -19,6 +19,7 @@ package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views
 
 import android.os.Build
 import androidx.annotation.ColorRes
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -272,100 +273,110 @@ private data class AndroidColorTable(
     val colors: List<AndroidColorData>,
 )
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-private fun androidMaterialYouTables(): List<AndroidColorTable> = listOf(
-    AndroidColorTable(
-        title = stringResource(id = R.string.tool_material_colors_android_accent_1),
-        // FIXME: Field requires API level 31 (current min is 26): `android.R.color#system_accent1_0`
-        colors = androidColorRamp(
-            android.R.color.system_accent1_0,
-            android.R.color.system_accent1_10,
-            android.R.color.system_accent1_50,
-            android.R.color.system_accent1_100,
-            android.R.color.system_accent1_200,
-            android.R.color.system_accent1_300,
-            android.R.color.system_accent1_400,
-            android.R.color.system_accent1_500,
-            android.R.color.system_accent1_600,
-            android.R.color.system_accent1_700,
-            android.R.color.system_accent1_800,
-            android.R.color.system_accent1_900,
-            android.R.color.system_accent1_1000,
-        ),
-    ),
-    AndroidColorTable(
-        title = stringResource(id = R.string.tool_material_colors_android_accent_2),
-        colors = androidColorRamp(
-            android.R.color.system_accent2_0,
-            android.R.color.system_accent2_10,
-            android.R.color.system_accent2_50,
-            android.R.color.system_accent2_100,
-            android.R.color.system_accent2_200,
-            android.R.color.system_accent2_300,
-            android.R.color.system_accent2_400,
-            android.R.color.system_accent2_500,
-            android.R.color.system_accent2_600,
-            android.R.color.system_accent2_700,
-            android.R.color.system_accent2_800,
-            android.R.color.system_accent2_900,
-            android.R.color.system_accent2_1000,
-        ),
-    ),
-    AndroidColorTable(
-        title = stringResource(id = R.string.tool_material_colors_android_accent_3),
-        colors = androidColorRamp(
-            android.R.color.system_accent3_0,
-            android.R.color.system_accent3_10,
-            android.R.color.system_accent3_50,
-            android.R.color.system_accent3_100,
-            android.R.color.system_accent3_200,
-            android.R.color.system_accent3_300,
-            android.R.color.system_accent3_400,
-            android.R.color.system_accent3_500,
-            android.R.color.system_accent3_600,
-            android.R.color.system_accent3_700,
-            android.R.color.system_accent3_800,
-            android.R.color.system_accent3_900,
-            android.R.color.system_accent3_1000,
-        ),
-    ),
-    AndroidColorTable(
-        title = stringResource(id = R.string.tool_material_colors_android_neutral_1),
-        colors = androidColorRamp(
-            android.R.color.system_neutral1_0,
-            android.R.color.system_neutral1_10,
-            android.R.color.system_neutral1_50,
-            android.R.color.system_neutral1_100,
-            android.R.color.system_neutral1_200,
-            android.R.color.system_neutral1_300,
-            android.R.color.system_neutral1_400,
-            android.R.color.system_neutral1_500,
-            android.R.color.system_neutral1_600,
-            android.R.color.system_neutral1_700,
-            android.R.color.system_neutral1_800,
-            android.R.color.system_neutral1_900,
-            android.R.color.system_neutral1_1000,
-        ),
-    ),
-    AndroidColorTable(
-        title = stringResource(id = R.string.tool_material_colors_android_neutral_2),
-        colors = androidColorRamp(
-            android.R.color.system_neutral2_0,
-            android.R.color.system_neutral2_10,
-            android.R.color.system_neutral2_50,
-            android.R.color.system_neutral2_100,
-            android.R.color.system_neutral2_200,
-            android.R.color.system_neutral2_300,
-            android.R.color.system_neutral2_400,
-            android.R.color.system_neutral2_500,
-            android.R.color.system_neutral2_600,
-            android.R.color.system_neutral2_700,
-            android.R.color.system_neutral2_800,
-            android.R.color.system_neutral2_900,
-            android.R.color.system_neutral2_1000,
-        ),
-    ),
-)
+private fun androidMaterialYouTables(): List<AndroidColorTable> {
+    val accent1Title = stringResource(id = R.string.tool_material_colors_android_accent_1)
+    val accent2Title = stringResource(id = R.string.tool_material_colors_android_accent_2)
+    val accent3Title = stringResource(id = R.string.tool_material_colors_android_accent_3)
+    val neutral1Title = stringResource(id = R.string.tool_material_colors_android_neutral_1)
+    val neutral2Title = stringResource(id = R.string.tool_material_colors_android_neutral_2)
+
+    return remember(accent1Title, accent2Title, accent3Title, neutral1Title, neutral2Title) {
+        listOf(
+            AndroidColorTable(
+                title = accent1Title,
+                colors = androidColorRamp(
+                    android.R.color.system_accent1_0,
+                    android.R.color.system_accent1_10,
+                    android.R.color.system_accent1_50,
+                    android.R.color.system_accent1_100,
+                    android.R.color.system_accent1_200,
+                    android.R.color.system_accent1_300,
+                    android.R.color.system_accent1_400,
+                    android.R.color.system_accent1_500,
+                    android.R.color.system_accent1_600,
+                    android.R.color.system_accent1_700,
+                    android.R.color.system_accent1_800,
+                    android.R.color.system_accent1_900,
+                    android.R.color.system_accent1_1000,
+                ),
+            ),
+            AndroidColorTable(
+                title = accent2Title,
+                colors = androidColorRamp(
+                    android.R.color.system_accent2_0,
+                    android.R.color.system_accent2_10,
+                    android.R.color.system_accent2_50,
+                    android.R.color.system_accent2_100,
+                    android.R.color.system_accent2_200,
+                    android.R.color.system_accent2_300,
+                    android.R.color.system_accent2_400,
+                    android.R.color.system_accent2_500,
+                    android.R.color.system_accent2_600,
+                    android.R.color.system_accent2_700,
+                    android.R.color.system_accent2_800,
+                    android.R.color.system_accent2_900,
+                    android.R.color.system_accent2_1000,
+                ),
+            ),
+            AndroidColorTable(
+                title = accent3Title,
+                colors = androidColorRamp(
+                    android.R.color.system_accent3_0,
+                    android.R.color.system_accent3_10,
+                    android.R.color.system_accent3_50,
+                    android.R.color.system_accent3_100,
+                    android.R.color.system_accent3_200,
+                    android.R.color.system_accent3_300,
+                    android.R.color.system_accent3_400,
+                    android.R.color.system_accent3_500,
+                    android.R.color.system_accent3_600,
+                    android.R.color.system_accent3_700,
+                    android.R.color.system_accent3_800,
+                    android.R.color.system_accent3_900,
+                    android.R.color.system_accent3_1000,
+                ),
+            ),
+            AndroidColorTable(
+                title = neutral1Title,
+                colors = androidColorRamp(
+                    android.R.color.system_neutral1_0,
+                    android.R.color.system_neutral1_10,
+                    android.R.color.system_neutral1_50,
+                    android.R.color.system_neutral1_100,
+                    android.R.color.system_neutral1_200,
+                    android.R.color.system_neutral1_300,
+                    android.R.color.system_neutral1_400,
+                    android.R.color.system_neutral1_500,
+                    android.R.color.system_neutral1_600,
+                    android.R.color.system_neutral1_700,
+                    android.R.color.system_neutral1_800,
+                    android.R.color.system_neutral1_900,
+                    android.R.color.system_neutral1_1000,
+                ),
+            ),
+            AndroidColorTable(
+                title = neutral2Title,
+                colors = androidColorRamp(
+                    android.R.color.system_neutral2_0,
+                    android.R.color.system_neutral2_10,
+                    android.R.color.system_neutral2_50,
+                    android.R.color.system_neutral2_100,
+                    android.R.color.system_neutral2_200,
+                    android.R.color.system_neutral2_300,
+                    android.R.color.system_neutral2_400,
+                    android.R.color.system_neutral2_500,
+                    android.R.color.system_neutral2_600,
+                    android.R.color.system_neutral2_700,
+                    android.R.color.system_neutral2_800,
+                    android.R.color.system_neutral2_900,
+                    android.R.color.system_neutral2_1000,
+                ),
+            ),
+        )
+    }
+}
 
 private fun androidColorRamp(
     @ColorRes color0: Int,

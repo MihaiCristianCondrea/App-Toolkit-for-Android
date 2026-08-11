@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views
+package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.tools
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,9 +26,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.NotificationsActive
-import androidx.compose.material.icons.outlined.NotificationsOff
-import androidx.compose.material.icons.outlined.Vibration
+import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,37 +34,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.d4rk.android.apps.apptoolkit.R
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable
-fun SoundModeTool(
-    mode: RingerMode,
-    onCycle: () -> Unit
+fun MusicSearchTool(
+    onLaunch: () -> Unit
 ) {
-    val icon: ImageVector = when (mode) {
-        RingerMode.Normal -> Icons.Outlined.NotificationsActive
-        RingerMode.Vibrate -> Icons.Outlined.Vibration
-        RingerMode.Silent -> Icons.Outlined.NotificationsOff
-    }
-
     Column(
         verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
     ) {
-        ResultPill(label = mode.name)
-
         Box(
             modifier = Modifier.padding(vertical = SizeConstants.LargeSize),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = icon,
+                imageVector = Icons.Outlined.MusicNote,
                 contentDescription = null,
                 modifier = Modifier.size(100.dp),
                 tint = MaterialTheme.colorScheme.primary
@@ -75,12 +60,12 @@ fun SoundModeTool(
 
         Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
 
-        Button(onClick = onCycle) {
-            Text(text = stringResource(id = R.string.tool_system_cycle_mode))
+        Button(onClick = onLaunch) {
+            Text(text = "Launch Music Search")
         }
 
         Text(
-            text = "Tap to change ringer mode",
+            text = "Identify music playing around you",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

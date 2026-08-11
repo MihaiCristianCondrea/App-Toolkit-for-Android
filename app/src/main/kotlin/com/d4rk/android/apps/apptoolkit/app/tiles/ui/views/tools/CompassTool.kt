@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views
+package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.tools
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.d4rk.android.apps.apptoolkit.R
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.ResultPill
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable

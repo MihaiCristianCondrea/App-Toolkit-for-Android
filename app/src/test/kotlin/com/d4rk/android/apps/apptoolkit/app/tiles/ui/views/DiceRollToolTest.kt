@@ -17,6 +17,10 @@
 
 package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views
 
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.tools.ConstantFaceNumbers
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.tools.DiceCubeFace
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.tools.DiceFaceDefinitions
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.tools.targetAnglesFor
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
