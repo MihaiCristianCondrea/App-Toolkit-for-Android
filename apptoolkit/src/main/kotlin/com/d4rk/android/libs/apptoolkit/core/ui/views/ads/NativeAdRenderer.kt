@@ -124,9 +124,14 @@ private class NativeAdViewHolder(
         advertiser.setTextColor(palette.onSurfaceVariant)
 
         iconFrame?.let { frame ->
+            val radiusDp = if (presentation is NativeAdPresentation.Compact) {
+                COMPACT_ICON_SIZE_DP / 2
+            } else {
+                ICON_CORNER_RADIUS_DP
+            }
             frame.background = roundedDrawable(
                 color = palette.surfaceVariant,
-                radiusPx = frame.context.dp(value = ICON_CORNER_RADIUS_DP),
+                radiusPx = frame.context.dp(value = radiusDp),
             )
         }
         mediaFrame?.let { frame ->
@@ -206,7 +211,7 @@ private const val CTA_CORNER_RADIUS_DP: Int = 20
 private const val CTA_HORIZONTAL_PADDING_DP: Int = 20
 private const val CTA_VERTICAL_PADDING_DP: Int = 8
 
-private const val CARD_PADDING_DP: Int = 8
+private const val CARD_PADDING_DP: Int = 12
 private const val BAR_HORIZONTAL_PADDING_DP: Int = 16
 private const val BAR_VERTICAL_PADDING_DP: Int = 12
 private const val SPACING_DP: Int = 16
@@ -214,7 +219,7 @@ private const val SMALL_SPACING_DP: Int = 8
 private const val LABEL_HORIZONTAL_PADDING_DP: Int = 8
 private const val LABEL_VERTICAL_PADDING_DP: Int = 4
 
-private const val COMPACT_ICON_SIZE_DP: Int = 48
+private const val COMPACT_ICON_SIZE_DP: Int = 44
 private const val BAR_ICON_SIZE_DP: Int = 32
 private const val GRID_ICON_SIZE_DP: Int = 56
 private const val ICON_PADDING_DP: Int = 4
@@ -318,7 +323,11 @@ private fun createFeatured(context: Context): NativeAdViewHolder {
 
 private fun createCompact(context: Context): NativeAdViewHolder {
     val root = nativeAdRoot(context = context)
-    val content = verticalContent(context = context, padding = context.dp(CARD_PADDING_DP))
+    val content = verticalContent(context = context, padding = 0).apply {
+        val horizontalPadding = context.dp(16)
+        val verticalPadding = context.dp(12)
+        setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+    }
     val label = sponsoredLabelView(context = context)
 
     val row = LinearLayout(context).apply {
@@ -329,7 +338,12 @@ private fun createCompact(context: Context): NativeAdViewHolder {
             ViewGroup.LayoutParams.WRAP_CONTENT,
         ).apply { topMargin = context.dp(SMALL_SPACING_DP) }
     }
-    val iconFrame = iconFrameView(context = context, sizeDp = COMPACT_ICON_SIZE_DP)
+    val iconFrame = iconFrameView(
+        context = context,
+        sizeDp = COMPACT_ICON_SIZE_DP,
+        radiusDp = COMPACT_ICON_SIZE_DP / 2,
+        paddingDp = 8
+    )
     val icon = iconFrame.getChildAt(0) as ImageView
 
     val texts = LinearLayout(context).apply {
@@ -585,11 +599,18 @@ private fun callToActionView(context: Context): TextView = TextView(context).app
  * Icon container. The icon itself is the registered `iconView`; the frame carries the rounded
  * background so the icon can keep its own padding without clipping the tint.
  */
-private fun iconFrameView(context: Context, sizeDp: Int): LinearLayout = LinearLayout(context).apply {
+private fun iconFrameView(
+    context: Context,
+    sizeDp: Int,
+    radiusDp: Int = ICON_CORNER_RADIUS_DP,
+    paddingDp: Int = 0,
+): LinearLayout = LinearLayout(context).apply {
     val size: Int = context.dp(sizeDp)
+    val padding: Int = context.dp(paddingDp)
+    setPadding(padding, padding, padding, padding)
     gravity = Gravity.CENTER
     clipToOutline = true
-    outlineProvider = roundedOutline(radiusPx = context.dp(ICON_CORNER_RADIUS_DP))
+    outlineProvider = roundedOutline(radiusPx = context.dp(radiusDp))
     layoutParams = LinearLayout.LayoutParams(size, size)
     addView(
         ImageView(context).apply {
