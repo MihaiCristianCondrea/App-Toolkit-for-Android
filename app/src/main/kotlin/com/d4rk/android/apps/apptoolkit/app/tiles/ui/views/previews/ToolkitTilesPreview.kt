@@ -15,8 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.tiles.ui
+package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.previews
 
+import android.R
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -27,6 +28,7 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileIcon
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesScreen
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesUiState
 import kotlinx.collections.immutable.persistentListOf
@@ -39,20 +41,20 @@ fun ToolkitTilesScreenPreview() {
         categories = persistentListOf(
             ToolkitTileCategory(
                 id = "sensors",
-                titleResId = android.R.string.unknownName,
+                titleResId = R.string.unknownName,
                 icon = ToolkitTileIcon.Compass,
                 tiles = persistentListOf(
                     ToolkitTile(
                         id = "level",
-                        titleResId = android.R.string.unknownName,
-                        summaryResId = android.R.string.unknownName,
+                        titleResId = R.string.unknownName,
+                        summaryResId = R.string.unknownName,
                         icon = ToolkitTileIcon.Level,
                         status = ToolkitTileStatus.Available
                     ),
                     ToolkitTile(
                         id = "compass",
-                        titleResId = android.R.string.unknownName,
-                        summaryResId = android.R.string.unknownName,
+                        titleResId = R.string.unknownName,
+                        summaryResId = R.string.unknownName,
                         icon = ToolkitTileIcon.Compass,
                         status = ToolkitTileStatus.NeedsSetup
                     )

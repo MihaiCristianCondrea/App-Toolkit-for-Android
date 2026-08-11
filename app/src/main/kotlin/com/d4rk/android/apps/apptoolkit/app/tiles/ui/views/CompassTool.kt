@@ -15,74 +15,67 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.tiles.ui.components
+package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.NotificationsActive
-import androidx.compose.material.icons.outlined.NotificationsOff
-import androidx.compose.material.icons.outlined.Vibration
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.d4rk.android.apps.apptoolkit.R
-import com.d4rk.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 @Composable
-fun SoundModeTool(
-    mode: RingerMode,
-    onCycle: () -> Unit
-) {
-    val icon: ImageVector = when (mode) {
-        RingerMode.Normal -> Icons.Outlined.NotificationsActive
-        RingerMode.Vibrate -> Icons.Outlined.Vibration
-        RingerMode.Silent -> Icons.Outlined.NotificationsOff
-    }
-
+fun CompassTool(azimuth: Float) {
     Column(
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ResultPill(label = mode.name)
-
+        ResultPill(
+            label = stringResource(
+                id = R.string.tile_service_azimuth_format,
+                azimuth.toInt()
+            )
+        )
         Box(
-            modifier = Modifier.padding(vertical = SizeConstants.LargeSize),
+            modifier = Modifier
+                .size(200.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = icon,
+                imageVector = Icons.Outlined.Explore,
                 contentDescription = null,
-                modifier = Modifier.size(100.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(SizeConstants.LargeSize)
+                    .rotate(-azimuth - 45f),
                 tint = MaterialTheme.colorScheme.primary
             )
+            Box(
+                modifier = Modifier
+                    .width(2.dp)
+                    .height(20.dp)
+                    .background(MaterialTheme.colorScheme.error)
+                    .align(Alignment.TopCenter)
+            )
         }
-
-        Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
-
-        Button(onClick = onCycle) {
-            Text(text = stringResource(id = R.string.tool_system_cycle_mode))
-        }
-
-        Text(
-            text = "Tap to change ringer mode",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
     }
 }

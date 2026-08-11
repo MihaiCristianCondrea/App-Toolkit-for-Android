@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.tiles.ui.components
+package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -49,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.d4rk.android.apps.apptoolkit.R
@@ -176,7 +177,7 @@ private fun CoinFace(
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            painter = androidx.compose.ui.res.painterResource(id = iconRes),
+            painter = painterResource(id = iconRes),
             contentDescription = null,
             modifier = Modifier.size(64.dp),
             tint = tint

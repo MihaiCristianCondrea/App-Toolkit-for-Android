@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.tiles.ui.components
+package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

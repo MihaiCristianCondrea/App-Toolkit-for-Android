@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
@@ -44,6 +45,35 @@ import com.d4rk.android.libs.apptoolkit.R
 import com.google.android.libraries.ads.mobile.sdk.nativead.MediaView
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
+
+/**
+ * Interface for creating the view hierarchy for different native ad presentations.
+ *
+ * Use this to provide custom ad view structures from the host app while keeping the
+ * ad lifecycle and binding logic in the toolkit.
+ */
+interface NativeAdViewFactory {
+    fun createViewHolder(context: Context, presentation: NativeAdPresentation): NativeAdViewHolder
+}
+
+/**
+ * Default implementation of [NativeAdViewFactory] providing the toolkit's standard presentations.
+ */
+class DefaultNativeAdViewFactory : NativeAdViewFactory {
+    override fun createViewHolder(
+        context: Context,
+        presentation: NativeAdPresentation
+    ): NativeAdViewHolder = when (presentation) {
+        NativeAdPresentation.Featured -> createFeatured(context = context)
+        NativeAdPresentation.Compact -> createCompact(context = context)
+        NativeAdPresentation.Grid -> createGrid(context = context)
+        NativeAdPresentation.BarRow -> createBarRow(context = context)
+    }
+}
+
+val LocalNativeAdViewFactory = staticCompositionLocalOf<NativeAdViewFactory> {
+    DefaultNativeAdViewFactory()
+}
 
 /**
  * Renders [nativeAd] inside a programmatically built [NativeAdView].
@@ -63,6 +93,7 @@ internal fun NativeAdRenderer(
     palette: NativeAdPalette,
     modifier: Modifier = Modifier,
 ) {
+    val factory = LocalNativeAdViewFactory.current
     val sponsoredLabel: String = stringResource(id = R.string.sponsored_ad_label)
 
     // Grid cells are square and their content is centred, so the ad view has to fill the cell;
@@ -76,7 +107,7 @@ internal fun NativeAdRenderer(
     key(presentation) {
         AndroidView(
             modifier = modifier.then(sizeModifier),
-            factory = { context -> createNativeAdView(context, presentation).root },
+            factory = { context -> factory.createViewHolder(context, presentation).root },
             update = { view ->
                 val holder: NativeAdViewHolder = view.holder ?: return@AndroidView
                 holder.applyPalette(palette = palette)
@@ -89,7 +120,7 @@ internal fun NativeAdRenderer(
 /**
  * Strong references to the views a native ad binds to, so binding never needs `findViewById`.
  */
-private class NativeAdViewHolder(
+class NativeAdViewHolder(
     val presentation: NativeAdPresentation,
     val root: NativeAdView,
     val content: LinearLayout,
@@ -124,14 +155,9 @@ private class NativeAdViewHolder(
         advertiser.setTextColor(palette.onSurfaceVariant)
 
         iconFrame?.let { frame ->
-            val radiusDp = if (presentation is NativeAdPresentation.Compact) {
-                COMPACT_ICON_SIZE_DP / 2
-            } else {
-                ICON_CORNER_RADIUS_DP
-            }
             frame.background = roundedDrawable(
                 color = palette.surfaceVariant,
-                radiusPx = frame.context.dp(value = radiusDp),
+                radiusPx = frame.context.dp(value = ICON_CORNER_RADIUS_DP),
             )
         }
         mediaFrame?.let { frame ->
@@ -200,45 +226,35 @@ private fun TextView.bindOptionalText(text: CharSequence?) {
     }
 }
 
-private const val ICON_CORNER_RADIUS_DP: Int = 12
-private const val LABEL_CORNER_RADIUS_DP: Int = 8
-private const val MEDIA_CORNER_RADIUS_DP: Int = 20
+const val ICON_CORNER_RADIUS_DP: Int = 12
+const val LABEL_CORNER_RADIUS_DP: Int = 8
+const val MEDIA_CORNER_RADIUS_DP: Int = 20
 
 /** Media aspect ratio for the Featured presentation, matching the layout it replaced. */
-private const val MEDIA_ASPECT_RATIO: Float = 16f / 9f
-private const val CTA_CORNER_RADIUS_DP: Int = 20
+const val MEDIA_ASPECT_RATIO: Float = 16f / 9f
+const val CTA_CORNER_RADIUS_DP: Int = 20
 
-private const val CTA_HORIZONTAL_PADDING_DP: Int = 20
-private const val CTA_VERTICAL_PADDING_DP: Int = 8
+const val CTA_HORIZONTAL_PADDING_DP: Int = 20
+const val CTA_VERTICAL_PADDING_DP: Int = 8
 
-private const val CARD_PADDING_DP: Int = 12
-private const val BAR_HORIZONTAL_PADDING_DP: Int = 16
-private const val BAR_VERTICAL_PADDING_DP: Int = 12
-private const val SPACING_DP: Int = 16
-private const val SMALL_SPACING_DP: Int = 8
-private const val LABEL_HORIZONTAL_PADDING_DP: Int = 8
-private const val LABEL_VERTICAL_PADDING_DP: Int = 4
+const val CARD_PADDING_DP: Int = 8
+const val BAR_HORIZONTAL_PADDING_DP: Int = 16
+const val BAR_VERTICAL_PADDING_DP: Int = 12
+const val SPACING_DP: Int = 16
+const val SMALL_SPACING_DP: Int = 8
+const val LABEL_HORIZONTAL_PADDING_DP: Int = 8
+const val LABEL_VERTICAL_PADDING_DP: Int = 4
 
-private const val COMPACT_ICON_SIZE_DP: Int = 44
-private const val BAR_ICON_SIZE_DP: Int = 32
-private const val GRID_ICON_SIZE_DP: Int = 56
-private const val ICON_PADDING_DP: Int = 4
+const val COMPACT_ICON_SIZE_DP: Int = 48
+const val BAR_ICON_SIZE_DP: Int = 32
+const val GRID_ICON_SIZE_DP: Int = 56
+const val ICON_PADDING_DP: Int = 4
 
-private const val LABEL_TEXT_SIZE_SP: Float = 11f
-private const val ADVERTISER_TEXT_SIZE_SP: Float = 12f
-private const val BODY_TEXT_SIZE_SP: Float = 14f
-private const val HEADLINE_TEXT_SIZE_SP: Float = 16f
-private const val CTA_TEXT_SIZE_SP: Float = 14f
-
-private fun createNativeAdView(
-    context: Context,
-    presentation: NativeAdPresentation,
-): NativeAdViewHolder = when (presentation) {
-    NativeAdPresentation.Featured -> createFeatured(context = context)
-    NativeAdPresentation.Compact -> createCompact(context = context)
-    NativeAdPresentation.Grid -> createGrid(context = context)
-    NativeAdPresentation.BarRow -> createBarRow(context = context)
-}
+const val LABEL_TEXT_SIZE_SP: Float = 11f
+const val ADVERTISER_TEXT_SIZE_SP: Float = 12f
+const val BODY_TEXT_SIZE_SP: Float = 14f
+const val HEADLINE_TEXT_SIZE_SP: Float = 16f
+const val CTA_TEXT_SIZE_SP: Float = 14f
 
 private fun createFeatured(context: Context): NativeAdViewHolder {
     val root = nativeAdRoot(context = context)
@@ -323,11 +339,7 @@ private fun createFeatured(context: Context): NativeAdViewHolder {
 
 private fun createCompact(context: Context): NativeAdViewHolder {
     val root = nativeAdRoot(context = context)
-    val content = verticalContent(context = context, padding = 0).apply {
-        val horizontalPadding = context.dp(16)
-        val verticalPadding = context.dp(12)
-        setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
-    }
+    val content = verticalContent(context = context, padding = context.dp(CARD_PADDING_DP))
     val label = sponsoredLabelView(context = context)
 
     val row = LinearLayout(context).apply {
@@ -338,12 +350,7 @@ private fun createCompact(context: Context): NativeAdViewHolder {
             ViewGroup.LayoutParams.WRAP_CONTENT,
         ).apply { topMargin = context.dp(SMALL_SPACING_DP) }
     }
-    val iconFrame = iconFrameView(
-        context = context,
-        sizeDp = COMPACT_ICON_SIZE_DP,
-        radiusDp = COMPACT_ICON_SIZE_DP / 2,
-        paddingDp = 8
-    )
+    val iconFrame = iconFrameView(context = context, sizeDp = COMPACT_ICON_SIZE_DP)
     val icon = iconFrame.getChildAt(0) as ImageView
 
     val texts = LinearLayout(context).apply {
@@ -509,14 +516,14 @@ private fun createBarRow(context: Context): NativeAdViewHolder {
     )
 }
 
-private fun nativeAdRoot(
+fun nativeAdRoot(
     context: Context,
     height: Int = ViewGroup.LayoutParams.WRAP_CONTENT,
 ): NativeAdView = NativeAdView(context).apply {
     layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height)
 }
 
-private fun verticalContent(context: Context, padding: Int): LinearLayout = LinearLayout(context)
+fun verticalContent(context: Context, padding: Int): LinearLayout = LinearLayout(context)
     .apply {
         orientation = LinearLayout.VERTICAL
         setPadding(padding, padding, padding, padding)
@@ -526,7 +533,7 @@ private fun verticalContent(context: Context, padding: Int): LinearLayout = Line
         )
     }
 
-private fun sponsoredLabelView(context: Context): TextView = TextView(context).apply {
+fun sponsoredLabelView(context: Context): TextView = TextView(context).apply {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, LABEL_TEXT_SIZE_SP)
     isAllCaps = true
     setPadding(
@@ -541,7 +548,7 @@ private fun sponsoredLabelView(context: Context): TextView = TextView(context).a
     )
 }
 
-private fun headlineView(context: Context, maxLines: Int): TextView = TextView(context).apply {
+fun headlineView(context: Context, maxLines: Int): TextView = TextView(context).apply {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, HEADLINE_TEXT_SIZE_SP)
     setTypeface(typeface, Typeface.BOLD)
     this.maxLines = maxLines
@@ -552,7 +559,7 @@ private fun headlineView(context: Context, maxLines: Int): TextView = TextView(c
     )
 }
 
-private fun bodyView(context: Context, maxLines: Int): TextView = TextView(context).apply {
+fun bodyView(context: Context, maxLines: Int): TextView = TextView(context).apply {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, BODY_TEXT_SIZE_SP)
     this.maxLines = maxLines
     ellipsize = TextUtils.TruncateAt.END
@@ -562,7 +569,7 @@ private fun bodyView(context: Context, maxLines: Int): TextView = TextView(conte
     )
 }
 
-private fun advertiserView(context: Context): TextView = TextView(context).apply {
+fun advertiserView(context: Context): TextView = TextView(context).apply {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, ADVERTISER_TEXT_SIZE_SP)
     maxLines = 1
     ellipsize = TextUtils.TruncateAt.END
@@ -579,7 +586,7 @@ private fun advertiserView(context: Context): TextView = TextView(context).apply
  * app's buttons do. A hardcoded minimum height made the CTA taller than its neighbours in every
  * presentation that puts it on a row with an icon or an advertiser line.
  */
-private fun callToActionView(context: Context): TextView = TextView(context).apply {
+fun callToActionView(context: Context): TextView = TextView(context).apply {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, CTA_TEXT_SIZE_SP)
     maxLines = 1
     gravity = Gravity.CENTER
@@ -599,7 +606,7 @@ private fun callToActionView(context: Context): TextView = TextView(context).app
  * Icon container. The icon itself is the registered `iconView`; the frame carries the rounded
  * background so the icon can keep its own padding without clipping the tint.
  */
-private fun iconFrameView(
+fun iconFrameView(
     context: Context,
     sizeDp: Int,
     radiusDp: Int = ICON_CORNER_RADIUS_DP,
@@ -624,11 +631,11 @@ private fun iconFrameView(
     )
 }
 
-private fun <T : View> T.withTopMargin(margin: Int): T = apply {
+fun <T : View> T.withTopMargin(margin: Int): T = apply {
     (layoutParams as? LinearLayout.LayoutParams)?.topMargin = margin
 }
 
-private fun TextView.centerHorizontally(): TextView = apply {
+fun TextView.centerHorizontally(): TextView = apply {
     gravity = Gravity.CENTER_HORIZONTAL
     (layoutParams as? LinearLayout.LayoutParams)?.gravity = Gravity.CENTER_HORIZONTAL
 }
@@ -636,7 +643,7 @@ private fun TextView.centerHorizontally(): TextView = apply {
 /**
  * A frame that always measures [widthToHeightRatio], whatever its child reports.
  */
-private class AspectRatioFrameLayout(
+class AspectRatioFrameLayout(
     context: Context,
     private val widthToHeightRatio: Float,
 ) : FrameLayout(context) {
@@ -655,17 +662,17 @@ private class AspectRatioFrameLayout(
     }
 }
 
-private fun roundedDrawable(color: Int, radiusPx: Int): GradientDrawable = GradientDrawable().apply {
+fun roundedDrawable(color: Int, radiusPx: Int): GradientDrawable = GradientDrawable().apply {
     shape = GradientDrawable.RECTANGLE
     cornerRadius = radiusPx.toFloat()
     setColor(color)
 }
 
-private fun roundedOutline(radiusPx: Int): ViewOutlineProvider = object : ViewOutlineProvider() {
+fun roundedOutline(radiusPx: Int): ViewOutlineProvider = object : ViewOutlineProvider() {
     override fun getOutline(view: View, outline: Outline) {
         outline.setRoundRect(0, 0, view.width, view.height, radiusPx.toFloat())
     }
 }
 
-private fun Context.dp(value: Int): Int =
+fun Context.dp(value: Int): Int =
     (value * resources.displayMetrics.density).toInt()

@@ -15,66 +15,66 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.tiles.ui.components
+package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Explore
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import com.d4rk.android.apps.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import kotlin.math.abs
 
 @Composable
-fun CompassTool(azimuth: Float) {
+fun LevelTool(pitch: Float, roll: Float) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ResultPill(
-            label = stringResource(
-                id = R.string.tile_service_azimuth_format,
-                azimuth.toInt()
-            )
-        )
+        Row(horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
+            ResultPill(label = "P: ${pitch.toInt()}°")
+            ResultPill(label = "R: ${roll.toInt()}°")
+        }
         Box(
             modifier = Modifier
                 .size(200.dp)
                 .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            Icon(
-                imageVector = Icons.Outlined.Explore,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(SizeConstants.LargeSize)
-                    .rotate(-azimuth - 45f),
-                tint = MaterialTheme.colorScheme.primary
-            )
+            // Target center circle
             Box(
                 modifier = Modifier
-                    .width(2.dp)
-                    .height(20.dp)
-                    .background(MaterialTheme.colorScheme.error)
-                    .align(Alignment.TopCenter)
+                    .size(40.dp)
+                    .background(Color.Transparent, CircleShape)
+                    .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape)
+            )
+            // Moving bubble
+            Box(
+                modifier = Modifier
+                    .size(30.dp)
+                    .graphicsLayer {
+                        translationX = -(roll.coerceIn(-45f, 45f) / 45f) * 80.dp.toPx()
+                        translationY = -(pitch.coerceIn(-45f, 45f) / 45f) * 80.dp.toPx()
+                    }
+                    .background(
+                        if (abs(pitch) < 1f && abs(roll) < 1f)
+                            MaterialTheme.colorScheme.primary
+                        else
+                            MaterialTheme.colorScheme.secondary,
+                        CircleShape
+                    )
             )
         }
     }

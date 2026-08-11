@@ -73,6 +73,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -102,15 +103,18 @@ import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileIcon
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.ToolkitToolKind
 import com.d4rk.android.apps.apptoolkit.app.tiles.domain.model.getTileServiceRequests
-import com.d4rk.android.apps.apptoolkit.app.tiles.ui.components.QuickToolsNativeAdCard
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.QuickToolsNativeAdCard
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesEvent
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.mapper.items
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.mapper.toNewTaskIntent
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
 import com.d4rk.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesUiState
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.MaterialColorsToolDialog
+import com.d4rk.android.apps.apptoolkit.app.tiles.ui.views.ads.ToolkitTilesNativeAdViewFactory
 import com.d4rk.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
 import com.d4rk.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
@@ -178,11 +182,15 @@ fun ToolkitTilesRoute(
         onEmpty = { NoDataScreen() },
         onError = { NoDataScreen() },
         onSuccess = { state ->
-            ToolkitTilesScreen(
-                state = state,
-                paddingValues = paddingValues,
-                onEvent = viewModel::onEvent,
-            )
+            CompositionLocalProvider(
+                LocalNativeAdViewFactory provides remember { ToolkitTilesNativeAdViewFactory() }
+            ) {
+                ToolkitTilesScreen(
+                    state = state,
+                    paddingValues = paddingValues,
+                    onEvent = viewModel::onEvent,
+                )
+            }
         },
     )
 }

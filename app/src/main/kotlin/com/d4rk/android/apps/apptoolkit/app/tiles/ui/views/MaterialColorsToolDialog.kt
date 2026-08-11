@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.tiles.ui
+package com.d4rk.android.apps.apptoolkit.app.tiles.ui.views
 
 import android.os.Build
 import androidx.annotation.ColorRes
@@ -36,6 +36,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -222,7 +223,7 @@ private fun ColorSwatch(
     }
 }
 
-private fun androidx.compose.material3.ColorScheme.toAppColorTable(title: String): ColorTable =
+private fun ColorScheme.toAppColorTable(title: String): ColorTable =
     ColorTable(
         title = title,
         colors = listOf(
@@ -275,6 +276,7 @@ private data class AndroidColorTable(
 private fun androidMaterialYouTables(): List<AndroidColorTable> = listOf(
     AndroidColorTable(
         title = stringResource(id = R.string.tool_material_colors_android_accent_1),
+        // FIXME: Field requires API level 31 (current min is 26): `android.R.color#system_accent1_0`
         colors = androidColorRamp(
             android.R.color.system_accent1_0,
             android.R.color.system_accent1_10,

@@ -173,3 +173,44 @@ host app's manifest. See [Consent (UMP) and the AdMob app id](consent-and-admob-
    `registerNativeAd`.
 3. Register an `AdsConfig` qualifier in the app module's `AdsModule`.
 4. Call `NativeAdSlot` from the screen. Do not write a new component with its own view tree.
+
+---
+
+## Screen-level Provisioning (Custom Styling)
+
+If a specific screen needs an ad to look different from the library defaults (e.g., circular icons, custom padding), use the `NativeAdViewFactory` pattern.
+
+### 1. Implement `NativeAdViewFactory`
+Create a factory in the host app (typically in the feature's `views/ads` package) and delegate unknown presentations to the toolkit's default.
+
+```kotlin
+class FeatureNativeAdViewFactory : NativeAdViewFactory {
+    private val defaultFactory = DefaultNativeAdViewFactory()
+
+    override fun createViewHolder(context: Context, presentation: NativeAdPresentation): NativeAdViewHolder {
+        return if (presentation is NativeAdPresentation.Compact) {
+            createCustomCompact(context)
+        } else {
+            defaultFactory.createViewHolder(context, presentation)
+        }
+    }
+
+    private fun createCustomCompact(context: Context): NativeAdViewHolder {
+        // Build your custom View hierarchy here using nativeAdRoot, verticalContent, etc.
+    }
+}
+```
+
+### 2. Provide the factory locally
+Wrap your screen content in a `CompositionLocalProvider` using `LocalNativeAdViewFactory`. This "shadows" the default factory only for that screen.
+
+```kotlin
+@Composable
+fun FeatureScreen(...) {
+    CompositionLocalProvider(
+        LocalNativeAdViewFactory provides remember { FeatureNativeAdViewFactory() }
+    ) {
+        FeatureContent(...)
+    }
+}
+```
