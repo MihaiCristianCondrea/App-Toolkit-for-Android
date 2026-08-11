@@ -20,8 +20,11 @@
   an empty bordered card behind, and they report load state so hosts can collapse the slot.
 - **Patch**: Changing a native ad unit no longer leaks the previously loaded ad.
 - **Patch**: Native ad colours follow in-app theme changes that do not recreate the activity.
-- **Patch**: The native ad "Sponsored" disclosure is translated in every supported locale, and the
-  call to action meets the 48 dp minimum touch target.
+- **Patch**: The native ad "Sponsored" disclosure is translated in every supported locale.
+- **Patch**: Native ad cards use the default card container instead of tinting themselves apart from
+  the content they sit among, the call to action no longer forces its own height, the grid cell
+  centres its content like the app cards it is interleaved with, and the media view keeps a 16:9
+  frame instead of taking whatever height the creative reports.
 
 # Version 26.07.1:
 

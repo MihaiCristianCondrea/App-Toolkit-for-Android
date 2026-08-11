@@ -49,7 +49,8 @@ fun HelpNativeAdCard(
         presentation = NativeAdPresentation.Compact,
         modifier = modifier,
         position = groupedPosition ?: GroupedItemPosition.SINGLE,
-        cornerRadius = SizeConstants.ExtraSmallSize,
+        // Matches QuestionCard, the item this row is interleaved with.
+        cornerRadius = SizeConstants.MediumSize,
         onAdLoaded = onAdLoaded,
     )
 }

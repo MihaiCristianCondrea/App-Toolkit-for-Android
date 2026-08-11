@@ -92,6 +92,10 @@ The Compose card the ad sits in, honouring `position` (grouped corners) and `sho
 preview stand-in. Kept separate from the renderer so the container is only composed once an ad
 exists.
 
+It applies **no `colors` override**: an ad sits among ordinary content and should read as an ordinary
+card. Tinting it apart from its neighbours makes it look like a different kind of surface. Pass
+`cornerRadius` to match whatever card the slot is interleaved with.
+
 ---
 
 ## Shipped components
@@ -131,7 +135,9 @@ host app's manifest. See [Consent (UMP) and the AdMob app id](consent-and-admob-
 - The disclosure label is `R.string.sponsored_ad_label`, a translated string used by every
   presentation. It used to be a hardcoded English literal (`"Sponsored"` in Kotlin, `"● Sponsored"`
   in XML) in an app shipping 25 locales.
-- The call to action has a **48 dp** minimum touch target. The XML layouts used 34–36 dp.
+- The call to action carries **no forced height** — it wraps its label plus padding, like the rest of
+  the app's buttons. A hardcoded minimum height made it taller than the icon and advertiser it shares
+  a row with.
 - Missing assets (no body, no icon, no advertiser, no CTA) are hidden before `registerNativeAd`, so
   the layout stays correct across creative payloads.
 - Render an ad only after consent and ads settings allow serving. Placement policy belongs to the

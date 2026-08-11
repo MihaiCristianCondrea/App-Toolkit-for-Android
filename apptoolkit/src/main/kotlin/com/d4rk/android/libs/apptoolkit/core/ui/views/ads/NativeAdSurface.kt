@@ -23,10 +23,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,6 +62,9 @@ internal fun NativeAdSurface(
     }
 
     val grouped: Boolean = position != GroupedItemPosition.SINGLE
+    // Deliberately no `colors` override: an ad sits among ordinary content and should read as an
+    // ordinary card. Tinting it apart from its neighbours (a lower container when grouped, an
+    // elevation overlay when standalone) made it look like a different kind of surface.
     Card(
         modifier = if (grouped) {
             modifier.groupedCorners(
@@ -74,13 +75,6 @@ internal fun NativeAdSurface(
             modifier
         },
         shape = if (grouped) RectangleShape else RoundedCornerShape(size = cornerRadius),
-        colors = CardDefaults.cardColors(
-            containerColor = if (grouped) {
-                MaterialTheme.colorScheme.surfaceContainerLow
-            } else {
-                MaterialTheme.colorScheme.surfaceColorAtElevation(SizeConstants.ExtraTinySize)
-            },
-        ),
     ) {
         content()
     }

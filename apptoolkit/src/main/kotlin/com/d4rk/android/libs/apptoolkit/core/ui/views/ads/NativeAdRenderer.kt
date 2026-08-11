@@ -27,9 +27,11 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
@@ -62,9 +64,17 @@ internal fun NativeAdRenderer(
 ) {
     val sponsoredLabel: String = stringResource(id = R.string.sponsored_ad_label)
 
+    // Grid cells are square and their content is centred, so the ad view has to fill the cell;
+    // every other presentation wraps its own height.
+    val sizeModifier: Modifier = if (presentation is NativeAdPresentation.Grid) {
+        Modifier.fillMaxSize()
+    } else {
+        Modifier.fillMaxWidth()
+    }
+
     key(presentation) {
         AndroidView(
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier.then(sizeModifier),
             factory = { context -> createNativeAdView(context, presentation).root },
             update = { view ->
                 val holder: NativeAdViewHolder = view.holder ?: return@AndroidView
@@ -84,6 +94,7 @@ private class NativeAdViewHolder(
     val content: LinearLayout,
     val label: TextView,
     val media: MediaView?,
+    val mediaFrame: View?,
     val icon: ImageView?,
     val iconFrame: View?,
     val headline: TextView,
@@ -107,10 +118,10 @@ private class NativeAdViewHolder(
                 radiusPx = frame.context.dp(value = ICON_CORNER_RADIUS_DP),
             )
         }
-        media?.let { mediaView ->
-            mediaView.background = roundedDrawable(
+        mediaFrame?.let { frame ->
+            frame.background = roundedDrawable(
                 color = palette.surfaceContainerHighest,
-                radiusPx = mediaView.context.dp(value = MEDIA_CORNER_RADIUS_DP),
+                radiusPx = frame.context.dp(value = MEDIA_CORNER_RADIUS_DP),
             )
         }
         callToAction?.let { cta ->
@@ -175,11 +186,13 @@ private fun TextView.bindOptionalText(text: CharSequence?) {
 
 private const val ICON_CORNER_RADIUS_DP: Int = 12
 private const val MEDIA_CORNER_RADIUS_DP: Int = 20
+
+/** Media aspect ratio for the Featured presentation, matching the layout it replaced. */
+private const val MEDIA_ASPECT_RATIO: Float = 16f / 9f
 private const val CTA_CORNER_RADIUS_DP: Int = 20
 
-/** Minimum touch target for the call to action, per Material accessibility guidance. */
-private const val CTA_MIN_HEIGHT_DP: Int = 48
 private const val CTA_HORIZONTAL_PADDING_DP: Int = 20
+private const val CTA_VERTICAL_PADDING_DP: Int = 8
 
 private const val CARD_PADDING_DP: Int = 8
 private const val BAR_HORIZONTAL_PADDING_DP: Int = 16
@@ -214,14 +227,27 @@ private fun createFeatured(context: Context): NativeAdViewHolder {
     val root = nativeAdRoot(context = context)
     val content = verticalContent(context = context, padding = context.dp(CARD_PADDING_DP))
     val label = sponsoredLabelView(context = context)
+
+    // The MediaView is sized by the creative, so on its own it renders at whatever height the asset
+    // happens to have — which is what made this card look arbitrary from one ad to the next. The
+    // 16:9 frame reproduces the constraint the XML layout used to impose.
+    val mediaFrame = AspectRatioFrameLayout(context = context, widthToHeightRatio = MEDIA_ASPECT_RATIO)
+        .apply {
+            clipToOutline = true
+            outlineProvider = roundedOutline(radiusPx = context.dp(MEDIA_CORNER_RADIUS_DP))
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+            ).apply { topMargin = context.dp(SPACING_DP) }
+        }
     val media = MediaView(context).apply {
-        clipToOutline = true
-        outlineProvider = roundedOutline(radiusPx = context.dp(MEDIA_CORNER_RADIUS_DP))
-        layoutParams = LinearLayout.LayoutParams(
+        layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-        ).apply { topMargin = context.dp(SPACING_DP) }
+            ViewGroup.LayoutParams.MATCH_PARENT,
+        )
     }
+    mediaFrame.addView(media)
+
     val headline = headlineView(context = context, maxLines = 2).withTopMargin(context.dp(SPACING_DP))
     val body = bodyView(context = context, maxLines = 3).withTopMargin(context.dp(SMALL_SPACING_DP))
 
@@ -247,20 +273,19 @@ private fun createFeatured(context: Context): NativeAdViewHolder {
     footer.addView(callToAction)
 
     content.addView(label)
-    content.addView(media)
+    content.addView(mediaFrame)
     content.addView(headline)
     content.addView(body)
     content.addView(footer)
     root.addView(content)
 
-    // MediaView measures itself from the ad's aspect ratio; the 16:9 hint from the old layout is
-    // reproduced by letting it match the card width and wrap its own height.
     return NativeAdViewHolder(
         presentation = NativeAdPresentation.Featured,
         root = root,
         content = content,
         label = label,
         media = media,
+        mediaFrame = mediaFrame,
         icon = icon,
         iconFrame = iconFrame,
         headline = headline,
@@ -319,6 +344,7 @@ private fun createCompact(context: Context): NativeAdViewHolder {
         content = content,
         label = label,
         media = null,
+        mediaFrame = null,
         icon = icon,
         iconFrame = iconFrame,
         headline = headline,
@@ -328,19 +354,37 @@ private fun createCompact(context: Context): NativeAdViewHolder {
     )
 }
 
+/**
+ * Square cell that sits among ordinary content cards in a grid.
+ *
+ * Everything is centred, matching the app cards it is interleaved with: a left-aligned column read
+ * as a different kind of tile.
+ */
 private fun createGrid(context: Context): NativeAdViewHolder {
-    val root = nativeAdRoot(context = context)
-    val content = verticalContent(context = context, padding = context.dp(SPACING_DP))
-    val label = sponsoredLabelView(context = context)
+    val root = nativeAdRoot(context = context, height = ViewGroup.LayoutParams.MATCH_PARENT)
+    val content = verticalContent(context = context, padding = context.dp(SPACING_DP)).apply {
+        gravity = Gravity.CENTER
+        layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+        )
+    }
+    val label = sponsoredLabelView(context = context).centerHorizontally()
     val iconFrame = iconFrameView(context = context, sizeDp = GRID_ICON_SIZE_DP).apply {
-        (layoutParams as LinearLayout.LayoutParams).topMargin = context.dp(SPACING_DP)
+        (layoutParams as LinearLayout.LayoutParams).apply {
+            topMargin = context.dp(SPACING_DP)
+            gravity = Gravity.CENTER_HORIZONTAL
+        }
     }
     val icon = iconFrame.getChildAt(0) as ImageView
     val headline = headlineView(context = context, maxLines = 1)
+        .centerHorizontally()
         .withTopMargin(context.dp(SPACING_DP))
     val advertiser = advertiserView(context = context)
+        .centerHorizontally()
         .withTopMargin(context.dp(ICON_PADDING_DP))
     val body = bodyView(context = context, maxLines = 2)
+        .centerHorizontally()
         .withTopMargin(context.dp(ICON_PADDING_DP))
 
     content.addView(label)
@@ -356,6 +400,7 @@ private fun createGrid(context: Context): NativeAdViewHolder {
         content = content,
         label = label,
         media = null,
+        mediaFrame = null,
         icon = icon,
         iconFrame = iconFrame,
         headline = headline,
@@ -419,6 +464,7 @@ private fun createBarRow(context: Context): NativeAdViewHolder {
         content = content,
         label = label,
         media = null,
+        mediaFrame = null,
         icon = icon,
         iconFrame = iconFrame,
         headline = headline,
@@ -428,11 +474,11 @@ private fun createBarRow(context: Context): NativeAdViewHolder {
     )
 }
 
-private fun nativeAdRoot(context: Context): NativeAdView = NativeAdView(context).apply {
-    layoutParams = ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT,
-    )
+private fun nativeAdRoot(
+    context: Context,
+    height: Int = ViewGroup.LayoutParams.WRAP_CONTENT,
+): NativeAdView = NativeAdView(context).apply {
+    layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height)
 }
 
 private fun verticalContent(context: Context, padding: Int): LinearLayout = LinearLayout(context)
@@ -491,17 +537,22 @@ private fun advertiserView(context: Context): TextView = TextView(context).apply
     )
 }
 
+/**
+ * The call to action.
+ *
+ * It carries no forced height: the button wraps its label plus padding, the way the rest of the
+ * app's buttons do. A hardcoded minimum height made the CTA taller than its neighbours in every
+ * presentation that puts it on a row with an icon or an advertiser line.
+ */
 private fun callToActionView(context: Context): TextView = TextView(context).apply {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, CTA_TEXT_SIZE_SP)
     maxLines = 1
     gravity = Gravity.CENTER
-    minHeight = context.dp(CTA_MIN_HEIGHT_DP)
-    minimumHeight = context.dp(CTA_MIN_HEIGHT_DP)
     setPadding(
         context.dp(CTA_HORIZONTAL_PADDING_DP),
-        0,
+        context.dp(CTA_VERTICAL_PADDING_DP),
         context.dp(CTA_HORIZONTAL_PADDING_DP),
-        0,
+        context.dp(CTA_VERTICAL_PADDING_DP),
     )
     layoutParams = LinearLayout.LayoutParams(
         ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -533,6 +584,33 @@ private fun iconFrameView(context: Context, sizeDp: Int): LinearLayout = LinearL
 
 private fun <T : View> T.withTopMargin(margin: Int): T = apply {
     (layoutParams as? LinearLayout.LayoutParams)?.topMargin = margin
+}
+
+private fun TextView.centerHorizontally(): TextView = apply {
+    gravity = Gravity.CENTER_HORIZONTAL
+    (layoutParams as? LinearLayout.LayoutParams)?.gravity = Gravity.CENTER_HORIZONTAL
+}
+
+/**
+ * A frame that always measures [widthToHeightRatio], whatever its child reports.
+ */
+private class AspectRatioFrameLayout(
+    context: Context,
+    private val widthToHeightRatio: Float,
+) : FrameLayout(context) {
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val width: Int = MeasureSpec.getSize(widthMeasureSpec)
+        if (width <= 0) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+            return
+        }
+        val height: Int = (width / widthToHeightRatio).toInt()
+        super.onMeasure(
+            MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY),
+        )
+    }
 }
 
 private fun roundedDrawable(color: Int, radiusPx: Int): GradientDrawable = GradientDrawable().apply {
