@@ -58,6 +58,10 @@ class FakeFirebaseController : FirebaseController {
         // no-op
     }
 
+    override fun recordNonFatal(throwable: Throwable, attributes: Map<String, String>) {
+        // no-op
+    }
+
     override fun logEvent(event: AnalyticsEvent) {
         // no-op
     }

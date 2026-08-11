@@ -23,6 +23,7 @@ import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.AdsCoreManager
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.d4rk.android.libs.apptoolkit.core.di.TestDispatchers
 import com.d4rk.android.libs.apptoolkit.core.utils.interfaces.OnShowAdCompleteListener
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.AdMobAppIdProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
 import com.google.android.libraries.ads.mobile.sdk.MobileAds
 import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAd
@@ -39,6 +40,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Test
 import java.lang.reflect.InvocationTargetException
 import java.util.Date
@@ -48,6 +50,12 @@ import kotlin.test.assertFailsWith
 
 class TestAdsCoreManager {
     private val testScope = CoroutineScope(Dispatchers.Unconfined)
+
+    /**
+     * [AdsCoreManager] now resolves the AdMob app id from the host manifest instead of using a
+     * hardcoded sample id, so the tests have to supply one.
+     */
+    private val adMobAppIdProvider = AdMobAppIdProvider { "ca-app-pub-1234567890123456~1234567890" }
     private val noopContinuation = object : Continuation<Unit> {
         override val context = EmptyCoroutineContext
         override fun resumeWith(result: Result<Unit>) {
@@ -61,7 +69,7 @@ class TestAdsCoreManager {
         val context = mockk<Context>()
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
-        val manager = AdsCoreManager(context, provider, TestDispatchers())
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), adMobAppIdProvider)
 
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(any()) } returns flowOf(true)
@@ -78,12 +86,38 @@ class TestAdsCoreManager {
     }
 
     @Test
+    fun `initializeAds skips MobileAds when the host declares no AdMob app id`() {
+        println("🚀 [TEST] initializeAds skips MobileAds when the host declares no AdMob app id")
+        val context = mockk<Context>()
+        every { context.applicationContext } returns context
+        val provider = mockk<BuildInfoProvider>()
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), AdMobAppIdProvider { null })
+
+        val dataStore = mockk<CommonDataStore>()
+        every { dataStore.ads(any()) } returns flowOf(true)
+        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
+        storeField.isAccessible = true
+        storeField.set(manager, dataStore)
+
+        mockkStatic(MobileAds::class)
+        justRun { MobileAds.initialize(context, any(), any()) }
+
+        runBlocking { manager.initializeAds("id") }
+
+        verify(exactly = 0) { MobileAds.initialize(context, any(), any()) }
+        val mgrField = AdsCoreManager::class.java.getDeclaredField("appOpenAdManager")
+        mgrField.isAccessible = true
+        assertNull(mgrField.get(manager))
+        println("🏁 [TEST DONE] initializeAds skips MobileAds when the host declares no AdMob app id")
+    }
+
+    @Test
     fun `showAdIfAvailable before init does nothing`() {
         println("🚀 [TEST] showAdIfAvailable before init does nothing")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
-        val manager = AdsCoreManager(context, provider, TestDispatchers())
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), adMobAppIdProvider)
         val activity = mockk<Activity>()
 
         manager.showAdIfAvailable(activity, testScope)
@@ -96,7 +130,7 @@ class TestAdsCoreManager {
         val context = mockk<Context>()
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
-        val manager = AdsCoreManager(context, provider, TestDispatchers())
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), adMobAppIdProvider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(any()) } returns flowOf(true)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
@@ -141,7 +175,7 @@ class TestAdsCoreManager {
         val context = mockk<Context>()
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
-        val manager = AdsCoreManager(context, provider, TestDispatchers())
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), adMobAppIdProvider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(any()) } returns flowOf(true)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
@@ -181,7 +215,7 @@ class TestAdsCoreManager {
         val context = mockk<Context>(relaxed = true)
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
-        val manager = AdsCoreManager(context, provider, TestDispatchers())
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), adMobAppIdProvider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(any()) } returns flowOf(true)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
@@ -229,7 +263,7 @@ class TestAdsCoreManager {
         val context = mockk<Context>()
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
-        val manager = AdsCoreManager(context, provider, TestDispatchers())
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), adMobAppIdProvider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(any()) } returns flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
@@ -253,7 +287,7 @@ class TestAdsCoreManager {
         val context = mockk<Context>()
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
-        val manager = AdsCoreManager(context, provider, TestDispatchers())
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), adMobAppIdProvider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(any()) } returns flowOf(true)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
@@ -290,7 +324,7 @@ class TestAdsCoreManager {
         val context = mockk<Context>()
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
-        val manager = AdsCoreManager(context, provider, TestDispatchers())
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), adMobAppIdProvider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(any()) } returns flowOf(true)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
@@ -327,7 +361,7 @@ class TestAdsCoreManager {
         val context = mockk<Context>()
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
-        val manager = AdsCoreManager(context, provider, TestDispatchers())
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), adMobAppIdProvider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(any()) } returns flowOf(true)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
@@ -371,7 +405,7 @@ class TestAdsCoreManager {
         val context = mockk<Context>()
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
-        val manager = AdsCoreManager(context, provider, TestDispatchers())
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), adMobAppIdProvider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(any()) } returns flowOf(true)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
@@ -404,7 +438,7 @@ class TestAdsCoreManager {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
         every { provider.isDebugBuild } returns true
-        val manager = AdsCoreManager(context, provider, TestDispatchers())
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), adMobAppIdProvider)
         val dataStore = mockk<CommonDataStore>()
         val slot = slot<Boolean>()
         every { dataStore.ads(capture(slot)) } returns flowOf(false)
@@ -430,7 +464,7 @@ class TestAdsCoreManager {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
         every { provider.isDebugBuild } returns false
-        val manager = AdsCoreManager(context, provider, TestDispatchers())
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), adMobAppIdProvider)
         val dataStore = mockk<CommonDataStore>()
         val slot = slot<Boolean>()
         every { dataStore.ads(capture(slot)) } returns flowOf(true)

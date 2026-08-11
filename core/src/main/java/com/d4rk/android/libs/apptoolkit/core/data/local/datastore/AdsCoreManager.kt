@@ -20,9 +20,12 @@ package com.d4rk.android.libs.apptoolkit.core.data.local.datastore
 // import com.d4rk.android.libs.apptoolkit.R
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.interfaces.OnShowAdCompleteListener
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.AdMobAppIdProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.ManifestAdMobAppIdProvider
 import com.google.android.libraries.ads.mobile.sdk.MobileAds
 import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAd
 import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAdEventCallback
@@ -48,26 +51,50 @@ open class AdsCoreManager(
     protected val context: Context,
     val buildInfoProvider: BuildInfoProvider,
     private val dispatchers: DispatcherProvider,
+    private val adMobAppIdProvider: AdMobAppIdProvider = ManifestAdMobAppIdProvider(context = context),
 ) {
     private var dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
     private var appOpenAdManager: AppOpenAdManager? = null
 
     /**
      * Prepares the SDK and loads an [AppOpenAd] if ads are enabled.
+     *
+     * The AdMob application id is resolved from the host app's manifest through
+     * [AdMobAppIdProvider]. The toolkit previously initialized the SDK with Google's sample app id,
+     * which pointed every consumer app at a publisher account that was not its own. When the host
+     * declares no usable `com.google.android.gms.ads.APPLICATION_ID` meta-data, initialization is
+     * skipped instead of falling back to a foreign id.
+     *
+     * Hosts must not call [MobileAds.initialize] themselves; a second initialization with a
+     * different id re-introduces the mismatch this method exists to prevent. Use
+     * [disableNativeValidator] instead of a bespoke initialization when the host needs the SDK's
+     * native ad validator turned off.
      */
-    suspend fun initializeAds(appOpenUnitId: String) {
+    suspend fun initializeAds(appOpenUnitId: String, disableNativeValidator: Boolean = false) {
         val isAdsChecked: Boolean = withContext(dispatchers.io) {
             dataStore.ads(default = !buildInfoProvider.isDebugBuild).first()
         }
-        if (isAdsChecked) {
-            withContext(dispatchers.io) {
-                MobileAds.initialize(
-                    context,
-                    InitializationConfig.Builder("ca-app-pub-3940256099942544~3347511713").build()
-                ) {}
-            }
-            appOpenAdManager = AppOpenAdManager(appOpenUnitId)
+        if (!isAdsChecked) {
+            return
         }
+
+        val adMobAppId: String? = adMobAppIdProvider.adMobAppId()
+        if (adMobAppId == null) {
+            Log.e(
+                LOG_TAG,
+                "Skipping Mobile Ads initialization: the host app declares no valid " +
+                        "${AdMobAppIdProvider.MANIFEST_METADATA_KEY} meta-data.",
+            )
+            return
+        }
+
+        withContext(dispatchers.io) {
+            val config: InitializationConfig = InitializationConfig.Builder(adMobAppId)
+                .apply { if (disableNativeValidator) setNativeValidatorDisabled() }
+                .build()
+            MobileAds.initialize(context, config) {}
+        }
+        appOpenAdManager = AppOpenAdManager(appOpenUnitId)
     }
 
     /**
@@ -171,6 +198,10 @@ open class AdsCoreManager(
             isShowingAd = true
             appOpenAd?.show(activity)
         }
+    }
+
+    private companion object {
+        const val LOG_TAG: String = "AdsCoreManager"
     }
 }
 

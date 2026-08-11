@@ -27,6 +27,8 @@ import com.d4rk.android.libs.apptoolkit.core.BaseCoreManager.Companion.isAppLoad
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.StandardDispatchers
 import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
+import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
+import com.d4rk.android.libs.apptoolkit.core.utils.crash.ConsentSdkCrashGuard
 import com.google.firebase.Firebase
 import com.google.firebase.appcheck.appCheck
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
@@ -52,8 +54,19 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     LifecycleObserver {
 
     protected val billingRepository: BillingRepository by inject()
+    private val firebaseController: FirebaseController by inject()
     protected open val dispatchers: DispatcherProvider = StandardDispatchers()
     private val applicationScope = CoroutineScope(SupervisorJob() + dispatchers.io)
+
+    /**
+     * Whether [ConsentSdkCrashGuard] is installed for this app.
+     *
+     * Override with `false` to opt out. The guard swallows exactly one failure — a telemetry ping
+     * inside the UMP SDK whose empty error body makes `Scanner.next()` throw on the SDK's own
+     * executor — and swallowing it has no functional effect on the consent flow. Every other
+     * throwable is delegated to the handler that was installed before it.
+     */
+    protected open val installsConsentSdkCrashGuard: Boolean = true
 
     companion object {
         /** Flag indicating whether the application finished its startup work. */
@@ -70,12 +83,31 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     override fun onCreate() {
         super.onCreate()
         Firebase.initialize(context = this)
+        installConsentSdkCrashGuard()
         Firebase.appCheck.installAppCheckProviderFactory(
             PlayIntegrityAppCheckProviderFactory.getInstance(),
         )
         registerActivityLifecycleCallbacks(this)
         applicationScope.launch {
             initializeApp()
+        }
+    }
+
+    /**
+     * Installs the UMP crash guard for every app built on the toolkit.
+     *
+     * Change rationale: the guard used to live in a single consumer app, which left every other app
+     * exposed to the same process kill through the same library code path. It belongs here because
+     * every consumer already extends this class, so no per-app wiring is needed.
+     *
+     * It runs directly after [Firebase.initialize] returns, which is when Crashlytics has registered
+     * its uncaught-exception handler. Installing at that point makes this guard the outer handler:
+     * everything it does not recognise still reaches Crashlytics as a fatal, exactly as before.
+     */
+    private fun installConsentSdkCrashGuard() {
+        if (!installsConsentSdkCrashGuard) return
+        ConsentSdkCrashGuard.install { throwable, attributes ->
+            firebaseController.recordNonFatal(throwable = throwable, attributes = attributes)
         }
     }
 

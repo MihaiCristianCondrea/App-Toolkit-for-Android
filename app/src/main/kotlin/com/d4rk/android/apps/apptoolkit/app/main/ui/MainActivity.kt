@@ -36,8 +36,6 @@ import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
-import com.google.android.libraries.ads.mobile.sdk.MobileAds
-import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -59,7 +57,6 @@ class MainActivity : AppCompatActivity() {
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { keepSplashVisible }
         enableEdgeToEdge()
-        initializeDependencies()
         handleStartup()
         observeActions()
     }
@@ -67,19 +64,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         handleGmsEvents()
-    }
-
-    private fun initializeDependencies() {
-        lifecycleScope.launch {
-            withContext(dispatchers.default) {
-                MobileAds.initialize(
-                    this@MainActivity,
-                    InitializationConfig.Builder(getString(com.d4rk.android.libs.apptoolkit.R.string.ad_mob_app_id))
-                        .setNativeValidatorDisabled()
-                        .build()
-                ) {}
-            }
-        }
     }
 
     private fun handleStartup() {

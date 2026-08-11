@@ -18,11 +18,12 @@
 package com.d4rk.android.libs.apptoolkit.app.consent.data.remote.datasource
 
 import android.util.Log
-import com.d4rk.android.libs.apptoolkit.R
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
+import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.canShowConsentForm
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.logging.CONSENT_LOG_TAG
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.AdMobAppIdProvider
 import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
@@ -32,18 +33,14 @@ import kotlinx.coroutines.flow.callbackFlow
 
 /**
  * UMP-backed implementation of [ConsentRemoteDataSource].
+ *
+ * @param adMobAppIdProvider resolves the *host* app's AdMob application id. Passing a foreign id to
+ * UMP produces consent requests against a publisher account that does not own the running app,
+ * which is the failure mode that precedes the SDK's metrics-ping crash.
  */
-class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
-
-    private companion object {
-        /**
-         * Canonical AdMob app id format used by UMP.
-         *
-         * Example: `ca-app-pub-3940256099942544~3347511713`
-         */
-        val AD_MOB_APP_ID_REGEX: Regex =
-            Regex(pattern = "^ca-app-pub-[0-9]{16}~[0-9]{10}$")
-    }
+class UmpConsentRemoteDataSource(
+    private val adMobAppIdProvider: AdMobAppIdProvider,
+) : ConsentRemoteDataSource {
 
     override fun requestConsent(
         host: ConsentHost,
@@ -52,7 +49,7 @@ class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
         trySend(DataState.Loading())
 
         val activity = host.activity
-        val params = buildRequestParameters(activity)
+        val params = buildRequestParameters()
         val consentInfo = UserMessagingPlatform.getConsentInformation(activity)
 
         runCatching {
@@ -60,6 +57,18 @@ class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
                 activity,
                 params,
                 {
+                    if (!host.canShowConsentForm) {
+                        // The info update succeeded, but the host went away while it was in flight.
+                        // Showing a form on a finishing activity throws from the window manager, so
+                        // the request is reported as failed and the caller can retry from a live
+                        // host.
+                        Log.w(CONSENT_LOG_TAG, "Consent host is no longer able to show a form.")
+                        trySend(
+                            DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO)
+                        )
+                        close()
+                        return@requestConsentInfoUpdate
+                    }
                     if (showIfRequired) {
                         UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { formError ->
                             if (formError != null) {
@@ -81,6 +90,19 @@ class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
                         UserMessagingPlatform.loadConsentForm(
                             activity,
                             { consentForm: ConsentForm ->
+                                if (!host.canShowConsentForm) {
+                                    Log.w(
+                                        CONSENT_LOG_TAG,
+                                        "Consent form loaded after the host stopped; not showing."
+                                    )
+                                    trySend(
+                                        DataState.Error(
+                                            error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO
+                                        )
+                                    )
+                                    close()
+                                    return@loadConsentForm
+                                }
                                 runCatching {
                                     consentForm.show(activity) {
                                         trySend(DataState.Success(Unit))
@@ -140,22 +162,29 @@ class UmpConsentRemoteDataSource : ConsentRemoteDataSource {
     /**
      * Builds the request parameters for UMP.
      *
-     * Change rationale: we previously accepted any id prefixed with `ca-app-pub-`, which still
-     * allowed malformed values to reach UMP internals. Those malformed values can crash parsing in
-     * the consent SDK, so we now gate `setAdMobAppId` behind the canonical AdMob app id regex and
-     * skip invalid values safely.
+     * Change rationale: the app id used to come from `R.string.ad_mob_app_id`, a *library* string
+     * resource holding the demo app's id. Consumer apps that declared their id under a different
+     * name never overrode it, so every consent request was scoped to the toolkit's own publisher
+     * app. The id is now resolved from the host app's manifest meta-data — the same value the
+     * Google Mobile Ads SDK reads — and `setAdMobAppId` is skipped entirely when no valid id is
+     * available, rather than falling back to a library constant.
+     *
+     * `setAdMobAppId` exists for UMP-without-GMA integrations; hosts that ship GMA already supply
+     * the id through the manifest. Passing the resolved value is therefore redundant but harmless,
+     * and it keeps the parameters explicit for hosts that initialize GMA lazily.
      */
-    private fun buildRequestParameters(activity: android.app.Activity): ConsentRequestParameters {
-        val appId = activity.getString(R.string.ad_mob_app_id).trim()
+    private fun buildRequestParameters(): ConsentRequestParameters {
         val builder = ConsentRequestParameters.Builder()
             .setTagForUnderAgeOfConsent(false)
 
-        if (appId.matches(AD_MOB_APP_ID_REGEX)) {
+        val appId: String? = adMobAppIdProvider.adMobAppId()
+        if (appId != null) {
             builder.setAdMobAppId(appId)
         } else {
             Log.w(
                 CONSENT_LOG_TAG,
-                "Skipping AdMob app id because it does not match canonical format."
+                "Requesting consent without an AdMob app id: the host app declares no valid " +
+                        "${AdMobAppIdProvider.MANIFEST_METADATA_KEY} meta-data."
             )
         }
 

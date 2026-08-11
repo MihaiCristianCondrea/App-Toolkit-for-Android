@@ -84,6 +84,21 @@ interface FirebaseController {
         extraKeys: Map<String, String> = emptyMap(),
     )
 
+    /**
+     * Records a non-fatal throwable that has no ViewModel context.
+     *
+     * [reportViewModelError] is shaped around a ViewModel flow failure, which does not fit
+     * throwables caught outside the presentation layer — for example an exception raised on a
+     * third-party SDK's own executor and intercepted by an uncaught-exception handler.
+     *
+     * @param throwable the exception to record
+     * @param attributes optional key/value pairs to attach as Crashlytics custom keys
+     */
+    fun recordNonFatal(
+        throwable: Throwable,
+        attributes: Map<String, String> = emptyMap(),
+    )
+
     fun logEvent(event: AnalyticsEvent)
 
     fun logScreenView(screenName: String, screenClass: String? = null)

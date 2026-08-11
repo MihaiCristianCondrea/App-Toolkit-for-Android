@@ -149,6 +149,22 @@ class FirebaseControllerImpl : FirebaseController {
         crashlytics.recordException(throwable)
     }
 
+    /**
+     * Records a non-fatal throwable that did not originate in a ViewModel.
+     *
+     * @param throwable The exception or error to be recorded.
+     * @param attributes Additional key-value pairs to be attached as custom metadata in Crashlytics.
+     */
+    override fun recordNonFatal(throwable: Throwable, attributes: Map<String, String>) {
+        val crashlytics = FirebaseCrashlytics.getInstance()
+        crashlytics.setCustomKey("exception_type", throwable::class.java.name)
+        crashlytics.setCustomKey("exception_message", throwable.message ?: "unknown")
+        attributes.forEach { (key, value) ->
+            crashlytics.setCustomKey(key, value)
+        }
+        crashlytics.recordException(throwable)
+    }
+
     override fun logEvent(event: AnalyticsEvent) {
         val name = event.name
         if (!isValidEventName(name)) {

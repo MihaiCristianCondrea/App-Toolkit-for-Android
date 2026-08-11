@@ -42,7 +42,9 @@ import com.d4rk.android.libs.apptoolkit.core.di.model.AppToolkitHostBuildConfig
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseControllerImpl
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.api.ApiHost
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.AdMobAppIdProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
+import com.d4rk.android.libs.apptoolkit.core.utils.providers.ManifestAdMobAppIdProvider
 import com.d4rk.android.libs.apptoolkit.playservices.update.data.repository.InAppUpdateRepositoryImpl
 import com.d4rk.android.libs.apptoolkit.playservices.update.domain.repository.InAppUpdateRepository
 import org.koin.core.module.Module
@@ -77,11 +79,13 @@ private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Modu
             defaultAdsEnabled = !hostBuildConfig.isDebugBuild,
         )
     }
+    single<AdMobAppIdProvider> { ManifestAdMobAppIdProvider(context = get()) }
     single<AdsCoreManager> {
         AdsCoreManager(
             context = get(),
             buildInfoProvider = get(),
             dispatchers = get(),
+            adMobAppIdProvider = get(),
         )
     }
     single<FirebaseController> { FirebaseControllerImpl() }
@@ -98,7 +102,7 @@ private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Modu
 
 private fun consentModule(): Module = module {
     single<ConsentPreferencesDataSource> { get<CommonDataStore>() }
-    single<ConsentRemoteDataSource> { UmpConsentRemoteDataSource() }
+    single<ConsentRemoteDataSource> { UmpConsentRemoteDataSource(adMobAppIdProvider = get()) }
     single<ConsentRepository> {
         ConsentRepositoryImpl(
             remote = get(),

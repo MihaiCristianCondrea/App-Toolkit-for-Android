@@ -26,12 +26,18 @@ import com.d4rk.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
 import com.d4rk.android.libs.apptoolkit.core.utils.dispatchers.UnconfinedDispatcherExtension
 import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -204,10 +210,149 @@ class ConsentRepositoryImplTest {
                 firebaseController.setPerformanceEnabled(false)
             }
         }
+
+    @Test
+    fun `concurrent requests share a single UMP round trip`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val remote = CountingConsentRemoteDataSource()
+            val repository = ConsentRepositoryImpl(
+                remote = remote,
+                local = FakeConsentPreferencesDataSource(),
+                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
+                firebaseController = mockk(relaxed = true),
+                requestScope = backgroundScope,
+            )
+
+            val first = async {
+                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true).toList()
+            }
+            val second = async {
+                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true).toList()
+            }
+            runCurrent()
+            remote.complete(DataState.Success(Unit))
+
+            val expected = listOf<DataState<Unit, Errors.UseCase>>(
+                DataState.Loading(),
+                DataState.Success(Unit),
+            )
+            assertEquals(expected, first.await())
+            assertEquals(expected, second.await())
+            assertEquals(1, remote.requestCount)
+        }
+
+    @Test
+    fun `a request that forces the form does not attach to an implicit one`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val remote = CountingConsentRemoteDataSource()
+            val repository = ConsentRepositoryImpl(
+                remote = remote,
+                local = FakeConsentPreferencesDataSource(),
+                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
+                firebaseController = mockk(relaxed = true),
+                requestScope = backgroundScope,
+            )
+
+            val implicit = async {
+                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true).toList()
+            }
+            val explicit = async {
+                repository.requestConsent(host = FakeConsentHost(), showIfRequired = false).toList()
+            }
+            runCurrent()
+            remote.complete(DataState.Success(Unit))
+
+            implicit.await()
+            explicit.await()
+            assertEquals(2, remote.requestCount)
+        }
+
+    @Test
+    fun `a later request starts a fresh round trip`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val remote = CountingConsentRemoteDataSource()
+            val repository = ConsentRepositoryImpl(
+                remote = remote,
+                local = FakeConsentPreferencesDataSource(),
+                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
+                firebaseController = mockk(relaxed = true),
+                requestScope = backgroundScope,
+            )
+
+            val first = async {
+                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true).toList()
+            }
+            runCurrent()
+            remote.complete(DataState.Success(Unit))
+            first.await()
+
+            val second = async {
+                repository.requestConsent(host = FakeConsentHost(), showIfRequired = true).toList()
+            }
+            runCurrent()
+            remote.complete(DataState.Success(Unit))
+            second.await()
+
+            assertEquals(2, remote.requestCount)
+        }
+
+    @Test
+    fun `requests from a finishing host never reach UMP`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val remote = CountingConsentRemoteDataSource()
+            val repository = ConsentRepositoryImpl(
+                remote = remote,
+                local = FakeConsentPreferencesDataSource(),
+                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
+                firebaseController = mockk(relaxed = true),
+                requestScope = backgroundScope,
+            )
+
+            val states = repository.requestConsent(
+                host = FakeConsentHost(isFinishing = true),
+                showIfRequired = true,
+            ).toList()
+
+            assertEquals(
+                listOf<DataState<Unit, Errors.UseCase>>(
+                    DataState.Loading(),
+                    DataState.Error(error = Errors.UseCase.FAILED_TO_LOAD_CONSENT_INFO),
+                ),
+                states,
+            )
+            assertEquals(0, remote.requestCount)
+        }
 }
 
-private class FakeConsentHost : ConsentHost {
-    override val activity = mockk<android.app.Activity>(relaxed = true)
+/**
+ * A remote source whose round trip stays open until [complete] is called, so tests can observe how
+ * many UMP requests the repository actually starts while one is in flight.
+ */
+private class CountingConsentRemoteDataSource : ConsentRemoteDataSource {
+    private val results = MutableSharedFlow<DataState<Unit, Errors.UseCase>>(replay = 1)
+
+    var requestCount: Int = 0
+        private set
+
+    override fun requestConsent(
+        host: ConsentHost,
+        showIfRequired: Boolean,
+    ): Flow<DataState<Unit, Errors.UseCase>> = flow {
+        requestCount++
+        emit(DataState.Loading())
+        emit(results.first())
+    }
+
+    suspend fun complete(state: DataState<Unit, Errors.UseCase>) {
+        results.emit(state)
+    }
+}
+
+private class FakeConsentHost(isFinishing: Boolean = false) : ConsentHost {
+    override val activity = mockk<android.app.Activity>(relaxed = true).also {
+        every { it.isFinishing } returns isFinishing
+        every { it.isDestroyed } returns false
+    }
 }
 
 private class FakeConsentPreferencesDataSource(

@@ -15,6 +15,15 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 
+<!--
+  This app id belongs to the demo app only.
+
+  It deliberately lives here rather than in the library: a library-owned `ad_mob_app_id` is
+  inherited by every consumer app that does not declare a resource with the exact same name, which
+  silently points both the UMP consent request and MobileAds.initialize at the demo app's publisher
+  account. The manifest `com.google.android.gms.ads.APPLICATION_ID` meta-data is the single source
+  of truth, and the toolkit reads it from there.
+-->
 <resources>
     <string name="ad_mob_app_id" translatable="false">ca-app-pub-5294151573817700~1979784742</string>
 </resources>

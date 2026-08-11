@@ -81,7 +81,10 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     }
 
     private suspend fun initializeAds() {
-        adsCoreManager.initializeAds(AdsConstants.APP_OPEN_UNIT_ID)
+        adsCoreManager.initializeAds(
+            appOpenUnitId = AdsConstants.APP_OPEN_UNIT_ID,
+            disableNativeValidator = true,
+        )
     }
 
     private fun applyDefaultColorPalette() {
