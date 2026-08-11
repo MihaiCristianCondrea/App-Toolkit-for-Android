@@ -20,6 +20,7 @@ package com.d4rk.android.libs.apptoolkit.core.ui.views.ads
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -36,7 +37,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d4rk.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
+import com.d4rk.android.libs.apptoolkit.core.utils.ads.AdsSdkState
 import com.google.android.libraries.ads.mobile.sdk.banner.AdView
 import com.google.android.libraries.ads.mobile.sdk.banner.BannerAd
 import com.google.android.libraries.ads.mobile.sdk.banner.BannerAdRequest
@@ -73,12 +76,23 @@ fun AdBanner(
 
     val mainHandler: Handler = remember { Handler(Looper.getMainLooper()) }
 
-    val adView = remember(adsConfig.bannerAdUnitId, adsConfig.adSize) {
-        AdView(context)
+    // Every entry point of the Mobile Ads SDK throws until MobileAds.initialize has run, and
+    // initialization is asynchronous. Waiting on AdsSdkState keeps the banner from asking too early,
+    // and re-keys this composable so the request starts as soon as the SDK is up.
+    val isToolkitSdkReady: Boolean by AdsSdkState.isReady.collectAsStateWithLifecycle()
+
+    val adView: AdView? = remember(adsConfig.bannerAdUnitId, adsConfig.adSize, isToolkitSdkReady) {
+        if (!AdsSdkState.canRequestAds()) {
+            null
+        } else {
+            runCatching { AdView(context) }
+                .onFailure { throwable -> Log.w(LOG_TAG, "Could not create an AdView.", throwable) }
+                .getOrNull()
+        }
     }
 
     LaunchedEffect(adView, showAds, adsConfig.bannerAdUnitId, adsConfig.adSize) {
-        if (!showAds) {
+        if (!showAds || adView == null) {
             isAdLoaded = false
             return@LaunchedEffect
         }
@@ -88,22 +102,31 @@ fun AdBanner(
             adsConfig.bannerAdUnitId,
             adsConfig.adSize
         ).build()
-        adView.loadAd(
-            adRequest,
-            object : AdLoadCallback<BannerAd> {
-                override fun onAdLoaded(ad: BannerAd) {
-                    mainHandler.post { isAdLoaded = true }
-                }
+        runCatching {
+            adView.loadAd(
+                adRequest,
+                object : AdLoadCallback<BannerAd> {
+                    override fun onAdLoaded(ad: BannerAd) {
+                        mainHandler.post { isAdLoaded = true }
+                    }
 
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    mainHandler.post { isAdLoaded = false }
+                    override fun onAdFailedToLoad(adError: LoadAdError) {
+                        mainHandler.post { isAdLoaded = false }
+                    }
                 }
-            }
-        )
+            )
+        }.onFailure { throwable ->
+            Log.w(
+                LOG_TAG,
+                "Banner ad request for '${adsConfig.bannerAdUnitId}' could not be started.",
+                throwable,
+            )
+            isAdLoaded = false
+        }
     }
 
     AnimatedVisibility(
-        visible = showAds && isAdLoaded,
+        visible = showAds && isAdLoaded && adView != null,
         enter = expandVertically(),
         exit = shrinkVertically()
     ) {
@@ -111,7 +134,9 @@ fun AdBanner(
             modifier = modifier
                 .fillMaxWidth()
                 .height(adsConfig.adSize.height.dp),
-            factory = { adView }
+            factory = { requireNotNull(adView) }
         )
     }
 }
+
+private const val LOG_TAG: String = "AdBanner"

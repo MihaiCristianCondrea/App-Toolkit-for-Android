@@ -77,6 +77,18 @@ adsCoreManager.initializeAds(
 )
 ```
 
+### Who decides that ads are enabled
+
+`AdsCoreManager` and the ad views must agree, or the views will request ads for an SDK that was never
+initialized — and every loader in the SDK throws for that, from inside composition, killing the
+process. Both read **`CommonDataStore.adsEnabledFlow`**, which carries the default the host
+configured (`defaultAdsEnabled`). Never read the preference with a locally chosen default.
+
+`AdsCoreManager` *observes* that flow rather than sampling it once, so enabling ads at runtime
+initializes the SDK instead of waiting for the next process start. `AdsSdkState.isReady` publishes
+when initialization completed; ad views wait on it, so a slot composed during startup requests its ad
+as soon as the SDK is up rather than failing once and giving up.
+
 ---
 
 ## Rule 2 — one consent round trip at a time

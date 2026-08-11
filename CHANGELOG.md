@@ -1,5 +1,10 @@
 # Unreleased:
 
+- **Patch**: Fixed a crash on screens showing ads (`MobileAds.initialize must be called before using
+  the Google Mobile Ads SDK`). `AdsCoreManager` and the ad views read the ads preference from the
+  same flow instead of each applying its own default, the preference is observed rather than sampled
+  once, and ad surfaces wait for the SDK to be ready before requesting — and never let a failed
+  request escape into composition.
 - **Patch**: Fixed a process kill caused by the UMP consent SDK. The consent request is now
   single-flighted process-wide, requests from a finishing activity never reach UMP, and a narrow
   crash guard installed from `BaseCoreManager` swallows the SDK's metrics-ping crash and reports it

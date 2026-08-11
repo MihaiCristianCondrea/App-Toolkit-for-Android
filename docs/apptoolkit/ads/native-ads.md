@@ -49,9 +49,16 @@ Each is separately replaceable and separately testable.
 
 ### 1. `rememberNativeAd(adUnitId, enabled)`
 
-Owns the ad's whole lifecycle in a **single** `DisposableEffect(adUnitId, enabled, loaderClient)`:
-loads, posts the callback to the main thread, destroys on dispose *and* on a key change, and
-destroys an ad that arrives after disposal.
+Owns the ad's whole lifecycle in a **single** `DisposableEffect`: loads, posts the callback to the
+main thread, destroys on dispose *and* on a key change, and destroys an ad that arrives after
+disposal.
+
+It waits for `AdsSdkState.canRequestAds()`. Every entry point of the Mobile Ads SDK throws
+`IllegalStateException("MobileAds.initialize must be called before using the Google Mobile Ads
+SDK.")` until initialization has run, and initialization is asynchronous — an unguarded request from
+composition takes the process down. The effect is keyed on `AdsSdkState.isReady`, so the request
+starts by itself the moment the SDK is up, and the call is wrapped in `runCatching` regardless: an ad
+slot must never be able to crash its host.
 
 Loading goes through `NativeAdLoaderClient`, the one seam that touches the network:
 

@@ -19,12 +19,15 @@ package com.d4rk.android.libs.apptoolkit.core.ui.views.ads
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.d4rk.android.libs.apptoolkit.core.utils.ads.AdsSdkState
 import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoaderCallback
@@ -38,6 +41,11 @@ import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoaderCallba
  * now owns both the load and the destroy, so re-keying destroys the old ad before requesting a new
  * one, and an ad that arrives after disposal is destroyed instead of retained.
  *
+ * The request waits for [AdsSdkState.isReady]. Initialization of the Mobile Ads SDK is asynchronous
+ * and starts during app startup, so a slot composed early would otherwise ask a SDK that is not up
+ * yet — which throws — and then never retry. Keying the effect on readiness means the request starts
+ * by itself the moment the SDK is up.
+ *
  * @param adUnitId the ad unit to request; a blank value loads nothing.
  * @param enabled `false` releases any loaded ad and skips loading, e.g. when the user disabled ads.
  * @return the loaded ad, or `null` while loading, after a failure, or when disabled.
@@ -46,40 +54,48 @@ import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoaderCallba
 fun rememberNativeAd(adUnitId: String, enabled: Boolean = true): NativeAd? {
     val loaderClient: NativeAdLoaderClient = LocalNativeAdLoaderClient.current
     val mainHandler: Handler = remember { Handler(Looper.getMainLooper()) }
+    val isToolkitSdkReady: Boolean by AdsSdkState.isReady.collectAsStateWithLifecycle()
     var nativeAd: NativeAd? by remember { mutableStateOf(value = null) }
 
-    DisposableEffect(adUnitId, enabled, loaderClient) {
+    DisposableEffect(adUnitId, enabled, isToolkitSdkReady, loaderClient) {
         nativeAd?.destroy()
         nativeAd = null
 
-        if (!enabled || adUnitId.isBlank()) {
+        if (!enabled || adUnitId.isBlank() || !AdsSdkState.canRequestAds()) {
             return@DisposableEffect onDispose { }
         }
 
         var disposed = false
-        loaderClient.load(
-            adUnitId,
-            object : NativeAdLoaderCallback {
-                override fun onNativeAdLoaded(ad: NativeAd) {
-                    mainHandler.post {
-                        if (disposed) {
-                            ad.destroy()
-                            return@post
+        // The loader throws synchronously when the Mobile Ads SDK has not been initialized, and this
+        // effect runs during composition — an unhandled throw here takes the whole process down. An
+        // ad slot must never do that: a slot that cannot load is a slot that renders nothing.
+        runCatching {
+            loaderClient.load(
+                adUnitId,
+                object : NativeAdLoaderCallback {
+                    override fun onNativeAdLoaded(ad: NativeAd) {
+                        mainHandler.post {
+                            if (disposed) {
+                                ad.destroy()
+                                return@post
+                            }
+                            nativeAd?.destroy()
+                            nativeAd = ad
                         }
-                        nativeAd?.destroy()
-                        nativeAd = ad
                     }
-                }
 
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    mainHandler.post {
-                        if (disposed) return@post
-                        nativeAd?.destroy()
-                        nativeAd = null
+                    override fun onAdFailedToLoad(adError: LoadAdError) {
+                        mainHandler.post {
+                            if (disposed) return@post
+                            nativeAd?.destroy()
+                            nativeAd = null
+                        }
                     }
-                }
-            },
-        )
+                },
+            )
+        }.onFailure { throwable ->
+            Log.w(LOG_TAG, "Native ad request for '$adUnitId' could not be started.", throwable)
+        }
 
         onDispose {
             disposed = true
@@ -90,3 +106,5 @@ fun rememberNativeAd(adUnitId: String, enabled: Boolean = true): NativeAd? {
 
     return nativeAd
 }
+
+private const val LOG_TAG: String = "NativeAdSlot"

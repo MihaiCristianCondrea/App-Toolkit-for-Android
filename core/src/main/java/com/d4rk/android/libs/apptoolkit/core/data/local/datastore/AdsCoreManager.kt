@@ -22,6 +22,8 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.utils.ads.AdsSdkInitializer
+import com.d4rk.android.libs.apptoolkit.core.utils.ads.AdsSdkState
 import com.d4rk.android.libs.apptoolkit.core.utils.interfaces.OnShowAdCompleteListener
 import com.d4rk.android.libs.apptoolkit.core.utils.providers.AdMobAppIdProvider
 import com.d4rk.android.libs.apptoolkit.core.utils.providers.BuildInfoProvider
@@ -35,8 +37,12 @@ import com.google.android.libraries.ads.mobile.sdk.common.FullScreenContentError
 import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
 import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.util.Date
 
@@ -52,9 +58,17 @@ open class AdsCoreManager(
     val buildInfoProvider: BuildInfoProvider,
     private val dispatchers: DispatcherProvider,
     private val adMobAppIdProvider: AdMobAppIdProvider = ManifestAdMobAppIdProvider(context = context),
+    private val adsSdkInitializer: AdsSdkInitializer = AdsSdkInitializer.Default,
 ) {
     private var dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
     private var appOpenAdManager: AppOpenAdManager? = null
+
+    private val managerScope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatchers.io)
+    private val initializationMutex = Mutex()
+    private var adsPreferenceJob: Job? = null
+
+    @Volatile
+    private var isSdkInitialized: Boolean = false
 
     /**
      * Prepares the SDK and loads an [AppOpenAd] if ads are enabled.
@@ -69,32 +83,87 @@ open class AdsCoreManager(
      * different id re-introduces the mismatch this method exists to prevent. Use
      * [disableNativeValidator] instead of a bespoke initialization when the host needs the SDK's
      * native ad validator turned off.
+     *
+     * Change rationale: this used to sample the ads preference once at startup with its own default
+     * (`!isDebugBuild`), while the ad views read the preference through
+     * [CommonDataStore.adsEnabledFlow] with a different default. On a build where the two disagreed
+     * the views loaded ads that the SDK had never been initialized for, and the loader throws
+     * `IllegalStateException` for that. Both sides now read the same flow, and the preference is
+     * observed rather than sampled, so turning ads on at runtime initializes the SDK instead of
+     * waiting for the next process start.
      */
     suspend fun initializeAds(appOpenUnitId: String, disableNativeValidator: Boolean = false) {
         val isAdsChecked: Boolean = withContext(dispatchers.io) {
-            dataStore.ads(default = !buildInfoProvider.isDebugBuild).first()
+            dataStore.adsEnabledFlow.first()
         }
-        if (!isAdsChecked) {
-            return
+        if (isAdsChecked) {
+            startAds(appOpenUnitId = appOpenUnitId, disableNativeValidator = disableNativeValidator)
         }
+        observeAdsPreference(
+            appOpenUnitId = appOpenUnitId,
+            disableNativeValidator = disableNativeValidator,
+        )
+    }
 
-        val adMobAppId: String? = adMobAppIdProvider.adMobAppId()
-        if (adMobAppId == null) {
-            Log.e(
-                LOG_TAG,
-                "Skipping Mobile Ads initialization: the host app declares no valid " +
-                        "${AdMobAppIdProvider.MANIFEST_METADATA_KEY} meta-data.",
-            )
-            return
+    /**
+     * Keeps the SDK in step with the ads preference for the rest of the process's life.
+     */
+    private fun observeAdsPreference(appOpenUnitId: String, disableNativeValidator: Boolean) {
+        if (adsPreferenceJob != null) return
+        adsPreferenceJob = managerScope.launch {
+            dataStore.adsEnabledFlow.collect { isEnabled ->
+                if (isEnabled) {
+                    startAds(
+                        appOpenUnitId = appOpenUnitId,
+                        disableNativeValidator = disableNativeValidator,
+                    )
+                }
+            }
         }
+    }
 
-        withContext(dispatchers.io) {
-            val config: InitializationConfig = InitializationConfig.Builder(adMobAppId)
-                .apply { if (disableNativeValidator) setNativeValidatorDisabled() }
-                .build()
-            MobileAds.initialize(context, config) {}
+    private suspend fun startAds(appOpenUnitId: String, disableNativeValidator: Boolean) {
+        if (!ensureAdsSdkInitialized(disableNativeValidator = disableNativeValidator)) return
+        if (appOpenAdManager == null) {
+            appOpenAdManager = AppOpenAdManager(appOpenUnitId)
         }
-        appOpenAdManager = AppOpenAdManager(appOpenUnitId)
+    }
+
+    /**
+     * Initializes the Mobile Ads SDK exactly once, and reports whether it is usable.
+     *
+     * Nothing may load an ad before this returns `true`: the loader throws
+     * `IllegalStateException("MobileAds.initialize must be called before using the Google Mobile
+     * Ads SDK.")` otherwise.
+     *
+     * @return `false` when the host declares no valid AdMob application id, in which case no ad can
+     * be served at all.
+     */
+    suspend fun ensureAdsSdkInitialized(disableNativeValidator: Boolean = false): Boolean {
+        if (isSdkInitialized) return true
+
+        return initializationMutex.withLock {
+            if (isSdkInitialized) return@withLock true
+
+            val adMobAppId: String = adMobAppIdProvider.adMobAppId() ?: run {
+                Log.e(
+                    LOG_TAG,
+                    "Skipping Mobile Ads initialization: the host app declares no valid " +
+                            "${AdMobAppIdProvider.MANIFEST_METADATA_KEY} meta-data.",
+                )
+                return@withLock false
+            }
+
+            withContext(dispatchers.io) {
+                val config: InitializationConfig = InitializationConfig.Builder(adMobAppId)
+                    .apply { if (disableNativeValidator) setNativeValidatorDisabled() }
+                    .build()
+                adsSdkInitializer.initialize(context, config)
+            }
+            isSdkInitialized = true
+            AdsSdkState.markInitialized()
+            true
+        }
     }
 
     /**
@@ -164,7 +233,7 @@ open class AdsCoreManager(
             activity: Activity, onShowAdCompleteListener: OnShowAdCompleteListener
         ) {
             val isAdsChecked: Boolean = withContext(dispatchers.io) {
-                dataStore.ads(default = !buildInfoProvider.isDebugBuild).first()
+                dataStore.adsEnabledFlow.first()
             }
 
             if (isShowingAd || !isAdsChecked) {

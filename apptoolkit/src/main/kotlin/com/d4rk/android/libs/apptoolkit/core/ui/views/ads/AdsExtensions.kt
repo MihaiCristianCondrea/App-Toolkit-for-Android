@@ -26,14 +26,16 @@ import com.d4rk.android.libs.apptoolkit.core.data.local.datastore.rememberCommon
 /**
  * A Composable function that remembers and observes whether ads are enabled.
  *
- * This function retrieves the ads enabled status from [CommonDataStore] and collects it as a
- * state that recomposes the view when the value changes. It defaults to `true` if no value is set.
+ * Change rationale: this used to build its own flow with a hardcoded `default = true`, while
+ * [AdsCoreManager] gated SDK initialization on the same preference read with a *different* default.
+ * When the two disagreed, ad views loaded ads for an SDK that had never been initialized, and the
+ * loader throws for that. Both sides now read [CommonDataStore.adsEnabledFlow], which carries the
+ * default the host configured, so they cannot diverge.
  *
  * @return `true` if ads are enabled, `false` otherwise. The value is lifecycle-aware.
  */
 @Composable
 fun rememberAdsEnabled(): Boolean {
     val dataStore: CommonDataStore = rememberCommonDataStore()
-    return remember { dataStore.ads(default = true) }
-        .collectAsStateWithLifecycle(initialValue = true).value
+    return dataStore.adsEnabledFlow.collectAsStateWithLifecycle().value
 }
