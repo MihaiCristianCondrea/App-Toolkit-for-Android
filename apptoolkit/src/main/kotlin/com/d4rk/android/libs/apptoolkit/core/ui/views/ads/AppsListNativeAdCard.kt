@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 /**
  * Square native ad cell that sits among app cards in a grid.
@@ -30,12 +31,14 @@ import androidx.compose.ui.Modifier
  * loaded" logic locally. Both now come from [NativeAdSlot] — see [SupportNativeAdCard] for the
  * behaviour changes that come with the shared renderer.
  *
+ * @param containerColor overrides the card container for hosts whose surfaces are their own.
  * @param onAdLoaded reports whether an ad is currently displayed, so the grid can drop the cell.
  */
 @Composable
 fun AppsListNativeAdCard(
     modifier: Modifier = Modifier,
     adUnitId: String,
+    containerColor: Color = Color.Unspecified,
     onAdLoaded: (Boolean) -> Unit = {},
 ) {
     NativeAdSlot(
@@ -44,6 +47,7 @@ fun AppsListNativeAdCard(
         modifier = modifier
             .fillMaxSize()
             .aspectRatio(ratio = 1f),
+        containerColor = containerColor,
         onAdLoaded = onAdLoaded,
     )
 }

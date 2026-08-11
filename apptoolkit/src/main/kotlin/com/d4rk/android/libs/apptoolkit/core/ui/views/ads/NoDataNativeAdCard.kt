@@ -19,6 +19,7 @@ package com.d4rk.android.libs.apptoolkit.core.ui.views.ads
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 /**
  * Media-led native ad card used on empty and error states.
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
  * `NativeAdViewHost` and bind it with `findViewById`. It is now a thin wrapper over [NativeAdSlot] —
  * see [SupportNativeAdCard] for the behaviour changes that come with the shared renderer.
  *
+ * @param containerColor overrides the card container for hosts whose surfaces are their own.
  * @param onAdLoaded reports whether an ad is currently displayed, so the empty state can drop the
  * slot and its spacing instead of leaving a gap.
  */
@@ -34,12 +36,14 @@ import androidx.compose.ui.Modifier
 fun NoDataNativeAdCard(
     modifier: Modifier = Modifier,
     adUnitId: String,
+    containerColor: Color = Color.Unspecified,
     onAdLoaded: (Boolean) -> Unit = {},
 ) {
     NativeAdSlot(
         adUnitId = adUnitId,
         presentation = NativeAdPresentation.Featured,
         modifier = modifier,
+        containerColor = containerColor,
         onAdLoaded = onAdLoaded,
     )
 }

@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.Dp
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
@@ -48,6 +49,9 @@ import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
  * @param position position inside a grouped list; affects the container's corners.
  * @param showContainer `false` renders the ad without a card behind it.
  * @param cornerRadius corner radius used when [position] is [GroupedItemPosition.SINGLE].
+ * @param containerColor overrides the card container. The default is an unstyled card, so the ad
+ * matches ordinary content; pass a colour on screens that build their cards differently, and in
+ * consumer apps whose surfaces are their own. Ignored when [showContainer] is `false`.
  * @param onAdLoaded invoked with whether an ad is currently displayed.
  */
 @Composable
@@ -58,6 +62,7 @@ fun NativeAdSlot(
     position: GroupedItemPosition = GroupedItemPosition.SINGLE,
     showContainer: Boolean = true,
     cornerRadius: Dp = SizeConstants.ExtraLargeSize,
+    containerColor: Color = Color.Unspecified,
     onAdLoaded: (Boolean) -> Unit = {},
 ) {
     val currentOnAdLoaded: (Boolean) -> Unit by rememberUpdatedState(newValue = onAdLoaded)
@@ -69,6 +74,7 @@ fun NativeAdSlot(
             position = position,
             showContainer = showContainer,
             cornerRadius = cornerRadius,
+            containerColor = containerColor,
         )
         return
     }
@@ -87,6 +93,7 @@ fun NativeAdSlot(
         position = position,
         showContainer = showContainer,
         cornerRadius = cornerRadius,
+        containerColor = containerColor,
     ) {
         NativeAdRenderer(
             presentation = presentation,

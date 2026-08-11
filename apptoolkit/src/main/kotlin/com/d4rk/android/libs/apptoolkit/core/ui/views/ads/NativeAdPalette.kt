@@ -42,6 +42,7 @@ data class NativeAdPalette(
     @get:ColorInt val secondaryContainer: Int,
     @get:ColorInt val onSecondaryContainer: Int,
     @get:ColorInt val surfaceContainerHighest: Int,
+    @get:ColorInt val surfaceVariant: Int,
 )
 
 /**
@@ -64,6 +65,7 @@ fun nativeAdPalette(): NativeAdPalette {
             secondaryContainer = colorScheme.secondaryContainer.toArgb(),
             onSecondaryContainer = colorScheme.onSecondaryContainer.toArgb(),
             surfaceContainerHighest = colorScheme.surfaceContainerHighest.toArgb(),
+            surfaceVariant = colorScheme.surfaceVariant.toArgb(),
         )
     }
 }

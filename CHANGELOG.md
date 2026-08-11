@@ -25,6 +25,11 @@
   the content they sit among, the call to action no longer forces its own height, the grid cell
   centres its content like the app cards it is interleaved with, and the media view keeps a 16:9
   frame instead of taking whatever height the creative reports.
+- **Minor**: `NativeAdSlot` and every native ad component take a `containerColor`, so a screen whose
+  rows are not default cards — or a consumer app with its own surfaces — overrides the container at
+  the call site instead of the toolkit guessing one tint for everybody.
+- **Patch**: Restored the rounded chip behind the native ad "Sponsored" badge, and the call to action
+  now stays on the trailing edge even when the creative carries no advertiser line.
 
 # Version 26.07.1:
 

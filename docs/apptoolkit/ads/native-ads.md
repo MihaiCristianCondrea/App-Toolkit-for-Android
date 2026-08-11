@@ -27,6 +27,7 @@ fun NativeAdSlot(
     position: GroupedItemPosition = GroupedItemPosition.SINGLE,
     showContainer: Boolean = true,
     cornerRadius: Dp = SizeConstants.ExtraLargeSize,
+    containerColor: Color = Color.Unspecified,
     onAdLoaded: (Boolean) -> Unit = {},
 )
 ```
@@ -92,9 +93,24 @@ The Compose card the ad sits in, honouring `position` (grouped corners) and `sho
 preview stand-in. Kept separate from the renderer so the container is only composed once an ad
 exists.
 
-It applies **no `colors` override**: an ad sits among ordinary content and should read as an ordinary
-card. Tinting it apart from its neighbours makes it look like a different kind of surface. Pass
-`cornerRadius` to match whatever card the slot is interleaved with.
+By default it applies **no `colors` override**: an ad sits among ordinary content and should read as
+ordinary content. Pass `cornerRadius` to match whatever card the slot is interleaved with.
+
+Screens that build their rows differently are the exception, and they say so at the call site:
+
+```kotlin
+NativeAdSlot(
+    adUnitId = adUnitId,
+    presentation = NativeAdPresentation.Compact,
+    position = position,
+    // Toolkit Tiles rows are surfaceContainerLow surfaces, not default cards.
+    containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+)
+```
+
+`containerColor` is on `NativeAdSlot` and on every shipped wrapper, because a consumer app's screens
+are its own — an app hosting the toolkit will have surfaces the toolkit has never seen. Overriding at
+the call site keeps the default honest instead of pushing one screen's exception onto every other.
 
 ---
 
@@ -139,7 +155,11 @@ host app's manifest. See [Consent (UMP) and the AdMob app id](consent-and-admob-
   the app's buttons. A hardcoded minimum height made it taller than the icon and advertiser it shares
   a row with.
 - Missing assets (no body, no icon, no advertiser, no CTA) are hidden before `registerNativeAd`, so
-  the layout stays correct across creative payloads.
+  the layout stays correct across creative payloads. Layouts do not lean on an optional view to hold
+  space: the Featured footer pushes its CTA to the trailing edge with a spacer, so a creative with no
+  advertiser line does not drag the CTA back to the left.
+- The disclosure badge sits in a rounded `surfaceVariant` chip on every card presentation. `BarRow`
+  is the exception — the strip is too shallow to carry one.
 - Render an ad only after consent and ads settings allow serving. Placement policy belongs to the
   screen; `NativeAdSlot` is a view-layer primitive.
 

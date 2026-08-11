@@ -18,6 +18,7 @@
 package com.d4rk.android.apps.apptoolkit.app.tiles.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,6 +36,10 @@ import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPos
  * `NativeAdViewHost` and bind it with `findViewById`. It is now a thin wrapper over the toolkit's
  * shared [NativeAdSlot], so the row picks up the same lifecycle, palette and disclosure handling as
  * every other ad surface.
+ *
+ * The Toolkit Tiles list is an exception to the toolkit's default of drawing ads on a plain card:
+ * its rows are built as `surfaceContainerLow` surfaces, so the ad passes that container explicitly
+ * rather than inheriting a tint the rest of the app does not want.
  *
  * @param initiallyLoaded keeps an already reported ad visible while this composable is moved from
  * the hidden preloader slot into the visible list. The slot reports `false` before its own load
@@ -55,6 +60,7 @@ fun QuickToolsNativeAdCard(
         presentation = NativeAdPresentation.Compact,
         modifier = modifier.fillMaxWidth(),
         position = position,
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         onAdLoaded = { isLoaded ->
             val suppressTransientReset: Boolean = isFirstReport && initiallyLoaded && !isLoaded
             isFirstReport = false

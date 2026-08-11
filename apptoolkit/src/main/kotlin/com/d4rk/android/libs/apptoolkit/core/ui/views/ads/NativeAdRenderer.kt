@@ -30,6 +30,7 @@ import android.view.ViewOutlineProvider
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Space
 import android.widget.TextView
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -108,19 +109,29 @@ private class NativeAdViewHolder(
 
     fun applyPalette(palette: NativeAdPalette) {
         label.setTextColor(palette.primary)
+        // The disclosure badge sits in a rounded chip on every card presentation, as it did in the
+        // layouts this renderer replaced. The bar strip is too shallow for one.
+        label.background = if (presentation is NativeAdPresentation.BarRow) {
+            null
+        } else {
+            roundedDrawable(
+                color = palette.surfaceVariant,
+                radiusPx = label.context.dp(value = LABEL_CORNER_RADIUS_DP),
+            )
+        }
         headline.setTextColor(palette.onSurface)
         body?.setTextColor(palette.onSurfaceVariant)
         advertiser.setTextColor(palette.onSurfaceVariant)
 
         iconFrame?.let { frame ->
             frame.background = roundedDrawable(
-                color = palette.surfaceContainerHighest,
+                color = palette.surfaceVariant,
                 radiusPx = frame.context.dp(value = ICON_CORNER_RADIUS_DP),
             )
         }
         mediaFrame?.let { frame ->
             frame.background = roundedDrawable(
-                color = palette.surfaceContainerHighest,
+                color = palette.surfaceVariant,
                 radiusPx = frame.context.dp(value = MEDIA_CORNER_RADIUS_DP),
             )
         }
@@ -185,6 +196,7 @@ private fun TextView.bindOptionalText(text: CharSequence?) {
 }
 
 private const val ICON_CORNER_RADIUS_DP: Int = 12
+private const val LABEL_CORNER_RADIUS_DP: Int = 8
 private const val MEDIA_CORNER_RADIUS_DP: Int = 20
 
 /** Media aspect ratio for the Featured presentation, matching the layout it replaced. */
@@ -262,14 +274,23 @@ private fun createFeatured(context: Context): NativeAdViewHolder {
     val iconFrame = iconFrameView(context = context, sizeDp = BAR_ICON_SIZE_DP)
     val icon = iconFrame.getChildAt(0) as ImageView
     val advertiser = advertiserView(context = context).apply {
-        layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-            .apply { marginStart = context.dp(SMALL_SPACING_DP) }
+        layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        ).apply { marginStart = context.dp(SMALL_SPACING_DP) }
+    }
+    // The spacer, not the advertiser, is what pushes the CTA to the trailing edge. Weighting the
+    // advertiser instead left the CTA next to the icon whenever the creative carried no advertiser
+    // line, because a gone view claims none of the row.
+    val footerSpacer = Space(context).apply {
+        layoutParams = LinearLayout.LayoutParams(0, 0, 1f)
     }
     val callToAction = callToActionView(context = context).apply {
         (layoutParams as LinearLayout.LayoutParams).marginStart = context.dp(SMALL_SPACING_DP)
     }
     footer.addView(iconFrame)
     footer.addView(advertiser)
+    footer.addView(footerSpacer)
     footer.addView(callToAction)
 
     content.addView(label)

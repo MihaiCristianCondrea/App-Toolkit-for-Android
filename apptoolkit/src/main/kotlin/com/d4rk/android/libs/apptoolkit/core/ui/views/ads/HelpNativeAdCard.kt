@@ -19,6 +19,7 @@ package com.d4rk.android.libs.apptoolkit.core.ui.views.ads
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.d4rk.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
@@ -35,6 +36,7 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * - Placement policy stays with the screen; this is a view-layer primitive.
  *
  * @param groupedPosition position inside a grouped Help section, or `null` when standalone.
+ * @param containerColor overrides the card container for hosts whose surfaces are their own.
  * @param onAdLoaded reports whether an ad is currently displayed.
  */
 @Composable
@@ -42,6 +44,7 @@ fun HelpNativeAdCard(
     modifier: Modifier = Modifier,
     adUnitId: String,
     groupedPosition: GroupedItemPosition? = null,
+    containerColor: Color = Color.Unspecified,
     onAdLoaded: (Boolean) -> Unit = {},
 ) {
     NativeAdSlot(
@@ -51,6 +54,7 @@ fun HelpNativeAdCard(
         position = groupedPosition ?: GroupedItemPosition.SINGLE,
         // Matches QuestionCard, the item this row is interleaved with.
         cornerRadius = SizeConstants.MediumSize,
+        containerColor = containerColor,
         onAdLoaded = onAdLoaded,
     )
 }

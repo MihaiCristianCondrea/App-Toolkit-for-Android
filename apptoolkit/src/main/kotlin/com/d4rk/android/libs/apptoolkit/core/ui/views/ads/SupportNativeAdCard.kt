@@ -19,6 +19,7 @@ package com.d4rk.android.libs.apptoolkit.core.ui.views.ads
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 /**
  * Media-led native ad card used on the Support screen.
@@ -32,18 +33,21 @@ import androidx.compose.ui.Modifier
  * - the "Sponsored" disclosure comes from a translated string instead of an English literal.
  *
  * @param adUnitId AdMob native ad unit to request.
+ * @param containerColor overrides the card container for hosts whose surfaces are their own.
  * @param onAdLoaded reports whether an ad is currently displayed, so hosts can collapse the slot.
  */
 @Composable
 fun SupportNativeAdCard(
     modifier: Modifier = Modifier,
     adUnitId: String,
+    containerColor: Color = Color.Unspecified,
     onAdLoaded: (Boolean) -> Unit = {},
 ) {
     NativeAdSlot(
         adUnitId = adUnitId,
         presentation = NativeAdPresentation.Featured,
         modifier = modifier,
+        containerColor = containerColor,
         onAdLoaded = onAdLoaded,
     )
 }

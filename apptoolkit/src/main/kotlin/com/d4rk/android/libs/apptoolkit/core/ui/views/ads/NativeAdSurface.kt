@@ -23,12 +23,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.d4rk.android.libs.apptoolkit.R
@@ -47,6 +50,8 @@ import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
  * rounded card.
  * @param showContainer `false` draws the ad with no card behind it, for hosts that already provide
  * their own surface.
+ * @param containerColor overrides the card container for screens whose own cards are not default
+ * cards. [Color.Unspecified] keeps the default.
  */
 @Composable
 internal fun NativeAdSurface(
@@ -54,6 +59,7 @@ internal fun NativeAdSurface(
     position: GroupedItemPosition = GroupedItemPosition.SINGLE,
     showContainer: Boolean = true,
     cornerRadius: Dp = SizeConstants.ExtraLargeSize,
+    containerColor: Color = Color.Unspecified,
     content: @Composable () -> Unit,
 ) {
     if (!showContainer) {
@@ -62,9 +68,10 @@ internal fun NativeAdSurface(
     }
 
     val grouped: Boolean = position != GroupedItemPosition.SINGLE
-    // Deliberately no `colors` override: an ad sits among ordinary content and should read as an
-    // ordinary card. Tinting it apart from its neighbours (a lower container when grouped, an
-    // elevation overlay when standalone) made it look like a different kind of surface.
+    // The default is deliberately an unstyled card: an ad sits among ordinary content and should
+    // read as ordinary content. Screens whose own cards are not default cards — and consumer apps
+    // with their own surfaces — pass `containerColor` rather than getting a toolkit-wide tint that
+    // is wrong everywhere else.
     Card(
         modifier = if (grouped) {
             modifier.groupedCorners(
@@ -75,6 +82,11 @@ internal fun NativeAdSurface(
             modifier
         },
         shape = if (grouped) RectangleShape else RoundedCornerShape(size = cornerRadius),
+        colors = if (containerColor.isSpecified) {
+            CardDefaults.cardColors(containerColor = containerColor)
+        } else {
+            CardDefaults.cardColors()
+        },
     ) {
         content()
     }
@@ -90,12 +102,14 @@ internal fun NativeAdPlaceholder(
     position: GroupedItemPosition = GroupedItemPosition.SINGLE,
     showContainer: Boolean = true,
     cornerRadius: Dp = SizeConstants.ExtraLargeSize,
+    containerColor: Color = Color.Unspecified,
 ) {
     NativeAdSurface(
         modifier = modifier,
         position = position,
         showContainer = showContainer,
         cornerRadius = cornerRadius,
+        containerColor = containerColor,
     ) {
         Box(
             modifier = if (presentation is NativeAdPresentation.Grid) {
