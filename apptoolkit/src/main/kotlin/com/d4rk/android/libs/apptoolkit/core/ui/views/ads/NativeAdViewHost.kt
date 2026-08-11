@@ -27,15 +27,23 @@ import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
 /**
  * A small helper to inflate and remember a [NativeAdView] inside Compose.
  *
- * Integration notes:
- * - This is a render bridge only; loading, consent gating, and lifecycle decisions remain in the caller.
- * - Callers should clear/destroy ad objects when leaving composition.
- *
  * @param modifier Modifiers applied to the hosting view.
  * @param layoutResId The XML layout resource used to inflate the [NativeAdView].
  * @param onNativeAdViewReady Called after the view is created or updated so the caller can store it.
  * @param onUpdate Called on every recomposition to apply the latest UI updates to the view.
  */
+@Deprecated(
+    message = "Native ads are built in Kotlin now. Use NativeAdSlot with a NativeAdPresentation " +
+            "instead of inflating an XML NativeAdView; this shim will be removed in the next " +
+            "release.",
+    replaceWith = ReplaceWith(
+        expression = "NativeAdSlot(adUnitId = adUnitId, presentation = presentation)",
+        imports = [
+            "com.d4rk.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot",
+            "com.d4rk.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation",
+        ],
+    ),
+)
 @Composable
 @UiComposable
 fun NativeAdViewHost(

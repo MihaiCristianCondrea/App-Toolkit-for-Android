@@ -17,191 +17,33 @@
 
 package com.d4rk.android.libs.apptoolkit.core.ui.views.ads
 
-import android.annotation.SuppressLint
-import android.os.Handler
-import android.os.Looper
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.core.view.isVisible
-import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoader
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoaderCallback
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdRequest
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
 
-@SuppressLint("InflateParams")
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+/**
+ * Square native ad cell that sits among app cards in a grid.
+ *
+ * Change rationale: this used to inflate `R.layout.native_ad_apps_list_card` through
+ * `NativeAdViewHost` and bind it with `findViewById`, while duplicating the "render nothing until
+ * loaded" logic locally. Both now come from [NativeAdSlot] — see [SupportNativeAdCard] for the
+ * behaviour changes that come with the shared renderer.
+ *
+ * @param onAdLoaded reports whether an ad is currently displayed, so the grid can drop the cell.
+ */
 @Composable
 fun AppsListNativeAdCard(
     modifier: Modifier = Modifier,
-    adUnitId: String
+    adUnitId: String,
+    onAdLoaded: (Boolean) -> Unit = {},
 ) {
-    val inspectionMode = LocalInspectionMode.current
-    val showAds: Boolean = rememberAdsEnabled()
-
-    if (inspectionMode) {
-        AppsListNativeAdPreview(modifier = modifier)
-        return
-    }
-
-    val mainHandler: Handler = remember { Handler(Looper.getMainLooper()) }
-
-    var isAdLoaded by remember(adUnitId) { mutableStateOf(false) }
-    var nativeAdView by remember { mutableStateOf<NativeAdView?>(null) }
-    var currentNativeAd by remember { mutableStateOf<NativeAd?>(null) }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            currentNativeAd?.destroy()
-            currentNativeAd = null
-        }
-    }
-
-    LaunchedEffect(adUnitId, showAds) {
-        if (!showAds || adUnitId.isBlank()) {
-            nativeAdView?.isVisible = false
-            currentNativeAd?.destroy()
-            currentNativeAd = null
-            isAdLoaded = false
-            return@LaunchedEffect
-        }
-
-        isAdLoaded = false
-        val adRequest: NativeAdRequest = NativeAdRequest.Builder(
-            adUnitId,
-            listOf(NativeAd.NativeAdType.NATIVE)
-        ).build()
-
-        nativeAdView?.isVisible = false
-        NativeAdLoader.load(
-            adRequest,
-            object : NativeAdLoaderCallback {
-                override fun onNativeAdLoaded(nativeAd: NativeAd) {
-                    mainHandler.post {
-                        currentNativeAd?.destroy()
-                        currentNativeAd = nativeAd
-                        nativeAdView?.let { view ->
-                            bindAppsListNativeAd(adView = view, nativeAd = nativeAd)
-                            view.isVisible = true
-                        }
-                        isAdLoaded = true
-                    }
-                }
-
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    mainHandler.post {
-                        nativeAdView?.isVisible = false
-                        isAdLoaded = false
-                    }
-                }
-            }
-        )
-    }
-
-    if (isAdLoaded) {
-        Card(
-            modifier = modifier
-                .fillMaxSize()
-                .aspectRatio(1f),
-            shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize)
-        ) {
-            NativeAdViewHost(
-                modifier = Modifier.fillMaxSize(),
-                layoutResId = R.layout.native_ad_apps_list_card,
-                onNativeAdViewReady = { adView ->
-                    if (nativeAdView !== adView) {
-                        nativeAdView = adView
-                    }
-                },
-                onUpdate = { view ->
-                    view.isVisible = isAdLoaded
-                    if (isAdLoaded) {
-                        currentNativeAd?.let { nativeAd ->
-                            bindAppsListNativeAd(adView = view, nativeAd = nativeAd)
-                        }
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun AppsListNativeAdPreview(modifier: Modifier) {
-    Card(
+    NativeAdSlot(
+        adUnitId = adUnitId,
+        presentation = NativeAdPresentation.Grid,
         modifier = modifier
             .fillMaxSize()
-            .aspectRatio(1f),
-        shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize)
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Native Ad Preview",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-private fun bindAppsListNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
-    val headlineView: TextView? = adView.findViewById(R.id.native_ad_headline)
-    adView.headlineView = headlineView
-    headlineView?.text = nativeAd.headline
-
-    val bodyView: TextView? = adView.findViewById(R.id.native_ad_body)
-    adView.bodyView = bodyView
-    val bodyText: CharSequence? = nativeAd.body
-    if (bodyText.isNullOrEmpty()) {
-        bodyView?.isVisible = false
-    } else {
-        bodyView?.text = bodyText
-        bodyView?.isVisible = true
-    }
-
-    val advertiserView: TextView? = adView.findViewById(R.id.native_ad_advertiser)
-    adView.advertiserView = advertiserView
-    val advertiserText: CharSequence? = nativeAd.advertiser
-    if (advertiserText.isNullOrEmpty()) {
-        advertiserView?.isVisible = false
-    } else {
-        advertiserView?.text = advertiserText
-        advertiserView?.isVisible = true
-    }
-
-    val iconView: ImageView? = adView.findViewById(R.id.native_ad_icon)
-    adView.iconView = iconView
-    val icon = nativeAd.icon
-    if (icon == null) {
-        iconView?.isVisible = false
-    } else {
-        iconView?.setImageDrawable(icon.drawable)
-        iconView?.isVisible = true
-    }
-
-    adView.registerNativeAd(nativeAd, null)
+            .aspectRatio(ratio = 1f),
+        onAdLoaded = onAdLoaded,
+    )
 }

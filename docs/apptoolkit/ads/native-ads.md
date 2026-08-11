@@ -1,155 +1,142 @@
 # Native Ads
 
-This guide documents how native ads are implemented inside the **App Toolkit** library and how the
-host app wires them in.
-It covers the shared configuration model, the reusable composables that wrap Google Mobile Ads SDK
-views, the XML layouts that
-define each presentation, and the Koin bindings that provide ad unit identifiers inside the app
-module.
+Native ads in the **App Toolkit** are rendered by one Kotlin renderer. There are no XML ad layouts
+and no `findViewById` binding: a screen picks a **presentation** and calls **one composable**.
 
-## Architecture overview
+> New ad surfaces add a presentation, not a component.
 
-Native ads are exposed to the Compose layer through reusable composables that host a `NativeAdView`
-via `AndroidView`. Each
-component performs the following common steps:
+---
 
-1. Resolve the current `AdsConfig` instance which carries the ad unit identifier (and optionally an
-   `AdSize`).
-2. Read the `adsEnabledFlow` flag from `CommonDataStore`; ads are skipped entirely when users
-   disable them.
-3. Short-circuit rendering when running inside preview/inspection mode so designers see a
-   placeholder message instead of a live
-   request.
-4. Inflate the corresponding XML layout, load a native ad with `AdLoader`, and bind headline, body,
-   advertiser, icon, media and
-   call-to-action views when the response arrives.
-5. Dispose of any previously loaded `NativeAd` instances to avoid leaks, mirroring Google’s
-   recommended lifecycle management.
+## The API
 
-This pattern is implemented in every native ad composable, e.g. `AppDetailsNativeAd`,
-`AppsListNativeAdCard`,
-`HelpNativeAdCard`, `SupportNativeAdCard`, `NoDataNativeAdCard`, and `BottomAppBarNativeAdBanner`.
-【F:
-apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/core/ui/components/ads/AppDetailsNativeAd.kt†L18-L106】【F:
-apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/core/ui/components/ads/SupportNativeAdCard.kt†L46-L117】
+```kotlin
+// apptoolkit/core/ui/views/ads
 
-### Ads configuration model
+sealed interface NativeAdPresentation {
+    data object Featured : NativeAdPresentation  // MediaView, headline, body, icon + advertiser + CTA
+    data object Compact  : NativeAdPresentation  // icon, headline, body, advertiser, trailing CTA
+    data object Grid     : NativeAdPresentation  // square cell for grids and decks, no CTA
+    data object BarRow   : NativeAdPresentation  // full-width strip for a bottom bar
+}
 
-Library consumers configure ad units with the `AdsConfig` data class which holds the string ID and
-desired banner size (used by
-banner surfaces that share the same DI entry points as native ads). Each native component receives
-the config via parameters or
-Koin injection.【F:
-apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/core/domain/model/ads/AdsConfig.kt†L5-L9】
+@Composable
+fun NativeAdSlot(
+    adUnitId: String,
+    presentation: NativeAdPresentation,
+    modifier: Modifier = Modifier,
+    position: GroupedItemPosition = GroupedItemPosition.SINGLE,
+    showContainer: Boolean = true,
+    cornerRadius: Dp = SizeConstants.ExtraLargeSize,
+    onAdLoaded: (Boolean) -> Unit = {},
+)
+```
 
-### Shared preview support
+Behaviour worth knowing:
 
-All native ad composables detect Compose inspection mode and render a lightweight preview text when
-previews are rendered in
-Android Studio. This keeps design-time previews fast and avoids attempted network access in the
-IDE.【F:
-apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/core/ui/components/ads/AppDetailsNativeAd.kt†L41-L52】
+| Situation | What happens |
+| --- | --- |
+| Ad not loaded yet, or load failed | **Nothing is rendered** — no container, no spacing. `onAdLoaded(false)` fires so the host can collapse the slot. |
+| Ad loaded | The container (unless `showContainer = false`) plus a registered `NativeAdView`. `onAdLoaded(true)` fires. |
+| User disabled ads, or `adUnitId` is blank | No request is made at all. |
+| `LocalInspectionMode` (previews, layout inspector) | A `NativeAdPlaceholder` is drawn; nothing is loaded. |
+| `adUnitId` changes | The previous `NativeAd` is destroyed before the new request starts. |
 
-## Library-provided components
+---
 
-The library module ships multiple specialized native ad surfaces tailored to different screens. Each
-composable expects an
-`AdsConfig` and inflates its own XML layout:
+## The four internals
 
-- `AppDetailsNativeAd` – shown inside the app details bottom sheet. Binds headline, body,
-  advertiser, icon and CTA button.
-  Layout: `native_ad_app_details.xml`.
-  【F:
-  app/src/main/java/com/d4rk/android/apps/apptoolkit/app/apps/common/AppDetailsBottomSheet.kt†L145-L154】【F:
-  apptoolkit/src/main/res/layout/native_ad_app_details.xml†L1-L111】
-- `AppsListNativeAdCard` – inserted between items in app lists. Displays headline, body, advertiser
-  and icon rows with rounded
-  styling. Layout: `native_ad_apps_list_card.xml`.
-  【F:
-  app/src/main/java/com/d4rk/android/apps/apptoolkit/app/apps/common/screens/AppsList.kt†L162-L170】【F:
-  apptoolkit/src/main/res/layout/native_ad_apps_list_card.xml†L1-L93】
-- `HelpNativeAdCard` – embedded in the help screen alongside FAQ content. Uses a decorated icon
-  container to match the support
-  theme. Layout: `native_ad_help_card.xml`.
-  【F:
-  apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/app/help/ui/HelpScreen.kt†L115-L136】【F:
-  apptoolkit/src/main/res/layout/native_ad_help_card.xml†L1-L122】
-- `SupportNativeAdCard` – blends into the support/donations screen and includes media view support
-  for richer creatives.
-  Layout: `native_ad_support_card.xml`.
-  【F:
-  apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/app/support/ui/SupportScreen.kt†L204-L219】【F:
-  apptoolkit/src/main/res/layout/native_ad_support_card.xml†L1-L125】
-- `NoDataNativeAdCard` – presented on the reusable "no data" layout to monetize empty states while
-  keeping copy and CTA visible.
-  Layout: `native_ad_no_data_card.xml`.
-  【F:
-  apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/core/ui/components/layouts/NoDataScreen.kt†L50-L112】【F:
-  apptoolkit/src/main/res/layout/native_ad_no_data_card.xml†L1-L125】
-- `BottomAppBarNativeAdBanner` – slides into the bottom navigation bar container and uses a
-  horizontal layout optimized for the
-  app chrome. Layout: `native_ad_bottom_bar.xml`.
-  【F:
-  apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/app/main/ui/components/navigation/BottomNavigationBar.kt†L42-L56】【F:
-  apptoolkit/src/main/res/layout/native_ad_bottom_bar.xml†L1-L92】
+Each is separately replaceable and separately testable.
 
-Each binding function hides unavailable fields (e.g., missing body text or icons) before calling
-`setNativeAd`, ensuring the UI
-stays policy compliant across different creative payloads.【F:
-apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/core/ui/components/ads/AppsListNativeAdCard.kt†L139-L174】
+### 1. `rememberNativeAd(adUnitId, enabled)`
 
-## App module integration
+Owns the ad's whole lifecycle in a **single** `DisposableEffect(adUnitId, enabled, loaderClient)`:
+loads, posts the callback to the main thread, destroys on dispose *and* on a key change, and
+destroys an ad that arrives after disposal.
 
-The application module wires these composables through Koin. `AdsModule` registers named `AdsConfig`
-singletons for every native
-placement, which allows screens to inject the proper configuration without hardcoding IDs.
-Qualifiers include
-`apps_list_native_ad`, `app_details_native_ad`, `no_data_native_ad`, `bottom_nav_bar_native_ad`,
-`help_large_banner_ad`, and
-`support_native_ad`.【F:
-app/src/main/java/com/d4rk/android/apps/apptoolkit/core/di/modules/AdsModule.kt†L31-L65】
+Loading goes through `NativeAdLoaderClient`, the one seam that touches the network:
 
-Each qualifier ultimately resolves to a release or debug ad unit string via `AdsConstants`. In debug
-builds the app serves Google
-sample IDs to satisfy policy, while release builds use production values. This logic also exposes
-the shared `NATIVE_AD_UNIT_ID`
-used for generic placements.【F:
-app/src/main/java/com/d4rk/android/apps/apptoolkit/core/utils/constants/ads/AdsConstants.kt†L7-L41】
+```kotlin
+CompositionLocalProvider(LocalNativeAdLoaderClient provides fakeClient) {
+    NativeAdSlot(adUnitId = "unit", presentation = NativeAdPresentation.Featured)
+}
+```
 
-Screens that participate in native ads request the appropriate config through `koinInject` (or
-receive it as a parameter) and
-pass it down to the library composable. Examples include:
+### 2. `nativeAdPalette()`
 
-- `AppsList` injecting `apps_list_native_ad` to interleave ads across the grid feed.
-- `AppsListRoute` fetching `app_details_native_ad` for the bottom sheet placement that wraps
-  `AppDetailsNativeAd`.
-- `NoDataScreen` exposing an `adsConfig` parameter defaulted to the `no_data_native_ad` binding.
-- `BottomNavigationBar` pulling `bottom_nav_bar_native_ad` for the persistent chrome ad.
-- `HelpScreen` and `SupportScreen` injecting `help_large_banner_ad` and `support_native_ad`
-  respectively.
-  【F:
-  app/src/main/java/com/d4rk/android/apps/apptoolkit/app/apps/common/screens/AppsList.kt†L56-L170】【F:
-  app/src/main/java/com/d4rk/android/apps/apptoolkit/app/apps/list/ui/AppsListScreen.kt†L35-L104】【F:
-  app/src/main/java/com/d4rk/android/apps/apptoolkit/app/apps/common/AppDetailsBottomSheet.kt†L63-L155】【F:
-  apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/core/ui/components/layouts/NoDataScreen.kt†L50-L112】【F:
-  apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/app/main/ui/components/navigation/BottomNavigationBar.kt†L38-L55】【F:
-  apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/app/help/ui/HelpScreen.kt†L115-L136】【F:
-  apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/app/support/ui/SupportScreen.kt†L98-L220】
+Snapshots `MaterialTheme.colorScheme` into an ARGB `NativeAdPalette`. Views cannot read
+`MaterialTheme`, so the colours are handed across the boundary explicitly. The palette is applied in
+the `AndroidView` **update** block, so an in-app theme change that does not recreate the activity
+repaints the ad instead of leaving stale colours behind.
 
-## Implementation notes
+### 3. `NativeAdRenderer`
 
-- All native ad loaders configure `AdChoices` to display in the top-right corner, matching Google’s
-  UX guidelines.【F:
-  apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/core/ui/components/ads/AppDetailsNativeAd.kt†L87-L104】
-- Failure listeners hide the `NativeAdView` when a load error occurs so empty containers do not
-  remain visible.【F:
-  apptoolkit/src/main/java/com/d4rk/android/libs/apptoolkit/core/ui/components/ads/AppDetailsNativeAd.kt†L97-L104】
-- Each layout includes an explicit "Ad" badge and respects Material 3 spacing to align with policy
-  and accessibility guidance.【F:apptoolkit/src/main/res/layout/native_ad_support_card.xml†L9-L36】【F:
-  apptoolkit/src/main/res/layout/native_ad_help_card.xml†L8-L30】
-- When extending the system, create a new XML layout in `apptoolkit/src/main/res/layout`, register a
-  matching `AdsConfig` in
-  `AdsModule`, and forward the qualifier into your Compose screen via Koin.
+An `AndroidView` wrapping a programmatically built `NativeAdView`. The factory builds the view tree
+for the presentation once and stores a holder with strong references to every child; `update`
+applies the palette and binds the ad.
 
-These conventions ensure the library and host app stay policy-compliant while keeping integrations
-declarative and easy to test.
+**"No XML" does not mean "no `NativeAdView`."** Ad assets must still be rendered inside a registered
+`NativeAdView` with a real `MediaView` and a `registerNativeAd` call — drawing headline, icon and CTA
+as pure Compose would break AdMob policy and click reporting. What the migration removed is the
+inflater and `findViewById`, not the ad view.
+
+### 4. `NativeAdSurface` / `NativeAdPlaceholder`
+
+The Compose card the ad sits in, honouring `position` (grouped corners) and `showContainer`, plus the
+preview stand-in. Kept separate from the renderer so the container is only composed once an ad
+exists.
+
+---
+
+## Shipped components
+
+Every one of these is now a thin wrapper over `NativeAdSlot`; their names and parameters are
+unchanged, so no screen needed edits.
+
+| Component | Presentation | Container | Used by |
+| --- | --- | --- | --- |
+| `SupportNativeAdCard` | `Featured` | card | Support screen |
+| `NoDataNativeAdCard` | `Featured` | card | `NoDataScreen` |
+| `HelpNativeAdCard` | `Compact` | card, grouped corners | Help screen list |
+| `AppDetailsNativeAd` | `Compact` | none | App details sheet |
+| `AppsListNativeAdCard` | `Grid` | card, 1:1 | Apps grid |
+| `BottomAppBarNativeAdBanner` | `BarRow` | none | Bottom app bar |
+| `QuickToolsNativeAdCard` (demo app) | `Compact` | card, grouped corners | Toolkit Tiles list |
+
+`NativeAdViewHost` is `@Deprecated` and exists only to keep one release of source compatibility. It
+inflates XML and has no replacement path other than `NativeAdSlot`.
+
+---
+
+## Configuration and DI
+
+Ad unit ids still come from `AdsConfig` bound in the app module's `AdsModule` under named qualifiers
+(`apps_list_native_ad`, `app_details_native_ad`, `no_data_native_ad`, `bottom_nav_bar_native_ad`,
+`help_large_banner_ad`, `support_native_ad`). Screens inject the qualifier they need and pass
+`bannerAdUnitId` down. Debug builds resolve to Google's sample unit ids through `AdsConstants`.
+
+The AdMob **application** id is a different thing and is never configured here — it is read from the
+host app's manifest. See [Consent (UMP) and the AdMob app id](consent-and-admob-app-id.md).
+
+---
+
+## Policy and accessibility
+
+- The disclosure label is `R.string.sponsored_ad_label`, a translated string used by every
+  presentation. It used to be a hardcoded English literal (`"Sponsored"` in Kotlin, `"● Sponsored"`
+  in XML) in an app shipping 25 locales.
+- The call to action has a **48 dp** minimum touch target. The XML layouts used 34–36 dp.
+- Missing assets (no body, no icon, no advertiser, no CTA) are hidden before `registerNativeAd`, so
+  the layout stays correct across creative payloads.
+- Render an ad only after consent and ads settings allow serving. Placement policy belongs to the
+  screen; `NativeAdSlot` is a view-layer primitive.
+
+---
+
+## Adding a new ad surface
+
+1. Check whether an existing `NativeAdPresentation` fits. It usually does.
+2. If not, add a `data object` to `NativeAdPresentation` and a `create…` builder in
+   `NativeAdRenderer.kt`. Register every asset view on the `NativeAdView` and pass the `MediaView` to
+   `registerNativeAd`.
+3. Register an `AdsConfig` qualifier in the app module's `AdsModule`.
+4. Call `NativeAdSlot` from the screen. Do not write a new component with its own view tree.

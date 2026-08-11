@@ -17,175 +17,29 @@
 
 package com.d4rk.android.libs.apptoolkit.core.ui.views.ads
 
-import android.annotation.SuppressLint
-import android.os.Handler
-import android.os.Looper
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.core.view.isVisible
-import com.d4rk.android.libs.apptoolkit.R
-import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
-import com.google.android.libraries.ads.mobile.sdk.nativead.MediaView
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoader
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoaderCallback
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdRequest
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
 
 /**
- * A Composable that displays a native ad in a card format, specifically designed for "no data" or empty states.
+ * Media-led native ad card used on empty and error states.
  *
- * This component fetches and displays a native ad from Google AdMob. It handles the ad loading lifecycle,
- * including requesting, binding, and destroying the ad. It also respects the user's ad preference
- * stored in `CommonDataStore`.
+ * Change rationale: this used to inflate `R.layout.native_ad_no_data_card` through
+ * `NativeAdViewHost` and bind it with `findViewById`. It is now a thin wrapper over [NativeAdSlot] —
+ * see [SupportNativeAdCard] for the behaviour changes that come with the shared renderer.
  *
- * If the app is running in preview mode (via `LocalInspectionMode`), a placeholder UI is shown instead of a real ad.
- * The ad will not be displayed if the user has disabled ads or if the provided `adsConfig` does not contain a valid ad unit ID.
- *
- * The ad's visibility is managed internally; it's hidden during loading and on failure, and shown only upon successful ad retrieval.
- *
- * The layout for the native ad is inflated from the `R.layout.native_ad_no_data_card` XML file.
- *
- * @param modifier The modifier to be applied to the ad card.
+ * @param onAdLoaded reports whether an ad is currently displayed, so the empty state can drop the
+ * slot and its spacing instead of leaving a gap.
  */
-@SuppressLint("InflateParams")
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun NoDataNativeAdCard(
     modifier: Modifier = Modifier,
-    adUnitId: String
+    adUnitId: String,
+    onAdLoaded: (Boolean) -> Unit = {},
 ) {
-    val inspectionMode = LocalInspectionMode.current
-    val showAds: Boolean = rememberAdsEnabled()
-
-    if (inspectionMode) return
-    if (!showAds || adUnitId.isBlank()) return
-
-    val mainHandler: Handler = remember { Handler(Looper.getMainLooper()) }
-
-    var nativeAdView by remember { mutableStateOf<NativeAdView?>(null) }
-    var currentNativeAd by remember { mutableStateOf<NativeAd?>(null) }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            currentNativeAd?.destroy()
-            currentNativeAd = null
-        }
-    }
-
-    Card(
+    NativeAdSlot(
+        adUnitId = adUnitId,
+        presentation = NativeAdPresentation.Featured,
         modifier = modifier,
-        shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(SizeConstants.ExtraTinySize)
-        )
-    ) {
-        NativeAdViewHost(
-            modifier = Modifier.fillMaxWidth(),
-            layoutResId = R.layout.native_ad_no_data_card,
-            onNativeAdViewReady = { view ->
-                if (nativeAdView !== view) {
-                    nativeAdView = view
-                }
-            }
-        )
-    }
-
-    LaunchedEffect(nativeAdView, adUnitId) {
-        val view: NativeAdView = nativeAdView ?: return@LaunchedEffect
-
-        val adRequest: NativeAdRequest = NativeAdRequest.Builder(
-            adUnitId,
-            listOf(NativeAd.NativeAdType.NATIVE)
-        ).build()
-
-        view.isVisible = false
-        NativeAdLoader.load(
-            adRequest,
-            object : NativeAdLoaderCallback {
-                override fun onNativeAdLoaded(nativeAd: NativeAd) {
-                    mainHandler.post {
-                        currentNativeAd?.destroy()
-                        currentNativeAd = nativeAd
-                        bindNoDataNativeAd(adView = view, nativeAd = nativeAd)
-                        view.isVisible = true
-                    }
-                }
-
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    mainHandler.post { view.isVisible = false }
-                }
-            }
-        )
-    }
-}
-
-private fun bindNoDataNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
-    val mediaView: MediaView? = adView.findViewById(R.id.native_ad_media)
-    mediaView?.mediaContent = nativeAd.mediaContent
-    mediaView?.isVisible = true
-
-    val headlineView: TextView? = adView.findViewById(R.id.native_ad_headline)
-    adView.headlineView = headlineView
-    headlineView?.text = nativeAd.headline
-
-    val bodyView: TextView? = adView.findViewById(R.id.native_ad_body)
-    adView.bodyView = bodyView
-    val bodyText: CharSequence? = nativeAd.body
-    if (bodyText.isNullOrEmpty()) {
-        bodyView?.isVisible = false
-    } else {
-        bodyView?.text = bodyText
-        bodyView?.isVisible = true
-    }
-
-    val advertiserView: TextView? = adView.findViewById(R.id.native_ad_advertiser)
-    adView.advertiserView = advertiserView
-    val advertiserText: CharSequence? = nativeAd.advertiser
-    if (advertiserText.isNullOrEmpty()) {
-        advertiserView?.isVisible = false
-    } else {
-        advertiserView?.text = advertiserText
-        advertiserView?.isVisible = true
-    }
-
-    val iconView: ImageView? = adView.findViewById(R.id.native_ad_icon)
-    adView.iconView = iconView
-    val icon = nativeAd.icon
-    if (icon == null) {
-        iconView?.isVisible = false
-    } else {
-        iconView?.setImageDrawable(icon.drawable)
-        iconView?.isVisible = true
-    }
-
-    val callToActionView: Button? = adView.findViewById(R.id.native_ad_call_to_action)
-    adView.callToActionView = callToActionView
-    val callToActionText: CharSequence? = nativeAd.callToAction
-    if (callToActionText.isNullOrEmpty()) {
-        callToActionView?.isVisible = false
-    } else {
-        callToActionView?.text = callToActionText
-        callToActionView?.isVisible = true
-    }
-
-    adView.registerNativeAd(nativeAd, mediaView)
+        onAdLoaded = onAdLoaded,
+    )
 }

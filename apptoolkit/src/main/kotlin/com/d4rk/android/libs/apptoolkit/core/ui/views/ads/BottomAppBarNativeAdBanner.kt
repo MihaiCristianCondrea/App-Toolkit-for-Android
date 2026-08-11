@@ -17,192 +17,30 @@
 
 package com.d4rk.android.libs.apptoolkit.core.ui.views.ads
 
-import android.annotation.SuppressLint
-import android.os.Handler
-import android.os.Looper
-import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.isVisible
-import com.d4rk.android.libs.apptoolkit.R
-import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoader
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoaderCallback
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdRequest
-import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
-
-private const val PREVIEW_NATIVE_AD_HEIGHT = 120
 
 /**
- * A Composable that displays a native ad styled to fit in a bottom app bar.
+ * Full-width native ad strip styled to sit in a bottom app bar.
  *
- * This component handles the entire lifecycle of loading and displaying a native ad from Google AdMob.
- * It uses an [AndroidView] to inflate a traditional XML layout (`R.layout.native_ad_bottom_bar`)
- * and populates it with the native ad content.
+ * Change rationale: this used to inflate `R.layout.native_ad_bottom_bar` and bind it with
+ * `findViewById`. It is now a thin wrapper over [NativeAdSlot] — see [SupportNativeAdCard] for the
+ * behaviour changes that come with the shared renderer. The strip paints its own surface, so it
+ * renders without a card container.
  *
- * The ad visibility is controlled by a value from [CommonDataStore], allowing users to disable ads.
- * If the ad fails to load, the view's visibility is set to false, effectively hiding it.
- * When the Composable is disposed, any active [NativeAd] is destroyed to prevent memory leaks.
- *
- * In Compose Preview mode (`LocalInspectionMode`), a placeholder [NativeAdPreview] is shown instead of a real ad.
- *
- * @param modifier The [Modifier] to be applied to the ad banner container.
- * @param adsConfig The configuration object containing ad-related settings, including the `bannerAdUnitId`.
- *                  The ad will not be displayed if the `bannerAdUnitId` is blank.
+ * @param onAdLoaded reports whether an ad is currently displayed, so the bar can collapse.
  */
-@SuppressLint("InflateParams")
 @Composable
 fun BottomAppBarNativeAdBanner(
     modifier: Modifier = Modifier,
-    adUnitId: String
+    adUnitId: String,
+    onAdLoaded: (Boolean) -> Unit = {},
 ) {
-    val inspectionMode = LocalInspectionMode.current
-    val showAds: Boolean = rememberAdsEnabled()
-
-    if (inspectionMode) {
-        NativeAdPreview(modifier = modifier)
-        return
-    }
-
-    if (!showAds || adUnitId.isBlank()) {
-        return
-    }
-
-    val mainHandler: Handler = remember { Handler(Looper.getMainLooper()) }
-
-    var nativeAdView by remember { mutableStateOf<NativeAdView?>(null) }
-    var currentNativeAd by remember { mutableStateOf<NativeAd?>(null) }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            currentNativeAd?.destroy()
-            currentNativeAd = null
-        }
-    }
-
-    AndroidView(
-        modifier = Modifier.fillMaxWidth(),
-        factory = { ctx ->
-            LayoutInflater.from(ctx)
-                .inflate(R.layout.native_ad_bottom_bar, null) as NativeAdView
-        },
-        update = { view ->
-            if (nativeAdView !== view) {
-                nativeAdView = view
-            }
-        }
+    NativeAdSlot(
+        adUnitId = adUnitId,
+        presentation = NativeAdPresentation.BarRow,
+        modifier = modifier,
+        showContainer = false,
+        onAdLoaded = onAdLoaded,
     )
-
-    LaunchedEffect(nativeAdView, adUnitId) {
-        val view: NativeAdView = nativeAdView ?: return@LaunchedEffect
-
-        val adRequest: NativeAdRequest = NativeAdRequest.Builder(
-            adUnitId,
-            listOf(NativeAd.NativeAdType.NATIVE)
-        ).build()
-
-        view.isVisible = false
-        NativeAdLoader.load(
-            adRequest,
-            object : NativeAdLoaderCallback {
-                override fun onNativeAdLoaded(nativeAd: NativeAd) {
-                    mainHandler.post {
-                        currentNativeAd?.destroy()
-                        currentNativeAd = nativeAd
-                        bindBottomAppBarNativeAd(adView = view, nativeAd = nativeAd)
-                        view.isVisible = true
-                    }
-                }
-
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    mainHandler.post { view.isVisible = false }
-                }
-            }
-        )
-    }
-}
-
-@Composable
-private fun NativeAdPreview(modifier: Modifier) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(PREVIEW_NATIVE_AD_HEIGHT.dp)
-            .background(MaterialTheme.colorScheme.surfaceVariant),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "Native Ad Preview",
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-private fun bindBottomAppBarNativeAd(adView: NativeAdView, nativeAd: NativeAd) {
-    val headlineView: TextView? = adView.findViewById(R.id.native_ad_headline)
-    adView.headlineView = headlineView
-    headlineView?.text = nativeAd.headline
-
-    val bodyView: TextView? = adView.findViewById(R.id.native_ad_body)
-    adView.bodyView = bodyView
-    val bodyText: CharSequence? = nativeAd.body
-    if (bodyText.isNullOrEmpty()) {
-        bodyView?.isVisible = false
-    } else {
-        bodyView?.text = bodyText
-        bodyView?.isVisible = true
-    }
-
-    val advertiserView: TextView? = adView.findViewById(R.id.native_ad_advertiser)
-    adView.advertiserView = advertiserView
-    val advertiserText: CharSequence? = nativeAd.advertiser
-    if (advertiserText.isNullOrEmpty()) {
-        advertiserView?.isVisible = false
-    } else {
-        advertiserView?.text = advertiserText
-        advertiserView?.isVisible = true
-    }
-
-    val iconView: ImageView? = adView.findViewById(R.id.native_ad_icon)
-    adView.iconView = iconView
-    val icon = nativeAd.icon
-    if (icon == null) {
-        iconView?.isVisible = false
-    } else {
-        iconView?.setImageDrawable(icon.drawable)
-        iconView?.isVisible = true
-    }
-
-    val callToActionView: Button? = adView.findViewById(R.id.native_ad_call_to_action)
-    adView.callToActionView = callToActionView
-    val callToActionText: CharSequence? = nativeAd.callToAction
-    if (callToActionText.isNullOrEmpty()) {
-        callToActionView?.isVisible = false
-    } else {
-        callToActionView?.text = callToActionText
-        callToActionView?.isVisible = true
-    }
-
-    adView.registerNativeAd(nativeAd, null)
 }

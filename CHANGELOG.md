@@ -1,3 +1,23 @@
+# Unreleased:
+
+- **Patch**: Fixed a process kill caused by the UMP consent SDK. The consent request is now
+  single-flighted process-wide, requests from a finishing activity never reach UMP, and a narrow
+  crash guard installed from `BaseCoreManager` swallows the SDK's metrics-ping crash and reports it
+  as a non-fatal instead.
+- **Patch**: The AdMob application id is now resolved from the host app's
+  `com.google.android.gms.ads.APPLICATION_ID` manifest metadata. The library no longer ships an
+  `ad_mob_app_id` string resource, which consumer apps silently inherited, and `AdsCoreManager` no
+  longer initializes the Mobile Ads SDK with Google's sample app id.
+- **Minor**: Native ads are built in Kotlin. `NativeAdSlot` plus a `NativeAdPresentation` replaces
+  the seven per-screen components and their XML layouts; existing component names and parameters are
+  unchanged. `NativeAdViewHost` is deprecated.
+- **Patch**: Native ad slots render nothing until an ad is bound, so a failed load no longer leaves
+  an empty bordered card behind, and they report load state so hosts can collapse the slot.
+- **Patch**: Changing a native ad unit no longer leaks the previously loaded ad.
+- **Patch**: Native ad colours follow in-app theme changes that do not recreate the activity.
+- **Patch**: The native ad "Sponsored" disclosure is translated in every supported locale, and the
+  call to action meets the 48 dp minimum touch target.
+
 # Version 26.07.1:
 
 - **New**: Centralized versioning system with automated `versionCode` and `versionName` generation.
