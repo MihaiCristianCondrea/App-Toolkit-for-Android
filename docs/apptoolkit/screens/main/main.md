@@ -59,7 +59,8 @@ still giving host apps a ready-to-go default shell that can be customized or rep
 
 ### Changelog UI
 
-- **`ChangelogDialog`**: renders immutable state from `ChangelogViewModel`.
+- **`ChangelogDialog`**: renders immutable state from `ChangelogViewModel` in a modal bottom sheet,
+  with independently scrollable release notes and a fixed action.
 - **`GetChangelogUseCase`**: selects the exact current-version section, or the full history when
   the returned Markdown has no matching version section.
 - **`ChangelogRepositoryImpl`**: loads the public Worker package changelog and uses the existing
@@ -108,8 +109,9 @@ that feels native and is ready to ship:
 - The **navigation rail** supports tablets/foldables/large screens.
 - The **navigation drawer** remains available for app-wide actions (settings/help/updates/share),
   while a host-owned shell keeps top-level navigation chrome stable as tab content changes.
-- The **changelog dialog** keeps release notes discoverable while using package metadata supplied
-  by the host's Koin configuration.
+- The **changelog bottom sheet** keeps release notes discoverable while using package metadata
+  supplied by the host's Koin configuration. Its fixed header and action frame a separately
+  scrollable body so long release histories remain usable on compact screens.
 - **GMS host abstractions** exist to avoid leaking concrete `Activity` dependencies into
   domain/data,
   while still making Play Core flows easy to wire in host apps.

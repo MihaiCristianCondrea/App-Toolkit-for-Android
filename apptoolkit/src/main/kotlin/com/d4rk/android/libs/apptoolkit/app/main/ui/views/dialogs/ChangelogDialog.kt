@@ -12,12 +12,23 @@ package com.d4rk.android.libs.apptoolkit.app.main.ui.views.dialogs
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.NewReleases
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularWavyProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,18 +41,19 @@ import com.d4rk.android.libs.apptoolkit.app.main.ui.contract.ChangelogEvent
 import com.d4rk.android.libs.apptoolkit.app.main.ui.state.ChangelogUiState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.d4rk.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.d4rk.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
+import com.d4rk.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
- * Displays the host application's package-aware changelog.
+ * Displays the host application's package-aware changelog in a modal bottom sheet.
  *
  * Network and fallback decisions are owned by the injected [ChangelogViewModel]; this composable
- * only renders state and sends retry intent.
+ * only renders state and sends retry intent. The header and action remain fixed while the body
+ * scrolls independently, so long release notes cannot push the dismissal action off-screen.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ChangelogDialog(
     onDismiss: () -> Unit,
@@ -50,29 +62,61 @@ fun ChangelogDialog(
     val screenState: UiStateScreen<ChangelogUiState> by
         viewModel.uiState.collectAsStateWithLifecycle()
     val isError = screenState.screenState is ScreenState.Error
-
-    BasicAlertDialog(
-        onDismiss = onDismiss,
-        onConfirm = {
-            if (isError) {
-                viewModel.onEvent(event = ChangelogEvent.Retry)
-            } else {
-                onDismiss()
-            }
-        },
-        icon = Icons.Outlined.NewReleases,
-        onCancel = onDismiss,
-        showDismissButton = false,
-        confirmButtonText = if (isError) {
-            stringResource(id = R.string.try_again)
-        } else {
-            stringResource(id = R.string.done_button_content_description)
-        },
-        title = stringResource(id = R.string.changelog_title),
-        content = {
-            ChangelogDialogContent(screenState = screenState)
-        },
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
     )
+
+    ModalBottomSheet(
+        modifier = Modifier.fillMaxHeight(),
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(horizontal = SizeConstants.LargeSize),
+            verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(imageVector = Icons.Outlined.NewReleases, contentDescription = null)
+                LargeHorizontalSpacer()
+                Text(
+                    text = stringResource(id = R.string.changelog_title),
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+            ) {
+                ChangelogDialogContent(screenState = screenState)
+            }
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    if (isError) {
+                        viewModel.onEvent(event = ChangelogEvent.Retry)
+                    } else {
+                        onDismiss()
+                    }
+                },
+            ) {
+                Text(
+                    text = if (isError) {
+                        stringResource(id = R.string.try_again)
+                    } else {
+                        stringResource(id = R.string.done_button_content_description)
+                    },
+                )
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
