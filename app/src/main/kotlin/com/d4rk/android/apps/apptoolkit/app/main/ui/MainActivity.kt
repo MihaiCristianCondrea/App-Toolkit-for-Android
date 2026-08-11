@@ -25,9 +25,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.d4rk.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.d4rk.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
@@ -35,6 +33,7 @@ import com.d4rk.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
 import com.d4rk.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.activity.observeActions
 import com.d4rk.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -93,14 +92,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeActions() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.actionEvent.collect { action ->
-                    when (action) {
-                        is MainAction.ReviewOutcomeReported -> Unit
-                        is MainAction.InAppUpdateResultReported -> Unit
-                    }
-                }
+        observeActions(viewModel = viewModel) { action ->
+            when (action) {
+                is MainAction.ReviewOutcomeReported -> Unit
+                is MainAction.InAppUpdateResultReported -> Unit
             }
         }
     }

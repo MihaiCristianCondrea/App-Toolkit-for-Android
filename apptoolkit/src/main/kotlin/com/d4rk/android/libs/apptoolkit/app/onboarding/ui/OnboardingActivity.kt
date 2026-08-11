@@ -30,6 +30,7 @@ import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConse
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.d4rk.android.libs.apptoolkit.core.ui.base.BaseActivity
+import com.d4rk.android.libs.apptoolkit.core.utils.extensions.activity.observeActions
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -60,14 +61,10 @@ class OnboardingActivity : BaseActivity() {
     }
 
     private fun observeActions() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.actionEvent.collect { action ->
-                    when (action) {
-                        OnboardingAction.RequestConsentUi -> requestConsentFromUi()
-                        OnboardingAction.OnboardingCompleted -> Unit
-                    }
-                }
+        observeActions(viewModel = viewModel) { action ->
+            when (action) {
+                OnboardingAction.RequestConsentUi -> requestConsentFromUi()
+                OnboardingAction.OnboardingCompleted -> Unit
             }
         }
     }

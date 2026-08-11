@@ -25,11 +25,10 @@ import com.d4rk.android.apps.apptoolkit.app.components.ui.contract.ComponentsUnl
 import com.d4rk.android.apps.apptoolkit.app.components.ui.state.ComponentsUnlockUiState
 import com.d4rk.android.libs.apptoolkit.core.coroutines.dispatchers.DispatcherProvider
 import com.d4rk.android.libs.apptoolkit.core.domain.repository.FirebaseController
-import com.d4rk.android.libs.apptoolkit.core.ui.base.ScreenViewModel
+import com.d4rk.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.d4rk.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.d4rk.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.d4rk.android.libs.apptoolkit.core.ui.state.updateState
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -42,20 +41,22 @@ import kotlinx.coroutines.flow.update
 class ComponentsUnlockViewModel(
     private val unlockComponentsShowcase: UnlockComponentsShowcaseUseCase,
     private val dispatchers: DispatcherProvider,
-    private val firebaseController: FirebaseController,
-) : ScreenViewModel<ComponentsUnlockUiState, ComponentsUnlockEvent, ComponentsUnlockAction>(
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<ComponentsUnlockUiState, ComponentsUnlockEvent, ComponentsUnlockAction>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
         data = ComponentsUnlockUiState(),
-    )
+    ),
+    firebaseController = firebaseController,
+    screenName = "ComponentsUnlock",
 ) {
     private var unlockRequested: Boolean = false
 
     init {
-        onEvent(ComponentsUnlockEvent.Initialize)
+        handleEvent(ComponentsUnlockEvent.Initialize)
     }
 
-    override fun onEvent(event: ComponentsUnlockEvent) {
+    override fun handleEvent(event: ComponentsUnlockEvent) {
         when (event) {
             ComponentsUnlockEvent.Initialize -> screenState.updateState(ScreenState.Success())
             is ComponentsUnlockEvent.VersionTapped -> handleVersionTap(event.tapCount)
@@ -84,14 +85,14 @@ class ComponentsUnlockViewModel(
                     )
                 }
             }
-            .catch { throwable ->
-                firebaseController.reportViewModelError(
-                    viewModelName = "ComponentsUnlockViewModel",
-                    action = "handleVersionTap",
-                    throwable = throwable,
-                )
+            .catchReport(action = Actions.HANDLE_VERSION_TAP) {
+                // Error is reported by LoggedScreenViewModel
             }
             .launchIn(viewModelScope)
+    }
+
+    private object Actions {
+        const val HANDLE_VERSION_TAP: String = "handleVersionTap"
     }
 
     private companion object {
