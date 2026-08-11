@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TestPermissionsViewModel {
+class PermissionsViewModelTest {
 
     companion object {
         @JvmField

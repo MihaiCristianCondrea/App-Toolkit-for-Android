@@ -37,7 +37,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
-class TestAboutViewModel {
+class AboutViewModelTest {
 
     companion object {
         @JvmField

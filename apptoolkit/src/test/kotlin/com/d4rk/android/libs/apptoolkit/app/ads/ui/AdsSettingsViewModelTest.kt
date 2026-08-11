@@ -46,7 +46,7 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TestAdsSettingsViewModel {
+class AdsSettingsViewModelTest {
 
     companion object {
         @JvmField

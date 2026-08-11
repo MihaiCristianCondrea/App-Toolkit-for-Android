@@ -18,9 +18,8 @@
 package com.d4rk.android.libs.apptoolkit.app.onboarding.ui
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import android.os.Bundle
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -30,12 +29,12 @@ import com.d4rk.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.d4rk.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
 import com.d4rk.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
-import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
+import com.d4rk.android.libs.apptoolkit.core.ui.base.BaseActivity
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class OnboardingActivity : ComponentActivity() {
+class OnboardingActivity : BaseActivity() {
 
     private val viewModel: OnboardingViewModel by viewModel()
     private val requestConsentUseCase: RequestConsentUseCase by inject()
@@ -49,12 +48,11 @@ class OnboardingActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         lifecycle.addObserver(lifecycleObserver)
         observeActions()
-        enableEdgeToEdge()
-        setContent {
-            AppTheme {
-                OnboardingScreen()
-            }
-        }
+    }
+
+    @Composable
+    override fun ScreenContent() {
+        OnboardingScreen()
     }
 
     private fun checkUserConsent() {

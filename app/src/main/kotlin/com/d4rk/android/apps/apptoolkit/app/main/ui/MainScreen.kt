@@ -69,7 +69,7 @@ import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
 import androidx.navigation3.ui.NavDisplay
-import com.d4rk.android.apps.apptoolkit.app.components.ui.views.ComponentsActivity
+import com.d4rk.android.apps.apptoolkit.app.components.ui.ComponentsActivity
 import com.d4rk.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
 import com.d4rk.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.d4rk.android.apps.apptoolkit.app.main.ui.views.fab.MainFloatingActionButton

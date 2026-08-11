@@ -15,14 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.components.ui.views
+package com.d4rk.android.apps.apptoolkit.app.components.ui
 
-import androidx.compose.runtime.Composable
-import com.d4rk.android.libs.apptoolkit.core.ui.base.BaseActivity
+import android.os.Bundle
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import com.d4rk.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 
-class ComponentsActivity : BaseActivity() {
-    @Composable
-    override fun ScreenContent() {
-        ComponentsRoute(isEmbedded = false)
+class ComponentsActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            AppTheme {
+                ComponentsRoute(isEmbedded = false)
+            }
+        }
     }
 }

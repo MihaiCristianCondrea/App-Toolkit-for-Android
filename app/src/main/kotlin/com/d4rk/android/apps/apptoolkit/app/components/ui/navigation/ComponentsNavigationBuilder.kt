@@ -21,7 +21,7 @@ import com.d4rk.android.apps.apptoolkit.app.main.ui.views.navigation.AppNavigati
 import com.d4rk.android.apps.apptoolkit.app.main.utils.constants.ComponentsRoute
 import com.d4rk.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import com.d4rk.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
-import com.d4rk.android.apps.apptoolkit.app.components.ui.views.ComponentsRoute as ComponentsScreenRoute
+import com.d4rk.android.apps.apptoolkit.app.components.ui.ComponentsRoute as ComponentsScreenRoute
 
 /**
  * Registers the components showcase entry in the app navigation graph.

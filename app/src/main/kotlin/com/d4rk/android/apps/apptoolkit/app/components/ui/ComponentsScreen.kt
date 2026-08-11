@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.d4rk.android.apps.apptoolkit.app.components.ui.views
+package com.d4rk.android.apps.apptoolkit.app.components.ui
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement

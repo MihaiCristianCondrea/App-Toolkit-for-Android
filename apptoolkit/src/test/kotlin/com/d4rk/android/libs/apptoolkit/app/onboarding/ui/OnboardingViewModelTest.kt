@@ -62,7 +62,7 @@ private class FailingOnboardingRepository : OnboardingRepository {
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TestOnboardingViewModel {
+class OnboardingViewModelTest {
 
     companion object {
         @JvmField

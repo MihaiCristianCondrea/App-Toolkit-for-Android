@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
 
-class TestAppsListViewModel : TestAppsListViewModelBase() {
+class AppsListViewModelTest : AppsListViewModelBaseTest() {
 
     companion object {
         @JvmField

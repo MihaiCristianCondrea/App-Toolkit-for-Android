@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TestGeneralSettingsViewModel {
+class GeneralSettingsViewModelTest {
 
     companion object {
         @JvmField

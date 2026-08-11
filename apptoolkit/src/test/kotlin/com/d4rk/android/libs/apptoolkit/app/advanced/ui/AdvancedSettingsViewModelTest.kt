@@ -46,7 +46,7 @@ class HotFakeCacheRepository : CacheRepository {
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TestAdvancedSettingsViewModel {
+class AdvancedSettingsViewModelTest {
 
     private val testDispatchers: DispatcherProvider = TestDispatchers()
     private val firebaseController = FakeFirebaseController()

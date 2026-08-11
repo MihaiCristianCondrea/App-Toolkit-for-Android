@@ -42,7 +42,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
-open class TestAppsListViewModelBase {
+open class AppsListViewModelBaseTest {
 
     protected lateinit var viewModel: AppsListViewModel
     private val firebaseController = FakeFirebaseController()
