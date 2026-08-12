@@ -18,17 +18,17 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.state.AdsSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar

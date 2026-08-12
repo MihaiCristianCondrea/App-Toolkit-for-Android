@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecas
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.ToolkitTilesRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.ToolkitTilesRepository
 import kotlinx.collections.immutable.toImmutableList
 
 /**

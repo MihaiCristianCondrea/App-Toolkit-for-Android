@@ -22,8 +22,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.Compon
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.about.ui.AppAboutSettingsContent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.settings.utils.providers.AppDisplaySettingsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.settings.utils.providers.AppPrivacySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepositoryImpl
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.domain.repository.GeneralSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.DisplaySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
@@ -52,7 +51,7 @@ val generalSettingsModule: Module = module {
             }
         )
     }
-    single<GeneralSettingsRepository> { GeneralSettingsRepositoryImpl(firebaseController = get()) }
+    single { GeneralSettingsRepository(firebaseController = get()) }
 
     viewModel {
         GeneralSettingsViewModel(

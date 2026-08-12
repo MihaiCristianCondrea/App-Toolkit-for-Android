@@ -21,7 +21,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.github.ExtraInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.google.common.truth.Truth.assertThat

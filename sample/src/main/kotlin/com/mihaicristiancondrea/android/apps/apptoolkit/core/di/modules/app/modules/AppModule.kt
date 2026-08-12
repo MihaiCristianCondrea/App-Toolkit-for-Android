@@ -17,31 +17,20 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.data.repository.MainNavigationRepositoryImpl
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.data.repository.AppNavigationRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.BreathingRepositoryImpl
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.CaffeineRepositoryImpl
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SensorRepositoryImpl
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SosRepositoryImpl
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SystemMonitorRepositoryImpl
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SystemRepositoryImpl
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.ToolkitTilesRepositoryImpl
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.BreathingRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.CaffeineRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.SensorRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.SosRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.SystemMonitorRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.SystemRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.ToolkitTilesRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.GetBreathingDataUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.GetSensorDataUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.GetSystemDataUseCase
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.BreathingRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.CaffeineRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SensorRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SosRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SystemRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.GetToolkitTilesUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.SyncToolkitTileStatusesUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
@@ -51,7 +40,7 @@ import org.koin.dsl.module
 val appModule: Module = module {
     single { NavigationManager() }
     single<NavigationRepository> {
-        MainNavigationRepositoryImpl(
+        AppNavigationRepository(
             dataStore = get(),
             firebaseController = get()
         )
@@ -60,42 +49,33 @@ val appModule: Module = module {
         GetNavigationDrawerItemsUseCase(navigationRepository = get(), firebaseController = get())
     }
     single { GetToolkitTilesUseCase() }
-    single { GetSensorDataUseCase(sensorRepository = get()) }
-    single { GetBreathingDataUseCase(breathingRepository = get()) }
-    single { GetSystemDataUseCase(repository = get()) }
     single { SyncToolkitTileStatusesUseCase(repository = get()) }
-    single<ToolkitTilesRepository> { ToolkitTilesRepositoryImpl(context = androidContext()) }
-    single<SensorRepository> {
-        SensorRepositoryImpl(
+    single { ToolkitTilesRepository(context = androidContext()) }
+    single {
+        SensorRepository(
             context = androidContext(),
             dispatchers = get()
         )
     }
-    single<BreathingRepository> {
-        BreathingRepositoryImpl(
+    single {
+        BreathingRepository(
             context = androidContext(),
             dispatchers = get()
         )
     }
-    single<CaffeineRepository> {
-        CaffeineRepositoryImpl(
+    single {
+        CaffeineRepository(
             context = androidContext()
         )
     }
-    single<SosRepository> {
-        SosRepositoryImpl(
+    single {
+        SosRepository(
             context = androidContext(),
             dispatchers = get()
         )
     }
-    single<SystemMonitorRepository> {
-        SystemMonitorRepositoryImpl(
-            context = androidContext(),
-            dispatchers = get()
-        )
-    }
-    single<SystemRepository> {
-        SystemRepositoryImpl(
+    single {
+        SystemRepository(
             context = androidContext(),
             dispatchers = get()
         )
@@ -104,8 +84,8 @@ val appModule: Module = module {
         ToolkitTilesViewModel(
             getToolkitTilesUseCase = get(),
             syncToolkitTileStatusesUseCase = get(),
-            getSensorDataUseCase = get(),
-            getBreathingDataUseCase = get(),
+            sensorRepository = get(),
+            breathingRepository = get(),
             caffeineRepository = get(),
             systemRepository = get(),
             sosRepository = get(),

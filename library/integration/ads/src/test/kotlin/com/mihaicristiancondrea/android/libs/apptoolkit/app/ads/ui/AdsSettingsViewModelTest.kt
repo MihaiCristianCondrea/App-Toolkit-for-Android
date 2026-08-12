@@ -17,11 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState

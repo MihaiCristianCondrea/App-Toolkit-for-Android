@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.usecases
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.model.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.repository.FaqRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import kotlinx.coroutines.flow.Flow

@@ -25,8 +25,8 @@ import androidx.multidex.MultiDexApplication
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.BillingCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.BillingCore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.crash.ConsentSdkCrashGuard
 import com.google.firebase.Firebase
 import com.google.firebase.appcheck.appCheck

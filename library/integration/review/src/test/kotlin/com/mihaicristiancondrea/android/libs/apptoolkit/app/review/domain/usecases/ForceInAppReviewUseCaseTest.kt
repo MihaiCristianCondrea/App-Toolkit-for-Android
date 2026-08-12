@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.useca
 import android.app.Activity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.domain.repository.ReviewRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.data.repository.ReviewRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

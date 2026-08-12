@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (Â©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,14 +19,14 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui
 
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repository.CacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.state.AdvancedSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen

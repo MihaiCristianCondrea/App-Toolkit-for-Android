@@ -1,5 +1,5 @@
-﻿/*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.Ab
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.licenses.ui.LicensesActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen

@@ -18,13 +18,13 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.FavoritesLocalDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.FavoritesLocalDataSourceImpl
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepositoryImpl
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.FavoritesRepositoryImpl
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.InstalledAppsRepositoryImpl
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.repository.DeveloperAppsRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.repository.FavoritesRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.repository.InstalledAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DefaultFavoritesLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.DefaultDeveloperAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.DefaultFavoritesRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.DefaultInstalledAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.FavoritesRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.InstalledAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchAppDetailsUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.GetAppInstallInfoUseCase
@@ -41,7 +41,7 @@ import org.koin.dsl.module
 
 val appsListModule: Module = module {
     single<DeveloperAppsRepository> {
-        DeveloperAppsRepositoryImpl(
+        DefaultDeveloperAppsRepository(
             client = get(),
             baseUrl = get(qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL)),
             firebaseController = get(),
@@ -50,7 +50,7 @@ val appsListModule: Module = module {
 
     single { FetchDeveloperAppsUseCase(repository = get()) }
     single { FetchAppDetailsUseCase(repository = get()) }
-    single<InstalledAppsRepository> { InstalledAppsRepositoryImpl(context = androidContext()) }
+    single<InstalledAppsRepository> { DefaultInstalledAppsRepository(context = androidContext()) }
     single { GetInstalledPackagesUseCase(repository = get()) }
     single { GetAppInstallInfoUseCase(repository = get()) }
     viewModel {
@@ -66,9 +66,9 @@ val appsListModule: Module = module {
         )
     }
 
-    single<FavoritesLocalDataSource> { FavoritesLocalDataSourceImpl(dataStore = get()) }
+    single<FavoritesLocalDataSource> { DefaultFavoritesLocalDataSource(dataStore = get()) }
     single<FavoritesRepository> {
-        FavoritesRepositoryImpl(
+        DefaultFavoritesRepository(
             local = get(),
             firebaseController = get()
         )

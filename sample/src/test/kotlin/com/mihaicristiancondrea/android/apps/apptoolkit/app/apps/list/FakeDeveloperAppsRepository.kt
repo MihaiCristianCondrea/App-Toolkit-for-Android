@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppSummary
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.repository.DeveloperAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.model.network.AppErrors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import kotlinx.coroutines.flow.Flow

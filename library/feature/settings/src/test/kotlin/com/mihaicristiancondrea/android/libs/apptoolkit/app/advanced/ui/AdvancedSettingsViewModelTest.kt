@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui
 
 import app.cash.turbine.test
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repository.CacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers

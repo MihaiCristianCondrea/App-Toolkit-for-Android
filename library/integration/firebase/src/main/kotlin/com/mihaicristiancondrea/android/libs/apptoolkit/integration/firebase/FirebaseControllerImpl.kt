@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase
 import android.os.Bundle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.boolean.asConsentStatus
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics

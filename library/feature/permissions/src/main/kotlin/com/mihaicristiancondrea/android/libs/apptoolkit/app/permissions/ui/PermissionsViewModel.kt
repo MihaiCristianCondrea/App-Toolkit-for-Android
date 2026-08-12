@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (Â©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui
 
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.domain.repository.PermissionsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repository.PermissionsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
@@ -28,7 +28,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.networ
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen

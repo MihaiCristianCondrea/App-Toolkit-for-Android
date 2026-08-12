@@ -38,7 +38,7 @@ flowchart LR
 
 ## Internal implementations
 
-- `InAppUpdateRepositoryImpl` and Play update-manager interactions.
+- `DefaultInAppUpdateRepository` and Play update-manager interactions.
 
 ## Current risks
 

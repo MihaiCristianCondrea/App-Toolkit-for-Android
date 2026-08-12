@@ -71,7 +71,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.views.Wallp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.theme.ThemeModeChoice
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.cards.ThemeChoicePreviewCard

@@ -20,9 +20,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domai
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.IssueReportResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow

@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.data.repository.OnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController

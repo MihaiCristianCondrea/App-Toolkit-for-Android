@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.domain.usecases
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.NavigationRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onStart

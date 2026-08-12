@@ -22,9 +22,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.github.ExtraInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.google.common.truth.Truth.assertThat
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -52,7 +52,7 @@ class TestIssueReporterRepository {
     private fun createRepository(
         client: HttpClient,
         scheduler: TestCoroutineScheduler,
-    ): IssueReporterRepository = IssueReporterRepositoryImpl(
+    ): IssueReporterRepository = DefaultIssueReporterRepository(
         remoteDataSource = IssueReporterRemoteDataSource(client),
         dispatchers = testDispatchers(scheduler),
         firebaseController = mockk<FirebaseController>(relaxed = true),

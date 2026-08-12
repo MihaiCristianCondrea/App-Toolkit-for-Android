@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (Â©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,12 +18,12 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.data.repository.OnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.copyData

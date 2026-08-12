@@ -55,17 +55,18 @@ The façade exports nearly the complete internal graph, so consumers can couple 
 ## Architecture guards
 
 `RepositoryConventionsTest` runs here rather than in any single feature module, because this is the
-only module that depends on every library module. It scans `library/**/src/main` and fails when a
-repository breaks the toolkit-wide convention:
+only module that depends on every library module. It scans active production sources in `library`
+and `sample` and fails when a repository breaks the project-wide convention:
 
-- a `*Repository` contract must live in a `domain/repository` package,
-- a `*RepositoryImpl` must live in a `data/repository` package,
-- an implementation's name must be its contract's name plus `Impl`.
+- repository contracts and concrete repositories live in `data/repository`,
+- concrete implementations do not use the ambiguous `Impl` suffix,
+- a retained `XRepository` interface uses `DefaultXRepository` for its general implementation,
+- a single implementation may be the concrete `XRepository` when an interface adds no boundary.
 
 It replaces a hand-written list of interface/implementation pairs checked with `isAssignableFrom`,
 which the compiler already guaranteed and which had fallen six repositories behind.
 
-The test reads source files, not the classpath, so `library/**/src/main/**/*.kt` is declared as an
+The test reads source files, not the classpath, so production Kotlin sources are declared as an
 explicit input of this module's `Test` tasks in `build.gradle.kts`. Removing that declaration lets
 Gradle treat the task as up to date after a file moves, which is precisely when the test needs to
 run.

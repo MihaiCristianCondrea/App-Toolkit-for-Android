@@ -7,7 +7,7 @@ Coordinates user consent state between persisted toolkit preferences and Google'
 ## Owns
 
 - Consent domain models and the repository contract covering apply/request.
-- `ConsentRepositoryImpl` and the UMP remote data source abstraction/implementation.
+- `DefaultConsentRepository` and the UMP remote data source abstraction/implementation.
 - Mapping host availability into consent behavior.
 
 ## Does not own
@@ -44,7 +44,7 @@ flowchart TD
 
 ## Internal implementations
 
-- `ConsentRepositoryImpl` and UMP SDK orchestration.
+- `DefaultConsentRepository` and UMP SDK orchestration.
 
 ## Current risks
 
@@ -62,7 +62,7 @@ repository cannot intercept it.
 
 The following invariants reduce failed/overlapping UMP requests and must be preserved:
 
-- `ConsentRepositoryImpl` permits one consent round trip at a time. A caller joins the replaying
+- `DefaultConsentRepository` permits one consent round trip at a time. A caller joins the replaying
   in-flight state instead of launching another request.
 - The in-flight request is keyed by `showIfRequired`; an explicit form request must not join a
   request that only shows a form when required.

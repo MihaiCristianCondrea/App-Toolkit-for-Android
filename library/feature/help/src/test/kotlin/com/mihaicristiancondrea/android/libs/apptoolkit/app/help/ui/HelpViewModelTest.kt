@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.model.FaqId
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.model.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.repository.FaqRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.ForceInAppReviewUseCase

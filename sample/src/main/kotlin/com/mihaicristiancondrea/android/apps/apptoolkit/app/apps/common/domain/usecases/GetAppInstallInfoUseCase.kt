@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppInstallInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.repository.InstalledAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.InstalledAppsRepository
 
 /** Returns package-manager install metadata for one catalog app package. */
 class GetAppInstallInfoUseCase(

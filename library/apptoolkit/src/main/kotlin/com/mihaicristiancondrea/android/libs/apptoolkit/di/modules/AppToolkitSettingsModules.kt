@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (Â©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,18 +17,18 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.AboutRepositoryImpl
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.DefaultAboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.AboutViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repository.CacheRepositoryImpl
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repository.DefaultCacheRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repository.CacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.AdvancedSettingsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repository.UsageAndDiagnosticsRepositoryImpl
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageAndDiagnosticsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repository.DefaultUsageAndDiagnosticsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repository.UsageAndDiagnosticsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repository.PermissionsRepositoryImpl
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.domain.repository.PermissionsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repository.DefaultPermissionsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repository.PermissionsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.PermissionsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
@@ -75,7 +75,7 @@ private fun settingsRootModule(): Module = module {
 
 private fun aboutModule(): Module = module {
     single<AboutRepository> {
-        AboutRepositoryImpl(
+        DefaultAboutRepository(
             deviceProvider = get(),
             buildInfoProvider = get(),
             context = get(),
@@ -100,7 +100,7 @@ private fun aboutModule(): Module = module {
 }
 
 private fun advancedSettingsModule(): Module = module {
-    single<CacheRepository> { CacheRepositoryImpl(context = get(), firebaseController = get()) }
+    single<CacheRepository> { DefaultCacheRepository(context = get(), firebaseController = get()) }
 
     viewModel {
         AdvancedSettingsViewModel(
@@ -113,7 +113,7 @@ private fun advancedSettingsModule(): Module = module {
 
 private fun permissionsModule(): Module = module {
     single<PermissionsRepository> {
-        PermissionsRepositoryImpl(
+        DefaultPermissionsRepository(
             context = get(),
             dispatchers = get(),
             firebaseController = get(),
@@ -131,7 +131,7 @@ private fun permissionsModule(): Module = module {
 
 private fun usageAndDiagnosticsModule(): Module = module {
     single<UsageAndDiagnosticsRepository> {
-        UsageAndDiagnosticsRepositoryImpl(
+        DefaultUsageAndDiagnosticsRepository(
             dataSource = get<CommonDataStore>(),
             configProvider = get(),
             dispatchers = get(),

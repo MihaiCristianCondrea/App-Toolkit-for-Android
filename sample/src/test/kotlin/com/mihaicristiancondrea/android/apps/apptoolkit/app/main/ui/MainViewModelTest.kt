@@ -28,11 +28,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.Mai
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants

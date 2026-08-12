@@ -19,12 +19,12 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui
 
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.CaffeineRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.SosRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.SystemRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.GetBreathingDataUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.GetSensorDataUseCase
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.BreathingRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.CaffeineRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SensorRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SosRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SystemRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.RingerMode
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.GetToolkitTilesUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.SyncToolkitTileStatusesUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
@@ -33,7 +33,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state.Toolk
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setError
@@ -54,8 +54,8 @@ import kotlinx.coroutines.launch
 /** Coordinates the static Toolkit Tiles catalog, filtering, and add-tile requests. */
 class ToolkitTilesViewModel(
     private val getToolkitTilesUseCase: GetToolkitTilesUseCase,
-    private val getSensorDataUseCase: GetSensorDataUseCase,
-    private val getBreathingDataUseCase: GetBreathingDataUseCase,
+    private val sensorRepository: SensorRepository,
+    private val breathingRepository: BreathingRepository,
     private val caffeineRepository: CaffeineRepository,
     private val systemRepository: SystemRepository,
     private val sosRepository: SosRepository,
@@ -182,7 +182,7 @@ class ToolkitTilesViewModel(
         sensorJob = viewModelScope.launch(dispatchers.default) {
             when (tileId) {
                 "compass" -> {
-                    getSensorDataUseCase.getCompassAzimuth()
+                    sensorRepository.getCompassAzimuth()
                         .onEach { azimuth ->
                             updateSensorData { it.copy(compassAzimuth = azimuth) }
                         }
@@ -190,7 +190,7 @@ class ToolkitTilesViewModel(
                 }
 
                 "bubble_level" -> {
-                    getSensorDataUseCase.getLevelOrientation()
+                    sensorRepository.getLevelOrientation()
                         .onEach { (pitch, roll) ->
                             updateSensorData { it.copy(levelPitch = pitch, levelRoll = roll) }
                         }
@@ -198,7 +198,7 @@ class ToolkitTilesViewModel(
                 }
 
                 "lux_meter" -> {
-                    getSensorDataUseCase.getLuxLevel()
+                    sensorRepository.getLuxLevel()
                         .onEach { lux ->
                             updateSensorData { it.copy(luxLevel = lux) }
                         }
@@ -206,7 +206,7 @@ class ToolkitTilesViewModel(
                 }
 
                 "temperature" -> {
-                    getSensorDataUseCase.getBatteryTemperature()
+                    sensorRepository.getBatteryTemperature()
                         .onEach { temperature ->
                             updateSensorData { it.copy(batteryTemperature = temperature) }
                         }
@@ -247,8 +247,8 @@ class ToolkitTilesViewModel(
                 }
 
                 "breathing" -> {
-                    getBreathingDataUseCase.start()
-                    getBreathingDataUseCase.breathingState
+                    breathingRepository.start()
+                    breathingRepository.breathingState
                         .onEach { state ->
                             screenState.update { current ->
                                 val data = current.data ?: return@update current
@@ -264,7 +264,7 @@ class ToolkitTilesViewModel(
     private fun stopSensorTracking() {
         sensorJob?.cancel()
         sensorJob = null
-        getBreathingDataUseCase.stop()
+        breathingRepository.stop()
         sosRepository.cleanup()
         updateSensorData { ToolkitSensorData() }
     }

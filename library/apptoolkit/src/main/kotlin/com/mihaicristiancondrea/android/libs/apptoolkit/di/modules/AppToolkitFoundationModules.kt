@@ -17,13 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepositoryImpl
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repository.DefaultAdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.AdsSettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.remote.datasource.ConsentRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.remote.datasource.UmpConsentRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepositoryImpl
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.DefaultConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
@@ -33,14 +33,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastor
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.client.KtorClient
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.model.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.FirebaseControllerImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.ManifestAdMobAppIdProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repository.InAppUpdateRepositoryImpl
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.repository.InAppUpdateRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repository.DefaultInAppUpdateRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repository.InAppUpdateRepository
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -96,7 +96,7 @@ private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Modu
 private fun consentModule(): Module = module {
     single<ConsentRemoteDataSource> { UmpConsentRemoteDataSource(adMobAppIdProvider = get()) }
     single<ConsentRepository> {
-        ConsentRepositoryImpl(
+        DefaultConsentRepository(
             remote = get(),
             local = get(),
             configProvider = get(),
@@ -107,7 +107,7 @@ private fun consentModule(): Module = module {
 
 private fun mainSharedModule(): Module = module {
     single { GmsHostFactory() } // Lightweight creator without screen references; safe as singleton.
-    single<InAppUpdateRepository> { InAppUpdateRepositoryImpl() }
+    single<InAppUpdateRepository> { DefaultInAppUpdateRepository() }
     single<String>(qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL)) {
         ApiHost.BASE_URL
     }
@@ -115,7 +115,7 @@ private fun mainSharedModule(): Module = module {
 
 private fun adsSettingsSharedModule(): Module = module {
     single<AdsSettingsRepository> {
-        AdsSettingsRepositoryImpl(
+        DefaultAdsSettingsRepository(
             dataStore = get(),
             firebaseController = get(),
         )

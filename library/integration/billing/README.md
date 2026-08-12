@@ -7,7 +7,7 @@ Wraps Google Play Billing behind a reusable repository and Koin module.
 ## Owns
 
 - Billing client lifecycle, product queries, purchase launches, and purchase-state exposure.
-- The `BillingRepository` contract and its `BillingRepositoryImpl` Play Billing implementation.
+- The `BillingRepository` contract and its `DefaultBillingRepository` Play Billing implementation.
 
 ## Does not own
 
@@ -42,7 +42,7 @@ flowchart LR
 
 ## Internal implementations
 
-- `BillingRepositoryImpl`: BillingClient callbacks, connection management, product-detail caching, and purchase acknowledgement/query behavior.
+- `DefaultBillingRepository`: BillingClient callbacks, connection management, product-detail caching, and purchase acknowledgement/query behavior.
 
 ## Current risks
 

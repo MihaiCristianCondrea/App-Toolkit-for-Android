@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.repository.FavoritesRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.FavoritesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

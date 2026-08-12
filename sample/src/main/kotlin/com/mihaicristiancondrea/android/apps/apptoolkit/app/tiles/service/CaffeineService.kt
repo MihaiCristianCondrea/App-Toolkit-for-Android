@@ -29,7 +29,7 @@ import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.CaffeineRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.CaffeineRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

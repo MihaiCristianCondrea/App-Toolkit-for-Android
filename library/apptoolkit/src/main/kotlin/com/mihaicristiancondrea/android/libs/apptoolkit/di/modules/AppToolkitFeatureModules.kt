@@ -17,29 +17,29 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.ChangelogRepositoryImpl
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.repository.ChangelogRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.DefaultChangelogRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.ChangelogRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.usecases.GetChangelogUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.ChangelogViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.local.HelpLocalDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.remote.HelpRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.repository.FaqRepositoryImpl
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.repository.DefaultFaqRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.repository.FaqRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.HelpViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.local.DeviceInfoLocalDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.remote.IssueReporterRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepositoryImpl
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repository.DefaultIssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.IssueReporterViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.ForceInAppReviewUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.StartupViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.utils.interfaces.providers.StartupProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.repository.BillingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repository.BillingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
@@ -50,9 +50,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.help.HelpConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.faqCatalogUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.toToken
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.data.repository.ReviewRepositoryImpl
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.domain.repository.ReviewRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.BillingCore
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.data.repository.DefaultReviewRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.data.repository.ReviewRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.BillingCore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
@@ -126,7 +126,7 @@ private fun helpModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = mod
     single<HelpLocalDataSource> { HelpLocalDataSource(context = get()) }
     single<HelpRemoteDataSource> { HelpRemoteDataSource(client = get()) }
     single<FaqRepository> {
-        FaqRepositoryImpl(
+        DefaultFaqRepository(
             localDataSource = get(),
             remoteDataSource = get(),
             catalogUrl = HelpConstants.FAQ_BASE_URL.faqCatalogUrl(
@@ -150,7 +150,7 @@ private fun helpModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = mod
 
 private fun changelogModule(): Module = module {
     single<ChangelogRepository> {
-        ChangelogRepositoryImpl(
+        DefaultChangelogRepository(
             client = get(),
             apiBaseUrl = get(
                 qualifier = named(AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL),
@@ -179,7 +179,7 @@ private fun changelogModule(): Module = module {
 private fun issueReporterModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<IssueReporterRemoteDataSource> { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
-    single<IssueReporterRepository> { IssueReporterRepositoryImpl(get(), get(), get()) }
+    single<IssueReporterRepository> { DefaultIssueReporterRepository(get(), get(), get()) }
     single<SendIssueReportUseCase> { SendIssueReportUseCase(get(), get(), get()) }
     single<GithubTarget> {
         GithubTarget(
@@ -202,7 +202,7 @@ private fun issueReporterModule(hostBuildConfig: AppToolkitHostBuildConfig): Mod
 }
 
 private fun reviewModule(): Module = module {
-    single<ReviewRepository> { ReviewRepositoryImpl(dataStore = get()) }
+    single<ReviewRepository> { DefaultReviewRepository(dataStore = get()) }
     single<RequestInAppReviewUseCase> { RequestInAppReviewUseCase(reviewRepository = get()) }
     single<ForceInAppReviewUseCase> { ForceInAppReviewUseCase(reviewRepository = get()) }
 }

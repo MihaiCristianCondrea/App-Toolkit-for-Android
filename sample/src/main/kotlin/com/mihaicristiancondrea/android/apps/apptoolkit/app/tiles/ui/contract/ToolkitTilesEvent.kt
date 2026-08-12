@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contract
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.RingerMode
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 

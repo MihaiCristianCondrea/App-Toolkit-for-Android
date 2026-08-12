@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.repository.InstalledAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.InstalledAppsRepository
 
 /** Returns the subset of [packageNames] currently installed on the device. */
 class GetInstalledPackagesUseCase(

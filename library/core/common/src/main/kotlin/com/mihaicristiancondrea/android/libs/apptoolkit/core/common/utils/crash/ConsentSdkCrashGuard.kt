@@ -35,7 +35,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  *
  * The stream is null-checked, the *body* is not, so an empty error body makes `Scanner.next()` throw
  * [NoSuchElementException]. The ping runs on the SDK's own `ThreadPoolExecutor`, so no `catch` in
- * `UmpConsentRemoteDataSource`, `ConsentRepositoryImpl`, or `RequestConsentUseCase` can ever see it:
+ * `UmpConsentRemoteDataSource`, `DefaultConsentRepository`, or `RequestConsentUseCase` can ever see it:
  * an uncaught throwable on a plain executor thread reaches the default uncaught-exception handler
  * and takes the process down. 4.0.0 is the newest published version, so there is no upgrade that
  * fixes the read.
@@ -57,7 +57,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  * The real fix for the underlying failure is upstream (Google), and the fix for the *cause* is on
  * our side: pointing the consent request at the host app's own AdMob app id (see
  * `AdMobAppIdProvider`) and never running two consent round trips at once (see
- * `ConsentRepositoryImpl`). This guard covers the remainder and should be removed once a
+ * `DefaultConsentRepository`). This guard covers the remainder and should be removed once a
  * `user-messaging-platform` release fixes the read — verified by decompiling, not by release notes.
  */
 object ConsentSdkCrashGuard {

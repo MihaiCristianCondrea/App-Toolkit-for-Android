@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (Â©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.BaseActivity

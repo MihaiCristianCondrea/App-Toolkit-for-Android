@@ -24,8 +24,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.Mai
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.repository.InAppUpdateRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repository.InAppUpdateRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
@@ -33,7 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar

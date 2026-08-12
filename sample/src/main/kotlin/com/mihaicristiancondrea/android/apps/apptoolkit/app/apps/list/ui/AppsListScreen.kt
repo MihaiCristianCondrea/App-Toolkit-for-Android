@@ -46,7 +46,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contrac
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.views.navigation.RandomAppHandler
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled

@@ -1,5 +1,5 @@
-﻿/*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui
 
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.domain.repository.GeneralSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.state.GeneralSettingsUiState
@@ -28,7 +28,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.networ
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -139,4 +139,3 @@ class GeneralSettingsViewModel(
         const val HAS_CONTENT_KEY: String = "hasContentKey"
     }
 }
-

@@ -44,7 +44,7 @@ flowchart TD
 
 ## Internal implementations
 
-- `AdsSettingsRepositoryImpl` and SDK/persistence coordination.
+- `DefaultAdsSettingsRepository` and SDK/persistence coordination.
 
 ## Current risks
 

@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.useca
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.domain.repository.ReviewRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.data.repository.ReviewRepository
 import kotlinx.coroutines.flow.first
 
 /**

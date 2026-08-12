@@ -5,14 +5,6 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app
@@ -21,87 +13,74 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
 
-/**
- * Enforces where repositories live and what they are called across every library module.
- *
- * This replaces a hand-maintained list of `interface to implementation` pairs asserted with
- * `isAssignableFrom`. That assertion could not fail: `class FooImpl : Foo` is checked by the
- * compiler, so the test restated the type system while its list silently fell behind — it was
- * missing six repositories and did not notice `MainRepositoryImpl` implementing
- * `NavigationRepository`, or a repository living at a module root with no `domain`/`data` split.
- *
- * Scanning the source tree instead means a new module is covered the moment it is added, and the
- * rules below fail on the drift the old test was meant to catch.
- */
+/** Guards the repository placement and naming rules used by every active Android module. */
 class RepositoryConventionsTest {
 
     @Test
-    fun `repository contracts live in domain repository packages`() {
-        val misplaced = libraryMainSources()
-            .filter { it.name.endsWith(SUFFIX_CONTRACT) }
-            .filterNot { it.parentPath().endsWith(PACKAGE_DOMAIN) }
+    fun `repositories live in data repository packages`() {
+        val misplaced = productionSources()
+            .filter { it.name.endsWith(REPOSITORY_FILE_SUFFIX) }
+            .filterNot { it.parentPath().endsWith(DATA_REPOSITORY_PACKAGE) }
             .map { it.relativePath() }
 
         assertThat(misplaced).isEmpty()
     }
 
     @Test
-    fun `repository implementations live in data repository packages`() {
-        val misplaced = libraryMainSources()
-            .filter { it.name.endsWith(SUFFIX_IMPLEMENTATION) }
-            .filterNot { it.parentPath().endsWith(PACKAGE_DATA) }
+    fun `repository implementations do not use Impl naming`() {
+        val legacyNames = productionSources()
+            .filter { source ->
+                source.name.contains(REPOSITORY_IMPL) ||
+                    source.readText().contains(REPOSITORY_IMPL_DECLARATION)
+            }
             .map { it.relativePath() }
 
-        assertThat(misplaced).isEmpty()
+        assertThat(legacyNames).isEmpty()
     }
 
     @Test
-    fun `every repository implementation is named after the contract it implements`() {
-        val contracts: Set<String> = libraryMainSources()
-            .filter { it.parentPath().endsWith(PACKAGE_DOMAIN) }
+    fun `default repositories correspond to a local repository contract`() {
+        val repositoryFiles = productionSources()
+            .filter { it.parentPath().endsWith(DATA_REPOSITORY_PACKAGE) }
+
+        val contracts = repositoryFiles
+            .filter { it.readText().contains(INTERFACE_DECLARATION) }
             .map { it.nameWithoutExtension }
             .toSet()
 
-        val orphaned = libraryMainSources()
-            .filter { it.name.endsWith(SUFFIX_IMPLEMENTATION) }
-            .filterNot { it.nameWithoutExtension.removeSuffix(SUFFIX_IMPL_MARKER) in contracts }
+        val orphanedDefaults = repositoryFiles
+            .filter { it.name.startsWith(DEFAULT_PREFIX) && it.name.endsWith(REPOSITORY_FILE_SUFFIX) }
+            .filterNot { it.nameWithoutExtension.removePrefix(DEFAULT_PREFIX) in contracts }
             .map { it.relativePath() }
 
-        assertThat(orphaned).isEmpty()
+        assertThat(orphanedDefaults).isEmpty()
     }
 
-    private fun libraryMainSources(): List<File> =
-        File(repositoryRoot, LIBRARY_DIRECTORY)
-            .walkTopDown()
-            .filter { it.isFile && it.extension == KOTLIN_EXTENSION }
-            .filter { MAIN_SOURCE_SET in it.invariantPath() }
-            .toList()
+    private fun productionSources(): List<File> = ACTIVE_SOURCE_ROOTS
+        .flatMap { directory -> File(repositoryRoot, directory).walkTopDown().toList() }
+        .filter { it.isFile && it.extension == KOTLIN_EXTENSION }
+        .filter { MAIN_SOURCE_SET in it.invariantPath() }
 
-    private fun File.parentPath(): String = parentFile.invariantPath()
+    private fun File.parentPath(): String = parentFile?.invariantPath().orEmpty()
 
     private fun File.invariantPath(): String = path.replace(File.separatorChar, '/')
 
     private fun File.relativePath(): String = relativeTo(repositoryRoot).invariantPath()
 
     private companion object {
-        const val LIBRARY_DIRECTORY = "library"
+        val ACTIVE_SOURCE_ROOTS: List<String> = listOf("library", "sample")
         const val MAIN_SOURCE_SET = "/src/main/"
         const val KOTLIN_EXTENSION = "kt"
-        const val PACKAGE_DOMAIN = "/domain/repository"
-        const val PACKAGE_DATA = "/data/repository"
-        const val SUFFIX_IMPL_MARKER = "Impl"
-        const val SUFFIX_CONTRACT = "Repository.kt"
-        const val SUFFIX_IMPLEMENTATION = "RepositoryImpl.kt"
+        const val DATA_REPOSITORY_PACKAGE = "/data/repository"
+        const val REPOSITORY_FILE_SUFFIX = "Repository.kt"
+        const val REPOSITORY_IMPL = "RepositoryImpl"
+        const val REPOSITORY_IMPL_DECLARATION = "class RepositoryImpl"
+        const val INTERFACE_DECLARATION = "interface "
+        const val DEFAULT_PREFIX = "Default"
+        const val SETTINGS_FILE = "settings.gradle.kts"
 
-        /**
-         * Gradle runs tests from the module directory, so the repository root has to be walked to
-         * rather than assumed — the depth differs between `library/apptoolkit` and any module that
-         * later inherits this test.
-         */
         val repositoryRoot: File = generateSequence(File("").absoluteFile) { it.parentFile }
             .firstOrNull { File(it, SETTINGS_FILE).isFile }
             ?: error("Could not locate $SETTINGS_FILE above ${File("").absolutePath}")
-
-        const val SETTINGS_FILE = "settings.gradle.kts"
     }
 }

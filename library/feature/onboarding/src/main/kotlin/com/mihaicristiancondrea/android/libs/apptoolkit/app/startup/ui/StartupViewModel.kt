@@ -1,5 +1,5 @@
-﻿/*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.state.StartupUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setLoading

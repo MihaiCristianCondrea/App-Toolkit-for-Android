@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.model.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider

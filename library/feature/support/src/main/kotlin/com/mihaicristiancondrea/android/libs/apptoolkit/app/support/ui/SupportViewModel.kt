@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (Â©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@ import android.app.Activity
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.ProductDetails
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.repository.BillingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repository.BillingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.billing.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.contract.SupportAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.contract.SupportEvent
@@ -31,7 +31,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.extensions.hasOneTimePurchaseOffer
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.extensions.primaryFormattedPrice
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar

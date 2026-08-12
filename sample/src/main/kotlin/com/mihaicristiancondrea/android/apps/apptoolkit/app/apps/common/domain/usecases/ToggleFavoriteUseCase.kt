@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.repository.FavoritesRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.FavoritesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 
 class ToggleFavoriteUseCase(
     private val repository: FavoritesRepository,

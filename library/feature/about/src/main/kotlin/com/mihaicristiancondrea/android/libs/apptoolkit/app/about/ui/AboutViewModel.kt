@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (Â©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.AboutAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.mapper.toUiState
@@ -28,7 +28,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.state.About
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen

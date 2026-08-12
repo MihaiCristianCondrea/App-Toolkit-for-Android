@@ -1,5 +1,5 @@
-﻿/*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.state.
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.controls.OnboardingFooter
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.default.DefaultOnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView

@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state
 import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.CaffeineState
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.BreathingState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.BreathingState
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.RingerMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentListOf

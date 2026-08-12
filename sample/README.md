@@ -40,8 +40,8 @@ flowchart TD
     Main[MainActivity / MainScreen] --> Nav[Host Navigation 3 graph]
     Nav --> HostFeatures[Apps, tiles, components]
     Nav --> ToolkitBuilders[AppToolkit destination builders]
-    HostFeatures --> Domain[Host use cases/repositories]
-    Domain --> Android[Android sensors, packages, services, DataStore]
+    HostFeatures --> Logic[Host use cases and data repositories]
+    Logic --> Android[Android sensors, packages, services, DataStore]
 ```
 
 ## Public contracts
@@ -51,7 +51,7 @@ This is an application module and is not intended as a library API. Its importan
 ## Internal implementations
 
 - Developer-app remote/local repositories, DTO mapping, favorites persistence, and installed-app inspection.
-- Quick-tool domain/repository implementations, Compose tools, Quick Settings tiles, and the caffeine service.
+- Concrete quick-tool data repositories, domain models/use cases with actual policy, Compose tools, Quick Settings tiles, and the caffeine service.
 - Main/components/apps-list ViewModels and UI, widget implementation, host DI modules, and navigation builders.
 
 ## Current risks
@@ -61,3 +61,7 @@ The host module still owns substantial reusable-looking apps-list, quick-tools, 
 ## Migration notes
 
 The current worktree reflects an ongoing migration from the former `:app` project to `:sample` and from the old package namespace to the published library/sample namespaces. Avoid restoring deleted `app/` sources while completing modularization.
+
+Quick-tool repositories intentionally use concrete `XRepository` classes. They each wrap one
+Android platform source, have no alternate implementation, and do not cross a module boundary;
+adding matching interfaces or pass-through use cases would not create useful substitution.

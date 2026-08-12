@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.testing
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 
 /**
  * No-op Firebase controller for unit tests.

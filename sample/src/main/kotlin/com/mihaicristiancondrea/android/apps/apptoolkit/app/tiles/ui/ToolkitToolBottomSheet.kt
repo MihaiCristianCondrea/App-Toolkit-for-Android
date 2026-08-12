@@ -49,8 +49,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.CaffeineState
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.BreathingState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.BreathingState
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.RingerMode
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.BatteryTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.BreathingTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.CaffeineTool
