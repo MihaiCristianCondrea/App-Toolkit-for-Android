@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repos
 
 import android.content.Context
 import app.cash.turbine.test
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
@@ -57,7 +57,7 @@ class TestCacheRepositoryImpl {
         )
         val result = repository.clearCache().single()
 
-        assertThat(result).isInstanceOf(Result.Success::class.java)
+        assertThat(result).isInstanceOf(DataState.Success::class.java)
         assertFalse(dir1.exists())
         assertFalse(dir2.exists())
         assertFalse(dir3.exists())
@@ -81,7 +81,7 @@ class TestCacheRepositoryImpl {
         )
         val result = repository.clearCache().single()
 
-        assertThat(result).isInstanceOf(Result.Error::class.java)
+        assertThat(result).isInstanceOf(DataState.Error::class.java)
         assertFalse(dir1.exists())
         assertTrue(failing.exists())
         assertFalse(dir3.exists())
@@ -99,7 +99,7 @@ class TestCacheRepositoryImpl {
         )
         val result = repository.clearCache().single()
 
-        assertThat(result).isInstanceOf(Result.Error::class.java)
+        assertThat(result).isInstanceOf(DataState.Error::class.java)
     }
 
     @Test
@@ -119,7 +119,7 @@ class TestCacheRepositoryImpl {
         )
         val result = repository.clearCache().single()
 
-        assertThat(result).isInstanceOf(Result.Success::class.java)
+        assertThat(result).isInstanceOf(DataState.Success::class.java)
     }
 
     @Test
@@ -140,7 +140,7 @@ class TestCacheRepositoryImpl {
         )
         val result = repository.clearCache().single()
 
-        assertThat(result).isInstanceOf(Result.Error::class.java)
+        assertThat(result).isInstanceOf(DataState.Error::class.java)
     }
 
     @Test
@@ -159,7 +159,7 @@ class TestCacheRepositoryImpl {
         )
 
         repository.clearCache().test {
-            assertThat(awaitItem()).isInstanceOf(Result.Success::class.java)
+            assertThat(awaitItem()).isInstanceOf(DataState.Success::class.java)
             awaitComplete()
         }
     }

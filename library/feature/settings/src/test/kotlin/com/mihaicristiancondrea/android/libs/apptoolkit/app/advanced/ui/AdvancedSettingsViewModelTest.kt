@@ -23,7 +23,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.domain.repo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import com.google.common.truth.Truth.assertThat
@@ -36,14 +37,15 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
-class FakeCacheRepository(private val result: Result<Unit>) : CacheRepository {
-    override fun clearCache(): Flow<Result<Unit>> = flowOf(result)
+class FakeCacheRepository(private val result: DataState<Unit, Errors.Database>) : CacheRepository {
+    override fun clearCache(): Flow<DataState<Unit, Errors.Database>> = flowOf(result)
 }
 
 class HotFakeCacheRepository : CacheRepository {
-    private val flow = MutableSharedFlow<Result<Unit>>(replay = 0, extraBufferCapacity = 1)
-    override fun clearCache(): Flow<Result<Unit>> = flow
-    suspend fun emit(result: Result<Unit>) = flow.emit(result)
+    private val flow =
+        MutableSharedFlow<DataState<Unit, Errors.Database>>(replay = 0, extraBufferCapacity = 1)
+    override fun clearCache(): Flow<DataState<Unit, Errors.Database>> = flow
+    suspend fun emit(result: DataState<Unit, Errors.Database>) = flow.emit(result)
 }
 
 
@@ -69,7 +71,7 @@ class AdvancedSettingsViewModelTest {
     @Test
     fun `onClearCache emits success message`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = AdvancedSettingsViewModel(
-            repository = FakeCacheRepository(Result.Success(Unit)),
+            repository = FakeCacheRepository(DataState.Success(Unit)),
             dispatchers = testDispatchers,
             firebaseController = firebaseController,
         )
@@ -90,7 +92,7 @@ class AdvancedSettingsViewModelTest {
     fun `onClearCache emits error message when failure`() =
         runTest(dispatcherExtension.testDispatcher) {
             val viewModel = AdvancedSettingsViewModel(
-                repository = FakeCacheRepository(Result.Error(Exception("fail"))),
+                repository = FakeCacheRepository(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)),
                 dispatchers = testDispatchers,
                 firebaseController = firebaseController,
             )
@@ -120,7 +122,7 @@ class AdvancedSettingsViewModelTest {
 
                 viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
                 advanceUntilIdle()
-                repository.emit(Result.Success(Unit))
+                repository.emit(DataState.Success(Unit))
                 advanceUntilIdle()
                 assertThat(expectMostRecentItem().data?.cacheClearMessage)
                     .isEqualTo(R.string.cache_cleared_success)
@@ -131,7 +133,7 @@ class AdvancedSettingsViewModelTest {
 
                 viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
                 advanceUntilIdle()
-                repository.emit(Result.Error(Exception("boom")))
+                repository.emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
                 advanceUntilIdle()
                 assertThat(expectMostRecentItem().data?.cacheClearMessage)
                     .isEqualTo(R.string.cache_cleared_error)

@@ -19,21 +19,21 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repository
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onStart
 
 /**
  * Concrete implementation of [AdsSettingsRepository].
  *
- * This class manages the persistence and retrieval of ad-related settings,
- * specifically whether ads are enabled or disabled. It uses [CommonDataStore]
- * for data persistence and [BuildInfoProvider] to determine the default ad state
- * based on the build type (e.g., disabling ads for debug builds).
+ * This class manages the persistence and retrieval of ad-related settings, specifically whether ads
+ * are enabled or disabled. [CommonDataStore] owns both the persistence and the build-dependent
+ * default, so this repository never recomputes either.
  *
  * @param dataStore The data store used for persisting ad settings.
- * @param buildInfoProvider Provider for build-specific information, like whether it's a debug build.
  */
 class AdsSettingsRepositoryImpl(
     private val dataStore: CommonDataStore,
@@ -57,13 +57,21 @@ class AdsSettingsRepositoryImpl(
                 )
             }
 
-    override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> {
+    // Previously returned Success unconditionally, so a DataStore write failure reached the caller
+    // as an uncaught exception rather than the error state the settings screen renders.
+    override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> {
         firebaseController.logBreadcrumb(
             message = "Ads settings updated",
             attributes = mapOf("enabled" to enabled.toString()),
         )
-        dataStore.saveAds(isChecked = enabled)
-        return Result.Success(Unit)
+        return runCatching { dataStore.saveAds(isChecked = enabled) }.fold(
+            onSuccess = { DataState.Success(Unit) },
+            onFailure = { throwable ->
+                if (throwable is CancellationException) throw throwable
+                firebaseController.recordNonFatal(throwable = throwable)
+                DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
+            },
+        )
     }
 }
 

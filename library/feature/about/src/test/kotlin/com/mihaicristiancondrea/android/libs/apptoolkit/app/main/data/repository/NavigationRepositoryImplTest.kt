@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repositor
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.MainRepositoryImpl
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.NavigationRepositoryImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,12 +30,12 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MainRepositoryImplTest {
+class NavigationRepositoryImplTest {
 
     @Test
     fun `getNavigationDrawerItems emits expected items`() = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
-        val repository = MainRepositoryImpl(TestDispatchers(dispatcher))
+        val repository = NavigationRepositoryImpl(TestDispatchers(dispatcher))
 
         val items = repository.getNavigationDrawerItems().first()
 

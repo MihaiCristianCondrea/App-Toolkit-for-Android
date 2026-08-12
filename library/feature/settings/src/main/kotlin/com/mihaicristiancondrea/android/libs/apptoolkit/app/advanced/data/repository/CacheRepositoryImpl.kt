@@ -19,8 +19,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repos
 
 import android.content.Context
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -42,15 +43,15 @@ class CacheRepositoryImpl(
     private val deleteRecursively: (File) -> Boolean = File::deleteRecursively,
 ) : CacheRepository {
 
-    override fun clearCache(): Flow<Result<Unit>> = flow {
+    override fun clearCache(): Flow<DataState<Unit, Errors.Database>> = flow {
         firebaseController.logBreadcrumb(
             message = "Cache clear requested",
             attributes = mapOf("source" to "CacheRepositoryImpl"),
         )
         // Resolving and deleting cache directories can both throw — SecurityException from a
-        // restricted profile, IO failures mid-delete. Those have to surface as Result.Error, or the
-        // exception escapes the flow and the caller reports nothing at all.
-        val result: Result<Unit> = runCatching {
+        // restricted profile, IO failures mid-delete. Those have to surface as DataState.Error, or
+        // the exception escapes the flow and the caller reports nothing at all.
+        val state: DataState<Unit, Errors.Database> = runCatching {
             val cacheDirs: List<File> = buildList {
                 add(context.cacheDir)
                 add(context.codeCacheDir)
@@ -61,18 +62,31 @@ class CacheRepositoryImpl(
         }.fold(
             onSuccess = { failed ->
                 if (failed.isEmpty()) {
-                    Result.Success(Unit)
+                    DataState.Success(Unit)
                 } else {
-                    Result.Error(Exception("Failed to clear cache"))
+                    // Named here rather than by the ViewModel: which directory refused to go is
+                    // something only this class can see, and the caller cannot re-derive it.
+                    firebaseController.logBreadcrumb(
+                        message = "Cache clear incomplete",
+                        attributes = mapOf("failedDirectories" to failed.size.toString()),
+                    )
+                    DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
                 }
             },
             onFailure = { throwable ->
                 if (throwable is CancellationException) throw throwable
-                Result.Error(throwable as? Exception ?: Exception(throwable))
+                firebaseController.recordNonFatal(throwable = throwable)
+                DataState.Error(
+                    error = if (throwable is SecurityException) {
+                        Errors.Database.DATABASE_CANT_OPEN
+                    } else {
+                        Errors.Database.DATABASE_OPERATION_FAILED
+                    },
+                )
             },
         )
 
-        emit(result)
+        emit(state)
     }
 }
 

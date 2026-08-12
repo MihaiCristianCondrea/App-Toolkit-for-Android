@@ -29,7 +29,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.repository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.repository.FaqRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepositoryImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.MainRepositoryImpl
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.NavigationRepositoryImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.data.repository.OnboardingRepositoryImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
@@ -69,7 +69,7 @@ class ImplementationContractsTest {
             contract(AboutRepository::class, AboutRepositoryImpl::class),
             contract(GeneralSettingsRepository::class, GeneralSettingsRepositoryImpl::class),
             contract(IssueReporterRepository::class, IssueReporterRepositoryImpl::class),
-            contract(NavigationRepository::class, MainRepositoryImpl::class),
+            contract(NavigationRepository::class, NavigationRepositoryImpl::class),
             contract(AdsSettingsRepository::class, AdsSettingsRepositoryImpl::class),
         )
 

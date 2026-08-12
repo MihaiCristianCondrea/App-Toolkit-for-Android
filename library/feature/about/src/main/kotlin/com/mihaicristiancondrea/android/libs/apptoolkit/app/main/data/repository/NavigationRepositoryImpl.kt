@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class MainRepositoryImpl(
+class NavigationRepositoryImpl(
     private val dispatchers: DispatcherProvider
 ) : NavigationRepository {
     override fun getNavigationDrawerItems(): Flow<List<NavigationDrawerItem>> =

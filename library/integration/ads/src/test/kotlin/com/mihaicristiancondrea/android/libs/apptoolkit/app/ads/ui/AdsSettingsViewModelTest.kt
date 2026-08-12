@@ -24,7 +24,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
@@ -65,10 +64,10 @@ class AdsSettingsViewModelTest {
 
         override fun observeAdsEnabled(): Flow<Boolean> = state
 
-        override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> {
+        override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> {
             if (shouldFail) throw IOException("fail")
             state.value = enabled
-            return Result.Success(Unit)
+            return DataState.Success(Unit)
         }
     }
 
@@ -99,8 +98,8 @@ class AdsSettingsViewModelTest {
             val repo = object : AdsSettingsRepository {
                 override val defaultAdsEnabled: Boolean = false
                 override fun observeAdsEnabled(): Flow<Boolean> = flow { throw IOException("boom") }
-                override suspend fun setAdsEnabled(enabled: Boolean): Result<Unit> =
-                    Result.Success(Unit)
+                override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> =
+                    DataState.Success(Unit)
             }
 
             val viewModel = createViewModel(repo)

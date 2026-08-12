@@ -17,7 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.domain.repository
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -27,9 +28,9 @@ interface CacheRepository {
     /**
      * Clears the application's cache directories.
      *
-     * @return A [Flow] emitting [Result.Success] if all directories were deleted successfully or
-     * [Result.Error] with the encountered [Exception].
+     * @return A [Flow] emitting [DataState.Success] once every directory is gone, or
+     * [DataState.Error] naming why the clear failed.
      */
-    fun clearCache(): Flow<Result<Unit>>
+    fun clearCache(): Flow<DataState<Unit, Errors.Database>>
 }
 

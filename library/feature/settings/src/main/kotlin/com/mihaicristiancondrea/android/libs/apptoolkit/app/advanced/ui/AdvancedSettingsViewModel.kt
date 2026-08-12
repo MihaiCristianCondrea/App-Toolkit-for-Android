@@ -24,9 +24,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.contract
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.state.AdvancedSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
@@ -40,7 +37,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.updateData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -74,12 +70,6 @@ class AdvancedSettingsViewModel(
         observeJob = observeJob.restart {
             repository.clearCache()
                 .flowOn(dispatchers.io)
-                .map<Result<Unit>, DataState<Unit, Errors.Database>> { result ->
-                    when (result) {
-                        is Result.Success -> DataState.Success(Unit)
-                        is Result.Error -> DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
-                    }
-                }
                 .onStart {
                     updateStateThreadSafe {
                         screenState.dismissSnackbar()

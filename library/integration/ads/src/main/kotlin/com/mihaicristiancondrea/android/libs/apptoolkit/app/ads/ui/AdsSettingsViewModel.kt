@@ -25,7 +25,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.state.AdsSett
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
@@ -168,12 +167,7 @@ class AdsSettingsViewModel(
     }
 
     private fun persistAdsEnabled(enabled: Boolean): Flow<DataState<Unit, Errors>> =
-        flow {
-            when (repository.setAdsEnabled(enabled)) {
-                is Result.Success -> emit(DataState.Success(Unit))
-                is Result.Error -> emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
-            }
-        }
+        flow { emit(repository.setAdsEnabled(enabled)) }
 
     private fun requestConsent(host: ConsentHost) {
         startOperation(

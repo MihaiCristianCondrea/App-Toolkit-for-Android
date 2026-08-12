@@ -17,7 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.repository
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -29,5 +30,5 @@ import kotlinx.coroutines.flow.Flow
 interface AdsSettingsRepository {
     val defaultAdsEnabled: Boolean
     fun observeAdsEnabled(): Flow<Boolean>
-    suspend fun setAdsEnabled(enabled: Boolean): Result<Unit>
+    suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database>
 }

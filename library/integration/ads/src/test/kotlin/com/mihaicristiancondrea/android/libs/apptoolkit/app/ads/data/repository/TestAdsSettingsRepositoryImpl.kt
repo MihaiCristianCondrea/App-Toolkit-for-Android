@@ -19,10 +19,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repository
 
 import app.cash.turbine.test
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -104,7 +104,7 @@ class TestAdsSettingsRepositoryImpl {
 
             val result = repository.setAdsEnabled(true)
 
-            assertThat(result).isInstanceOf(Result.Success::class.java)
+            assertThat(result).isInstanceOf(DataState.Success::class.java)
             coVerify { dataStore.saveAds(isChecked = true) }
         }
 
@@ -115,8 +115,23 @@ class TestAdsSettingsRepositoryImpl {
         coEvery { dataStore.saveAds(any()) } throws IOException("boom")
         val repository = createRepository(dataStore, debugBuild = false)
 
-        assertThrows<IOException> { repository.setAdsEnabled(true) }
+        val result = repository.setAdsEnabled(true)
+
+        assertThat(result).isInstanceOf(DataState.Error::class.java)
+        assertThat((result as DataState.Error).error)
+            .isEqualTo(Errors.Database.DATABASE_OPERATION_FAILED)
         coVerify { dataStore.saveAds(isChecked = true) }
+    }
+
+    // The failure has to be a value, not a throw: the settings screen renders it, and a raw throw
+    // from a suspend call reaches the ViewModel's crash reporter instead of the snackbar.
+    @Test
+    fun `setAdsEnabled rethrows cancellation`() = runTest(dispatcherExtension.testDispatcher) {
+        val dataStore = mockk<CommonDataStore>()
+        coEvery { dataStore.saveAds(any()) } throws CancellationException("cancelled")
+        val repository = createRepository(dataStore, debugBuild = false)
+
+        assertThrows<CancellationException> { repository.setAdsEnabled(true) }
     }
 
     @Test
