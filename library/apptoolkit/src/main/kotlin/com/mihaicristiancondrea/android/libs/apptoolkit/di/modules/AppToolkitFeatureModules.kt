@@ -39,7 +39,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecas
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.StartupViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.utils.interfaces.providers.StartupProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.BillingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.repository.BillingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repository
 
 import android.app.Activity
 import android.content.Context
@@ -32,8 +32,8 @@ import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.billing.PurchaseResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.BillingCore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.repository.BillingRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -52,22 +52,22 @@ private const val RETRY_DELAY_SIMPLE_MS = 1_000L
 private const val RETRY_DELAY_EXPONENTIAL_MS = 2_000L
 private const val RETRY_MAX_DELAY_MS = 16_000L
 
-class BillingRepository private constructor(
+class BillingRepositoryImpl private constructor(
     context: Context,
     private val dispatchers: DispatcherProvider,
     private val firebaseController: FirebaseController,
     externalScope: CoroutineScope,
-) : PurchasesUpdatedListener, BillingCore {
+) : PurchasesUpdatedListener, BillingRepository {
 
     private val scope =
         CoroutineScope(externalScope.coroutineContext + SupervisorJob() + dispatchers.io)
 
     private val _productDetails = MutableStateFlow<Map<String, ProductDetails>>(emptyMap())
-    val productDetails: Flow<Map<String, ProductDetails>> =
+    override val productDetails: Flow<Map<String, ProductDetails>> =
         _productDetails.asStateFlow()
 
     private val _purchaseResult = MutableSharedFlow<PurchaseResult>()
-    val purchaseResult: Flow<PurchaseResult> =
+    override val purchaseResult: Flow<PurchaseResult> =
         _purchaseResult.asSharedFlow()
 
     private val billingClient: BillingClient = BillingClient.newBuilder(context)
@@ -83,16 +83,16 @@ class BillingRepository private constructor(
 
     companion object {
         @Volatile
-        private var INSTANCE: BillingRepository? = null
+        private var INSTANCE: BillingRepositoryImpl? = null
 
         fun getInstance(
             context: Context,
             dispatchers: DispatcherProvider,
             firebaseController: FirebaseController,
             externalScope: CoroutineScope,
-        ): BillingRepository {
+        ): BillingRepositoryImpl {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: BillingRepository(
+                INSTANCE ?: BillingRepositoryImpl(
                     context.applicationContext,
                     dispatchers,
                     firebaseController,
@@ -198,7 +198,7 @@ class BillingRepository private constructor(
         }
     }
 
-    suspend fun processPastPurchases() {
+    override suspend fun processPastPurchases() {
         withContext(dispatchers.io) {
             val params = QueryPurchasesParams.newBuilder()
                 .setProductType(BillingClient.ProductType.INAPP)
@@ -218,7 +218,7 @@ class BillingRepository private constructor(
         }
     }
 
-    suspend fun queryProductDetails(productIds: List<String>) {
+    override suspend fun queryProductDetails(productIds: List<String>) {
         withContext(dispatchers.io) {
             val products = productIds.map {
                 QueryProductDetailsParams.Product.newBuilder()
@@ -247,7 +247,7 @@ class BillingRepository private constructor(
         }
     }
 
-    fun launchInAppDonationFlow(
+    override fun launchInAppDonationFlow(
         activity: Activity,
         details: ProductDetails
     ) {
@@ -259,10 +259,10 @@ class BillingRepository private constructor(
         )
     }
 
-    fun launchSubscriptionFlow(
+    override fun launchSubscriptionFlow(
         activity: Activity,
         details: ProductDetails,
-        offerToken: String? = null,
+        offerToken: String?,
     ) {
         launchBillingFlow(
             activity = activity,

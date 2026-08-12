@@ -21,7 +21,7 @@ import android.app.Activity
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.ProductDetails
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.BillingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.repository.BillingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.billing.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.contract.SupportAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.contract.SupportEvent

@@ -6,7 +6,7 @@ Holds low-level contracts, domain result types, host configuration, dispatchers,
 
 ## Owns
 
-- `Result`, analytics and billing value models, and theme preference state.
+- Analytics and billing value models, and theme preference state.
 - `FirebaseController`, `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK contracts.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).
 - Small platform and Kotlin extensions used across modules.
@@ -38,7 +38,7 @@ flowchart TD
     Host[Host configuration and platform providers] --> Contracts[Common contracts]
     Contracts --> Features[Feature and integration modules]
     Dispatchers[DispatcherProvider] --> Features
-    Features --> Result[Shared result/value models]
+    Features --> Models[Shared value models]
 ```
 
 ## Public contracts

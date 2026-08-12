@@ -52,6 +52,24 @@ flowchart TD
 
 The façade exports nearly the complete internal graph, so consumers can couple to implementation modules transitively. Its DI files also instantiate implementations owned by many other modules, making constructor changes ripple into this composition module.
 
+## Architecture guards
+
+`RepositoryConventionsTest` runs here rather than in any single feature module, because this is the
+only module that depends on every library module. It scans `library/**/src/main` and fails when a
+repository breaks the toolkit-wide convention:
+
+- a `*Repository` contract must live in a `domain/repository` package,
+- a `*RepositoryImpl` must live in a `data/repository` package,
+- an implementation's name must be its contract's name plus `Impl`.
+
+It replaces a hand-written list of interface/implementation pairs checked with `isAssignableFrom`,
+which the compiler already guaranteed and which had fallen six repositories behind.
+
+The test reads source files, not the classpath, so `library/**/src/main/**/*.kt` is declared as an
+explicit input of this module's `Test` tasks in `build.gradle.kts`. Removing that declaration lets
+Gradle treat the task as up to date after a file moves, which is precisely when the test needs to
+run.
+
 ## Migration notes
 
 Bindings were moved out of the sample app so other hosts can integrate the toolkit using explicit host configuration and provider factories.

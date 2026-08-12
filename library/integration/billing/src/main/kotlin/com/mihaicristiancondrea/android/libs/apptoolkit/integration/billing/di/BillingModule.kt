@@ -19,7 +19,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.BillingCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.BillingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repository.BillingRepositoryImpl
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.domain.repository.BillingRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
@@ -31,7 +32,7 @@ import org.koin.dsl.module
 val billingModule: Module = module {
     single<BillingRepository>(createdAtStart = true) {
         val dispatchers = get<DispatcherProvider>()
-        BillingRepository.getInstance(
+        BillingRepositoryImpl.getInstance(
             context = get(),
             dispatchers = dispatchers,
             firebaseController = get(),
