@@ -24,9 +24,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.Mai
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.usecases.RequestInAppUpdateUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.repository.InAppUpdateRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
@@ -59,10 +58,9 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val getNavigationDrawerItemsUseCase: GetNavigationDrawerItemsUseCase,
-    private val applyInitialConsentUseCase: ApplyInitialConsentUseCase,
-    private val requestConsentUseCase: RequestConsentUseCase,
+    private val consentRepository: ConsentRepository,
     private val requestInAppReviewUseCase: RequestInAppReviewUseCase,
-    private val requestInAppUpdateUseCase: RequestInAppUpdateUseCase,
+    private val inAppUpdateRepository: InAppUpdateRepository,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<MainUiState, MainEvent, MainAction>(
@@ -147,7 +145,7 @@ class MainViewModel(
                 action = Actions.APPLY_INITIAL_CONSENT,
                 block = {
                     withContext(dispatchers.io) {
-                        applyInitialConsentUseCase.invoke()
+                        consentRepository.applyInitialConsent()
                     }
                 },
                 onError = {
@@ -179,7 +177,7 @@ class MainViewModel(
             extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
         )
         consentJob = consentJob.restart {
-            requestConsentUseCase.invoke(host = host)
+            consentRepository.requestConsent(host = host)
                 // Keep consent flow collection on ViewModel scope (main-safe for UI updates)
                 // and avoid forcing the whole upstream chain onto Main via flowOn(main).
                 .onEach { result: DataState<Unit, Errors> ->
@@ -272,7 +270,7 @@ class MainViewModel(
     private fun requestInAppUpdate(host: InAppUpdateHost) {
         startOperation(action = Actions.REQUEST_UPDATE)
         updateJob = updateJob.restart {
-            requestInAppUpdateUseCase(host = host)
+            inAppUpdateRepository.requestUpdate(host = host)
                 .flowOn(dispatchers.io)
                 .onEach { result ->
                     sendAction(action = MainAction.InAppUpdateResultReported(result = result))

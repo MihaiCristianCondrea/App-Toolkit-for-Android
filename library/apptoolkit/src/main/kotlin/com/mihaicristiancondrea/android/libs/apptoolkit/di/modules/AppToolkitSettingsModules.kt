@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.AboutRepositoryImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.GetAboutInfoUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.AboutViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repository.CacheRepositoryImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
@@ -83,12 +82,6 @@ private fun aboutModule(): Module = module {
             firebaseController = get(),
         )
     }
-    single<GetAboutInfoUseCase> {
-        GetAboutInfoUseCase(
-            repository = get(),
-            firebaseController = get(),
-        )
-    }
     single<CopyDeviceInfoUseCase> {
         CopyDeviceInfoUseCase(
             repository = get(),
@@ -98,7 +91,7 @@ private fun aboutModule(): Module = module {
 
     viewModel {
         AboutViewModel(
-            getAboutInfo = get(),
+            aboutRepository = get(),
             copyDeviceInfo = get(),
             dispatchers = get(),
             firebaseController = get(),
@@ -151,7 +144,7 @@ private fun usageAndDiagnosticsModule(): Module = module {
             repository = get(),
             firebaseController = get(),
             dispatchers = get(),
-            applyConsentSettingsUseCase = get(),
+            consentRepository = get(),
         )
     }
 }

@@ -6,7 +6,7 @@ Coordinates user consent state between persisted toolkit preferences and Google'
 
 ## Owns
 
-- Consent domain models, repository contract, and apply/request use cases.
+- Consent domain models and the repository contract covering apply/request.
 - `ConsentRepositoryImpl` and the UMP remote data source abstraction/implementation.
 - Mapping host availability into consent behavior.
 
@@ -32,8 +32,7 @@ Coordinates user consent state between persisted toolkit preferences and Google'
 
 ```mermaid
 flowchart TD
-    UI[Onboarding or settings] --> UseCase[Consent use case]
-    UseCase --> Repo[ConsentRepository]
+    UI[Onboarding or settings] --> Repo[ConsentRepository]
     Repo --> Store[Consent preferences]
     Repo --> UMP[UMP remote source]
     Repo --> Host[ConsentHost callbacks]
@@ -41,7 +40,7 @@ flowchart TD
 
 ## Public contracts
 
-- `ConsentRepository`, consent use cases, `ConsentSettings`, `ConsentHost`, and `ConsentHostAvailability`.
+- `ConsentRepository`, `ConsentSettings`, `ConsentHost`, and `ConsentHostAvailability`.
 
 ## Internal implementations
 
@@ -58,8 +57,8 @@ Consent behavior spans persistence, host callbacks, UMP state, Firebase toggles,
 The toolkit previously encountered a process-killing failure after a consent request failed. UMP
 4.0.0 performs a metrics request on its own executor and reads a non-success response body with
 `Scanner.next()`. An empty body throws `NoSuchElementException` on that executor thread. Because the
-throw happens outside the toolkit coroutine/callback path, catches in the remote source, repository,
-or use case cannot intercept it.
+throw happens outside the toolkit coroutine/callback path, catches in the remote source or the
+repository cannot intercept it.
 
 The following invariants reduce failed/overlapping UMP requests and must be preserved:
 

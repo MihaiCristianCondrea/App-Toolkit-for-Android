@@ -19,13 +19,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui
 
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.usecases.ObserveAdsEnabledUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.usecases.SetAdsEnabledUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.state.AdsSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
@@ -56,10 +54,8 @@ import kotlinx.coroutines.flow.onStart
  * ViewModel for ads settings and consent interaction.
  */
 class AdsSettingsViewModel(
-    private val observeAdsEnabled: ObserveAdsEnabledUseCase,
-    private val setAdsEnabled: SetAdsEnabledUseCase,
-    private val requestConsentUseCase: RequestConsentUseCase,
     private val repository: AdsSettingsRepository,
+    private val consentRepository: ConsentRepository,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<AdsSettingsUiState, AdsSettingsEvent, AdsSettingsAction>(
@@ -95,7 +91,7 @@ class AdsSettingsViewModel(
     private fun observe() {
         startOperation(action = Actions.OBSERVE_ADS_ENABLED)
         observeJob = observeJob.restart {
-            observeAdsEnabled.invoke()
+            repository.observeAdsEnabled()
                 .flowOn(dispatchers.io)
                 .onStart {
                     updateStateThreadSafe {
@@ -173,7 +169,7 @@ class AdsSettingsViewModel(
 
     private fun persistAdsEnabled(enabled: Boolean): Flow<DataState<Unit, Errors>> =
         flow {
-            when (setAdsEnabled(enabled)) {
+            when (repository.setAdsEnabled(enabled)) {
                 is Result.Success -> emit(DataState.Success(Unit))
                 is Result.Error -> emit(DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED))
             }
@@ -185,7 +181,7 @@ class AdsSettingsViewModel(
             extra = mapOf(ExtraKeys.HOST to host.activity::class.java.name)
         )
         consentJob = consentJob.restart {
-            requestConsentUseCase.invoke(host = host, showIfRequired = false)
+            consentRepository.requestConsent(host = host, showIfRequired = false)
                 // Keep upstream consent work off Main by not applying flowOn(main) here.
                 .onEach { result ->
                     result.onFailure { error ->

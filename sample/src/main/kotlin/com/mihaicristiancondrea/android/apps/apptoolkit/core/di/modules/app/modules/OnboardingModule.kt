@@ -20,8 +20,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.mod
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.onboarding.utils.interfaces.providers.AppOnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.data.repository.OnboardingRepositoryImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteOnboardingUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOnboardingCompletionUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.OnboardingViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
@@ -34,13 +32,10 @@ val onboardingModule: Module = module {
     single<OnboardingProvider> { AppOnboardingProvider() }
     single<OnboardingPreferencesDataSource> { get<CommonDataStore>() }
     single<OnboardingRepository> { OnboardingRepositoryImpl(dataStore = get()) }
-    single<ObserveOnboardingCompletionUseCase> { ObserveOnboardingCompletionUseCase(repository = get()) }
-    single<CompleteOnboardingUseCase> { CompleteOnboardingUseCase(repository = get()) }
 
     viewModel {
         OnboardingViewModel(
-            observeOnboardingCompletionUseCase = get(),
-            completeOnboardingUseCase = get(),
+            onboardingRepository = get(),
             dispatchers = get(),
             firebaseController = get(),
         )

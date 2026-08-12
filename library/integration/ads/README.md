@@ -6,7 +6,7 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 
 ## Owns
 
-- Ads settings repository, observe/set use cases, ViewModel, screen, and activity.
+- Ads settings repository, ViewModel, screen, and activity.
 - Google Mobile Ads SDK exposure needed by reusable ad rendering.
 
 ## Does not own
@@ -32,8 +32,7 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 ```mermaid
 flowchart TD
     Screen[AdsSettingsScreen] --> VM[AdsSettingsViewModel]
-    VM --> UseCases[Observe / set ads enabled]
-    UseCases --> Repo[AdsSettingsRepository]
+    VM --> Repo[AdsSettingsRepository]
     Repo --> Store[CommonDataStore]
     Repo --> Consent[Consent state]
     Consent --> AdsSDK[Google Mobile Ads]
@@ -41,7 +40,7 @@ flowchart TD
 
 ## Public contracts
 
-- Ads settings screen/activity, repository contract, use cases, and UI event/action/state contracts.
+- Ads settings screen/activity, repository contract, and UI event/action/state contracts.
 
 ## Internal implementations
 

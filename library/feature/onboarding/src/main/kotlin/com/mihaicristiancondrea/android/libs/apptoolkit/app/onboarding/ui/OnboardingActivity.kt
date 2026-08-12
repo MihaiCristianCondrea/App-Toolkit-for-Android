@@ -25,7 +25,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.BaseActivity
@@ -37,7 +37,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class OnboardingActivity : BaseActivity() {
 
     private val viewModel: OnboardingViewModel by viewModel()
-    private val requestConsentUseCase: RequestConsentUseCase by inject()
+    private val consentRepository: ConsentRepository by inject()
     private val lifecycleObserver = object : DefaultLifecycleObserver {
         override fun onResume(owner: LifecycleOwner) {
             checkUserConsent()
@@ -73,7 +73,7 @@ class OnboardingActivity : BaseActivity() {
             override val activity = this@OnboardingActivity
         }
         lifecycleScope.launch {
-            requestConsentUseCase.invoke(host = host).collect { }
+            consentRepository.requestConsent(host = host).collect { }
         }
     }
 }

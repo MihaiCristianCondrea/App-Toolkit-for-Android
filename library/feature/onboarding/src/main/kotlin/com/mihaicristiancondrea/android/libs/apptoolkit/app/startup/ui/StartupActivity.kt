@@ -28,7 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.utils.interfaces.providers.StartupProvider
@@ -44,7 +44,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class StartupActivity : BaseActivity() {
     private val provider: StartupProvider by inject()
-    private val requestConsentUseCase: RequestConsentUseCase by inject()
+    private val consentRepository: ConsentRepository by inject()
     private val viewModel: StartupViewModel by viewModel()
     private val permissionLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
@@ -111,7 +111,7 @@ class StartupActivity : BaseActivity() {
         }
 
         lifecycleScope.launch {
-            requestConsentUseCase.invoke(host = host).collect { result ->
+            consentRepository.requestConsent(host = host).collect { result ->
                 if (result !is DataState.Loading) {
                     viewModel.onEvent(StartupEvent.ConsentFormLoaded)
                 }

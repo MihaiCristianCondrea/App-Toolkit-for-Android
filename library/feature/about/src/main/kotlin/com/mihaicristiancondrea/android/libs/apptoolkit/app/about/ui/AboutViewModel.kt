@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.GetAboutInfoUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.AboutAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.mapper.toUiState
@@ -38,9 +38,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setLoading
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
  * ViewModel for the About screen, including device info sharing.
  */
 open class AboutViewModel(
-    private val getAboutInfo: GetAboutInfoUseCase,
+    private val aboutRepository: AboutRepository,
     private val copyDeviceInfo: CopyDeviceInfoUseCase,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
@@ -78,25 +78,17 @@ open class AboutViewModel(
     private fun loadAboutInfo() {
         startOperation(action = Actions.LOAD_ABOUT_INFO)
         observeJob = observeJob.restart {
-            getAboutInfo.invoke()
+            flow { emit(aboutRepository.getAboutInfo()) }
                 .flowOn(dispatchers.io)
                 .onStart {
                     updateStateThreadSafe {
                         screenState.setLoading()
                     }
                 }
-                .onEach { result ->
-                    result
-                        .onSuccess { info ->
-                            updateStateThreadSafe {
-                                screenState.setSuccess(data = info.toUiState())
-                            }
-                        }
-                        .onFailure { error ->
-                            updateStateThreadSafe {
-                                screenState.setError(message = error.asUiText())
-                            }
-                        }
+                .onEach { info ->
+                    updateStateThreadSafe {
+                        screenState.setSuccess(data = info.toUiState())
+                    }
                 }
                 .catchReport(action = Actions.LOAD_ABOUT_INFO) {
                     updateStateThreadSafe {

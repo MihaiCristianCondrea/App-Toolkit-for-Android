@@ -32,8 +32,8 @@ Owns AppToolkit about, licenses, changelog, privacy, and shared main-navigation 
 ```mermaid
 flowchart TD
     AboutScreen --> AboutVM[AboutViewModel]
-    AboutVM --> AboutUC[About use cases]
-    AboutUC --> AboutRepo[AboutRepository]
+    AboutVM --> AboutRepo[AboutRepository]
+    AboutVM --> CopyUC[CopyDeviceInfoUseCase]
     ChangelogUI[Changelog dialog] --> ChangelogVM
     ChangelogVM --> ChangelogRepo[ChangelogRepository]
     ChangelogVM --> Update[In-app update integration]
@@ -42,7 +42,7 @@ flowchart TD
 
 ## Public contracts
 
-- About/privacy provider interfaces, route keys, navigation repository/models, about/changelog repositories/use cases/models, and screen/navigation composables.
+- About/privacy provider interfaces, route keys, navigation repository/models, about/changelog repositories/models, `CopyDeviceInfoUseCase`, `GetChangelogUseCase`, and screen/navigation composables.
 
 ## Internal implementations
 

@@ -18,13 +18,10 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.usecases.ObserveAdsEnabledUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.usecases.SetAdsEnabledUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.contract.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
@@ -76,16 +73,9 @@ class AdsSettingsViewModelTest {
     }
 
     private fun createViewModel(repository: AdsSettingsRepository): AdsSettingsViewModel {
-        val observeUseCase = ObserveAdsEnabledUseCase(repository, firebaseController)
-        val setUseCase = SetAdsEnabledUseCase(repository, firebaseController)
         return AdsSettingsViewModel(
-            observeAdsEnabled = observeUseCase,
-            setAdsEnabled = setUseCase,
-            requestConsentUseCase = RequestConsentUseCase(
-                FakeConsentRepository(),
-                firebaseController
-            ),
             repository = repository,
+            consentRepository = FakeConsentRepository(),
             dispatchers = testDispatchers(),
             firebaseController = firebaseController,
         )

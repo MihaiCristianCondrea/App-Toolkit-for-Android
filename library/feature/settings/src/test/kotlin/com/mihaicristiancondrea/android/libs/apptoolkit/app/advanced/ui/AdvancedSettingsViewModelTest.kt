@@ -25,6 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -33,6 +34,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 
 class FakeCacheRepository(private val result: Result<Unit>) : CacheRepository {
     override fun clearCache(): Flow<Result<Unit>> = flowOf(result)
@@ -48,11 +50,24 @@ class HotFakeCacheRepository : CacheRepository {
 @OptIn(ExperimentalCoroutinesApi::class)
 class AdvancedSettingsViewModelTest {
 
-    private val testDispatchers: DispatcherProvider = TestDispatchers()
+    companion object {
+        // `viewModelScope` binds to `Dispatchers.Main.immediate`, and Lifecycle falls back to an
+        // empty context — meaning `Dispatchers.Default` — when Main is missing instead of throwing.
+        // Without this the ViewModel's coroutines run on real threads that `advanceUntilIdle()`
+        // knows nothing about, so every assertion below races the work it is waiting for.
+        @JvmField
+        @RegisterExtension
+        val dispatcherExtension = StandardDispatcherExtension()
+    }
+
+    // The same dispatcher backs `runTest`, `Dispatchers.Main` and `flowOn`, so one scheduler drives
+    // every coroutine the ViewModel starts.
+    private val testDispatchers: DispatcherProvider =
+        TestDispatchers(dispatcherExtension.testDispatcher)
     private val firebaseController = FakeFirebaseController()
 
     @Test
-    fun `onClearCache emits success message`() = runTest {
+    fun `onClearCache emits success message`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = AdvancedSettingsViewModel(
             repository = FakeCacheRepository(Result.Success(Unit)),
             dispatchers = testDispatchers,
@@ -72,48 +87,56 @@ class AdvancedSettingsViewModelTest {
     }
 
     @Test
-    fun `onClearCache emits error message when failure`() = runTest {
-        val viewModel = AdvancedSettingsViewModel(
-            repository = FakeCacheRepository(Result.Error(Exception("fail"))),
-            dispatchers = testDispatchers,
-            firebaseController = firebaseController,
-        )
+    fun `onClearCache emits error message when failure`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = AdvancedSettingsViewModel(
+                repository = FakeCacheRepository(Result.Error(Exception("fail"))),
+                dispatchers = testDispatchers,
+                firebaseController = firebaseController,
+            )
 
-        viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
-        advanceUntilIdle()
+            viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
+            advanceUntilIdle()
 
-        assertThat(viewModel.uiState.value.data?.cacheClearMessage)
-            .isEqualTo(R.string.cache_cleared_error)
-    }
+            assertThat(viewModel.uiState.value.data?.cacheClearMessage)
+                .isEqualTo(R.string.cache_cleared_error)
+        }
 
     @Test
-    fun `clearCache emits messages for success and error`() = runTest {
-        val repository = HotFakeCacheRepository()
-        val viewModel = AdvancedSettingsViewModel(
-            repository = repository,
-            dispatchers = testDispatchers,
-            firebaseController = firebaseController,
-        )
+    fun `clearCache emits messages for success and error`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = HotFakeCacheRepository()
+            val viewModel = AdvancedSettingsViewModel(
+                repository = repository,
+                dispatchers = testDispatchers,
+                firebaseController = firebaseController,
+            )
 
-        viewModel.uiState.test {
-            assertThat(awaitItem().data?.cacheClearMessage).isNull()
+            // `expectMostRecentItem()` rather than `awaitItem()`: clearing the cache first flips the
+            // screen to loading, so each step produces an intermediate state before the one under
+            // test. Asserting on the latest keeps the test about the message, not the transitions.
+            viewModel.uiState.test {
+                assertThat(awaitItem().data?.cacheClearMessage).isNull()
 
-            viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
-            advanceUntilIdle()
-            repository.emit(Result.Success(Unit))
-            assertThat(awaitItem().data?.cacheClearMessage)
-                .isEqualTo(R.string.cache_cleared_success)
+                viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
+                advanceUntilIdle()
+                repository.emit(Result.Success(Unit))
+                advanceUntilIdle()
+                assertThat(expectMostRecentItem().data?.cacheClearMessage)
+                    .isEqualTo(R.string.cache_cleared_success)
 
-            viewModel.onEvent(AdvancedSettingsEvent.MessageShown)
-            assertThat(awaitItem().data?.cacheClearMessage).isNull()
+                viewModel.onEvent(AdvancedSettingsEvent.MessageShown)
+                advanceUntilIdle()
+                assertThat(expectMostRecentItem().data?.cacheClearMessage).isNull()
 
-            viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
-            advanceUntilIdle()
-            repository.emit(Result.Error(Exception("boom")))
-            assertThat(awaitItem().data?.cacheClearMessage)
-                .isEqualTo(R.string.cache_cleared_error)
+                viewModel.onEvent(AdvancedSettingsEvent.ClearCache)
+                advanceUntilIdle()
+                repository.emit(Result.Error(Exception("boom")))
+                advanceUntilIdle()
+                assertThat(expectMostRecentItem().data?.cacheClearMessage)
+                    .isEqualTo(R.string.cache_cleared_error)
 
-            cancelAndIgnoreRemainingEvents()
+                cancelAndIgnoreRemainingEvents()
+            }
         }
-    }
 }

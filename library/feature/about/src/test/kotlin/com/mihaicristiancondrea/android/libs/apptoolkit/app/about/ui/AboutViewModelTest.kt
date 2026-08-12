@@ -22,7 +22,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.model.A
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.repository.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.GetAboutInfoUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
@@ -73,7 +72,7 @@ class AboutViewModelTest {
         val testDispatchers: DispatcherProvider = TestDispatchers(testDispatcher)
 
         return AboutViewModel(
-            getAboutInfo = GetAboutInfoUseCase(repository, firebaseController),
+            aboutRepository = repository,
             copyDeviceInfo = CopyDeviceInfoUseCase(repository, firebaseController),
             dispatchers = testDispatchers,
             firebaseController = firebaseController,

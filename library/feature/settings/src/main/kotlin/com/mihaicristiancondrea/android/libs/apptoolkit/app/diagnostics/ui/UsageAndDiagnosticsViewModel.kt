@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.ApplyConsentSettingsUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.domain.model.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.domain.repository.UsageAndDiagnosticsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsAction
@@ -49,7 +49,7 @@ import kotlinx.coroutines.flow.onStart
 class UsageAndDiagnosticsViewModel(
     private val repository: UsageAndDiagnosticsRepository,
     private val dispatchers: DispatcherProvider,
-    private val applyConsentSettingsUseCase: ApplyConsentSettingsUseCase,
+    private val consentRepository: ConsentRepository,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<UsageAndDiagnosticsUiState, UsageAndDiagnosticsEvent, UsageAndDiagnosticsAction>(
     initialState = UiStateScreen(data = UsageAndDiagnosticsUiState()),
@@ -113,7 +113,7 @@ class UsageAndDiagnosticsViewModel(
 
                         screenState.setSuccess(data = updated)
                     }
-                    applyConsentSettingsUseCase(consentSettings)
+                    consentRepository.applyConsentSettings(consentSettings)
                 }
                 .catchReport(action = Actions.OBSERVE_CONSENTS) {
                     updateStateThreadSafe {
@@ -210,7 +210,7 @@ class UsageAndDiagnosticsViewModel(
     }
 
     private suspend fun applyConsentSettings(settings: UsageAndDiagnosticsSettings) {
-        applyConsentSettingsUseCase(
+        consentRepository.applyConsentSettings(
             ConsentSettings(
                 usageAndDiagnostics = settings.usageAndDiagnostics,
                 analyticsConsent = settings.analyticsConsent,

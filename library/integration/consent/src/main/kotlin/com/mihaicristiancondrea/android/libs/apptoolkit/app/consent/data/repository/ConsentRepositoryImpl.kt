@@ -81,6 +81,13 @@ class ConsentRepositoryImpl(
         host: ConsentHost,
         showIfRequired: Boolean,
     ): Flow<DataState<Unit, Errors.UseCase>> = flow {
+        firebaseController.logBreadcrumb(
+            message = "Consent request started",
+            attributes = mapOf(
+                "host" to host.activity::class.java.name,
+                "showIfRequired" to showIfRequired.toString(),
+            ),
+        )
         if (!host.isAlive) {
             firebaseController.logBreadcrumb(
                 message = "Consent request skipped for a finishing host",
@@ -150,11 +157,22 @@ class ConsentRepositoryImpl(
     )
 
     override suspend fun applyInitialConsent() {
+        firebaseController.logBreadcrumb(message = "Applying initial consent")
         val settings = readPersistedSettings()
         applyConsentSettings(settings)
     }
 
     override suspend fun applyConsentSettings(settings: ConsentSettings) {
+        firebaseController.logBreadcrumb(
+            message = "Consent settings applied",
+            attributes = mapOf(
+                "usageAndDiagnostics" to settings.usageAndDiagnostics.toString(),
+                "analyticsConsent" to settings.analyticsConsent.toString(),
+                "adStorageConsent" to settings.adStorageConsent.toString(),
+                "adUserDataConsent" to settings.adUserDataConsent.toString(),
+                "adPersonalizationConsent" to settings.adPersonalizationConsent.toString(),
+            ),
+        )
         firebaseController.updateConsent(
             analyticsGranted = settings.analyticsConsent,
             adStorageGranted = settings.adStorageConsent,

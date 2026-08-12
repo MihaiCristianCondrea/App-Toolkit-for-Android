@@ -19,17 +19,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepositoryImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.repository.AdsSettingsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.usecases.ObserveAdsEnabledUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.usecases.SetAdsEnabledUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.AdsSettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.remote.datasource.ConsentRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.remote.datasource.UmpConsentRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepositoryImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.ApplyConsentSettingsUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.usecases.RequestInAppUpdateUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
@@ -109,15 +103,11 @@ private fun consentModule(): Module = module {
             firebaseController = get(),
         )
     }
-    single { RequestConsentUseCase(repository = get(), firebaseController = get()) }
-    single { ApplyInitialConsentUseCase(repository = get(), firebaseController = get()) }
-    single { ApplyConsentSettingsUseCase(repository = get(), firebaseController = get()) }
 }
 
 private fun mainSharedModule(): Module = module {
     single { GmsHostFactory() } // Lightweight creator without screen references; safe as singleton.
     single<InAppUpdateRepository> { InAppUpdateRepositoryImpl() }
-    single { RequestInAppUpdateUseCase(repository = get()) }
     single<String>(qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL)) {
         ApiHost.BASE_URL
     }
@@ -127,19 +117,14 @@ private fun adsSettingsSharedModule(): Module = module {
     single<AdsSettingsRepository> {
         AdsSettingsRepositoryImpl(
             dataStore = get(),
-            buildInfoProvider = get(),
             firebaseController = get(),
         )
     }
-    single { ObserveAdsEnabledUseCase(repo = get(), firebaseController = get()) }
-    single { SetAdsEnabledUseCase(repo = get(), firebaseController = get()) }
 
     viewModel {
         AdsSettingsViewModel(
-            observeAdsEnabled = get(),
-            setAdsEnabled = get(),
-            requestConsentUseCase = get(),
             repository = get(),
+            consentRepository = get(),
             dispatchers = get(),
             firebaseController = get(),
         )

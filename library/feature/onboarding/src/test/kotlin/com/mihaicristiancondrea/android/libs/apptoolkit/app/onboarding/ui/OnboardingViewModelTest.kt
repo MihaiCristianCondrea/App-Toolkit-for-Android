@@ -18,8 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteOnboardingUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOnboardingCompletionUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
@@ -178,8 +176,7 @@ class OnboardingViewModelTest {
 
     private fun createViewModel(repository: OnboardingRepository): OnboardingViewModel =
         OnboardingViewModel(
-            observeOnboardingCompletionUseCase = ObserveOnboardingCompletionUseCase(repository),
-            completeOnboardingUseCase = CompleteOnboardingUseCase(repository),
+            onboardingRepository = repository,
             dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
             firebaseController = firebaseController,
         )

@@ -77,6 +77,7 @@ class TestCacheRepositoryImpl {
         val repository = CacheRepositoryImpl(
             context = context,
             firebaseController = mockk<FirebaseController>(relaxed = true),
+            deleteRecursively = { file -> if (file == failing) false else file.deleteRecursively() },
         )
         val result = repository.clearCache().single()
 
@@ -94,6 +95,7 @@ class TestCacheRepositoryImpl {
         val repository = CacheRepositoryImpl(
             context = context,
             firebaseController = mockk<FirebaseController>(relaxed = true),
+            deleteRecursively = { throw SecurityException("denied") },
         )
         val result = repository.clearCache().single()
 
@@ -134,6 +136,7 @@ class TestCacheRepositoryImpl {
         val repository = CacheRepositoryImpl(
             context = context,
             firebaseController = mockk<FirebaseController>(relaxed = true),
+            deleteRecursively = { throw SecurityException("denied") },
         )
         val result = repository.clearCache().single()
 

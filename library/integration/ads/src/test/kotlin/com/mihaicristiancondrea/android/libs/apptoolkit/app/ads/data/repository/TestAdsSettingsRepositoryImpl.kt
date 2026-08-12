@@ -50,12 +50,9 @@ class TestAdsSettingsRepositoryImpl {
         dataStore: CommonDataStore,
         debugBuild: Boolean = false,
     ): AdsSettingsRepositoryImpl {
-        val buildInfoProvider = mockk<BuildInfoProvider> {
-            every { isDebugBuild } returns debugBuild
-        }
+        every { dataStore.defaultAdsEnabled } returns !debugBuild
         return AdsSettingsRepositoryImpl(
             dataStore = dataStore,
-            buildInfoProvider = buildInfoProvider,
             firebaseController = mockk<FirebaseController>(relaxed = true),
         )
     }

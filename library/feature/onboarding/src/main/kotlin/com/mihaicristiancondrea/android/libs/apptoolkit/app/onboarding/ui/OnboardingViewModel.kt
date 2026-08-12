@@ -18,8 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteOnboardingUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOnboardingCompletionUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.repository.OnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
@@ -40,8 +39,7 @@ import kotlinx.coroutines.withContext
  * ViewModel for the onboarding flow, including completion and consent requests.
  */
 class OnboardingViewModel(
-    private val observeOnboardingCompletionUseCase: ObserveOnboardingCompletionUseCase,
-    private val completeOnboardingUseCase: CompleteOnboardingUseCase,
+    private val onboardingRepository: OnboardingRepository,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<OnboardingUiState, OnboardingEvent, OnboardingAction>(
@@ -71,12 +69,12 @@ class OnboardingViewModel(
     private fun observeCompletion() {
         startOperation(action = Actions.OBSERVE_COMPLETION)
         observerJob = observerJob.restart {
-            observeOnboardingCompletionUseCase.invoke()
+            onboardingRepository.observeOnboardingCompletion()
                 .flowOn(dispatchers.io)
                 .onStart {
                     firebaseController.logBreadcrumb(
                         message = "Observe onboarding completion started",
-                        attributes = mapOf("source" to "ObserveOnboardingCompletionUseCase")
+                        attributes = mapOf("source" to "OnboardingRepository")
                     )
                 }
                 .onEach { completed ->
@@ -107,7 +105,7 @@ class OnboardingViewModel(
                 action = Actions.COMPLETE_ONBOARDING,
                 block = {
                     withContext(dispatchers.io) {
-                        completeOnboardingUseCase()
+                        onboardingRepository.setOnboardingCompleted()
                     }
 
                     updateStateThreadSafe {

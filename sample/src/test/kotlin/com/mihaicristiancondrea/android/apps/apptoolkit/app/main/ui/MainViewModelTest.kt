@@ -29,8 +29,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.state.MainUi
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.ApplyInitialConsentUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.repository.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
@@ -91,13 +89,9 @@ class MainViewModelTest {
 
         MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
-            applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true),
-            requestConsentUseCase = RequestConsentUseCase(
-                repository = FakeConsentRepository(),
-                firebaseController = mockk<FirebaseController>(relaxed = true)
-            ),
+            consentRepository = FakeConsentRepository(),
             requestInAppReviewUseCase = mockk(relaxed = true),
-            requestInAppUpdateUseCase = mockk(relaxed = true),
+            inAppUpdateRepository = mockk(relaxed = true),
             firebaseController = mockk<FirebaseController>(relaxed = true),
             dispatchers = dispatchers,
         )
@@ -112,20 +106,16 @@ class MainViewModelTest {
     @Test
     fun `initialization applies persisted consent once`() =
         runTest(dispatcherExtension.testDispatcher) {
-            val applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true)
+            val consentRepository = mockk<ConsentRepository>(relaxed = true)
 
             MainViewModel(
                 getNavigationDrawerItemsUseCase = GetNavigationDrawerItemsUseCase(
                     navigationRepository = FakeNavigationRepository(flowOf(emptyList())),
                     firebaseController = mockk(relaxed = true)
                 ),
-                applyInitialConsentUseCase = applyInitialConsentUseCase,
-                requestConsentUseCase = RequestConsentUseCase(
-                    repository = FakeConsentRepository(),
-                    firebaseController = mockk(relaxed = true)
-                ),
+                consentRepository = consentRepository,
                 requestInAppReviewUseCase = mockk(relaxed = true),
-                requestInAppUpdateUseCase = mockk(relaxed = true),
+                inAppUpdateRepository = mockk(relaxed = true),
                 firebaseController = mockk<FirebaseController>(relaxed = true),
                 dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher),
             )
@@ -133,7 +123,7 @@ class MainViewModelTest {
             runCurrent()
             advanceUntilIdle()
 
-            coVerify(exactly = 1) { applyInitialConsentUseCase.invoke() }
+            coVerify(exactly = 1) { consentRepository.applyInitialConsent() }
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -156,13 +146,9 @@ class MainViewModelTest {
 
             val viewModel = MainViewModel(
                 getNavigationDrawerItemsUseCase = useCase,
-                applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true),
-                requestConsentUseCase = RequestConsentUseCase(
-                    FakeConsentRepository(),
-                    firebaseController
-                ),
+                consentRepository = FakeConsentRepository(),
                 requestInAppReviewUseCase = mockk(relaxed = true),
-                requestInAppUpdateUseCase = mockk(relaxed = true),
+                inAppUpdateRepository = mockk(relaxed = true),
                 firebaseController = firebaseController,
                 dispatchers = dispatchers,
             )
@@ -186,13 +172,9 @@ class MainViewModelTest {
 
         val viewModel = MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
-            applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true),
-            requestConsentUseCase = RequestConsentUseCase(
-                FakeConsentRepository(),
-                firebaseController
-            ),
+            consentRepository = FakeConsentRepository(),
             requestInAppReviewUseCase = mockk(relaxed = true),
-            requestInAppUpdateUseCase = mockk(relaxed = true),
+            inAppUpdateRepository = mockk(relaxed = true),
             firebaseController = firebaseController,
             dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
         )
@@ -234,13 +216,9 @@ class MainViewModelTest {
 
         val viewModel = MainViewModel(
             getNavigationDrawerItemsUseCase = useCase,
-            applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true),
-            requestConsentUseCase = RequestConsentUseCase(
-                FakeConsentRepository(),
-                firebaseController
-            ),
+            consentRepository = FakeConsentRepository(),
             requestInAppReviewUseCase = mockk(relaxed = true),
-            requestInAppUpdateUseCase = mockk(relaxed = true),
+            inAppUpdateRepository = mockk(relaxed = true),
             firebaseController = firebaseController,
             dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
         )
@@ -280,13 +258,9 @@ class MainViewModelTest {
                     navigationRepository = FakeNavigationRepository(flowOf(emptyList())),
                     firebaseController = firebaseController
                 ),
-                applyInitialConsentUseCase = mockk<ApplyInitialConsentUseCase>(relaxed = true),
-                requestConsentUseCase = RequestConsentUseCase(
-                    repository = consentRepository,
-                    firebaseController = firebaseController
-                ),
+                consentRepository = consentRepository,
                 requestInAppReviewUseCase = mockk(relaxed = true),
-                requestInAppUpdateUseCase = mockk(relaxed = true),
+                inAppUpdateRepository = mockk(relaxed = true),
                 firebaseController = firebaseController,
                 dispatchers = TestDispatchers(dispatcherExtension.testDispatcher),
             )

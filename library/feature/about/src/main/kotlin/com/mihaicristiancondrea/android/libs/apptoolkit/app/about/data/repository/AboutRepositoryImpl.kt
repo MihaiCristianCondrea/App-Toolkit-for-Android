@@ -42,12 +42,17 @@ class AboutRepositoryImpl(
     private val sdkIntProvider: () -> Int = { Build.VERSION.SDK_INT },
 ) : AboutRepository {
 
-    override suspend fun getAboutInfo(): AboutInfo =
-        AboutInfo(
+    override suspend fun getAboutInfo(): AboutInfo {
+        firebaseController.logBreadcrumb(
+            message = "About info load started",
+            attributes = mapOf("source" to "AboutRepository"),
+        )
+        return AboutInfo(
             appVersion = buildInfoProvider.appVersion,
             appVersionCode = buildInfoProvider.appVersionCode,
             deviceInfo = deviceProvider.deviceInfo,
         )
+    }
 
     override fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult {
         firebaseController.logBreadcrumb(

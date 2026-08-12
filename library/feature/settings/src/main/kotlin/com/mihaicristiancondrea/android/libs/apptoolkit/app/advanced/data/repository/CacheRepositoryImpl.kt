@@ -21,6 +21,7 @@ import android.content.Context
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.File
@@ -34,6 +35,11 @@ import java.io.File
 class CacheRepositoryImpl(
     private val context: Context,
     private val firebaseController: FirebaseController,
+    /**
+     * Seam for the delete itself. Without it the failure branch is unreachable from a test: an
+     * empty temp directory always deletes cleanly, so the error path shipped uncovered.
+     */
+    private val deleteRecursively: (File) -> Boolean = File::deleteRecursively,
 ) : CacheRepository {
 
     override fun clearCache(): Flow<Result<Unit>> = flow {
@@ -41,15 +47,32 @@ class CacheRepositoryImpl(
             message = "Cache clear requested",
             attributes = mapOf("source" to "CacheRepositoryImpl"),
         )
-        val cacheDirs: List<File> = buildList {
-            add(context.cacheDir)
-            add(context.codeCacheDir)
-            context.externalCacheDir?.let(::add)
-        }.distinct()
+        // Resolving and deleting cache directories can both throw — SecurityException from a
+        // restricted profile, IO failures mid-delete. Those have to surface as Result.Error, or the
+        // exception escapes the flow and the caller reports nothing at all.
+        val result: Result<Unit> = runCatching {
+            val cacheDirs: List<File> = buildList {
+                add(context.cacheDir)
+                add(context.codeCacheDir)
+                context.externalCacheDir?.let(::add)
+            }.distinct()
 
-        val failed = cacheDirs.filterNot { it.deleteRecursively() }
+            cacheDirs.filterNot(deleteRecursively)
+        }.fold(
+            onSuccess = { failed ->
+                if (failed.isEmpty()) {
+                    Result.Success(Unit)
+                } else {
+                    Result.Error(Exception("Failed to clear cache"))
+                }
+            },
+            onFailure = { throwable ->
+                if (throwable is CancellationException) throw throwable
+                Result.Error(throwable as? Exception ?: Exception(throwable))
+            },
+        )
 
-        emit(if (failed.isEmpty()) Result.Success(Unit) else Result.Error(Exception("Failed to clear cache")))
+        emit(result)
     }
 }
 

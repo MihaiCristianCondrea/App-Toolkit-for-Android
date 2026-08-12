@@ -322,6 +322,60 @@ class ConsentRepositoryImplTest {
             )
             assertEquals(0, remote.requestCount)
         }
+    /**
+     * The breadcrumbs used to be contributed by pass-through use cases. They are part of the
+     * repository's observable behaviour now, and operations depends on them.
+     */
+    @Test
+    fun `applyInitialConsent logs a breadcrumb`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val firebaseController = mockk<FirebaseController>(relaxed = true)
+            val repository = ConsentRepositoryImpl(
+                remote = mockk(relaxed = true),
+                local = FakeConsentPreferencesDataSource(),
+                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
+                firebaseController = firebaseController,
+            )
+
+            repository.applyInitialConsent()
+
+            verify { firebaseController.logBreadcrumb(message = "Applying initial consent") }
+        }
+
+    @Test
+    fun `applyConsentSettings logs a breadcrumb with the applied values`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val firebaseController = mockk<FirebaseController>(relaxed = true)
+            val repository = ConsentRepositoryImpl(
+                remote = mockk(relaxed = true),
+                local = FakeConsentPreferencesDataSource(),
+                configProvider = FakeBuildInfoProvider(isDebugBuild = false),
+                firebaseController = firebaseController,
+            )
+
+            repository.applyConsentSettings(
+                ConsentSettings(
+                    usageAndDiagnostics = true,
+                    analyticsConsent = true,
+                    adStorageConsent = false,
+                    adUserDataConsent = false,
+                    adPersonalizationConsent = true,
+                )
+            )
+
+            verify {
+                firebaseController.logBreadcrumb(
+                    message = "Consent settings applied",
+                    attributes = mapOf(
+                        "usageAndDiagnostics" to "true",
+                        "analyticsConsent" to "true",
+                        "adStorageConsent" to "false",
+                        "adUserDataConsent" to "false",
+                        "adPersonalizationConsent" to "true",
+                    ),
+                )
+            }
+        }
 }
 
 /**
@@ -385,5 +439,3 @@ private class FakeBuildInfoProvider(
     override val appVersionCode: Int = 1
     override val packageName: String = "com.mihaicristiancondrea.android.libs.apptoolkit.test"
 }
-
-

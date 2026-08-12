@@ -36,7 +36,7 @@ interface ConsentRepository {
      */
     fun requestConsent(
         host: ConsentHost,
-        showIfRequired: Boolean,
+        showIfRequired: Boolean = true,
     ): Flow<DataState<Unit, Errors.UseCase>>
 
     /**

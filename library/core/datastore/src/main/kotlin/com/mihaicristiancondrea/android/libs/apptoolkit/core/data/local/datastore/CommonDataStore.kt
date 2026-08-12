@@ -63,7 +63,7 @@ val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(name
 open class CommonDataStore(
     context: Context,
     dispatchers: DispatcherProvider = StandardDispatchers(),
-    private val defaultAdsEnabled: Boolean = true,
+    val defaultAdsEnabled: Boolean = true,
 ) : OnboardingPreferencesDataSource, UsageAndDiagnosticsPreferencesDataSource,
     ConsentPreferencesDataSource, CommonDataStoreCore {
     val dataStore: DataStore<Preferences> = context.commonDataStore

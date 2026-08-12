@@ -117,10 +117,9 @@ val appModule: Module = module {
     viewModel {
         MainViewModel(
             getNavigationDrawerItemsUseCase = get(),
-            applyInitialConsentUseCase = get(),
-            requestConsentUseCase = get(),
+            consentRepository = get(),
             requestInAppReviewUseCase = get<RequestInAppReviewUseCase>(),
-            requestInAppUpdateUseCase = get(),
+            inAppUpdateRepository = get(),
             firebaseController = get(),
             dispatchers = get(),
         )

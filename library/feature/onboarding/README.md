@@ -8,7 +8,7 @@ Owns startup routing and the multi-page onboarding flow, including theme choice,
 
 - Startup and onboarding screens, activities, ViewModels, state/events/actions.
 - `StartupProvider` and `OnboardingProvider` host extension contracts.
-- Onboarding repository/use cases, page models, controls, and consent/theme pages.
+- Onboarding repository, page models, controls, and consent/theme pages.
 
 ## Does not own
 
@@ -34,14 +34,14 @@ flowchart TD
     Startup[StartupViewModel] --> Completed{Onboarding complete?}
     Completed -->|No| Screen[OnboardingScreen]
     Screen --> VM[OnboardingViewModel]
-    VM --> Consent[Consent use cases]
+    VM --> Consent[ConsentRepository]
     VM --> Store[Onboarding repository / DataStore]
     Store -->|Complete| Host[Host start destination]
 ```
 
 ## Public contracts
 
-- Startup/onboarding provider contracts, repository/use cases/models, and presentation entry points.
+- Startup/onboarding provider contracts, repository/models, and presentation entry points.
 
 ## Internal implementations
 

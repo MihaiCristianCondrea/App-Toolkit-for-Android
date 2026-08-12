@@ -21,7 +21,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.domain.repositor
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onStart
 
@@ -38,12 +37,17 @@ import kotlinx.coroutines.flow.onStart
  */
 class AdsSettingsRepositoryImpl(
     private val dataStore: CommonDataStore,
-    buildInfoProvider: BuildInfoProvider,
     private val firebaseController: FirebaseController,
 ) : AdsSettingsRepository {
 
-    override val defaultAdsEnabled: Boolean = !buildInfoProvider.isDebugBuild
+    // Deliberately delegated rather than recomputed. `AdsCoreManager` gates SDK initialization on
+    // the same preference and the ad views observe it; a repository with its own default is how the
+    // two came to disagree before, which made ad views request ads for an uninitialized SDK.
+    override val defaultAdsEnabled: Boolean = dataStore.defaultAdsEnabled
 
+    // The cold `ads(...)` flow rather than `adsEnabledFlow`: the settings screen needs IO errors and
+    // cancellation to reach it, and the eagerly-started StateFlow swallows both into its own scope.
+    // Only the default is shared — that is what used to diverge.
     override fun observeAdsEnabled(): Flow<Boolean> =
         dataStore.ads(default = defaultAdsEnabled)
             .onStart {

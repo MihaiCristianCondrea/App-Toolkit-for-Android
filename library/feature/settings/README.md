@@ -38,7 +38,7 @@ flowchart TD
     Root --> Advanced[Advanced/cache settings]
     Root --> Diagnostics[Usage and diagnostics]
     General --> Repos[Feature repositories]
-    Diagnostics --> Consent[Consent use case]
+    Diagnostics --> Consent[ConsentRepository]
     Repos --> Store[CommonDataStore / Android cache]
 ```
 
