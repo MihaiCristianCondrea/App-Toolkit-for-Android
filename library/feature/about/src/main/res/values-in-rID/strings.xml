@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Iklan</string>
+    <string name="android_version">Versi Android</string>
+    <string name="api_level">Level API</string>
+    <string name="app_build">Build aplikasi: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">Versi build aplikasi</string>
+    <string name="app_info">Info aplikasi</string>
+    <string name="changelog_title">Catatan perubahan aplikasi</string>
+    <string name="code_of_conduct">Kode etik</string>
+    <string name="content_description_more_options">Lebih banyak opsi</string>
+    <string name="debug">Debug</string>
+    <string name="device_info">Informasi perangkat</string>
+    <string name="device_model">Model perangkat</string>
+    <string name="done_button_content_description">Selesai</string>
+    <string name="go_back">Kembali</string>
+    <string name="help_and_feedback">Bantuan &amp; umpan balik</string>
+    <string name="legal">Hukum</string>
+    <string name="legal_notices">Pemberitahuan hukum</string>
+    <string name="license">Lisensi</string>
+    <string name="manufacturer">Pabrikan</string>
+    <string name="no_new_updates_message">Tidak ada pembaruan baru yang tersedia.</string>
+    <string name="oss_license_title">Lisensi sumber terbuka</string>
+    <string name="permissions">Izin</string>
+    <string name="privacy">Privasi</string>
+    <string name="privacy_policy">Kebijakan privasi</string>
+    <string name="release">Rilis</string>
+    <string name="settings">Pengaturan</string>
+    <string name="settings_placeholder_description">Tidak ada pengaturan yang dipilih. Pilih opsi untuk melihat detailnya di sini.</string>
+    <string name="share">Bagikan</string>
+    <string name="snack_device_info_copied">Informasi perangkat disalin ke papan klip</string>
+    <string name="snack_device_info_failed">Tidak dapat memuat info perangkat</string>
+    <string name="summary_preference_settings_ads">Kendalikan bagaimana kami menggunakan informasi Anda untuk menampilkan iklan yang relevan</string>
+    <string name="summary_preference_settings_code_of_conduct">Pahami aturan dan pedoman perilaku dalam layanan kami</string>
+    <string name="summary_preference_settings_legal_notices">Lihat informasi hukum tentang layanan kami</string>
+    <string name="summary_preference_settings_oss">Detail lisensi untuk perangkat lunak sumber terbuka</string>
+    <string name="summary_preference_settings_permissions">Kelola izin yang diberikan kepada layanan kami</string>
+    <string name="summary_preference_settings_privacy_policy">Lihat kebijakan yang mengatur bagaimana kami menangani data Anda</string>
+    <string name="summary_preference_settings_terms_of_service">Tinjau ketentuan yang Anda setujui saat menggunakan layanan kami</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Bagikan data untuk membantu meningkatkan pengalaman dalam aplikasi</string>
+    <string name="summary_share_message">Lihat aplikasi luar biasa yang saya gunakan ini. Aplikasi ini memiliki beberapa fitur keren yang mungkin menarik bagi Anda. Unduh dari Play Store di: %1$s</string>
+    <string name="support_us">Dukung kami</string>
+    <string name="terms_of_service">Ketentuan layanan</string>
+    <string name="try_again">Coba lagi</string>
+    <string name="updates">Pembaruan</string>
+    <string name="usage_and_diagnostics">Penggunaan dan diagnostik</string>
+</resources>

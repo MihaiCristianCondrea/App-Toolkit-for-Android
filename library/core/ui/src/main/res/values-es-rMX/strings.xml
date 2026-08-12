@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">Acerca de</string>
+    <string name="amoled_mode">Modo AMOLED</string>
+    <string name="color_palette">Paleta de colores</string>
+    <string name="dark_mode">Modo oscuro</string>
+    <string name="dialog_info_language">Personaliza tu experiencia con tu idioma preferido. Cualquier cambio de idioma que realices surtirá efecto de inmediato, garantizando una experiencia fluida en el idioma elegido.</string>
+    <string name="dialog_info_startup">Configura la pantalla inicial que se presenta a los usuarios al iniciar la aplicación. Esta configuración influye en la primera interacción del usuario con la aplicación y puede adaptarse a segmentos de usuarios específicos u objetivos del producto.</string>
+    <string name="dialog_language_subtitle">Selecciona tu idioma preferido</string>
+    <string name="dialog_startup_subtitle">Elige tu página de inicio preferida</string>
+    <string name="done_button_content_description">Hecho</string>
+    <string name="follow_system">Seguir modo del sistema</string>
+    <string name="go_back">Regresar</string>
+    <string name="learn_more">Más información</string>
+    <string name="light_mode">Modo claro</string>
+    <string name="loading">Cargando…</string>
+    <string name="onboarding_theme_dark_desc">Agradable a la vista.</string>
+    <string name="onboarding_theme_light_desc">Brillante y energético.</string>
+    <string name="onboarding_theme_system_desc">Coincide con tu dispositivo.</string>
+    <string name="other_colors">Otros colores</string>
+    <string name="screen_and_display_settings">Configuración de pantalla y visualización.</string>
+    <string name="select_language_title">Seleccionar idioma</string>
+    <string name="sort_by">Ordenar por</string>
+    <string name="sponsored_ad_label">● Anuncio patrocinado</string>
+    <string name="startup_page">Página de inicio</string>
+    <string name="summary_dark_theme">El tema oscuro aprovecha un fondo profundo para extender significativamente la duración de su batería. Para activarlo, simplemente navegue al Administrador de sistemas de su Android y seleccione su tema preferido en</string>
+    <string name="theme_mode">Modo de tema</string>
+    <string name="try_again">Intentar de nuevo</string>
+    <string name="wallpaper_colors">Colores del fondo de pantalla</string>
+</resources>

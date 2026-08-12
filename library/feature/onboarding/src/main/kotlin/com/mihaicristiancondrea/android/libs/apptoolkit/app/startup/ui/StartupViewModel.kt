@@ -1,0 +1,75 @@
+﻿/*
+ * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui
+
+import androidx.lifecycle.viewModelScope
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.state.StartupUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setLoading
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.successData
+import kotlinx.coroutines.launch
+
+/**
+ * ViewModel for the startup screen.
+ *
+ * Consent is requested by the UI layer after receiving [StartupAction.RequestConsentUi], so this
+ * ViewModel does not keep Activity-bound host references.
+ */
+class StartupViewModel(
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<StartupUiState, StartupEvent, StartupAction>(
+    initialState = UiStateScreen(data = StartupUiState()),
+    firebaseController = firebaseController,
+    screenName = "Startup",
+) {
+
+    override fun handleEvent(event: StartupEvent) {
+        when (event) {
+            StartupEvent.RequestConsent -> requestConsent()
+            StartupEvent.ConsentFormLoaded -> markConsentFormLoaded()
+            StartupEvent.Continue -> sendAction(action = StartupAction.NavigateNext)
+        }
+    }
+
+    private fun requestConsent() {
+        startOperation(action = Actions.REQUEST_CONSENT)
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.setLoading()
+            }
+            sendAction(StartupAction.RequestConsentUi)
+        }
+    }
+
+    private fun markConsentFormLoaded() {
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.successData { copy(consentFormLoaded = true) }
+            }
+        }
+    }
+
+    private object Actions {
+        const val REQUEST_CONSENT: String = "requestConsent"
+    }
+}
+

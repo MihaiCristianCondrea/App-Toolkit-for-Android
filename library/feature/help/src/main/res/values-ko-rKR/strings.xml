@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">베타 프로그램</string>
+    <string name="contact_us">문의하기</string>
+    <string name="contact_us_description">자세히 알려주시면 도움을 드리겠습니다.</string>
+    <string name="feedback">의견</string>
+    <string name="help">도움말</string>
+    <string name="help_feedback_sheet_contact_description">직접 지원을 위해 내 공식 연락처 페이지를 여세요.</string>
+    <string name="help_feedback_sheet_contact_title">개인적으로 연락하기</string>
+    <string name="help_feedback_sheet_feature_request_description">공식 양식을 통해 앱에 대한 새로운 아이디어를 제안해 주세요.</string>
+    <string name="help_feedback_sheet_feature_request_title">기능 요청 보내기</string>
+    <string name="help_feedback_sheet_review_description">평점을 남겨 더 많은 사용자가 앱을 발견하도록 도와주세요.</string>
+    <string name="help_feedback_sheet_review_title">Google Play 리뷰 남기기</string>
+    <string name="help_feedback_sheet_title">어떤 방식으로 피드백을 보내시겠어요?</string>
+    <string name="oss_license_title">오픈 소스 라이선스</string>
+    <string name="popular_help_resources">많이 찾는 도움말 리소스</string>
+    <string name="privacy_policy">개인정보처리방침</string>
+    <string name="terms_of_service">서비스 약관</string>
+    <string name="version">버전 %1$s</string>
+    <string name="version_info">버전 정보</string>
+    <string name="view_in_google_play_store">Google Play 스토어에서 보기</string>
+</resources>

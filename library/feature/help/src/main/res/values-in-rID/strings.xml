@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">Program beta</string>
+    <string name="contact_us">Hubungi kami</string>
+    <string name="contact_us_description">Beritahu kami lebih banyak dan kami akan membantu Anda</string>
+    <string name="feedback">Umpan balik</string>
+    <string name="help">Bantuan</string>
+    <string name="help_feedback_sheet_contact_description">Buka halaman kontak resmi saya untuk dukungan langsung.</string>
+    <string name="help_feedback_sheet_contact_title">Hubungi saya secara pribadi</string>
+    <string name="help_feedback_sheet_feature_request_description">Sarankan ide baru untuk aplikasi kami melalui formulir resmi.</string>
+    <string name="help_feedback_sheet_feature_request_title">Kirim permintaan fitur</string>
+    <string name="help_feedback_sheet_review_description">Bagikan penilaian Anda dan bantu lebih banyak pengguna menemukan aplikasi ini.</string>
+    <string name="help_feedback_sheet_review_title">Beri ulasan di Google Play</string>
+    <string name="help_feedback_sheet_title">Bagaimana Anda ingin membagikan masukan?</string>
+    <string name="oss_license_title">Lisensi sumber terbuka</string>
+    <string name="popular_help_resources">Sumber daya bantuan populer</string>
+    <string name="privacy_policy">Kebijakan privasi</string>
+    <string name="terms_of_service">Ketentuan layanan</string>
+    <string name="version">Versi %1$s</string>
+    <string name="version_info">Info versi</string>
+    <string name="view_in_google_play_store">Lihat di Google Play Store</string>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Реклами</string>
+    <string name="android_version">Версия на Android</string>
+    <string name="api_level">API ниво</string>
+    <string name="app_build">Компилация на приложението: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">Версия на компилацията</string>
+    <string name="app_info">Информация за приложението</string>
+    <string name="changelog_title">Дневник на промените</string>
+    <string name="code_of_conduct">Кодекс на поведение</string>
+    <string name="content_description_more_options">Още опции</string>
+    <string name="debug">Отстраняване на грешки</string>
+    <string name="device_info">Информация за устройството</string>
+    <string name="device_model">Модел на устройството</string>
+    <string name="done_button_content_description">Готово</string>
+    <string name="go_back">Назад</string>
+    <string name="help_and_feedback">Помощ и обратна връзка</string>
+    <string name="legal">Правни</string>
+    <string name="legal_notices">Правни известия</string>
+    <string name="license">Лиценз</string>
+    <string name="manufacturer">Производител</string>
+    <string name="no_new_updates_message">Няма налични нови актуализации.</string>
+    <string name="oss_license_title">Лицензи за отворен код</string>
+    <string name="permissions">Разрешения</string>
+    <string name="privacy">Поверителност</string>
+    <string name="privacy_policy">Политика за поверителност</string>
+    <string name="release">Релийз</string>
+    <string name="settings">Настройки</string>
+    <string name="settings_placeholder_description">Няма избрани настройки. Изберете опция, за да видите подробностите тук.</string>
+    <string name="share">Споделяне</string>
+    <string name="snack_device_info_copied">Информацията за устройството е копирана в клипборда</string>
+    <string name="snack_device_info_failed">Неуспешно зареждане на информация за устройството</string>
+    <string name="summary_preference_settings_ads">Контролирайте как се използва вашата информация за показване на подходящи реклами</string>
+    <string name="summary_preference_settings_code_of_conduct">Разберете правилата и насоките за поведение в услугата ни</string>
+    <string name="summary_preference_settings_legal_notices">Прегледайте правната информация за нашата услуга</string>
+    <string name="summary_preference_settings_oss">Подробности за лицензите на софтуера с отворен код</string>
+    <string name="summary_preference_settings_permissions">Управлявайте разрешенията, предоставени на нашата услуга</string>
+    <string name="summary_preference_settings_privacy_policy">Прегледайте политиката за обработка на данни</string>
+    <string name="summary_preference_settings_terms_of_service">Прегледайте условията за ползване на услугата</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Споделяйте данни за подобряване на изживяването в приложението</string>
+    <string name="summary_share_message">Вижте това невероятно приложение, което използвам. То има наистина страхотни функции, които може да ви бъдат интересни. Можете да го изтеглите от Play Store на адрес: %1$s</string>
+    <string name="support_us">Подкрепете ни</string>
+    <string name="terms_of_service">Общи условия</string>
+    <string name="try_again">Опитайте отново</string>
+    <string name="updates">Актуализации</string>
+    <string name="usage_and_diagnostics">Използване и диагностика</string>
+</resources>

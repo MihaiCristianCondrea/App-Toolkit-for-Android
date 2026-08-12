@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">Про додаток</string>
+    <string name="amoled_mode">Режим AMOLED</string>
+    <string name="color_palette">Палітра кольорів</string>
+    <string name="dark_mode">Темна тема</string>
+    <string name="dialog_info_language">Персоналізуйте свій досвід, використовуючи бажану мову</string>
+    <string name="dialog_info_startup">Налаштуйте початковий екран, який буде відображатися при запуску додатка.</string>
+    <string name="dialog_language_subtitle">Виберіть бажану мову</string>
+    <string name="dialog_startup_subtitle">Виберіть бажану початкову сторінку</string>
+    <string name="done_button_content_description">Готово</string>
+    <string name="follow_system">Дотримуватися системного режиму</string>
+    <string name="go_back">Повернутися</string>
+    <string name="learn_more">Дізнатися більше</string>
+    <string name="light_mode">Світла тема</string>
+    <string name="loading">Завантаження…</string>
+    <string name="onboarding_theme_dark_desc">Приємний для очей.</string>
+    <string name="onboarding_theme_light_desc">Яскравий та енергійний.</string>
+    <string name="onboarding_theme_system_desc">Відповідає налаштуванням вашого пристрою.</string>
+    <string name="other_colors">Інші кольори</string>
+    <string name="screen_and_display_settings">Налаштування екрана та відображення.</string>
+    <string name="select_language_title">Виберіть мову</string>
+    <string name="sort_by">Сортувати за</string>
+    <string name="sponsored_ad_label">● Спонсорована реклама</string>
+    <string name="startup_page">Початкова сторінка</string>
+    <string name="summary_dark_theme">Темна тема використовує глибокий фон, щоб значно продовжити час роботи акумулятора. Щоб активувати його, просто перейдіть до системного менеджера Android та виберіть бажану тему в</string>
+    <string name="theme_mode">Режим теми</string>
+    <string name="try_again">Спробувати знову</string>
+    <string name="wallpaper_colors">Кольори шпалер</string>
+</resources>

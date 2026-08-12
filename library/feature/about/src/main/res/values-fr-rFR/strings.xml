@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Publicités</string>
+    <string name="android_version">Version d\'Android</string>
+    <string name="api_level">Niveau d\'API</string>
+    <string name="app_build">Compilation de l\'application: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">Version de la compilation</string>
+    <string name="app_info">Informations sur l\'application</string>
+    <string name="changelog_title">Journal des modifications</string>
+    <string name="code_of_conduct">Code de conduite</string>
+    <string name="content_description_more_options">Plus d\'options</string>
+    <string name="debug">Débogage</string>
+    <string name="device_info">Informations sur l\'appareil</string>
+    <string name="device_model">Modèle de l\'appareil</string>
+    <string name="done_button_content_description">Terminé</string>
+    <string name="go_back">Retour</string>
+    <string name="help_and_feedback">Aide et commentaires</string>
+    <string name="legal">Légal</string>
+    <string name="legal_notices">Mentions légales</string>
+    <string name="license">Licence</string>
+    <string name="manufacturer">Fabricant</string>
+    <string name="no_new_updates_message">Aucune nouvelle mise à jour disponible.</string>
+    <string name="oss_license_title">Licences open source</string>
+    <string name="permissions">Autorisations</string>
+    <string name="privacy">Confidentialité</string>
+    <string name="privacy_policy">Politique de confidentialité</string>
+    <string name="release">Version</string>
+    <string name="settings">Paramètres</string>
+    <string name="settings_placeholder_description">Aucun paramètre sélectionné. Choisissez une option pour afficher les détails ici.</string>
+    <string name="share">Partager</string>
+    <string name="snack_device_info_copied">Les informations sur l\'appareil ont été copiées dans le presse-papiers</string>
+    <string name="snack_device_info_failed">Impossible de charger les informations sur l\'appareil</string>
+    <string name="summary_preference_settings_ads">Contrôlez comment nous utilisons vos informations pour vous montrer des publicités pertinentes</string>
+    <string name="summary_preference_settings_code_of_conduct">Comprenez les règles et lignes directrices concernant le comportement au sein de notre service</string>
+    <string name="summary_preference_settings_legal_notices">Consultez les informations légales sur notre service</string>
+    <string name="summary_preference_settings_oss">Consultez les détails des licences des logiciels open source</string>
+    <string name="summary_preference_settings_permissions">Gérez les autorisations accordées à notre service</string>
+    <string name="summary_preference_settings_privacy_policy">Consultez la politique qui régit le traitement de vos données</string>
+    <string name="summary_preference_settings_terms_of_service">Examinez les conditions que vous acceptez lors de l\'utilisation de notre service</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Partagez des données pour améliorer l\'expérience de l\'application</string>
+    <string name="summary_share_message">Découvrez cette application incroyable que j\'utilise. Elle propose des fonctionnalités vraiment intéressantes que vous pourriez aimer. Vous pouvez la télécharger depuis le Play Store à: %1$s</string>
+    <string name="support_us">Soutenez-nous</string>
+    <string name="terms_of_service">Conditions d\'utilisation</string>
+    <string name="try_again">Réessayer</string>
+    <string name="updates">Mises à jour</string>
+    <string name="usage_and_diagnostics">Utilisation et diagnostics</string>
+</resources>

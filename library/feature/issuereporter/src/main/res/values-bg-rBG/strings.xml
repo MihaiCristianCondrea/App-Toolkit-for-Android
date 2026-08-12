@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">Доклад за грешка</string>
+    <string name="cd_expand_device_info">Покажи или скрий информацията за устройството</string>
+    <string name="device_info">Информация за устройството</string>
+    <string name="issue_description_label">Описание</string>
+    <string name="issue_email_label">Имейл</string>
+    <string name="issue_section_label">Проблем</string>
+    <string name="issue_send">Изпрати</string>
+    <string name="issue_submitted">Проблемът ви беше изпратен.</string>
+    <string name="issue_submitted_successfully">Емисия, изпратена успешно</string>
+    <string name="issue_title_label">Заглавие</string>
+    <string name="login_section_label">Вход</string>
+    <string name="open_button_label">Отворен брой</string>
+    <string name="open_issue_in_browser">Отворен в браузъра</string>
+    <string name="optional_placeholder">По избор</string>
+    <string name="send_anonymously">Изпрати анонимно</string>
+    <string name="snack_report_failed">Неуспешно изпращане на доклада</string>
+    <string name="snack_report_success">Докладът е изпратен успешно</string>
+    <string name="use_github_account">Изпрати чрез GitHub профил</string>
+</resources>

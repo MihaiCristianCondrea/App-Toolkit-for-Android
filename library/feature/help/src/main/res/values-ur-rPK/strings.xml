@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">بیٹا پروگرام</string>
+    <string name="contact_us">ہم سے رابطہ کریں</string>
+    <string name="contact_us_description">ہمیں مزید بتائیں اور ہم آپ کو وہاں پہنچنے میں مدد کریں گے</string>
+    <string name="feedback">رائے</string>
+    <string name="help">مدد</string>
+    <string name="help_feedback_sheet_contact_description">براہِ راست مدد کے لیے میرا سرکاری رابطہ صفحہ کھولیں۔</string>
+    <string name="help_feedback_sheet_contact_title">مجھ سے ذاتی طور پر رابطہ کریں</string>
+    <string name="help_feedback_sheet_feature_request_description">سرکاری فارم کے ذریعے ہماری کسی بھی ایپ کے لیے نئے آئیڈیاز تجویز کریں۔</string>
+    <string name="help_feedback_sheet_feature_request_title">فیچر کی درخواست بھیجیں</string>
+    <string name="help_feedback_sheet_review_description">اپنی ریٹنگ شیئر کریں اور مزید صارفین کو ایپ دریافت کرنے میں مدد دیں۔</string>
+    <string name="help_feedback_sheet_review_title">Google Play پر جائزہ دیں</string>
+    <string name="help_feedback_sheet_title">آپ اپنی رائے کیسے شیئر کرنا چاہتے ہیں؟</string>
+    <string name="oss_license_title">اوپن سورس لائسنس</string>
+    <string name="popular_help_resources">مشہور امدادی وسائل</string>
+    <string name="privacy_policy">رازداری کی پالیسی</string>
+    <string name="terms_of_service">سروس کی شرائط</string>
+    <string name="version">ورژن %1$s</string>
+    <string name="version_info">ورژن کی معلومات</string>
+    <string name="view_in_google_play_store">گوگل پلے اسٹور میں دیکھیں</string>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Reklam</string>
+    <string name="android_version">Android-version</string>
+    <string name="api_level">API-nivå</string>
+    <string name="app_build">Appversion: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">Byggversion</string>
+    <string name="app_info">Appinformation</string>
+    <string name="changelog_title">Ändringslogg</string>
+    <string name="code_of_conduct">Uppförandekod</string>
+    <string name="content_description_more_options">Fler alternativ</string>
+    <string name="debug">Felsökning</string>
+    <string name="device_info">Enhetsinformation</string>
+    <string name="device_model">Enhetsmodell</string>
+    <string name="done_button_content_description">Klar</string>
+    <string name="go_back">Tillbaka</string>
+    <string name="help_and_feedback">Hjälp och feedback</string>
+    <string name="legal">Juridisk information</string>
+    <string name="legal_notices">Juridiska meddelanden</string>
+    <string name="license">Licens</string>
+    <string name="manufacturer">Tillverkare</string>
+    <string name="no_new_updates_message">Inga nya uppdateringar tillgängliga.</string>
+    <string name="oss_license_title">Öppen källkodslicenser</string>
+    <string name="permissions">Behörigheter</string>
+    <string name="privacy">Sekretess</string>
+    <string name="privacy_policy">Integritetspolicy</string>
+    <string name="release">Utgåva</string>
+    <string name="settings">Inställningar</string>
+    <string name="settings_placeholder_description">Inga inställningar valda. Välj ett alternativ för att se detaljer här.</string>
+    <string name="share">Dela</string>
+    <string name="snack_device_info_copied">Enhetsinformation kopierad till urklipp</string>
+    <string name="snack_device_info_failed">Det gick inte att läsa in enhetsinformation</string>
+    <string name="summary_preference_settings_ads">Kontrollera hur vi använder din information för att visa relevanta annonser</string>
+    <string name="summary_preference_settings_code_of_conduct">Förstå reglerna och riktlinjerna för beteende inom vår tjänst</string>
+    <string name="summary_preference_settings_legal_notices">Visa juridisk information om vår tjänst</string>
+    <string name="summary_preference_settings_oss">Licensinformation för programvara med öppen källkod</string>
+    <string name="summary_preference_settings_permissions">Hantera de behörigheter som beviljats vår tjänst</string>
+    <string name="summary_preference_settings_privacy_policy">Se policyn för hur vi hanterar dina data</string>
+    <string name="summary_preference_settings_terms_of_service">Granska villkoren du godkänner vid användning av vår tjänst</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Dela data för att hjälpa till att förbättra appupplevelsen</string>
+    <string name="summary_share_message">Kolla in den här fantastiska appen som jag använder. Den har några riktigt coola funktioner som du kanske tycker är intressanta. Du kan ladda ner den från Play Store på: %1$s</string>
+    <string name="support_us">Stöd oss</string>
+    <string name="terms_of_service">Användarvillkor</string>
+    <string name="try_again">Försök igen</string>
+    <string name="updates">Uppdateringar</string>
+    <string name="usage_and_diagnostics">Användning och diagnostik</string>
+</resources>

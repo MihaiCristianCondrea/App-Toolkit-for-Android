@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">اشتہارات</string>
+    <string name="android_version">اینڈرائیڈ ورژن</string>
+    <string name="api_level">API لیول</string>
+    <string name="app_build">ایپ بلڈ: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">ایپلیکیشن بلڈ ورژن</string>
+    <string name="app_info">ایپ کی معلومات</string>
+    <string name="changelog_title">ایپ چینج لاگ</string>
+    <string name="code_of_conduct">ضابطہ اخلاق</string>
+    <string name="content_description_more_options">مزید اختیارات</string>
+    <string name="debug">ڈیبگ</string>
+    <string name="device_info">ڈیوائس کی معلومات</string>
+    <string name="device_model">ڈیوائس ماڈل</string>
+    <string name="done_button_content_description">ہو گیا</string>
+    <string name="go_back">پیچھے جائیں</string>
+    <string name="help_and_feedback">مدد اور رائے</string>
+    <string name="legal">قانونی</string>
+    <string name="legal_notices">قانونی نوٹس</string>
+    <string name="license">لائسنس</string>
+    <string name="manufacturer">مینوفیکچرر</string>
+    <string name="no_new_updates_message">کوئی نئی اپ ڈیٹس دستیاب نہیں ہیں۔</string>
+    <string name="oss_license_title">اوپن سورس لائسنس</string>
+    <string name="permissions">اجازتیں</string>
+    <string name="privacy">رازداری</string>
+    <string name="privacy_policy">رازداری کی پالیسی</string>
+    <string name="release">ریلیز</string>
+    <string name="settings">ترتیبات</string>
+    <string name="settings_placeholder_description">کوئی ترتیبات منتخب نہیں ہیں۔ اس کی تفصیلات یہاں دیکھنے کے لیے ایک آپشن منتخب کریں۔</string>
+    <string name="share">شیئر کریں</string>
+    <string name="snack_device_info_copied">ڈیوائس کی معلومات کلپ بورڈ پر کاپی ہو گئیں</string>
+    <string name="snack_device_info_failed">ڈیوائس کی معلومات لوڈ نہیں ہو سکی</string>
+    <string name="summary_preference_settings_ads">کنٹرول کریں کہ ہم آپ کو متعلقہ اشتہارات دکھانے کے لیے آپ کی معلومات کیسے استعمال کرتے ہیں</string>
+    <string name="summary_preference_settings_code_of_conduct">ہماری سروس کے اندر رویے کے لیے قواعد و ضوابط کو سمجھیں</string>
+    <string name="summary_preference_settings_legal_notices">ہماری سروس کے بارے میں قانونی معلومات دیکھیں</string>
+    <string name="summary_preference_settings_oss">اوپن سورس سافٹ ویئر کے لیے لائسنس کی تفصیلات</string>
+    <string name="summary_preference_settings_permissions">ہماری سروس کو دی گئی اجازتوں کا نظم کریں</string>
+    <string name="summary_preference_settings_privacy_policy">وہ پالیسی دیکھیں جو یہ کنٹرول کرتی ہے کہ ہم آپ کے ڈیٹا کو کیسے سنبھالتے ہیں</string>
+    <string name="summary_preference_settings_terms_of_service">ان شرائط کا جائزہ لیں جن سے آپ ہماری سروس استعمال کرتے وقت اتفاق کرتے ہیں</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">ایپ میں تجربے کو بہتر بنانے میں مدد کے لیے ڈیٹا شیئر کریں</string>
+    <string name="summary_share_message">یہ حیرت انگیز ایپ دیکھیں جو میں استعمال کر رہا ہوں. اس میں کچھ واقعی عمدہ خصوصیات ہیں جو آپ کو دلچسپ لگ سکتی ہیں۔ آپ اسے پلے اسٹور سے یہاں سے ڈاؤن لوڈ کر سکتے ہیں: %1$s</string>
+    <string name="support_us">ہماری مدد کریں</string>
+    <string name="terms_of_service">سروس کی شرائط</string>
+    <string name="try_again">دوبارہ کوشش کریں</string>
+    <string name="updates">اپ ڈیٹس</string>
+    <string name="usage_and_diagnostics">استعمال اور تشخیص</string>
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="error_forbidden">금지됨: 권한이 부족합니다</string>
+    <string name="error_gone">API 엔드포인트가 제거되었습니다</string>
+    <string name="error_invalid_report">제목과 설명은 비워 둘 수 없습니다</string>
+    <string name="error_unauthorized">인증되지 않음: 잘못된 토큰</string>
+    <string name="error_unprocessable">이슈 생성을 위한 데이터가 유효하지 않습니다</string>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Reklamlar</string>
+    <string name="android_version">Android sürümü</string>
+    <string name="api_level">API seviyesi</string>
+    <string name="app_build">Uygulama yapısı: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">Uygulama sürümü</string>
+    <string name="app_info">Uygulama bilgisi</string>
+    <string name="changelog_title">Uygulama değişiklik günlüğü</string>
+    <string name="code_of_conduct">Davranış kuralları</string>
+    <string name="content_description_more_options">Daha Fazla Seçenekler</string>
+    <string name="debug">Hata ayıklama</string>
+    <string name="device_info">Cihaz bilgileri</string>
+    <string name="device_model">Cihaz modeli</string>
+    <string name="done_button_content_description">Bitti</string>
+    <string name="go_back">Geri dön</string>
+    <string name="help_and_feedback">Yardım ve geri bildirim</string>
+    <string name="legal">Yasal</string>
+    <string name="legal_notices">Yasal bildirimler</string>
+    <string name="license">Lisans</string>
+    <string name="manufacturer">Üretici</string>
+    <string name="no_new_updates_message">Yeni güncelleme yok.</string>
+    <string name="oss_license_title">Açık kaynak lisansları</string>
+    <string name="permissions">İzinler</string>
+    <string name="privacy">Gizlilik</string>
+    <string name="privacy_policy">Gizlilik politikası</string>
+    <string name="release">Yayın</string>
+    <string name="settings">Ayarlar</string>
+    <string name="settings_placeholder_description">Seçilen bir ayar yok. Ayrıntıları görüntülemek için bir seçenek seçin.</string>
+    <string name="share">Paylaş</string>
+    <string name="snack_device_info_copied">Cihaz bilgileri panoya kopyalandı</string>
+    <string name="snack_device_info_failed">Cihaz bilgileri yüklenemedi</string>
+    <string name="summary_preference_settings_ads">Verilerinizi nasıl kullandığımızı kontrol edin</string>
+    <string name="summary_preference_settings_code_of_conduct">Hizmetimizdeki davranış kurallarını ve yönergelerini anlayın</string>
+    <string name="summary_preference_settings_legal_notices">Hizmetimizle ilgili yasal bilgileri görüntüleyin</string>
+    <string name="summary_preference_settings_oss">Açık kaynak yazılım lisansları hakkında detaylar</string>
+    <string name="summary_preference_settings_permissions">Hizmetimize verilen izinleri yönetin</string>
+    <string name="summary_preference_settings_privacy_policy">Verilerinizi nasıl ele aldığımızı açıklayan politikayı görüntüleyin</string>
+    <string name="summary_preference_settings_terms_of_service">Hizmetimizi kullanırken kabul ettiğiniz şartları gözden geçirin</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Deneyimi geliştirmek için veri paylaşın</string>
+    <string name="summary_share_message">Bu harika uygulamaya bir göz atın. Kullanmakta olduğum ve ilginizi çekebilecek bazı harika özelliklere sahip. Play Store\'dan indirilebilir: %1$s</string>
+    <string name="support_us">Bizi destekle</string>
+    <string name="terms_of_service">Hizmet şartları</string>
+    <string name="try_again">Tekrar dene</string>
+    <string name="updates">Güncellemeler</string>
+    <string name="usage_and_diagnostics">Kullanım ve teşhis</string>
+</resources>

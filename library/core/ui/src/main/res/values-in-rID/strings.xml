@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">Tentang</string>
+    <string name="amoled_mode">Mode AMOLED</string>
+    <string name="color_palette">Palet warna</string>
+    <string name="dark_mode">Mode gelap</string>
+    <string name="dialog_info_language">Personalisasi pengalaman Anda dengan bahasa pilihan Anda. Perubahan bahasa yang Anda buat akan langsung berlaku.</string>
+    <string name="dialog_info_startup">Mengonfigurasi layar awal yang disajikan kepada pengguna saat meluncurkan aplikasi. Pengaturan ini memengaruhi interaksi pertama pengguna dengan aplikasi.</string>
+    <string name="dialog_language_subtitle">Pilih bahasa pilihan Anda</string>
+    <string name="dialog_startup_subtitle">Pilih halaman awal yang Anda sukai</string>
+    <string name="done_button_content_description">Selesai</string>
+    <string name="follow_system">Ikuti mode sistem</string>
+    <string name="go_back">Kembali</string>
+    <string name="learn_more">Pelajari lebih lanjut</string>
+    <string name="light_mode">Mode terang</string>
+    <string name="loading">Memuat…</string>
+    <string name="onboarding_theme_dark_desc">Nyaman di mata.</string>
+    <string name="onboarding_theme_light_desc">Terang dan energik.</string>
+    <string name="onboarding_theme_system_desc">Sesuai dengan perangkat Anda.</string>
+    <string name="other_colors">Warna lainnya</string>
+    <string name="screen_and_display_settings">Layar dan Tampilan Pengaturan.</string>
+    <string name="select_language_title">Pilih bahasa</string>
+    <string name="sort_by">Urutkan berdasarkan</string>
+    <string name="sponsored_ad_label">● Iklan bersponsor</string>
+    <string name="startup_page">Halaman awal</string>
+    <string name="summary_dark_theme">Tema gelap memanfaatkan latar belakang yang dalam untuk secara signifikan memperpanjang masa pakai baterai Anda. Untuk mengaktifkannya, cukup arahkan ke manajer sistem Android Anda dan pilih tema pilihan Anda</string>
+    <string name="theme_mode">Mode tema</string>
+    <string name="try_again">Coba lagi</string>
+    <string name="wallpaper_colors">Warna wallpaper</string>
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="cancelled_error">ยกเลิกการดำเนินการแล้ว</string>
+    <string name="connection_closed_error">การเชื่อมต่อถูกขัดจังหวะ</string>
+    <string name="connection_error">เกิดข้อผิดพลาดของเครือข่าย โปรดลองอีกครั้ง</string>
+    <string name="database_cant_open_error">ไม่สามารถเปิดพื้นที่จัดเก็บข้อมูลได้</string>
+    <string name="database_constraint_error">เกิดข้อผิดพลาดข้อจำกัดของพื้นที่จัดเก็บข้อมูล</string>
+    <string name="database_corrupt_error">พื้นที่จัดเก็บข้อมูลเสียหาย</string>
+    <string name="database_error">เกิดข้อผิดพลาดในการจัดเก็บข้อมูล</string>
+    <string name="database_full_error">พื้นที่จัดเก็บข้อมูลเต็ม</string>
+    <string name="database_locked_error">พื้นที่จัดเก็บข้อมูลไม่ว่าง โปรดลองอีกครั้ง</string>
+    <string name="error_failed_to_launch_review">ไม่สามารถเริ่มขั้นตอนการรีวิวได้</string>
+    <string name="error_failed_to_load_consent_info">ไม่สามารถโหลดข้อมูลความยินยอมได้</string>
+    <string name="error_failed_to_load_faq">ไม่สามารถโหลดคำถามที่พบบ่อยได้</string>
+    <string name="error_failed_to_load_sku_details">ไม่สามารถโหลดรายละเอียด SKU ได้</string>
+    <string name="error_failed_to_request_review">ไม่สามารถร้องขอการรีวิวได้</string>
+    <string name="error_failed_to_update_app">ไม่สามารถอัปเดตแอปได้</string>
+    <string name="http_client_error">คำขอล้มเหลว โปรดลองอีกครั้ง</string>
+    <string name="http_redirect_error">มีการเปลี่ยนเส้นทางที่ไม่คาดคิดจากเซิร์ฟเวอร์</string>
+    <string name="http_server_error">เกิดข้อผิดพลาดของเซิร์ฟเวอร์ โปรดลองอีกครั้งในภายหลัง</string>
+    <string name="illegal_argument_error">มีการระบุอินพุตหรืออาร์กิวเมนต์ไม่ถูกต้อง โปรดตรวจสอบข้อมูลแล้วลองอีกครั้ง</string>
+    <string name="invalid_state_error">ไม่อนุญาตให้ดำเนินการในขณะนี้</string>
+    <string name="no_data_error">ไม่มีข้อมูล</string>
+    <string name="no_internet_error">ไม่มีการเชื่อมต่ออินเทอร์เน็ต</string>
+    <string name="rate_limited_error">มีคำขอมากเกินไป โปรดลองอีกครั้งในภายหลัง</string>
+    <string name="request_timeout_error">คำขอหมดเวลา โปรดลองอีกครั้ง</string>
+    <string name="serialization_error">ไม่สามารถอ่านการตอบกลับจากเซิร์ฟเวอร์ได้</string>
+    <string name="ssl_error">การเชื่อมต่อที่ปลอดภัยล้มเหลว</string>
+    <string name="unknown_error">เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ</string>
+    <string name="unsupported_operation_error">ไม่รองรับการดำเนินการนี้</string>
+</resources>

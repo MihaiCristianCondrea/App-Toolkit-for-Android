@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">Über</string>
+    <string name="amoled_mode">AMOLED-Modus</string>
+    <string name="color_palette">Farbpalette</string>
+    <string name="dark_mode">Dunkles thema</string>
+    <string name="dialog_info_language">Passen Sie Ihre Erfahrung mit Ihrer bevorzugten Sprache an. Änderungen werden sofort wirksam.</string>
+    <string name="dialog_info_startup">Konfiguriert den Startbildschirm, der Nutzern beim Starten der Anwendung präsentiert wird. Diese Einstellung beeinflusst die erste Benutzerinteraktion mit der App.</string>
+    <string name="dialog_language_subtitle">Wählen Sie Ihre bevorzugte Sprache</string>
+    <string name="dialog_startup_subtitle">Wählen Sie Ihre bevorzugte Startseite</string>
+    <string name="done_button_content_description">Fertig</string>
+    <string name="follow_system">Systemmodus folgen</string>
+    <string name="go_back">Zurück</string>
+    <string name="learn_more">Mehr erfahren</string>
+    <string name="light_mode">Helles thema</string>
+    <string name="loading">Wird geladen…</string>
+    <string name="onboarding_theme_dark_desc">Angenehm für die Augen.</string>
+    <string name="onboarding_theme_light_desc">Hell und energiegeladen.</string>
+    <string name="onboarding_theme_system_desc">Entspricht den Geräteeinstellungen.</string>
+    <string name="other_colors">Andere Farben</string>
+    <string name="screen_and_display_settings">Bildschirm und Einstellungen anzeigen.</string>
+    <string name="select_language_title">Sprache auswählen</string>
+    <string name="sort_by">Sortieren nach</string>
+    <string name="sponsored_ad_label">● Gesponserte Anzeige</string>
+    <string name="startup_page">Startseite</string>
+    <string name="summary_dark_theme">Das Dunkle Thema nutzt einen tiefen Hintergrund, um Ihre Akkulaufzeit erheblich zu verlängern. Um es zu aktivieren, navigieren Sie einfach zum Systemmanager Ihres Android -Systems und wählen Sie Ihr bevorzugtes Thema in</string>
+    <string name="theme_mode">Themenmodus</string>
+    <string name="try_again">Erneut versuchen</string>
+    <string name="wallpaper_colors">Hintergrundfarben</string>
+</resources>

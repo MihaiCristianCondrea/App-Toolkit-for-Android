@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">Chương trình beta</string>
+    <string name="contact_us">Liên hệ với chúng tôi</string>
+    <string name="contact_us_description">Hãy cho chúng tôi biết thêm và chúng tôi sẽ giúp bạn</string>
+    <string name="feedback">Phản hồi</string>
+    <string name="help">Trợ giúp</string>
+    <string name="help_feedback_sheet_contact_description">Mở trang liên hệ chính thức của tôi để được hỗ trợ trực tiếp.</string>
+    <string name="help_feedback_sheet_contact_title">Liên hệ trực tiếp với tôi</string>
+    <string name="help_feedback_sheet_feature_request_description">Đề xuất ý tưởng mới cho bất kỳ ứng dụng nào của chúng tôi qua biểu mẫu chính thức.</string>
+    <string name="help_feedback_sheet_feature_request_title">Gửi yêu cầu tính năng</string>
+    <string name="help_feedback_sheet_review_description">Chia sẻ đánh giá của bạn và giúp nhiều người dùng hơn khám phá ứng dụng.</string>
+    <string name="help_feedback_sheet_review_title">Để lại đánh giá trên Google Play</string>
+    <string name="help_feedback_sheet_title">Bạn muốn chia sẻ phản hồi như thế nào?</string>
+    <string name="oss_license_title">Giấy phép nguồn mở</string>
+    <string name="popular_help_resources">Tài nguyên trợ giúp phổ biến</string>
+    <string name="privacy_policy">Chính sách quyền riêng tư</string>
+    <string name="terms_of_service">Điều khoản dịch vụ</string>
+    <string name="version">Phiên bản %1$s</string>
+    <string name="version_info">Thông tin phiên bản</string>
+    <string name="view_in_google_play_store">Xem trên Google Play Store</string>
+</resources>

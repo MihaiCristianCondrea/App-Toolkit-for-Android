@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="cancelled_error">Operacja anulowana.</string>
+    <string name="connection_closed_error">Połączenie zostało przerwane.</string>
+    <string name="connection_error">Błąd sieci. Spróbuj ponownie.</string>
+    <string name="database_cant_open_error">Nie można otworzyć pamięci.</string>
+    <string name="database_constraint_error">Błąd ograniczeń pamięci.</string>
+    <string name="database_corrupt_error">Pamięć jest uszkodzona.</string>
+    <string name="database_error">Błąd pamięci.</string>
+    <string name="database_full_error">Pamięć jest pełna.</string>
+    <string name="database_locked_error">Pamięć jest zajęta. Spróbuj ponownie.</string>
+    <string name="error_failed_to_launch_review">Nie udało się uruchomić procesu recenzji</string>
+    <string name="error_failed_to_load_consent_info">Nie udało się załadować informacji o zgodzie</string>
+    <string name="error_failed_to_load_faq">Nie udało się załadować FAQ</string>
+    <string name="error_failed_to_load_sku_details">Nie udało się załadować szczegółów SKU</string>
+    <string name="error_failed_to_request_review">Nie udało się poprosić o recenzję</string>
+    <string name="error_failed_to_update_app">Nie udało się zaktualizować aplikacji</string>
+    <string name="http_client_error">Żądanie nie powiodło się. Spróbuj ponownie.</string>
+    <string name="http_redirect_error">Nieoczekiwane przekierowanie z serwera.</string>
+    <string name="http_server_error">Błąd serwera. Spróbuj ponownie później.</string>
+    <string name="illegal_argument_error">Podano nieprawidłowe dane wejściowe lub argument. Sprawdź informacje i spróbuj ponownie.</string>
+    <string name="invalid_state_error">Operacja nie jest obecnie dozwolona.</string>
+    <string name="no_data_error">Brak dostępnych danych.</string>
+    <string name="no_internet_error">Brak połączenia z internetem.</string>
+    <string name="rate_limited_error">Zbyt wiele żądań. Spróbuj ponownie później.</string>
+    <string name="request_timeout_error">Przekroczono limit czasu żądania. Spróbuj ponownie.</string>
+    <string name="serialization_error">Nie udało się odczytać odpowiedzi serwera.</string>
+    <string name="ssl_error">Nie udało się nawiązać bezpiecznego połączenia.</string>
+    <string name="unknown_error">Wystąpił nieznany błąd.</string>
+    <string name="unsupported_operation_error">Nieobsługiwana operacja.</string>
+</resources>

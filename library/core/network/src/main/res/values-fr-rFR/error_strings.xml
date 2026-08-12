@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="cancelled_error">Opération annulée.</string>
+    <string name="connection_closed_error">La connexion a été interrompue.</string>
+    <string name="connection_error">Erreur réseau. Veuillez réessayer.</string>
+    <string name="database_cant_open_error">Impossible d\'ouvrir le stockage.</string>
+    <string name="database_constraint_error">Erreur de contrainte du stockage.</string>
+    <string name="database_corrupt_error">Le stockage est corrompu.</string>
+    <string name="database_error">Erreur de stockage.</string>
+    <string name="database_full_error">Le stockage est plein.</string>
+    <string name="database_locked_error">Le stockage est occupé. Réessayez.</string>
+    <string name="error_failed_to_launch_review">Échec du lancement du flux d\'avis</string>
+    <string name="error_failed_to_load_consent_info">Échec du chargement des informations de consentement</string>
+    <string name="error_failed_to_load_faq">Échec du chargement de la FAQ</string>
+    <string name="error_failed_to_load_sku_details">Échec du chargement des détails du SKU</string>
+    <string name="error_failed_to_request_review">Échec de la demande d\'avis</string>
+    <string name="error_failed_to_update_app">Échec de la mise à jour de l\'application</string>
+    <string name="http_client_error">La requête a échoué. Veuillez réessayer.</string>
+    <string name="http_redirect_error">Redirection inattendue depuis le serveur.</string>
+    <string name="http_server_error">Erreur du serveur. Veuillez réessayer plus tard.</string>
+    <string name="illegal_argument_error">Entrée ou argument non valide fourni. Veuillez vérifier les informations et réessayer.</string>
+    <string name="invalid_state_error">Opération non autorisée pour le moment.</string>
+    <string name="no_data_error">Aucune donnée disponible.</string>
+    <string name="no_internet_error">Aucune connexion Internet.</string>
+    <string name="rate_limited_error">Trop de requêtes. Réessayez plus tard.</string>
+    <string name="request_timeout_error">Délai de la requête dépassé. Réessayez.</string>
+    <string name="serialization_error">Échec de la lecture de la réponse du serveur.</string>
+    <string name="ssl_error">La connexion sécurisée a échoué.</string>
+    <string name="unknown_error">Une erreur inconnue s\'est produite.</string>
+    <string name="unsupported_operation_error">Opération non prise en charge.</string>
+</resources>

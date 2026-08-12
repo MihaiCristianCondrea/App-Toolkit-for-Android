@@ -1,0 +1,157 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.navigation
+
+import android.content.Context
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.VolunteerActivism
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
+
+/**
+ * A top app bar for the main screen of the application.
+ *
+ * It includes the application title, a navigation icon, and route-specific actions.
+ * By default, it shows a "Support Us" overflow item that uses the host callback or opens the
+ * [SupportActivity]. Hosts can disable that default action and provide their destination's actions.
+ * The navigation icon's action is configurable.
+ *
+ * @param title is the optional title that can be provided by the host app
+ * @param navigationIcon The [ImageVector] to be displayed as the navigation icon.
+ * @param onNavigationIconClick A lambda to be executed when the navigation icon is clicked.
+ * @param onSupportClick Optional host callback for opening Support inside an existing navigation
+ * shell. When null, the default behavior opens [SupportActivity].
+ * @param showSupportAction Whether to render the built-in Support overflow action.
+ * @param actions Additional destination-owned app bar actions.
+ * @param scrollBehavior A [TopAppBarScrollBehavior] to be applied to the top app bar,
+ * which defines its behavior when content is scrolled.
+ */
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun MainTopAppBar(
+    title: String = stringResource(id = R.string.app_name),
+    navigationIcon: ImageVector?,
+    onNavigationIconClick: () -> Unit,
+    onSupportClick: (() -> Unit)? = null,
+    showSupportAction: Boolean = true,
+    actions: @Composable RowScope.() -> Unit = {},
+    scrollBehavior: TopAppBarScrollBehavior,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+) {
+    TopAppBar(
+        title = {
+            AnimatedContent(
+                targetState = title,
+                transitionSpec = {
+                    (fadeIn(animationSpec = tween(durationMillis = 220, delayMillis = 90)) +
+                            scaleIn(
+                                initialScale = 0.92f,
+                                animationSpec = tween(durationMillis = 220, delayMillis = 90)
+                            ))
+                        .togetherWith(fadeOut(animationSpec = tween(durationMillis = 90)))
+                },
+                label = "MainTopAppBarTitleAnimation",
+            ) { targetTitle ->
+                Text(
+                    text = targetTitle,
+                    modifier = Modifier.animateContentSize(),
+                )
+            }
+        },
+        navigationIcon = {
+            if (navigationIcon != null) {
+                AnimatedIconButtonDirection(
+                    icon = navigationIcon,
+                    contentDescription = stringResource(id = R.string.go_back),
+                    onClick = onNavigationIconClick,
+                    feedback = ButtonFeedback(hapticFeedbackType = null),
+                    iconSize = SizeConstants.TwentyFourSize,
+                )
+            }
+        },
+        actions = {
+            if (showSupportAction) {
+                SupportMenuAction(onSupportClick = onSupportClick)
+            }
+            actions()
+        },
+        scrollBehavior = scrollBehavior,
+        windowInsets = windowInsets,
+    )
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun SupportMenuAction(onSupportClick: (() -> Unit)?) {
+    val context: Context = LocalContext.current
+    val (expandedMenu, setExpandedMenu) = remember { mutableStateOf(value = false) }
+
+    AnimatedIconButtonDirection(
+        fromRight = true,
+        icon = Icons.Outlined.MoreVert,
+        contentDescription = stringResource(id = R.string.content_description_more_options),
+        onClick = { setExpandedMenu(true) },
+        iconSize = SizeConstants.TwentyFourSize,
+    )
+
+    DropdownMenu(
+        expanded = expandedMenu,
+        shape = MaterialTheme.shapes.largeIncreased,
+        onDismissRequest = { setExpandedMenu(false) },
+    ) {
+        CommonDropdownMenuItem(
+            textResId = R.string.support_us,
+            icon = Icons.Outlined.VolunteerActivism,
+            onClick = {
+                setExpandedMenu(false)
+                onSupportClick?.invoke()
+                    ?: context.openActivity(SupportActivity::class.java)
+            },
+        )
+    }
+}

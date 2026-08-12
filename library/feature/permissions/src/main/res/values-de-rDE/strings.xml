@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="access_network_state">Netzwerkstatus zugreifen [ACCESS_NETWORK_STATE]</string>
+    <string name="ad_id">Werbe-ID [AD_ID]</string>
+    <string name="billing">Abrechnung [BILLING]</string>
+    <string name="check_license">Lizenz prüfen [CHECK_LICENSE]</string>
+    <string name="foreground_service">Vordergrunddienst [FOREGROUND_SERVICE]</string>
+    <string name="internet">Internet [INTERNET]</string>
+    <string name="normal">Normal</string>
+    <string name="permissions">Berechtigungen</string>
+    <string name="post_notifications">Benachrichtigungen posten [POST_NOTIFICATIONS]</string>
+    <string name="runtime">Laufzeit</string>
+    <string name="summary_preference_permissions_access_network_state">Ermöglicht der App, die Netzwerkverbindung zu überprüfen und Informationen über WLAN abzurufen, einschließlich des aktivierten Status und der Namen verbundener WLAN-Geräte.</string>
+    <string name="summary_preference_permissions_ad_id">Ermöglicht der App, die mit dem Gerät des Nutzers verknüpfte Werbe-ID abzurufen und zu verwenden, um personalisierte Anzeigen bereitzustellen, die Wirksamkeit von Anzeigen zu messen und Anzeigen auf Geräten mit Android 13 oder höher anzuzeigen.</string>
+    <string name="summary_preference_permissions_billing">Ermöglicht der App, die Google Play Billing Library zu verwenden, um In-App-Käufe und Spenden abzuwickeln.</string>
+    <string name="summary_preference_permissions_check_license">Ermöglicht der App, ihre Übereinstimmung mit der Lizenzvereinbarung zu überprüfen und Lizenzbedingungen zum Schutz des geistigen Eigentums durchzusetzen.</string>
+    <string name="summary_preference_permissions_foreground_service">Ermöglicht der App, Dienste zu erstellen und zu verwenden, die im Vordergrund ausgeführt werden, wodurch sie Vorrang vor anderen Hintergrundprozessen erhalten und Leistung sowie Zuverlässigkeit verbessert werden.</string>
+    <string name="summary_preference_permissions_internet">Ermöglicht der App, eine Internetverbindung herzustellen, um Fehlerberichte zu senden oder nach Updates zu suchen.</string>
+    <string name="summary_preference_permissions_post_notifications">Ermöglicht der App, Benachrichtigungen auf Geräten mit Android 13 oder höher anzuzeigen.</string>
+    <string name="summary_preference_permissions_wake_lock">Ermöglicht der App, das Gerät während kritischer Vorgänge am Übergang in den Ruhezustand (z. B. Bildschirmabdunkelung oder Prozessorruhezustand) zu hindern, um sicherzustellen, dass diese ohne Unterbrechung abgeschlossen werden. Dies wird sparsam verwendet, um den Akku zu schonen.</string>
+    <string name="wake_lock">Gerät aktiv lassen [WAKE_LOCK]</string>
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="cancelled_error">Операция отменена.</string>
+    <string name="connection_closed_error">Соединение было прервано.</string>
+    <string name="connection_error">Ошибка сети. Пожалуйста, попробуйте снова.</string>
+    <string name="database_cant_open_error">Не удалось открыть хранилище.</string>
+    <string name="database_constraint_error">Ошибка ограничения хранилища.</string>
+    <string name="database_corrupt_error">Хранилище повреждено.</string>
+    <string name="database_error">Ошибка хранилища.</string>
+    <string name="database_full_error">Хранилище заполнено.</string>
+    <string name="database_locked_error">Хранилище занято. Попробуйте снова.</string>
+    <string name="error_failed_to_launch_review">Не удалось запустить процесс оценки</string>
+    <string name="error_failed_to_load_consent_info">Не удалось загрузить информацию о согласии</string>
+    <string name="error_failed_to_load_faq">Не удалось загрузить раздел FAQ</string>
+    <string name="error_failed_to_load_sku_details">Не удалось загрузить сведения о SKU</string>
+    <string name="error_failed_to_request_review">Не удалось запросить оценку</string>
+    <string name="error_failed_to_update_app">Не удалось обновить приложение</string>
+    <string name="http_client_error">Запрос не выполнен. Пожалуйста, попробуйте снова.</string>
+    <string name="http_redirect_error">Неожиданное перенаправление от сервера.</string>
+    <string name="http_server_error">Ошибка сервера. Пожалуйста, попробуйте позже.</string>
+    <string name="illegal_argument_error">Указан недопустимый ввод или аргумент. Проверьте информацию и попробуйте снова.</string>
+    <string name="invalid_state_error">Операция сейчас недоступна.</string>
+    <string name="no_data_error">Данные отсутствуют.</string>
+    <string name="no_internet_error">Нет подключения к интернету.</string>
+    <string name="rate_limited_error">Слишком много запросов. Попробуйте позже.</string>
+    <string name="request_timeout_error">Время ожидания запроса истекло. Попробуйте снова.</string>
+    <string name="serialization_error">Не удалось прочитать ответ сервера.</string>
+    <string name="ssl_error">Не удалось установить защищённое соединение.</string>
+    <string name="unknown_error">Произошла неизвестная ошибка.</string>
+    <string name="unsupported_operation_error">Операция не поддерживается.</string>
+</resources>

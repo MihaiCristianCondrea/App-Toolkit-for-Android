@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">Tungkol sa</string>
+    <string name="amoled_mode">AMOLED mode</string>
+    <string name="color_palette">Paleta ng kulay</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="dialog_info_language">I-personalize ang iyong karanasan gamit ang iyong gustong wika. Anumang pagbabago sa wika na gagawin mo ay agad na magkakabisa, na tinitiyak ang isang tuluy-tuloy na karanasan sa iyong napiling wika</string>
+    <string name="dialog_info_startup">Kino-configure ang paunang screen na ipinapakita sa mga user sa paglunsad ng application. Nakakaimpluwensya ang setting na ito sa unang interaksyon ng user sa app at maaaring iakma sa mga partikular na segment ng user o layunin ng produkto.</string>
+    <string name="dialog_language_subtitle">Piliin ang iyong gustong wika</string>
+    <string name="dialog_startup_subtitle">Piliin ang iyong gustong startup page</string>
+    <string name="done_button_content_description">Tapos na</string>
+    <string name="follow_system">Sundin ang system mode</string>
+    <string name="go_back">Bumalik</string>
+    <string name="learn_more">Matuto pa</string>
+    <string name="light_mode">Light mode</string>
+    <string name="loading">Naglo-load…</string>
+    <string name="onboarding_theme_dark_desc">Maginhawa sa mata.</string>
+    <string name="onboarding_theme_light_desc">Maliwanag at masigla.</string>
+    <string name="onboarding_theme_system_desc">Tumutugma sa iyong device.</string>
+    <string name="other_colors">Ibang mga kulay</string>
+    <string name="screen_and_display_settings">Mga Setting ng Screen at Display.</string>
+    <string name="select_language_title">Pumili ng wika</string>
+    <string name="sort_by">Pagbukud-bukurin ayon sa</string>
+    <string name="sponsored_ad_label">● Naka-sponsor na ad</string>
+    <string name="startup_page">Startup page</string>
+    <string name="summary_dark_theme">Ang madilim na tema ay gumagamit ng isang malalim na background upang makabuluhang mapalawak ang iyong buhay ng baterya. Upang maisaaktibo ito, mag -navigate lamang sa manager ng system ng iyong Android at piliin ang iyong ginustong tema sa</string>
+    <string name="theme_mode">Mode ng tema</string>
+    <string name="try_again">Subukang muli</string>
+    <string name="wallpaper_colors">Mga kulay ng wallpaper</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="access_network_state">الوصول لحالة الشبكة [ACCESS_NETWORK_STATE]</string>
+    <string name="ad_id">معرّف الإعلان [AD_ID]</string>
+    <string name="billing">الفوترة [BILLING]</string>
+    <string name="check_license">التحقق من الترخيص [CHECK_LICENSE]</string>
+    <string name="foreground_service">خدمة تعمل في المقدمة [FOREGROUND_SERVICE]</string>
+    <string name="internet">الإنترنت [INTERNET]</string>
+    <string name="normal">عادي</string>
+    <string name="permissions">الأذونات</string>
+    <string name="post_notifications">إرسال الإشعارات [POST_NOTIFICATIONS]</string>
+    <string name="runtime">وقت التشغيل</string>
+    <string name="summary_preference_permissions_access_network_state">يسمح للتطبيق بالتحقق من اتصال الشبكة واسترجاع معلومات عن شبكة الواي فاي، بما في ذلك حالة التشغيل وأسماء أجهزة الواي فاي المتصلة.</string>
+    <string name="summary_preference_permissions_ad_id">يسمح للتطبيق باسترجاع واستخدام معرّف الإعلانات المرتبط بجهاز المستخدم، مما يوفر إعلانات مخصصة، ويقيس فعالية الإعلانات، ويعرض الإعلانات على أجهزة أندرويد 13 أو الأحدث.</string>
+    <string name="summary_preference_permissions_billing">يسمح للتطبيق باستخدام مكتبة جوجل بلاي للفوترة لمعالجة عمليات الشراء داخل التطبيق والتبرعات.</string>
+    <string name="summary_preference_permissions_check_license">يسمح للتطبيق بالتحقق من امتثاله لاتفاقية الترخيص وفرض شروط الترخيص لحماية الملكية الفكرية.</string>
+    <string name="summary_preference_permissions_foreground_service">يسمح للتطبيق بإنشاء واستخدام خدمات تعمل في المقدمة، مما يمنحها الأولوية على عمليات الخلفية الأخرى ويحسن الأداء والموثوقية.</string>
+    <string name="summary_preference_permissions_internet">يسمح للتطبيق بإنشاء اتصال بالإنترنت لإرسال تقارير الأخطاء أو التحقق من وجود تحديثات.</string>
+    <string name="summary_preference_permissions_post_notifications">يسمح للتطبيق بعرض الإشعارات على الأجهزة التي تعمل بنظام أندرويد 13 أو الأحدث.</string>
+    <string name="summary_preference_permissions_wake_lock">يسمح للتطبيق بمنع الجهاز من الدخول في وضع السكون (على سبيل المثال، تعتيم الشاشة أو وضع سكون المعالج) أثناء العمليات الحرجة لضمان إكمالها دون انقطاع. يُستخدم هذا بشكل مقتصد للحفاظ على طاقة البطارية.</string>
+    <string name="wake_lock">إبقاء الجهاز مستيقظًا [WAKE_LOCK]</string>
+</resources>

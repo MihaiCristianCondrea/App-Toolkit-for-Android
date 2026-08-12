@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">کے بارے میں</string>
+    <string name="amoled_mode">AMOLED موڈ</string>
+    <string name="color_palette">رنگ پیلیٹ</string>
+    <string name="dark_mode">ڈارک موڈ</string>
+    <string name="dialog_info_language">اپنی پسندیدہ زبان کے ساتھ اپنے تجربے کو ذاتی بنائیں۔ آپ جو بھی زبان کی تبدیلیاں کرتے ہیں وہ فوراً لاگو ہوتی ہیں، جس سے آپ کی منتخب کردہ زبان میں بغیر کسی رکاوٹ کے تجربہ یقینی ہوتا ہے۔</string>
+    <string name="dialog_info_startup">ایپلیکیشن لانچ کرنے پر صارفین کو پیش کی جانے والی ابتدائی اسکرین کو کنفیگر کرتا ہے۔ یہ ترتیب صارف کے ایپ کے ساتھ پہلے تعامل پر اثر انداز ہوتی ہے اور اسے مخصوص صارف طبقات یا مصنوعات کے اہداف کے مطابق بنایا جا سکتا ہے۔</string>
+    <string name="dialog_language_subtitle">اپنی پسندیدہ زبان منتخب کریں</string>
+    <string name="dialog_startup_subtitle">اپنی ترجیحی شروعاتی صفحہ منتخب کریں</string>
+    <string name="done_button_content_description">ہو گیا</string>
+    <string name="follow_system">سسٹم موڈ فالو کریں</string>
+    <string name="go_back">پیچھے جائیں</string>
+    <string name="learn_more">مزید جانیں</string>
+    <string name="light_mode">لائٹ موڈ</string>
+    <string name="loading">لوڈ ہو رہا ہے…</string>
+    <string name="onboarding_theme_dark_desc">آنکھوں کے لیے آرام دہ۔</string>
+    <string name="onboarding_theme_light_desc">روشن اور توانا۔</string>
+    <string name="onboarding_theme_system_desc">آپ کے آلے سے مطابقت رکھتا ہے۔</string>
+    <string name="other_colors">دیگر رنگ</string>
+    <string name="screen_and_display_settings">۔ﺕﺎﺒﯿﺗﺮﺗ ﯽﮐ ﮯﻠﭙﺳﮈ ﺭﻭﺍ ﻦﯾﺮﮑﺳﺍ</string>
+    <string name="select_language_title">زبان منتخب کریں</string>
+    <string name="sort_by">ترتیب دیں</string>
+    <string name="sponsored_ad_label">● اسپانسر شدہ اشتہار</string>
+    <string name="startup_page">شروعاتی صفحہ</string>
+    <string name="summary_dark_theme">ﮟﯾﺮﮐ ﺐﺨﺘﻨﻣ ﻮﮐ ﻢﯿﮭﺗ ﯽﺤﯿﺟﺮﺗ ﮯﻨﭘﺍ ﺭﻭﺍ ﮟﯿﺋﺎﺟ ﺮﭘ ﺮﺠﯿﻨﯿﻣ ﻢﭩﺴﺳ ﮯﮐ Android ﮯﻨﭘﺍ ﻑﺮﺻ ،</string>
+    <string name="theme_mode">تھیم موڈ</string>
+    <string name="try_again">دوبارہ کوشش کریں</string>
+    <string name="wallpaper_colors">وال پیپر کے رنگ</string>
+</resources>

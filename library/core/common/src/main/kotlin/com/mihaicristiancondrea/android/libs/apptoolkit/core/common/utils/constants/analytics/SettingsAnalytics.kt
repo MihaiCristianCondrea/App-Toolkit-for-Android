@@ -1,0 +1,42 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics
+
+/**
+ * Shared GA4 naming used by settings surfaces so dashboards stay consistent across screens.
+ */
+object SettingsAnalytics {
+    object Events {
+        const val ACTION: String = "settings_action"
+        const val PREFERENCE_TOGGLE: String = "settings_preference_toggle"
+        const val PREFERENCE_VIEW: String = "settings_preference_view"
+        const val THEME_SWITCH: String = "settings_theme_switch"
+    }
+
+    object Params {
+        const val ACTION_NAME: String = "action_name"
+        const val SCREEN: String = "screen"
+        const val PREFERENCE_KEY: String = "preference_key"
+        const val ENABLED: String = "enabled"
+        const val THEME_MODE: String = "theme_mode"
+        const val NAVIGATION_ROUTE: String = "navigation_route"
+        const val FAQ_ID: String = "faq_id"
+        const val FAQ_POSITION: String = "faq_position"
+        const val EXPANDED: String = "expanded"
+    }
+}

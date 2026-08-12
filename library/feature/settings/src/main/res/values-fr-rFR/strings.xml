@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Paramètres de confidentialité avancés</string>
+    <string name="app_behavior">Comportement de l\'application</string>
+    <string name="appearance">Apparence</string>
+    <string name="bounce_buttons">Animation de rebond</string>
+    <string name="bug_report">Rapport de bug</string>
+    <string name="cache_cleared_success">Cache vidé avec succès</string>
+    <string name="cache_management">Gestion du cache</string>
+    <string name="clear_cache">Vider le cache</string>
+    <string name="consent_ad_personalization_description">Activer les publicités personnalisées en fonction de votre activité et de vos préférences sur les services et applications Google.</string>
+    <string name="consent_ad_personalization_title">Publicités personnalisées</string>
+    <string name="consent_ad_storage_description">Activer le stockage de données (comme les identifiants d\'appareil ou les cookies) pour mesurer les performances publicitaires et afficher des publicités pertinentes.</string>
+    <string name="consent_ad_storage_title">Stocker les données publicitaires</string>
+    <string name="consent_ad_user_data_description">Autoriser l\'envoi de données d\'utilisation et de l\'appareil à Google pour prendre en charge des fonctionnalités liées à la publicité telles que les conversions et l\'optimisation des campagnes.</string>
+    <string name="consent_ad_user_data_title">Envoyer des données pour la publicité</string>
+    <string name="consent_analytics_storage_description">Autoriser le stockage de données telles que l\'utilisation de l\'application et la durée de la visite pour améliorer les analyses et les performances de l\'application.</string>
+    <string name="consent_analytics_storage_title">Stocker les données d\'analyse</string>
+    <string name="consent_category_advertising_title">Publicité personnalisée</string>
+    <string name="consent_category_analytics_title">Analyses</string>
+    <string name="dark_theme">Thème sombre</string>
+    <string name="dynamic_colors">Couleurs dynamiques</string>
+    <string name="error_reporting">Rapport d\'erreurs</string>
+    <string name="get_help">Obtenir de l\'aide</string>
+    <string name="icon_desc_consent_category">Icône de catégorie de consentement</string>
+    <string name="icon_desc_expand_less">Réduire</string>
+    <string name="icon_desc_expand_more">Développer</string>
+    <string name="language">Langue</string>
+    <string name="learn_more">En savoir plus</string>
+    <string name="navigation">Navigation</string>
+    <string name="settings">Paramètres</string>
+    <string name="settings_placeholder_description">Aucun paramètre sélectionné. Choisissez une option pour afficher les détails ici.</string>
+    <string name="show_labels_on_bottom_bar">Afficher les étiquettes sur la barre inférieure</string>
+    <string name="startup_page">Page de démarrage</string>
+    <string name="summary_preference_settings_bounce_buttons">Ajoute une légère animation de rebond aux éléments cliquables lorsqu\'ils sont pressés</string>
+    <string name="summary_preference_settings_bug_report">Envoyez des rapports de bugs et des demandes de fonctionnalités à la page de problèmes de GitHub</string>
+    <string name="summary_preference_settings_clear_cache">Effacer les données temporaires de l\'application.</string>
+    <string name="summary_preference_settings_dynamic_colors">Appliquez les couleurs du fond d\'écran au thème de l\'application</string>
+    <string name="summary_preference_settings_language">Change la langue utilisée dans l\'application</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Afficher les titres des icônes ci-dessous dans la barre de navigation inférieure</string>
+    <string name="summary_preference_settings_startup_page">Choisissez l\'écran à afficher au démarrage de l\'application.</string>
+    <string name="summary_usage_and_diagnostics">Améliorez votre expérience en envoyant automatiquement des données de diagnostic et d\'utilisation de l\'application.</string>
+    <string name="usage_and_diagnostics">Utilisation et diagnostics</string>
+    <string name="will_never_turn_on_automatically">Ne sera jamais activé automatiquement</string>
+    <string name="will_turn_on_automatically_by_system">Sera activé automatiquement par le système</string>
+</resources>

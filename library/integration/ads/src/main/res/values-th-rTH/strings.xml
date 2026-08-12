@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">โฆษณา</string>
+    <string name="display_ads">แสดงโฆษณา</string>
+    <string name="learn_more">เรียนรู้เพิ่มเติม</string>
+    <string name="personalized_ads">โฆษณาเฉพาะบุคคล</string>
+    <string name="summary_ads">ดูโฆษณาที่ตรงกับความสนใจของคุณ จัดการข้อมูลสำหรับโฆษณาที่ปรับแต่งได้</string>
+    <string name="summary_ads_personalized_ads">เลือกวิธีที่เราใช้ข้อมูลส่วนตัวในการปรับแต่งโฆษณา</string>
+</resources>

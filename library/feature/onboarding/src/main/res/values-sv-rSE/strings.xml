@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="agree">Godkänn</string>
+    <string name="amoled_mode">AMOLED-läge</string>
+    <string name="back_button_content_description">Tillbaka</string>
+    <string name="back_button_text">Tillbaka</string>
+    <string name="consent_ad_personalization_description">Aktivera anpassade annonser baserat på din aktivitet och dina preferenser i Googles tjänster och appar.</string>
+    <string name="consent_ad_personalization_description_short">Aktiverar anpassad reklam.</string>
+    <string name="consent_ad_personalization_title">Anpassade annonser</string>
+    <string name="consent_ad_storage_description">Aktivera lagring av data (som enhetsidentifierare eller cookies) för att mäta annonsprestanda och visa relevanta annonser.</string>
+    <string name="consent_ad_storage_description_short">Tillåter lagring av data för reklamsyften.</string>
+    <string name="consent_ad_storage_title">Lagra annonsdata</string>
+    <string name="consent_ad_user_data_description">Tillåt att användnings- och enhetsdata skickas till Google för att stödja annonsrelaterade funktioner såsom konverteringar och kampanjoptimering.</string>
+    <string name="consent_ad_user_data_description_short">Tillåter sändning av användardata för annonser.</string>
+    <string name="consent_ad_user_data_title">Skicka data för annonser</string>
+    <string name="consent_analytics_storage_description">Tillåt lagring av data såsom appanvändning och besökslängd för att förbättra analys och appens prestanda.</string>
+    <string name="consent_analytics_storage_description_short">Tillåter datainsamling för analys av appanvändning.</string>
+    <string name="consent_analytics_storage_title">Lagra analysdata</string>
+    <string name="dark_mode">Mörkt läge</string>
+    <string name="done_button_content_description">Klar</string>
+    <string name="done_button_text">Klar</string>
+    <string name="error">Fel</string>
+    <string name="follow_system">Följ systeminställningar</string>
+    <string name="learn_more">Läs mer</string>
+    <string name="learn_more_about_provider">Läs mer om den här leverantören</string>
+    <string name="learn_more_privacy_policy">Granska vår integritetspolicy</string>
+    <string name="light_mode">Ljust läge</string>
+    <string name="next_button_content_description">Nästa</string>
+    <string name="next_button_text">Nästa</string>
+    <string name="onboarding_amoled_mode_desc">Djupare svärta för OLED-skärmar.</string>
+    <string name="onboarding_complete_icon_desc">Introduktion klar</string>
+    <string name="onboarding_crashlytics_about_body_1">I den här appen använder vi Firebase, en plattform från Google som hjälper utvecklare att förstå hur en app används, förbättra prestanda och tillhandahålla vissa tjänster som analys. Firebase Analytics samlar automatiskt in information som händelseanvändning, skärmvisningar, enhetsegenskaper och andra signaler, men endast om du ger samtycke till att dessa typer av data samlas in. Om samtycke inte ges kommer Firebase inte att logga händelser eller skicka data som rör dessa kategorier.</string>
+    <string name="onboarding_crashlytics_about_body_2">För detaljerad information om hur Firebase och Google-tjänster hanterar data, samt deras respektive integritets- och säkerhetspolicyer, se den officiella dokumentationen för Firebase Privacy och dina regionala integritetsrättigheter enligt lagar som GDPR och CCPA.</string>
+    <string name="onboarding_crashlytics_about_title">Om samtycke och användning av Firebase-data</string>
+    <string name="onboarding_crashlytics_consent_info_learn_more">Läs mer om samtycke och dataanvändning</string>
+    <string name="onboarding_crashlytics_consent_info_message">Om du vill veta mer om hur dina data används och vad varje samtyckesalternativ innebär kan du läsa dokumentationen nedan.</string>
+    <string name="onboarding_crashlytics_consent_intro_1">Din integritet är viktig. Innan vi samlar in användnings- eller annonsdata, välj vilka typer av data du samtycker till. Dina val påverkar hur vi mäter appens prestanda, förbättrar funktioner och anpassar annonsering, samtidigt som vi respekterar din integritet.</string>
+    <string name="onboarding_crashlytics_consent_intro_2">Dessa val hjälper oss att följa integritetsstandarder som GDPR och CCPA och ger dig kontroll över hur dina data används. Du kan ändra dessa inställningar senare i appens integritetsinställningar när som helst.</string>
+    <string name="onboarding_crashlytics_description">Tillåt appen att skicka anonym användningsdata och kraschrapporter. Detta hjälper oss att åtgärda buggar och förbättra din upplevelse. Ingen personlig information samlas in.</string>
+    <string name="onboarding_crashlytics_details_intro">Nedan hittar du mer detaljerade inställningar för hur dina data används i appen. Dina val påverkar vilken information som samlas in, hur den lagras och hur den kan delas med tjänsteleverantörer som Google, i enlighet med tillämpliga integritetsstandarder och samtyckeskrav.</string>
+    <string name="onboarding_crashlytics_dialog_allow_all">Tillåt alla</string>
+    <string name="onboarding_crashlytics_dialog_allow_essentials">Tillåt nödvändiga</string>
+    <string name="onboarding_crashlytics_dialog_confirm_choices">Bekräfta val</string>
+    <string name="onboarding_crashlytics_dialog_privacy_choices_title">Integritetsval</string>
+    <string name="onboarding_crashlytics_dialog_tab_about">Om</string>
+    <string name="onboarding_crashlytics_dialog_tab_consent">Samtycke</string>
+    <string name="onboarding_crashlytics_dialog_tab_details">Detaljer</string>
+    <string name="onboarding_crashlytics_disabled_desc">Datarapportering är inaktiv.</string>
+    <string name="onboarding_crashlytics_enabled_desc">Datarapportering är aktiv.</string>
+    <string name="onboarding_crashlytics_privacy_info">Din integritet är viktig. Vi använder endast dessa data för att åtgärda buggar och förbättra funktioner. För mer information, läs vår integritetspolicy.</string>
+    <string name="onboarding_crashlytics_show_details_button">Visa detaljerad information</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Visa detaljerad information om användning och diagnostik</string>
+    <string name="onboarding_crashlytics_title">Hjälp oss att förbättra</string>
+    <string name="onboarding_final_description">Tack för att du anpassade din upplevelse. Du är nu redo att utforska alla funktioner. Ha så kul.</string>
+    <string name="onboarding_final_title">Allt är klart.</string>
+    <string name="onboarding_theme_dark_desc">Behagligt för ögonen.</string>
+    <string name="onboarding_theme_light_desc">Ljust och energiskt.</string>
+    <string name="onboarding_theme_subtitle">Välj hur du vill att appen ska se ut.</string>
+    <string name="onboarding_theme_system_desc">Matchar din enhet.</string>
+    <string name="onboarding_theme_title">Välj din stil</string>
+    <string name="other_colors">Andra färger</string>
+    <string name="skip_button_content_description">Hoppa över</string>
+    <string name="skip_button_text">Hoppa över</string>
+    <string name="summary_browse_terms_of_service_and_privacy_policy">Läs och godkänn våra användarvillkor och integritetspolicy för att fortsätta</string>
+    <string name="usage_and_diagnostics">Användning och diagnostik</string>
+    <string name="wallpaper_colors">Bakgrundsfärger</string>
+    <string name="welcome">Välkommen</string>
+</resources>

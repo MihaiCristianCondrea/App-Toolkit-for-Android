@@ -1,6 +1,6 @@
 ![App Toolkit for Android](/app/src/main/play/listings/en-US/graphics/feature-graphic/play_store_feature_graphic.png "App Toolkit for Android")
 
-<a href="https://play.google.com/store/apps/details?id=com.d4rk.android.apps.apptoolkit"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>
+<a href="https://play.google.com/store/apps/details?id=com.mihaicristiancondrea.android.apps.apptoolkit"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>
 
 App Toolkit for Android
 ==================
@@ -102,9 +102,7 @@ for you!
 
 # License
 
-__Privacy Policy
-__ [here](https://mihaicristiancondrea.github.io/profile/#privacy-policy-end-user-software).
-__Terms of Service
-__ [here](https://mihaicristiancondrea.github.io/profile/#terms-of-service-end-user-software).
+__Privacy Policy__ [here](https://mihaicristiancondrea.github.io/profile/#privacy-policy-end-user-software).
+__Terms of Service__ [here](https://mihaicristiancondrea.github.io/profile/#terms-of-service-end-user-software).
 
 ![license](https://imgur.com/QQlcEVT.png)

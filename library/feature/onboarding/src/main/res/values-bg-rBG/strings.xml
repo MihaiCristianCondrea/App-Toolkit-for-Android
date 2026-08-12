@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="agree">Съгласен съм</string>
+    <string name="amoled_mode">AMOLED режим</string>
+    <string name="back_button_content_description">Назад</string>
+    <string name="back_button_text">Назад</string>
+    <string name="consent_ad_personalization_description">Активиране на персонализирани реклами въз основа на вашата активност и предпочитания в услугите и приложенията на Google.</string>
+    <string name="consent_ad_personalization_description_short">Активира персонализирана реклама.</string>
+    <string name="consent_ad_personalization_title">Персонализирани реклами</string>
+    <string name="consent_ad_storage_description">Активиране на съхраняването на данни (като идентификатори на устройства или бисквитки) за измерване на ефективността на рекламите и показване на подходящи реклами.</string>
+    <string name="consent_ad_storage_description_short">Разрешава съхраняването на данни за рекламни цели.</string>
+    <string name="consent_ad_storage_title">Съхраняване на данни за реклама</string>
+    <string name="consent_ad_user_data_description">Разрешаване на изпращането на данни за употреба и устройство към Google за поддържане на функции, свързани с реклами, като конверсии и оптимизация на кампании.</string>
+    <string name="consent_ad_user_data_description_short">Позволява изпращане на потребителски данни за реклами.</string>
+    <string name="consent_ad_user_data_title">Изпращане на данни за реклами</string>
+    <string name="consent_analytics_storage_description">Разрешаване на съхраняването на данни, като например използване на приложението и продължителност на посещението, за подобряване на анализите и производителността на приложението.</string>
+    <string name="consent_analytics_storage_description_short">Позволява събиране на данни за анализ на използването на приложението.</string>
+    <string name="consent_analytics_storage_title">Съхраняване на данни за анализ</string>
+    <string name="dark_mode">Тъмен режим</string>
+    <string name="done_button_content_description">Готово</string>
+    <string name="done_button_text">Готово</string>
+    <string name="error">Грешка</string>
+    <string name="follow_system">Следвай системния режим</string>
+    <string name="learn_more">Научете повече</string>
+    <string name="learn_more_about_provider">Научи повече за този доставчик</string>
+    <string name="learn_more_privacy_policy">Прегледай нашата политика за поверителност</string>
+    <string name="light_mode">Светъл режим</string>
+    <string name="next_button_content_description">Напред</string>
+    <string name="next_button_text">Напред</string>
+    <string name="onboarding_amoled_mode_desc">По-дълбоки черни за OLED екрани.</string>
+    <string name="onboarding_complete_icon_desc">Началната настройка е завършена</string>
+    <string name="onboarding_crashlytics_about_body_1">В това приложение използваме Firebase — платформа на Google, която помага на разработчиците да разберат как се използва приложението, да подобрят производителността и да предоставят услуги като анализи. Firebase Analytics автоматично събира информация като използване на събития, прегледи на екрани, свойства на устройството и други сигнали, но само ако дадете съгласие за събирането на тези типове данни. Ако съгласие не бъде дадено, Firebase няма да регистрира събития или да изпраща данни, свързани с тези категории.</string>
+    <string name="onboarding_crashlytics_about_body_2">За подробна информация относно начина, по който Firebase и услугите на Google обработват данни, както и за съответните политики за поверителност и сигурност, моля консултирайте се с официалната документация за поверителност на Firebase и вашите регионални права за защита на личните данни съгласно закони като GDPR и CCPA.</string>
+    <string name="onboarding_crashlytics_about_title">Относно съгласието и използването на данни от Firebase</string>
+    <string name="onboarding_crashlytics_consent_info_learn_more">Научи повече за съгласието и използването на данни</string>
+    <string name="onboarding_crashlytics_consent_info_message">Ако желаете да научите повече за това как се използват вашите данни и какво означава всяка опция за съгласие, разгледайте документацията по-долу.</string>
+    <string name="onboarding_crashlytics_consent_intro_1">Вашата поверителност е важна. Преди да събираме каквито и да е данни за използване или реклама, моля изберете типовете данни, за които давате съгласие. Вашият избор влияе върху начина, по който измерваме производителността на приложението, подобряваме функциите и персонализираме рекламите, като същевременно зачитаме вашата поверителност.</string>
+    <string name="onboarding_crashlytics_consent_intro_2">Тези избори ни помагат да спазваме стандарти за поверителност като GDPR и CCPA, като същевременно ви дават контрол върху начина, по който се използват вашите данни. Можете да промените тези настройки по-късно по всяко време в настройките за поверителност на приложението.</string>
+    <string name="onboarding_crashlytics_description">Разреши на приложението да изпраща анонимни данни за употреба и отчети за сривове. Това ни помага да поправяме грешки и да подобрим твоето преживяване. Не се събира лична информация.</string>
+    <string name="onboarding_crashlytics_details_intro">По-долу ще намерите по-подробни настройки за начина, по който вашите данни се използват в приложението. Вашият избор влияе върху това каква информация се събира, как се съхранява и как може да бъде споделяна с доставчици на услуги като Google, в съответствие с приложимите стандарти за поверителност и изисквания за съгласие.</string>
+    <string name="onboarding_crashlytics_dialog_allow_all">Разрешаване на всички</string>
+    <string name="onboarding_crashlytics_dialog_allow_essentials">Само необходимите</string>
+    <string name="onboarding_crashlytics_dialog_confirm_choices">Потвърди избора</string>
+    <string name="onboarding_crashlytics_dialog_privacy_choices_title">Настройки за поверителност</string>
+    <string name="onboarding_crashlytics_dialog_tab_about">Относно</string>
+    <string name="onboarding_crashlytics_dialog_tab_consent">Съгласие</string>
+    <string name="onboarding_crashlytics_dialog_tab_details">Подробности</string>
+    <string name="onboarding_crashlytics_disabled_desc">Докладването на данни е неактивно.</string>
+    <string name="onboarding_crashlytics_enabled_desc">Докладването на данни е активно.</string>
+    <string name="onboarding_crashlytics_privacy_info">Твоята поверителност е важна. Ние използваме тези данни само за поправяне на грешки и подобряване на функциите. За повече подробности, моля, прегледай нашата политика за поверителност.</string>
+    <string name="onboarding_crashlytics_show_details_button">Покажи подробна информация</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Покажи подробна информация за употребата и диагностиката</string>
+    <string name="onboarding_crashlytics_title">Помогни ни да се подобрим</string>
+    <string name="onboarding_final_description">Благодарим ти, че персонализира своето преживяване. Вече си готов да изследваш всички функции. Приятно ползване.</string>
+    <string name="onboarding_final_title">Всичко е готово.</string>
+    <string name="onboarding_theme_dark_desc">Приятен за очите.</string>
+    <string name="onboarding_theme_light_desc">Светъл и енергичен.</string>
+    <string name="onboarding_theme_subtitle">Избери как да изглежда приложението.</string>
+    <string name="onboarding_theme_system_desc">Съответства на твоето устройство.</string>
+    <string name="onboarding_theme_title">Избери своя стил</string>
+    <string name="other_colors">Други цветове</string>
+    <string name="skip_button_content_description">Пропусни</string>
+    <string name="skip_button_text">Пропусни</string>
+    <string name="summary_browse_terms_of_service_and_privacy_policy">Прочетете и се съгласете с нашите Общи условия и Политика за поверителност, за да продължите</string>
+    <string name="usage_and_diagnostics">Използване и диагностика</string>
+    <string name="wallpaper_colors">Цветове на тапета</string>
+    <string name="welcome">Добре дошли</string>
+</resources>

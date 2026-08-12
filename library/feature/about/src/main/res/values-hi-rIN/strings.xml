@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">विज्ञापन</string>
+    <string name="android_version">एंड्रॉइड संस्करण</string>
+    <string name="api_level">एपीआई स्तर</string>
+    <string name="app_build">ऐप निर्माण: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">एप्लिकेशन निर्माण संस्करण</string>
+    <string name="app_info">ऐप जानकारी</string>
+    <string name="changelog_title">ऐप चेंजलॉग</string>
+    <string name="code_of_conduct">आचार संहिता</string>
+    <string name="content_description_more_options">अधिक विकल्प</string>
+    <string name="debug">डीबग</string>
+    <string name="device_info">डिवाइस जानकारी</string>
+    <string name="device_model">डिवाइस मॉडल</string>
+    <string name="done_button_content_description">हो गया</string>
+    <string name="go_back">वापस जाओ</string>
+    <string name="help_and_feedback">मदद और प्रतिक्रिया</string>
+    <string name="legal">कानूनी</string>
+    <string name="legal_notices">कानूनी नोटिस</string>
+    <string name="license">लाइसेंस</string>
+    <string name="manufacturer">निर्माता</string>
+    <string name="no_new_updates_message">कोई नया अपडेट उपलब्ध नहीं है।</string>
+    <string name="oss_license_title">ओपन सोर्स लाइसेंस</string>
+    <string name="permissions">अनुमतियाँ</string>
+    <string name="privacy">गोपनीयता</string>
+    <string name="privacy_policy">गोपनीयता नीति</string>
+    <string name="release">रिलीज़</string>
+    <string name="settings">सेटिंग्स</string>
+    <string name="settings_placeholder_description">कोई सेटिंग्स चयनित नहीं। विवरण देखने के लिए एक विकल्प चुनें।</string>
+    <string name="share">साझा करें</string>
+    <string name="snack_device_info_copied">डिवाइस जानकारी क्लिपबोर्ड में कॉपी की गई</string>
+    <string name="snack_device_info_failed">डिवाइस की जानकारी लोड नहीं हो सकी</string>
+    <string name="summary_preference_settings_ads">प्रासंगिक विज्ञापन दिखाने के लिए आपकी जानकारी के उपयोग को नियंत्रित करें</string>
+    <string name="summary_preference_settings_code_of_conduct">हमारी सेवा के भीतर व्यवहार के नियमों और दिशानिर्देशों को समझें</string>
+    <string name="summary_preference_settings_legal_notices">हमारी सेवा के बारे में कानूनी जानकारी देखें</string>
+    <string name="summary_preference_settings_oss">ओपन सोर्स सॉफ़्टवेयर के लिए लाइसेंस विवरण</string>
+    <string name="summary_preference_settings_permissions">हमारी सेवा को दी गई अनुमतियों का प्रबंधन करें</string>
+    <string name="summary_preference_settings_privacy_policy">हम आपके डेटा को कैसे संभालते हैं इसकी नीति देखें</string>
+    <string name="summary_preference_settings_terms_of_service">सेवा की शर्तों की समीक्षा करें</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">ऐप अनुभव को बेहतर बनाने में मदद के लिए डेटा साझा करें</string>
+    <string name="summary_share_message">इस शानदार ऐप को देखें जिसे मैं उपयोग कर रहा हूँ. इसमें कुछ बहुत ही शानदार फीचर्स हैं जो आपको रोचक लग सकते हैं। इसे Play Store से डाउनलोड करें: %1$s</string>
+    <string name="support_us">हमें समर्थन दें</string>
+    <string name="terms_of_service">सेवा की शर्तें</string>
+    <string name="try_again">फिर से प्रयास करें</string>
+    <string name="updates">अपडेट्स</string>
+    <string name="usage_and_diagnostics">उपयोग और निदान</string>
+</resources>

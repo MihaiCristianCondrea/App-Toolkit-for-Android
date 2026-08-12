@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Quảng cáo</string>
+    <string name="android_version">Phiên bản Android</string>
+    <string name="api_level">Cấp API</string>
+    <string name="app_build">Bản dựng ứng dụng: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">Phiên bản xây dựng ứng dụng</string>
+    <string name="app_info">Thông tin ứng dụng</string>
+    <string name="changelog_title">Nhật ký thay đổi ứng dụng</string>
+    <string name="code_of_conduct">Quy tắc ứng xử</string>
+    <string name="content_description_more_options">Nhiều lựa chọn hơn</string>
+    <string name="debug">Gỡ lỗi</string>
+    <string name="device_info">Thông tin thiết bị</string>
+    <string name="device_model">Kiểu máy</string>
+    <string name="done_button_content_description">Xong</string>
+    <string name="go_back">Quay lại</string>
+    <string name="help_and_feedback">Trợ giúp &amp; phản hồi</string>
+    <string name="legal">Pháp lý</string>
+    <string name="legal_notices">Thông báo pháp lý</string>
+    <string name="license">Giấy phép</string>
+    <string name="manufacturer">Nhà sản xuất</string>
+    <string name="no_new_updates_message">Không có bản cập nhật mới.</string>
+    <string name="oss_license_title">Giấy phép nguồn mở</string>
+    <string name="permissions">Quyền</string>
+    <string name="privacy">Quyền riêng tư</string>
+    <string name="privacy_policy">Chính sách quyền riêng tư</string>
+    <string name="release">Phát hành</string>
+    <string name="settings">Cài đặt</string>
+    <string name="settings_placeholder_description">Chưa chọn cài đặt nào. Chọn một tùy chọn để xem chi tiết tại đây.</string>
+    <string name="share">Chia sẻ</string>
+    <string name="snack_device_info_copied">Đã sao chép thông tin thiết bị vào khay nhớ tạm</string>
+    <string name="snack_device_info_failed">Không thể tải thông tin thiết bị</string>
+    <string name="summary_preference_settings_ads">Kiểm soát cách chúng tôi sử dụng thông tin của bạn để hiển thị quảng cáo phù hợp</string>
+    <string name="summary_preference_settings_code_of_conduct">Hiểu các quy tắc và hướng dẫn về hành vi trong dịch vụ của chúng tôi</string>
+    <string name="summary_preference_settings_legal_notices">Xem thông tin pháp lý về dịch vụ của chúng tôi</string>
+    <string name="summary_preference_settings_oss">Chi tiết giấy phép cho phần mềm nguồn mở</string>
+    <string name="summary_preference_settings_permissions">Quản lý các quyền được cấp cho dịch vụ của chúng tôi</string>
+    <string name="summary_preference_settings_privacy_policy">Xem chính sách quy định cách chúng tôi xử lý dữ liệu của bạn</string>
+    <string name="summary_preference_settings_terms_of_service">Xem lại các điều khoản bạn đồng ý khi sử dụng dịch vụ của chúng tôi</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Chia sẻ dữ liệu để giúp cải thiện trải nghiệm trong ứng dụng</string>
+    <string name="summary_share_message">Hãy xem ứng dụng tuyệt vời này mà tôi đang dùng. Nó có một số tính năng rất thú vị mà bạn có thể thấy hay. Bạn có thể tải xuống từ Play Store tại: %1$s</string>
+    <string name="support_us">Ủng hộ chúng tôi</string>
+    <string name="terms_of_service">Điều khoản dịch vụ</string>
+    <string name="try_again">Thử lại</string>
+    <string name="updates">Cập nhật</string>
+    <string name="usage_and_diagnostics">Sử dụng và chẩn đoán</string>
+</resources>

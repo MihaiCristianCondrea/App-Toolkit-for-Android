@@ -1,0 +1,920 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui
+
+import android.app.StatusBarManager
+import android.content.Context
+import android.graphics.drawable.Icon
+import android.os.Build
+import android.provider.Settings
+import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.BatteryChargingFull
+import androidx.compose.material.icons.outlined.Casino
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Dehaze
+import androidx.compose.material.icons.outlined.ExpandLess
+import androidx.compose.material.icons.outlined.ExpandMore
+import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.GraphicEq
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.MonetizationOn
+import androidx.compose.material.icons.outlined.MusicNote
+import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Straighten
+import androidx.compose.material.icons.outlined.Thermostat
+import androidx.compose.material.icons.outlined.Timer
+import androidx.compose.material.icons.outlined.WarningAmber
+import androidx.compose.material.icons.outlined.WbSunny
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitQuickTool
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileIcon
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitToolKind
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.getTileServiceRequests
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ads.QuickToolsNativeAdCard
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mapper.items
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mapper.toNewTaskIntent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.MaterialColorsToolDialog
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ads.ToolkitTilesNativeAdViewFactory
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import org.koin.compose.viewmodel.koinViewModel
+
+/** Route-level composable for the Toolkit Tiles catalog. */
+@Composable
+fun ToolkitTilesRoute(
+    paddingValues: PaddingValues,
+) {
+    val viewModel: ToolkitTilesViewModel = koinViewModel()
+    val screenState: UiStateScreen<ToolkitTilesUiState> by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(viewModel, lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.onEvent(ToolkitTilesEvent.Refresh)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    LaunchedEffect(viewModel, context) {
+        viewModel.actionEvent.collect { action ->
+            when (action) {
+                is ToolkitTilesAction.RequestAddTile -> requestQuickSettingsTile(
+                    context = context,
+                    requestKey = action.requestKey,
+                )
+
+                ToolkitTilesAction.ShowSetupRequiredMessage -> Toast.makeText(
+                    context,
+                    R.string.tiles_setup_required_message,
+                    Toast.LENGTH_SHORT,
+                ).show()
+
+                is ToolkitTilesAction.ShowMessage -> Toast.makeText(
+                    context,
+                    action.message,
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+        }
+    }
+
+    ScreenStateHandler(
+        screenState = screenState,
+        onLoading = { LoadingScreen(paddingValues = paddingValues) },
+        onEmpty = { NoDataScreen() },
+        onError = { NoDataScreen() },
+        onSuccess = { state ->
+            CompositionLocalProvider(
+                LocalNativeAdViewFactory provides remember { ToolkitTilesNativeAdViewFactory() }
+            ) {
+                ToolkitTilesScreen(
+                    state = state,
+                    paddingValues = paddingValues,
+                    onEvent = viewModel::onEvent,
+                )
+            }
+        },
+    )
+}
+
+/** Stateless Material 3 screen that renders Quick Settings tile categories and actions. */
+@Composable
+fun ToolkitTilesScreen(
+    state: ToolkitTilesUiState,
+    paddingValues: PaddingValues,
+    onEvent: (ToolkitTilesEvent) -> Unit,
+) {
+    val showAds = rememberAdsEnabled()
+    var selectedTile by remember { mutableStateOf<ToolkitTile?>(null) }
+    var quickToolDialog by remember { mutableStateOf<ToolkitQuickTool?>(null) }
+    val filteredCategories = remember(state.categories, state.selectedFilter) {
+        state.categories.filterFor(state.selectedFilter)
+    }
+    val listItems = remember(filteredCategories) {
+        buildList {
+            filteredCategories.forEachIndexed { index, category ->
+                add(ToolkitTilesListItem.Category(category))
+                if ((index + 1) % 2 == 0) {
+                    add(
+                        ToolkitTilesListItem.Ad(
+                            id = "ad_after_${category.id}",
+                            adUnitId = AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID,
+                        )
+                    )
+                }
+            }
+            if (isNotEmpty() && last() !is ToolkitTilesListItem.Ad) {
+                add(
+                    ToolkitTilesListItem.Ad(
+                        id = "ad_trailing",
+                        adUnitId = AdsConstants.QUICK_TOOLS_NATIVE_AD_UNIT_ID,
+                    )
+                )
+            }
+        }.toImmutableList()
+    }
+
+    val visibleListItems = remember(listItems, state.loadedAdIds, showAds) {
+        listItems
+            .filter { item -> item.isVisible(loadedAdIds = state.loadedAdIds, showAds = showAds) }
+            .let { visibleItems ->
+                visibleItems.mapIndexed { index, item ->
+                    PositionedToolkitTilesListItem(
+                        item = item,
+                        position = groupedItemPosition(index, visibleItems.size),
+                    )
+                }
+            }
+            .toImmutableList()
+    }
+    val preloadedAdItems = remember(listItems, state.loadedAdIds, showAds) {
+        if (!showAds) return@remember persistentListOf()
+        listItems
+            .filterIsInstance<ToolkitTilesListItem.Ad>()
+            .filterNot { adItem -> adItem.id in state.loadedAdIds }
+            .toImmutableList()
+    }
+
+    LaunchedEffect(selectedTile) {
+        selectedTile?.let { tile ->
+            onEvent(ToolkitTilesEvent.TilePreviewOpened(tile.id))
+        } ?: run {
+            onEvent(ToolkitTilesEvent.TilePreviewClosed)
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+            contentPadding = PaddingValues(
+                start = SizeConstants.LargeSize,
+                top = paddingValues.calculateTopPadding() + SizeConstants.LargeSize,
+                end = SizeConstants.LargeSize,
+                bottom = paddingValues.calculateBottomPadding() + SizeConstants.LargeSize,
+            ),
+        ) {
+            item {
+                TilesFilters(
+                    categories = state.categories,
+                    selectedFilter = state.selectedFilter,
+                    onFilterSelected = { filter -> onEvent(ToolkitTilesEvent.FilterSelected(filter)) },
+                )
+            }
+            item { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
+            if (listItems.isEmpty()) {
+                item {
+                    EmptyFilterCard()
+                }
+            } else {
+                itemsIndexed(
+                    items = visibleListItems,
+                    key = { _, positionedItem -> "${state.selectedFilter}_${positionedItem.item.stableKey}" },
+                ) { index, positionedItem ->
+                    val item = positionedItem.item
+                    val position = positionedItem.position
+
+                    when (item) {
+                        is ToolkitTilesListItem.Category -> {
+                            val category = item.category
+                            val expanded = category.id in state.expandedCategoryIds
+                            TileCategorySection(
+                                category = category,
+                                position = position,
+                                expanded = expanded,
+                                modifier = Modifier
+                                    .animateItem()
+                                    .animateVisibility(index = index),
+                                selectedFilter = state.selectedFilter,
+                                onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
+                                onPreviewTile = { tile ->
+                                    if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
+                                        quickToolDialog = ToolkitQuickTool.MaterialColors
+                                    } else {
+                                        selectedTile = tile
+                                    }
+                                },
+                            )
+                        }
+
+                        is ToolkitTilesListItem.Ad -> {
+                            QuickToolsNativeAdCard(
+                                modifier = Modifier
+                                    .animateItem()
+                                    .animateVisibility(index = index),
+                                adUnitId = item.adUnitId,
+                                position = position,
+                                initiallyLoaded = item.id in state.loadedAdIds,
+                                onStatusChanged = { isLoaded ->
+                                    onEvent(ToolkitTilesEvent.AdStatusChanged(item.id, isLoaded))
+                                },
+                            )
+                        }
+                    }
+                }
+            }
+            item { Spacer(modifier = Modifier.height(SizeConstants.SmallSize)) }
+            item {
+                HowToAddTilesCard()
+            }
+            item {
+                NavigationBarSpacer()
+            }
+        }
+
+        HiddenAdPreloaders(
+            adItems = preloadedAdItems,
+            onEvent = onEvent,
+        )
+    }
+
+    selectedTile?.let { tile ->
+        ToolkitToolBottomSheet(
+            tile = tile,
+            sensorData = state.sensorData,
+            breathingState = state.breathingState,
+            caffeineState = state.caffeineState,
+            ringerMode = state.ringerMode,
+            isSosActive = state.isSosActive,
+            onClose = { selectedTile = null },
+            onAddTile = { onEvent(ToolkitTilesEvent.AddTileClicked(tile.requestKey)) },
+            onSetupTile = { onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) },
+            onCaffeineCycle = { onEvent(ToolkitTilesEvent.CaffeineCycleClicked) },
+            onSoundModeCycle = { current -> onEvent(ToolkitTilesEvent.SoundModeClicked(current)) },
+            onMusicSearchLaunch = { onEvent(ToolkitTilesEvent.MusicSearchClicked) },
+            onSosToggle = { onEvent(ToolkitTilesEvent.SosClicked) },
+        )
+    }
+
+    if (quickToolDialog == ToolkitQuickTool.MaterialColors) {
+        MaterialColorsToolDialog(onClose = { quickToolDialog = null })
+    }
+}
+
+
+@Composable
+private fun HiddenAdPreloaders(
+    adItems: ImmutableList<ToolkitTilesListItem.Ad>,
+    onEvent: (ToolkitTilesEvent) -> Unit,
+) {
+    Box(modifier = Modifier.size(0.dp)) {
+        adItems.forEach { item ->
+            QuickToolsNativeAdCard(
+                adUnitId = item.adUnitId,
+                position = GroupedItemPosition.MIDDLE,
+                onStatusChanged = { isLoaded ->
+                    onEvent(ToolkitTilesEvent.AdStatusChanged(item.id, isLoaded))
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun TilesFilters(
+    categories: ImmutableList<ToolkitTileCategory>,
+    selectedFilter: ToolkitTilesFilter,
+    onFilterSelected: (ToolkitTilesFilter) -> Unit,
+) {
+    val filters = remember(categories) {
+        val allTiles = categories.flatMap { it.tiles }
+        val statuses = allTiles.map { it.status }.toSet()
+
+        ToolkitTilesFilter.items().filter { item ->
+            when (item.filter) {
+                ToolkitTilesFilter.All -> true
+                ToolkitTilesFilter.Added -> statuses.contains(ToolkitTileStatus.Added)
+                ToolkitTilesFilter.NeedsSetup -> statuses.contains(ToolkitTileStatus.NeedsSetup)
+                ToolkitTilesFilter.Unsupported -> statuses.contains(ToolkitTileStatus.Unsupported)
+            }
+        }.toImmutableList()
+    }
+
+    if (filters.size > 1) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+        ) {
+            filters.forEach { item ->
+                FilterChip(
+                    selected = selectedFilter == item.filter,
+                    onClick = { onFilterSelected(item.filter) },
+                    label = { Text(text = stringResource(id = item.labelResId)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = item.icon,
+                            contentDescription = null,
+                            modifier = Modifier.size(SizeConstants.ButtonIconSize),
+                        )
+                    },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun TileCategorySection(
+    category: ToolkitTileCategory,
+    position: GroupedItemPosition,
+    expanded: Boolean,
+    modifier: Modifier = Modifier,
+    selectedFilter: ToolkitTilesFilter = ToolkitTilesFilter.All,
+    onToggle: () -> Unit,
+    onPreviewTile: (ToolkitTile) -> Unit,
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .groupedCorners(
+                position = position,
+                outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+            ),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = RectangleShape,
+    ) {
+        Column(modifier = Modifier.padding(SizeConstants.MediumSize)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                TileIconBadge(icon = category.icon)
+                Spacer(modifier = Modifier.width(SizeConstants.MediumSize))
+                Text(
+                    text = stringResource(id = category.titleResId),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.weight(1f),
+                )
+                Text(
+                    text = stringResource(id = R.string.tiles_count_format, category.tiles.size),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                IconButton(onClick = onToggle) {
+                    Icon(
+                        imageVector = if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
+                        contentDescription = stringResource(
+                            id = if (expanded) R.string.tiles_collapse_category else R.string.tiles_expand_category,
+                        ),
+                    )
+                }
+            }
+            AnimatedVisibility(visible = expanded) {
+                Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
+                    Spacer(modifier = Modifier.height(SizeConstants.ExtraTinySize))
+                    category.tiles.forEachIndexed { index, tile ->
+                        ToolkitTileCard(
+                            tile = tile,
+                            position = groupedItemPosition(index, category.tiles.size),
+                            modifier = Modifier.animateVisibility(index = index),
+                            key = "${selectedFilter}_${tile.id}",
+                            onPreviewTile = { onPreviewTile(tile) },
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ToolkitTileCard(
+    tile: ToolkitTile,
+    position: GroupedItemPosition,
+    modifier: Modifier = Modifier,
+    key: Any? = null,
+    onPreviewTile: () -> Unit,
+) {
+    key(key) {
+        Card(
+            onClick = onPreviewTile,
+            modifier = modifier
+                .fillMaxWidth()
+                .groupedCorners(
+                    position = position,
+                    outerRadius = SizeConstants.LargeExpandedSize,
+                ),
+            shape = RectangleShape,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            ),
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SizeConstants.LargeSize),
+                verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    TileIconBadge(icon = tile.icon, large = true)
+                    Spacer(modifier = Modifier.width(SizeConstants.LargeSize))
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+                    ) {
+                        Text(
+                            text = stringResource(id = tile.titleResId),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                        Text(
+                            text = stringResource(id = tile.summaryResId),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+                ToolkitToolChips(tile = tile)
+            }
+        }
+    }
+}
+
+@Composable
+internal fun TileIconBadge(
+    icon: ToolkitTileIcon,
+    large: Boolean = false,
+) {
+    val colors = icon.iconColors()
+    val size =
+        if (large) SizeConstants.LauncherIconSize + SizeConstants.SmallSize else SizeConstants.FortyFourSize
+    Box(
+        modifier = Modifier.size(size),
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            painter = painterResource(id = icon.backgroundDrawableRes()),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            colorFilter = ColorFilter.tint(colors.container.copy(alpha = 0.15f)),
+        )
+        Icon(
+            imageVector = icon.imageVector(),
+            contentDescription = null,
+            tint = colors.content,
+        )
+    }
+}
+
+@Composable
+private fun ToolkitToolChips(tile: ToolkitTile) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        ToolTypeChip(kind = tile.kind)
+        if (tile.requestKey != null) {
+            TileAvailabilityChip()
+        }
+        if (tile.status != ToolkitTileStatus.Available) {
+            TileStatusChip(status = tile.status)
+        }
+    }
+}
+
+@Composable
+private fun ToolTypeChip(kind: ToolkitToolKind) {
+    val labelResId = when (kind) {
+        ToolkitToolKind.Quick -> R.string.tiles_chip_quick_tool
+        ToolkitToolKind.Expanded -> R.string.tiles_chip_expanded_tool
+    }
+    AssistChip(
+        onClick = {},
+        label = { Text(text = stringResource(id = labelResId)) },
+        colors = androidx.compose.material3.AssistChipDefaults.assistChipColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            labelColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        ),
+        border = null,
+    )
+}
+
+@Composable
+private fun TileAvailabilityChip() {
+    AssistChip(
+        onClick = {},
+        label = { Text(text = stringResource(id = R.string.tiles_chip_tile)) },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Outlined.CheckCircle,
+                contentDescription = null,
+                modifier = Modifier.size(SizeConstants.ButtonIconSize),
+            )
+        },
+        colors = androidx.compose.material3.AssistChipDefaults.assistChipColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            labelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            leadingIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        ),
+        border = null,
+    )
+}
+
+@Composable
+private fun TileStatusChip(
+    status: ToolkitTileStatus,
+    onClick: () -> Unit = {},
+) {
+    val colors = status.statusColors()
+    AssistChip(
+        onClick = onClick,
+        label = { Text(text = stringResource(id = status.labelResId())) },
+        leadingIcon = {
+            Icon(
+                imageVector = status.icon(),
+                contentDescription = null,
+                modifier = Modifier.size(SizeConstants.ButtonIconSize),
+            )
+        },
+        colors = androidx.compose.material3.AssistChipDefaults.assistChipColors(
+            containerColor = colors.container,
+            labelColor = colors.content,
+            leadingIconContentColor = colors.content,
+        ),
+        border = null,
+    )
+}
+
+@Composable
+private fun EmptyFilterCard() {
+    ElevatedCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(SizeConstants.LargeSize),
+    ) {
+        Text(
+            modifier = Modifier.padding(SizeConstants.LargeSize),
+            text = stringResource(id = R.string.tiles_filter_empty),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+    }
+}
+
+@Composable
+private fun HowToAddTilesCard() {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(SizeConstants.ExtraLargeIncreasedSize),
+        color = MaterialTheme.colorScheme.tertiaryContainer,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(SizeConstants.LargeSize),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Info,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onTertiaryContainer,
+            )
+            Spacer(modifier = Modifier.width(SizeConstants.LargeSize))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(id = R.string.tiles_how_to_add_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                )
+                Text(
+                    text = stringResource(id = R.string.tiles_how_to_add_summary),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                )
+            }
+        }
+    }
+}
+
+private fun ImmutableList<ToolkitTileCategory>.filterFor(
+    filter: ToolkitTilesFilter,
+): List<ToolkitTileCategory> = when (filter) {
+    ToolkitTilesFilter.All -> this
+    ToolkitTilesFilter.Added -> filterByStatus(ToolkitTileStatus.Added)
+    ToolkitTilesFilter.NeedsSetup -> filterByStatus(ToolkitTileStatus.NeedsSetup)
+    ToolkitTilesFilter.Unsupported -> filterByStatus(ToolkitTileStatus.Unsupported)
+}
+
+private fun ImmutableList<ToolkitTileCategory>.filterByStatus(
+    status: ToolkitTileStatus,
+): List<ToolkitTileCategory> = mapNotNull { category ->
+    val tiles = category.tiles.filter { tile -> tile.status == status }
+    if (tiles.isEmpty()) null else category.copy(tiles = tiles.toImmutableList())
+}
+
+internal fun ToolkitTile.previewTextResId(): Int = when (id) {
+    "coin_flip" -> R.string.tile_preview_coin_result
+    "compass" -> R.string.tile_preview_compass_result
+    "bubble_level" -> R.string.tile_preview_level_result
+    else -> R.string.tile_preview_default_result
+}
+
+private fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
+    ToolkitTileIcon.Level -> Icons.Outlined.Straighten
+    ToolkitTileIcon.Compass -> Icons.Outlined.Explore
+    ToolkitTileIcon.Lux -> Icons.Outlined.WbSunny
+    ToolkitTileIcon.Temperature -> Icons.Outlined.Thermostat
+    ToolkitTileIcon.Coin -> Icons.Outlined.MonetizationOn
+    ToolkitTileIcon.Dice -> Icons.Outlined.Casino
+    ToolkitTileIcon.Counter -> Icons.Outlined.Dehaze
+    ToolkitTileIcon.Battery -> Icons.Outlined.BatteryChargingFull
+    ToolkitTileIcon.Caffeine -> Icons.Outlined.Timer
+    ToolkitTileIcon.Sound -> Icons.Outlined.GraphicEq
+    ToolkitTileIcon.Music -> Icons.Outlined.MusicNote
+    ToolkitTileIcon.Breathing -> Icons.Outlined.FavoriteBorder
+    ToolkitTileIcon.Sos -> Icons.Outlined.WarningAmber
+    ToolkitTileIcon.Palette -> Icons.Outlined.Palette
+}
+
+private fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
+    ToolkitTileIcon.Level,
+    ToolkitTileIcon.Compass,
+    ToolkitTileIcon.Lux -> R.drawable.background_8_sided_cookie
+
+    ToolkitTileIcon.Temperature,
+    ToolkitTileIcon.Caffeine,
+    ToolkitTileIcon.Breathing -> R.drawable.background_soft_burst
+
+    ToolkitTileIcon.Sound -> R.drawable.background_flower
+
+    ToolkitTileIcon.Coin,
+    ToolkitTileIcon.Dice,
+    ToolkitTileIcon.Counter -> R.drawable.background_12_sided_cookie
+
+    ToolkitTileIcon.Sos -> R.drawable.background_gem
+
+    else -> R.drawable.background_circle
+}
+
+private fun ToolkitTileStatus.labelResId(): Int = when (this) {
+    ToolkitTileStatus.Added -> R.string.tiles_status_added
+    ToolkitTileStatus.Available -> R.string.tiles_status_available
+    ToolkitTileStatus.NeedsSetup -> R.string.tiles_status_needs_setup
+    ToolkitTileStatus.Unsupported -> R.string.tiles_status_unsupported
+}
+
+private fun ToolkitTileStatus.icon(): ImageVector = when (this) {
+    ToolkitTileStatus.Added -> Icons.Outlined.CheckCircle
+    ToolkitTileStatus.Available -> Icons.Outlined.Info
+    ToolkitTileStatus.NeedsSetup -> Icons.Outlined.WarningAmber
+    ToolkitTileStatus.Unsupported -> Icons.Outlined.Close
+}
+
+@Composable
+private fun ToolkitTileIcon.iconColors(): StatusColors {
+    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+    return when (this) {
+        ToolkitTileIcon.Level,
+        ToolkitTileIcon.Compass,
+        ToolkitTileIcon.Lux -> StatusColors(
+            container = if (isDark) Color(0xFF006A60) else Color(0xFF00A091),
+            content = if (isDark) Color(0xFF74DED1) else Color(0xFF006A60),
+        )
+
+        ToolkitTileIcon.Battery -> StatusColors(
+            container = if (isDark) Color(0xFF5A2D91) else Color(0xFF9158E2),
+            content = if (isDark) Color(0xFFD3BFFF) else Color(0xFF5A2D91),
+        )
+
+        ToolkitTileIcon.Temperature,
+        ToolkitTileIcon.Caffeine,
+        ToolkitTileIcon.Breathing -> StatusColors(
+            container = if (isDark) Color(0xFF8B4100) else Color(0xFFFF8B26),
+            content = if (isDark) Color(0xFFFFB88E) else Color(0xFF8B4100),
+        )
+
+        ToolkitTileIcon.Coin,
+        ToolkitTileIcon.Dice,
+        ToolkitTileIcon.Counter -> StatusColors(
+            container = if (isDark) Color(0xFF6B5E00) else Color(0xFFE2C900),
+            content = if (isDark) Color(0xFFFBE44D) else Color(0xFF6B5E00),
+        )
+
+        ToolkitTileIcon.Sound -> StatusColors(
+            container = if (isDark) Color(0xFF91005A) else Color(0xFFE2008E),
+            content = if (isDark) Color(0xFFFFB0D3) else Color(0xFF91005A),
+        )
+
+        ToolkitTileIcon.Music -> StatusColors(
+            container = if (isDark) Color(0xFF3F0091) else Color(0xFF6F00FF),
+            content = if (isDark) Color(0xFFC8BFFF) else Color(0xFF3F0091),
+        )
+
+        ToolkitTileIcon.Palette -> StatusColors(
+            container = if (isDark) Color(0xFF7A4E00) else Color(0xFFFFB84D),
+            content = if (isDark) Color(0xFFFFDDA8) else Color(0xFF7A4E00),
+        )
+
+        ToolkitTileIcon.Sos -> StatusColors(
+            container = if (isDark) Color(0xFFB10000) else Color(0xFFEE0000),
+            content = if (isDark) Color(0xFFFFDAD6) else Color(0xFFB10000),
+        )
+    }
+}
+
+@Composable
+private fun ToolkitTileStatus.statusColors(): StatusColors = when (this) {
+    ToolkitTileStatus.Added -> StatusColors(
+        container = MaterialTheme.colorScheme.primaryContainer,
+        content = MaterialTheme.colorScheme.onPrimaryContainer,
+    )
+
+    ToolkitTileStatus.Available -> StatusColors(
+        container = MaterialTheme.colorScheme.secondaryContainer,
+        content = MaterialTheme.colorScheme.onSecondaryContainer,
+    )
+
+    ToolkitTileStatus.NeedsSetup -> StatusColors(
+        container = MaterialTheme.colorScheme.tertiaryContainer,
+        content = MaterialTheme.colorScheme.onTertiaryContainer,
+    )
+
+    ToolkitTileStatus.Unsupported -> StatusColors(
+        container = MaterialTheme.colorScheme.errorContainer,
+        content = MaterialTheme.colorScheme.onErrorContainer,
+    )
+}
+
+private data class StatusColors(
+    val container: Color,
+    val content: Color,
+)
+
+private data class PositionedToolkitTilesListItem(
+    val item: ToolkitTilesListItem,
+    val position: GroupedItemPosition,
+)
+
+private val ToolkitTilesListItem.stableKey: String
+    get() = when (this) {
+        is ToolkitTilesListItem.Category -> category.id
+        is ToolkitTilesListItem.Ad -> id
+    }
+
+private fun ToolkitTilesListItem.isVisible(
+    loadedAdIds: Set<String>,
+    showAds: Boolean,
+): Boolean = when (this) {
+    is ToolkitTilesListItem.Category -> true
+    is ToolkitTilesListItem.Ad -> showAds && id in loadedAdIds
+}
+
+private sealed class ToolkitTilesListItem {
+    data class Category(val category: ToolkitTileCategory) : ToolkitTilesListItem()
+    data class Ad(val id: String, val adUnitId: String) : ToolkitTilesListItem()
+}
+
+private fun requestQuickSettingsTile(
+    context: Context,
+    requestKey: String,
+) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        Toast.makeText(context, R.string.tiles_add_pre_android_13, Toast.LENGTH_LONG).show()
+        context.startActivity(Settings.ACTION_SETTINGS.toNewTaskIntent())
+        return
+    }
+
+    val request = getTileServiceRequests()[requestKey]
+    if (request == null) {
+        Toast.makeText(context, R.string.tiles_setup_required_message, Toast.LENGTH_SHORT).show()
+        return
+    }
+
+    val statusBarManager = context.getSystemService(StatusBarManager::class.java)
+    statusBarManager.requestAddTileService(
+        request.componentName(context),
+        context.getString(request.labelResId),
+        Icon.createWithResource(context, request.iconResId),
+        context.mainExecutor,
+    ) { result ->
+        val messageResId = when (result) {
+            StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED -> R.string.tiles_add_result_added
+            StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED -> R.string.tiles_add_result_already_added
+            else -> R.string.tiles_add_result_failed
+        }
+        Toast.makeText(context, messageResId, Toast.LENGTH_SHORT).show()
+    }
+}

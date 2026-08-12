@@ -1,0 +1,155 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences
+
+import android.view.SoundEffectConstants
+import android.view.View
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallHorizontalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+
+/**
+ * Creates a clickable preference item with a switch and a divider for app preference screens.
+ *
+ * This composable function combines an optional icon, title, summary, switch, and a divider into a single row.
+ * The entire row is clickable and triggers the provided `onClick` callback function when clicked.
+ * The switch is toggled on or off based on the `checked` parameter, and any change in its state calls
+ * the `onCheckedChange` callback with the new state.
+ *
+ * @param icon An optional icon to be displayed at the start of the preference item. If provided, it should be an `ImageVector` object.
+ * @param title The main title text displayed for the preference item.
+ * @param summary A secondary text displayed below the title for additional information about the preference.
+ * @param checked The initial state of the switch. Set to true for on and false for off.
+ * @param onCheckedChange A callback function that is called whenever the switch is toggled. This function receives the new state of the switch (boolean) as a parameter.
+ * @param onClick A callback function that is called when the entire preference item is clicked. If no action is needed on click, this can be left empty.
+ *
+ * State ownership:
+ * - [checked] is caller-owned state.
+ * - This composable emits click/toggle intent only and does not persist settings.
+ *
+ * Accessibility:
+ * - Keep [title] short and [summary] descriptive to clarify what the trailing switch controls.
+ * @param firebaseController Optional Firebase controller used to log GA4 events.
+ * @param ga4Event Optional GA4 event data to log on click.
+ */
+@Composable
+fun SwitchPreferenceItemWithDivider(
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    title: String,
+    summary: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    onClick: () -> Unit,
+    onSwitchClick: (Boolean) -> Unit,
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
+) {
+    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
+    val view: View = LocalView.current
+
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+        shape = RectangleShape,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = {
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                    hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
+                    firebaseController.logGa4Event(ga4Event)
+                    onClick()
+                }), verticalAlignment = Alignment.CenterVertically
+        ) {
+            icon?.let {
+                LargeHorizontalSpacer()
+                Icon(imageVector = it, contentDescription = null)
+                LargeHorizontalSpacer()
+            }
+            Column(
+                modifier = Modifier
+                    .padding(all = SizeConstants.LargeSize)
+                    .weight(weight = 1f)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(text = summary, style = MaterialTheme.typography.bodyMedium)
+            }
+            ExtraSmallHorizontalSpacer()
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                contentDescription = null,
+                modifier = Modifier.size(size = SizeConstants.MediumSize),
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            )
+            ExtraSmallHorizontalSpacer()
+            VerticalDivider(
+                modifier = Modifier
+                    .height(height = SizeConstants.MediumSize * 3)
+                    .align(alignment = Alignment.CenterVertically),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                thickness = SizeConstants.ExtraTinySize / 2
+            )
+            CustomSwitch(
+                checked = checked,
+                onCheckedChange = { isChecked ->
+                    firebaseController.logGa4Event(ga4Event)
+                    onCheckedChange(isChecked)
+                    onSwitchClick(isChecked)
+                },
+                modifier = Modifier.padding(all = SizeConstants.LargeSize)
+            )
+        }
+    }
+}

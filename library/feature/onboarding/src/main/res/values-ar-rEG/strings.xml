@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="agree">أوافق</string>
+    <string name="amoled_mode">وضع AMOLED</string>
+    <string name="back_button_content_description">رجوع</string>
+    <string name="back_button_text">رجوع</string>
+    <string name="consent_ad_personalization_description">تمكين الإعلانات المخصصة بناءً على نشاطك وتفضيلاتك عبر خدمات وتطبيقات Google.</string>
+    <string name="consent_ad_personalization_description_short">يمكّن الإعلانات المخصصة.</string>
+    <string name="consent_ad_personalization_title">الإعلانات المخصصة</string>
+    <string name="consent_ad_storage_description">تمكين تخزين البيانات (مثل معرفات الجهاز أو ملفات تعريف الارتباط) لقياس أداء الإعلانات وعرض الإعلانات ذات الصلة.</string>
+    <string name="consent_ad_storage_description_short">يسمح بتخزين البيانات لأغراض إعلانية.</string>
+    <string name="consent_ad_storage_title">تخزين بيانات الإعلانات</string>
+    <string name="consent_ad_user_data_description">السماح بإرسال بيانات الاستخدام والجهاز إلى Google لدعم الميزات المتعلقة بالإعلانات مثل التحويلات وتحسين الحملات.</string>
+    <string name="consent_ad_user_data_description_short">يسمح بإرسال بيانات المستخدم للإعلانات.</string>
+    <string name="consent_ad_user_data_title">إرسال البيانات للإعلانات</string>
+    <string name="consent_analytics_storage_description">السماح بتخزين البيانات مثل استخدام التطبيق ومدة الزيارة لتحسين التحليلات وأداء التطبيق.</string>
+    <string name="consent_analytics_storage_description_short">يسمح بجمع البيانات لتحليل استخدام التطبيق.</string>
+    <string name="consent_analytics_storage_title">تخزين بيانات التحليلات</string>
+    <string name="dark_mode">الوضع الداكن</string>
+    <string name="done_button_content_description">تم</string>
+    <string name="done_button_text">تم</string>
+    <string name="error">خطأ</string>
+    <string name="follow_system">اتباع وضع النظام</string>
+    <string name="learn_more">اعرف المزيد</string>
+    <string name="learn_more_about_provider">معرفة المزيد عن هذا المزوّد</string>
+    <string name="learn_more_privacy_policy">مراجعة سياسة الخصوصية الخاصة بنا</string>
+    <string name="light_mode">الوضع الفاتح</string>
+    <string name="next_button_content_description">التالي</string>
+    <string name="next_button_text">التالي</string>
+    <string name="onboarding_amoled_mode_desc">أسود أعمق لشاشات OLED.</string>
+    <string name="onboarding_complete_icon_desc">اكتمل الإعداد الأولي</string>
+    <string name="onboarding_crashlytics_about_body_1">نستخدم في هذا التطبيق Firebase، وهي منصة من Google تساعد المطورين على فهم كيفية استخدام التطبيق، وتحسين الأداء، وتوفير خدمات مثل التحليلات. تقوم Firebase Analytics بجمع معلومات مثل استخدام الأحداث، وعرض الشاشات، وخصائص الجهاز، وإشارات أخرى تلقائيًا، ولكن فقط إذا منحت الموافقة على جمع هذه الأنواع من البيانات. في حال عدم منح الموافقة، لن تقوم Firebase بتسجيل الأحداث أو إرسال بيانات متعلقة بهذه الفئات.</string>
+    <string name="onboarding_crashlytics_about_body_2">للحصول على معلومات تفصيلية حول كيفية تعامل Firebase وخدمات Google مع البيانات، وكذلك سياسات الخصوصية والأمان الخاصة بها، يرجى الرجوع إلى وثائق خصوصية Firebase الرسمية وحقوق الخصوصية الإقليمية الخاصة بك بموجب قوانين مثل GDPR وCCPA.</string>
+    <string name="onboarding_crashlytics_about_title">حول الموافقة واستخدام بيانات Firebase</string>
+    <string name="onboarding_crashlytics_consent_info_learn_more">معرفة المزيد حول الموافقة واستخدام البيانات</string>
+    <string name="onboarding_crashlytics_consent_info_message">إذا كنت ترغب في معرفة المزيد حول كيفية استخدام بياناتك وما تعنيه كل خيار من خيارات الموافقة، فراجع الوثائق أدناه.</string>
+    <string name="onboarding_crashlytics_consent_intro_1">خصوصيتك مهمة. قبل أن نجمع أي بيانات استخدام أو إعلانات، يرجى اختيار أنواع البيانات التي توافق على جمعها. تؤثر اختياراتك على كيفية قياس أداء التطبيق، وتحسين الميزات، وتخصيص الإعلانات، مع الاستمرار في احترام خصوصيتك.</string>
+    <string name="onboarding_crashlytics_consent_intro_2">تساعدنا هذه الاختيارات على الامتثال لمعايير الخصوصية مثل GDPR وCCPA، مع منحك التحكم في كيفية استخدام بياناتك. يمكنك تغيير هذه الإعدادات لاحقًا في تفضيلات الخصوصية داخل التطبيق في أي وقت.</string>
+    <string name="onboarding_crashlytics_description">اسمح للتطبيق بإرسال بيانات استخدام مجهولة وتقارير الأعطال. يساعدنا هذا في إصلاح الأخطاء وتحسين تجربتك. لا يتم جمع أي معلومات شخصية على الإطلاق.</string>
+    <string name="onboarding_crashlytics_details_intro">فيما يلي ستجد عناصر تحكم أكثر تفصيلاً حول كيفية استخدام بياناتك عبر التطبيق. تؤثر اختياراتك على نوع المعلومات التي يتم جمعها، وكيفية تخزينها، وكيف يمكن مشاركتها مع مزوّدي الخدمات مثل Google، وذلك وفقًا لمعايير الخصوصية ومتطلبات الموافقة المعمول بها.</string>
+    <string name="onboarding_crashlytics_dialog_allow_all">السماح للكل</string>
+    <string name="onboarding_crashlytics_dialog_allow_essentials">الأساسيات فقط</string>
+    <string name="onboarding_crashlytics_dialog_confirm_choices">تأكيد الاختيارات</string>
+    <string name="onboarding_crashlytics_dialog_privacy_choices_title">خيارات الخصوصية</string>
+    <string name="onboarding_crashlytics_dialog_tab_about">حول</string>
+    <string name="onboarding_crashlytics_dialog_tab_consent">الموافقة</string>
+    <string name="onboarding_crashlytics_dialog_tab_details">التفاصيل</string>
+    <string name="onboarding_crashlytics_disabled_desc">الإبلاغ عن البيانات غير نشط.</string>
+    <string name="onboarding_crashlytics_enabled_desc">الإبلاغ عن البيانات نشط.</string>
+    <string name="onboarding_crashlytics_privacy_info">خصوصيتك مهمة. نحن نستخدم هذه البيانات فقط لإصلاح الأخطاء وتحسين الميزات. لمزيد من التفاصيل، يرجى مراجعة سياسة الخصوصية الخاصة بنا.</string>
+    <string name="onboarding_crashlytics_show_details_button">عرض معلومات تفصيلية</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">عرض معلومات تفصيلية حول الاستخدام والتشخيصات</string>
+    <string name="onboarding_crashlytics_title">ساعدنا على التحسين</string>
+    <string name="onboarding_final_description">شكرًا لتخصيص تجربتك. أنت الآن جاهز لاستكشاف جميع الميزات. استمتع.</string>
+    <string name="onboarding_final_title">أنت جاهز تمامًا.</string>
+    <string name="onboarding_theme_dark_desc">مريح للعينين.</string>
+    <string name="onboarding_theme_light_desc">مشرق وحيوي.</string>
+    <string name="onboarding_theme_subtitle">حدد كيف تريد أن يبدو التطبيق.</string>
+    <string name="onboarding_theme_system_desc">يطابق جهازك.</string>
+    <string name="onboarding_theme_title">اختر طرازك</string>
+    <string name="other_colors">ألوان أخرى</string>
+    <string name="skip_button_content_description">تخطي</string>
+    <string name="skip_button_text">تخطي</string>
+    <string name="summary_browse_terms_of_service_and_privacy_policy">اقرأ ووافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا للمتابعة</string>
+    <string name="usage_and_diagnostics">الاستخدام والتشخيصات</string>
+    <string name="wallpaper_colors">ألوان خلفية الشاشة</string>
+    <string name="welcome">مرحباً</string>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="non_paid_support">Безкоштовна підтримка</string>
+    <string name="paid_support">Платна підтримка</string>
+    <string name="purchase_cancelled">Купівля скасована</string>
+    <string name="purchase_pending">Ваша пожертва обробляється Google. Ми повідомимо вас, коли він завершиться. Дякую.</string>
+    <string name="purchase_thank_you">Дякую за пожертву.</string>
+    <string name="summary_donations">Ваші пожертви допоможуть нам підтримувати роботу додатка та розвивати його функції. Дякуємо за вашу щедрість.</string>
+    <string name="support_offer_unavailable">Ця опція пожертви наразі недоступна.</string>
+    <string name="support_us">Підтримайте нас</string>
+    <string name="web_ad">Веб-реклама</string>
+</resources>

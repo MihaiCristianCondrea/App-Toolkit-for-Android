@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Hirdetések</string>
+    <string name="android_version">Android verzió</string>
+    <string name="api_level">API szint</string>
+    <string name="app_build">Alkalmazásverzió: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">Alkalmazásverzió</string>
+    <string name="app_info">Alkalmazásinformáció</string>
+    <string name="changelog_title">Alkalmazás változásnapló</string>
+    <string name="code_of_conduct">Magatartási kódex</string>
+    <string name="content_description_more_options">További lehetőségek</string>
+    <string name="debug">Hibakeresés</string>
+    <string name="device_info">Eszközinformációk</string>
+    <string name="device_model">Eszközmodell</string>
+    <string name="done_button_content_description">Kész</string>
+    <string name="go_back">Vissza</string>
+    <string name="help_and_feedback">Segítség és visszajelzés</string>
+    <string name="legal">Jogi</string>
+    <string name="legal_notices">Jogi közlemények</string>
+    <string name="license">Licenc</string>
+    <string name="manufacturer">Gyártó</string>
+    <string name="no_new_updates_message">Nincs új frissítés elérhető.</string>
+    <string name="oss_license_title">Nyílt forráskódú licencek</string>
+    <string name="permissions">Engedélyek</string>
+    <string name="privacy">Adatvédelem</string>
+    <string name="privacy_policy">Adatvédelmi irányelvek</string>
+    <string name="release">Kiadás</string>
+    <string name="settings">Beállítások</string>
+    <string name="settings_placeholder_description">Nincs kiválasztott beállítás. Válassz egy lehetőséget a részletek megtekintéséhez.</string>
+    <string name="share">Megosztás</string>
+    <string name="snack_device_info_copied">Eszközinformáció másolva a vágólapra</string>
+    <string name="snack_device_info_failed">Nem sikerült betölteni az eszköz adatait</string>
+    <string name="summary_preference_settings_ads">Szabályozd, hogyan használjuk az információidat a releváns hirdetések megjelenítéséhez</string>
+    <string name="summary_preference_settings_code_of_conduct">Ismerd meg a szolgáltatásban elvárt viselkedési szabályokat</string>
+    <string name="summary_preference_settings_legal_notices">Tekintsd meg a szolgáltatásunk jogi információit</string>
+    <string name="summary_preference_settings_oss">Nyílt forráskódú szoftverek licenc részletei</string>
+    <string name="summary_preference_settings_permissions">Kezelje a szolgáltatásunkhoz adott engedélyeket</string>
+    <string name="summary_preference_settings_privacy_policy">Tekintsd meg az adatkezelési irányelveinket</string>
+    <string name="summary_preference_settings_terms_of_service">Tekintsd át a szolgáltatási feltételeket</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Oszd meg az adatokat az alkalmazásélmény javítása érdekében</string>
+    <string name="summary_share_message">Nézd meg ezt a fantasztikus alkalmazást, amit használok. Nagyon érdekes funkciói vannak, amik neked is tetszhetnek. Letöltheted a Play Áruházból itt: %1$s</string>
+    <string name="support_us">Támogass minket</string>
+    <string name="terms_of_service">Szolgáltatási feltételek</string>
+    <string name="try_again">Próbáld újra</string>
+    <string name="updates">Frissítések</string>
+    <string name="usage_and_diagnostics">Használat és diagnosztika</string>
+</resources>

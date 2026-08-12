@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">錯誤回報</string>
+    <string name="cd_expand_device_info">展開或收合裝置資訊</string>
+    <string name="device_info">設備資訊</string>
+    <string name="issue_description_label">描述</string>
+    <string name="issue_email_label">電子郵件</string>
+    <string name="issue_section_label">問題</string>
+    <string name="issue_send">傳送</string>
+    <string name="issue_submitted">您的問題已提交！</string>
+    <string name="issue_submitted_successfully">問題成功提交</string>
+    <string name="issue_title_label">標題</string>
+    <string name="login_section_label">登入</string>
+    <string name="open_button_label">公開問題</string>
+    <string name="open_issue_in_browser">在瀏覽器中打開</string>
+    <string name="optional_placeholder">可選</string>
+    <string name="send_anonymously">匿名傳送</string>
+    <string name="snack_report_failed">無法傳送報告</string>
+    <string name="snack_report_success">報告已成功送出</string>
+    <string name="use_github_account">使用 GitHub 帳戶傳送</string>
+</resources>

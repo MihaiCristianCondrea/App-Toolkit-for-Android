@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">Programa beta</string>
+    <string name="contact_us">Fale conosco</string>
+    <string name="contact_us_description">Conte-nos mais e nós o ajudaremos</string>
+    <string name="feedback">Feedback</string>
+    <string name="help">Ajuda</string>
+    <string name="help_feedback_sheet_contact_description">Abra minha página oficial de contato para suporte direto.</string>
+    <string name="help_feedback_sheet_contact_title">Fale comigo pessoalmente</string>
+    <string name="help_feedback_sheet_feature_request_description">Sugira novas ideias para qualquer um dos nossos apps pelo formulário oficial.</string>
+    <string name="help_feedback_sheet_feature_request_title">Enviar solicitação de recurso</string>
+    <string name="help_feedback_sheet_review_description">Compartilhe sua nota e ajude mais usuários a descobrir o app.</string>
+    <string name="help_feedback_sheet_review_title">Deixe uma avaliação no Google Play</string>
+    <string name="help_feedback_sheet_title">Como você gostaria de compartilhar seu feedback?</string>
+    <string name="oss_license_title">Licenças de código aberto</string>
+    <string name="popular_help_resources">Recursos de ajuda populares</string>
+    <string name="privacy_policy">Política de privacidade</string>
+    <string name="terms_of_service">Termos de serviço</string>
+    <string name="version">Versão %1$s</string>
+    <string name="version_info">Informações da versão</string>
+    <string name="view_in_google_play_store">Ver no Google Play Store</string>
+</resources>

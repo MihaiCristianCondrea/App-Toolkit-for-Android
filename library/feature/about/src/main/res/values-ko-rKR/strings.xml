@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">광고</string>
+    <string name="android_version">Android 버전</string>
+    <string name="api_level">API 레벨</string>
+    <string name="app_build">앱 빌드: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">애플리케이션 빌드 버전</string>
+    <string name="app_info">앱 정보</string>
+    <string name="changelog_title">앱 변경 로그</string>
+    <string name="code_of_conduct">행동 강령</string>
+    <string name="content_description_more_options">더 많은 옵션</string>
+    <string name="debug">디버그</string>
+    <string name="device_info">기기 정보</string>
+    <string name="device_model">기기 모델</string>
+    <string name="done_button_content_description">완료</string>
+    <string name="go_back">뒤로 가기</string>
+    <string name="help_and_feedback">도움말 &amp; 의견</string>
+    <string name="legal">법률 정보</string>
+    <string name="legal_notices">법적 고지</string>
+    <string name="license">라이선스</string>
+    <string name="manufacturer">제조업체</string>
+    <string name="no_new_updates_message">새로운 업데이트가 없습니다.</string>
+    <string name="oss_license_title">오픈 소스 라이선스</string>
+    <string name="permissions">권한</string>
+    <string name="privacy">개인 정보 보호</string>
+    <string name="privacy_policy">개인정보처리방침</string>
+    <string name="release">릴리스</string>
+    <string name="settings">설정</string>
+    <string name="settings_placeholder_description">선택된 설정이 없습니다. 여기서 세부 정보를 보려면 옵션을 선택하세요.</string>
+    <string name="share">공유</string>
+    <string name="snack_device_info_copied">기기 정보가 클립보드에 복사되었습니다.</string>
+    <string name="snack_device_info_failed">디바이스 정보를 불러올 수 없습니다</string>
+    <string name="summary_preference_settings_ads">관련 광고를 표시하기 위해 귀하의 정보를 사용하는 방법 제어</string>
+    <string name="summary_preference_settings_code_of_conduct">서비스 내 행동 규칙 및 지침 이해</string>
+    <string name="summary_preference_settings_legal_notices">서비스 관련 법률 정보 보기</string>
+    <string name="summary_preference_settings_oss">오픈 소스 소프트웨어 라이선스 세부 정보</string>
+    <string name="summary_preference_settings_permissions">서비스에 부여된 권한 관리</string>
+    <string name="summary_preference_settings_privacy_policy">데이터 처리 방식을 규정하는 정책 보기</string>
+    <string name="summary_preference_settings_terms_of_service">서비스 사용 시 동의하는 약관 검토</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">인앱 환경 개선을 위해 데이터 공유</string>
+    <string name="summary_share_message">제가 사용 중인 이 멋진 앱을 확인해 보세요. 흥미로운 기능이 많이 있습니다. Play 스토어에서 다운로드할 수 있습니다: %1$s</string>
+    <string name="support_us">지원하기</string>
+    <string name="terms_of_service">서비스 약관</string>
+    <string name="try_again">다시 시도</string>
+    <string name="updates">업데이트</string>
+    <string name="usage_and_diagnostics">사용량 &amp; 진단</string>
+</resources>

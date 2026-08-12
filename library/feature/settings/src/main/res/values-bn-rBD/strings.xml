@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">উন্নত গোপনীয়তা সেটিংস</string>
+    <string name="app_behavior">অ্যাপের আচরণ</string>
+    <string name="appearance">অ্যাপের চেহারা</string>
+    <string name="bounce_buttons">বাউন্স ক্লিক</string>
+    <string name="bug_report">বাগ রিপোর্ট</string>
+    <string name="cache_cleared_success">ক্যাশে সফলভাবে পরিষ্কার করা হয়েছে</string>
+    <string name="cache_management">ক্যাশে ব্যবস্থাপনা</string>
+    <string name="clear_cache">ক্যাশে পরিষ্কার করুন</string>
+    <string name="consent_ad_personalization_description">Google পরিষেবা এবং অ্যাপ জুড়ে আপনার কার্যকলাপ এবং পছন্দের উপর ভিত্তি করে ব্যক্তিগতকৃত বিজ্ঞাপন সক্রিয় করুন।</string>
+    <string name="consent_ad_personalization_title">ব্যক্তিগতকৃত বিজ্ঞাপন</string>
+    <string name="consent_ad_storage_description">বিজ্ঞাপনের পারফরম্যান্স পরিমাপ করতে এবং প্রাসঙ্গিক বিজ্ঞাপন দেখানোর জন্য ডেটা (যেমন ডিভাইস শনাক্তকারী বা কুকিজ) সংরক্ষণ সক্ষম করুন।</string>
+    <string name="consent_ad_storage_title">বিজ্ঞাপনের ডেটা সংরক্ষণ করুন</string>
+    <string name="consent_ad_user_data_description">ব্যবহার এবং ডিভাইসের ডেটা Google-কে পাঠানোর অনুমতি দিন, যাতে রূপান্তর এবং প্রচারাভিযান অপ্টিমাইজেশনের মতো বিজ্ঞাপন-সম্পর্কিত বৈশিষ্ট্যগুলি সমর্থন করা যায়।</string>
+    <string name="consent_ad_user_data_title">বিজ্ঞাপনের জন্য ডেটা পাঠান</string>
+    <string name="consent_analytics_storage_description">অ্যাপের ব্যবহার এবং পরিদর্শনের সময়কালের মতো ডেটা সংরক্ষণ করার অনুমতি দিন, যাতে অ্যানালিটিক্স এবং অ্যাপের পারফরম্যান্স উন্নত করা যায়।</string>
+    <string name="consent_analytics_storage_title">অ্যানালিটিক্স ডেটা সংরক্ষণ করুন</string>
+    <string name="consent_category_advertising_title">ব্যক্তিগতকৃত বিজ্ঞাপন</string>
+    <string name="consent_category_analytics_title">অ্যানালিটিক্স</string>
+    <string name="dark_theme">ডার্ক থিম</string>
+    <string name="dynamic_colors">ডাইনামিক রঙ</string>
+    <string name="error_reporting">ত্রুটি প্রতিবেদন</string>
+    <string name="get_help">সাহায্য পান</string>
+    <string name="icon_desc_consent_category">সম্মতি বিভাগের আইকন</string>
+    <string name="icon_desc_expand_less">সংকুচিত করুন</string>
+    <string name="icon_desc_expand_more">আরও প্রসারিত করুন</string>
+    <string name="language">ভাষা</string>
+    <string name="learn_more">আরও জানুন</string>
+    <string name="navigation">নেভিগেশন</string>
+    <string name="settings">সেটিংস</string>
+    <string name="settings_placeholder_description">কোনো সেটিংস নির্বাচন করা হয়নি। এর বিবরণ এখানে দেখতে একটি বিকল্প পছন্দ করুন।</string>
+    <string name="show_labels_on_bottom_bar">নীচের বারে লেবেলগুলি দেখান</string>
+    <string name="startup_page">স্টার্টআপ পৃষ্ঠা</string>
+    <string name="summary_preference_settings_bounce_buttons">ক্লিক করার সময় সমস্ত ক্লিকযোগ্য উপাদানে একটি সূক্ষ্ম বাউন্স অ্যানিমেশন প্রয়োগ করে</string>
+    <string name="summary_preference_settings_bug_report">অ্যাপের GitHub রিপোজিটরি ইস্যু পৃষ্ঠায় বাগ রিপোর্ট এবং বৈশিষ্ট্যের অনুরোধ পাঠান</string>
+    <string name="summary_preference_settings_clear_cache">অস্থায়ী অ্যাপ্লিকেশন ডেটা পরিষ্কার করুন।</string>
+    <string name="summary_preference_settings_dynamic_colors">ওয়ালপেপার থেকে রঙ অ্যাপ থিমে প্রয়োগ করুন</string>
+    <string name="summary_preference_settings_language">অ্যাপে ব্যবহৃত ভাষা পরিবর্তন করে</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">নীচের নেভিগেশন বারে আইকনগুলির নীচে আইটেম শিরোনাম প্রদর্শন করুন</string>
+    <string name="summary_preference_settings_startup_page">অ্যাপ শুরু হওয়ার সময় প্রদর্শিত স্ক্রিনটি পছন্দ করুন।</string>
+    <string name="summary_usage_and_diagnostics">স্বয়ংক্রিয়ভাবে ডায়াগনস্টিক, ডিভাইস এবং অ্যাপ ব্যবহারের ডেটা আমাদের কাছে পাঠিয়ে আপনার অভিজ্ঞতা উন্নত করতে সাহায্য করুন। এটি অ্যাপের কর্মক্ষমতা, স্থিতিশীলতা এবং অন্যান্য উন্নতিতে সাহায্য করবে। কিছু সামগ্রিক ডেটাও আমাদের অ্যাপগুলিকে সাহায্য করবে।\n\nএটি আপনার ডিভাইস এবং আপনি কীভাবে আমাদের অ্যাপগুলি ব্যবহার করেন (যেমন ব্যাটারির স্তর, সিস্টেম এবং অ্যাপ কার্যকলাপ এবং ত্রুটি) সে সম্পর্কে সাধারণ তথ্য। ডেটা আমাদের অ্যাপগুলির উন্নতিতে ব্যবহৃত হবে।\n\nএই বৈশিষ্ট্যটি বন্ধ করলে অ্যাপ আপডেট এবং নিরাপত্তার মতো প্রয়োজনীয় পরিষেবাগুলির জন্য প্রয়োজনীয় তথ্য পাঠানোর ক্ষেত্রে আপনার ডিভাইসের ক্ষমতা প্রভাবিত হবে না।\n</string>
+    <string name="usage_and_diagnostics">ব্যবহার এবং ডায়াগনস্টিকস</string>
+    <string name="will_never_turn_on_automatically">কখনো স্বয়ংক্রিয়ভাবে চালু হবে না</string>
+    <string name="will_turn_on_automatically_by_system">সিস্টেম দ্বারা স্বয়ংক্রিয়ভাবে চালু হবে</string>
+</resources>

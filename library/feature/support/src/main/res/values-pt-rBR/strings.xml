@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="non_paid_support">Suporte não pago</string>
+    <string name="paid_support">Suporte pago</string>
+    <string name="purchase_cancelled">Compra cancelada</string>
+    <string name="purchase_pending">Sua doação está sendo processada pelo Google. Nós o notificaremos quando estiver completo. Obrigado.</string>
+    <string name="purchase_thank_you">Obrigado por sua doação.</string>
+    <string name="summary_donations">Independentemente do valor da sua doação, você nos ajudará a manter o aplicativo em funcionamento e melhorar seus recursos. Agradecemos por sua generosidade e gentileza.</string>
+    <string name="support_offer_unavailable">Esta opção de doação está indisponível no momento.</string>
+    <string name="support_us">Apoie-nos</string>
+    <string name="web_ad">Anúncio na web</string>
+</resources>

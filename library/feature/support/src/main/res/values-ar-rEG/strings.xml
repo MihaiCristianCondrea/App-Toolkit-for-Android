@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="non_paid_support">دعم غير مدفوع</string>
+    <string name="paid_support">دعم مدفوع</string>
+    <string name="purchase_cancelled">الشراء تم إلغاؤه</string>
+    <string name="purchase_pending">تتم معالجة تبرعك بواسطة Google. سوف نعلمك عند اكتماله. شكرًا لك.</string>
+    <string name="purchase_thank_you">شكرا لك على تبرعك.</string>
+    <string name="summary_donations">بغض النظر عن المبلغ الذي تتبرع به، ستساعدنا في الحفاظ على تشغيل تطبيقنا وتحسين ميزاتنا. نحن نقدر كرمك ولطفك.</string>
+    <string name="support_offer_unavailable">خيار التبرع هذا غير متاح حاليًا.</string>
+    <string name="support_us">ادعمنا</string>
+    <string name="web_ad">إعلان ويب</string>
+</resources>

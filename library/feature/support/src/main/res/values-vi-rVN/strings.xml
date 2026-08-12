@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="non_paid_support">Hỗ trợ không trả phí</string>
+    <string name="paid_support">Hỗ trợ trả phí</string>
+    <string name="purchase_cancelled">Mua hàng bị hủy bỏ</string>
+    <string name="purchase_pending">Sự đóng góp của bạn đang được Google xử lý. Chúng tôi sẽ thông báo cho bạn khi nó hoàn thành. Cảm ơn.</string>
+    <string name="purchase_thank_you">Cảm ơn bạn đã đóng góp của bạn.</string>
+    <string name="summary_donations">Dù bạn quyên góp bao nhiêu, bạn cũng sẽ giúp chúng tôi duy trì hoạt động của ứng dụng và cải thiện các tính năng. Chúng tôi đánh giá cao sự hào phóng và lòng tốt của bạn.</string>
+    <string name="support_offer_unavailable">Tùy chọn quyên góp này hiện không khả dụng.</string>
+    <string name="support_us">Ủng hộ chúng tôi</string>
+    <string name="web_ad">Quảng cáo web</string>
+</resources>

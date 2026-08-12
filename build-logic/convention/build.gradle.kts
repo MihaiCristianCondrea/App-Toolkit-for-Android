@@ -19,7 +19,7 @@ plugins {
     id("org.gradle.kotlin.kotlin-dsl") version "6.7.6"
 }
 
-group = "com.d4rk.android.apptoolkit.buildlogic"
+group = "com.mihaicristiancondrea.android.apptoolkit.buildlogic"
 
 dependencies {
     compileOnly(libs.android.gradlePlugin)
@@ -29,8 +29,8 @@ dependencies {
 gradlePlugin {
     plugins {
         register("versioning") {
-            id = "com.d4rk.android.apptoolkit.versioning"
-            implementationClass = "com.d4rk.android.apptoolkit.buildlogic.VersioningPlugin"
+            id = "com.mihaicristiancondrea.android.apptoolkit.versioning"
+            implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.VersioningPlugin"
         }
     }
 }

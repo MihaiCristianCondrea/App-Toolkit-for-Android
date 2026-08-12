@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="access_network_state">Доступ до стану мережі [ACCESS_NETWORK_STATE]</string>
+    <string name="ad_id">Ідентифікатор реклами [AD_ID]</string>
+    <string name="billing">Платежі [BILLING]</string>
+    <string name="check_license">Перевірка ліцензії [CHECK_LICENSE]</string>
+    <string name="foreground_service">Служба переднього плану [FOREGROUND_SERVICE]</string>
+    <string name="internet">Інтернет [INTERNET]</string>
+    <string name="normal">Нормальні</string>
+    <string name="permissions">Дозволи</string>
+    <string name="post_notifications">Публікувати сповіщення [POST_NOTIFICATIONS]</string>
+    <string name="runtime">Час виконання</string>
+    <string name="summary_preference_permissions_access_network_state">Дозволяє додатку перевіряти підключення до мережі та отримувати інформацію про Wi-Fi, включаючи стан увімкнення та назви підключених пристроїв Wi-Fi.</string>
+    <string name="summary_preference_permissions_ad_id">Дозволяє додатку отримувати та використовувати рекламний ідентифікатор, пов\'язаний з пристроєм користувача, надаючи персоналізовану рекламу, вимірюючи ефективність реклами та показуючи рекламу на пристроях з Android 13 або новіших версій.</string>
+    <string name="summary_preference_permissions_billing">Дозволяє додатку використовувати бібліотеку Google Play Billing для обробки покупок у додатку та пожертв.</string>
+    <string name="summary_preference_permissions_check_license">Дозволяє додатку перевіряти його відповідність ліцензійній угоді та застосовувати умови ліцензування для захисту інтелектуальної власності.</string>
+    <string name="summary_preference_permissions_foreground_service">Дозволяє додатку створювати та використовувати служби, що працюють на передньому плані, надаючи їм пріоритет над іншими фоновими процесами та покращуючи продуктивність і надійність.</string>
+    <string name="summary_preference_permissions_internet">Дозволяє додатку встановлювати інтернет-з\'єднання для надсилання звітів про помилки або перевірки оновлень.</string>
+    <string name="summary_preference_permissions_post_notifications">Дозволяє додатку відображати сповіщення на пристроях з Android 13 або новіших версій.</string>
+    <string name="summary_preference_permissions_wake_lock">Дозволяє програмі запобігати переходу пристрою в режим сну (наприклад, затемнення екрана або перехід процесора в режим сну) під час критичних операцій, щоб забезпечити їх завершення без переривань. Використовується економно для збереження заряду батареї.</string>
+    <string name="wake_lock">Залишати пристрій увімкненим [WAKE_LOCK]</string>
+</resources>

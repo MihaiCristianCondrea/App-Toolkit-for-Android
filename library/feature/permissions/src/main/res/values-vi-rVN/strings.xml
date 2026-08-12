@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="access_network_state">Truy cập trạng thái mạng [ACCESS_NETWORK_STATE]</string>
+    <string name="ad_id">ID quảng cáo [AD_ID]</string>
+    <string name="billing">Thanh toán [BILLING]</string>
+    <string name="check_license">Kiểm tra giấy phép [CHECK_LICENSE]</string>
+    <string name="foreground_service">Dịch vụ nền trước [FOREGROUND_SERVICE]</string>
+    <string name="internet">Internet [INTERNET]</string>
+    <string name="normal">Bình thường</string>
+    <string name="permissions">Quyền</string>
+    <string name="post_notifications">Gửi thông báo [POST_NOTIFICATIONS]</string>
+    <string name="runtime">Thời gian chạy</string>
+    <string name="summary_preference_permissions_access_network_state">Cho phép ứng dụng kiểm tra kết nối mạng và truy xuất thông tin về Wi-Fi, bao gồm trạng thái bật và tên thiết bị Wi-Fi đã kết nối.</string>
+    <string name="summary_preference_permissions_ad_id">Cho phép ứng dụng truy xuất và sử dụng mã nhận dạng quảng cáo được liên kết với thiết bị của người dùng, cung cấp quảng cáo được cá nhân hóa, đo lường hiệu quả quảng cáo và hiển thị quảng cáo trên các thiết bị Android 13 trở lên.</string>
+    <string name="summary_preference_permissions_billing">Cho phép ứng dụng sử dụng Thư viện thanh toán Google Play để xử lý các giao dịch mua trong ứng dụng và quyên góp.</string>
+    <string name="summary_preference_permissions_check_license">Cho phép ứng dụng xác minh việc tuân thủ thỏa thuận cấp phép và thực thi các điều khoản cấp phép để bảo vệ tài sản trí tuệ.</string>
+    <string name="summary_preference_permissions_foreground_service">Cho phép ứng dụng tạo và sử dụng các dịch vụ chạy trên nền trước, ưu tiên chúng hơn các quy trình nền khác và cải thiện hiệu suất cũng như độ tin cậy.</string>
+    <string name="summary_preference_permissions_internet">Cho phép ứng dụng thiết lập kết nối internet để gửi báo cáo lỗi hoặc kiểm tra cập nhật.</string>
+    <string name="summary_preference_permissions_post_notifications">Cho phép ứng dụng hiển thị thông báo trên các thiết bị chạy Android 13 trở lên.</string>
+    <string name="summary_preference_permissions_wake_lock">Cho phép ứng dụng ngăn thiết bị chuyển sang chế độ ngủ (ví dụ: làm mờ màn hình hoặc bộ xử lý ngủ) trong các hoạt động quan trọng để đảm bảo chúng hoàn thành mà không bị gián đoạn. Điều này được sử dụng một cách tiết kiệm để bảo tồn pin.</string>
+    <string name="wake_lock">Giữ thiết bị luôn bật [WAKE_LOCK]</string>
+</resources>

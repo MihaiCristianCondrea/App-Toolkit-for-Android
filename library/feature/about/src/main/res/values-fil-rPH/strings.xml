@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Mga Ad</string>
+    <string name="android_version">Bersyon ng Android</string>
+    <string name="api_level">Antas ng API</string>
+    <string name="app_build">Build ng app: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">Bersyon ng build ng application</string>
+    <string name="app_info">Impormasyon ng app</string>
+    <string name="changelog_title">Changelog ng app</string>
+    <string name="code_of_conduct">Kodigo ng pag-uugali</string>
+    <string name="content_description_more_options">Higit pang mga pagpipilian</string>
+    <string name="debug">Debug</string>
+    <string name="device_info">Impormasyon ng device</string>
+    <string name="device_model">Modelo ng device</string>
+    <string name="done_button_content_description">Tapos na</string>
+    <string name="go_back">Bumalik</string>
+    <string name="help_and_feedback">Tulong &amp; Feedback</string>
+    <string name="legal">Legal</string>
+    <string name="legal_notices">Mga legal na paunawa</string>
+    <string name="license">Lisensya</string>
+    <string name="manufacturer">Manufacturer</string>
+    <string name="no_new_updates_message">Walang bagong update na available.</string>
+    <string name="oss_license_title">Mga lisensya ng open source</string>
+    <string name="permissions">Mga Pahintulot</string>
+    <string name="privacy">Pribasya</string>
+    <string name="privacy_policy">Patakaran sa privacy</string>
+    <string name="release">Release</string>
+    <string name="settings">Mga Setting</string>
+    <string name="settings_placeholder_description">Walang napiling setting. Pumili ng opsyon para tingnan ang mga detalye nito dito.</string>
+    <string name="share">Ibahagi</string>
+    <string name="snack_device_info_copied">Nakopya sa clipboard ang impormasyon ng device</string>
+    <string name="snack_device_info_failed">Hindi ma-load ang impormasyon ng device</string>
+    <string name="summary_preference_settings_ads">Kontrolin kung paano namin ginagamit ang iyong impormasyon para ipakita sa iyo ang mga nauugnay na ad</string>
+    <string name="summary_preference_settings_code_of_conduct">Unawain ang mga patakaran at alituntunin para sa pag-uugali sa loob ng aming serbisyo</string>
+    <string name="summary_preference_settings_legal_notices">Tingnan ang legal na impormasyon tungkol sa aming serbisyo</string>
+    <string name="summary_preference_settings_oss">Mga detalye ng lisensya para sa open source software</string>
+    <string name="summary_preference_settings_permissions">Pamahalaan ang mga pahintulot na ibinigay sa aming serbisyo</string>
+    <string name="summary_preference_settings_privacy_policy">Tingnan ang patakaran na namamahala kung paano namin hinahawakan ang iyong data</string>
+    <string name="summary_preference_settings_terms_of_service">Suriin ang mga tuntunin na sinasang-ayunan mo kapag ginagamit ang aming serbisyo</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Ibahagi ang data para makatulong na mapabuti ang karanasan sa loob ng app</string>
+    <string name="summary_share_message">Tingnan itong kamangha-manghang app na ginagamit ko. Mayroon itong ilang mga talagang cool na feature na maaaring makita mong interesante. Maaari mo itong i-download mula sa Play Store sa: %1$s</string>
+    <string name="support_us">Suportahan kami</string>
+    <string name="terms_of_service">Mga tuntunin ng serbisyo</string>
+    <string name="try_again">Subukang muli</string>
+    <string name="updates">Mga Update</string>
+    <string name="usage_and_diagnostics">Paggamit at mga diagnostic</string>
+</resources>

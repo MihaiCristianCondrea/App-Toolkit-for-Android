@@ -1,0 +1,305 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui
+
+import androidx.lifecycle.viewModelScope
+import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.CaffeineRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.RingerMode
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.SosRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.repository.SystemRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.GetBreathingDataUseCase
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.GetSensorDataUseCase
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.GetToolkitTilesUseCase
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.SyncToolkitTileStatusesUseCase
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state.ToolkitSensorData
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setError
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setLoading
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import kotlinx.collections.immutable.mutate
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+/** Coordinates the static Toolkit Tiles catalog, filtering, and add-tile requests. */
+class ToolkitTilesViewModel(
+    private val getToolkitTilesUseCase: GetToolkitTilesUseCase,
+    private val getSensorDataUseCase: GetSensorDataUseCase,
+    private val getBreathingDataUseCase: GetBreathingDataUseCase,
+    private val caffeineRepository: CaffeineRepository,
+    private val systemRepository: SystemRepository,
+    private val sosRepository: SosRepository,
+    private val syncToolkitTileStatusesUseCase: SyncToolkitTileStatusesUseCase,
+    private val dispatchers: DispatcherProvider,
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<ToolkitTilesUiState, ToolkitTilesEvent, ToolkitTilesAction>(
+    initialState = UiStateScreen(data = ToolkitTilesUiState()),
+    firebaseController = firebaseController,
+    screenName = "ToolkitTiles",
+) {
+    private var loadJob: Job? = null
+    private var sensorJob: Job? = null
+
+    init {
+        onEvent(ToolkitTilesEvent.Initialize)
+    }
+
+    override fun handleEvent(event: ToolkitTilesEvent) {
+        when (event) {
+            is ToolkitTilesEvent.Initialize -> loadTiles()
+            is ToolkitTilesEvent.Refresh -> refreshStatuses()
+            is ToolkitTilesEvent.FilterSelected -> selectFilter(event.filter)
+            is ToolkitTilesEvent.CategoryToggled -> toggleCategory(event.categoryId)
+            is ToolkitTilesEvent.AddTileClicked -> handleAddTile(event.requestKey)
+            is ToolkitTilesEvent.TileSetupClicked -> handleTileSetup(event.tileId)
+            is ToolkitTilesEvent.TilePreviewOpened -> startSensorTracking(event.tileId)
+            is ToolkitTilesEvent.TilePreviewClosed -> stopSensorTracking()
+            is ToolkitTilesEvent.CaffeineCycleClicked -> caffeineRepository.cycleState()
+            is ToolkitTilesEvent.SoundModeClicked -> handleSoundModeCycle(event.current)
+            is ToolkitTilesEvent.MusicSearchClicked -> systemRepository.launchMusicSearch()
+            is ToolkitTilesEvent.SosClicked -> sosRepository.toggle()
+            is ToolkitTilesEvent.AdStatusChanged -> updateAdStatus(event.adId, event.isLoaded)
+        }
+    }
+
+    private fun updateAdStatus(adId: String, isLoaded: Boolean) {
+        screenState.update { current ->
+            val data = current.data ?: return@update current
+            val updated = data.loadedAdIds.mutate {
+                if (isLoaded) it.add(adId) else it.remove(adId)
+            }
+            current.copy(data = data.copy(loadedAdIds = updated))
+        }
+    }
+
+    private fun loadTiles() {
+        startOperation(action = Actions.LOAD_TILES)
+        loadJob = loadJob.restart {
+            getToolkitTilesUseCase()
+                .flowOn(dispatchers.default)
+                .onStart { screenState.setLoading() }
+                .catchReport(action = Actions.LOAD_TILES) {
+                    screenState.setError(
+                        message = UiTextHelper.StringResource(R.string.tiles_error_failed_to_load),
+                    )
+                }
+                .onEach { categories ->
+                    val expandedIds = categories
+                        .filter { category -> category.initiallyExpanded }
+                        .map { category -> category.id }
+                        .toPersistentSet()
+
+                    val syncedCategories = syncToolkitTileStatusesUseCase(categories)
+
+                    screenState.setSuccess(
+                        data = (screenData ?: ToolkitTilesUiState()).copy(
+                            categories = syncedCategories.toImmutableList(),
+                            expandedCategoryIds = expandedIds,
+                        )
+                    )
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    private fun refreshStatuses() {
+        screenState.update { current ->
+            val data = current.data ?: return@update current
+            current.copy(data = data.copy(categories = syncToolkitTileStatusesUseCase(data.categories).toImmutableList()))
+        }
+    }
+
+    private fun selectFilter(filter: ToolkitTilesFilter) {
+        screenState.update { current ->
+            current.copy(data = current.data?.copy(selectedFilter = filter))
+        }
+    }
+
+    private fun toggleCategory(categoryId: String) {
+        screenState.update { current ->
+            val data = current.data ?: return@update current
+            val expandedIds = data.expandedCategoryIds
+            val updated = expandedIds.mutate {
+                if (categoryId in it) {
+                    it.remove(categoryId)
+                } else {
+                    it.add(categoryId)
+                }
+            }
+            current.copy(data = data.copy(expandedCategoryIds = updated))
+        }
+    }
+
+    private fun handleAddTile(requestKey: String?) {
+        startOperation(action = Actions.ADD_TILE)
+        if (requestKey == null) {
+            showSetupMessage()
+        } else {
+            sendAction(ToolkitTilesAction.RequestAddTile(requestKey))
+        }
+    }
+
+    private fun handleTileSetup(tileId: String) {
+        startOperation(
+            action = Actions.OPEN_TILE_SETUP,
+            extra = mapOf(ExtraKeys.TILE_ID to tileId),
+        )
+        showSetupMessage()
+    }
+
+    private fun startSensorTracking(tileId: String) {
+        sensorJob?.cancel()
+        sensorJob = viewModelScope.launch(dispatchers.default) {
+            when (tileId) {
+                "compass" -> {
+                    getSensorDataUseCase.getCompassAzimuth()
+                        .onEach { azimuth ->
+                            updateSensorData { it.copy(compassAzimuth = azimuth) }
+                        }
+                        .launchIn(this)
+                }
+
+                "bubble_level" -> {
+                    getSensorDataUseCase.getLevelOrientation()
+                        .onEach { (pitch, roll) ->
+                            updateSensorData { it.copy(levelPitch = pitch, levelRoll = roll) }
+                        }
+                        .launchIn(this)
+                }
+
+                "lux_meter" -> {
+                    getSensorDataUseCase.getLuxLevel()
+                        .onEach { lux ->
+                            updateSensorData { it.copy(luxLevel = lux) }
+                        }
+                        .launchIn(this)
+                }
+
+                "temperature" -> {
+                    getSensorDataUseCase.getBatteryTemperature()
+                        .onEach { temperature ->
+                            updateSensorData { it.copy(batteryTemperature = temperature) }
+                        }
+                        .launchIn(this)
+                }
+
+                "caffeine" -> {
+                    caffeineRepository.currentState
+                        .onEach { state ->
+                            screenState.update { current ->
+                                val data = current.data ?: return@update current
+                                current.copy(data = data.copy(caffeineState = state))
+                            }
+                        }
+                        .launchIn(this)
+                }
+
+                "sound_mode" -> {
+                    systemRepository.getRingerMode()
+                        .onEach { mode ->
+                            screenState.update { current ->
+                                val data = current.data ?: return@update current
+                                current.copy(data = data.copy(ringerMode = mode))
+                            }
+                        }
+                        .launchIn(this)
+                }
+
+                "sos" -> {
+                    sosRepository.isActive
+                        .onEach { active ->
+                            screenState.update { current ->
+                                val data = current.data ?: return@update current
+                                current.copy(data = data.copy(isSosActive = active))
+                            }
+                        }
+                        .launchIn(this)
+                }
+
+                "breathing" -> {
+                    getBreathingDataUseCase.start()
+                    getBreathingDataUseCase.breathingState
+                        .onEach { state ->
+                            screenState.update { current ->
+                                val data = current.data ?: return@update current
+                                current.copy(data = data.copy(breathingState = state))
+                            }
+                        }
+                        .launchIn(this)
+                }
+            }
+        }
+    }
+
+    private fun stopSensorTracking() {
+        sensorJob?.cancel()
+        sensorJob = null
+        getBreathingDataUseCase.stop()
+        sosRepository.cleanup()
+        updateSensorData { ToolkitSensorData() }
+    }
+
+    private fun updateSensorData(update: (ToolkitSensorData) -> ToolkitSensorData) {
+        screenState.update { current ->
+            val data = current.data ?: return@update current
+            current.copy(data = data.copy(sensorData = update(data.sensorData)))
+        }
+    }
+
+    private fun showSetupMessage() {
+        sendAction(ToolkitTilesAction.ShowSetupRequiredMessage)
+    }
+
+    private fun handleSoundModeCycle(current: RingerMode) {
+        val next = when (current) {
+            RingerMode.Normal -> RingerMode.Vibrate
+            RingerMode.Vibrate,
+            RingerMode.Silent -> RingerMode.Normal
+        }
+        try {
+            systemRepository.setRingerMode(next)
+        } catch (_: Exception) {
+            sendAction(ToolkitTilesAction.ShowMessage("Unable to change sound mode"))
+        }
+    }
+
+    private object Actions {
+        const val LOAD_TILES: String = "loadTiles"
+        const val ADD_TILE: String = "addTile"
+        const val OPEN_TILE_SETUP: String = "openTileSetup"
+    }
+
+    private object ExtraKeys {
+        const val TILE_ID: String = "tileId"
+    }
+}

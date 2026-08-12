@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">Raport o błędzie</string>
+    <string name="cd_expand_device_info">Rozwiń lub zwiń informacje o urządzeniu</string>
+    <string name="device_info">Informacje o urządzeniu</string>
+    <string name="issue_description_label">Opis</string>
+    <string name="issue_email_label">Email</string>
+    <string name="issue_section_label">Zgłoszenie</string>
+    <string name="issue_send">Wyślij</string>
+    <string name="issue_submitted">Twój problem został przesłany.</string>
+    <string name="issue_submitted_successfully">Problem złożony pomyślnie</string>
+    <string name="issue_title_label">Tytuł</string>
+    <string name="login_section_label">Logowanie</string>
+    <string name="open_button_label">Problem otwarty</string>
+    <string name="open_issue_in_browser">Otwarte w przeglądarce</string>
+    <string name="optional_placeholder">Opcjonalnie</string>
+    <string name="send_anonymously">Wyślij anonimowo</string>
+    <string name="snack_report_failed">Nie udało się wysłać zgłoszenia</string>
+    <string name="snack_report_success">Zgłoszenie wysłane pomyślnie</string>
+    <string name="use_github_account">Wyślij za pomocą konta GitHub</string>
+</resources>

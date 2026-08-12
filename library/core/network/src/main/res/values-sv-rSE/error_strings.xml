@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="cancelled_error">Åtgärden avbröts.</string>
+    <string name="connection_closed_error">Anslutningen avbröts.</string>
+    <string name="connection_error">Nätverksfel. Försök igen.</string>
+    <string name="database_cant_open_error">Det gick inte att öppna lagringen.</string>
+    <string name="database_constraint_error">Begränsningsfel i lagringen.</string>
+    <string name="database_corrupt_error">Lagringen är skadad.</string>
+    <string name="database_error">Lagringsfel.</string>
+    <string name="database_full_error">Lagringen är full.</string>
+    <string name="database_locked_error">Lagringen är upptagen. Försök igen.</string>
+    <string name="error_failed_to_launch_review">Det gick inte att starta granskningsflödet</string>
+    <string name="error_failed_to_load_consent_info">Det gick inte att läsa in samtyckesinformation</string>
+    <string name="error_failed_to_load_faq">Det gick inte att läsa in vanliga frågor</string>
+    <string name="error_failed_to_load_sku_details">Det gick inte att läsa in SKU-detaljer</string>
+    <string name="error_failed_to_request_review">Det gick inte att begära granskning</string>
+    <string name="error_failed_to_update_app">Det gick inte att uppdatera appen</string>
+    <string name="http_client_error">Begäran misslyckades. Försök igen.</string>
+    <string name="http_redirect_error">Oväntad omdirigering från servern.</string>
+    <string name="http_server_error">Serverfel. Försök igen senare.</string>
+    <string name="illegal_argument_error">Ogiltig inmatning eller argument angavs. Kontrollera informationen och försök igen.</string>
+    <string name="invalid_state_error">Åtgärden är inte tillåten just nu.</string>
+    <string name="no_data_error">Inga data tillgängliga.</string>
+    <string name="no_internet_error">Ingen internetanslutning.</string>
+    <string name="rate_limited_error">För många begäranden. Försök igen senare.</string>
+    <string name="request_timeout_error">Begäran tog för lång tid. Försök igen.</string>
+    <string name="serialization_error">Det gick inte att läsa serversvaret.</string>
+    <string name="ssl_error">Säker anslutning misslyckades.</string>
+    <string name="unknown_error">Ett okänt fel uppstod.</string>
+    <string name="unsupported_operation_error">Åtgärden stöds inte.</string>
+</resources>

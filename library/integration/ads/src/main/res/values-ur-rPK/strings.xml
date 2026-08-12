@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">اشتہارات</string>
+    <string name="display_ads">اشتہارات دکھائیں</string>
+    <string name="learn_more">مزید جانیں</string>
+    <string name="personalized_ads">ذاتی نوعیت کے اشتہارات</string>
+    <string name="summary_ads">وہ اشتہارات دیکھیں جو آپ سے متعلقہ ہوں۔ اپنی ایپ سرگرمی کی بنیاد پر ذاتی نوعیت کے اشتہارات دکھانے کے لیے استعمال ہونے والی معلومات کا نظم کریں۔ آپ یہاں ہمیشہ ذاتی نوعیت کو بند کر سکتے ہیں۔\n</string>
+    <string name="summary_ads_personalized_ads">منتخب کریں کہ ہم آپ کی دلچسپیوں کی بنیاد پر آپ کے لیے اشتہارات کو کیسے ذاتی بناتے ہیں</string>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">تقرير خطأ</string>
+    <string name="cd_expand_device_info">توسيع أو طي معلومات الجهاز</string>
+    <string name="device_info">معلومات الجهاز</string>
+    <string name="issue_description_label">الوصف</string>
+    <string name="issue_email_label">البريد الإلكتروني</string>
+    <string name="issue_section_label">المشكلة</string>
+    <string name="issue_send">إرسال</string>
+    <string name="issue_submitted">تم تقديم مشكلتك.</string>
+    <string name="issue_submitted_successfully">تم تقديم القضية بنجاح</string>
+    <string name="issue_title_label">العنوان</string>
+    <string name="login_section_label">تسجيل الدخول</string>
+    <string name="open_button_label">قضية مفتوحة</string>
+    <string name="open_issue_in_browser">مفتوح في المتصفح</string>
+    <string name="optional_placeholder">اختياري</string>
+    <string name="send_anonymously">أرسل مجهولاً</string>
+    <string name="snack_report_failed">فشل في إرسال التقرير</string>
+    <string name="snack_report_success">تم إرسال التقرير بنجاح</string>
+    <string name="use_github_account">أرسل باستخدام حساب GitHub</string>
+</resources>

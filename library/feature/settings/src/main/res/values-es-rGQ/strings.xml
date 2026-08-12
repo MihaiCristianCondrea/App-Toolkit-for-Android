@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Configuración avanzada de privacidad</string>
+    <string name="app_behavior">Comportamiento de la aplicación</string>
+    <string name="appearance">Apariencia</string>
+    <string name="bounce_buttons">Animación de rebote</string>
+    <string name="bug_report">Informe de fallos</string>
+    <string name="cache_cleared_success">Caché borrado con éxito</string>
+    <string name="cache_management">Gestión de caché</string>
+    <string name="clear_cache">Borrar caché</string>
+    <string name="consent_ad_personalization_description">Habilitar anuncios personalizados basados en tu actividad y preferencias en los servicios y aplicaciones de Google.</string>
+    <string name="consent_ad_personalization_title">Anuncios personalizados</string>
+    <string name="consent_ad_storage_description">Habilitar el almacenamiento de datos (como identificadores de dispositivo o cookies) para medir el rendimiento de los anuncios y mostrar anuncios relevantes.</string>
+    <string name="consent_ad_storage_title">Almacenar datos de publicidad</string>
+    <string name="consent_ad_user_data_description">Permitir el envío de datos de uso y del dispositivo a Google para admitir funciones relacionadas con anuncios, como conversiones y optimización de campañas.</string>
+    <string name="consent_ad_user_data_title">Enviar datos para anuncios</string>
+    <string name="consent_analytics_storage_description">Permitir el almacenamiento de datos como el uso de la aplicación y la duración de la visita para mejorar el análisis y el rendimiento de la aplicación.</string>
+    <string name="consent_analytics_storage_title">Almacenar datos de análisis</string>
+    <string name="consent_category_advertising_title">Publicidad personalizada</string>
+    <string name="consent_category_analytics_title">Análisis</string>
+    <string name="dark_theme">Tema oscuro</string>
+    <string name="dynamic_colors">Colores dinámicos</string>
+    <string name="error_reporting">Informe de errores</string>
+    <string name="get_help">Obtener ayuda</string>
+    <string name="icon_desc_consent_category">Icono de categoría de consentimiento</string>
+    <string name="icon_desc_expand_less">Contraer</string>
+    <string name="icon_desc_expand_more">Expandir más</string>
+    <string name="language">Idioma</string>
+    <string name="learn_more">Saber más</string>
+    <string name="navigation">Navegación</string>
+    <string name="settings">Configuración</string>
+    <string name="settings_placeholder_description">No se seleccionaron configuraciones. Elige una opción para ver los detalles aquí.</string>
+    <string name="show_labels_on_bottom_bar">Mostrar etiquetas en la barra inferior</string>
+    <string name="startup_page">Página de inicio</string>
+    <string name="summary_preference_settings_bounce_buttons">Aplica una ligera animación de rebote a todos los elementos clicables al hacer clic</string>
+    <string name="summary_preference_settings_bug_report">Envía informes de errores y solicitudes de funciones a la página de problemas de GitHub</string>
+    <string name="summary_preference_settings_clear_cache">Borrar los datos temporales de la aplicación.</string>
+    <string name="summary_preference_settings_dynamic_colors">Aplica colores del fondo de pantalla al tema de la aplicación</string>
+    <string name="summary_preference_settings_language">Cambia el idioma utilizado en la aplicación</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Mostrar títulos de elementos a continuación iconos en la barra de navegación inferior</string>
+    <string name="summary_preference_settings_startup_page">Elige la pantalla que se mostrará al iniciar la aplicación.</string>
+    <string name="summary_usage_and_diagnostics">Ayuda a mejorar tu experiencia enviando automáticamente datos de diagnóstico y uso.</string>
+    <string name="usage_and_diagnostics">Uso y diagnóstico</string>
+    <string name="will_never_turn_on_automatically">Nunca se activará automáticamente</string>
+    <string name="will_turn_on_automatically_by_system">Se activará automáticamente por el sistema</string>
+</resources>

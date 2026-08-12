@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">Névjegy</string>
+    <string name="amoled_mode">AMOLED mód</string>
+    <string name="color_palette">Színpaletta</string>
+    <string name="dark_mode">Sötét mód</string>
+    <string name="dialog_info_language">Személyre szabhatod a tapasztalataidat a választott nyelveddel. A nyelvi változtatások azonnal érvénybe lépnek.</string>
+    <string name="dialog_info_startup">Az indítóképernyő beállításai, amelyek befolyásolják a felhasználók első interakcióját az alkalmazással.</string>
+    <string name="dialog_language_subtitle">Válaszd ki a kívánt nyelvet</string>
+    <string name="dialog_startup_subtitle">Válaszd ki a kedvenc indítóoldaladat</string>
+    <string name="done_button_content_description">Kész</string>
+    <string name="follow_system">Rendszerbeállítás követése</string>
+    <string name="go_back">Vissza</string>
+    <string name="learn_more">Tudj meg többet</string>
+    <string name="light_mode">Világos mód</string>
+    <string name="loading">Betöltés…</string>
+    <string name="onboarding_theme_dark_desc">Kíméletes a szemnek.</string>
+    <string name="onboarding_theme_light_desc">Világos és energikus.</string>
+    <string name="onboarding_theme_system_desc">Megfelel az eszközének.</string>
+    <string name="other_colors">Egyéb színek</string>
+    <string name="screen_and_display_settings">képernyő és megjelenítés a beállítások.</string>
+    <string name="select_language_title">Nyelv kiválasztása</string>
+    <string name="sort_by">Rendezés</string>
+    <string name="sponsored_ad_label">● Szponzorált hirdetés</string>
+    <string name="startup_page">Indítóoldal</string>
+    <string name="summary_dark_theme">A sötét téma mély hátteret használ ki, hogy jelentősen meghosszabbítsa az akkumulátor élettartamát. Az aktiváláshoz egyszerűen keresse meg az Android Rendszerkezelőjét, és válassza ki a kívánt témát</string>
+    <string name="theme_mode">Téma mód</string>
+    <string name="try_again">Próbáld újra</string>
+    <string name="wallpaper_colors">Háttérkép színei</string>
+</resources>

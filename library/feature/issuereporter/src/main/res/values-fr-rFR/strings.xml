@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">Rapport de bug</string>
+    <string name="cd_expand_device_info">Développer ou réduire les informations de l\'appareil</string>
+    <string name="device_info">Informations sur l\'appareil</string>
+    <string name="issue_description_label">Description</string>
+    <string name="issue_email_label">E-mail</string>
+    <string name="issue_section_label">Problème</string>
+    <string name="issue_send">Envoyer</string>
+    <string name="issue_submitted">Votre problème a été soumis.</string>
+    <string name="issue_submitted_successfully">Numéro soumis avec succès</string>
+    <string name="issue_title_label">Titre</string>
+    <string name="login_section_label">Connexion</string>
+    <string name="open_button_label">Problème d\'ouverture</string>
+    <string name="open_issue_in_browser">Ouvert dans le navigateur</string>
+    <string name="optional_placeholder">Facultatif</string>
+    <string name="send_anonymously">Envoyer anonymement</string>
+    <string name="snack_report_failed">Échec de l\'envoi du rapport</string>
+    <string name="snack_report_success">Rapport envoyé avec succès</string>
+    <string name="use_github_account">Envoyer avec le compte GitHub</string>
+</resources>

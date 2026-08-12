@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="agree">Aceptar</string>
+    <string name="amoled_mode">Modo AMOLED</string>
+    <string name="back_button_content_description">Atrás</string>
+    <string name="back_button_text">Atrás</string>
+    <string name="consent_ad_personalization_description">Habilitar anuncios personalizados basados en tu actividad y preferencias en los servicios y apps de Google.</string>
+    <string name="consent_ad_personalization_description_short">Habilita la publicidad personalizada.</string>
+    <string name="consent_ad_personalization_title">Anuncios personalizados</string>
+    <string name="consent_ad_storage_description">Habilitar el almacenamiento de datos (como identificadores de dispositivo o cookies) para medir el rendimiento de los anuncios y mostrar anuncios relevantes.</string>
+    <string name="consent_ad_storage_description_short">Permite almacenar datos con fines publicitarios.</string>
+    <string name="consent_ad_storage_title">Almacenar datos de publicidad</string>
+    <string name="consent_ad_user_data_description">Permitir el envío de datos de uso y del dispositivo a Google para admitir funciones relacionadas con anuncios, como conversiones y optimización de campañas.</string>
+    <string name="consent_ad_user_data_description_short">Permite enviar datos del usuario para anuncios.</string>
+    <string name="consent_ad_user_data_title">Enviar datos para anuncios</string>
+    <string name="consent_analytics_storage_description">Permitir el almacenamiento de datos como el uso de la app y la duración de la visita para mejorar los análisis y el rendimiento de la app.</string>
+    <string name="consent_analytics_storage_description_short">Permite la recopilación de datos para el análisis del uso de la app.</string>
+    <string name="consent_analytics_storage_title">Almacenar datos de análisis</string>
+    <string name="dark_mode">Modo oscuro</string>
+    <string name="done_button_content_description">Hecho</string>
+    <string name="done_button_text">Hecho</string>
+    <string name="error">Error</string>
+    <string name="follow_system">Seguir modo del sistema</string>
+    <string name="learn_more">Más información</string>
+    <string name="learn_more_about_provider">Más información sobre este proveedor</string>
+    <string name="learn_more_privacy_policy">Revisa nuestra Política de Privacidad</string>
+    <string name="light_mode">Modo claro</string>
+    <string name="next_button_content_description">Siguiente</string>
+    <string name="next_button_text">Siguiente</string>
+    <string name="onboarding_amoled_mode_desc">Negros más profundos para pantallas OLED.</string>
+    <string name="onboarding_complete_icon_desc">Integración completada</string>
+    <string name="onboarding_crashlytics_about_body_1">En esta aplicación utilizamos Firebase, una plataforma de Google que ayuda a los desarrolladores a entender cómo se usa una aplicación, mejorar el rendimiento y ofrecer ciertos servicios como analíticas. Firebase Analytics recopila automáticamente información como el uso de eventos, vistas de pantalla, propiedades del dispositivo y otras señales, pero solo si otorgas tu consentimiento para recopilar este tipo de datos. Si no se otorga el consentimiento, Firebase no registrará eventos ni enviará datos relacionados con esas categorías.</string>
+    <string name="onboarding_crashlytics_about_body_2">Para obtener información detallada sobre cómo Firebase y los servicios de Google manejan los datos, así como sobre sus respectivas políticas de privacidad y seguridad, consulta la documentación oficial de privacidad de Firebase y tus derechos de privacidad regionales conforme a leyes como el RGPD y la CCPA.</string>
+    <string name="onboarding_crashlytics_about_title">Acerca del consentimiento y el uso de datos de Firebase</string>
+    <string name="onboarding_crashlytics_consent_info_learn_more">Más información sobre el consentimiento y el uso de datos</string>
+    <string name="onboarding_crashlytics_consent_info_message">Si deseas saber más sobre cómo se usan tus datos y qué significa cada opción de consentimiento, consulta la documentación a continuación.</string>
+    <string name="onboarding_crashlytics_consent_intro_1">Tu privacidad es importante. Antes de recopilar cualquier dato de uso o publicidad, elige los tipos de datos para los que otorgas tu consentimiento. Tus decisiones influyen en cómo medimos el rendimiento de la aplicación, mejoramos funciones y personalizamos la publicidad, respetando tu privacidad.</string>
+    <string name="onboarding_crashlytics_consent_intro_2">Estas opciones nos ayudan a cumplir con estándares de privacidad como el RGPD y la CCPA, al mismo tiempo que te dan control sobre cómo se utilizan tus datos. Puedes cambiar estos ajustes más adelante en las preferencias de privacidad de la aplicación en cualquier momento.</string>
+    <string name="onboarding_crashlytics_description">Permite que la aplicación envíe datos de uso anónimos e informes de fallos. Esto nos ayuda a corregir errores y mejorar tu experiencia. Nunca se recopila información personal.</string>
+    <string name="onboarding_crashlytics_details_intro">A continuación encontrarás controles más detallados sobre cómo se usan tus datos en la aplicación. Tus elecciones influyen en qué información se recopila, cómo se almacena y cómo puede compartirse con proveedores de servicios como Google, de acuerdo con los estándares de privacidad y los requisitos de consentimiento aplicables.</string>
+    <string name="onboarding_crashlytics_dialog_allow_all">Permitir todo</string>
+    <string name="onboarding_crashlytics_dialog_allow_essentials">Permitir lo esencial</string>
+    <string name="onboarding_crashlytics_dialog_confirm_choices">Confirmar opciones</string>
+    <string name="onboarding_crashlytics_dialog_privacy_choices_title">Opciones de privacidad</string>
+    <string name="onboarding_crashlytics_dialog_tab_about">Acerca de</string>
+    <string name="onboarding_crashlytics_dialog_tab_consent">Consentimiento</string>
+    <string name="onboarding_crashlytics_dialog_tab_details">Detalles</string>
+    <string name="onboarding_crashlytics_disabled_desc">El informe de datos está inactivo.</string>
+    <string name="onboarding_crashlytics_enabled_desc">El informe de datos está activo.</string>
+    <string name="onboarding_crashlytics_privacy_info">Tu privacidad es importante. Solo usamos estos datos para corregir errores y mejorar funciones. Para más detalles, revisa nuestra política de privacidad.</string>
+    <string name="onboarding_crashlytics_show_details_button">Mostrar información detallada</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Mostrar información detallada sobre uso y diagnósticos</string>
+    <string name="onboarding_crashlytics_title">Ayúdanos a mejorar</string>
+    <string name="onboarding_final_description">Gracias por personalizar tu experiencia. Ya estás listo para explorar todas las funciones. Disfruta.</string>
+    <string name="onboarding_final_title">todo listo.</string>
+    <string name="onboarding_theme_dark_desc">Agradable a la vista.</string>
+    <string name="onboarding_theme_light_desc">Brillante y energético.</string>
+    <string name="onboarding_theme_subtitle">Selecciona cómo te gustaría que se viera la aplicación.</string>
+    <string name="onboarding_theme_system_desc">Coincide con tu dispositivo.</string>
+    <string name="onboarding_theme_title">Elige tu estilo</string>
+    <string name="other_colors">Otros colores</string>
+    <string name="skip_button_content_description">Omitir</string>
+    <string name="skip_button_text">Omitir</string>
+    <string name="summary_browse_terms_of_service_and_privacy_policy">Lee y acepta nuestros Términos de servicio y Política de Privacidad para continuar</string>
+    <string name="usage_and_diagnostics">Uso y diagnósticos</string>
+    <string name="wallpaper_colors">Colores del fondo de pantalla</string>
+    <string name="welcome">Bienvenido</string>
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">정보</string>
+    <string name="amoled_mode">AMOLED 모드</string>
+    <string name="color_palette">색상 팔레트</string>
+    <string name="dark_mode">다크 모드</string>
+    <string name="dialog_info_language">선호하는 언어로 환경을 맞춤 설정하세요. 변경한 언어는 즉시 적용되어 선택한 언어로 원활한 환경을 보장합니다.</string>
+    <string name="dialog_info_startup">애플리케이션 실행 시 사용자에게 표시되는 초기 화면을 구성합니다. 이 설정은 사용자의 앱과의 첫 번째 상호 작용에 영향을 미치며 특정 사용자 세그먼트 또는 제품 목표에 맞게 조정할 수 있습니다.</string>
+    <string name="dialog_language_subtitle">선호하는 언어를 선택하세요.</string>
+    <string name="dialog_startup_subtitle">선호하는 시작 페이지를 선택하세요</string>
+    <string name="done_button_content_description">완료</string>
+    <string name="follow_system">시스템 모드 따르기</string>
+    <string name="go_back">뒤로 가기</string>
+    <string name="learn_more">더 알아보기</string>
+    <string name="light_mode">라이트 모드</string>
+    <string name="loading">로딩 중…</string>
+    <string name="onboarding_theme_dark_desc">눈이 편안한 스타일.</string>
+    <string name="onboarding_theme_light_desc">밝고 활기찬 스타일.</string>
+    <string name="onboarding_theme_system_desc">기기 설정과 일치.</string>
+    <string name="other_colors">기타 색상</string>
+    <string name="screen_and_display_settings">화면 및 디스플레이 설정.</string>
+    <string name="select_language_title">언어 선택</string>
+    <string name="sort_by">정렬 기준</string>
+    <string name="sponsored_ad_label">● 스폰서 광고</string>
+    <string name="startup_page">시작 페이지</string>
+    <string name="summary_dark_theme">다크 테마는 깊은 배경을 활용하여 배터리 수명을 크게 연장합니다. 활성화하려면 Android의 시스템 관리자로 이동하여 선호하는 테마를 선택하십시오.</string>
+    <string name="theme_mode">테마 모드</string>
+    <string name="try_again">다시 시도</string>
+    <string name="wallpaper_colors">배경화면 색상</string>
+</resources>

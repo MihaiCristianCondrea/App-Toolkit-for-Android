@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="non_paid_support">নন-পেইড সাপোর্ট</string>
+    <string name="paid_support">পেইড সাপোর্ট</string>
+    <string name="purchase_cancelled">ক্রয় বাতিল</string>
+    <string name="purchase_pending">আপনার অনুদান গুগল দ্বারা প্রক্রিয়া করা হচ্ছে। এটি সম্পূর্ণ হলে আমরা আপনাকে অবহিত করব। আপনাকে ধন্যবাদ.</string>
+    <string name="purchase_thank_you">আপনার অনুদানের জন্য আপনাকে ধন্যবাদ.</string>
+    <string name="summary_donations">আপনি যতই দান করুন না কেন, আপনি আমাদের অ্যাপ চালু রাখতে এবং আমাদের বৈশিষ্ট্যগুলি উন্নত করতে সাহায্য করবেন। আমরা আপনার উদারতা এবং দয়ার প্রশংসা করি.</string>
+    <string name="support_offer_unavailable">এই অনুদানের বিকল্পটি বর্তমানে উপলভ্য নয়।</string>
+    <string name="support_us">আমাদের সমর্থন করুন</string>
+    <string name="web_ad">ওয়েব বিজ্ঞাপন</string>
+</resources>

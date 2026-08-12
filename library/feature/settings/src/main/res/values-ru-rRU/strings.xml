@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Расширенные настройки конфиденциальности</string>
+    <string name="app_behavior">Поведение приложения</string>
+    <string name="appearance">Внешний вид</string>
+    <string name="bounce_buttons">Анимация нажатия</string>
+    <string name="bug_report">Отчёт о баге</string>
+    <string name="cache_cleared_success">Кэш успешно очищен</string>
+    <string name="cache_management">Управление кэшем</string>
+    <string name="clear_cache">Очистить кэш</string>
+    <string name="consent_ad_personalization_description">Включить персонализированные объявления на основе вашей активности и предпочтений в сервисах и приложениях Google.</string>
+    <string name="consent_ad_personalization_title">Персонализированные объявления</string>
+    <string name="consent_ad_storage_description">Включить хранение данных (например, идентификаторы устройства или файлы cookie) для измерения эффективности рекламы и показа релевантных объявлений.</string>
+    <string name="consent_ad_storage_title">Хранение рекламных данных</string>
+    <string name="consent_ad_user_data_description">Разрешить отправку данных об использовании и устройстве в Google для поддержки функций, связанных с рекламой, таких как отслеживание конверсий и оптимизация кампаний.</string>
+    <string name="consent_ad_user_data_title">Отправка данных для рекламы</string>
+    <string name="consent_analytics_storage_description">Разрешить хранение данных, таких как использование приложения и продолжительность посещения, для улучшения аналитики и производительности приложения.</string>
+    <string name="consent_analytics_storage_title">Хранение данных аналитики</string>
+    <string name="consent_category_advertising_title">Персонализированная реклама</string>
+    <string name="consent_category_analytics_title">Аналитика</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="dynamic_colors">Динамические цвета</string>
+    <string name="error_reporting">Отчёт об ошибках</string>
+    <string name="get_help">Получить помощь</string>
+    <string name="icon_desc_consent_category">Значок категории согласия</string>
+    <string name="icon_desc_expand_less">Свернуть</string>
+    <string name="icon_desc_expand_more">Развернуть</string>
+    <string name="language">Язык</string>
+    <string name="learn_more">Узнать больше</string>
+    <string name="navigation">Навигация</string>
+    <string name="settings">Настройки</string>
+    <string name="settings_placeholder_description">Настройки не выбраны. Выберите опцию, чтобы увидеть её детали.</string>
+    <string name="show_labels_on_bottom_bar">Показать этикетки на нижней панели</string>
+    <string name="startup_page">Стартовая страница</string>
+    <string name="summary_preference_settings_bounce_buttons">Применяет лёгкую анимацию отскока к кликабельным элементам</string>
+    <string name="summary_preference_settings_bug_report">Отправьте отчёты об ошибках и запросы на функции на страницу GitHub проекта</string>
+    <string name="summary_preference_settings_clear_cache">Очистить временные данные приложения.</string>
+    <string name="summary_preference_settings_dynamic_colors">Применяйте цвета обоев к теме приложения</string>
+    <string name="summary_preference_settings_language">Измените язык, используемый в приложении</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Отображение заголовков элементов ниже значков в нижней навигационной панели</string>
+    <string name="summary_preference_settings_startup_page">Выберите экран, который будет отображаться при запуске приложения.</string>
+    <string name="summary_usage_and_diagnostics">Помогите улучшить ваш опыт, автоматически отправляя данные диагностики и использования устройства.</string>
+    <string name="usage_and_diagnostics">Использование и диагностика</string>
+    <string name="will_never_turn_on_automatically">Никогда не будет включено автоматически</string>
+    <string name="will_turn_on_automatically_by_system">Будет включено автоматически системой</string>
+</resources>

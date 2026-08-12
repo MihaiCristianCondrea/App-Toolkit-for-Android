@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">โปรแกรมเบต้า</string>
+    <string name="contact_us">ติดต่อเรา</string>
+    <string name="contact_us_description">บอกเรามากขึ้น แล้วเราจะช่วยคุณ</string>
+    <string name="feedback">ข้อเสนอแนะ</string>
+    <string name="help">ช่วยเหลือ</string>
+    <string name="help_feedback_sheet_contact_description">เปิดหน้าติดต่ออย่างเป็นทางการของฉันเพื่อรับการช่วยเหลือโดยตรง</string>
+    <string name="help_feedback_sheet_contact_title">ติดต่อฉันโดยตรง</string>
+    <string name="help_feedback_sheet_feature_request_description">เสนอไอเดียใหม่สำหรับแอปของเราผ่านแบบฟอร์มอย่างเป็นทางการ</string>
+    <string name="help_feedback_sheet_feature_request_title">ส่งคำขอฟีเจอร์</string>
+    <string name="help_feedback_sheet_review_description">แบ่งปันคะแนนของคุณและช่วยให้ผู้ใช้มากขึ้นค้นพบแอปนี้</string>
+    <string name="help_feedback_sheet_review_title">ให้รีวิวบน Google Play</string>
+    <string name="help_feedback_sheet_title">คุณต้องการส่งความคิดเห็นอย่างไร?</string>
+    <string name="oss_license_title">ใบอนุญาตซอฟต์แวร์โอเพ่นซอร์ส</string>
+    <string name="popular_help_resources">แหล่งข้อมูลช่วยเหลือยอดนิยม</string>
+    <string name="privacy_policy">นโยบายความเป็นส่วนตัว</string>
+    <string name="terms_of_service">ข้อกำหนดในการให้บริการ</string>
+    <string name="version">เวอร์ชัน %1$s</string>
+    <string name="version_info">ข้อมูลเวอร์ชัน</string>
+    <string name="view_in_google_play_store">ดูใน Google Play Store</string>
+</resources>

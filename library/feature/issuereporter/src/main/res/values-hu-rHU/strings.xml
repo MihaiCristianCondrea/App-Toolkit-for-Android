@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">Hibajelentés</string>
+    <string name="cd_expand_device_info">Eszközinformációk kibontása vagy összecsukása</string>
+    <string name="device_info">Eszközinformációk</string>
+    <string name="issue_description_label">Leírás</string>
+    <string name="issue_email_label">E-mail</string>
+    <string name="issue_section_label">Hiba</string>
+    <string name="issue_send">Küldés</string>
+    <string name="issue_submitted">A kérdését benyújtották.</string>
+    <string name="issue_submitted_successfully">A kiadás sikeresen benyújtva</string>
+    <string name="issue_title_label">Cím</string>
+    <string name="login_section_label">Bejelentkezés</string>
+    <string name="open_button_label">Nyitott kérdés</string>
+    <string name="open_issue_in_browser">Nyissa meg a böngészőben</string>
+    <string name="optional_placeholder">Opcionális</string>
+    <string name="send_anonymously">Küldés névtelenül</string>
+    <string name="snack_report_failed">A jelentés elküldése nem sikerült</string>
+    <string name="snack_report_success">A jelentés sikeresen elküldve</string>
+    <string name="use_github_account">Küldés GitHub fiókkal</string>
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">के बारे में</string>
+    <string name="amoled_mode">AMOLED मोड</string>
+    <string name="color_palette">रंग पैलेट</string>
+    <string name="dark_mode">डार्क मोड</string>
+    <string name="dialog_info_language">अपनी पसंदीदा भाषा के साथ अपना अनुभव वैयक्तिकृत करें। कोई भी भाषा परिवर्तन तुरंत प्रभाव में आता है।</string>
+    <string name="dialog_info_startup">यह प्रारंभिक स्क्रीन को कॉन्फ़िगर करता है जो उपयोगकर्ता को ऐप लॉन्च करते समय प्रस्तुत की जाती है।</string>
+    <string name="dialog_language_subtitle">अपनी पसंदीदा भाषा चुनें</string>
+    <string name="dialog_startup_subtitle">अपना पसंदीदा स्टार्टअप पेज चुनें</string>
+    <string name="done_button_content_description">हो गया</string>
+    <string name="follow_system">सिस्टम मोड का अनुसरण करें</string>
+    <string name="go_back">वापस जाओ</string>
+    <string name="learn_more">अधिक जानें</string>
+    <string name="light_mode">लाइट मोड</string>
+    <string name="loading">लोड हो रहा है…</string>
+    <string name="onboarding_theme_dark_desc">आंखों के लिए आसान।</string>
+    <string name="onboarding_theme_light_desc">उज्ज्वल और ऊर्जावान।</string>
+    <string name="onboarding_theme_system_desc">आपके डिवाइस से मेल खाता है।</string>
+    <string name="other_colors">अन्य रंग</string>
+    <string name="screen_and_display_settings">स्क्रीन और प्रदर्शन सेटिंग्स।</string>
+    <string name="select_language_title">भाषा चुनें</string>
+    <string name="sort_by">छांटें</string>
+    <string name="sponsored_ad_label">● प्रायोजित विज्ञापन</string>
+    <string name="startup_page">स्टार्टअप पेज</string>
+    <string name="summary_dark_theme">डार्क थीम एक गहरी पृष्ठभूमि का लाभ उठाती है ताकि आपके बैटरी जीवन को महत्वपूर्ण रूप से बढ़ाया जा सके। इसे सक्रिय करने के लिए, बस अपने Android के सिस्टम मैनेजर पर नेविगेट करें और अपने पसंदीदा विषय का चयन करें</string>
+    <string name="theme_mode">थीम मोड</string>
+    <string name="try_again">फिर से प्रयास करें</string>
+    <string name="wallpaper_colors">वॉलपेपर के रंग</string>
+</resources>

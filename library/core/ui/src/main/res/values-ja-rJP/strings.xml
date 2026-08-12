@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">アプリについて</string>
+    <string name="amoled_mode">AMOLEDモード</string>
+    <string name="color_palette">カラーパレット</string>
+    <string name="dark_mode">ダークモード</string>
+    <string name="dialog_info_language">お好みの言語で体験をカスタマイズします。言語の変更はすぐに反映されます。</string>
+    <string name="dialog_info_startup">アプリ起動時にユーザーに提示される初期画面を設定します。この設定は、アプリとの最初のインタラクションに影響を与えます。</string>
+    <string name="dialog_language_subtitle">お好みの言語を選択してください</string>
+    <string name="dialog_startup_subtitle">お好みのスタートアップページを選択してください：</string>
+    <string name="done_button_content_description">完了</string>
+    <string name="follow_system">システムモードに従う</string>
+    <string name="go_back">戻る</string>
+    <string name="learn_more">詳しく見る</string>
+    <string name="light_mode">ライトモード</string>
+    <string name="loading">読み込み中…</string>
+    <string name="onboarding_theme_dark_desc">目に優しい。</string>
+    <string name="onboarding_theme_light_desc">明るくエネルギッシュ。</string>
+    <string name="onboarding_theme_system_desc">デバイスに合わせる。</string>
+    <string name="other_colors">その他の色</string>
+    <string name="screen_and_display_settings">画面と表示設定。</string>
+    <string name="select_language_title">言語を選択</string>
+    <string name="sort_by">並び替え</string>
+    <string name="sponsored_ad_label">● スポンサー広告</string>
+    <string name="startup_page">スタートアップページ</string>
+    <string name="summary_dark_theme">暗いテーマは、バッテリー寿命を大幅に延長するために深い背景を活用します。それをアクティブにするには、Androidのシステムマネージャーに移動して、希望するテーマを選択してください</string>
+    <string name="theme_mode">テーマモード</string>
+    <string name="try_again">もう一度試してください</string>
+    <string name="wallpaper_colors">壁紙の色</string>
+</resources>

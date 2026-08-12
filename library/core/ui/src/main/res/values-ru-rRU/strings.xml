@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">О приложении</string>
+    <string name="amoled_mode">AMOLED-режим</string>
+    <string name="color_palette">Цветовая палитра</string>
+    <string name="dark_mode">Тёмный режим</string>
+    <string name="dialog_info_language">Персонализируйте ваш опыт, выбрав предпочтительный язык. Изменения вступают в силу сразу.</string>
+    <string name="dialog_info_startup">Настраивает начальный экран, представленный пользователям при запуске приложения. Эта настройка влияет на первое взаимодействие пользователя с приложением.</string>
+    <string name="dialog_language_subtitle">Выберите предпочтительный язык</string>
+    <string name="dialog_startup_subtitle">Выберите предпочтительную стартовую страницу</string>
+    <string name="done_button_content_description">Готово</string>
+    <string name="follow_system">Следовать за системой</string>
+    <string name="go_back">Назад</string>
+    <string name="learn_more">Узнать больше</string>
+    <string name="light_mode">Светлый режим</string>
+    <string name="loading">Загрузка…</string>
+    <string name="onboarding_theme_dark_desc">Приятный для глаз.</string>
+    <string name="onboarding_theme_light_desc">Яркий и энергичный.</string>
+    <string name="onboarding_theme_system_desc">Соответствует настройкам вашего устройства.</string>
+    <string name="other_colors">Другие цвета</string>
+    <string name="screen_and_display_settings">Настройки экрана и отображения.</string>
+    <string name="select_language_title">Выберите язык</string>
+    <string name="sort_by">Сортировать по</string>
+    <string name="sponsored_ad_label">● Спонсируемая реклама</string>
+    <string name="startup_page">Стартовая страница</string>
+    <string name="summary_dark_theme">Темная тема использует глубокий фон, чтобы значительно продлить срок службы батареи. Чтобы активировать его, просто перейдите к системному менеджеру Android и выберите свою предпочтительную тему в</string>
+    <string name="theme_mode">Режим темы</string>
+    <string name="try_again">Попробуйте снова</string>
+    <string name="wallpaper_colors">Цвета обоев</string>
+</resources>

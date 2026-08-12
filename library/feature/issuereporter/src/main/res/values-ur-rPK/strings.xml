@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">بگ رپورٹ</string>
+    <string name="cd_expand_device_info">آلہ کی معلومات کو پھیلائیں یا سمیٹیں</string>
+    <string name="device_info">ڈیوائس کی معلومات</string>
+    <string name="issue_description_label">تفصیل</string>
+    <string name="issue_email_label">ای میل</string>
+    <string name="issue_section_label">مسئلہ</string>
+    <string name="issue_send">بھیجیں</string>
+    <string name="issue_submitted">آپ کا مسئلہ پیش کیا گیا تھا.</string>
+    <string name="issue_submitted_successfully">مسئلہ کامیابی کے ساتھ جمع کرایا گیا</string>
+    <string name="issue_title_label">عنوان</string>
+    <string name="login_section_label">لاگ ان</string>
+    <string name="open_button_label">کھلا مسئلہ</string>
+    <string name="open_issue_in_browser">براؤزر میں کھلا</string>
+    <string name="optional_placeholder">اختیاری</string>
+    <string name="send_anonymously">گمنام بھیجیں</string>
+    <string name="snack_report_failed">رپورٹ بھیجنے میں ناکام</string>
+    <string name="snack_report_success">رپورٹ کامیابی سے بھیج دی گئی</string>
+    <string name="use_github_account">GitHub اکاؤنٹ استعمال کرکے بھیجیں</string>
+</resources>

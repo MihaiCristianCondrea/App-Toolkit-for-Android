@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">O aplikacji</string>
+    <string name="amoled_mode">Tryb AMOLED</string>
+    <string name="color_palette">Paleta kolorów</string>
+    <string name="dark_mode">Tryb ciemny</string>
+    <string name="dialog_info_language">Spersonalizuj swoje doświadczenie za pomocą preferowanego języka. Wszelkie zmiany języka zostaną zastosowane natychmiast.</string>
+    <string name="dialog_info_startup">Konfiguruje ekran początkowy wyświetlany użytkownikom przy uruchamianiu aplikacji. To ustawienie wpływa na pierwszą interakcję użytkownika z aplikacją.</string>
+    <string name="dialog_language_subtitle">Wybierz preferowany język</string>
+    <string name="dialog_startup_subtitle">Wybierz preferowaną stronę startową</string>
+    <string name="done_button_content_description">Gotowe</string>
+    <string name="follow_system">Podążaj za ustawieniami systemu</string>
+    <string name="go_back">Wróć</string>
+    <string name="learn_more">Dowiedz się więcej</string>
+    <string name="light_mode">Tryb jasny</string>
+    <string name="loading">Ładowanie…</string>
+    <string name="onboarding_theme_dark_desc">Przyjemny dla oczu.</string>
+    <string name="onboarding_theme_light_desc">Jasny i energiczny.</string>
+    <string name="onboarding_theme_system_desc">Dopasowany do Twojego urządzenia.</string>
+    <string name="other_colors">Inne kolory</string>
+    <string name="screen_and_display_settings">Ustawienia ekranu i wyświetlania.</string>
+    <string name="select_language_title">Wybierz język</string>
+    <string name="sort_by">Sortuj według</string>
+    <string name="sponsored_ad_label">● Reklama sponsorowana</string>
+    <string name="startup_page">Strona startowa</string>
+    <string name="summary_dark_theme">Mroczny motyw wykorzystuje głębokie tło, aby znacznie wydłużyć żywotność baterii. Aby go aktywować, po prostu przejdź do menedżera systemu Androida i wybierz preferowany motyw w</string>
+    <string name="theme_mode">Tryb motywu</string>
+    <string name="try_again">Spróbuj ponownie</string>
+    <string name="wallpaper_colors">Kolory tapety</string>
+</resources>

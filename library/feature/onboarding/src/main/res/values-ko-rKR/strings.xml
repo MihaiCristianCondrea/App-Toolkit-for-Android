@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="agree">동의</string>
+    <string name="amoled_mode">AMOLED 모드</string>
+    <string name="back_button_content_description">뒤로</string>
+    <string name="back_button_text">뒤로</string>
+    <string name="consent_ad_personalization_description">Google 서비스 및 앱 전반의 활동 및 환경설정을 기반으로 맞춤 광고를 사용 설정합니다.</string>
+    <string name="consent_ad_personalization_description_short">맞춤 광고를 사용 설정합니다.</string>
+    <string name="consent_ad_personalization_title">맞춤 광고</string>
+    <string name="consent_ad_storage_description">광고 실적 측정 및 관련 광고 표시를 위해 데이터(기기 식별자 또는 쿠키 등) 저장을 사용 설정합니다.</string>
+    <string name="consent_ad_storage_description_short">광고 목적으로 데이터를 저장하도록 허용합니다.</string>
+    <string name="consent_ad_storage_title">광고 데이터 저장</string>
+    <string name="consent_ad_user_data_description">전환 및 캠페인 최적화와 같은 광고 관련 기능을 지원하기 위해 사용량 및 기기 데이터를 Google에 전송하는 것을 허용합니다.</string>
+    <string name="consent_ad_user_data_description_short">광고를 위해 사용자 데이터를 전송하도록 허용합니다.</string>
+    <string name="consent_ad_user_data_title">광고용 데이터 전송</string>
+    <string name="consent_analytics_storage_description">앱 사용량 및 방문 기간과 같은 데이터 저장을 허용하여 분석 및 앱 성능을 개선합니다.</string>
+    <string name="consent_analytics_storage_description_short">앱 사용 분석을 위한 데이터 수집을 허용합니다.</string>
+    <string name="consent_analytics_storage_title">분석 데이터 저장</string>
+    <string name="dark_mode">다크 모드</string>
+    <string name="done_button_content_description">완료</string>
+    <string name="done_button_text">완료</string>
+    <string name="error">오류</string>
+    <string name="follow_system">시스템 모드 따르기</string>
+    <string name="learn_more">더 알아보기</string>
+    <string name="learn_more_about_provider">이 제공업체에 대해 자세히 알아보기</string>
+    <string name="learn_more_privacy_policy">개인정보처리방침 검토</string>
+    <string name="light_mode">라이트 모드</string>
+    <string name="next_button_content_description">다음</string>
+    <string name="next_button_text">다음</string>
+    <string name="onboarding_amoled_mode_desc">OLED 화면을 위한 더 깊은 검은색.</string>
+    <string name="onboarding_complete_icon_desc">온보딩 완료</string>
+    <string name="onboarding_crashlytics_about_body_1">이 앱에서는 Google의 플랫폼인 Firebase를 사용합니다. Firebase는 앱 사용 방식을 이해하고 성능을 개선하며 분석과 같은 특정 서비스를 제공하는 데 도움을 줍니다. Firebase Analytics는 이벤트 사용, 화면 조회, 기기 속성 및 기타 신호와 같은 정보를 자동으로 수집하지만, 이러한 데이터 유형의 수집에 동의한 경우에만 수행됩니다. 동의하지 않으면 Firebase는 이벤트를 기록하거나 해당 범주와 관련된 데이터를 전송하지 않습니다.</string>
+    <string name="onboarding_crashlytics_about_body_2">Firebase 및 Google 서비스가 데이터를 처리하는 방식과 각 서비스의 개인정보 보호 및 보안 정책에 대한 자세한 내용은 공식 Firebase 개인정보 보호 문서와 GDPR 및 CCPA와 같은 법률에 따른 지역별 개인정보 보호 권리를 참고하시기 바랍니다.</string>
+    <string name="onboarding_crashlytics_about_title">동의 및 Firebase 데이터 사용에 관하여</string>
+    <string name="onboarding_crashlytics_consent_info_learn_more">동의 및 데이터 사용에 대해 자세히 알아보기</string>
+    <string name="onboarding_crashlytics_consent_info_message">데이터 사용 방식과 각 동의 옵션의 의미에 대해 더 알고 싶다면 아래 문서를 참고하세요.</string>
+    <string name="onboarding_crashlytics_consent_intro_1">개인정보 보호는 중요합니다. 사용 또는 광고 데이터를 수집하기 전에 동의할 데이터 유형을 선택해 주세요. 선택한 내용은 앱 성능 측정, 기능 개선 및 광고 맞춤화 방식에 영향을 미치며, 개인정보는 존중됩니다.</string>
+    <string name="onboarding_crashlytics_consent_intro_2">이러한 선택은 GDPR 및 CCPA와 같은 개인정보 보호 기준을 준수하는 데 도움이 되며, 데이터 사용 방식에 대한 제어 권한을 제공합니다. 이러한 설정은 언제든지 앱의 개인정보 설정에서 변경할 수 있습니다.</string>
+    <string name="onboarding_crashlytics_description">앱이 익명의 사용 데이터 및 충돌 보고서를 전송하도록 허용하세요. 이를 통해 버그를 수정하고 사용자 환경을 개선할 수 있습니다. 개인 정보는 절대 수집되지 않습니다.</string>
+    <string name="onboarding_crashlytics_details_intro">아래에서는 앱 전반에서 데이터가 어떻게 사용되는지에 대한 보다 자세한 제어 옵션을 확인할 수 있습니다. 선택한 내용에 따라 수집되는 정보, 저장 방식, 그리고 적용되는 개인정보 보호 기준 및 동의 요구사항에 따라 Google과 같은 서비스 제공업체와 공유되는 방식이 달라집니다.</string>
+    <string name="onboarding_crashlytics_dialog_allow_all">모두 허용</string>
+    <string name="onboarding_crashlytics_dialog_allow_essentials">필수 항목만</string>
+    <string name="onboarding_crashlytics_dialog_confirm_choices">선택 확인</string>
+    <string name="onboarding_crashlytics_dialog_privacy_choices_title">개인정보 선택</string>
+    <string name="onboarding_crashlytics_dialog_tab_about">정보</string>
+    <string name="onboarding_crashlytics_dialog_tab_consent">동의</string>
+    <string name="onboarding_crashlytics_dialog_tab_details">세부정보</string>
+    <string name="onboarding_crashlytics_disabled_desc">데이터 보고가 비활성화되었습니다.</string>
+    <string name="onboarding_crashlytics_enabled_desc">데이터 보고가 활성화되었습니다.</string>
+    <string name="onboarding_crashlytics_privacy_info">귀하의 개인 정보는 중요합니다. 이 데이터는 버그 수정 및 기능 개선에만 사용됩니다. 자세한 내용은 개인정보처리방침을 검토하세요.</string>
+    <string name="onboarding_crashlytics_show_details_button">자세한 정보 표시</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">사용 및 진단에 대한 자세한 정보 표시</string>
+    <string name="onboarding_crashlytics_title">개선에 도움을 주세요</string>
+    <string name="onboarding_final_description">환경을 맞춤 설정해 주셔서 감사합니다. 이제 모든 기능을 탐색할 준비가 되었습니다. 즐겁게 사용하세요.</string>
+    <string name="onboarding_final_title">모든 준비가 완료되었습니다.</string>
+    <string name="onboarding_theme_dark_desc">눈이 편안한 스타일.</string>
+    <string name="onboarding_theme_light_desc">밝고 활기찬 스타일.</string>
+    <string name="onboarding_theme_subtitle">앱의 모양을 선택하세요.</string>
+    <string name="onboarding_theme_system_desc">기기 설정과 일치.</string>
+    <string name="onboarding_theme_title">스타일 선택</string>
+    <string name="other_colors">기타 색상</string>
+    <string name="skip_button_content_description">건너뛰기</string>
+    <string name="skip_button_text">건너뛰기</string>
+    <string name="summary_browse_terms_of_service_and_privacy_policy">계속하려면 서비스 약관 및 개인정보처리방침을 읽고 동의하세요.</string>
+    <string name="usage_and_diagnostics">사용량 &amp; 진단</string>
+    <string name="wallpaper_colors">배경화면 색상</string>
+    <string name="welcome">환영합니다</string>
+</resources>

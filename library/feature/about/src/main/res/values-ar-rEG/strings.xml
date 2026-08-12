@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">الإعلانات</string>
+    <string name="android_version">إصدار أندرويد</string>
+    <string name="api_level">مستوى API</string>
+    <string name="app_build">إصدار التطبيق: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">إصدار بناء التطبيق</string>
+    <string name="app_info">معلومات التطبيق</string>
+    <string name="changelog_title">سجل تغييرات التطبيق</string>
+    <string name="code_of_conduct">مدونة قواعد السلوك</string>
+    <string name="content_description_more_options">المزيد من الخيارات</string>
+    <string name="debug">تصحيح</string>
+    <string name="device_info">معلومات الجهاز</string>
+    <string name="device_model">طراز الجهاز</string>
+    <string name="done_button_content_description">تم</string>
+    <string name="go_back">العودة</string>
+    <string name="help_and_feedback">المساعدة والملاحظات</string>
+    <string name="legal">قانوني</string>
+    <string name="legal_notices">إشعارات قانونية</string>
+    <string name="license">الترخيص</string>
+    <string name="manufacturer">الشركة المصنعة</string>
+    <string name="no_new_updates_message">لا توجد تحديثات جديدة متاحة.</string>
+    <string name="oss_license_title">تراخيص المصادر المفتوحة</string>
+    <string name="permissions">الأذونات</string>
+    <string name="privacy">الخصوصية</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="release">إصدار</string>
+    <string name="settings">الإعدادات</string>
+    <string name="settings_placeholder_description">لم يتم تحديد أي إعدادات. اختر خيارًا لعرض تفاصيله هنا.</string>
+    <string name="share">مشاركة</string>
+    <string name="snack_device_info_copied">تم نسخ معلومات الجهاز إلى الحافظة</string>
+    <string name="snack_device_info_failed">تعذر تحميل معلومات الجهاز</string>
+    <string name="summary_preference_settings_ads">تحكم في كيفية استخدامنا لمعلوماتك لعرض إعلانات ذات صلة بك</string>
+    <string name="summary_preference_settings_code_of_conduct">فهم القواعد والإرشادات للسلوك داخل خدمتنا</string>
+    <string name="summary_preference_settings_legal_notices">عرض المعلومات القانونية حول خدمتنا</string>
+    <string name="summary_preference_settings_oss">تفاصيل الترخيص للبرامج مفتوحة المصدر</string>
+    <string name="summary_preference_settings_permissions">إدارة الأذونات الممنوحة لخدمتنا</string>
+    <string name="summary_preference_settings_privacy_policy">عرض السياسة التي تحكم كيفية تعاملنا مع بياناتك</string>
+    <string name="summary_preference_settings_terms_of_service">مراجعة الشروط التي توافق عليها عند استخدام خدمتنا</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">شارك البيانات للمساعدة في تحسين التجربة داخل التطبيق</string>
+    <string name="summary_share_message">اطلع على هذا التطبيق الرائع الذي أستخدمه. يحتوي على بعض الميزات الرائعة التي قد تجدها مثيرة للاهتمام. يمكنك تنزيله من متجر Play على: %1$s</string>
+    <string name="support_us">ادعمنا</string>
+    <string name="terms_of_service">شروط الخدمة</string>
+    <string name="try_again">حاول مرة أخرى</string>
+    <string name="updates">التحديثات</string>
+    <string name="usage_and_diagnostics">الاستخدام والتشخيصات</string>
+</resources>

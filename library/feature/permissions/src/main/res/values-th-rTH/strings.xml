@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="access_network_state">เข้าถึงสถานะเครือข่าย [ACCESS_NETWORK_STATE]</string>
+    <string name="ad_id">รหัสโฆษณา [AD_ID]</string>
+    <string name="billing">การเรียกเก็บเงิน [BILLING]</string>
+    <string name="check_license">ตรวจสอบใบอนุญาต [CHECK_LICENSE]</string>
+    <string name="foreground_service">บริการเบื้องหน้า [FOREGROUND_SERVICE]</string>
+    <string name="internet">อินเทอร์เน็ต [INTERNET]</string>
+    <string name="normal">ปกติ</string>
+    <string name="permissions">สิทธิ์การเข้าถึง</string>
+    <string name="post_notifications">โพสต์การแจ้งเตือน [POST_NOTIFICATIONS]</string>
+    <string name="runtime">ระหว่างการทำงาน</string>
+    <string name="summary_preference_permissions_access_network_state">อนุญาตให้แอปตรวจสอบการเชื่อมต่อเครือข่ายและเรียกดูข้อมูลเกี่ยวกับ Wi-Fi รวมถึงสถานะที่เปิดใช้งานและชื่ออุปกรณ์ Wi-Fi ที่เชื่อมต่อ</string>
+    <string name="summary_preference_permissions_ad_id">อนุญาตให้แอปเรียกดูและใช้ตัวระบุโฆษณาที่เชื่อมโยงกับอุปกรณ์ของผู้ใช้ เพื่อให้โฆษณาที่ปรับให้เหมาะกับแต่ละบุคคล วัดประสิทธิภาพโฆษณา และแสดงโฆษณาบนอุปกรณ์ Android 13 หรือใหม่กว่า</string>
+    <string name="summary_preference_permissions_billing">อนุญาตให้แอปใช้ไลบรารี Google Play Billing เพื่อจัดการการซื้อในแอปและการบริจาค</string>
+    <string name="summary_preference_permissions_check_license">อนุญาตให้แอปตรวจสอบการปฏิบัติตามข้อตกลงใบอนุญาตและบังคับใช้เงื่อนไขการอนุญาตให้ใช้สิทธิ์เพื่อปกป้องทรัพย์สินทางปัญญา</string>
+    <string name="summary_preference_permissions_foreground_service">อนุญาตให้แอปสร้างและใช้บริการที่ทำงานในเบื้องหน้า โดยให้ความสำคัญกับบริการเหล่านั้นมากกว่ากระบวนการเบื้องหลังอื่นๆ และปรับปรุงประสิทธิภาพและความน่าเชื่อถือ</string>
+    <string name="summary_preference_permissions_internet">อนุญาตให้แอปสร้างการเชื่อมต่ออินเทอร์เน็ตเพื่อส่งรายงานข้อผิดพลาดหรือตรวจสอบการอัปเดต</string>
+    <string name="summary_preference_permissions_post_notifications">อนุญาตให้แอปแสดงการแจ้งเตือนบนอุปกรณ์ที่ใช้ Android 13 หรือใหม่กว่า</string>
+    <string name="summary_preference_permissions_wake_lock">อนุญาตให้แอปป้องกันไม่ให้อุปกรณ์เข้าสู่โหมดสลีป (เช่น การหรี่แสงหน้าจอหรือการพักการทำงานของโปรเซสเซอร์) ระหว่างการดำเนินการที่สำคัญเพื่อให้แน่ใจว่าจะเสร็จสมบูรณ์โดยไม่หยุดชะงัก ซึ่งจะใช้เท่าที่จำเป็นเพื่อประหยัดแบตเตอรี่</string>
+    <string name="wake_lock">เปิดหน้าจออุปกรณ์ค้างไว้ [WAKE_LOCK]</string>
+</resources>
