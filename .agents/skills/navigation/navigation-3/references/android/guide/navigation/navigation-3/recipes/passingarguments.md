@@ -1,22 +1,16 @@
 # Passing Arguments to ViewModels (Hilt)
 
-This recipe demonstrates how to pass navigation arguments (keys) to a `ViewModel` using Hilt for
-dependency injection.
+This recipe demonstrates how to pass navigation arguments (keys) to a `ViewModel` using Hilt for dependency injection.
 
 ## How it works
 
 This example uses Dagger/Hilt's assisted injection feature:
 
-1. The `ViewModel` is annotated with `@HiltViewModel` and its constructor uses `@AssistedInject` to
-   receive the navigation key (which is annotated with `@Assisted`).
+1. The `ViewModel` is annotated with `@HiltViewModel` and its constructor uses `@AssistedInject` to receive the navigation key (which is annotated with `@Assisted`).
 2. An `@AssistedFactory` interface is defined to create the `ViewModel`.
-3. The `hiltViewModel` composable function is used to obtain the `ViewModel` instance. A
-   `creationCallback` is provided to pass the navigation key to the factory, making it available to
-   the `ViewModel`.
+3. The `hiltViewModel` composable function is used to obtain the `ViewModel` instance. A `creationCallback` is provided to pass the navigation key to the factory, making it available to the `ViewModel`.
 
-**Note** : The `rememberViewModelStoreNavEntryDecorator` is added to the `NavDisplay`'s
-`entryDecorators`. This ensures that `ViewModel`s are correctly scoped to their corresponding
-`NavEntry`, so that a new `ViewModel` instance is created for each unique navigation key.
+**Note** : The `rememberViewModelStoreNavEntryDecorator` is added to the `NavDisplay`'s `entryDecorators`. This ensures that `ViewModel`s are correctly scoped to their corresponding `NavEntry`, so that a new `ViewModel` instance is created for each unique navigation key.
 [![](https://developer.android.com/static/images/picto-icons/code.svg) Explore View the full recipe on GitHub.](https://github.com/android/nav3-recipes/tree/main/app/src/main/java/com/example/nav3recipes/passingarguments/viewmodels/hilt)
 
 ```
@@ -139,24 +133,20 @@ class RouteBViewModel @AssistedInject constructor(
         fun create(navKey: RouteB): RouteBViewModel
     }
 }
+
+   
 ```
 
 # Passing Arguments to ViewModels (Basic)
 
-This recipe demonstrates how to pass navigation arguments (keys) to a `ViewModel` using a custom
-`ViewModelProvider.Factory`.
+This recipe demonstrates how to pass navigation arguments (keys) to a `ViewModel` using a custom `ViewModelProvider.Factory`.
 
 ## How it works
 
-1. A custom `ViewModelProvider.Factory` is created that takes the navigation key as a constructor
-   parameter.
-2. Inside the `entry` composable, `viewModel(factory = ...)` is used to create the `ViewModel`
-   instance, passing the current navigation key to the factory. This makes the navigation key
-   available to the `ViewModel`.
+1. A custom `ViewModelProvider.Factory` is created that takes the navigation key as a constructor parameter.
+2. Inside the `entry` composable, `viewModel(factory = ...)` is used to create the `ViewModel` instance, passing the current navigation key to the factory. This makes the navigation key available to the `ViewModel`.
 
-**Note** : The `rememberViewModelStoreNavEntryDecorator` is added to the `NavDisplay`'s
-`entryDecorators`. This ensures that `ViewModel`s are correctly scoped to their corresponding
-`NavEntry`, so that a new `ViewModel` instance is created for each unique navigation key.
+**Note** : The `rememberViewModelStoreNavEntryDecorator` is added to the `NavDisplay`'s `entryDecorators`. This ensures that `ViewModel`s are correctly scoped to their corresponding `NavEntry`, so that a new `ViewModel` instance is created for each unique navigation key.
 [![](https://developer.android.com/static/images/picto-icons/code.svg) Explore View the full recipe on GitHub.](https://github.com/android/nav3-recipes/tree/main/app/src/main/java/com/example/nav3recipes/passingarguments/viewmodels/basic)
 
 ```
@@ -269,23 +259,21 @@ class RouteBViewModel(
         }
     }
 }
+
+   
 ```
 
 # Passing Arguments to ViewModels (Koin)
 
-This recipe demonstrates how to pass navigation arguments (keys) to a `ViewModel` using Koin for
-dependency injection.
+This recipe demonstrates how to pass navigation arguments (keys) to a `ViewModel` using Koin for dependency injection.
 
 ## How it works
 
 1. A Koin module is defined that provides the `ViewModel`.
 2. The `koinViewModel` composable function is used to get the `ViewModel` instance.
-3. The navigation key is passed to the `ViewModel`'s constructor using `parametersOf(key)`. This
-   makes the navigation key available to the `ViewModel`.
+3. The navigation key is passed to the `ViewModel`'s constructor using `parametersOf(key)`. This makes the navigation key available to the `ViewModel`.
 
-**Note** : The `rememberViewModelStoreNavEntryDecorator` is added to the `NavDisplay`'s
-`entryDecorators`. This ensures that `ViewModel`s are correctly scoped to their corresponding
-`NavEntry`, so that a new `ViewModel` instance is created for each unique navigation key.
+**Note** : The `rememberViewModelStoreNavEntryDecorator` is added to the `NavDisplay`'s `entryDecorators`. This ensures that `ViewModel`s are correctly scoped to their corresponding `NavEntry`, so that a new `ViewModel` instance is created for each unique navigation key.
 [![](https://developer.android.com/static/images/picto-icons/code.svg) Explore View the full recipe on GitHub.](https://github.com/android/nav3-recipes/tree/main/app/src/main/java/com/example/nav3recipes/passingarguments/viewmodels/koin)
 
 ```
@@ -384,4 +372,5 @@ fun ScreenB(viewModel: RouteBViewModel) {
 }
 
 class RouteBViewModel(val navKey: RouteB) : ViewModel()
+   
 ```

@@ -32,3 +32,31 @@ Do not duplicate detailed module documentation into `AGENTS.md`.
 Update documentation only when the change makes existing technical documentation inaccurate or changes a documented contract, architecture rule, or public API.
 
 Do not add comments or KDoc that merely restate the implementation. Document contracts, invariants, and non-obvious reasoning where useful.
+
+## Module and Feature Documentation
+
+Each active feature/module may contain its own `README.md` documenting its local architecture and responsibilities.
+
+These READMEs are part of the technical documentation and should be treated as the local source of context for that module.
+
+When working inside a module or feature:
+
+* Read its `README.md` when one exists before making substantial architectural changes.
+* Keep it aligned with the actual implementation when a change meaningfully affects what the module does or how it interacts with the rest of the project.
+* Update it when responsibilities, ownership boundaries, module dependencies, public contracts, important flows, or meaningful architectural risks change.
+* Do not update it for trivial implementation details, cosmetic UI changes, internal refactors that preserve the documented contract, or routine maintenance.
+
+Module READMEs may document topics such as:
+
+* purpose
+* what the module owns
+* what it explicitly does not own
+* modules it depends on
+* modules that depend on it
+* primary logic/data flow
+* public contracts
+* internal implementations
+* relevant architectural risks or migration notes
+
+Documentation must describe the current code. Do not invent intended architecture or rewrite a module README merely to make it look more complete.
+

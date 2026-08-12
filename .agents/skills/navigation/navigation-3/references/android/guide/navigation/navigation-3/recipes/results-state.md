@@ -1,24 +1,17 @@
 # Returning a Result (State-Based)
 
-This recipe demonstrates how to return a result from one screen to a previous screen using a
-state-based approach.
+This recipe demonstrates how to return a result from one screen to a previous screen using a state-based approach.
 
 ## How it works
 
 This example uses a `ResultEventBus` to manage the result as state.
 
-1. **ResultEventBusNavEntryDecorator** : A `NavEntryDecorator` that provides a `ResultEventBus` via
-   `LocalResultEventBus`.
-2. **`ResultEventBus`** : A `ResultEventBus` is created and made available to the composables via
-   `LocalResultEventBus`. This EventBus sends and receives the results.
-3. **Setting the result** : The screen that produces the result calls `resultBus.sendResult(person)`
-   to send the data back.
-4. **Observing the result** : The screen that needs the result calls
-   `resultBus.conflateAsState<Person?>()` to get a `State` object representing the result. The UI
-   then observes this state and recomposes whenever the result changes.
+1. **ResultEventBusNavEntryDecorator** : A `NavEntryDecorator` that provides a `ResultEventBus` via `LocalResultEventBus`.
+2. **`ResultEventBus`** : A `ResultEventBus` is created and made available to the composables via `LocalResultEventBus`. This EventBus sends and receives the results.
+3. **Setting the result** : The screen that produces the result calls `resultBus.sendResult(person)` to send the data back.
+4. **Observing the result** : The screen that needs the result calls `resultBus.conflateAsState<Person?>()` to get a `State` object representing the result. The UI then observes this state and recomposes whenever the result changes.
 
-This approach is suitable when only the latest result is required. The result state does not survive
-configuration change or process death.
+This approach is suitable when only the latest result is required. The result state does not survive configuration change or process death.
 [![](https://developer.android.com/static/images/picto-icons/code.svg) Explore View the full recipe on GitHub.](https://github.com/android/nav3-recipes/tree/main/app/src/main/java/com/example/nav3recipes/results/state)
 
 ```
@@ -48,6 +41,7 @@ import androidx.lifecycle.ViewModel
 class HomeViewModel : ViewModel() {
     var person by mutableStateOf<Person?>(null)
 }
+   
 ```
 
 ```
@@ -77,6 +71,7 @@ data object Home : NavKey
 
 @Serializable
 class PersonDetailsForm : NavKey
+    
 ```
 
 ```
@@ -98,11 +93,11 @@ class PersonDetailsForm : NavKey
 
 package com.example.nav3recipes.results.common
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
-data class Person(val name: String, val favoriteColor: String) : Parcelable
+@Serializable
+data class Person(val name: String, val favoriteColor: String)
+   
 ```
 
 ```
@@ -188,6 +183,7 @@ fun PersonDetailsScreen(
         }
     }
 }
+   
 ```
 
 ```
@@ -215,16 +211,14 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.result.LocalResultEventBus
-import androidx.navigation3.runtime.result.ResultEffect
 import androidx.navigation3.runtime.result.rememberResultEventBusNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.nav3recipes.results.common.Home
 import com.example.nav3recipes.results.common.HomeScreen
-import com.example.nav3recipes.results.common.HomeViewModel
 import com.example.nav3recipes.results.common.Person
 import com.example.nav3recipes.results.common.PersonDetailsForm
 import com.example.nav3recipes.results.common.PersonDetailsScreen
@@ -243,7 +237,10 @@ class ResultStateActivity : ComponentActivity() {
                     backStack = backStack,
                     modifier = Modifier.padding(paddingValues),
                     onBack = { backStack.removeLastOrNull() },
-                    entryDecorators = listOf(rememberResultEventBusNavEntryDecorator()),
+                    entryDecorators = listOf(
+                        rememberSaveableStateHolderNavEntryDecorator(),
+                        rememberResultEventBusNavEntryDecorator()
+                    ),
                     entryProvider = entryProvider {
                         entry<Home> {
                             val resultState = LocalResultEventBus
@@ -270,4 +267,6 @@ class ResultStateActivity : ComponentActivity() {
         }
     }
 }
+
+   
 ```

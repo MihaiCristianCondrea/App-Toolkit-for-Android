@@ -8,11 +8,7 @@ A `ListDetailSceneStrategy` will return a `ListDetailScene` if:
 - A `Detail` entry is the last item in the back stack
 - A `List` entry is in the back stack
 
-The `ListDetailScene` provides a `CompositionLocal` named `LocalBackButtonVisibility` that can be
-used by the detail `NavEntry` to control whether it displays a back button. This is useful when the
-detail entry usually displays a back button but should not display it when being displayed in a
-`ListDetailScene`. See <https://github.com/android/nav3-recipes/issues/151> for more details on this
-use case.
+The `ListDetailScene` provides a `CompositionLocal` named `LocalBackButtonVisibility` that can be used by the detail `NavEntry` to control whether it displays a back button. This is useful when the detail entry usually displays a back button but should not display it when being displayed in a `ListDetailScene`. See <https://github.com/android/nav3-recipes/issues/151> for more details on this use case.
 
 See `ListDetailScene.kt` for more implementation details.
 [![](https://developer.android.com/static/images/picto-icons/code.svg) Explore View the full recipe on GitHub.](https://github.com/android/nav3-recipes/tree/main/app/src/main/java/com/example/nav3recipes/scenes/listdetail)
@@ -172,6 +168,8 @@ class ListDetailSceneStrategy<T : Any>(val windowSizeClass: WindowSizeClass) : S
         )
     }
 }
+
+   
 ```
 
 ```
@@ -291,6 +289,7 @@ private fun NavBackStack<NavKey>.addDetail(detailRoute: ConversationDetail) {
     removeIf { it is ConversationDetail }
     add(detailRoute)
 }
+   
 ```
 
 ```
@@ -436,4 +435,5 @@ fun ProfileScreen() {
         )
     }
 }
+   
 ```

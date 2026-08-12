@@ -5,8 +5,7 @@ This example shows how to create a two pane layout using the Scenes API.
 A `TwoPaneSceneStrategy` will return a `TwoPaneScene` if:
 
 - the window width is over 600dp
-- the last two nav entries on the back stack have indicated that they support being displayed in a
-  `TwoPaneScene` in their metadata.
+- the last two nav entries on the back stack have indicated that they support being displayed in a `TwoPaneScene` in their metadata.
 
 See `TwoPaneScene.kt` for more implementation details.
 [![](https://developer.android.com/static/images/picto-icons/code.svg) Explore View the full recipe on GitHub.](https://github.com/android/nav3-recipes/tree/main/app/src/main/java/com/example/nav3recipes/scenes/twopane)
@@ -124,6 +123,8 @@ class TwoPaneSceneStrategy<T : Any>(val windowSizeClass: WindowSizeClass) : Scen
 
 
 }
+
+   
 ```
 
 ```
@@ -242,4 +243,6 @@ private fun NavBackStack<NavKey>.addProductRoute(productId: Int) {
         add(productRoute)
     }
 }
+
+   
 ```
