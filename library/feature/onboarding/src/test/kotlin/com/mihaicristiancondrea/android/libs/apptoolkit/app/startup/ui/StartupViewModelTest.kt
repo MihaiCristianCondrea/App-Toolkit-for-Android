@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.dispatchers.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch

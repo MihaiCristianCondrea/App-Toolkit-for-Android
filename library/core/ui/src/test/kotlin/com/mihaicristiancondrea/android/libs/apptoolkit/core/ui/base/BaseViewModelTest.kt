@@ -21,7 +21,7 @@ import app.cash.turbine.test
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.dispatchers.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

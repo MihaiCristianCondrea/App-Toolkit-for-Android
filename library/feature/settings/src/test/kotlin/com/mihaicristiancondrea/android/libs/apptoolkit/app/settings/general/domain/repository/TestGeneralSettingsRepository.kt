@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.do
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepositoryImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.dispatchers.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineDispatcher

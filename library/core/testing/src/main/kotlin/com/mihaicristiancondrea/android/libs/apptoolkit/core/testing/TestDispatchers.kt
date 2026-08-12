@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.core.utils.dispatchers
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.testing
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher

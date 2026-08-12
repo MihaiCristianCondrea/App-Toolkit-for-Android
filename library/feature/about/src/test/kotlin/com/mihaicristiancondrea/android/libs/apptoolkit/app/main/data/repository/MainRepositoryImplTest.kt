@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.data.repository
+package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.MainRepositoryImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem

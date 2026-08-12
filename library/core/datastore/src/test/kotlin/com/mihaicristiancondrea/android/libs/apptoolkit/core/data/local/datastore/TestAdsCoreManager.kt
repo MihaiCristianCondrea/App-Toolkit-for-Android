@@ -21,7 +21,7 @@ import android.app.Activity
 import android.content.Context
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.AdsCoreManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.interfaces.OnShowAdCompleteListener
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
@@ -39,9 +39,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Test
 import java.lang.reflect.InvocationTargetException
 import java.util.Date
 import kotlin.coroutines.Continuation

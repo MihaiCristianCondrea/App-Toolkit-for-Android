@@ -21,9 +21,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.re
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.usecases.CompleteOnboardingUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.usecases.ObserveOnboardingCompletionUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.TestDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.dispatchers.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

@@ -21,7 +21,7 @@ import app.cash.turbine.test
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.dispatchers.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery

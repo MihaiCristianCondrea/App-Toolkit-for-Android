@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")
+    id("com.mihaicristiancondrea.android.apptoolkit.unit-test")
+    id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
 }
 
 val versioning = extensions.getByType<VersioningExtension>()
@@ -23,6 +25,7 @@ android {
 }
 
 dependencies {
+    testImplementation(project(":library:core:testing"))
     api(project(":library:core:common"))
     api(project(":library:core:network"))
     api(project(":library:core:ui"))

@@ -28,8 +28,9 @@ plugins {
     alias(notation = libs.plugins.firebase.crashlytics) apply false
     alias(notation = libs.plugins.firebase.performance) apply false
     alias(notation = libs.plugins.about.libraries)
-    alias(notation = libs.plugins.mannodermaus.android.junit5)
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")
+    id("com.mihaicristiancondrea.android.apptoolkit.unit-test")
+    id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
 }
 
 val hasGoogleServicesConfig: Boolean = listOf(
@@ -147,10 +148,6 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
 
     buildFeatures {
         buildConfig = true
@@ -177,15 +174,10 @@ android {
         }
     }
 
-    testOptions {
-        unitTests.all {
-            it.useJUnitPlatform()
-            it.jvmArgs("-XX:+EnableDynamicAgentLoading")
-        }
-    }
 }
 
 dependencies {
+    testImplementation(project(":library:core:testing"))
     implementation(project(":library:apptoolkit"))
     implementation(project(":library:core:common"))
     implementation(project(":library:core:ui"))
@@ -208,8 +200,6 @@ dependencies {
     implementation("org.chromium.net:cronet-fallback:143.7445.0")
 
     // Unit Tests
-    testImplementation(dependencyNotation = libs.bundles.unitTest)
-    testRuntimeOnly(dependencyNotation = libs.bundles.unitTestRuntime)
 
     // Instrumentation Tests
     androidTestImplementation(dependencyNotation = libs.bundles.instrumentationTest)

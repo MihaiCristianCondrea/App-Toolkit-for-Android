@@ -21,11 +21,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepositoryImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.dispatchers.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.google.common.truth.Truth.assertThat
 import io.mockk.mockk

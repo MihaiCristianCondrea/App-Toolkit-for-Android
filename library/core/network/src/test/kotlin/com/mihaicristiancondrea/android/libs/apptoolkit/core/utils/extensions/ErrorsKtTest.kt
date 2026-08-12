@@ -17,10 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.toError
 import kotlinx.serialization.SerializationException
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException

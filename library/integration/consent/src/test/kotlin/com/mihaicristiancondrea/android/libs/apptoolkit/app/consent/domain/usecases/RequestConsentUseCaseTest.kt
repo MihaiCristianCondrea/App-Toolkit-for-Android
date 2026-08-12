@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

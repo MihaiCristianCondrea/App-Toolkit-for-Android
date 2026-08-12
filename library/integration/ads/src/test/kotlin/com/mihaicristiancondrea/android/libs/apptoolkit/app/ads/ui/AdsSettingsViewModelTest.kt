@@ -26,13 +26,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.usecases.RequestConsentUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.dispatchers.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

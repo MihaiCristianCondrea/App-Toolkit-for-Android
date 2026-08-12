@@ -11,7 +11,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repositor
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond

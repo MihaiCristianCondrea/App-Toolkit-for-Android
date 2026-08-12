@@ -21,8 +21,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.ui.graphics.vector.ImageVector
 import app.cash.turbine.test
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.core.utils.dispatchers.StandardDispatcherExtension
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.state.MainUiState

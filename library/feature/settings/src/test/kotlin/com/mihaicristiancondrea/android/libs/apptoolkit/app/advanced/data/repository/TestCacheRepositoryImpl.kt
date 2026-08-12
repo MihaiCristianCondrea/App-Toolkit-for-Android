@@ -27,8 +27,8 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.io.path.createTempDirectory
 import kotlin.test.assertFalse

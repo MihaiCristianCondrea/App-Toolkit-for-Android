@@ -22,9 +22,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.domain.repository.CacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.Result
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class FakeCacheRepository(private val result: Result<Unit>) : CacheRepository {
     override fun clearCache(): Flow<Result<Unit>> = flowOf(result)

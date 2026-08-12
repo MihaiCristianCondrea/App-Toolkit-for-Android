@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.utils
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.testing
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController

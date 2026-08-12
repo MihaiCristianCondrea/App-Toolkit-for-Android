@@ -17,15 +17,14 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.IssueReporterViewModelTest
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.domain.repository.PermissionsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.dispatchers.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
@@ -58,7 +57,7 @@ class PermissionsViewModelTest {
             every { repository.getPermissionsConfig() } returns flowOf(config!!)
         }
         val dispatchers =
-            TestDispatchers(IssueReporterViewModelTest.dispatcherExtension.testDispatcher)
+            TestDispatchers(dispatcherExtension.testDispatcher)
         viewModel = PermissionsViewModel(
             permissionsRepository = repository,
             dispatchers = dispatchers,

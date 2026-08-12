@@ -15,7 +15,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import com.mihaicristiancondrea.android.apptoolkit.buildlogic.VersioningExtension
 
 val publishingArtifactId = providers.gradleProperty("PUBLISHING_ARTIFACT_ID")
@@ -28,9 +27,10 @@ plugins {
     alias(notation = libs.plugins.kotlin.parcelize)
     alias(notation = libs.plugins.kotlin.serialization)
     alias(notation = libs.plugins.about.libraries)
-    alias(notation = libs.plugins.mannodermaus.android.junit5)
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")
     `maven-publish`
+    id("com.mihaicristiancondrea.android.apptoolkit.unit-test")
+    id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
 }
 
 val versioning = extensions.getByType<VersioningExtension>()
@@ -54,27 +54,12 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
 
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_21)
-        }
-    }
 
     buildFeatures {
         compose = true
     }
 
-    testOptions {
-        unitTests.all {
-            it.useJUnitPlatform()
-            it.jvmArgs("-XX:+EnableDynamicAgentLoading")
-        }
-    }
 
     publishing {
         singleVariant("release") {
@@ -84,6 +69,7 @@ android {
 }
 
 dependencies {
+    testImplementation(project(":library:core:testing"))
     // Internal modules
     api(project(":library:core:common"))
     api(project(":library:core:datastore"))
@@ -146,8 +132,6 @@ dependencies {
     api(dependencyNotation = libs.bundles.ui.richtext)
 
     // Unit Tests
-    testImplementation(dependencyNotation = libs.bundles.unitTest)
-    testRuntimeOnly(dependencyNotation = libs.bundles.unitTestRuntime)
 
     // Instrumentation Tests
     androidTestImplementation(dependencyNotation = libs.bundles.instrumentationTest)

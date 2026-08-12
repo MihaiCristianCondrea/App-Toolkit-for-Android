@@ -15,7 +15,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import com.mihaicristiancondrea.android.apptoolkit.buildlogic.VersioningExtension
 
 plugins {
@@ -24,6 +23,7 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")
     `maven-publish`
+    id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
 }
 
 val versioning = extensions.getByType<VersioningExtension>()
@@ -36,16 +36,7 @@ android {
         minSdk = versioning.minSdk
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
 
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_21)
-        }
-    }
 
     buildFeatures {
         compose = true

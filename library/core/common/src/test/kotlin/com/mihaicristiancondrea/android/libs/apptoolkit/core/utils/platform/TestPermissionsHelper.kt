@@ -31,13 +31,16 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import io.mockk.verify
-import org.junit.Test
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class TestPermissionsHelper {
 
-    @Test
+    @Disabled(
+        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
+    )    @Test
     fun `hasNotificationPermission returns true for API 32 and below`() {
         val context = mockk<Context>()
 
@@ -52,7 +55,9 @@ class TestPermissionsHelper {
         }
     }
 
-    @Test
+    @Disabled(
+        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
+    )    @Test
     fun `hasNotificationPermission reflects granted state on API 33`() {
         val context = mockk<Context>()
 
@@ -80,7 +85,9 @@ class TestPermissionsHelper {
         }
     }
 
-    @Test
+    @Disabled(
+        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
+    )    @Test
     fun `requestNotificationPermission requests on API 33 when missing`() {
         val activity = mockk<Activity>()
 
@@ -113,7 +120,9 @@ class TestPermissionsHelper {
         }
     }
 
-    @Test
+    @Disabled(
+        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
+    )    @Test
     fun `requestNotificationPermission skips when already granted on API 33`() {
         val activity = mockk<Activity>()
 
@@ -134,7 +143,9 @@ class TestPermissionsHelper {
         }
     }
 
-    @Test
+    @Disabled(
+        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
+    )    @Test
     fun `requestNotificationPermission ignores API 32 and below`() {
         val activity = mockk<Activity>()
 

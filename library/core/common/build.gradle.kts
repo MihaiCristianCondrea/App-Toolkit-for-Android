@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")
+    id("com.mihaicristiancondrea.android.apptoolkit.unit-test")
+    id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
 }
 
 val versioning = extensions.getByType<VersioningExtension>()
@@ -22,6 +24,7 @@ android {
 }
 
 dependencies {
+    testImplementation(project(":library:core:testing"))
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.compose.material3)
 

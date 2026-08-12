@@ -42,9 +42,9 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
@@ -53,13 +53,13 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class CommonDataStoreTest {
 
-    @Before
+    @BeforeEach
     fun setUp() {
         mockkStatic("com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStoreKt")
         resetSingleton()
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         unmockkAll()
         resetSingleton()
@@ -405,12 +405,9 @@ class CommonDataStoreTest {
     }
 
     private fun resetSingleton() {
-        val companionField = CommonDataStore::class.java.getDeclaredField("Companion")
-        companionField.isAccessible = true
-        val companion = companionField.get(null)
-        val instanceField = companion.javaClass.getDeclaredField("instance")
+        val instanceField = CommonDataStore::class.java.getDeclaredField("instance")
         instanceField.isAccessible = true
-        instanceField.set(companion, null)
+        instanceField.set(null, null)
     }
 
     private class FakePreferencesDataStore : DataStore<Preferences> {

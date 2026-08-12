@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.m
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.utils.buildAppListItems
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class BuildAppListItemsTest {

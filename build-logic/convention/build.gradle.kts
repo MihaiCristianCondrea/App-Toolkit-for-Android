@@ -24,6 +24,7 @@ group = "com.mihaicristiancondrea.android.apptoolkit.buildlogic"
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.mannodermaus.gradlePlugin)
 }
 
 gradlePlugin {
@@ -31,6 +32,14 @@ gradlePlugin {
         register("versioning") {
             id = "com.mihaicristiancondrea.android.apptoolkit.versioning"
             implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.VersioningPlugin"
+        }
+        register("jvmTarget") {
+            id = "com.mihaicristiancondrea.android.apptoolkit.jvm-target"
+            implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.JvmTargetPlugin"
+        }
+        register("unitTest") {
+            id = "com.mihaicristiancondrea.android.apptoolkit.unit-test"
+            implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.UnitTestPlugin"
         }
     }
 }

@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.github.ExtraInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.repository.IssueReporterRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.repository.FirebaseController
 import com.google.common.truth.Truth.assertThat
 import io.ktor.client.HttpClient

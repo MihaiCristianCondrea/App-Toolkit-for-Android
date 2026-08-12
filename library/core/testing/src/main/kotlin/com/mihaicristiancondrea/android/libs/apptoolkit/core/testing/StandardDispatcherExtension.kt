@@ -15,12 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.dispatchers
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.testing
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.extension.AfterEachCallback
@@ -28,8 +28,8 @@ import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class UnconfinedDispatcherExtension : BeforeEachCallback, AfterEachCallback {
-    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+class StandardDispatcherExtension : BeforeEachCallback, AfterEachCallback {
+    val testDispatcher: TestDispatcher = StandardTestDispatcher()
 
     override fun beforeEach(context: ExtensionContext) {
         Dispatchers.setMain(testDispatcher)

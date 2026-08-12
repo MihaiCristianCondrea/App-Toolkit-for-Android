@@ -21,12 +21,12 @@ import android.app.Activity
 import app.cash.turbine.test
 import com.android.billingclient.api.ProductDetails
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.billing.BillingRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.billing.PurchaseResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.BillingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.billing.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.dispatchers.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -131,7 +131,7 @@ class SupportViewModelTest {
                 stateWithSnackbar = awaitItem()
             }
 
-            val snackbar = stateWithSnackbar.snackbar
+            val snackbar = checkNotNull(stateWithSnackbar.snackbar)
             assertThat(snackbar.isError).isFalse()
             val msg = snackbar.message as UiTextHelper.StringResource
             assertThat(msg.resourceId).isEqualTo(R.string.purchase_pending)
@@ -160,7 +160,7 @@ class SupportViewModelTest {
                 val errorData = requireNotNull(stateWithError.data)
                 assertThat(errorData.error).isEqualTo(error)
 
-                val snackbar = stateWithError.snackbar
+                val snackbar = checkNotNull(stateWithError.snackbar)
                 assertThat(snackbar.isError).isTrue()
                 val msg = snackbar.message as UiTextHelper.DynamicString
                 assertThat(msg.content).isEqualTo(error)
@@ -182,7 +182,7 @@ class SupportViewModelTest {
                 stateWithSnackbar = awaitItem()
             }
 
-            val snackbar = stateWithSnackbar.snackbar
+            val snackbar = checkNotNull(stateWithSnackbar.snackbar)
             assertThat(snackbar.isError).isFalse()
             val msg = snackbar.message as UiTextHelper.StringResource
             assertThat(msg.resourceId).isEqualTo(R.string.purchase_cancelled)
@@ -246,7 +246,7 @@ class SupportViewModelTest {
                     stateWithSnackbar = awaitItem()
                 }
 
-                val snackbar = stateWithSnackbar.snackbar
+                val snackbar = checkNotNull(stateWithSnackbar.snackbar)
                 assertThat(snackbar.isError).isTrue()
                 val message = snackbar.message as UiTextHelper.StringResource
                 assertThat(message.resourceId).isEqualTo(R.string.support_offer_unavailable)

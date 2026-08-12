@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 
 import com.google.common.truth.Truth.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class ResultTest {
 

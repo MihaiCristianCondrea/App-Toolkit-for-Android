@@ -24,10 +24,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.dispatchers.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.google.common.truth.Truth.assertThat
 import io.ktor.http.HttpStatusCode

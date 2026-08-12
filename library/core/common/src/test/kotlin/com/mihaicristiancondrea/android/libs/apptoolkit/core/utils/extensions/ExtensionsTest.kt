@@ -17,19 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.boolean.toApiEnvironment
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.toError
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.normalizeRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.sanitizeUrlOrNull
-import kotlinx.serialization.SerializationException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.robolectric.annotation.Config
-import java.net.ConnectException
-import java.net.SocketTimeoutException
-import java.sql.SQLException
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertFailsWith
@@ -104,36 +98,4 @@ class ExtensionsTest {
         )
     }
 
-    @Test
-    fun `toError maps throwable to domain error`() {
-        assertAll(
-            { assertEquals(Errors.Network.NO_INTERNET, java.net.UnknownHostException().toError()) },
-            {
-                assertEquals(
-                    Errors.Network.REQUEST_TIMEOUT,
-                    SocketTimeoutException().toError()
-                )
-            },
-            { assertEquals(Errors.Network.NO_INTERNET, ConnectException().toError()) },
-            {
-                assertEquals(
-                    Errors.Network.SERIALIZATION,
-                    SerializationException("invalid").toError()
-                )
-            },
-            {
-                assertEquals(
-                    Errors.Database.DATABASE_OPERATION_FAILED,
-                    SQLException().toError()
-                )
-            },
-            {
-                assertEquals(
-                    Errors.UseCase.ILLEGAL_ARGUMENT,
-                    IllegalArgumentException().toError()
-                )
-            },
-            { assertEquals(Errors.UseCase.NO_DATA, IllegalStateException().toError()) },
-        )
-    }
 }

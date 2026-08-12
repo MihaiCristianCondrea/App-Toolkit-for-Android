@@ -130,6 +130,7 @@ test-koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "
 
 # Kotlin
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+mannodermaus-gradlePlugin = { group = "de.mannodermaus.gradle.plugins", name = "android-junit5", version.ref = "mannodermausPlugin" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutines" }
@@ -150,6 +151,7 @@ markwon-core = { module = "io.noties.markwon:core", version.ref = "markwonCore" 
 # Testing
 test-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "testJupiter" }
 test-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "testJupiter" }
+test-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "testJupiter" }
 test-junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "testJupiter" }
 test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "testKotlinCoroutines" }
 test-mockk = { module = "io.mockk:mockk", version.ref = "testMockk" }
@@ -295,6 +297,10 @@ unitTest = [
     "test-turbine",
 ]
 
+# NOTE: `test-junit-vintage-engine` is declared but deliberately not in this bundle yet. Adding it
+# makes the 13 JUnit 4 suites run — and 11 of their tests fail immediately, because they stub
+# `Build.VERSION.SDK_INT` with `mockkStatic`, which cannot intercept a static final field. Those
+# suites have therefore never passed; they need porting to Robolectric's `@Config(sdk = …)` first.
 unitTestRuntime = ["test-junit-jupiter-engine"]
 
 # For instrumentation tests on an Android device (androidTest sourceSet)

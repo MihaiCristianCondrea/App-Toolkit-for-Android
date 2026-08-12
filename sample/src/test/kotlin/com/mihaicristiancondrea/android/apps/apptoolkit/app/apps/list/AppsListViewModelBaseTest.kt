@@ -28,9 +28,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.u
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.core.utils.dispatchers.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.model.network.AppErrors
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen

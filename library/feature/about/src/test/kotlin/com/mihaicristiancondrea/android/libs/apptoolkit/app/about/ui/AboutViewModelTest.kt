@@ -26,9 +26,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.TestDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.FakeFirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.dispatchers.UnconfinedDispatcherExtension
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.google.common.truth.Truth.assertThat
