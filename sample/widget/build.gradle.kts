@@ -20,12 +20,12 @@ plugins {
 }
 
 android {
-    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore"
+    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.widget"
 }
 
 dependencies {
     testImplementation(project(":library:core:testing"))
-    api(project(":library:core:datastore"))
-    api(project(":library:core:ui"))
-    api(project(":library:core:common"))
+    api(project(":sample:feature:apps"))
+    api(project(":sample:core:ui"))
+    api(project(":library:apptoolkit"))
 }

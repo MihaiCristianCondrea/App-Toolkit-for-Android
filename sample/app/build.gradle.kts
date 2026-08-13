@@ -103,7 +103,6 @@ android {
             ""
         }
         buildConfigField("String", "GITHUB_TOKEN", "\"$githubToken\"")
-        buildConfigField("int", "APPS_LIST_AD_FREQUENCY", "4")
     }
 
     signingConfigs {
@@ -181,6 +180,12 @@ dependencies {
     implementation(project(":sample:core:common"))
     implementation(project(":sample:core:datastore"))
     implementation(project(":sample:core:navigation"))
+    implementation(project(":sample:feature:apps"))
+    implementation(project(":sample:feature:components"))
+    implementation(project(":sample:feature:home"))
+    implementation(project(":sample:feature:settings"))
+    implementation(project(":sample:feature:tiles"))
+    implementation(project(":sample:widget"))
     implementation(project(":sample:core:ui"))
     implementation(project(":library:apptoolkit"))
     implementation(project(":library:core:common"))

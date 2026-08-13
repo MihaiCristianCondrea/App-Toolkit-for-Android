@@ -17,15 +17,17 @@
 
 plugins {
     id("com.mihaicristiancondrea.android.apptoolkit.sample-module")
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
-    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore"
+    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles"
 }
 
 dependencies {
     testImplementation(project(":library:core:testing"))
-    api(project(":library:core:datastore"))
-    api(project(":library:core:ui"))
-    api(project(":library:core:common"))
+    api(project(":sample:core:navigation"))
+    api(project(":sample:core:common"))
+    api(project(":sample:core:ui"))
+    api(project(":library:apptoolkit"))
 }

@@ -60,4 +60,12 @@ object AdsConstants {
 
     val SUPPORT_NATIVE_AD_UNIT_ID: String
         get() = nativeAdUnitId("ca-app-pub-5294151573817700/9755754484")
+
+    /**
+     * How many apps to show between native ads in the apps list.
+     *
+     * Was an app-module `buildConfigField`, which no feature module can read. It is a fixed tuning
+     * value, not a build input, so it belongs in shared code rather than in the generated class.
+     */
+    const val APPS_LIST_AD_FREQUENCY: Int = 4
 }

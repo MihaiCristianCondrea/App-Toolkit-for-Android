@@ -26,6 +26,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appNavigationEntryBuilders
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
@@ -86,7 +88,7 @@ class MainActivity : AppCompatActivity() {
     private fun setMainActivityContent() {
         setContent {
             AppTheme {
-                MainScreen()
+                MainScreen(entryBuilders = { context -> appNavigationEntryBuilders(context = context) })
             }
         }
     }

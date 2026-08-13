@@ -17,15 +17,21 @@
 
 plugins {
     id("com.mihaicristiancondrea.android.apptoolkit.sample-module")
+    alias(libs.plugins.kotlin.parcelize)
+    // The API DTOs are @Serializable. Without this plugin they compile but have no generated
+    // serializer, and every decode fails at runtime with SerializationException.
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore"
+    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps"
 }
 
 dependencies {
     testImplementation(project(":library:core:testing"))
-    api(project(":library:core:datastore"))
-    api(project(":library:core:ui"))
-    api(project(":library:core:common"))
+    api(project(":sample:core:navigation"))
+    api(project(":sample:core:common"))
+    api(project(":sample:core:datastore"))
+    api(project(":sample:core:ui"))
+    api(project(":library:apptoolkit"))
 }
