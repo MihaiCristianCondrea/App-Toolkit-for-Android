@@ -6,22 +6,15 @@ This recipe demonstrates how to display a destination as a modal bottom sheet.
 
 To show a destination as a bottom sheet, you need to do two things:
 
-1. **Use `BottomSheetSceneStrategy`** : Create an instance of `BottomSheetSceneStrategy` and pass it
-   to the `sceneStrategy` parameter of the `NavDisplay` composable.
+1. **Use `BottomSheetSceneStrategy`** : Create an instance of `BottomSheetSceneStrategy` and pass it to the `sceneStrategy` parameter of the `NavDisplay` composable.
 
-2. **Add metadata to the destination** : For the destination that you want to display as a bottom
-   sheet, add `BottomSheetSceneStrategy.bottomSheet()` to its metadata. This is done in the `entry`
-   function.
+2. **Add metadata to the destination** : For the destination that you want to display as a bottom sheet, add `BottomSheetSceneStrategy.bottomSheet()` to its metadata. This is done in the `entry` function.
 
-In this example, `RouteB` is configured to be a bottom sheet. When you navigate from `RouteA` to
-`RouteB`, `RouteB` will be displayed in a modal bottom sheet that slides up from the bottom of the
-screen.
+In this example, `RouteB` is configured to be a bottom sheet. When you navigate from `RouteA` to `RouteB`, `RouteB` will be displayed in a modal bottom sheet that slides up from the bottom of the screen.
 
-The content of the bottom sheet can be styled as needed. In this recipe, the content is clipped to
-have rounded corners.
+The content of the bottom sheet can be styled as needed. In this recipe, the content is clipped to have rounded corners.
 
-For more information, see the official documentation
-on [custom layouts](https://developer.android.com/guide/navigation/navigation-3/custom-layouts).
+For more information, see the official documentation on [custom layouts](https://developer.android.com/guide/navigation/navigation-3/custom-layouts).
 [![](https://developer.android.com/static/images/picto-icons/code.svg) Explore View the full recipe on GitHub.](https://github.com/android/nav3-recipes/tree/main/app/src/main/java/com/example/nav3recipes/bottomsheet)
 
 ```
@@ -109,6 +102,8 @@ class BottomSheetActivity : ComponentActivity() {
         }
     }
 }
+
+   
 ```
 
 ```
@@ -199,4 +194,5 @@ class BottomSheetSceneStrategy<T : Any> : SceneStrategy<T> {
     }
 
 }
+   
 ```

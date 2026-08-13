@@ -1,3 +1,9 @@
+# Unreleased:
+
+- **Minor**: Enhanced the system for fetching app updates and handled internal errors more robustly.
+- **Minor**: Optimized resource usage and resolved various crashes to ensure a smoother experience.
+- **Patch**: Refined layouts and fixed visual inconsistencies across different themes and locales, including improved advertisement integration.
+
 # Version 26.07.1:
 
 - **New**: Centralized versioning system with automated `versionCode` and `versionName` generation.

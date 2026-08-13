@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="cancelled_error">Операцію скасовано.</string>
+    <string name="connection_closed_error">З’єднання було перервано.</string>
+    <string name="connection_error">Помилка мережі. Будь ласка, спробуйте ще раз.</string>
+    <string name="database_cant_open_error">Не вдалося відкрити сховище.</string>
+    <string name="database_constraint_error">Помилка обмеження сховища.</string>
+    <string name="database_corrupt_error">Сховище пошкоджене.</string>
+    <string name="database_error">Помилка сховища.</string>
+    <string name="database_full_error">Сховище заповнене.</string>
+    <string name="database_locked_error">Сховище зайняте. Спробуйте ще раз.</string>
+    <string name="error_failed_to_launch_review">Не вдалося запустити процес оцінювання</string>
+    <string name="error_failed_to_load_consent_info">Не вдалося завантажити інформацію про згоду</string>
+    <string name="error_failed_to_load_faq">Не вдалося завантажити розділ поширених запитань</string>
+    <string name="error_failed_to_load_sku_details">Не вдалося завантажити відомості SKU</string>
+    <string name="error_failed_to_request_review">Не вдалося надіслати запит на оцінювання</string>
+    <string name="error_failed_to_update_app">Не вдалося оновити застосунок</string>
+    <string name="http_client_error">Не вдалося виконати запит. Будь ласка, спробуйте ще раз.</string>
+    <string name="http_redirect_error">Неочікуване перенаправлення від сервера.</string>
+    <string name="http_server_error">Помилка сервера. Будь ласка, спробуйте пізніше.</string>
+    <string name="illegal_argument_error">Надано недійсні дані або аргумент. Перевірте інформацію та спробуйте ще раз.</string>
+    <string name="invalid_state_error">Операцію наразі заборонено.</string>
+    <string name="no_data_error">Дані відсутні.</string>
+    <string name="no_internet_error">Немає підключення до інтернету.</string>
+    <string name="rate_limited_error">Забагато запитів. Спробуйте пізніше.</string>
+    <string name="request_timeout_error">Час очікування запиту минув. Спробуйте ще раз.</string>
+    <string name="serialization_error">Не вдалося прочитати відповідь сервера.</string>
+    <string name="ssl_error">Не вдалося встановити захищене з’єднання.</string>
+    <string name="unknown_error">Сталася невідома помилка.</string>
+    <string name="unsupported_operation_error">Операція не підтримується.</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <!--
+      The reporter activity used to ask for @style/Theme.Material3.DayNight.NoActionBar, which comes
+      from com.google.android.material — a dependency this module does not have. It resolved only
+      because the sample app happens to pull Material Components in; a host app without it would
+      have failed to link the manifest. BaseActivity extends AppCompatActivity and the screen itself
+      is Compose, so an AppCompat parent is all the platform side actually needs, and it ships with
+      the module instead of depending on the host.
+    -->
+    <style name="Theme.AppToolkit.IssueReporter" parent="Theme.AppCompat.DayNight.NoActionBar" />
+
+</resources>

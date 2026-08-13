@@ -1,11 +1,10 @@
 ## EngageBroadcastReceiver
 
-Setting up the `BroadcastReceiver` correctly requires **both** static and
-dynamic registration. Static registration allows the app to receive broadcasts
-even when it is not running, while dynamic registration is required on newer
-Android versions to safely receive broadcasts when the app is live in memory.
+Setting up the `BroadcastReceiver` correctly requires **both** static and dynamic registration. Static registration allows the app to receive broadcasts even when it isn't running, while dynamic registration is required on newer Android versions to safely receive broadcasts when the app is live in memory.
 
-### BroadcastReceiver Implementation
+### BroadcastReceiver implementation
+
+<br />
 
 ```kotlin
 import android.content.BroadcastReceiver
@@ -64,16 +63,18 @@ class EngageBroadcastReceiver : BroadcastReceiver() {
         }
     }
 }
+   
 ```
 
 <br />
 
-### Static Registration (AndroidManifest.xml)
+### Static registration in AndroidManifest.xml
 
-Add the `<receiver>` tag inside the `<application>` block in
-`AndroidManifest.xml`
+Add the `<receiver>` tag inside the `<application>` block in `AndroidManifest.xml`
 
-```kotlin
+<br />
+
+```xml
 <!--    Add the `<receiver>` tag inside the `<application>` block in `AndroidManifest.xml`:-->
 <receiver
     android:name="com.example.snippets.engage.EngageBroadcastReceiver"
@@ -88,22 +89,27 @@ Add the `<receiver>` tag inside the `<application>` block in
         <!-- Note: Add vertical-specific intents here if applicable (e.g., FOOD shopping cart, etc.) -->
     </intent-filter>
 </receiver>
+   
 ```
 
 <br />
 
 ## EngageWorker
 
+<br />
+
 ```kotlin
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.google.android.engage.common.datamodel.ClusterType
 import com.google.android.engage.service.AppEngageErrorCode
 import com.google.android.engage.service.AppEngageException
 import com.google.android.engage.service.AppEngagePublishClient
 import com.google.android.engage.service.AppEngagePublishStatusCode
 import com.google.android.engage.service.PublishStatusRequest
+import com.google.android.engage.service.ServiceAvailabilityRequest
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.tasks.await
 
@@ -122,19 +128,29 @@ class EngageWorker(context: Context, workerParams: WorkerParameters) : Coroutine
             return Result.failure()
         }
 
-        // Check if engage service is available before publishing.
-        val isAvailable = client.isServiceAvailable.await()
-
-        // If the service is not available, do not attempt to publish and indicate failure.
-        if (!isAvailable) {
-            return Result.failure()
+        val publishType = inputData.getString(Constants.PUBLISH_TYPE_KEY)
+        val intendedClusterType = when (publishType) {
+            Constants.PUBLISH_TYPE_RECOMMENDATIONS -> ClusterType.TYPE_RECOMMENDATION
+            Constants.PUBLISH_TYPE_FEATURED -> ClusterType.TYPE_FEATURED
+            Constants.PUBLISH_TYPE_CONTINUATION -> ClusterType.TYPE_CONTINUATION
+            Constants.PUBLISH_TYPE_USER_ACCOUNT_MANAGEMENT -> ClusterType.TYPE_ENGAGEMENT
+            else -> ClusterType.TYPE_UNKNOWN
         }
 
-        val publishType = inputData.getString(Constants.PUBLISH_TYPE_KEY)
+        if (intendedClusterType != ClusterType.TYPE_UNKNOWN) {
+            val request = ServiceAvailabilityRequest.Builder()
+                .addIntendedClusterType(intendedClusterType)
+                .build()
+            val availabilityMap = client.isServiceAvailable(request).await()
+            if (availabilityMap[intendedClusterType] != true) {
+                return Result.failure()
+            }
+        }
+
         return when (publishType) {
             Constants.PUBLISH_TYPE_RECOMMENDATIONS -> publishRecommendations()
             // Constants.PUBLISH_TYPE_FEATURED -> publishFeatured()
-            // Constants.PUBLISH_TYPE_CONTINUATION-> publishContinuation()
+            Constants.PUBLISH_TYPE_CONTINUATION -> publishContinuation()
             Constants.PUBLISH_TYPE_USER_ACCOUNT_MANAGEMENT -> publishUserAccountManagement()
             else -> Result.failure()
         }
@@ -145,6 +161,21 @@ class EngageWorker(context: Context, workerParams: WorkerParameters) : Coroutine
         val publishTask: Task<Void> =
             client.publishRecommendationClusters(
                 clusterRequestFactory.constructRecommendationClustersRequest()
+            )
+        return publishAndProvideResult(publishTask)
+    }
+
+    private suspend fun publishContinuation(): Result {
+        // Empty Continuation Guard: If there is no continuation content,
+        // we must delete the cluster instead of publishing an empty one on the UI.
+        if (getContinuationData().isEmpty()) {
+            val deleteTask = client.deleteContinuationCluster()
+            return publishAndProvideResult(deleteTask)
+        }
+
+        val publishTask: Task<Void> =
+            client.publishContinuationCluster(
+                clusterRequestFactory.constructContinuationClusterRequest()
             )
         return publishAndProvideResult(publishTask)
     }
@@ -175,6 +206,11 @@ class EngageWorker(context: Context, workerParams: WorkerParameters) : Coroutine
 
     private fun isAccountSignedIn(): Boolean {
         // Implement your app's sign-in check logic here.
+        // ...
+    }
+
+    private fun getContinuationData(): List<Any> {
+        // Implement your app's data loading logic here.
         // ...
     }
 
@@ -259,11 +295,14 @@ class EngageWorker(context: Context, workerParams: WorkerParameters) : Coroutine
         }
     }
 }
+   
 ```
 
 <br />
 
 ## ClusterRequestFactory
+
+<br />
 
 ```kotlin
 class ClusterRequestFactory(context: Context) {
@@ -287,11 +326,28 @@ class ClusterRequestFactory(context: Context) {
 
         val items = appDataRepository.getRecommendations()
         val recommendationCluster = com.google.android.engage.common.datamodel.RecommendationCluster.Builder()
+            .setTitle("Recommended Content") // Required field
+            .setRecommendationClusterType(com.google.android.engage.common.datamodel.RecommendationClusterType.TYPE_TOP_PICKS_FOR_YOU) // Required field
         for (item in items) {
             recommendationCluster.addEntity(ItemToEntityConverter.convert(item))
         }
         return com.google.android.engage.service.PublishRecommendationClustersRequest.Builder()
             .addRecommendationCluster(recommendationCluster.build())
+            .setAccountProfile(accountProfile) // Set the account profile on the request for personalization/sync
+            .build()
+    }
+
+    fun constructContinuationClusterRequest(): com.google.android.engage.service.PublishContinuationClusterRequest {
+        val items = appDataRepository.getContinuationData()
+
+        val continuationCluster = com.google.android.engage.common.datamodel.ContinuationCluster.Builder()
+            .setAccountProfile(accountProfile) // Set the account profile on the request for personalization/sync
+
+        for (item in items) {
+            continuationCluster.addEntity(ItemToEntityConverter.convert(item))
+        }
+        return com.google.android.engage.service.PublishContinuationClusterRequest.Builder()
+            .setContinuationCluster(continuationCluster.build())
             .build()
     }
 
@@ -300,11 +356,14 @@ class ClusterRequestFactory(context: Context) {
             .setSignInCardEntity(signInCard)
             .build()
 }
+   
 ```
 
 <br />
 
 ## EngagePublisher
+
+<br />
 
 ```kotlin
 object EngagePublisher {
@@ -324,11 +383,14 @@ object EngagePublisher {
         WorkManager.getInstance(context).enqueueUniqueWork("EngageOneTime", ExistingWorkPolicy.REPLACE, workRequest)
     }
 }
+   
 ```
 
 <br />
 
 ## Constants
+
+<br />
 
 ```kotlin
 object Constants {
@@ -338,17 +400,20 @@ object Constants {
     const val PUBLISH_TYPE_KEY = "PUBLISH_TYPE"
     const val PUBLISH_TYPE_RECOMMENDATIONS = "RECOMMENDATIONS"
     const val PUBLISH_TYPE_FEATURED = "FEATURED"
-    // const val PUBLISH_TYPE_CONTINUATION = "CONTINUATION"
+    const val PUBLISH_TYPE_CONTINUATION = "CONTINUATION"
     // ...
     const val PUBLISH_TYPE_USER_ACCOUNT_MANAGEMENT = "USER_ACCOUNT_MANAGEMENT"
     // const val PUBLISH_TYPE_FOOD_SHOPPING_CARD = "FOOD_SHOPPING_CARD"
     // const val PUBLISH_TYPE_RESERVATION = "RESERVATION"
 }
+   
 ```
 
 <br />
 
 ## ItemToEntityConverter
+
+<br />
 
 ```kotlin
 object ItemToEntityConverter {
@@ -363,20 +428,20 @@ object ItemToEntityConverter {
             .build()
     }
 }
+   
 ```
 
 <br />
 
-## Dependency Specifications (libs.versions.toml)
+> **Strict image aspect ratio requirement** : Play Engage has strict requirements for image aspect ratios depending on the vertical and entity type (e.g., 16:9 for landscape, 1:1 for square, 2:3 for portrait). Ensure your `ItemToEntityConverter` maps images that conform to these strict requirements to avoid cropping or content rejection by Play.
 
-This skill specifies all dependencies following in `libs.versions.toml` format.
-Adapt these definitions to other formats (such as standard Groovy `build.gradle`
-or Kotlin DSL `build.gradle.kts` implementation lines) as required by the
-project.
+## Dependency specifications (libs.versions.toml)
+
+This skill specifies all dependencies using the `libs.versions.toml` format. Adapt these definitions to other formats (such as standard Groovy `build.gradle` or Kotlin DSL `build.gradle.kts` implementation lines) as required by the project.
 
     [versions]
-    engage-core = "1.5.12"
-    engage-tv = "1.0.6"
+    engage-core = "1.6.0"
+    engage-tv = "1.1.0"
     playServicesOssLicenses = "17.5.1"
     workManager = "2.11.2"
     coroutines = "1.10.2"
@@ -391,21 +456,50 @@ project.
     kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
     kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
-## TV Integrations
+## Dual content rating fields for Watch and TV
 
-The following patterns and configurations are specific to Android TV
-integrations.
+For Watch and TV integrations, you must populate both the new `contentRatings` (which uses `RatingSystem`) and the legacy `contentRatingsLegacies` (which uses `String` lists) to ensure compatibility across all Google Play surfaces.
 
-### AndroidManifest.xml (TV)
+<br />
 
 ```kotlin
-<!-- Mandatory for TV integrations -->
-<uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA" />
+fun convertMovie(movie: MovieData): MovieEntity {
+    val ratingSystem = RatingSystem.Builder()
+        .setAgencyName("MPAA")
+        .setRating("PG-13")
+        .build()
+    return MovieEntity.Builder()
+        .setEntityId(movie.id)
+        .setName(movie.title)
+        // ... other fields
+        .addContentRating(ratingSystem) // Recommended API
+        .addContentRatingsLegacy(listOf("MPAA:PG-13")) // Legacy API for backward compatibility
+        .build()
+}
+   
 ```
 
 <br />
 
-### PlatformSpecificUri Example
+## TV integrations
+
+The following patterns and configurations are specific to Android TV integrations.
+
+### AndroidManifest.xml for TV
+
+<br />
+
+```xml
+<!-- Mandatory for TV integrations -->
+<uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA" />
+   
+```
+
+<br />
+
+### PlatformSpecificUri example
+
+<br />
 
 ```kotlin
 val platformSpecificPlaybackUris = listOf(
@@ -418,11 +512,14 @@ val platformSpecificPlaybackUris = listOf(
         .setActionUri(Uri.parse("https://www.example.com/mobile/play/123"))
         .build()
 )
+   
 ```
 
 <br />
 
-### AccountProfile Example
+### AccountProfile example
+
+<br />
 
 ```kotlin
 val accountProfile: AccountProfile
@@ -432,6 +529,7 @@ val accountProfile: AccountProfile
         // AppCompatDelegate.getApplicationLocales().get(0) for Per-App Language Preferences
         .setLocale(Locale.getDefault().toLanguageTag())
         .build()
+   
 ```
 
 <br />

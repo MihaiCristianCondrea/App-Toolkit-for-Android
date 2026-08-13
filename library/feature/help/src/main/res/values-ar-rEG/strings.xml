@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">برنامج تجريبي</string>
+    <string name="contact_us">اتصل بنا</string>
+    <string name="contact_us_description">أخبرنا المزيد وسنساعدك في الوصول إلى هناك</string>
+    <string name="feedback">الملاحظات</string>
+    <string name="help">مساعدة</string>
+    <string name="help_feedback_sheet_contact_description">افتح صفحة الاتصال الرسمية الخاصة بي للحصول على دعم مباشر.</string>
+    <string name="help_feedback_sheet_contact_title">تواصل معي شخصيًا</string>
+    <string name="help_feedback_sheet_feature_request_description">اقترح أفكارًا جديدة لأي من تطبيقاتنا عبر النموذج الرسمي.</string>
+    <string name="help_feedback_sheet_feature_request_title">إرسال طلب ميزة</string>
+    <string name="help_feedback_sheet_review_description">شارك تقييمك وساعد المزيد من المستخدمين على اكتشاف التطبيق.</string>
+    <string name="help_feedback_sheet_review_title">اترك مراجعة على Google Play</string>
+    <string name="help_feedback_sheet_title">كيف تود مشاركة ملاحظاتك؟</string>
+    <string name="oss_license_title">تراخيص المصادر المفتوحة</string>
+    <string name="popular_help_resources">مصادر المساعدة الشائعة</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="terms_of_service">شروط الخدمة</string>
+    <string name="version">الإصدار %1$s</string>
+    <string name="version_info">معلومات الإصدار</string>
+    <string name="view_in_google_play_store">عرض في متجر Google Play</string>
+</resources>

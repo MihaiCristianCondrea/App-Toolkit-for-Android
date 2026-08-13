@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">বিজ্ঞাপন</string>
+    <string name="display_ads">বিজ্ঞাপন প্রদর্শন করুন</string>
+    <string name="learn_more">আরও জানুন</string>
+    <string name="personalized_ads">ব্যক্তিগতকৃত বিজ্ঞাপন</string>
+    <string name="summary_ads">আপনার জন্য প্রাসঙ্গিক বিজ্ঞাপন দেখুন। আপনার অ্যাপ কার্যকলাপের উপর ভিত্তি করে ব্যক্তিগতকৃত বিজ্ঞাপন দেখানোর জন্য ব্যবহৃত তথ্য পরিচালনা করুন। আপনি সর্বদা এখানে ব্যক্তিগতকরণ বন্ধ করতে পারেন।\n</string>
+    <string name="summary_ads_personalized_ads">আপনার আগ্রহের ভিত্তিতে আমরা কীভাবে আপনার জন্য বিজ্ঞাপন ব্যক্তিগতকৃত করি তা পছন্দ করুন</string>
+</resources>

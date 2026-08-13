@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="access_network_state">Åtkomst till nätverksstatus [ACCESS_NETWORK_STATE]</string>
+    <string name="ad_id">Annons-ID [AD_ID]</string>
+    <string name="billing">Fakturering [BILLING]</string>
+    <string name="check_license">Kontrollera licens [CHECK_LICENSE]</string>
+    <string name="foreground_service">Förgrundstjänst [FOREGROUND_SERVICE]</string>
+    <string name="internet">Internet [INTERNET]</string>
+    <string name="normal">Normal</string>
+    <string name="permissions">Behörigheter</string>
+    <string name="post_notifications">Skicka aviseringar [POST_NOTIFICATIONS]</string>
+    <string name="runtime">Körningstid</string>
+    <string name="summary_preference_permissions_access_network_state">Tillåter appen att kontrollera nätverksanslutning och hämta information om Wi-Fi, inklusive aktiverad status och namn på anslutna Wi-Fi-enheter.</string>
+    <string name="summary_preference_permissions_ad_id">Tillåter appen att hämta och använda annonseringsidentifieraren som är kopplad till användarens enhet, för att tillhandahålla personliga annonser, mäta annonseffektivitet och visa annonser på Android 13-enheter eller senare.</string>
+    <string name="summary_preference_permissions_billing">Tillåter appen att använda Google Play Billing Library för att hantera köp i appen och donationer</string>
+    <string name="summary_preference_permissions_check_license">Tillåter appen att verifiera sin överensstämmelse med licensavtalet och upprätthålla licensvillkor för att skydda immateriella rättigheter.</string>
+    <string name="summary_preference_permissions_foreground_service">Tillåter appen att skapa och använda tjänster som körs i förgrunden, vilket ger dem prioritet över andra bakgrundsprocesser och förbättrar prestanda och tillförlitlighet.</string>
+    <string name="summary_preference_permissions_internet">Tillåter appen att upprätta en internetanslutning för att skicka felrapporter eller söka efter uppdateringar.</string>
+    <string name="summary_preference_permissions_post_notifications">Tillåter appen att visa aviseringar på enheter med Android 13 eller senare.</string>
+    <string name="summary_preference_permissions_wake_lock">Tillåter appen att förhindra att enheten går i viloläge (t.ex. skärmdimning или processorvila) under kritiska operationer för att säkerställa att de slutförs utan avbrott. Detta används sparsamt för att spara batteri.</string>
+    <string name="wake_lock">Håll enheten vaken [WAKE_LOCK]</string>
+</resources>

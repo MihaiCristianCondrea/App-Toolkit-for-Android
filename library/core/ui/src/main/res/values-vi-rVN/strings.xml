@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">Giới thiệu</string>
+    <string name="amoled_mode">Chế độ AMOLED</string>
+    <string name="color_palette">Bảng màu</string>
+    <string name="dark_mode">Chế độ tối</string>
+    <string name="dialog_info_language">Cá nhân hóa trải nghiệm của bạn với ngôn ngữ ưa thích. Mọi thay đổi ngôn ngữ bạn thực hiện sẽ có hiệu lực ngay lập tức, đảm bảo trải nghiệm liền mạch bằng ngôn ngữ bạn đã chọn</string>
+    <string name="dialog_info_startup">Cấu hình màn hình ban đầu được hiển thị cho người dùng khi khởi chạy ứng dụng. Cài đặt này ảnh hưởng đến tương tác đầu tiên của người dùng với ứng dụng và có thể được điều chỉnh cho các phân khúc người dùng cụ thể hoặc mục tiêu sản phẩm.</string>
+    <string name="dialog_language_subtitle">Chọn ngôn ngữ ưa thích của bạn</string>
+    <string name="dialog_startup_subtitle">Chọn trang khởi động ưa thích của bạn</string>
+    <string name="done_button_content_description">Xong</string>
+    <string name="follow_system">Theo chế độ hệ thống</string>
+    <string name="go_back">Quay lại</string>
+    <string name="learn_more">Tìm hiểu thêm</string>
+    <string name="light_mode">Chế độ sáng</string>
+    <string name="loading">Đang tải…</string>
+    <string name="onboarding_theme_dark_desc">Dịu mắt.</string>
+    <string name="onboarding_theme_light_desc">Sáng sủa và năng động.</string>
+    <string name="onboarding_theme_system_desc">Phù hợp với thiết bị của bạn.</string>
+    <string name="other_colors">Màu khác</string>
+    <string name="screen_and_display_settings">màn hình và cài đặt hiển thị.</string>
+    <string name="select_language_title">Chọn ngôn ngữ</string>
+    <string name="sort_by">Sắp xếp theo</string>
+    <string name="sponsored_ad_label">● Quảng cáo được tài trợ</string>
+    <string name="sponsored_ad_label_plain">Quảng cáo được tài trợ</string>
+    <string name="startup_page">Trang khởi động</string>
+    <string name="summary_dark_theme">Chủ đề tối tận dụng một nền sâu để mở rộng đáng kể thời lượng pin của bạn. Để kích hoạt nó, chỉ cần điều hướng đến Trình quản lý hệ thống Android của bạn và chọn chủ đề ưa thích của bạn trong</string>
+    <string name="theme_mode">Chế độ chủ đề</string>
+    <string name="try_again">Thử lại</string>
+    <string name="wallpaper_colors">Màu hình nền</string>
+</resources>

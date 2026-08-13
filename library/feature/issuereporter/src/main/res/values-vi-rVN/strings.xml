@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">Báo cáo lỗi</string>
+    <string name="cd_expand_device_info">Mở rộng hoặc thu gọn thông tin thiết bị</string>
+    <string name="device_info">Thông tin thiết bị</string>
+    <string name="issue_description_label">Mô tả</string>
+    <string name="issue_email_label">Email</string>
+    <string name="issue_section_label">Vấn đề</string>
+    <string name="issue_send">Gửi</string>
+    <string name="issue_submitted">Vấn đề của bạn đã được gửi.</string>
+    <string name="issue_submitted_successfully">Vấn đề được gửi thành công</string>
+    <string name="issue_title_label">Tiêu đề</string>
+    <string name="login_section_label">Đăng nhập</string>
+    <string name="open_button_label">Vấn đề mở</string>
+    <string name="open_issue_in_browser">Mở trong trình duyệt</string>
+    <string name="optional_placeholder">Tùy chọn</string>
+    <string name="send_anonymously">Gửi ẩn danh</string>
+    <string name="snack_report_failed">Gửi báo cáo thất bại</string>
+    <string name="snack_report_success">Báo cáo đã được gửi thành công</string>
+    <string name="use_github_account">Gửi bằng tài khoản GitHub</string>
+</resources>

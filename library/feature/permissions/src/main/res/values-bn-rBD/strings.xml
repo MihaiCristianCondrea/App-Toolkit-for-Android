@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="access_network_state">নেটওয়ার্কের অবস্থা অ্যাক্সেস [ACCESS_NETWORK_STATE]</string>
+    <string name="ad_id">বিজ্ঞাপন আইডি [AD_ID]</string>
+    <string name="billing">বিলিং [BILLING]</string>
+    <string name="check_license">লাইসেন্স যাচাই [CHECK_LICENSE]</string>
+    <string name="foreground_service">ফোরগ্রাউন্ড পরিষেবা [FOREGROUND_SERVICE]</string>
+    <string name="internet">ইন্টারনেট [INTERNET]</string>
+    <string name="normal">সাধারণ</string>
+    <string name="permissions">অনুমতিসমূহ</string>
+    <string name="post_notifications">পোস্ট নোটিফিকেশন [POST_NOTIFICATIONS]</string>
+    <string name="runtime">রানটাইম</string>
+    <string name="summary_preference_permissions_access_network_state">অ্যাপটিকে নেটওয়ার্ক সংযোগ পরীক্ষা করতে এবং ওয়াই-ফাই সম্পর্কিত তথ্য পুনরুদ্ধার করার অনুমতি দেয়, যার মধ্যে সক্রিয় অবস্থা এবং সংযুক্ত ওয়াই-ফাই ডিভাইসের নাম অন্তর্ভুক্ত।</string>
+    <string name="summary_preference_permissions_ad_id">অ্যাপটিকে ব্যবহারকারীর ডিভাইসের সাথে যুক্ত বিজ্ঞাপন শনাক্তকারী পুনরুদ্ধার এবং ব্যবহার করার অনুমতি দেয়, যা ব্যক্তিগতকৃত বিজ্ঞাপন সরবরাহ করে, বিজ্ঞাপনের কার্যকারিতা পরিমাপ করে এবং অ্যান্ড্রয়েড ১৩ বা তার পরের ডিভাইসগুলোতে বিজ্ঞাপন দেখায়।</string>
+    <string name="summary_preference_permissions_billing">অ্যাপটিকে গুগল প্লে বিলিং লাইব্রেরি ব্যবহার করে অ্যাপ-মধ্যস্থ কেনাকাটা এবং অনুদান পরিচালনা করার অনুমতি দেয়।</string>
+    <string name="summary_preference_permissions_check_license">অ্যাপটিকে লাইসেন্স চুক্তির সাথে তার সম্মতি যাচাই করতে এবং মেধা সম্পত্তির সুরক্ষার জন্য লাইসেন্সের শর্তাবলী প্রয়োগ করার অনুমতি দেয়।</string>
+    <string name="summary_preference_permissions_foreground_service">অ্যাপটিকে ফোরগ্রাউন্ডে চালিত পরিষেবা তৈরি এবং ব্যবহার করার অনুমতি দেয়, যা অন্যান্য ব্যাকগ্রাউন্ড প্রসেসের উপর তাদের অগ্রাধিকার দেয় এবং কার্যকারিতা ও নির্ভরযোগ্যতা উন্নত করে।</string>
+    <string name="summary_preference_permissions_internet">অ্যাপটিকে ত্রুটির প্রতিবেদন পাঠাতে অথবা আপডেটের জন্য পরীক্ষা করতে ইন্টারনেট সংযোগ স্থাপন করার অনুমতি দেয়।</string>
+    <string name="summary_preference_permissions_post_notifications">অ্যাপটিকে অ্যান্ড্রয়েড ১৩ বা তার পরের ডিভাইসগুলোতে বিজ্ঞপ্তি প্রদর্শন করার অনুমতি দেয়।</string>
+    <string name="summary_preference_permissions_wake_lock">অ্যাপটিকে জরুরি অপারেশনের সময় ডিভাইসকে ঘুমাতে যাওয়া (যেমন, স্ক্রিন অনুজ্জ্বল হওয়া বা প্রসেসর ঘুমানো) থেকে বিরত রাখতে দেয় যাতে সেগুলি বাধা ছাড়াই সম্পন্ন হয়। ব্যাটারি সংরক্ষণের জন্য এটি অল্প পরিমাণে ব্যবহৃত হয়।</string>
+    <string name="wake_lock">ডিভাইসকে জাগিয়ে রাখুন [WAKE_LOCK]</string>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">Отчёт о баге</string>
+    <string name="cd_expand_device_info">Развернуть или свернуть информацию об устройстве</string>
+    <string name="device_info">Информация об устройстве</string>
+    <string name="issue_description_label">Описание</string>
+    <string name="issue_email_label">Электронная почта</string>
+    <string name="issue_section_label">Проблема</string>
+    <string name="issue_send">Отправить</string>
+    <string name="issue_submitted">Ваша проблема была отправлена.</string>
+    <string name="issue_submitted_successfully">Выпуск успешно</string>
+    <string name="issue_title_label">Заголовок</string>
+    <string name="login_section_label">Войти</string>
+    <string name="open_button_label">Открытая проблема</string>
+    <string name="open_issue_in_browser">Открыт в браузере</string>
+    <string name="optional_placeholder">Необязательно</string>
+    <string name="send_anonymously">Отправить анонимно</string>
+    <string name="snack_report_failed">Не удалось отправить отчет</string>
+    <string name="snack_report_success">Отчет успешно отправлен</string>
+    <string name="use_github_account">Отправить через аккаунт GitHub</string>
+</resources>

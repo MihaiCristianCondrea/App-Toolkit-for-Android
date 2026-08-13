@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="agree">ยอมรับ</string>
+    <string name="amoled_mode">โหมด AMOLED</string>
+    <string name="back_button_content_description">ย้อนกลับ</string>
+    <string name="back_button_text">ย้อนกลับ</string>
+    <string name="consent_ad_personalization_description">เปิดใช้งานโฆษณาส่วนบุคคลตามกิจกรรมและค่ากำหนดของคุณในบริการและแอปต่างๆ ของ Google</string>
+    <string name="consent_ad_personalization_description_short">เปิดใช้งานการโฆษณาที่ปรับให้เหมาะกับแต่ละบุคคล</string>
+    <string name="consent_ad_personalization_title">โฆษณาส่วนบุคคล</string>
+    <string name="consent_ad_storage_description">เปิดใช้งานการจัดเก็บข้อมูล (เช่น ตัวระบุอุปกรณ์หรือคุกกี้) เพื่อวัดประสิทธิภาพโฆษณาและแสดงโฆษณาที่เกี่ยวข้อง</string>
+    <string name="consent_ad_storage_description_short">อนุญาตการจัดเก็บข้อมูลเพื่อวัตถุประสงค์ในการโฆษณา</string>
+    <string name="consent_ad_storage_title">จัดเก็บข้อมูลโฆษณา</string>
+    <string name="consent_ad_user_data_description">อนุญาตให้ส่งข้อมูลการใช้งานและข้อมูลอุปกรณ์ไปยัง Google เพื่อสนับสนุนฟีเจอร์ที่เกี่ยวข้องกับโฆษณา เช่น คอนเวอร์ชันและการเพิ่มประสิทธิภาพแคมเปญ</string>
+    <string name="consent_ad_user_data_description_short">อนุญาตการส่งข้อมูลผู้ใช้สำหรับโฆษณา</string>
+    <string name="consent_ad_user_data_title">ส่งข้อมูลสำหรับโฆษณา</string>
+    <string name="consent_analytics_storage_description">อนุญาตให้จัดเก็บข้อมูล เช่น การใช้งานแอปและระยะเวลาการเข้าชม เพื่อปรับปรุงการวิเคราะห์และประสิทธิภาพของแอป</string>
+    <string name="consent_analytics_storage_description_short">อนุญาตการเก็บรวบรวมข้อมูลสำหรับการวิเคราะห์การใช้งานแอป</string>
+    <string name="consent_analytics_storage_title">จัดเก็บข้อมูลการวิเคราะห์</string>
+    <string name="dark_mode">โหมดมืด</string>
+    <string name="done_button_content_description">เสร็จสิ้น</string>
+    <string name="done_button_text">เสร็จสิ้น</string>
+    <string name="error">ข้อผิดพลาด</string>
+    <string name="follow_system">ตามการตั้งค่าระบบ</string>
+    <string name="learn_more">เรียนรู้เพิ่มเติม</string>
+    <string name="learn_more_about_provider">ดูข้อมูลเพิ่มเติมเกี่ยวกับผู้ให้บริการนี้</string>
+    <string name="learn_more_privacy_policy">อ่านนโยบายความเป็นส่วนตัวของเรา</string>
+    <string name="light_mode">โหมดสว่าง</string>
+    <string name="next_button_content_description">ถัดไป</string>
+    <string name="next_button_text">ถัดไป</string>
+    <string name="onboarding_amoled_mode_desc">สีดำเข้มขึ้นสำหรับหน้าจอ OLED</string>
+    <string name="onboarding_complete_icon_desc">การเริ่มต้นใช้งานเสร็จสมบูรณ์</string>
+    <string name="onboarding_crashlytics_about_body_1">ในแอปนี้เราใช้ Firebase ซึ่งเป็นแพลตฟอร์มจาก Google ที่ช่วยให้นักพัฒนาเข้าใจการใช้งานแอป ปรับปรุงประสิทธิภาพ และให้บริการบางอย่าง เช่น การวิเคราะห์ Firebase Analytics จะรวบรวมข้อมูลโดยอัตโนมัติ เช่น การใช้งานเหตุการณ์ การดูหน้าจอ คุณสมบัติของอุปกรณ์ และสัญญาณอื่น ๆ แต่จะทำก็ต่อเมื่อคุณให้ความยินยอมในการรวบรวมข้อมูลประเภทดังกล่าว หากไม่ได้ให้ความยินยอม Firebase จะไม่บันทึกเหตุการณ์หรือส่งข้อมูลที่เกี่ยวข้องกับหมวดหมู่เหล่านั้น</string>
+    <string name="onboarding_crashlytics_about_body_2">สำหรับข้อมูลโดยละเอียดเกี่ยวกับวิธีที่ Firebase และบริการของ Google จัดการข้อมูล รวมถึงนโยบายด้านความเป็นส่วนตัวและความปลอดภัยของแต่ละบริการ โปรดดูเอกสาร Firebase Privacy อย่างเป็นทางการและสิทธิ์ด้านความเป็นส่วนตัวตามกฎหมาย เช่น GDPR และ CCPA</string>
+    <string name="onboarding_crashlytics_about_title">เกี่ยวกับความยินยอมและการใช้งานข้อมูล Firebase</string>
+    <string name="onboarding_crashlytics_consent_info_learn_more">ดูข้อมูลเพิ่มเติมเกี่ยวกับความยินยอมและการใช้งานข้อมูล</string>
+    <string name="onboarding_crashlytics_consent_info_message">หากคุณต้องการทราบข้อมูลเพิ่มเติมเกี่ยวกับการใช้งานข้อมูลของคุณและความหมายของแต่ละตัวเลือกความยินยอม โปรดดูเอกสารด้านล่าง</string>
+    <string name="onboarding_crashlytics_consent_intro_1">ความเป็นส่วนตัวของคุณมีความสำคัญ ก่อนที่เราจะรวบรวมข้อมูลการใช้งานหรือข้อมูลโฆษณาใด ๆ โปรดเลือกประเภทข้อมูลที่คุณยินยอม ตัวเลือกของคุณส่งผลต่อวิธีที่เราวัดประสิทธิภาพของแอป ปรับปรุงฟีเจอร์ และปรับแต่งโฆษณา โดยยังคงเคารพความเป็นส่วนตัวของคุณ</string>
+    <string name="onboarding_crashlytics_consent_intro_2">ตัวเลือกเหล่านี้ช่วยให้เราปฏิบัติตามมาตรฐานความเป็นส่วนตัว เช่น GDPR และ CCPA พร้อมทั้งให้คุณควบคุมการใช้งานข้อมูลของคุณ คุณสามารถเปลี่ยนการตั้งค่าเหล่านี้ได้ในภายหลังจากการตั้งค่าความเป็นส่วนตัวของแอปทุกเมื่อ</string>
+    <string name="onboarding_crashlytics_description">อนุญาตให้แอปส่งข้อมูลการใช้งานที่ไม่ระบุตัวตนและรายงานข้อขัดข้อง ซึ่งช่วยให้เราแก้ไขข้อบกพร่องและปรับปรุงประสบการณ์ของคุณให้ดีขึ้น จะไม่มีการรวบรวมข้อมูลส่วนบุคคลใดๆ</string>
+    <string name="onboarding_crashlytics_details_intro">ด้านล่างนี้คุณจะพบการควบคุมที่ละเอียดมากขึ้นเกี่ยวกับวิธีที่ข้อมูลของคุณถูกใช้งานภายในแอป ตัวเลือกของคุณส่งผลต่อข้อมูลที่ถูกรวบรวม วิธีการจัดเก็บ และการแบ่งปันกับผู้ให้บริการ เช่น Google ตามมาตรฐานความเป็นส่วนตัวและข้อกำหนดด้านความยินยอมที่เกี่ยวข้อง</string>
+    <string name="onboarding_crashlytics_dialog_allow_all">อนุญาตทั้งหมด</string>
+    <string name="onboarding_crashlytics_dialog_allow_essentials">อนุญาตเฉพาะที่จำเป็น</string>
+    <string name="onboarding_crashlytics_dialog_confirm_choices">ยืนยันตัวเลือก</string>
+    <string name="onboarding_crashlytics_dialog_privacy_choices_title">ตัวเลือกความเป็นส่วนตัว</string>
+    <string name="onboarding_crashlytics_dialog_tab_about">เกี่ยวกับ</string>
+    <string name="onboarding_crashlytics_dialog_tab_consent">ความยินยอม</string>
+    <string name="onboarding_crashlytics_dialog_tab_details">รายละเอียด</string>
+    <string name="onboarding_crashlytics_disabled_desc">การรายงานข้อมูลไม่ทำงาน</string>
+    <string name="onboarding_crashlytics_enabled_desc">การรายงานข้อมูลทำงานอยู่</string>
+    <string name="onboarding_crashlytics_privacy_info">ความเป็นส่วนตัวของคุณเป็นสิ่งสำคัญ เราใช้ข้อมูลนี้เพื่อแก้ไขข้อบกพร่องและปรับปรุงคุณสมบัติเท่านั้น สำหรับรายละเอียดเพิ่มเติม โปรดอ่านนโยบายความเป็นส่วนตัวของเรา</string>
+    <string name="onboarding_crashlytics_show_details_button">แสดงข้อมูลโดยละเอียด</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">แสดงข้อมูลโดยละเอียดเกี่ยวกับการใช้งานและการวินิจฉัย</string>
+    <string name="onboarding_crashlytics_title">ช่วยเราปรับปรุง</string>
+    <string name="onboarding_final_description">ขอบคุณสำหรับการปรับแต่งประสบการณ์ของคุณ ตอนนี้คุณพร้อมที่จะสำรวจคุณสมบัติทั้งหมดแล้ว ขอให้สนุก.</string>
+    <string name="onboarding_final_title">คุณพร้อมแล้ว.</string>
+    <string name="onboarding_theme_dark_desc">สบายตา</string>
+    <string name="onboarding_theme_light_desc">สว่างสดใสและมีชีวิตชีวา</string>
+    <string name="onboarding_theme_subtitle">เลือกรูปลักษณ์ที่คุณต้องการสำหรับแอป</string>
+    <string name="onboarding_theme_system_desc">ตรงกับอุปกรณ์ของคุณ</string>
+    <string name="onboarding_theme_title">เลือกสไตล์ของคุณ</string>
+    <string name="other_colors">สีอื่นๆ</string>
+    <string name="skip_button_content_description">ข้าม</string>
+    <string name="skip_button_text">ข้าม</string>
+    <string name="summary_browse_terms_of_service_and_privacy_policy">โปรดอ่านและยอมรับเงื่อนไขการให้บริการและนโยบายความเป็นส่วนตัวเพื่อดำเนินการต่อ</string>
+    <string name="usage_and_diagnostics">การใช้งานและการวินิจฉัย</string>
+    <string name="wallpaper_colors">สีของวอลเปเปอร์</string>
+    <string name="welcome">ยินดีต้อนรับ</string>
+</resources>

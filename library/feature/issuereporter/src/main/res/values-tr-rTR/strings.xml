@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">Hata raporu</string>
+    <string name="cd_expand_device_info">Cihaz bilgisini genişlet veya daralt</string>
+    <string name="device_info">Cihaz bilgileri</string>
+    <string name="issue_description_label">Açıklama</string>
+    <string name="issue_email_label">E-posta</string>
+    <string name="issue_section_label">Sorun</string>
+    <string name="issue_send">Gönder</string>
+    <string name="issue_submitted">Sorununuz gönderildi.</string>
+    <string name="issue_submitted_successfully">Başarılı bir şekilde gönderilen sorun</string>
+    <string name="issue_title_label">Başlık</string>
+    <string name="login_section_label">Giriş yap</string>
+    <string name="open_button_label">Açık sorun</string>
+    <string name="open_issue_in_browser">Tarayıcıda açın</string>
+    <string name="optional_placeholder">İsteğe bağlı</string>
+    <string name="send_anonymously">Anonim gönder</string>
+    <string name="snack_report_failed">Rapor gönderilemedi</string>
+    <string name="snack_report_success">Rapor başarıyla gönderildi</string>
+    <string name="use_github_account">GitHub hesabıyla gönder</string>
+</resources>

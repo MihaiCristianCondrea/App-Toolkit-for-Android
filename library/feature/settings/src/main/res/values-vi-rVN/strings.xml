@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Cài đặt quyền riêng tư nâng cao</string>
+    <string name="app_behavior">Hành vi ứng dụng</string>
+    <string name="appearance">Giao diện</string>
+    <string name="bounce_buttons">Nhấp nảy</string>
+    <string name="bug_report">Báo cáo lỗi</string>
+    <string name="cache_cleared_success">Đã xóa bộ nhớ đệm thành công</string>
+    <string name="cache_management">Quản lý bộ nhớ đệm</string>
+    <string name="clear_cache">Xóa bộ nhớ đệm</string>
+    <string name="consent_ad_personalization_description">Cho phép quảng cáo được cá nhân hóa dựa trên hoạt động và tùy chọn của bạn trên các dịch vụ và ứng dụng của Google.</string>
+    <string name="consent_ad_personalization_title">Quảng cáo được cá nhân hóa</string>
+    <string name="consent_ad_storage_description">Cho phép lưu trữ dữ liệu (như mã nhận dạng thiết bị hoặc cookie) để đo lường hiệu suất quảng cáo và hiển thị quảng cáo phù hợp.</string>
+    <string name="consent_ad_storage_title">Lưu trữ dữ liệu quảng cáo</string>
+    <string name="consent_ad_user_data_description">Cho phép gửi dữ liệu sử dụng và dữ liệu thiết bị cho Google để hỗ trợ các tính năng liên quan đến quảng cáo như lượt chuyển đổi và tối ưu hóa chiến dịch.</string>
+    <string name="consent_ad_user_data_title">Gửi dữ liệu cho quảng cáo</string>
+    <string name="consent_analytics_storage_description">Cho phép lưu trữ dữ liệu như mức sử dụng ứng dụng và thời lượng truy cập để cải thiện phân tích và hiệu suất ứng dụng.</string>
+    <string name="consent_analytics_storage_title">Lưu trữ dữ liệu phân tích</string>
+    <string name="consent_category_advertising_title">Quảng cáo được cá nhân hóa</string>
+    <string name="consent_category_analytics_title">Phân tích</string>
+    <string name="dark_theme">Chủ đề tối</string>
+    <string name="dynamic_colors">Màu sắc động</string>
+    <string name="error_reporting">Báo cáo lỗi</string>
+    <string name="get_help">Nhận trợ giúp</string>
+    <string name="icon_desc_consent_category">Biểu tượng danh mục sự đồng ý</string>
+    <string name="icon_desc_expand_less">Thu gọn</string>
+    <string name="icon_desc_expand_more">Mở rộng</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="learn_more">Tìm hiểu thêm</string>
+    <string name="navigation">Điều hướng</string>
+    <string name="settings">Cài đặt</string>
+    <string name="settings_placeholder_description">Chưa chọn cài đặt nào. Chọn một tùy chọn để xem chi tiết tại đây.</string>
+    <string name="show_labels_on_bottom_bar">Hiển thị nhãn trên thanh dưới cùng</string>
+    <string name="startup_page">Trang khởi động</string>
+    <string name="summary_preference_settings_bounce_buttons">Áp dụng hiệu ứng nảy tinh tế cho tất cả các yếu tố có thể nhấp khi được nhấp</string>
+    <string name="summary_preference_settings_bug_report">Gửi báo cáo lỗi và yêu cầu tính năng đến trang vấn đề của kho lưu trữ GitHub của ứng dụng</string>
+    <string name="summary_preference_settings_clear_cache">Xóa dữ liệu ứng dụng tạm thời.</string>
+    <string name="summary_preference_settings_dynamic_colors">Áp dụng màu từ hình nền vào chủ đề ứng dụng</string>
+    <string name="summary_preference_settings_language">Thay đổi ngôn ngữ được sử dụng trong ứng dụng</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Hiển thị các tiêu đề mục dưới các biểu tượng trong thanh điều hướng dưới cùng</string>
+    <string name="summary_preference_settings_startup_page">Chọn màn hình sẽ hiển thị khi ứng dụng khởi động.</string>
+    <string name="summary_usage_and_diagnostics">Giúp cải thiện trải nghiệm của bạn bằng cách tự động gửi dữ liệu chẩn đoán, thiết bị và sử dụng ứng dụng cho chúng tôi. Điều này sẽ giúp cải thiện hiệu suất, độ ổn định của ứng dụng và các cải tiến khác. Một số dữ liệu tổng hợp cũng sẽ giúp ích cho các ứng dụng của chúng tôi.\n\nĐây là thông tin chung về thiết bị của bạn và cách bạn sử dụng các ứng dụng của chúng tôi (chẳng hạn như mức pin, hoạt động của hệ thống và ứng dụng cũng như lỗi). Dữ liệu sẽ được sử dụng để cải thiện các ứng dụng của chúng tôi\n\nViệc tắt tính năng này không ảnh hưởng đến khả năng thiết bị của bạn gửi thông tin cần thiết cho các dịch vụ thiết yếu như cập nhật ứng dụng và bảo mật.\n</string>
+    <string name="usage_and_diagnostics">Sử dụng và chẩn đoán</string>
+    <string name="will_never_turn_on_automatically">Sẽ không bao giờ tự động bật</string>
+    <string name="will_turn_on_automatically_by_system">Sẽ tự động bật theo hệ thống</string>
+</resources>

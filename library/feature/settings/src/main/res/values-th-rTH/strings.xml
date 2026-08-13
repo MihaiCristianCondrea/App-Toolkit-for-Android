@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">การตั้งค่าความเป็นส่วนตัวขั้นสูง</string>
+    <string name="app_behavior">การทำงานของแอป</string>
+    <string name="appearance">ลักษณะ</string>
+    <string name="bounce_buttons">เอฟเฟกต์ปุ่ม</string>
+    <string name="bug_report">รายงานข้อผิดพลาด</string>
+    <string name="cache_cleared_success">ล้างแคชสำเร็จ</string>
+    <string name="cache_management">การจัดการแคช</string>
+    <string name="clear_cache">ล้างแคช</string>
+    <string name="consent_ad_personalization_description">เปิดใช้งานโฆษณาส่วนบุคคลตามกิจกรรมและค่ากำหนดของคุณในบริการและแอปต่างๆ ของ Google</string>
+    <string name="consent_ad_personalization_title">โฆษณาส่วนบุคคล</string>
+    <string name="consent_ad_storage_description">เปิดใช้งานการจัดเก็บข้อมูล (เช่น ตัวระบุอุปกรณ์หรือคุกกี้) เพื่อวัดประสิทธิภาพโฆษณาและแสดงโฆษณาที่เกี่ยวข้อง</string>
+    <string name="consent_ad_storage_title">จัดเก็บข้อมูลโฆษณา</string>
+    <string name="consent_ad_user_data_description">อนุญาตให้ส่งข้อมูลการใช้งานและข้อมูลอุปกรณ์ไปยัง Google เพื่อสนับสนุนฟีเจอร์ที่เกี่ยวข้องกับโฆษณา เช่น คอนเวอร์ชันและการเพิ่มประสิทธิภาพแคมเปญ</string>
+    <string name="consent_ad_user_data_title">ส่งข้อมูลสำหรับโฆษณา</string>
+    <string name="consent_analytics_storage_description">อนุญาตให้จัดเก็บข้อมูล เช่น การใช้งานแอปและระยะเวลาการเข้าชม เพื่อปรับปรุงการวิเคราะห์และประสิทธิภาพของแอป</string>
+    <string name="consent_analytics_storage_title">จัดเก็บข้อมูลการวิเคราะห์</string>
+    <string name="consent_category_advertising_title">โฆษณาส่วนบุคคล</string>
+    <string name="consent_category_analytics_title">การวิเคราะห์</string>
+    <string name="dark_theme">ธีมมืด</string>
+    <string name="dynamic_colors">สีแบบไดนามิก</string>
+    <string name="error_reporting">การรายงานข้อผิดพลาด</string>
+    <string name="get_help">ขอความช่วยเหลือ</string>
+    <string name="icon_desc_consent_category">ไอคอนหมวดหมู่การยินยอม</string>
+    <string name="icon_desc_expand_less">ยุบ</string>
+    <string name="icon_desc_expand_more">ขยาย</string>
+    <string name="language">ภาษา</string>
+    <string name="learn_more">เรียนรู้เพิ่มเติม</string>
+    <string name="navigation">การนำทาง</string>
+    <string name="settings">การตั้งค่า</string>
+    <string name="settings_placeholder_description">ยังไม่มีการเลือกตั้งค่า เลือกตัวเลือกเพื่อดูรายละเอียดที่นี่</string>
+    <string name="show_labels_on_bottom_bar">แสดงฉลากบนแถบด้านล่าง</string>
+    <string name="startup_page">หน้าจอเริ่มต้น</string>
+    <string name="summary_preference_settings_bounce_buttons">เพิ่มแอนิเมชันการเด้งเบา ๆ เมื่อคลิกปุ่มต่าง ๆ</string>
+    <string name="summary_preference_settings_bug_report">ส่งรายงานข้อผิดพลาดไปยังหน้าปัญหาใน GitHub</string>
+    <string name="summary_preference_settings_clear_cache">ล้างข้อมูลแอปพลิเคชันชั่วคราว</string>
+    <string name="summary_preference_settings_dynamic_colors">ใช้สีจากภาพพื้นหลังกับธีมแอป</string>
+    <string name="summary_preference_settings_language">เปลี่ยนภาษาที่ใช้ในแอป</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">แสดงชื่อรายการด้านล่างไอคอนในแถบการนำทางด้านล่าง</string>
+    <string name="summary_preference_settings_startup_page">เลือกหน้าจอที่จะแสดงเมื่อเริ่มต้นแอป</string>
+    <string name="summary_usage_and_diagnostics">ช่วยปรับปรุงแอปโดยส่งข้อมูลการใช้งานและข้อผิดพลาด</string>
+    <string name="usage_and_diagnostics">การใช้งานและการวินิจฉัย</string>
+    <string name="will_never_turn_on_automatically">จะไม่มีการเปิดใช้งานอัตโนมัติ</string>
+    <string name="will_turn_on_automatically_by_system">ระบบจะเปิดใช้งานโดยอัตโนมัติ</string>
+</resources>

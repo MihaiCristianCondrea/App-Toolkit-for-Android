@@ -1,0 +1,182 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform
+
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.PermissionsHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.permissions.PermissionsConstants
+import io.mockk.every
+import io.mockk.justRun
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import io.mockk.verify
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
+import kotlin.reflect.KClass
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+
+class TestPermissionsHelper {
+
+    @Disabled(
+        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
+    )    @Test
+    fun `hasNotificationPermission returns true for API 32 and below`() {
+        val context = mockk<Context>()
+
+        withStaticMocks(Build.VERSION::class, ContextCompat::class) {
+            every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.S_V2
+
+            assertTrue(PermissionsHelper.hasNotificationPermission(context))
+
+            verify(exactly = 0) {
+                ContextCompat.checkSelfPermission(any(), any())
+            }
+        }
+    }
+
+    @Disabled(
+        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
+    )    @Test
+    fun `hasNotificationPermission reflects granted state on API 33`() {
+        val context = mockk<Context>()
+
+        withStaticMocks(Build.VERSION::class, ContextCompat::class) {
+            every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.TIRAMISU
+            every {
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            } returnsMany listOf(
+                PackageManager.PERMISSION_GRANTED,
+                PackageManager.PERMISSION_DENIED
+            )
+
+            assertTrue(PermissionsHelper.hasNotificationPermission(context))
+            assertFalse(PermissionsHelper.hasNotificationPermission(context))
+
+            verify(exactly = 2) {
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            }
+        }
+    }
+
+    @Disabled(
+        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
+    )    @Test
+    fun `requestNotificationPermission requests on API 33 when missing`() {
+        val activity = mockk<Activity>()
+
+        withStaticMocks(Build.VERSION::class, ContextCompat::class, ActivityCompat::class) {
+            every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.TIRAMISU
+            every {
+                ContextCompat.checkSelfPermission(
+                    activity,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            } returns PackageManager.PERMISSION_DENIED
+
+            justRun {
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    PermissionsConstants.REQUEST_CODE_NOTIFICATION_PERMISSION
+                )
+            }
+
+            PermissionsHelper.requestNotificationPermission(activity)
+
+            verify(exactly = 1) {
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    PermissionsConstants.REQUEST_CODE_NOTIFICATION_PERMISSION
+                )
+            }
+        }
+    }
+
+    @Disabled(
+        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
+    )    @Test
+    fun `requestNotificationPermission skips when already granted on API 33`() {
+        val activity = mockk<Activity>()
+
+        withStaticMocks(Build.VERSION::class, ContextCompat::class, ActivityCompat::class) {
+            every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.TIRAMISU
+            every {
+                ContextCompat.checkSelfPermission(
+                    activity,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            } returns PackageManager.PERMISSION_GRANTED
+
+            PermissionsHelper.requestNotificationPermission(activity)
+
+            verify(exactly = 0) {
+                ActivityCompat.requestPermissions(any(), any(), any())
+            }
+        }
+    }
+
+    @Disabled(
+        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
+    )    @Test
+    fun `requestNotificationPermission ignores API 32 and below`() {
+        val activity = mockk<Activity>()
+
+        withStaticMocks(Build.VERSION::class, ContextCompat::class, ActivityCompat::class) {
+            every { Build.VERSION.SDK_INT } returns Build.VERSION_CODES.S_V2
+
+            PermissionsHelper.requestNotificationPermission(activity)
+
+            verify(exactly = 0) {
+                ContextCompat.checkSelfPermission(any(), any())
+            }
+            verify(exactly = 0) {
+                ActivityCompat.requestPermissions(any(), any(), any())
+            }
+        }
+    }
+
+    private inline fun <T> withStaticMocks(
+        vararg targets: KClass<*>,
+        block: () -> T
+    ): T {
+        targets.forEach { mockkStatic(it) }
+
+        return runCatching(block)
+            .also {
+                targets.reversed().forEach { k ->
+                    runCatching { unmockkStatic(k) }
+                }
+            }
+            .getOrThrow()
+    }
+}

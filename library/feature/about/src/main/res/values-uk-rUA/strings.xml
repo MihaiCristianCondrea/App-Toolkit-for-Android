@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Реклама</string>
+    <string name="android_version">Версія Android</string>
+    <string name="api_level">Рівень API</string>
+    <string name="app_build">Збірка додатка: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">Версія додатка</string>
+    <string name="app_info">Інформація про додаток</string>
+    <string name="changelog_title">Журнал змін</string>
+    <string name="code_of_conduct">Кодекс поведінки</string>
+    <string name="content_description_more_options">Більше варіантів</string>
+    <string name="debug">Налагодження</string>
+    <string name="device_info">Інформація про пристрій</string>
+    <string name="device_model">Модель пристрою</string>
+    <string name="done_button_content_description">Готово</string>
+    <string name="go_back">Повернутися</string>
+    <string name="help_and_feedback">Допомога та зворотній зв\'язок</string>
+    <string name="legal">Юридична інформація</string>
+    <string name="legal_notices">Юридичні повідомлення</string>
+    <string name="license">Ліцензія</string>
+    <string name="manufacturer">Виробник</string>
+    <string name="no_new_updates_message">Немає нових оновлень.</string>
+    <string name="oss_license_title">Ліцензії з відкритим кодом</string>
+    <string name="permissions">Дозволи</string>
+    <string name="privacy">Конфіденційність</string>
+    <string name="privacy_policy">Політика конфіденційності</string>
+    <string name="release">Реліз</string>
+    <string name="settings">Налаштування</string>
+    <string name="settings_placeholder_description">Налаштування не вибрано. Виберіть опцію, щоб переглянути її деталі.</string>
+    <string name="share">Поділитися</string>
+    <string name="snack_device_info_copied">Інформацію про пристрій скопійовано до буфера обміну</string>
+    <string name="snack_device_info_failed">Не вдалося завантажити інформацію про пристрій</string>
+    <string name="summary_preference_settings_ads">Керуйте інформацією для показу реклами</string>
+    <string name="summary_preference_settings_code_of_conduct">Дізнайтеся правила та керівні принципи поведінки</string>
+    <string name="summary_preference_settings_legal_notices">Перегляньте юридичну інформацію про наш сервіс</string>
+    <string name="summary_preference_settings_oss">Деталі ліцензій на програмне забезпечення з відкритим кодом</string>
+    <string name="summary_preference_settings_permissions">Керуйте дозволами, наданими нашій службі</string>
+    <string name="summary_preference_settings_privacy_policy">Перегляньте політику обробки ваших даних</string>
+    <string name="summary_preference_settings_terms_of_service">Ознайомтеся з умовами використання нашого сервісу</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Поділіться даними для покращення роботи додатка</string>
+    <string name="summary_share_message">Перегляньте цей чудовий додаток, яким я користуюся. У ньому є цікаві функції, які можуть вас зацікавити. Ви можете завантажити його з Play Store за посиланням: %1$s</string>
+    <string name="support_us">Підтримайте нас</string>
+    <string name="terms_of_service">Умови використання</string>
+    <string name="try_again">Спробувати знову</string>
+    <string name="updates">Оновлення</string>
+    <string name="usage_and_diagnostics">Використання та діагностика</string>
+</resources>

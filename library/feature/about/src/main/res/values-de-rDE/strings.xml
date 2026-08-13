@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Werbung</string>
+    <string name="android_version">Android-version</string>
+    <string name="api_level">API-stufe</string>
+    <string name="app_build">App-build: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">App-Build-Version</string>
+    <string name="app_info">App-Informationen</string>
+    <string name="changelog_title">Änderungsprotokoll</string>
+    <string name="code_of_conduct">Verhaltenskodex</string>
+    <string name="content_description_more_options">Weitere Optionen</string>
+    <string name="debug">Debug</string>
+    <string name="device_info">Geräteinformationen</string>
+    <string name="device_model">Gerätemodell</string>
+    <string name="done_button_content_description">Fertig</string>
+    <string name="go_back">Zurück</string>
+    <string name="help_and_feedback">Hilfe &amp; Feedback</string>
+    <string name="legal">Rechtliches</string>
+    <string name="legal_notices">Rechtliche Hinweise</string>
+    <string name="license">Lizenz</string>
+    <string name="manufacturer">Hersteller</string>
+    <string name="no_new_updates_message">Keine neuen Updates verfügbar.</string>
+    <string name="oss_license_title">Open-Source-Lizenzen</string>
+    <string name="permissions">Berechtigungen</string>
+    <string name="privacy">Datenschutz</string>
+    <string name="privacy_policy">Datenschutzrichtlinie</string>
+    <string name="release">Release</string>
+    <string name="settings">Einstellungen</string>
+    <string name="settings_placeholder_description">Keine Einstellungen ausgewählt. Wählen Sie eine Option, um Details anzuzeigen.</string>
+    <string name="share">Teilen</string>
+    <string name="snack_device_info_copied">Geräteinformationen wurden in die Zwischenablage kopiert</string>
+    <string name="snack_device_info_failed">Geräteinformationen konnten nicht geladen werden</string>
+    <string name="summary_preference_settings_ads">Verwalten Sie Ihre Werbeeinwilligungen</string>
+    <string name="summary_preference_settings_code_of_conduct">Erfahren Sie die Regeln und Richtlinien für die Nutzung unserer Dienste</string>
+    <string name="summary_preference_settings_legal_notices">Rechtliche Informationen zu unserem Dienst anzeigen</string>
+    <string name="summary_preference_settings_oss">Details zu Open-Source-Lizenzen anzeigen</string>
+    <string name="summary_preference_settings_permissions">Verwalten Sie die Berechtigungen, die unserem Dienst erteilt wurden</string>
+    <string name="summary_preference_settings_privacy_policy">Anzeigen der Richtlinie zur Datenverarbeitung</string>
+    <string name="summary_preference_settings_terms_of_service">Überprüfen Sie die Nutzungsbedingungen</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Teilen Sie Daten, um die App-Erfahrung zu verbessern</string>
+    <string name="summary_share_message">Schauen Sie sich diese großartige App an, die ich benutze. Sie bietet wirklich coole Funktionen, die Sie interessieren könnten. Sie können sie im Play Store herunterladen unter: %1$s</string>
+    <string name="support_us">Unterstützen sie uns</string>
+    <string name="terms_of_service">Nutzungsbedingungen</string>
+    <string name="try_again">Erneut versuchen</string>
+    <string name="updates">Updates</string>
+    <string name="usage_and_diagnostics">Nutzung und Diagnostik</string>
+</resources>

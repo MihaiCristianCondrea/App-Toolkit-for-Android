@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">โฆษณา</string>
+    <string name="android_version">เวอร์ชัน Android</string>
+    <string name="api_level">ระดับ API</string>
+    <string name="app_build">เวอร์ชันแอป: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">เวอร์ชันแอป</string>
+    <string name="app_info">ข้อมูลแอป</string>
+    <string name="changelog_title">บันทึกการเปลี่ยนแปลง</string>
+    <string name="code_of_conduct">หลักปฏิบัติ</string>
+    <string name="content_description_more_options">ตัวเลือกเพิ่มเติม</string>
+    <string name="debug">แก้ไขข้อผิดพลาด</string>
+    <string name="device_info">ข้อมูลอุปกรณ์</string>
+    <string name="device_model">รุ่นอุปกรณ์</string>
+    <string name="done_button_content_description">เสร็จสิ้น</string>
+    <string name="go_back">กลับ</string>
+    <string name="help_and_feedback">ความช่วยเหลือและข้อเสนอแนะ</string>
+    <string name="legal">ข้อมูลทางกฎหมาย</string>
+    <string name="legal_notices">ประกาศทางกฎหมาย</string>
+    <string name="license">ใบอนุญาต</string>
+    <string name="manufacturer">ผู้ผลิต</string>
+    <string name="no_new_updates_message">ไม่มีการอัปเดตใหม่.</string>
+    <string name="oss_license_title">ใบอนุญาตซอฟต์แวร์โอเพ่นซอร์ส</string>
+    <string name="permissions">สิทธิ์การเข้าถึง</string>
+    <string name="privacy">ความเป็นส่วนตัว</string>
+    <string name="privacy_policy">นโยบายความเป็นส่วนตัว</string>
+    <string name="release">เวอร์ชันเผยแพร่</string>
+    <string name="settings">การตั้งค่า</string>
+    <string name="settings_placeholder_description">ยังไม่มีการเลือกตั้งค่า เลือกตัวเลือกเพื่อดูรายละเอียดที่นี่</string>
+    <string name="share">แชร์</string>
+    <string name="snack_device_info_copied">คัดลอกข้อมูลอุปกรณ์ไปยังคลิปบอร์ดแล้ว</string>
+    <string name="snack_device_info_failed">ไม่สามารถโหลดข้อมูลอุปกรณ์ได้</string>
+    <string name="summary_preference_settings_ads">ควบคุมวิธีการใช้ข้อมูลของคุณสำหรับแสดงโฆษณา</string>
+    <string name="summary_preference_settings_code_of_conduct">เข้าใจกฎและแนวทางการปฏิบัติภายในบริการของเรา</string>
+    <string name="summary_preference_settings_legal_notices">ดูข้อมูลทางกฎหมายเกี่ยวกับบริการของเรา</string>
+    <string name="summary_preference_settings_oss">รายละเอียดใบอนุญาตซอฟต์แวร์โอเพ่นซอร์ส</string>
+    <string name="summary_preference_settings_permissions">จัดการสิทธิ์ที่มอบให้กับบริการของเรา</string>
+    <string name="summary_preference_settings_privacy_policy">ดูนโยบายเกี่ยวกับการจัดการข้อมูลของเรา</string>
+    <string name="summary_preference_settings_terms_of_service">ตรวจสอบข้อกำหนดที่คุณยอมรับเมื่อใช้บริการของเรา</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">แชร์ข้อมูลเพื่อช่วยปรับปรุงประสบการณ์การใช้งาน</string>
+    <string name="summary_share_message">ลองดูแอปนี้ที่ฉันใช้อยู่. มีฟีเจอร์เจ๋ง ๆ มากมายที่คุณอาจสนใจ ดาวน์โหลดได้จาก Play Store ที่: %1$s</string>
+    <string name="support_us">สนับสนุนเรา</string>
+    <string name="terms_of_service">ข้อกำหนดในการให้บริการ</string>
+    <string name="try_again">ลองอีกครั้ง</string>
+    <string name="updates">การอัปเดต</string>
+    <string name="usage_and_diagnostics">การใช้งานและการวินิจฉัย</string>
+</resources>

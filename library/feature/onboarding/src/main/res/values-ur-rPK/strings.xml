@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="agree">متفق ہوں</string>
+    <string name="amoled_mode">AMOLED موڈ</string>
+    <string name="back_button_content_description">پیچھے</string>
+    <string name="back_button_text">پیچھے</string>
+    <string name="consent_ad_personalization_description">Google سروسز اور ایپس پر آپ کی سرگرمی اور ترجیحات کی بنیاد پر ذاتی نوعیت کے اشتہارات فعال کریں۔</string>
+    <string name="consent_ad_personalization_description_short">ذاتی نوعیت کی تشہیر کو فعال کرتا ہے۔</string>
+    <string name="consent_ad_personalization_title">ذاتی نوعیت کے اشتہارات</string>
+    <string name="consent_ad_storage_description">اشتہار کی کارکردگی کی پیمائش کرنے اور متعلقہ اشتہارات دکھانے کے لیے ڈیٹا (جیسے ڈیوائس شناخت کنندگان یا کوکیز) کو اسٹور کرنا فعال کریں۔</string>
+    <string name="consent_ad_storage_description_short">اشتہاری مقاصد کے لیے ڈیٹا ذخیرہ کرنے کی اجازت دیتا ہے۔</string>
+    <string name="consent_ad_storage_title">اشتہاری ڈیٹا اسٹور کریں</string>
+    <string name="consent_ad_user_data_description">استعمال اور ڈیوائس کا ڈیٹا Google کو بھیجنے کی اجازت دیں تاکہ اشتہار سے متعلق خصوصیات جیسے تبادلوں اور مہم کی اصلاح میں مدد مل سکے۔</string>
+    <string name="consent_ad_user_data_description_short">اشتہارات کے لیے صارف کا ڈیٹا بھیجنے کی اجازت دیتا ہے۔</string>
+    <string name="consent_ad_user_data_title">اشتہارات کے لیے ڈیٹا بھیجیں</string>
+    <string name="consent_analytics_storage_description">ایپ کے استعمال اور وزٹ کے دورانیے جیسے ڈیٹا کو اسٹور کرنے کی اجازت دیں تاکہ تجزیات اور ایپ کی کارکردگی کو بہتر بنایا جا سکے۔</string>
+    <string name="consent_analytics_storage_description_short">ایپ کے استعمال کے تجزیے کے لیے ڈیٹا اکٹھا کرنے کی اجازت دیتا ہے۔</string>
+    <string name="consent_analytics_storage_title">تجزیاتی ڈیٹا اسٹور کریں</string>
+    <string name="dark_mode">ڈارک موڈ</string>
+    <string name="done_button_content_description">ہو گیا</string>
+    <string name="done_button_text">ہو گیا</string>
+    <string name="error">خرابی</string>
+    <string name="follow_system">سسٹم موڈ فالو کریں</string>
+    <string name="learn_more">مزید جانیں</string>
+    <string name="learn_more_about_provider">اس فراہم کنندہ کے بارے میں مزید جانیں</string>
+    <string name="learn_more_privacy_policy">ہماری رازداری کی پالیسی کا جائزہ لیں</string>
+    <string name="light_mode">لائٹ موڈ</string>
+    <string name="next_button_content_description">آگے</string>
+    <string name="next_button_text">آگے</string>
+    <string name="onboarding_amoled_mode_desc">OLED اسکرینوں کے لیے گہرے سیاہ رنگ۔</string>
+    <string name="onboarding_complete_icon_desc">آن بورڈنگ مکمل</string>
+    <string name="onboarding_crashlytics_about_body_1">اس ایپ میں ہم Firebase استعمال کرتے ہیں، جو Google کا ایک پلیٹ فارم ہے اور ڈویلپرز کو یہ سمجھنے میں مدد دیتا ہے کہ ایپ کو کیسے استعمال کیا جاتا ہے، کارکردگی بہتر بناتا ہے اور تجزیات جیسی کچھ خدمات فراہم کرتا ہے۔ Firebase Analytics خودکار طور پر معلومات جمع کرتا ہے، جیسے ایونٹ کا استعمال، اسکرین ویوز، ڈیوائس کی خصوصیات اور دیگر اشارے، لیکن صرف اس صورت میں جب آپ ان اقسام کے ڈیٹا کو جمع کرنے کی رضامندی دیتے ہیں۔ اگر رضامندی نہ دی جائے تو Firebase ایونٹس کو لاگ نہیں کرے گا اور ان زمروں سے متعلق ڈیٹا ارسال نہیں کرے گا۔</string>
+    <string name="onboarding_crashlytics_about_body_2">Firebase اور Google سروسز ڈیٹا کو کیسے ہینڈل کرتی ہیں، اور ان کی رازداری اور سیکیورٹی پالیسیوں کے بارے میں تفصیلی معلومات کے لیے، براہ کرم سرکاری Firebase Privacy دستاویزات اور GDPR اور CCPA جیسے قوانین کے تحت اپنے علاقائی رازداری کے حقوق ملاحظہ کریں۔</string>
+    <string name="onboarding_crashlytics_about_title">رضامندی اور Firebase ڈیٹا کے استعمال کے بارے میں</string>
+    <string name="onboarding_crashlytics_consent_info_learn_more">رضامندی اور ڈیٹا کے استعمال کے بارے میں مزید جانیں</string>
+    <string name="onboarding_crashlytics_consent_info_message">اگر آپ یہ جاننا چاہتے ہیں کہ آپ کا ڈیٹا کیسے استعمال ہوتا ہے اور ہر رضامندی کے اختیار کا کیا مطلب ہے، تو نیچے دی گئی دستاویزات دیکھیں۔</string>
+    <string name="onboarding_crashlytics_consent_intro_1">آپ کی رازداری اہم ہے۔ کسی بھی استعمال یا اشتہاری ڈیٹا کو جمع کرنے سے پہلے، براہ کرم ان ڈیٹا اقسام کا انتخاب کریں جن کے لیے آپ رضامندی دیتے ہیں۔ آپ کے انتخاب اس بات پر اثر انداز ہوتے ہیں کہ ہم ایپ کی کارکردگی کیسے ناپتے ہیں، خصوصیات کو بہتر بناتے ہیں اور اشتہارات کو کس طرح ترتیب دیتے ہیں، جبکہ آپ کی رازداری کا احترام برقرار رکھتے ہیں۔</string>
+    <string name="onboarding_crashlytics_consent_intro_2">یہ انتخاب ہمیں GDPR اور CCPA جیسے رازداری کے معیارات پر عمل کرنے میں مدد دیتے ہیں اور آپ کو یہ کنٹرول دیتے ہیں کہ آپ کے ڈیٹا کو کیسے استعمال کیا جاتا ہے۔ آپ بعد میں کسی بھی وقت ایپ کی رازداری کی ترتیبات میں ان سیٹنگز کو تبدیل کر سکتے ہیں۔</string>
+    <string name="onboarding_crashlytics_description">ایپ کو گمنام استعمال کا ڈیٹا اور کریش رپورٹس بھیجنے کی اجازت دیں۔ اس سے ہمیں کیڑے ٹھیک کرنے اور آپ کے تجربے کو بہتر بنانے میں مدد ملتی ہے۔ کوئی ذاتی معلومات کبھی جمع نہیں کی جاتیں۔</string>
+    <string name="onboarding_crashlytics_details_intro">نیچے آپ کو اس بات کے بارے میں مزید تفصیلی کنٹرولز ملیں گے کہ ایپ میں آپ کے ڈیٹا کو کیسے استعمال کیا جاتا ہے۔ یہاں آپ کے انتخاب اس بات پر اثر انداز ہوتے ہیں کہ کون سی معلومات جمع کی جاتی ہیں، انہیں کیسے محفوظ کیا جاتا ہے اور قابل اطلاق رازداری کے معیارات اور رضامندی کی ضروریات کے مطابق Google جیسے سروس فراہم کنندگان کے ساتھ کیسے شیئر کیا جا سکتا ہے۔</string>
+    <string name="onboarding_crashlytics_dialog_allow_all">سب کی اجازت دیں</string>
+    <string name="onboarding_crashlytics_dialog_allow_essentials">صرف ضروری اجازت دیں</string>
+    <string name="onboarding_crashlytics_dialog_confirm_choices">انتخاب کی تصدیق کریں</string>
+    <string name="onboarding_crashlytics_dialog_privacy_choices_title">رازداری کے اختیارات</string>
+    <string name="onboarding_crashlytics_dialog_tab_about">تعارف</string>
+    <string name="onboarding_crashlytics_dialog_tab_consent">رضامندی</string>
+    <string name="onboarding_crashlytics_dialog_tab_details">تفصیلات</string>
+    <string name="onboarding_crashlytics_disabled_desc">ڈیٹا رپورٹنگ غیر فعال ہے۔</string>
+    <string name="onboarding_crashlytics_enabled_desc">ڈیٹا رپورٹنگ فعال ہے۔</string>
+    <string name="onboarding_crashlytics_privacy_info">آپ کی رازداری اہم ہے۔ ہم اس ڈیٹا کو صرف کیڑے ٹھیک کرنے اور خصوصیات کو بہتر بنانے کے لیے استعمال کرتے ہیں۔ مزید تفصیلات کے لیے، براہ کرم ہماری رازداری کی پالیسی کا جائزہ لیں۔</string>
+    <string name="onboarding_crashlytics_show_details_button">تفصیلی معلومات دکھائیں</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">استعمال اور تشخیص کے بارے میں تفصیلی معلومات دکھائیں</string>
+    <string name="onboarding_crashlytics_title">بہتر بنانے میں ہماری مدد کریں</string>
+    <string name="onboarding_final_description">اپنے تجربے کو ذاتی بنانے کا شکریہ۔ اب آپ تمام خصوصیات کو دریافت کرنے کے لیے تیار ہیں۔ لطف اٹھائیں.</string>
+    <string name="onboarding_final_title">آپ پوری طرح تیار ہیں.</string>
+    <string name="onboarding_theme_dark_desc">آنکھوں کے لیے آرام دہ۔</string>
+    <string name="onboarding_theme_light_desc">روشن اور توانا۔</string>
+    <string name="onboarding_theme_subtitle">منتخب کریں کہ آپ ایپ کو کیسا دیکھنا چاہیں گے۔</string>
+    <string name="onboarding_theme_system_desc">آپ کے آلے سے مطابقت رکھتا ہے۔</string>
+    <string name="onboarding_theme_title">اپنا انداز منتخب کریں</string>
+    <string name="other_colors">دیگر رنگ</string>
+    <string name="skip_button_content_description">اسکپ کریں</string>
+    <string name="skip_button_text">اسکپ کریں</string>
+    <string name="summary_browse_terms_of_service_and_privacy_policy">جاری رکھنے کے لیے ہماری سروس کی شرائط اور رازداری کی پالیسی کو پڑھیں اور ان سے اتفاق کریں</string>
+    <string name="usage_and_diagnostics">استعمال اور تشخیص</string>
+    <string name="wallpaper_colors">وال پیپر کے رنگ</string>
+    <string name="welcome">خوش آمدید</string>
+</resources>

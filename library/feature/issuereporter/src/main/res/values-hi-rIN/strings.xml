@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">बग रिपोर्ट</string>
+    <string name="cd_expand_device_info">डिवाइस की जानकारी विस्तारित या संक्षिप्त करें</string>
+    <string name="device_info">डिवाइस जानकारी</string>
+    <string name="issue_description_label">विवरण</string>
+    <string name="issue_email_label">ईमेल</string>
+    <string name="issue_section_label">समस्या</string>
+    <string name="issue_send">भेजें</string>
+    <string name="issue_submitted">आपका मुद्दा प्रस्तुत किया गया था.</string>
+    <string name="issue_submitted_successfully">मुद्दा सफलतापूर्वक प्रस्तुत किया गया</string>
+    <string name="issue_title_label">शीर्षक</string>
+    <string name="login_section_label">लॉगिन</string>
+    <string name="open_button_label">मुद्दा खोलें</string>
+    <string name="open_issue_in_browser">ब्राउज़र में खोलें</string>
+    <string name="optional_placeholder">वैकल्पिक</string>
+    <string name="send_anonymously">बेनामी भेजें</string>
+    <string name="snack_report_failed">रिपोर्ट भेजने में विफल</string>
+    <string name="snack_report_success">रिपोर्ट सफलतापूर्वक भेजी गई</string>
+    <string name="use_github_account">GitHub खाता उपयोग करके भेजें</string>
+</resources>

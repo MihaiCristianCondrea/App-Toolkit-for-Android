@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="agree">Sunt de acord</string>
+    <string name="amoled_mode">Mod AMOLED</string>
+    <string name="back_button_content_description">Înapoi</string>
+    <string name="back_button_text">Înapoi</string>
+    <string name="consent_ad_personalization_description">Activați anunțurile personalizate pe baza activității și preferințelor dvs. în serviciile și aplicațiile Google.</string>
+    <string name="consent_ad_personalization_description_short">Activează publicitatea personalizată.</string>
+    <string name="consent_ad_personalization_title">Anunțuri personalizate</string>
+    <string name="consent_ad_storage_description">Activați stocarea datelor (cum ar fi identificatorii de dispozitiv sau modulele cookie) pentru măsurarea performanței anunțurilor și afișarea de anunțuri relevante.</string>
+    <string name="consent_ad_storage_description_short">Permite stocarea datelor în scopuri publicitare.</string>
+    <string name="consent_ad_storage_title">Stocare date publicitare</string>
+    <string name="consent_ad_user_data_description">Permiteți trimiterea datelor de utilizare și despre dispozitiv către Google pentru a sprijini funcțiile legate de anunțuri, cum ar fi conversiile și optimizarea campaniilor.</string>
+    <string name="consent_ad_user_data_description_short">Permite trimiterea datelor utilizatorului pentru reclame.</string>
+    <string name="consent_ad_user_data_title">Trimitere date pentru anunțuri</string>
+    <string name="consent_analytics_storage_description">Permiteți stocarea datelor, cum ar fi utilizarea aplicației și durata vizitei, pentru a îmbunătăți analiza și performanța aplicației.</string>
+    <string name="consent_analytics_storage_description_short">Permite colectarea datelor pentru analiza utilizării aplicației.</string>
+    <string name="consent_analytics_storage_title">Stocare date de analiză</string>
+    <string name="dark_mode">Mod întunecat</string>
+    <string name="done_button_content_description">Gata</string>
+    <string name="done_button_text">Gata</string>
+    <string name="error">Eroare</string>
+    <string name="follow_system">Urmărește setările sistemului</string>
+    <string name="learn_more">Află mai multe</string>
+    <string name="learn_more_about_provider">Află mai multe despre acest furnizor</string>
+    <string name="learn_more_privacy_policy">Revizuiește Politica noastră de confidențialitate</string>
+    <string name="light_mode">Mod luminos</string>
+    <string name="next_button_content_description">Următorul</string>
+    <string name="next_button_text">Următorul</string>
+    <string name="onboarding_amoled_mode_desc">Negru mai profund pentru ecranele OLED.</string>
+    <string name="onboarding_complete_icon_desc">Integrare completă</string>
+    <string name="onboarding_crashlytics_about_body_1">În această aplicație folosim Firebase, o platformă de la Google care ajută dezvoltatorii să înțeleagă cum este utilizată aplicația, să îmbunătățească performanța și să ofere anumite servicii precum analiticele. Firebase Analytics colectează automat informații precum utilizarea evenimentelor, vizualizările de ecran, proprietățile dispozitivului și alte semnale, dar numai dacă îți dai consimțământul pentru colectarea acestor tipuri de date. Dacă nu este acordat consimțământul, Firebase nu va înregistra evenimente și nu va trimite date legate de acele categorii.</string>
+    <string name="onboarding_crashlytics_about_body_2">Pentru informații detaliate despre modul în care Firebase și serviciile Google gestionează datele, precum și despre politicile lor de confidențialitate și securitate, consultă documentația oficială Firebase Privacy și drepturile tale regionale privind confidențialitatea, conform unor legi precum GDPR și CCPA.</string>
+    <string name="onboarding_crashlytics_about_title">Despre consimțământ și utilizarea datelor Firebase</string>
+    <string name="onboarding_crashlytics_consent_info_learn_more">Află mai multe despre consimțământ și utilizarea datelor</string>
+    <string name="onboarding_crashlytics_consent_info_message">Dacă vrei să afli mai multe despre modul în care sunt utilizate datele tale și ce înseamnă fiecare opțiune de consimțământ, consultă documentația de mai jos.</string>
+    <string name="onboarding_crashlytics_consent_intro_1">Confidențialitatea ta contează. Înainte să colectăm orice date de utilizare sau publicitate, te rugăm să alegi tipurile de date pentru care îți dai consimțământul. Opțiunile tale influențează modul în care măsurăm performanța aplicației, îmbunătățim funcțiile și adaptăm publicitatea, respectând în continuare confidențialitatea ta.</string>
+    <string name="onboarding_crashlytics_consent_intro_2">Aceste opțiuni ne ajută să respectăm standarde de confidențialitate precum GDPR și CCPA, oferindu-ți în același timp control asupra modului în care sunt utilizate datele tale. Poți schimba aceste setări mai târziu, în preferințele de confidențialitate ale aplicației, oricând.</string>
+    <string name="onboarding_crashlytics_description">Permite aplicației să trimită date anonime de utilizare și rapoarte de erori. Acest lucru ne ajută să remediem erorile și să-ți îmbunătățim experiența. Nu sunt colectate niciodată informații personale.</string>
+    <string name="onboarding_crashlytics_details_intro">Mai jos vei găsi controale mai detaliate despre modul în care datele tale sunt utilizate în aplicație. Opțiunile tale influențează ce informații sunt colectate, cum sunt stocate și cum pot fi partajate cu furnizori de servicii precum Google, în conformitate cu standardele de confidențialitate aplicabile și cerințele de consimțământ.</string>
+    <string name="onboarding_crashlytics_dialog_allow_all">Permite tot</string>
+    <string name="onboarding_crashlytics_dialog_allow_essentials">Permite esențialul</string>
+    <string name="onboarding_crashlytics_dialog_confirm_choices">Confirmă opțiunile</string>
+    <string name="onboarding_crashlytics_dialog_privacy_choices_title">Opțiuni de confidențialitate</string>
+    <string name="onboarding_crashlytics_dialog_tab_about">Despre</string>
+    <string name="onboarding_crashlytics_dialog_tab_consent">Consimțământ</string>
+    <string name="onboarding_crashlytics_dialog_tab_details">Detalii</string>
+    <string name="onboarding_crashlytics_disabled_desc">Raportarea datelor este inactivă.</string>
+    <string name="onboarding_crashlytics_enabled_desc">Raportarea datelor este activă.</string>
+    <string name="onboarding_crashlytics_privacy_info">Confidențialitatea ta este importantă. Utilizăm aceste date doar pentru a remedia erorile și a îmbunătăți funcționalitățile. Pentru mai multe detalii, te rugăm să consulți politica noastră de confidențialitate.</string>
+    <string name="onboarding_crashlytics_show_details_button">Afișați informații detaliate</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Afișați informații detaliate despre utilizare și diagnosticare</string>
+    <string name="onboarding_crashlytics_title">Ajută-ne să îmbunătățim</string>
+    <string name="onboarding_final_description">Mulțumim că ți-ai personalizat experiența. Acum ești gata să explorezi toate funcționalitățile. Bucură-te.</string>
+    <string name="onboarding_final_title">Ești gata.</string>
+    <string name="onboarding_theme_dark_desc">Ușor pentru ochi.</string>
+    <string name="onboarding_theme_light_desc">Luminos și energic.</string>
+    <string name="onboarding_theme_subtitle">Selectează cum dorești să arate aplicația.</string>
+    <string name="onboarding_theme_system_desc">Se potrivește cu dispozitivul tău.</string>
+    <string name="onboarding_theme_title">Alege-ți stilul</string>
+    <string name="other_colors">Alte culori</string>
+    <string name="skip_button_content_description">Omite</string>
+    <string name="skip_button_text">Omite</string>
+    <string name="summary_browse_terms_of_service_and_privacy_policy">Citește și acceptă Termenii de utilizare și Politica de confidențialitate pentru a continua</string>
+    <string name="usage_and_diagnostics">Utilizare și diagnoză</string>
+    <string name="wallpaper_colors">Culorile fundalului</string>
+    <string name="welcome">Bine ai venit</string>
+</resources>

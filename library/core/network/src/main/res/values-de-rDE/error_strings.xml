@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="cancelled_error">Vorgang abgebrochen.</string>
+    <string name="connection_closed_error">Die Verbindung wurde unterbrochen.</string>
+    <string name="connection_error">Netzwerkfehler. Bitte versuchen Sie es erneut.</string>
+    <string name="database_cant_open_error">Der Speicher konnte nicht geöffnet werden.</string>
+    <string name="database_constraint_error">Speicherbeschränkungsfehler.</string>
+    <string name="database_corrupt_error">Der Speicher ist beschädigt.</string>
+    <string name="database_error">Speicherfehler.</string>
+    <string name="database_full_error">Der Speicher ist voll.</string>
+    <string name="database_locked_error">Der Speicher ist beschäftigt. Versuchen Sie es erneut.</string>
+    <string name="error_failed_to_launch_review">Fehler beim Starten des Bewertungsablaufs</string>
+    <string name="error_failed_to_load_consent_info">Fehler beim Laden der Einwilligungsinformationen</string>
+    <string name="error_failed_to_load_faq">Fehler beim Laden der FAQs</string>
+    <string name="error_failed_to_load_sku_details">Fehler beim Laden der SKU-Details</string>
+    <string name="error_failed_to_request_review">Fehler beim Anfordern der Bewertung</string>
+    <string name="error_failed_to_update_app">Fehler beim Aktualisieren der App</string>
+    <string name="http_client_error">Anfrage fehlgeschlagen. Bitte versuchen Sie es erneut.</string>
+    <string name="http_redirect_error">Unerwartete Weiterleitung vom Server.</string>
+    <string name="http_server_error">Serverfehler. Bitte versuchen Sie es später erneut.</string>
+    <string name="illegal_argument_error">Ungültige Eingabe oder ungültiges Argument angegeben. Bitte überprüfen Sie die Informationen und versuchen Sie es erneut.</string>
+    <string name="invalid_state_error">Vorgang ist derzeit nicht zulässig.</string>
+    <string name="no_data_error">Keine Daten verfügbar.</string>
+    <string name="no_internet_error">Keine Internetverbindung.</string>
+    <string name="rate_limited_error">Zu viele Anfragen. Versuchen Sie es später erneut.</string>
+    <string name="request_timeout_error">Zeitüberschreitung der Anfrage. Versuchen Sie es erneut.</string>
+    <string name="serialization_error">Fehler beim Lesen der Serverantwort.</string>
+    <string name="ssl_error">Sichere Verbindung fehlgeschlagen.</string>
+    <string name="unknown_error">Ein unbekannter Fehler ist aufgetreten.</string>
+    <string name="unsupported_operation_error">Nicht unterstützter Vorgang.</string>
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">關於</string>
+    <string name="amoled_mode">AMOLED 模式</string>
+    <string name="color_palette">色彩調色盤</string>
+    <string name="dark_mode">深色模式</string>
+    <string name="dialog_info_language">使用您偏好的語言個性化您的體驗。任何語言更改將立即生效。</string>
+    <string name="dialog_info_startup">設定應用程式啟動時呈現給使用者的初始畫面。</string>
+    <string name="dialog_language_subtitle">選擇您偏好的語言</string>
+    <string name="dialog_startup_subtitle">選擇您偏好的啟動頁面：</string>
+    <string name="done_button_content_description">完成</string>
+    <string name="follow_system">跟隨系統模式</string>
+    <string name="go_back">返回</string>
+    <string name="learn_more">了解更多</string>
+    <string name="light_mode">淺色模式</string>
+    <string name="loading">載入中…</string>
+    <string name="onboarding_theme_dark_desc">對眼睛溫和。</string>
+    <string name="onboarding_theme_light_desc">明亮且充滿活力。</string>
+    <string name="onboarding_theme_system_desc">與您的裝置設定相符。</string>
+    <string name="other_colors">其他顏色</string>
+    <string name="screen_and_display_settings">屏幕和顯示設置。</string>
+    <string name="select_language_title">選擇語言</string>
+    <string name="sort_by">排序依據：</string>
+    <string name="sponsored_ad_label">● 贊助廣告</string>
+    <string name="sponsored_ad_label_plain">贊助廣告</string>
+    <string name="startup_page">啟動頁面</string>
+    <string name="summary_dark_theme">深色主題利用深厚的背景來顯著延長電池壽命。要激活它，只需導航到您的Android系統管理器，然後在</string>
+    <string name="theme_mode">主題模式</string>
+    <string name="try_again">再試一次</string>
+    <string name="wallpaper_colors">桌布顏色</string>
+</resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="arabic" translatable="false">🇸🇦 العربية</string>
+    <string name="bengali" translatable="false">🇧🇩 বাংলা</string>
+    <string name="brazilian_portuguese" translatable="false">🇧🇷 Português (Brasil)</string>
+    <string name="bulgarian" translatable="false">🇧🇬 Български</string>
+    <string name="english" translatable="false">🇬🇧 English</string>
+    <string name="filipino" translatable="false">🇵🇭 Filipino</string>
+    <string name="french" translatable="false">🇫🇷 Français</string>
+    <string name="german" translatable="false">🇩🇪 Deutsch</string>
+    <string name="hindi" translatable="false">🇮🇳 हिन्दी</string>
+    <string name="hungarian" translatable="false">🇭🇺 Magyar</string>
+    <string name="indonesian" translatable="false">🇮🇩 Bahasa Indonesia</string>
+    <string name="italian" translatable="false">🇮🇹 Italiano</string>
+    <string name="japanese" translatable="false">🇯🇵 日本語</string>
+    <string name="korean" translatable="false">🇰🇷 한국어</string>
+    <string name="polish" translatable="false">🇵🇱 Polski</string>
+    <string name="romanian" translatable="false">🇷🇴 Română</string>
+    <string name="russian" translatable="false">🇷🇺 Русский</string>
+    <string name="spanish" translatable="false">🇪🇸 Español</string>
+    <string name="spanish_mexico" translatable="false">🇲🇽 Español (México)</string>
+    <string name="swedish" translatable="false">🇸🇪 Svenska</string>
+    <string name="thai" translatable="false">🇹🇭 ไทย</string>
+    <string name="traditional_chinese" translatable="false">🇹🇼 中文</string>
+    <string name="turkish" translatable="false">🇹🇷 Türkçe</string>
+    <string name="ukrainian" translatable="false">🇺🇦 Українська</string>
+    <string name="urdu" translatable="false">🇵🇰 اردو</string>
+    <string name="vietnamese" translatable="false">🇻🇳 Tiếng Việt</string>
+</resources>

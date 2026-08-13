@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">إعدادات الخصوصية المتقدمة</string>
+    <string name="app_behavior">سلوك التطبيق</string>
+    <string name="appearance">المظهر</string>
+    <string name="bounce_buttons">نقر مرن</string>
+    <string name="bug_report">تقرير خطأ</string>
+    <string name="cache_cleared_success">تم مسح ذاكرة التخزين المؤقت بنجاح</string>
+    <string name="cache_management">إدارة ذاكرة التخزين المؤقت</string>
+    <string name="clear_cache">مسح ذاكرة التخزين المؤقت</string>
+    <string name="consent_ad_personalization_description">تمكين الإعلانات المخصصة بناءً على نشاطك وتفضيلاتك عبر خدمات وتطبيقات Google.</string>
+    <string name="consent_ad_personalization_title">الإعلانات المخصصة</string>
+    <string name="consent_ad_storage_description">تمكين تخزين البيانات (مثل معرفات الجهاز أو ملفات تعريف الارتباط) لقياس أداء الإعلانات وعرض الإعلانات ذات الصلة.</string>
+    <string name="consent_ad_storage_title">تخزين بيانات الإعلانات</string>
+    <string name="consent_ad_user_data_description">السماح بإرسال بيانات الاستخدام والجهاز إلى Google لدعم الميزات المتعلقة بالإعلانات مثل التحويلات وتحسين الحملات.</string>
+    <string name="consent_ad_user_data_title">إرسال البيانات للإعلانات</string>
+    <string name="consent_analytics_storage_description">السماح بتخزين البيانات مثل استخدام التطبيق ومدة الزيارة لتحسين التحليلات وأداء التطبيق.</string>
+    <string name="consent_analytics_storage_title">تخزين بيانات التحليلات</string>
+    <string name="consent_category_advertising_title">الإعلانات المخصصة</string>
+    <string name="consent_category_analytics_title">التحليلات</string>
+    <string name="dark_theme">المظهر الداكن</string>
+    <string name="dynamic_colors">الألوان الديناميكية</string>
+    <string name="error_reporting">الإبلاغ عن الأخطاء</string>
+    <string name="get_help">احصل على مساعدة</string>
+    <string name="icon_desc_consent_category">أيقونة فئة الموافقة</string>
+    <string name="icon_desc_expand_less">طي</string>
+    <string name="icon_desc_expand_more">توسيع</string>
+    <string name="language">اللغة</string>
+    <string name="learn_more">اعرف المزيد</string>
+    <string name="navigation">التنقل</string>
+    <string name="settings">الإعدادات</string>
+    <string name="settings_placeholder_description">لم يتم تحديد أي إعدادات. اختر خيارًا لعرض تفاصيله هنا.</string>
+    <string name="show_labels_on_bottom_bar">عرض الملصقات على الشريط السفلي</string>
+    <string name="startup_page">صفحة البدء</string>
+    <string name="summary_preference_settings_bounce_buttons">يطبق رسومًا متحركة مرنة خفية على جميع العناصر القابلة للنقر عند النقر عليها</string>
+    <string name="summary_preference_settings_bug_report">أرسل تقارير الأخطاء وطلبات الميزات إلى صفحة مشكلات مستودع GitHub الخاص بالتطبيق</string>
+    <string name="summary_preference_settings_clear_cache">مسح بيانات التطبيق المؤقتة.</string>
+    <string name="summary_preference_settings_dynamic_colors">تطبيق الألوان من الخلفيات على سمة التطبيق</string>
+    <string name="summary_preference_settings_language">يغير اللغة المستخدمة في التطبيق</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">عرض عناوين العناصر أدناه الرموز في شريط التنقل السفلي</string>
+    <string name="summary_preference_settings_startup_page">اختر الشاشة التي سيتم عرضها عند بدء تشغيل التطبيق.</string>
+    <string name="summary_usage_and_diagnostics">ساعد في تحسين تجربتك عن طريق إرسال بيانات التشخيص والجهاز واستخدام التطبيق إلينا تلقائيًا. سيساعد هذا في تحسين أداء التطبيق واستقراره وتحسينات أخرى. ستساعد بعض البيانات المجمعة أيضًا تطبيقاتنا.\n\nهذه معلومات عامة حول جهازك وكيفية استخدامك لتطبيقاتنا (مثل مستوى البطارية ونشاط النظام والتطبيق والأخطاء). سيتم استخدام البيانات لتحسين تطبيقاتنا\n\nلا يؤثر إيقاف تشغيل هذه الميزة على قدرة جهازك على إرسال المعلومات اللازمة للخدمات الأساسية مثل تحديثات التطبيق والأمان.\n</string>
+    <string name="usage_and_diagnostics">الاستخدام والتشخيصات</string>
+    <string name="will_never_turn_on_automatically">لن يتم تشغيله تلقائيًا أبدًا</string>
+    <string name="will_turn_on_automatically_by_system">سيتم تشغيله تلقائيًا بواسطة النظام</string>
+</resources>

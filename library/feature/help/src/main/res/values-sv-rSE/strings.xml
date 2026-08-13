@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">Betaprogram</string>
+    <string name="contact_us">Kontakta oss</string>
+    <string name="contact_us_description">Berätta mer så hjälper vi dig</string>
+    <string name="feedback">Feedback</string>
+    <string name="help">Hjälp</string>
+    <string name="help_feedback_sheet_contact_description">Öppna min officiella kontaktsida för direkt support.</string>
+    <string name="help_feedback_sheet_contact_title">Kontakta mig personligen</string>
+    <string name="help_feedback_sheet_feature_request_description">Föreslå nya idéer för någon av våra appar via det officiella formuläret.</string>
+    <string name="help_feedback_sheet_feature_request_title">Skicka funktionsförslag</string>
+    <string name="help_feedback_sheet_review_description">Dela ditt betyg och hjälp fler användare att upptäcka appen.</string>
+    <string name="help_feedback_sheet_review_title">Lämna en recension på Google Play</string>
+    <string name="help_feedback_sheet_title">Hur vill du dela feedback?</string>
+    <string name="oss_license_title">Öppen källkodslicenser</string>
+    <string name="popular_help_resources">Populära hjälpresurser</string>
+    <string name="privacy_policy">Integritetspolicy</string>
+    <string name="terms_of_service">Användarvillkor</string>
+    <string name="version">Version %1$s</string>
+    <string name="version_info">Versionsinformation</string>
+    <string name="view_in_google_play_store">Visa i Google Play Store</string>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">বিজ্ঞাপন</string>
+    <string name="android_version">অ্যান্ড্রয়েড সংস্করণ</string>
+    <string name="api_level">API লেভেল</string>
+    <string name="app_build">অ্যাপ বিল্ড: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">অ্যাপ্লিকেশন বিল্ড সংস্করণ</string>
+    <string name="app_info">অ্যাপের তথ্য</string>
+    <string name="changelog_title">অ্যাপ চেঞ্জলগ</string>
+    <string name="code_of_conduct">আচরণবিধি</string>
+    <string name="content_description_more_options">আরও বিকল্প</string>
+    <string name="debug">ডিবাগ</string>
+    <string name="device_info">ডিভাইসের তথ্য</string>
+    <string name="device_model">ডিভাইস মডেল</string>
+    <string name="done_button_content_description">সম্পন্ন</string>
+    <string name="go_back">ফিরে যান</string>
+    <string name="help_and_feedback">সাহায্য ও প্রতিক্রিয়া</string>
+    <string name="legal">আইনি</string>
+    <string name="legal_notices">আইনি নোটিশ</string>
+    <string name="license">লাইসেন্স</string>
+    <string name="manufacturer">প্রস্তুতকারক</string>
+    <string name="no_new_updates_message">কোনো নতুন আপডেট উপলব্ধ নেই।</string>
+    <string name="oss_license_title">ওপেন সোর্স লাইসেন্স</string>
+    <string name="permissions">অনুমতিসমূহ</string>
+    <string name="privacy">গোপনীয়তা</string>
+    <string name="privacy_policy">গোপনীয়তা নীতি</string>
+    <string name="release">রিলিজ</string>
+    <string name="settings">সেটিংস</string>
+    <string name="settings_placeholder_description">কোনো সেটিংস নির্বাচন করা হয়নি। এর বিবরণ এখানে দেখতে একটি বিকল্প পছন্দ করুন।</string>
+    <string name="share">শেয়ার করুন</string>
+    <string name="snack_device_info_copied">ডিভাইসের তথ্য ক্লিপবোর্ডে কপি করা হয়েছে</string>
+    <string name="snack_device_info_failed">ডিভাইসের তথ্য লোড করা যায়নি</string>
+    <string name="summary_preference_settings_ads">আপনাকে প্রাসঙ্গিক বিজ্ঞাপন দেখাতে আমরা কীভাবে আপনার তথ্য ব্যবহার করি তা নিয়ন্ত্রণ করুন</string>
+    <string name="summary_preference_settings_code_of_conduct">আমাদের পরিষেবার মধ্যে আচরণের নিয়ম এবং নির্দেশিকা বুঝুন</string>
+    <string name="summary_preference_settings_legal_notices">আমাদের পরিষেবা সম্পর্কে আইনি তথ্য দেখুন</string>
+    <string name="summary_preference_settings_oss">ওপেন সোর্স সফ্টওয়্যারের জন্য লাইসেন্সের বিবরণ</string>
+    <string name="summary_preference_settings_permissions">আমাদের পরিষেবাতে মঞ্জুর করা অনুমতিসমূহ পরিচালনা করুন</string>
+    <string name="summary_preference_settings_privacy_policy">আমরা কীভাবে আপনার ডেটা পরিচালনা করি তা নিয়ন্ত্রণকারী নীতি দেখুন</string>
+    <string name="summary_preference_settings_terms_of_service">আমাদের পরিষেবা ব্যবহার করার সময় আপনি যে শর্তাবলীতে সম্মত হন তা পর্যালোচনা করুন</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">অ্যাপ-মধ্যস্থ অভিজ্ঞতা উন্নত করতে ডেটা শেয়ার করুন</string>
+    <string name="summary_share_message">আমার ব্যবহার করা এই অসাধারণ অ্যাপটি দেখুন. এর কিছু দারুণ ফিচার আছে যা আপনার আকর্ষণীয় লাগতে পারে। আপনি এটি প্লে স্টোর থেকে ডাউনলোড করতে পারেন: %1$s</string>
+    <string name="support_us">আমাদের সমর্থন করুন</string>
+    <string name="terms_of_service">পরিষেবার শর্তাবলী</string>
+    <string name="try_again">আবার চেষ্টা করুন</string>
+    <string name="updates">আপডেট</string>
+    <string name="usage_and_diagnostics">ব্যবহার এবং ডায়াগনস্টিকস</string>
+</resources>

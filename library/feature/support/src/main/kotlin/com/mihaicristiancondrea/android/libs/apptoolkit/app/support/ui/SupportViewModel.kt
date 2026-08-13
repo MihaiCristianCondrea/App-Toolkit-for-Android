@@ -1,0 +1,372 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui
+
+import android.app.Activity
+import androidx.lifecycle.viewModelScope
+import com.android.billingclient.api.ProductDetails
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.contracts.SupportAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.contracts.SupportEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.states.DonationOptionUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.states.SupportScreenUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.extensions.hasOneTimePurchaseOffer
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.extensions.primaryFormattedPrice
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.billing.PurchaseResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.activity.isValidForBilling
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.copyData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setError
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setNoData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.toPersistentMap
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
+
+private const val BILLING_LAUNCH_TIMEOUT_MS = 20_000L
+
+/**
+ * ViewModel responsible for the support/donation flow.
+ *
+ * Handles billing setup, product detail observation, and purchase result UI updates.
+ */
+class SupportViewModel(
+    private val billingRepository: BillingRepository,
+    firebaseController: FirebaseController,
+) : LoggedScreenViewModel<SupportScreenUiState, SupportEvent, SupportAction>(
+    initialState = UiStateScreen(
+        screenState = ScreenState.IsLoading(),
+        data = SupportScreenUiState(),
+    ),
+    firebaseController = firebaseController,
+    screenName = "Support",
+) {
+
+    private val donationProductIds = listOf(
+        DonationProductIds.LOW_DONATION,
+        DonationProductIds.NORMAL_DONATION,
+        DonationProductIds.HIGH_DONATION,
+        DonationProductIds.EXTREME_DONATION,
+    )
+
+    private var currentProductDetails: Map<String, ProductDetails> = emptyMap()
+
+    private var productDetailsJob: Job? = null
+    private var purchaseResultJob: Job? = null
+    private var queryJob: Job? = null
+    private var billingTimeoutJob: Job? = null
+    private var billingLaunchJob: Job? = null
+
+    init {
+        handleEvent(SupportEvent.SetUpBilling)
+    }
+
+    override fun handleEvent(event: SupportEvent) {
+        when (event) {
+            is SupportEvent.SetUpBilling -> setupBilling()
+            is SupportEvent.QueryProductDetails -> queryProductDetails()
+            is SupportEvent.DismissSnackbar -> dismissSnackbar()
+        }
+    }
+
+    fun setupBilling() {
+        observeProductDetails()
+        observePurchaseResults()
+        queryProductDetails()
+    }
+
+    fun onDonateClicked(activity: Activity, productId: String) {
+        if (!activity.isValidForBilling()) return
+        if (screenData?.isBillingInProgress == true) return
+
+        val option = screenData?.donationOptions?.get(productId)
+        if (option?.isEligible != true) {
+            showOfferUnavailable()
+            return
+        }
+
+        val details = currentProductDetails[productId]
+        if (details == null) {
+            showOfferUnavailable()
+            return
+        }
+        val hostName = activity::class.java.name
+        billingLaunchJob = billingLaunchJob.restart {
+            launchReport(
+                action = Actions.DONATE_CLICKED,
+                extra = mapOf(
+                    ExtraKeys.PRODUCT_ID to productId,
+                    ExtraKeys.ACTIVITY to hostName,
+                ),
+                block = {
+                    updateStateThreadSafe {
+                        setBillingInProgress(inProgress = true)
+                        startBillingTimeout()
+                    }
+                    billingRepository.launchInAppDonationFlow(activity, details)
+                },
+                onError = { throwable ->
+                    updateStateThreadSafe {
+                        setBillingInProgress(inProgress = false)
+                        screenState.setError(
+                            message = UiTextHelper.DynamicString(
+                                throwable.message ?: "Billing launch failed"
+                            )
+                        )
+                    }
+                },
+            )
+        }
+    }
+
+    private fun observeProductDetails() {
+        productDetailsJob = productDetailsJob.restart {
+            startOperation(action = Actions.OBSERVE_PRODUCT_DETAILS)
+
+            billingRepository.productDetails
+                .onStart {
+                    updateStateThreadSafe {
+                        if (screenData?.donationOptions.isNullOrEmpty()) {
+                            screenState.setLoading()
+                        } else {
+                            screenState.updateState(ScreenState.Success())
+                        }
+                    }
+                }
+                .onEach { detailsMap ->
+                    currentProductDetails = detailsMap
+
+                    val options = buildDonationOptions(detailsMap)
+                    val base = screenData ?: SupportScreenUiState()
+                    val updated = base.copy(error = null, donationOptions = options)
+
+                    updateStateThreadSafe {
+                        if (detailsMap.isEmpty()) {
+                            screenState.setNoData(data = updated)
+                        } else {
+                            screenState.setSuccess(data = updated)
+                        }
+                    }
+                }
+                .catchReport(action = Actions.OBSERVE_PRODUCT_DETAILS) { throwable ->
+                    val message = UiTextHelper.DynamicString(throwable.message.orEmpty())
+
+                    updateStateThreadSafe {
+                        screenState.copyData { copy(error = throwable.message.orEmpty()) }
+                        screenState.setError(message = message)
+                    }
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    private fun observePurchaseResults() {
+        startOperation(action = Actions.OBSERVE_PURCHASE_RESULT)
+        purchaseResultJob = purchaseResultJob.restart {
+            billingRepository.purchaseResult
+                .onEach { result ->
+                    when (result) {
+                        PurchaseResult.Pending -> updateStateThreadSafe {
+                            setBillingInProgress(inProgress = false)
+                            clearError()
+                            restoreScreenStateFromData()
+                            screenState.showSnackbar(
+                                UiSnackbar(
+                                    message = UiTextHelper.StringResource(
+                                        R.string.purchase_pending
+                                    ),
+                                    isError = false,
+                                    timeStamp = System.nanoTime(),
+                                    type = ScreenMessageType.SNACKBAR
+                                )
+                            )
+                        }
+
+                        PurchaseResult.Success -> updateStateThreadSafe {
+                            setBillingInProgress(inProgress = false)
+                            clearError()
+                            restoreScreenStateFromData()
+                            screenState.showSnackbar(
+                                UiSnackbar(
+                                    message = UiTextHelper.StringResource(
+                                        R.string.purchase_thank_you
+                                    ),
+                                    isError = false,
+                                    timeStamp = System.nanoTime(),
+                                    type = ScreenMessageType.SNACKBAR
+                                )
+                            )
+                        }
+
+                        is PurchaseResult.Failed -> updateStateThreadSafe {
+                            setBillingInProgress(inProgress = false)
+                            screenState.copyData { copy(error = result.error) }
+                            screenState.setError(message = UiTextHelper.DynamicString(result.error))
+                        }
+
+                        PurchaseResult.UserCancelled -> updateStateThreadSafe {
+                            setBillingInProgress(inProgress = false)
+                            clearError()
+                            restoreScreenStateFromData()
+                            screenState.showSnackbar(
+                                UiSnackbar(
+                                    message = UiTextHelper.StringResource(
+                                        R.string.purchase_cancelled
+                                    ),
+                                    isError = false,
+                                    timeStamp = System.nanoTime(),
+                                    type = ScreenMessageType.SNACKBAR
+                                )
+                            )
+                        }
+                    }
+                }
+                .catchReport(action = Actions.OBSERVE_PURCHASE_RESULT) { throwable ->
+                    updateStateThreadSafe {
+                        setBillingInProgress(inProgress = false)
+                        screenState.setError(message = UiTextHelper.DynamicString(throwable.message.orEmpty()))
+                    }
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    private fun queryProductDetails() {
+        queryJob = queryJob.restart {
+            launchReport(
+                action = Actions.QUERY_PRODUCT_DETAILS,
+                block = {
+                    updateStateThreadSafe {
+                        if (screenData?.donationOptions.isNullOrEmpty()) {
+                            screenState.setLoading()
+                        }
+                    }
+
+                    billingRepository.queryProductDetails(productIds = donationProductIds)
+                },
+                onError = { throwable ->
+                    updateStateThreadSafe {
+                        clearError()
+                        screenState.showSnackbar(
+                            UiSnackbar(
+                                message = Errors.UseCase.FAILED_TO_LOAD_SKU_DETAILS.asUiText(),
+                                isError = true,
+                                timeStamp = System.nanoTime(),
+                                type = ScreenMessageType.SNACKBAR
+                            )
+                        )
+                        screenState.updateState(ScreenState.Error())
+                        screenState.copyData { copy(error = throwable.message.orEmpty()) }
+                    }
+                },
+            )
+        }
+    }
+
+    private fun buildDonationOptions(detailsMap: Map<String, ProductDetails>): ImmutableMap<String, DonationOptionUiState> {
+        return donationProductIds.associateWith { productId ->
+            val details = detailsMap[productId]
+            DonationOptionUiState(
+                productId = productId,
+                formattedPrice = details?.primaryFormattedPrice(),
+                isEligible = details?.hasOneTimePurchaseOffer() == true,
+            )
+        }.toPersistentMap()
+    }
+
+    private fun dismissSnackbar() {
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.dismissSnackbar()
+            }
+        }
+    }
+
+    private fun showOfferUnavailable() {
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.showSnackbar(
+                    UiSnackbar(
+                        message = UiTextHelper.StringResource(R.string.support_offer_unavailable),
+                        isError = true,
+                        timeStamp = System.nanoTime(),
+                        type = ScreenMessageType.SNACKBAR
+                    )
+                )
+            }
+        }
+    }
+
+    private fun setBillingInProgress(inProgress: Boolean) {
+        if (!inProgress) {
+            billingTimeoutJob?.cancel()
+            billingTimeoutJob = null
+        }
+        screenState.copyData { copy(isBillingInProgress = inProgress) }
+    }
+
+    private fun startBillingTimeout() {
+        billingTimeoutJob?.cancel()
+        billingTimeoutJob = viewModelScope.launch {
+            delay(BILLING_LAUNCH_TIMEOUT_MS.milliseconds)
+            updateStateThreadSafe { setBillingInProgress(inProgress = false) }
+        }
+    }
+
+    private fun clearError() {
+        screenState.copyData { copy(error = null) }
+    }
+
+    private fun restoreScreenStateFromData() {
+        val hasOptions = screenData?.donationOptions?.isNotEmpty() == true
+        screenState.updateState(if (hasOptions) ScreenState.Success() else ScreenState.NoData())
+    }
+
+    private object Actions {
+        const val OBSERVE_PRODUCT_DETAILS: String = "observeProductDetails"
+        const val OBSERVE_PURCHASE_RESULT: String = "observePurchaseResult"
+        const val QUERY_PRODUCT_DETAILS: String = "queryProductDetails"
+        const val DONATE_CLICKED: String = "donateClicked"
+    }
+
+    private object ExtraKeys {
+        const val PRODUCT_ID: String = "productId"
+        const val ACTIVITY: String = "activity"
+    }
+}
+

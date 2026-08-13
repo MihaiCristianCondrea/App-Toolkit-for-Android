@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">ベータプログラム</string>
+    <string name="contact_us">お問い合わせ</string>
+    <string name="contact_us_description">詳しくお聞かせください。サポートいたします。</string>
+    <string name="feedback">フィードバック</string>
+    <string name="help">ヘルプ</string>
+    <string name="help_feedback_sheet_contact_description">直接サポートのために、私の公式コンタクトページを開きます。</string>
+    <string name="help_feedback_sheet_contact_title">個別に連絡する</string>
+    <string name="help_feedback_sheet_feature_request_description">公式フォームから、各アプリへの新しいアイデアを提案してください。</string>
+    <string name="help_feedback_sheet_feature_request_title">機能リクエストを送信</string>
+    <string name="help_feedback_sheet_review_description">評価を共有して、より多くのユーザーがアプリを見つけられるようにしてください。</string>
+    <string name="help_feedback_sheet_review_title">Google Playでレビューする</string>
+    <string name="help_feedback_sheet_title">どのようにフィードバックを共有しますか？</string>
+    <string name="oss_license_title">オープンソースライセンス</string>
+    <string name="popular_help_resources">人気のヘルプリソース</string>
+    <string name="privacy_policy">プライバシーポリシー</string>
+    <string name="terms_of_service">利用規約</string>
+    <string name="version">バージョン %1$s</string>
+    <string name="version_info">バージョン情報</string>
+    <string name="view_in_google_play_store">Google Playストアで表示</string>
+</resources>

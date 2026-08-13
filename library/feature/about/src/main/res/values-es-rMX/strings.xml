@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Anuncios</string>
+    <string name="android_version">Versión de Android</string>
+    <string name="api_level">Nivel de API</string>
+    <string name="app_build">Compilación de la app: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">Versión de compilación de la aplicación</string>
+    <string name="app_info">Información de la aplicación</string>
+    <string name="changelog_title">Registro de cambios de la aplicación</string>
+    <string name="code_of_conduct">Código de conducta</string>
+    <string name="content_description_more_options">Más opciones</string>
+    <string name="debug">Depuración</string>
+    <string name="device_info">Información del dispositivo</string>
+    <string name="device_model">Modelo del dispositivo</string>
+    <string name="done_button_content_description">Hecho</string>
+    <string name="go_back">Regresar</string>
+    <string name="help_and_feedback">Ayuda &amp; comentarios</string>
+    <string name="legal">Legal</string>
+    <string name="legal_notices">Avisos legales</string>
+    <string name="license">Licencia</string>
+    <string name="manufacturer">Fabricante</string>
+    <string name="no_new_updates_message">No hay nuevas actualizaciones disponibles.</string>
+    <string name="oss_license_title">Licencias de código abierto</string>
+    <string name="permissions">Permisos</string>
+    <string name="privacy">Privacidad</string>
+    <string name="privacy_policy">Política de privacidad</string>
+    <string name="release">Lanzamiento</string>
+    <string name="settings">Configuración</string>
+    <string name="settings_placeholder_description">No hay configuraciones seleccionadas. Elige una opción para ver sus detalles aquí.</string>
+    <string name="share">Compartir</string>
+    <string name="snack_device_info_copied">Información del dispositivo copiada al portapapeles</string>
+    <string name="snack_device_info_failed">No se pudo cargar la información del dispositivo</string>
+    <string name="summary_preference_settings_ads">Controla cómo usamos tu información para mostrarte anuncios relevantes</string>
+    <string name="summary_preference_settings_code_of_conduct">Comprende las reglas y directrices de comportamiento dentro de nuestro servicio</string>
+    <string name="summary_preference_settings_legal_notices">Ver información legal sobre nuestro servicio</string>
+    <string name="summary_preference_settings_oss">Detalles de licencia para software de código abierto</string>
+    <string name="summary_preference_settings_permissions">Administra los permisos otorgados a nuestro servicio</string>
+    <string name="summary_preference_settings_privacy_policy">Consulta la política que rige cómo manejamos tus datos</string>
+    <string name="summary_preference_settings_terms_of_service">Revisa los términos que aceptas al usar nuestro servicio</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Comparte datos para ayudar a mejorar la experiencia en la aplicación</string>
+    <string name="summary_share_message">Mira esta increíble aplicación que estoy usando. Tiene algunas funciones geniales que podrían interesarte. Puedes descargarla desde Play Store en: %1$s</string>
+    <string name="support_us">Apóyanos</string>
+    <string name="terms_of_service">Términos de servicio</string>
+    <string name="try_again">Intentar de nuevo</string>
+    <string name="updates">Actualizaciones</string>
+    <string name="usage_and_diagnostics">Uso y diagnósticos</string>
+</resources>

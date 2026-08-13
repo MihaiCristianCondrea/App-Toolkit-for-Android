@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">廣告</string>
+    <string name="android_version">Android 版本：</string>
+    <string name="api_level">API 等級：</string>
+    <string name="app_build">應用程式構建：%6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">應用程式構建版本</string>
+    <string name="app_info">應用程式資訊</string>
+    <string name="changelog_title">應用程式變更紀錄</string>
+    <string name="code_of_conduct">行為準則</string>
+    <string name="content_description_more_options">更多选项</string>
+    <string name="debug">除錯</string>
+    <string name="device_info">設備資訊</string>
+    <string name="device_model">設備型號：</string>
+    <string name="done_button_content_description">完成</string>
+    <string name="go_back">返回</string>
+    <string name="help_and_feedback">幫助與反饋</string>
+    <string name="legal">法律</string>
+    <string name="legal_notices">法律通知</string>
+    <string name="license">許可證</string>
+    <string name="manufacturer">製造商：</string>
+    <string name="no_new_updates_message">沒有新的更新可用。</string>
+    <string name="oss_license_title">開源許可證</string>
+    <string name="permissions">權限</string>
+    <string name="privacy">隱私</string>
+    <string name="privacy_policy">隱私政策</string>
+    <string name="release">發行</string>
+    <string name="settings">設定</string>
+    <string name="settings_placeholder_description">未選擇設定。選擇一個選項以在此查看詳細資訊。</string>
+    <string name="share">分享</string>
+    <string name="snack_device_info_copied">設備資訊已複製到剪貼板</string>
+    <string name="snack_device_info_failed">無法載入裝置資訊</string>
+    <string name="summary_preference_settings_ads">管理我們如何使用您的資訊來顯示相關廣告</string>
+    <string name="summary_preference_settings_code_of_conduct">了解服務中的行為規範和指南</string>
+    <string name="summary_preference_settings_legal_notices">檢視服務的法律資訊</string>
+    <string name="summary_preference_settings_oss">開源軟體的許可證詳情</string>
+    <string name="summary_preference_settings_permissions">管理授予我們服務的權限</string>
+    <string name="summary_preference_settings_privacy_policy">檢視我們如何處理您數據的政策</string>
+    <string name="summary_preference_settings_terms_of_service">檢視您使用我們服務時同意的條款</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">分享數據以幫助改進應用程式體驗</string>
+    <string name="summary_share_message">看看我正在使用的這個很棒的應用程式！它有一些您可能感興趣的酷炫功能。您可以從 Play 商店下載：%1$s</string>
+    <string name="support_us">支持我們</string>
+    <string name="terms_of_service">服務條款</string>
+    <string name="try_again">再試一次</string>
+    <string name="updates">更新</string>
+    <string name="usage_and_diagnostics">使用與診斷</string>
+</resources>

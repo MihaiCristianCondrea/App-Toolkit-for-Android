@@ -1,45 +1,39 @@
 There are three ways you can adopt Styles throughout your app:
 
-1. Use directly on existing components that expose a [
-   `Style`](https://developer.android.com/reference/kotlin/androidx/compose/foundation/style/Style)
-   parameter.
-2. Apply a style with [
-   `Modifier.styleable`](https://developer.android.com/reference/kotlin/androidx/compose/foundation/style/styleable.modifier#(androidx.compose.ui.Modifier).styleable(androidx.compose.foundation.style.StyleState,androidx.compose.foundation.style.Style))
-   on layout composables that don't accept a `Style` parameter.
-3. In your own custom design system, use `Modifier.styleable{}` and expose a style parameter on your
-   own components.
+1. Use directly on existing components that expose a [`Style`](https://developer.android.com/reference/kotlin/androidx/compose/foundation/style/Style) parameter.
+2. Apply a style with [`Modifier.styleable`](https://developer.android.com/reference/kotlin/androidx/compose/foundation/style/styleable.modifier#(androidx.compose.ui.Modifier).styleable(androidx.compose.foundation.style.StyleState,androidx.compose.foundation.style.Style)) on layout composables that don't accept a `Style` parameter.
+3. In your own custom design system, use `Modifier.styleable{}` and expose a style parameter on your own components.
 
 ## Available properties on Styles
 
-Styles support many of the same properties that modifiers support; however, not
-everything that is a modifier can be replicated with a Style. You still need
-modifiers for certain behaviors, like interactions, custom drawing, or stacking
-of properties.
+Styles support many of the same properties that modifiers support; however, not everything that is a modifier can be replicated with a Style. You still need modifiers for certain behaviors, like interactions, custom drawing, or stacking of properties.
 
-| Grouping                        | Properties                                                                                                                                                                                                                                                                                                                                                               | Inherited by children                                                                           |
-|---------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
-| **Layout and sizing**           |                                                                                                                                                                                                                                                                                                                                                                          |                                                                                                 |
-| Content Padding (inner)         | - `contentPadding(all: Dp)` - `contentPadding(horizontal: Dp, vertical: Dp)` - `contentPadding(start: Dp, top: Dp, end: Dp, bottom: Dp)` - `contentPaddingHorizontal(value: Dp)` / `contentPaddingVertical(value: Dp)` - `contentPaddingStart(value: Dp)` / `contentPaddingTop(value: Dp)` / `contentPaddingEnd(value: Dp)` / `contentPaddingBottom(value: Dp)`          | No                                                                                              |
-| External Padding (outer)        | - `externalPadding(all: Dp)` - `externalPadding(horizontal: Dp, vertical: Dp)` - `externalPadding(start: Dp, top: Dp, end: Dp, bottom: Dp)` - `externalPaddingHorizontal(value: Dp)` / `externalPaddingVertical(value: Dp)` - `externalPaddingStart(value: Dp)` / `externalPaddingTop(value: Dp)` / `externalPaddingEnd(value: Dp)` / `externalPaddingBottom(value: Dp)` | No                                                                                              |
-| Dimensions                      | `fillWidth()/fillHeight()/fillSize()` and `width`, `height`, and `size` (supports `Dp`, `DpSize`, or `Float` fractions).                                                                                                                                                                                                                                                 | No                                                                                              |
-| Positioning                     | `left/top/right/bottom` offsets.                                                                                                                                                                                                                                                                                                                                         | No                                                                                              |
-| **Visual Appearance**           |                                                                                                                                                                                                                                                                                                                                                                          |                                                                                                 |
-| Fills                           | `background` and `foreground` (supports `Color` or `Brush`).                                                                                                                                                                                                                                                                                                             | No                                                                                              |
-| Borders                         | `borderWidth`, `borderColor`, and `borderBrush`.                                                                                                                                                                                                                                                                                                                         | No                                                                                              |
-| Shape                           | `shape`                                                                                                                                                                                                                                                                                                                                                                  | No - but used in conjunction with other properties. `clip` and `border` use this defined shape. |
-| Shadows                         | `dropShadow`, `innerShadow`                                                                                                                                                                                                                                                                                                                                              | No                                                                                              |
-| **Transformations**             |                                                                                                                                                                                                                                                                                                                                                                          |                                                                                                 |
-| Graphics layer spatial movement | `translationX`, `translationY`, `scaleX/scaleY`, `rotationX/rotationY/rotationZ`                                                                                                                                                                                                                                                                                         | No                                                                                              |
-| Control                         | `alpha`, `zIndex` (stacking order), and `transformOrigin` (pivot point)                                                                                                                                                                                                                                                                                                  | No                                                                                              |
-| **Typography**                  |                                                                                                                                                                                                                                                                                                                                                                          |                                                                                                 |
-| Styling                         | `textStyle`, `fontSize`, `fontWeight`, `fontStyle`, and `fontFamily`                                                                                                                                                                                                                                                                                                     | Yes                                                                                             |
-| Coloration                      | `contentColor` and `contentBrush`. This is also used for Icons styling.                                                                                                                                                                                                                                                                                                  | Yes                                                                                             |
-| Paragraph                       | `lineHeight`, `letterSpacing`, `textAlign`, `textDirection`, `lineBreak`, and `hyphens`.                                                                                                                                                                                                                                                                                 | Yes                                                                                             |
-| Decoration                      | `textDecoration`, `textIndent`, and `baselineShift`.                                                                                                                                                                                                                                                                                                                     | Yes                                                                                             |
+| Grouping | Properties | Inherited by children |
+|---|---|---|
+| **Layout and sizing** |   |   |
+| Content Padding (inner) | - `contentPadding(all: Dp)` - `contentPadding(horizontal: Dp, vertical: Dp)` - `contentPadding(start: Dp, top: Dp, end: Dp, bottom: Dp)` - `contentPaddingHorizontal(value: Dp)` / `contentPaddingVertical(value: Dp)` - `contentPaddingStart(value: Dp)` / `contentPaddingTop(value: Dp)` / `contentPaddingEnd(value: Dp)` / `contentPaddingBottom(value: Dp)` | No |
+| External Padding (outer) | - `externalPadding(all: Dp)` - `externalPadding(horizontal: Dp, vertical: Dp)` - `externalPadding(start: Dp, top: Dp, end: Dp, bottom: Dp)` - `externalPaddingHorizontal(value: Dp)` / `externalPaddingVertical(value: Dp)` - `externalPaddingStart(value: Dp)` / `externalPaddingTop(value: Dp)` / `externalPaddingEnd(value: Dp)` / `externalPaddingBottom(value: Dp)` | No |
+| Dimensions | `fillWidth()/fillHeight()/fillSize()` and `width`, `height`, and `size` (supports `Dp`, `DpSize`, or `Float` fractions). | No |
+| Positioning | `left/top/right/bottom` offsets. | No |
+| **Visual Appearance** |   |   |
+| Fills | `background` and `foreground` (supports `Color` or `Brush`). | No |
+| Borders | `borderWidth`, `borderColor`, and `borderBrush`. | No |
+| Shape | `shape` | No - but used in conjunction with other properties. `clip` and `border` use this defined shape. |
+| Shadows | `dropShadow`, `innerShadow` | No |
+| **Transformations** |   |   |
+| Graphics layer spatial movement | `translationX`, `translationY`, `scaleX/scaleY`, `rotationX/rotationY/rotationZ` | No |
+| Control | `alpha`, `zIndex` (stacking order), and `transformOrigin` (pivot point) | No |
+| **Typography** |   |   |
+| Styling | `textStyle`, `fontSize`, `fontWeight`, `fontStyle`, and `fontFamily` | Yes |
+| Coloration | `contentColor` and `contentBrush`. This is also used for Icons styling. | Yes |
+| Paragraph | `lineHeight`, `letterSpacing`, `textAlign`, `textDirection`, `lineBreak`, and `hyphens`. | Yes |
+| Decoration | `textDecoration`, `textIndent`, and `baselineShift`. | Yes |
 
 ## Use Styles directly on components with Style parameters
 
 Components that expose a `Style` parameter allow you to set their styling:
+
+<br />
 
 ```kotlin
 BaseButton(
@@ -48,12 +42,14 @@ BaseButton(
 ) {
     BaseText("Click me")
 }
+   
 ```
 
 <br />
 
-Within the style lambda, you can set various properties, such as `externalPadding`
-or `background`:
+Within the style lambda, you can set various properties, such as `externalPadding` or `background`:
+
+<br />
 
 ```kotlin
 BaseButton(
@@ -62,18 +58,18 @@ BaseButton(
 ) {
     BaseText("Click me")
 }
+   
 ```
 
 <br />
 
-For the full list of supported properties, see [Available properties on
-Styles](https://developer.android.com/develop/ui/compose/styles/fundamentals#properties-styles).
+For the full list of supported properties, see [Available properties on Styles](https://developer.android.com/develop/ui/compose/styles/fundamentals#properties-styles).
 
 ## Apply Styles using modifiers for components with no existing parameter
 
-For components that lack a built-in style parameter, you can still apply styles
-with the `styleable` modifier. This approach is also useful when developing your
-own custom components.
+For components that lack a built-in style parameter, you can still apply styles with the `styleable` modifier. This approach is also useful when developing your own custom components.
+
+<br />
 
 ```kotlin
 Row(
@@ -81,12 +77,14 @@ Row(
 ) {
     BaseText("Content")
 }
+   
 ```
 
 <br />
 
-Similar to the `style` parameter, you can include properties like `background`,
-`contentPadding`, or `externalPadding` inside the lambda.
+Similar to the `style` parameter, you can include properties like `background`, `contentPadding`, or `externalPadding` inside the lambda.
+
+<br />
 
 ```kotlin
 Row(
@@ -96,43 +94,36 @@ Row(
 ) {
     BaseText("Content")
 }
+   
 ```
 
 <br />
 
 > [!NOTE]
-> **Note:** When using `Modifier.styleable`, the child composables won't have those properties
-> applied to them, unless they are inherited properties. Only the container with the `styleable`
-> modifier has those properties applied.
+> **Note:** When using `Modifier.styleable`, the child composables won't have those properties applied to them, unless they are inherited properties. Only the container with the `styleable` modifier has those properties applied.
 
-Multiple chained `Modifier.styleable` modifiers are additive with non-inherited
-properties on the applied composable, behaving similarly to multiple modifiers
-defining the same properties. For inherited properties, these are overridden,
-and the last `styleable` modifier in the chain sets the values.
+Multiple chained `Modifier.styleable` modifiers are additive with non-inherited properties on the applied composable, behaving similarly to multiple modifiers defining the same properties. For inherited properties, these are overridden, and the last `styleable` modifier in the chain sets the values.
 
-When using `Modifier.styleable`, you may also want to create and supply a
-`StyleState` to be used with the modifier to apply state-based styling. For more
-details, see [State and animations with
-Styles](https://developer.android.com/develop/ui/compose/styles/state-animations).
+When using `Modifier.styleable`, you may also want to create and supply a `StyleState` to be used with the modifier to apply state-based styling. For more details, see [State and animations with Styles](https://developer.android.com/develop/ui/compose/styles/state-animations).
 
 ## Define a standalone Style
 
 You can define a standalone Style for reusability purposes:
 
+<br />
+
 ```kotlin
 val style = Style { background(Color.Blue) }
+   
 ```
 
 <br />
 
-You can then pass that defined style into a composable's style parameter or with
-`Modifier.styleable`. When using `Modifier.styleable`, you also need to create a
-`StyleState` object. `StyleState` is covered in detail in the [State and
-animations with Styles](https://developer.android.com/develop/ui/compose/styles/state-animations)
-documentation.
+You can then pass that defined style into a composable's style parameter or with `Modifier.styleable`. When using `Modifier.styleable`, you also need to create a `StyleState` object. `StyleState` is covered in detail in the [State and animations with Styles](https://developer.android.com/develop/ui/compose/styles/state-animations) documentation.
 
-The following example shows how you can apply a Style either directly through a
-component's built-in parameters, or through a `Modifier.styleable`:
+The following example shows how you can apply a Style either directly through a component's built-in parameters, or through a `Modifier.styleable`:
+
+<br />
 
 ```kotlin
 val style = Style { background(Color.Blue) }
@@ -149,11 +140,14 @@ Column(
 ) {
     BaseText("Column content")
 }
+   
 ```
 
 <br />
 
 You can also pass that Style into multiple components:
+
+<br />
 
 ```kotlin
 val style = Style { background(Color.Blue) }
@@ -177,14 +171,16 @@ Row(
 ) {
     BaseText("Row")
 }
+   
 ```
 
 <br />
 
 ## Add multiple Style properties
 
-You can add multiple Style properties by setting different properties on each
-line:
+You can add multiple Style properties by setting different properties on each line:
+
+<br />
 
 ```kotlin
 BaseButton(
@@ -196,19 +192,17 @@ BaseButton(
 ) {
     BaseText("Button")
 }
+   
 ```
 
 <br />
 
 > [!IMPORTANT]
-> **Important:** Unlike modifier-based styling, properties in Styles override one another; the last
-> property defined takes precedence.
+> **Important:** Unlike modifier-based styling, properties in Styles override one another; the last property defined takes precedence.
 
-Properties in Styles are not additive, unlike modifier-based styling. Styles
-take the last set value in the list of properties within one style block. In the
-following example, with the background set twice, the `TealColor` is the applied
-background. For padding, `contentPaddingTop` overrides the top
-padding set by `contentPadding` and does not combine the values.
+Properties in Styles are not additive, unlike modifier-based styling. Styles take the last set value in the list of properties within one style block. In the following example, with the background set twice, the `TealColor` is the applied background. For padding, `contentPaddingTop` overrides the top padding set by `contentPadding` and does not combine the values.
+
+<br />
 
 ```kotlin
 BaseButton(
@@ -227,18 +221,19 @@ BaseButton(
 ) {
     BaseText("Click me!")
 }
+   
 ```
 
 <br />
 
 ![Button with two background colors set, and two contentPadding
-overrides](https://developer.android.com/static/develop/ui/compose/styles/images/basic_style_button.png)
-**Figure 1.** Button with two background colors set and two `contentPadding` overrides.
+overrides](https://developer.android.com/static/develop/ui/compose/styles/images/basic_style_button.png) **Figure 1.** Button with two background colors set and two `contentPadding` overrides.
 
 ## Merge multiple style objects
 
-You can create multiple Style objects and pass them into the style parameter of
-your composable.
+You can create multiple Style objects and pass them into the style parameter of your composable.
+
+<br />
 
 ```kotlin
 val style1 = Style { background(TealColor) }
@@ -252,19 +247,17 @@ BaseButton(
 ) {
     BaseText("Click me!")
 }
+   
 ```
 
 <br />
 
 ![Button with background color and contentPaddingTop
-set](https://developer.android.com/static/develop/ui/compose/styles/images/button_content_padding_top.png)
-**Figure 2.** Button with background color and `contentPaddingTop` set.
+set](https://developer.android.com/static/develop/ui/compose/styles/images/button_content_padding_top.png) **Figure 2.** Button with background color and `contentPaddingTop` set.
 
-When multiple Styles specify the same property, the last set
-property is chosen. Because properties are not additive in Styles, the last
-padding passed in overrides the `contentPaddingHorizontal` set by the initial
-`contentPadding`. Additionally, the last background color overrides the
-background color set by the initial style passed in.
+When multiple Styles specify the same property, the last set property is chosen. Because properties are not additive in Styles, the last padding passed in overrides the `contentPaddingHorizontal` set by the initial `contentPadding`. Additionally, the last background color overrides the background color set by the initial style passed in.
+
+<br />
 
 ```kotlin
 val style1 = Style {
@@ -285,46 +278,39 @@ BaseButton(
 ) {
     BaseText("Click me!")
 }
+   
 ```
 
 <br />
 
-In this case, the styling applied has a light gray background and `32.dp` padding,
-except for the left and right padding, which has a value of `8.dp`.
+In this case, the styling applied has a light gray background and `32.dp` padding, except for the left and right padding, which has a value of `8.dp`.
 ![Button with contentPadding that's overridden by different
-Styles](https://developer.android.com/static/develop/ui/compose/styles/images/button_content_padding_overrides.png)
-**Figure 3.** Button with `contentPadding` that's overridden by different Styles.
+Styles](https://developer.android.com/static/develop/ui/compose/styles/images/button_content_padding_overrides.png) **Figure 3.** Button with `contentPadding` that's overridden by different Styles.
 
 ## Style inheritance
 
 > [!NOTE]
-> **Note:** While the Style APIs are experimental, you need to opt-in to enable Style inheritance by
-> setting the flag `ComposeFoundationFlags.isInheritedTextStyleEnabled = true`.
+> **Note:** While the Style APIs are experimental, you need to opt-in to enable Style inheritance by setting the flag `ComposeFoundationFlags.isInheritedTextStyleEnabled = true`.
 
-Certain style properties, such as `contentColor` and text style-related
-properties, propagate to the child composables. A style set on a child
-composable overrides the inherited parent styling for that specific child.
+Certain style properties, such as `contentColor` and text style-related properties, propagate to the child composables. A style set on a child composable overrides the inherited parent styling for that specific child.
 ![Style propagation with Style, styleable, and direct
-parameters](https://developer.android.com/static/develop/ui/compose/styles/images/styles_modifiers_precedence_ordering.png)
-**Figure 4.** Style propagation with `Style`, `styleable`, and direct parameters.
+parameters](https://developer.android.com/static/develop/ui/compose/styles/images/styles_modifiers_precedence_ordering.png) **Figure 4.** Style propagation with `Style`, `styleable`, and direct parameters.
 
-| Priority    | Method                           | Effect                                                                               |
-|-------------|----------------------------------|--------------------------------------------------------------------------------------|
-| 1 (Highest) | Direct arguments on a composable | Overrides everything; for example, `Text(color = Color.Red)`                         |
-| 2           | Style parameter                  | Local style overrides `Text(style = Style { contentColor(Color.Red)}`                |
-| 3           | Modifier chain                   | `Modifier.styleable{ contentColor(Color.Red)` on the component itself.               |
-| 4 (Lowest)  | Parent styles                    | For properties that can be inherited (Typography/Color) passed down from the parent. |
+| Priority | Method | Effect |
+|---|---|---|
+| 1 (Highest) | Direct arguments on a composable | Overrides everything; for example, `Text(color = Color.Red)` |
+| 2 | Style parameter | Local style overrides `Text(style = Style { contentColor(Color.Red)}` |
+| 3 | Modifier chain | `Modifier.styleable{ contentColor(Color.Red)` on the component itself. |
+| 4 (Lowest) | Parent styles | For properties that can be inherited (Typography/Color) passed down from the parent. |
 
 > [!NOTE]
-> **Note:** Multiple chained `Modifier.styleable` modifiers are additive with non-inherited
-> properties on the applied composable, similar to having multiple modifiers defining the same
-> properties. For inherited properties, these are overridden; the last `styleable` modifier in the
-> chain sets the values.
+> **Note:** Multiple chained `Modifier.styleable` modifiers are additive with non-inherited properties on the applied composable, similar to having multiple modifiers defining the same properties. For inherited properties, these are overridden; the last `styleable` modifier in the chain sets the values.
 
 ### Parent styling
 
-You can set text properties (such as `contentColor`) from the parent composable,
-and they propagate to all child `Text` composables.
+You can set text properties (such as `contentColor`) from the parent composable, and they propagate to all child `Text` composables.
+
+<br />
 
 ```kotlin
 val styleState = remember { MutableStyleState(null) }
@@ -341,19 +327,19 @@ Column(
     BaseText("certain properties")
     BaseText("from their parents")
 }
+   
 ```
 
 <br />
 
 ![Child composables' property
-inheritance](https://developer.android.com/static/develop/ui/compose/styles/images/children_inherit_styles_parents.png)
-**Figure 5.** Child composables' property inheritance.
+inheritance](https://developer.android.com/static/develop/ui/compose/styles/images/children_inherit_styles_parents.png) **Figure 5.** Child composables' property inheritance.
 
 ### Child override of properties
 
-You can also set styling on a specific `Text` composable. If the parent composable
-has styling set, the styling set on the child composable overrides the
-parent composable's styling.
+You can also set styling on a specific `Text` composable. If the parent composable has styling set, the styling set on the child composable overrides the parent composable's styling.
+
+<br />
 
 ```kotlin
 val styleState = remember { MutableStyleState(null) }
@@ -372,47 +358,50 @@ Column(
     BaseText("override properties")
     BaseText("set by their parents")
 }
+   
 ```
 
 <br />
 
 ![Child composables override parent
-properties](https://developer.android.com/static/develop/ui/compose/styles/images/children_override_styles.png)
-**Figure 6.** Child composables override parent properties.
+properties](https://developer.android.com/static/develop/ui/compose/styles/images/children_override_styles.png) **Figure 6.** Child composables override parent properties.
 
 ## Implement custom Style properties
 
-You can create custom properties that map to existing Style definitions by using
-extension functions on the `StyleScope`, as shown in the following example:
+You can create custom properties that map to existing Style definitions by using extension functions on the `StyleScope`, as shown in the following example:
+
+<br />
 
 ```kotlin
 fun StyleScope.outlinedBackground(color: Color) {
     border(1.dp, color)
     background(color)
 }
+   
 ```
 
 <br />
 
 Apply this new property within a Style definition:
 
+<br />
+
 ```kotlin
 val customExtensionStyle = Style {
     outlinedBackground(Color.Blue)
 }
+   
 ```
 
 <br />
 
-Creating new styleable properties is unsupported. If your use case
-requires such support, submit
-a [feature request](https://issuetracker.google.com/issues/new?component=612128).
+Creating new styleable properties is unsupported. If your use case requires such support, submit a [feature request](https://issuetracker.google.com/issues/new?component=612128).
 
 ## Read `CompositionLocal` values
 
-It's a common pattern to store design system tokens within a `CompositionLocal`,
-to access the variables without needing to pass them as parameters. Styles
-can access `CompositionLocal`s to retrieve system-wide values within a style:
+It's a common pattern to store design system tokens within a `CompositionLocal`, to access the variables without needing to pass them as parameters. Styles can access `CompositionLocal`s to retrieve system-wide values within a style:
+
+<br />
 
 ```kotlin
 val buttonStyle = Style {
@@ -420,6 +409,7 @@ val buttonStyle = Style {
     shape(RoundedCornerShape(50))
     background(Brush.verticalGradient(LocalCustomColors.currentValue.background))
 }
+   
 ```
 
 <br />

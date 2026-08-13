@@ -1,7 +1,7 @@
 [versions]
 androidBilling = "9.1.0"
 androidGradlePlugin = "9.3.1"
-androidxAppCompat = "1.7.1"
+androidxAppCompat = "1.8.0"
 androidxCoreKtx = "1.19.0"
 androidxCoreSplashscreen = "1.2.0"
 androidxDatastorePreferences = "1.2.1"
@@ -10,15 +10,15 @@ androidxWindow = "1.5.1"
 androidxConstraintlayoutCompose = "1.1.2"
 androidxWorkRuntime = "2.11.2"
 androidxActivityCompose = "1.13.0"
-animationGraphics = "1.11.4"
-androidxComposeBom = "2026.06.01"
-androidxComposeFoundationLayout = "1.11.4"
-androidxComposeMaterial3 = "1.5.0-alpha25"
+animationGraphics = "1.12.0"
+androidxComposeBom = "2026.08.00"
+androidxComposeFoundationLayout = "1.12.0"
+androidxComposeMaterial3 = "1.5.0-alpha26"
 androidxComposeMaterial3WindowSizeClass = "1.4.0"
 androidxComposeMaterial3AdaptiveNavigationAuite = "1.4.0"
-androidxMaterial3Adaptive = "1.2.0"
+androidxMaterial3Adaptive = "1.3.0"
 androidxLifecycle = "2.11.0"
-androidxNavigation3 = "1.1.5"
+androidxNavigation3 = "1.1.6"
 androidxGlance = "1.1.1"
 googleAccompanistDrawablePainter = "0.37.3"
 googleGuava = "33.6.0-android"
@@ -45,15 +45,19 @@ composeMarkdown = "0.7.1"
 konfettiCompose = "2.0.5"
 lottie = "6.7.1"
 markwonCore = "4.6.2"
-androidxComposeUiTestManifest = "1.11.4"
+androidxComposeUiTestManifest = "1.12.0"
 androidxEspressoCore = "3.7.0"
+androidxTestExtJunit = "1.3.0"
+androidxTestRunner = "1.7.0"
 androidxTestTruth = "1.7.0"
-testJupiter = "6.1.2"
+testJupiter = "6.1.3"
 testKotlinCoroutines = "1.11.0"
 testMockk = "1.14.11"
 testRobolectric = "4.16.1"
 testSlf4jSimple = "2.0.18"
 testTurbine = "1.2.1"
+#noinspection GradleDependency
+cronetFallback = "143.7445.0"
 
 [libraries]
 # AndroidX
@@ -130,6 +134,7 @@ test-koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "
 
 # Kotlin
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+mannodermaus-gradlePlugin = { group = "de.mannodermaus.gradle.plugins", name = "android-junit5", version.ref = "mannodermausPlugin" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutines" }
@@ -146,10 +151,12 @@ compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.
 konfetti-compose = { module = "nl.dionsegijn:konfetti-compose", version.ref = "konfettiCompose" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 markwon-core = { module = "io.noties.markwon:core", version.ref = "markwonCore" }
+cronet-fallback = { module = "org.chromium.net:cronet-fallback", version.ref = "cronetFallback" }
 
 # Testing
 test-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "testJupiter" }
 test-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "testJupiter" }
+test-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "testJupiter" } # Intentionally unwired; see the note above the `unitTestRuntime` bundle.
 test-junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "testJupiter" }
 test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "testKotlinCoroutines" }
 test-mockk = { module = "io.mockk:mockk", version.ref = "testMockk" }
@@ -157,7 +164,10 @@ test-robolectric = { module = "org.robolectric:robolectric", version.ref = "test
 test-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "testSlf4jSimple" }
 test-turbine = { module = "app.cash.turbine:turbine", version.ref = "testTurbine" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "androidxComposeUiTestManifest" }
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "androidxComposeUiTestManifest" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspressoCore" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestExtJunit" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTestRunner" }
 androidx-test-truth = { module = "androidx.test.ext:truth", version.ref = "androidxTestTruth" }
 test-mockk-android = { module = "io.mockk:mockk-android", version.ref = "testMockk" }
 
@@ -295,12 +305,22 @@ unitTest = [
     "test-turbine",
 ]
 
+# NOTE: `test-junit-vintage-engine` is declared but deliberately not in this bundle yet. Adding it
+# makes the 13 JUnit 4 suites run — and 11 of their tests fail immediately, because they stub
+# `Build.VERSION.SDK_INT` with `mockkStatic`, which cannot intercept a static final field. Those
+# suites have therefore never passed; they need porting to Robolectric's `@Config(sdk = …)` first.
+#
+# Wired by UnitTestPlugin rather than by a build script, which is why an IDE "unused alias"
+# inspection does not see the reference.
 unitTestRuntime = ["test-junit-jupiter-engine"]
 
 # For instrumentation tests on an Android device (androidTest sourceSet)
 instrumentationTest = [
+    "androidx-compose-ui-test-junit4",
     "androidx-compose-ui-test-manifest",
     "androidx-test-espresso-core",
+    "androidx-test-ext-junit",
+    "androidx-test-runner",
     "androidx-test-truth",
     "koin-androidx-compose",
     "test-junit-jupiter-api",

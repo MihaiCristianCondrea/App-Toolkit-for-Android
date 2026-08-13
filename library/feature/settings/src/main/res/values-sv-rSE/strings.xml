@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Avancerade sekretessinställningar</string>
+    <string name="app_behavior">Appbeteende</string>
+    <string name="appearance">Utseende</string>
+    <string name="bounce_buttons">Klickanimation</string>
+    <string name="bug_report">Felrapport</string>
+    <string name="cache_cleared_success">Cache rensades framgångsrikt</string>
+    <string name="cache_management">Cachehantering</string>
+    <string name="clear_cache">Rensa cache</string>
+    <string name="consent_ad_personalization_description">Aktivera anpassade annonser baserat på din aktivitet och dina preferenser i Googles tjänster och appar.</string>
+    <string name="consent_ad_personalization_title">Anpassade annonser</string>
+    <string name="consent_ad_storage_description">Aktivera lagring av data (som enhetsidentifierare eller cookies) för att mäta annonsprestanda och visa relevanta annonser.</string>
+    <string name="consent_ad_storage_title">Lagra annonsdata</string>
+    <string name="consent_ad_user_data_description">Tillåt att användnings- och enhetsdata skickas till Google för att stödja annonsrelaterade funktioner såsom konverteringar och kampanjoptimering.</string>
+    <string name="consent_ad_user_data_title">Skicka data för annonser</string>
+    <string name="consent_analytics_storage_description">Tillåt lagring av data såsom appanvändning och besökslängd för att förbättra analys och appens prestanda.</string>
+    <string name="consent_analytics_storage_title">Lagra analysdata</string>
+    <string name="consent_category_advertising_title">Anpassad annonsering</string>
+    <string name="consent_category_analytics_title">Analys</string>
+    <string name="dark_theme">Mörkt tema</string>
+    <string name="dynamic_colors">Dynamiska färger</string>
+    <string name="error_reporting">Felrapportering</string>
+    <string name="get_help">Få hjälp</string>
+    <string name="icon_desc_consent_category">Ikon för samtyckeskategori</string>
+    <string name="icon_desc_expand_less">Visa mindre</string>
+    <string name="icon_desc_expand_more">Visa mer</string>
+    <string name="language">Språk</string>
+    <string name="learn_more">Läs mer</string>
+    <string name="navigation">Navigering</string>
+    <string name="settings">Inställningar</string>
+    <string name="settings_placeholder_description">Inga inställningar valda. Välj ett alternativ för att se detaljer här.</string>
+    <string name="show_labels_on_bottom_bar">Visa etiketter på bottenstången</string>
+    <string name="startup_page">Startsida</string>
+    <string name="summary_preference_settings_bounce_buttons">Tillämpa en subtil studsande animation på klickbara element</string>
+    <string name="summary_preference_settings_bug_report">Skicka felrapporter och funktionsförfrågningar till appens GitHub-sida</string>
+    <string name="summary_preference_settings_clear_cache">Rensa tillfälliga applikationsdata.</string>
+    <string name="summary_preference_settings_dynamic_colors">Applicera färger från tapeten till appens tema</string>
+    <string name="summary_preference_settings_language">Ändra det språk som används i appen</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Visa objekttitlar under ikoner i den nedre navigationsfältet</string>
+    <string name="summary_preference_settings_startup_page">Välj vilken skärm som ska visas vid appens start.</string>
+    <string name="summary_usage_and_diagnostics">Hjälp oss förbättra din upplevelse genom att automatiskt skicka diagnostikdata.</string>
+    <string name="usage_and_diagnostics">Användning och diagnostik</string>
+    <string name="will_never_turn_on_automatically">Kommer aldrig att aktiveras automatiskt</string>
+    <string name="will_turn_on_automatically_by_system">Kommer att aktiveras automatiskt av systemet</string>
+</resources>

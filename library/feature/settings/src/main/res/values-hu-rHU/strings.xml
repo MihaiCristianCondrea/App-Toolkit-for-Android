@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Speciális adatvédelmi beállítások</string>
+    <string name="app_behavior">Alkalmazás viselkedése</string>
+    <string name="appearance">Megjelenés</string>
+    <string name="bounce_buttons">Gomb visszapattanás</string>
+    <string name="bug_report">Hibajelentés</string>
+    <string name="cache_cleared_success">A gyorsítótár sikeresen törölve</string>
+    <string name="cache_management">Gyorsítótár-kezelés</string>
+    <string name="clear_cache">Gyorsítótár törlése</string>
+    <string name="consent_ad_personalization_description">Engedélyezi a személyre szabott hirdetéseket a Google-szolgáltatásokban és -alkalmazásokban végzett tevékenységei és preferenciái alapján.</string>
+    <string name="consent_ad_personalization_title">Személyre szabott hirdetések</string>
+    <string name="consent_ad_storage_description">Engedélyezi az adatok (például eszközazonosítók vagy sütik) tárolását a hirdetési teljesítmény mérésére és releváns hirdetések megjelenítésére.</string>
+    <string name="consent_ad_storage_title">Hirdetési adatok tárolása</string>
+    <string name="consent_ad_user_data_description">Engedélyezi a használati és eszközadatok Google-nak való elküldését a hirdetésekkel kapcsolatos funkciók, például a konverziók és a kampányoptimalizálás támogatásához.</string>
+    <string name="consent_ad_user_data_title">Adatok küldése hirdetésekhez</string>
+    <string name="consent_analytics_storage_description">Engedélyezi az adatok, például az alkalmazáshasználat és a látogatás időtartamának tárolását az analitika és az alkalmazás teljesítményének javítása érdekében.</string>
+    <string name="consent_analytics_storage_title">Analitikai adatok tárolása</string>
+    <string name="consent_category_advertising_title">Személyre szabott hirdetés</string>
+    <string name="consent_category_analytics_title">Analitika</string>
+    <string name="dark_theme">Sötét téma</string>
+    <string name="dynamic_colors">Dinamikus színek</string>
+    <string name="error_reporting">Hibajelentés</string>
+    <string name="get_help">Segítség kérése</string>
+    <string name="icon_desc_consent_category">Hozzájárulási kategória ikonja</string>
+    <string name="icon_desc_expand_less">Összecsukás</string>
+    <string name="icon_desc_expand_more">Kibontás</string>
+    <string name="language">Nyelv</string>
+    <string name="learn_more">Tudj meg többet</string>
+    <string name="navigation">Navigáció</string>
+    <string name="settings">Beállítások</string>
+    <string name="settings_placeholder_description">Nincs kiválasztott beállítás. Válassz egy lehetőséget a részletek megtekintéséhez.</string>
+    <string name="show_labels_on_bottom_bar">Mutassa be a címkéket az alsó sávon</string>
+    <string name="startup_page">Indítóoldal</string>
+    <string name="summary_preference_settings_bounce_buttons">Halvány visszapattanási animációt alkalmaz minden kattintható elemre</string>
+    <string name="summary_preference_settings_bug_report">Küldj hibajelentéseket és funkciókéréseket az alkalmazás GitHub-archívumának hibajelentő oldalára</string>
+    <string name="summary_preference_settings_clear_cache">Törölje az ideiglenes alkalmazásadatokat.</string>
+    <string name="summary_preference_settings_dynamic_colors">Alkalmazd a háttérképek színeit az alkalmazás témájára</string>
+    <string name="summary_preference_settings_language">Módosítja az alkalmazásban használt nyelvet</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Az elemcímek megjelenítése az ikonok alatt az alsó navigációs sávban</string>
+    <string name="summary_preference_settings_startup_page">Válaszd ki a képernyőt, amely megjelenik az alkalmazás indításakor.</string>
+    <string name="summary_usage_and_diagnostics">Javítsd a tapasztalataidat azáltal, hogy automatikusan küldöd a diagnosztikai, eszköz- és alkalmazáshasználati adatokat.</string>
+    <string name="usage_and_diagnostics">Használat és diagnosztika</string>
+    <string name="will_never_turn_on_automatically">Soha nem kapcsol be automatikusan</string>
+    <string name="will_turn_on_automatically_by_system">Automatikusan bekapcsol a rendszer által</string>
+</resources>

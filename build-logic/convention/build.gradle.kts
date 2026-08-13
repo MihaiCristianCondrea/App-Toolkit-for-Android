@@ -16,21 +16,48 @@
  */
 
 plugins {
-    id("org.gradle.kotlin.kotlin-dsl") version "6.7.6"
+    // Applied by its full id with an explicit version rather than the `kotlin-dsl` accessor: JitPack
+    // resolves this build twice — once for the included build and once for the publication — and the
+    // accessor is not on its plugin classpath, so the build fails there without the coordinates
+    // spelled out.
+    //
+    // The version must match the one bundled with the Gradle release in gradle-wrapper.properties.
+    // Gradle warns ("expects version 'x' but version 'y' has been applied") on any mismatch, and the
+    // mismatched plugin also drags in a different Kotlin than the embedded one, which the Kotlin DSL
+    // does not support. When bumping Gradle, run any task and let the warning name the expected
+    // version — Gradle 9.7 pairs with kotlin-dsl 6.7.3.
+    id("org.gradle.kotlin.kotlin-dsl") version "6.7.3"
 }
 
-group = "com.d4rk.android.apptoolkit.buildlogic"
+group = "com.mihaicristiancondrea.android.apptoolkit.buildlogic"
 
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.mannodermaus.gradlePlugin)
 }
 
 gradlePlugin {
     plugins {
         register("versioning") {
-            id = "com.d4rk.android.apptoolkit.versioning"
-            implementationClass = "com.d4rk.android.apptoolkit.buildlogic.VersioningPlugin"
+            id = "com.mihaicristiancondrea.android.apptoolkit.versioning"
+            implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.VersioningPlugin"
+        }
+        register("jvmTarget") {
+            id = "com.mihaicristiancondrea.android.apptoolkit.jvm-target"
+            implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.JvmTargetPlugin"
+        }
+        register("unitTest") {
+            id = "com.mihaicristiancondrea.android.apptoolkit.unit-test"
+            implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.UnitTestPlugin"
+        }
+        register("libraryPublish") {
+            id = "com.mihaicristiancondrea.android.apptoolkit.library-publish"
+            implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.LibraryPublishPlugin"
+        }
+        register("sampleModule") {
+            id = "com.mihaicristiancondrea.android.apptoolkit.sample-module"
+            implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.SampleModulePlugin"
         }
     }
 }

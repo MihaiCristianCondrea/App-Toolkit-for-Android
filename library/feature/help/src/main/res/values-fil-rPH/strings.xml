@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">Beta program</string>
+    <string name="contact_us">Makipag-ugnayan sa amin</string>
+    <string name="contact_us_description">Sabihin sa amin ang higit pa at tutulungan ka naming makarating doon</string>
+    <string name="feedback">Feedback</string>
+    <string name="help">Tulong</string>
+    <string name="help_feedback_sheet_contact_description">Buksan ang aking opisyal na contact page para sa direktang suporta.</string>
+    <string name="help_feedback_sheet_contact_title">Makipag-ugnayan sa akin nang personal</string>
+    <string name="help_feedback_sheet_feature_request_description">Magmungkahi ng mga bagong ideya para sa alinman sa aming mga app sa pamamagitan ng opisyal na form.</string>
+    <string name="help_feedback_sheet_feature_request_title">Magpadala ng kahilingan ng feature</string>
+    <string name="help_feedback_sheet_review_description">Ibahagi ang iyong rating at tulungan ang mas maraming user na matuklasan ang app.</string>
+    <string name="help_feedback_sheet_review_title">Mag-iwan ng review sa Google Play</string>
+    <string name="help_feedback_sheet_title">Paano mo gustong magbahagi ng feedback?</string>
+    <string name="oss_license_title">Mga lisensya ng open source</string>
+    <string name="popular_help_resources">Mga sikat na mapagkukunan ng tulong</string>
+    <string name="privacy_policy">Patakaran sa privacy</string>
+    <string name="terms_of_service">Mga tuntunin ng serbisyo</string>
+    <string name="version">Bersyon %1$s</string>
+    <string name="version_info">Impormasyon ng bersyon</string>
+    <string name="view_in_google_play_store">Tingnan sa Google Play Store</string>
+</resources>

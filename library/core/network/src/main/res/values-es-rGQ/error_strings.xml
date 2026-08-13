@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="cancelled_error">Operación cancelada.</string>
+    <string name="connection_closed_error">La conexión fue interrumpida.</string>
+    <string name="connection_error">Error de red. Por favor, inténtelo de nuevo.</string>
+    <string name="database_cant_open_error">No se puede abrir el almacenamiento.</string>
+    <string name="database_constraint_error">Error de restricción de almacenamiento.</string>
+    <string name="database_corrupt_error">El almacenamiento está dañado.</string>
+    <string name="database_error">Error de almacenamiento.</string>
+    <string name="database_full_error">El almacenamiento está lleno.</string>
+    <string name="database_locked_error">El almacenamiento está ocupado. Inténtelo de nuevo.</string>
+    <string name="error_failed_to_launch_review">No se pudo iniciar el flujo de reseña</string>
+    <string name="error_failed_to_load_consent_info">No se pudo cargar la información de consentimiento</string>
+    <string name="error_failed_to_load_faq">No se pudieron cargar las preguntas frecuentes</string>
+    <string name="error_failed_to_load_sku_details">No se pudieron cargar los detalles del SKU</string>
+    <string name="error_failed_to_request_review">No se pudo solicitar la reseña</string>
+    <string name="error_failed_to_update_app">No se pudo actualizar la aplicación</string>
+    <string name="http_client_error">La solicitud falló. Por favor, inténtelo de nuevo.</string>
+    <string name="http_redirect_error">Redirección inesperada desde el servidor.</string>
+    <string name="http_server_error">Error del servidor. Por favor, inténtelo de nuevo más tarde.</string>
+    <string name="illegal_argument_error">Se proporcionó una entrada o argumento no válido. Compruebe la información e inténtelo de nuevo.</string>
+    <string name="invalid_state_error">La operación no está permitida en este momento.</string>
+    <string name="no_data_error">No hay datos disponibles.</string>
+    <string name="no_internet_error">No hay conexión a internet.</string>
+    <string name="rate_limited_error">Demasiadas solicitudes. Inténtelo de nuevo más tarde.</string>
+    <string name="request_timeout_error">La solicitud agotó el tiempo de espera. Inténtelo de nuevo.</string>
+    <string name="serialization_error">No se pudo leer la respuesta del servidor.</string>
+    <string name="ssl_error">La conexión segura falló.</string>
+    <string name="unknown_error">Se produjo un error desconocido.</string>
+    <string name="unsupported_operation_error">Operación no compatible.</string>
+</resources>

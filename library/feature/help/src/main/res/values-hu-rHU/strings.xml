@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">Béta program</string>
+    <string name="contact_us">Lépj kapcsolatba velünk</string>
+    <string name="contact_us_description">Mondj el többet, és segítünk neked</string>
+    <string name="feedback">Visszajelzés</string>
+    <string name="help">Segítség</string>
+    <string name="help_feedback_sheet_contact_description">Nyisd meg a hivatalos kapcsolatfelvételi oldalamat közvetlen támogatásért.</string>
+    <string name="help_feedback_sheet_contact_title">Lépj velem kapcsolatba személyesen</string>
+    <string name="help_feedback_sheet_feature_request_description">Javasolj új ötleteket bármelyik alkalmazásunkhoz a hivatalos űrlapon keresztül.</string>
+    <string name="help_feedback_sheet_feature_request_title">Funkciókérés küldése</string>
+    <string name="help_feedback_sheet_review_description">Oszd meg az értékelésedet, és segíts, hogy többen felfedezzék az alkalmazást.</string>
+    <string name="help_feedback_sheet_review_title">Írj értékelést a Google Playen</string>
+    <string name="help_feedback_sheet_title">Hogyan szeretnél visszajelzést küldeni?</string>
+    <string name="oss_license_title">Nyílt forráskódú licencek</string>
+    <string name="popular_help_resources">Népszerű segítségforrások</string>
+    <string name="privacy_policy">Adatvédelmi irányelvek</string>
+    <string name="terms_of_service">Szolgáltatási feltételek</string>
+    <string name="version">Verzió: %1$s</string>
+    <string name="version_info">Verzió információ</string>
+    <string name="view_in_google_play_store">Megtekintés a Google Play Áruházban</string>
+</resources>

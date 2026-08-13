@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="access_network_state">Akses status jaringan [ACCESS_NETWORK_STATE]</string>
+    <string name="ad_id">Id iklan [AD_ID]</string>
+    <string name="billing">Penagihan [BILLING]</string>
+    <string name="check_license">Periksa lisensi [CHECK_LICENSE]</string>
+    <string name="foreground_service">Layanan latar depan [FOREGROUND_SERVICE]</string>
+    <string name="internet">Internet [INTERNET]</string>
+    <string name="normal">Normal</string>
+    <string name="permissions">Izin</string>
+    <string name="post_notifications">Posting notifikasi [POST_NOTIFICATIONS]</string>
+    <string name="runtime">Runtime</string>
+    <string name="summary_preference_permissions_access_network_state">Memungkinkan aplikasi untuk memeriksa konektivitas jaringan dan mengambil informasi tentang Wi-Fi, termasuk status diaktifkan dan nama perangkat Wi-Fi yang terhubung.</string>
+    <string name="summary_preference_permissions_ad_id">Memungkinkan aplikasi untuk mengambil dan menggunakan pengidentifikasi iklan yang terkait dengan perangkat pengguna, menyediakan iklan yang dipersonalisasi, mengukur efektivitas iklan, dan menampilkan iklan di perangkat Android 13 atau yang lebih baru.</string>
+    <string name="summary_preference_permissions_billing">Memungkinkan aplikasi untuk menggunakan Google Play Billing Library untuk menangani pembelian dalam aplikasi dan donasi</string>
+    <string name="summary_preference_permissions_check_license">Memungkinkan aplikasi untuk memverifikasi kepatuhannya terhadap perjanjian lisensi dan memberlakukan persyaratan lisensi untuk melindungi kekayaan intelektual.</string>
+    <string name="summary_preference_permissions_foreground_service">Memungkinkan aplikasi untuk membuat dan menggunakan layanan yang berjalan di latar depan, memberi mereka prioritas di atas proses latar belakang lainnya dan meningkatkan kinerja dan keandalan.</string>
+    <string name="summary_preference_permissions_internet">Memungkinkan aplikasi untuk membuat koneksi internet untuk mengirim laporan kesalahan atau memeriksa pembaruan.</string>
+    <string name="summary_preference_permissions_post_notifications">Memungkinkan aplikasi untuk menampilkan notifikasi di perangkat dengan Android 13 atau yang lebih baru.</string>
+    <string name="summary_preference_permissions_wake_lock">Mengizinkan aplikasi untuk mencegah perangkat beralih ke mode tidur (misalnya, peredupan layar atau mode tidur prosesor) selama operasi penting untuk memastikan operasi tersebut selesai tanpa gangguan. Ini digunakan secukupnya untuk menghemat baterai.</string>
+    <string name="wake_lock">Jaga perangkat tetap aktif [WAKE_LOCK]</string>
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="cancelled_error">تم إلغاء العملية.</string>
+    <string name="connection_closed_error">تمت مقاطعة الاتصال.</string>
+    <string name="connection_error">خطأ في الشبكة. يرجى المحاولة مرة أخرى.</string>
+    <string name="database_cant_open_error">تعذر فتح التخزين.</string>
+    <string name="database_constraint_error">خطأ في قيود التخزين.</string>
+    <string name="database_corrupt_error">التخزين تالف.</string>
+    <string name="database_error">خطأ في التخزين.</string>
+    <string name="database_full_error">التخزين ممتلئ.</string>
+    <string name="database_locked_error">التخزين مشغول. حاول مرة أخرى.</string>
+    <string name="error_failed_to_launch_review">فشل في تشغيل تدفق المراجعة</string>
+    <string name="error_failed_to_load_consent_info">فشل في تحميل معلومات الموافقة</string>
+    <string name="error_failed_to_load_faq">فشل في تحميل الأسئلة الشائعة</string>
+    <string name="error_failed_to_load_sku_details">فشل في تحميل تفاصيل SKU</string>
+    <string name="error_failed_to_request_review">فشل في طلب المراجعة</string>
+    <string name="error_failed_to_update_app">فشل في تحديث التطبيق</string>
+    <string name="http_client_error">فشل الطلب. يرجى المحاولة مرة أخرى.</string>
+    <string name="http_redirect_error">إعادة توجيه غير متوقعة من الخادم.</string>
+    <string name="http_server_error">خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقًا.</string>
+    <string name="illegal_argument_error">تم تقديم إدخال أو وسيطة غير صالحة. يرجى التحقق من المعلومات والمحاولة مرة أخرى.</string>
+    <string name="invalid_state_error">العملية غير مسموح بها الآن.</string>
+    <string name="no_data_error">لا توجد بيانات متاحة.</string>
+    <string name="no_internet_error">لا يوجد اتصال بالإنترنت.</string>
+    <string name="rate_limited_error">طلبات كثيرة جدًا. حاول مرة أخرى لاحقًا.</string>
+    <string name="request_timeout_error">انتهت مهلة الطلب. حاول مرة أخرى.</string>
+    <string name="serialization_error">فشل في قراءة استجابة الخادم.</string>
+    <string name="ssl_error">فشل الاتصال الآمن.</string>
+    <string name="unknown_error">حدث خطأ غير معروف.</string>
+    <string name="unsupported_operation_error">عملية غير مدعومة.</string>
+</resources>

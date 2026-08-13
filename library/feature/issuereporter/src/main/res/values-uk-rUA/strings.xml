@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">Звіт про помилку</string>
+    <string name="cd_expand_device_info">Розгорнути або згорнути інформацію про пристрій</string>
+    <string name="device_info">Інформація про пристрій</string>
+    <string name="issue_description_label">Опис</string>
+    <string name="issue_email_label">Електронна пошта</string>
+    <string name="issue_section_label">Проблема</string>
+    <string name="issue_send">Надіслати</string>
+    <string name="issue_submitted">Ваше питання було подано.</string>
+    <string name="issue_submitted_successfully">Проблема подано успішно</string>
+    <string name="issue_title_label">Заголовок</string>
+    <string name="login_section_label">Увійти</string>
+    <string name="open_button_label">Відкритий випуск</string>
+    <string name="open_issue_in_browser">Відкрито в браузері</string>
+    <string name="optional_placeholder">Необов\'язково</string>
+    <string name="send_anonymously">Надіслати анонімно</string>
+    <string name="snack_report_failed">Не вдалося надіслати звіт</string>
+    <string name="snack_report_success">Звіт успішно надіслано</string>
+    <string name="use_github_account">Надіслати через обліковий запис GitHub</string>
+</resources>

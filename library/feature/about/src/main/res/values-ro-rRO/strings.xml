@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="ads">Reclame</string>
+    <string name="android_version">Versiune Android</string>
+    <string name="api_level">Nivel API</string>
+    <string name="app_build">Compilare aplicație: %6$s\n%1$s\n%2$s\n%3$s\n%4$s\n%5$s</string>
+    <string name="app_build_version">Versiunea de compilare a aplicației</string>
+    <string name="app_info">Informații despre aplicație</string>
+    <string name="changelog_title">Jurnal de modificări al aplicației</string>
+    <string name="code_of_conduct">Cod de conduită</string>
+    <string name="content_description_more_options">Mai multe opțiuni</string>
+    <string name="debug">Depanare</string>
+    <string name="device_info">Informații despre dispozitiv</string>
+    <string name="device_model">Model dispozitiv</string>
+    <string name="done_button_content_description">Gata</string>
+    <string name="go_back">Înapoi</string>
+    <string name="help_and_feedback">Ajutor și feedback</string>
+    <string name="legal">Informații legale</string>
+    <string name="legal_notices">Avertismente legale</string>
+    <string name="license">Licență</string>
+    <string name="manufacturer">Producător</string>
+    <string name="no_new_updates_message">Nu există actualizări noi disponibile.</string>
+    <string name="oss_license_title">Licențe open source</string>
+    <string name="permissions">Permisiuni</string>
+    <string name="privacy">Confidențialitate</string>
+    <string name="privacy_policy">Politica de confidențialitate</string>
+    <string name="release">Lansare</string>
+    <string name="settings">Setări</string>
+    <string name="settings_placeholder_description">Nicio setare selectată. Alege o opțiune pentru a vedea detalii aici.</string>
+    <string name="share">Distribuie</string>
+    <string name="snack_device_info_copied">Informațiile dispozitivului au fost copiate în clipboard</string>
+    <string name="snack_device_info_failed">Nu s-a putut încărca informațiile despre dispozitiv</string>
+    <string name="summary_preference_settings_ads">Controlează modul în care folosim informațiile tale pentru a afișa reclame relevante</string>
+    <string name="summary_preference_settings_code_of_conduct">Înțelege regulile și liniile directoare pentru comportament în cadrul serviciului nostru</string>
+    <string name="summary_preference_settings_legal_notices">Vezi informațiile legale despre serviciul nostru</string>
+    <string name="summary_preference_settings_oss">Detalii despre licențele software-ului open source</string>
+    <string name="summary_preference_settings_permissions">Vizualizați permisiunile acordate serviciului nostru</string>
+    <string name="summary_preference_settings_privacy_policy">Vezi politica care reglementează modul în care gestionăm datele tale</string>
+    <string name="summary_preference_settings_terms_of_service">Revizuiește termenii pe care îi accepți utilizând serviciul nostru</string>
+    <string name="summary_preference_settings_usage_and_diagnostics">Partajează date pentru a ajuta la îmbunătățirea experienței în aplicație</string>
+    <string name="summary_share_message">Verifică această aplicație uimitoare pe care o folosesc. Are câteva funcții interesante. O poți descărca din Play Store la: %1$s</string>
+    <string name="support_us">Susține-ne</string>
+    <string name="terms_of_service">Termeni de serviciu</string>
+    <string name="try_again">Încearcă din nou</string>
+    <string name="updates">Actualizări</string>
+    <string name="usage_and_diagnostics">Utilizare și diagnoză</string>
+</resources>

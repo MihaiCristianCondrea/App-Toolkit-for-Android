@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="agree">Setuju</string>
+    <string name="amoled_mode">Mode AMOLED</string>
+    <string name="back_button_content_description">Kembali</string>
+    <string name="back_button_text">Kembali</string>
+    <string name="consent_ad_personalization_description">Aktifkan iklan yang dipersonalisasi berdasarkan aktivitas dan preferensi Anda di seluruh layanan dan aplikasi Google.</string>
+    <string name="consent_ad_personalization_description_short">Mengaktifkan iklan yang dipersonalisasi.</string>
+    <string name="consent_ad_personalization_title">Iklan yang dipersonalisasi</string>
+    <string name="consent_ad_storage_description">Aktifkan penyimpanan data (seperti ID perangkat atau cookie) untuk mengukur performa iklan dan menampilkan iklan yang relevan.</string>
+    <string name="consent_ad_storage_description_short">Mengizinkan penyimpanan data untuk tujuan periklanan.</string>
+    <string name="consent_ad_storage_title">Simpan data iklan</string>
+    <string name="consent_ad_user_data_description">Izinkan pengiriman data penggunaan dan perangkat ke Google untuk mendukung fitur terkait iklan seperti konversi dan optimalisasi kampanye.</string>
+    <string name="consent_ad_user_data_description_short">Mengizinkan pengiriman data pengguna untuk iklan.</string>
+    <string name="consent_ad_user_data_title">Kirim data untuk iklan</string>
+    <string name="consent_analytics_storage_description">Izinkan penyimpanan data seperti penggunaan aplikasi dan durasi kunjungan untuk meningkatkan analitik dan performa aplikasi.</string>
+    <string name="consent_analytics_storage_description_short">Mengizinkan pengumpulan data untuk analisis penggunaan aplikasi.</string>
+    <string name="consent_analytics_storage_title">Simpan data analitik</string>
+    <string name="dark_mode">Mode gelap</string>
+    <string name="done_button_content_description">Selesai</string>
+    <string name="done_button_text">Selesai</string>
+    <string name="error">Kesalahan</string>
+    <string name="follow_system">Ikuti mode sistem</string>
+    <string name="learn_more">Pelajari lebih lanjut</string>
+    <string name="learn_more_about_provider">Pelajari lebih lanjut tentang penyedia ini</string>
+    <string name="learn_more_privacy_policy">Tinjau Kebijakan Privasi kami</string>
+    <string name="light_mode">Mode terang</string>
+    <string name="next_button_content_description">Selanjutnya</string>
+    <string name="next_button_text">Selanjutnya</string>
+    <string name="onboarding_amoled_mode_desc">Hitam lebih pekat untuk layar OLED.</string>
+    <string name="onboarding_complete_icon_desc">Orientasi selesai</string>
+    <string name="onboarding_crashlytics_about_body_1">Dalam aplikasi ini kami menggunakan Firebase, sebuah platform dari Google yang membantu pengembang memahami bagaimana aplikasi digunakan, meningkatkan kinerja, dan menyediakan layanan tertentu seperti analitik. Firebase Analytics secara otomatis mengumpulkan informasi seperti penggunaan peristiwa, tampilan layar, properti perangkat, dan sinyal lainnya, tetapi hanya jika Anda memberikan persetujuan untuk pengumpulan jenis data tersebut. Jika persetujuan tidak diberikan, Firebase tidak akan mencatat peristiwa atau mengirim data yang terkait dengan kategori tersebut.</string>
+    <string name="onboarding_crashlytics_about_body_2">Untuk informasi terperinci tentang bagaimana Firebase dan layanan Google menangani data, serta kebijakan privasi dan keamanan masing-masing, silakan lihat dokumentasi resmi Privasi Firebase dan hak privasi regional Anda berdasarkan undang-undang seperti GDPR dan CCPA.</string>
+    <string name="onboarding_crashlytics_about_title">Tentang persetujuan dan penggunaan data Firebase</string>
+    <string name="onboarding_crashlytics_consent_info_learn_more">Pelajari lebih lanjut tentang persetujuan dan penggunaan data</string>
+    <string name="onboarding_crashlytics_consent_info_message">Jika Anda ingin mempelajari lebih lanjut tentang bagaimana data Anda digunakan dan arti setiap opsi persetujuan, silakan lihat dokumentasi di bawah ini.</string>
+    <string name="onboarding_crashlytics_consent_intro_1">Privasi Anda penting. Sebelum kami mengumpulkan data penggunaan atau periklanan apa pun, silakan pilih jenis data yang Anda setujui. Pilihan Anda memengaruhi cara kami mengukur kinerja aplikasi, meningkatkan fitur, dan menyesuaikan iklan, sambil tetap menghormati privasi Anda.</string>
+    <string name="onboarding_crashlytics_consent_intro_2">Pilihan ini membantu kami mematuhi standar privasi seperti GDPR dan CCPA sekaligus memberi Anda kendali atas bagaimana data Anda digunakan. Anda dapat mengubah pengaturan ini nanti kapan saja di preferensi privasi aplikasi.</string>
+    <string name="onboarding_crashlytics_description">Izinkan aplikasi mengirim data penggunaan anonim dan laporan kerusakan. Ini membantu kami memperbaiki bug dan membuat pengalaman Anda lebih baik. Tidak ada informasi pribadi yang pernah dikumpulkan.</string>
+    <string name="onboarding_crashlytics_details_intro">Di bawah ini Anda akan menemukan kontrol yang lebih terperinci tentang bagaimana data Anda digunakan di seluruh aplikasi. Pilihan Anda memengaruhi informasi apa yang dikumpulkan, bagaimana data tersebut disimpan, dan bagaimana data tersebut dapat dibagikan dengan penyedia layanan seperti Google, sesuai dengan standar privasi dan persyaratan persetujuan yang berlaku.</string>
+    <string name="onboarding_crashlytics_dialog_allow_all">Izinkan semua</string>
+    <string name="onboarding_crashlytics_dialog_allow_essentials">Hanya yang penting</string>
+    <string name="onboarding_crashlytics_dialog_confirm_choices">Konfirmasi pilihan</string>
+    <string name="onboarding_crashlytics_dialog_privacy_choices_title">Pilihan privasi</string>
+    <string name="onboarding_crashlytics_dialog_tab_about">Tentang</string>
+    <string name="onboarding_crashlytics_dialog_tab_consent">Persetujuan</string>
+    <string name="onboarding_crashlytics_dialog_tab_details">Detail</string>
+    <string name="onboarding_crashlytics_disabled_desc">Pelaporan data tidak aktif.</string>
+    <string name="onboarding_crashlytics_enabled_desc">Pelaporan data aktif.</string>
+    <string name="onboarding_crashlytics_privacy_info">Privasi Anda penting. Kami hanya menggunakan data ini untuk memperbaiki bug dan meningkatkan fitur. Untuk lebih jelasnya, harap tinjau kebijakan privasi kami.</string>
+    <string name="onboarding_crashlytics_show_details_button">Tampilkan informasi detail</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Tampilkan informasi detail tentang penggunaan dan diagnostik</string>
+    <string name="onboarding_crashlytics_title">Bantu kami meningkatkan</string>
+    <string name="onboarding_final_description">Terima kasih telah mempersonalisasi pengalaman Anda. Sekarang Anda siap untuk menjelajahi semua fitur. Selamat menikmati.</string>
+    <string name="onboarding_final_title">Anda siap.</string>
+    <string name="onboarding_theme_dark_desc">Nyaman di mata.</string>
+    <string name="onboarding_theme_light_desc">Terang dan energik.</string>
+    <string name="onboarding_theme_subtitle">Pilih bagaimana Anda ingin tampilan aplikasi.</string>
+    <string name="onboarding_theme_system_desc">Sesuai dengan perangkat Anda.</string>
+    <string name="onboarding_theme_title">Pilih gaya anda</string>
+    <string name="other_colors">Warna lainnya</string>
+    <string name="skip_button_content_description">Lewati</string>
+    <string name="skip_button_text">Lewati</string>
+    <string name="summary_browse_terms_of_service_and_privacy_policy">Baca dan setujui Ketentuan layanan dan Kebijakan Privasi kami untuk melanjutkan</string>
+    <string name="usage_and_diagnostics">Penggunaan dan diagnostik</string>
+    <string name="wallpaper_colors">Warna wallpaper</string>
+    <string name="welcome">Selamat datang</string>
+</resources>

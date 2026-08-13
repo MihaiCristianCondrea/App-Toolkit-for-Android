@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">বিটা প্রোগ্রাম</string>
+    <string name="contact_us">আমাদের সাথে যোগাযোগ করুন</string>
+    <string name="contact_us_description">আমাদের আরও জানান এবং আমরা আপনাকে সেখানে পৌঁছাতে সাহায্য করব</string>
+    <string name="feedback">প্রতিক্রিয়া</string>
+    <string name="help">সাহায্য</string>
+    <string name="help_feedback_sheet_contact_description">সরাসরি সহায়তার জন্য আমার অফিসিয়াল যোগাযোগ পেজ খুলুন।</string>
+    <string name="help_feedback_sheet_contact_title">ব্যক্তিগতভাবে আমার সাথে যোগাযোগ করুন</string>
+    <string name="help_feedback_sheet_feature_request_description">অফিশিয়াল ফর্মের মাধ্যমে আমাদের যেকোনো অ্যাপের জন্য নতুন ধারণা জানান।</string>
+    <string name="help_feedback_sheet_feature_request_title">ফিচার অনুরোধ পাঠান</string>
+    <string name="help_feedback_sheet_review_description">আপনার রেটিং শেয়ার করুন এবং আরও ব্যবহারকারীকে অ্যাপটি খুঁজে পেতে সাহায্য করুন।</string>
+    <string name="help_feedback_sheet_review_title">Google Play-এ রিভিউ দিন</string>
+    <string name="help_feedback_sheet_title">আপনি কীভাবে মতামত শেয়ার করতে চান?</string>
+    <string name="oss_license_title">ওপেন সোর্স লাইসেন্স</string>
+    <string name="popular_help_resources">জনপ্রিয় সাহায্য সংস্থান</string>
+    <string name="privacy_policy">গোপনীয়তা নীতি</string>
+    <string name="terms_of_service">পরিষেবার শর্তাবলী</string>
+    <string name="version">সংস্করণ %1$s</string>
+    <string name="version_info">সংস্করণের তথ্য</string>
+    <string name="view_in_google_play_store">গুগল প্লে স্টোরে দেখুন</string>
+</resources>

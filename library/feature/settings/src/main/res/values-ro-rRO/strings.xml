@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Setări avansate de confidențialitate</string>
+    <string name="app_behavior">Comportamentul aplicației</string>
+    <string name="appearance">Aspect</string>
+    <string name="bounce_buttons">Animație la clic</string>
+    <string name="bug_report">Raportare bug</string>
+    <string name="cache_cleared_success">Cache-ul a fost șters cu succes</string>
+    <string name="cache_management">Gestionare cache</string>
+    <string name="clear_cache">Șterge cache</string>
+    <string name="consent_ad_personalization_description">Activați anunțurile personalizate pe baza activității și preferințelor dvs. în serviciile și aplicațiile Google.</string>
+    <string name="consent_ad_personalization_title">Anunțuri personalizate</string>
+    <string name="consent_ad_storage_description">Activați stocarea datelor (cum ar fi identificatorii de dispozitiv sau modulele cookie) pentru măsurarea performanței anunțurilor și afișarea de anunțuri relevante.</string>
+    <string name="consent_ad_storage_title">Stocare date publicitare</string>
+    <string name="consent_ad_user_data_description">Permiteți trimiterea datelor de utilizare și despre dispozitiv către Google pentru a sprijini funcțiile legate de anunțuri, cum ar fi conversiile și optimizarea campaniilor.</string>
+    <string name="consent_ad_user_data_title">Trimitere date pentru anunțuri</string>
+    <string name="consent_analytics_storage_description">Permiteți stocarea datelor, cum ar fi utilizarea aplicației și durata vizitei, pentru a îmbunătăți analiza și performanța aplicației.</string>
+    <string name="consent_analytics_storage_title">Stocare date de analiză</string>
+    <string name="consent_category_advertising_title">Publicitate personalizată</string>
+    <string name="consent_category_analytics_title">Analiză</string>
+    <string name="dark_theme">Temă întunecată</string>
+    <string name="dynamic_colors">Culori dinamice</string>
+    <string name="error_reporting">Raportare erori</string>
+    <string name="get_help">Obține ajutor</string>
+    <string name="icon_desc_consent_category">Pictogramă categorie consimțământ</string>
+    <string name="icon_desc_expand_less">Restrângeți</string>
+    <string name="icon_desc_expand_more">Extindeți</string>
+    <string name="language">Limbă</string>
+    <string name="learn_more">Află mai multe</string>
+    <string name="navigation">Navigare</string>
+    <string name="settings">Setări</string>
+    <string name="settings_placeholder_description">Nicio setare selectată. Alege o opțiune pentru a vedea detalii aici.</string>
+    <string name="show_labels_on_bottom_bar">Afișați etichete pe bara de jos</string>
+    <string name="startup_page">Pagina de pornire</string>
+    <string name="summary_preference_settings_bounce_buttons">Aplică o animație subtilă de săritură la elementele clicabile</string>
+    <string name="summary_preference_settings_bug_report">Trimite rapoarte de erori și solicitări de funcții pe pagina de probleme a aplicației din GitHub</string>
+    <string name="summary_preference_settings_clear_cache">Șterge datele temporare ale aplicației.</string>
+    <string name="summary_preference_settings_dynamic_colors">Aplică culorile din tapetul dispozitivului la tema aplicației</string>
+    <string name="summary_preference_settings_language">Schimbă limba utilizată în aplicație</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Afișați titlurile elementelor sub pictogramele din bara de navigare de jos</string>
+    <string name="summary_preference_settings_startup_page">Alege ecranul care va fi afișat la pornirea aplicației.</string>
+    <string name="summary_usage_and_diagnostics">Ajută la îmbunătățirea experienței trimițând automat date de diagnosticare, utilizare a dispozitivului și a aplicației.</string>
+    <string name="usage_and_diagnostics">Utilizare și diagnoză</string>
+    <string name="will_never_turn_on_automatically">Nu se va activa niciodată automat</string>
+    <string name="will_turn_on_automatically_by_system">Se va activa automat prin setările sistemului</string>
+</resources>

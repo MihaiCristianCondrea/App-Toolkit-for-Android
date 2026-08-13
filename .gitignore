@@ -23,12 +23,12 @@ out/
 *.class
 
 # Release artifacts (uncomment or adjust as needed)
-app/release/*
+/sample/app/release/*
 release/
 signing.properties
 github.properties
-app/google-services.json
-/app/src/main/play/keys/*
+/sample/app/src/main/play/keys/*
+/sample/app/google-services.json
 
 ###############################################################################
 # LOCAL CONFIG / ENV FILES
@@ -104,3 +104,8 @@ lint/tmp/
 ###############################################################################
 .kotlin
 /gradle/gradle-daemon-jvm.properties
+
+###############################################################################
+# AI AGENTS
+###############################################################################
+.artifacts

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="access_network_state">I-access ang estado ng network [ACCESS_NETWORK_STATE]</string>
+    <string name="ad_id">Ad ID [AD_ID]</string>
+    <string name="billing">Pagsingil [BILLING]</string>
+    <string name="check_license">Suriin ang lisensya [CHECK_LICENSE]</string>
+    <string name="foreground_service">Serbisyo sa foreground [FOREGROUND_SERVICE]</string>
+    <string name="internet">Internet [INTERNET]</string>
+    <string name="normal">Normal</string>
+    <string name="permissions">Mga Pahintulot</string>
+    <string name="post_notifications">Mag-post ng mga notipikasyon [POST_NOTIFICATIONS]</string>
+    <string name="runtime">Runtime</string>
+    <string name="summary_preference_permissions_access_network_state">Pinapayagan ang app na suriin ang koneksyon sa network at kunin ang impormasyon tungkol sa Wi-Fi, kabilang ang enabled status at mga pangalan ng konektadong Wi-Fi device.</string>
+    <string name="summary_preference_permissions_ad_id">Pinapayagan ang app na kunin at gamitin ang advertising identifier na nauugnay sa device ng user, na nagbibigay ng mga personalized na ad, sumusukat sa pagiging epektibo ng ad, at nagpapakita ng mga ad sa mga device na may Android 13 o mas bago.</string>
+    <string name="summary_preference_permissions_billing">Pinapayagan ang app na gamitin ang Google Play Billing Library para pangasiwaan ang mga in-app na pagbili at donasyon.</string>
+    <string name="summary_preference_permissions_check_license">Pinapayagan ang app na i-verify ang pagsunod nito sa kasunduan sa lisensya at ipatupad ang mga tuntunin sa paglilisensya para protektahan ang intellectual property.</string>
+    <string name="summary_preference_permissions_foreground_service">Pinapayagan ang app na lumikha at gumamit ng mga serbisyong tumatakbo sa foreground, na nagbibigay sa kanila ng priyoridad kaysa sa ibang mga proseso sa background at nagpapahusay sa performance at reliability.</string>
+    <string name="summary_preference_permissions_internet">Pinapayagan ang app na magtatag ng koneksyon sa internet para magpadala ng mga ulat ng error o tumingin ng mga update.</string>
+    <string name="summary_preference_permissions_post_notifications">Pinapayagan ang app na magpakita ng mga notipikasyon sa mga device na may Android 13 o mas bago.</string>
+    <string name="summary_preference_permissions_wake_lock">Pinapayagan ang app na pigilan ang device na mag-sleep (hal., pagdidilim ng screen o pag-sleep ng processor) habang may mga kritikal na operasyon para matiyak na makukumpleto ang mga ito nang walang abala. Ginagamit ito nang matipid para makatipid ng baterya.</string>
+    <string name="wake_lock">Panatilihing gising ang device [WAKE_LOCK]</string>
+</resources>

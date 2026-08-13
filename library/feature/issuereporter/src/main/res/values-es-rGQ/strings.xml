@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">Informe de fallos</string>
+    <string name="cd_expand_device_info">Expandir o contraer información del dispositivo</string>
+    <string name="device_info">Información del dispositivo</string>
+    <string name="issue_description_label">Descripción</string>
+    <string name="issue_email_label">Correo electrónico</string>
+    <string name="issue_section_label">Incidencia</string>
+    <string name="issue_send">Enviar</string>
+    <string name="issue_submitted">Su problema fue enviado.</string>
+    <string name="issue_submitted_successfully">Problema enviado con éxito</string>
+    <string name="issue_title_label">Título</string>
+    <string name="login_section_label">Iniciar sesión</string>
+    <string name="open_button_label">Problema abierto</string>
+    <string name="open_issue_in_browser">Abrir en el navegador</string>
+    <string name="optional_placeholder">Opcional</string>
+    <string name="send_anonymously">Enviar de forma anónima</string>
+    <string name="snack_report_failed">Error al enviar el informe</string>
+    <string name="snack_report_success">Informe enviado correctamente</string>
+    <string name="use_github_account">Enviar usando la cuenta de GitHub</string>
+</resources>

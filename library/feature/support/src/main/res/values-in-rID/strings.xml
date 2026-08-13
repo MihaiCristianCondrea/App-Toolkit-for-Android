@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="non_paid_support">Dukungan tidak berbayar</string>
+    <string name="paid_support">Dukungan berbayar</string>
+    <string name="purchase_cancelled">Pembelian dibatalkan</string>
+    <string name="purchase_pending">Donasi Anda sedang diproses oleh Google. Kami akan memberi tahu Anda saat selesai. Terima kasih.</string>
+    <string name="purchase_thank_you">Terima kasih atas donasi Anda.</string>
+    <string name="summary_donations">Berapa pun jumlah yang Anda sumbangkan, Anda akan membantu kami menjaga aplikasi tetap berjalan dan meningkatkan fitur kami. Kami menghargai kemurahan hati dan kebaikan Anda.</string>
+    <string name="support_offer_unavailable">Opsi donasi ini saat ini tidak tersedia.</string>
+    <string name="support_us">Dukung kami</string>
+    <string name="web_ad">Iklan web</string>
+</resources>

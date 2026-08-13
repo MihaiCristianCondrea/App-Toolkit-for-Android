@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="non_paid_support">การสนับสนุนแบบไม่ชำระเงิน</string>
+    <string name="paid_support">การสนับสนุนแบบชำระเงิน</string>
+    <string name="purchase_cancelled">การซื้อที่ถูกยกเลิก</string>
+    <string name="purchase_pending">การบริจาคของคุณกำลังดำเนินการโดย Google เราจะแจ้งให้คุณทราบเมื่อเสร็จสิ้น ขอบคุณ.</string>
+    <string name="purchase_thank_you">ขอบคุณสำหรับการบริจาค.</string>
+    <string name="summary_donations">ไม่ว่าคุณจะบริจาคเท่าไหร่ คุณจะช่วยให้เราดำเนินการแอปและพัฒนาฟีเจอร์ใหม่ ๆ ได้ต่อไป เราขอบคุณในความมีน้ำใจของคุณ.</string>
+    <string name="support_offer_unavailable">ตัวเลือกการบริจาคนี้ไม่พร้อมใช้งานในขณะนี้.</string>
+    <string name="support_us">สนับสนุนเรา</string>
+    <string name="web_ad">โฆษณาเว็บ</string>
+</resources>

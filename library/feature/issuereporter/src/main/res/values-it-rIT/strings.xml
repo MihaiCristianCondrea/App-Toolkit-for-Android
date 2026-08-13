@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="bug_report">Segnalazione bug</string>
+    <string name="cd_expand_device_info">Espandi o riduci le informazioni sul dispositivo</string>
+    <string name="device_info">Informazioni sul dispositivo</string>
+    <string name="issue_description_label">Descrizione</string>
+    <string name="issue_email_label">Email</string>
+    <string name="issue_section_label">Problema</string>
+    <string name="issue_send">Invia</string>
+    <string name="issue_submitted">Il tuo problema è stato inviato.</string>
+    <string name="issue_submitted_successfully">Emissione presentata con successo</string>
+    <string name="issue_title_label">Titolo</string>
+    <string name="login_section_label">Accesso</string>
+    <string name="open_button_label">Problema aperto</string>
+    <string name="open_issue_in_browser">Aprire nel browser</string>
+    <string name="optional_placeholder">Opzionale</string>
+    <string name="send_anonymously">Invia in modo anonimo</string>
+    <string name="snack_report_failed">Invio della segnalazione non riuscito</string>
+    <string name="snack_report_success">Segnalazione inviata con successo</string>
+    <string name="use_github_account">Invia con l\'account GitHub</string>
+</resources>

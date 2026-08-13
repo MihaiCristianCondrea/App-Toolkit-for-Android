@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">Program beta</string>
+    <string name="contact_us">Contactează-ne</string>
+    <string name="contact_us_description">Spune-ne mai multe și te vom ajuta</string>
+    <string name="feedback">Feedback</string>
+    <string name="help">Ajutor</string>
+    <string name="help_feedback_sheet_contact_description">Deschide pagina mea oficială de contact pentru suport direct.</string>
+    <string name="help_feedback_sheet_contact_title">Contactează-mă personal</string>
+    <string name="help_feedback_sheet_feature_request_description">Sugerează idei noi pentru oricare dintre aplicațiile noastre prin formularul oficial.</string>
+    <string name="help_feedback_sheet_feature_request_title">Trimite o cerere de funcționalitate</string>
+    <string name="help_feedback_sheet_review_description">Partajează evaluarea ta și ajută mai mulți utilizatori să descopere aplicația.</string>
+    <string name="help_feedback_sheet_review_title">Lasă o recenzie pe Google Play</string>
+    <string name="help_feedback_sheet_title">Cum dorești să trimiți feedback?</string>
+    <string name="oss_license_title">Licențe open source</string>
+    <string name="popular_help_resources">Resurse de ajutor populare</string>
+    <string name="privacy_policy">Politica de confidențialitate</string>
+    <string name="terms_of_service">Termeni de serviciu</string>
+    <string name="version">Versiunea %1$s</string>
+    <string name="version_info">Informații despre versiune</string>
+    <string name="view_in_google_play_store">Vezi în Google Play Store</string>
+</resources>

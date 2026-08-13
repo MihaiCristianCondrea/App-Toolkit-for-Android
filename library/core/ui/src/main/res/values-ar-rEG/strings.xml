@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">حول</string>
+    <string name="amoled_mode">وضع AMOLED</string>
+    <string name="color_palette">لوحة الألوان</string>
+    <string name="dark_mode">الوضع الداكن</string>
+    <string name="dialog_info_language">خصص تجربتك بلغتك المفضلة. أي تغييرات لغة تجريها تدخل حيز التنفيذ على الفور، مما يضمن تجربة سلسة بلغتك المختارة</string>
+    <string name="dialog_info_startup">يقوم بتكوين الشاشة الأولية المقدمة للمستخدمين عند تشغيل التطبيق. يؤثر هذا الإعداد على التفاعل الأول للمستخدم مع التطبيق ويمكن تخصيصه لشرائح مستخدمين محددة أو أهداف المنتج.</string>
+    <string name="dialog_language_subtitle">اختر لغتك المفضلة</string>
+    <string name="dialog_startup_subtitle">اختر صفحة البدء المفضلة لديك</string>
+    <string name="done_button_content_description">تم</string>
+    <string name="follow_system">اتباع وضع النظام</string>
+    <string name="go_back">العودة</string>
+    <string name="learn_more">اعرف المزيد</string>
+    <string name="light_mode">الوضع الفاتح</string>
+    <string name="loading">جارٍ التحميل…</string>
+    <string name="onboarding_theme_dark_desc">مريح للعينين.</string>
+    <string name="onboarding_theme_light_desc">مشرق وحيوي.</string>
+    <string name="onboarding_theme_system_desc">يطابق جهازك.</string>
+    <string name="other_colors">ألوان أخرى</string>
+    <string name="screen_and_display_settings">.ﺽﺮﻌﻟﺍﻭ ﺔﺷﺎﺸﻟﺍ ﺕﺍﺩﺍﺪﻋﺇ</string>
+    <string name="select_language_title">اختر اللغة</string>
+    <string name="sort_by">فرز حسب</string>
+    <string name="sponsored_ad_label">● إعلان برعاية</string>
+    <string name="sponsored_ad_label_plain">إعلان برعاية</string>
+    <string name="startup_page">صفحة البدء</string>
+    <string name="summary_dark_theme">ﻲﻓ ﻚﻳﺪﻟ ﺔﻠﻀﻔﻤﻟﺍ ﺔﻤﺴﻟﺍ ﺩﺪﺣﻭ Android ﻡﺎﻈﻧ ﺮﻳﺪﻣ ﻰﻟﺇ ﻝﺎﻘﺘﻧﻻﺍ ﻯﻮﺳ ﻚﻴﻠﻋ ﺎﻣ ، ﻪﻠﻴﻌﻔﺘﻟ</string>
+    <string name="theme_mode">وضع المظهر</string>
+    <string name="try_again">حاول مرة أخرى</string>
+    <string name="wallpaper_colors">ألوان خلفية الشاشة</string>
+</resources>

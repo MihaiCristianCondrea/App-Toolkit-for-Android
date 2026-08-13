@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="access_network_state">نیٹ ورک کی حالت تک رسائی [ACCESS_NETWORK_STATE]</string>
+    <string name="ad_id">اشتہار کی شناخت [AD_ID]</string>
+    <string name="billing">بلنگ [BILLING]</string>
+    <string name="check_license">لائسنس چیک کریں [CHECK_LICENSE]</string>
+    <string name="foreground_service">پیش منظر سروس [FOREGROUND_SERVICE]</string>
+    <string name="internet">انٹرنیٹ [INTERNET]</string>
+    <string name="normal">عام</string>
+    <string name="permissions">اجازتیں</string>
+    <string name="post_notifications">اطلاعات پوسٹ کریں [POST_NOTIFICATIONS]</string>
+    <string name="runtime">رن ٹائم</string>
+    <string name="summary_preference_permissions_access_network_state">ایپ کو نیٹ ورک کنیکٹیویٹی چیک کرنے اور وائی فائی کے بارے میں معلومات بازیافت کرنے کی اجازت دیتا ہے، بشمول فعال حیثیت اور منسلک وائی فائی ڈیوائس کے نام۔</string>
+    <string name="summary_preference_permissions_ad_id">ایپ کو صارف کے آلے سے وابستہ اشتہاری شناخت کنندہ کو بازیافت کرنے اور استعمال کرنے کی اجازت دیتا ہے، ذاتی نوعیت کے اشتہارات فراہم کرتا ہے، اشتہار کی تاثیر کی پیمائش کرتا ہے، اور Android 13 یا بعد کے آلات پر اشتہارات دکھاتا ہے۔</string>
+    <string name="summary_preference_permissions_billing">ایپ کو ایپ میں خریداریوں اور عطیات کو سنبھالنے کے لیے گوگل پلے بلنگ لائبریری استعمال کرنے کی اجازت دیتا ہے۔</string>
+    <string name="summary_preference_permissions_check_license">ایپ کو لائسنس کے معاہدے کی تعمیل کی توثیق کرنے اور دانشورانہ املاک کے تحفظ کے لیے لائسنس کی شرائط نافذ کرنے کی اجازت دیتا ہے۔</string>
+    <string name="summary_preference_permissions_foreground_service">ایپ کو پیش منظر میں چلنے والی خدمات بنانے اور استعمال کرنے کی اجازت دیتا ہے، جس سے انہیں دیگر پس منظر کے عمل پر فوقیت ملتی ہے اور کارکردگی اور وشوسنییتا بہتر ہوتی ہے۔</string>
+    <string name="summary_preference_permissions_internet">ایپ کو غلطی کی رپورٹس بھیجنے یا اپ ڈیٹس چیک کرنے کے لیے انٹرنیٹ کنکشن قائم کرنے کی اجازت دیتا ہے۔</string>
+    <string name="summary_preference_permissions_post_notifications">ایپ کو Android 13 یا اس کے بعد والے آلات پر اطلاعات دکھانے کی اجازت دیتا ہے۔</string>
+    <string name="summary_preference_permissions_wake_lock">ایپ کو اہم کارروائیوں کے دوران ڈیوائس کو سلیپ موڈ (مثلاً، اسکرین کا مدھم ہونا یا پروسیسر کا سلیپ موڈ) میں جانے سے روکنے کی اجازت دیتا ہے تاکہ یہ یقینی بنایا جا سکے کہ وہ بغیر کسی رکاوٹ کے مکمل ہوں۔ بیٹری بچانے کے لیے اسے किफایت سے استعمال کیا جاتا ہے۔</string>
+    <string name="wake_lock">ڈیوائس کو بیدار رکھیں [WAKE_LOCK]</string>
+</resources>

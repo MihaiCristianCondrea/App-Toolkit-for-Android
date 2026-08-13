@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="beta_program">Beta program</string>
+    <string name="contact_us">Contact support</string>
+    <string name="contact_us_description">Share details to get help reaching your goal</string>
+    <string name="feedback">Feedback</string>
+    <string name="help">Help</string>
+    <string name="help_feedback_sheet_contact_description">Open my official contact page for direct support.</string>
+    <string name="help_feedback_sheet_contact_title">Contact me personally</string>
+    <string name="help_feedback_sheet_feature_request_description">Suggest new ideas for any of our apps through the official form.</string>
+    <string name="help_feedback_sheet_feature_request_title">Send feature request</string>
+    <string name="help_feedback_sheet_review_description">Share your rating and help more users discover the app.</string>
+    <string name="help_feedback_sheet_review_title">Leave a Google Play review</string>
+    <string name="help_feedback_sheet_title">How would you like to share feedback?</string>
+    <string name="oss_license_title">Open source licenses</string>
+    <string name="popular_help_resources">Popular help resources</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="terms_of_service">Terms of service</string>
+    <string name="version">Version %1$s</string>
+    <string name="version_info">Version info</string>
+    <string name="view_in_google_play_store">View in Google Play Store</string>
+</resources>

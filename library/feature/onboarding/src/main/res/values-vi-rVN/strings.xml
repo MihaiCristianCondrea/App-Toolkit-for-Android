@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="agree">Đồng ý</string>
+    <string name="amoled_mode">Chế độ AMOLED</string>
+    <string name="back_button_content_description">Quay lại</string>
+    <string name="back_button_text">Quay lại</string>
+    <string name="consent_ad_personalization_description">Cho phép quảng cáo được cá nhân hóa dựa trên hoạt động và tùy chọn của bạn trên các dịch vụ và ứng dụng của Google.</string>
+    <string name="consent_ad_personalization_description_short">Bật quảng cáo được cá nhân hóa.</string>
+    <string name="consent_ad_personalization_title">Quảng cáo được cá nhân hóa</string>
+    <string name="consent_ad_storage_description">Cho phép lưu trữ dữ liệu (như mã nhận dạng thiết bị hoặc cookie) để đo lường hiệu suất quảng cáo và hiển thị quảng cáo phù hợp.</string>
+    <string name="consent_ad_storage_description_short">Cho phép lưu trữ dữ liệu cho mục đích quảng cáo.</string>
+    <string name="consent_ad_storage_title">Lưu trữ dữ liệu quảng cáo</string>
+    <string name="consent_ad_user_data_description">Cho phép gửi dữ liệu sử dụng và dữ liệu thiết bị cho Google để hỗ trợ các tính năng liên quan đến quảng cáo như lượt chuyển đổi và tối ưu hóa chiến dịch.</string>
+    <string name="consent_ad_user_data_description_short">Cho phép gửi dữ liệu người dùng cho quảng cáo.</string>
+    <string name="consent_ad_user_data_title">Gửi dữ liệu cho quảng cáo</string>
+    <string name="consent_analytics_storage_description">Cho phép lưu trữ dữ liệu như mức sử dụng ứng dụng và thời lượng truy cập để cải thiện phân tích và hiệu suất ứng dụng.</string>
+    <string name="consent_analytics_storage_description_short">Cho phép thu thập dữ liệu để phân tích việc sử dụng ứng dụng.</string>
+    <string name="consent_analytics_storage_title">Lưu trữ dữ liệu phân tích</string>
+    <string name="dark_mode">Chế độ tối</string>
+    <string name="done_button_content_description">Xong</string>
+    <string name="done_button_text">Xong</string>
+    <string name="error">Lỗi</string>
+    <string name="follow_system">Theo chế độ hệ thống</string>
+    <string name="learn_more">Tìm hiểu thêm</string>
+    <string name="learn_more_about_provider">Tìm hiểu thêm về nhà cung cấp này</string>
+    <string name="learn_more_privacy_policy">Xem lại Chính sách quyền riêng tư của chúng tôi</string>
+    <string name="light_mode">Chế độ sáng</string>
+    <string name="next_button_content_description">Tiếp theo</string>
+    <string name="next_button_text">Tiếp theo</string>
+    <string name="onboarding_amoled_mode_desc">Màu đen sâu hơn cho màn hình OLED.</string>
+    <string name="onboarding_complete_icon_desc">Hoàn tất giới thiệu</string>
+    <string name="onboarding_crashlytics_about_body_1">Trong ứng dụng này, chúng tôi sử dụng Firebase, một nền tảng của Google giúp nhà phát triển hiểu cách ứng dụng được sử dụng, cải thiện hiệu năng và cung cấp một số dịch vụ như phân tích. Firebase Analytics tự động thu thập thông tin như mức sử dụng sự kiện, lượt xem màn hình, thuộc tính thiết bị và các tín hiệu khác, nhưng chỉ khi bạn cấp quyền đồng ý để thu thập các loại dữ liệu này. Nếu không có sự đồng ý, Firebase sẽ không ghi sự kiện hoặc gửi dữ liệu liên quan đến các danh mục đó.</string>
+    <string name="onboarding_crashlytics_about_body_2">Để biết thông tin chi tiết về cách Firebase và các dịch vụ của Google xử lý dữ liệu, cũng như các chính sách quyền riêng tư và bảo mật tương ứng, vui lòng tham khảo tài liệu Firebase Privacy chính thức và các quyền riêng tư theo khu vực của bạn theo các luật như GDPR và CCPA.</string>
+    <string name="onboarding_crashlytics_about_title">Giới thiệu về đồng ý và việc sử dụng dữ liệu Firebase</string>
+    <string name="onboarding_crashlytics_consent_info_learn_more">Tìm hiểu thêm về đồng ý và việc sử dụng dữ liệu</string>
+    <string name="onboarding_crashlytics_consent_info_message">Nếu bạn muốn tìm hiểu thêm về cách dữ liệu của bạn được sử dụng và ý nghĩa của từng tùy chọn đồng ý, hãy xem tài liệu bên dưới.</string>
+    <string name="onboarding_crashlytics_consent_intro_1">Quyền riêng tư của bạn rất quan trọng. Trước khi chúng tôi thu thập bất kỳ dữ liệu sử dụng hoặc quảng cáo nào, vui lòng chọn các loại dữ liệu mà bạn đồng ý. Lựa chọn của bạn ảnh hưởng đến cách chúng tôi đo hiệu năng ứng dụng, cải thiện tính năng và điều chỉnh quảng cáo, đồng thời vẫn tôn trọng quyền riêng tư của bạn.</string>
+    <string name="onboarding_crashlytics_consent_intro_2">Những lựa chọn này giúp chúng tôi tuân thủ các tiêu chuẩn quyền riêng tư như GDPR và CCPA, đồng thời cho bạn quyền kiểm soát cách dữ liệu của bạn được sử dụng. Bạn có thể thay đổi các cài đặt này sau trong tùy chọn quyền riêng tư của ứng dụng bất kỳ lúc nào.</string>
+    <string name="onboarding_crashlytics_description">Cho phép ứng dụng gửi dữ liệu sử dụng ẩn danh và báo cáo sự cố. Điều này giúp chúng tôi sửa lỗi và cải thiện trải nghiệm của bạn. Không có thông tin cá nhân nào được thu thập.</string>
+    <string name="onboarding_crashlytics_details_intro">Dưới đây bạn sẽ thấy các tùy chọn chi tiết hơn về cách dữ liệu của bạn được sử dụng trong ứng dụng. Lựa chọn của bạn ảnh hưởng đến thông tin nào được thu thập, cách thông tin được lưu trữ và cách thông tin có thể được chia sẻ với các nhà cung cấp dịch vụ như Google, theo các tiêu chuẩn quyền riêng tư và yêu cầu đồng ý hiện hành.</string>
+    <string name="onboarding_crashlytics_dialog_allow_all">Cho phép tất cả</string>
+    <string name="onboarding_crashlytics_dialog_allow_essentials">Cho phép cần thiết</string>
+    <string name="onboarding_crashlytics_dialog_confirm_choices">Xác nhận lựa chọn</string>
+    <string name="onboarding_crashlytics_dialog_privacy_choices_title">Tùy chọn quyền riêng tư</string>
+    <string name="onboarding_crashlytics_dialog_tab_about">Giới thiệu</string>
+    <string name="onboarding_crashlytics_dialog_tab_consent">Đồng ý</string>
+    <string name="onboarding_crashlytics_dialog_tab_details">Chi tiết</string>
+    <string name="onboarding_crashlytics_disabled_desc">Báo cáo dữ liệu không hoạt động.</string>
+    <string name="onboarding_crashlytics_enabled_desc">Báo cáo dữ liệu đang hoạt động.</string>
+    <string name="onboarding_crashlytics_privacy_info">Quyền riêng tư của bạn rất quan trọng. Chúng tôi chỉ sử dụng dữ liệu này để sửa lỗi và cải thiện các tính năng. Để biết thêm chi tiết, vui lòng xem lại chính sách quyền riêng tư của chúng tôi.</string>
+    <string name="onboarding_crashlytics_show_details_button">Hiển thị thông tin chi tiết</string>
+    <string name="onboarding_crashlytics_show_details_button_cd">Hiển thị thông tin chi tiết về việc sử dụng và chẩn đoán</string>
+    <string name="onboarding_crashlytics_title">Giúp chúng tôi cải thiện</string>
+    <string name="onboarding_final_description">Cảm ơn bạn đã cá nhân hóa trải nghiệm của mình. Bây giờ bạn đã sẵn sàng khám phá tất cả các tính năng. Chúc bạn vui vẻ.</string>
+    <string name="onboarding_final_title">Bạn đã sẵn sàng.</string>
+    <string name="onboarding_theme_dark_desc">Dịu mắt.</string>
+    <string name="onboarding_theme_light_desc">Sáng sủa và năng động.</string>
+    <string name="onboarding_theme_subtitle">Chọn giao diện bạn muốn cho ứng dụng.</string>
+    <string name="onboarding_theme_system_desc">Phù hợp với thiết bị của bạn.</string>
+    <string name="onboarding_theme_title">Chọn phong cách của bạn</string>
+    <string name="other_colors">Màu khác</string>
+    <string name="skip_button_content_description">Bỏ qua</string>
+    <string name="skip_button_text">Bỏ qua</string>
+    <string name="summary_browse_terms_of_service_and_privacy_policy">Đọc và đồng ý với Điều khoản dịch vụ và Chính sách quyền riêng tư của chúng tôi để tiếp tục</string>
+    <string name="usage_and_diagnostics">Sử dụng và chẩn đoán</string>
+    <string name="wallpaper_colors">Màu hình nền</string>
+    <string name="welcome">Chào mừng</string>
+</resources>

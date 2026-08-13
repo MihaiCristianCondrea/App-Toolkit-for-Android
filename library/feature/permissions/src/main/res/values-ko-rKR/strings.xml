@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="access_network_state">네트워크 상태 액세스 [ACCESS_NETWORK_STATE]</string>
+    <string name="ad_id">광고 ID [AD_ID]</string>
+    <string name="billing">결제 [BILLING]</string>
+    <string name="check_license">라이선스 확인 [CHECK_LICENSE]</string>
+    <string name="foreground_service">포그라운드 서비스 [FOREGROUND_SERVICE]</string>
+    <string name="internet">인터넷 [INTERNET]</string>
+    <string name="normal">일반</string>
+    <string name="permissions">권한</string>
+    <string name="post_notifications">알림 게시 [POST_NOTIFICATIONS]</string>
+    <string name="runtime">런타임</string>
+    <string name="summary_preference_permissions_access_network_state">앱이 네트워크 연결 상태를 확인하고 활성화 상태 및 연결된 Wi-Fi 기기 이름을 포함한 Wi-Fi 정보를 검색하도록 허용합니다.</string>
+    <string name="summary_preference_permissions_ad_id">앱이 사용자의 기기와 연결된 광고 식별자를 검색하고 사용하여 맞춤 광고를 제공하고, 광고 효과를 측정하며, Android 13 이상 기기에 광고를 표시하도록 허용합니다.</string>
+    <string name="summary_preference_permissions_billing">앱이 인앱 구매 및 기부를 처리하기 위해 Google Play 결제 라이브러리를 사용하도록 허용합니다.</string>
+    <string name="summary_preference_permissions_check_license">앱이 라이선스 계약 준수 여부를 확인하고 지적 재산권을 보호하기 위해 라이선스 조건을 시행하도록 허용합니다.</string>
+    <string name="summary_preference_permissions_foreground_service">앱이 포그라운드에서 실행되는 서비스를 만들고 사용하여 다른 백그라운드 프로세스보다 우선순위를 부여하고 성능과 안정성을 향상시키도록 허용합니다.</string>
+    <string name="summary_preference_permissions_internet">앱이 오류 보고서를 보내거나 업데이트를 확인하기 위해 인터넷 연결을 설정하도록 허용합니다.</string>
+    <string name="summary_preference_permissions_post_notifications">앱이 Android 13 이상이 설치된 기기에서 알림을 표시하도록 허용합니다.</string>
+    <string name="summary_preference_permissions_wake_lock">앱이 중요한 작업을 수행하는 동안 기기가 절전 모드(예: 화면 어두워짐 또는 프로세서 절전)로 전환되는 것을 방지하여 중단 없이 완료되도록 합니다. 배터리를 절약하기 위해 최소한으로 사용됩니다.</string>
+    <string name="wake_lock">기기를 절전 모드로 전환하지 않음 [WAKE_LOCK]</string>
+</resources>
