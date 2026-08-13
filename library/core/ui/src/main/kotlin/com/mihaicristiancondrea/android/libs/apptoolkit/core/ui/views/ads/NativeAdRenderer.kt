@@ -89,7 +89,7 @@ val LocalNativeAdViewFactory = staticCompositionLocalOf<NativeAdViewFactory> {
 @Composable
 internal fun NativeAdRenderer(
     presentation: NativeAdPresentation,
-    nativeAd: NativeAd, // FIXME: Parameter 'nativeAd' has runtime-determined stability
+    nativeAd: NativeAd,
     palette: NativeAdPalette,
     modifier: Modifier = Modifier,
 ) {

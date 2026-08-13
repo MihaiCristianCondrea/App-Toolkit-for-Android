@@ -29,8 +29,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.extensions.primaryFormattedPrice
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.billing.PurchaseResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.activity.isValidForBilling
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.activity.isValidForBilling
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors

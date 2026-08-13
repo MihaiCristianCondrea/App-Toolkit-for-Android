@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window
 
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.window.core.layout.WindowSizeClass
@@ -41,12 +42,18 @@ enum class AppWindowWidthSizeClass {
 /**
  * Remembers the current [WindowAdaptiveInfo], opting into the Large and ExtraLarge width
  * breakpoints.
+ *
+ * Material replaced `currentWindowAdaptiveInfo(supportLargeAndXLargeWidth = …)` with two separate
+ * entry points instead of a flag: `currentWindowAdaptiveInfoV2()` always reports the L and XL width
+ * classes, and the no-argument `currentWindowAdaptiveInfo()` stops at Expanded. Selecting between
+ * them here keeps [supportLargeAndXLargeWidth] meaning exactly what it did before, so callers of
+ * this library see no behaviour change and nothing calls the deprecated overload.
  */
 @Composable
 fun rememberWindowAdaptiveInfo(
     supportLargeAndXLargeWidth: Boolean = true,
 ): WindowAdaptiveInfo =
-    currentWindowAdaptiveInfo(supportLargeAndXLargeWidth = supportLargeAndXLargeWidth) // FIXME: 'fun currentWindowAdaptiveInfo(supportLargeAndXLargeWidth: Boolean = ...): WindowAdaptiveInfo' is deprecated. Please use V2 version of this function to support L and XL width size classes.
+    if (supportLargeAndXLargeWidth) currentWindowAdaptiveInfoV2() else currentWindowAdaptiveInfo()
 
 /**
  * Remembers the current [WindowSizeClass] calculated from the active window metrics.

@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.Permi
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.PrivacySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
 
 class AppPrivacySettingsProvider(
     private val context: Context,

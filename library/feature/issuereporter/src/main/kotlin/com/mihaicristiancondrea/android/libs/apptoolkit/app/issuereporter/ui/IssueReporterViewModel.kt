@@ -32,7 +32,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.sta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.GithubToken
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.onFailure

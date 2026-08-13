@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.const
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.openAppNotificationSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just

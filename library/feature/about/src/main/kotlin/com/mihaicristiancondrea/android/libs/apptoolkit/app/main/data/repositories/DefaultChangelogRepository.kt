@@ -14,7 +14,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.toError
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.result.runSuspendCatching
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.header

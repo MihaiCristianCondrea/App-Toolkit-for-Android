@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.Toast
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
 import kotlinx.coroutines.withContext
 
 open class AppInfoHelper(

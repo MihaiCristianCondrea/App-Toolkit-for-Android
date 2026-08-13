@@ -46,8 +46,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.DISPLAY_SETTINGS_LOG_TAG
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.startActivitySafely
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
@@ -80,7 +80,7 @@ private object DisplayActionNames {
     const val OPEN_THEME_SETTINGS: String = "open_theme_settings"
     const val THEME_REDIRECT: String = "theme_redirect"
     const val OPEN_STARTUP_DIALOG: String = "open_startup_dialog"
-    const val CHANGE_STARTUP_DESTINATION: String = "change_startup_destination" // FIXME: Property "CHANGE_STARTUP_DESTINATION" is never used
+    const val CHANGE_STARTUP_DESTINATION: String = "change_startup_destination"
     const val OPEN_LANGUAGE_SETTINGS: String = "open_language_settings"
     const val CHANGE_LANGUAGE: String = "change_language"
 }

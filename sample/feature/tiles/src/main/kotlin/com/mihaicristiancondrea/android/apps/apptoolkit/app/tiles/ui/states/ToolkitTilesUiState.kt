@@ -56,5 +56,7 @@ enum class ToolkitTilesFilter {
     NeedsSetup,
     Unsupported;
 
-    companion object {} // FIXME: Redundant empty class body
+    // Not redundant despite reading as an empty body: `ToolkitTilesFilterMappers.items()` is
+    // declared on ToolkitTilesFilter.Companion, and an enum has no implicit companion to extend.
+    companion object
 }

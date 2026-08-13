@@ -55,11 +55,13 @@ fun rememberNativeAd(adUnitId: String, enabled: Boolean = true): NativeAd? {
     val loaderClient: NativeAdLoaderClient = LocalNativeAdLoaderClient.current
     val mainHandler: Handler = remember { Handler(Looper.getMainLooper()) }
     val isToolkitSdkReady: Boolean by AdsSdkState.isReady.collectAsStateWithLifecycle()
-    var nativeAd: NativeAd? by remember { mutableStateOf(value = null) }
+    // Named `loadedAd` rather than `nativeAd` so the `onNativeAdLoaded` override below can use the
+    // parameter name its supertype declares without shadowing this state.
+    var loadedAd: NativeAd? by remember { mutableStateOf(value = null) }
 
     DisposableEffect(adUnitId, enabled, isToolkitSdkReady, loaderClient) {
-        nativeAd?.destroy()
-        nativeAd = null
+        loadedAd?.destroy()
+        loadedAd = null
 
         if (!enabled || adUnitId.isBlank() || !AdsSdkState.canRequestAds()) {
             return@DisposableEffect onDispose { }
@@ -73,22 +75,22 @@ fun rememberNativeAd(adUnitId: String, enabled: Boolean = true): NativeAd? {
             loaderClient.load(
                 adUnitId,
                 object : NativeAdLoaderCallback {
-                    override fun onNativeAdLoaded(ad: NativeAd) {
+                    override fun onNativeAdLoaded(nativeAd: NativeAd) {
                         mainHandler.post {
                             if (disposed) {
-                                ad.destroy()
+                                nativeAd.destroy()
                                 return@post
                             }
-                            nativeAd?.destroy()
-                            nativeAd = ad
+                            loadedAd?.destroy()
+                            loadedAd = nativeAd
                         }
                     }
 
                     override fun onAdFailedToLoad(adError: LoadAdError) {
                         mainHandler.post {
                             if (disposed) return@post
-                            nativeAd?.destroy()
-                            nativeAd = null
+                            loadedAd?.destroy()
+                            loadedAd = null
                         }
                     }
                 },
@@ -99,12 +101,12 @@ fun rememberNativeAd(adUnitId: String, enabled: Boolean = true): NativeAd? {
 
         onDispose {
             disposed = true
-            nativeAd?.destroy()
-            nativeAd = null
+            loadedAd?.destroy()
+            loadedAd = null
         }
     }
 
-    return nativeAd
+    return loadedAd
 }
 
 private const val LOG_TAG: String = "NativeAdSlot"

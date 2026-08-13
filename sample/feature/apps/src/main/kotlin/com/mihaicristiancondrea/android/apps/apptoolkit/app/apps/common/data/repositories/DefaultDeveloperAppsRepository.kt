@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.m
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.models.network.AppErrors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.result.runSuspendCatching
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 import io.ktor.client.HttpClient

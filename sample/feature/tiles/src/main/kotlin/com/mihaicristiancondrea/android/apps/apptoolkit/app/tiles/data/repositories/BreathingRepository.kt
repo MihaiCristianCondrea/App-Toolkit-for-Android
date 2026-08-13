@@ -17,11 +17,13 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories
 
+import android.Manifest
 import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import androidx.annotation.RequiresPermission
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.BreathingPhase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.BreathingState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
@@ -66,6 +68,9 @@ class BreathingRepository(
         private const val DURATION_HOLD_EMPTY = 1000L
         private const val FRAME_RATE_MS = 32L
         private const val INHALE_TICK_INTERVAL = 150L
+
+        /** Fallback buzz length for API 26–28, which have no predefined effects. */
+        private const val LEGACY_VIBRATION_MS = 50L
     }
 
     fun start() {
@@ -91,7 +96,7 @@ class BreathingRepository(
     private suspend fun runCycle() {
         runPhase(BreathingPhase.INHALE, DURATION_INHALE, 0.4f, 1f, useHaptics = true)
         runPhase(BreathingPhase.HOLD_FULL, DURATION_HOLD_FULL, 1f, 1f)
-        vibrate(VibrationEffect.EFFECT_HEAVY_CLICK) /*FIXME: Field requires API level 29 (current min is 26): android.os.VibrationEffect#EFFECT_HEAVY_CLICK*/
+        vibrate(Haptic.HEAVY_CLICK)
         runPhase(BreathingPhase.EXHALE, DURATION_EXHALE, 1f, 0.4f)
         runPhase(BreathingPhase.HOLD_EMPTY, DURATION_HOLD_EMPTY, 0.4f, 0.4f)
     }
@@ -111,7 +116,7 @@ class BreathingRepository(
             elapsedTime = System.currentTimeMillis() - startTime
 
             if (useHaptics && elapsedTime >= nextHapticTrigger) {
-                vibrate(VibrationEffect.EFFECT_TICK) /*FIXME: Field requires API level 29 (current min is 26): android.os.VibrationEffect#EFFECT_TICK*/
+                vibrate(Haptic.TICK)
                 nextHapticTrigger += INHALE_TICK_INTERVAL
             }
 
@@ -124,13 +129,30 @@ class BreathingRepository(
         }
     }
 
-    private fun vibrate(effectId: Int) {
+    /**
+     * The haptics this session plays, named independently of the platform constants.
+     *
+     * [VibrationEffect.EFFECT_TICK] and [VibrationEffect.EFFECT_HEAVY_CLICK] were added in API 29
+     * while this module's `minSdk` is 26. Passing the raw constant meant every call site
+     * dereferenced an API-29 field before [vibrate] could check the version, so the guard inside
+     * [vibrate] protected nothing — the field access happened first, on the caller's side. Naming
+     * the effect instead keeps the constants inside the version check, which is the only place they
+     * are legal.
+     */
+    private enum class Haptic { TICK, HEAVY_CLICK }
+
+    @RequiresPermission(Manifest.permission.VIBRATE)
+    private fun vibrate(haptic: Haptic) {
         if (!vibrator.hasVibrator()) return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            vibrator.vibrate(VibrationEffect.createPredefined(effectId)) /*FIXME: Missing permissions required by Vibrator.vibrate: android.permission.VIBRATE*/
+            val effectId = when (haptic) {
+                Haptic.TICK -> VibrationEffect.EFFECT_TICK
+                Haptic.HEAVY_CLICK -> VibrationEffect.EFFECT_HEAVY_CLICK
+            }
+            vibrator.vibrate(VibrationEffect.createPredefined(effectId))
         } else {
             @Suppress("DEPRECATION")
-            vibrator.vibrate(50)
+            vibrator.vibrate(LEGACY_VIBRATION_MS)
         }
     }
 }

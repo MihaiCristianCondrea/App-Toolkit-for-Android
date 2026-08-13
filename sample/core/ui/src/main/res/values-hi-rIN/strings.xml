@@ -174,7 +174,10 @@
     <string name="tiles_chip_quick_tool">त्वरित उपकरण</string>
     <string name="tiles_chip_tile">टाइल</string>
     <string name="tiles_collapse_category">श्रेणी संक्षिप्त करें</string>
-    <string name="tiles_count_format">%1$d उपकरण</string>
+    <plurals name="tiles_count_format">
+        <item quantity="one">%1$d उपकरण</item>
+        <item quantity="other">%1$d उपकरण</item>
+    </plurals>
     <string name="tiles_error_failed_to_load">त्वरित उपकरण लोड करने में विफल</string>
     <string name="tiles_expand_category">श्रेणी का विस्तार करें</string>
     <string name="tiles_filter_added">जोड़ा गया</string>
@@ -229,4 +232,7 @@
     <string name="widget_apps_preview_secondary_item">कैलेंडर</string>
     <string name="widget_apps_preview_third_item">नोट्स</string>
     <string name="widget_apps_title">Mihai-Cristian Condrea के ऐप्स</string>
+    <string name="app_short_description">उपयोगी Android टूल और यूटिलिटी का संग्रह।</string>
+    <string name="settings_disabled_message">सेटिंग्स फ़िलहाल उपलब्ध नहीं हैं।</string>
+    <string name="long_settings_label">सेटिंग्स खोलें</string>
 </resources>

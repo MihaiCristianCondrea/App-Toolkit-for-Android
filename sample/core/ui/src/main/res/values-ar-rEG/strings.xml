@@ -174,7 +174,9 @@
     <string name="tiles_chip_quick_tool">أداة سريعة</string>
     <string name="tiles_chip_tile">بلاط</string>
     <string name="tiles_collapse_category">طي الفئة</string>
-    <string name="tiles_count_format">أدوات %1$d</string>
+    <plurals name="tiles_count_format">
+        <item quantity="other">أدوات %1$d</item>
+    </plurals>
     <string name="tiles_error_failed_to_load">فشل تحميل الأدوات السريعة</string>
     <string name="tiles_expand_category">قم بتوسيع الفئة</string>
     <string name="tiles_filter_added">تمت الإضافة</string>
@@ -229,4 +231,7 @@
     <string name="widget_apps_preview_secondary_item">التقويم</string>
     <string name="widget_apps_preview_third_item">الملاحظات</string>
     <string name="widget_apps_title">تطبيقات من Mihai-Cristian Condrea</string>
+    <string name="app_short_description">مجموعة من أدوات وبرامج أندرويد المفيدة.</string>
+    <string name="settings_disabled_message">الإعدادات غير متاحة حاليًا.</string>
+    <string name="long_settings_label">فتح الإعدادات</string>
 </resources>

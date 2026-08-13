@@ -174,7 +174,9 @@
     <string name="tiles_chip_quick_tool">เครื่องมือด่วน</string>
     <string name="tiles_chip_tile">กระเบื้อง</string>
     <string name="tiles_collapse_category">ยุบหมวดหมู่</string>
-    <string name="tiles_count_format">เครื่องมือ %1$d</string>
+    <plurals name="tiles_count_format">
+        <item quantity="other">เครื่องมือ %1$d</item>
+    </plurals>
     <string name="tiles_error_failed_to_load">โหลดเครื่องมือด่วนไม่สำเร็จ</string>
     <string name="tiles_expand_category">ขยายหมวดหมู่</string>
     <string name="tiles_filter_added">เพิ่มแล้ว</string>
@@ -229,4 +231,7 @@
     <string name="widget_apps_preview_secondary_item">ปฏิทิน</string>
     <string name="widget_apps_preview_third_item">บันทึกย่อ</string>
     <string name="widget_apps_title">แอปโดย Mihai-Cristian Condrea</string>
+    <string name="app_short_description">ชุดเครื่องมือและยูทิลิตี Android ที่ใช้งานสะดวก</string>
+    <string name="settings_disabled_message">ขณะนี้การตั้งค่าไม่พร้อมใช้งาน</string>
+    <string name="long_settings_label">เปิดการตั้งค่า</string>
 </resources>

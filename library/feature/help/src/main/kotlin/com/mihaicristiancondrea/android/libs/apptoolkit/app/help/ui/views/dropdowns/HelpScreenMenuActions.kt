@@ -33,9 +33,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.licenses.ui.LicensesActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.links.AppLinks
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.openActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.openUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.VersionInfoAlertDialog

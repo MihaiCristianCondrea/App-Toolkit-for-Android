@@ -174,7 +174,9 @@
     <string name="tiles_chip_quick_tool">Alat cepat</string>
     <string name="tiles_chip_tile">Ubin</string>
     <string name="tiles_collapse_category">Ciutkan kategori</string>
-    <string name="tiles_count_format">Alat %1$d</string>
+    <plurals name="tiles_count_format">
+        <item quantity="other">Alat %1$d</item>
+    </plurals>
     <string name="tiles_error_failed_to_load">Gagal memuat Alat Cepat</string>
     <string name="tiles_expand_category">Perluas kategori</string>
     <string name="tiles_filter_added">Ditambahkan</string>
@@ -229,4 +231,7 @@
     <string name="widget_apps_preview_secondary_item">Kalender</string>
     <string name="widget_apps_preview_third_item">Catatan</string>
     <string name="widget_apps_title">Aplikasi oleh Mihai-Cristian Condrea</string>
+    <string name="app_short_description">Kumpulan alat dan utilitas Android yang praktis.</string>
+    <string name="settings_disabled_message">Setelan saat ini tidak tersedia.</string>
+    <string name="long_settings_label">Buka setelan</string>
 </resources>

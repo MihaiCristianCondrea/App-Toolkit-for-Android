@@ -23,13 +23,13 @@
     android:viewportHeight="498"
     tools:ignore="VectorRaster">
     <path
-        android:fillColor="?attr/colorSecondary" <!--FIXME Cannot resolve symbol '?attr/colorSecondary'-->
+        android:fillColor="?attr/colorSecondary"
         android:pathData="M303.773 372.098c0.044-1.119-3.385-2.164-7.659-2.334-4.274-0.169-7.775 0.601-7.82 1.72-0.044 1.119 3.385 2.164 7.659 2.333 4.274 0.17 7.775-0.6 7.82-1.719z" />
     <path
         android:fillColor="?attr/colorPrimary"
         android:pathData="M353.075 369.487c0.045-1.119-3.384-2.164-7.658-2.333-4.275-0.17-7.776 0.6-7.82 1.719-0.044 1.119 3.385 2.164 7.659 2.333 4.274 0.17 7.775-0.6 7.819-1.719z" />
     <path
-        android:fillColor="?attr/colorTertiary" <!--FIXME: Cannot resolve symbol '?attr/colorTertiary'-->
+        android:fillColor="?attr/colorTertiary"
         android:pathData="M284.83 356.885c0.044-1.119-3.385-2.164-7.659-2.334-4.274-0.169-7.775 0.601-7.82 1.72-0.044 1.119 3.385 2.164 7.659 2.333 4.274 0.17 7.775-0.6 7.82-1.719z" />
     <path
         android:fillColor="?attr/colorSecondary"

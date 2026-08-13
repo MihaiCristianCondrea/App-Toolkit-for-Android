@@ -174,7 +174,9 @@
     <string name="tiles_chip_quick_tool">快速工具</string>
     <string name="tiles_chip_tile">磁磚</string>
     <string name="tiles_collapse_category">折疊類別</string>
-    <string name="tiles_count_format">%1$d 工具</string>
+    <plurals name="tiles_count_format">
+        <item quantity="other">%1$d 工具</item>
+    </plurals>
     <string name="tiles_error_failed_to_load">快速工具載入失敗</string>
     <string name="tiles_expand_category">擴大類別</string>
     <string name="tiles_filter_added">已新增</string>
@@ -229,4 +231,7 @@
     <string name="widget_apps_preview_secondary_item">日曆</string>
     <string name="widget_apps_preview_third_item">筆記</string>
     <string name="widget_apps_title">Mihai-Cristian Condrea 的應用程式</string>
+    <string name="app_short_description">實用的 Android 工具與公用程式集合。</string>
+    <string name="settings_disabled_message">設定目前無法使用。</string>
+    <string name="long_settings_label">開啟設定</string>
 </resources>

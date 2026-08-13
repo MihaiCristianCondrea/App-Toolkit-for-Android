@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.previews
 
-import android.R // FIXME: Don't include android.R here; use a fully qualified name for each usage instead
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -41,20 +40,20 @@ fun ToolkitTilesScreenPreview() {
         categories = persistentListOf(
             ToolkitTileCategory(
                 id = "sensors",
-                titleResId = R.string.unknownName,
+                titleResId = android.R.string.unknownName,
                 icon = ToolkitTileIcon.Compass,
                 tiles = persistentListOf(
                     ToolkitTile(
                         id = "level",
-                        titleResId = R.string.unknownName,
-                        summaryResId = R.string.unknownName,
+                        titleResId = android.R.string.unknownName,
+                        summaryResId = android.R.string.unknownName,
                         icon = ToolkitTileIcon.Level,
                         status = ToolkitTileStatus.Available
                     ),
                     ToolkitTile(
                         id = "compass",
-                        titleResId = R.string.unknownName,
-                        summaryResId = R.string.unknownName,
+                        titleResId = android.R.string.unknownName,
+                        summaryResId = android.R.string.unknownName,
                         icon = ToolkitTileIcon.Compass,
                         status = ToolkitTileStatus.NeedsSetup
                     )

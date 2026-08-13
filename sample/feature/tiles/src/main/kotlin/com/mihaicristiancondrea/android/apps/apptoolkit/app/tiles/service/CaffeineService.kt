@@ -70,15 +70,25 @@ class CaffeineService : Service() {
         return START_NOT_STICKY
     }
 
+    /**
+     * Holds the screen on for the caffeine tile.
+     *
+     * [PowerManager.SCREEN_BRIGHT_WAKE_LOCK] is deprecated in favour of
+     * `WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON`, but that replacement needs a window and this
+     * runs in a service with no UI of its own — keeping the screen awake for whatever app is in the
+     * foreground is the whole point of the tile. The deprecated flag is still honoured, so it stays
+     * with the suppression documented rather than silenced.
+     */
+    @Suppress("DEPRECATION")
     private fun acquireWakeLock() {
         if (wakeLock?.isHeld == true) return
 
         val powerManager = getSystemService(POWER_SERVICE) as PowerManager
         wakeLock = powerManager.newWakeLock(
-            PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE, // FIXME: 'static field SCREEN_BRIGHT_WAKE_LOCK: Int' is deprecated. Deprecated in Java.
-            "AppToolkit:CaffeineWakeLock"
+            PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE,
+            WAKE_LOCK_TAG
         ).apply {
-            acquire(10*60*1000L /*10 minutes*/)
+            acquire(WAKE_LOCK_TIMEOUT_MS)
         }
     }
 
@@ -131,6 +141,10 @@ class CaffeineService : Service() {
         private const val NOTIFICATION_ID = 1001
         private const val CHANNEL_ID = "caffeine_channel"
         private const val EXTRA_DURATION = "extra_duration"
+        private const val WAKE_LOCK_TAG = "AppToolkit:CaffeineWakeLock"
+
+        /** Safety net so a leaked lock cannot drain the battery indefinitely. */
+        private const val WAKE_LOCK_TIMEOUT_MS = 10 * 60 * 1000L
 
         fun start(context: Context, durationMillis: Long?) {
             val intent = Intent(context, CaffeineService::class.java).apply {

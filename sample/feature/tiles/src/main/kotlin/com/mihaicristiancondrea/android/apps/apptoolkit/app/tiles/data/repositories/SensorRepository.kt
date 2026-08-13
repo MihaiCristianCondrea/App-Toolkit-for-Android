@@ -36,7 +36,9 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.math.atan2
 import kotlin.math.roundToInt
+import kotlin.math.sqrt
 import kotlin.time.Duration.Companion.milliseconds
 
 /** Converts Android sensor callbacks into streams consumed by tile previews. */
@@ -199,8 +201,15 @@ class SensorRepository(
                     // This is less stable but better than nothing
                     val normGravity = gravity[0] * gravity[0] + gravity[1] * gravity[1] + gravity[2] * gravity[2]
                     if (normGravity > 0.1f) {
-                        val pitch = Math.toDegrees(Math.atan2(gravity[1].toDouble(), gravity[2].toDouble())).toFloat() // FIXME: Should be replaced with Kotlin function
-                        val roll = Math.toDegrees(Math.atan2(-gravity[0].toDouble(), Math.sqrt((gravity[1] * gravity[1] + gravity[2] * gravity[2]).toDouble()))).toFloat() // FIXME: Should be replaced with Kotlin function
+                        val pitch = Math.toDegrees(
+                            atan2(gravity[1].toDouble(), gravity[2].toDouble())
+                        ).toFloat()
+                        val roll = Math.toDegrees(
+                            atan2(
+                                -gravity[0].toDouble(),
+                                sqrt((gravity[1] * gravity[1] + gravity[2] * gravity[2]).toDouble())
+                            )
+                        ).toFloat()
                         trySend(pitch to roll)
                     }
                 }
@@ -264,10 +273,6 @@ class SensorRepository(
         }
         awaitClose { job.cancel() }
     }.flowOn(dispatchers.default)
-
-    fun isSensorAvailable(sensorType: Int): Boolean { // FIXME: Function "isSensorAvailable" is never used
-        return sensorManager.getDefaultSensor(sensorType) != null
-    }
 
     private fun remapRotationMatrix(
         rotationMatrix: FloatArray, displayRotation: Int, remappedMatrix: FloatArray

@@ -89,6 +89,9 @@ class AdsCoreManagerInitializationTest {
         }
     }
 
+    // `ads(…)` returns a Flow, and inside a mockk `verify` block the call is recorded rather than
+    // executed — nothing constructs a real flow here, so the UnusedFlow check does not apply.
+    @Suppress("UnusedFlow")
     @Test
     fun `ads enablement is read from the same flow the ad views observe`() = runTest {
         val dataStore = mockk<CommonDataStore>()
@@ -98,7 +101,7 @@ class AdsCoreManagerInitializationTest {
         manager.initializeAds(appOpenUnitId = "unit")
 
         verify { dataStore.adsEnabledFlow }
-        verify(exactly = 0) { dataStore.ads(any()) } // FIXME: Flow is constructed but not used
+        verify(exactly = 0) { dataStore.ads(any()) }
     }
 
     @Test

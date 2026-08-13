@@ -22,8 +22,8 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import androidx.core.app.ActivityCompat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.permissions.PermissionsConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.hasPostNotificationsPermissions
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.permissions.PermissionsConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.hasPostNotificationsPermissions
 
 /**
  * Utility class for handling runtime permissions.

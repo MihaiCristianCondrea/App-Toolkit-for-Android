@@ -174,7 +174,10 @@
     <string name="tiles_chip_quick_tool">Snabbt verktyg</string>
     <string name="tiles_chip_tile">Kakel</string>
     <string name="tiles_collapse_category">Komprimera kategori</string>
-    <string name="tiles_count_format">%1$d-verktyg</string>
+    <plurals name="tiles_count_format">
+        <item quantity="one">%1$d verktyg</item>
+        <item quantity="other">%1$d-verktyg</item>
+    </plurals>
     <string name="tiles_error_failed_to_load">Det gick inte att läsa in snabbverktyg</string>
     <string name="tiles_expand_category">Utöka kategori</string>
     <string name="tiles_filter_added">Tillagd</string>
@@ -229,4 +232,7 @@
     <string name="widget_apps_preview_secondary_item">Kalender</string>
     <string name="widget_apps_preview_third_item">Anteckningar</string>
     <string name="widget_apps_title">Appar av Mihai-Cristian Condrea</string>
+    <string name="app_short_description">En samling praktiska Android-verktyg och tillbehör.</string>
+    <string name="settings_disabled_message">Inställningarna är inte tillgängliga just nu.</string>
+    <string name="long_settings_label">Öppna inställningar</string>
 </resources>

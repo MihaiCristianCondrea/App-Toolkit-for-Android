@@ -24,6 +24,11 @@ android {
     }
 }
 
+composeCompiler {
+    // See the file itself for why each entry is there.
+    stabilityConfigurationFiles.add(layout.projectDirectory.file("compose-stability.conf"))
+}
+
 dependencies {
     testImplementation(project(":library:core:testing"))
     api(project(":library:core:common"))

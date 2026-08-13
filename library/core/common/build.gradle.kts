@@ -17,6 +17,7 @@ android {
 
     defaultConfig {
         minSdk = versioning.minSdk
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
@@ -26,6 +27,9 @@ android {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.bundles.instrumentationTest)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.compose.material3)
 

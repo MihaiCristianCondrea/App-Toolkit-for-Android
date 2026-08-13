@@ -28,7 +28,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repositories.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors

@@ -27,7 +27,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.models.network.AppErrors
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.utils.extensions.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
@@ -196,7 +196,7 @@ class AppsListViewModel(
                 val isFilterValid = when (state.selectedFilter) {
                     AppsListFilter.All -> true
                     AppsListFilter.Installed -> installedPackagesCount > 0
-                    AppsListFilter.NotInstalled -> installedPackagesCount > 0 && installedPackagesCount < allAppsCount // FIXME: Two comparisons should be converted to a range check
+                    AppsListFilter.NotInstalled -> installedPackagesCount in 1..<allAppsCount
                     AppsListFilter.Favorites -> favoritesCount > 0
                 }
 

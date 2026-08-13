@@ -174,7 +174,9 @@
     <string name="tiles_chip_quick_tool">Công cụ nhanh</string>
     <string name="tiles_chip_tile">Ngói</string>
     <string name="tiles_collapse_category">Thu gọn danh mục</string>
-    <string name="tiles_count_format">Công cụ %1$d</string>
+    <plurals name="tiles_count_format">
+        <item quantity="other">Công cụ %1$d</item>
+    </plurals>
     <string name="tiles_error_failed_to_load">Không tải được Công cụ nhanh</string>
     <string name="tiles_expand_category">Mở rộng danh mục</string>
     <string name="tiles_filter_added">Đã thêm</string>
@@ -229,4 +231,7 @@
     <string name="widget_apps_preview_secondary_item">Lịch</string>
     <string name="widget_apps_preview_third_item">Ghi chú</string>
     <string name="widget_apps_title">Ứng dụng của Mihai-Cristian Condrea</string>
+    <string name="app_short_description">Bộ sưu tập các công cụ và tiện ích Android hữu ích.</string>
+    <string name="settings_disabled_message">Hiện không thể sử dụng phần cài đặt.</string>
+    <string name="long_settings_label">Mở cài đặt</string>
 </resources>

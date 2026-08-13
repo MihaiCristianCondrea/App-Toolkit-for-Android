@@ -58,3 +58,8 @@ translation as the failure mode.
 `ErrorExtensions` was in the host's `core/utils` package. It moved here rather than to
 `:sample:core:common` because it resolves string resources, and putting it in `common` would have
 pointed the constants module at the resource module.
+
+Its package is now `core.ui.utils.extensions`. It kept the `core.utils` root through the first move,
+which left that root split across two modules — `:sample:core:common` owned `core.utils.constants.*`
+while this module owned `core.utils.extensions`. Each `core.*` root now belongs to exactly one
+module.

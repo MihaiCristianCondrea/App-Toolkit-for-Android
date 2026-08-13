@@ -89,6 +89,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -113,7 +114,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ads.Q
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ads.ToolkitTilesNativeAdViewFactory
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
@@ -465,7 +466,11 @@ private fun TileCategorySection(
                     modifier = Modifier.weight(1f),
                 )
                 Text(
-                    text = stringResource(id = R.string.tiles_count_format, category.tiles.size),
+                    text = pluralStringResource(
+                        id = R.plurals.tiles_count_format,
+                        count = category.tiles.size,
+                        category.tiles.size,
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
