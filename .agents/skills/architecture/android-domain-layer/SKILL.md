@@ -7,6 +7,16 @@ description: >
   logic, ViewModel complexity, repository coordination, domain-layer
   dependencies, use-case naming, threading, or deciding whether a use case
   should exist at all.
+metadata:
+  author: Google LLC
+  last-updated: '2026-08-13'
+  keywords:
+  - architecture
+  - domain layer
+  - use case
+  - business logic
+  - interactor
+  - viewModel complexity
 ---
 
 # Android Domain Layer

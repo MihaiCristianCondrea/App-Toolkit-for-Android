@@ -7,6 +7,17 @@ description: >
   constraints, retries, backoff, expedited work, long-running workers,
   foreground execution, work chaining, progress, cancellation, or persistent
   tasks that must survive app restarts or device reboots.
+metadata:
+  author: Google LLC
+  last-updated: '2026-08-13'
+  keywords:
+  - workmanager
+  - worker
+  - coroutineworker
+  - background work
+  - jetpack
+  - scheduling
+  - persistent work
 ---
 
 # Android WorkManager

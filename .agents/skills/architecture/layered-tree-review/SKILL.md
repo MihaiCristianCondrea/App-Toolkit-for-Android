@@ -1,6 +1,18 @@
 ---
 name: android-project-tree
 description: Review Android/Kotlin project tree and file placement. Use when deciding where screens, ViewModels, repositories, data sources, models, mappers, use cases, navigation, or state files should live. This skill checks structure only; use the dedicated data/domain architecture skills for behavior and architectural semantics.
+metadata:
+  author: Mihai-Cristian Condrea
+  last-updated: '2026-08-13'
+  keywords:
+  - android
+  - clean architecture
+  - feature organization
+  - file placement
+  - layered architecture
+  - module structure
+  - package organization
+  - project structure
 ---
 
 # Android Project Tree

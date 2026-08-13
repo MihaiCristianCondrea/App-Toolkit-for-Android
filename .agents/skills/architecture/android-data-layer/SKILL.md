@@ -6,6 +6,19 @@ description: >
   with UI, ViewModels, repositories, data sources, domain/use-case layers,
   models, state, threading, caching, sources of truth, dependency direction,
   or when deciding where Android application logic should live.
+metadata:
+  author: Google LLC
+  last-updated: '2026-08-13'
+  keywords:
+  - architecture
+  - data layer
+  - repository
+  - datasource
+  - model
+  - source of truth
+  - main-safety
+  - threading
+  - caching
 ---
 
 # Android Architecture

@@ -6,6 +6,18 @@ description: >
   DataStore, Proto DataStore, JSON DataStore, serializers, preference keys,
   DataStore migrations, corruption handling, multi-process DataStore,
   repositories backed by DataStore, or replacing SharedPreferences.
+metadata:
+  author: Google LLC
+  last-updated: '2026-08-13'
+  keywords:
+  - datastore
+  - preferences
+  - jetpack
+  - persistence
+  - sharedpreferences
+  - serialization
+  - proto
+  - json
 ---
 
 # Android DataStore
