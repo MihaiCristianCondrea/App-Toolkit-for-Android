@@ -58,11 +58,16 @@ val hasMatchingGoogleServicesConfig: Boolean = googleServicesFiles.any { configF
     packageNamePattern.containsMatchIn(configFile.readText())
 }
 
+// A config that is present but names a different package is the dangerous case: it looks
+// configured, and the only symptom is that Firebase quietly does nothing.
+val hasMismatchedGoogleServicesConfig: Boolean =
+    googleServicesFiles.isNotEmpty() && !hasMatchingGoogleServicesConfig
+
 if (hasMatchingGoogleServicesConfig) {
     apply(plugin = libs.plugins.google.mobile.services.get().pluginId)
     apply(plugin = libs.plugins.firebase.crashlytics.get().pluginId)
     apply(plugin = libs.plugins.firebase.performance.get().pluginId)
-} else if (googleServicesFiles.isNotEmpty()) {
+} else if (hasMismatchedGoogleServicesConfig) {
     logger.warn(
         "google-services.json has no client for '$releasedApplicationId', so Firebase " +
             "(Analytics, Crashlytics, Performance) is disabled for this build. Add that package " +
@@ -70,16 +75,19 @@ if (hasMatchingGoogleServicesConfig) {
     )
 }
 
-// A release build without Crashlytics is worse than a failed build: the app ships and stops
-// reporting. Debug builds are allowed to run without Firebase so the project stays buildable by
-// anyone who does not have the real config.
+// `google-services.json` is gitignored, so an absent file is the normal state on CI and on any
+// clone — it means "not configured here", which is obvious and harmless. A file that is present but
+// names a different package means "configured wrong", which is invisible: Firebase is skipped and
+// the release ships with no crash reporting. Only the second case fails the build; failing on the
+// first would break `./gradlew build` on CI, which assembles release variants.
 gradle.taskGraph.whenReady {
     val assemblesRelease = allTasks.any { task ->
         task.project == project && task.name.contains("Release")
     }
-    check(hasMatchingGoogleServicesConfig || !assemblesRelease) {
-        "Refusing to build a release without Firebase: google-services.json has no client for " +
-            "'$releasedApplicationId'. See docs/application-id.md."
+    check(!hasMismatchedGoogleServicesConfig || !assemblesRelease) {
+        "Refusing to build a release with a mismatched google-services.json: it has no client for " +
+            "'$releasedApplicationId', so Crashlytics would be silently disabled. " +
+            "See docs/application-id.md."
     }
 }
 

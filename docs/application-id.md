@@ -44,32 +44,27 @@ Changing it, or getting it wrong, breaks all of these:
 
 ## google-services.json
 
-The build applies the Firebase plugins only when `google-services.json` contains a client for the
-application ID above. The check is deliberately stricter than "the file exists":
+The file is **not committed** — it is gitignored, and holds API keys and client IDs issued by
+Firebase. Each machine that needs Firebase keeps its own copy at `sample/app/google-services.json`,
+downloaded from the Firebase console for the app registered as `com.d4rk.android.apps.apptoolkit`.
 
-- if the file is **missing**, Firebase is skipped — contributors can build without the real config;
-- if the file is **present but has no matching client**, the build warns and skips Firebase, rather
-  than failing with the plugin's `No matching client found for package name`, which reads as a build
-  misconfiguration instead of what it is;
-- a **release** build in that state fails outright. Shipping a release whose crash reporting silently
-  did not initialise is worse than not shipping.
+The build applies the Firebase plugins only when that file contains a client matching the
+application ID. The check distinguishes two states that a plain file-exists test cannot:
 
-### Current state
+| State                       | Meaning              | Build behaviour                          |
+|-----------------------------|----------------------|------------------------------------------|
+| File absent                 | Not configured here  | Firebase skipped, build proceeds         |
+| File present, wrong package | Configured wrong     | Warning; **release builds fail**         |
+| File present, right package | Configured           | Firebase plugins applied                 |
 
-The committed `sample/app/google-services.json` has a client for
-`com.mihaicristiancondrea.android.apps.apptoolkit` only, so **Firebase is currently disabled** for
-this app and release builds will refuse to run.
+Absence is the normal state on CI and on a fresh clone. It is obvious and harmless, so it must not
+fail the build — `./gradlew build` assembles release variants, so failing on absence would break CI
+for everyone.
 
-To fix it, in the Firebase console for project `app-toolkit-for-android`:
-
-1. Add an Android app with package name `com.d4rk.android.apps.apptoolkit`.
-2. Add the release and debug signing SHA-1/SHA-256 fingerprints to it.
-3. Download the regenerated `google-services.json` and replace `sample/app/google-services.json`.
-
-The regenerated file keeps the existing client, so nothing that already works stops working.
-
-This cannot be done from the repository — the file carries API keys and client IDs issued by
-Firebase, and inventing them would produce a build that looks configured and fails at runtime.
+A file that is present but names a different package is the case worth failing on. Nothing looks
+wrong: the Google Services plugin is simply never applied, and the release ships with Crashlytics
+silently doing nothing. That is how a renamed application ID turns into a release with no crash
+reporting, which is exactly what happened when the ID was corrected.
 
 ## Verifying
 
@@ -79,9 +74,12 @@ Firebase, and inventing them would produce a build that looks configured and fai
 unzip -p sample/app/build/outputs/apk/debug/app-debug.apk AndroidManifest.xml | strings | grep -i d4rk
 ```
 
-The warning below means the Firebase step above has not been done yet:
+This warning means a `google-services.json` is present but registered to a different package —
+re-download it from the Firebase console for `com.d4rk.android.apps.apptoolkit`:
 
 ```text
 google-services.json has no client for 'com.d4rk.android.apps.apptoolkit', so Firebase
 (Analytics, Crashlytics, Performance) is disabled for this build.
 ```
+
+No warning and no Firebase simply means the file is absent, which is expected on CI.
