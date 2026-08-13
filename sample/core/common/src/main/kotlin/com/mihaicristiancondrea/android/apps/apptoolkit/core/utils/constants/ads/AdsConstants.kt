@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.common.BuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.DebugAdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.bannerAdUnitId as selectBannerAdUnitId
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.nativeAdUnitId as selectNativeAdUnitId

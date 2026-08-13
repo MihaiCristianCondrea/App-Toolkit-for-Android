@@ -178,6 +178,7 @@ android {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
+    implementation(project(":sample:core:common"))
     implementation(project(":library:apptoolkit"))
     implementation(project(":library:core:common"))
     implementation(project(":library:core:ui"))

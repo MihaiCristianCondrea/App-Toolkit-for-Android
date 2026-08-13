@@ -41,5 +41,9 @@ gradlePlugin {
             id = "com.mihaicristiancondrea.android.apptoolkit.unit-test"
             implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.UnitTestPlugin"
         }
+        register("sampleModule") {
+            id = "com.mihaicristiancondrea.android.apptoolkit.sample-module"
+            implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.SampleModulePlugin"
+        }
     }
 }
