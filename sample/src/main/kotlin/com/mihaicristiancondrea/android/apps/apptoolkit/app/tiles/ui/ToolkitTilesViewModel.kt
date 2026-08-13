@@ -25,8 +25,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositor
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SosRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SystemRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.RingerMode
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.GetToolkitTilesUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.SyncToolkitTileStatusesUseCase
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contract.ToolkitTilesEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state.ToolkitSensorData
@@ -53,13 +52,12 @@ import kotlinx.coroutines.launch
 
 /** Coordinates the static Toolkit Tiles catalog, filtering, and add-tile requests. */
 class ToolkitTilesViewModel(
-    private val getToolkitTilesUseCase: GetToolkitTilesUseCase,
+    private val toolkitTilesRepository: ToolkitTilesRepository,
     private val sensorRepository: SensorRepository,
     private val breathingRepository: BreathingRepository,
     private val caffeineRepository: CaffeineRepository,
     private val systemRepository: SystemRepository,
     private val sosRepository: SosRepository,
-    private val syncToolkitTileStatusesUseCase: SyncToolkitTileStatusesUseCase,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<ToolkitTilesUiState, ToolkitTilesEvent, ToolkitTilesAction>(
@@ -105,7 +103,7 @@ class ToolkitTilesViewModel(
     private fun loadTiles() {
         startOperation(action = Actions.LOAD_TILES)
         loadJob = loadJob.restart {
-            getToolkitTilesUseCase()
+            toolkitTilesRepository.tileCategories()
                 .flowOn(dispatchers.default)
                 .onStart { screenState.setLoading() }
                 .catchReport(action = Actions.LOAD_TILES) {
@@ -119,11 +117,9 @@ class ToolkitTilesViewModel(
                         .map { category -> category.id }
                         .toPersistentSet()
 
-                    val syncedCategories = syncToolkitTileStatusesUseCase(categories)
-
                     screenState.setSuccess(
                         data = (screenData ?: ToolkitTilesUiState()).copy(
-                            categories = syncedCategories.toImmutableList(),
+                            categories = categories,
                             expandedCategoryIds = expandedIds,
                         )
                     )
@@ -135,7 +131,8 @@ class ToolkitTilesViewModel(
     private fun refreshStatuses() {
         screenState.update { current ->
             val data = current.data ?: return@update current
-            current.copy(data = data.copy(categories = syncToolkitTileStatusesUseCase(data.categories).toImmutableList()))
+            val refreshed = toolkitTilesRepository.withCurrentStatuses(data.categories)
+            current.copy(data = data.copy(categories = refreshed.toImmutableList()))
         }
     }
 

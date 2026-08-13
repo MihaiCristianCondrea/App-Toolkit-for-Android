@@ -17,22 +17,29 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository
 
-import android.content.Context
-import android.provider.Settings
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.getTileServiceRequests
-/** Reads active Quick Settings tiles and resolves the toolkit's tile services. */
-class ToolkitTilesRepository(private val context: Context) {
-    fun getActiveQuickSettingsTiles(): Set<String> {
-        return try {
-            val tiles = Settings.Secure.getString(context.contentResolver, "sysui_qs_tiles") ?: ""
-            tiles.split(",").toSet()
-        } catch (_: SecurityException) {
-            emptySet()
-        }
-    }
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.flow.Flow
 
-    fun getComponentFlattenedName(requestKey: String): String? {
-        val request = getTileServiceRequests()[requestKey]
-        return request?.componentName(context)?.flattenToString()
-    }
+/**
+ * Owns the Toolkit Tiles catalogue and the Quick Settings state each tile is shown with.
+ *
+ * The catalogue used to live in `GetToolkitTilesUseCase` and the status pass in
+ * `SyncToolkitTileStatusesUseCase`. Neither was a use case: one was a hardcoded data set in the
+ * domain layer, the other read this repository and mapped over the result. Both are data-layer
+ * work, and keeping them apart meant a caller could load the catalogue and forget to apply
+ * statuses — which is what [tileCategories] now does for them.
+ */
+interface ToolkitTilesRepository {
+
+    /** The curated catalogue, with each tile's current Quick Settings status already applied. */
+    fun tileCategories(): Flow<ImmutableList<ToolkitTileCategory>>
+
+    /**
+     * Re-reads Quick Settings and returns [categories] with refreshed statuses.
+     *
+     * Used when returning from the system tile picker, where the catalogue has not changed but the
+     * set of added tiles has.
+     */
+    fun withCurrentStatuses(categories: List<ToolkitTileCategory>): List<ToolkitTileCategory>
 }

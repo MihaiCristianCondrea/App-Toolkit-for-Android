@@ -15,8 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository
 
+import android.content.Context
+import android.provider.Settings
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitQuickTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
@@ -24,15 +26,48 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.T
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitToolKind
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.getTileServiceRequests
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-/** Builds the curated Toolkit Tiles catalog inspired by the preview-only resources project. */
-class GetToolkitTilesUseCase {
-    operator fun invoke(): Flow<ImmutableList<ToolkitTileCategory>> = flowOf(
-        persistentListOf(
+/** Serves the curated Toolkit Tiles catalog and reads active Quick Settings tiles. */
+class DefaultToolkitTilesRepository(private val context: Context) : ToolkitTilesRepository {
+
+    override fun tileCategories(): Flow<ImmutableList<ToolkitTileCategory>> =
+        flowOf(withCurrentStatuses(catalogue).toImmutableList())
+
+    override fun withCurrentStatuses(
+        categories: List<ToolkitTileCategory>,
+    ): List<ToolkitTileCategory> {
+        val activeTiles = activeQuickSettingsTiles()
+        return categories.map { category ->
+            category.copy(
+                tiles = category.tiles.map { tile ->
+                    val componentName = tile.requestKey?.let(::componentFlattenedName)
+                    if (componentName != null && componentName in activeTiles) {
+                        tile.copy(status = ToolkitTileStatus.Added)
+                    } else {
+                        tile
+                    }
+                }.toImmutableList()
+            )
+        }
+    }
+
+    private fun activeQuickSettingsTiles(): Set<String> = try {
+        val tiles = Settings.Secure.getString(context.contentResolver, SYSUI_QS_TILES) ?: ""
+        tiles.split(",").toSet()
+    } catch (_: SecurityException) {
+        emptySet()
+    }
+
+    private fun componentFlattenedName(requestKey: String): String? =
+        getTileServiceRequests()[requestKey]?.componentName(context)?.flattenToString()
+
+    private val catalogue: ImmutableList<ToolkitTileCategory> = persistentListOf(
             ToolkitTileCategory(
                 id = CATEGORY_SENSORS,
                 titleResId = R.string.tiles_category_sensors,
@@ -166,7 +201,6 @@ class GetToolkitTilesUseCase {
                     ),
                 ),
             ),
-        )
     )
 
     private companion object {
@@ -174,5 +208,6 @@ class GetToolkitTilesUseCase {
         const val CATEGORY_UTILITIES: String = "utilities"
         const val CATEGORY_SYSTEM: String = "system"
         const val CATEGORY_WELLBEING: String = "wellbeing"
+        const val SYSUI_QS_TILES: String = "sysui_qs_tiles"
     }
 }

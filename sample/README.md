@@ -51,7 +51,7 @@ This is an application module and is not intended as a library API. Its importan
 ## Internal implementations
 
 - Developer-app remote/local repositories, DTO mapping, favorites persistence, and installed-app inspection.
-- Concrete quick-tool data repositories, domain models/use cases with actual policy, Compose tools, Quick Settings tiles, and the caffeine service.
+- Concrete quick-tool data repositories, the Toolkit Tiles catalogue and Quick Settings status reads, domain models, Compose tools, Quick Settings tiles, and the caffeine service.
 - Main/components/apps-list ViewModels and UI, widget implementation, host DI modules, and navigation builders.
 
 ## Current risks
@@ -62,9 +62,14 @@ The host module still owns substantial reusable-looking apps-list, quick-tools, 
 
 The current worktree reflects an ongoing migration from the former `:app` project to `:sample` and from the old package namespace to the published library/sample namespaces. Avoid restoring deleted `app/` sources while completing modularization.
 
-Quick-tool repositories intentionally use concrete `XRepository` classes. They each wrap one
-Android platform source, have no alternate implementation, and do not cross a module boundary;
-adding matching interfaces or pass-through use cases would not create useful substitution.
+`BreathingRepository`, `CaffeineRepository`, `SensorRepository`, `SosRepository` and
+`SystemRepository` intentionally stay concrete `XRepository` classes. They each wrap one Android
+platform source, have no alternate implementation, and do not cross a module boundary; adding
+matching interfaces or pass-through use cases would not create useful substitution.
+
+`ToolkitTilesRepository` is the exception among them, and has a `Default` implementation behind an
+interface: it serves the tile catalogue as well as reading Quick Settings, so a caller can be given
+a fixed catalogue without a device.
 
 The apps-list, navigation-drawer and components-showcase use cases were removed for the same reason
 in reverse: each forwarded one call to a repository that already logged the breadcrumb the use case

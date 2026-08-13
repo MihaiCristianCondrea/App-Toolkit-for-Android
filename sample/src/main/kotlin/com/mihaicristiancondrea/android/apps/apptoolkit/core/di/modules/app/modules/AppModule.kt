@@ -25,9 +25,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositor
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SensorRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SosRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SystemRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.DefaultToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.ToolkitTilesRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.GetToolkitTilesUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.usecase.SyncToolkitTileStatusesUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
@@ -44,9 +43,7 @@ val appModule: Module = module {
             firebaseController = get()
         )
     }
-    single { GetToolkitTilesUseCase() }
-    single { SyncToolkitTileStatusesUseCase(repository = get()) }
-    single { ToolkitTilesRepository(context = androidContext()) }
+    single<ToolkitTilesRepository> { DefaultToolkitTilesRepository(context = androidContext()) }
     single {
         SensorRepository(
             context = androidContext(),
@@ -78,8 +75,7 @@ val appModule: Module = module {
     }
     viewModel {
         ToolkitTilesViewModel(
-            getToolkitTilesUseCase = get(),
-            syncToolkitTileStatusesUseCase = get(),
+            toolkitTilesRepository = get(),
             sensorRepository = get(),
             breathingRepository = get(),
             caffeineRepository = get(),
