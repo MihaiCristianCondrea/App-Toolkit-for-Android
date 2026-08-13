@@ -44,7 +44,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.views.navigation.RandomAppHandler
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.RandomAppHandler
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.ads.AdsConfig

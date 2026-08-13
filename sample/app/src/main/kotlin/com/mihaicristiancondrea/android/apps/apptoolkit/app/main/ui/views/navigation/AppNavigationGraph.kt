@@ -17,31 +17,19 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.views.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.runtime.Stable
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.navigation.appsListEntryBuilder
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.toolkitTilesEntryBuilder
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.appToolkitNavigationEntryBuilders
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 
 /**
- * Context shared by all navigation entry builders in the app module.
- */
-@Stable
-data class AppNavigationEntryContext(
-    val paddingValues: PaddingValues,
-    val windowWidthSizeClass: AppWindowWidthSizeClass,
-    val onRandomAppHandlerChanged: (StableNavKey, RandomAppHandler?) -> Unit,
-) {
-    fun registerRandomAppHandlerFor(route: StableNavKey): (RandomAppHandler?) -> Unit = { handler ->
-        onRandomAppHandlerChanged(route, handler)
-    }
-}
-
-/**
- * Default app navigation builders that can be extended with additional entries.
+ * Assembles the app's navigation entries from every feature module.
+ *
+ * This is the one place that knows the full feature set, which is why it stays in `:sample:app`
+ * rather than in the shell or in a feature: the shell renders whatever entries it is handed, and
+ * each feature contributes only its own.
  */
 fun appNavigationEntryBuilders(
     context: AppNavigationEntryContext,

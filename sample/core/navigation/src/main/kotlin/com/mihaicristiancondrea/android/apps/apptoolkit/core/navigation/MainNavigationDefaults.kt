@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.utils.defaults
+package com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Apps
@@ -23,14 +23,13 @@ import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.GridView
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-internal object MainNavigationDefaults {
+// Public rather than internal now that the shell consuming it lives in another module.
+object MainNavigationDefaults {
     val fabSupportedRoutes: Set<StableNavKey> = setOf(
         AppsListRoute
     )

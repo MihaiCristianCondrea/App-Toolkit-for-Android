@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.views.navigation.AppNavigationEntryContext
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesRoute as ToolkitTilesScreenRoute

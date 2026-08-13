@@ -52,6 +52,7 @@ rootProject.name = "App-Toolkit-for-Android"
 include(":sample:app")
 include(":sample:core:common")
 include(":sample:core:datastore")
+include(":sample:core:navigation")
 include(":sample:core:ui")
 include(":library:apptoolkit")
 include(":library:core:common")

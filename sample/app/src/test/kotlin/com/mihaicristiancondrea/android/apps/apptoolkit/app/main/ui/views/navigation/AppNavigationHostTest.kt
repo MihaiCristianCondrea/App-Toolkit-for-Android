@@ -18,10 +18,11 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.views.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.utils.constants.AppsListRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.utils.constants.ToolkitTilesRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.utils.constants.toNavKeyOrDefault
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppsListRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationRoutes
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.toNavKeyOrDefault
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.AdsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.HelpRoute

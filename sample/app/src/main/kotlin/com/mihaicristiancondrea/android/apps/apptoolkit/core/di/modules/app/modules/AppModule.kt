@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.mod
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.data.repository.AppNavigationRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.BreathingRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.CaffeineRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SensorRepository

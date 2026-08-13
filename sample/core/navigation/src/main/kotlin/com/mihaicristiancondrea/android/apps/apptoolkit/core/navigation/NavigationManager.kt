@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.navigation
+package com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
 import kotlinx.coroutines.flow.MutableSharedFlow
