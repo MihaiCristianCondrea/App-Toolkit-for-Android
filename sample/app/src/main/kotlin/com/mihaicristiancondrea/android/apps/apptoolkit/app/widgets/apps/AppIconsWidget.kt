@@ -58,7 +58,7 @@ import androidx.glance.layout.size
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.widgets.apps.domain.actions.OpenAppOrStoreAction

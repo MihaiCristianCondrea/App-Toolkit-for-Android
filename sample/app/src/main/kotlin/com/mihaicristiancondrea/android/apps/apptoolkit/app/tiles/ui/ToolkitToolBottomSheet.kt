@@ -45,7 +45,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.CaffeineState
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus

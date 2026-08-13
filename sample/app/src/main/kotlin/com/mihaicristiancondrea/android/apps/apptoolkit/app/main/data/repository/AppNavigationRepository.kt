@@ -24,7 +24,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Widgets
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.utils.constants.NavigationRoutes
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.NavigationRepository

@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules
 
 import android.content.Context
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module

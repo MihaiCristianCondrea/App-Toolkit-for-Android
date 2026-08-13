@@ -186,7 +186,7 @@ class MainViewModelTest {
 
             val msg = snackbar.message as UiTextHelper.StringResource
             assertEquals(
-                com.mihaicristiancondrea.android.apps.apptoolkit.R.string.error_failed_to_load_navigation,
+                com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R.string.error_failed_to_load_navigation,
                 msg.resourceId
             )
 

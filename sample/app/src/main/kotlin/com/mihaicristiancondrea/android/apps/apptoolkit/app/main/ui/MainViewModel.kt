@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.state.MainUiState
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repository.InAppUpdateRepository

@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.reposito
 
 import android.content.Context
 import android.provider.Settings
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitQuickTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileCategory

@@ -50,7 +50,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppListItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.AppCard

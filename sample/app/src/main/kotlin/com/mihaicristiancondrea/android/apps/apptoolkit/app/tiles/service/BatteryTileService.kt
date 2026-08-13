@@ -23,7 +23,7 @@ import android.os.BatteryManager
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 
 /** Quick Settings tile that refreshes the current battery percentage. */
 class BatteryTileService : TileService() {

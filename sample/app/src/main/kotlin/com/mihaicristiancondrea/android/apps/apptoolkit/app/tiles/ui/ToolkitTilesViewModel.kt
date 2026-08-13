@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.BreathingRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.CaffeineRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.SensorRepository

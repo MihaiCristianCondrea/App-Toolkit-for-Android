@@ -73,7 +73,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import coil3.compose.AsyncImage
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppLink

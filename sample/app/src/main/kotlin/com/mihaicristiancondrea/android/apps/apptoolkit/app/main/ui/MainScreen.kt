@@ -689,7 +689,7 @@ private fun SubScreenShell(
         is LicensesRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.oss_license_title)
         is SupportRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.support_us)
         is LibraryExtrasRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.app_name)
-        is ComponentsRoute -> stringResource(com.mihaicristiancondrea.android.apps.apptoolkit.R.string.components_title)
+        is ComponentsRoute -> stringResource(com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R.string.components_title)
         else -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.app_name)
     }
 

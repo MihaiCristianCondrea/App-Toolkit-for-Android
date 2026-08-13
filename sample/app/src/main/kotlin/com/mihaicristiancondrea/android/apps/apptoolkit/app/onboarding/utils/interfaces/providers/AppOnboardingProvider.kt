@@ -24,7 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material.icons.outlined.Star
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.onboarding.utils.constants.OnboardingKeys
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.model.OnboardingPage

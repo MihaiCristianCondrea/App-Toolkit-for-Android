@@ -22,7 +22,7 @@ import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.WarningAmber
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.model.ToolkitTilesFilterItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state.ToolkitTilesFilter
 import kotlinx.collections.immutable.ImmutableList

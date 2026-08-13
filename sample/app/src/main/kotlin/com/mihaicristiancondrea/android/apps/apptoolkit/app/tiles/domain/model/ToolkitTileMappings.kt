@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model
 
 import android.content.ComponentName
 import android.content.Context
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.BatteryTileService
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.CoinFlipTileService
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.CounterTileService

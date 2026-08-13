@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.apps.apptoolkit.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 
 @Immutable
 sealed class CaffeineState {
