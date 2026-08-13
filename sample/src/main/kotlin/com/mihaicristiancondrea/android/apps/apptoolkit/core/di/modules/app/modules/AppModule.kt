@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.data.repository.AppNavigationRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.navigation.NavigationManager
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repository.BreathingRepository
@@ -44,9 +43,6 @@ val appModule: Module = module {
             dataStore = get(),
             firebaseController = get()
         )
-    }
-    single<GetNavigationDrawerItemsUseCase> {
-        GetNavigationDrawerItemsUseCase(navigationRepository = get(), firebaseController = get())
     }
     single { GetToolkitTilesUseCase() }
     single { SyncToolkitTileStatusesUseCase(repository = get()) }
@@ -96,7 +92,7 @@ val appModule: Module = module {
 
     viewModel {
         MainViewModel(
-            getNavigationDrawerItemsUseCase = get(),
+            navigationRepository = get(),
             consentRepository = get(),
             requestInAppReviewUseCase = get<RequestInAppReviewUseCase>(),
             inAppUpdateRepository = get(),

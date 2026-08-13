@@ -20,12 +20,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchAppDetailsUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.GetAppInstallInfoUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.GetInstalledPackagesUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
@@ -56,25 +50,14 @@ open class AppsListViewModelBaseTest {
         dispatchers: DispatcherProvider = TestDispatchers(),
     ) {
         println("\uD83E\uDDEA [SETUP] Initial favorites: $initialFavorites")
-        val developerAppsRepository = FakeDeveloperAppsRepository(fetchApps, fetchError)
-        val fetchUseCase = FetchDeveloperAppsUseCase(developerAppsRepository)
-        val fetchDetailsUseCase = FetchAppDetailsUseCase(developerAppsRepository)
-        val installedAppsRepository =
-            FakeInstalledAppsRepository(installedPackages = installedPackages)
-        val getInstalledPackagesUseCase = GetInstalledPackagesUseCase(installedAppsRepository)
-        val getAppInstallInfoUseCase = GetAppInstallInfoUseCase(installedAppsRepository)
-        val favoritesRepository =
-            FakeFavoritesRepository(initialFavorites, favoritesFlow, toggleError)
-        val observeFavoritesUseCase =
-            ObserveFavoritesUseCase(favoritesRepository, firebaseController)
-        val toggleFavoriteUseCase = ToggleFavoriteUseCase(favoritesRepository, firebaseController)
         viewModel = AppsListViewModel(
-            fetchDeveloperAppsUseCase = fetchUseCase,
-            fetchAppDetailsUseCase = fetchDetailsUseCase,
-            getInstalledPackagesUseCase = getInstalledPackagesUseCase,
-            getAppInstallInfoUseCase = getAppInstallInfoUseCase,
-            observeFavoritesUseCase = observeFavoritesUseCase,
-            toggleFavoriteUseCase = toggleFavoriteUseCase,
+            developerAppsRepository = FakeDeveloperAppsRepository(fetchApps, fetchError),
+            installedAppsRepository = FakeInstalledAppsRepository(installedPackages = installedPackages),
+            favoritesRepository = FakeFavoritesRepository(
+                initialFavorites,
+                favoritesFlow,
+                toggleError,
+            ),
             dispatchers = dispatchers,
             firebaseController = firebaseController
         )

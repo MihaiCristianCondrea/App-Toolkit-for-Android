@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui
 
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.domain.usecase.UnlockComponentsShowcaseUseCase
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repository.ComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.contract.ComponentsUnlockAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.contract.ComponentsUnlockEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.state.ComponentsUnlockUiState
@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.update
  * Coordinates unlocking the components showcase entry based on About screen taps.
  */
 class ComponentsUnlockViewModel(
-    private val unlockComponentsShowcase: UnlockComponentsShowcaseUseCase,
+    private val componentsShowcaseRepository: ComponentsShowcaseRepository,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<ComponentsUnlockUiState, ComponentsUnlockEvent, ComponentsUnlockAction>(
@@ -74,7 +74,7 @@ class ComponentsUnlockViewModel(
 
         unlockRequested = true
         flow {
-            unlockComponentsShowcase()
+            componentsShowcaseRepository.unlock()
             emit(Unit)
         }
             .flowOn(dispatchers.io)

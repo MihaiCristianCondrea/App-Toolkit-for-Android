@@ -17,7 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings.modules
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.domain.usecase.UnlockComponentsShowcaseUseCase
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repository.ComponentsShowcaseRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repository.DefaultComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.ComponentsUnlockViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.about.ui.AppAboutSettingsContent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.settings.utils.providers.AppDisplaySettingsProvider
@@ -38,7 +39,9 @@ val generalSettingsModule: Module = module {
     single<PrivacySettingsProvider> {
         AppPrivacySettingsProvider(context = get())
     }
-    single<UnlockComponentsShowcaseUseCase> { UnlockComponentsShowcaseUseCase(dataStore = get()) }
+    single<ComponentsShowcaseRepository> {
+        DefaultComponentsShowcaseRepository(dataStore = get(), firebaseController = get())
+    }
     // Keep as factory: this provider carries composable content lambdas and should stay short-lived
     // to avoid accidental capture of screen-scoped references in global state.
     factory<GeneralSettingsContentProvider> {
@@ -63,7 +66,7 @@ val generalSettingsModule: Module = module {
 
     viewModel {
         ComponentsUnlockViewModel(
-            unlockComponentsShowcase = get(),
+            componentsShowcaseRepository = get(),
             dispatchers = get(),
             firebaseController = get(),
         )

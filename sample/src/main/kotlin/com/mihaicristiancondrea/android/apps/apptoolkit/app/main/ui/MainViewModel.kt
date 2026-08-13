@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.NavigationRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.MainAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.state.MainUiState
@@ -57,7 +57,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
 class MainViewModel(
-    private val getNavigationDrawerItemsUseCase: GetNavigationDrawerItemsUseCase,
+    private val navigationRepository: NavigationRepository,
     private val consentRepository: ConsentRepository,
     private val requestInAppReviewUseCase: RequestInAppReviewUseCase,
     private val inAppUpdateRepository: InAppUpdateRepository,
@@ -93,7 +93,7 @@ class MainViewModel(
     private fun loadNavigationItems() {
         startOperation(action = Actions.LOAD_NAVIGATION)
         navigationJob = navigationJob.restart {
-            getNavigationDrawerItemsUseCase.invoke()
+            navigationRepository.getNavigationDrawerItems()
                 .flowOn(dispatchers.io)
                 .onStart {
                     updateStateThreadSafe {

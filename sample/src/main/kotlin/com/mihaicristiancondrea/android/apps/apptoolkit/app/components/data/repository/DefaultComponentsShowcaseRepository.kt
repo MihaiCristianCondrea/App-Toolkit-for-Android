@@ -15,20 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repository
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.FavoritesRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import kotlinx.coroutines.flow.Flow
 
-class ToggleFavoriteUseCase(
-    private val repository: FavoritesRepository,
+class DefaultComponentsShowcaseRepository(
+    private val dataStore: DatastoreInterface,
     private val firebaseController: FirebaseController,
-) {
-    suspend operator fun invoke(packageName: String) {
+) : ComponentsShowcaseRepository {
+
+    override val isUnlocked: Flow<Boolean> = dataStore.componentsShowcaseUnlocked
+
+    override suspend fun unlock() {
         firebaseController.logBreadcrumb(
-            message = "Toggle favorite",
-            attributes = mapOf("packageName" to packageName),
+            message = "Components showcase unlocked",
+            attributes = mapOf("source" to "DefaultComponentsShowcaseRepository"),
         )
-        repository.toggleFavorite(packageName)
+        dataStore.saveComponentsShowcaseUnlocked(true)
     }
 }

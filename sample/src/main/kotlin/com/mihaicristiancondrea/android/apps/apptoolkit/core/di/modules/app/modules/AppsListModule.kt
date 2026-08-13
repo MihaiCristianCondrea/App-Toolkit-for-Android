@@ -25,12 +25,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.rep
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.FavoritesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.InstalledAppsRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchAppDetailsUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.GetAppInstallInfoUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.GetInstalledPackagesUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import org.koin.android.ext.koin.androidContext
@@ -48,19 +42,13 @@ val appsListModule: Module = module {
         )
     }
 
-    single { FetchDeveloperAppsUseCase(repository = get()) }
-    single { FetchAppDetailsUseCase(repository = get()) }
     single<InstalledAppsRepository> { DefaultInstalledAppsRepository(context = androidContext()) }
-    single { GetInstalledPackagesUseCase(repository = get()) }
-    single { GetAppInstallInfoUseCase(repository = get()) }
+
     viewModel {
         AppsListViewModel(
-            fetchDeveloperAppsUseCase = get(),
-            fetchAppDetailsUseCase = get(),
-            getInstalledPackagesUseCase = get(),
-            getAppInstallInfoUseCase = get(),
-            observeFavoritesUseCase = get(),
-            toggleFavoriteUseCase = get(),
+            developerAppsRepository = get(),
+            installedAppsRepository = get(),
+            favoritesRepository = get(),
             dispatchers = get(),
             firebaseController = get(),
         )
@@ -73,7 +61,4 @@ val appsListModule: Module = module {
             firebaseController = get()
         )
     }
-
-    single { ObserveFavoritesUseCase(repository = get(), firebaseController = get()) }
-    single { ToggleFavoriteUseCase(repository = get(), firebaseController = get()) }
 }

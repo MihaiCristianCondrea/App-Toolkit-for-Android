@@ -19,12 +19,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui
 
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchAppDetailsUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.GetAppInstallInfoUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.GetInstalledPackagesUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.ObserveFavoritesUseCase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.ToggleFavoriteUseCase
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.FavoritesRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.InstalledAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
@@ -67,22 +64,17 @@ import kotlinx.coroutines.withContext
  * handling user interactions such as fetching apps, opening a random app, and toggling favorites.
  * It observes changes in favorite apps and updates the UI state accordingly.
  *
- * @param fetchDeveloperAppsUseCase Use case to fetch the list of applications.
- * @param getInstalledPackagesUseCase Use case to resolve installed catalog packages.
- * @param getAppInstallInfoUseCase Use case to resolve selected-app install metadata.
- * @param observeFavoritesUseCase Use case to observe the set of favorite app package names.
- * @param toggleFavoriteUseCase Use case to add or remove an app from favorites.
+ * @param developerAppsRepository Source of the developer's app catalog and per-app details.
+ * @param installedAppsRepository Resolves which catalog entries are installed and their metadata.
+ * @param favoritesRepository Reads and updates the set of favorite app package names.
  * @param dispatchers Provides coroutine dispatchers for different contexts (IO, Main, etc.).
  * @param firebaseController Reports ViewModel flow failures to Firebase.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppsListViewModel(
-    private val fetchDeveloperAppsUseCase: FetchDeveloperAppsUseCase,
-    private val fetchAppDetailsUseCase: FetchAppDetailsUseCase,
-    private val getInstalledPackagesUseCase: GetInstalledPackagesUseCase,
-    private val getAppInstallInfoUseCase: GetAppInstallInfoUseCase,
-    observeFavoritesUseCase: ObserveFavoritesUseCase,
-    private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
+    private val developerAppsRepository: DeveloperAppsRepository,
+    private val installedAppsRepository: InstalledAppsRepository,
+    private val favoritesRepository: FavoritesRepository,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<AppListUiState, HomeEvent, HomeAction>(
@@ -97,7 +89,7 @@ class AppsListViewModel(
     private var appInstallInfoJob: Job? = null
     private var toggleJob: Job? = null
 
-    val favorites = observeFavoritesUseCase()
+    val favorites = favoritesRepository.observeFavorites()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -143,7 +135,7 @@ class AppsListViewModel(
         fetchJob = fetchJob.restart {
             fetchAppsTrigger
                 .flatMapLatest {
-                    fetchDeveloperAppsUseCase()
+                    developerAppsRepository.fetchDeveloperApps()
                         .flowOn(dispatchers.io)
                         .onStart {
                             breadcrumb(
@@ -166,7 +158,7 @@ class AppsListViewModel(
                         .onSuccess { apps ->
                             val list = apps.toImmutableList()
                             val installedPackages = withContext(dispatchers.io) {
-                                getInstalledPackagesUseCase(
+                                installedAppsRepository.getInstalledPackages(
                                     packageNames = list.map { app -> app.packageName },
                                 ).toImmutableSet()
                             }
@@ -242,7 +234,7 @@ class AppsListViewModel(
 
     private fun loadSelectedAppDetails(packageName: String) {
         appDetailsJob = appDetailsJob.restart {
-            fetchAppDetailsUseCase(packageName)
+            developerAppsRepository.fetchAppDetails(packageName)
                 .flowOn(dispatchers.io)
                 .onStart {
                     screenState.update { current ->
@@ -305,7 +297,7 @@ class AppsListViewModel(
             screenState.update { current ->
                 current.copy(
                     data = current.data?.copy(
-                        selectedAppInstallInfo = getAppInstallInfoUseCase(packageName),
+                        selectedAppInstallInfo = installedAppsRepository.getInstallInfo(packageName),
                     ),
                 )
             }
@@ -317,7 +309,7 @@ class AppsListViewModel(
                 extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
                 block = {
                     val installInfo = withContext(dispatchers.io) {
-                        getAppInstallInfoUseCase(packageName)
+                        installedAppsRepository.getInstallInfo(packageName)
                     }
                     screenState.update { current ->
                         val data = current.data ?: return@update current
@@ -365,7 +357,7 @@ class AppsListViewModel(
                 action = Actions.TOGGLE_FAVORITE,
                 extra = mapOf(ExtraKeys.PACKAGE_NAME to packageName),
                 block = {
-                    withContext(dispatchers.io) { toggleFavoriteUseCase(packageName) }
+                    withContext(dispatchers.io) { favoritesRepository.toggleFavorite(packageName) }
                 },
                 onError = {
                     updateStateThreadSafe {

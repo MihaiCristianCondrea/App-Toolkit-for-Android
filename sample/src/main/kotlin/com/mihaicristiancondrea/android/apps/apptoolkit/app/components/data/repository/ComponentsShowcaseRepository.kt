@@ -15,20 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.domain.usecase
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repository
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
+import kotlinx.coroutines.flow.Flow
 
 /**
- * Persists the unlocked state for the components showcase so it can be shown in release builds.
+ * Owns whether the hidden components showcase has been unlocked.
  *
- * This use case isolates the datastore write from UI layers and can be triggered after
- * meeting the unlock criteria (e.g., multiple About screen taps).
+ * Replaces `UnlockComponentsShowcaseUseCase`, which forwarded a single call to the DataStore. The
+ * write needs an owner in the data layer rather than none at all: dropping the use case without one
+ * would have left a ViewModel talking to a data source directly.
  */
-class UnlockComponentsShowcaseUseCase(
-    private val dataStore: DatastoreInterface,
-) {
-    suspend operator fun invoke() {
-        dataStore.saveComponentsShowcaseUnlocked(true)
-    }
+interface ComponentsShowcaseRepository {
+
+    /** Emits whether the showcase entry should be offered. */
+    val isUnlocked: Flow<Boolean>
+
+    /** Marks the showcase as unlocked so it appears in navigation. */
+    suspend fun unlock()
 }

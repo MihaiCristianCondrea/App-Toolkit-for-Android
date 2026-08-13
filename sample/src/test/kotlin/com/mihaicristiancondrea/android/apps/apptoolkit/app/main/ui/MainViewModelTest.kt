@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import app.cash.turbine.test
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.domain.usecases.GetNavigationDrawerItemsUseCase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.state.MainUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
@@ -81,14 +80,10 @@ class MainViewModelTest {
         )
 
         val repo = FakeNavigationRepository(flowOf(expectedItems))
-        val useCase = GetNavigationDrawerItemsUseCase(
-            navigationRepository = repo,
-            firebaseController = mockk<FirebaseController>(relaxed = true)
-        )
         val dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher)
 
         MainViewModel(
-            getNavigationDrawerItemsUseCase = useCase,
+            navigationRepository = repo,
             consentRepository = FakeConsentRepository(),
             requestInAppReviewUseCase = mockk(relaxed = true),
             inAppUpdateRepository = mockk(relaxed = true),
@@ -109,10 +104,7 @@ class MainViewModelTest {
             val consentRepository = mockk<ConsentRepository>(relaxed = true)
 
             MainViewModel(
-                getNavigationDrawerItemsUseCase = GetNavigationDrawerItemsUseCase(
-                    navigationRepository = FakeNavigationRepository(flowOf(emptyList())),
-                    firebaseController = mockk(relaxed = true)
-                ),
+                navigationRepository = FakeNavigationRepository(flowOf(emptyList())),
                 consentRepository = consentRepository,
                 requestInAppReviewUseCase = mockk(relaxed = true),
                 inAppUpdateRepository = mockk(relaxed = true),
@@ -141,11 +133,10 @@ class MainViewModelTest {
 
             val repo = FakeNavigationRepository(flowOf(expectedItems))
             val firebaseController = mockk<FirebaseController>(relaxed = true)
-            val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
             val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
             val viewModel = MainViewModel(
-                getNavigationDrawerItemsUseCase = useCase,
+                navigationRepository = repo,
                 consentRepository = FakeConsentRepository(),
                 requestInAppReviewUseCase = mockk(relaxed = true),
                 inAppUpdateRepository = mockk(relaxed = true),
@@ -168,10 +159,9 @@ class MainViewModelTest {
     fun `navigation load error shows snackbar`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = FakeNavigationRepository(upstream = flow { throw IllegalStateException("boom") })
         val firebaseController = mockk<FirebaseController>(relaxed = true)
-        val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
 
         val viewModel = MainViewModel(
-            getNavigationDrawerItemsUseCase = useCase,
+            navigationRepository = repo,
             consentRepository = FakeConsentRepository(),
             requestInAppReviewUseCase = mockk(relaxed = true),
             inAppUpdateRepository = mockk(relaxed = true),
@@ -212,10 +202,9 @@ class MainViewModelTest {
     fun `empty navigation list sets no data state`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = FakeNavigationRepository(flowOf(emptyList()))
         val firebaseController = mockk<FirebaseController>(relaxed = true)
-        val useCase = GetNavigationDrawerItemsUseCase(repo, firebaseController)
 
         val viewModel = MainViewModel(
-            getNavigationDrawerItemsUseCase = useCase,
+            navigationRepository = repo,
             consentRepository = FakeConsentRepository(),
             requestInAppReviewUseCase = mockk(relaxed = true),
             inAppUpdateRepository = mockk(relaxed = true),
@@ -254,10 +243,7 @@ class MainViewModelTest {
             )
 
             val viewModel = MainViewModel(
-                getNavigationDrawerItemsUseCase = GetNavigationDrawerItemsUseCase(
-                    navigationRepository = FakeNavigationRepository(flowOf(emptyList())),
-                    firebaseController = firebaseController
-                ),
+                navigationRepository = FakeNavigationRepository(flowOf(emptyList())),
                 consentRepository = consentRepository,
                 requestInAppReviewUseCase = mockk(relaxed = true),
                 inAppUpdateRepository = mockk(relaxed = true),

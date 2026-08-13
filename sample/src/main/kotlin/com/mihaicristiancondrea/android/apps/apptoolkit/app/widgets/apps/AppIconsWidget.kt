@@ -60,7 +60,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.mihaicristiancondrea.android.apps.apptoolkit.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.usecases.FetchDeveloperAppsUseCase
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.widgets.apps.domain.actions.OpenAppOrStoreAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import kotlinx.collections.immutable.ImmutableList
@@ -108,8 +108,9 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
 
     private suspend fun loadApps(context: Context): ImmutableList<WidgetAppEntry> =
         withContext(Dispatchers.IO) {
-            val fetchAppsUseCase = GlobalContext.get().get<FetchDeveloperAppsUseCase>()
-            val apps = when (val state = fetchAppsUseCase().first { it !is DataState.Loading }) {
+            val developerAppsRepository = GlobalContext.get().get<DeveloperAppsRepository>()
+            val state = developerAppsRepository.fetchDeveloperApps().first { it !is DataState.Loading }
+            val apps = when (state) {
                 is DataState.Success -> state.data
                 is DataState.Error -> state.data ?: emptyList()
                 is DataState.Loading -> emptyList()

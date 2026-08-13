@@ -40,7 +40,7 @@ flowchart TD
     Main[MainActivity / MainScreen] --> Nav[Host Navigation 3 graph]
     Nav --> HostFeatures[Apps, tiles, components]
     Nav --> ToolkitBuilders[AppToolkit destination builders]
-    HostFeatures --> Logic[Host use cases and data repositories]
+    HostFeatures --> Logic[Host repositories]
     Logic --> Android[Android sensors, packages, services, DataStore]
 ```
 
@@ -65,3 +65,10 @@ The current worktree reflects an ongoing migration from the former `:app` projec
 Quick-tool repositories intentionally use concrete `XRepository` classes. They each wrap one
 Android platform source, have no alternate implementation, and do not cross a module boundary;
 adding matching interfaces or pass-through use cases would not create useful substitution.
+
+The apps-list, navigation-drawer and components-showcase use cases were removed for the same reason
+in reverse: each forwarded one call to a repository that already logged the breadcrumb the use case
+claimed to add, so ViewModels now call those repositories directly. The unlock write moved to
+`ComponentsShowcaseRepository` rather than disappearing — dropping its use case without an owner
+would have left a ViewModel holding `DatastoreInterface`, a data source, with no repository between
+them. Use cases that carry real policy stay.
