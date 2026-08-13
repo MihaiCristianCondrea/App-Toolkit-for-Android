@@ -17,9 +17,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings.modules
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.settings.utils.providers.AppAboutSettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.settings.utils.providers.AppAdvancedSettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.settings.utils.providers.AppSettingsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.providers.AppAboutSettingsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.providers.AppAdvancedSettingsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.providers.AppSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AdvancedSettingsProvider

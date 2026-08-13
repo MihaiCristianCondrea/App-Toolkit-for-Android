@@ -15,35 +15,31 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.settings.utils.providers
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.providers
 
 import android.content.Context
-import android.content.Intent
+import androidx.compose.runtime.Composable
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.AdsSettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.PermissionsActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.display.ui.views.dialogs.SelectStartupScreenAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.PrivacySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.DisplaySettingsProvider
 
-class AppPrivacySettingsProvider(
+class AppDisplaySettingsProvider(
     private val context: Context,
-) : PrivacySettingsProvider {
-
-    override fun openPermissionsScreen() {
-        context.startActivitySafely(Intent(context, PermissionsActivity::class.java))
-    }
-
-    override fun openAdsScreen() {
-        context.startActivitySafely(Intent(context, AdsSettingsActivity::class.java))
-    }
-
-    override fun openUsageAndDiagnosticsScreen() {
+) : DisplaySettingsProvider {
+    override fun openThemeSettings() {
         GeneralSettingsActivity.start(
             context = context,
-            title = context.getString(R.string.usage_and_diagnostics),
-            contentKey = SettingsContent.USAGE_AND_DIAGNOSTICS,
+            title = context.getString(R.string.dark_theme),
+            contentKey = SettingsContent.THEME,
         )
+    }
+
+    override val supportsStartupPage: Boolean = true
+
+    @Composable
+    override fun StartupPageDialog(onDismiss: () -> Unit, onStartupSelected: (String) -> Unit) {
+        SelectStartupScreenAlertDialog(onDismiss = onDismiss, onStartupSelected = onStartupSelected)
     }
 }

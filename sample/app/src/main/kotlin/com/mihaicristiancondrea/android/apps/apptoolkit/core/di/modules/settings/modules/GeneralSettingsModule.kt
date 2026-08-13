@@ -21,8 +21,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repositories.DefaultComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.ComponentsUnlockViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.about.ui.AppAboutSettingsContent
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.settings.utils.providers.AppDisplaySettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.settings.utils.providers.AppPrivacySettingsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.providers.AppDisplaySettingsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.providers.AppPrivacySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.data.repository.GeneralSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.DisplaySettingsProvider

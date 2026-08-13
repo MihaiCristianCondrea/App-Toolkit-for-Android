@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.settings.utils.providers
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.providers
 
 import android.content.Context
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.settings.utils.constants.SettingsConstants
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.constants.SettingsConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
