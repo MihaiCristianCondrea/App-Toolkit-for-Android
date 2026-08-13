@@ -174,9 +174,6 @@
     <string name="tiles_chip_quick_tool">빠른 도구</string>
     <string name="tiles_chip_tile">타일</string>
     <string name="tiles_collapse_category">카테고리 접기</string>
-    <plurals name="tiles_count_format">
-        <item quantity="other">%1$d 도구</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">빠른 도구를 로드하지 못했습니다.</string>
     <string name="tiles_expand_category">카테고리 펼치기</string>
     <string name="tiles_filter_added">추가됨</string>

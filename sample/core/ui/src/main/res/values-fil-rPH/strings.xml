@@ -174,10 +174,6 @@
     <string name="tiles_chip_quick_tool">Mabilis na tool</string>
     <string name="tiles_chip_tile">Tile</string>
     <string name="tiles_collapse_category">I-collapse ang kategorya</string>
-    <plurals name="tiles_count_format">
-        <item quantity="one">%1$d tool</item>
-        <item quantity="other">Mga tool ng %1$d</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">Nabigong i-load ang Quick Tools</string>
     <string name="tiles_expand_category">Palawakin ang kategorya</string>
     <string name="tiles_filter_added">Idinagdag</string>

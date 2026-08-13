@@ -174,10 +174,6 @@
     <string name="tiles_chip_quick_tool">দ্রুত টুল</string>
     <string name="tiles_chip_tile">টালি</string>
     <string name="tiles_collapse_category">বিভাগ সঙ্কুচিত করুন</string>
-    <plurals name="tiles_count_format">
-        <item quantity="one">%1$d টুল</item>
-        <item quantity="other">%1$d টুল</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">দ্রুত টুল লোড করতে ব্যর্থ হয়েছে</string>
     <string name="tiles_expand_category">বিভাগ প্রসারিত করুন</string>
     <string name="tiles_filter_added">যোগ করা হয়েছে</string>

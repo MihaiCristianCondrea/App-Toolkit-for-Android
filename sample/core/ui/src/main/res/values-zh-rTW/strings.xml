@@ -174,9 +174,6 @@
     <string name="tiles_chip_quick_tool">快速工具</string>
     <string name="tiles_chip_tile">磁磚</string>
     <string name="tiles_collapse_category">折疊類別</string>
-    <plurals name="tiles_count_format">
-        <item quantity="other">%1$d 工具</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">快速工具載入失敗</string>
     <string name="tiles_expand_category">擴大類別</string>
     <string name="tiles_filter_added">已新增</string>

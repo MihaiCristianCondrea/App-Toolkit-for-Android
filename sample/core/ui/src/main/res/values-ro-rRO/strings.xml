@@ -174,10 +174,6 @@
     <string name="tiles_chip_quick_tool">Instrument rapid</string>
     <string name="tiles_chip_tile">Tigla</string>
     <string name="tiles_collapse_category">Restrânge categoria</string>
-    <plurals name="tiles_count_format">
-        <item quantity="one">instrument %1$d</item>
-        <item quantity="other">instrumente %1$d</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">Nu s-a încărcat Instrumentele rapide</string>
     <string name="tiles_expand_category">Extinde categoria</string>
     <string name="tiles_filter_added">Adăugat</string>

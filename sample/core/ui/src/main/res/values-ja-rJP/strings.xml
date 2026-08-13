@@ -174,9 +174,6 @@
     <string name="tiles_chip_quick_tool">クイックツール</string>
     <string name="tiles_chip_tile">タイル</string>
     <string name="tiles_collapse_category">カテゴリを折りたたむ</string>
-    <plurals name="tiles_count_format">
-        <item quantity="other">%1$d ツール</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">クイックツールのロードに失敗しました</string>
     <string name="tiles_expand_category">カテゴリを展開する</string>
     <string name="tiles_filter_added">追加されました</string>

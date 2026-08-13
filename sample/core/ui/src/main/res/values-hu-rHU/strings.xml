@@ -174,10 +174,6 @@
     <string name="tiles_chip_quick_tool">Gyors eszköz</string>
     <string name="tiles_chip_tile">Csempe</string>
     <string name="tiles_collapse_category">Kategória összecsukása</string>
-    <plurals name="tiles_count_format">
-        <item quantity="one">%1$d eszköz</item>
-        <item quantity="other">%1$d eszközök</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">Nem sikerült betölteni a Gyorseszközöket</string>
     <string name="tiles_expand_category">Kategória kibontása</string>
     <string name="tiles_filter_added">Hozzáadva</string>

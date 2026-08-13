@@ -174,10 +174,6 @@
     <string name="tiles_chip_quick_tool">Hızlı araç</string>
     <string name="tiles_chip_tile">Fayans</string>
     <string name="tiles_collapse_category">Kategoriyi daralt</string>
-    <plurals name="tiles_count_format">
-        <item quantity="one">%1$d araç</item>
-        <item quantity="other">%1$d araçları</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">Hızlı Araçlar yüklenemedi</string>
     <string name="tiles_expand_category">Kategoriyi genişlet</string>
     <string name="tiles_filter_added">Eklendi</string>

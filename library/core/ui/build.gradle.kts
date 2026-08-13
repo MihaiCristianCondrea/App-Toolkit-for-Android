@@ -43,4 +43,12 @@ dependencies {
     api(libs.bundles.koin)
     api(libs.kotlinx.collections.immutable)
     api(libs.androidx.window)
+
+    // Declares the Material theme attributes (colorPrimaryContainer, colorSecondaryContainer,
+    // colorTertiary, …) that vector drawables in the feature modules reference as ?attr/. AppCompat
+    // alone does not define them, so without this the release resource link fails with
+    // "resource attr/colorPrimaryContainer not found". It used to arrive transitively from
+    // :library:apptoolkit, which is the only module that pulls the `google` bundle; splitting the
+    // features out left them linking against attributes nothing on their classpath declared.
+    api(libs.google.material)
 }

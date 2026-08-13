@@ -174,10 +174,6 @@
     <string name="tiles_chip_quick_tool">Быстрый инструмент</string>
     <string name="tiles_chip_tile">Плитка</string>
     <string name="tiles_collapse_category">Свернуть категорию</string>
-    <plurals name="tiles_count_format">
-        <item quantity="one">Инструмент %1$d</item>
-        <item quantity="other">Инструменты %1$d</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">Не удалось загрузить быстрые инструменты.</string>
     <string name="tiles_expand_category">Развернуть категорию</string>
     <string name="tiles_filter_added">Добавлено</string>

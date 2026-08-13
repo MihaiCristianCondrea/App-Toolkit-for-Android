@@ -174,10 +174,6 @@
     <string name="tiles_chip_quick_tool">تیز ٹول</string>
     <string name="tiles_chip_tile">ٹائل</string>
     <string name="tiles_collapse_category">زمرہ کو سکیڑیں۔</string>
-    <plurals name="tiles_count_format">
-        <item quantity="one">%1$d ٹول</item>
-        <item quantity="other">%1$d ٹولز</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">کوئیک ٹولز لوڈ کرنے میں ناکام</string>
     <string name="tiles_expand_category">زمرہ پھیلائیں۔</string>
     <string name="tiles_filter_added">شامل کیا گیا۔</string>

@@ -174,10 +174,6 @@
     <string name="tiles_chip_quick_tool">Outil rapide</string>
     <string name="tiles_chip_tile">Tuile</string>
     <string name="tiles_collapse_category">Réduire la catégorie</string>
-    <plurals name="tiles_count_format">
-        <item quantity="one">Outil %1$d</item>
-        <item quantity="other">Outils %1$d</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">Échec du chargement des outils rapides</string>
     <string name="tiles_expand_category">Agrandir la catégorie</string>
     <string name="tiles_filter_added">Ajouté</string>

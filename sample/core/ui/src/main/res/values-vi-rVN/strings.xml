@@ -174,9 +174,6 @@
     <string name="tiles_chip_quick_tool">Công cụ nhanh</string>
     <string name="tiles_chip_tile">Ngói</string>
     <string name="tiles_collapse_category">Thu gọn danh mục</string>
-    <plurals name="tiles_count_format">
-        <item quantity="other">Công cụ %1$d</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">Không tải được Công cụ nhanh</string>
     <string name="tiles_expand_category">Mở rộng danh mục</string>
     <string name="tiles_filter_added">Đã thêm</string>

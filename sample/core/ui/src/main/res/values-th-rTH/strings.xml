@@ -174,9 +174,6 @@
     <string name="tiles_chip_quick_tool">เครื่องมือด่วน</string>
     <string name="tiles_chip_tile">กระเบื้อง</string>
     <string name="tiles_collapse_category">ยุบหมวดหมู่</string>
-    <plurals name="tiles_count_format">
-        <item quantity="other">เครื่องมือ %1$d</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">โหลดเครื่องมือด่วนไม่สำเร็จ</string>
     <string name="tiles_expand_category">ขยายหมวดหมู่</string>
     <string name="tiles_filter_added">เพิ่มแล้ว</string>

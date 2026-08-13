@@ -182,10 +182,6 @@
     <string name="tiles_chip_quick_tool">Quick tool</string>
     <string name="tiles_chip_tile">Tile</string>
     <string name="tiles_collapse_category">Collapse category</string>
-    <plurals name="tiles_count_format">
-        <item quantity="one">%1$d tool</item>
-        <item quantity="other">%1$d tools</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">Failed to load Quick Tools</string>
     <string name="tiles_expand_category">Expand category</string>
     <string name="tiles_filter_added">Added</string>

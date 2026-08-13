@@ -174,10 +174,6 @@
     <string name="tiles_chip_quick_tool">त्वरित उपकरण</string>
     <string name="tiles_chip_tile">टाइल</string>
     <string name="tiles_collapse_category">श्रेणी संक्षिप्त करें</string>
-    <plurals name="tiles_count_format">
-        <item quantity="one">%1$d उपकरण</item>
-        <item quantity="other">%1$d उपकरण</item>
-    </plurals>
     <string name="tiles_error_failed_to_load">त्वरित उपकरण लोड करने में विफल</string>
     <string name="tiles_expand_category">श्रेणी का विस्तार करें</string>
     <string name="tiles_filter_added">जोड़ा गया</string>
