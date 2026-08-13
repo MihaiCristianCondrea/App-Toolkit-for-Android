@@ -31,7 +31,7 @@ class RepositoryConventionsTest {
         val legacyNames = productionSources()
             .filter { source ->
                 source.name.contains(REPOSITORY_IMPL) ||
-                    source.readText().contains(REPOSITORY_IMPL_DECLARATION)
+                    REPOSITORY_IMPL_DECLARATION.containsMatchIn(source.readText())
             }
             .map { it.relativePath() }
 
@@ -74,7 +74,12 @@ class RepositoryConventionsTest {
         const val DATA_REPOSITORY_PACKAGE = "/data/repository"
         const val REPOSITORY_FILE_SUFFIX = "Repository.kt"
         const val REPOSITORY_IMPL = "RepositoryImpl"
-        const val REPOSITORY_IMPL_DECLARATION = "class RepositoryImpl"
+
+        // A regex, not the literal "class RepositoryImpl": that substring never appears in a real
+        // declaration, because the class name always carries a prefix — `class AboutRepositoryImpl`
+        // does not contain it. The check silently passed everything, leaving the file-name check as
+        // the only live rule and a mis-named class inside a correctly named file undetected.
+        val REPOSITORY_IMPL_DECLARATION = Regex("""class\s+\w*RepositoryImpl\b""")
         const val INTERFACE_DECLARATION = "interface "
         const val DEFAULT_PREFIX = "Default"
         const val SETTINGS_FILE = "settings.gradle.kts"
