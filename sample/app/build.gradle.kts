@@ -33,16 +33,54 @@ plugins {
     id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
 }
 
-val hasGoogleServicesConfig: Boolean = listOf(
+// The Play Store identity of an already-released app. Kept next to the Firebase check below
+// because the two have to agree: `google-services.json` is matched by package name, so changing
+// one without the other fails the build.
+val releasedApplicationId = "com.d4rk.android.apps.apptoolkit"
+
+val googleServicesFiles: List<File> = listOf(
     "google-services.json",
     "src/debug/google-services.json",
     "src/release/google-services.json",
-).any { path -> file(path).exists() }
+).map(::file).filter(File::exists)
 
-if (hasGoogleServicesConfig) {
+// Checking that a config file exists is not the same as checking it is the right one. The Google
+// Services plugin matches by package name and fails with "No matching client found for package
+// name", which reads as a build misconfiguration rather than what it is: this Firebase project has
+// no app registered for the id we ship under. Detecting it here turns that into an actionable
+// message, and lets a contributor without the real config still build.
+// Matched with a regex rather than an exact substring: the file is generated JSON and its spacing
+// is not a contract we control.
+val packageNamePattern = Regex(
+    """"package_name"\s*:\s*"${Regex.escape(releasedApplicationId)}""""
+)
+val hasMatchingGoogleServicesConfig: Boolean = googleServicesFiles.any { configFile ->
+    packageNamePattern.containsMatchIn(configFile.readText())
+}
+
+if (hasMatchingGoogleServicesConfig) {
     apply(plugin = libs.plugins.google.mobile.services.get().pluginId)
     apply(plugin = libs.plugins.firebase.crashlytics.get().pluginId)
     apply(plugin = libs.plugins.firebase.performance.get().pluginId)
+} else if (googleServicesFiles.isNotEmpty()) {
+    logger.warn(
+        "google-services.json has no client for '$releasedApplicationId', so Firebase " +
+            "(Analytics, Crashlytics, Performance) is disabled for this build. Add that package " +
+            "in the Firebase console and re-download the file. See docs/application-id.md."
+    )
+}
+
+// A release build without Crashlytics is worse than a failed build: the app ships and stops
+// reporting. Debug builds are allowed to run without Firebase so the project stays buildable by
+// anyone who does not have the real config.
+gradle.taskGraph.whenReady {
+    val assemblesRelease = allTasks.any { task ->
+        task.project == project && task.name.contains("Release")
+    }
+    check(hasMatchingGoogleServicesConfig || !assemblesRelease) {
+        "Refusing to build a release without Firebase: google-services.json has no client for " +
+            "'$releasedApplicationId'. See docs/application-id.md."
+    }
 }
 
 val versioning = extensions.getByType<VersioningExtension>()
@@ -53,8 +91,11 @@ android {
     compileSdk = appVersion.compileSdk
 
     defaultConfig {
-        applicationId = "com.mihaicristiancondrea.android.apps"
-        applicationIdSuffix = ".apptoolkit"
+        // The Play Store identity of an app that is already released. It must not follow the
+        // `namespace` above: `namespace` names the generated R/BuildConfig classes and can be
+        // renamed freely, while changing `applicationId` publishes a different app and strands
+        // every existing install. See docs/application-id.md.
+        applicationId = "com.d4rk.android.apps.apptoolkit"
         minSdk = appVersion.minSdk
         targetSdk = appVersion.targetSdk
         versionCode = appVersion.versionCode
@@ -139,7 +180,7 @@ android {
                 getDefaultProguardFile(name = "proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            if (hasGoogleServicesConfig) {
+            if (hasMatchingGoogleServicesConfig) {
                 configure<CrashlyticsExtension> {
                     mappingFileUploadEnabled = true
                 }
