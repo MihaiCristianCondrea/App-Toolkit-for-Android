@@ -74,6 +74,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.contracts.IssueReporterEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.utils.ISSUE_REPORTER_SCREEN_NAME
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.utils.IssueReporterActionNames
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.utils.issueReporterActionEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.views.DeviceInfoCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.views.IssueReportFormCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.views.IssueReporterAccountOptions
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.views.IssueSubmittedCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.states.IssueReporterUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
@@ -103,17 +110,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-private const val ISSUE_REPORTER_SCREEN_NAME = "IssueReporter"
 private const val ISSUE_REPORTER_SCREEN_CLASS = "IssueReporterScreen"
-
-private object IssueReporterActionNames {
-    const val BACK_CLICK: String = "back_click"
-    const val OPEN_ISSUES_LIST: String = "open_issues_list"
-    const val SEND_ISSUE: String = "send_issue"
-    const val OPEN_CREATED_ISSUE: String = "open_created_issue"
-    const val TOGGLE_DEVICE_INFO: String = "toggle_device_info"
-    const val SET_ANONYMOUS_MODE: String = "set_anonymous_mode"
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -248,12 +245,6 @@ fun IssueReporterScreenContent(
     onEvent: (IssueReporterEvent) -> Unit,
     data: IssueReporterUiState,
 ) {
-    val uriHandler = LocalUriHandler.current
-    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
-
-    val deviceExpanded = rememberSaveable { mutableStateOf(false) }
-
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(
@@ -266,56 +257,10 @@ fun IssueReporterScreenContent(
     ) {
         item {
             if (!data.issueUrl.isNullOrEmpty()) {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = SizeConstants.ExtraSmallSize
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(SizeConstants.LargeSize),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.CheckCircleOutline,
-                            contentDescription = stringResource(id = R.string.issue_submitted_successfully),
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(SizeConstants.LauncherIconSize)
-                        )
-                        SmallVerticalSpacer()
-                        Text(
-                            text = stringResource(id = R.string.issue_submitted),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                        SmallVerticalSpacer()
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.End
-                        ) {
-                            GeneralOutlinedButton(
-                                onClick = {
-                                    firebaseController.logEvent(
-                                        issueReporterActionEvent(
-                                            actionName = IssueReporterActionNames.OPEN_CREATED_ISSUE,
-                                            params = mapOf(
-                                                "has_issue_url" to AnalyticsValue.Bool(data.issueUrl.isNotBlank()),
-                                            ),
-                                        )
-                                    )
-                                    data.issueUrl.let(uriHandler::openUri)
-                                },
-                                vectorIcon = Icons.AutoMirrored.Outlined.OpenInNew,
-                                iconContentDescription = stringResource(R.string.open_issue_in_browser),
-                                label = stringResource(R.string.open_button_label)
-                            )
-                        }
-                    }
-                }
+                IssueSubmittedCard(
+                    issueUrl = data.issueUrl,
+                    firebaseController = firebaseController,
+                )
             }
         }
 
@@ -327,44 +272,7 @@ fun IssueReporterScreenContent(
         }
 
         item {
-            Card(shape = MaterialTheme.shapes.medium, modifier = Modifier.fillMaxWidth()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(SizeConstants.LargeSize),
-                    verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)
-                ) {
-                    OutlinedTextField(
-                        value = data.title,
-                        onValueChange = { onEvent(IssueReporterEvent.UpdateTitle(it)) },
-                        label = { Text(stringResource(id = R.string.issue_title_label)) },
-                        leadingIcon = { Icon(Icons.Outlined.Title, contentDescription = null) },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
-                    )
-
-                    OutlinedTextField(
-                        value = data.description,
-                        onValueChange = { onEvent(IssueReporterEvent.UpdateDescription(it)) },
-                        label = { Text(stringResource(id = R.string.issue_description_label)) },
-                        leadingIcon = { Icon(Icons.Outlined.Info, contentDescription = null) },
-                        modifier = Modifier.fillMaxWidth(),
-                        minLines = 4
-                    )
-
-                    OutlinedTextField(
-                        value = data.email,
-                        onValueChange = { onEvent(IssueReporterEvent.UpdateEmail(it)) },
-                        label = { Text(stringResource(id = R.string.issue_email_label)) },
-                        placeholder = { Text(stringResource(id = R.string.optional_placeholder)) },
-                        leadingIcon = { Icon(Icons.Outlined.Email, contentDescription = null) },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
-                    )
-                }
-            }
+            IssueReportFormCard(data = data, onEvent = onEvent)
         }
 
         item {
@@ -375,92 +283,19 @@ fun IssueReporterScreenContent(
         }
 
         item {
-            RadioButtonPreferenceItem(
-                text = stringResource(id = R.string.send_anonymously),
-                isChecked = data.anonymous,
-                onCheckedChange = { checked ->
-                    if (checked) {
-                        firebaseController.logEvent(
-                            issueReporterActionEvent(
-                                actionName = IssueReporterActionNames.SET_ANONYMOUS_MODE,
-                                params = mapOf("anonymous" to AnalyticsValue.Bool(true)),
-                            )
-                        )
-                        onEvent(IssueReporterEvent.SetAnonymous(anonymous = true))
-                    }
-                },
-                modifier = Modifier.groupedPreferenceItem(
-                    position = GroupedItemPosition.FIRST,
-                    outerRadius = SizeConstants.LargeMediumSize,
-                )
-            )
-
-            RadioButtonPreferenceItem(
-                text = stringResource(id = R.string.use_github_account),
-                isChecked = !data.anonymous,
-                onCheckedChange = { /* disabled */ },
-                enabled = false,
-                modifier = Modifier.groupedPreferenceItem(
-                    position = GroupedItemPosition.LAST,
-                    outerRadius = SizeConstants.LargeMediumSize,
-                )
+            IssueReporterAccountOptions(
+                anonymous = data.anonymous,
+                firebaseController = firebaseController,
+                onEvent = onEvent,
             )
         }
 
         item {
-            Card(shape = MaterialTheme.shapes.medium, modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    LargeHorizontalSpacer()
-
-                    Row(
-                        modifier = Modifier
-                            .bounceClick()
-                            .clickable {
-                                view.playSoundEffect(SoundEffectConstants.CLICK)
-                                hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
-
-                                val newValue = !deviceExpanded.value
-                                deviceExpanded.value = newValue
-                                if (newValue) {
-                                    onEvent(IssueReporterEvent.RequestDeviceInfo)
-                                }
-
-                                firebaseController.logEvent(
-                                    issueReporterActionEvent(
-                                        actionName = IssueReporterActionNames.TOGGLE_DEVICE_INFO,
-                                        params = mapOf("expanded" to AnalyticsValue.Bool(newValue)),
-                                    )
-                                )
-                            }
-                            .fillMaxWidth()
-                            .padding(vertical = SizeConstants.LargeSize),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.device_info),
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(start = SizeConstants.LargeSize)
-                        )
-                        Icon(
-                            modifier = Modifier.padding(end = SizeConstants.LargeSize),
-                            imageVector = if (deviceExpanded.value) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
-                            contentDescription = stringResource(id = R.string.cd_expand_device_info)
-                        )
-                    }
-
-                    AnimatedVisibility(visible = deviceExpanded.value) {
-                        Text(
-                            text = data.deviceInfoText.orEmpty(),
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier
-                                .padding(SizeConstants.LargeSize)
-                                .horizontalScroll(rememberScrollState())
-                        )
-                    }
-                }
-            }
+            DeviceInfoCard(
+                deviceInfoText = data.deviceInfoText,
+                firebaseController = firebaseController,
+                onExpandRequested = { onEvent(IssueReporterEvent.RequestDeviceInfo) },
+            )
 
             repeat(2) {
                 ExtraExtraLargeVerticalSpacer()
@@ -469,17 +304,4 @@ fun IssueReporterScreenContent(
     }
 }
 
-private fun issueReporterActionEvent(
-    actionName: String,
-    params: Map<String, AnalyticsValue> = emptyMap(),
-): AnalyticsEvent {
-    return AnalyticsEvent(
-        name = SettingsAnalytics.Events.ACTION,
-        params = buildMap {
-            put(SettingsAnalytics.Params.SCREEN, AnalyticsValue.Str(ISSUE_REPORTER_SCREEN_NAME))
-            put(SettingsAnalytics.Params.ACTION_NAME, AnalyticsValue.Str(actionName))
-            putAll(params)
-        },
-    )
-}
 

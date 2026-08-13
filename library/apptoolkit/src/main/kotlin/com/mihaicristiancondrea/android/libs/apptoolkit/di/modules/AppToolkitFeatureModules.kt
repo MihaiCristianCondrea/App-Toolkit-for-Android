@@ -175,7 +175,7 @@ private fun changelogModule(): Module = module {
 private fun issueReporterModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<IssueReporterRemoteDataSource> { IssueReporterRemoteDataSource(client = get()) }
     single<DeviceInfoProvider> { DeviceInfoLocalDataSource(get(), get()) }
-    single<IssueReporterRepository> { DefaultIssueReporterRepository(get(), get(), get()) }
+    single<IssueReporterRepository> { DefaultIssueReporterRepository(get(), get(), get(), get()) }
     single<SendIssueReportUseCase> { SendIssueReportUseCase(get(), get(), get()) }
     single<GithubTarget> {
         GithubTarget(
@@ -190,7 +190,7 @@ private fun issueReporterModule(hostBuildConfig: AppToolkitHostBuildConfig): Mod
             sendIssueReport = get(),
             githubTarget = get(),
             githubToken = get(githubTokenQualifier),
-            deviceInfoProvider = get(),
+            repository = get(),
             firebaseController = get(),
             dispatchers = get(),
         )

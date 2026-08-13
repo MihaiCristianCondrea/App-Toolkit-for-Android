@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.DeviceInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.IssueReportResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.GithubTarget
@@ -25,6 +26,17 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain
  * Repository contract for sending issue reports.
  */
 interface IssueReporterRepository {
+
+    /**
+     * Captures the device details attached to a report, and shown in the report screen's device
+     * panel.
+     *
+     * Exposed here rather than letting callers hold `DeviceInfoProvider`: that interface is
+     * implemented by a data source, and the UI reached it directly. The repository is the data
+     * layer's entry point.
+     */
+    suspend fun captureDeviceInfo(): DeviceInfo
+
     suspend fun sendReport(
         report: Report,
         target: GithubTarget,

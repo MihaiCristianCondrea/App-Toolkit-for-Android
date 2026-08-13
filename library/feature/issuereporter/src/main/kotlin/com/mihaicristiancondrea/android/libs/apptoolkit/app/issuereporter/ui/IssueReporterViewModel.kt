@@ -22,7 +22,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.ExtraInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repositories.IssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.mappers.asDataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.models.IssueReporterError
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.mappers.toPlainText
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.contracts.IssueReporterAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.contracts.IssueReporterEvent
@@ -63,7 +66,7 @@ class IssueReporterViewModel(
     private val sendIssueReport: SendIssueReportUseCase,
     private val githubTarget: GithubTarget,
     @param:GithubToken private val githubToken: String,
-    private val deviceInfoProvider: DeviceInfoProvider,
+    private val repository: IssueReporterRepository,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<IssueReporterUiState, IssueReporterEvent, IssueReporterAction>(
@@ -193,7 +196,7 @@ class IssueReporterViewModel(
 
         viewModelScope.launch {
             val captured = withContext(dispatchers.default) {
-                deviceInfoProvider.capture().toString()
+                repository.captureDeviceInfo().toPlainText()
             }
             updateStateThreadSafe {
                 screenState.copyData {
@@ -204,7 +207,7 @@ class IssueReporterViewModel(
     }
 
     private suspend fun prepareReport(data: IssueReporterUiState): Report {
-        val deviceInfo = deviceInfoProvider.capture()
+        val deviceInfo = repository.captureDeviceInfo()
         val extraInfo = ExtraInfo()
 
         return Report(
@@ -247,23 +250,6 @@ class IssueReporterViewModel(
         updateStateThreadSafe {
             screenState.setError(message = message)
         }
-    }
-
-    private fun IssueReportResult.asDataState(): DataState<String, IssueReporterError> =
-        when (this) {
-            is IssueReportResult.Success -> DataState.Success(url)
-            is IssueReportResult.Error -> DataState.Error(
-                error = IssueReporterError.Http(status = status, message = message),
-            )
-        }
-
-    private sealed interface IssueReporterError : RootError {
-        val message: String?
-
-        data class Http(val status: HttpStatusCode, override val message: String?) :
-            IssueReporterError
-
-        data class Generic(override val message: String?) : IssueReporterError
     }
 
     private fun IssueReporterError.toUiText(): UiTextHelper =

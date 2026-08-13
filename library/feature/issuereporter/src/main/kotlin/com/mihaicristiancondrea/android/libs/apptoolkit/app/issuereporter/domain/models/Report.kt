@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (©) 2026 Mihai-Cristian Condrea
+ * Copyright (Â©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.mappers.toMarkdown
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.ExtraInfo
 
 class Report(

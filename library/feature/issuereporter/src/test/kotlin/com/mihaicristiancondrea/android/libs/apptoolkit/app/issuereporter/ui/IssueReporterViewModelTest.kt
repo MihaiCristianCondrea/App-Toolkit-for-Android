@@ -18,10 +18,11 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui
 
 import com.google.common.truth.Truth.assertThat
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.DeviceInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.IssueReportResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repositories.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.contracts.IssueReporterEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
@@ -72,9 +73,41 @@ class IssueReporterViewModelTest {
     }
 
     private val githubTarget = GithubTarget("user", "repo")
-    private val deviceInfoProvider = object : DeviceInfoProvider {
-        override suspend fun capture(): DeviceInfo = mockk()
+    /**
+     * A real [DeviceInfo] rather than a mock: the model no longer needs a `Context` to exist, so a
+     * test can build one outright.
+     */
+    private fun deviceInfo(): DeviceInfo = DeviceInfo(
+        appVersionName = "1.0.0",
+        appVersionCode = 1L,
+        buildVersion = "build",
+        releaseVersion = "16",
+        sdkVersion = 36,
+        buildId = "id",
+        brand = "brand",
+        manufacturer = "manufacturer",
+        device = "device",
+        model = "model",
+        product = "product",
+        hardware = "hardware",
+        abis = listOf("arm64-v8a"),
+        abis32Bit = emptyList(),
+        abis64Bit = listOf("arm64-v8a"),
+    )
+
+    /** Only `captureDeviceInfo` is exercised here; sending goes through the use case. */
+    private fun fakeRepository(
+        capture: suspend () -> DeviceInfo = { deviceInfo() },
+    ): IssueReporterRepository = object : IssueReporterRepository {
+        override suspend fun captureDeviceInfo(): DeviceInfo = capture()
+        override suspend fun sendReport(
+            report: Report,
+            target: GithubTarget,
+            token: String?,
+        ): IssueReportResult = error("not used")
     }
+
+    private val repository: IssueReporterRepository = fakeRepository()
     private val firebaseController = FakeFirebaseController()
 
     private inline fun <T> withMainDispatcher(
@@ -100,7 +133,7 @@ class IssueReporterViewModelTest {
                 sendIssueReport = useCase,
                 githubTarget = githubTarget,
                 githubToken = "",
-                deviceInfoProvider = deviceInfoProvider,
+                repository = repository,
                 firebaseController = firebaseController,
                 dispatchers = dispatchers,
             )
@@ -129,7 +162,7 @@ class IssueReporterViewModelTest {
                 sendIssueReport = useCase,
                 githubTarget = githubTarget,
                 githubToken = "token",
-                deviceInfoProvider = deviceInfoProvider,
+                repository = repository,
                 firebaseController = firebaseController,
                 dispatchers = dispatchers,
             )
@@ -162,7 +195,7 @@ class IssueReporterViewModelTest {
                 sendIssueReport = useCase,
                 githubTarget = githubTarget,
                 githubToken = "",
-                deviceInfoProvider = deviceInfoProvider,
+                repository = repository,
                 firebaseController = firebaseController,
                 dispatchers = dispatchers,
             )
@@ -186,11 +219,7 @@ class IssueReporterViewModelTest {
     fun `device info failure shows error and skips use case`() = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
 
-        val failingProvider = object : DeviceInfoProvider {
-            override suspend fun capture(): DeviceInfo {
-                throw IllegalStateException("boom")
-            }
-        }
+        val failingRepository = fakeRepository { throw IllegalStateException("boom") }
 
         withMainDispatcher(dispatcher) {
             val useCase = mockk<SendIssueReportUseCase>()
@@ -199,7 +228,7 @@ class IssueReporterViewModelTest {
                 sendIssueReport = useCase,
                 githubTarget = githubTarget,
                 githubToken = "",
-                deviceInfoProvider = failingProvider,
+                repository = failingRepository,
                 firebaseController = firebaseController,
                 dispatchers = dispatchers,
             )
@@ -234,7 +263,7 @@ class IssueReporterViewModelTest {
                 sendIssueReport = useCase,
                 githubTarget = githubTarget,
                 githubToken = "tok",
-                deviceInfoProvider = deviceInfoProvider,
+                repository = repository,
                 firebaseController = firebaseController,
                 dispatchers = dispatchers,
             )

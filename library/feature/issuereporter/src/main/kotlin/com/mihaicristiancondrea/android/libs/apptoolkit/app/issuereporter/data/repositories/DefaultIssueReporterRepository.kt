@@ -19,6 +19,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.mappers.toCreateIssueRequest
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.remote.IssueReporterRemoteDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.DeviceInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.IssueReportResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.GithubTarget
@@ -28,9 +30,13 @@ import kotlinx.coroutines.withContext
 
 class DefaultIssueReporterRepository(
     private val remoteDataSource: IssueReporterRemoteDataSource,
+    private val deviceInfoProvider: DeviceInfoProvider,
     private val dispatchers: DispatcherProvider,
     private val firebaseController: FirebaseController,
 ) : IssueReporterRepository {
+
+    // The data source already moves itself to IO, so no withContext here.
+    override suspend fun captureDeviceInfo(): DeviceInfo = deviceInfoProvider.capture()
 
     override suspend fun sendReport(
         report: Report,
