@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.m
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.models.network.AppErrors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import io.ktor.client.HttpClient
@@ -70,11 +70,11 @@ class DefaultDeveloperAppsRepository(
                 .map { it.toDomain() }
                 .sortedBy { it.name.lowercase() }
 
-            DataState.Success<List<AppSummary>, AppErrors>(data = apps)
+            DataState.Success(data = apps)
         }.fold(
             onSuccess = { state -> state },
             onFailure = { throwable ->
-                DataState.Error<List<AppSummary>, AppErrors>(
+                DataState.Error(
                     error = mapThrowableToError(
                         throwable = throwable,
                         default = AppErrors.UseCase.FAILED_TO_LOAD_APPS,
@@ -100,7 +100,7 @@ class DefaultDeveloperAppsRepository(
         val result: DataState<AppDetails, AppErrors> = runSuspendCatching {
             val response = client.get(requestUrl)
             if (!response.status.isSuccess()) {
-                return@runSuspendCatching DataState.Error<AppDetails, AppErrors>(
+                return@runSuspendCatching DataState.Error(
                     error = mapHttpStatusToError(response.status),
                 )
             }
@@ -110,7 +110,7 @@ class DefaultDeveloperAppsRepository(
         }.fold(
             onSuccess = { state -> state },
             onFailure = { throwable ->
-                DataState.Error<AppDetails, AppErrors>(
+                DataState.Error(
                     error = mapThrowableToError(
                         throwable = throwable,
                         default = AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS,
