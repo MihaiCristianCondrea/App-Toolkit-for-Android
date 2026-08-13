@@ -1,62 +1,45 @@
 # AGENTS.md
 
-Work with the existing project architecture and conventions. Inspect surrounding code before making changes and prefer the smallest complete solution over broad refactors.
+Work with the existing project architecture and conventions. Inspect surrounding code and the relevant module documentation before making changes. Prefer the smallest complete solution over broad refactors.
 
 ## General
 
-* Reuse existing project patterns before introducing new abstractions.
-* Do not perform unrelated cleanup or refactoring.
-* Remove imports, declarations, parameters, and code made unused by your changes.
-* Do not add dependencies unless they are genuinely necessary and consistent with the existing project.
+- Reuse existing project patterns before introducing new abstractions.
+- Do not perform unrelated cleanup or refactoring.
+- Remove code made unused by your changes.
+- Do not add dependencies unless genuinely necessary and consistent with the project.
+- Use the relevant project skills for architecture, Android APIs, Compose, testing, performance, and other specialized guidance. Do not duplicate those rules here.
+
+## Module context
+
+Each active module or feature may contain a local `README.md`. Treat it as the primary source of context for that module.
+
+Before making substantial changes:
+
+- Read the relevant module `README.md` when one exists.
+- Respect its documented ownership, dependencies, public contracts, flows, and known risks.
+- Inspect the actual implementation when documentation and code need to be reconciled.
+- Do not invent intended architecture that is not supported by the current code.
+
+Update the module `README.md` only when a change meaningfully affects its documented responsibilities, dependencies, contracts, important flows, or architectural risks.
+
+Do not update it for cosmetic changes, routine maintenance, or internal refactors that preserve the documented behavior.
 
 ## Localization
 
 When changing user-facing strings, inspect the target module's existing resources and Gradle configuration first.
 
-* Never assume or hardcode the supported locale list.
-* Translate all locales required by the target module when translation is part of the task.
-* Do not create new locale directories unless explicitly required.
-* Preserve resource keys, placeholders, escaping, markup, and formatting tokens exactly.
+- Never assume or hardcode the supported locale list.
+- Translate all locales required by the target module when translation is part of the task.
+- Do not create new locale directories unless explicitly required.
+- Preserve resource keys, placeholders, escaping, markup, and formatting tokens exactly.
 
 ## Documentation
 
-Each active Gradle module documents its ownership, dependencies, contracts, logic flow, and risks in
-the local `README.md`. Read the relevant module README before changing that module and update it when
-a change affects those claims.
+Documentation must describe the current code.
 
-ViewModel, event/action, coroutine, Flow, and `UiStateScreen<T>` rules are documented with the
-presentation contracts in `@./library/core/ui/README.md`.
+Update technical documentation only when your change makes it inaccurate or changes a documented contract, architecture decision, or public API.
 
-Do not duplicate detailed module documentation into `AGENTS.md`.
+Do not duplicate module documentation or skill guidance into `AGENTS.md`.
 
-Update documentation only when the change makes existing technical documentation inaccurate or changes a documented contract, architecture rule, or public API.
-
-Do not add comments or KDoc that merely restate the implementation. Document contracts, invariants, and non-obvious reasoning where useful.
-
-## Module and Feature Documentation
-
-Each active feature/module may contain its own `README.md` documenting its local architecture and responsibilities.
-
-These READMEs are part of the technical documentation and should be treated as the local source of context for that module.
-
-When working inside a module or feature:
-
-* Read its `README.md` when one exists before making substantial architectural changes.
-* Keep it aligned with the actual implementation when a change meaningfully affects what the module does or how it interacts with the rest of the project.
-* Update it when responsibilities, ownership boundaries, module dependencies, public contracts, important flows, or meaningful architectural risks change.
-* Do not update it for trivial implementation details, cosmetic UI changes, internal refactors that preserve the documented contract, or routine maintenance.
-
-Module READMEs may document topics such as:
-
-* purpose
-* what the module owns
-* what it explicitly does not own
-* modules it depends on
-* modules that depend on it
-* primary logic/data flow
-* public contracts
-* internal implementations
-* relevant architectural risks or migration notes
-
-Documentation must describe the current code. Do not invent intended architecture or rewrite a module README merely to make it look more complete.
-
+Do not add comments or KDoc that merely restate the implementation. When touching code, add, improve, or correct relevant KDoc when it helps explain public APIs, contracts, invariants, side effects, ownership, assumptions, or non-obvious behavior. If existing KDoc is inaccurate or outdated, update it to match the current implementation.
