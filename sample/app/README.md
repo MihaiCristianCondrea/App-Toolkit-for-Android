@@ -1,79 +1,86 @@
-# `:sample` Logic Graph
+# `:sample:app` Logic Graph
 
 ## Purpose
 
-Provides the installable App Toolkit for Android application and demonstrates how a host composes the reusable toolkit libraries with app-specific features, providers, resources, and platform components.
+The installable App Toolkit for Android application: the composition root that assembles the toolkit
+libraries with the host's own feature modules.
 
 ## Owns
 
-- The Android application, manifest, startup `Application`, `MainActivity`, root screen, host navigation graph, and Koin bootstrap.
-- App-specific tools/tiles and Android services, developer-app browsing/favorites, component showcase, and apps widget.
-- Host implementations of startup, onboarding, settings, build/ad configuration, DataStore, and navigation provider contracts.
-- Application resources, localization, store listing, icons, and host Firebase/Play configuration.
+- The `AppToolkit` application class, the manifest, `MainActivity`, and the Koin bootstrap.
+- `appNavigationEntryBuilders`, the one declaration that names every host feature.
+- Host implementations of the startup and onboarding provider contracts.
+- Application identity resources: launcher mipmaps and the `xml/` configuration the manifest points
+  at (shortcuts, backup and data-extraction rules, locale config, widget provider info).
+- Signing, ProGuard, locale filters, Play/Firebase configuration, and the app-wide `BuildConfig`
+  fields.
 
 ## Does not own
 
-- Reusable AppToolkit feature screens and infrastructure, owned by `:library:*` modules.
-- Shared DI/navigation assembly, owned by [`:library:apptoolkit`](../library/apptoolkit/README.md).
-- SDK-neutral contracts and reusable UI/theme components, owned by the corresponding core modules.
+- Any feature. Screens, repositories and ViewModels live in `:sample:feature:*` and `:sample:widget`.
+- Shared resources and strings, owned by [`:sample:core:ui`](../core/ui/README.md).
+- Route keys and the entry-builder context, owned by
+  [`:sample:core:navigation`](../core/navigation/README.md).
 
 ## Depends on
 
-- [`:library:apptoolkit`](../library/apptoolkit/README.md) for shared DI and navigation composition.
-- `:library:core:common`, `:library:core:ui`, `:library:core:designsystem`, and `:library:navigation` for host contracts, presentation foundations, theming, and navigation.
-- `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`, `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and `:library:feature:support` because the host exposes and configures those screens.
-- `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`, `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update` to install the optional SDK behavior.
-
-The application does not directly declare `:library:core`, `:library:core:datastore`, or `:library:core:network`; those arrive through the façade/feature graph.
+- Every `:sample:core:*`, `:sample:feature:*` and `:sample:widget` module.
+- [`:library:apptoolkit`](../../library/apptoolkit/README.md) for shared DI and navigation composition,
+  plus the toolkit feature and integration modules it configures.
 
 ## Used by
 
-No internal module depends on `:sample`; it is the application entry point.
+Nothing. This is the application entry point.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    App[AppToolkit Application] --> Koin[Host Koin bootstrap]
+    App[AppToolkit Application] --> Koin[Koin bootstrap]
     Koin --> Facade[AppToolkit DI module lists]
-    Koin --> HostBindings[Host providers and repositories]
-    Main[MainActivity / MainScreen] --> Nav[Host Navigation 3 graph]
-    Nav --> HostFeatures[Apps, tiles, components]
-    Nav --> ToolkitBuilders[AppToolkit destination builders]
-    HostFeatures --> Logic[Host repositories]
-    Logic --> Android[Android sensors, packages, services, DataStore]
+    Koin --> HostModules[Host DI modules]
+    Activity[MainActivity] --> Builders[appNavigationEntryBuilders]
+    Builders --> Features[":sample:feature:* entry builders"]
+    Builders --> ToolkitEntries[Toolkit destination builders]
+    Activity --> Shell["MainScreen (:sample:feature:home)"]
+    Shell --> Builders
 ```
 
 ## Public contracts
 
-This is an application module and is not intended as a library API. Its important integration surface is the set of host provider implementations and configuration values passed into AppToolkit DI factories.
+Not a library. Its integration surface is the set of host provider implementations and configuration
+values passed into the AppToolkit DI factories.
 
 ## Internal implementations
 
-- Developer-app remote/local repositories, DTO mapping, favorites persistence, and installed-app inspection.
-- Concrete quick-tool data repositories, the Toolkit Tiles catalogue and Quick Settings status reads, domain models, Compose tools, Quick Settings tiles, and the caffeine service.
-- Main/components/apps-list ViewModels and UI, widget implementation, host DI modules, and navigation builders.
+- Koin module wiring, host provider bindings, and the navigation entry aggregation.
 
 ## Current risks
 
-The host module still owns substantial reusable-looking apps-list, quick-tools, widget, and component-showcase business logic. Those flows cannot currently be reused without depending on the application module or extracting dedicated feature modules.
+`appNavigationEntryBuilders` is the single place that knows the full feature set, so every new
+destination touches this module. That is deliberate — it is what keeps the feature modules from
+depending on each other — but it does make this file a merge point.
+
+Components declared by feature modules (Quick Settings tile services, the caffeine foreground
+service, `ComponentsActivity`, the widget receiver) are still declared in this manifest rather than in
+each feature's own. They resolve because every module is a dependency here, but a feature is not yet
+self-contained: adding one to another host means editing this manifest.
 
 ## Migration notes
 
-The current worktree reflects an ongoing migration from the former `:app` project to `:sample` and from the old package namespace to the published library/sample namespaces. Avoid restoring deleted `app/` sources while completing modularization.
+The host was a single `:sample` module until the split. Three couplings had to be broken to make the
+feature modules leaves rather than a chain:
 
-`BreathingRepository`, `CaffeineRepository`, `SensorRepository`, `SosRepository` and
-`SystemRepository` intentionally stay concrete `XRepository` classes. They each wrap one Android
-platform source, have no alternate implementation, and do not cross a module boundary; adding
-matching interfaces or pass-through use cases would not create useful substitution.
+- `MainScreen` imported `appNavigationEntryBuilders`, which would have made the shell depend on every
+  feature it renders. It now takes the builders as a parameter, supplied here by `MainActivity`.
+- `CaffeineService` built its notification intent from `MainActivity::class.java`; it resolves the
+  launcher activity through the package manager instead.
+- `APPS_LIST_AD_FREQUENCY` was a `buildConfigField` here, which no library module can read. It is a
+  fixed tuning value, so it became a constant in [`:sample:core:common`](../core/common/README.md).
 
-`ToolkitTilesRepository` is the exception among them, and has a `Default` implementation behind an
-interface: it serves the tile catalogue as well as reading Quick Settings, so a caller can be given
-a fixed catalogue without a device.
+Quick-tool repositories in `:sample:feature:tiles` intentionally stay concrete classes: each wraps one
+Android platform source, has no alternate implementation, and does not cross a module boundary.
 
-The apps-list, navigation-drawer and components-showcase use cases were removed for the same reason
-in reverse: each forwarded one call to a repository that already logged the breadcrumb the use case
-claimed to add, so ViewModels now call those repositories directly. The unlock write moved to
-`ComponentsShowcaseRepository` rather than disappearing — dropping its use case without an owner
-would have left a ViewModel holding `DatastoreInterface`, a data source, with no repository between
-them. Use cases that carry real policy stay.
+Pass-through use cases were removed throughout. Where one wrapped a data source rather than a
+repository, a repository was introduced instead of deleting it outright, so no ViewModel ends up
+holding `DatastoreInterface` directly.
