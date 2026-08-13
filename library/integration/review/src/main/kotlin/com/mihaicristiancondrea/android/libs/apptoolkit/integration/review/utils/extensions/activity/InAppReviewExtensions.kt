@@ -18,9 +18,9 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.utils.extensions.activity
 
 import android.app.Activity
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.hasPlayStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isInstalledFromPlayStore
-import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.tasks.await
 
 /**

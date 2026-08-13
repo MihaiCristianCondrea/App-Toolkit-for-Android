@@ -17,28 +17,25 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repository.DefaultAdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repository.AdsSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repository.DefaultAdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.AdsSettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.remote.datasource.ConsentRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.remote.datasource.UmpConsentRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.DefaultConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.DefaultConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.AdsCoreManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ConsentPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.client.KtorClient
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.model.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.FirebaseControllerImpl
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.ManifestAdMobAppIdProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.AdsCoreManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.client.KtorClient
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repository.DefaultInAppUpdateRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repository.InAppUpdateRepository
 import org.koin.core.module.Module

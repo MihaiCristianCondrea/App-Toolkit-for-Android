@@ -18,9 +18,9 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.local
 
 import android.content.Context
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.model.FaqId
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.model.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R
 
 /**
  * Local data source responsible for retrieving FAQ items from the application's resources.

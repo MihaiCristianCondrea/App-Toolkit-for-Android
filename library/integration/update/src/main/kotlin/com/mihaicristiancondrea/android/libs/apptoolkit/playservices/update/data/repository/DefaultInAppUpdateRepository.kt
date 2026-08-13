@@ -17,13 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repository
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repository.InAppUpdateRepository
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateResult
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

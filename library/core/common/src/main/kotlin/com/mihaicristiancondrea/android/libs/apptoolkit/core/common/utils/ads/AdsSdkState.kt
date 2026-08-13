@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads
 
 import com.google.android.libraries.ads.mobile.sdk.MobileAds
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads.AdsSdkState.isReady
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

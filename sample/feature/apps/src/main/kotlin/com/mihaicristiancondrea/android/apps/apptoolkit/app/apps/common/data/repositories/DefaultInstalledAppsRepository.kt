@@ -19,9 +19,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.re
 
 import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInstallInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.InstalledAppsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.packagemanager.getVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.isAppInstalled
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.packagemanager.getVersionInfo
 
 /** Android package-manager-backed implementation of [InstalledAppsRepository]. */
 class DefaultInstalledAppsRepository(

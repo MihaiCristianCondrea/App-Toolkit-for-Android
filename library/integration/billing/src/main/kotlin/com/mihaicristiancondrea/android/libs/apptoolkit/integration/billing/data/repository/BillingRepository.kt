@@ -19,8 +19,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.dat
 
 import android.app.Activity
 import com.android.billingclient.api.ProductDetails
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.billing.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.BillingCore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.billing.PurchaseResult
 import kotlinx.coroutines.flow.Flow
 
 /**

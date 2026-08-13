@@ -10,10 +10,10 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.usecases
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.ChangelogRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.string.extractChangesForVersion
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

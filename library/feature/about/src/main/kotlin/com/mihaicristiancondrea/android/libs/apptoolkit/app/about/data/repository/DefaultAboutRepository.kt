@@ -22,7 +22,6 @@ import android.os.Build
 import android.util.Log
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.model.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.CLIPBOARD_HELPER_LOG_TAG

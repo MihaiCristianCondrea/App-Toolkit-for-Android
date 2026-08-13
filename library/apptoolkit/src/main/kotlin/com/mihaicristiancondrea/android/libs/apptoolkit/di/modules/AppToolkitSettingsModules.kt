@@ -17,12 +17,12 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.DefaultAboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.DefaultAboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.AboutViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repository.DefaultCacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repository.CacheRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repository.DefaultCacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.AdvancedSettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repository.DefaultUsageAndDiagnosticsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repository.UsageAndDiagnosticsRepository
@@ -41,8 +41,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.color
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.rose.rosePalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.special.christmas.christmasPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.special.skin.skinPalette
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named

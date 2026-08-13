@@ -73,10 +73,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import coil3.compose.AsyncImage
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDetails
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppLink
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AppDetailsNativeAd
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
@@ -85,7 +86,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.AppVersionInfo as InstalledAppVersionInfo
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

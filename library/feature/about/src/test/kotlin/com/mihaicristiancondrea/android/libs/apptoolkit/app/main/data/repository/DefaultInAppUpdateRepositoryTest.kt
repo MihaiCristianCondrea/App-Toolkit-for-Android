@@ -20,9 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repositor
 import android.app.Activity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repository.DefaultInAppUpdateRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateResult
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
@@ -32,6 +29,9 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repository.DefaultInAppUpdateRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateResult
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic

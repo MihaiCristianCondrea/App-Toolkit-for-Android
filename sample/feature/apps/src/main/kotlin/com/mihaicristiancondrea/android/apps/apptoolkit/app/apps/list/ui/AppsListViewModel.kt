@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.FavoritesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.InstalledAppsRepository
@@ -27,11 +26,13 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contrac
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.models.network.AppErrors
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.dismissSnackbar
@@ -39,7 +40,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setError
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setLoading
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setNoData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.ExperimentalCoroutinesApi

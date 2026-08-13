@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.result
 
 import kotlinx.coroutines.CancellationException
 

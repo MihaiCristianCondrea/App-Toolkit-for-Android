@@ -20,9 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui
 import android.app.Activity
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.ProductDetails
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repository.BillingRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.billing.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.contract.SupportAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.contract.SupportEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.state.DonationOptionUiState
@@ -30,8 +27,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.state.Sup
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.extensions.hasOneTimePurchaseOffer
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.extensions.primaryFormattedPrice
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.billing.PurchaseResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.activity.isValidForBilling
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -44,10 +46,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setNoData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.showSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.updateState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.activity.isValidForBilling
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repository.BillingRepository
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.Job

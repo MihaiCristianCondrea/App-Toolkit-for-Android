@@ -20,11 +20,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.di
 import android.app.Activity
 import android.content.Context
 import androidx.compose.material3.ColorScheme
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AdvancedSettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
-import io.ktor.client.engine.HttpClientEngine
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.startup.utils.interfaces.providers.AppStartupProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.adsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.appModule
@@ -34,16 +29,21 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modu
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.startupModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings.modules.generalSettingsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings.modules.hostSettingsProvidersModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AdvancedSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.model.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitFeatureModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitFoundationModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitSettingsModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.di.billingModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di.firebaseModule
+import io.ktor.client.engine.HttpClientEngine
+import org.junit.jupiter.api.Test
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.koin.test.verify.verify
-import org.junit.jupiter.api.Test
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.di.dataStoreModule as libraryDataStoreModule
 
 /**

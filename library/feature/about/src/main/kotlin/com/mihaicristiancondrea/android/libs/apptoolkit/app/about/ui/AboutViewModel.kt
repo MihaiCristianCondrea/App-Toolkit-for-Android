@@ -18,17 +18,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.AboutAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.mapper.toUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.state.AboutUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
@@ -37,8 +38,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setError
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setLoading
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.showSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn

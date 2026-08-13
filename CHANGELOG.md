@@ -1,35 +1,8 @@
 # Unreleased:
 
-- **Patch**: Fixed a crash on screens showing ads (`MobileAds.initialize must be called before using
-  the Google Mobile Ads SDK`). `AdsCoreManager` and the ad views read the ads preference from the
-  same flow instead of each applying its own default, the preference is observed rather than sampled
-  once, and ad surfaces wait for the SDK to be ready before requesting — and never let a failed
-  request escape into composition.
-- **Patch**: Fixed a process kill caused by the UMP consent SDK. The consent request is now
-  single-flighted process-wide, requests from a finishing activity never reach UMP, and a narrow
-  crash guard installed from `BaseCoreManager` swallows the SDK's metrics-ping crash and reports it
-  as a non-fatal instead.
-- **Patch**: The AdMob application id is now resolved from the host app's
-  `com.google.android.gms.ads.APPLICATION_ID` manifest metadata. The library no longer ships an
-  `ad_mob_app_id` string resource, which consumer apps silently inherited, and `AdsCoreManager` no
-  longer initializes the Mobile Ads SDK with Google's sample app id.
-- **Minor**: Native ads are built in Kotlin. `NativeAdSlot` plus a `NativeAdPresentation` replaces
-  the seven per-screen components and their XML layouts; existing component names and parameters are
-  unchanged. `NativeAdViewHost` is deprecated.
-- **Patch**: Native ad slots render nothing until an ad is bound, so a failed load no longer leaves
-  an empty bordered card behind, and they report load state so hosts can collapse the slot.
-- **Patch**: Changing a native ad unit no longer leaks the previously loaded ad.
-- **Patch**: Native ad colours follow in-app theme changes that do not recreate the activity.
-- **Patch**: The native ad "Sponsored" disclosure is translated in every supported locale.
-- **Patch**: Native ad cards use the default card container instead of tinting themselves apart from
-  the content they sit among, the call to action no longer forces its own height, the grid cell
-  centres its content like the app cards it is interleaved with, and the media view keeps a 16:9
-  frame instead of taking whatever height the creative reports.
-- **Minor**: `NativeAdSlot` and every native ad component take a `containerColor`, so a screen whose
-  rows are not default cards — or a consumer app with its own surfaces — overrides the container at
-  the call site instead of the toolkit guessing one tint for everybody.
-- **Patch**: Restored the rounded chip behind the native ad "Sponsored" badge, and the call to action
-  now stays on the trailing edge even when the creative carries no advertiser line.
+- **Minor**: Enhanced the system for fetching app updates and handled internal errors more robustly.
+- **Minor**: Optimized resource usage and resolved various crashes to ensure a smoother experience.
+- **Patch**: Refined layouts and fixed visual inconsistencies across different themes and locales, including improved advertisement integration.
 
 # Version 26.07.1:
 

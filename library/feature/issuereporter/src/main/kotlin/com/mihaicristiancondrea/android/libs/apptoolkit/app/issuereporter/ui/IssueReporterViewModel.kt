@@ -18,7 +18,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.IssueReportResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.github.ExtraInfo
@@ -29,11 +28,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.con
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.state.IssueReporterUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.GithubToken
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -44,8 +45,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setError
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setLoading
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.showSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch

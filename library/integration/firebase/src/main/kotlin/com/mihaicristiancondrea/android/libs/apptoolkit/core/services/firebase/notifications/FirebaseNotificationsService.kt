@@ -18,9 +18,9 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.services.firebase.notifications
 
 import android.util.Log
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.FCM_LOG_TAG
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.FCM_LOG_TAG
 
 /**
  * A service that extends [com.google.firebase.messaging.FirebaseMessagingService] to handle Firebase Cloud Messaging (FCM) events.

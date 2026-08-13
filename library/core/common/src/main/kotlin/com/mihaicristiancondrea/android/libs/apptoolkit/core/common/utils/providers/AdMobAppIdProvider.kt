@@ -22,6 +22,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider.Companion.AD_MOB_APP_ID_REGEX
 
 /**
  * Resolves the AdMob application id that belongs to the *host* app.

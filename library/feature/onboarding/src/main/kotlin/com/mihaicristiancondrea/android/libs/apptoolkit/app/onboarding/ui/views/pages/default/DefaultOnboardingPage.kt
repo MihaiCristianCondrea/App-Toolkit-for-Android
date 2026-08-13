@@ -32,8 +32,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.model.OnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.default.containers.DefaultOnboardingIconContainer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 
 @Composable
 fun DefaultOnboardingPage(page: OnboardingPage.DefaultPage) {

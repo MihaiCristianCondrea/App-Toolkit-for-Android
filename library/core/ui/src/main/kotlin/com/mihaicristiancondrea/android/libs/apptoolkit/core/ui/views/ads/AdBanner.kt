@@ -38,13 +38,13 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads.AdsSdkState
 import com.google.android.libraries.ads.mobile.sdk.banner.AdView
 import com.google.android.libraries.ads.mobile.sdk.banner.BannerAd
 import com.google.android.libraries.ads.mobile.sdk.banner.BannerAdRequest
 import com.google.android.libraries.ads.mobile.sdk.common.AdLoadCallback
 import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads.AdsSdkState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 
 /**
  * A Composable function that displays a banner ad from Google AdMob.

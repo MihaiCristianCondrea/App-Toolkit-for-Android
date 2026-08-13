@@ -19,10 +19,10 @@ package com.mihaicristiancondrea.android.apptoolkit.buildlogic
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import java.util.Properties
-import java.util.Locale
-import java.time.ZonedDateTime
 import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.util.Locale
+import java.util.Properties
 
 class VersioningPlugin : Plugin<Project> {
     override fun apply(target: Project) {

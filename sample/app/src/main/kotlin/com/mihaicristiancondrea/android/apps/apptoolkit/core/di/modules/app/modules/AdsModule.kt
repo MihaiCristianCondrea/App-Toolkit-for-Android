@@ -17,11 +17,11 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules
 
+import com.google.android.libraries.ads.mobile.sdk.banner.AdSize
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
-import com.google.android.libraries.ads.mobile.sdk.banner.AdSize
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module

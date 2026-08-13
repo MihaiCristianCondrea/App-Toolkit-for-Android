@@ -33,11 +33,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.model.App
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitFeatureModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitFoundationModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitSettingsModules
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.di.dataStoreModule as libraryDataStoreModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.di.billingModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di.firebaseModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.di.dataStoreModule as libraryDataStoreModule
 
 fun initializeKoin(context: Context) {
     val appToolkitBuildConfig = AppToolkitHostBuildConfig(

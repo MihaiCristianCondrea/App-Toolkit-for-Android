@@ -18,11 +18,10 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.data.repository
 
 import android.app.Activity
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.hasPlayStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.isInstalledFromPlayStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.data.repository.ReviewRepository
-import com.google.android.play.core.review.ReviewManagerFactory
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 

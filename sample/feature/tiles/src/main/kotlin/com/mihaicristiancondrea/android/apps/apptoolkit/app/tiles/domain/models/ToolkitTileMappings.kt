@@ -19,11 +19,11 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models
 
 import android.content.ComponentName
 import android.content.Context
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.BatteryTileService
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.CoinFlipTileService
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.CounterTileService
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.DiceRollTileService
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 
 data class TileServiceRequest(
     val serviceClass: Class<*>,

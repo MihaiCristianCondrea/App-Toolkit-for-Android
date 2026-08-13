@@ -19,15 +19,15 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.mod
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.data.repositories.AppNavigationRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.BreathingRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.CaffeineRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.DefaultToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.SensorRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.SosRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.SystemRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.DefaultToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
 import org.koin.android.ext.koin.androidContext

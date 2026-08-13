@@ -18,17 +18,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.domain.model.UsageAndDiagnosticsSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repository.UsageAndDiagnosticsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.domain.model.UsageAndDiagnosticsSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnosticsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar
@@ -38,8 +39,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setErrors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setLoading
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.updateState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn

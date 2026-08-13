@@ -27,10 +27,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads.AdsSdkState
 import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoaderCallback
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads.AdsSdkState
 
 /**
  * Loads a [NativeAd] for [adUnitId] and keeps it alive for as long as it is composed.

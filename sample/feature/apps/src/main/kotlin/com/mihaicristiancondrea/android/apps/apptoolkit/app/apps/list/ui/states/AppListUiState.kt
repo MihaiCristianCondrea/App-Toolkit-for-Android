@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDetails
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInstallInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet

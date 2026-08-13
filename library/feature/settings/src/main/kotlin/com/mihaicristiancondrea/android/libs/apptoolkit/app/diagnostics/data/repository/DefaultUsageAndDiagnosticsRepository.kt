@@ -18,11 +18,10 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repository
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.domain.model.UsageAndDiagnosticsSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repository.UsageAndDiagnosticsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.UsageAndDiagnosticsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.UsageAndDiagnosticsPreferencesDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn

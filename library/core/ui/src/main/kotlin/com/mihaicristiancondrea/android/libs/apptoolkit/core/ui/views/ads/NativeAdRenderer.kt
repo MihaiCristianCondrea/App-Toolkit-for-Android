@@ -41,10 +41,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.google.android.libraries.ads.mobile.sdk.nativead.MediaView
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 
 /**
  * Interface for creating the view hierarchy for different native ad presentations.

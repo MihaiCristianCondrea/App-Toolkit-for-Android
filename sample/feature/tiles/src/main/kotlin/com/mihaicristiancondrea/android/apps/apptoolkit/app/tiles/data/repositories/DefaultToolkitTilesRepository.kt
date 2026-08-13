@@ -19,7 +19,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.reposito
 
 import android.content.Context
 import android.provider.Settings
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitQuickTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileCategory
@@ -27,6 +26,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitToolKind
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.getTileServiceRequests
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

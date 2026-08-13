@@ -18,11 +18,11 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repositories.ComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.contracts.ComponentsUnlockAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.contracts.ComponentsUnlockEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.states.ComponentsUnlockUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.BuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
