@@ -27,8 +27,8 @@ app/release/*
 release/
 signing.properties
 github.properties
-app/google-services.json
 /app/src/main/play/keys/*
+/sample/app/google-services.json
 
 ###############################################################################
 # LOCAL CONFIG / ENV FILES
