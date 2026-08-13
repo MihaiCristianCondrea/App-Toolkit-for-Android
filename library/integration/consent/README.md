@@ -52,7 +52,10 @@ Consent behavior spans persistence, host callbacks, UMP state, Firebase toggles,
 
 ## Migration notes
 
-### UMP 4.0.0 empty-error-body process crash
+### Fixed: UMP 4.0.0 empty-error-body process crash
+
+Reported as `NoSuchElementException` from `Scanner.next()` on a UMP `ThreadPoolExecutor` thread, with
+no toolkit frame in the stack.
 
 The toolkit previously encountered a process-killing failure after a consent request failed. UMP
 4.0.0 performs a metrics request on its own executor and reads a non-success response body with

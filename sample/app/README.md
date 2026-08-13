@@ -66,6 +66,16 @@ service, `ComponentsActivity`, the widget receiver) are still declared in this m
 each feature's own. They resolve because every module is a dependency here, but a feature is not yet
 self-contained: adding one to another host means editing this manifest.
 
+## Architecture guards
+
+`HostKoinGraphTest` verifies the dependency graph `initializeKoin` assembles, because a Koin
+definition that cannot be created surfaces as a fatal `Unable to start activity` at
+`MainActivity.onCreate` rather than at startup. The mechanics and the four host extension points it
+pins are documented in [`:library:apptoolkit`](../../library/apptoolkit/README.md).
+
+The list of modules in that test mirrors `initializeKoin` by hand. A module added to one and not the
+other leaves the check passing while the app breaks, so they have to be edited together.
+
 ## Migration notes
 
 The host was a single `:sample` module until the split. Three couplings had to be broken to make the

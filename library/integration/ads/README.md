@@ -52,6 +52,24 @@ Ad rendering is split between this integration and `:library:core:ui`, which wea
 
 ## Migration notes
 
+### Fixed: `IllegalStateException: MobileAds.initialize must be called before using the Google Mobile Ads SDK`
+
+Reported from `NativeAdLoader.load` inside a Compose `DisposableEffect`, which made it fatal: the
+throw happened during composition, so it took the process down instead of failing one ad slot.
+
+Two independent causes, both fixed:
+
+- The ads-enabled preference had two sources with different defaults. `AdsCoreManager` gated SDK
+  initialization on one and the ad views read the other, so in a debug build the views could believe
+  ads were on while the SDK had never been initialized. Both now read
+  `CommonDataStore.adsEnabledFlow`, and only the default is shared.
+- Even with one source, initialization is asynchronous. An ad slot composed during startup could
+  request before the SDK was up. Requests now wait on `AdsSdkState.isReady` and re-key when readiness
+  changes, so a slot composed early starts by itself rather than throwing and never retrying.
+
+`rememberNativeAd` additionally wraps the load in `runCatching`, so any remaining synchronous SDK
+throw renders an empty slot instead of killing the host. An ad is never worth a crash.
+
 Ads, consent, and Mobile Ads initialization previously diverged in ways that could terminate every
 consumer app. The durable safeguards are documented at the modules that own them:
 

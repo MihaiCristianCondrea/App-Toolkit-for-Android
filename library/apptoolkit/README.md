@@ -71,6 +71,30 @@ explicit input of this module's `Test` tasks in `build.gradle.kts`. Removing tha
 Gradle treat the task as up to date after a file moves, which is precisely when the test needs to
 run.
 
+### Fixed: `Unable to start activity` from an unresolvable Koin definition
+
+A definition that cannot be created does not fail when Koin starts — it fails the first time
+something asks for it. In practice that is `MainActivity.onCreate` resolving `MainViewModel`, which
+reports as `RuntimeException: Unable to start activity` caused by `InstanceCreationException`. The
+trace names only the outermost ViewModel and the innermost definition, never the dependency that was
+actually missing, and the app is dead before its first frame.
+
+`HostKoinGraphTest` in `:sample:app` now resolves the whole graph by reflection in a plain unit test,
+so a missing binding fails the build instead of a launch. It checks two things:
+
+- every definition in the graph `initializeKoin` builds can be resolved;
+- the toolkit's own modules ask a host for nothing beyond four documented extension points
+  (`SettingsProvider`, `AboutSettingsProvider`, `AdvancedSettingsProvider`, and the default
+  `ColorPalette`). Adding a fifth is a new integration requirement that would crash every existing
+  host, so it has to be added to that list deliberately.
+
+Two mechanics are easy to get wrong when editing that test. Koin resolves a definition against its
+own module plus that module's `includes`, so the graph must be wrapped as
+`module { includes(allModules) }` — verifying a flat list makes every cross-module dependency read as
+missing. And `verify` reflects on the produced type's constructor regardless of how the definition
+builds it, so types created by a factory function (`HttpClient`, `ColorPalette`) need their
+constructor parameters listed as externally supplied rather than the check being skipped.
+
 ## Migration notes
 
 Bindings were moved out of the sample app so other hosts can integrate the toolkit using explicit host configuration and provider factories.

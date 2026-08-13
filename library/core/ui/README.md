@@ -62,7 +62,9 @@ Feature-specific theme, onboarding-preview, and display-dialog code lives in thi
 
 Native and banner ad requests previously assumed the Mobile Ads SDK had already initialized. When
 the preference/UI path disagreed with initialization, SDK calls could throw synchronously from a
-Compose effect and kill the host process. Preserve the current behavior:
+Compose effect and kill the host process — reported as
+`IllegalStateException: MobileAds.initialize must be called before using the Google Mobile Ads SDK`
+with `NativeAdLoader.load` under `DisposableEffectImpl.onRemembered`. Preserve the current behavior:
 
 - `rememberAdsEnabled` observes the same `CommonDataStore.adsEnabledFlow` used by
   `AdsCoreManager`; it must not choose its own default.
