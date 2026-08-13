@@ -38,6 +38,7 @@
     <string name="select_language_title">Виберіть мову</string>
     <string name="sort_by">Сортувати за</string>
     <string name="sponsored_ad_label">● Спонсорована реклама</string>
+    <string name="sponsored_ad_label_plain">Спонсорована реклама</string>
     <string name="startup_page">Початкова сторінка</string>
     <string name="summary_dark_theme">Темна тема використовує глибокий фон, щоб значно продовжити час роботи акумулятора. Щоб активувати його, просто перейдіть до системного менеджера Android та виберіть бажану тему в</string>
     <string name="theme_mode">Режим теми</string>

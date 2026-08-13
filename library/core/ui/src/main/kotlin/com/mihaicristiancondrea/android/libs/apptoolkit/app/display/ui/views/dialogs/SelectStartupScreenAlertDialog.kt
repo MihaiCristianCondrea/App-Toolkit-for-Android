@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.display.ui.views.di
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -44,6 +43,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastor
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.DialogContentSizing
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.dialogContentHeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
@@ -76,7 +77,13 @@ import kotlin.math.min
 @Composable
 fun SelectStartupScreenAlertDialog(
     onDismiss: () -> Unit,
-    onStartupSelected: (String) -> Unit
+    onStartupSelected: (String) -> Unit,
+    /**
+     * Defaults to wrapping the option list. This dialog usually offers a handful of startup screens
+     * and previously reserved 60% of the screen height for them regardless, leaving most of the
+     * dialog empty. Pass [DialogContentSizing.FractionOfScreen] to restore the fixed height.
+     */
+    sizing: DialogContentSizing = DialogContentSizing.WrapContent,
 ) {
     val dataStore: CommonDataStore = rememberCommonDataStore()
 
@@ -136,6 +143,7 @@ fun SelectStartupScreenAlertDialog(
                 onSelectedPageChange = { selected -> selectedPage = selected },
                 startupEntries = entries,
                 startupValues = values,
+                sizing = sizing,
             )
         }
     )
@@ -147,11 +155,12 @@ fun SelectStartupScreenAlertDialogContent(
     onSelectedPageChange: (String) -> Unit,
     startupEntries: ImmutableList<String>,
     startupValues: ImmutableList<String>,
+    sizing: DialogContentSizing = DialogContentSizing.WrapContent,
 ) {
     val count = min(startupEntries.size, startupValues.size)
 
     Column(
-        modifier = Modifier.fillMaxHeight(fraction = 0.6f)
+        modifier = Modifier.dialogContentHeight(sizing = sizing)
     ) {
         Text(text = stringResource(id = R.string.dialog_startup_subtitle))
         Box(

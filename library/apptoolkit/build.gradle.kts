@@ -17,9 +17,6 @@
 
 import com.mihaicristiancondrea.android.apptoolkit.buildlogic.VersioningExtension
 
-val publishingArtifactId = providers.gradleProperty("PUBLISHING_ARTIFACT_ID")
-val jitpackGroupId = providers.gradleProperty("JITPACK_GROUP_ID")
-val publishingVersion = providers.gradleProperty("PUBLISHING_VERSION")
 
 plugins {
     alias(notation = libs.plugins.android.library)
@@ -28,9 +25,9 @@ plugins {
     alias(notation = libs.plugins.kotlin.serialization)
     alias(notation = libs.plugins.about.libraries)
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")
-    `maven-publish`
     id("com.mihaicristiancondrea.android.apptoolkit.unit-test")
     id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
+    id("com.mihaicristiancondrea.android.apptoolkit.library-publish")
 }
 
 val versioning = extensions.getByType<VersioningExtension>()
@@ -60,12 +57,6 @@ android {
         compose = true
     }
 
-
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
-    }
 }
 
 // `RepositoryConventionsTest` reads production source trees rather than the classpath, and Gradle
@@ -157,16 +148,3 @@ dependencies {
     debugImplementation(dependencyNotation = libs.androidx.compose.ui.test.manifest)
 }
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = jitpackGroupId.get()
-            artifactId = publishingArtifactId.get()
-            version = publishingVersion.get()
-
-            afterEvaluate {
-                from(components["release"])
-            }
-        }
-    }
-}

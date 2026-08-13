@@ -38,6 +38,7 @@
     <string name="select_language_title">Pumili ng wika</string>
     <string name="sort_by">Pagbukud-bukurin ayon sa</string>
     <string name="sponsored_ad_label">● Naka-sponsor na ad</string>
+    <string name="sponsored_ad_label_plain">Naka-sponsor na ad</string>
     <string name="startup_page">Startup page</string>
     <string name="summary_dark_theme">Ang madilim na tema ay gumagamit ng isang malalim na background upang makabuluhang mapalawak ang iyong buhay ng baterya. Upang maisaaktibo ito, mag -navigate lamang sa manager ng system ng iyong Android at piliin ang iyong ginustong tema sa</string>
     <string name="theme_mode">Mode ng tema</string>

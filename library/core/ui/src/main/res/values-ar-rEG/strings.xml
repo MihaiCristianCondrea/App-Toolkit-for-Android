@@ -38,6 +38,7 @@
     <string name="select_language_title">اختر اللغة</string>
     <string name="sort_by">فرز حسب</string>
     <string name="sponsored_ad_label">● إعلان برعاية</string>
+    <string name="sponsored_ad_label_plain">إعلان برعاية</string>
     <string name="startup_page">صفحة البدء</string>
     <string name="summary_dark_theme">ﻲﻓ ﻚﻳﺪﻟ ﺔﻠﻀﻔﻤﻟﺍ ﺔﻤﺴﻟﺍ ﺩﺪﺣﻭ Android ﻡﺎﻈﻧ ﺮﻳﺪﻣ ﻰﻟﺇ ﻝﺎﻘﺘﻧﻻﺍ ﻯﻮﺳ ﻚﻴﻠﻋ ﺎﻣ ، ﻪﻠﻴﻌﻔﺘﻟ</string>
     <string name="theme_mode">وضع المظهر</string>

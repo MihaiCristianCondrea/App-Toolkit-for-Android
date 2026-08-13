@@ -38,6 +38,7 @@
     <string name="select_language_title">Välj språk</string>
     <string name="sort_by">Sortera efter</string>
     <string name="sponsored_ad_label">● Sponsrad annons</string>
+    <string name="sponsored_ad_label_plain">Sponsrad annons</string>
     <string name="startup_page">Startsida</string>
     <string name="summary_dark_theme">Dark Theme utnyttjar en djup bakgrund för att avsevärt förlänga batteritiden. För att aktivera det, navigera bara till din Androids systemhanterare och välj ditt föredragna tema i</string>
     <string name="theme_mode">Temaläge</string>

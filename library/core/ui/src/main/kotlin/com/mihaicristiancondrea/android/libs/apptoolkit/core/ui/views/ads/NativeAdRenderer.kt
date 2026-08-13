@@ -361,8 +361,10 @@ private fun createCompact(context: Context): NativeAdViewHolder {
                 marginEnd = context.dp(SMALL_SPACING_DP)
             }
     }
-    val headline = headlineView(context = context, maxLines = 2)
-    val body = bodyView(context = context, maxLines = 3)
+    // One headline line and two body lines: Compact sits inline between question cards on the help
+    // screen, and a three-line body made the ad taller than the rows it is interleaved with.
+    val headline = headlineView(context = context, maxLines = 1)
+    val body = bodyView(context = context, maxLines = 2)
         .withTopMargin(context.dp(ICON_PADDING_DP))
     val advertiser = advertiserView(context = context)
         .withTopMargin(context.dp(ICON_PADDING_DP))

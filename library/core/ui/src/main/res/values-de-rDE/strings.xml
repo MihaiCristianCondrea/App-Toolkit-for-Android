@@ -38,6 +38,7 @@
     <string name="select_language_title">Sprache auswählen</string>
     <string name="sort_by">Sortieren nach</string>
     <string name="sponsored_ad_label">● Gesponserte Anzeige</string>
+    <string name="sponsored_ad_label_plain">Gesponserte Anzeige</string>
     <string name="startup_page">Startseite</string>
     <string name="summary_dark_theme">Das Dunkle Thema nutzt einen tiefen Hintergrund, um Ihre Akkulaufzeit erheblich zu verlängern. Um es zu aktivieren, navigieren Sie einfach zum Systemmanager Ihres Android -Systems und wählen Sie Ihr bevorzugtes Thema in</string>
     <string name="theme_mode">Themenmodus</string>

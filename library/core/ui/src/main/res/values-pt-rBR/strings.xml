@@ -38,6 +38,7 @@
     <string name="select_language_title">Selecionar idioma</string>
     <string name="sort_by">Ordenar por</string>
     <string name="sponsored_ad_label">● Anúncio patrocinado</string>
+    <string name="sponsored_ad_label_plain">Anúncio patrocinado</string>
     <string name="startup_page">Página inicial</string>
     <string name="summary_dark_theme">O tema escuro aproveita um fundo profundo para estender significativamente a vida útil da bateria. Para ativá -lo, simplesmente navegue para o gerente de sistema do seu Android e selecione seu tema preferido em</string>
     <string name="theme_mode">Modo de tema</string>

@@ -38,6 +38,7 @@
     <string name="select_language_title">Chọn ngôn ngữ</string>
     <string name="sort_by">Sắp xếp theo</string>
     <string name="sponsored_ad_label">● Quảng cáo được tài trợ</string>
+    <string name="sponsored_ad_label_plain">Quảng cáo được tài trợ</string>
     <string name="startup_page">Trang khởi động</string>
     <string name="summary_dark_theme">Chủ đề tối tận dụng một nền sâu để mở rộng đáng kể thời lượng pin của bạn. Để kích hoạt nó, chỉ cần điều hướng đến Trình quản lý hệ thống Android của bạn và chọn chủ đề ưa thích của bạn trong</string>
     <string name="theme_mode">Chế độ chủ đề</string>

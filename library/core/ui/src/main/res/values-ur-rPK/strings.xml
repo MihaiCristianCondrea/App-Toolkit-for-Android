@@ -38,6 +38,7 @@
     <string name="select_language_title">زبان منتخب کریں</string>
     <string name="sort_by">ترتیب دیں</string>
     <string name="sponsored_ad_label">● اسپانسر شدہ اشتہار</string>
+    <string name="sponsored_ad_label_plain">اسپانسر شدہ اشتہار</string>
     <string name="startup_page">شروعاتی صفحہ</string>
     <string name="summary_dark_theme">ﮟﯾﺮﮐ ﺐﺨﺘﻨﻣ ﻮﮐ ﻢﯿﮭﺗ ﯽﺤﯿﺟﺮﺗ ﮯﻨﭘﺍ ﺭﻭﺍ ﮟﯿﺋﺎﺟ ﺮﭘ ﺮﺠﯿﻨﯿﻣ ﻢﭩﺴﺳ ﮯﮐ Android ﮯﻨﭘﺍ ﻑﺮﺻ ،</string>
     <string name="theme_mode">تھیم موڈ</string>

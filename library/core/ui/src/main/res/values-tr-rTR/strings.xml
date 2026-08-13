@@ -38,6 +38,7 @@
     <string name="select_language_title">Dil seç</string>
     <string name="sort_by">Sırala</string>
     <string name="sponsored_ad_label">● Sponsorlu reklam</string>
+    <string name="sponsored_ad_label_plain">Sponsorlu reklam</string>
     <string name="startup_page">Başlangıç sayfası</string>
     <string name="summary_dark_theme">Karanlık tema, pil ömrünüzü önemli ölçüde uzatmak için derin bir arka plandan yararlanır. Etkinleştirmek için, Android\'in sistem yöneticisine gidin ve tercih ettiğiniz temayı seçin</string>
     <string name="theme_mode">Tema modu</string>

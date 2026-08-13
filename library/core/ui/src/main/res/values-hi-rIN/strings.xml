@@ -38,6 +38,7 @@
     <string name="select_language_title">भाषा चुनें</string>
     <string name="sort_by">छांटें</string>
     <string name="sponsored_ad_label">● प्रायोजित विज्ञापन</string>
+    <string name="sponsored_ad_label_plain">प्रायोजित विज्ञापन</string>
     <string name="startup_page">स्टार्टअप पेज</string>
     <string name="summary_dark_theme">डार्क थीम एक गहरी पृष्ठभूमि का लाभ उठाती है ताकि आपके बैटरी जीवन को महत्वपूर्ण रूप से बढ़ाया जा सके। इसे सक्रिय करने के लिए, बस अपने Android के सिस्टम मैनेजर पर नेविगेट करें और अपने पसंदीदा विषय का चयन करें</string>
     <string name="theme_mode">थीम मोड</string>

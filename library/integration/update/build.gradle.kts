@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")
     id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
+    id("com.mihaicristiancondrea.android.apptoolkit.library-publish")
 }
 
 val versioning = extensions.getByType<VersioningExtension>()

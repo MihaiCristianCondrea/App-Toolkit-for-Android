@@ -78,6 +78,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.analytics.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedActionList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
@@ -274,140 +276,46 @@ fun HelpScreen(
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            FeedbackListSection {
-                FeedbackListItem(
-                    title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
-                    description = stringResource(id = R.string.help_feedback_sheet_feature_request_description),
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Lightbulb,
-                            contentDescription = null
-                        )
-                    },
-                    position = FeedbackItemPosition.First,
-                    onClick = {
-                        firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.REQUEST_FEATURE))
-                        showFeedbackBottomSheet.value = false
-                        viewModel.onEvent(HelpEvent.OpenFeatureRequestForm)
-                    }
-                )
-
-                FeedbackListItem(
-                    title = stringResource(id = R.string.help_feedback_sheet_contact_title),
-                    description = stringResource(id = R.string.help_feedback_sheet_contact_description),
-                    icon = {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.ContactSupport,
-                            contentDescription = null
-                        )
-                    },
-                    position = FeedbackItemPosition.Middle,
-                    onClick = {
-                        firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.CONTACT_US))
-                        showFeedbackBottomSheet.value = false
-                        viewModel.onEvent(HelpEvent.OpenContactPage)
-                    }
-                )
-
-                FeedbackListItem(
-                    title = stringResource(id = R.string.help_feedback_sheet_review_title),
-                    description = stringResource(id = R.string.help_feedback_sheet_review_description),
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Outlined.RateReview,
-                            contentDescription = null
-                        )
-                    },
-                    position = FeedbackItemPosition.Last,
-                    onClick = {
-                        firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.LEAVE_REVIEW))
-                        showFeedbackBottomSheet.value = false
-                        reviewHost?.let { host ->
-                            viewModel.onEvent(HelpEvent.RequestReview(host = host))
-                        }
-                    }
-                )
-            }
+            GroupedActionList(
+                modifier = Modifier.padding(horizontal = 12.dp),
+                actions = listOf(
+                    GroupedAction(
+                        title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
+                        description = stringResource(id = R.string.help_feedback_sheet_feature_request_description),
+                        icon = Icons.Outlined.Lightbulb,
+                        onClick = {
+                            firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.REQUEST_FEATURE))
+                            showFeedbackBottomSheet.value = false
+                            viewModel.onEvent(HelpEvent.OpenFeatureRequestForm)
+                        },
+                    ),
+                    GroupedAction(
+                        title = stringResource(id = R.string.help_feedback_sheet_contact_title),
+                        description = stringResource(id = R.string.help_feedback_sheet_contact_description),
+                        icon = Icons.AutoMirrored.Outlined.ContactSupport,
+                        onClick = {
+                            firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.CONTACT_US))
+                            showFeedbackBottomSheet.value = false
+                            viewModel.onEvent(HelpEvent.OpenContactPage)
+                        },
+                    ),
+                    GroupedAction(
+                        title = stringResource(id = R.string.help_feedback_sheet_review_title),
+                        description = stringResource(id = R.string.help_feedback_sheet_review_description),
+                        icon = Icons.Outlined.RateReview,
+                        onClick = {
+                            firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.LEAVE_REVIEW))
+                            showFeedbackBottomSheet.value = false
+                            reviewHost?.let { host ->
+                                viewModel.onEvent(HelpEvent.RequestReview(host = host))
+                            }
+                        },
+                    ),
+                ),
+            )
 
             Spacer(modifier = Modifier.height(SizeConstants.ExtraLargeCompactSize))
         }
-    }
-}
-
-private enum class FeedbackItemPosition {
-    First,
-    Middle,
-    Last,
-}
-
-@Composable
-private fun FeedbackListSection(
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp),
-        shape = MaterialTheme.shapes.extraLarge,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
-    ) {
-        Column(
-            modifier = Modifier.padding(all = 6.dp),
-            content = content
-        )
-    }
-}
-
-@Composable
-private fun FeedbackListItem(
-    title: String,
-    description: String,
-    icon: @Composable () -> Unit,
-    position: FeedbackItemPosition,
-    onClick: () -> Unit,
-) {
-    val topCorner = if (position == FeedbackItemPosition.First) {
-        SizeConstants.LargeSize
-    } else {
-        SizeConstants.ExtraTinySize
-    }
-    val bottomCorner = if (position == FeedbackItemPosition.Last) {
-        SizeConstants.LargeSize
-    } else {
-        SizeConstants.ExtraTinySize
-    }
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(
-            topStart = topCorner,
-            topEnd = topCorner,
-            bottomStart = bottomCorner,
-            bottomEnd = bottomCorner,
-        ),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = onClick)
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-        ) {
-            icon()
-            Spacer(modifier = Modifier.width(12.dp))
-            Column {
-                Text(text = title)
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-    }
-    if (position != FeedbackItemPosition.Last) {
-        Spacer(modifier = Modifier.height(4.dp))
     }
 }
 

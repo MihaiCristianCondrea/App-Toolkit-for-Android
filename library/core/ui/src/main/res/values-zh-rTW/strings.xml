@@ -38,6 +38,7 @@
     <string name="select_language_title">選擇語言</string>
     <string name="sort_by">排序依據：</string>
     <string name="sponsored_ad_label">● 贊助廣告</string>
+    <string name="sponsored_ad_label_plain">贊助廣告</string>
     <string name="startup_page">啟動頁面</string>
     <string name="summary_dark_theme">深色主題利用深厚的背景來顯著延長電池壽命。要激活它，只需導航到您的Android系統管理器，然後在</string>
     <string name="theme_mode">主題模式</string>

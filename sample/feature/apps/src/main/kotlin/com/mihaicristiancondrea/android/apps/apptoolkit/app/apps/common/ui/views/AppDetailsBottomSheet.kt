@@ -75,7 +75,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import coil3.compose.AsyncImage
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppLink
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
@@ -213,9 +212,8 @@ fun AppDetailsBottomSheet(
                 }
             }
         }
-        appDetails?.let { details ->
-            AppLinksSection(links = details.links, actionLauncher = actionLauncher)
-        }
+        // Links are deliberately not rendered for now. `AppDetails.links` is still parsed and
+        // carried, so restoring this is re-adding the section rather than re-plumbing the data.
         LargeVerticalSpacer()
     }
 }
@@ -513,46 +511,6 @@ private fun AppSection(
         }
         ExtraSmallVerticalSpacer()
         content()
-    }
-}
-
-@Composable
-private fun AppLinksSection(
-    links: List<AppLink>,
-    actionLauncher: AppActionLauncher,
-) {
-    if (links.isEmpty()) return
-
-    AppSection(
-        title = stringResource(id = R.string.app_details_links_title),
-        icon = Icons.AutoMirrored.Outlined.OpenInNew,
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
-            links.forEach { link ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .bounceClick()
-                        .clickable { actionLauncher.openUrl(link.url) }
-                        .padding(vertical = SizeConstants.SmallSize),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(imageVector = Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = null)
-                    MediumHorizontalSpacer()
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = link.label,
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
-                        contentDescription = null,
-                    )
-                }
-            }
-        }
     }
 }
 

@@ -38,6 +38,7 @@
     <string name="select_language_title">เลือกภาษา</string>
     <string name="sort_by">เรียงตาม</string>
     <string name="sponsored_ad_label">● โฆษณาที่ได้รับการสนับสนุน</string>
+    <string name="sponsored_ad_label_plain">โฆษณาที่ได้รับการสนับสนุน</string>
     <string name="startup_page">หน้าจอเริ่มต้น</string>
     <string name="summary_dark_theme">ธีมมืดใช้ประโยชน์จากพื้นหลังลึกเพื่อยืดอายุการใช้งานแบตเตอรี่ของคุณอย่างมีนัยสำคัญ ในการเปิดใช้งานเพียงแค่นำทางไปยังตัวจัดการระบบของ Android และเลือกธีมที่คุณต้องการใน</string>
     <string name="theme_mode">โหมดธีม</string>

@@ -38,6 +38,7 @@
     <string name="select_language_title">言語を選択</string>
     <string name="sort_by">並び替え</string>
     <string name="sponsored_ad_label">● スポンサー広告</string>
+    <string name="sponsored_ad_label_plain">スポンサー広告</string>
     <string name="startup_page">スタートアップページ</string>
     <string name="summary_dark_theme">暗いテーマは、バッテリー寿命を大幅に延長するために深い背景を活用します。それをアクティブにするには、Androidのシステムマネージャーに移動して、希望するテーマを選択してください</string>
     <string name="theme_mode">テーマモード</string>

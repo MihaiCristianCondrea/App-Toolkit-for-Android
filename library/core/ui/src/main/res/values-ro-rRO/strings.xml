@@ -38,6 +38,7 @@
     <string name="select_language_title">Selectați limba</string>
     <string name="sort_by">Sortează după</string>
     <string name="sponsored_ad_label">● Anunț sponsorizat</string>
+    <string name="sponsored_ad_label_plain">Anunț sponsorizat</string>
     <string name="startup_page">Pagina de pornire</string>
     <string name="summary_dark_theme">Tema întunecată folosește un fundal profund pentru a -ți extinde semnificativ durata de viață a bateriei. Pentru a -l activa, pur și simplu navigați la managerul de sistem Android și selectați tema preferată în</string>
     <string name="theme_mode">Mod temă</string>

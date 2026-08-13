@@ -38,6 +38,7 @@
     <string name="select_language_title">ভাষা নির্বাচন করুন</string>
     <string name="sort_by">সাজান</string>
     <string name="sponsored_ad_label">● স্পনসর্ড বিজ্ঞাপন</string>
+    <string name="sponsored_ad_label_plain">স্পনসর্ড বিজ্ঞাপন</string>
     <string name="startup_page">স্টার্টআপ পৃষ্ঠা</string>
     <string name="summary_dark_theme">গা dark ় থিম আপনার ব্যাটারির জীবনকে উল্লেখযোগ্যভাবে প্রসারিত করতে একটি গভীর পটভূমি উপার্জন করে। এটি সক্রিয় করতে, কেবল আপনার অ্যান্ড্রয়েডের সিস্টেম ম্যানেজারে নেভিগেট করুন এবং আপনার পছন্দসই থিমটি নির্বাচন করুন</string>
     <string name="theme_mode">থিম মোড</string>

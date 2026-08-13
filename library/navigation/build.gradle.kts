@@ -22,8 +22,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.parcelize)
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")
-    `maven-publish`
     id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
+    id("com.mihaicristiancondrea.android.apptoolkit.library-publish")
 }
 
 val versioning = extensions.getByType<VersioningExtension>()
@@ -41,12 +41,6 @@ android {
     buildFeatures {
         compose = true
     }
-
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
-    }
 }
 
 dependencies {
@@ -59,16 +53,3 @@ dependencies {
     api(libs.androidx.compose.ui.tooling.preview)
 }
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = project.group.toString()
-            artifactId = project.name
-            version = project.version.toString()
-
-            afterEvaluate {
-                from(components["release"])
-            }
-        }
-    }
-}

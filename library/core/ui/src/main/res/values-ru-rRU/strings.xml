@@ -38,6 +38,7 @@
     <string name="select_language_title">Выберите язык</string>
     <string name="sort_by">Сортировать по</string>
     <string name="sponsored_ad_label">● Спонсируемая реклама</string>
+    <string name="sponsored_ad_label_plain">Спонсируемая реклама</string>
     <string name="startup_page">Стартовая страница</string>
     <string name="summary_dark_theme">Темная тема использует глубокий фон, чтобы значительно продлить срок службы батареи. Чтобы активировать его, просто перейдите к системному менеджеру Android и выберите свою предпочтительную тему в</string>
     <string name="theme_mode">Режим темы</string>
