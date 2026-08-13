@@ -20,7 +20,7 @@ class RepositoryConventionsTest {
     fun `repositories live in data repository packages`() {
         val misplaced = productionSources()
             .filter { it.name.endsWith(REPOSITORY_FILE_SUFFIX) }
-            .filterNot { it.parentPath().endsWith(DATA_REPOSITORY_PACKAGE) }
+            .filterNot { source -> DATA_REPOSITORY_PACKAGES.any(source.parentPath()::endsWith) }
             .map { it.relativePath() }
 
         assertThat(misplaced).isEmpty()
@@ -41,7 +41,7 @@ class RepositoryConventionsTest {
     @Test
     fun `default repositories correspond to a local repository contract`() {
         val repositoryFiles = productionSources()
-            .filter { it.parentPath().endsWith(DATA_REPOSITORY_PACKAGE) }
+            .filter { source -> DATA_REPOSITORY_PACKAGES.any(source.parentPath()::endsWith) }
 
         val contracts = repositoryFiles
             .filter { it.readText().contains(INTERFACE_DECLARATION) }
@@ -71,7 +71,11 @@ class RepositoryConventionsTest {
         val ACTIVE_SOURCE_ROOTS: List<String> = listOf("library", "sample")
         const val MAIN_SOURCE_SET = "/src/main/"
         const val KOTLIN_EXTENSION = "kt"
-        const val DATA_REPOSITORY_PACKAGE = "/data/repository"
+        // Both spellings are accepted while the rename is half-done. `data/repositories` is the
+        // target named by the android-project-tree skill and is what `:sample` now uses; the
+        // library still uses the singular because its packages are published API and renaming them
+        // breaks every host's imports. Drop the singular entry once the library follows.
+        val DATA_REPOSITORY_PACKAGES = listOf("/data/repositories", "/data/repository")
         const val REPOSITORY_FILE_SUFFIX = "Repository.kt"
         const val REPOSITORY_IMPL = "RepositoryImpl"
 
