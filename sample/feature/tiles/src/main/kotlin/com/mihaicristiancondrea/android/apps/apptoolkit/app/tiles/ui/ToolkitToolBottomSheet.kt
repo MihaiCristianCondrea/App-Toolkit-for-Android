@@ -46,11 +46,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.CaffeineState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.BreathingState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.RingerMode
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.CaffeineState
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.BreathingState
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.RingerMode
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.BatteryTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.BreathingTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.CaffeineTool
@@ -65,7 +65,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.SosTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.SoundModeTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.TemperatureTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.state.ToolkitSensorData
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.ToolkitSensorData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
 /**

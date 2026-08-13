@@ -17,10 +17,10 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppDetails
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppSummary
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.model.network.AppErrors
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDetails
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppSummary
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DeveloperAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.models.network.AppErrors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

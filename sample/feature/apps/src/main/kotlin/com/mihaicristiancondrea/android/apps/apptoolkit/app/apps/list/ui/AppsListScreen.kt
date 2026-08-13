@@ -32,7 +32,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.AndroidAppActionLauncher
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.AppDetailsBottomSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.analytics.AppInteractionType
@@ -41,9 +41,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.buildOnShareClick
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.screens.AppsList
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.screens.loading.HomeLoadingScreen
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contracts.HomeAction
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contracts.HomeEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.RandomAppHandler
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController

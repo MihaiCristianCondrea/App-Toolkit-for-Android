@@ -71,7 +71,7 @@ import androidx.navigation3.scene.SceneStrategyScope
 import androidx.navigation3.ui.NavDisplay
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.ComponentsActivity
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.state.MainUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.views.fab.MainFloatingActionButton
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.views.navigation.isDrawerItemSelected

@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppInstallInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.InstalledAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInstallInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.InstalledAppsRepository
 
 class FakeInstalledAppsRepository(
     private val installedPackages: Set<String> = emptySet(),

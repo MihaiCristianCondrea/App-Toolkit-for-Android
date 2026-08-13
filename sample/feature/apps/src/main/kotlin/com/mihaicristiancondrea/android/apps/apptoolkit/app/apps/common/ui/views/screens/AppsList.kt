@@ -51,12 +51,12 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppListItem
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppListItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.AppCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.utils.buildAppListItems
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppListUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AppsListNativeAdCard

@@ -74,9 +74,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import coil3.compose.AsyncImage
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppDetails
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppLink
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDetails
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppLink
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AppDetailsNativeAd
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton

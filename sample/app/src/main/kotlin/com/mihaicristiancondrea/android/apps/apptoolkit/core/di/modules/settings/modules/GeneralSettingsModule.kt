@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings.modules
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repository.ComponentsShowcaseRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repository.DefaultComponentsShowcaseRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repositories.ComponentsShowcaseRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repositories.DefaultComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.ComponentsUnlockViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.about.ui.AppAboutSettingsContent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.settings.utils.providers.AppDisplaySettingsProvider

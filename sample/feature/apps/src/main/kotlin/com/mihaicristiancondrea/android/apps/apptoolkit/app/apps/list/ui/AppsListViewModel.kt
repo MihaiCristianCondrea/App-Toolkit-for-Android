@@ -19,14 +19,14 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui
 
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.DeveloperAppsRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.FavoritesRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repository.InstalledAppsRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contract.HomeAction
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.state.AppListUiState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.model.network.AppErrors
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DeveloperAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.FavoritesRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.InstalledAppsRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contracts.HomeAction
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contracts.HomeEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppListUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppsListFilter
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.models.network.AppErrors
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.extensions.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure

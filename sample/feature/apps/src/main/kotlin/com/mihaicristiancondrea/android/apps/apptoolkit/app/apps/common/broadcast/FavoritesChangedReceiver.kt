@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.broadcast
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.broadcast
 
 import android.content.BroadcastReceiver
 import android.content.Context

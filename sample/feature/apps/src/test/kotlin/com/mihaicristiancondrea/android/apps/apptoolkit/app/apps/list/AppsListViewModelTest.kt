@@ -19,9 +19,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.model.AppInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contract.HomeEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.state.AppsListFilter
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contracts.HomeEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

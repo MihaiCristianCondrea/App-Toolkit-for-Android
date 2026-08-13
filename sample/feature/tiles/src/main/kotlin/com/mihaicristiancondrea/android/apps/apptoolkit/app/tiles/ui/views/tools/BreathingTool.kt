@@ -37,8 +37,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.BreathingPhase
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.model.BreathingState
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.BreathingPhase
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.BreathingState
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 

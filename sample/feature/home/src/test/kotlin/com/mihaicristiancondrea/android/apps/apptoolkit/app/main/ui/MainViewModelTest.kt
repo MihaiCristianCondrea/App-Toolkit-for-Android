@@ -23,8 +23,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import app.cash.turbine.test
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.MainEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.state.MainUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepository

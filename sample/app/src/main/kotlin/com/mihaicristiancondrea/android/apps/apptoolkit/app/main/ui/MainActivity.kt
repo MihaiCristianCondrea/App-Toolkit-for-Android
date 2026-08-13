@@ -28,8 +28,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appNavigationEntryBuilders
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.MainAction
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contract.MainEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainAction
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.StartupActivity
