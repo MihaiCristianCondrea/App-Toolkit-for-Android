@@ -255,7 +255,7 @@ dependencies {
     implementation(project(":library:integration:review"))
     implementation(project(":library:integration:update"))
 
-    implementation("org.chromium.net:cronet-fallback:143.7445.0")
+    implementation(libs.cronet.fallback)
 
     // Unit Tests
 

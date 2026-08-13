@@ -21,10 +21,10 @@ app's permanent identity:
 
 Android separates the two concepts precisely so a rename like this is possible:
 
-| Setting         | What it names                                   | Safe to change            |
-|-----------------|-------------------------------------------------|---------------------------|
-| `namespace`     | Generated `R` and `BuildConfig` classes          | Yes, it is source-only    |
-| `applicationId` | The app's identity on the device and on Play     | No, once released         |
+| Setting         | What it names                                | Safe to change         |
+|-----------------|----------------------------------------------|------------------------|
+| `namespace`     | Generated `R` and `BuildConfig` classes      | Yes, it is source-only |
+| `applicationId` | The app's identity on the device and on Play | No, once released      |
 
 So `sample/app/build.gradle.kts` deliberately sets an `applicationId` that does not match its
 `namespace`. That mismatch is correct and should not be "tidied up".
@@ -51,11 +51,11 @@ downloaded from the Firebase console for the app registered as `com.d4rk.android
 The build applies the Firebase plugins only when that file contains a client matching the
 application ID. The check distinguishes two states that a plain file-exists test cannot:
 
-| State                       | Meaning              | Build behaviour                          |
-|-----------------------------|----------------------|------------------------------------------|
-| File absent                 | Not configured here  | Firebase skipped, build proceeds         |
-| File present, wrong package | Configured wrong     | Warning; **release builds fail**         |
-| File present, right package | Configured           | Firebase plugins applied                 |
+| State                       | Meaning             | Build behaviour                  |
+|-----------------------------|---------------------|----------------------------------|
+| File absent                 | Not configured here | Firebase skipped, build proceeds |
+| File present, wrong package | Configured wrong    | Warning; **release builds fail** |
+| File present, right package | Configured          | Firebase plugins applied         |
 
 Absence is the normal state on CI and on a fresh clone. It is obvious and harmless, so it must not
 fail the build — `./gradlew build` assembles release variants, so failing on absence would break CI

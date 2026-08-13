@@ -1,7 +1,7 @@
 [versions]
 androidBilling = "9.1.0"
 androidGradlePlugin = "9.3.1"
-androidxAppCompat = "1.7.1"
+androidxAppCompat = "1.8.0"
 androidxCoreKtx = "1.19.0"
 androidxCoreSplashscreen = "1.2.0"
 androidxDatastorePreferences = "1.2.1"
@@ -11,15 +11,16 @@ androidxConstraintlayoutCompose = "1.1.2"
 androidxWorkRuntime = "2.11.2"
 androidxActivityCompose = "1.13.0"
 animationGraphics = "1.11.4"
-androidxComposeBom = "2026.06.01"
+androidxComposeBom = "2026.08.00"
 androidxComposeFoundationLayout = "1.11.4"
 androidxComposeMaterial3 = "1.5.0-alpha25"
 androidxComposeMaterial3WindowSizeClass = "1.4.0"
 androidxComposeMaterial3AdaptiveNavigationAuite = "1.4.0"
-androidxMaterial3Adaptive = "1.2.0"
+androidxMaterial3Adaptive = "1.3.0"
 androidxLifecycle = "2.11.0"
-androidxNavigation3 = "1.1.5"
+androidxNavigation3 = "1.1.6"
 androidxGlance = "1.1.1"
+cronetFallback = "143.7445.0"
 googleAccompanistDrawablePainter = "0.37.3"
 googleGuava = "33.6.0-android"
 googleMaterial = "1.14.0"
@@ -45,7 +46,7 @@ composeMarkdown = "0.7.1"
 konfettiCompose = "2.0.5"
 lottie = "6.7.1"
 markwonCore = "4.6.2"
-androidxComposeUiTestManifest = "1.11.4"
+androidxComposeUiTestManifest = "1.12.0"
 androidxEspressoCore = "3.7.0"
 androidxTestTruth = "1.7.0"
 testJupiter = "6.1.3"
@@ -147,11 +148,12 @@ compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.
 konfetti-compose = { module = "nl.dionsegijn:konfetti-compose", version.ref = "konfettiCompose" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 markwon-core = { module = "io.noties.markwon:core", version.ref = "markwonCore" }
+cronet-fallback = { module = "org.chromium.net:cronet-fallback", version.ref = "cronetFallback" }
 
 # Testing
 test-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "testJupiter" }
 test-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "testJupiter" }
-test-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "testJupiter" }
+test-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "testJupiter" } # FIXME: Dependency alias 'test-junit-vintage-engine' is not used in build scripts
 test-junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "testJupiter" }
 test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "testKotlinCoroutines" }
 test-mockk = { module = "io.mockk:mockk", version.ref = "testMockk" }
@@ -301,7 +303,7 @@ unitTest = [
 # makes the 13 JUnit 4 suites run — and 11 of their tests fail immediately, because they stub
 # `Build.VERSION.SDK_INT` with `mockkStatic`, which cannot intercept a static final field. Those
 # suites have therefore never passed; they need porting to Robolectric's `@Config(sdk = …)` first.
-unitTestRuntime = ["test-junit-jupiter-engine"]
+unitTestRuntime = ["test-junit-jupiter-engine"] # FIXME: Bundle reference 'unitTestRuntime' is not used in build scripts
 
 # For instrumentation tests on an Android device (androidTest sourceSet)
 instrumentationTest = [
