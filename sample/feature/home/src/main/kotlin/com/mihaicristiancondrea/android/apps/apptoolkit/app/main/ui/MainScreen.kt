@@ -82,7 +82,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.Navigati
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.HelpActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.views.dropdowns.HelpScreenMenuActions
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.model.BottomBarItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.models.BottomBarItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.dialogs.ChangelogDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.navigation.MainTopAppBar
@@ -100,9 +100,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.AppVersionInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.Navigator

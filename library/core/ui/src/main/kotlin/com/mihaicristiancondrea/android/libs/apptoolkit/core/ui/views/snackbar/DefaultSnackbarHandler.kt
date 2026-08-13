@@ -26,9 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.CustomSnackbarVisuals
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.CustomSnackbarVisuals
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 
 /**
  * Utility that shows snackbars described by [UiStateScreen.snackbar].

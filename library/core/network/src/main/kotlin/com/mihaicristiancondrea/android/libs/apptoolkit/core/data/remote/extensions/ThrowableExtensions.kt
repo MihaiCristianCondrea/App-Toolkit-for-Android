@@ -24,7 +24,7 @@ import android.database.sqlite.SQLiteDatabaseLockedException
 import android.database.sqlite.SQLiteDiskIOException
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteFullException
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.RedirectResponseException

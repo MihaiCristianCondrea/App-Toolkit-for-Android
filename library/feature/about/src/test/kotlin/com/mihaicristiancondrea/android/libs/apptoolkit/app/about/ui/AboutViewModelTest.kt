@@ -18,11 +18,11 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui
 
 import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.AboutRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.model.AboutInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repositories.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.models.AboutInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.models.CopyDeviceInfoResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper

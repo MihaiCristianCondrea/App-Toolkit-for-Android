@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDestinationType
 import kotlinx.parcelize.Parcelize
 

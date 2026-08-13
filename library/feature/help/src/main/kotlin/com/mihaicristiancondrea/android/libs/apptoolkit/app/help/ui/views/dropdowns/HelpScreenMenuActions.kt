@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.licenses.ui.Licenses
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.AppVersionInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.VersionInfoAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem

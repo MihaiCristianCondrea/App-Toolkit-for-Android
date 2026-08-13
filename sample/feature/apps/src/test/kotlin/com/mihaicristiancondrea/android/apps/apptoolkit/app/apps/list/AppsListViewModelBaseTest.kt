@@ -27,8 +27,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.models.netwo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow

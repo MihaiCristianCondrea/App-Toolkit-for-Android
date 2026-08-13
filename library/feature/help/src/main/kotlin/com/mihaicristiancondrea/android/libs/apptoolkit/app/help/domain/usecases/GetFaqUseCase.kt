@@ -17,10 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.usecases
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.repository.FaqRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.model.FaqItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.repositories.FaqRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

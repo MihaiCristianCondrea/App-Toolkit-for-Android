@@ -64,12 +64,12 @@ import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.DarkModePreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.LightModePreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.SystemModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.domain.model.WallpaperSwatchColors
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.domain.models.WallpaperSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider.paletteById
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.DynamicPaletteVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
@@ -83,8 +83,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.extensions.rememberThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.theme.ThemeModeChoice
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.theme.ThemeModeChoice
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.cards.ThemeChoicePreviewCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState

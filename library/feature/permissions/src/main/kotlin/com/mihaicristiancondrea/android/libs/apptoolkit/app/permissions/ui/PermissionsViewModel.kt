@@ -1,5 +1,5 @@
 /*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,26 +18,26 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repository.PermissionsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repositories.PermissionsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.contracts.PermissionsAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.contracts.PermissionsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.models.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.onFailure
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.onSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setErrors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setNoData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.updateData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setErrors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setNoData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
@@ -57,7 +57,7 @@ import kotlinx.coroutines.flow.onStart
  * It extends [ScreenViewModel] to manage the UI state ([UiStateScreen]) and handle UI events
  * ([PermissionsEvent]) and actions ([PermissionsAction]).
  *
- * @param permissionsRepository The repository responsible for fetching permissions data info.
+ * @param permissionsRepository The repositories responsible for fetching permissions data info.
  * @param firebaseController Reports ViewModel flow failures to Firebase.
  */
 class PermissionsViewModel(
@@ -138,7 +138,7 @@ class PermissionsViewModel(
                                     screenState.setNoData(data = fallback)
                                 } else {
                                     screenState.setErrors(listOf(UiSnackbar(message = error.asUiText())))
-                                    screenState.updateData(newState = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState.Error()) { current ->
+                                    screenState.updateData(newState = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState.Error()) { current ->
                                         current
                                     }
                                 }

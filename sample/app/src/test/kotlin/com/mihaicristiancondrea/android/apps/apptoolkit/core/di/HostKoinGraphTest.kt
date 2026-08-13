@@ -33,7 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.inter
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AdvancedSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.model.AppToolkitHostBuildConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitFeatureModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitFoundationModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitSettingsModules

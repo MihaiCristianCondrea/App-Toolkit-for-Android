@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui
 
 import androidx.compose.runtime.Composable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.BaseActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.AppVersionInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import org.koin.android.ext.android.inject
 
 class HelpActivity : BaseActivity() {

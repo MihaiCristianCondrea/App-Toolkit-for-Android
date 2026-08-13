@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import kotlinx.coroutines.flow.Flow
 
 class DefaultComponentsShowcaseRepository(

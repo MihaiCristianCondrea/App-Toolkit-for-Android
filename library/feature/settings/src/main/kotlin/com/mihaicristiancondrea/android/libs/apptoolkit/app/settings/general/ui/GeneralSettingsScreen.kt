@@ -25,11 +25,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.contract.GeneralSettingsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.state.GeneralSettingsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.contracts.GeneralSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.states.GeneralSettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler

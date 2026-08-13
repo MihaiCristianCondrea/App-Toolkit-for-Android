@@ -1,5 +1,5 @@
 /*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,18 +17,18 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.AboutRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.DefaultAboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repositories.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repositories.DefaultAboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.AboutViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repository.CacheRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repository.DefaultCacheRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repositories.CacheRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repositories.DefaultCacheRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.AdvancedSettingsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repository.DefaultUsageAndDiagnosticsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repository.UsageAndDiagnosticsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repositories.DefaultUsageAndDiagnosticsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repositories.UsageAndDiagnosticsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repository.DefaultPermissionsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repository.PermissionsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repositories.DefaultPermissionsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repositories.PermissionsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.PermissionsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider

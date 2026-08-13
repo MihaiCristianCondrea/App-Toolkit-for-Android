@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnosticsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.states.UsageAndDiagnosticsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.dialogs.pages.AboutPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.dialogs.pages.ConsentPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.dialogs.pages.DetailsPage

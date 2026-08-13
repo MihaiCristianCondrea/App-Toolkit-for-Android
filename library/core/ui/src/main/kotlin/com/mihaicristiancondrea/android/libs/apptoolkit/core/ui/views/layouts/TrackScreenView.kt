@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 
 /**
  * Emits a screen-view analytics event when [screenName] changes.

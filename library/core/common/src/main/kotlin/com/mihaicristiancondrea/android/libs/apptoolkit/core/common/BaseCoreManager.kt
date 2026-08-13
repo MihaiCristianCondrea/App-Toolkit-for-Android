@@ -30,8 +30,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.BaseCoreMana
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.BillingCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BillingCore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.crash.ConsentSdkCrashGuard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred

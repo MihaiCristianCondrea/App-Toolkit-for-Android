@@ -29,7 +29,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modu
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings.modules.generalSettingsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings.modules.hostSettingsProvidersModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.help.HelpConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.model.AppToolkitHostBuildConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitFeatureModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitFoundationModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitSettingsModules

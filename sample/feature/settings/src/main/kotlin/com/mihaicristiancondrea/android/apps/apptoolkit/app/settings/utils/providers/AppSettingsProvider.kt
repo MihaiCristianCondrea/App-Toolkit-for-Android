@@ -28,9 +28,9 @@ import androidx.compose.ui.graphics.Color
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.constants.SettingsConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsCategory
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsPreference
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.models.SettingsCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.models.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.models.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings

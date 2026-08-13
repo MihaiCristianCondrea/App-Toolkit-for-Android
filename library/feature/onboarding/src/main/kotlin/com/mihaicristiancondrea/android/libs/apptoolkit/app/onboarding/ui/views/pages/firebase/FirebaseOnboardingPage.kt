@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,11 +42,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.contract.UsageAndDiagnosticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.state.UsageAndDiagnosticsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.states.UsageAndDiagnosticsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.OnboardingViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contract.OnboardingEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.state.OnboardingUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contracts.OnboardingEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.states.OnboardingUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.cards.UsageAndDiagnosticsToggleCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.dialogs.FirebaseConsentDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.text.PrivacyPolicySection

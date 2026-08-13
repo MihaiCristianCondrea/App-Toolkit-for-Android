@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.analytics.Ga4EventData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 
 /**
  * Logs a GA4 event for reusable UI components when both the controller and event data exist.

@@ -13,6 +13,7 @@ metadata:
   - architecture
   - data layer
   - repository
+  - repositories
   - datasource
   - model
   - source of truth

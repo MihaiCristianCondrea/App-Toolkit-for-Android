@@ -60,7 +60,7 @@ android {
 }
 
 // `RepositoryConventionsTest` reads production source trees rather than the classpath, and Gradle
-// cannot infer that. Without declaring it, moving a repository into the wrong package leaves the
+// cannot infer that. Without declaring it, moving a repositories into the wrong package leaves the
 // test task up to date and the violation ships unnoticed — the exact failure the test exists to
 // prevent.
 tasks.withType<Test>().configureEach {

@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extension
 
 import android.content.pm.PackageManager
 import android.os.Build
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.AppVersionInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 
 /**
  * Returns version metadata for [packageName], or `null` when unavailable (not installed, not visible, or error).

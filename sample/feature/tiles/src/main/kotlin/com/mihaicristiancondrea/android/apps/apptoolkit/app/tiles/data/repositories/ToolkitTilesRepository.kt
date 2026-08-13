@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * The catalogue used to live in `GetToolkitTilesUseCase` and the status pass in
  * `SyncToolkitTileStatusesUseCase`. Neither was a use case: one was a hardcoded data set in the
- * domain layer, the other read this repository and mapped over the result. Both are data-layer
+ * domain layer, the other read this repositories and mapped over the result. Both are data-layer
  * work, and keeping them apart meant a caller could load the catalogue and forget to apply
  * statuses — which is what [tileCategories] now does for them.
  */

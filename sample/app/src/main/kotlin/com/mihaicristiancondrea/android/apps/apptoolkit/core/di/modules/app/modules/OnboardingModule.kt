@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.onboarding.utils.interfaces.providers.AppOnboardingProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.data.repository.DefaultOnboardingRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.data.repository.OnboardingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.data.repositories.DefaultOnboardingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.data.repositories.OnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.OnboardingViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore

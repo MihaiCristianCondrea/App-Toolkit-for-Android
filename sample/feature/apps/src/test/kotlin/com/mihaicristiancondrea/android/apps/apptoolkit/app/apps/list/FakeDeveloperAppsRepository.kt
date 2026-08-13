@@ -21,7 +21,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.rep
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.models.network.AppErrors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

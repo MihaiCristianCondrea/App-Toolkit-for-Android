@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.models.network
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Error
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Error
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 
 /**
  * App-specific error surface.

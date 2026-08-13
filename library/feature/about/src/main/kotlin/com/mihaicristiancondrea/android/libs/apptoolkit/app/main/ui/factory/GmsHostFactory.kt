@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.factory
 import android.app.Activity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.models.ReviewHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.models.InAppUpdateHost
 
 /**
  * Builds GMS host abstractions for in-app review and update flows.

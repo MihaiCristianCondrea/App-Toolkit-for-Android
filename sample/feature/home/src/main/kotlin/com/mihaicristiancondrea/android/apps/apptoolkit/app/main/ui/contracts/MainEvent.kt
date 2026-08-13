@@ -17,10 +17,10 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.models.ReviewHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.models.InAppUpdateHost
 
 sealed interface MainEvent : UiEvent {
     data object ApplyInitialConsent : MainEvent

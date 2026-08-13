@@ -34,8 +34,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.Permi
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.AppVersionInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import org.koin.compose.koinInject
 

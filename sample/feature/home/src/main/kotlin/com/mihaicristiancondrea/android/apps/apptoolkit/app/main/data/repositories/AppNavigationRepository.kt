@@ -27,10 +27,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastor
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationRoutes
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.home.BuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repository.NavigationRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repositories.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.NavigationDrawerItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart

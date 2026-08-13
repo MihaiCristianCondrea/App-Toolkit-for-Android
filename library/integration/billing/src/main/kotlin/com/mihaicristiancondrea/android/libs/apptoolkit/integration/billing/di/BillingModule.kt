@@ -18,9 +18,9 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.BillingCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repository.BillingRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repository.DefaultBillingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BillingCore
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.DefaultBillingRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module

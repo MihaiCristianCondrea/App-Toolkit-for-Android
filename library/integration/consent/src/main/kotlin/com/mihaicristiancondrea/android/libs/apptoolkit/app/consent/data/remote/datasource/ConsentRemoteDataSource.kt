@@ -17,9 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.remote.datasource
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 import kotlinx.coroutines.flow.Flow
 
 /**

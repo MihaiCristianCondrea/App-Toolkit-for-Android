@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers
 
 import android.content.Context
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.model.OnboardingPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.models.OnboardingPage
 
 interface OnboardingProvider {
     fun getOnboardingPages(context: Context): List<OnboardingPage>

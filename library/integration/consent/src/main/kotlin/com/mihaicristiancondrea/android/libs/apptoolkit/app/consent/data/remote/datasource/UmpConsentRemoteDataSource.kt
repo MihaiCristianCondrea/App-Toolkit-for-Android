@@ -21,12 +21,12 @@ import android.util.Log
 import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.canShowConsentForm
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.canShowConsentForm
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.CONSENT_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

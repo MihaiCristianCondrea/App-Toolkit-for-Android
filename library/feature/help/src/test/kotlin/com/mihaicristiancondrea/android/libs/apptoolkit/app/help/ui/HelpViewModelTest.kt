@@ -17,18 +17,18 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.repository.FaqRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.model.FaqId
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.model.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.repositories.FaqRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.models.FaqId
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.models.FaqItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.usecases.GetFaqUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.contract.HelpEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.contracts.HelpEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.ForceInAppReviewUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

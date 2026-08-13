@@ -17,9 +17,9 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.data.repository.ReviewRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.models.ReviewHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.models.ReviewOutcome
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.data.repositories.ReviewRepository
 
 /**
  * Forces the in-app review flow to launch if it is available on the device.

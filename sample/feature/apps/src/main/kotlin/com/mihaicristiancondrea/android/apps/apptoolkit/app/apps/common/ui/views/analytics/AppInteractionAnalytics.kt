@@ -18,9 +18,9 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.analytics
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 
 /**
  * App list interaction types reported to GA4.

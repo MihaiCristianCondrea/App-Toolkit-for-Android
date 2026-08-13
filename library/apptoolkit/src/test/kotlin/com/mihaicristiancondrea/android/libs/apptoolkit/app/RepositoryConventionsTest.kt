@@ -13,7 +13,7 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
 
-/** Guards the repository placement and naming rules used by every active Android module. */
+/** Guards the repositories placement and naming rules used by every active Android module. */
 class RepositoryConventionsTest {
 
     @Test
@@ -75,7 +75,7 @@ class RepositoryConventionsTest {
         // target named by the android-project-tree skill and is what `:sample` now uses; the
         // library still uses the singular because its packages are published API and renaming them
         // breaks every host's imports. Drop the singular entry once the library follows.
-        val DATA_REPOSITORY_PACKAGES = listOf("/data/repositories", "/data/repository")
+        val DATA_REPOSITORY_PACKAGES = listOf("/data/repositories", "/data/repositories")
         const val REPOSITORY_FILE_SUFFIX = "Repository.kt"
         const val REPOSITORY_IMPL = "RepositoryImpl"
 

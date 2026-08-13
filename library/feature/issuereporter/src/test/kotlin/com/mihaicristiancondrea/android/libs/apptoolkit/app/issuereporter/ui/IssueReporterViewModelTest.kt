@@ -18,17 +18,17 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui
 
 import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.IssueReportResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.DeviceInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.IssueReportResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.contract.IssueReporterEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.contracts.IssueReporterEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import io.ktor.http.HttpStatusCode
 import io.mockk.confirmVerified

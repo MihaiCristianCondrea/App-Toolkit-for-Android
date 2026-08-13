@@ -29,8 +29,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import kotlinx.coroutines.delay
 
 /**

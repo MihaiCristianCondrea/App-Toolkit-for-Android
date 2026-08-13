@@ -19,11 +19,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repository.CacheRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.contract.AdvancedSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.data.repositories.CacheRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.contracts.AdvancedSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers

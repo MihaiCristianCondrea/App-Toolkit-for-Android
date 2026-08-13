@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.AppVersionInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 
 /** Package-manager install metadata for a catalog app. */
 @Immutable

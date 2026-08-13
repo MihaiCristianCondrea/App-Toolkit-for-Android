@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads
 
 /**
- * Koin qualifier names used for [com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.ads.AdsConfig]
+ * Koin qualifier names used for [com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig]
  * bindings.
  */
 object AdsQualifiers {

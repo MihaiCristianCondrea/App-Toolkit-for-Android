@@ -62,7 +62,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.rep
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.widgets.apps.domain.actions.OpenAppOrStoreAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers

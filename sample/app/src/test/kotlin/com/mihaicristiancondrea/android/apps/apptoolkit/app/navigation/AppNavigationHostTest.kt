@@ -32,7 +32,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.SettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.SupportRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.entryProviderFor
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.datastore.startupDestinationFlow
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass

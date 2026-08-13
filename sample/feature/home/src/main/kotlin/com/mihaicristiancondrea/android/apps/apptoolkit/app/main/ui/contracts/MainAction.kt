@@ -17,9 +17,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.models.ReviewOutcome
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.model.InAppUpdateResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.models.InAppUpdateResult
 
 sealed interface MainAction : ActionEvent {
     data class ReviewOutcomeReported(val outcome: ReviewOutcome) : MainAction

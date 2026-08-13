@@ -22,8 +22,8 @@ import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow

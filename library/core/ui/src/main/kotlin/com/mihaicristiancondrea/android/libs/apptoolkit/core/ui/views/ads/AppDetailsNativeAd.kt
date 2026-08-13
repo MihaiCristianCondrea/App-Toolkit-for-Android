@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.ads.AdsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 
 /**
  * Icon-led native ad rendered inline in an app details sheet, without a card of its own.

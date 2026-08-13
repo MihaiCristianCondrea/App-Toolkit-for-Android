@@ -18,26 +18,26 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.contract.SettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.models.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.contracts.SettingsAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.contracts.SettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.onFailure
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.onSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setErrors
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setNoData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.updateData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setErrors
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setNoData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flow
@@ -127,7 +127,7 @@ class SettingsViewModel(
                                     screenState.setNoData(data = fallback)
                                 } else {
                                     screenState.setErrors(listOf(UiSnackbar(message = error.asUiText())))
-                                    screenState.updateData(newState = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState.Error()) { current ->
+                                    screenState.updateData(newState = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState.Error()) { current ->
                                         current
                                     }.also {
                                         if (screenState.value.data == null) {

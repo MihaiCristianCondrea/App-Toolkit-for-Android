@@ -18,14 +18,14 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.state.StartupUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contracts.StartupAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contracts.StartupEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.states.StartupUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.successData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.successData
 import kotlinx.coroutines.launch
 
 /**

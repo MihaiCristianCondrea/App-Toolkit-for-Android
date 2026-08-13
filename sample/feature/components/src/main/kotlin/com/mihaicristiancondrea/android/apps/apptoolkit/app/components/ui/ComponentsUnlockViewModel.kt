@@ -24,11 +24,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.contra
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.states.ComponentsUnlockUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.BuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.updateState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateState
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn

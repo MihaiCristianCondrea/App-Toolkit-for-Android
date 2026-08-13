@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 
 /**

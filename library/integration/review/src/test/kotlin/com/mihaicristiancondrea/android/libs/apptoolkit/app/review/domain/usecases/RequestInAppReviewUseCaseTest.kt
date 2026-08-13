@@ -18,9 +18,9 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases
 
 import android.app.Activity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.model.ReviewOutcome
-import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.data.repository.ReviewRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.models.ReviewHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.models.ReviewOutcome
+import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.review.data.repositories.ReviewRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

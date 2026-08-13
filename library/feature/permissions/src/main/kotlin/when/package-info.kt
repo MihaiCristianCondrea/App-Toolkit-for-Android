@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  *
  * Repositories act as data boundaries that can persist or observe state via suspend functions
  * or [kotlinx.coroutines.flow.Flow]. Prefer providers for static, read-only configuration, and
- * use repository implementations in this package when the consumer needs observable or async data.
+ * use repositories implementations in this package when the consumer needs observable or async data.
  */
-package com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repository
+package com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repositories
 

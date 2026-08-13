@@ -18,11 +18,11 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.usecases
 
 import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repository.IssueReporterRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.IssueReportResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.Report
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.github.ExtraInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.github.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repositories.IssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.IssueReportResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.Report
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.ExtraInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import io.ktor.http.HttpStatusCode

@@ -1,5 +1,5 @@
 /*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,14 +27,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repository.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.model.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contract.StartupAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contract.StartupEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repositories.ConsentRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contracts.StartupAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contracts.StartupEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.utils.interfaces.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.STARTUP_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.BaseActivity
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.onCompletion

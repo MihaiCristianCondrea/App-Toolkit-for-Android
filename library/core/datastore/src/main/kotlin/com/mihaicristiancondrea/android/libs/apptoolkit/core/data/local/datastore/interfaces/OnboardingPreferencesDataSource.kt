@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datasto
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Abstraction over onboarding-related preference operations used by the repository.
+ * Abstraction over onboarding-related preference operations used by the repositories.
  */
 interface OnboardingPreferencesDataSource {
     /** Emits whether the app is being launched for the first time. */

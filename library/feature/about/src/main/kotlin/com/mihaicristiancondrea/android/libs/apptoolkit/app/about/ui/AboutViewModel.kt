@@ -1,5 +1,5 @@
 /*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,26 +18,26 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repositories.AboutRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases.CopyDeviceInfoUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.AboutAction
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contract.AboutEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.mapper.toUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.state.AboutUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contracts.AboutAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contracts.AboutEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.mappers.toUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.states.AboutUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onFailure
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.onSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.onFailure
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.onSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.dismissSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setError
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setLoading
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.setSuccess
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.showSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setError
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flow

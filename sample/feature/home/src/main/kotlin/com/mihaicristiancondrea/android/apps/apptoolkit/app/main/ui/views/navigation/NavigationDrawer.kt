@@ -26,10 +26,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.SettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.SupportRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model.analytics.AnalyticsValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.model.navigation.StableNavKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
 
 fun isDrawerItemSelected(
     itemRoute: String,

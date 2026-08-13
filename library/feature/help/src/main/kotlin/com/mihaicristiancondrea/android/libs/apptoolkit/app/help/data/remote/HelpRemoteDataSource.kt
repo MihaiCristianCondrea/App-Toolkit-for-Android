@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.remote
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.remote.model.FaqCatalogDto
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.remote.model.FaqQuestionDto
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.remote.models.FaqCatalogDto
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.data.remote.models.FaqQuestionDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.local
 
 import android.app.Application
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.model.DeviceInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.DeviceInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import kotlinx.coroutines.withContext

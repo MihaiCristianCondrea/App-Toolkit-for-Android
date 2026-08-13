@@ -1,5 +1,5 @@
 /*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
+ * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,11 +17,11 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.usecases
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repository.AboutRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.model.CopyDeviceInfoResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repository.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.DataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.model.network.Errors
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.data.repositories.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.domain.models.CopyDeviceInfoResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.flow
  * This use case interacts with the [AboutRepository] to perform the copy operation
  * and returns a [Flow] emitting the state of the operation as [DataState].
  *
- * @property repository The repository used to perform the copy operation.
+ * @property repository The repositories used to perform the copy operation.
  */
 class CopyDeviceInfoUseCase(
     private val repository: AboutRepository,

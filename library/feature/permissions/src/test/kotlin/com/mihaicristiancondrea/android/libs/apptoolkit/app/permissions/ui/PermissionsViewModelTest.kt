@@ -18,14 +18,14 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui
 
 import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repository.PermissionsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.contract.PermissionsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsCategory
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.model.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repositories.PermissionsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.contracts.PermissionsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.models.SettingsCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.models.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.state.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
