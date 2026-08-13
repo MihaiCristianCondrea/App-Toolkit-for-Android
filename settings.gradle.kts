@@ -49,7 +49,7 @@ plugins {
 
 rootProject.name = "App-Toolkit-for-Android"
 
-include(":sample")
+include(":sample:app")
 include(":library:apptoolkit")
 include(":library:core:common")
 include(":library:core:datastore")
