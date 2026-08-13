@@ -19,11 +19,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datasto
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.theme.ThemePreferencesState
 
 /**
  * Collects [themePreferencesState] as state within a composable.

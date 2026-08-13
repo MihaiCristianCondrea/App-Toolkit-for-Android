@@ -2,7 +2,9 @@
 
 ## Purpose
 
-Acts as the host-facing façade and composition root for reusable AppToolkit features. It assembles Koin modules and Navigation 3 destinations while re-exporting the toolkit modules through Gradle `api` dependencies.
+Acts as the host-facing façade and composition root for reusable AppToolkit features. It assembles
+Koin modules and Navigation 3 destinations while re-exporting the toolkit modules through Gradle
+`api` dependencies.
 
 ## Owns
 
@@ -12,16 +14,24 @@ Acts as the host-facing façade and composition root for reusable AppToolkit fea
 
 ## Does not own
 
-- Feature screens, repositories, use cases, or SDK implementations; those stay in their feature/core/integration modules.
+- Feature screens, repositories, use cases, or SDK implementations; those stay in their
+  feature/core/integration modules.
 - Host application startup, app-specific routes, providers, and business logic, owned by `:sample`.
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`, `:library:core:designsystem`, and `:library:navigation` to assemble common infrastructure and UI contracts.
-- `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`, `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and `:library:feature:support` to provision toolkit ViewModels, repositories, and destinations.
-- `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`, `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update` to connect SDK implementations.
+- `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`,
+  `:library:core:designsystem`, and `:library:navigation` to assemble common infrastructure and UI
+  contracts.
+- `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`,
+  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
+  `:library:feature:support` to provision toolkit ViewModels, repositories, and destinations.
+- `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`,
+  `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update`
+  to connect SDK implementations.
 
-All dependencies are exported with `api`, making this a convenience façade rather than an isolation boundary.
+All dependencies are exported with `api`, making this a convenience façade rather than an isolation
+boundary.
 
 ## Used by
 
@@ -46,11 +56,14 @@ flowchart TD
 
 ## Internal implementations
 
-- Koin binding details, qualifier wiring, default palette registration, and private destination builders.
+- Koin binding details, qualifier wiring, default palette registration, and private destination
+  builders.
 
 ## Current risks
 
-The façade exports nearly the complete internal graph, so consumers can couple to implementation modules transitively. Its DI files also instantiate implementations owned by many other modules, making constructor changes ripple into this composition module.
+The façade exports nearly the complete internal graph, so consumers can couple to implementation
+modules transitively. Its DI files also instantiate implementations owned by many other modules,
+making constructor changes ripple into this composition module.
 
 ## Architecture guards
 
@@ -79,7 +92,8 @@ reports as `RuntimeException: Unable to start activity` caused by `InstanceCreat
 trace names only the outermost ViewModel and the innermost definition, never the dependency that was
 actually missing, and the app is dead before its first frame.
 
-`HostKoinGraphTest` in `:sample:app` now resolves the whole graph by reflection in a plain unit test,
+`HostKoinGraphTest` in `:sample:app` now resolves the whole graph by reflection in a plain unit
+test,
 so a missing binding fails the build instead of a launch. It checks two things:
 
 - every definition in the graph `initializeKoin` builds can be resolved;
@@ -90,11 +104,13 @@ so a missing binding fails the build instead of a launch. It checks two things:
 
 Two mechanics are easy to get wrong when editing that test. Koin resolves a definition against its
 own module plus that module's `includes`, so the graph must be wrapped as
-`module { includes(allModules) }` — verifying a flat list makes every cross-module dependency read as
+`module { includes(allModules) }` — verifying a flat list makes every cross-module dependency read
+as
 missing. And `verify` reflects on the produced type's constructor regardless of how the definition
 builds it, so types created by a factory function (`HttpClient`, `ColorPalette`) need their
 constructor parameters listed as externally supplied rather than the check being skipped.
 
 ## Migration notes
 
-Bindings were moved out of the sample app so other hosts can integrate the toolkit using explicit host configuration and provider factories.
+Bindings were moved out of the sample app so other hosts can integrate the toolkit using explicit
+host configuration and provider factories.

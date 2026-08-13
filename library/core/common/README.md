@@ -2,12 +2,14 @@
 
 ## Purpose
 
-Holds low-level contracts, domain result types, host configuration, dispatchers, constants, and Android utility abstractions shared across the toolkit.
+Holds low-level contracts, domain result types, host configuration, dispatchers, constants, and
+Android utility abstractions shared across the toolkit.
 
 ## Owns
 
 - Analytics and billing value models, and theme preference state.
-- `FirebaseController`, `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK contracts.
+- `FirebaseController`, `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK
+  contracts.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).
 - Small platform and Kotlin extensions used across modules.
 
@@ -25,9 +27,13 @@ No internal Gradle modules. This is the bottom shared runtime dependency for mos
 ## Used by
 
 - `:sample` and `:library:apptoolkit` for host and façade contracts.
-- `:library:core:datastore`, `:library:core:network`, `:library:core:ui`, and `:library:core:designsystem`.
-- `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`, `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and `:library:feature:support`.
-- `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`, `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update`.
+- `:library:core:datastore`, `:library:core:network`, `:library:core:ui`, and
+  `:library:core:designsystem`.
+- `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`,
+  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
+  `:library:feature:support`.
+- `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`,
+  `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update`.
 
 `:library:navigation` and the empty `:library:core` project do not depend on this module.
 
@@ -52,11 +58,14 @@ flowchart TD
 
 ## Current risks
 
-The module has a broad surface spanning domain values, Android helpers, DI metadata, ads, billing, and Firebase contracts. That breadth makes it easy for unrelated concerns to accumulate in the lowest-level dependency.
+The module has a broad surface spanning domain values, Android helpers, DI metadata, ads, billing,
+and Firebase contracts. That breadth makes it easy for unrelated concerns to accumulate in the
+lowest-level dependency.
 
 ## Migration notes
 
-The commented DataStore dependency in the Gradle file records that `common -> datastore` was removed to break a circular dependency. Keep persistence implementations above the contracts defined here.
+The commented DataStore dependency in the Gradle file records that `common -> datastore` was removed
+to break a circular dependency. Keep persistence implementations above the contracts defined here.
 
 ### Host AdMob ID and UMP crash guard
 

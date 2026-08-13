@@ -20,10 +20,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.mappers.toCreateIssueRequest
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.remote.IssueReporterRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.DeviceInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.IssueReportResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.GithubTarget
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.providers.DeviceInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import kotlinx.coroutines.withContext

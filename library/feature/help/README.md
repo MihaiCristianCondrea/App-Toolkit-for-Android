@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Displays localized FAQ/help content, loading a product-specific catalog locally or remotely and exposing contact/review actions.
+Displays localized FAQ/help content, loading a product-specific catalog locally or remotely and
+exposing contact/review actions.
 
 ## Owns
 
@@ -18,7 +19,8 @@ Displays localized FAQ/help content, loading a product-specific catalog locally 
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:datastore`, `:library:core:network`, and `:library:core:ui` for shared configuration, state, persistence access, networking, and UI.
+- `:library:core:common`, `:library:core:datastore`, `:library:core:network`, and `:library:core:ui`
+  for shared configuration, state, persistence access, networking, and UI.
 - [`:library:navigation`](../../navigation/README.md) for feature navigation.
 - [`:library:integration:review`](../../integration/review/README.md) for review prompts.
 - [`:library:feature:about`](../about/README.md) for shared AppToolkit routes/navigation surfaces.
@@ -49,4 +51,5 @@ flowchart TD
 
 ## Current risks
 
-The module depends on the broad `about` feature for shared navigation definitions, creating more coupling than the help flow itself requires.
+The module depends on the broad `about` feature for shared navigation definitions, creating more
+coupling than the help flow itself requires.

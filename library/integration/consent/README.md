@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Coordinates user consent state between persisted toolkit preferences and Google's User Messaging Platform (UMP).
+Coordinates user consent state between persisted toolkit preferences and Google's User Messaging
+Platform (UMP).
 
 ## Owns
 
@@ -25,7 +26,8 @@ Coordinates user consent state between persisted toolkit preferences and Google'
 ## Used by
 
 - `:sample` and `:library:apptoolkit`.
-- `:library:feature:about`, `:library:feature:onboarding`, and `:library:feature:settings` for privacy/diagnostics flows.
+- `:library:feature:about`, `:library:feature:onboarding`, and `:library:feature:settings` for
+  privacy/diagnostics flows.
 - `:library:integration:ads` before enabling ads.
 
 ## Flow chart
@@ -48,13 +50,15 @@ flowchart TD
 
 ## Current risks
 
-Consent behavior spans persistence, host callbacks, UMP state, Firebase toggles, and ads consumers; changes require coordinated validation across those boundaries.
+Consent behavior spans persistence, host callbacks, UMP state, Firebase toggles, and ads consumers;
+changes require coordinated validation across those boundaries.
 
 ## Migration notes
 
 ### Fixed: UMP 4.0.0 empty-error-body process crash
 
-Reported as `NoSuchElementException` from `Scanner.next()` on a UMP `ThreadPoolExecutor` thread, with
+Reported as `NoSuchElementException` from `Scanner.next()` on a UMP `ThreadPoolExecutor` thread,
+with
 no toolkit frame in the stack.
 
 The toolkit previously encountered a process-killing failure after a consent request failed. UMP

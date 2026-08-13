@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Supplies the shared Ktor HTTP client and normalized network result/error types used by remote-backed features.
+Supplies the shared Ktor HTTP client and normalized network result/error types used by remote-backed
+features.
 
 ## Owns
 
@@ -17,12 +18,15 @@ Supplies the shared Ktor HTTP client and normalized network result/error types u
 
 ## Depends on
 
-- [`:library:core:common`](../common/README.md) for shared result utilities and UI-text abstractions.
+- [`:library:core:common`](../common/README.md) for shared result utilities and UI-text
+  abstractions.
 
 ## Used by
 
 - `:library:apptoolkit` for DI composition.
-- `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`, `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and `:library:feature:support`.
+- `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`,
+  `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and
+  `:library:feature:support`.
 - `:library:integration:ads` and `:library:integration:consent`.
 
 ## Flow chart
@@ -45,4 +49,5 @@ flowchart LR
 
 ## Current risks
 
-Network result models live under a domain package while the same module also owns the concrete HTTP client, coupling abstraction and transport implementation.
+Network result models live under a domain package while the same module also owns the concrete HTTP
+client, coupling abstraction and transport implementation.

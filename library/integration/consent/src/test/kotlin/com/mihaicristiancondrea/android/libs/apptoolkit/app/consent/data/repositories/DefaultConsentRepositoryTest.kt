@@ -322,6 +322,7 @@ class DefaultConsentRepositoryTest {
             )
             assertEquals(0, remote.requestCount)
         }
+
     /**
      * The breadcrumbs used to be contributed by pass-through use cases. They are part of the
      * repositories's observable behaviour now, and operations depends on them.

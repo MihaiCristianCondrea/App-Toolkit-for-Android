@@ -91,7 +91,8 @@ fun QuestionCard(
 
     Card(
         modifier = cardModifier,
-        shape = groupedPosition?.let { RectangleShape } ?: RoundedCornerShape(size = SizeConstants.MediumSize),
+        shape = groupedPosition?.let { RectangleShape }
+            ?: RoundedCornerShape(size = SizeConstants.MediumSize),
         onClick = {
             view.playSoundEffect(SoundEffectConstants.CLICK)
             hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)

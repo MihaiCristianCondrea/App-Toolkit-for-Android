@@ -1,4 +1,21 @@
 /*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
  * Copyright (C) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -10,9 +27,11 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.dialogs
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -60,7 +79,7 @@ fun ChangelogDialog(
 ) {
     val viewModel: ChangelogViewModel = koinViewModel()
     val screenState: UiStateScreen<ChangelogUiState> by
-        viewModel.uiState.collectAsStateWithLifecycle()
+    viewModel.uiState.collectAsStateWithLifecycle()
     val isError = screenState.screenState is ScreenState.Error
     val sheetState = rememberBottomSheetState(
         initialValue = SheetValue.Hidden,
@@ -89,11 +108,11 @@ fun ChangelogDialog(
                     style = MaterialTheme.typography.headlineSmall,
                 )
             }
-            Column(
+            Box(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center,
             ) {
                 ChangelogDialogContent(screenState = screenState)
             }
@@ -125,13 +144,19 @@ private fun ChangelogDialogContent(
     screenState: UiStateScreen<ChangelogUiState>,
 ) {
     when (screenState.screenState) {
-        is ScreenState.IsLoading -> Row(verticalAlignment = Alignment.CenterVertically) {
+        is ScreenState.IsLoading -> Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ) {
             CircularWavyProgressIndicator()
             LargeHorizontalSpacer()
             Text(text = stringResource(id = R.string.loading_changelog_message))
         }
 
-        is ScreenState.Error -> Column(verticalArrangement = Arrangement.Center) {
+        is ScreenState.Error -> Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Text(text = stringResource(id = R.string.error_loading_changelog_message))
         }
 
@@ -140,10 +165,16 @@ private fun ChangelogDialogContent(
             val markdown = screenState.data?.markdown.orEmpty().ifBlank {
                 stringResource(id = R.string.no_new_updates_message)
             }
-            MarkdownText(
-                modifier = Modifier.fillMaxWidth(),
-                markdown = markdown,
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+            ) {
+                MarkdownText(
+                    modifier = Modifier.fillMaxWidth(),
+                    markdown = markdown,
+                )
+            }
         }
     }
 }

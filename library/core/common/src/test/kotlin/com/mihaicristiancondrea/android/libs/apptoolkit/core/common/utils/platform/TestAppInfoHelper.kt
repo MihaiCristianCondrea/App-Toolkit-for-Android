@@ -25,7 +25,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.widget.Toast
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.isAppInstalled
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.AppInfoHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import io.mockk.every
 import io.mockk.justRun
@@ -185,7 +184,8 @@ class TestAppInfoHelper {
 
     @Disabled(
         "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
-    )    @Test
+    )
+    @Test
     fun `openApp returns false on start failure`() = runTest {
         val dispatcher = UnconfinedTestDispatcher(testScheduler)
         println("🚀 [TEST] openApp returns false on start failure")
@@ -212,7 +212,8 @@ class TestAppInfoHelper {
 
     @Disabled(
         "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
-    )    @Test
+    )
+    @Test
     fun `openAppResult exposes failure`() = runTest {
         val dispatcher = UnconfinedTestDispatcher(testScheduler)
         println("🚀 [TEST] openAppResult exposes failure")

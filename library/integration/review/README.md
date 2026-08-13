@@ -18,7 +18,8 @@ Encapsulates Google Play in-app review eligibility, prompting, and persisted req
 ## Depends on
 
 - [`:library:core:common`](../../core/common/README.md) for shared contracts and results.
-- [`:library:core:datastore`](../../core/datastore/README.md) for prompt history/eligibility persistence.
+- [`:library:core:datastore`](../../core/datastore/README.md) for prompt history/eligibility
+  persistence.
 
 ## Used by
 
@@ -47,4 +48,5 @@ flowchart LR
 
 ## Current risks
 
-Repository packages retain the historical `playservices` name even though the active Gradle module is `:library:integration:review`, which can obscure current ownership.
+Repository packages retain the historical `playservices` name even though the active Gradle module
+is `:library:integration:review`, which can obscure current ownership.

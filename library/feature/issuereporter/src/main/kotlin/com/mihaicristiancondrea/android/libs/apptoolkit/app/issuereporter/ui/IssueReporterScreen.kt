@@ -45,6 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.GithubTarget
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.contracts.IssueReporterEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.states.IssueReporterUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.utils.ISSUE_REPORTER_SCREEN_NAME
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.utils.IssueReporterActionNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.utils.issueReporterActionEvent
@@ -52,7 +53,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.vie
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.views.IssueReportFormCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.views.IssueReporterAccountOptions
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.views.IssueSubmittedCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.states.IssueReporterUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants

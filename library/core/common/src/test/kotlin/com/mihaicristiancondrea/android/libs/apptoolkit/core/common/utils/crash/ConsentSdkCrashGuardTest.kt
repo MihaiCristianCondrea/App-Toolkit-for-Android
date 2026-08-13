@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.crash
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.crash.ConsentSdkCrashGuard
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

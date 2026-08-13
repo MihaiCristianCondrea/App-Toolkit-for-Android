@@ -42,4 +42,5 @@ flowchart LR
 
 ## Current risks
 
-Repository packages retain the historical `playservices` name, which does not match the active integration module path.
+Repository packages retain the historical `playservices` name, which does not match the active
+integration module path.

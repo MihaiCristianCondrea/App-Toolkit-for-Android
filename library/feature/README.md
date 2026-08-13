@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Acts as the implicit Gradle parent for user-facing AppToolkit feature modules. It is an organizational container, not a runtime artifact.
+Acts as the implicit Gradle parent for user-facing AppToolkit feature modules. It is an
+organizational container, not a runtime artifact.
 
 ## Owns
 
@@ -10,7 +11,8 @@ Acts as the implicit Gradle parent for user-facing AppToolkit feature modules. I
 
 ## Does not own
 
-- Feature contracts or implementations; each child feature owns its complete current UI/domain/data slice.
+- Feature contracts or implementations; each child feature owns its complete current UI/domain/data
+  slice.
 - Cross-feature composition, owned by `:library:apptoolkit` and the host application.
 
 ## Depends on
@@ -19,7 +21,8 @@ No internal Gradle modules.
 
 ## Used by
 
-No internal module declares a dependency on `:library:feature`; consumers select child feature modules.
+No internal module declares a dependency on `:library:feature`; consumers select child feature
+modules.
 
 ## Flow chart
 

@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Reserves the parent core artifact in the active Gradle graph. It currently contains no production source and does not aggregate its child modules.
+Reserves the parent core artifact in the active Gradle graph. It currently contains no production
+source and does not aggregate its child modules.
 
 ## Owns
 
@@ -38,4 +39,5 @@ There is no production implementation in this module.
 
 ## Current risks
 
-The active but empty project can be mistaken for an umbrella dependency even though it does not expose the core child modules.
+The active but empty project can be mistaken for an umbrella dependency even though it does not
+expose the core child modules.

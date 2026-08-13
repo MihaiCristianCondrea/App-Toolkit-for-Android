@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Provides the toolkit's shared Preferences DataStore implementation and preference-source contracts used by onboarding, consent, ads, diagnostics, review, and theming.
+Provides the toolkit's shared Preferences DataStore implementation and preference-source contracts
+used by onboarding, consent, ads, diagnostics, review, and theming.
 
 ## Owns
 
@@ -18,13 +19,15 @@ Provides the toolkit's shared Preferences DataStore implementation and preferenc
 
 ## Depends on
 
-- [`:library:core:common`](../common/README.md) for shared contracts, preference constants, and common models.
+- [`:library:core:common`](../common/README.md) for shared contracts, preference constants, and
+  common models.
 
 ## Used by
 
 - `:library:apptoolkit` for host DI assembly.
 - `:library:core:designsystem` for persisted theme state.
-- `:library:feature:about`, `:library:feature:help`, `:library:feature:onboarding`, and `:library:feature:settings`.
+- `:library:feature:about`, `:library:feature:help`, `:library:feature:onboarding`, and
+  `:library:feature:settings`.
 - `:library:integration:ads`, `:library:integration:consent`, and `:library:integration:review`.
 
 ## Flow chart
@@ -39,7 +42,8 @@ flowchart LR
 
 ## Public contracts
 
-- `CommonDataStore`, its preference flows/setters, preference-source interfaces, and `dataStoreModule`.
+- `CommonDataStore`, its preference flows/setters, preference-source interfaces, and
+  `dataStoreModule`.
 
 ## Internal implementations
 
@@ -47,14 +51,16 @@ flowchart LR
 
 ## Current risks
 
-`CommonDataStore` serves several unrelated features directly, so changes to keys or default values are compatibility-sensitive across many modules.
+`CommonDataStore` serves several unrelated features directly, so changes to keys or default values
+are compatibility-sensitive across many modules.
 
 ## Migration notes
 
 ### Ads initialization must share the UI preference source
 
 An earlier initialization path sampled the ads preference with a debug-dependent default while the
-Compose ad surfaces used `true`. In a debug build with no stored preference, `AdsCoreManager` skipped
+Compose ad surfaces used `true`. In a debug build with no stored preference, `AdsCoreManager`
+skipped
 `MobileAds.initialize` while native/banner views attempted SDK requests. Those SDK entry points can
 throw synchronously, including from composition. A removed host-side unconditional initialization
 had previously masked the disagreement.

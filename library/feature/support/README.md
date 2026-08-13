@@ -17,7 +17,8 @@ Presents donation/support products and coordinates purchases through the billing
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:network`, and `:library:core:ui` for shared billing/Firebase contracts, errors, and Compose foundations.
+- `:library:core:common`, `:library:core:network`, and `:library:core:ui` for shared
+  billing/Firebase contracts, errors, and Compose foundations.
 - [`:library:integration:billing`](../../integration/billing/README.md) for Play Billing access.
 - [`:library:navigation`](../../navigation/README.md) for navigation support.
 
@@ -46,4 +47,5 @@ flowchart TD
 
 ## Current risks
 
-Billing contracts/results exist in common, integration, and support namespaces, creating overlapping concepts that can be confused during changes.
+Billing contracts/results exist in common, integration, and support namespaces, creating overlapping
+concepts that can be confused during changes.

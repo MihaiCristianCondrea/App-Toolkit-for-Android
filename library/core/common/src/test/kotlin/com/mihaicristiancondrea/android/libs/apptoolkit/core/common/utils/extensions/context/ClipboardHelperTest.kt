@@ -58,7 +58,8 @@ class ClipboardHelperTest {
 
     @Disabled(
         "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
-    )    @Test
+    )
+    @Test
     fun `copyTextToClipboard copies text and invokes callback for API 32`() {
         val context = mockk<Context>()
         val clipboardManager = mockk<ClipboardManager>()
@@ -95,7 +96,8 @@ class ClipboardHelperTest {
 
     @Disabled(
         "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
-    )    @Test
+    )
+    @Test
     fun `copyTextToClipboard does not invoke callback on API 33`() {
         val context = mockk<Context>()
         val clipboardManager = mockk<ClipboardManager>()
@@ -132,7 +134,8 @@ class ClipboardHelperTest {
 
     @Disabled(
         "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
-    )    @Test
+    )
+    @Test
     fun `copyTextToClipboard does not invoke callback on API above 33`() {
         val context = mockk<Context>()
         val clipboardManager = mockk<ClipboardManager>()
@@ -169,7 +172,8 @@ class ClipboardHelperTest {
 
     @Disabled(
         "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
-    )    @Test
+    )
+    @Test
     fun `copyTextToClipboard logs warning when clipboard service unavailable`() {
         val context = mockk<Context>()
         every { context.getSystemService(Context.CLIPBOARD_SERVICE) } returns null

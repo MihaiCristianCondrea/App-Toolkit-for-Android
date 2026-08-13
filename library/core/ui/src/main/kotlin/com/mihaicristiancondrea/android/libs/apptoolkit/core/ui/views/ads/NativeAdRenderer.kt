@@ -264,15 +264,16 @@ private fun createFeatured(context: Context): NativeAdViewHolder {
     // The MediaView is sized by the creative, so on its own it renders at whatever height the asset
     // happens to have — which is what made this card look arbitrary from one ad to the next. The
     // 16:9 frame reproduces the constraint the XML layout used to impose.
-    val mediaFrame = AspectRatioFrameLayout(context = context, widthToHeightRatio = MEDIA_ASPECT_RATIO)
-        .apply {
-            clipToOutline = true
-            outlineProvider = roundedOutline(radiusPx = context.dp(MEDIA_CORNER_RADIUS_DP))
-            layoutParams = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-            ).apply { topMargin = context.dp(SPACING_DP) }
-        }
+    val mediaFrame =
+        AspectRatioFrameLayout(context = context, widthToHeightRatio = MEDIA_ASPECT_RATIO)
+            .apply {
+                clipToOutline = true
+                outlineProvider = roundedOutline(radiusPx = context.dp(MEDIA_CORNER_RADIUS_DP))
+                layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                ).apply { topMargin = context.dp(SPACING_DP) }
+            }
     val media = MediaView(context).apply {
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -281,7 +282,8 @@ private fun createFeatured(context: Context): NativeAdViewHolder {
     }
     mediaFrame.addView(media)
 
-    val headline = headlineView(context = context, maxLines = 2).withTopMargin(context.dp(SPACING_DP))
+    val headline =
+        headlineView(context = context, maxLines = 2).withTopMargin(context.dp(SPACING_DP))
     val body = bodyView(context = context, maxLines = 3).withTopMargin(context.dp(SMALL_SPACING_DP))
 
     val footer = LinearLayout(context).apply {

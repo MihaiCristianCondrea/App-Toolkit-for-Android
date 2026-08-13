@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Defines the AppToolkit Compose theme, typography, color palettes, dynamic wallpaper colors, and theme-selection visuals.
+Defines the AppToolkit Compose theme, typography, color palettes, dynamic wallpaper colors, and
+theme-selection visuals.
 
 ## Owns
 
@@ -40,12 +41,15 @@ flowchart TD
 
 ## Public contracts
 
-- `AppTheme`, `AppThemeConfig`, `ColorPalette`, palette providers/values, theme models, and selection composables.
+- `AppTheme`, `AppThemeConfig`, `ColorPalette`, palette providers/values, theme models, and
+  selection composables.
 
 ## Internal implementations
 
-- Concrete palette color tables, seasonal filtering, typography definitions, and dynamic-color resolution.
+- Concrete palette color tables, seasonal filtering, typography definitions, and dynamic-color
+  resolution.
 
 ## Current risks
 
-The module depends directly on persistence and includes feature-namespaced theme models/UI, which makes the design system less reusable independently of AppToolkit settings.
+The module depends directly on persistence and includes feature-namespaced theme models/UI, which
+makes the design system less reusable independently of AppToolkit settings.

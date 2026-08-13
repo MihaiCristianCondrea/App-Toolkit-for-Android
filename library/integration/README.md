@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Acts as the implicit Gradle parent for optional third-party and Google service integrations. It is an organizational container, not a runtime artifact.
+Acts as the implicit Gradle parent for optional third-party and Google service integrations. It is
+an organizational container, not a runtime artifact.
 
 ## Owns
 
@@ -19,7 +20,8 @@ No internal Gradle modules.
 
 ## Used by
 
-No internal module declares a dependency on `:library:integration`; consumers select child integration modules.
+No internal module declares a dependency on `:library:integration`; consumers select child
+integration modules.
 
 ## Flow chart
 

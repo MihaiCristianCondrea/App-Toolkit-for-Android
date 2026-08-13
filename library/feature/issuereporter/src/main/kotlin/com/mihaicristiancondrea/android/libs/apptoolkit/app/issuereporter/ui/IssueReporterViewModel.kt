@@ -18,16 +18,16 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui
 
 import androidx.lifecycle.viewModelScope
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repositories.IssueReporterRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.mappers.toPlainText
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.ExtraInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repositories.IssueReporterRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.mappers.asDataState
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.models.IssueReporterError
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.mappers.toPlainText
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.contracts.IssueReporterAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.contracts.IssueReporterEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.mappers.asDataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.models.IssueReporterError
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.states.IssueReporterUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController

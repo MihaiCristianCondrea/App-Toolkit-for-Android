@@ -16,8 +16,10 @@ Wraps Google Play Billing behind a reusable repository and Koin module.
 
 ## Depends on
 
-- [`:library:core:common`](../../core/common/README.md) for `BillingCore`, purchase results, and shared lifecycle helpers.
-  `BillingRepository` extends `BillingCore`, so the core manager can close billing without seeing the purchase surface.
+- [`:library:core:common`](../../core/common/README.md) for `BillingCore`, purchase results, and
+  shared lifecycle helpers.
+  `BillingRepository` extends `BillingCore`, so the core manager can close billing without seeing
+  the purchase surface.
 
 ## Used by
 
@@ -42,7 +44,8 @@ flowchart LR
 
 ## Internal implementations
 
-- `DefaultBillingRepository`: BillingClient callbacks, connection management, product-detail caching, and purchase acknowledgement/query behavior.
+- `DefaultBillingRepository`: BillingClient callbacks, connection management, product-detail
+  caching, and purchase acknowledgement/query behavior.
 
 ## Current risks
 

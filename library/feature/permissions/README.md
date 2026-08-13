@@ -11,14 +11,17 @@ Displays application permission state and coordinates Android permission-managem
 
 ## Does not own
 
-- General privacy/settings composition, owned by `:library:feature:settings` and `:library:feature:about`.
+- General privacy/settings composition, owned by `:library:feature:settings` and
+  `:library:feature:about`.
 - Generic permission helpers/constants, owned by `:library:core:common`.
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:network`, and `:library:core:ui` for platform helpers, dispatchers/errors, and presentation foundations.
+- `:library:core:common`, `:library:core:network`, and `:library:core:ui` for platform helpers,
+  dispatchers/errors, and presentation foundations.
 - [`:library:navigation`](../../navigation/README.md) for navigation support.
-- [`:library:feature:settings`](../settings/README.md) for settings-related contracts/UI composition.
+- [`:library:feature:settings`](../settings/README.md) for settings-related contracts/UI
+  composition.
 
 ## Used by
 
@@ -45,4 +48,5 @@ flowchart LR
 
 ## Current risks
 
-The feature depends on the broad settings module even though the primary permission repository is self-contained, increasing feature coupling.
+The feature depends on the broad settings module even though the primary permission repository is
+self-contained, increasing feature coupling.

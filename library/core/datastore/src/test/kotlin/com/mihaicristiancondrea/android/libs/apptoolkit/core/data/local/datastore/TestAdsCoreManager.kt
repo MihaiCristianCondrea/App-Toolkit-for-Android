@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore
 
 import android.app.Activity
-import android.util.Log
 import android.content.Context
+import android.util.Log
 import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAd
 import com.google.android.libraries.ads.mobile.sdk.appopen.AppOpenAdEventCallback
 import com.google.android.libraries.ads.mobile.sdk.common.AdLoadCallback

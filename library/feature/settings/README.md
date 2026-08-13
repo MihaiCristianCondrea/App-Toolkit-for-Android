@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Composes the toolkit's root, general, display, advanced, and usage/diagnostics settings experiences and exposes host provider extension points.
+Composes the toolkit's root, general, display, advanced, and usage/diagnostics settings experiences
+and exposes host provider extension points.
 
 ## Owns
 
@@ -21,13 +22,17 @@ Composes the toolkit's root, general, display, advanced, and usage/diagnostics s
 
 ## Depends on
 
-- `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`, and `:library:navigation` for shared infrastructure.
-- [`:library:integration:consent`](../../integration/consent/README.md) for diagnostics consent updates.
-- `:library:feature:about`, `:library:feature:help`, and `:library:feature:issuereporter` to compose related settings destinations/content.
+- `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`,
+  and `:library:navigation` for shared infrastructure.
+- [`:library:integration:consent`](../../integration/consent/README.md) for diagnostics consent
+  updates.
+- `:library:feature:about`, `:library:feature:help`, and `:library:feature:issuereporter` to compose
+  related settings destinations/content.
 
 ## Used by
 
-- `:sample`, `:library:apptoolkit`, `:library:feature:onboarding`, and `:library:feature:permissions`.
+- `:sample`, `:library:apptoolkit`, `:library:feature:onboarding`, and
+  `:library:feature:permissions`.
 
 ## Flow chart
 
@@ -44,12 +49,16 @@ flowchart TD
 
 ## Public contracts
 
-- Settings/provider interfaces, settings category/preference/config models, repository contracts, and screen/ViewModel contracts.
+- Settings/provider interfaces, settings category/preference/config models, repository contracts,
+  and screen/ViewModel contracts.
 
 ## Internal implementations
 
-- Default content providers, cache operations, DataStore-backed repositories, settings lists, and consent-section UI.
+- Default content providers, cache operations, DataStore-backed repositories, settings lists, and
+  consent-section UI.
 
 ## Current risks
 
-This module directly depends on three other feature modules and is itself a dependency of onboarding and permissions. The resulting feature-level coupling makes route/provider changes likely to ripple across the graph.
+This module directly depends on three other feature modules and is itself a dependency of onboarding
+and permissions. The resulting feature-level coupling makes route/provider changes likely to ripple
+across the graph.

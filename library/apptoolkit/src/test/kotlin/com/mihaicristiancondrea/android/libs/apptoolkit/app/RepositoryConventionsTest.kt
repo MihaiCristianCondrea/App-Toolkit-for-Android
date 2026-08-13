@@ -5,6 +5,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app
@@ -31,7 +39,7 @@ class RepositoryConventionsTest {
         val legacyNames = productionSources()
             .filter { source ->
                 source.name.contains(REPOSITORY_IMPL) ||
-                    REPOSITORY_IMPL_DECLARATION.containsMatchIn(source.readText())
+                        REPOSITORY_IMPL_DECLARATION.containsMatchIn(source.readText())
             }
             .map { it.relativePath() }
 
@@ -71,6 +79,7 @@ class RepositoryConventionsTest {
         val ACTIVE_SOURCE_ROOTS: List<String> = listOf("library", "sample")
         const val MAIN_SOURCE_SET = "/src/main/"
         const val KOTLIN_EXTENSION = "kt"
+
         // Both spellings are accepted while the rename is half-done. `data/repositories` is the
         // target named by the android-project-tree skill and is what `:sample` now uses; the
         // library still uses the singular because its packages are published API and renaming them

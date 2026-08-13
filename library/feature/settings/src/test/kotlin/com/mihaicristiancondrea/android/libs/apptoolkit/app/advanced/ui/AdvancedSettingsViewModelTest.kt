@@ -44,6 +44,7 @@ class FakeCacheRepository(private val result: DataState<Unit, Errors.Database>) 
 class HotFakeCacheRepository : CacheRepository {
     private val flow =
         MutableSharedFlow<DataState<Unit, Errors.Database>>(replay = 0, extraBufferCapacity = 1)
+
     override fun clearCache(): Flow<DataState<Unit, Errors.Database>> = flow
     suspend fun emit(result: DataState<Unit, Errors.Database>) = flow.emit(result)
 }

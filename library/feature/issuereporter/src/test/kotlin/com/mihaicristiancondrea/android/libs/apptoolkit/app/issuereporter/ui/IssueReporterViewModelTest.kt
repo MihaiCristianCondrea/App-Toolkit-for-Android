@@ -18,11 +18,11 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui
 
 import com.google.common.truth.Truth.assertThat
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.Report
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repositories.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.DeviceInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.IssueReportResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.Report
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.models.github.GithubTarget
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.data.repositories.IssueReporterRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.contracts.IssueReporterEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
@@ -73,6 +73,7 @@ class IssueReporterViewModelTest {
     }
 
     private val githubTarget = GithubTarget("user", "repo")
+
     /**
      * A real [DeviceInfo] rather than a mock: the model no longer needs a `Context` to exist, so a
      * test can build one outright.

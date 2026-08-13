@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Implements the toolkit's Firebase analytics/crash-reporting contract and provides Firebase messaging service wiring.
+Implements the toolkit's Firebase analytics/crash-reporting contract and provides Firebase messaging
+service wiring.
 
 ## Owns
 
@@ -13,11 +14,13 @@ Implements the toolkit's Firebase analytics/crash-reporting contract and provide
 ## Does not own
 
 - The SDK-neutral `FirebaseController` contract, owned by `:library:core:common`.
-- User consent decisions and persisted diagnostics preferences, owned by consent/settings/DataStore modules.
+- User consent decisions and persisted diagnostics preferences, owned by consent/settings/DataStore
+  modules.
 
 ## Depends on
 
-- [`:library:core:common`](../../core/common/README.md) for the controller contract and shared analytics values.
+- [`:library:core:common`](../../core/common/README.md) for the controller contract and shared
+  analytics values.
 
 Firebase Analytics, Crashlytics, Performance, and Messaging materially define this module.
 
@@ -45,4 +48,5 @@ flowchart TD
 
 ## Current risks
 
-The module bundles several Firebase products, so hosts cannot currently select analytics, crash reporting, performance, and messaging independently at the module boundary.
+The module bundles several Firebase products, so hosts cannot currently select analytics, crash
+reporting, performance, and messaging independently at the module boundary.
