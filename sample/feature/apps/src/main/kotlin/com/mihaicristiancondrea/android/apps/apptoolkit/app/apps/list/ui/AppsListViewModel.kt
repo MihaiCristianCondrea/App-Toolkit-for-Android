@@ -46,11 +46,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -187,9 +187,7 @@ class AppsListViewModel(
     }
 
     private fun observeFilterValidity() {
-        screenState
-            .map { it.data }
-            .filterNotNull()
+        screenState.mapNotNull { it.data }
             .onEach { state ->
                 val allAppsCount = state.apps.size
                 val installedPackagesCount = state.installedPackages.size
@@ -198,7 +196,7 @@ class AppsListViewModel(
                 val isFilterValid = when (state.selectedFilter) {
                     AppsListFilter.All -> true
                     AppsListFilter.Installed -> installedPackagesCount > 0
-                    AppsListFilter.NotInstalled -> installedPackagesCount > 0 && installedPackagesCount < allAppsCount
+                    AppsListFilter.NotInstalled -> installedPackagesCount > 0 && installedPackagesCount < allAppsCount // FIXME: Two comparisons should be converted to a range check
                     AppsListFilter.Favorites -> favoritesCount > 0
                 }
 

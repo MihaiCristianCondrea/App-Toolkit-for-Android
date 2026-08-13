@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ads
 
 /**
  *  This object holds constant values for debug ad unit IDs.

@@ -98,7 +98,7 @@ class AdsCoreManagerInitializationTest {
         manager.initializeAds(appOpenUnitId = "unit")
 
         verify { dataStore.adsEnabledFlow }
-        verify(exactly = 0) { dataStore.ads(any()) }
+        verify(exactly = 0) { dataStore.ads(any()) } // FIXME: Flow is constructed but not used
     }
 
     @Test
@@ -147,7 +147,7 @@ class AdsCoreManagerInitializationTest {
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
         val manager = managerWith(
             dataStore = dataStore,
-            adMobAppIdProvider = AdMobAppIdProvider { null },
+            adMobAppIdProvider = { null },
         )
 
         manager.initializeAds(appOpenUnitId = "unit")

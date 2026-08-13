@@ -89,7 +89,7 @@ class TestAdsCoreManager {
         val context = mockk<Context>()
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
-        val manager = AdsCoreManager(context, provider, TestDispatchers(), AdMobAppIdProvider { null })
+        val manager = AdsCoreManager(context, provider, TestDispatchers(), { null })
 
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)

@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.links.AppLinks
 
 interface PrivacySettingsProvider {
 

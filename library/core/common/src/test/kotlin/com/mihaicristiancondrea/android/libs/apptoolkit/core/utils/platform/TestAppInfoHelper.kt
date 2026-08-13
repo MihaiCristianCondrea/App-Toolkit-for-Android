@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.platform
 
 import android.app.Activity
 import android.content.ComponentName
@@ -25,6 +25,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.widget.Toast
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.isAppInstalled
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.AppInfoHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import io.mockk.every
 import io.mockk.justRun

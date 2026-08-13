@@ -35,7 +35,7 @@ fun interface AdsSdkInitializer {
     companion object {
         /** The production initializer. */
         val Default: AdsSdkInitializer = AdsSdkInitializer { context, config ->
-            MobileAds.initialize(context, config) {}
+            MobileAds.initialize(context, config) {} /*FIXME: Missing permissions required by MobileAds.initialize: android.permission.INTERNET*/
         }
     }
 }

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ads
 
 /** Selects a banner ad unit ID while keeping debug IDs centralized in the toolkit library. */
 fun bannerAdUnitId(isDebug: Boolean, releaseId: String): String =

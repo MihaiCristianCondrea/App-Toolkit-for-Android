@@ -22,6 +22,6 @@
         <activity
             android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.IssueReporterActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.DayNight.NoActionBar" />
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar" /> <!--FIXME: Cannot resolve symbol '@style/Theme.Material3.DayNight.NoActionBar'-->
     </application>
 </manifest>

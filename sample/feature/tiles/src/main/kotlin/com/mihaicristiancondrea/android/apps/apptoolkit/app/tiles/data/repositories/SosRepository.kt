@@ -34,11 +34,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.time.Duration.Companion.milliseconds
 
 /** Owns SOS signalling state and controls the device torch. */
 class SosRepository(
     context: Context,
-    private val dispatchers: DispatcherProvider,
+    dispatchers: DispatcherProvider,
 ) {
 
     private val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
@@ -78,13 +79,13 @@ class SosRepository(
         sosJob = scope.launch {
             try {
                 while (isActive) {
-                    delay(unit * 2)
+                    delay((unit * 2).milliseconds)
                     sendS()
-                    delay(unit * 2)
+                    delay((unit * 2).milliseconds)
                     sendO()
-                    delay(unit * 2)
+                    delay((unit * 2).milliseconds)
                     sendS()
-                    delay(unit * 4)
+                    delay((unit * 4).milliseconds)
                 }
             } finally {
                 withContext(NonCancellable) {
@@ -114,18 +115,18 @@ class SosRepository(
 
     private suspend fun dot() {
         blink(unit)
-        delay(unit)
+        delay(unit.milliseconds)
     }
 
     private suspend fun dash() {
         blink(unit * 3)
-        delay(unit)
+        delay(unit.milliseconds)
     }
 
     private suspend fun blink(duration: Long) {
         if (!currentCoroutineContext().isActive) return
         setTorch(true)
-        delay(duration)
+        delay(duration.milliseconds)
         setTorch(false)
     }
 

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context
 
 import android.content.Context
 import android.content.Intent
@@ -24,8 +24,8 @@ import android.provider.Settings
 import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.intent.requireNewTask
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.links.AppLinks
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.intent.requireNewTask
 
 /**
  * Safely starts an activity.

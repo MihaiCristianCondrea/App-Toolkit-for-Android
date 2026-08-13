@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ui
 
 object ScreenDataStatus {
     const val NO_DATA: String = "no_data"

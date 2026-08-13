@@ -46,7 +46,7 @@ enum class AppWindowWidthSizeClass {
 fun rememberWindowAdaptiveInfo(
     supportLargeAndXLargeWidth: Boolean = true,
 ): WindowAdaptiveInfo =
-    currentWindowAdaptiveInfo(supportLargeAndXLargeWidth = supportLargeAndXLargeWidth)
+    currentWindowAdaptiveInfo(supportLargeAndXLargeWidth = supportLargeAndXLargeWidth) // FIXME: 'fun currentWindowAdaptiveInfo(supportLargeAndXLargeWidth: Boolean = ...): WindowAdaptiveInfo' is deprecated. Please use V2 version of this function to support L and XL width size classes.
 
 /**
  * Remembers the current [WindowSizeClass] calculated from the active window metrics.

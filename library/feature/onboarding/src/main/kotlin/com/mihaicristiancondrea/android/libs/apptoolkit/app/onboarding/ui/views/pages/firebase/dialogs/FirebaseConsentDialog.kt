@@ -58,7 +58,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.state
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.dialogs.pages.AboutPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.dialogs.pages.ConsentPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.dialogs.pages.DetailsPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick

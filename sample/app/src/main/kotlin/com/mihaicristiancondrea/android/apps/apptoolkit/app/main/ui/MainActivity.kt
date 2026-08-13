@@ -34,7 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.factory.GmsH
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

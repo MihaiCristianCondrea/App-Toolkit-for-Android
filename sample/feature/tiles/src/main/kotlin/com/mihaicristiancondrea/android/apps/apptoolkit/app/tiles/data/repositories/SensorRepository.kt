@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.milliseconds
 
 /** Converts Android sensor callbacks into streams consumed by tile previews. */
 class SensorRepository(
@@ -198,8 +199,8 @@ class SensorRepository(
                     // This is less stable but better than nothing
                     val normGravity = gravity[0] * gravity[0] + gravity[1] * gravity[1] + gravity[2] * gravity[2]
                     if (normGravity > 0.1f) {
-                        val pitch = Math.toDegrees(Math.atan2(gravity[1].toDouble(), gravity[2].toDouble())).toFloat()
-                        val roll = Math.toDegrees(Math.atan2(-gravity[0].toDouble(), Math.sqrt((gravity[1] * gravity[1] + gravity[2] * gravity[2]).toDouble()))).toFloat()
+                        val pitch = Math.toDegrees(Math.atan2(gravity[1].toDouble(), gravity[2].toDouble())).toFloat() // FIXME: Should be replaced with Kotlin function
+                        val roll = Math.toDegrees(Math.atan2(-gravity[0].toDouble(), Math.sqrt((gravity[1] * gravity[1] + gravity[2] * gravity[2]).toDouble()))).toFloat() // FIXME: Should be replaced with Kotlin function
                         trySend(pitch to roll)
                     }
                 }
@@ -258,13 +259,13 @@ class SensorRepository(
                     context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
                 val temperature = intent?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) ?: 0
                 trySend(temperature / 10f)
-                delay(2000)
+                delay(2000.milliseconds)
             }
         }
         awaitClose { job.cancel() }
     }.flowOn(dispatchers.default)
 
-    fun isSensorAvailable(sensorType: Int): Boolean {
+    fun isSensorAvailable(sensorType: Int): Boolean { // FIXME: Function "isSensorAvailable" is never used
         return sensorManager.getDefaultSensor(sensorType) != null
     }
 

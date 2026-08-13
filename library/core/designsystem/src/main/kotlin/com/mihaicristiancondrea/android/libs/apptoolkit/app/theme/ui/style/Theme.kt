@@ -41,7 +41,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.color
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.typography.AppTypography
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.applyDynamicVariant
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.colorscheme.applyDynamicVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.extensions.rememberThemePreferencesState
 
 object AppThemeConfig {

@@ -66,7 +66,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.SoundModeTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.TemperatureTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
 
 /**
  * Animated bottom sheet host for previewing every Quick Tools catalog entry.

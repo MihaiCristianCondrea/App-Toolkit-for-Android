@@ -56,5 +56,5 @@ enum class ToolkitTilesFilter {
     NeedsSetup,
     Unsupported;
 
-    companion object {}
+    companion object {} // FIXME: Redundant empty class body
 }

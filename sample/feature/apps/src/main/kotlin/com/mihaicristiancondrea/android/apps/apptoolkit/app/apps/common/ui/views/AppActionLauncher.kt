@@ -30,8 +30,8 @@ import android.widget.Toast
 import androidx.compose.runtime.Stable
 import androidx.core.net.toUri
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.links.AppLinks
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.openUrl
 
 /**
  * Launches Android and external app surfaces for a selected catalog app.

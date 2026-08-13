@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.mod
 import com.google.android.libraries.ads.mobile.sdk.banner.AdSize
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named

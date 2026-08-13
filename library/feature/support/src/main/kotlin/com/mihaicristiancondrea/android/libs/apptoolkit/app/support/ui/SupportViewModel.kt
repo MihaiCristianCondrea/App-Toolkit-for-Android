@@ -29,8 +29,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.extensions.primaryFormattedPrice
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.billing.PurchaseResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.activity.isValidForBilling
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.activity.isValidForBilling
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
@@ -56,6 +56,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val BILLING_LAUNCH_TIMEOUT_MS = 20_000L
 
@@ -342,7 +343,7 @@ class SupportViewModel(
     private fun startBillingTimeout() {
         billingTimeoutJob?.cancel()
         billingTimeoutJob = viewModelScope.launch {
-            delay(BILLING_LAUNCH_TIMEOUT_MS)
+            delay(BILLING_LAUNCH_TIMEOUT_MS.milliseconds)
             updateStateThreadSafe { setBillingInProgress(inProgress = false) }
         }
     }

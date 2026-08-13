@@ -26,7 +26,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ui.ScreenMessageType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState

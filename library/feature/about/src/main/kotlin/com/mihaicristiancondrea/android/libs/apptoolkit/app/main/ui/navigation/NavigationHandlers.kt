@@ -20,8 +20,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation
 import android.content.Context
 import androidx.compose.material3.DrawerState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.shareApp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.shareApp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -58,7 +59,7 @@ fun handleNavigationItemClick(
 
         NavigationDrawerRoutes.ROUTE_UPDATES -> onChangelogRequested().let { true }
         NavigationDrawerRoutes.ROUTE_SHARE -> context.shareApp(
-            shareMessageFormat = com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.summary_share_message
+            shareMessageFormat = R.string.summary_share_message
         ).let { true }
 
         else -> additionalHandlers[item.route]?.let { handler ->

@@ -18,7 +18,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.m
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.utils.constants.PlayStoreUrls
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class AppInfoDtoTest {
 
@@ -79,6 +78,6 @@ class AppInfoDtoTest {
 
         assertEquals(PlayStoreUrls.DEFAULT_ICON_URL, domain.iconUrl)
         assertEquals("Tools", domain.shortDescription)
-        assertTrue(domain.category == null)
+        assertEquals(domain.category, null)
     }
 }

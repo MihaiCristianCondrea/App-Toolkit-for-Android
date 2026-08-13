@@ -15,27 +15,28 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.platform
 
 import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule  // FIXME: Unresolved reference 'v2'.
+import androidx.test.ext.junit.runners.AndroidJUnit4 // FIXME: Unresolved reference 'runners'.
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.Locale
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4::class) // FIXME: Unresolved reference 'RunWith'. && Annotation argument must be a compile-time constant.
 class UiTextHelperInstrumentationTest {
 
-    @get:Rule
-    val composeRule = createAndroidComposeRule<ComponentActivity>()
+    @get:Rule // FIXME: Unresolved reference 'Rule'.
+    val composeRule: createAndroidComposeRule = createAndroidComposeRule<ComponentActivity>() // FIXME: Unresolved reference 'createAndroidComposeRule'.
 
     @Test
     fun asString_uses_updated_configuration() {

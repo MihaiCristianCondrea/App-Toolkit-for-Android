@@ -176,7 +176,7 @@
             android:value="true" />
 
         <receiver
-            android:name=".core.broadcast.FavoritesChangedReceiver"
+            android:name=".app.apps.common.broadcast.FavoritesChangedReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.mihaicristiancondrea.android.apps.apptoolkit.action.FAVORITES_CHANGED" />

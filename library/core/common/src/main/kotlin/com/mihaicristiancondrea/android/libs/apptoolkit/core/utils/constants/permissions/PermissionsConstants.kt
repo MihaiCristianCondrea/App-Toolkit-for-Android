@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.permissions
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.permissions
 
 /**
  *  A class containing constants related to permissions.

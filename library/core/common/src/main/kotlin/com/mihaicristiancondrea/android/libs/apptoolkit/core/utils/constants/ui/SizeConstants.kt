@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ui
 
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.SwitchDefaults

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.theme
 
 /**
  * Represents the persisted theme-related preferences exposed to the UI layer.

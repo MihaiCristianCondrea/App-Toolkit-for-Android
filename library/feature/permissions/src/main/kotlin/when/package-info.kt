@@ -22,5 +22,5 @@
  * or [kotlinx.coroutines.flow.Flow]. Prefer providers for static, read-only configuration, and
  * use repositories implementations in this package when the consumer needs observable or async data.
  */
-package com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repositories
+package `when`
 

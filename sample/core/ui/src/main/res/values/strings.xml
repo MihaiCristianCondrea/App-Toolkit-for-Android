@@ -20,7 +20,7 @@
     <string name="advanced">Advanced</string>
     <string name="all_apps">All apps</string>
     <string name="app_details_about_title">About this app</string>
-    <string name="app_short_description">A collection of handy Android tools and utilities.</string>
+    <string name="app_short_description">A collection of handy Android tools and utilities.</string> <!--FIXME: "app_short_description" is not translated in "de" (German), "hi" (Hindi), "ru" (Russian), "sv" (Swedish), "ko" (Korean), "pt" (Portuguese), "bg" (Bulgarian), "in" (Indonesian), "fil" (Filipino; Pilipino), "it" (Italian), "bn" (Bangla), "fr" (French), "hu" (Hungarian), "es" (Spanish), "zh" (Chinese), "ar" (Arabic), "vi" (Vietnamese), "th" (Thai), "uk" (Ukrainian), "ja" (Japanese), "pl" (Polish), "ro" (Romanian), "ur" (Urdu), "tr" (Turkish)-->
     <string name="app_details_app_info">App info</string>
     <string name="app_details_battery">Battery</string>
     <string name="app_details_checking_install_state">Checking install status</string>
@@ -110,8 +110,8 @@
     <string name="question_9">Is my data safe when using App Toolkit to find your other apps?</string>
     <string name="security_and_privacy">Security &amp; privacy</string>
     <string name="settings">Settings</string>
-    <string name="settings_disabled_message">Settings are currently unavailable.</string>
-    <string name="long_settings_label">Open Settings</string>
+    <string name="settings_disabled_message">Settings are currently unavailable.</string> <!--FIXME: "settings_disabled_message" is not translated in "de" (German), "hi" (Hindi), "ru" (Russian), "sv" (Swedish), "ko" (Korean), "pt" (Portuguese), "bg" (Bulgarian), "in" (Indonesian), "fil" (Filipino; Pilipino), "it" (Italian), "bn" (Bangla), "fr" (French), "hu" (Hungarian), "es" (Spanish), "zh" (Chinese), "ar" (Arabic), "vi" (Vietnamese), "th" (Thai), "uk" (Ukrainian), "ja" (Japanese), "pl" (Polish), "ro" (Romanian), "ur" (Urdu), "tr" (Turkish)-->
+    <string name="long_settings_label">Open Settings</string> <!--FIXME: "long_settings_label" is not translated in "de" (German), "hi" (Hindi), "ru" (Russian), "sv" (Swedish), "ko" (Korean), "pt" (Portuguese), "bg" (Bulgarian), "in" (Indonesian), "fil" (Filipino; Pilipino), "it" (Italian), "bn" (Bangla), "fr" (French), "hu" (Hungarian), "es" (Spanish), "zh" (Chinese), "ar" (Arabic), "vi" (Vietnamese), "th" (Thai), "uk" (Ukrainian), "ja" (Japanese), "pl" (Polish), "ro" (Romanian), "ur" (Urdu), "tr" (Turkish)-->
     <string name="summary_preference_faq_1">App Toolkit is an application designed to feature and demonstrate apps built with the AppToolkit library. It\'s your guide to exploring this ecosystem and seeing the AppToolkit library in action.</string>
     <string name="summary_preference_faq_2">App Toolkit lists various applications. Tapping on an app listing typically provides more information and a link to install or open it from the Google Play Store, allowing you to experience it firsthand.</string>
     <string name="summary_preference_faq_3">Many apps featured in App Toolkit offer a core set of features for free. Some may have advanced functionalities available through a premium version or in-app purchases. Details for each app can be found on its respective Play Store page.</string>
@@ -182,7 +182,7 @@
     <string name="tiles_chip_quick_tool">Quick tool</string>
     <string name="tiles_chip_tile">Tile</string>
     <string name="tiles_collapse_category">Collapse category</string>
-    <string name="tiles_count_format">%1$d tools</string>
+    <string name="tiles_count_format">%1$d tools</string> <!--FIXME: Formatting %d followed by words ("tools"): This should probably be a plural rather than a string-->
     <string name="tiles_error_failed_to_load">Failed to load Quick Tools</string>
     <string name="tiles_expand_category">Expand category</string>
     <string name="tiles_filter_added">Added</string>

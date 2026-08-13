@@ -24,10 +24,11 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.shareApp
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.openActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.shareApp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -141,7 +142,7 @@ class NavigationItemClickTest {
     fun `share route invokes share app and closes drawer`() = runTest {
         every {
             context.shareApp(
-                com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.summary_share_message
+                R.string.summary_share_message
             )
         } returns true
         val drawerState = mockk<DrawerState>()
@@ -157,7 +158,7 @@ class NavigationItemClickTest {
 
         verify(exactly = 1) {
             context.shareApp(
-                com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.summary_share_message
+                R.string.summary_share_message
             )
         }
         coVerify(exactly = 1) { drawerState.close() }

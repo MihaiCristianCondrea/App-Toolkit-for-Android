@@ -36,6 +36,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
+import kotlin.time.Duration.Companion.milliseconds
 
 /** Owns the breathing-session state machine and its haptic feedback. */
 class BreathingRepository(
@@ -90,7 +91,7 @@ class BreathingRepository(
     private suspend fun runCycle() {
         runPhase(BreathingPhase.INHALE, DURATION_INHALE, 0.4f, 1f, useHaptics = true)
         runPhase(BreathingPhase.HOLD_FULL, DURATION_HOLD_FULL, 1f, 1f)
-        vibrate(VibrationEffect.EFFECT_HEAVY_CLICK)
+        vibrate(VibrationEffect.EFFECT_HEAVY_CLICK) /*FIXME: Field requires API level 29 (current min is 26): android.os.VibrationEffect#EFFECT_HEAVY_CLICK*/
         runPhase(BreathingPhase.EXHALE, DURATION_EXHALE, 1f, 0.4f)
         runPhase(BreathingPhase.HOLD_EMPTY, DURATION_HOLD_EMPTY, 0.4f, 0.4f)
     }
@@ -110,7 +111,7 @@ class BreathingRepository(
             elapsedTime = System.currentTimeMillis() - startTime
 
             if (useHaptics && elapsedTime >= nextHapticTrigger) {
-                vibrate(VibrationEffect.EFFECT_TICK)
+                vibrate(VibrationEffect.EFFECT_TICK) /*FIXME: Field requires API level 29 (current min is 26): android.os.VibrationEffect#EFFECT_TICK*/
                 nextHapticTrigger += INHALE_TICK_INTERVAL
             }
 
@@ -119,14 +120,14 @@ class BreathingRepository(
             val secondsLeft = ceil((duration - elapsedTime) / 1000.0).toInt().coerceAtLeast(1)
 
             _breathingState.value = BreathingState(phase, currentProgress, secondsLeft)
-            delay(FRAME_RATE_MS)
+            delay(FRAME_RATE_MS.milliseconds)
         }
     }
 
     private fun vibrate(effectId: Int) {
         if (!vibrator.hasVibrator()) return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            vibrator.vibrate(VibrationEffect.createPredefined(effectId))
+            vibrator.vibrate(VibrationEffect.createPredefined(effectId)) /*FIXME: Missing permissions required by Vibrator.vibrate: android.permission.VIBRATE*/
         } else {
             @Suppress("DEPRECATION")
             vibrator.vibrate(50)

@@ -23,11 +23,11 @@ out/
 *.class
 
 # Release artifacts (uncomment or adjust as needed)
-app/release/*
+/sample/app/release/*
 release/
 signing.properties
 github.properties
-/app/src/main/play/keys/*
+/sample/app/src/main/play/keys/*
 /sample/app/google-services.json
 
 ###############################################################################

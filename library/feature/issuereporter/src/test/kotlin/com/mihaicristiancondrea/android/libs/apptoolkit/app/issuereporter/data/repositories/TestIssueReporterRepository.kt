@@ -54,7 +54,7 @@ class TestIssueReporterRepository {
         scheduler: TestCoroutineScheduler,
     ): IssueReporterRepository = DefaultIssueReporterRepository(
         remoteDataSource = IssueReporterRemoteDataSource(client),
-        deviceInfoProvider = DeviceInfoProvider { error("device info is not captured in these tests") },
+        deviceInfoProvider = { error("device info is not captured in these tests") },
         dispatchers = testDispatchers(scheduler),
         firebaseController = mockk<FirebaseController>(relaxed = true),
     )

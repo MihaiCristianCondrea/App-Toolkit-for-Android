@@ -64,7 +64,7 @@ fun String.toToken(): String =
 fun String.extractChangesForVersion(version: String): String {
     if (isBlank() || version.isBlank()) return ""
     val versionHeading = Regex(
-        pattern = """^#{1,6}\s*(?:\[)?(?:(?:Version\s+)|v)?${Regex.escape(version.trim())}(?:])?(?:\s*[-:].*)?\s*$""",
+        pattern = """^#{1,6}\s*(?:\[)?(?:(?:Version\s+)|v)?${Regex.escape(version.trim())}(?:])?(?:\s*[-:].*)?\s*$""", // FIXME: Unnecessary non-capturing group '(?:\[)' && Unnecessary non-capturing group '(?:Version\s+)' Unnecessary non-capturing group '(?:])'
         option = RegexOption.IGNORE_CASE,
     )
     val versionLinesIterator = lineSequence()

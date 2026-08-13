@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.domain.models
 import androidx.compose.runtime.Immutable
 
 @Immutable
-data class ThemeSettingOption(
+data class ThemeSettingOption( // FIXME: Class "ThemeSettingOption" is never used
     val key: String,
     val displayName: String
 )

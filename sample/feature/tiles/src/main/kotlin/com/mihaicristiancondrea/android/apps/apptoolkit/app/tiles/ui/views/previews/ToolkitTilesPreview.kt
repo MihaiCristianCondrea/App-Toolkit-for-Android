@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.previews
 
-import android.R
+import android.R // FIXME: Don't include android.R here; use a fully qualified name for each usage instead
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface

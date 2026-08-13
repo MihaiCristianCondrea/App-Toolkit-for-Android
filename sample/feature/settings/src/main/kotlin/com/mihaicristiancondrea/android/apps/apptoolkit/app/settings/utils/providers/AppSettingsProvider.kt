@@ -33,7 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.models.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.openAppNotificationSettings
 
 class AppSettingsProvider(context: Context) : SettingsProvider {
     private val context: Context = context.applicationContext

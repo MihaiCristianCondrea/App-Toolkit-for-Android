@@ -25,7 +25,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.findActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context.findActivity
 
 /**
  * A Side Effect that listens for a specific [Lifecycle.Event] of the current Activity

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.platform
 
 import android.Manifest
 import android.app.Activity
@@ -24,7 +24,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.permissions.PermissionsConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.PermissionsHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.constants.permissions.PermissionsConstants
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -33,6 +34,7 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import kotlin.reflect.KClass
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -164,7 +166,7 @@ class TestPermissionsHelper {
     }
 
     private inline fun <T> withStaticMocks(
-        vararg targets: kotlin.reflect.KClass<*>,
+        vararg targets: KClass<*>,
         block: () -> T
     ): T {
         targets.forEach { mockkStatic(it) }

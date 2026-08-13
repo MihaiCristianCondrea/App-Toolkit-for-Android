@@ -15,7 +15,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-@file:Suppress("FunctionName")
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations
 

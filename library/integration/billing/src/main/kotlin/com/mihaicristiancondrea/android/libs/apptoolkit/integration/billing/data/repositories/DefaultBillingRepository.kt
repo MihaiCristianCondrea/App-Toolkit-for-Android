@@ -46,6 +46,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val RETRY_DELAY_SIMPLE_MS = 1_000L
 private const val RETRY_DELAY_EXPONENTIAL_MS = 2_000L
@@ -387,13 +388,13 @@ class DefaultBillingRepository private constructor(
                 })
             }
             if (!billingClient.isReady && attempt < maxAttempts) {
-                delay(RETRY_DELAY_SIMPLE_MS)
+                delay(RETRY_DELAY_SIMPLE_MS.milliseconds)
             }
         }
     }
 
     private suspend fun retryPurchaseUpdate(purchases: MutableList<Purchase>?) {
-        delay(RETRY_DELAY_SIMPLE_MS)
+        delay(RETRY_DELAY_SIMPLE_MS.milliseconds)
         if (purchases.isNullOrEmpty()) {
             processPastPurchases()
         } else {
@@ -437,9 +438,9 @@ class DefaultBillingRepository private constructor(
                 return result
             }
             when (strategy) {
-                is RetryStrategy.Simple -> delay(strategy.delayMillis)
+                is RetryStrategy.Simple -> delay(strategy.delayMillis.milliseconds)
                 is RetryStrategy.Exponential -> {
-                    delay(delayMillis)
+                    delay(delayMillis.milliseconds)
                     delayMillis = (delayMillis * strategy.factor).toLong()
                         .coerceAtMost(strategy.maxDelayMillis)
                 }

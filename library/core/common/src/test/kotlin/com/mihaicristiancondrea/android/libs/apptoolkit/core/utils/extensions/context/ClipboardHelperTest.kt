@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.utils.extensions.context
 
 import android.content.ClipData
 import android.content.ClipboardManager
