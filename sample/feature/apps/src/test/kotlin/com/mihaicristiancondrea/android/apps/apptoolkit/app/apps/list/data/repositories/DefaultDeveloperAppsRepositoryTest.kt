@@ -26,6 +26,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.data.repositories
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DeveloperAppsLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppCategoryDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppDetailsDataDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppDetailsDto
@@ -169,6 +170,28 @@ class DefaultDeveloperAppsRepositoryTest {
     }
 
     @Test
+    fun `fetchDeveloperApps persists a successful response`() = runTest {
+        val response = catalogueResponse("Online")
+        val local = FakeDeveloperAppsLocalDataSource()
+        val repository = repositoryReturning(Json.encodeToString(response), local)
+
+        repository.fetchDeveloperApps().first()
+
+        assertEquals(response, local.value)
+    }
+
+    @Test
+    fun `fetchDeveloperApps exposes cached data with a network error`() = runTest {
+        val local = FakeDeveloperAppsLocalDataSource(catalogueResponse("Cached"))
+        val repository = repositoryWithStatus(HttpStatusCode.InternalServerError, local)
+
+        val result = repository.fetchDeveloperApps().first() as DataState.Error
+
+        assertEquals(listOf("Cached"), result.data?.map { it.name })
+        assertEquals(AppErrors.Common(Errors.Network.HTTP_SERVER_ERROR), result.error)
+    }
+
+    @Test
     fun `fetchAppDetails rejects a blank package`() = runTest {
         val repository = repositoryReturning("{}")
 
@@ -177,14 +200,20 @@ class DefaultDeveloperAppsRepositoryTest {
         assertEquals(AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS, result.error)
     }
 
-    private fun repositoryReturning(json: String): DefaultDeveloperAppsRepository {
+    private fun repositoryReturning(
+        json: String,
+        local: DeveloperAppsLocalDataSource = FakeDeveloperAppsLocalDataSource(),
+    ): DefaultDeveloperAppsRepository {
         val client = HttpClient(MockEngine { respondJson(json) }) {
             install(ContentNegotiation) { json() }
         }
-        return createRepository(client)
+        return createRepository(client, local)
     }
 
-    private fun repositoryWithStatus(status: HttpStatusCode): DefaultDeveloperAppsRepository {
+    private fun repositoryWithStatus(
+        status: HttpStatusCode,
+        local: DeveloperAppsLocalDataSource = FakeDeveloperAppsLocalDataSource(),
+    ): DefaultDeveloperAppsRepository {
         val client = HttpClient(
             MockEngine {
                 respond(
@@ -199,15 +228,41 @@ class DefaultDeveloperAppsRepositoryTest {
         ) {
             install(ContentNegotiation) { json() }
         }
-        return createRepository(client)
+        return createRepository(client, local)
     }
 
-    private fun createRepository(client: HttpClient): DefaultDeveloperAppsRepository =
+    private fun createRepository(
+        client: HttpClient,
+        local: DeveloperAppsLocalDataSource = FakeDeveloperAppsLocalDataSource(),
+    ): DefaultDeveloperAppsRepository =
         DefaultDeveloperAppsRepository(
             client = client,
             baseUrl = "https://example.com",
             firebaseController = mockk<FirebaseController>(relaxed = true),
+            localDataSource = local,
         )
+
+    private fun catalogueResponse(name: String): AppsListResponseDto = AppsListResponseDto(
+        data = AppsListDataDto(
+            apps = listOf(
+                AppSummaryDto(
+                    name = name,
+                    packageName = "com.example.${name.lowercase()}",
+                    iconUrl = "https://example.com/$name.png",
+                ),
+            ),
+        ),
+    )
+}
+
+private class FakeDeveloperAppsLocalDataSource(
+    var value: AppsListResponseDto? = null,
+) : DeveloperAppsLocalDataSource {
+    override suspend fun read(): AppsListResponseDto? = value
+
+    override suspend fun write(value: AppsListResponseDto) {
+        this.value = value
+    }
 }
 
 private fun io.ktor.client.engine.mock.MockRequestHandleScope.respondJson(

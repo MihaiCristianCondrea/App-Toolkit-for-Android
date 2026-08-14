@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.mappers.toDomain
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DeveloperAppsLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppDetailsResponseDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppsListResponseDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDetails
@@ -49,6 +50,7 @@ class DefaultDeveloperAppsRepository(
     private val client: HttpClient,
     private val baseUrl: String,
     private val firebaseController: FirebaseController,
+    private val localDataSource: DeveloperAppsLocalDataSource,
 ) : DeveloperAppsRepository {
 
     override fun fetchDeveloperApps(): Flow<DataState<List<AppSummary>, AppErrors>> = flow {
@@ -57,24 +59,27 @@ class DefaultDeveloperAppsRepository(
             message = "Developer apps fetch",
             attributes = mapOf("url" to requestUrl),
         )
-        val result: DataState<List<AppSummary>, AppErrors> = runSuspendCatching {
+        val result = runSuspendCatching<DataState<List<AppSummary>, AppErrors>> {
             val response = client.get(requestUrl)
             if (!response.status.isSuccess()) {
                 return@runSuspendCatching DataState.Error<List<AppSummary>, AppErrors>(
+                    data = localDataSource.read()?.toDomainApps(),
                     error = mapHttpStatusToError(response.status),
                 )
             }
 
             val dto = response.body<AppsListResponseDto>()
-            val apps = dto.data.apps
-                .map { it.toDomain() }
-                .sortedBy { it.name.lowercase() }
+            localDataSource.write(dto)
+            val apps = dto.toDomainApps()
 
             DataState.Success(data = apps)
-        }.fold(
+        }
+        val cachedApps = if (result.isFailure) localDataSource.read()?.toDomainApps() else null
+        val state = result.fold(
             onSuccess = { state -> state },
             onFailure = { throwable ->
                 DataState.Error(
+                    data = cachedApps,
                     error = mapThrowableToError(
                         throwable = throwable,
                         default = AppErrors.UseCase.FAILED_TO_LOAD_APPS,
@@ -82,8 +87,11 @@ class DefaultDeveloperAppsRepository(
                 )
             },
         )
-        emit(result)
+        emit(state)
     }
+
+    private fun AppsListResponseDto.toDomainApps(): List<AppSummary> =
+        data.apps.map { it.toDomain() }.sortedBy { it.name.lowercase() }
 
     override fun fetchAppDetails(
         packageName: String,

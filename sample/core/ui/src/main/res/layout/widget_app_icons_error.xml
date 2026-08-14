@@ -29,11 +29,4 @@
         android:text="@string/widget_apps_error_message"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/widget_error_action_refresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/widget_apps_error_retry" />
-
 </LinearLayout>

@@ -17,15 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.widgets.apps
 
-import android.content.Context
-import android.content.Intent
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
-import androidx.glance.appwidget.updateAll
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 
 /**
  * Broadcast receiver entry point for the Glance app icons grid widget.
@@ -33,22 +26,4 @@ import kotlinx.coroutines.launch
 class AppIconsWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = AppIconsWidget()
 
-    override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-        if (intent.action == ACTION_REFRESH_WIDGET) {
-            val pendingResult = goAsync()
-            CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
-                try {
-                    AppIconsWidget().updateAll(context)
-                } finally {
-                    pendingResult.finish()
-                }
-            }
-        }
-    }
-
-    companion object {
-        const val ACTION_REFRESH_WIDGET: String =
-            "com.mihaicristiancondrea.android.apps.apptoolkit.action.APP_ICONS_WIDGET_REFRESH"
-    }
 }
