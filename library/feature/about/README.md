@@ -10,8 +10,9 @@ several settings/help flows.
 - About information/copy-device-info domain and presentation flows.
 - Changelog retrieval/presentation and in-app-update triggering.
 - Licenses and library-extras screens.
-- Privacy/about provider contracts, AppToolkit route keys, drawer routes, bars/rails, and related
-  navigation models/helpers.
+- Privacy/about provider contracts, typed AppToolkit route keys, bars/rails, and related navigation
+  helpers.
+- The default repository for hosts that use the four standard drawer entries unchanged.
 
 ## Does not own
 
@@ -26,6 +27,8 @@ several settings/help flows.
 - `:library:integration:consent`, `:library:integration:review`, and `:library:integration:update`
   for privacy and Play flows.
 - [`:library:feature:support`](../support/README.md) for support navigation/content integration.
+- [`:library:navigation`](../../navigation/README.md) for drawer models, routes, and its host-facing
+  repository contract.
 
 ## Used by
 
@@ -46,9 +49,9 @@ flowchart TD
 
 ## Public contracts
 
-- About/privacy provider interfaces, route keys, navigation repository/models, about/changelog
-  repositories/models, `CopyDeviceInfoUseCase`, `GetChangelogUseCase`, and screen/navigation
-  composables.
+- About/privacy provider interfaces, typed route keys, `DefaultNavigationRepository`,
+  about/changelog repositories/models, `CopyDeviceInfoUseCase`, `GetChangelogUseCase`, and
+  screen/navigation composables.
 
 ## Internal implementations
 
@@ -57,6 +60,6 @@ flowchart TD
 
 ## Current risks
 
-The module's scope extends well beyond “about” into application navigation, changelog, privacy,
-licenses, and updates. Other features depend on it mainly for shared routes, making this a broad and
-change-sensitive feature boundary.
+The module's scope extends beyond “about” into navigation UI, changelog, privacy, licenses, and
+updates. Drawer contracts and string routes have moved to `:library:navigation`, but the remaining
+presentation surface is still a broad and change-sensitive feature boundary.

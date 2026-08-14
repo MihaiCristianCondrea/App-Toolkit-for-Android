@@ -15,12 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repositories
+package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.NavigationDrawerItem
-import kotlinx.coroutines.flow.Flow
-
-interface NavigationRepository {
-    fun getNavigationDrawerItems(): Flow<List<NavigationDrawerItem>>
+object NavigationDrawerRoutes {
+    const val ROUTE_SETTINGS: String = "settings"
+    const val ROUTE_HELP_AND_FEEDBACK: String = "help_and_feedback"
+    const val ROUTE_SUPPORT: String = "support"
+    const val ROUTE_UPDATES: String = "updates"
+    const val ROUTE_SHARE: String = "share"
 }
-

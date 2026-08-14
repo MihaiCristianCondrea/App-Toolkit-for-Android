@@ -91,7 +91,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.HelpRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.LibraryExtrasRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.LicensesRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.PermissionsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.SettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.SupportRoute
@@ -101,7 +101,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.BottomBarItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder

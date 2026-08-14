@@ -2,20 +2,23 @@
 
 ## Purpose
 
-Defines navigation-neutral models, back-stack operations, icons, and transition helpers shared by
-host and feature UI.
+Defines navigation models, route identifiers, repository contracts, back-stack operations, icons,
+and transition helpers shared by host and feature UI.
 
 ## Owns
 
-- `NavigationDestination` and `MainNavigationItem` models.
+- `NavigationDestination`, `MainNavigationItem`, and `NavigationDrawerItem` models.
+- Drawer route identifiers and the repository contract hosts implement to supply items.
 - Back-stack mutation helpers.
 - Shared activity and bottom-navigation transitions.
 - Navigation icon rendering.
 
 ## Does not own
 
-- AppToolkit route keys and destination registration, owned by `:library:feature:about` and
+- Typed AppToolkit route keys and destination registration, owned by `:library:feature:about` and
   `:library:apptoolkit` respectively.
+- The standard four-item drawer implementation, owned by `:library:feature:about` because its labels
+  are feature resources.
 - Host-app routes and the root navigation graph, owned by `:sample`.
 
 ## Depends on
@@ -42,14 +45,15 @@ flowchart LR
 
 ## Public contracts
 
-- Navigation destination/item models.
+- Navigation destination/item models, including `NavigationDrawerItem`.
+- `NavigationDrawerRoutes` and `NavigationRepository`.
 - Back-stack action extensions and transition helpers.
 - `NavigationIcon`.
 
 ## Internal implementations
 
-- Compose rendering and transition specifications remain implementation helpers; route ownership
-  stays with consumers.
+- Compose rendering and transition specifications remain implementation helpers; typed destination
+  ownership stays with consumers.
 
 ## Current risks
 

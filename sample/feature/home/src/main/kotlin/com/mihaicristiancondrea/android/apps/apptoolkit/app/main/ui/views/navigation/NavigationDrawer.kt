@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.Navigati
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.HelpRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.SettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.SupportRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent

@@ -17,10 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repositories
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
