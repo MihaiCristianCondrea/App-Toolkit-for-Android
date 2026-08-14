@@ -18,11 +18,11 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers
 
 import androidx.compose.material3.DrawerState
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -41,7 +41,8 @@ import kotlinx.coroutines.flow.filter
  *
  * @sample com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.HapticDrawerSwipeSample
  */
-fun Modifier.hapticDrawerSwipe(state: DrawerState): Modifier = composed {
+@Composable
+fun Modifier.hapticDrawerSwipe(state: DrawerState): Modifier {
     val haptics = rememberUpdatedState(LocalHapticFeedback.current)
 
     LaunchedEffect(state) {
@@ -53,5 +54,5 @@ fun Modifier.hapticDrawerSwipe(state: DrawerState): Modifier = composed {
             }
     }
 
-    this
+    return this
 }

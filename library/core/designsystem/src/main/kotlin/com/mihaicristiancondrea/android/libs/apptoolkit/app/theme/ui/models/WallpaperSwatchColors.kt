@@ -15,11 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local
+package com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.models
 
-import kotlinx.coroutines.flow.Flow
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Color
 
-interface FavoritesLocalDataSource {
-    fun observeFavorites(): Flow<Set<String>>
-    suspend fun toggleFavorite(packageName: String)
-}
+/** Preview colors rendered by a wallpaper/theme swatch. Presentation-only. */
+@Immutable
+data class WallpaperSwatchColors(
+    val primary: Color,
+    val secondary: Color,
+    val tertiary: Color,
+)

@@ -3,6 +3,13 @@
 - **Minor**: Enhanced the system for fetching app updates and handled internal errors more robustly.
 - **Minor**: Optimized resource usage and resolved various crashes to ensure a smoother experience.
 - **Patch**: Refined layouts and fixed visual inconsistencies across different themes and locales, including improved advertisement integration.
+- **Minor**: Reduced recomposition work in navigation, loading, and shimmer surfaces so scrolling and
+  placeholder animations cost less on the main thread.
+- **Minor**: Moved `BottomBarItem` to
+  `com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation` and
+  `WallpaperSwatchColors` to
+  `com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.models`. Update imports; no
+  behavior changed.
 
 # Version 26.07.1:
 

@@ -15,14 +15,26 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.domain.models
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.models
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppSummary
 
+/**
+ * Presentation-only row model for the app grid.
+ *
+ * The grid interleaves catalog entries with advertisement slots, which is a rendering concern; the
+ * data and domain layers only ever deal in [AppSummary].
+ */
 @Immutable
-data class WallpaperSwatchColors(
-    val primary: Color,
-    val secondary: Color,
-    val tertiary: Color,
-)
+sealed interface AppListItem {
+    /** A catalog application rendered as an app card. */
+    @Immutable
+    data class App(val appInfo: AppSummary) : AppListItem
+
+    /**
+     * Represents an advertisement placeholder in the app list.
+     */
+    @Immutable
+    data object Ad : AppListItem
+}

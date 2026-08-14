@@ -19,11 +19,11 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers
 
 import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -39,9 +39,10 @@ import kotlinx.coroutines.flow.runningFold
  *
  * @param swipeToDismissBoxState The [SwipeToDismissBoxState] to observe for swipe state changes.
  */
+@Composable
 fun Modifier.hapticSwipeToDismissBox(
     swipeToDismissBoxState: SwipeToDismissBoxState
-): Modifier = composed {
+): Modifier {
     val haptics = rememberUpdatedState(LocalHapticFeedback.current)
 
     LaunchedEffect(swipeToDismissBoxState) {
@@ -60,5 +61,5 @@ fun Modifier.hapticSwipeToDismissBox(
             .collect { /* handled by fold */ }
     }
 
-    this
+    return this
 }

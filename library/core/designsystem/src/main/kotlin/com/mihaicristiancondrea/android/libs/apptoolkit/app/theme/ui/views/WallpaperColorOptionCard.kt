@@ -43,13 +43,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.domain.models.WallpaperSwatchColors
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.models.WallpaperSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
 @Composable
@@ -126,7 +125,7 @@ fun WallpaperColorOptionCard(
  * depends on core:designsystem for theming, and a reverse dependency would create a cycle.
  */
 @Composable
-private fun Modifier.bounceClick(): Modifier = composed {
+private fun Modifier.bounceClick(): Modifier {
     val pressed = remember { mutableStateOf(false) }
 
     val scale: Float by animateFloatAsState(
@@ -134,7 +133,7 @@ private fun Modifier.bounceClick(): Modifier = composed {
         label = "Button Press Scale Animation"
     )
 
-    this
+    return this
         .graphicsLayer {
             scaleX = scale
             scaleY = scale

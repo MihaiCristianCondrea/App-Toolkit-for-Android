@@ -50,7 +50,6 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,6 +62,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.metadata
 import androidx.navigation3.scene.Scene
@@ -82,7 +82,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.Navigati
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.HelpActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.views.dropdowns.HelpScreenMenuActions
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.models.BottomBarItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.dialogs.ChangelogDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.navigation.MainTopAppBar
@@ -101,6 +100,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportAc
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.BottomBarItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
@@ -138,7 +138,7 @@ fun MainScreen(
     entryBuilders: (AppNavigationEntryContext) -> List<NavigationEntryBuilder<StableNavKey>>,
 ) {
     val viewModel: MainViewModel = koinViewModel()
-    val uiStateScreen by viewModel.uiState.collectAsState()
+    val uiStateScreen by viewModel.uiState.collectAsStateWithLifecycle()
 
     MainScreenContent(
         uiState = uiStateScreen.data ?: MainUiState(),
@@ -376,8 +376,11 @@ private fun MainShell(
     val modalDrawerEnabled = windowWidthSizeClass == AppWindowWidthSizeClass.Compact
     val randomAppHandler = randomAppHandlerState.value
 
-    val isScrollingUp: Boolean =
-        scrollBehavior.state.contentOffset > -SizeConstants.MediumSize.value
+    // Read through derivedStateOf so the shell recomposes when the FAB should change shape, not on
+    // every scroll frame: contentOffset changes continuously while the derived boolean rarely does.
+    val isScrollingUp: Boolean by remember(scrollBehavior) {
+        derivedStateOf { scrollBehavior.state.contentOffset > -SizeConstants.MediumSize.value }
+    }
 
     val appBarTitleResId: Int = remember(currentRoute) {
         MainNavigationDefaults.bottomBarItems
@@ -415,12 +418,10 @@ private fun MainShell(
             )
         }
 
-    val isFabVisible: Boolean by remember(currentRoute) {
-        derivedStateOf { MainNavigationDefaults.fabSupportedRoutes.contains(currentRoute) }
+    val isFabVisible: Boolean = remember(currentRoute) {
+        MainNavigationDefaults.fabSupportedRoutes.contains(currentRoute)
     }
-    val isFabExtended: Boolean by remember(isScrollingUp) {
-        derivedStateOf { isScrollingUp }
-    }
+    val isFabExtended: Boolean = isScrollingUp
 
     val bottomItems: ImmutableList<BottomBarItem<StableNavKey>> =
         MainNavigationDefaults.bottomBarItems

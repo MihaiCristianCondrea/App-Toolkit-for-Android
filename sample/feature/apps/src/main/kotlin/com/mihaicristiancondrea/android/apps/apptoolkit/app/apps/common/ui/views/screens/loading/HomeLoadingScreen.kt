@@ -23,8 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -37,15 +35,15 @@ fun HomeLoadingScreen(
     windowWidthSizeClass: AppWindowWidthSizeClass,
     itemAspectRatio: Float = 1f,
 ) {
-    val numberOfColumns: Int by remember(windowWidthSizeClass) {
-        derivedStateOf {
-            when (windowWidthSizeClass) {
-                AppWindowWidthSizeClass.Compact -> 2
-                AppWindowWidthSizeClass.Medium -> 3
-                AppWindowWidthSizeClass.Expanded -> 4
-                AppWindowWidthSizeClass.Large -> 5
-                AppWindowWidthSizeClass.ExtraLarge -> 6
-            }
+    // These derive from plain parameters rather than snapshot state, so remember keys are enough;
+    // derivedStateOf would only add snapshot-observation overhead with nothing to observe.
+    val numberOfColumns: Int = remember(windowWidthSizeClass) {
+        when (windowWidthSizeClass) {
+            AppWindowWidthSizeClass.Compact -> 2
+            AppWindowWidthSizeClass.Medium -> 3
+            AppWindowWidthSizeClass.Expanded -> 4
+            AppWindowWidthSizeClass.Large -> 5
+            AppWindowWidthSizeClass.ExtraLarge -> 6
         }
     }
 
@@ -55,12 +53,8 @@ fun HomeLoadingScreen(
         paddingValues = paddingValues
     )
 
-    val totalRowsToDisplay: Int by remember(fittedRows) {
-        derivedStateOf { if (fittedRows == 0) 1 else fittedRows + 1 }
-    }
-    val actualItemCount: Int by remember(totalRowsToDisplay, numberOfColumns) {
-        derivedStateOf { totalRowsToDisplay * numberOfColumns }
-    }
+    val totalRowsToDisplay: Int = if (fittedRows == 0) 1 else fittedRows + 1
+    val actualItemCount: Int = totalRowsToDisplay * numberOfColumns
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = numberOfColumns),

@@ -15,11 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.models
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
 
 /**
  * Represents an item rendered in bottom navigation surfaces (bottom bar and navigation rail).

@@ -32,10 +32,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
@@ -58,14 +56,11 @@ import kotlin.math.min
 @Composable
 fun Modifier.bounceClick(
     animationEnabled: Boolean = true,
-): Modifier = composed {
-    LocalContext.current
+): Modifier {
     val dataStore = rememberCommonDataStore()
 
     val bouncyButtonsEnabled: Boolean by dataStore.bouncyButtons
         .collectAsStateWithLifecycle(initialValue = true)
-
-    if (!animationEnabled || !bouncyButtonsEnabled) return@composed this
 
     val pressed = remember { mutableStateOf(false) }
 
@@ -74,7 +69,9 @@ fun Modifier.bounceClick(
         label = "Button Press Scale Animation"
     )
 
-    this
+    if (!animationEnabled || !bouncyButtonsEnabled) return this
+
+    return this
         .graphicsLayer {
             scaleX = scale
             scaleY = scale
@@ -106,13 +103,14 @@ fun Modifier.bounceClick(
  * @param staggerDelay Amount of delay in milliseconds per [index] before the
  * animation starts. Defaults to 64.
  */
+@Composable
 fun Modifier.animateVisibility(
     index: Int = 0,
     invisibleOffsetY: Int = 50,
     animationDuration: Int = 300,
     staggerDelay: Int = 64,
     maxStaggeredItems: Int = 20,
-) = composed {
+): Modifier {
     var visible by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -135,7 +133,7 @@ fun Modifier.animateVisibility(
         label = "OffsetY"
     )
 
-    this
+    return this
         .offset {
             IntOffset(x = 0, y = offsetState.value.toInt())
         }

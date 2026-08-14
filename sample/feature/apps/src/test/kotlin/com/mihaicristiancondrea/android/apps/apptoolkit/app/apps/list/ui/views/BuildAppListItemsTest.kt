@@ -18,12 +18,12 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.views
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppListItem
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.models.AppListItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.utils.buildAppListItems
+import kotlin.test.assertEquals
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 class BuildAppListItemsTest {
 

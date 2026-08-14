@@ -58,8 +58,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.DarkModePreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.LightModePreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.SystemModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.domain.models.WallpaperSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.filterSeasonalStaticPalettes
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.models.WallpaperSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider.paletteById
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.DynamicPaletteVariant
@@ -76,11 +76,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.Them
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
+import java.time.LocalDate
+import java.time.ZoneId
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.ZoneId
 
 @Composable
 fun ThemeOnboardingPageTab() {

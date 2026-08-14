@@ -102,7 +102,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitToolKind
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.getTileServiceRequests
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.getTileServiceRequests
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contracts.ToolkitTilesAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contracts.ToolkitTilesEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.items

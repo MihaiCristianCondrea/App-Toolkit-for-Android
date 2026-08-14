@@ -64,7 +64,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.DarkModePreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.LightModePreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.SystemModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.domain.models.WallpaperSwatchColors
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.models.WallpaperSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider.paletteById
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
@@ -94,12 +94,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePager
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
+import java.time.LocalDate
+import java.time.ZoneId
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
-import java.time.LocalDate
-import java.time.ZoneId
 
 private const val THEME_SCREEN_NAME = "Theme"
 private const val THEME_SCREEN_CLASS = "ThemeSettingsList"
