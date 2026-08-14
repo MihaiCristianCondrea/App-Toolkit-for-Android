@@ -7,8 +7,11 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 
 ## Owns
 
-- `CommonDataStore` and DataStore creation/access extensions.
-- Preference data-source contracts for onboarding, consent, and usage diagnostics.
+- The single `settings` Preferences DataStore instance, handed out by `Context.commonDataStore`.
+- Cohesive preference data sources over that instance: theme, display, onboarding, consent and
+  diagnostics, ads, review, changelog, app state, and favorites.
+- `CommonDataStore`, which owns one instance of each source, exposes them, and keeps the flat
+  pre-split API delegating to them.
 - Persisted theme, review, ads, and consent-related values.
 - `AdsCoreManager` and the Koin DataStore module, which is the single place `CommonDataStore` is
   registered; `appToolkitFoundationModules` includes it rather than defining its own copy.
@@ -37,15 +40,19 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 ```mermaid
 flowchart LR
     Feature[Feature repository] --> Contract[Preference data-source contract]
-    Contract --> Store[CommonDataStore]
-    Store --> Preferences[Preferences DataStore]
+    Facade[CommonDataStore] --> Contract
+    Contract --> Source[Default*PreferencesDataSource]
+    Source --> Preferences[settings Preferences DataStore]
     Preferences --> Flow[Typed Flow values]
 ```
 
 ## Public contracts
 
-- `CommonDataStore`, its preference flows/setters, preference-source interfaces, and
+- The preference data-source interfaces, their `Default*` implementations, `CommonDataStore`, and
   `dataStoreModule`.
+- New code should depend on the narrow contract it needs (`ThemePreferencesDataSource`,
+  `ReviewPreferencesDataSource`, …), all of which `dataStoreModule` registers. `CommonDataStore`
+  remains for callers written against the earlier single-class API.
 
 ## Internal implementations
 
@@ -53,8 +60,12 @@ flowchart LR
 
 ## Current risks
 
-`CommonDataStore` serves several unrelated features directly, so changes to keys or default values
-are compatibility-sensitive across many modules.
+Every group shares one `settings` preferences file, so key names and default values stay
+compatibility-sensitive across modules even though the API is now split. Splitting the file itself
+would need a `DataMigration` for installed apps and has not been done.
+
+`DefaultAdsPreferencesDataSource` starts an eager collector, so exactly one instance may exist per
+process. Reach it through the graph rather than constructing it.
 
 ## Migration notes
 

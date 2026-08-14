@@ -24,6 +24,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import app.cash.turbine.test
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultAdsPreferencesDataSource
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -396,10 +397,15 @@ class CommonDataStoreTest {
         return CommonDataStore(context, TestDispatcherProvider(StandardTestDispatcher(scheduler)))
     }
 
+    /**
+     * The sharing scope behind `adsEnabledFlow` now belongs to the ads preference source, which is
+     * what `CommonDataStore.close()` shuts down.
+     */
     private fun CommonDataStore.extractScope(): CoroutineScope {
-        val field = CommonDataStore::class.java.getDeclaredField("scope")
+        val adsSource = adsPreferences as DefaultAdsPreferencesDataSource
+        val field = DefaultAdsPreferencesDataSource::class.java.getDeclaredField("scope")
         field.isAccessible = true
-        return field.get(this) as CoroutineScope
+        return field.get(adsSource) as CoroutineScope
     }
 
     private fun resetSingleton() {

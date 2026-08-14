@@ -5,6 +5,10 @@
 - **Patch**: Refined layouts and fixed visual inconsistencies across different themes and locales, including improved advertisement integration.
 - **Minor**: Reduced recomposition work in navigation, loading, and shimmer surfaces so scrolling and
   placeholder animations cost less on the main thread.
+- **Minor**: Split the shared preference store into per-responsibility data sources (theme, display,
+  onboarding, consent/diagnostics, ads, review, changelog, app state, favorites), each registered in
+  the Koin graph. Stored keys and the `settings` file are unchanged, and `CommonDataStore` keeps its
+  full API, so existing data and existing call sites are unaffected.
 - **Minor**: Moved `BottomBarItem` to
   `com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation` and
   `WallpaperSwatchColors` to
