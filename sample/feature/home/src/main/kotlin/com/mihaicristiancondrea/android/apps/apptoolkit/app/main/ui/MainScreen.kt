@@ -45,7 +45,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -101,7 +100,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.toAppWindowWidthSizeClass
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.BottomNavTransitions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.NativeActivityTransitions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.rememberBottomNavTransitions
@@ -160,8 +159,7 @@ private fun MainScreenContent(
     )
     val navigator = remember(navigationState) { Navigator(state = navigationState) }
 
-    val windowWidthSizeClass: AppWindowWidthSizeClass =
-        currentWindowAdaptiveInfo().windowSizeClass.toAppWindowWidthSizeClass() // FIXME: 'fun currentWindowAdaptiveInfo(supportLargeAndXLargeWidth: Boolean = ...): WindowAdaptiveInfo' is deprecated. Please use V2 version of this function to support L and XL width size classes.
+    val windowWidthSizeClass: AppWindowWidthSizeClass = rememberWindowWidthSizeClass()
 
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
 
