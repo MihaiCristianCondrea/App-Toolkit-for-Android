@@ -53,6 +53,8 @@ flowchart LR
 - New code should depend on the narrow contract it needs (`ThemePreferencesDataSource`,
   `ReviewPreferencesDataSource`, …), all of which `dataStoreModule` registers. `CommonDataStore`
   remains for callers written against the earlier single-class API.
+- `themePreferencesState()` combines stored theme values into the application-facing
+  `ThemePreferencesState`; Compose collection of that flow belongs to `:library:core:designsystem`.
 
 ## Internal implementations
 

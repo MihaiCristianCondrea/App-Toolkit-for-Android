@@ -39,7 +39,15 @@ class AppDisplaySettingsProvider(
     override val supportsStartupPage: Boolean = true
 
     @Composable
-    override fun StartupPageDialog(onDismiss: () -> Unit, onStartupSelected: (String) -> Unit) {
-        SelectStartupScreenAlertDialog(onDismiss = onDismiss, onStartupSelected = onStartupSelected)
+    override fun StartupPageDialog(
+        currentRoute: String,
+        onDismiss: () -> Unit,
+        onStartupSelected: (String) -> Unit,
+    ) {
+        SelectStartupScreenAlertDialog(
+            currentRoute = currentRoute,
+            onDismiss = onDismiss,
+            onStartupSelected = onStartupSelected,
+        )
     }
 }

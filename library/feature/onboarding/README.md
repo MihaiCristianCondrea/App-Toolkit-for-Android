@@ -7,6 +7,9 @@ consent, and completion persistence.
 
 ## Owns
 
+- `OnboardingThemeViewModel`, which keeps the theme onboarding page independent from DataStore and
+  exposes the shared immutable theme-preferences model.
+
 - Startup and onboarding screens, activities, ViewModels, state/events/actions.
 - `StartupProvider` and `OnboardingProvider` host extension contracts.
 - Onboarding repository, page models, controls, and consent/theme pages.

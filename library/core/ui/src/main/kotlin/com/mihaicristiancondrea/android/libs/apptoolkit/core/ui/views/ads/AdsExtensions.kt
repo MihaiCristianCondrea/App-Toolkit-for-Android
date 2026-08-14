@@ -18,23 +18,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.LocalAdsEnabled
 
 /**
  * A Composable function that remembers and observes whether ads are enabled.
  *
  * Change rationale: this used to build its own flow with a hardcoded `default = true`, while
- * [AdsCoreManager] gated SDK initialization on the same preference read with a *different* default.
+ * Ads initialization and [AppTheme][com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.AppTheme]
+ * read the same preference source, while ad slots consume the provided UI value.
  * When the two disagreed, ad views loaded ads for an SDK that had never been initialized, and the
- * loader throws for that. Both sides now read [CommonDataStore.adsEnabledFlow], which carries the
- * default the host configured, so they cannot diverge.
+ * The host-configured default is therefore preserved without creating one collector per ad slot.
  *
  * @return `true` if ads are enabled, `false` otherwise. The value is lifecycle-aware.
  */
 @Composable
-fun rememberAdsEnabled(): Boolean {
-    val dataStore: CommonDataStore = rememberCommonDataStore()
-    return dataStore.adsEnabledFlow.collectAsStateWithLifecycle().value
-}
+fun rememberAdsEnabled(): Boolean = LocalAdsEnabled.current

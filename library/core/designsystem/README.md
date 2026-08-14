@@ -20,7 +20,8 @@ theme-selection visuals.
 
 ## Depends on
 
-- [`:library:core:common`](../common/README.md) for theme preference state and shared helpers.
+- [`:library:core:common`](../common/README.md) for the application-facing theme preference model
+  and shared helpers.
 - [`:library:core:datastore`](../datastore/README.md) to observe persisted theme settings.
 
 ## Used by
@@ -46,10 +47,18 @@ flowchart TD
 
 ## Internal implementations
 
+- `AppTheme` observes global bounce-animation, bottom-bar-label, and ad-slot preferences once at the
+  root and provides them to reusable UI without per-component DataStore collectors.
+- Compose collection of `themePreferencesState()` at the design-system boundary.
+- `LocalBouncyAnimationsEnabled`, the design-system-owned UI contract used by interactive core UI
+  components without introducing a dependency cycle back from the design system to core UI.
+- `bounceClick`, the shared press-feedback modifier consumed by core and navigation UI.
+
 - Concrete palette color tables, seasonal filtering, typography definitions, and dynamic-color
   resolution.
 
 ## Current risks
 
-The module depends directly on persistence and includes feature-namespaced theme models/UI, which
-makes the design system less reusable independently of AppToolkit settings.
+The module still depends directly on the preference contracts needed by `AppTheme`. The persisted
+model and non-Compose flow combination remain outside this module so presentation-specific
+collection does not leak back into `:library:core:datastore`.

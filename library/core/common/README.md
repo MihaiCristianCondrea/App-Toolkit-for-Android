@@ -7,7 +7,7 @@ Android utility abstractions shared across the toolkit.
 
 ## Owns
 
-- Analytics and billing value models, and theme preference state.
+- Analytics and billing value models, and the application-facing theme preference model.
 - `FirebaseController`, `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK
   contracts.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).
@@ -51,6 +51,8 @@ flowchart TD
 
 - `FirebaseController`, `BillingCore`, `DispatcherProvider`, and provider/helper interfaces.
 - `AppToolkitHostBuildConfig`, DI qualifiers, common result/value models, and stable constants.
+- `ThemePreferencesState`, the immutable application-facing representation shared by persistence
+  and theme UI without a synthetic domain package.
 
 ## Internal implementations
 

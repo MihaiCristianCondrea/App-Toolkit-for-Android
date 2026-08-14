@@ -15,19 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.contracts
 
-import android.os.Parcelable
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDestination
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
-/**
- * Marker interface to signal Compose stability for navigation keys.
- *
- * Located in the core domain layer so that both the library and consuming
- * applications can share the same stable navigation contract.
- */
-@Immutable
-@Stable
-interface StableNavKey : NavigationDestination, Parcelable
+sealed interface ThemeSettingsEvent : UiEvent {
+    data object Initialize : ThemeSettingsEvent
+    data class SelectThemeMode(val mode: String) : ThemeSettingsEvent
+    data class SetAmoledMode(val enabled: Boolean) : ThemeSettingsEvent
+    data class SelectDynamicPalette(val variant: Int) : ThemeSettingsEvent
+    data class SelectStaticPalette(val id: String) : ThemeSettingsEvent
+}

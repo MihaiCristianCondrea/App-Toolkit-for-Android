@@ -15,15 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.theme
+package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models
+
+import android.os.Parcelable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 
 /**
- * Represents the persisted theme-related preferences exposed to the UI layer.
+ * Marker interface to signal Compose stability for navigation keys.
+ *
+ * Owned by the navigation contract module so library and host destinations share the same key.
  */
-data class ThemePreferencesState(
-    val themeMode: String,
-    val dynamicColors: Boolean,
-    val amoledMode: Boolean,
-    val dynamicPaletteVariant: Int,
-    val staticPaletteId: String,
-)
+@Immutable
+@Stable
+interface StableNavKey : NavigationDestination, Parcelable

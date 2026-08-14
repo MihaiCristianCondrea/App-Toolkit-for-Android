@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.display.ui.views.dialogs
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,23 +27,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.SELECT_LANGUAGE_DIALOG_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.effects.persistChanges
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
@@ -53,15 +44,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CoroutineScope
 
 
 /**
  * A composable that displays an alert dialog for selecting the application language.
  *
- * This dialog retrieves the current language preference from the [CommonDataStore],
- * allows the user to pick a new language from a list of available options, and
- * automatically persists the selection.
+ * The caller owns persistence; dismissing the dialog does not save a provisional selection.
  *
  * @param onDismiss Callback invoked when the dialog should be dismissed,
  * either by clicking outside, clicking the cancel button, or after confirming a selection.
@@ -69,10 +57,14 @@ import kotlinx.coroutines.CoroutineScope
  * providing the selected language string value as a parameter.
  */
 @Composable
-fun SelectLanguageAlertDialog(onDismiss: () -> Unit, onLanguageSelected: (String) -> Unit) {
-    val dataStore: CommonDataStore = rememberCommonDataStore()
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val selectedLanguage = remember { mutableStateOf(value = "") }
+fun SelectLanguageAlertDialog(
+    currentLanguage: String,
+    onDismiss: () -> Unit,
+    onLanguageSelected: (String) -> Unit,
+) {
+    val selectedLanguage = rememberSaveable(currentLanguage) {
+        mutableStateOf(value = currentLanguage)
+    }
 
     val preferenceLanguageEntries = stringArrayResource(id = R.array.preference_language_entries)
     val preferenceLanguageValues = stringArrayResource(id = R.array.preference_language_values)
@@ -81,43 +73,6 @@ fun SelectLanguageAlertDialog(onDismiss: () -> Unit, onLanguageSelected: (String
     }
     val languageValues: ImmutableList<String> = remember(preferenceLanguageValues) {
         preferenceLanguageValues.toList().toImmutableList()
-    }
-
-    val currentLanguageState = dataStore.getLanguage()
-        .collectDataStoreState(
-            initial = { "" },
-            logTag = SELECT_LANGUAGE_DIALOG_LOG_TAG,
-            onErrorReset = { mutableState ->
-                mutableState.value = ""
-                selectedLanguage.value = ""
-            },
-        )
-    val currentLanguage by currentLanguageState
-
-    LaunchedEffect(currentLanguage) {
-        selectedLanguage.value = currentLanguage
-    }
-
-    val latestLanguage by rememberUpdatedState(newValue = currentLanguage)
-
-    LaunchedEffect(selectedLanguage, coroutineScope) {
-        selectedLanguage.persistChanges(
-            scope = coroutineScope,
-            currentValue = { latestLanguage },
-            onPersist = { language: String ->
-                if (language.isNotBlank()) {
-                    dataStore.saveLanguage(language = language)
-                }
-            },
-            onError = { throwable, latest ->
-                Log.w(
-                    SELECT_LANGUAGE_DIALOG_LOG_TAG,
-                    "Failed to persist language selection.",
-                    throwable
-                )
-                selectedLanguage.value = latest
-            },
-        )
     }
 
     BasicAlertDialog(

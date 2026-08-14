@@ -22,17 +22,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.lifecycleScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.GENERAL_SETTINGS_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.BaseActivity
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 
 class GeneralSettingsActivity : BaseActivity() {
-
-    private val commonDataStore: CommonDataStore by inject()
 
     private var title: String = ""
     private var contentKey: String? = null
@@ -68,10 +62,6 @@ class GeneralSettingsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            commonDataStore.markSettingsInteracted()
-        }
-
         title = intent.getStringExtra(EXTRA_TITLE)
             ?: getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R.string.settings)
         contentKey = intent.getStringExtra(EXTRA_CONTENT)
@@ -88,4 +78,3 @@ class GeneralSettingsActivity : BaseActivity() {
         )
     }
 }
-

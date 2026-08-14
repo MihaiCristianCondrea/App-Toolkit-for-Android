@@ -21,15 +21,15 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppsList
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationRoutes
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ToolkitTilesRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.HelpRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.SettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.SupportRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 
 fun isDrawerItemSelected(
     itemRoute: String,

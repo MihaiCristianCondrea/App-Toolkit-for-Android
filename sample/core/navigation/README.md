@@ -20,7 +20,8 @@ knowing which shell renders it.
 
 - [`:sample:core:ui`](../ui/README.md) for the strings and icons the bottom bar uses.
 - [`:library:navigation`](../../../library/navigation/README.md) and
-  [`:library:core:ui`](../../../library/core/ui/README.md) for `StableNavKey` and destination types.
+  [`:library:navigation`](../../../library/navigation/README.md) for `StableNavKey` and destination
+  types, plus [`:library:core:ui`](../../../library/core/ui/README.md) for shared UI state.
 
 ## Used by
 

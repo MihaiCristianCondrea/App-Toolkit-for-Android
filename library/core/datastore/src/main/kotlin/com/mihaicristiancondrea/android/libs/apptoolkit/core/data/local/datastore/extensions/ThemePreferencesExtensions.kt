@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datasto
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.DynamicPaletteVariant.clamp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.theme.ThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.models.theme.ThemePreferencesState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.onStart
 /**
  * Emits a combined [ThemePreferencesState] with sensible defaults for missing values.
  */
-fun CommonDataStore.themePreferencesState(
+fun ThemePreferencesDataSource.themePreferencesState(
     themeModeDefault: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
     dynamicColorsDefault: Boolean = true,
     amoledModeDefault: Boolean = false,

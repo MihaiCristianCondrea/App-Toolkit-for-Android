@@ -147,4 +147,3 @@ dependencies {
     androidTestImplementation(dependencyNotation = libs.bundles.instrumentationTest)
     debugImplementation(dependencyNotation = libs.androidx.compose.ui.test.manifest)
 }
-

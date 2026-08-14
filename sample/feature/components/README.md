@@ -6,7 +6,7 @@ The hidden components showcase and the unlock gesture that reveals it.
 
 ## Owns
 
-- `ComponentsShowcaseRepository` and its default implementation, owning the unlock flag.
+- The concrete `ComponentsShowcaseRepository`, which owns the unlock flag.
 - `ComponentsActivity`, `ComponentsScreen`, `ComponentsUnlockViewModel` and its contracts.
 - `ComponentsNavigationBuilder`.
 
@@ -53,6 +53,6 @@ drawer — but they mean this module cannot be removed without touching both.
 
 ## Migration notes
 
-`ComponentsShowcaseRepository` was created when `UnlockComponentsShowcaseUseCase` was removed. The
-use case forwarded one call to `DatastoreInterface`, so deleting it outright would have left a
-ViewModel holding a data source with no repository between them.
+`ComponentsShowcaseRepository` was created when `UnlockComponentsShowcaseUseCase` was removed. It is
+a concrete repository because the sample has one implementation; it still prevents the ViewModel
+from holding a data source directly without adding an unused abstraction.

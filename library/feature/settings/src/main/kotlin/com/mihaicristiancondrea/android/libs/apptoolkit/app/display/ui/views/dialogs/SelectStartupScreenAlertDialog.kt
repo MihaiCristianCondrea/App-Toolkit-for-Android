@@ -26,22 +26,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.SELECT_STARTUP_DIALOG_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.BasicAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.DialogContentSizing
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.dialogContentHeight
@@ -52,13 +45,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.onCompletion
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
-import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.min
 
 
@@ -67,8 +55,7 @@ import kotlin.math.min
  * to select the startup screen for the application.
  *
  * This dialog fetches available screen names and their corresponding route values via Koin
- * dependency injection, manages the state of the current selection within the [CommonDataStore],
- * and persists changes automatically when a new option is selected.
+ * dependency injection. The caller owns persistence of the confirmed selection.
  *
  * @param onDismiss A callback invoked when the dialog is dismissed or the "Done" button is clicked.
  * @param onStartupSelected A callback invoked when a startup screen is selected, providing
@@ -76,6 +63,7 @@ import kotlin.math.min
  */
 @Composable
 fun SelectStartupScreenAlertDialog(
+    currentRoute: String,
     onDismiss: () -> Unit,
     onStartupSelected: (String) -> Unit,
     /**
@@ -85,47 +73,15 @@ fun SelectStartupScreenAlertDialog(
      */
     sizing: DialogContentSizing = DialogContentSizing.WrapContent,
 ) {
-    val dataStore: CommonDataStore = rememberCommonDataStore()
-
     val entriesRaw: List<String> = koinInject(qualifier = named("startup_entries"))
     val valuesRaw: List<String> = koinInject(qualifier = named("startup_values"))
 
     val entries: ImmutableList<String> = remember(entriesRaw) { entriesRaw.toImmutableList() }
     val values: ImmutableList<String> = remember(valuesRaw) { valuesRaw.toImmutableList() }
 
-    val defaultRoute: String = values.firstOrNull().orEmpty()
-    val startupRouteState = dataStore
-        .getStartupPage(default = defaultRoute)
-        .collectDataStoreState(
-            initial = { defaultRoute },
-            logTag = SELECT_STARTUP_DIALOG_LOG_TAG,
-            onErrorReset = { mutableState -> mutableState.value = defaultRoute },
-        )
-    val startupRoute by startupRouteState
-
-    val selectedPageState = rememberSaveable { mutableStateOf(defaultRoute) }
+    val initialRoute = currentRoute.ifBlank { values.firstOrNull().orEmpty() }
+    val selectedPageState = rememberSaveable(initialRoute) { mutableStateOf(initialRoute) }
     var selectedPage by selectedPageState
-
-    LaunchedEffect(startupRoute) {
-        selectedPage = startupRoute
-    }
-
-    val latestStartupRoute by rememberUpdatedState(startupRoute)
-    LaunchedEffect(dataStore) {
-        snapshotFlow { selectedPage }
-            .distinctUntilChanged()
-            .drop(1)
-            .onCompletion { cause: Throwable? ->
-                if (cause != null && cause !is CancellationException) {
-                    selectedPage = latestStartupRoute
-                }
-            }
-            .collectLatest { route: String ->
-                if (route.isNotBlank() && route != latestStartupRoute) {
-                    dataStore.saveStartupPage(route)
-                }
-            }
-    }
 
     BasicAlertDialog(
         onDismiss = onDismiss,

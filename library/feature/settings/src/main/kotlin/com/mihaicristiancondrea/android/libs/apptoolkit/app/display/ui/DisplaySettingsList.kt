@@ -32,12 +32,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.display.ui.contracts.DisplaySettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.display.ui.states.DisplaySettingsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.display.ui.views.dialogs.SelectLanguageAlertDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.DisplaySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
@@ -45,14 +47,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.DISPLAY_SETTINGS_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.effects.collectDataStoreState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
@@ -62,9 +60,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItemWithDivider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 
 private const val DISPLAY_SETTINGS_SCREEN_NAME = "DisplaySettings"
@@ -94,8 +91,7 @@ private object DisplayActionNames {
  * - **Navigation:** Configuration for the startup page and visibility of bottom bar labels.
  * - **Language:** Access to per-app language settings via system settings (Android 13+) or an internal dialog.
  *
- * The function utilizes [CommonDataStore] for persistence and [DisplaySettingsProvider]
- * for navigation and custom dialog implementations.
+ * Persistence is owned by [DisplaySettingsViewModel]; [DisplaySettingsProvider] supplies host UI.
  *
  * @param paddingValues The padding to be applied to the [LazyColumn] container,
  * typically used to avoid overlap with system bars or scaffolds.
@@ -106,6 +102,12 @@ fun DisplaySettingsList(
 ) {
     val provider: DisplaySettingsProvider = koinInject()
     val firebaseController: FirebaseController = koinInject()
+    val viewModel: DisplaySettingsViewModel = koinViewModel()
+    val screenState: UiStateScreen<DisplaySettingsUiState> by
+        viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState = screenState.data ?: DisplaySettingsUiState()
+    val startupRoute: String by viewModel.startupRoute(defaultRoute = "")
+        .collectAsStateWithLifecycle(initialValue = "")
 
     TrackScreenView(
         firebaseController = firebaseController,
@@ -116,25 +118,15 @@ fun DisplaySettingsList(
     TrackScreenState(
         firebaseController = firebaseController,
         screenName = DISPLAY_SETTINGS_SCREEN_NAME,
-        screenState = ScreenState.Success(),
+        screenState = screenState.screenState,
     )
 
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
-    val dataStore: CommonDataStore = rememberCommonDataStore()
 
     val showLanguageDialog = rememberSaveable { mutableStateOf(false) }
     val showStartupDialog = rememberSaveable { mutableStateOf(false) }
 
-    val currentThemeModeState = dataStore.themeMode.collectDataStoreState(
-        initial = { DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM },
-        logTag = DISPLAY_SETTINGS_LOG_TAG,
-        onErrorReset = { mutableState ->
-            mutableState.value = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
-            dataStore.themeModeState.value = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
-        },
-    )
-    val currentThemeModeKey: String by currentThemeModeState
+    val currentThemeModeKey: String = uiState.themeMode
 
     val isSystemDarkTheme: Boolean = isSystemInDarkTheme()
 
@@ -152,32 +144,7 @@ fun DisplaySettingsList(
         else -> stringResource(id = R.string.will_turn_on_automatically_by_system)
     }
 
-    val isDynamicColorsState = dataStore.dynamicColors.collectDataStoreState(
-        initial = { true },
-        logTag = DISPLAY_SETTINGS_LOG_TAG,
-    )
-    val isDynamicColors: Boolean by isDynamicColorsState
-
-    val bouncyButtonsState = dataStore.bouncyButtons.collectDataStoreState(
-        initial = { true },
-        logTag = DISPLAY_SETTINGS_LOG_TAG,
-    )
-    val bouncyButtons: Boolean by bouncyButtonsState
-
-    val showLabelsOnBottomBarState = dataStore.getShowBottomBarLabels()
-        .collectDataStoreState(initial = { true }, logTag = DISPLAY_SETTINGS_LOG_TAG)
-    val showLabelsOnBottomBar: Boolean by showLabelsOnBottomBarState
-
-    val setThemeMode: (String) -> Unit = remember(coroutineScope, dataStore) {
-        { mode: String ->
-            coroutineScope.launch {
-                dataStore.saveThemeMode(mode = mode)
-                dataStore.themeModeState.value = mode
-            }
-        }
-    }
-
-    val onDarkThemeChanged: (Boolean) -> Unit = remember(setThemeMode, firebaseController) {
+    val onDarkThemeChanged: (Boolean) -> Unit = remember(viewModel, firebaseController) {
         { isChecked: Boolean ->
             val targetMode =
                 if (isChecked) DataStoreNamesConstants.THEME_MODE_DARK
@@ -193,14 +160,16 @@ fun DisplaySettingsList(
                     ),
                 )
             )
-            setThemeMode(targetMode)
+            viewModel.onEvent(DisplaySettingsEvent.ThemeModeChanged(targetMode))
         }
     }
 
     if (showStartupDialog.value) {
         provider.StartupPageDialog(
+            currentRoute = startupRoute,
             onDismiss = { showStartupDialog.value = false }
         ) { selectedDestination: String ->
+            viewModel.onEvent(DisplaySettingsEvent.StartupRouteChanged(selectedDestination))
             firebaseController.logEvent(
                 displayActionEvent(
                     actionName = DisplayActionNames.CHANGE_STARTUP_DESTINATION,
@@ -213,8 +182,10 @@ fun DisplaySettingsList(
 
     if (showLanguageDialog.value) {
         SelectLanguageAlertDialog(
+            currentLanguage = uiState.language,
             onDismiss = { showLanguageDialog.value = false },
             onLanguageSelected = { newLanguageCode: String ->
+                viewModel.onEvent(DisplaySettingsEvent.LanguageChanged(newLanguageCode))
                 showLanguageDialog.value = false
                 firebaseController.logEvent(
                     displayActionEvent(
@@ -269,9 +240,9 @@ fun DisplaySettingsList(
                 SwitchPreferenceItem(
                     title = stringResource(id = R.string.dynamic_colors),
                     summary = stringResource(id = R.string.summary_preference_settings_dynamic_colors),
-                    checked = isDynamicColors,
+                    checked = uiState.dynamicColors,
                     onCheckedChange = { isChecked ->
-                        coroutineScope.launch { dataStore.saveDynamicColors(isChecked = isChecked) }
+                        viewModel.onEvent(DisplaySettingsEvent.DynamicColorsChanged(isChecked))
                     },
                     modifier = Modifier.groupedPreferenceItem(
                         position = GroupedItemPosition.LAST,
@@ -289,9 +260,9 @@ fun DisplaySettingsList(
             SwitchPreferenceItem(
                 title = stringResource(id = R.string.bounce_buttons),
                 summary = stringResource(id = R.string.summary_preference_settings_bounce_buttons),
-                checked = bouncyButtons,
+                checked = uiState.bouncyButtons,
                 onCheckedChange = { isChecked ->
-                    coroutineScope.launch { dataStore.saveBouncyButtons(isChecked = isChecked) }
+                    viewModel.onEvent(DisplaySettingsEvent.BouncyButtonsChanged(isChecked))
                 },
                 modifier = Modifier.groupedPreferenceItem(
                     position = GroupedItemPosition.SINGLE,
@@ -327,9 +298,9 @@ fun DisplaySettingsList(
                 SwitchPreferenceItem(
                     title = stringResource(id = R.string.show_labels_on_bottom_bar),
                     summary = stringResource(id = R.string.summary_preference_settings_show_labels_on_bottom_bar),
-                    checked = showLabelsOnBottomBar,
+                    checked = uiState.showBottomBarLabels,
                     onCheckedChange = { isChecked ->
-                        coroutineScope.launch { dataStore.saveShowLabelsOnBottomBar(isChecked = isChecked) }
+                        viewModel.onEvent(DisplaySettingsEvent.BottomBarLabelsChanged(isChecked))
                     },
                     modifier = Modifier.groupedPreferenceItem(
                         position = GroupedItemPosition.LAST,

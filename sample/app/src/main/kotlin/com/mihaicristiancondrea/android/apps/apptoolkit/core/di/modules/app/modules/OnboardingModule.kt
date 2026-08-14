@@ -21,6 +21,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.onboarding.utils.int
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.data.repositories.DefaultOnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.data.repositories.OnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.OnboardingViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.OnboardingThemeViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.OnboardingPreferencesDataSource
@@ -40,5 +41,5 @@ val onboardingModule: Module = module {
             firebaseController = get(),
         )
     }
+    viewModel { OnboardingThemeViewModel(preferences = get()) }
 }
-

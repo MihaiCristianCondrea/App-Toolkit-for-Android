@@ -10,8 +10,8 @@ several settings/help flows.
 - About information/copy-device-info domain and presentation flows.
 - Changelog retrieval/presentation and in-app-update triggering.
 - Licenses and library-extras screens.
-- Privacy/about provider contracts, typed AppToolkit route keys, bars/rails, and related navigation
-  helpers.
+- Privacy/about provider contracts, the feature-specific top app bar, and related navigation
+  handlers.
 - The default repository for hosts that use the four standard drawer entries unchanged.
 
 ## Does not own
@@ -19,6 +19,10 @@ several settings/help flows.
 - Host main screen and host route keys, owned by `:sample`.
 - Support, consent, review, and update implementations, owned by their feature/integration modules.
 - Root Navigation 3 entry assembly, owned by `:library:apptoolkit`.
+- Generic bottom navigation, rails, and drawer rendering, owned by
+  [`:library:navigation`](../../navigation/README.md).
+- Stable and typed AppToolkit route keys, owned by
+  [`:library:navigation`](../../navigation/README.md).
 
 ## Depends on
 
@@ -44,12 +48,12 @@ flowchart TD
     ChangelogUI[Changelog dialog] --> ChangelogVM
     ChangelogVM --> ChangelogRepo[ChangelogRepository]
     ChangelogVM --> Update[In-app update integration]
-    Nav[Shared route keys and bars] --> Consumers[Host/help/settings]
+    Nav[Feature routes and handlers] --> Consumers[Host/help/settings]
 ```
 
 ## Public contracts
 
-- About/privacy provider interfaces, typed route keys, `DefaultNavigationRepository`,
+- About/privacy provider interfaces, `DefaultNavigationRepository`,
   about/changelog repositories/models, `CopyDeviceInfoUseCase`, `GetChangelogUseCase`, and
   screen/navigation composables.
 
@@ -60,6 +64,6 @@ flowchart TD
 
 ## Current risks
 
-The module's scope extends beyond “about” into navigation UI, changelog, privacy, licenses, and
-updates. Drawer contracts and string routes have moved to `:library:navigation`, but the remaining
-presentation surface is still a broad and change-sensitive feature boundary.
+The module still extends beyond “about” into changelog, privacy, licenses, updates, and a
+feature-specific top app bar. Generic shell rendering has moved to `:library:navigation`, but the
+remaining presentation surface is still a broad and change-sensitive feature boundary.

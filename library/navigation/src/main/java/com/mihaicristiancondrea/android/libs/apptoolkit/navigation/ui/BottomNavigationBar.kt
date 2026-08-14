@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui
 
 import android.view.SoundEffectConstants
 import android.view.View
@@ -29,7 +29,6 @@ import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -39,11 +38,10 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.BottomBarItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.LocalShowBottomBarLabels
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.BottomBarItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.bounceClick
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,10 +55,7 @@ fun <T : StableNavKey> BottomNavigationBar(
     val view: View = LocalView.current
     LocalContext.current
 
-    val dataStore = rememberCommonDataStore()
-    val showLabels: Boolean by dataStore
-        .getShowBottomBarLabels()
-        .collectAsStateWithLifecycle(initialValue = true)
+    val showLabels = LocalShowBottomBarLabels.current
 
     NavigationBar(
         windowInsets = NavigationBarDefaults.windowInsets
