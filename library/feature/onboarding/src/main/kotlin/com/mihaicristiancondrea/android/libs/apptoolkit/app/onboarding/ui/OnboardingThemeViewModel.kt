@@ -55,7 +55,7 @@ class OnboardingThemeViewModel(
         onEvent(OnboardingThemeEvent.Initialize)
     }
 
-    override fun handleEvent(event: OnboardingThemeEvent) {
+    override fun onEvent(event: OnboardingThemeEvent) {
         when (event) {
             OnboardingThemeEvent.Initialize -> observePreferences()
             is OnboardingThemeEvent.SelectThemeMode -> selectThemeMode(event.mode)

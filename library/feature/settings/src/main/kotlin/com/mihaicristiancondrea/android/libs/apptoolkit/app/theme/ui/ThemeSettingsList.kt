@@ -52,6 +52,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -512,7 +513,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                         .padding(horizontal = SizeConstants.MediumSize * 2),
                     title = stringResource(id = R.string.amoled_mode),
                     enabled = amoledAllowed,
-                    switchState = isAmoledMode,
+                    switchState = isAmoledMode, // FIXME: Argument type mismatch: actual type is 'Boolean', but 'State<Boolean>' was expected.
                     onSwitchToggled = { isChecked ->
                         firebase.value.logEvent(
                             AnalyticsEvent(

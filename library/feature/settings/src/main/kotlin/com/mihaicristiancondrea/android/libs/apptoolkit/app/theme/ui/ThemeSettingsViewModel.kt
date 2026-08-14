@@ -55,7 +55,7 @@ class ThemeSettingsViewModel(
         onEvent(ThemeSettingsEvent.Initialize)
     }
 
-    override fun handleEvent(event: ThemeSettingsEvent) {
+    override fun onEvent(event: ThemeSettingsEvent) {
         when (event) {
             ThemeSettingsEvent.Initialize -> observePreferences()
             is ThemeSettingsEvent.SelectThemeMode -> selectThemeMode(event.mode)

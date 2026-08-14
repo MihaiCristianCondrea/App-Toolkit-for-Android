@@ -35,7 +35,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 /** Owns display-preference observation and persistence for [DisplaySettingsList]. */
-class DisplaySettingsViewModel(// FIXME: <html>Class 'DisplaySettingsViewModel' is not abstract and does not implement abstract base class member:<br/>fun onEvent(event: E): Unit
+class DisplaySettingsViewModel(
     private val displayPreferences: DisplayPreferencesDataSource,
     private val themePreferences: ThemePreferencesDataSource,
 ) : ScreenViewModel<DisplaySettingsUiState, DisplaySettingsEvent, ActionEvent>(
@@ -76,7 +76,7 @@ class DisplaySettingsViewModel(// FIXME: <html>Class 'DisplaySettingsViewModel' 
     fun startupRoute(defaultRoute: String): Flow<String> =
         displayPreferences.startupPage(default = defaultRoute)
 
-    override fun handleEvent(event: DisplaySettingsEvent) { // FIXME: 'handleEvent' overrides nothing.
+    override fun onEvent(event: DisplaySettingsEvent) {
         when (event) {
             DisplaySettingsEvent.Initialize -> observePreferences()
             is DisplaySettingsEvent.ThemeModeChanged ->
