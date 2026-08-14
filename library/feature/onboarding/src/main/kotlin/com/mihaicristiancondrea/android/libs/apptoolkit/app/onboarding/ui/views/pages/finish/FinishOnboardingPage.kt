@@ -56,6 +56,7 @@ import nl.dionsegijn.konfetti.core.Position
 import nl.dionsegijn.konfetti.core.Spread
 import nl.dionsegijn.konfetti.core.emitter.Emitter
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun FinishOnboardingPage() {
@@ -112,10 +113,10 @@ fun FinishOnboardingPage() {
         iconVisible.value = true
 
         if (!FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally) {
-            delay(300)
+            delay(300.milliseconds)
             showKonfetti.value = true
             FinalOnboardingKonfettiState.hasKonfettiBeenShownGlobally = true
-            delay(4_000)
+            delay(4_000.milliseconds)
             showKonfetti.value = false // optional: removes KonfettiView from composition
         }
     }

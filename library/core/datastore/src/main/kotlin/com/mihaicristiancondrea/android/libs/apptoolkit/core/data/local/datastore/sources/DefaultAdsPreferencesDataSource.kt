@@ -46,7 +46,7 @@ import kotlinx.coroutines.flow.stateIn
 class DefaultAdsPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
     dispatchers: DispatcherProvider,
-    private val defaultAdsEnabled: Boolean,
+    defaultAdsEnabled: Boolean,
 ) : AdsPreferencesDataSource {
 
     private val scope = CoroutineScope(SupervisorJob() + dispatchers.io)

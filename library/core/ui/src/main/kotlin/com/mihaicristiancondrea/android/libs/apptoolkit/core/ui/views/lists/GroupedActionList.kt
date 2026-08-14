@@ -72,7 +72,7 @@ data class GroupedAction(
  */
 @Composable
 fun GroupedActionList(
-    actions: List<GroupedAction>,
+    actions: List<GroupedAction>, // FIXME: Parameter 'actions' has runtime-determined stability
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
     itemColor: Color = MaterialTheme.colorScheme.surfaceContainer,

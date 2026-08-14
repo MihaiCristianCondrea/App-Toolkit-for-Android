@@ -647,7 +647,7 @@ fun TextView.centerHorizontally(): TextView = apply {
 /**
  * A frame that always measures [widthToHeightRatio], whatever its child reports.
  */
-class AspectRatioFrameLayout(
+class AspectRatioFrameLayout( // FIXME: Custom view AspectRatioFrameLayout is missing constructor used by tools: (Context) or (Context,AttributeSet) or (Context,AttributeSet,int)
     context: Context,
     private val widthToHeightRatio: Float,
 ) : FrameLayout(context) {

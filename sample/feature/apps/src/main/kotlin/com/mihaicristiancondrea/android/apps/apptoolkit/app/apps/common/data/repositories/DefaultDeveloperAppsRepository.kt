@@ -59,10 +59,10 @@ class DefaultDeveloperAppsRepository(
             message = "Developer apps fetch",
             attributes = mapOf("url" to requestUrl),
         )
-        val result = runSuspendCatching<DataState<List<AppSummary>, AppErrors>> {
+        val result = runSuspendCatching {
             val response = client.get(requestUrl)
             if (!response.status.isSuccess()) {
-                return@runSuspendCatching DataState.Error<List<AppSummary>, AppErrors>(
+                return@runSuspendCatching DataState.Error(
                     data = localDataSource.read()?.toDomainApps(),
                     error = mapHttpStatusToError(response.status),
                 )

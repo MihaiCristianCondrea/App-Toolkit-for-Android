@@ -69,6 +69,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.koin.core.context.GlobalContext
 import java.net.URL
+import androidx.core.graphics.scale
+import androidx.core.net.toUri
 
 /**
  * A highly expressive, resizable 3x3 grid widget that focuses on fast app launching.
@@ -122,7 +124,7 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
                 icon = resolveAppIcon(context, app),
                 destination = launchIntent ?: Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=${Uri.encode(app.packageName)}"),
+                    "https://play.google.com/store/apps/details?id=${Uri.encode(app.packageName)}".toUri(),
                 ),
             )
         }.toImmutableList()
@@ -141,12 +143,7 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
             }
         }.getOrNull()
         if (remoteIcon != null) {
-            return Bitmap.createScaledBitmap(
-                remoteIcon,
-                DEFAULT_ICON_BITMAP_SIZE_PX,
-                DEFAULT_ICON_BITMAP_SIZE_PX,
-                true,
-            ).also { scaled -> if (scaled !== remoteIcon) remoteIcon.recycle() }
+            return remoteIcon.scale(DEFAULT_ICON_BITMAP_SIZE_PX, DEFAULT_ICON_BITMAP_SIZE_PX).also { scaled -> if (scaled !== remoteIcon) remoteIcon.recycle() }
         }
         return context.packageManager.getApplicationIcon(context.packageName)
             .toBitmap(DEFAULT_ICON_BITMAP_SIZE_PX)
@@ -166,7 +163,7 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
 }
 
 @Composable
-internal fun AppIconsWidgetContent(state: AppIconsWidgetState) {
+internal fun AppIconsWidgetContent(state: AppIconsWidgetState) { // FIXME: Parameter 'state' has runtime-determined stability
     GlanceTheme {
         val strings = WidgetStrings.from(LocalContext.current)
         when (state) {

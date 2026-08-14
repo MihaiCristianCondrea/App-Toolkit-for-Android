@@ -35,7 +35,7 @@ class ConsentSdkCrashGuardTest {
         val throwable = NoSuchElementException().withFrames(
             "java.util.Scanner" to "next",
             "com.google.android.gms.internal.consent_sdk.zzcd" to "zza",
-            "java.util.concurrent.ThreadPoolExecutor\$Worker" to "run",
+            "java.util.concurrent.ThreadPoolExecutor\$Worker" to "run", // FIXME: An interpolation prefix can simplify the string
         )
 
         assertTrue(

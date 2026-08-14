@@ -30,7 +30,7 @@ class VersioningPlugin : Plugin<Project> {
     }
 }
 
-open class VersioningExtension(private val project: Project) {
+open class VersioningExtension(project: Project) {
     private val releasePropertiesFile = project.rootProject.file("release.properties")
     private val properties = Properties().apply {
         if (releasePropertiesFile.exists()) {

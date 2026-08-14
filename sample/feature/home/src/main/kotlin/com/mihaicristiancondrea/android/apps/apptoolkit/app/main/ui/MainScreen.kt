@@ -600,7 +600,7 @@ private fun TopLevelContentNavDisplay(
     navigator: Navigator<StableNavKey>,
     entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
     onBack: () -> Unit,
-    bottomNavTransitions: BottomNavTransitions,
+    bottomNavTransitions: BottomNavTransitions, // FIXME: Unstable parameter 'bottomNavTransitions' prevents composable from being skippable
 ) {
     NavDisplay(
         entries = navigator.state.toDecoratedTopLevelEntries(entryProvider),
