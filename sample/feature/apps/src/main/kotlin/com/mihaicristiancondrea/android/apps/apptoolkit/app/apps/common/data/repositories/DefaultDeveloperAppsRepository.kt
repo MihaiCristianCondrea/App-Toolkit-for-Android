@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.mappers.toDomain
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DeveloperAppsLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.mappers.toDomain
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppDetailsResponseDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppsListResponseDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDetails
@@ -59,10 +59,10 @@ class DefaultDeveloperAppsRepository(
             message = "Developer apps fetch",
             attributes = mapOf("url" to requestUrl),
         )
-        val result = runSuspendCatching<DataState<List<AppSummary>, AppErrors>> {
+        val result = runSuspendCatching {
             val response = client.get(requestUrl)
             if (!response.status.isSuccess()) {
-                return@runSuspendCatching DataState.Error<List<AppSummary>, AppErrors>(
+                return@runSuspendCatching DataState.Error(
                     data = localDataSource.read()?.toDomainApps(),
                     error = mapHttpStatusToError(response.status),
                 )

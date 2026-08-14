@@ -30,7 +30,9 @@ import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -42,7 +44,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.typog
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.applyDynamicVariant
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.extensions.rememberThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
 
 object AppThemeConfig {
     var customLightScheme: ColorScheme? = null
@@ -102,6 +104,13 @@ private fun getColorScheme(
 fun AppTheme(content: @Composable () -> Unit) {
     val context: Context = LocalContext.current
     val themePreferences = rememberThemePreferencesState()
+    val dataStore = rememberCommonDataStore()
+    val bouncyAnimationsEnabled = dataStore.bouncyButtons
+        .collectAsStateWithLifecycle(initialValue = true)
+    val showBottomBarLabels = dataStore.getShowBottomBarLabels()
+        .collectAsStateWithLifecycle(initialValue = true)
+    val adsEnabled = dataStore.adsEnabledFlow
+        .collectAsStateWithLifecycle()
 
     val isSystemDarkTheme: Boolean = isSystemInDarkTheme()
     val isDarkTheme: Boolean = when (themePreferences.themeMode) {
@@ -130,9 +139,15 @@ fun AppTheme(content: @Composable () -> Unit) {
         }
     }
 
-    MaterialExpressiveTheme(
-        colorScheme = colorScheme,
-        typography = AppTypography,
-        content = content
-    )
+    CompositionLocalProvider(
+        LocalBouncyAnimationsEnabled provides bouncyAnimationsEnabled.value,
+        LocalShowBottomBarLabels provides showBottomBarLabels.value,
+        LocalAdsEnabled provides adsEnabled.value,
+    ) {
+        MaterialExpressiveTheme(
+            colorScheme = colorScheme,
+            typography = AppTypography,
+            content = content
+        )
+    }
 }

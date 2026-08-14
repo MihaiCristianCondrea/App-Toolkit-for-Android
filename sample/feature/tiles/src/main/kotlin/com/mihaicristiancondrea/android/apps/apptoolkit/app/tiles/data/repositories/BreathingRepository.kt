@@ -43,7 +43,7 @@ import kotlin.time.Duration.Companion.milliseconds
 /** Owns the breathing-session state machine and its haptic feedback. */
 class BreathingRepository(
     context: Context,
-    private val dispatchers: DispatcherProvider,
+    dispatchers: DispatcherProvider,
 ) {
 
     private val vibrator: Vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

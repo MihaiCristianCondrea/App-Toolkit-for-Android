@@ -28,6 +28,7 @@ import androidx.lifecycle.lifecycleScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.initializeKoin
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.managers.AdsCoreManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.AppThemeConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider
@@ -35,7 +36,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.BaseCoreMana
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isHalloweenSeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.AdsCoreManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.data.repositories.BillingRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -160,4 +160,3 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
         super.onTerminate()
     }
 }
-

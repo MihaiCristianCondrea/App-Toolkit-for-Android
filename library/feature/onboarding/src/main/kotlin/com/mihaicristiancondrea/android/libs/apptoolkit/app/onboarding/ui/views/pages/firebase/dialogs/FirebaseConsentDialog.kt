@@ -61,7 +61,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 import kotlinx.coroutines.launch
@@ -227,4 +227,3 @@ fun FirebaseConsentDialog(
         }
     }
 }
-

@@ -15,31 +15,31 @@ functions like `asFlow()` and `asObservable()` for interop at module boundaries.
 
 ### 2. Type mapping
 
-| RxJava | Kotlin |
-|---|---|
-| `Observable<T>` | `Flow<T>` |
-| `Flowable<T>` | `Flow<T>` (backpressure is built-in) |
-| `Single<T>` | `suspend fun`: T |
-| `Maybe<T>` | `suspend fun`: T? |
-| `Completable` | `suspend fun` returning `Unit` |
-| `Disposable` | `Job` (from coroutines) |
+| RxJava                | Kotlin                                    |
+|-----------------------|-------------------------------------------|
+| `Observable<T>`       | `Flow<T>`                                 |
+| `Flowable<T>`         | `Flow<T>` (backpressure is built-in)      |
+| `Single<T>`           | `suspend fun`: T                          |
+| `Maybe<T>`            | `suspend fun`: T?                         |
+| `Completable`         | `suspend fun` returning `Unit`            |
+| `Disposable`          | `Job` (from coroutines)                   |
 | `CompositeDisposable` | `CoroutineScope` (structured concurrency) |
 
 ### 3. Operator mapping
 
-| RxJava | Kotlin Flow |
-|---|---|
-| `subscribeOn(Schedulers.io())` | `flowOn(Dispatchers.IO)` |
+| RxJava                                      | Kotlin Flow                                   |
+|---------------------------------------------|-----------------------------------------------|
+| `subscribeOn(Schedulers.io())`              | `flowOn(Dispatchers.IO)`                      |
 | `observeOn(AndroidSchedulers.mainThread())` | `flowOn(Dispatchers.Main)` or collect on Main |
-| `flatMap` | `flatMapMerge` or `flatMapConcat` |
-| `map` | `map` (same) |
-| `filter` | `filter` (same) |
-| `zip` | `combine` or `zip` |
-| `merge` | `merge` |
-| `concat` | `flatMapConcat` |
-| `onErrorReturn` | `catch { emit(default) }` |
-| `doOnNext` | `onEach` |
-| `subscribe()` | `collect {}` in a coroutine scope |
+| `flatMap`                                   | `flatMapMerge` or `flatMapConcat`             |
+| `map`                                       | `map` (same)                                  |
+| `filter`                                    | `filter` (same)                               |
+| `zip`                                       | `combine` or `zip`                            |
+| `merge`                                     | `merge`                                       |
+| `concat`                                    | `flatMapConcat`                               |
+| `onErrorReturn`                             | `catch { emit(default) }`                     |
+| `doOnNext`                                  | `onEach`                                      |
+| `subscribe()`                               | `collect {}` in a coroutine scope             |
 
 ### 4. Error handling
 
@@ -169,6 +169,7 @@ class UserRepository(
 ```
 
 **Key points:**
+
 - `Observable<List<User>>` becomes `Flow<List<User>>`.
 - `subscribeOn(Schedulers.io())` becomes `flowOn(Dispatchers.IO)` at the end of the
   chain (it affects all upstream operators).

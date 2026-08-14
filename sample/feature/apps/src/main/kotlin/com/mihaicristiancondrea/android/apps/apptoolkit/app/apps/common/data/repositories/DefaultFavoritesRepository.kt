@@ -17,17 +17,23 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.FavoritesLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onStart
 
+/**
+ * Favorites source of truth backed directly by the app DataStore.
+ *
+ * `DatastoreInterface` already is the local data source for this feature, so the repository talks
+ * to it without an extra per-feature data-source wrapper.
+ */
 class DefaultFavoritesRepository(
-    private val local: FavoritesLocalDataSource,
+    private val dataStore: DatastoreInterface,
     private val firebaseController: FirebaseController,
 ) : FavoritesRepository {
 
-    override fun observeFavorites(): Flow<Set<String>> = local.observeFavorites()
+    override fun observeFavorites(): Flow<Set<String>> = dataStore.favoriteApps
         .onStart {
             firebaseController.logBreadcrumb(
                 message = "Favorites observe",
@@ -40,6 +46,6 @@ class DefaultFavoritesRepository(
             message = "Favorite toggled",
             attributes = mapOf("packageName" to packageName),
         )
-        local.toggleFavorite(packageName)
+        dataStore.toggleFavoriteApp(packageName)
     }
 }

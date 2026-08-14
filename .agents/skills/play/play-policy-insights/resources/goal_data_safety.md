@@ -1,6 +1,7 @@
 {{#IF_ANY data_sources, disclosure}}
 {{ACTIVATE_GOAL}}
 {{/IF_ANY}}
+
 ## Data Safety and Privacy Audit
 
 ### Policies to Verify
@@ -12,22 +13,32 @@
   requires prior prominent in-app disclosure and affirmative user consent.
 
 - **Common Evaluation Matrix**:
-  | Case | Technical Observation | `user_initiated` | `is_third_party` | Disclosure Status | Severity | Issue Summary |
+  | Case | Technical Observation | `user_initiated` | `is_third_party` | Disclosure Status |
+  Severity | Issue Summary |
   | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-  | **1** | **Not Transferred** (Local only) | N/A | N/A | `EXEMPT` | `SUGGESTION` | "Data Safety Compliant (Local-Only)" |
-  | **2A** | **Transferred** + **Background** + **No Disclosure** | `false` | (Any) | `MISSING` | `CRITICAL` | "**Silent Background Transfer**": Policy violation. Data is sent without prior disclosure. |
-  | **2B** | **Transferred** + **Background** + **Disclosure Found** | `false` | (Any) | `DISCLOSED` | `IMPORTANT` | "**Background Transfer (Disclosure Claimed)**": Evidence found; requires Critic verification. |
-  | **3** | **Transferred** + **User-Initiated** + **First Party** | `true` | `false` | `EXEMPT` | `IMPORTANT` | "**User-Initiated Collection**": Disclosure exempt, but **must be declared** in Play Store form. |
-  | **4** | **Transferred** + **User-Initiated** + **Third Party** | `true` | `true` | `EXEMPT` | `SUGGESTION` | "**Manual Sharing**": **Policy Exempt**. User triggers transfer to 3P; no disclosure or declaration needed. |
+  | **1** | **Not Transferred** (Local only) | N/A | N/A | `EXEMPT` | `SUGGESTION` | "Data Safety
+  Compliant (Local-Only)" |
+  | **2A** | **Transferred** + **Background** + **No Disclosure** | `false` | (Any) | `MISSING` |
+  `CRITICAL` | "**Silent Background Transfer**": Policy violation. Data is sent without prior
+  disclosure. |
+  | **2B** | **Transferred** + **Background** + **Disclosure Found** | `false` | (Any) |
+  `DISCLOSED` | `IMPORTANT` | "**Background Transfer (Disclosure Claimed)**": Evidence found;
+  requires Critic verification. |
+  | **3** | **Transferred** + **User-Initiated** + **First Party** | `true` | `false` | `EXEMPT` |
+  `IMPORTANT` | "**User-Initiated Collection**": Disclosure exempt, but **must be declared** in Play
+  Store form. |
+  | **4** | **Transferred** + **User-Initiated** + **Third Party** | `true` | `true` | `EXEMPT` |
+  `SUGGESTION` | "**Manual Sharing**": **Policy Exempt**. User triggers transfer to 3P; no
+  disclosure or declaration needed. |
 
 - **Exemptions Reference**:
-  - **Anonymous Data**: Fully anonymized data not linked to a user is exempt.
-  - **End-to-End Encryption (E2EE)**: Data E2EE where the developer cannot read
-    it is exempt.
-  - **Open Web WebView**: Data entered into a WebView navigating the open web is
-    exempt.
-  - *If any of these apply, downgrade severity to `SUGGESTION` and mark
-    `EXEMPT`.*
+    - **Anonymous Data**: Fully anonymized data not linked to a user is exempt.
+    - **End-to-End Encryption (E2EE)**: Data E2EE where the developer cannot read
+      it is exempt.
+    - **Open Web WebView**: Data entered into a WebView navigating the open web is
+      exempt.
+    - *If any of these apply, downgrade severity to `SUGGESTION` and mark
+      `EXEMPT`.*
 
 ---
 
@@ -52,6 +63,7 @@
 
 For each source in `data_sources` listed below, trace the technical signal from
 the exact location provided to its transmission endpoint.
+
 - **Mandatory Starting Point**: Navigate to the file and line number specified
   in the `data_sources` list.
 - **Loop Discipline**: You must analyze the transmission path for *every* piece
@@ -65,10 +77,10 @@ the exact location provided to its transmission endpoint.
   identify a user `NAME`), treat it as a false positive and follow the
   **Evidentiary Standard** to downgrade or prune the finding.
 - **Sink Categorization**: Determine the destination:
-  1. **First Party / Service Provider (`is_third_party: false`)**:
-     Developer-controlled servers, Firebase, custom APIs, etc.
-  2. **Third Party (`is_third_party: true`)**: Social SDKs, ad networks, or
-     user-selected apps via Android Share Sheet (`Intent.ACTION_SEND`).
+    1. **First Party / Service Provider (`is_third_party: false`)**:
+       Developer-controlled servers, Firebase, custom APIs, etc.
+    2. **Third Party (`is_third_party: true`)**: Social SDKs, ad networks, or
+       user-selected apps via Android Share Sheet (`Intent.ACTION_SEND`).
 - **Ambiguity Mandate**: If the destination is ambiguous (e.g., generic URL or
   obfuscated SDK), you MUST default to `is_third_party: false` (erring on the
   side of Collection).
@@ -80,6 +92,7 @@ the exact location provided to its transmission endpoint.
 
 **Conditional Execution**: Execute this step **ONLY IF** `is_transferred` is
 `true` AND `user_initiated` is `false`.
+
 - **Rationale**: User-initiated actions (Case 3 and 4) are exempt from Prominent
   Disclosure. Do not search for disclosures if `user_initiated` is true.
 - **Semantic Search**: Review the `disclosure` list below.
@@ -98,28 +111,28 @@ the exact location provided to its transmission endpoint.
   violation.
 - **Evaluating Keys**: For each data type object in `"findings"`, evaluate and
   populate:
-  1.  **psl_constant**: Set this exactly to the uppercase **PSL Constant** of
-     the data type (listed as the **Data Type** heading in the **Data Sources to
-     Trace** section below, e.g., `"PRECISE_LOCATION"`, `"CONTACTS"`). This is
-     critical for downstream matching.
-  2.  **policy_id**: Set this exactly to either `"prominent_disclosure_policy"`
-     or `"data_safety_section"` depending on the check being performed.
-  3.  **is_transferred**: `true` (JSON Boolean) if the data is transferred
-     off-device or on-device to a third party. `false` (JSON Boolean) if local
-     only.
-  4.  **user_initiated**: `true` (JSON Boolean) if the user explicitly triggers
-     the transfer.
-  5.  **is_third_party**: `true` (JSON Boolean) if the destination is a Third
-     Party (e.g., Share Sheet, Social SDK). `false` (JSON Boolean) if it's a
-     First Party/Service Provider (e.g., your own backend).
-  6.  **prominent_disclosure_status**: Set strictly to one of these three
-     uppercase enums: `"DISCLOSED"` (visible disclosure and user consent found),
-     `"MISSING"` (no disclosure found, or is not an affirmative gatekeeper), or
-     `"EXEMPT"` (exempt from prominent disclosure under policies).
-  7.  **purpose**: Categorize why the data is being collected (e.g., "App
-     functionality", "Analytics", "Local functionality only").
-  8.  **linked_to_user**: `true` (JSON Boolean) if the data is tied to an
-     identity, email, or device ID, otherwise `false` (JSON Boolean).
+    1. **psl_constant**: Set this exactly to the uppercase **PSL Constant** of
+       the data type (listed as the **Data Type** heading in the **Data Sources to
+       Trace** section below, e.g., `"PRECISE_LOCATION"`, `"CONTACTS"`). This is
+       critical for downstream matching.
+    2. **policy_id**: Set this exactly to either `"prominent_disclosure_policy"`
+       or `"data_safety_section"` depending on the check being performed.
+    3. **is_transferred**: `true` (JSON Boolean) if the data is transferred
+       off-device or on-device to a third party. `false` (JSON Boolean) if local
+       only.
+    4. **user_initiated**: `true` (JSON Boolean) if the user explicitly triggers
+       the transfer.
+    5. **is_third_party**: `true` (JSON Boolean) if the destination is a Third
+       Party (e.g., Share Sheet, Social SDK). `false` (JSON Boolean) if it's a
+       First Party/Service Provider (e.g., your own backend).
+    6. **prominent_disclosure_status**: Set strictly to one of these three
+       uppercase enums: `"DISCLOSED"` (visible disclosure and user consent found),
+       `"MISSING"` (no disclosure found, or is not an affirmative gatekeeper), or
+       `"EXEMPT"` (exempt from prominent disclosure under policies).
+    7. **purpose**: Categorize why the data is being collected (e.g., "App
+       functionality", "Analytics", "Local functionality only").
+    8. **linked_to_user**: `true` (JSON Boolean) if the data is tied to an
+       identity, email, or device ID, otherwise `false` (JSON Boolean).
 
 - **Map findings strictly to the 5 Cases:** Use the Case matrix in "Policies to
   Verify" to set the appropriate `severity` and `issue_summary` based on the
@@ -132,6 +145,7 @@ the exact location provided to its transmission endpoint.
 
 Apply the following heuristics while strictly adhering to the Heuristics &
 Extrapolation Boundaries defined in your Execution Mandates:
+
 1. **Implicit Data Leaks (The Logger Loop)**: Inspect if any custom logging
    frameworks (e.g., Crashlytics, custom error loggers, or telemetry SDKs)
    receive sensitive variables as part of diagnostic payloads. If a user
@@ -158,29 +172,32 @@ Extrapolation Boundaries defined in your Execution Mandates:
 {{#IF semantic_files.LEGAL}}
 **Semantic Triage Starting Points (Files of Interest)**:
 The following files likely contain privacy or consent logic:
+
 - **LEGAL** related:
   {{#EACH semantic_files.LEGAL}}
-  - `{{ITEM}}`
-  {{/EACH}}
-{{/IF}}
+    - `{{ITEM}}`
+      {{/EACH}}
+      {{/IF}}
 
 {{#IF data_sources}}
 **Data Sources to Trace**:
 {{#EACH data_sources}}
+
 - **Data Type**: {{KEY}}
   *Description: {{VALUE.description}}*
   {{#EACH VALUE.findings}}
-  - `{{ITEM}}`
-  {{/EACH}}
-{{/EACH}}
-{{/IF}}
+    - `{{ITEM}}`
+      {{/EACH}}
+      {{/EACH}}
+      {{/IF}}
 
 {{#IF disclosure}}
 **UI Disclosure Starting Points**:
 {{#EACH disclosure}}
+
 - `{{ITEM}}`
-{{/EACH}}
-{{/IF}}
+  {{/EACH}}
+  {{/IF}}
 
 ## Output schema
 

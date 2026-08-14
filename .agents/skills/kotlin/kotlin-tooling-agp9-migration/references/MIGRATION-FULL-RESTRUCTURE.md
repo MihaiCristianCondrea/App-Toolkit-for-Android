@@ -1,6 +1,8 @@
 # Full Restructure: Extracting All Platform Entry Points
 
-This guide covers the complete extraction of platform-specific entry points from a monolithic `composeApp` module into dedicated per-platform application modules. This is the most thorough migration path and results in a clean architecture where `shared` contains only cross-platform code.
+This guide covers the complete extraction of platform-specific entry points from a monolithic
+`composeApp` module into dedicated per-platform application modules. This is the most thorough
+migration path and results in a clean architecture where `shared` contains only cross-platform code.
 
 ---
 
@@ -107,9 +109,11 @@ fun main() = application {
 
 ### Remove Desktop from shared
 
-In `shared/build.gradle.kts`, remove the `jvm("desktop")` target entirely. The desktop target only needs to exist in `desktopApp`.
+In `shared/build.gradle.kts`, remove the `jvm("desktop")` target entirely. The desktop target only
+needs to exist in `desktopApp`.
 
 **Before (in composeApp):**
+
 ```kotlin
 kotlin {
     jvm("desktop")
@@ -131,6 +135,7 @@ compose.desktop {
 ```
 
 **After (in shared):**
+
 ```kotlin
 kotlin {
     // jvm("desktop") -- REMOVED
@@ -140,7 +145,9 @@ kotlin {
 ```
 
 If you have shared JVM code that both Android and Desktop use, you have two options:
-1. Keep a `jvm()` target in shared (without the `application {}` block) and use intermediate source sets.
+
+1. Keep a `jvm()` target in shared (without the `application {}` block) and use intermediate source
+   sets.
 2. Put all shared code in `commonMain` and rely on the JVM dependency from `desktopApp`.
 
 ---
@@ -222,7 +229,8 @@ kotlin {
 }
 ```
 
-If you need shared Wasm-compatible code, keep `wasmJs()` in shared as a library target (no `binaries.executable()`, no `browser {}` config).
+If you need shared Wasm-compatible code, keep `wasmJs()` in shared as a library target (no
+`binaries.executable()`, no `browser {}` config).
 
 ---
 
@@ -248,18 +256,22 @@ kotlin {
 
 If the module was renamed from `composeApp` to `shared`:
 
-1. **Framework import:** Change `import ComposeApp` to `import Shared` in all `.swift` files (must match `baseName` in the framework config).
+1. **Framework import:** Change `import ComposeApp` to `import Shared` in all `.swift` files (must
+   match `baseName` in the framework config).
 
-2. **Gradle task path:** Update the Run Script build phase in `project.pbxproj` (or via Xcode > Build Phases):
+2. **Gradle task path:** Update the Run Script build phase in `project.pbxproj` (or via Xcode >
+   Build Phases):
    ```bash
    # In Xcode Build Phases > Run Script
    cd "$SRCROOT/.."
    ./gradlew :shared:embedAndSignAppleFrameworkForXcode
    ```
 
-3. **App struct name:** If the SwiftUI `@main` struct was named after the old module (e.g., `ComposeAppApp`), rename it to something appropriate for your project.
+3. **App struct name:** If the SwiftUI `@main` struct was named after the old module (e.g.,
+   `ComposeAppApp`), rename it to something appropriate for your project.
 
-4. **Framework search paths:** Update Build Settings if they reference the old module directory path.
+4. **Framework search paths:** Update Build Settings if they reference the old module directory
+   path.
 
 5. **Cocoapods (if used):** Update the pod spec name:
    ```kotlin
@@ -311,6 +323,7 @@ implementation(project(":shared"))
 ### 4. Update .idea / Workspace Files
 
 If using IntelliJ/Android Studio, the IDE may cache the old module name. Either:
+
 - Delete `.idea/` and re-import
 - Or manually update `.idea/modules.xml` and related files
 
@@ -379,6 +392,7 @@ kotlin {
 ```
 
 This variant is useful when:
+
 - iOS uses SwiftUI and does not want Compose Multiplatform
 - Desktop is not a target
 - You want to minimize the shared surface area
@@ -419,8 +433,11 @@ dependencies {
 }
 ```
 
-The server module is a plain JVM module. It depends on `:shared` for common models and API contracts. It is unaffected by the AGP 9.0 migration except that:
-- If shared previously had a `jvm()` target that the server depended on, verify it still exists after restructuring.
+The server module is a plain JVM module. It depends on `:shared` for common models and API
+contracts. It is unaffected by the AGP 9.0 migration except that:
+
+- If shared previously had a `jvm()` target that the server depended on, verify it still exists
+  after restructuring.
 - If shared was renamed, update the dependency path.
 
 ---

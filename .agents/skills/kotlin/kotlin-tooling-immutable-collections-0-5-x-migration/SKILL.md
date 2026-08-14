@@ -155,9 +155,12 @@ Then re-confirm the build is clean.
 
 ## Rename reference
 
-- **`PersistentCollection`** — `add`→`adding`, `addAll`→`addingAll`, `remove`→`removing`, `removeAll`→`removingAll`, `retainAll`→`retainingAll`, `clear`→`cleared`
-- **`PersistentList`** (the above, plus) — `add(i, e)`→`addingAt`, `addAll(i, c)`→`addingAllAt`, `set(i, e)`→`replacingAt`, `removeAt`→`removingAt`
-- **`PersistentMap`** — `put`→`putting`, `putAll`→`puttingAll`, `remove(k)`→`removing`, `remove(k, v)`→`removing`, `clear`→`cleared`
+- **`PersistentCollection`** — `add`→`adding`, `addAll`→`addingAll`, `remove`→`removing`,
+  `removeAll`→`removingAll`, `retainAll`→`retainingAll`, `clear`→`cleared`
+- **`PersistentList`** (the above, plus) — `add(i, e)`→`addingAt`, `addAll(i, c)`→`addingAllAt`,
+  `set(i, e)`→`replacingAt`, `removeAt`→`removingAt`
+- **`PersistentMap`** — `put`→`putting`, `putAll`→`puttingAll`, `remove(k)`→`removing`,
+  `remove(k, v)`→`removing`, `clear`→`cleared`
 
 Builders (`PersistentList.Builder`, etc.) are **not** renamed — they mutate in place, so
 their imperative names stay.
@@ -168,5 +171,7 @@ their imperative names stay.
 - [KEEP-0459] — naming rationale
 
 [KEEP-0459]: https://github.com/Kotlin/KEEP/blob/main/proposals/KEEP-0459-naming-conventions-for-copy-returning-operations.md
+
 [`0.5.0-MIGRATION.md`]: https://github.com/Kotlin/kotlinx.collections.immutable/blob/master/docs/0.5.0-MIGRATION.md
+
 [Maven Central]: https://central.sonatype.com/artifact/org.jetbrains.kotlinx/kotlinx-collections-immutable/versions

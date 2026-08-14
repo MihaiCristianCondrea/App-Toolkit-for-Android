@@ -130,6 +130,7 @@ class ProductResource @Inject constructor(
 ```
 
 Key changes:
+
 - `@Inject` field injection is replaced by an `@Inject`-annotated primary constructor.
 - A secondary no-arg constructor is added to satisfy the CDI specification. In practice,
   CDI will use the `@Inject` constructor — the no-arg constructor exists only to pass

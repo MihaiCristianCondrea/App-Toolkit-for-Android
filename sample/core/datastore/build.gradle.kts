@@ -28,4 +28,5 @@ dependencies {
     api(project(":library:core:datastore"))
     api(project(":library:core:ui"))
     api(project(":library:core:common"))
+    api(project(":library:navigation"))
 }

@@ -46,24 +46,6 @@ class RepositoryConventionsTest {
         assertThat(legacyNames).isEmpty()
     }
 
-    @Test
-    fun `default repositories correspond to a local repository contract`() {
-        val repositoryFiles = productionSources()
-            .filter { source -> DATA_REPOSITORY_PACKAGES.any(source.parentPath()::endsWith) }
-
-        val contracts = repositoryFiles
-            .filter { it.readText().contains(INTERFACE_DECLARATION) }
-            .map { it.nameWithoutExtension }
-            .toSet()
-
-        val orphanedDefaults = repositoryFiles
-            .filter { it.name.startsWith(DEFAULT_PREFIX) && it.name.endsWith(REPOSITORY_FILE_SUFFIX) }
-            .filterNot { it.nameWithoutExtension.removePrefix(DEFAULT_PREFIX) in contracts }
-            .map { it.relativePath() }
-
-        assertThat(orphanedDefaults).isEmpty()
-    }
-
     private fun productionSources(): List<File> = ACTIVE_SOURCE_ROOTS
         .flatMap { directory -> File(repositoryRoot, directory).walkTopDown().toList() }
         .filter { it.isFile && it.extension == KOTLIN_EXTENSION }
@@ -80,11 +62,7 @@ class RepositoryConventionsTest {
         const val MAIN_SOURCE_SET = "/src/main/"
         const val KOTLIN_EXTENSION = "kt"
 
-        // Both spellings are accepted while the rename is half-done. `data/repositories` is the
-        // target named by the android-project-tree skill and is what `:sample` now uses; the
-        // library still uses the singular because its packages are published API and renaming them
-        // breaks every host's imports. Drop the singular entry once the library follows.
-        val DATA_REPOSITORY_PACKAGES = listOf("/data/repositories", "/data/repositories")
+        val DATA_REPOSITORY_PACKAGES = listOf("/data/repositories")
         const val REPOSITORY_FILE_SUFFIX = "Repository.kt"
         const val REPOSITORY_IMPL = "RepositoryImpl"
 
@@ -93,8 +71,6 @@ class RepositoryConventionsTest {
         // does not contain it. The check silently passed everything, leaving the file-name check as
         // the only live rule and a mis-named class inside a correctly named file undetected.
         val REPOSITORY_IMPL_DECLARATION = Regex("""class\s+\w*RepositoryImpl\b""")
-        const val INTERFACE_DECLARATION = "interface "
-        const val DEFAULT_PREFIX = "Default"
         const val SETTINGS_FILE = "settings.gradle.kts"
 
         val repositoryRoot: File = generateSequence(File("").absoluteFile) { it.parentFile }

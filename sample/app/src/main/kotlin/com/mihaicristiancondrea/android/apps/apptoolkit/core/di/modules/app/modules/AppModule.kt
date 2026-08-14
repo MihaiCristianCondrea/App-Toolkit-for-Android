@@ -28,8 +28,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositor
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repositories.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.repositories.NavigationRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel

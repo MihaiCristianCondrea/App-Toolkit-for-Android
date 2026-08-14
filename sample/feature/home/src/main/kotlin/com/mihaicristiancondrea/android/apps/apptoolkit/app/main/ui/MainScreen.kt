@@ -45,12 +45,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,6 +61,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.metadata
 import androidx.navigation3.scene.Scene
@@ -82,27 +81,14 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.Navigati
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.HelpActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.views.dropdowns.HelpScreenMenuActions
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.models.BottomBarItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.dialogs.ChangelogDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.navigation.MainTopAppBar
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.navigation.NavigationDrawerItemContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.AdsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.GeneralSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.HelpRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.LibraryExtrasRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.LicensesRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.PermissionsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.SettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.SupportRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.NavigationDrawerItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.Navigator
@@ -114,12 +100,25 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.toAppWindowWidthSizeClass
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.BottomNavTransitions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.NativeActivityTransitions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.rememberBottomNavTransitions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.rememberNativeActivityTransitions
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.BottomBarItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.isTopLevel
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerItemContent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.CoroutineScope
@@ -138,7 +137,7 @@ fun MainScreen(
     entryBuilders: (AppNavigationEntryContext) -> List<NavigationEntryBuilder<StableNavKey>>,
 ) {
     val viewModel: MainViewModel = koinViewModel()
-    val uiStateScreen by viewModel.uiState.collectAsState()
+    val uiStateScreen by viewModel.uiState.collectAsStateWithLifecycle()
 
     MainScreenContent(
         uiState = uiStateScreen.data ?: MainUiState(),
@@ -160,8 +159,7 @@ private fun MainScreenContent(
     )
     val navigator = remember(navigationState) { Navigator(state = navigationState) }
 
-    val windowWidthSizeClass: AppWindowWidthSizeClass =
-        currentWindowAdaptiveInfo().windowSizeClass.toAppWindowWidthSizeClass()
+    val windowWidthSizeClass: AppWindowWidthSizeClass = rememberWindowWidthSizeClass()
 
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
 
@@ -376,8 +374,11 @@ private fun MainShell(
     val modalDrawerEnabled = windowWidthSizeClass == AppWindowWidthSizeClass.Compact
     val randomAppHandler = randomAppHandlerState.value
 
-    val isScrollingUp: Boolean =
-        scrollBehavior.state.contentOffset > -SizeConstants.MediumSize.value
+    // Read through derivedStateOf so the shell recomposes when the FAB should change shape, not on
+    // every scroll frame: contentOffset changes continuously while the derived boolean rarely does.
+    val isScrollingUp: Boolean by remember(scrollBehavior) {
+        derivedStateOf { scrollBehavior.state.contentOffset > -SizeConstants.MediumSize.value }
+    }
 
     val appBarTitleResId: Int = remember(currentRoute) {
         MainNavigationDefaults.bottomBarItems
@@ -415,12 +416,10 @@ private fun MainShell(
             )
         }
 
-    val isFabVisible: Boolean by remember(currentRoute) {
-        derivedStateOf { MainNavigationDefaults.fabSupportedRoutes.contains(currentRoute) }
+    val isFabVisible: Boolean = remember(currentRoute) {
+        MainNavigationDefaults.fabSupportedRoutes.contains(currentRoute)
     }
-    val isFabExtended: Boolean by remember(isScrollingUp) {
-        derivedStateOf { isScrollingUp }
-    }
+    val isFabExtended: Boolean = isScrollingUp
 
     val bottomItems: ImmutableList<BottomBarItem<StableNavKey>> =
         MainNavigationDefaults.bottomBarItems

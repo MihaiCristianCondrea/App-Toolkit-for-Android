@@ -2,25 +2,32 @@
 
 ## Purpose
 
-Defines navigation-neutral models, back-stack operations, icons, and transition helpers shared by
-host and feature UI.
+Defines navigation models, route identifiers, repository contracts, back-stack operations, icons,
+and transition helpers shared by host and feature UI.
 
 ## Owns
 
-- `NavigationDestination` and `MainNavigationItem` models.
+- `NavigationDestination`, `MainNavigationItem`, `NavigationDrawerItem`, and `BottomBarItem` models.
+- `StableNavKey` and the reusable typed AppToolkit route keys.
+- Drawer route identifiers and the repository contract hosts implement to supply items.
 - Back-stack mutation helpers.
 - Shared activity and bottom-navigation transitions.
 - Navigation icon rendering.
+- Bottom navigation, navigation rail, drawer-item content, and hide-on-scroll shell rendering.
 
 ## Does not own
 
-- AppToolkit route keys and destination registration, owned by `:library:feature:about` and
-  `:library:apptoolkit` respectively.
+- Destination registration, owned by `:library:apptoolkit` and host composition roots.
+- The standard four-item drawer implementation, owned by `:library:feature:about` because its labels
+  are feature resources.
 - Host-app routes and the root navigation graph, owned by `:sample`.
 
 ## Depends on
 
-No internal Gradle modules. Navigation 3 and Compose materially define its role.
+- [`:library:core:common`](../core/common/README.md) for shared sizing constants.
+- [`:library:core:designsystem`](../core/designsystem/README.md) for interaction feedback and global
+  UI preference values.
+- Navigation 3, Compose, and immutable collections materially define the module's public role.
 
 ## Used by
 
@@ -42,14 +49,18 @@ flowchart LR
 
 ## Public contracts
 
-- Navigation destination/item models.
+- Navigation destination/item models, including `NavigationDrawerItem` and `BottomBarItem`.
+- `StableNavKey` and `AppToolkitNavKey` route implementations.
+- `NavigationDrawerRoutes` and `NavigationRepository`.
 - Back-stack action extensions and transition helpers.
 - `NavigationIcon`.
+- `BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerItemContent`, and
+  `HideOnScrollBottomBar`.
 
 ## Internal implementations
 
-- Compose rendering and transition specifications remain implementation helpers; route ownership
-  stays with consumers.
+- Compose rendering and transition specifications remain implementation helpers; destination
+  registration stays with consumers.
 
 ## Current risks
 

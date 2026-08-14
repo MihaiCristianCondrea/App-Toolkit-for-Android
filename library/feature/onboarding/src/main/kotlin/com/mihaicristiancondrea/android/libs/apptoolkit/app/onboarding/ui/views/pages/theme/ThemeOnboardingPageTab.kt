@@ -44,6 +44,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -53,13 +54,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.models.OnboardingThemeChoice
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.OnboardingThemeViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contracts.OnboardingThemeEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.cards.AmoledModeToggleCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.DarkModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.LightModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.SystemModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.domain.models.WallpaperSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.filterSeasonalStaticPalettes
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.models.WallpaperSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider.paletteById
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.DynamicPaletteVariant
@@ -69,24 +70,34 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.colorscheme.applyDynamicVariant
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isHalloweenSeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.extensions.rememberThemePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.cards.ThemeChoicePreviewCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePager
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.DarkModePreview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.LightModePreview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.SystemModePreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
+import java.time.LocalDate
+import java.time.ZoneId
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.ZoneId
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ThemeOnboardingPageTab() {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val dataStore = rememberCommonDataStore()
-    val themePreferences = rememberThemePreferencesState()
+    val viewModel: OnboardingThemeViewModel = koinViewModel()
+    val screenState by viewModel.uiState.collectAsStateWithLifecycle()
+    val themePreferences = screenState.data ?: ThemePreferencesState(
+        themeMode = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM,
+        dynamicColors = true,
+        amoledMode = false,
+        dynamicPaletteVariant = 0,
+        staticPaletteId = StaticPaletteIds.DEFAULT,
+    )
     val context = LocalContext.current
 
     val defaultThemeModeKey: String = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
@@ -227,12 +238,7 @@ fun ThemeOnboardingPageTab() {
                     icon = choice.icon,
                     isSelected = currentThemeMode == choice.key,
                     onClick = {
-                        coroutineScope.launch {
-                            dataStore.saveThemeMode(mode = choice.key)
-                            if (choice.key == DataStoreNamesConstants.THEME_MODE_LIGHT && isAmoledMode) {
-                                dataStore.saveAmoledMode(isChecked = false)
-                            }
-                        }
+                        viewModel.onEvent(OnboardingThemeEvent.SelectThemeMode(choice.key))
                     },
                     modifier = Modifier.weight(1f),
                     preview = {
@@ -251,9 +257,7 @@ fun ThemeOnboardingPageTab() {
             enabled = amoledAllowed,
             onCheckedChange = { isChecked ->
                 if (!amoledAllowed) return@AmoledModeToggleCard
-                coroutineScope.launch {
-                    dataStore.saveAmoledMode(isChecked = isChecked)
-                }
+                viewModel.onEvent(OnboardingThemeEvent.SetAmoledMode(isChecked))
             }
         )
 
@@ -302,10 +306,9 @@ fun ThemeOnboardingPageTab() {
                                     colors = palette,
                                     selected = isDynamicColors && index == dynamicVariantIndex,
                                     onClick = {
-                                        coroutineScope.launch {
-                                            dataStore.saveDynamicColors(true)
-                                            dataStore.saveDynamicPaletteVariant(index)
-                                        }
+                                        viewModel.onEvent(
+                                            OnboardingThemeEvent.SelectDynamicPalette(index)
+                                        )
                                     }
                                 )
                             }
@@ -327,10 +330,9 @@ fun ThemeOnboardingPageTab() {
                                     selected = !isDynamicColors && id == staticPaletteId,
                                     showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) || (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
                                     onClick = {
-                                        coroutineScope.launch {
-                                            dataStore.saveDynamicColors(false)
-                                            dataStore.saveStaticPaletteId(id)
-                                        }
+                                        viewModel.onEvent(
+                                            OnboardingThemeEvent.SelectStaticPalette(id)
+                                        )
                                     }
                                 )
                             }
@@ -357,10 +359,7 @@ fun ThemeOnboardingPageTab() {
                         showSeasonalBadge = (isChristmasSeason && id == StaticPaletteIds.CHRISTMAS) ||
                                 (isHalloweenSeason && id == StaticPaletteIds.HALLOWEEN),
                         onClick = {
-                            coroutineScope.launch {
-                                dataStore.saveDynamicColors(false)
-                                dataStore.saveStaticPaletteId(id)
-                            }
+                            viewModel.onEvent(OnboardingThemeEvent.SelectStaticPalette(id))
                         }
                     )
                 }
@@ -368,4 +367,3 @@ fun ThemeOnboardingPageTab() {
         }
     }
 }
-

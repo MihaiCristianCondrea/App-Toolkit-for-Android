@@ -2,7 +2,8 @@
 
 ## Purpose
 
-The host's preference storage: everything the sample persists beyond what the toolkit already stores.
+The host's preference storage: everything the sample persists beyond what the toolkit already
+stores.
 
 ## Owns
 
@@ -18,7 +19,8 @@ The host's preference storage: everything the sample persists beyond what the to
 ## Depends on
 
 - [`:library:core:datastore`](../../../library/core/datastore/README.md) for `CommonDataStore`.
-- [`:library:core:ui`](../../../library/core/ui/README.md) for `StableNavKey` and the startup-destination extension.
+- [`:library:navigation`](../../../library/navigation/README.md) for `StableNavKey`, and
+  [`:library:core:ui`](../../../library/core/ui/README.md) for the startup-destination extension.
 
 ## Used by
 

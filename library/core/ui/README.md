@@ -8,23 +8,25 @@ entry helpers, state handling, analytics hooks, and shared components.
 ## Owns
 
 - `ScreenViewModel`, `LoggedScreenViewModel`, event/action bases, and `UiStateScreen` handling.
-- Stable navigation keys, entry builders, navigation state, and animations.
+- Navigation entry builders and UI state built on stable keys owned by `:library:navigation`.
 - Reusable buttons, fields, preferences, layouts, dialogs, snackbars, ads slots, effects, and
   adaptive-window helpers.
-- Render models such as `AppVersionInfo`, `AdsConfig`, and navigation drawer items.
+- Render models such as `AppVersionInfo` and `AdsConfig`.
+- The shared theme-mode preview composables used by both the onboarding and settings theme UI.
 
 ## Does not own
 
 - Business rules, repositories, DTOs, persistence, or HTTP behavior.
 - Color palette and root theme construction, owned by [
   `:library:core:designsystem`](../designsystem/README.md).
-- Feature screens, except that some feature-specific theme/onboarding/display UI currently remains
-  here.
+- Feature screens.
 
 ## Depends on
 
 - [`:library:core:common`](../common/README.md) for common models, Firebase contracts, and platform
   helpers.
+- [`:library:core:datastore`](../datastore/README.md) for remaining persistence-backed UI adapters;
+  reusable modifiers and ad slots consume design-system-provided values rather than DataStore.
 - [`:library:core:designsystem`](../designsystem/README.md) for theme primitives.
 - [`:library:navigation`](../../navigation/README.md) for shared navigation models and transitions.
 

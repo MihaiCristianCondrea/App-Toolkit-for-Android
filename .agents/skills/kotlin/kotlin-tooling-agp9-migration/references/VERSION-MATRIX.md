@@ -26,14 +26,15 @@
 
 ---
 
-
 ## Version Notes
 
 ### AGP 9.0.0
 
 - First release supporting `com.android.kotlin.multiplatform.library`.
-- Built-in Kotlin compilation for `com.android.application` and `com.android.library` (no separate `kotlin-android` plugin needed).
-- Removes support for `com.android.application` + `org.jetbrains.kotlin.multiplatform` in the same module.
+- Built-in Kotlin compilation for `com.android.application` and `com.android.library` (no separate
+  `kotlin-android` plugin needed).
+- Removes support for `com.android.application` + `org.jetbrains.kotlin.multiplatform` in the same
+  module.
 - Single-variant model for KMP libraries (no build types/flavors).
 - Runtime dependency on KGP 2.2.10 — projects using lower KGP versions are auto-upgraded.
 - If the project uses KSP, upgrade to 2.3.1+ for AGP 9.0 support.

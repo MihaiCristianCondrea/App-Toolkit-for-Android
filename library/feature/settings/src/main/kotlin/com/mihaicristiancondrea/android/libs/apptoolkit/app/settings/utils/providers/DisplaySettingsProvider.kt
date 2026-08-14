@@ -55,7 +55,9 @@ interface DisplaySettingsProvider {
      */
     @Composable
     fun StartupPageDialog(
-        onDismiss: () -> Unit, onStartupSelected: (String) -> Unit
+        currentRoute: String,
+        onDismiss: () -> Unit,
+        onStartupSelected: (String) -> Unit,
     ) {
 
     }

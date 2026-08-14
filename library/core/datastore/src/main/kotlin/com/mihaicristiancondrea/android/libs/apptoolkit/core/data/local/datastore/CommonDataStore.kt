@@ -15,50 +15,56 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore
 
 import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.DynamicPaletteVariant
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.AdsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.AppStatePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ChangelogPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ConsentPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.DisplayPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.FavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.OnboardingPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ReviewPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.UsageAndDiagnosticsPreferencesDataSource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultAdsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultAppStatePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultChangelogPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultDiagnosticsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultDisplayPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultFavoritesPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultOnboardingPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultReviewPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultThemePreferencesDataSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 
 val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(name = DataStoreNamesConstants.DATA_STORE_SETTINGS)
 
 /**
- * A singleton class responsible for managing application-wide data using Android DataStore.
+ * Facade over the toolkit's preference data sources.
  *
- * This class provides methods to access and modify various application settings and data,
- * such as last used timestamp, startup status, theme preferences, language, and usage & diagnostics settings.
+ * Every value lives in the single `settings` Preferences DataStore, which is what
+ * [Context.commonDataStore] hands out; the preferences are grouped into cohesive data sources
+ * rather than split across files so that no stored key moves and existing installs keep their
+ * data. Each group is exposed here and registered in the Koin graph, so new code can depend on the
+ * narrow contract it needs — [ThemePreferencesDataSource], [ReviewPreferencesDataSource], and so
+ * on — instead of on this whole surface.
  *
- * The DataStore is backed by a file named "common_data_store" within the application's data directory.
+ * The members below delegate to those sources and exist so that callers written against the
+ * previous single-class API keep compiling.
  *
- * @property dataStore The DataStore instance for storing preferences.
+ * @property defaultAdsEnabled value [adsEnabledFlow] carries until the preference is set.
  */
 open class CommonDataStore(
     context: Context,
@@ -66,8 +72,47 @@ open class CommonDataStore(
     val defaultAdsEnabled: Boolean = true,
 ) : OnboardingPreferencesDataSource, UsageAndDiagnosticsPreferencesDataSource,
     ConsentPreferencesDataSource, CommonDataStoreCore {
+
     val dataStore: DataStore<Preferences> = context.commonDataStore
-    private val scope = CoroutineScope(SupervisorJob() + dispatchers.io)
+
+    /** Appearance preferences: theme mode, AMOLED, and palette selection. */
+    val themePreferences: ThemePreferencesDataSource =
+        DefaultThemePreferencesDataSource(dataStore = dataStore)
+
+    /** Display preferences: language, startup destination, and interaction chrome. */
+    val displayPreferences: DisplayPreferencesDataSource =
+        DefaultDisplayPreferencesDataSource(dataStore = dataStore)
+
+    /** First-run state. */
+    val onboardingPreferences: OnboardingPreferencesDataSource =
+        DefaultOnboardingPreferencesDataSource(dataStore = dataStore)
+
+    /** Consent and usage-diagnostics toggles. */
+    val diagnosticsPreferences: DefaultDiagnosticsPreferencesDataSource =
+        DefaultDiagnosticsPreferencesDataSource(dataStore = dataStore)
+
+    /** Ads preference, including the shared eagerly started [adsEnabledFlow]. */
+    val adsPreferences: AdsPreferencesDataSource = DefaultAdsPreferencesDataSource(
+        dataStore = dataStore,
+        dispatchers = dispatchers,
+        defaultAdsEnabled = defaultAdsEnabled,
+    )
+
+    /** In-app review counters. */
+    val reviewPreferences: ReviewPreferencesDataSource =
+        DefaultReviewPreferencesDataSource(dataStore = dataStore)
+
+    /** Last seen changelog version and its cached Markdown. */
+    val changelogPreferences: ChangelogPreferencesDataSource =
+        DefaultChangelogPreferencesDataSource(dataStore = dataStore)
+
+    /** One-shot app-state flags and timestamps. */
+    val appStatePreferences: AppStatePreferencesDataSource =
+        DefaultAppStatePreferencesDataSource(dataStore = dataStore)
+
+    /** Favorited package names. */
+    val favoritesPreferences: FavoritesPreferencesDataSource =
+        DefaultFavoritesPreferencesDataSource(dataStore = dataStore)
 
     companion object {
         @Volatile
@@ -87,353 +132,178 @@ open class CommonDataStore(
     }
 
     override fun close() {
-        scope.cancel()
+        adsPreferences.close()
     }
 
-    // Last used app notifications
-    private val lastUsedKey =
-        longPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_LAST_USED)
-    val lastUsed: Flow<Long> = dataStore.data.map { preferences: Preferences ->
-        preferences[lastUsedKey] ?: 0
-    }.distinctUntilChanged()
+    // region App state
 
-    suspend fun saveLastUsed(timestamp: Long) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[lastUsedKey] = timestamp
-        }
-    }
+    val lastUsed: Flow<Long> get() = appStatePreferences.lastUsed
 
-    // Startup
-    private val startupKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_STARTUP)
-    override val startup: Flow<Boolean> = dataStore.data.map { preferences: Preferences ->
-        preferences[startupKey] != false
-    }.distinctUntilChanged()
+    suspend fun saveLastUsed(timestamp: Long) = appStatePreferences.saveLastUsed(timestamp)
 
-    private val startupPageKey =
-        stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_STARTUP_PAGE)
+    val settingsInteracted: Flow<Boolean> get() = appStatePreferences.settingsInteracted
+
+    suspend fun markSettingsInteracted() = appStatePreferences.markSettingsInteracted()
+
+    val componentsShowcaseUnlocked: Flow<Boolean>
+        get() = appStatePreferences.componentsShowcaseUnlocked
+
+    suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean) =
+        appStatePreferences.saveComponentsShowcaseUnlocked(isUnlocked)
+
+    // endregion
+
+    // region Onboarding
+
+    override val startup: Flow<Boolean> get() = onboardingPreferences.startup
+
+    /** Stores whether the app has completed its first-time startup flow. */
+    override suspend fun saveStartup(isFirstTime: Boolean) =
+        onboardingPreferences.saveStartup(isFirstTime)
+
+    // endregion
+
+    // region Display
 
     /**
      * Observes the preferred startup route.
      *
      * @param default value emitted when the preference has not been set yet.
      */
-    fun getStartupPage(default: String = ""): Flow<String> = dataStore.data.map { preferences ->
-        preferences[startupPageKey] ?: default
-    }.distinctUntilChanged()
-
-    /** Stores whether the app has completed its first-time startup flow. */
-    override suspend fun saveStartup(isFirstTime: Boolean) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[startupKey] = isFirstTime
-        }
-    }
+    fun getStartupPage(default: String = ""): Flow<String> =
+        displayPreferences.startupPage(default = default)
 
     /** Persists the route that should be opened when the app launches. */
-    suspend fun saveStartupPage(route: String) {
-        dataStore.edit { prefs: MutablePreferences ->
-            prefs[startupPageKey] = route
-        }
-    }
+    suspend fun saveStartupPage(route: String) = displayPreferences.saveStartupPage(route)
 
-    // Display
+    fun getShowBottomBarLabels(): Flow<Boolean> = displayPreferences.showBottomBarLabels
+
+    suspend fun saveShowLabelsOnBottomBar(isChecked: Boolean) =
+        displayPreferences.saveShowBottomBarLabels(isChecked)
+
+    val bouncyButtons: Flow<Boolean> get() = displayPreferences.bouncyButtons
+
+    suspend fun saveBouncyButtons(isChecked: Boolean) =
+        displayPreferences.saveBouncyButtons(isChecked)
+
+    fun getLanguage(): Flow<String> = displayPreferences.language
+
+    suspend fun saveLanguage(language: String) = displayPreferences.saveLanguage(language)
+
+    // endregion
+
+    // region Theme
+
+    /**
+     * Theme mode mirrored as Compose state so the settings UI can reflect a tap before the write
+     * round-trips through DataStore. Presentation state rather than stored data; the persisted
+     * value is [themeMode].
+     */
     val themeModeState = mutableStateOf(value = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM)
-    private val themeModeKey =
-        stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_THEME_MODE)
-    val themeMode: Flow<String> = dataStore.data.map { preferences: Preferences ->
-        preferences[themeModeKey] ?: DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM
-    }.distinctUntilChanged()
 
-    suspend fun saveThemeMode(mode: String) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[themeModeKey] = mode
-        }
-    }
+    val themeMode: Flow<String> get() = themePreferences.themeMode
 
-    private val amoledModeKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_AMOLED_MODE)
-    val amoledMode: Flow<Boolean> = dataStore.data.map { preferences: Preferences ->
-        preferences[amoledModeKey] == true
-    }.distinctUntilChanged()
+    suspend fun saveThemeMode(mode: String) = themePreferences.saveThemeMode(mode)
 
-    suspend fun saveAmoledMode(isChecked: Boolean) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[amoledModeKey] = isChecked
-        }
-    }
+    val amoledMode: Flow<Boolean> get() = themePreferences.amoledMode
 
-    private val dynamicColorsKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_DYNAMIC_COLORS)
-    val dynamicColors: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[dynamicColorsKey] != false
-    }.distinctUntilChanged()
+    suspend fun saveAmoledMode(isChecked: Boolean) = themePreferences.saveAmoledMode(isChecked)
 
-    suspend fun saveDynamicColors(isChecked: Boolean) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[dynamicColorsKey] = isChecked
-        }
-    }
+    val dynamicColors: Flow<Boolean> get() = themePreferences.dynamicColors
 
-    private val settingsInteractedKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SETTINGS_INTERACTED)
-    val settingsInteracted: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[settingsInteractedKey] == true
-    }.distinctUntilChanged()
+    suspend fun saveDynamicColors(isChecked: Boolean) =
+        themePreferences.saveDynamicColors(isChecked)
 
-    suspend fun markSettingsInteracted() {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[settingsInteractedKey] = true
-        }
-    }
+    val dynamicPaletteVariant: Flow<Int> get() = themePreferences.dynamicPaletteVariant
 
-    private val dynamicPaletteVariantKey =
-        intPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_DYNAMIC_PALETTE_VARIANT) // :contentReference[oaicite:2]{index=2}
+    suspend fun saveDynamicPaletteVariant(variant: Int) =
+        themePreferences.saveDynamicPaletteVariant(variant)
 
-    val dynamicPaletteVariant: Flow<Int> = dataStore.data
-        .map { preferences ->
-            DynamicPaletteVariant.clamp(
-                preferences[dynamicPaletteVariantKey] ?: 0
-            )
-        }
-        .distinctUntilChanged()
+    val staticPaletteId: Flow<String> get() = themePreferences.staticPaletteId
 
-    suspend fun saveDynamicPaletteVariant(variant: Int) {
-        dataStore.edit { preferences ->
-            preferences[dynamicPaletteVariantKey] = DynamicPaletteVariant.clamp(variant)
-        }
-    }
+    suspend fun saveStaticPaletteId(id: String) = themePreferences.saveStaticPaletteId(id)
 
-    private val staticPaletteIdKey =
-        stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_STATIC_PALETTE_ID)
+    // endregion
 
-    val staticPaletteId: Flow<String> = dataStore.data
-        .map { preferences ->
-            StaticPaletteIds.sanitize(preferences[staticPaletteIdKey] ?: StaticPaletteIds.DEFAULT)
-        }
-        .distinctUntilChanged()
-
-    suspend fun saveStaticPaletteId(id: String) {
-        val safe = StaticPaletteIds.sanitize(id)
-
-        dataStore.edit { preferences ->
-            preferences[staticPaletteIdKey] = safe
-        }
-    }
-
-    private val bouncyButtonsKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_BOUNCY_BUTTONS)
-    val bouncyButtons: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[bouncyButtonsKey] != false
-    }.distinctUntilChanged()
-
-    suspend fun saveBouncyButtons(isChecked: Boolean) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[bouncyButtonsKey] = isChecked
-        }
-    }
-
-    fun getShowBottomBarLabels(): Flow<Boolean> {
-        return dataStore.data.map { preferences ->
-            preferences[booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SHOW_BOTTOM_BAR_LABELS)] != false
-        }.distinctUntilChanged()
-    }
-
-    suspend fun saveShowLabelsOnBottomBar(isChecked: Boolean) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SHOW_BOTTOM_BAR_LABELS)] =
-                isChecked
-        }
-    }
-
-    private val languageKey =
-        stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_LANGUAGE)
-
-    fun getLanguage(): Flow<String> = dataStore.data.map { preferences: Preferences ->
-        preferences[languageKey] ?: "en"
-    }.distinctUntilChanged()
-
-    suspend fun saveLanguage(language: String) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[languageKey] = language
-        }
-    }
-
-    private val componentsShowcaseUnlockedKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_COMPONENTS_SHOWCASE_UNLOCKED)
-    val componentsShowcaseUnlocked: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[componentsShowcaseUnlockedKey] == true
-    }.distinctUntilChanged()
-
-    suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean) {
-        dataStore.edit { preferences ->
-            preferences[componentsShowcaseUnlockedKey] = isUnlocked
-        }
-    }
-
-    // Usage and Diagnostics
-    private val usageAndDiagnosticsKey: Preferences.Key<Boolean> =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_USAGE_AND_DIAGNOSTICS)
+    // region Consent and diagnostics
 
     override fun usageAndDiagnostics(default: Boolean): Flow<Boolean> =
-        dataStore.data.map { preferences: Preferences ->
-            preferences[usageAndDiagnosticsKey] ?: default
-        }.distinctUntilChanged()
+        diagnosticsPreferences.usageAndDiagnostics(default)
 
-    override suspend fun saveUsageAndDiagnostics(isChecked: Boolean) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[usageAndDiagnosticsKey] = isChecked
-        }
-    }
-
-    // Analytics Consent
-    private val analyticsConsentKey: Preferences.Key<Boolean> =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_ANALYTICS_CONSENT)
+    override suspend fun saveUsageAndDiagnostics(isChecked: Boolean) =
+        diagnosticsPreferences.saveUsageAndDiagnostics(isChecked)
 
     override fun analyticsConsent(default: Boolean): Flow<Boolean> =
-        dataStore.data.map { preferences: Preferences ->
-            preferences[analyticsConsentKey] ?: default
-        }.distinctUntilChanged()
+        diagnosticsPreferences.analyticsConsent(default)
 
-    override suspend fun saveAnalyticsConsent(isGranted: Boolean) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[analyticsConsentKey] = isGranted
-        }
-    }
-
-    // Ad Storage Consent
-    private val adStorageConsentKey: Preferences.Key<Boolean> =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_AD_STORAGE_CONSENT)
+    override suspend fun saveAnalyticsConsent(isGranted: Boolean) =
+        diagnosticsPreferences.saveAnalyticsConsent(isGranted)
 
     override fun adStorageConsent(default: Boolean): Flow<Boolean> =
-        dataStore.data.map { preferences: Preferences ->
-            preferences[adStorageConsentKey] ?: default
-        }.distinctUntilChanged()
+        diagnosticsPreferences.adStorageConsent(default)
 
-    override suspend fun saveAdStorageConsent(isGranted: Boolean) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[adStorageConsentKey] = isGranted
-        }
-    }
-
-    // Ad User Data Consent
-    private val adUserDataConsentKey: Preferences.Key<Boolean> =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_AD_USER_DATA_CONSENT)
+    override suspend fun saveAdStorageConsent(isGranted: Boolean) =
+        diagnosticsPreferences.saveAdStorageConsent(isGranted)
 
     override fun adUserDataConsent(default: Boolean): Flow<Boolean> =
-        dataStore.data.map { preferences: Preferences ->
-            preferences[adUserDataConsentKey] ?: default
-        }.distinctUntilChanged()
+        diagnosticsPreferences.adUserDataConsent(default)
 
-    override suspend fun saveAdUserDataConsent(isGranted: Boolean) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[adUserDataConsentKey] = isGranted
-        }
-    }
-
-    // Ad Personalization Consent
-    private val adPersonalizationConsentKey: Preferences.Key<Boolean> =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_AD_PERSONALIZATION_CONSENT)
+    override suspend fun saveAdUserDataConsent(isGranted: Boolean) =
+        diagnosticsPreferences.saveAdUserDataConsent(isGranted)
 
     override fun adPersonalizationConsent(default: Boolean): Flow<Boolean> =
-        dataStore.data.map { preferences: Preferences ->
-            preferences[adPersonalizationConsentKey] ?: default
-        }.distinctUntilChanged()
+        diagnosticsPreferences.adPersonalizationConsent(default)
 
-    override suspend fun saveAdPersonalizationConsent(isGranted: Boolean) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[adPersonalizationConsentKey] = isGranted
-        }
-    }
+    override suspend fun saveAdPersonalizationConsent(isGranted: Boolean) =
+        diagnosticsPreferences.saveAdPersonalizationConsent(isGranted)
 
-    // Ads
-    private val adsKey = booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_ADS)
-    fun ads(default: Boolean): Flow<Boolean> = dataStore.data.map { prefs: Preferences ->
-        prefs[adsKey] ?: default
-    }.distinctUntilChanged()
+    // endregion
 
-    val adsEnabledFlow: StateFlow<Boolean> =
-        ads(default = defaultAdsEnabled).stateIn(
-            scope = scope,
-            started = SharingStarted.Eagerly,
-            initialValue = defaultAdsEnabled
-        )
+    // region Ads
 
-    suspend fun saveAds(isChecked: Boolean) {
-        dataStore.edit { preferences: MutablePreferences ->
-            preferences[adsKey] = isChecked
-        }
-    }
+    fun ads(default: Boolean): Flow<Boolean> = adsPreferences.ads(default = default)
 
-    // Favorite Apps
-    private val favoriteAppsKey =
-        stringSetPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_FAVORITE_APPS)
-    val favoriteApps: Flow<Set<String>> = dataStore.data.map { prefs: Preferences ->
-        prefs[favoriteAppsKey] ?: emptySet()
-    }.distinctUntilChanged()
+    val adsEnabledFlow: StateFlow<Boolean> get() = adsPreferences.adsEnabled
 
-    suspend fun toggleFavoriteApp(packageName: String) {
-        dataStore.edit { prefs: MutablePreferences ->
-            val current = prefs[favoriteAppsKey]?.toMutableSet() ?: mutableSetOf()
-            if (!current.add(packageName)) {
-                current.remove(packageName)
-            }
-            prefs[favoriteAppsKey] = current
-        }
-    }
+    suspend fun saveAds(isChecked: Boolean) = adsPreferences.saveAds(isChecked)
 
-    // Review Prompt
-    private val sessionCountKey =
-        longPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_SESSION_COUNT)
-    val sessionCount: Flow<Int> = dataStore.data.map { prefs: Preferences ->
-        (prefs[sessionCountKey] ?: 0L).toInt()
-    }.distinctUntilChanged()
+    // endregion
 
-    private val reviewPromptedKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_REVIEW_PROMPTED)
-    val hasPromptedReview: Flow<Boolean> = dataStore.data.map { prefs: Preferences ->
-        prefs[reviewPromptedKey] == true
-    }.distinctUntilChanged()
+    // region Favorites
 
-    // Last seen changelog version
-    private val lastSeenVersionKey =
-        stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_LAST_SEEN_VERSION)
+    val favoriteApps: Flow<Set<String>> get() = favoritesPreferences.favoriteApps
+
+    suspend fun toggleFavoriteApp(packageName: String) =
+        favoritesPreferences.toggleFavoriteApp(packageName)
+
+    // endregion
+
+    // region Review
+
+    val sessionCount: Flow<Int> get() = reviewPreferences.sessionCount
+
+    val hasPromptedReview: Flow<Boolean> get() = reviewPreferences.hasPromptedReview
+
+    suspend fun incrementSessionCount() = reviewPreferences.incrementSessionCount()
+
+    suspend fun setHasPromptedReview(value: Boolean) =
+        reviewPreferences.setHasPromptedReview(value)
+
+    // endregion
+
+    // region Changelog
 
     fun getLastSeenVersion(default: String = ""): Flow<String> =
-        dataStore.data.map { prefs: Preferences ->
-            prefs[lastSeenVersionKey] ?: default
-        }.distinctUntilChanged()
+        changelogPreferences.lastSeenVersion(default = default)
 
-    suspend fun saveLastSeenVersion(version: String) {
-        dataStore.edit { prefs: MutablePreferences ->
-            prefs[lastSeenVersionKey] = version
-        }
-    }
-
-    // Cached changelog for last seen version
-    private val cachedChangelogKey =
-        stringPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_CACHED_CHANGELOG)
+    suspend fun saveLastSeenVersion(version: String) =
+        changelogPreferences.saveLastSeenVersion(version)
 
     fun getCachedChangelog(default: String = ""): Flow<String> =
-        dataStore.data.map { prefs: Preferences ->
-            prefs[cachedChangelogKey] ?: default
-        }.distinctUntilChanged()
+        changelogPreferences.cachedChangelog(default = default)
 
-    suspend fun saveCachedChangelog(changelog: String) {
-        dataStore.edit { prefs: MutablePreferences ->
-            prefs[cachedChangelogKey] = changelog
-        }
-    }
+    suspend fun saveCachedChangelog(changelog: String) =
+        changelogPreferences.saveCachedChangelog(changelog)
 
-    suspend fun incrementSessionCount() {
-        dataStore.edit { prefs: MutablePreferences ->
-            val current: Long = prefs[sessionCountKey] ?: 0L
-            prefs[sessionCountKey] = current + 1L
-        }
-    }
-
-    suspend fun setHasPromptedReview(value: Boolean) {
-        dataStore.edit { prefs: MutablePreferences ->
-            prefs[reviewPromptedKey] = value
-        }
-    }
+    // endregion
 }

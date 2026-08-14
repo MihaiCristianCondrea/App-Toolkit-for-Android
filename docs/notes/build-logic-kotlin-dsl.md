@@ -62,5 +62,5 @@ sync with each other.
 4. Re-run to confirm both warnings are gone.
 
 | Gradle | `kotlin-dsl` |
-| ------ | ------------ |
+|--------|--------------|
 | 9.7    | 6.7.3        |

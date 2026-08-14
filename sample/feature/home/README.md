@@ -23,7 +23,8 @@ destination.
 
 - `:sample:feature:components` for `ComponentsActivity`, the drawer's showcase target.
 - `:sample:core:navigation`, `:sample:core:datastore`, `:sample:core:ui`.
-- [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the toolkit's own destinations, top bar and drawer content.
+- [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the toolkit's own destinations,
+  top bar and drawer content.
 
 ## Used by
 

@@ -18,15 +18,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.AppStatePreferencesDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 /** Validates general-settings content keys and records the access breadcrumb. */
 class GeneralSettingsRepository(
     private val firebaseController: FirebaseController,
+    private val appStatePreferences: AppStatePreferencesDataSource? = null,
 ) {
 
     fun getContentKey(contentKey: String?): Flow<String> = flow {
+        appStatePreferences?.markSettingsInteracted()
         firebaseController.logBreadcrumb(
             message = "General settings content requested",
             attributes = mapOf("hasContentKey" to (!contentKey.isNullOrBlank()).toString()),

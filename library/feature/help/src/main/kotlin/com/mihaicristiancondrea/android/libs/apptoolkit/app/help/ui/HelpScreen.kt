@@ -78,6 +78,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.Grou
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedActionList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -269,7 +270,7 @@ fun HelpScreen(
 
             GroupedActionList(
                 modifier = Modifier.padding(horizontal = 12.dp),
-                actions = listOf(
+                actions = persistentListOf(
                     GroupedAction(
                         title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
                         description = stringResource(id = R.string.help_feedback_sheet_feature_request_description),
@@ -329,4 +330,3 @@ private fun helpActionEvent(actionName: String): AnalyticsEvent {
         ),
     )
 }
-

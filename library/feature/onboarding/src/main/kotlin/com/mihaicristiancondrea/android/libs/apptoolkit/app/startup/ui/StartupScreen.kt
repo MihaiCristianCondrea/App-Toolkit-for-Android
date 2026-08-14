@@ -53,7 +53,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.Sc
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.TopAppBarScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 import org.koin.compose.koinInject

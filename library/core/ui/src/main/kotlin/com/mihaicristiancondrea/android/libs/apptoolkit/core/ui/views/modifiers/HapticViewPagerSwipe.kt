@@ -18,17 +18,18 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers
 
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.runningFold
 
-fun Modifier.hapticPagerSwipe(pagerState: PagerState): Modifier = composed {
+@Composable
+fun Modifier.hapticPagerSwipe(pagerState: PagerState): Modifier {
     val haptics = rememberUpdatedState(LocalHapticFeedback.current)
 
     LaunchedEffect(pagerState) {
@@ -47,5 +48,5 @@ fun Modifier.hapticPagerSwipe(pagerState: PagerState): Modifier = composed {
             .collect { /* state already handled */ }
     }
 
-    this
+    return this
 }

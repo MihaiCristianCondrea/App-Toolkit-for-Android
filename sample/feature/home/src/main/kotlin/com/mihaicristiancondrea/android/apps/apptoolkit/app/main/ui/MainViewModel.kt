@@ -24,7 +24,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainU
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repositories.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.models.ReviewHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.models.ReviewOutcome
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
@@ -37,7 +36,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.netwo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
@@ -45,6 +43,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoadin
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setNoData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.repositories.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repositories.InAppUpdateRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.models.InAppUpdateHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.models.InAppUpdateResult

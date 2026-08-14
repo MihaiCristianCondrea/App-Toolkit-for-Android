@@ -121,6 +121,7 @@ fun PermissionsScreen(
     }
 }
 
+
 @Composable
 fun PermissionsContent(
     paddingValues: PaddingValues,
@@ -131,15 +132,26 @@ fun PermissionsContent(
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.spacedBy(space = SizeConstants.ExtraTinySize),
     ) {
-        settingsConfig.categories.forEach { category ->
+        settingsConfig.categories.forEachIndexed { categoryIndex, category ->
+            val categoryKey = category.title ?: "category_$categoryIndex"
 
-            item {
+            item(
+                key = "permission_category_$categoryKey",
+                contentType = "permission_category",
+            ) {
                 category.title?.let { title ->
                     PreferenceCategoryItem(title = title)
                 }
             }
 
-            itemsIndexed(category.preferences) { index, preference ->
+            itemsIndexed(
+                items = category.preferences,
+                key = { index, preference ->
+                    val preferenceKey = preference.key ?: preference.title ?: index
+                    "permission_${categoryKey}_$preferenceKey"
+                },
+                contentType = { _, _ -> "permission_preference" },
+            ) { index, preference ->
                 SettingsPreferenceItem(
                     title = preference.title,
                     summary = preference.summary,
@@ -156,4 +168,3 @@ fun PermissionsContent(
         }
     }
 }
-

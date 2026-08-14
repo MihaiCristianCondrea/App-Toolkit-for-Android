@@ -11,27 +11,28 @@ to idiomatic Kotlin equivalents. Lombok has no place in Kotlin code.
 
 ## Annotation Conversion Table
 
-| Lombok Annotation | Kotlin Equivalent |
-|---|---|
-| `@Getter` / `@Setter` | Kotlin properties (val/var) — automatic |
-| `@Data` | `data class` with primary constructor properties |
-| `@Value` (Lombok) | `data class` with `val` properties (immutable) |
-| `@Builder` | Default parameter values, or named arguments. For complex builders, use Kotlin builder DSL |
-| `@NoArgsConstructor` | Secondary no-arg constructor, or default values for all params |
-| `@AllArgsConstructor` | Primary constructor (Kotlin default) |
-| `@RequiredArgsConstructor` | Primary constructor with only required (non-default) params |
-| `@ToString` | `data class` auto-generates toString, or manual `override fun toString()` |
-| `@EqualsAndHashCode` | `data class` auto-generates, or manual `override fun equals/hashCode` |
-| `@Slf4j` / `@Log` / `@Log4j2` | Companion object with logger (see example below) |
-| `@Cleanup` | Kotlin's `.use {}` extension function |
-| `@SneakyThrows` | Kotlin has no checked exceptions — just remove it |
-| `@Synchronized` | Kotlin's `@Synchronized` annotation |
-| `@With` | `data class` `.copy()` method |
-| `@Accessors(chain = true)` | Kotlin's `apply {}` block |
+| Lombok Annotation             | Kotlin Equivalent                                                                          |
+|-------------------------------|--------------------------------------------------------------------------------------------|
+| `@Getter` / `@Setter`         | Kotlin properties (val/var) — automatic                                                    |
+| `@Data`                       | `data class` with primary constructor properties                                           |
+| `@Value` (Lombok)             | `data class` with `val` properties (immutable)                                             |
+| `@Builder`                    | Default parameter values, or named arguments. For complex builders, use Kotlin builder DSL |
+| `@NoArgsConstructor`          | Secondary no-arg constructor, or default values for all params                             |
+| `@AllArgsConstructor`         | Primary constructor (Kotlin default)                                                       |
+| `@RequiredArgsConstructor`    | Primary constructor with only required (non-default) params                                |
+| `@ToString`                   | `data class` auto-generates toString, or manual `override fun toString()`                  |
+| `@EqualsAndHashCode`          | `data class` auto-generates, or manual `override fun equals/hashCode`                      |
+| `@Slf4j` / `@Log` / `@Log4j2` | Companion object with logger (see example below)                                           |
+| `@Cleanup`                    | Kotlin's `.use {}` extension function                                                      |
+| `@SneakyThrows`               | Kotlin has no checked exceptions — just remove it                                          |
+| `@Synchronized`               | Kotlin's `@Synchronized` annotation                                                        |
+| `@With`                       | `data class` `.copy()` method                                                              |
+| `@Accessors(chain = true)`    | Kotlin's `apply {}` block                                                                  |
 
 ## Key Rules
 
 1. **@Slf4j** — Convert to a companion object with an explicit logger:
+
 ```kotlin
 companion object {
     private val log = LoggerFactory.getLogger(MyClass::class.java)
@@ -88,6 +89,7 @@ data class Order(
 ```
 
 **What changed:**
+
 - `@Data` → `data class` with primary constructor properties.
 - `@Builder` → default parameter values. Callers use named arguments:
   `Order(orderId = "123", customerName = "Alice", quantity = 2)`.
@@ -181,6 +183,7 @@ open class PaymentService(
 ```
 
 **What changed:**
+
 - `@Slf4j` → companion object with `LoggerFactory.getLogger(...)`.
 - `@RequiredArgsConstructor` → primary constructor with `val` parameters.
 - Lombok imports replaced with `org.slf4j.LoggerFactory`.
@@ -227,6 +230,7 @@ data class DatabaseConfig(
 ```
 
 **What changed:**
+
 - `@Value` → `data class` with `val` properties (all immutable).
 - Lombok's `@Value` makes the class final, and Kotlin `data class` is also final by
   default — so the semantics match.

@@ -17,20 +17,30 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repositories
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import kotlinx.coroutines.flow.Flow
 
 /**
  * Owns whether the hidden components showcase has been unlocked.
  *
- * Replaces `UnlockComponentsShowcaseUseCase`, which forwarded a single call to the DataStore. The
- * write needs an owner in the data layer rather than none at all: dropping the use case without one
- * would have left a ViewModel talking to a data source directly.
+ * Keeps the ViewModel independent from the local DataStore source without adding a one-production-
+ * implementation interface.
  */
-interface ComponentsShowcaseRepository {
+class ComponentsShowcaseRepository(
+    private val dataStore: DatastoreInterface,
+    private val firebaseController: FirebaseController,
+) {
 
     /** Emits whether the showcase entry should be offered. */
-    val isUnlocked: Flow<Boolean>
+    val isUnlocked: Flow<Boolean> = dataStore.componentsShowcaseUnlocked
 
     /** Marks the showcase as unlocked so it appears in navigation. */
-    suspend fun unlock()
+    suspend fun unlock() {
+        firebaseController.logBreadcrumb(
+            message = "Components showcase unlocked",
+            attributes = mapOf("source" to "ComponentsShowcaseRepository"),
+        )
+        dataStore.saveComponentsShowcaseUnlocked(true)
+    }
 }

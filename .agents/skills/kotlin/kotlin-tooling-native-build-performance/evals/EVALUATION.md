@@ -1,8 +1,10 @@
 # Testing
 
-This skill is A/B evaluated with the JetBrains [`skills-ab-eval`](https://github.com/JetBrains/skills-ab-eval-cookbook) tool.
+This skill is A/B evaluated with the JetBrains [
+`skills-ab-eval`](https://github.com/JetBrains/skills-ab-eval-cookbook) tool.
 The suite lives at
-[`kotlin-tooling-native-build-performance`](https://github.com/JetBrains/skills-ab-eval-cookbook/tree/main/kotlin-tooling-native-build-performance)
+[
+`kotlin-tooling-native-build-performance`](https://github.com/JetBrains/skills-ab-eval-cookbook/tree/main/kotlin-tooling-native-build-performance)
 and contains two tasks:
 
 - **`native-build-performance-audit-task`** — a synthetic KMP iOS fixture
@@ -19,10 +21,10 @@ preserves production release behavior.
 Run via `skills-ab-eval` on the `codex` agent, `openai/gpt-5.5` at low reasoning
 effort, n = 6 pairs per task:
 
-| Task | Without skill | With skill | Δ | Significance |
-|---|---:|---:|---:|---|
-| Synthetic native build audit | 0.74 ± 0.05 | 0.99 ± 0.02 | +0.25 | p = 0.031 |
-| KotlinProject native build audit | 0.59 ± 0.05 | 0.90 ± 0.02 | +0.31 | p = 0.031 |
+| Task                             | Without skill |  With skill |     Δ | Significance |
+|----------------------------------|--------------:|------------:|------:|--------------|
+| Synthetic native build audit     |   0.74 ± 0.05 | 0.99 ± 0.02 | +0.25 | p = 0.031    |
+| KotlinProject native build audit |   0.59 ± 0.05 | 0.90 ± 0.02 | +0.31 | p = 0.031    |
 
 The with-skill arms are near-deterministic (σ ≤ 0.02): the diagnostic procedure
 lives in the skill, not in the model's reasoning budget. Additional

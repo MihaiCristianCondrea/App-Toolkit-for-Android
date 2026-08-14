@@ -44,7 +44,6 @@ import org.junit.jupiter.api.Test
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.koin.test.verify.verify
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.di.dataStoreModule as libraryDataStoreModule
 
 /**
  * Verifies the dependency graph the app actually starts with.
@@ -118,7 +117,6 @@ class HostKoinGraphTest {
         addAll(appToolkitFoundationModules(hostBuildConfig = hostBuildConfig))
         add(firebaseModule)
         add(billingModule)
-        add(libraryDataStoreModule(isDebugBuild = hostBuildConfig.isDebugBuild))
         add(dataStoreModule)
         add(appModule)
         add(hostSettingsProvidersModule)
@@ -162,7 +160,6 @@ class HostKoinGraphTest {
             )
             add(firebaseModule)
             add(billingModule)
-            add(libraryDataStoreModule(isDebugBuild = true))
         }.let { toolkitModules -> module { includes(toolkitModules) } }
             .verify(extraTypes = platformTypes + builtByFactoryFunction + hostExtensionPoints)
     }

@@ -34,7 +34,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.bounceClick
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

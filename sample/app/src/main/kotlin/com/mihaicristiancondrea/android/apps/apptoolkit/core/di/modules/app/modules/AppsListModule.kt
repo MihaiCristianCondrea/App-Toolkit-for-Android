@@ -18,9 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DefaultDeveloperAppsLocalDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DefaultFavoritesLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DeveloperAppsLocalDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.FavoritesLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DefaultDeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DefaultFavoritesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DefaultInstalledAppsRepository
@@ -66,10 +64,9 @@ val appsListModule: Module = module {
         )
     }
 
-    single<FavoritesLocalDataSource> { DefaultFavoritesLocalDataSource(dataStore = get()) }
     single<FavoritesRepository> {
         DefaultFavoritesRepository(
-            local = get(),
+            dataStore = get(),
             firebaseController = get()
         )
     }

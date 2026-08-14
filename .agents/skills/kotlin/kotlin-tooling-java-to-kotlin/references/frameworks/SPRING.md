@@ -99,6 +99,7 @@ fun main(args: Array<String>) {
 ```
 
 Key changes:
+
 - `main` becomes a top-level function (no companion object needed).
 - `runApplication<T>` is a Spring Boot Kotlin extension that replaces
   `SpringApplication.run(T::class.java, *args)`.
@@ -171,6 +172,7 @@ class UserController(
 ```
 
 Key changes:
+
 - `@Autowired` is removed — Spring auto-discovers the single constructor.
 - The `Autowired` import is removed because it is no longer referenced.
 - Constructor parameter becomes a `private val` in the primary constructor.
@@ -230,6 +232,7 @@ open class MailProperties {
 ```
 
 Key changes:
+
 - Getters and setters are replaced by Kotlin properties.
 - `lateinit var` is used for required `String` properties that Spring populates
   after construction.

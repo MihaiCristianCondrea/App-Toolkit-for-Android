@@ -49,8 +49,10 @@ flowchart TD
 
 ## Current risks
 
-The widget resolves its repository through `GlobalContext` rather than constructor injection, because
-a Glance widget is instantiated by the framework. That hides the dependency from the type system: the
+The widget resolves its repository through `GlobalContext` rather than constructor injection,
+because
+a Glance widget is instantiated by the framework. That hides the dependency from the type system:
+the
 widget compiles even if the binding is removed and fails at runtime instead.
 
 The receiver is still declared in the application manifest rather than this module's, so adding the

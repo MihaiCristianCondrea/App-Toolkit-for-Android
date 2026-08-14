@@ -21,7 +21,7 @@ Koin modules and Navigation 3 destinations while re-exporting the toolkit module
 ## Depends on
 
 - `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`,
-  `:library:core:designsystem`, and `:library:navigation` to assemble common infrastructure and UI
+  `:library:core:designsystem` and `:library:navigation` to assemble common infrastructure and UI
   contracts.
 - `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`,
   `:library:feature:onboarding`, `:library:feature:permissions`, `:library:feature:settings`, and

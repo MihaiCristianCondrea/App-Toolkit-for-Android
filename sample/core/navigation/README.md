@@ -8,7 +8,8 @@ knowing which shell renders it.
 ## Owns
 
 - `AppNavKey` and the host route keys (`AppsListRoute`, `ToolkitTilesRoute`, `ComponentsRoute`).
-- `AppNavigationEntryContext` and `RandomAppHandler`, the parameters every feature entry builder takes.
+- `AppNavigationEntryContext` and `RandomAppHandler`, the parameters every feature entry builder
+  takes.
 - `NavigationManager` and `MainNavigationDefaults` (bottom-bar items, FAB-supported routes).
 
 ## Does not own
@@ -20,7 +21,8 @@ knowing which shell renders it.
 
 - [`:sample:core:ui`](../ui/README.md) for the strings and icons the bottom bar uses.
 - [`:library:navigation`](../../../library/navigation/README.md) and
-  [`:library:core:ui`](../../../library/core/ui/README.md) for `StableNavKey` and destination types.
+  [`:library:navigation`](../../../library/navigation/README.md) for `StableNavKey` and destination
+  types, plus [`:library:core:ui`](../../../library/core/ui/README.md) for shared UI state.
 
 ## Used by
 

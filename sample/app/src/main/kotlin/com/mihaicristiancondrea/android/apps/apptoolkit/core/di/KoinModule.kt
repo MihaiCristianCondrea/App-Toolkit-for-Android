@@ -37,7 +37,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.di.b
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di.firebaseModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.di.dataStoreModule as libraryDataStoreModule
 
 fun initializeKoin(context: Context) {
     val appToolkitBuildConfig = AppToolkitHostBuildConfig(
@@ -56,7 +55,6 @@ fun initializeKoin(context: Context) {
                 addAll(appToolkitFoundationModules(hostBuildConfig = appToolkitBuildConfig))
                 add(firebaseModule)
                 add(billingModule)
-                add(libraryDataStoreModule(isDebugBuild = appToolkitBuildConfig.isDebugBuild))
                 add(dataStoreModule)
                 add(appModule)
                 add(hostSettingsProvidersModule)

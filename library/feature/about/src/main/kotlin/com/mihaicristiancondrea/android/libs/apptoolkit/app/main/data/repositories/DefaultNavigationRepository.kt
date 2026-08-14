@@ -22,14 +22,21 @@ import androidx.compose.material.icons.automirrored.outlined.EventNote
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Share
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.utils.constants.NavigationDrawerRoutes
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.repositories.NavigationRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
+/**
+ * Supplies the standard Settings, Help, Updates, and Share drawer entries.
+ *
+ * Hosts can use this implementation as-is instead of duplicating the standard list, or implement
+ * [NavigationRepository] when they need to add, remove, or dynamically change entries.
+ */
 class DefaultNavigationRepository(
     private val dispatchers: DispatcherProvider
 ) : NavigationRepository {
@@ -65,4 +72,3 @@ class DefaultNavigationRepository(
             )
         }.flowOn(dispatchers.io)
 }
-

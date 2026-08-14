@@ -17,6 +17,8 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.states
 
+import androidx.compose.runtime.Immutable
+
 /**
  * Represents the state for [com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsViewModel].
  *
@@ -26,6 +28,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.stat
  * @param adUserDataConsent user consent for ad user data
  * @param adPersonalizationConsent user consent for ad personalization
  */
+@Immutable
 data class UsageAndDiagnosticsUiState(
     val usageAndDiagnostics: Boolean = false,
     val analyticsConsent: Boolean = false,

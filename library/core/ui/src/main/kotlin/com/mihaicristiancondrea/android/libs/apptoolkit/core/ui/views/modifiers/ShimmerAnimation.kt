@@ -24,8 +24,9 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -53,7 +54,8 @@ import androidx.compose.ui.graphics.Brush
  * )
  * ```
  */
-fun Modifier.shimmerEffect(): Modifier = composed {
+@Composable
+fun Modifier.shimmerEffect(): Modifier {
     val shimmerColors = listOf(
         MaterialTheme.colorScheme.surfaceContainer,
         MaterialTheme.colorScheme.outlineVariant,
@@ -62,7 +64,9 @@ fun Modifier.shimmerEffect(): Modifier = composed {
     )
 
     val transition = rememberInfiniteTransition(label = "ShimmerTransition")
-    val progress = transition.animateFloat(
+    // Kept as State and read inside onDrawBehind: reading .value here instead would invalidate the
+    // calling composable on every animation frame, when only the draw phase needs the new value.
+    val progress: State<Float> = transition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
@@ -70,13 +74,13 @@ fun Modifier.shimmerEffect(): Modifier = composed {
             repeatMode = RepeatMode.Restart
         ),
         label = "ShimmerProgress"
-    ).value
+    )
 
-    drawWithCache {
+    return this.drawWithCache {
         onDrawBehind {
             val width = size.width
             val height = size.height
-            val startX = (-2f * width) + (4f * width * progress)
+            val startX = (-2f * width) + (4f * width * progress.value)
 
             drawRect(
                 brush = Brush.linearGradient(

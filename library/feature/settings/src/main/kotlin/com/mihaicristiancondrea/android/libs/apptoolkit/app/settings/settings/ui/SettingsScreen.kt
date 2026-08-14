@@ -43,7 +43,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -322,7 +321,7 @@ fun SettingsDetail(
         viewModel.onEvent(event = GeneralSettingsEvent.Load(contentKey = preference.key))
     }
 
-    val uiStateScreen = viewModel.uiState.collectAsState().value
+    val uiStateScreen = viewModel.uiState.collectAsStateWithLifecycle().value
 
     TrackScreenState(
         firebaseController = firebaseController,

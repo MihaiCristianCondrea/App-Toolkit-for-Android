@@ -59,7 +59,7 @@ class JvmTargetPlugin : Plugin<Project> {
 
             else -> error(
                 "Apply com.mihaicristiancondrea.android.apptoolkit.jvm-target after the Android " +
-                        "application or library plugin in ${'$'}path."
+                        "application or library plugin in $path."
             )
         }
     }

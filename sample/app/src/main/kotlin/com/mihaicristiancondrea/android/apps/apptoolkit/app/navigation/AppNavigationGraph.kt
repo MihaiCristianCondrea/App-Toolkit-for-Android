@@ -21,8 +21,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.navigat
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.toolkitTilesEntryBuilder
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.appToolkitNavigationEntryBuilders
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 
 /**
  * Assembles the app's navigation entries from every feature module.

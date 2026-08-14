@@ -8,12 +8,13 @@ Its design is heavily inspired by standard libraries in languages like Python,
 C++ and Java.
 
 Some of the purposes of the standard library include:
+
 1) Acting as a way of sharing and commonly written queries without needing
-to copy/paste large amounts of SQL.
+   to copy/paste large amounts of SQL.
 2) Raising the abstraction level when exposing data in the trace. Many
-modules in the standard library convert low-level trace concepts
-e.g. slices, tracks and into concepts developers may be more familar with
-e.g. for Android developers: app startups, binder transactions etc.
+   modules in the standard library convert low-level trace concepts
+   e.g. slices, tracks and into concepts developers may be more familar with
+   e.g. for Android developers: app startups, binder transactions etc.
 
 Standard library modules can be included as follows
 
@@ -55,7 +56,8 @@ TABLE
 
 <br />
 
-**track**. Tracks are a fundamental concept in trace processor and represent a "timeline" for events of the same type and with the same context
+**track**. Tracks are a fundamental concept in trace processor and represent a "timeline" for events
+of the same type and with the same context
 
 <br />
 
@@ -104,7 +106,8 @@ VIEW
 
 <br />
 
-**cpu_available_frequencies**. Contains the frequency values that the CPUs on the device are capable of running at.
+**cpu_available_frequencies**. Contains the frequency values that the CPUs on the device are capable
+of running at.
 
 <br />
 
@@ -180,7 +183,9 @@ VIEW
 
 <br />
 
-**thread_state**. This table contains the scheduling state of every thread on the system during the trace. The rows in this table which have \|state\| = 'Running', will have a corresponding row in the \|sched_slice\| table.
+**thread_state**. This table contains the scheduling state of every thread on the system during the
+trace. The rows in this table which have \|state\| = 'Running', will have a corresponding row in the
+\|sched_slice\| table.
 
 <br />
 
@@ -400,7 +405,8 @@ during the trace.
 
 <br />
 
-**instant**. Contains instant events from userspace which indicates what happened at a single moment in time.
+**instant**. Contains instant events from userspace which indicates what happened at a single moment
+in time.
 
 <br />
 
@@ -507,7 +513,8 @@ VIEW
 
 <br />
 
-**args**. Arbitrary key-value pairs which allow adding metadata to other, strongly typed tables. Note: for a given row, only one of \|int_value\|, \|string_value\|, \|real_value\| will be non-null.
+**args**. Arbitrary key-value pairs which allow adding metadata to other, strongly typed tables.
+Note: for a given row, only one of \|int_value\|, \|string_value\|, \|real_value\| will be non-null.
 
 <br />
 
@@ -557,7 +564,8 @@ VIEW
 
 <br />
 
-**slice_is_ancestor** -\> BOOL. Given two slice ids, returns whether the first is an ancestor of the second.
+**slice_is_ancestor** -\> BOOL. Given two slice ids, returns whether the first is an ancestor of the
+second.
 
 <br />
 
@@ -792,7 +800,8 @@ VIEW
 
 <br />
 
-**wattson_system_states**. The final system state for the CPU subsystem, which has all the information needed by Wattson to estimate energy for the CPU subsystem.
+**wattson_system_states**. The final system state for the CPU subsystem, which has all the
+information needed by Wattson to estimate energy for the CPU subsystem.
 
 <br />
 
@@ -836,7 +845,10 @@ needed by Wattson to estimate energy for the CPU subsystem.
 
 <br />
 
-**cpu_profiling_samples**. Table containing all the timestamped samples of CPU profiling which occurred during the trace. Currently, this table is backed by the following data sources: \* Linux perf \* macOS instruments \* Chrome CPU profiling \* Legacy V8 CPU profiling \* Profiling data in Gecko traces
+**cpu_profiling_samples**. Table containing all the timestamped samples of CPU profiling which
+occurred during the trace. Currently, this table is backed by the following data sources: \* Linux
+perf \* macOS instruments \* Chrome CPU profiling \* Legacy V8 CPU profiling \* Profiling data in
+Gecko traces
 
 <br />
 
@@ -868,7 +880,11 @@ Currently, this table is backed by the following data sources:
 
 <br />
 
-**cpu_profiling_summary_tree** . Table summarising the callstacks captured during any CPU profiling which occurred during the trace. Specifically, this table returns a tree containing all the callstacks seen during the trace with `self_count` equal to the number of samples with that frame as the leaf and `cumulative_count` equal to the number of samples with the frame anywhere in the tree. The data sources supported are the same as the `cpu_profiling_samples` table.
+**cpu_profiling_summary_tree** . Table summarising the callstacks captured during any CPU profiling
+which occurred during the trace. Specifically, this table returns a tree containing all the
+callstacks seen during the trace with `self_count` equal to the number of samples with that frame as
+the leaf and `cumulative_count` equal to the number of samples with the frame anywhere in the tree.
+The data sources supported are the same as the `cpu_profiling_samples` table.
 
 <br />
 
@@ -932,7 +948,8 @@ VIEW
 
 <br />
 
-**thread_slice_cpu_time**. Time each thread slice spent running on CPU. Requires scheduling data to be available in the trace.
+**thread_slice_cpu_time**. Time each thread slice spent running on CPU. Requires scheduling data to
+be available in the trace.
 
 <br />
 
@@ -983,7 +1000,8 @@ VIEW
 
 <br />
 
-**thread_slice**. All thread slices with data about thread, thread track and process. Where possible, use available view functions which filter this view.
+**thread_slice**. All thread slices with data about thread, thread track and process. Where
+possible, use available view functions which filter this view.
 
 <br />
 
@@ -1020,7 +1038,8 @@ Where possible, use available view functions which filter this view.
 
 <br />
 
-**process_slice**. All process slices with data about process track and process. Where possible, use available view functions which filter this view.
+**process_slice**. All process slices with data about process track and process. Where possible, use
+available view functions which filter this view.
 
 <br />
 
@@ -1059,13 +1078,16 @@ Where possible, use available view functions which filter this view.
 
 <br />
 
-**sched_previous_runnable_on_thread**. Previous runnable slice on the same thread. For each "Running" thread state finds: - previous "Runnable" (or runnable preempted) state. - previous uninterrupted "Runnable" state with a valid waker thread.
+**sched_previous_runnable_on_thread**. Previous runnable slice on the same thread. For each "
+Running" thread state finds: - previous "Runnable" (or runnable preempted) state. - previous
+uninterrupted "Runnable" state with a valid waker thread.
 
 <br />
 
 TABLE
 Previous runnable slice on the same thread.
 For each "Running" thread state finds:
+
 - previous "Runnable" (or runnable preempted) state.
 - previous uninterrupted "Runnable" state with a valid waker thread.
 
@@ -1085,7 +1107,8 @@ For each "Running" thread state finds:
 
 <br />
 
-**sched_state_to_human_readable_string** -\> STRING. Translates a single-letter scheduling state to a human-readable string.
+**sched_state_to_human_readable_string** -\> STRING. Translates a single-letter scheduling state to
+a human-readable string.
 
 <br />
 
@@ -1093,7 +1116,11 @@ For each "Running" thread state finds:
 
 <br />
 
-Returns STRING: Humanly readable string representing the scheduling state of the kernel thread. The individual characters in the string mean the following: R (runnable), S (awaiting a wakeup), D (in an uninterruptible sleep), T (suspended), t (being traced), X (exiting), P (parked), W (waking), I (idle), N (not contributing to the load average), K (wakeable on fatal signals) and Z (zombie, awaiting cleanup).
+Returns STRING: Humanly readable string representing the scheduling state of the kernel thread. The
+individual characters in the string mean the following: R (runnable), S (awaiting a wakeup), D (in
+an uninterruptible sleep), T (suspended), t (being traced), X (exiting), P (parked), W (waking), I (
+idle), N (not contributing to the load average), K (wakeable on fatal signals) and Z (zombie,
+awaiting cleanup).
 
 | Argument | Type | Description |
 |---|---|---|
@@ -1105,7 +1132,8 @@ Returns STRING: Humanly readable string representing the scheduling state of the
 
 <br />
 
-**sched_state_io_to_human_readable_string** -\> STRING. Translates a single-letter scheduling state and IO wait information to a human-readable string.
+**sched_state_io_to_human_readable_string** -\> STRING. Translates a single-letter scheduling state
+and IO wait information to a human-readable string.
 
 <br />
 
@@ -1170,7 +1198,8 @@ TABLE
 
 <br />
 
-**sched_time_in_state_for_thread**. The time a thread spent in each scheduling state during it's lifetime.
+**sched_time_in_state_for_thread**. The time a thread spent in each scheduling state during it's
+lifetime.
 
 <br />
 
@@ -1190,7 +1219,8 @@ TABLE
 
 <br />
 
-**sched_percentage_of_time_in_state**. Summary of time spent by thread in each scheduling state, in percentage (\[0, 100\] ranges)
+**sched_percentage_of_time_in_state**. Summary of time spent by thread in each scheduling state, in
+percentage (\[0, 100\] ranges)
 
 <br />
 
@@ -1217,7 +1247,8 @@ are rounded down.
 
 <br />
 
-**sched_time_in_state_for_thread_in_interval** . Time the thread spent each state in a given interval.
+**sched_time_in_state_for_thread_in_interval** . Time the thread spent each state in a given
+interval.
 
 <br />
 
@@ -1244,7 +1275,8 @@ are rounded down.
 
 <br />
 
-**sched_time_in_state_and_cpu_for_thread_in_interval** . Time the thread spent each state and cpu in a given interval.
+**sched_time_in_state_and_cpu_for_thread_in_interval** . Time the thread spent each state and cpu in
+a given interval.
 
 <br />
 
@@ -1272,7 +1304,8 @@ are rounded down.
 
 <br />
 
-**sched_time_in_state_for_cpu_in_interval** . Time spent by CPU in each scheduling state in a provided interval.
+**sched_time_in_state_for_cpu_in_interval** . Time spent by CPU in each scheduling state in a
+provided interval.
 
 <br />
 
@@ -1303,7 +1336,10 @@ are rounded down.
 
 <br />
 
-**intervals_overlap_count** . Compute the distribution of the overlap of the given intervals over time. Each interval is a (ts, dur) pair and the overlap represented as a (ts, value) counter, with the value corresponding to the number of intervals that overlap the given timestamp and interval until the next timestamp.
+**intervals_overlap_count** . Compute the distribution of the overlap of the given intervals over
+time. Each interval is a (ts, dur) pair and the overlap represented as a (ts, value) counter, with
+the value corresponding to the number of intervals that overlap the given timestamp and interval
+until the next timestamp.
 
 <br />
 
@@ -1316,7 +1352,8 @@ Compute the distribution of the overlap of the given intervals over time.
 Each interval is a (ts, dur) pair and the overlap represented as a (ts, value)
 counter, with the value corresponding to the number of intervals that overlap
 the given timestamp and interval until the next timestamp.
-Returns: TableOrSubquery, The returned table has the schema (ts INT64, value UINT32). \|ts\| is the timestamp when the number of open segments changed. \|value\| is the number of open segments.
+Returns: TableOrSubquery, The returned table has the schema (ts INT64, value UINT32). \|ts\| is the
+timestamp when the number of open segments changed. \|value\| is the number of open segments.
 
 | Argument | Type | Description |
 |---|---|---|
@@ -1336,7 +1373,8 @@ Returns: TableOrSubquery, The returned table has the schema (ts INT64, value UIN
 
 <br />
 
-**time_from_ns** -\> INT. Returns the provided nanosecond duration, which is the default representation of time durations in trace processor
+**time_from_ns** -\> INT. Returns the provided nanosecond duration, which is the default
+representation of time durations in trace processor
 
 <br />
 
@@ -1359,7 +1397,8 @@ Returns INT: Time duration in nanoseconds.
 
 <br />
 
-**time_from_us** -\> INT. Converts a duration in microseconds to nanoseconds, which is the default representation of time durations in trace processor.
+**time_from_us** -\> INT. Converts a duration in microseconds to nanoseconds, which is the default
+representation of time durations in trace processor.
 
 <br />
 
@@ -1381,7 +1420,8 @@ Returns INT: Time duration in nanoseconds.
 
 <br />
 
-**time_from_ms** -\> INT. Converts a duration in millseconds to nanoseconds, which is the default representation of time durations in trace processor.
+**time_from_ms** -\> INT. Converts a duration in millseconds to nanoseconds, which is the default
+representation of time durations in trace processor.
 
 <br />
 
@@ -1403,7 +1443,8 @@ Returns INT: Time duration in nanoseconds.
 
 <br />
 
-**time_from_s** -\> INT. Converts a duration in seconds to nanoseconds, which is the default representation of time durations in trace processor.
+**time_from_s** -\> INT. Converts a duration in seconds to nanoseconds, which is the default
+representation of time durations in trace processor.
 
 <br />
 
@@ -1425,7 +1466,8 @@ Returns INT: Time duration in nanoseconds.
 
 <br />
 
-**time_from_min** -\> INT. Converts a duration in minutes to nanoseconds, which is the default representation of time durations in trace processor.
+**time_from_min** -\> INT. Converts a duration in minutes to nanoseconds, which is the default
+representation of time durations in trace processor.
 
 <br />
 
@@ -1447,7 +1489,8 @@ Returns INT: Time duration in nanoseconds.
 
 <br />
 
-**time_from_hours** -\> INT. Converts a duration in hours to nanoseconds, which is the default representation of time durations in trace processor.
+**time_from_hours** -\> INT. Converts a duration in hours to nanoseconds, which is the default
+representation of time durations in trace processor.
 
 <br />
 
@@ -1469,7 +1512,8 @@ Returns INT: Time duration in nanoseconds.
 
 <br />
 
-**time_from_days** -\> INT. Converts a duration in days to nanoseconds, which is the default representation of time durations in trace processor.
+**time_from_days** -\> INT. Converts a duration in days to nanoseconds, which is the default
+representation of time durations in trace processor.
 
 <br />
 
@@ -1491,7 +1535,8 @@ Returns INT: Time duration in nanoseconds.
 
 <br />
 
-**time_to_ns** -\> INT. Returns the provided nanosecond duration, which is the default representation of time durations in trace processor
+**time_to_ns** -\> INT. Returns the provided nanosecond duration, which is the default
+representation of time durations in trace processor
 
 <br />
 
@@ -1732,7 +1777,9 @@ TABLE
 
 <br />
 
-**cpu_idle_time_in_state_counters**. Counter information for sysfs cpuidle states. Tracks the percentage of time spent in each state between two timestamps, by dividing the incremental time spent in one state, by time all CPUS spent in any state.
+**cpu_idle_time_in_state_counters**. Counter information for sysfs cpuidle states. Tracks the
+percentage of time spent in each state between two timestamps, by dividing the incremental time
+spent in one state, by time all CPUS spent in any state.
 
 <br />
 
@@ -1784,7 +1831,9 @@ TABLE
 
 <br />
 
-**cpu_process_utilization_per_period** . Returns a table of process utilization per given period. Utilization is calculated as sum of average utilization of each CPU in each period, which is defined as a multiply of \|interval\|
+**cpu_process_utilization_per_period** . Returns a table of process utilization per given period.
+Utilization is calculated as sum of average utilization of each CPU in each period, which is defined
+as a multiply of \|interval\|
 
 <br />
 
@@ -1813,7 +1862,9 @@ upid \| INT \| Upid of the process.
 
 <br />
 
-**cpu_process_utilization_per_second** . Returns a table of process utilization per second. Utilization is calculated as sum of average utilization of each CPU in each period, which is defined as a multiply of \|interval\|
+**cpu_process_utilization_per_second** . Returns a table of process utilization per second.
+Utilization is calculated as sum of average utilization of each CPU in each period, which is defined
+as a multiply of \|interval\|
 
 <br />
 
@@ -1841,7 +1892,8 @@ upid \| INT \| Upid of the process.
 
 <br />
 
-**cpu_cycles_per_process_in_interval** . Aggregated CPU statistics for each process in a provided interval.
+**cpu_cycles_per_process_in_interval** . Aggregated CPU statistics for each process in a provided
+interval.
 
 <br />
 
@@ -1933,7 +1985,8 @@ TABLE
 
 <br />
 
-**cpu_utilization_per_second**. Table with system utilization per second. Utilization is calculated by sum of average utilization of each CPU every second
+**cpu_utilization_per_second**. Table with system utilization per second. Utilization is calculated
+by sum of average utilization of each CPU every second
 
 <br />
 
@@ -2002,7 +2055,9 @@ TABLE
 
 <br />
 
-**cpu_utilization_per_period** . Returns a table of system utilization per given period. Utilization is calculated as sum of average utilization of each CPU in each period, which is defined as a multiply of \|interval\|
+**cpu_utilization_per_period** . Returns a table of system utilization per given period. Utilization
+is calculated as sum of average utilization of each CPU in each period, which is defined as a
+multiply of \|interval\|
 
 <br />
 
@@ -2117,7 +2172,9 @@ TABLE
 
 <br />
 
-**cpu_thread_utilization_per_period** . Returns a table of thread utilization per given period. Utilization is calculated as sum of average utilization of each CPU in each period, which is defined as a multiply of \|interval\|
+**cpu_thread_utilization_per_period** . Returns a table of thread utilization per given period.
+Utilization is calculated as sum of average utilization of each CPU in each period, which is defined
+as a multiply of \|interval\|
 
 <br />
 
@@ -2146,7 +2203,9 @@ utid \| INT \| Utid of the thread.
 
 <br />
 
-**cpu_thread_utilization_per_second** . Returns a table of thread utilization per second. Utilization is calculated as sum of average utilization of each CPU in each period, which is defined as a multiply of \|interval\|
+**cpu_thread_utilization_per_second** . Returns a table of thread utilization per second.
+Utilization is calculated as sum of average utilization of each CPU in each period, which is defined
+as a multiply of \|interval\|
 
 <br />
 
@@ -2174,7 +2233,8 @@ utid \| INT \| Utid of the thread.
 
 <br />
 
-**cpu_cycles_per_thread_in_interval** . Aggregated CPU statistics for each thread in a provided interval.
+**cpu_cycles_per_thread_in_interval** . Aggregated CPU statistics for each thread in a provided
+interval.
 
 <br />
 
@@ -2262,7 +2322,8 @@ device_name \| STRING \| Devfreq name to query for.
 
 <br />
 
-**memory_rss_high_watermark_per_process**. For each process fetches the memory high watermark until or during timestamp.
+**memory_rss_high_watermark_per_process**. For each process fetches the memory high watermark until
+or during timestamp.
 
 <br />
 
@@ -2320,7 +2381,10 @@ VIEW
 
 <br />
 
-**linux_perf_samples_summary_tree** . Table summarising the callstacks captured during all perf samples in the trace. Specifically, this table returns a tree containing all the callstacks seen during the trace with `self_count` equal to the number of samples with that frame as the leaf and `cumulative_count` equal to the number of samples with the frame anywhere in the tree.
+**linux_perf_samples_summary_tree** . Table summarising the callstacks captured during all perf
+samples in the trace. Specifically, this table returns a tree containing all the callstacks seen
+during the trace with `self_count` equal to the number of samples with that frame as the leaf and
+`cumulative_count` equal to the number of samples with the frame anywhere in the tree.
 
 <br />
 
@@ -2460,7 +2524,8 @@ VIEW
 
 <br />
 
-**android_app_process_starts**. All app cold starts with information about their cold start reason: broadcast, service, activity or provider.
+**android_app_process_starts**. All app cold starts with information about their cold start reason:
+broadcast, service, activity or provider.
 
 <br />
 
@@ -2496,7 +2561,8 @@ broadcast, service, activity or provider.
 
 <br />
 
-**android_auto_multiuser_timing**. Time elapsed between the latest user start and the specific end event like package startup(ex carlauncher) or previous user stop.
+**android_auto_multiuser_timing**. Time elapsed between the latest user start and the specific end
+event like package startup(ex carlauncher) or previous user stop.
 
 <br />
 
@@ -2520,7 +2586,8 @@ like package startup(ex carlauncher) or previous user stop.
 
 <br />
 
-**android_auto_multiuser_timing_with_previous_user_resource_usage** . This table extends `android_auto_multiuser_timing` table with previous user resource usage.
+**android_auto_multiuser_timing_with_previous_user_resource_usage** . This table extends
+`android_auto_multiuser_timing` table with previous user resource usage.
 
 <br />
 
@@ -2636,7 +2703,8 @@ and duration from the events and extract the details as follows:
 
 <br />
 
-**android_battery_stats_counter_to_string** -\> STRING. Converts a battery_stats counter value to human readable string.
+**android_battery_stats_counter_to_string** -\> STRING. Converts a battery_stats counter value to
+human readable string.
 
 <br />
 
@@ -2680,7 +2748,11 @@ VIEW
 
 <br />
 
-**android_sync_binder_thread_state_by_txn**. Aggregated thread_states on the client and server side per binder txn This builds on the data from \|_sync_binder_metrics_by_txn\| and for each end (client and server) of the transaction, it returns the aggregated sum of all the thread state durations. The \|thread_state_type\| column represents whether a given 'aggregated thread_state' row is on the client or server side
+**android_sync_binder_thread_state_by_txn**. Aggregated thread_states on the client and server side
+per binder txn This builds on the data from \|_sync_binder_metrics_by_txn\| and for each end (client
+and server) of the transaction, it returns the aggregated sum of all the thread state durations. The
+\|thread_state_type\| column represents whether a given 'aggregated thread_state' row is on the
+client or server side
 
 <br />
 
@@ -2712,7 +2784,11 @@ is server side.
 
 <br />
 
-**android_sync_binder_blocked_functions_by_txn**. Aggregated blocked_functions on the client and server side per binder txn This builds on the data from \|_sync_binder_metrics_by_txn\| and for each end (client and server) of the transaction, it returns the aggregated sum of all the kernel blocked function durations. The \|thread_state_type\| column represents whether a given 'aggregated blocked_function' row is on the client or server side
+**android_sync_binder_blocked_functions_by_txn**. Aggregated blocked_functions on the client and
+server side per binder txn This builds on the data from \|_sync_binder_metrics_by_txn\| and for each
+end (client and server) of the transaction, it returns the aggregated sum of all the kernel blocked
+function durations. The \|thread_state_type\| column represents whether a given 'aggregated
+blocked_function' row is on the client or server side
 
 <br />
 
@@ -2744,7 +2820,8 @@ is server side.
 
 <br />
 
-**android_binder_txns**. Breakdown binder transactions per txn. It returns data about the client and server ends of every binder transaction async.
+**android_binder_txns**. Breakdown binder transactions per txn. It returns data about the client and
+server ends of every binder transaction async.
 
 <br />
 
@@ -2794,7 +2871,10 @@ It returns data about the client and server ends of every binder transaction asy
 
 <br />
 
-**android_binder_outgoing_graph** . Returns a DAG of all outgoing binder txns from a process. The roots of the graph are the threads making the txns and the graph flows from: thread -\> server_process -\> AIDL interface -\> AIDL method. The weights of each node represent the wall execution time in the server_process.
+**android_binder_outgoing_graph** . Returns a DAG of all outgoing binder txns from a process. The
+roots of the graph are the threads making the txns and the graph flows from: thread -\>
+server_process -\> AIDL interface -\> AIDL method. The weights of each node represent the wall
+execution time in the server_process.
 
 <br />
 
@@ -2820,7 +2900,10 @@ upid \| INT \| Upid of process to generate an outgoing graph for.
 
 <br />
 
-**android_binder_incoming_graph** . Returns a DAG of all incoming binder txns from a process. The roots of the graph are the clients making the txns and the graph flows from: client_process -\> AIDL interface -\> AIDL method. The weights of each node represent the wall execution time in the server_process.
+**android_binder_incoming_graph** . Returns a DAG of all incoming binder txns from a process. The
+roots of the graph are the clients making the txns and the graph flows from: client_process -\> AIDL
+interface -\> AIDL method. The weights of each node represent the wall execution time in the
+server_process.
 
 <br />
 
@@ -2846,7 +2929,9 @@ upid \| INT \| Upid of process to generate an incoming graph for.
 
 <br />
 
-**android_binder_graph** . Returns a graph of all binder txns in a trace. The nodes are client_process and server_process. The weights of each node represent the wall execution time in the server_process.
+**android_binder_graph** . Returns a graph of all binder txns in a trace. The nodes are
+client_process and server_process. The weights of each node represent the wall execution time in the
+server_process.
 
 <br />
 
@@ -2859,9 +2944,12 @@ The nodes are client_process and server_process.
 The weights of each node represent the wall execution time in the server_process.
 Argument \| Type \| Description
 --- \| --- \| ---
-min_client_oom_score \| INT \| Matches txns from client_processes greater than or equal to the OOM score.
-max_client_oom_score \| INT \| Matches txns from client_processes less than or equal to the OOM score.
-min_server_oom_score \| INT \| Matches txns to server_processes greater than or equal to the OOM score.
+min_client_oom_score \| INT \| Matches txns from client_processes greater than or equal to the OOM
+score.
+max_client_oom_score \| INT \| Matches txns from client_processes less than or equal to the OOM
+score.
+min_server_oom_score \| INT \| Matches txns to server_processes greater than or equal to the OOM
+score.
 max_server_oom_score \| INT \| Matches txns to server_processes less than or equal to the OOM score.
 
 | Column | Type | Description |
@@ -3140,7 +3228,10 @@ For Googlers: more details in go/android-performance-metrics-glossary.
 
 <br />
 
-**android_cpu_time_per_frame** . How much time did the frame take across the UI Thread + RenderThread. Calculated as sum of `app VSYNC delay` `Choreographer#doFrame` slice duration and summed durations of all `DrawFrame` slices associated with this frame. Availability: from N (API 24). For Googlers: more details in go/android-performance-metrics-glossary.
+**android_cpu_time_per_frame** . How much time did the frame take across the UI Thread +
+RenderThread. Calculated as sum of `app VSYNC delay` `Choreographer#doFrame` slice duration and
+summed durations of all `DrawFrame` slices associated with this frame. Availability: from N (API
+24). For Googlers: more details in go/android-performance-metrics-glossary.
 
 <br />
 
@@ -3166,7 +3257,8 @@ For Googlers: more details in go/android-performance-metrics-glossary.
 
 <br />
 
-**android_frame_stats**. Aggregated stats of the frame. For Googlers: more details in go/android-performance-metrics-glossary.
+**android_frame_stats**. Aggregated stats of the frame. For Googlers: more details in
+go/android-performance-metrics-glossary.
 
 <br />
 
@@ -3196,7 +3288,8 @@ For Googlers: more details in go/android-performance-metrics-glossary.
 
 <br />
 
-**android_frames_choreographer_do_frame** . All of the `Choreographer#doFrame` slices with their frame id.
+**android_frames_choreographer_do_frame** . All of the `Choreographer#doFrame` slices with their
+frame id.
 
 <br />
 
@@ -3216,7 +3309,9 @@ TABLE
 
 <br />
 
-**android_frames_draw_frame** . All of the `DrawFrame` slices with their frame id and render thread. There might be multiple DrawFrames slices for a single vsync (frame id). This happens when we are drawing multiple layers (e.g
+**android_frames_draw_frame** . All of the `DrawFrame` slices with their frame id and render thread.
+There might be multiple DrawFrames slices for a single vsync (frame id). This happens when we are
+drawing multiple layers (e.g
 
 <br />
 
@@ -3332,7 +3427,8 @@ TABLE
 
 <br />
 
-**android_garbage_collection_events**. All Garbage collection events with a breakdown of the time spent and heap reclaimed.
+**android_garbage_collection_events**. All Garbage collection events with a breakdown of the time
+spent and heap reclaimed.
 
 <br />
 
@@ -3424,6 +3520,7 @@ TABLE
 All input events with round trip latency breakdown. Input delivery is socket based and every
 input event sent from the OS needs to be ACK'ed by the app. This gives us 4 subevents to measure
 latencies between:
+
 1. Input dispatch event sent from OS.
 2. Input dispatch event received in app.
 3. Input ACK event sent from app.
@@ -3460,7 +3557,8 @@ latencies between:
 
 <br />
 
-**android_key_events**. Key events processed by the Android framework (from android.input.inputevent data source).
+**android_key_events**. Key events processed by the Android framework (from android.input.inputevent
+data source).
 
 <br />
 
@@ -3479,7 +3577,8 @@ VIEW
 
 <br />
 
-**android_motion_events**. Motion events processed by the Android framework (from android.input.inputevent data source).
+**android_motion_events**. Motion events processed by the Android framework (from
+android.input.inputevent data source).
 
 <br />
 
@@ -3498,7 +3597,8 @@ VIEW
 
 <br />
 
-**android_input_event_dispatch**. Input event dispatching information in Android (from android.input.inputevent data source).
+**android_input_event_dispatch**. Input event dispatching information in Android (from
+android.input.inputevent data source).
 
 <br />
 
@@ -3549,7 +3649,8 @@ TABLE
 
 <br />
 
-**android_dmabuf_allocs**. Track dmabuf allocations, re-attributing gralloc allocations to their source (if binder transactions to gralloc are recorded).
+**android_dmabuf_allocs**. Track dmabuf allocations, re-attributing gralloc allocations to their
+source (if binder transactions to gralloc are recorded).
 
 <br />
 
@@ -3579,7 +3680,11 @@ Track dmabuf allocations, re-attributing gralloc allocations to their source
 
 <br />
 
-**heap_graph_dominator_tree**. All reachable heap graph objects, their immediate dominators and summary of their dominated sets. The heap graph dominator tree is calculated by stdlib graphs.dominator_tree. Each reachable object is a node in the dominator tree, their immediate dominator is their parent node in the tree, and their dominated set is all their descendants in the tree
+**heap_graph_dominator_tree**. All reachable heap graph objects, their immediate dominators and
+summary of their dominated sets. The heap graph dominator tree is calculated by stdlib
+graphs.dominator_tree. Each reachable object is a node in the dominator tree, their immediate
+dominator is their parent node in the tree, and their dominated set is all their descendants in the
+tree
 
 <br />
 
@@ -3611,7 +3716,8 @@ heap_graph_object prelude table.
 
 <br />
 
-**android_heap_graph_class_aggregation**. Class-level breakdown of the java heap. Per type name aggregates the object stats and the dominator tree stats.
+**android_heap_graph_class_aggregation**. Class-level breakdown of the java heap. Per type name
+aggregates the object stats and the dominator tree stats.
 
 <br />
 
@@ -3730,7 +3836,8 @@ TABLE
 
 <br />
 
-**android_monitor_contention_chain**. Contains parsed monitor contention slices with the parent-child relationships.
+**android_monitor_contention_chain**. Contains parsed monitor contention slices with the
+parent-child relationships.
 
 <br />
 
@@ -3774,7 +3881,9 @@ TABLE
 
 <br />
 
-**android_monitor_contention_chain_thread_state**. Note that we only span join the duration where the lock was actually held and contended. This can be less than the duration the lock was 'waited on' when a different waiter acquired the lock earlier than the first waiter.
+**android_monitor_contention_chain_thread_state**. Note that we only span join the duration where
+the lock was actually held and contended. This can be less than the duration the lock was 'waited
+on' when a different waiter acquired the lock earlier than the first waiter.
 
 <br />
 
@@ -3816,7 +3925,11 @@ lock earlier than the first waiter.
 
 <br />
 
-**android_monitor_contention_chain_thread_state_by_txn**. Aggregated thread_states on the 'blocking thread', the thread holding the lock. This builds on the data from \|android_monitor_contention_chain\| and for each contention slice, it returns the aggregated sum of all the thread states on the blocking thread. Note that this data is only available for the first waiter on a lock.
+**android_monitor_contention_chain_thread_state_by_txn**. Aggregated thread_states on the 'blocking
+thread', the thread holding the lock. This builds on the data from
+\|android_monitor_contention_chain\| and for each contention slice, it returns the aggregated sum of
+all the thread states on the blocking thread. Note that this data is only available for the first
+waiter on a lock.
 
 <br />
 
@@ -3841,7 +3954,11 @@ Note that this data is only available for the first waiter on a lock.
 
 <br />
 
-**android_monitor_contention_chain_blocked_functions_by_txn**. Aggregated blocked_functions on the 'blocking thread', the thread holding the lock. This builds on the data from \|android_monitor_contention_chain\| and for each contention, it returns the aggregated sum of all the kernel blocked function durations on the blocking thread. Note that this data is only available for the first waiter on a lock.
+**android_monitor_contention_chain_blocked_functions_by_txn**. Aggregated blocked_functions on the '
+blocking thread', the thread holding the lock. This builds on the data from
+\|android_monitor_contention_chain\| and for each contention, it returns the aggregated sum of all
+the kernel blocked function durations on the blocking thread. Note that this data is only available
+for the first waiter on a lock.
 
 <br />
 
@@ -3868,7 +3985,8 @@ Note that this data is only available for the first waiter on a lock.
 
 <br />
 
-**android_extract_android_monitor_contention_blocking_thread** -\> STRING. Extracts the blocking thread from a slice name
+**android_extract_android_monitor_contention_blocking_thread** -\> STRING. Extracts the blocking
+thread from a slice name
 
 <br />
 
@@ -3888,7 +4006,8 @@ Returns STRING: Blocking thread
 
 <br />
 
-**android_extract_android_monitor_contention_blocking_tid** -\> INT. Extracts the blocking thread tid from a slice name
+**android_extract_android_monitor_contention_blocking_tid** -\> INT. Extracts the blocking thread
+tid from a slice name
 
 <br />
 
@@ -3908,7 +4027,8 @@ Returns INT: Blocking thread tid
 
 <br />
 
-**android_extract_android_monitor_contention_blocking_method** -\> STRING. Extracts the blocking method from a slice name
+**android_extract_android_monitor_contention_blocking_method** -\> STRING. Extracts the blocking
+method from a slice name
 
 <br />
 
@@ -3928,7 +4048,9 @@ Returns STRING: Blocking thread
 
 <br />
 
-**android_extract_android_monitor_contention_short_blocking_method** -\> STRING. Extracts a shortened form of the blocking method name from a slice name. The shortened form discards the parameter and return types.
+**android_extract_android_monitor_contention_short_blocking_method** -\> STRING. Extracts a
+shortened form of the blocking method name from a slice name. The shortened form discards the
+parameter and return types.
 
 <br />
 
@@ -3951,7 +4073,8 @@ Returns STRING: Blocking thread
 
 <br />
 
-**android_extract_android_monitor_contention_blocked_method** -\> STRING. Extracts the monitor contention blocked method from a slice name
+**android_extract_android_monitor_contention_blocked_method** -\> STRING. Extracts the monitor
+contention blocked method from a slice name
 
 <br />
 
@@ -3971,7 +4094,8 @@ Returns STRING: Blocking thread
 
 <br />
 
-**android_extract_android_monitor_contention_short_blocked_method** -\> STRING. Extracts a shortened form of the monitor contention blocked method name from a slice name
+**android_extract_android_monitor_contention_short_blocked_method** -\> STRING. Extracts a shortened
+form of the monitor contention blocked method name from a slice name
 
 <br />
 
@@ -3994,7 +4118,8 @@ Returns STRING: Blocking thread
 
 <br />
 
-**android_extract_android_monitor_contention_waiter_count** -\> INT. Extracts the number of waiters on the monitor from a slice name
+**android_extract_android_monitor_contention_waiter_count** -\> INT. Extracts the number of waiters
+on the monitor from a slice name
 
 <br />
 
@@ -4014,7 +4139,8 @@ Returns INT: Count of waiters on the lock
 
 <br />
 
-**android_extract_android_monitor_contention_blocking_src** -\> STRING. Extracts the monitor contention blocking source location from a slice name
+**android_extract_android_monitor_contention_blocking_src** -\> STRING. Extracts the monitor
+contention blocking source location from a slice name
 
 <br />
 
@@ -4034,7 +4160,8 @@ Returns STRING: Blocking thread
 
 <br />
 
-**android_extract_android_monitor_contention_blocked_src** -\> STRING. Extracts the monitor contention blocked source location from a slice name
+**android_extract_android_monitor_contention_blocked_src** -\> STRING. Extracts the monitor
+contention blocked source location from a slice name
 
 <br />
 
@@ -4056,7 +4183,10 @@ Returns STRING: Blocking thread
 
 <br />
 
-**android_monitor_contention_graph** . Returns a DAG of all Java lock contentions in a process. Each node in the graph is a pair. Each edge connects from a node waiting on a lock to a node holding a lock. The weights of each node represent the cumulative wall time the node blocked other nodes connected to it.
+**android_monitor_contention_graph** . Returns a DAG of all Java lock contentions in a process. Each
+node in the graph is a pair. Each edge connects from a node waiting on a lock to a node holding a
+lock. The weights of each node represent the cumulative wall time the node blocked other nodes
+connected to it.
 
 <br />
 
@@ -4065,7 +4195,10 @@ Returns STRING: Blocking thread
 <br />
 
 Returns a DAG of all Java lock contentions in a process.
-Each node in the graph is a pair. Each edge connects from a node waiting on a lock to a node holding a lock. The weights of each node represent the cumulative wall time the node blocked other nodes connected to it. Argument \| Type \| Description --- \| --- \| --- upid \| INT \| Upid of process to generate a lock graph for.
+Each node in the graph is a pair. Each edge connects from a node waiting on a lock to a node holding
+a lock. The weights of each node represent the cumulative wall time the node blocked other nodes
+connected to it. Argument \| Type \| Description --- \| --- \| --- upid \| INT \| Upid of process to
+generate a lock graph for.
 
 | Column | Type | Description |
 |---|---|---|
@@ -4081,7 +4214,8 @@ Each node in the graph is a pair. Each edge connects from a node waiting on a lo
 
 <br />
 
-**android_network_packets**. Android network packet events (from android.network_packets data source).
+**android_network_packets**. Android network packet events (from android.network_packets data
+source).
 
 <br />
 
@@ -4118,7 +4252,8 @@ VIEW
 
 <br />
 
-**android_oom_adj_intervals**. All oom adj state intervals across all processes along with the reason for the state update.
+**android_oom_adj_intervals**. All oom adj state intervals across all processes along with the
+reason for the state update.
 
 <br />
 
@@ -4148,7 +4283,8 @@ VIEW
 
 <br />
 
-**android_oom_adj_score_to_bucket_name** -\> STRING. Converts an oom_adj score Integer to String sample name. One of: cached, background, job, foreground_service, bfgs, foreground and system.
+**android_oom_adj_score_to_bucket_name** -\> STRING. Converts an oom_adj score Integer to String
+sample name. One of: cached, background, job, foreground_service, bfgs, foreground and system.
 
 <br />
 
@@ -4171,7 +4307,8 @@ Returns STRING: Returns the sample bucket based on the oom score.
 
 <br />
 
-**android_oom_adj_score_to_detailed_bucket_name** -\> STRING. Converts an oom_adj score Integer to String bucket name. Deprecated: use `android_oom_adj_score_to_bucket_name` instead.
+**android_oom_adj_score_to_detailed_bucket_name** -\> STRING. Converts an oom_adj score Integer to
+String bucket name. Deprecated: use `android_oom_adj_score_to_bucket_name` instead.
 
 <br />
 
@@ -4198,7 +4335,9 @@ Returns STRING: Returns the oom_adj bucket.
 
 <br />
 
-**android_power_rails_counters**. Android power rails counters data. For details see: https://perfetto.dev/docs/data-sources/battery-counters#odpm NOTE: Requires dedicated hardware - table is only populated on Pixels.
+**android_power_rails_counters**. Android power rails counters data. For details
+see: https://perfetto.dev/docs/data-sources/battery-counters#odpm NOTE: Requires dedicated
+hardware - table is only populated on Pixels.
 
 <br />
 
@@ -4334,11 +4473,12 @@ TABLE
 Some slice names have params in them. This functions removes them to make it
 possible to aggregate by name.
 Some examples are:
+
 - Lock/monitor contention slices. The name includes where the lock
-contention is in the code. That part is removed.
+  contention is in the code. That part is removed.
 - DrawFrames/ooFrame. The name also includes the frame number.
 - Apk/oat/dex loading: The name of the apk is removed
-Returns STRING: Simplified name.
+  Returns STRING: Simplified name.
 
 | Argument | Type | Description |
 |---|---|---|
@@ -4354,7 +4494,8 @@ Returns STRING: Simplified name.
 
 <br />
 
-**android_startups**. All activity startups in the trace by startup id. Populated by different scripts depending on the platform version/contents.
+**android_startups**. All activity startups in the trace by startup id. Populated by different
+scripts depending on the platform version/contents.
 
 <br />
 
@@ -4377,7 +4518,8 @@ Populated by different scripts depending on the platform version/contents.
 
 <br />
 
-**android_startup_processes**. Maps a startup to the set of processes that handled the activity start. The vast majority of cases should be a single process
+**android_startup_processes**. Maps a startup to the set of processes that handled the activity
+start. The vast majority of cases should be a single process
 
 <br />
 
@@ -4399,7 +4541,8 @@ possible that the process dies during the activity startup and is respawned.
 
 <br />
 
-**android_startup_threads**. Maps a startup to the set of threads on processes that handled the activity start.
+**android_startup_threads**. Maps a startup to the set of threads on processes that handled the
+activity start.
 
 <br />
 
@@ -4423,7 +4566,8 @@ activity start.
 
 <br />
 
-**android_thread_slices_for_all_startups**. All the slices for all startups in trace. Generally, this view should not be used
+**android_thread_slices_for_all_startups**. All the slices for all startups in trace. Generally,
+this view should not be used
 
 <br />
 
@@ -4455,7 +4599,8 @@ to the startup slices which are created from this table.
 
 <br />
 
-**android_sum_dur_for_startup_and_slice** -\> INT. Returns duration of startup for slice name. Sums duration of all slices of startup with provided name.
+**android_sum_dur_for_startup_and_slice** -\> INT. Returns duration of startup for slice name. Sums
+duration of all slices of startup with provided name.
 
 <br />
 
@@ -4479,7 +4624,9 @@ Returns INT: Sum of duration.
 
 <br />
 
-**android_sum_dur_on_main_thread_for_startup_and_slice** -\> INT. Returns duration of startup for slice name on main thread. Sums duration of all slices of startup with provided name only on main thread.
+**android_sum_dur_on_main_thread_for_startup_and_slice** -\> INT. Returns duration of startup for
+slice name on main thread. Sums duration of all slices of startup with provided name only on main
+thread.
 
 <br />
 
@@ -4505,7 +4652,8 @@ Returns INT: Sum of duration.
 
 <br />
 
-**android_slices_for_startup_and_slice_name** . Given a startup id and GLOB for a slice name, returns matching slices with data.
+**android_slices_for_startup_and_slice_name** . Given a startup id and GLOB for a slice name,
+returns matching slices with data.
 
 <br />
 
@@ -4533,7 +4681,8 @@ Returns INT: Sum of duration.
 
 <br />
 
-**android_binder_transaction_slices_for_startup** . Returns binder transaction slices for a given startup id with duration over threshold.
+**android_binder_transaction_slices_for_startup** . Returns binder transaction slices for a given
+startup id with duration over threshold.
 
 <br />
 
@@ -4565,7 +4714,13 @@ Returns INT: Sum of duration.
 
 <br />
 
-**android_startup_time_to_display**. Startup metric defintions, which focus on the observable time range: TTID - Time To Initial Display \* https://developer.android.com/topic/performance/vitals/launch-time#time-initial \* end of first RenderThread.DrawFrame - bindApplication TTFD - Time To Full Display \* https://developer.android.com/topic/performance/vitals/launch-time#retrieve-TTFD \* end of next RT.DrawFrame, after reportFullyDrawn called - bindApplication Googlers: see go/android-performance-metrics-glossary for details.
+**android_startup_time_to_display**. Startup metric defintions, which focus on the observable time
+range: TTID - Time To Initial
+Display \* https://developer.android.com/topic/performance/vitals/launch-time#time-initial \* end of
+first RenderThread.DrawFrame - bindApplication TTFD - Time To Full
+Display \* https://developer.android.com/topic/performance/vitals/launch-time#retrieve-TTFD \* end
+of next RT.DrawFrame, after reportFullyDrawn called - bindApplication Googlers: see
+go/android-performance-metrics-glossary for details.
 
 <br />
 
@@ -4598,7 +4753,8 @@ Googlers: see go/android-performance-metrics-glossary for details.
 
 <br />
 
-**android_statsd_atoms**. Statsd atoms. A subset of the slice table containing statsd atom instant events.
+**android_statsd_atoms**. Statsd atoms. A subset of the slice table containing statsd atom instant
+events.
 
 <br />
 
@@ -4636,7 +4792,9 @@ A subset of the slice table containing statsd atom instant events.
 
 <br />
 
-**android_suspend_state**. Table of suspended and awake slices. Selects either the minimal or full ftrace source depending on what's available, marks suspended periods, and complements them to give awake periods.
+**android_suspend_state**. Table of suspended and awake slices. Selects either the minimal or full
+ftrace source depending on what's available, marks suspended periods, and complements them to give
+awake periods.
 
 <br />
 
@@ -4663,7 +4821,8 @@ periods.
 
 <br />
 
-**android_inputmethod_clients**. Android inputmethod clients state dumps (from android.inputmethod data source).
+**android_inputmethod_clients**. Android inputmethod clients state dumps (from android.inputmethod
+data source).
 
 <br />
 
@@ -4681,7 +4840,8 @@ VIEW
 
 <br />
 
-**android_inputmethod_manager_service**. Android inputmethod manager service state dumps (from android.inputmethod data source).
+**android_inputmethod_manager_service**. Android inputmethod manager service state dumps (from
+android.inputmethod data source).
 
 <br />
 
@@ -4699,7 +4859,8 @@ VIEW
 
 <br />
 
-**android_inputmethod_service**. Android inputmethod service state dumps (from android.inputmethod data source).
+**android_inputmethod_service**. Android inputmethod service state dumps (from android.inputmethod
+data source).
 
 <br />
 
@@ -4767,7 +4928,11 @@ VIEW
 
 <br />
 
-**chrome_scrolls**. Defines slices for all of the individual scrolls in a trace based on the LatencyInfo-based scroll definition. NOTE: this view of top level scrolls is based on the LatencyInfo definition of a scroll, which differs subtly from the definition based on EventLatencies. TODO(b/278684408): add support for tracking scrolls across multiple Chrome/ WebView instances
+**chrome_scrolls**. Defines slices for all of the individual scrolls in a trace based on the
+LatencyInfo-based scroll definition. NOTE: this view of top level scrolls is based on the
+LatencyInfo definition of a scroll, which differs subtly from the definition based on
+EventLatencies. TODO(b/278684408): add support for tracking scrolls across multiple Chrome/ WebView
+instances
 
 <br />
 
@@ -4801,7 +4966,10 @@ definition of scrolls should resolve this.
 
 <br />
 
-**chrome_cpu_power_slice**. The CPU power transitions in the trace. Power states are encoded as non-negative integers, with zero representing full-power operation and positive values representing increasingly deep sleep states. On ARM systems, power state 1 represents the WFI (Wait For Interrupt) sleep state that the CPU enters while idle.
+**chrome_cpu_power_slice**. The CPU power transitions in the trace. Power states are encoded as
+non-negative integers, with zero representing full-power operation and positive values representing
+increasingly deep sleep states. On ARM systems, power state 1 represents the WFI (Wait For
+Interrupt) sleep state that the CPU enters while idle.
 
 <br />
 
@@ -4829,7 +4997,8 @@ state that the CPU enters while idle.
 
 <br />
 
-**chrome_cpu_power_first_sched_slice_after_powerup**. The Linux scheduler slices that executed immediately after a CPU power up.
+**chrome_cpu_power_first_sched_slice_after_powerup**. The Linux scheduler slices that executed
+immediately after a CPU power up.
 
 <br />
 
@@ -4853,7 +5022,8 @@ CPU power up.
 
 <br />
 
-**chrome_cpu_power_post_powerup_slice**. A table holding the slices that executed within the scheduler slice that ran on a CPU immediately after power-up.
+**chrome_cpu_power_post_powerup_slice**. A table holding the slices that executed within the
+scheduler slice that ran on a CPU immediately after power-up.
 
 <br />
 
@@ -4879,7 +5049,8 @@ slice that ran on a CPU immediately after power-up.
 
 <br />
 
-**chrome_cpu_power_first_toplevel_slice_after_powerup**. The first top-level slice that ran after a CPU power-up.
+**chrome_cpu_power_first_toplevel_slice_after_powerup**. The first top-level slice that ran after a
+CPU power-up.
 
 <br />
 
@@ -4923,7 +5094,9 @@ TABLE
 
 <br />
 
-**chrome_gesture_scroll_events**. All scroll-related events (frames) including gesture scroll updates, begins and ends with respective scroll ids and start/end timestamps, regardless of being presented
+**chrome_gesture_scroll_events**. All scroll-related events (frames) including gesture scroll
+updates, begins and ends with respective scroll ids and start/end timestamps, regardless of being
+presented
 
 <br />
 
@@ -4954,7 +5127,8 @@ for context on pinches.
 
 <br />
 
-**chrome_get_most_recent_scroll_begin_id** -\> INT. Extracts scroll id for the EventLatency slice at `ts`.
+**chrome_get_most_recent_scroll_begin_id** -\> INT. Extracts scroll id for the EventLatency slice at
+`ts`.
 
 <br />
 
@@ -4962,7 +5136,8 @@ for context on pinches.
 
 <br />
 
-Returns INT: The event_latency_id of the EventLatency slice with the type GESTURE_SCROLL_BEGIN that is the closest to `ts`.
+Returns INT: The event_latency_id of the EventLatency slice with the type GESTURE_SCROLL_BEGIN that
+is the closest to `ts`.
 
 | Argument | Type | Description |
 |---|---|---|
@@ -4978,7 +5153,8 @@ Returns INT: The event_latency_id of the EventLatency slice with the type GESTUR
 
 <br />
 
-**chrome_event_latency_stage_descriptions**. Source of truth of the descriptions of EventLatency stages.
+**chrome_event_latency_stage_descriptions**. Source of truth of the descriptions of EventLatency
+stages.
 
 <br />
 
@@ -4999,7 +5175,8 @@ TABLE
 
 <br />
 
-**chrome_histograms**. A helper view on top of the histogram events emitted by Chrome. Requires "disabled-by-default-histogram_samples" Chrome category.
+**chrome_histograms**. A helper view on top of the histogram events emitted by Chrome. Requires "
+disabled-by-default-histogram_samples" Chrome category.
 
 <br />
 
@@ -5029,7 +5206,8 @@ Requires "disabled-by-default-histogram_samples" Chrome category.
 
 <br />
 
-**chrome_interactions**. All critical user interaction events, including type and table with associated metrics.
+**chrome_interactions**. All critical user interaction events, including type and table with
+associated metrics.
 
 <br />
 
@@ -5055,7 +5233,8 @@ associated metrics.
 
 <br />
 
-**chrome_hardware_class** -\> STRING. Returns hardware class of the device, often use to find device brand and model.
+**chrome_hardware_class** -\> STRING. Returns hardware class of the device, often use to find device
+brand and model.
 
 <br />
 
@@ -5140,7 +5319,8 @@ TABLE
 
 <br />
 
-**chrome_predictor_error**. The scrolling offsets and predictor jank values for the actual (applied) scroll events.
+**chrome_predictor_error**. The scrolling offsets and predictor jank values for the actual (applied)
+scroll events.
 
 <br />
 
@@ -5171,7 +5351,8 @@ scroll events.
 
 <br />
 
-**chrome_scroll_jank_cause_descriptions**. Source of truth of the descriptions of EventLatency-based scroll jank causes.
+**chrome_scroll_jank_cause_descriptions**. Source of truth of the descriptions of EventLatency-based
+scroll jank causes.
 
 <br />
 
@@ -5190,7 +5371,8 @@ TABLE
 
 <br />
 
-**chrome_scroll_jank_causes_with_event_latencies**. Combined description of scroll jank cause and associated event latency stage.
+**chrome_scroll_jank_causes_with_event_latencies**. Combined description of scroll jank cause and
+associated event latency stage.
 
 <br />
 
@@ -5214,7 +5396,9 @@ VIEW
 
 <br />
 
-**chrome_select_scroll_jank_cause_thread** . Function to retrieve the thread id of the thread on a particular process if there are any slices during a particular EventLatency slice duration; this upid/thread combination refers to a cause of Scroll Jank.
+**chrome_select_scroll_jank_cause_thread** . Function to retrieve the thread id of the thread on a
+particular process if there are any slices during a particular EventLatency slice duration; this
+upid/thread combination refers to a cause of Scroll Jank.
 
 <br />
 
@@ -5228,7 +5412,8 @@ upid/thread combination refers to a cause of Scroll Jank.
 Argument \| Type \| Description
 --- \| --- \| ---
 event_latency_id \| INT \| The slice id of an EventLatency slice.
-process_type \| STRING \| The process type that the thread is on: one of 'Browser', 'Renderer' or 'GPU'.
+process_type \| STRING \| The process type that the thread is on: one of 'Browser', 'Renderer' or '
+GPU'.
 thread_name \| STRING \| The name of the thread.
 
 | Column | Type | Description |
@@ -5245,7 +5430,8 @@ thread_name \| STRING \| The name of the thread.
 
 <br />
 
-**chrome_janky_event_latencies_v3**. Selects EventLatency slices that correspond with janks in a scroll
+**chrome_janky_event_latencies_v3**. Selects EventLatency slices that correspond with janks in a
+scroll
 
 <br />
 
@@ -5272,7 +5458,8 @@ based on the V3 version of scroll jank metrics.
 
 <br />
 
-**chrome_janky_frame_presentation_intervals**. Frame presentation interval is the delta between when the frame was supposed to be presented and when it was actually presented.
+**chrome_janky_frame_presentation_intervals**. Frame presentation interval is the delta between when
+the frame was supposed to be presented and when it was actually presented.
 
 <br />
 
@@ -5339,7 +5526,8 @@ TABLE
 
 <br />
 
-**chrome_gesture_scroll_updates**. Grabs all gesture updates with respective scroll ids and start/end timestamps, regardless of being presented.
+**chrome_gesture_scroll_updates**. Grabs all gesture updates with respective scroll ids and
+start/end timestamps, regardless of being presented.
 
 <br />
 
@@ -5364,7 +5552,8 @@ timestamps, regardless of being presented.
 
 <br />
 
-**chrome_presented_gesture_scrolls**. Scroll updates, corresponding to all input events that were converted to a presented scroll update.
+**chrome_presented_gesture_scrolls**. Scroll updates, corresponding to all input events that were
+converted to a presented scroll update.
 
 <br />
 
@@ -5389,7 +5578,8 @@ presented scroll update.
 
 <br />
 
-**chrome_scroll_updates_with_deltas**. Associate every trace_id with it's perceived delta_y on the screen after prediction.
+**chrome_scroll_updates_with_deltas**. Associate every trace_id with it's perceived delta_y on the
+screen after prediction.
 
 <br />
 
@@ -5455,7 +5645,8 @@ TABLE
 
 <br />
 
-**chrome_merged_frame_view**. Group all gestures presented at the same timestamp together in a single row.
+**chrome_merged_frame_view**. Group all gestures presented at the same timestamp together in a
+single row.
 
 <br />
 
@@ -5483,7 +5674,9 @@ a single row.
 
 <br />
 
-**chrome_frame_info_with_delay**. View contains all chrome presented frames during gesture updates while calculating delay since last presented which usually should equal to \|VSYNC_INTERVAL\| if no jank is present.
+**chrome_frame_info_with_delay**. View contains all chrome presented frames during gesture updates
+while calculating delay since last presented which usually should equal to \|VSYNC_INTERVAL\| if no
+jank is present.
 
 <br />
 
@@ -5515,7 +5708,9 @@ equal to \|VSYNC_INTERVAL\| if no jank is present.
 
 <br />
 
-**chrome_vsyncs**. Calculate \|VSYNC_INTERVAL\| as the lowest vsync seen in the trace or the minimum delay between frames larger than zero. TODO(\~M130): Remove the lowest vsync since we should always have vsync_interval_ms.
+**chrome_vsyncs**. Calculate \|VSYNC_INTERVAL\| as the lowest vsync seen in the trace or the minimum
+delay between frames larger than zero. TODO(\~M130): Remove the lowest vsync since we should always
+have vsync_interval_ms.
 
 <br />
 
@@ -5578,7 +5773,8 @@ TABLE
 
 <br />
 
-**chrome_janky_frames**. Finds all causes of jank for all janky frames, and a cause of sub jank if the cause of jank was GPU related.
+**chrome_janky_frames**. Finds all causes of jank for all janky frames, and a cause of sub jank if
+the cause of jank was GPU related.
 
 <br />
 
@@ -5618,7 +5814,9 @@ TABLE
 
 <br />
 
-**chrome_janky_frames_percentage**. Dividing missed frames over total frames to get janky frame percentage. This represents the v3 scroll jank metrics. Reflects Event.Jank.DelayedFramesPercentage UMA metric.
+**chrome_janky_frames_percentage**. Dividing missed frames over total frames to get janky frame
+percentage. This represents the v3 scroll jank metrics. Reflects Event.Jank.DelayedFramesPercentage
+UMA metric.
 
 <br />
 
@@ -5679,7 +5877,12 @@ VIEW
 
 <br />
 
-**chrome_get_v3_jank_cause_id** -\> LONG. Given two slice Ids A and B, find the maximum difference between the durations of it's direct children with matching names for example if slice A has children named (X, Y, Z) with durations of (10, 10, 5) and slice B has children named (X, Y) with durations of (9, 9), the function will return the slice id of the slice named Z that is A's child, as no matching slice named Z was found under B, making 5 - 0 = 5 the maximum delta between both slice's direct children
+**chrome_get_v3_jank_cause_id** -\> LONG. Given two slice Ids A and B, find the maximum difference
+between the durations of it's direct children with matching names for example if slice A has
+children named (X, Y, Z) with durations of (10, 10, 5) and slice B has children named (X, Y) with
+durations of (9, 9), the function will return the slice id of the slice named Z that is A's child,
+as no matching slice named Z was found under B, making 5 - 0 = 5 the maximum delta between both
+slice's direct children
 
 <br />
 
@@ -5710,7 +5913,8 @@ Returns LONG: The slice id of the breakdown that has the maximum duration delta.
 
 <br />
 
-**chrome_scroll_input_offsets**. The raw coordinates and pixel offsets for all input events which were part of a scroll.
+**chrome_scroll_input_offsets**. The raw coordinates and pixel offsets for all input events which
+were part of a scroll.
 
 <br />
 
@@ -5761,7 +5965,8 @@ that are actually processed.
 
 <br />
 
-**chrome_select_long_task_slices** . Extract mojo information for the long-task-tracking scenario for specific names
+**chrome_select_long_task_slices** . Extract mojo information for the long-task-tracking scenario
+for specific names
 
 <br />
 
@@ -5794,7 +5999,9 @@ name \| STRING \| The name of slice.
 
 <br />
 
-**chrome_speedometer_measure**. Augmented slices for Speedometer measurements. These are the intervals of time Speedometer uses to compute the final score. There are two intervals that are measured for every test: sync and async
+**chrome_speedometer_measure**. Augmented slices for Speedometer measurements. These are the
+intervals of time Speedometer uses to compute the final score. There are two intervals that are
+measured for every test: sync and async
 
 <br />
 
@@ -5819,7 +6026,9 @@ There are two intervals that are measured for every test: sync and async
 
 <br />
 
-**chrome_speedometer_iteration**. Slice that covers one Speedometer iteration. Depending on the Speedometer version these slices might need to be estimated as older versions of Speedometer to not emit marks for this interval
+**chrome_speedometer_iteration**. Slice that covers one Speedometer iteration. Depending on the
+Speedometer version these slices might need to be estimated as older versions of Speedometer to not
+emit marks for this interval
 
 <br />
 
@@ -5848,7 +6057,8 @@ a bit.
 
 <br />
 
-**chrome_speedometer_score** -\> DOUBLE. Returns the Speedometer score for all iterations in the trace
+**chrome_speedometer_score** -\> DOUBLE. Returns the Speedometer score for all iterations in the
+trace
 
 <br />
 
@@ -5864,7 +6074,8 @@ Returns DOUBLE: Speedometer score
 
 <br />
 
-**chrome_speedometer_renderer_main_utid** -\> INT. Returns the utid for the main thread that ran Speedometer 3
+**chrome_speedometer_renderer_main_utid** -\> INT. Returns the utid for the main thread that ran
+Speedometer 3
 
 <br />
 
@@ -5884,7 +6095,10 @@ Returns INT: Renderer main utid
 
 <br />
 
-**chrome_speedometer_2_1_measure**. Augmented slices for Speedometer measurements. These are the intervals of time Speedometer uses to compute the final score. There are two intervals that are measured for every test: sync and async sync is the time between the start and sync-end marks, async is the time between the sync-end and async-end marks.
+**chrome_speedometer_2_1_measure**. Augmented slices for Speedometer measurements. These are the
+intervals of time Speedometer uses to compute the final score. There are two intervals that are
+measured for every test: sync and async sync is the time between the start and sync-end marks, async
+is the time between the sync-end and async-end marks.
 
 <br />
 
@@ -5911,7 +6125,8 @@ between the sync-end and async-end marks.
 
 <br />
 
-**chrome_speedometer_2_1_iteration**. Slice that covers one Speedometer iteration. This slice is actually estimated as a default Speedometer run will not emit marks to cover this interval
+**chrome_speedometer_2_1_iteration**. Slice that covers one Speedometer iteration. This slice is
+actually estimated as a default Speedometer run will not emit marks to cover this interval
 
 <br />
 
@@ -5940,7 +6155,8 @@ returns the values in ms these here and in ns.
 
 <br />
 
-**chrome_speedometer_2_1_score** -\> DOUBLE. Returns the Speedometer 2.1 score for all iterations in the trace
+**chrome_speedometer_2_1_score** -\> DOUBLE. Returns the Speedometer 2.1 score for all iterations in
+the trace
 
 <br />
 
@@ -5956,7 +6172,8 @@ Returns DOUBLE: Speedometer 2.1 score
 
 <br />
 
-**chrome_speedometer_2_1_renderer_main_utid** -\> INT. Returns the utid for the main thread that ran Speedometer 2.1
+**chrome_speedometer_2_1_renderer_main_utid** -\> INT. Returns the utid for the main thread that ran
+Speedometer 2.1
 
 <br />
 
@@ -5976,7 +6193,9 @@ Returns INT: Renderer main utid
 
 <br />
 
-**chrome_speedometer_3_measure**. Augmented slices for Speedometer measurements. These are the intervals of time Speedometer uses to compute the final score. There are two intervals that are measured for every test: sync and async.
+**chrome_speedometer_3_measure**. Augmented slices for Speedometer measurements. These are the
+intervals of time Speedometer uses to compute the final score. There are two intervals that are
+measured for every test: sync and async.
 
 <br />
 
@@ -6001,7 +6220,9 @@ There are two intervals that are measured for every test: sync and async.
 
 <br />
 
-**chrome_speedometer_3_iteration**. Slice that covers one Speedometer iteration. The metrics associated are the same ones Speedometer would output, but note we use ns precision (Speedometer uses \~100us) so the actual values might differ a bit.
+**chrome_speedometer_3_iteration**. Slice that covers one Speedometer iteration. The metrics
+associated are the same ones Speedometer would output, but note we use ns precision (Speedometer
+uses \~100us) so the actual values might differ a bit.
 
 <br />
 
@@ -6028,7 +6249,8 @@ Speedometer would output, but note we use ns precision (Speedometer uses
 
 <br />
 
-**chrome_speedometer_3_score** -\> DOUBLE. Returns the Speedometer 3 score for all iterations in the trace
+**chrome_speedometer_3_score** -\> DOUBLE. Returns the Speedometer 3 score for all iterations in the
+trace
 
 <br />
 
@@ -6044,7 +6266,8 @@ Returns DOUBLE: Speedometer 3 score
 
 <br />
 
-**chrome_speedometer_3_renderer_main_utid** -\> INT. Returns the utid for the main thread that ran Speedometer 3
+**chrome_speedometer_3_renderer_main_utid** -\> INT. Returns the utid for the main thread that ran
+Speedometer 3
 
 <br />
 
@@ -6090,7 +6313,8 @@ TABLE
 
 <br />
 
-**chrome_java_views**. A list of slices corresponding to operations on interesting (non-generic) Chrome Java views
+**chrome_java_views**. A list of slices corresponding to operations on interesting (non-generic)
+Chrome Java views
 
 <br />
 
@@ -6121,25 +6345,25 @@ TODO(altimin): convert this to EXTEND_TABLE when it becomes available.
 
 VIEW
 
-| Column | Type | Description |
-|---|---|---|
-| id | INT | Slice id. |
-| type | STRING | Type. |
-| name | STRING | Name of the task. |
-| ts | INT | Timestamp. |
-| dur | INT | Duration. |
-| utid | INT | Utid of the thread this task run on. |
-| thread_name | STRING | Name of the thread this task run on. |
-| upid | INT | Upid of the process of this task. |
-| process_name | STRING | Name of the process of this task. |
-| track_id | INT | Same as slice.track_id. |
-| category | STRING | Same as slice.category. |
-| depth | INT | Same as slice.depth. |
-| parent_id | INT | Same as slice.parent_id. |
-| arg_set_id | INT | Same as slice.arg_set_id. |
-| thread_ts | INT | Same as slice.thread_ts. |
-| thread_dur | INT | Same as slice.thread_dur. |
-| posted_from | STRING | Source location where the PostTask was called. |
+| Column       | Type   | Description                                    |
+|--------------|--------|------------------------------------------------|
+| id           | INT    | Slice id.                                      |
+| type         | STRING | Type.                                          |
+| name         | STRING | Name of the task.                              |
+| ts           | INT    | Timestamp.                                     |
+| dur          | INT    | Duration.                                      |
+| utid         | INT    | Utid of the thread this task run on.           |
+| thread_name  | STRING | Name of the thread this task run on.           |
+| upid         | INT    | Upid of the process of this task.              |
+| process_name | STRING | Name of the process of this task.              |
+| track_id     | INT    | Same as slice.track_id.                        |
+| category     | STRING | Same as slice.category.                        |
+| depth        | INT    | Same as slice.depth.                           |
+| parent_id    | INT    | Same as slice.parent_id.                       |
+| arg_set_id   | INT    | Same as slice.arg_set_id.                      |
+| thread_ts    | INT    | Same as slice.thread_ts.                       |
+| thread_dur   | INT    | Same as slice.thread_dur.                      |
+| posted_from  | STRING | Source location where the PostTask was called. |
 
 <br />
 
@@ -6156,23 +6380,23 @@ A list of "Chrome tasks": top-level execution units (e.g. scheduler tasks /
 IPCs / system callbacks) run by Chrome. For a given thread, the slices
 corresponding to these tasks will not intersect.
 
-| Column | Type | Description |
-|---|---|---|
-| id | INT | Id for the given task, also the id of the slice this task corresponds to. |
-| name | STRING | Name for the given task. |
-| task_type | STRING | Type of the task (e.g. "scheduler"). |
-| thread_name | STRING | Thread name. |
-| utid | INT | Utid. |
-| process_name | STRING | Process name. |
-| upid | INT | Upid. |
-| ts | INT | Alias of \|slice.ts\|. |
-| dur | INT | Alias of \|slice.dur\|. |
-| track_id | INT | Alias of \|slice.track_id\|. |
-| category | STRING | Alias of \|slice.category\|. |
-| arg_set_id | INT | Alias of \|slice.arg_set_id\|. |
-| thread_ts | INT | Alias of \|slice.thread_ts\|. |
-| thread_dur | INT | Alias of \|slice.thread_dur\|. |
-| full_name | STRING | STRING Legacy alias for \|name\|. |
+| Column       | Type   | Description                                                               |
+|--------------|--------|---------------------------------------------------------------------------|
+| id           | INT    | Id for the given task, also the id of the slice this task corresponds to. |
+| name         | STRING | Name for the given task.                                                  |
+| task_type    | STRING | Type of the task (e.g. "scheduler").                                      |
+| thread_name  | STRING | Thread name.                                                              |
+| utid         | INT    | Utid.                                                                     |
+| process_name | STRING | Process name.                                                             |
+| upid         | INT    | Upid.                                                                     |
+| ts           | INT    | Alias of \|slice.ts\|.                                                    |
+| dur          | INT    | Alias of \|slice.dur\|.                                                   |
+| track_id     | INT    | Alias of \|slice.track_id\|.                                              |
+| category     | STRING | Alias of \|slice.category\|.                                              |
+| arg_set_id   | INT    | Alias of \|slice.arg_set_id\|.                                            |
+| thread_ts    | INT    | Alias of \|slice.thread_ts\|.                                             |
+| thread_dur   | INT    | Alias of \|slice.thread_dur\|.                                            |
+| full_name    | STRING | STRING Legacy alias for \|name\|.                                         |
 
 <br />
 
@@ -6184,7 +6408,9 @@ corresponding to these tasks will not intersect.
 
 <br />
 
-**chrome_vsync_intervals**. A simple table that checks the time between VSync (this can be used to determine if we're refreshing at 90 FPS or 60 FPS). Note: In traces without the "Java" category there will be no VSync TraceEvents and this table will be empty.
+**chrome_vsync_intervals**. A simple table that checks the time between VSync (this can be used to
+determine if we're refreshing at 90 FPS or 60 FPS). Note: In traces without the "Java" category
+there will be no VSync TraceEvents and this table will be empty.
 
 <br />
 
@@ -6193,15 +6419,16 @@ A simple table that checks the time between VSync (this can be used to
 determine if we're refreshing at 90 FPS or 60 FPS).
 
 > [!NOTE]
-> **Note:** In traces without the "Java" category there will be no VSync TraceEvents and this table will be empty.
+> **Note:** In traces without the "Java" category there will be no VSync TraceEvents and this table
+> will be empty.
 
-| Column | Type | Description |
-|---|---|---|
-| slice_id | INT | Slice id of the vsync slice. |
-| ts | INT | Timestamp of the vsync slice. |
-| dur | INT | Duration of the vsync slice. |
-| track_id | INT | Track id of the vsync slice. |
-| time_to_next_vsync | INT | Duration until next vsync arrives. |
+| Column             | Type | Description                        |
+|--------------------|------|------------------------------------|
+| slice_id           | INT  | Slice id of the vsync slice.       |
+| ts                 | INT  | Timestamp of the vsync slice.      |
+| dur                | INT  | Duration of the vsync slice.       |
+| track_id           | INT  | Track id of the vsync slice.       |
+| time_to_next_vsync | INT  | Duration until next vsync arrives. |
 
 <br />
 
@@ -6211,7 +6438,11 @@ determine if we're refreshing at 90 FPS or 60 FPS).
 
 <br />
 
-**chrome_calculate_avg_vsync_interval** -\> FLOAT. Function: compute the average Vysnc interval of the gesture (hopefully this would be either 60 FPS for the whole gesture or 90 FPS but that isnt always the case) on the given time segment. If the trace doesnt contain the VSync TraceEvent we just fall back on assuming its 60 FPS (this is the 1.6e+7 in the COALESCE which corresponds to 16 ms or 60 FPS).
+**chrome_calculate_avg_vsync_interval** -\> FLOAT. Function: compute the average Vysnc interval of
+the gesture (hopefully this would be either 60 FPS for the whole gesture or 90 FPS but that isnt
+always the case) on the given time segment. If the trace doesnt contain the VSync TraceEvent we just
+fall back on assuming its 60 FPS (this is the 1.6e+7 in the COALESCE which corresponds to 16 ms or
+60 FPS).
 
 <br />
 
@@ -6225,12 +6456,13 @@ FPS but that isnt always the case) on the given time segment.
 If the trace doesnt contain the VSync TraceEvent we just fall back on
 assuming its 60 FPS (this is the 1.6e+7 in the COALESCE which
 corresponds to 16 ms or 60 FPS).
-Returns FLOAT: The average vsync interval on this time segment or 1.6e+7, if trace doesn't contain the VSync TraceEvent.
+Returns FLOAT: The average vsync interval on this time segment or 1.6e+7, if trace doesn't contain
+the VSync TraceEvent.
 
-| Argument | Type | Description |
-|---|---|---|
+| Argument | Type | Description          |
+|----------|------|----------------------|
 | begin_ts | LONG | Interval start time. |
-| end_ts | LONG | Interval end time. |
+| end_ts   | LONG | Interval end time.   |
 
 <br />
 
@@ -6242,7 +6474,11 @@ Returns FLOAT: The average vsync interval on this time segment or 1.6e+7, if tra
 
 <br />
 
-**chrome_web_content_interactions**. Chrome web content interactions (InteractionToFirstPaint), including associated high-level metrics and properties. Multiple events may occur for the same interaction; each row in this table represents the primary (longest) event for the interaction. Web content interactions are discrete, as opposed to sustained (e.g. scrolling); and only occur with the web content itself, as opposed to other parts of Chrome (e.g
+**chrome_web_content_interactions**. Chrome web content interactions (InteractionToFirstPaint),
+including associated high-level metrics and properties. Multiple events may occur for the same
+interaction; each row in this table represents the primary (longest) event for the interaction. Web
+content interactions are discrete, as opposed to sustained (e.g. scrolling); and only occur with the
+web content itself, as opposed to other parts of Chrome (e.g
 
 <br />
 
@@ -6258,14 +6494,14 @@ scrolling); and only occur with the web content itself, as opposed to other
 parts of Chrome (e.g. omnibox). Interaction events include taps, clicks,
 keyboard input (typing), and drags.
 
-| Column | Type | Description |
-|---|---|---|
-| id | INT | Unique id for this interaction. |
-| ts | INT | Start timestamp of the event. Because multiple events may occur for the same interaction, this is the start timestamp of the longest event. |
-| dur | INT | Duration of the event. Because multiple events may occur for the same interaction, this is the duration of the longest event. |
-| interaction_type | STRING | The interaction type. |
-| total_duration_ms | INT | The total duration of all events that occurred for the same interaction. |
-| renderer_upid | INT | The process id this event occurred on. |
+| Column            | Type   | Description                                                                                                                                 |
+|-------------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| id                | INT    | Unique id for this interaction.                                                                                                             |
+| ts                | INT    | Start timestamp of the event. Because multiple events may occur for the same interaction, this is the start timestamp of the longest event. |
+| dur               | INT    | Duration of the event. Because multiple events may occur for the same interaction, this is the duration of the longest event.               |
+| interaction_type  | STRING | The interaction type.                                                                                                                       |
+| total_duration_ms | INT    | The total duration of all events that occurred for the same interaction.                                                                    |
+| renderer_upid     | INT    | The process id this event occurred on.                                                                                                      |
 
 <br />
 
@@ -6309,10 +6545,11 @@ Then this macro will generate the following intervals:
 ts=20, dur=10, value=30, track_id=1
 ts=0, dur=10, value=10, track_id=2
 ts=10, dur=30, value=20, track_id=2`
-Returns: TableOrSubquery, Table with the schema (id UINT32, ts UINT64, dur UINT64, track_id UINT64, value DOUBLE, next_value DOUBLE, delta_value DOUBLE).
+Returns: TableOrSubquery, Table with the schema (id UINT32, ts UINT64, dur UINT64, track_id UINT64,
+value DOUBLE, next_value DOUBLE, delta_value DOUBLE).
 
-| Argument | Type | Description |
-|---|---|---|
+| Argument      | Type            | Description                                                                                                                                                                                                                |
+|---------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | counter_table | TableOrSubquery | A table/view/subquery corresponding to a "counter-like" table. This table must have the columns "id" and "ts" and "track_id" and "value" corresponding to an id, timestamp, counter track_id and associated counter value. |
 
 <br />
@@ -6327,7 +6564,8 @@ Returns: TableOrSubquery, Table with the schema (id UINT32, ts UINT64, dur UINT6
 
 <br />
 
-**graph_dominator_tree** . Given a table containing a directed flow-graph and an entry node, computes the "dominator tree" for the graph
+**graph_dominator_tree** . Given a table containing a directed flow-graph and an entry node,
+computes the "dominator tree" for the graph
 
 <br />
 
@@ -6368,12 +6606,14 @@ dominator_compatible_heap_graph,
 (SELECT max(id) + 1 FROM heap_graph_object)
 );
 \`\`\`
-Returns: TableOrSubquery, The returned table has the schema (node_id UINT32, dominator_node_id UINT32). \|node_id\| is the id of the node from the input graph and \|dominator_node_id\| is the id of the node in the input flow-graph which is the "dominator" of \|node_id\|.
+Returns: TableOrSubquery, The returned table has the schema (node_id UINT32, dominator_node_id
+UINT32). \|node_id\| is the id of the node from the input graph and \|dominator_node_id\| is the id
+of the node in the input flow-graph which is the "dominator" of \|node_id\|.
 
-| Argument | Type | Description |
-|---|---|---|
-| graph_table | TableOrSubquery | A table/view/subquery corresponding to a directed flow-graph on which the dominator tree should be computed. This table must have the columns "source_node_id" and "dest_node_id" corresponding to the two nodes on either end of the edges in the graph. Note: the columns must contain uint32 similar to ids in trace processor tables (i.e. the values should be relatively dense and close to zero). The implementation makes assumptions on this for performance reasons and, if this criteria is not, can lead to enormous amounts of memory being allocated. Note: this means that the graph *must* be a single fully connected component with \|root_node_id\| (see below) being the "entry node" for this component. Specifically, all nodes *must* be reachable by following paths from the root node. Failing to adhere to this property will result in undefined behaviour. If working with a "forest"-like structure, a dummy node should be added which links all the roots of the forest together into a single component; an example of this can be found in the heap graph example query above. |
-| root_node_id | Expr | The entry node to \|graph_table\| which will be the root of the dominator tree. |
+| Argument     | Type            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|--------------|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| graph_table  | TableOrSubquery | A table/view/subquery corresponding to a directed flow-graph on which the dominator tree should be computed. This table must have the columns "source_node_id" and "dest_node_id" corresponding to the two nodes on either end of the edges in the graph. Note: the columns must contain uint32 similar to ids in trace processor tables (i.e. the values should be relatively dense and close to zero). The implementation makes assumptions on this for performance reasons and, if this criteria is not, can lead to enormous amounts of memory being allocated. Note: this means that the graph *must* be a single fully connected component with \|root_node_id\| (see below) being the "entry node" for this component. Specifically, all nodes *must* be reachable by following paths from the root node. Failing to adhere to this property will result in undefined behaviour. If working with a "forest"-like structure, a dummy node should be added which links all the roots of the forest together into a single component; an example of this can be found in the heap graph example query above. |
+| root_node_id | Expr            | The entry node to \|graph_table\| which will be the root of the dominator tree.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 <br />
 
@@ -6385,7 +6625,16 @@ Returns: TableOrSubquery, The returned table has the schema (node_id UINT32, dom
 
 <br />
 
-**tree_structural_partition_by_group** . Partitions a tree into a forest of trees based on a given grouping key in a structure-preserving way. Specifically, for each tree in the output forest, all the nodes in that tree have the same ancestors and descendants as in the original tree *iff* that ancestor/descendent belonged to the same group. Example: Input id \| parent_id \| group_key ---\|---\|--- 1 \| NULL \| 1 2 \| 1 \| 1 3 \| NULL \| 2 4 \| NULL \| 2 5 \| 2 \| 1 6 \| NULL \| 3 7 \| 4 \| 2 8 \| 4 \| 1 Or as a graph: `1 (1) / 2 (1) / \ 3 (2) 4 (2) / \ 5 (1) 8 (1) / \ 6 (3) 7 (2)` Possible output (order of rows is implementation-defined) id \| parent_id \| group_key ---\|---\|--- 1 \| NULL \| 1 2 \| 1 \| 1 3 \| NULL \| 2 4 \| NULL \| 2 5 \| 2 \| 1 6 \| NULL \| 3 7 \| 4 \| 2 8 \| 2 \| 1 Or as a forest: `1 (1) 3 (2) 4 (2) 6 (3) | | 2 (1) 7 (2) / \ 5 (1) 8 (1)`
+**tree_structural_partition_by_group** . Partitions a tree into a forest of trees based on a given
+grouping key in a structure-preserving way. Specifically, for each tree in the output forest, all
+the nodes in that tree have the same ancestors and descendants as in the original tree *iff* that
+ancestor/descendent belonged to the same group. Example: Input id \| parent_id \|
+group_key ---\|---\|--- 1 \| NULL \| 1 2 \| 1 \| 1 3 \| NULL \| 2 4 \| NULL \| 2 5 \| 2 \| 1 6 \|
+NULL \| 3 7 \| 4 \| 2 8 \| 4 \| 1 Or as a graph:
+`1 (1) / 2 (1) / \ 3 (2) 4 (2) / \ 5 (1) 8 (1) / \ 6 (3) 7 (2)` Possible output (order of rows is
+implementation-defined) id \| parent_id \| group_key ---\|---\|--- 1 \| NULL \| 1 2 \| 1 \| 1 3 \|
+NULL \| 2 4 \| NULL \| 2 5 \| 2 \| 1 6 \| NULL \| 3 7 \| 4 \| 2 8 \| 2 \| 1 Or as a forest:
+`1 (1) 3 (2) 4 (2) 6 (3) | | 2 (1) 7 (2) / \ 5 (1) 8 (1)`
 
 <br />
 
@@ -6404,15 +6653,15 @@ Example:
 Input
 
 | id | parent_id | group_key |
-|---|---|---|
-| 1 | NULL | 1 |
-| 2 | 1 | 1 |
-| 3 | NULL | 2 |
-| 4 | NULL | 2 |
-| 5 | 2 | 1 |
-| 6 | NULL | 3 |
-| 7 | 4 | 2 |
-| 8 | 4 | 1 |
+|----|-----------|-----------|
+| 1  | NULL      | 1         |
+| 2  | 1         | 1         |
+| 3  | NULL      | 2         |
+| 4  | NULL      | 2         |
+| 5  | 2         | 1         |
+| 6  | NULL      | 3         |
+| 7  | 4         | 2         |
+| 8  | 4         | 1         |
 
 Or as a graph:
 `1 (1)
@@ -6427,15 +6676,15 @@ Or as a graph:
 Possible output (order of rows is implementation-defined)
 
 | id | parent_id | group_key |
-|---|---|---|
-| 1 | NULL | 1 |
-| 2 | 1 | 1 |
-| 3 | NULL | 2 |
-| 4 | NULL | 2 |
-| 5 | 2 | 1 |
-| 6 | NULL | 3 |
-| 7 | 4 | 2 |
-| 8 | 2 | 1 |
+|----|-----------|-----------|
+| 1  | NULL      | 1         |
+| 2  | 1         | 1         |
+| 3  | NULL      | 2         |
+| 4  | NULL      | 2         |
+| 5  | 2         | 1         |
+| 6  | NULL      | 3         |
+| 7  | 4         | 2         |
+| 8  | 2         | 1         |
 
 Or as a forest:
 `1 (1) 3 (2) 4 (2) 6 (3)
@@ -6443,10 +6692,11 @@ Or as a forest:
 2 (1) 7 (2)
 / \
 5 (1) 8 (1)`
-Returns: TableOrSubquery, The returned table has the schema (id UINT32, parent_id UINT32, group_key UINT32).
+Returns: TableOrSubquery, The returned table has the schema (id UINT32, parent_id UINT32, group_key
+UINT32).
 
-| Argument | Type | Description |
-|---|---|---|
+| Argument   | Type            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | tree_table | TableOrSubquery | A table/view/subquery corresponding to a tree which should be partitioned. This table must have the columns "id", "parent_id" and "group_key". Note: the columns must contain uint32 similar to ids in trace processor tables (i.e. the values should be relatively dense and close to zero). The implementation makes assumptions on this for performance reasons and, if this criteria is not, can lead to enormous amounts of memory being allocated. |
 
 <br />
@@ -6459,7 +6709,8 @@ Returns: TableOrSubquery, The returned table has the schema (id UINT32, parent_i
 
 <br />
 
-**graph_reachable_dfs** . Computes the "reachable" set of nodes in a directed graph from a given set of starting nodes by performing a depth-first search on the graph
+**graph_reachable_dfs** . Computes the "reachable" set of nodes in a directed graph from a given set
+of starting nodes by performing a depth-first search on the graph
 
 <br />
 
@@ -6489,12 +6740,14 @@ WHERE owned_id IS NOT NULL
 ),
 (SELECT id FROM heap_graph_object WHERE root_type IS NOT NULL)
 );`
-Returns: TableOrSubquery, The returned table has the schema (node_id UINT32, parent_node_id UINT32). \|node_id\| is the id of the node from the input graph and \|parent_node_id\| is the id of the node which was the first encountered predecessor in a DFS search of the graph.
+Returns: TableOrSubquery, The returned table has the schema (node_id UINT32, parent_node_id UINT32).
+\|node_id\| is the id of the node from the input graph and \|parent_node_id\| is the id of the node
+which was the first encountered predecessor in a DFS search of the graph.
 
-| Argument | Type | Description |
-|---|---|---|
+| Argument    | Type            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+|-------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | graph_table | TableOrSubquery | A table/view/subquery corresponding to a directed graph on which the reachability search should be performed. This table must have the columns "source_node_id" and "dest_node_id" corresponding to the two nodes on either end of the edges in the graph. Note: the columns must contain uint32 similar to ids in trace processor tables (i.e. the values should be relatively dense and close to zero). The implementation makes assumptions on this for performance reasons and, if this criteria is not, can lead to enormous amounts of memory being allocated. |
-| start_nodes | TableOrSubquery | A table/view/subquery corresponding to the list of start nodes for the BFS. This table must have a single column "node_id". |
+| start_nodes | TableOrSubquery | A table/view/subquery corresponding to the list of start nodes for the BFS. This table must have a single column "node_id".                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 
 <br />
 
@@ -6502,7 +6755,8 @@ Returns: TableOrSubquery, The returned table has the schema (node_id UINT32, par
 
 <br />
 
-**graph_reachable_bfs** . Computes the "reachable" set of nodes in a directed graph from a given starting node by performing a breadth-first search on the graph
+**graph_reachable_bfs** . Computes the "reachable" set of nodes in a directed graph from a given
+starting node by performing a breadth-first search on the graph
 
 <br />
 
@@ -6532,12 +6786,14 @@ WHERE owned_id IS NOT NULL
 ),
 (SELECT id FROM heap_graph_object WHERE root_type IS NOT NULL)
 );`
-Returns: TableOrSubquery, The returned table has the schema (node_id UINT32, parent_node_id UINT32). \|node_id\| is the id of the node from the input graph and \|parent_node_id\| is the id of the node which was the first encountered predecessor in a BFS search of the graph.
+Returns: TableOrSubquery, The returned table has the schema (node_id UINT32, parent_node_id UINT32).
+\|node_id\| is the id of the node from the input graph and \|parent_node_id\| is the id of the node
+which was the first encountered predecessor in a BFS search of the graph.
 
-| Argument | Type | Description |
-|---|---|---|
+| Argument    | Type            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+|-------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | graph_table | TableOrSubquery | A table/view/subquery corresponding to a directed graph on which the reachability search should be performed. This table must have the columns "source_node_id" and "dest_node_id" corresponding to the two nodes on either end of the edges in the graph. Note: the columns must contain uint32 similar to ids in trace processor tables (i.e. the values should be relatively dense and close to zero). The implementation makes assumptions on this for performance reasons and, if this criteria is not, can lead to enormous amounts of memory being allocated. |
-| start_nodes | TableOrSubquery | A table/view/subquery corresponding to the list of start nodes for the BFS. This table must have a single column "node_id". |
+| start_nodes | TableOrSubquery | A table/view/subquery corresponding to the list of start nodes for the BFS. This table must have a single column "node_id".                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 
 <br />
 
@@ -6569,10 +6825,12 @@ ts AS sort_key
 FROM slice
 )
 );`
-Returns: TableOrSubquery, The returned table has the schema (node_id UINT32, next_node_id UINT32). \|node_id\| is the id of the node from the input graph and \|next_node_id\| is the id of the node which is its next sibling.
+Returns: TableOrSubquery, The returned table has the schema (node_id UINT32, next_node_id UINT32).
+\|node_id\| is the id of the node from the input graph and \|next_node_id\| is the id of the node
+which is its next sibling.
 
-| Argument | Type | Description |
-|---|---|---|
+| Argument    | Type            | Description                                                                                                                                                              |
+|-------------|-----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | graph_table | TableOrSubquery | A table/view/subquery corresponding to a directed graph for which to find the next sibling. This table must have the columns "node_id", "node_parent_id" and "sort_key". |
 
 <br />
@@ -6581,7 +6839,12 @@ Returns: TableOrSubquery, The returned table has the schema (node_id UINT32, nex
 
 <br />
 
-**graph_reachable_weight_bounded_dfs** . Computes the "reachable" set of nodes in a directed graph from a set of starting (root) nodes by performing a depth-first search from each root node on the graph. The search is bounded by the sum of edge weights on the path and the root node specifies the max weight (inclusive) allowed before stopping the search. The returned nodes are structured as a tree with parent-child relationships corresponding to the order in which nodes were encountered by the DFS
+**graph_reachable_weight_bounded_dfs** . Computes the "reachable" set of nodes in a directed graph
+from a set of starting (root) nodes by performing a depth-first search from each root node on the
+graph. The search is bounded by the sum of edge weights on the path and the root node specifies the
+max weight (inclusive) allowed before stopping the search. The returned nodes are structured as a
+tree with parent-child relationships corresponding to the order in which nodes were encountered by
+the DFS
 
 <br />
 
@@ -6624,13 +6887,16 @@ id - COALESCE(prev_id, id) AS root_target_weight
 FROM _wakeup_chain
 ));
 \`\`\`
-Returns: TableOrSubquery, The returned table has the schema (root_node_id, node_id UINT32, parent_node_id UINT32). \|root_node_id\| is the id of the starting node under which this edge was encountered. \|node_id\| is the id of the node from the input graph and \|parent_node_id\| is the id of the node which was the first encountered predecessor in a DFS search of the graph.
+Returns: TableOrSubquery, The returned table has the schema (root_node_id, node_id UINT32,
+parent_node_id UINT32). \|root_node_id\| is the id of the starting node under which this edge was
+encountered. \|node_id\| is the id of the node from the input graph and \|parent_node_id\| is the id
+of the node which was the first encountered predecessor in a DFS search of the graph.
 
-| Argument | Type | Description |
-|---|---|---|
-| graph_table | TableOrSubquery | A table/view/subquery corresponding to a directed graph on which the reachability search should be performed. This table must have the columns "source_node_id" and "dest_node_id" corresponding to the two nodes on either end of the edges in the graph and an "edge_weight" corresponding to the weight of the edge between the node. Note: the columns must contain uint32 similar to ids in trace processor tables (i.e. the values should be relatively dense and close to zero). The implementation makes assumptions on this for performance reasons and, if this criteria is not, can lead to enormous amounts of memory being allocated. |
-| root_table | TableOrSubquery | A table/view/subquery corresponding to start nodes to \|graph_table\| which will be the roots of the reachability trees. This table must have the columns "root_node_id" and "root_target_weight" corresponding to the starting node id and the max weight allowed on the tree. Note: the columns must contain uint32 similar to ids in trace processor tables (i.e. the values should be relatively dense and close to zero). The implementation makes assumptions on this for performance reasons and, if this criteria is not, can lead to enormous amounts of memory being allocated. |
-| is_target_weight_floor | Expr | Whether the target_weight is a floor weight or ceiling weight. If it's floor, the search stops right after we exceed the target weight, and we include the node that pushed just passed the target. If ceiling, the search stops right before the target weight and the node that would have pushed us passed the target is not included. |
+| Argument               | Type            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|------------------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| graph_table            | TableOrSubquery | A table/view/subquery corresponding to a directed graph on which the reachability search should be performed. This table must have the columns "source_node_id" and "dest_node_id" corresponding to the two nodes on either end of the edges in the graph and an "edge_weight" corresponding to the weight of the edge between the node. Note: the columns must contain uint32 similar to ids in trace processor tables (i.e. the values should be relatively dense and close to zero). The implementation makes assumptions on this for performance reasons and, if this criteria is not, can lead to enormous amounts of memory being allocated. |
+| root_table             | TableOrSubquery | A table/view/subquery corresponding to start nodes to \|graph_table\| which will be the roots of the reachability trees. This table must have the columns "root_node_id" and "root_target_weight" corresponding to the starting node id and the max weight allowed on the tree. Note: the columns must contain uint32 similar to ids in trace processor tables (i.e. the values should be relatively dense and close to zero). The implementation makes assumptions on this for performance reasons and, if this criteria is not, can lead to enormous amounts of memory being allocated.                                                          |
+| is_target_weight_floor | Expr            | Whether the target_weight is a floor weight or ceiling weight. If it's floor, the search stops right after we exceed the target weight, and we include the node that pushed just passed the target. If ceiling, the search stops right before the target weight and the node that would have pushed us passed the target is not included.                                                                                                                                                                                                                                                                                                          |
 
 <br />
 
@@ -6644,7 +6910,13 @@ Returns: TableOrSubquery, The returned table has the schema (root_node_id, node_
 
 <br />
 
-**export_to_firefox_profile** -\> STRING. Dumps all trace data as a Firefox profile json string See `Profile` in https://github.com/firefox-devtools/profiler/blob/main/src/types/profile.js Also https://firefox-source-docs.mozilla.org/tools/profiler/code-overview.html You would probably want to download the generated json and then open at https://https://profiler.firefox.com You can easily do this from the UI via the following SQL `SELECT CAST(export_to_firefox_profile() AS BLOB) AS profile;` The result will have a link for you to download this json as a file.
+**export_to_firefox_profile** -\> STRING. Dumps all trace data as a Firefox profile json string See
+`Profile` in https://github.com/firefox-devtools/profiler/blob/main/src/types/profile.js
+Also https://firefox-source-docs.mozilla.org/tools/profiler/code-overview.html You would probably
+want to download the generated json and then open at https://https://profiler.firefox.com You can
+easily do this from the UI via the following SQL
+`SELECT CAST(export_to_firefox_profile() AS BLOB) AS profile;` The result will have a link for you
+to download this json as a file.
 
 <br />
 

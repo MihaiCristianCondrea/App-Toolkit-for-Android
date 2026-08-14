@@ -16,10 +16,12 @@
   -->
 
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:width="380dp"
     android:height="380dp"
     android:viewportWidth="380"
-    android:viewportHeight="380">
+    android:viewportHeight="380"
+    tools:ignore="VectorRaster">
 
     <path
         android:fillColor="?attr/colorPrimaryContainer"

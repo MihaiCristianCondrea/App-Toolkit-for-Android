@@ -27,12 +27,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.advanced.ui.Advanced
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repositories.DefaultUsageAndDiagnosticsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.data.repositories.UsageAndDiagnosticsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.diagnostics.ui.UsageAndDiagnosticsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.display.ui.DisplaySettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repositories.DefaultPermissionsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.data.repositories.PermissionsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.PermissionsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.ThemeSettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.google.blue.bluePalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.google.green.greenPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.google.red.redPalette
@@ -60,8 +62,18 @@ fun appToolkitSettingsModules(): List<Module> = listOf(
     advancedSettingsModule(),
     permissionsModule(),
     usageAndDiagnosticsModule(),
+    displaySettingsModule(),
     themeModule(),
 )
+
+private fun displaySettingsModule(): Module = module {
+    viewModel {
+        DisplaySettingsViewModel(
+            displayPreferences = get(),
+            themePreferences = get(),
+        )
+    }
+}
 
 private fun settingsRootModule(): Module = module {
     viewModel {
@@ -150,6 +162,7 @@ private fun usageAndDiagnosticsModule(): Module = module {
 }
 
 private fun themeModule(): Module = module {
+    viewModel { ThemeSettingsViewModel(preferences = get()) }
     single<ColorPalette>(named(AppToolkitDiConstants.MONOCHROME_THEME_PALETTE)) { monochromePalette }
     single<ColorPalette>(named(AppToolkitDiConstants.BLUE_THEME_PALETTE)) { bluePalette }
     single<ColorPalette>(named(AppToolkitDiConstants.GREEN_THEME_PALETTE)) { greenPalette }
@@ -163,4 +176,3 @@ private fun themeModule(): Module = module {
             ?: get(named(AppToolkitDiConstants.BLUE_THEME_PALETTE))
     }
 }
-

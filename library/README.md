@@ -8,7 +8,7 @@ by architectural role but has no build script or runtime artifact of its own.
 ## Owns
 
 - The filesystem and Gradle hierarchy below `:library`.
-- Grouping for the façade, core, navigation, feature, and integration projects.
+- Grouping for the façade, core, navigation contract/UI, feature, and integration projects.
 
 ## Does not own
 

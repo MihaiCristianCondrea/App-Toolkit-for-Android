@@ -1,4 +1,4 @@
-![App Toolkit for Android](/app/src/main/play/listings/en-US/graphics/feature-graphic/play_store_feature_graphic.png "App Toolkit for Android")
+![App Toolkit for Android](/sample/app/src/main/play/listings/en-US/graphics/feature-graphic/play_store_feature_graphic.png "App Toolkit for Android")
 
 <a href="https://play.google.com/store/apps/details?id=com.mihaicristiancondrea.android.apps.apptoolkit"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>
 
@@ -21,13 +21,39 @@ free and open-source software!
 
 # Features
 
-- Preview reusable screens
-- Lists all my published apps
-- Launch apps or open Play Store
-- Dynamic content
-- Supports Material You theming
+🛠️ Essential Quick-Access Utilities
+
+- **Smart Decision Tools**: Instantly flip a coin or roll dice for quick choices and games.
+- **Tally Counter**: Effortlessly track tasks, habits, or repetitions with a simple interface.
+- **Precision Compass & Level**: High-accuracy tools for navigation and perfect alignment.
+- **Lux Meter**: Professional light intensity measurement using your device's ambient sensors.
+- **SOS Emergency Flash**: One-touch SOS signaling and a powerful flashlight for any situation.
+- **Music Search**: Lightning-fast shortcut to identify any song playing nearby.
+- **Caffeine Mode**: Keep your screen awake and prevent timeouts while reading or working.
+
+📱 Device & Design Insights
+- **Material Colors Explorer**: Preview and explore your device's unique Material You color palette.
+- **Sound Mode Manager**: Quickly toggle between Silent, Vibrate, and Ring modes.
+
+🧘 Wellness & Focus
+- **Guided Breathing Helper**: Destress and relax with simple, effective breathing exercises.
+
+🚀 Developer Showcase
+
+- **Modern Material 3 Expressive UI**: Experience the best of Android design with full dynamic theming.
+- **Live Component Previews**: Explore functional implementations of professional UI building blocks.
+- **App Portfolio**: Browse a dynamic, real-time list of all my published apps on Google Play.
+- **One-Tap Discovery**: Instantly launch your favorite apps or view them on the Play Store.
+
+
+• Battery Health Monitor: Real-time tracking of battery temperature and hardware status.
+
 
 # Benefits
+
+🛠️ All-in-One Productivity Hub
+- **Eliminate App Clutter**: Replace dozens of single-purpose utility apps with one lightweight, high-performance toolkit.
+
 
 - See how shared components work
 - Build your own UI toolkit faster
@@ -39,9 +65,9 @@ free and open-source software!
 <!--suppress CheckImageSize -->
 <table>
   <tr>
-    <td><img src="/app/src/main/play/listings/en-US/graphics/phone-screenshots/1-screenshot_welcome.png" width="300" alt="Screenshot Welcome"></td>
-    <td><img src="/app/src/main/play/listings/en-US/graphics/phone-screenshots/2-screenshot_apps.png" width="300" alt="Screenshot Apps"></td>
-    <td><img src="/app/src/main/play/listings/en-US/graphics/phone-screenshots/3-screenshot_onboarding_theme.png" width="300" alt="Screenshot Onboarding Theme"></td>
+    <td><img src="/sample/app/src/main/play/listings/en-US/graphics/phone-screenshots/1-screenshot_welcome.png" width="300" alt="Screenshot Welcome"></td>
+    <td><img src="/sample/app/src/main/play/listings/en-US/graphics/phone-screenshots/2-screenshot_apps.png" width="300" alt="Screenshot Apps"></td>
+    <td><img src="/sample/app/src/main/play/listings/en-US/graphics/phone-screenshots/3-screenshot_onboarding_theme.png" width="300" alt="Screenshot Onboarding Theme"></td>
   </tr>
 </table>
 
@@ -81,7 +107,7 @@ dependencyResolutionManagement {
 }
 
 dependencies {
-    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:2.0.17")
+    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:3.0.0")
 }
 ```
 

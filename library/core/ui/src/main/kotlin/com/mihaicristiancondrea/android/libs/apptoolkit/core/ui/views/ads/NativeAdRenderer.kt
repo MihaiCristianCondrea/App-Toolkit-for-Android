@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Outline
 import android.graphics.Typeface
@@ -647,6 +648,7 @@ fun TextView.centerHorizontally(): TextView = apply {
 /**
  * A frame that always measures [widthToHeightRatio], whatever its child reports.
  */
+@SuppressLint("ViewConstructor")
 class AspectRatioFrameLayout(
     context: Context,
     private val widthToHeightRatio: Float,

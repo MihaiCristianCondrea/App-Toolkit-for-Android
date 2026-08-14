@@ -43,16 +43,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs.DatePickerDialog
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.bounceClick
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,8 +66,13 @@ fun DatePickerTextField(
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
 ) {
-    val formatter = remember { SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()) }
-    val parser = remember { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()) }
+    val configuration = LocalConfiguration.current
+    val locale = remember(configuration) { configuration.locales[0] }
+    val formatter = remember(locale) { SimpleDateFormat("dd.MM.yyyy", locale) }
+    val parser = remember(locale) { SimpleDateFormat("yyyy-MM-dd", locale) }
+    val formattedDate = remember(dateMillis, formatter) {
+        formatter.format(Date(dateMillis))
+    }
 
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -106,7 +111,7 @@ fun DatePickerTextField(
             }
     ) {
         OutlinedTextField(
-            value = formatter.format(Date(dateMillis)),
+            value = formattedDate,
             onValueChange = {},
             readOnly = textFieldReadOnly,
             enabled = textFieldEnabled,

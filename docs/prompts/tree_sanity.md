@@ -6,7 +6,8 @@ Use the project architecture skills:
 
 [`architecture`](../../.agents/skills/architecture)
 
-Treat the skills, `AGENTS.md`, relevant project documentation, and existing module READMEs as the guidance for this review.
+Treat the skills, `AGENTS.md`, relevant project documentation, and existing module READMEs as the
+guidance for this review.
 
 ## Goal
 
@@ -40,19 +41,24 @@ Do not redesign the project from scratch.
 
 Preserve architecture that is already reasonable, even when another valid approach exists.
 
-Prefer small, meaningful improvements over restructuring for visual consistency or theoretical purity.
+Prefer small, meaningful improvements over restructuring for visual consistency or theoretical
+purity.
 
-Do not force every feature into an identical structure. The structure should follow the responsibilities and complexity of the feature.
+Do not force every feature into an identical structure. The structure should follow the
+responsibilities and complexity of the feature.
 
-Before moving, removing, or restructuring something, inspect its actual usages and understand why it currently exists.
+Before moving, removing, or restructuring something, inspect its actual usages and understand why it
+currently exists.
 
-Preserve behavior, compatibility, user data, public contracts, and existing functionality unless a change is explicitly necessary.
+Preserve behavior, compatibility, user data, public contracts, and existing functionality unless a
+change is explicitly necessary.
 
 ## Documentation
 
 Keep documentation synchronized when the architecture meaningfully changes.
 
-If a module has a local `README.md`, update it when its responsibilities, dependencies, consumers, public contracts, important flows, or architectural risks change.
+If a module has a local `README.md`, update it when its responsibilities, dependencies, consumers,
+public contracts, important flows, or architectural risks change.
 
 Do not update documentation for trivial implementation changes.
 
@@ -64,7 +70,8 @@ Do not claim something was validated unless it was actually run.
 
 ## Result
 
-The project should end up easier to understand and maintain, with clearer ownership and boundaries and less unnecessary structural complexity.
+The project should end up easier to understand and maintain, with clearer ownership and boundaries
+and less unnecessary structural complexity.
 
 At the end, summarize:
 

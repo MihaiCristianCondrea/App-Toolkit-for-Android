@@ -23,7 +23,8 @@ exposing contact/review actions.
   for shared configuration, state, persistence access, networking, and UI.
 - [`:library:navigation`](../../navigation/README.md) for feature navigation.
 - [`:library:integration:review`](../../integration/review/README.md) for review prompts.
-- [`:library:feature:about`](../about/README.md) for shared AppToolkit routes/navigation surfaces.
+- [`:library:navigation`](../../navigation/README.md) for shared AppToolkit routes; the remaining
+  About dependency supplies feature-specific settings/navigation integration.
 
 ## Used by
 

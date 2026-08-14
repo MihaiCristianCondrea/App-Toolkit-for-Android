@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitToolKind
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.getTileServiceRequests
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.getTileServiceRequests
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -68,139 +68,139 @@ class DefaultToolkitTilesRepository(private val context: Context) : ToolkitTiles
         getTileServiceRequests()[requestKey]?.componentName(context)?.flattenToString()
 
     private val catalogue: ImmutableList<ToolkitTileCategory> = persistentListOf(
-            ToolkitTileCategory(
-                id = CATEGORY_SENSORS,
-                titleResId = R.string.tiles_category_sensors,
-                icon = ToolkitTileIcon.Compass,
-                initiallyExpanded = true,
-                tiles = persistentListOf(
-                    ToolkitTile(
-                        id = "bubble_level",
-                        titleResId = R.string.tile_bubble_level_title,
-                        summaryResId = R.string.tile_bubble_level_summary,
-                        icon = ToolkitTileIcon.Level,
-                        status = ToolkitTileStatus.NeedsSetup,
-                    ),
-                    ToolkitTile(
-                        id = "compass",
-                        titleResId = R.string.tile_compass_title,
-                        summaryResId = R.string.tile_compass_summary,
-                        icon = ToolkitTileIcon.Compass,
-                        status = ToolkitTileStatus.NeedsSetup,
-                    ),
-                    ToolkitTile(
-                        id = "lux_meter",
-                        titleResId = R.string.tile_lux_meter_title,
-                        summaryResId = R.string.tile_lux_meter_summary,
-                        icon = ToolkitTileIcon.Lux,
-                        status = ToolkitTileStatus.NeedsSetup,
-                    ),
-                    ToolkitTile(
-                        id = "temperature",
-                        titleResId = R.string.tile_temperature_title,
-                        summaryResId = R.string.tile_temperature_summary,
-                        icon = ToolkitTileIcon.Temperature,
-                        status = ToolkitTileStatus.Available,
-                    ),
+        ToolkitTileCategory(
+            id = CATEGORY_SENSORS,
+            titleResId = R.string.tiles_category_sensors,
+            icon = ToolkitTileIcon.Compass,
+            initiallyExpanded = true,
+            tiles = persistentListOf(
+                ToolkitTile(
+                    id = "bubble_level",
+                    titleResId = R.string.tile_bubble_level_title,
+                    summaryResId = R.string.tile_bubble_level_summary,
+                    icon = ToolkitTileIcon.Level,
+                    status = ToolkitTileStatus.NeedsSetup,
+                ),
+                ToolkitTile(
+                    id = "compass",
+                    titleResId = R.string.tile_compass_title,
+                    summaryResId = R.string.tile_compass_summary,
+                    icon = ToolkitTileIcon.Compass,
+                    status = ToolkitTileStatus.NeedsSetup,
+                ),
+                ToolkitTile(
+                    id = "lux_meter",
+                    titleResId = R.string.tile_lux_meter_title,
+                    summaryResId = R.string.tile_lux_meter_summary,
+                    icon = ToolkitTileIcon.Lux,
+                    status = ToolkitTileStatus.NeedsSetup,
+                ),
+                ToolkitTile(
+                    id = "temperature",
+                    titleResId = R.string.tile_temperature_title,
+                    summaryResId = R.string.tile_temperature_summary,
+                    icon = ToolkitTileIcon.Temperature,
+                    status = ToolkitTileStatus.Available,
                 ),
             ),
-            ToolkitTileCategory(
-                id = CATEGORY_UTILITIES,
-                titleResId = R.string.tiles_category_utilities,
-                icon = ToolkitTileIcon.Dice,
-                tiles = persistentListOf(
-                    ToolkitTile(
-                        id = "coin_flip",
-                        titleResId = R.string.tile_coin_flip_title,
-                        summaryResId = R.string.tile_coin_flip_summary,
-                        icon = ToolkitTileIcon.Coin,
-                        status = ToolkitTileStatus.Available,
-                        requestKey = "coin_flip",
-                    ),
-                    ToolkitTile(
-                        id = "dice_roll",
-                        titleResId = R.string.tile_dice_roll_title,
-                        summaryResId = R.string.tile_dice_roll_summary,
-                        icon = ToolkitTileIcon.Dice,
-                        status = ToolkitTileStatus.Available,
-                        requestKey = "dice_roll",
-                    ),
-                    ToolkitTile(
-                        id = "counter",
-                        titleResId = R.string.tile_counter_title,
-                        summaryResId = R.string.tile_counter_summary,
-                        icon = ToolkitTileIcon.Counter,
-                        status = ToolkitTileStatus.Available,
-                        requestKey = "counter",
-                    ),
-                    ToolkitTile(
-                        id = "material_colors",
-                        titleResId = R.string.tool_material_colors_title,
-                        summaryResId = R.string.tool_material_colors_summary,
-                        icon = ToolkitTileIcon.Palette,
-                        status = ToolkitTileStatus.Available,
-                        kind = ToolkitToolKind.Expanded,
-                        quickTool = ToolkitQuickTool.MaterialColors,
-                    ),
-                    ToolkitTile(
-                        id = "music_search",
-                        titleResId = R.string.tile_music_search_title,
-                        summaryResId = R.string.tile_music_search_summary,
-                        icon = ToolkitTileIcon.Music,
-                        status = ToolkitTileStatus.Available,
-                    ),
+        ),
+        ToolkitTileCategory(
+            id = CATEGORY_UTILITIES,
+            titleResId = R.string.tiles_category_utilities,
+            icon = ToolkitTileIcon.Dice,
+            tiles = persistentListOf(
+                ToolkitTile(
+                    id = "coin_flip",
+                    titleResId = R.string.tile_coin_flip_title,
+                    summaryResId = R.string.tile_coin_flip_summary,
+                    icon = ToolkitTileIcon.Coin,
+                    status = ToolkitTileStatus.Available,
+                    requestKey = "coin_flip",
+                ),
+                ToolkitTile(
+                    id = "dice_roll",
+                    titleResId = R.string.tile_dice_roll_title,
+                    summaryResId = R.string.tile_dice_roll_summary,
+                    icon = ToolkitTileIcon.Dice,
+                    status = ToolkitTileStatus.Available,
+                    requestKey = "dice_roll",
+                ),
+                ToolkitTile(
+                    id = "counter",
+                    titleResId = R.string.tile_counter_title,
+                    summaryResId = R.string.tile_counter_summary,
+                    icon = ToolkitTileIcon.Counter,
+                    status = ToolkitTileStatus.Available,
+                    requestKey = "counter",
+                ),
+                ToolkitTile(
+                    id = "material_colors",
+                    titleResId = R.string.tool_material_colors_title,
+                    summaryResId = R.string.tool_material_colors_summary,
+                    icon = ToolkitTileIcon.Palette,
+                    status = ToolkitTileStatus.Available,
+                    kind = ToolkitToolKind.Expanded,
+                    quickTool = ToolkitQuickTool.MaterialColors,
+                ),
+                ToolkitTile(
+                    id = "music_search",
+                    titleResId = R.string.tile_music_search_title,
+                    summaryResId = R.string.tile_music_search_summary,
+                    icon = ToolkitTileIcon.Music,
+                    status = ToolkitTileStatus.Available,
                 ),
             ),
-            ToolkitTileCategory(
-                id = CATEGORY_SYSTEM,
-                titleResId = R.string.tiles_category_system,
-                icon = ToolkitTileIcon.Battery,
-                tiles = persistentListOf(
-                    ToolkitTile(
-                        id = "battery",
-                        titleResId = R.string.tile_battery_title,
-                        summaryResId = R.string.tile_battery_summary,
-                        icon = ToolkitTileIcon.Battery,
-                        status = ToolkitTileStatus.Available,
-                        requestKey = "battery",
-                    ),
-                    ToolkitTile(
-                        id = "caffeine",
-                        titleResId = R.string.tile_caffeine_title,
-                        summaryResId = R.string.tile_caffeine_summary,
-                        icon = ToolkitTileIcon.Caffeine,
-                        status = ToolkitTileStatus.Available,
-                    ),
-                    ToolkitTile(
-                        id = "sound_mode",
-                        titleResId = R.string.tile_sound_mode_title,
-                        summaryResId = R.string.tile_sound_mode_summary,
-                        icon = ToolkitTileIcon.Sound,
-                        status = ToolkitTileStatus.Available,
-                    ),
+        ),
+        ToolkitTileCategory(
+            id = CATEGORY_SYSTEM,
+            titleResId = R.string.tiles_category_system,
+            icon = ToolkitTileIcon.Battery,
+            tiles = persistentListOf(
+                ToolkitTile(
+                    id = "battery",
+                    titleResId = R.string.tile_battery_title,
+                    summaryResId = R.string.tile_battery_summary,
+                    icon = ToolkitTileIcon.Battery,
+                    status = ToolkitTileStatus.Available,
+                    requestKey = "battery",
+                ),
+                ToolkitTile(
+                    id = "caffeine",
+                    titleResId = R.string.tile_caffeine_title,
+                    summaryResId = R.string.tile_caffeine_summary,
+                    icon = ToolkitTileIcon.Caffeine,
+                    status = ToolkitTileStatus.Available,
+                ),
+                ToolkitTile(
+                    id = "sound_mode",
+                    titleResId = R.string.tile_sound_mode_title,
+                    summaryResId = R.string.tile_sound_mode_summary,
+                    icon = ToolkitTileIcon.Sound,
+                    status = ToolkitTileStatus.Available,
                 ),
             ),
-            ToolkitTileCategory(
-                id = CATEGORY_WELLBEING,
-                titleResId = R.string.tiles_category_wellbeing,
-                icon = ToolkitTileIcon.Breathing,
-                tiles = persistentListOf(
-                    ToolkitTile(
-                        id = "breathing",
-                        titleResId = R.string.tile_breathing_title,
-                        summaryResId = R.string.tile_breathing_summary,
-                        icon = ToolkitTileIcon.Breathing,
-                        status = ToolkitTileStatus.Available,
-                    ),
-                    ToolkitTile(
-                        id = "sos",
-                        titleResId = R.string.tile_sos_title,
-                        summaryResId = R.string.tile_sos_summary,
-                        icon = ToolkitTileIcon.Sos,
-                        status = ToolkitTileStatus.Available,
-                    ),
+        ),
+        ToolkitTileCategory(
+            id = CATEGORY_WELLBEING,
+            titleResId = R.string.tiles_category_wellbeing,
+            icon = ToolkitTileIcon.Breathing,
+            tiles = persistentListOf(
+                ToolkitTile(
+                    id = "breathing",
+                    titleResId = R.string.tile_breathing_title,
+                    summaryResId = R.string.tile_breathing_summary,
+                    icon = ToolkitTileIcon.Breathing,
+                    status = ToolkitTileStatus.Available,
+                ),
+                ToolkitTile(
+                    id = "sos",
+                    titleResId = R.string.tile_sos_title,
+                    summaryResId = R.string.tile_sos_summary,
+                    icon = ToolkitTileIcon.Sos,
+                    status = ToolkitTileStatus.Available,
                 ),
             ),
+        ),
     )
 
     private companion object {

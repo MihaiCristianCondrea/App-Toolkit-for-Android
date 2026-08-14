@@ -19,8 +19,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Stable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 
 /**
  * Context shared by all navigation entry builders in the app.

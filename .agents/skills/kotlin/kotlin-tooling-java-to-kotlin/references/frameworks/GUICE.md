@@ -154,6 +154,7 @@ class OrderService @Inject constructor(
 ```
 
 Key changes:
+
 - `@Inject` moves before the `constructor` keyword in the primary constructor.
 - Constructor parameters become `private val` in the primary constructor.
 - `@Named("region")` uses `@param:Named` site target so the annotation reaches the

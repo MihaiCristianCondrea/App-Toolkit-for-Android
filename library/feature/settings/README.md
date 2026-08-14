@@ -8,6 +8,10 @@ and exposes host provider extension points.
 ## Owns
 
 - Settings screen/activity/ViewModel and configurable category/preference models.
+- `DisplaySettingsViewModel`, which owns display-preference observation and persistence while the
+  display list and selection dialogs remain presentation-only.
+- `ThemeSettingsViewModel`, which owns theme preference observation and mutations for the dedicated
+  theme settings surface.
 - General settings repository/presentation flow.
 - Advanced cache repository and settings flow.
 - Usage-and-diagnostics repository/model/presentation flow.
@@ -42,7 +46,7 @@ flowchart TD
     Root --> General[General settings]
     Root --> Advanced[Advanced/cache settings]
     Root --> Diagnostics[Usage and diagnostics]
-    General --> Repos[Feature repositories]
+    General --> Repos[Feature repositories / preference state holders]
     Diagnostics --> Consent[ConsentRepository]
     Repos --> Store[CommonDataStore / Android cache]
 ```
@@ -50,7 +54,8 @@ flowchart TD
 ## Public contracts
 
 - Settings/provider interfaces, settings category/preference/config models, repository contracts,
-  and screen/ViewModel contracts.
+  and screen/ViewModel contracts. Host startup dialogs receive the current route and return only a
+  confirmed selection; the toolkit state holder performs persistence.
 
 ## Internal implementations
 

@@ -10,19 +10,23 @@ The developer's app catalogue: listing, details, favorites, and install state.
   implementations, the API DTOs and their mapping.
 - `DeveloperAppsLocalDataSource`, which persists the last successfully downloaded compact
   catalogue as an atomic JSON file.
-- `AppsListViewModel`, the list and detail-sheet composables, and the native-ad placement in the list.
+- `AppsListViewModel`, the list and detail-sheet composables, and the native-ad placement in the
+  list.
 - `appsListEntryBuilder`, this feature's navigation entry.
 - `FavoritesChangedReceiver`, which keeps the widget in step with favorites.
 
 ## Does not own
 
-- The route keys it registers against, owned by [`:sample:core:navigation`](../../core/navigation/README.md).
-- Widget rendering, owned by [`:sample:widget`](../../widget/README.md), which reads this module's repository.
+- The route keys it registers against, owned by [
+  `:sample:core:navigation`](../../core/navigation/README.md).
+- Widget rendering, owned by [`:sample:widget`](../../widget/README.md), which reads this module's
+  repository.
 
 ## Depends on
 
 - `:sample:core:navigation`, `:sample:core:common`, `:sample:core:datastore`, `:sample:core:ui`.
-- [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for ad slots, state contracts and Ktor.
+- [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for ad slots, state contracts and
+  Ktor.
 
 ## Used by
 
@@ -44,7 +48,8 @@ flowchart TD
 
 ## Public contracts
 
-- The three repositories, `AppsListViewModel`, `appsListEntryBuilder`, `AppInfo`/`AppSummary`/`AppDetails`.
+- The three repositories, `AppsListViewModel`, `appsListEntryBuilder`, `AppInfo`/`AppSummary`/
+  `AppDetails`.
 
 ## Internal implementations
 
@@ -66,5 +71,6 @@ about the source makes the dependency visible.
 
 ## Migration notes
 
-`AppsListViewModel` used to take six pass-through use cases wrapping these three repositories. It now
+`AppsListViewModel` used to take six pass-through use cases wrapping these three repositories. It
+now
 takes the repositories; the use cases added a duplicated breadcrumb and nothing else.

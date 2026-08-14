@@ -247,7 +247,7 @@
     "urls": [
       "https://support.google.com/googleplay/android-developer/answer/16558241",
       "https://support.google.com/googleplay/android-developer/answer/9799150"
-    ] 
+    ]
   },
   "contacts_access_policy": {
     "name": "Contacts Permissions",
@@ -255,7 +255,7 @@
     "urls": [
       "https://support.google.com/googleplay/android-developer/answer/16909972#contacts-permissions",
       "https://support.google.com/googleplay/android-developer/answer/16935362"
-    ] 
+    ]
   },
   "audio_recording_policy": {
     "name": "Audio Recording Policy",

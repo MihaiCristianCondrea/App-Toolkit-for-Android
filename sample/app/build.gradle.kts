@@ -70,8 +70,8 @@ if (hasMatchingGoogleServicesConfig) {
 } else if (hasMismatchedGoogleServicesConfig) {
     logger.warn(
         "google-services.json has no client for '$releasedApplicationId', so Firebase " +
-            "(Analytics, Crashlytics, Performance) is disabled for this build. Add that package " +
-            "in the Firebase console and re-download the file. See docs/application-id.md."
+                "(Analytics, Crashlytics, Performance) is disabled for this build. Add that package " +
+                "in the Firebase console and re-download the file. See docs/application-id.md."
     )
 }
 
@@ -86,8 +86,8 @@ gradle.taskGraph.whenReady {
     }
     check(!hasMismatchedGoogleServicesConfig || !assemblesRelease) {
         "Refusing to build a release with a mismatched google-services.json: it has no client for " +
-            "'$releasedApplicationId', so Crashlytics would be silently disabled. " +
-            "See docs/application-id.md."
+                "'$releasedApplicationId', so Crashlytics would be silently disabled. " +
+                "See docs/application-id.md."
     }
 }
 

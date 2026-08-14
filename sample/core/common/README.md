@@ -17,8 +17,10 @@ Host-wide constants and error types that carry no UI and no Android state.
 
 ## Depends on
 
-- [`:library:core:common`](../../../library/core/common/README.md) for the debug/release ad-unit selectors.
-- [`:library:core:network`](../../../library/core/network/README.md) for the `Errors` hierarchy `AppErrors` extends.
+- [`:library:core:common`](../../../library/core/common/README.md) for the debug/release ad-unit
+  selectors.
+- [`:library:core:network`](../../../library/core/network/README.md) for the `Errors` hierarchy
+  `AppErrors` extends.
 
 ## Used by
 
@@ -49,6 +51,7 @@ isolation against a different build type would not.
 
 ## Migration notes
 
-`APPS_LIST_AD_FREQUENCY` was an application-module `buildConfigField`. No library module can read the
+`APPS_LIST_AD_FREQUENCY` was an application-module `buildConfigField`. No library module can read
+the
 application's generated class, and the value is fixed tuning rather than a build input, so it became
 a constant here when `:sample:feature:apps` was split out.

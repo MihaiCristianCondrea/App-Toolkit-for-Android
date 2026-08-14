@@ -19,8 +19,15 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datasto
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.AdsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.AppStatePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ChangelogPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ConsentPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.DisplayPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.FavoritesPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.OnboardingPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ReviewPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.UsageAndDiagnosticsPreferencesDataSource
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -38,7 +45,20 @@ fun dataStoreModule(isDebugBuild: Boolean): Module = module {
     }
 
     single<CommonDataStoreCore> { get<CommonDataStore>() }
-    single<ConsentPreferencesDataSource> { get<CommonDataStore>() }
-    single<OnboardingPreferencesDataSource> { get<CommonDataStore>() }
-    single<UsageAndDiagnosticsPreferencesDataSource> { get<CommonDataStore>() }
+
+    // Bound from the facade rather than constructed here so that exactly one instance of each
+    // group exists per process. DefaultAdsPreferencesDataSource in particular starts an eager
+    // collector, so a second copy would observe the same preference twice.
+    single<ThemePreferencesDataSource> { get<CommonDataStore>().themePreferences }
+    single<DisplayPreferencesDataSource> { get<CommonDataStore>().displayPreferences }
+    single<AdsPreferencesDataSource> { get<CommonDataStore>().adsPreferences }
+    single<ReviewPreferencesDataSource> { get<CommonDataStore>().reviewPreferences }
+    single<ChangelogPreferencesDataSource> { get<CommonDataStore>().changelogPreferences }
+    single<AppStatePreferencesDataSource> { get<CommonDataStore>().appStatePreferences }
+    single<FavoritesPreferencesDataSource> { get<CommonDataStore>().favoritesPreferences }
+    single<OnboardingPreferencesDataSource> { get<CommonDataStore>().onboardingPreferences }
+    single<ConsentPreferencesDataSource> { get<CommonDataStore>().diagnosticsPreferences }
+    single<UsageAndDiagnosticsPreferencesDataSource> {
+        get<CommonDataStore>().diagnosticsPreferences
+    }
 }

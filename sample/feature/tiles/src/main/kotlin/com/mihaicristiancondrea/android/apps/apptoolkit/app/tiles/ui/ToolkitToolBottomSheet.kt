@@ -51,6 +51,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.ToolkitSensorData
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.previews.GenericToolPreview
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.BatteryTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.BreathingTool

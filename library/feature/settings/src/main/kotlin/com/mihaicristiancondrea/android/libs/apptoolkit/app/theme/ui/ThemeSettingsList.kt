@@ -52,6 +52,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -61,10 +62,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.DarkModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.LightModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.SystemModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.domain.models.WallpaperSwatchColors
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.contracts.ThemeSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.models.WallpaperSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider.paletteById
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
@@ -80,11 +80,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openDisplaySettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isHalloweenSeason
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.extensions.rememberThemePreferencesState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.rememberCommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.theme.ThemeModeChoice
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.cards.ThemeChoicePreviewCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.drawable.rememberPaletteImageVector
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
@@ -94,12 +93,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePager
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.DarkModePreview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.LightModePreview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.SystemModePreview
+import java.time.LocalDate
+import java.time.ZoneId
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
-import java.time.LocalDate
-import java.time.ZoneId
+import org.koin.compose.viewmodel.koinViewModel
 
 private const val THEME_SCREEN_NAME = "Theme"
 private const val THEME_SCREEN_CLASS = "ThemeSettingsList"
@@ -114,12 +117,15 @@ private const val THEME_SCREEN_CLASS = "ThemeSettingsList"
  * - Theme mode selection (follow system / dark / light).
  * - An informational message with a "Learn more" action that opens system display settings.
  *
- * The current selections are read from [CommonDataStore] and updates are persisted asynchronously.
+ * [ThemeSettingsViewModel] owns persisted state and mutations.
  */
 @Composable
 fun ThemeSettingsList(paddingValues: PaddingValues) {
     val firebaseController: FirebaseController = koinInject()
     val firebase = rememberUpdatedState(firebaseController)
+    val viewModel: ThemeSettingsViewModel = koinViewModel()
+    val screenState: UiStateScreen<ThemePreferencesState> by
+        viewModel.uiState.collectAsStateWithLifecycle()
 
     TrackScreenView(
         firebaseController = firebaseController,
@@ -129,16 +135,14 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
     TrackScreenState(
         firebaseController = firebaseController,
         screenName = THEME_SCREEN_NAME,
-        screenState = ScreenState.Success(),
+        screenState = screenState.screenState,
     )
 
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
-    val dataStore = rememberCommonDataStore()
-
-    val themePreferences = rememberThemePreferencesState()
+    val themePreferences = screenState.data ?: return
     val currentThemeModeKey = themePreferences.themeMode
-    val isAmoledMode = rememberUpdatedState(themePreferences.amoledMode)
+    val isAmoledMode = themePreferences.amoledMode
     val isDynamicColors: Boolean = themePreferences.dynamicColors
     val dynamicVariantIndex: Int = themePreferences.dynamicPaletteVariant
     val staticPaletteId: String = themePreferences.staticPaletteId
@@ -343,10 +347,9 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                                         ),
                                                     ),
                                                 )
-                                                coroutineScope.launch {
-                                                    dataStore.saveDynamicColors(true)
-                                                    dataStore.saveDynamicPaletteVariant(index)
-                                                }
+                                                viewModel.onEvent(
+                                                    ThemeSettingsEvent.SelectDynamicPalette(index)
+                                                )
                                             }
                                         )
                                     }
@@ -386,10 +389,9 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                                         ),
                                                     ),
                                                 )
-                                                coroutineScope.launch {
-                                                    dataStore.saveDynamicColors(false)
-                                                    dataStore.saveStaticPaletteId(id)
-                                                }
+                                                viewModel.onEvent(
+                                                    ThemeSettingsEvent.SelectStaticPalette(id)
+                                                )
                                             }
                                         )
                                     }
@@ -434,10 +436,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                             ),
                                         ),
                                     )
-                                    coroutineScope.launch {
-                                        dataStore.saveDynamicColors(false)
-                                        dataStore.saveStaticPaletteId(id)
-                                    }
+                                    viewModel.onEvent(ThemeSettingsEvent.SelectStaticPalette(id))
                                 }
                             )
                         }
@@ -486,15 +485,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                         ),
                                     ),
                                 )
-                                coroutineScope.launch {
-                                    dataStore.saveThemeMode(mode = choice.key)
-                                    dataStore.themeModeState.value = choice.key
-                                    if (choice.key == DataStoreNamesConstants.THEME_MODE_LIGHT &&
-                                        isAmoledMode.value
-                                    ) {
-                                        dataStore.saveAmoledMode(isChecked = false)
-                                    }
-                                }
+                                viewModel.onEvent(ThemeSettingsEvent.SelectThemeMode(choice.key))
                             },
                             modifier = Modifier.weight(1f),
                             preview = {
@@ -522,7 +513,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                         .padding(horizontal = SizeConstants.MediumSize * 2),
                     title = stringResource(id = R.string.amoled_mode),
                     enabled = amoledAllowed,
-                    switchState = isAmoledMode,
+                    switchState = rememberUpdatedState(isAmoledMode),
                     onSwitchToggled = { isChecked ->
                         firebase.value.logEvent(
                             AnalyticsEvent(
@@ -535,7 +526,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                                 ),
                             ),
                         )
-                        coroutineScope.launch { dataStore.saveAmoledMode(isChecked) }
+                        viewModel.onEvent(ThemeSettingsEvent.SetAmoledMode(isChecked))
                     },
                     checkIcon = Icons.Filled.Contrast
                 )

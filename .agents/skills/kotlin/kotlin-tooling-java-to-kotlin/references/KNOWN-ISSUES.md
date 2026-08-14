@@ -4,7 +4,8 @@ A reference of common issues encountered during Java-to-Kotlin conversion, with 
 
 ### Kotlin Keyword Conflicts
 
-Java identifiers that are reserved keywords in Kotlin will cause compilation errors after conversion.
+Java identifiers that are reserved keywords in Kotlin will cause compilation errors after
+conversion.
 
 **Affected keywords:** `when`, `in`, `is`, `object`, `fun`, `val`, `var`, `typealias`, `as`
 
@@ -22,11 +23,15 @@ fun `when`(event: String) { ... }
 fun `in`(items: List<String>): Boolean { ... }
 ```
 
-When the API is internal (not exposed to other modules), prefer renaming the identifier to a non-keyword alternative instead of using backticks. For example, rename `when` to `onEvent` or `in` to `contains`.
+When the API is internal (not exposed to other modules), prefer renaming the identifier to a
+non-keyword alternative instead of using backticks. For example, rename `when` to `onEvent` or `in`
+to `contains`.
 
 ### SAM Conversion Ambiguity
 
-When a Java method has overloads that each accept a different SAM (Single Abstract Method) interface, Kotlin's trailing lambda syntax becomes ambiguous. The compiler cannot determine which SAM interface the lambda should implement.
+When a Java method has overloads that each accept a different SAM (Single Abstract Method)
+interface, Kotlin's trailing lambda syntax becomes ambiguous. The compiler cannot determine which
+SAM interface the lambda should implement.
 
 ```java
 // Java — overloaded method accepting different SAM types
@@ -45,11 +50,14 @@ executor.submit(Runnable { doWork() })
 executor.submit(Callable { computeResult() })
 ```
 
-Use explicit SAM constructor calls whenever there are overloaded methods accepting different functional interfaces.
+Use explicit SAM constructor calls whenever there are overloaded methods accepting different
+functional interfaces.
 
 ### Platform Types
 
-Java types without nullability annotations (`@Nullable`, `@NotNull`, `@NonNull`) become "platform types" (`T!`) in Kotlin. Platform types bypass Kotlin's null-safety system — they are neither nullable nor non-null, and null checks are deferred to runtime.
+Java types without nullability annotations (`@Nullable`, `@NotNull`, `@NonNull`) become "platform
+types" (`T!`) in Kotlin. Platform types bypass Kotlin's null-safety system — they are neither
+nullable nor non-null, and null checks are deferred to runtime.
 
 ```java
 // Java — no nullability annotations
@@ -68,11 +76,13 @@ val name: String? = obj.name             // if could be null
 val items: List<String> = obj.items      // if neither list nor elements are null
 ```
 
-Always add explicit type declarations to eliminate platform types. Analyze the Java source code, documentation, and call sites to determine the correct nullability.
+Always add explicit type declarations to eliminate platform types. Analyze the Java source code,
+documentation, and call sites to determine the correct nullability.
 
 ### @JvmStatic / @JvmField / @JvmOverloads
 
-When converted Kotlin code is still called from Java, use JVM interop annotations to maintain a clean Java API:
+When converted Kotlin code is still called from Java, use JVM interop annotations to maintain a
+clean Java API:
 
 **`@JvmStatic`** — Makes companion object functions accessible as static methods from Java:
 
@@ -122,7 +132,8 @@ fun connect(host: String, port: Int = 443, secure: Boolean = true) { ... }
 
 ### Checked Exceptions
 
-Kotlin does not have checked exceptions. When Kotlin code is called from Java, the Java compiler will not know about thrown exceptions unless annotated with `@Throws`:
+Kotlin does not have checked exceptions. When Kotlin code is called from Java, the Java compiler
+will not know about thrown exceptions unless annotated with `@Throws`:
 
 ```kotlin
 // Without @Throws, Java callers cannot catch IOException in a catch block
@@ -140,10 +151,10 @@ Add `@Throws` to every Kotlin function that throws checked exceptions and is cal
 
 Java wildcard types map to Kotlin's variance annotations:
 
-| Java | Kotlin | Description |
-|------|--------|-------------|
-| `? extends T` | `out T` | Covariance (producer) |
-| `? super T` | `in T` | Contravariance (consumer) |
+| Java            | Kotlin       | Description                 |
+|-----------------|--------------|-----------------------------|
+| `? extends T`   | `out T`      | Covariance (producer)       |
+| `? super T`     | `in T`       | Contravariance (consumer)   |
 | Raw type `List` | `List<Any?>` | Add explicit type parameter |
 
 ```java
@@ -160,13 +171,15 @@ fun addAll(target: MutableList<in Int>) { ... }
 fun legacy(items: List<Any?>) { ... }  // explicit type parameter
 ```
 
-For raw types, analyze the code to determine the most specific type parameter rather than defaulting to `Any?`.
+For raw types, analyze the code to determine the most specific type parameter rather than defaulting
+to `Any?`.
 
 ### Static Members
 
 Java's `static` keyword has no direct equivalent in Kotlin. Use the following mappings:
 
-**Static methods** — Use companion object functions, or top-level functions if they don't need class state:
+**Static methods** — Use companion object functions, or top-level functions if they don't need class
+state:
 
 ```java
 // Java
@@ -187,7 +200,8 @@ class StringUtils {
 }
 ```
 
-**Static constants** — Use `const val` for compile-time constants (primitives and String), `val` for object constants:
+**Static constants** — Use `const val` for compile-time constants (primitives and String), `val` for
+object constants:
 
 ```kotlin
 class HttpStatus {
@@ -288,19 +302,20 @@ view.addListener(object : ViewListener {
 
 Java arrays map to Kotlin types as follows:
 
-| Java | Kotlin | Notes |
-|------|--------|-------|
-| `String[]` | `Array<String>` | Reference type arrays |
-| `int[]` | `IntArray` | Primitive array (not `Array<Int>`) |
-| `long[]` | `LongArray` | Primitive array |
-| `double[]` | `DoubleArray` | Primitive array |
-| `boolean[]` | `BooleanArray` | Primitive array |
-| `Object[]` | `Array<Any?>` | |
-| `new int[10]` | `IntArray(10)` | Array creation |
-| `new String[10]` | `arrayOfNulls<String>(10)` | Nullable element array |
-| `String... args` | `vararg args: String` | Varargs parameter |
+| Java             | Kotlin                     | Notes                              |
+|------------------|----------------------------|------------------------------------|
+| `String[]`       | `Array<String>`            | Reference type arrays              |
+| `int[]`          | `IntArray`                 | Primitive array (not `Array<Int>`) |
+| `long[]`         | `LongArray`                | Primitive array                    |
+| `double[]`       | `DoubleArray`              | Primitive array                    |
+| `boolean[]`      | `BooleanArray`             | Primitive array                    |
+| `Object[]`       | `Array<Any?>`              |                                    |
+| `new int[10]`    | `IntArray(10)`             | Array creation                     |
+| `new String[10]` | `arrayOfNulls<String>(10)` | Nullable element array             |
+| `String... args` | `vararg args: String`      | Varargs parameter                  |
 
-Using `Array<Int>` instead of `IntArray` causes boxing overhead — always use the specialized primitive array types.
+Using `Array<Int>` instead of `IntArray` causes boxing overhead — always use the specialized
+primitive array types.
 
 ### Ternary Operator
 
@@ -318,7 +333,8 @@ val label = if (count > 0) "Items: $count" else "Empty"
 
 ### instanceof
 
-Java's `instanceof` maps to Kotlin's `is` keyword. Kotlin supports smart casting, so an explicit cast after an `is` check is unnecessary:
+Java's `instanceof` maps to Kotlin's `is` keyword. Kotlin supports smart casting, so an explicit
+cast after an `is` check is unnecessary:
 
 ```java
 // Java
@@ -355,4 +371,5 @@ BufferedReader(FileReader(path)).use { reader ->
 }
 ```
 
-The `.use {}` function works on any `Closeable` or `AutoCloseable` instance and guarantees the resource is closed even if an exception is thrown.
+The `.use {}` function works on any `Closeable` or `AutoCloseable` instance and guarantees the
+resource is closed even if an exception is thrown.

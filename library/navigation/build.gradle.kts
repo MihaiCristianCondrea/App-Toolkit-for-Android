@@ -36,20 +36,21 @@ android {
         minSdk = versioning.minSdk
     }
 
-
-
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
+    api(project(":library:core:common"))
+    api(project(":library:core:designsystem"))
+
     // Navigation3
     api(libs.bundles.androidx.navigation3)
 
     // Compose
     api(platform(libs.androidx.compose.bom))
-    api(libs.androidx.compose.material3)
+    api(libs.bundles.androidx.compose)
     api(libs.androidx.compose.ui.tooling.preview)
+    api(libs.kotlinx.collections.immutable)
 }
-
