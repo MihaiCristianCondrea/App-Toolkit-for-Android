@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -24,12 +24,22 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun LightModePreview(modifier: Modifier = Modifier) {
+fun SystemModePreview(modifier: Modifier = Modifier) {
+    val lightBg = Color(0xFFF2F4F8)
+    val darkBg = Color(0xFF111318)
+
     MiniUiPreview(
         modifier = modifier,
-        background = Brush.linearGradient(listOf(Color(0xFFF4F6FA), Color(0xFFEFF2F7))),
-        surface = Color.White.copy(alpha = 0.92f),
-        line = Color(0xFF1B1F2A).copy(alpha = 0.20f),
+        background = Brush.horizontalGradient(
+            colorStops = arrayOf(
+                0.0f to lightBg,
+                0.50f to lightBg,
+                0.50f to darkBg,
+                1.0f to darkBg
+            )
+        ),
+        surface = Color.White.copy(alpha = 0.72f),
+        line = Color(0xFF1B1F2A).copy(alpha = 0.18f),
         accent = MaterialTheme.colorScheme.primary,
     )
 }

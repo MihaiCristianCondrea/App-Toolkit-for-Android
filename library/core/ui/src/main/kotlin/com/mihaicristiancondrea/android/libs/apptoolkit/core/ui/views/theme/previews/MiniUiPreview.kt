@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

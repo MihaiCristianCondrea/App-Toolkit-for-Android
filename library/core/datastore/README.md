@@ -10,7 +10,8 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 - `CommonDataStore` and DataStore creation/access extensions.
 - Preference data-source contracts for onboarding, consent, and usage diagnostics.
 - Persisted theme, review, ads, and consent-related values.
-- `AdsCoreManager` and the Koin DataStore module.
+- `AdsCoreManager` and the Koin DataStore module, which is the single place `CommonDataStore` is
+  registered; `appToolkitFoundationModules` includes it rather than defining its own copy.
 
 ## Does not own
 
@@ -25,7 +26,8 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 ## Used by
 
 - `:library:apptoolkit` for host DI assembly.
-- `:library:core:designsystem` for persisted theme state.
+- `:library:core:designsystem` for persisted theme state, and `:library:core:ui` for the
+  preference-driven modifiers and ad slots.
 - `:library:feature:about`, `:library:feature:help`, `:library:feature:onboarding`, and
   `:library:feature:settings`.
 - `:library:integration:ads`, `:library:integration:consent`, and `:library:integration:review`.

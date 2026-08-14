@@ -61,9 +61,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.DarkModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.LightModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.SystemModePreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.models.WallpaperSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider.paletteById
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.views.WallpaperColorOptionCard
@@ -94,6 +91,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePager
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.DarkModePreview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.LightModePreview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.SystemModePreview
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlinx.collections.immutable.persistentListOf

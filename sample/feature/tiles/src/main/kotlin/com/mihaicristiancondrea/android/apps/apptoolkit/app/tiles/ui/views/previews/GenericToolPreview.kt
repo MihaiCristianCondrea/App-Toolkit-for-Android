@@ -25,7 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.previewTextResId
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.previewTextResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants

@@ -55,9 +55,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.domain.models.OnboardingThemeChoice
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.cards.AmoledModeToggleCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.DarkModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.LightModePreview
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.previews.SystemModePreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.filterSeasonalStaticPalettes
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.models.WallpaperSwatchColors
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ThemePaletteProvider.paletteById
@@ -75,6 +72,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.cards.Them
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.ThemePalettePager
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.dedupeStaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.isAmoledAllowed
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.DarkModePreview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.LightModePreview
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.theme.previews.SystemModePreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 import java.time.LocalDate
 import java.time.ZoneId

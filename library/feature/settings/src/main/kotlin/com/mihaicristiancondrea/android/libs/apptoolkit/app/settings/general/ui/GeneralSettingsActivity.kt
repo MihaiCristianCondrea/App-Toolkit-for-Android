@@ -28,8 +28,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extens
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.BaseActivity
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class GeneralSettingsActivity : BaseActivity() {
+
+    private val commonDataStore: CommonDataStore by inject()
 
     private var title: String = ""
     private var contentKey: String? = null
@@ -66,7 +69,7 @@ class GeneralSettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
-            CommonDataStore.getInstance(applicationContext).markSettingsInteracted()
+            commonDataStore.markSettingsInteracted()
         }
 
         title = intent.getStringExtra(EXTRA_TITLE)

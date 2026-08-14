@@ -58,8 +58,8 @@ open class AdsCoreManager(
     private val dispatchers: DispatcherProvider,
     private val adMobAppIdProvider: AdMobAppIdProvider = ManifestAdMobAppIdProvider(context = context),
     private val adsSdkInitializer: AdsSdkInitializer = AdsSdkInitializer.Default,
+    private val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context),
 ) {
-    private var dataStore: CommonDataStore = CommonDataStore.getInstance(context = context)
     private var appOpenAdManager: AppOpenAdManager? = null
 
     private val managerScope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatchers.io)
