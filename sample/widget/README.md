@@ -7,7 +7,8 @@ The home-screen app-icons widget.
 ## Owns
 
 - `AppIconsWidget` and `AppIconsWidgetReceiver`.
-- `OpenAppOrStoreAction`, which opens an installed app or falls back to its store listing.
+- `RefreshWidgetAction`, which retries an unsuccessful catalogue load through Glance's action
+  worker.
 
 ## Does not own
 
@@ -31,16 +32,20 @@ flowchart TD
     Receiver[AppIconsWidgetReceiver] --> Widget[AppIconsWidget]
     Widget --> Repo[DeveloperAppsRepository]
     Repo --> Api[Apps metadata API]
-    Widget --> Action[OpenAppOrStoreAction]
+    Repo --> Cache[Persistent catalogue snapshot]
+    Widget --> Launch[Glance activity action]
+    Widget --> Retry[RefreshWidgetAction]
 ```
 
 ## Public contracts
 
-- `AppIconsWidget`, `AppIconsWidgetReceiver`, `OpenAppOrStoreAction`.
+- `AppIconsWidget`, `AppIconsWidgetReceiver`, `RefreshWidgetAction`.
 
 ## Internal implementations
 
-- Glance layout, loading and error states, icon fetching.
+- Glance layout, explicit loading/empty/error states, bounded icon fetching, and app/store intent
+  selection.
+- Glance unit tests for standalone state content and retry presentation.
 
 ## Current risks
 

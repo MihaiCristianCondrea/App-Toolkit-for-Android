@@ -21,10 +21,13 @@ plugins {
 
 android {
     namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.widget"
+    testOptions.unitTests.isReturnDefaultValues = true
 }
 
 dependencies {
     testImplementation(project(":library:core:testing"))
+    testImplementation(libs.androidx.glance.testing)
+    testImplementation(libs.androidx.glance.appwidget.testing)
     api(project(":sample:feature:apps"))
     api(project(":sample:core:ui"))
     api(project(":library:apptoolkit"))

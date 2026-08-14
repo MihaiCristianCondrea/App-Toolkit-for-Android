@@ -8,6 +8,8 @@ The developer's app catalogue: listing, details, favorites, and install state.
 
 - `DeveloperAppsRepository`, `InstalledAppsRepository`, `FavoritesRepository` and their `Default`
   implementations, the API DTOs and their mapping.
+- `DeveloperAppsLocalDataSource`, which persists the last successfully downloaded compact
+  catalogue as an atomic JSON file.
 - `AppsListViewModel`, the list and detail-sheet composables, and the native-ad placement in the list.
 - `appsListEntryBuilder`, this feature's navigation entry.
 - `FavoritesChangedReceiver`, which keeps the widget in step with favorites.
@@ -35,6 +37,7 @@ flowchart TD
     VM --> Installed[InstalledAppsRepository]
     VM --> Favorites[FavoritesRepository]
     Developer --> Api[Apps metadata API]
+    Developer --> CatalogueCache[DeveloperAppsLocalDataSource]
     Favorites --> Store[DatastoreInterface]
     Receiver[FavoritesChangedReceiver] --> Favorites
 ```
@@ -45,7 +48,15 @@ flowchart TD
 
 ## Internal implementations
 
-- DTO mapping, ad interleaving, install-state inspection through the package manager.
+- DTO mapping, catalogue-file serialization, ad interleaving, and install-state inspection through
+  the package manager.
+
+## Source of truth and failure behavior
+
+The remote endpoint remains authoritative. Each successful compact-catalogue response atomically
+replaces the local JSON snapshot. When a request fails, `DeveloperAppsRepository` exposes that
+snapshot as stale data together with the network error, allowing non-screen consumers such as the
+widget to remain useful offline. Corrupt snapshots are deleted and treated as cache misses.
 
 ## Current risks
 

@@ -17,7 +17,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DefaultDeveloperAppsLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DefaultFavoritesLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DeveloperAppsLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.FavoritesLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DefaultDeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DefaultFavoritesRepository
@@ -27,6 +29,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.rep
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.InstalledAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
+import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
@@ -34,11 +37,20 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val appsListModule: Module = module {
+    single<DeveloperAppsLocalDataSource> {
+        DefaultDeveloperAppsLocalDataSource(
+            cacheFile = androidContext().filesDir.resolve("developer_apps/catalogue.json"),
+            json = Json { ignoreUnknownKeys = true },
+            dispatchers = get(),
+        )
+    }
+
     single<DeveloperAppsRepository> {
         DefaultDeveloperAppsRepository(
             client = get(),
             baseUrl = get(qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL)),
             firebaseController = get(),
+            localDataSource = get(),
         )
     }
 
