@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.datastore.startupDestinationFlow
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import kotlinx.coroutines.flow.Flow
 
 /**

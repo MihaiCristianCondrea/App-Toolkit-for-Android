@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.managers.AdsCoreManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repositories.DefaultAdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.AdsSettingsViewModel
@@ -33,7 +34,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.ManifestAdMobAppIdProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.AdsCoreManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.client.KtorClient
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repositories.DefaultInAppUpdateRepository
@@ -128,6 +128,5 @@ private fun adsSettingsSharedModule(): Module = module {
         )
     }
 }
-
 
 

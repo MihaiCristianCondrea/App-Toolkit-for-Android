@@ -25,6 +25,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 
 /**
@@ -38,6 +39,7 @@ fun rememberBottomNavTransitions(): BottomNavTransitions {
 /**
  * Class providing standard fade transitions for top-level navigation.
  */
+@Immutable
 class BottomNavTransitions {
 
     /**

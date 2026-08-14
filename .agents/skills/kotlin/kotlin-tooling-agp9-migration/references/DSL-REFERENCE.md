@@ -1,6 +1,7 @@
 # DSL Reference: AGP 8.x to AGP 9.x KMP Library Migration
 
-Side-by-side mapping of every DSL element from the old `com.android.library` configuration to the new `com.android.kotlin.multiplatform.library` configuration.
+Side-by-side mapping of every DSL element from the old `com.android.library` configuration to the
+new `com.android.kotlin.multiplatform.library` configuration.
 
 ---
 
@@ -61,6 +62,7 @@ Side-by-side mapping of every DSL element from the old `com.android.library` con
 | `kotlinOptions { languageVersion = "1.9" }`                                   | `compilerOptions { languageVersion.set(KotlinVersion.KOTLIN_2_0) }`          |
 
 Full JvmTarget import:
+
 ```kotlin
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 ```
@@ -158,6 +160,7 @@ The lint DSL is largely unchanged, it just moves inside `kotlin { android {} }`.
 The DSL is the same, just nested under `kotlin { android {} }`.
 
 **Syntax note for AGP 9.0:**
+
 ```kotlin
 // Old syntax (still works but deprecated)
 resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -188,17 +191,24 @@ resources {
 ---
 
 ## Dependency Resolution
-Because the new KMP Android library plugin is strictly single-variant, you can no longer define fallback logic inside `buildTypes` or `defaultConfig`.
+
+Because the new KMP Android library plugin is strictly single-variant, you can no longer define
+fallback logic inside `buildTypes` or `defaultConfig`.
 | Old | New | Notes |
 |---|---|---|
-| `android { defaultConfig { missingDimensionStrategy("tier", "free") } }` | `kotlin { android { localDependencySelection { productFlavorDimension("tier") { selectFrom.set(listOf("free")) } } } }` | Configure dependency flavor fallbacks |
-| `android { buildTypes { getByName("debug") { matchingFallbacks.add("release") } } }` | `kotlin { android { localDependencySelection { selectBuildTypeFrom.set(listOf("debug", "release")) } } }` | Configure dependency build type mapping |
+| `android { defaultConfig { missingDimensionStrategy("tier", "free") } }` |
+`kotlin { android { localDependencySelection { productFlavorDimension("tier") { selectFrom.set(listOf("free")) } } } }` |
+Configure dependency flavor fallbacks |
+| `android { buildTypes { getByName("debug") { matchingFallbacks.add("release") } } }` |
+`kotlin { android { localDependencySelection { selectBuildTypeFrom.set(listOf("debug", "release")) } } }` |
+Configure dependency build type mapping |
 
 ---
 
 ## Build Types and Product Flavors
 
-**Removed in KMP library plugin.** The `com.android.kotlin.multiplatform.library` plugin produces a single build variant.
+**Removed in KMP library plugin.** The `com.android.kotlin.multiplatform.library` plugin produces a
+single build variant.
 
 | Old                                               | New     | Notes                                               |
 |---------------------------------------------------|---------|-----------------------------------------------------|
@@ -209,7 +219,8 @@ Because the new KMP Android library plugin is strictly single-variant, you can n
 
 ### Workarounds for Variant-Dependent Logic
 
-1. **Compile-time constants:** Use `expect`/`actual` or dependency injection instead of `BuildConfig`.
+1. **Compile-time constants:** Use `expect`/`actual` or dependency injection instead of
+   `BuildConfig`.
 2. **Environment-specific behavior:** Use Gradle properties or runtime configuration.
 3. **Different dependencies per build type:** Not possible in KMP library. Move to app module.
 4. **Minification/ProGuard:** Only relevant in the application module.
@@ -224,9 +235,11 @@ Because the new KMP Android library plugin is strictly single-variant, you can n
 | `androidComponents { beforeVariants { ... } }` | Not available in KMP library                     |
 | `androidComponents { finalizeDsl { ... } }`    | Not available in KMP library                     |
 
-The `androidComponents` extension is significantly reduced in scope for KMP libraries because there is only a single variant. Most customization that relied on variant-aware APIs must be reworked.
+The `androidComponents` extension is significantly reduced in scope for KMP libraries because there
+is only a single variant. Most customization that relied on variant-aware APIs must be reworked.
 
-**Note:** `android.enableLegacyVariantApi` is **removed** in AGP 9.0 and will cause an error if set. Code depending on legacy variant APIs must be migrated to `androidComponents` APIs.
+**Note:** `android.enableLegacyVariantApi` is **removed** in AGP 9.0 and will cause an error if set.
+Code depending on legacy variant APIs must be migrated to `androidComponents` APIs.
 
 ---
 

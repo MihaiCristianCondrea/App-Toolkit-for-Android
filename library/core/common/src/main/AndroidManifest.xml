@@ -15,13 +15,4 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<!--
-  This module initializes the Mobile Ads SDK and drives the toolkit's network clients, so it
-  declares the permission those APIs need rather than relying on the host app to remember. Library
-  manifests merge into the consuming application.
--->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-
-</manifest>
+<manifest />

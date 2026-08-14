@@ -513,7 +513,7 @@ fun ThemeSettingsList(paddingValues: PaddingValues) {
                         .padding(horizontal = SizeConstants.MediumSize * 2),
                     title = stringResource(id = R.string.amoled_mode),
                     enabled = amoledAllowed,
-                    switchState = isAmoledMode, // FIXME: Argument type mismatch: actual type is 'Boolean', but 'State<Boolean>' was expected.
+                    switchState = rememberUpdatedState(isAmoledMode),
                     onSwitchToggled = { isChecked ->
                         firebase.value.logEvent(
                             AnalyticsEvent(

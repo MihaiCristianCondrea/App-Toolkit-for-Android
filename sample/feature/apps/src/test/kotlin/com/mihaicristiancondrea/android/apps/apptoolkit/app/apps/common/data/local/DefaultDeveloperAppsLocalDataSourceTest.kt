@@ -13,11 +13,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.rem
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppsListDataDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppsListResponseDto
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import java.nio.file.Files
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull

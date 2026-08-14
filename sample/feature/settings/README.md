@@ -13,7 +13,8 @@ The host's settings providers: what the sample contributes to the toolkit's sett
 
 ## Does not own
 
-- The settings screens themselves, owned by [`:library:feature:settings`](../../../library/feature/settings/README.md).
+- The settings screens themselves, owned by [
+  `:library:feature:settings`](../../../library/feature/settings/README.md).
   This module only fills in the provider contracts that module exposes.
 - The unlock flag, owned by [`:sample:feature:components`](../components/README.md).
 

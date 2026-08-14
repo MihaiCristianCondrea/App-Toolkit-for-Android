@@ -85,24 +85,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.views.dropdo
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.dialogs.ChangelogDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.navigation.MainTopAppBar
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerItemContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.BottomBarItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.Navigator
@@ -119,7 +106,20 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.Bo
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.NativeActivityTransitions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.rememberBottomNavTransitions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.animations.rememberNativeActivityTransitions
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.BottomBarItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.isTopLevel
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerItemContent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.CoroutineScope
@@ -161,7 +161,7 @@ private fun MainScreenContent(
     val navigator = remember(navigationState) { Navigator(state = navigationState) }
 
     val windowWidthSizeClass: AppWindowWidthSizeClass =
-        currentWindowAdaptiveInfo().windowSizeClass.toAppWindowWidthSizeClass()
+        currentWindowAdaptiveInfo().windowSizeClass.toAppWindowWidthSizeClass() // FIXME: 'fun currentWindowAdaptiveInfo(supportLargeAndXLargeWidth: Boolean = ...): WindowAdaptiveInfo' is deprecated. Please use V2 version of this function to support L and XL width size classes.
 
     val snackBarHostState: SnackbarHostState = remember { SnackbarHostState() }
 
@@ -600,7 +600,7 @@ private fun TopLevelContentNavDisplay(
     navigator: Navigator<StableNavKey>,
     entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
     onBack: () -> Unit,
-    bottomNavTransitions: BottomNavTransitions, // FIXME: Unstable parameter 'bottomNavTransitions' prevents composable from being skippable
+    bottomNavTransitions: BottomNavTransitions,
 ) {
     NavDisplay(
         entries = navigator.state.toDecoratedTopLevelEntries(entryProvider),

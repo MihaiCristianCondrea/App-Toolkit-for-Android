@@ -26,7 +26,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainU
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.repositories.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
@@ -34,8 +33,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.netwo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.repositories.NavigationRepository
 import io.mockk.clearAllMocks
 import io.mockk.coVerify
 import io.mockk.mockk

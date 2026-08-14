@@ -2,7 +2,8 @@
 
 ## Purpose
 
-The host's preference storage: everything the sample persists beyond what the toolkit already stores.
+The host's preference storage: everything the sample persists beyond what the toolkit already
+stores.
 
 ## Owns
 

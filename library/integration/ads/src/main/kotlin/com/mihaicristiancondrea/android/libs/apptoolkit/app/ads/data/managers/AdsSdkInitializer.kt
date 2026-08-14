@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads
+package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.managers
 
 import android.Manifest
 import android.content.Context
@@ -41,7 +41,7 @@ fun interface AdsSdkInitializer {
          * `android.permission.INTERNET` is declared by this module's own manifest rather than left
          * to the host, so the permission the SDK needs merges in wherever the toolkit is consumed.
          */
-        @get:RequiresPermission(Manifest.permission.INTERNET) // FIXME: Missing permissions required by MobileAds.initialize: android.permission.INTERNET
+        @get:RequiresPermission(Manifest.permission.INTERNET)
         val Default: AdsSdkInitializer = AdsSdkInitializer { context, config ->
             MobileAds.initialize(context, config) {}
         }

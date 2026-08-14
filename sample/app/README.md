@@ -17,7 +17,8 @@ libraries with the host's own feature modules.
 
 ## Does not own
 
-- Any feature. Screens, repositories and ViewModels live in `:sample:feature:*` and `:sample:widget`.
+- Any feature. Screens, repositories and ViewModels live in `:sample:feature:*` and
+  `:sample:widget`.
 - Shared resources and strings, owned by [`:sample:core:ui`](../core/ui/README.md).
 - Route keys and the entry-builder context, owned by
   [`:sample:core:navigation`](../core/navigation/README.md).
@@ -25,7 +26,8 @@ libraries with the host's own feature modules.
 ## Depends on
 
 - Every `:sample:core:*`, `:sample:feature:*` and `:sample:widget` module.
-- [`:library:apptoolkit`](../../library/apptoolkit/README.md) for shared DI and navigation composition,
+- [`:library:apptoolkit`](../../library/apptoolkit/README.md) for shared DI and navigation
+  composition,
   plus the toolkit feature and integration modules it configures.
 
 ## Used by
@@ -62,7 +64,8 @@ destination touches this module. That is deliberate — it is what keeps the fea
 depending on each other — but it does make this file a merge point.
 
 Components declared by feature modules (Quick Settings tile services, the caffeine foreground
-service, `ComponentsActivity`, the widget receiver) are still declared in this manifest rather than in
+service, `ComponentsActivity`, the widget receiver) are still declared in this manifest rather than
+in
 each feature's own. They resolve because every module is a dependency here, but a feature is not yet
 self-contained: adding one to another host means editing this manifest.
 
@@ -81,14 +84,16 @@ other leaves the check passing while the app breaks, so they have to be edited t
 The host was a single `:sample` module until the split. Three couplings had to be broken to make the
 feature modules leaves rather than a chain:
 
-- `MainScreen` imported `appNavigationEntryBuilders`, which would have made the shell depend on every
+- `MainScreen` imported `appNavigationEntryBuilders`, which would have made the shell depend on
+  every
   feature it renders. It now takes the builders as a parameter, supplied here by `MainActivity`.
 - `CaffeineService` built its notification intent from `MainActivity::class.java`; it resolves the
   launcher activity through the package manager instead.
 - `APPS_LIST_AD_FREQUENCY` was a `buildConfigField` here, which no library module can read. It is a
   fixed tuning value, so it became a constant in [`:sample:core:common`](../core/common/README.md).
 
-Quick-tool repositories in `:sample:feature:tiles` intentionally stay concrete classes: each wraps one
+Quick-tool repositories in `:sample:feature:tiles` intentionally stay concrete classes: each wraps
+one
 Android platform source, has no alternate implementation, and does not cross a module boundary.
 
 Pass-through use cases were removed throughout. Where one wrapped a data source rather than a

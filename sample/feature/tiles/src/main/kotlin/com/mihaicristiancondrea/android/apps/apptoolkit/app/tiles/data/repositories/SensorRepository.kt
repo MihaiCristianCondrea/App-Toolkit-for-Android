@@ -133,8 +133,16 @@ class SensorRepository(
             val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
             val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
             if (accelerometer != null && magnetometer != null) {
-                sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
-                sensorManager.registerListener(listener, magnetometer, SensorManager.SENSOR_DELAY_UI)
+                sensorManager.registerListener(
+                    listener,
+                    accelerometer,
+                    SensorManager.SENSOR_DELAY_UI
+                )
+                sensorManager.registerListener(
+                    listener,
+                    magnetometer,
+                    SensorManager.SENSOR_DELAY_UI
+                )
             } else {
                 close()
             }
@@ -199,7 +207,8 @@ class SensorRepository(
                 } else if (hasGravity && !hasGeomagnetic) {
                     // Fallback to accelerometer-only for pitch/roll if magnetometer is missing
                     // This is less stable but better than nothing
-                    val normGravity = gravity[0] * gravity[0] + gravity[1] * gravity[1] + gravity[2] * gravity[2]
+                    val normGravity =
+                        gravity[0] * gravity[0] + gravity[1] * gravity[1] + gravity[2] * gravity[2]
                     if (normGravity > 0.1f) {
                         val pitch = Math.toDegrees(
                             atan2(gravity[1].toDouble(), gravity[2].toDouble())
@@ -226,14 +235,22 @@ class SensorRepository(
         } else {
             val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
             val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-            
+
             if (accelerometer != null) {
-                sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
+                sensorManager.registerListener(
+                    listener,
+                    accelerometer,
+                    SensorManager.SENSOR_DELAY_UI
+                )
             }
             if (magnetometer != null) {
-                sensorManager.registerListener(listener, magnetometer, SensorManager.SENSOR_DELAY_UI)
+                sensorManager.registerListener(
+                    listener,
+                    magnetometer,
+                    SensorManager.SENSOR_DELAY_UI
+                )
             }
-            
+
             if (accelerometer == null) {
                 close()
             }

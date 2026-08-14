@@ -1,6 +1,8 @@
 # Migration Report Template
 
-After migration (whether successful or not), write a comprehensive `MIGRATION_REPORT.md` in the project root. This document serves both as human-readable documentation and as structured input for AI agents analyzing the migration.
+After migration (whether successful or not), write a comprehensive `MIGRATION_REPORT.md` in the
+project root. This document serves both as human-readable documentation and as structured input for
+AI agents analyzing the migration.
 
 ## Template
 
@@ -137,9 +139,15 @@ Group by type: Gradle files, Kotlin sources, Xcode project files, other.>
 
 ## Writing Guidelines
 
-- **Be specific.** Include actual file paths, class names, error messages. Avoid vague statements like "updated the config."
+- **Be specific.** Include actual file paths, class names, error messages. Avoid vague statements
+  like "updated the config."
 - **Show before/after.** For non-trivial changes, include code snippets of what was changed and why.
-- **Explain the "why."** Every error and non-trivial decision should include root cause analysis, not just the fix.
-- **Mark preserved `cocoapods.*` imports clearly.** These are the most confusing aspect of the migration for future readers — explain exactly why each one was kept and which library provides the bundled klib.
-- **Flag generalizable issues.** Mark errors that are likely to affect other projects so this report can improve the migration tooling.
-- **Keep it machine-parseable.** Use consistent markdown headings, tables, and the `Error #N` format so AI agents can extract structured data.
+- **Explain the "why."** Every error and non-trivial decision should include root cause analysis,
+  not just the fix.
+- **Mark preserved `cocoapods.*` imports clearly.** These are the most confusing aspect of the
+  migration for future readers — explain exactly why each one was kept and which library provides
+  the bundled klib.
+- **Flag generalizable issues.** Mark errors that are likely to affect other projects so this report
+  can improve the migration tooling.
+- **Keep it machine-parseable.** Use consistent markdown headings, tables, and the `Error #N` format
+  so AI agents can extract structured data.

@@ -7,7 +7,8 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 ## Owns
 
 - Ads settings repository, ViewModel, screen, and activity.
-- Google Mobile Ads SDK exposure needed by reusable ad rendering.
+- `AdsCoreManager`, `AdsSdkInitializer`, and Google Mobile Ads SDK initialization.
+- App-open ad lifecycle and the `INTERNET` permission required by the SDK.
 
 ## Does not own
 
@@ -42,6 +43,7 @@ flowchart TD
 ## Public contracts
 
 - Ads settings screen/activity, repository contract, and UI event/action/state contracts.
+- `AdsCoreManager` and its replaceable `AdsSdkInitializer` test seam.
 
 ## Internal implementations
 

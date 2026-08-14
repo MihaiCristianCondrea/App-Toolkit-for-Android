@@ -1,6 +1,8 @@
 # Splitting a KMP + Android Application Module for AGP 9.0
 
-AGP 9.0 does not support `com.android.application` combined with `org.jetbrains.kotlin.multiplatform` in the same module. You must split the monolithic `composeApp` module into a pure Android application module and a KMP shared library module.
+AGP 9.0 does not support `com.android.application` combined with
+`org.jetbrains.kotlin.multiplatform` in the same module. You must split the monolithic `composeApp`
+module into a pure Android application module and a KMP shared library module.
 
 ---
 
@@ -109,7 +111,8 @@ iosApp/                       # Unchanged
 
 ## androidApp/build.gradle.kts
 
-**Important:** In AGP 9.0, the `com.android.application` plugin has Kotlin support built in. Do NOT apply `org.jetbrains.kotlin.android` separately -- it will conflict.
+**Important:** In AGP 9.0, the `com.android.application` plugin has Kotlin support built in. Do NOT
+apply `org.jetbrains.kotlin.android` separately -- it will conflict.
 
 ```kotlin
 plugins {
@@ -166,9 +169,12 @@ dependencies {
 ### Key Points for androidApp
 
 - **No `kotlin.multiplatform` plugin.** This is a pure Android application module.
-- **No `kotlin-android` plugin.** AGP 9.0's `com.android.application` plugin bundles Kotlin compilation. Applying `org.jetbrains.kotlin.android` will cause a conflict error.
-- **`buildTypes` and `productFlavors` work here.** The application plugin still supports full variant configuration.
-- **Compose compiler plugin** is applied separately (`composeCompiler`), or it can come from KGP 2.0+ if you use the compose compiler Gradle plugin.
+- **No `kotlin-android` plugin.** AGP 9.0's `com.android.application` plugin bundles Kotlin
+  compilation. Applying `org.jetbrains.kotlin.android` will cause a conflict error.
+- **`buildTypes` and `productFlavors` work here.** The application plugin still supports full
+  variant configuration.
+- **Compose compiler plugin** is applied separately (`composeCompiler`), or it can come from KGP
+  2.0+ if you use the compose compiler Gradle plugin.
 - **Depends on `:shared`** to access all shared KMP code.
 
 ---
@@ -226,7 +232,8 @@ kotlin {
 
 - **Plugin is `com.android.kotlin.multiplatform.library`**, not `com.android.library`.
 - **Namespace must differ from androidApp.** Use `com.example.shared` vs `com.example.app`.
-- **No `applicationId`, `versionCode`, `versionName`, `targetSdk`.** These are application-only concepts.
+- **No `applicationId`, `versionCode`, `versionName`, `targetSdk`.** These are application-only
+  concepts.
 - **No `buildTypes` or `productFlavors`.** The KMP library plugin produces a single variant.
 - **Framework exports** (`binaries.framework`) stay here since iOS depends on the shared module.
 - **`androidTarget {}`** is replaced with **`android {}`**.
@@ -259,6 +266,7 @@ include(":iosApp")
 ### With Version Catalog
 
 **Before:**
+
 ```kotlin
 plugins {
     alias(libs.plugins.androidApplication) apply false
@@ -270,6 +278,7 @@ plugins {
 ```
 
 **After:**
+
 ```kotlin
 plugins {
     alias(libs.plugins.androidApplication) apply false
@@ -283,6 +292,7 @@ plugins {
 ### Without Version Catalog
 
 **Before:**
+
 ```kotlin
 plugins {
     id("com.android.application") version "8.7.3" apply false
@@ -294,6 +304,7 @@ plugins {
 ```
 
 **After:**
+
 ```kotlin
 plugins {
     id("com.android.application") version "9.0.1" apply false
@@ -304,7 +315,8 @@ plugins {
 }
 ```
 
-Note: `com.android.library` is replaced with `com.android.kotlin.multiplatform.library`. If you still have pure Android library modules (non-KMP), you can keep `com.android.library` as well.
+Note: `com.android.library` is replaced with `com.android.kotlin.multiplatform.library`. If you
+still have pure Android library modules (non-KMP), you can keep `com.android.library` as well.
 
 ---
 
@@ -342,14 +354,17 @@ class MainActivity : ComponentActivity() {
 
 ### 2. AndroidManifest.xml
 
-The full application manifest with `<application>`, `<activity>`, `<intent-filter>` moves to androidApp:
+The full application manifest with `<application>`, `<activity>`, `<intent-filter>` moves to
+androidApp:
 
 ```
 composeApp/src/androidMain/AndroidManifest.xml
   --> androidApp/src/main/AndroidManifest.xml
 ```
 
-**Important:** After moving the manifest, verify the `android:name` attribute on `<activity>` points to the correct Activity class in its new location. If the old manifest relied on a default or short class name, you may need to use the fully qualified name:
+**Important:** After moving the manifest, verify the `android:name` attribute on `<activity>` points
+to the correct Activity class in its new location. If the old manifest relied on a default or short
+class name, you may need to use the fully qualified name:
 
 ```xml
 <activity
@@ -362,7 +377,8 @@ composeApp/src/androidMain/AndroidManifest.xml
 </activity>
 ```
 
-The shared module may still have a minimal manifest (auto-generated or containing just `<manifest>` with no `<application>`).
+The shared module may still have a minimal manifest (auto-generated or containing just `<manifest>`
+with no `<application>`).
 
 ### 3. Application Class (if any)
 
@@ -422,7 +438,8 @@ android {
 }
 ```
 
-If they collide, you will get duplicate R class errors at compile time. The `applicationId` (in androidApp only) can be different from both namespaces.
+If they collide, you will get duplicate R class errors at compile time. The `applicationId` (in
+androidApp only) can be different from both namespaces.
 
 ---
 
@@ -430,7 +447,8 @@ If they collide, you will get duplicate R class errors at compile time. The `app
 
 ### Android Studio
 
-After the split, the run configuration for the Android app must point to `:androidApp` instead of `:composeApp`:
+After the split, the run configuration for the Android app must point to `:androidApp` instead of
+`:composeApp`:
 
 1. Edit Run Configurations
 2. Change Module to `androidApp`
@@ -450,7 +468,8 @@ If the shared module was renamed from `composeApp` to `shared`:
    }
    ```
 
-2. **Update the Run Script build phase** in `project.pbxproj` (or via Xcode > Build Phases > Run Script) to reference the new module:
+2. **Update the Run Script build phase** in `project.pbxproj` (or via Xcode > Build Phases > Run
+   Script) to reference the new module:
    ```bash
    # Old
    cd "$SRCROOT/.."
@@ -461,7 +480,8 @@ If the shared module was renamed from `composeApp` to `shared`:
    ./gradlew :shared:embedAndSignAppleFrameworkForXcode
    ```
 
-3. **Update Swift imports** — in all `.swift` files, change the framework import to match `baseName`:
+3. **Update Swift imports** — in all `.swift` files, change the framework import to match
+   `baseName`:
    ```swift
    // Old
    import ComposeApp
@@ -470,7 +490,9 @@ If the shared module was renamed from `composeApp` to `shared`:
    import Shared
    ```
 
-4. **Update the app struct name** if it was tied to the old module name. The `@main` struct name in your SwiftUI app entry point is independent of the framework name, but if it referenced the old name, rename it:
+4. **Update the app struct name** if it was tied to the old module name. The `@main` struct name in
+   your SwiftUI app entry point is independent of the framework name, but if it referenced the old
+   name, rename it:
    ```swift
    // Example: rename if it was called ComposeAppApp or similar
    @main
@@ -483,7 +505,8 @@ If the shared module was renamed from `composeApp` to `shared`:
    }
    ```
 
-5. **Update framework search paths** in Xcode Build Settings if they reference the old module directory path.
+5. **Update framework search paths** in Xcode Build Settings if they reference the old module
+   directory path.
 
 ---
 

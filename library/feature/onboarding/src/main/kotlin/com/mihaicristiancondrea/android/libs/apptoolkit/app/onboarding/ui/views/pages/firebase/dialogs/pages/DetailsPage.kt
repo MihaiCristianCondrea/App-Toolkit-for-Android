@@ -42,7 +42,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 
 @Composable
 fun DetailsPage(
-    state: UsageAndDiagnosticsUiState, // FIXME: Unstable parameter 'state' prevents composable from being skippable
+    state: UsageAndDiagnosticsUiState,
     onAnalyticsConsentChanged: (Boolean) -> Unit,
     onAdStorageConsentChanged: (Boolean) -> Unit,
     onAdUserDataConsentChanged: (Boolean) -> Unit,
@@ -106,4 +106,3 @@ fun DetailsPage(
         )
     }
 }
-

@@ -23,7 +23,8 @@ The hidden components showcase and the unlock gesture that reveals it.
 
 ## Used by
 
-- `:sample:feature:settings` (unlock gesture), `:sample:feature:home` (drawer entry), `:sample:app` (DI).
+- `:sample:feature:settings` (unlock gesture), `:sample:feature:home` (drawer entry),
+  `:sample:app` (DI).
 
 ## Flow chart
 

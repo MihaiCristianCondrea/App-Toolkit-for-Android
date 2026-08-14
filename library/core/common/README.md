@@ -81,7 +81,7 @@ publisher account. The current contract deliberately prevents that regression:
   `ca-app-pub-[0-9]{16}~[0-9]{10}`, and returns `null` for missing or malformed values.
 - There must be no library fallback AdMob application ID. The sample/demo ID belongs only to the
   sample application.
-- Hosts should let `AdsCoreManager` initialize Mobile Ads; separate initialization with another ID
+- Hosts should let the `:library:integration:ads` `AdsCoreManager` initialize Mobile Ads; separate initialization with another ID
   can recreate the mismatch.
 
 UMP 4.0.0 can also throw `NoSuchElementException` from `Scanner.next()` on its executor when a

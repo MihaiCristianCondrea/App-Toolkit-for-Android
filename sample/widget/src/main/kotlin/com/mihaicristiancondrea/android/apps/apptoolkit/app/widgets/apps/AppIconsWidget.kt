@@ -29,6 +29,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
+import androidx.core.graphics.scale
+import androidx.core.net.toUri
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
@@ -69,8 +71,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.koin.core.context.GlobalContext
 import java.net.URL
-import androidx.core.graphics.scale
-import androidx.core.net.toUri
 
 /**
  * A highly expressive, resizable 3x3 grid widget that focuses on fast app launching.
@@ -98,13 +98,15 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
         withContext(Dispatchers.IO) {
             runCatching {
                 val developerAppsRepository = GlobalContext.get().get<DeveloperAppsRepository>()
-                val state = developerAppsRepository.fetchDeveloperApps().first { it !is DataState.Loading }
+                val state =
+                    developerAppsRepository.fetchDeveloperApps().first { it !is DataState.Loading }
                 val apps = when (state) {
                     is DataState.Success -> state.data
                     is DataState.Error -> return@withContext state.data
                         ?.takeIf { it.isNotEmpty() }
                         ?.let { AppIconsWidgetState.Content(createEntries(context, it)) }
                         ?: AppIconsWidgetState.Error
+
                     is DataState.Loading -> return@withContext AppIconsWidgetState.Loading
                 }
 
@@ -116,7 +118,10 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
             }
         }
 
-    private fun createEntries(context: Context, apps: List<AppInfo>): ImmutableList<WidgetAppEntry> =
+    private fun createEntries(
+        context: Context,
+        apps: List<AppInfo>
+    ): ImmutableList<WidgetAppEntry> =
         apps.take(MAX_GRID_ITEMS).map { app ->
             val launchIntent = context.packageManager.getLaunchIntentForPackage(app.packageName)
             WidgetAppEntry(
@@ -143,7 +148,8 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
             }
         }.getOrNull()
         if (remoteIcon != null) {
-            return remoteIcon.scale(DEFAULT_ICON_BITMAP_SIZE_PX, DEFAULT_ICON_BITMAP_SIZE_PX).also { scaled -> if (scaled !== remoteIcon) remoteIcon.recycle() }
+            return remoteIcon.scale(DEFAULT_ICON_BITMAP_SIZE_PX, DEFAULT_ICON_BITMAP_SIZE_PX)
+                .also { scaled -> if (scaled !== remoteIcon) remoteIcon.recycle() }
         }
         return context.packageManager.getApplicationIcon(context.packageName)
             .toBitmap(DEFAULT_ICON_BITMAP_SIZE_PX)
@@ -163,7 +169,7 @@ class AppIconsWidget : GlanceAppWidget(errorUiLayout = R.layout.widget_app_icons
 }
 
 @Composable
-internal fun AppIconsWidgetContent(state: AppIconsWidgetState) { // FIXME: Parameter 'state' has runtime-determined stability
+internal fun AppIconsWidgetContent(state: AppIconsWidgetState) {
     GlanceTheme {
         val strings = WidgetStrings.from(LocalContext.current)
         when (state) {
@@ -228,7 +234,7 @@ private fun WidgetGrid(apps: ImmutableList<WidgetAppEntry>, title: String) {
         ) {
             if (showTitle) {
                 Text(
-                        text = title,
+                    text = title,
                     style = TextStyle(fontWeight = FontWeight.Medium),
                     modifier = GlanceModifier.padding(start = 4.dp, top = 2.dp, bottom = 2.dp)
                 )
@@ -286,6 +292,7 @@ internal data class WidgetAppEntry(
     val destination: Intent,
 )
 
+@Immutable
 internal sealed interface AppIconsWidgetState {
     data object Loading : AppIconsWidgetState
     data object Empty : AppIconsWidgetState

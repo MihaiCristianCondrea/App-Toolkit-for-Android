@@ -1,6 +1,9 @@
 ## EngageBroadcastReceiver
 
-Setting up the `BroadcastReceiver` correctly requires **both** static and dynamic registration. Static registration allows the app to receive broadcasts even when it isn't running, while dynamic registration is required on newer Android versions to safely receive broadcasts when the app is live in memory.
+Setting up the `BroadcastReceiver` correctly requires **both** static and dynamic registration.
+Static registration allows the app to receive broadcasts even when it isn't running, while dynamic
+registration is required on newer Android versions to safely receive broadcasts when the app is live
+in memory.
 
 ### BroadcastReceiver implementation
 
@@ -433,11 +436,16 @@ object ItemToEntityConverter {
 
 <br />
 
-> **Strict image aspect ratio requirement** : Play Engage has strict requirements for image aspect ratios depending on the vertical and entity type (e.g., 16:9 for landscape, 1:1 for square, 2:3 for portrait). Ensure your `ItemToEntityConverter` maps images that conform to these strict requirements to avoid cropping or content rejection by Play.
+> **Strict image aspect ratio requirement** : Play Engage has strict requirements for image aspect
+> ratios depending on the vertical and entity type (e.g., 16:9 for landscape, 1:1 for square, 2:3 for
+> portrait). Ensure your `ItemToEntityConverter` maps images that conform to these strict requirements
+> to avoid cropping or content rejection by Play.
 
 ## Dependency specifications (libs.versions.toml)
 
-This skill specifies all dependencies using the `libs.versions.toml` format. Adapt these definitions to other formats (such as standard Groovy `build.gradle` or Kotlin DSL `build.gradle.kts` implementation lines) as required by the project.
+This skill specifies all dependencies using the `libs.versions.toml` format. Adapt these definitions
+to other formats (such as standard Groovy `build.gradle` or Kotlin DSL `build.gradle.kts`
+implementation lines) as required by the project.
 
     [versions]
     engage-core = "1.6.0"
@@ -458,7 +466,9 @@ This skill specifies all dependencies using the `libs.versions.toml` format. Ada
 
 ## Dual content rating fields for Watch and TV
 
-For Watch and TV integrations, you must populate both the new `contentRatings` (which uses `RatingSystem`) and the legacy `contentRatingsLegacies` (which uses `String` lists) to ensure compatibility across all Google Play surfaces.
+For Watch and TV integrations, you must populate both the new `contentRatings` (which uses
+`RatingSystem`) and the legacy `contentRatingsLegacies` (which uses `String` lists) to ensure
+compatibility across all Google Play surfaces.
 
 <br />
 

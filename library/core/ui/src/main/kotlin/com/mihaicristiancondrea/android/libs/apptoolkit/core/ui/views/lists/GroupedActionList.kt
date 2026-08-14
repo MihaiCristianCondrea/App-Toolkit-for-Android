@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import kotlinx.collections.immutable.ImmutableList
 
 /**
  * One row of a [GroupedActionList]: what to show, and what to do when it is tapped.
@@ -72,7 +73,7 @@ data class GroupedAction(
  */
 @Composable
 fun GroupedActionList(
-    actions: List<GroupedAction>, // FIXME: Parameter 'actions' has runtime-determined stability
+    actions: ImmutableList<GroupedAction>,
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
     itemColor: Color = MaterialTheme.colorScheme.surfaceContainer,

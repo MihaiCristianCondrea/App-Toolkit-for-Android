@@ -23,6 +23,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppsList
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationRoutes
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.toNavKeyOrDefault
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.entryProviderFor
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.datastore.startupDestinationFlow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
@@ -31,11 +36,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Licens
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.entryProviderFor
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.datastore.startupDestinationFlow
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk

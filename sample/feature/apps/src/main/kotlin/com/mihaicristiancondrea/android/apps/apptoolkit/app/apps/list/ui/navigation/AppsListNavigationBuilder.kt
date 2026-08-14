@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.naviga
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.AppsListRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppsListRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 
 fun appsListEntryBuilder(
     context: AppNavigationEntryContext,

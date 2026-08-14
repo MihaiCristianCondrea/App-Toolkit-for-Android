@@ -6,7 +6,8 @@ Every shared resource in the host app, plus the error-to-text mapping that resol
 
 ## Owns
 
-- All `values*` resources: 230 strings across 30 locale folders, arrays, colors, themes, ad unit ids.
+- All `values*` resources: 230 strings across 30 locale folders, arrays, colors, themes, ad unit
+  ids.
 - Shared `drawable`, `drawable-anydpi`, `drawable-xhdpi` and `layout` resources.
 - `ErrorExtensions`, which maps `AppErrors` to `UiTextHelper`.
 
@@ -19,8 +20,10 @@ Every shared resource in the host app, plus the error-to-text mapping that resol
 ## Depends on
 
 - [`:sample:core:common`](../common/README.md) for `AppErrors`.
-- [`:library:core:ui`](../../../library/core/ui/README.md) for `UiTextHelper` and the toolkit mapper it delegates to.
-- [`:library:core:designsystem`](../../../library/core/designsystem/README.md) for the theme the resources feed.
+- [`:library:core:ui`](../../../library/core/ui/README.md) for `UiTextHelper` and the toolkit mapper
+  it delegates to.
+- [`:library:core:designsystem`](../../../library/core/designsystem/README.md) for the theme the
+  resources feed.
 
 ## Used by
 

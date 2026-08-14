@@ -68,7 +68,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun FirebaseConsentDialog(
-    state: UsageAndDiagnosticsUiState, // FIXME: Unstable parameter 'state' prevents composable from being skippable
+    state: UsageAndDiagnosticsUiState,
     onDismissRequest: () -> Unit,
     onAllowAll: () -> Unit,
     onAllowEssentials: () -> Unit,
@@ -227,4 +227,3 @@ fun FirebaseConsentDialog(
         }
     }
 }
-

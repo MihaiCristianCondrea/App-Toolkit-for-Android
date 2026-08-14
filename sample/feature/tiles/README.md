@@ -6,17 +6,21 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
 
 ## Owns
 
-- `ToolkitTilesRepository` and `DefaultToolkitTilesRepository`, which own the tile catalogue and read
+- `ToolkitTilesRepository` and `DefaultToolkitTilesRepository`, which own the tile catalogue and
+  read
   which tiles are added to Quick Settings.
-- The platform-wrapping repositories: `SensorRepository`, `BreathingRepository`, `CaffeineRepository`,
+- The platform-wrapping repositories: `SensorRepository`, `BreathingRepository`,
+  `CaffeineRepository`,
   `SystemRepository`, `SosRepository`.
 - `ToolkitTilesViewModel`, the tool composables, the bottom sheet, and `toolkitTilesEntryBuilder`.
 - The Quick Settings tile services and `CaffeineService`.
 
 ## Does not own
 
-- The route key it registers against, owned by [`:sample:core:navigation`](../../core/navigation/README.md).
-- Native ad rendering, owned by [`:library:core:ui`](../../../library/core/ui/README.md); this module
+- The route key it registers against, owned by [
+  `:sample:core:navigation`](../../core/navigation/README.md).
+- Native ad rendering, owned by [`:library:core:ui`](../../../library/core/ui/README.md); this
+  module
   supplies only the quick-tools card styling.
 
 ## Depends on
@@ -54,7 +58,8 @@ The platform repositories stay concrete classes with no interface. Each wraps on
 has no alternate implementation, so an interface would add substitution nobody uses — but it also
 means those paths cannot be faked in a unit test.
 
-`ToolkitTilesRepository` is the exception and has a contract, because it serves the catalogue as well
+`ToolkitTilesRepository` is the exception and has a contract, because it serves the catalogue as
+well
 as reading the platform.
 
 ## Migration notes
@@ -65,5 +70,6 @@ repository and mapped over the result — so both moved into the repository, whe
 now applies statuses itself.
 
 `CaffeineService` used to build its notification intent from `MainActivity::class.java`. It resolves
-the launcher activity through the package manager instead, so a quick-tool service does not depend on
+the launcher activity through the package manager instead, so a quick-tool service does not depend
+on
 the application module.

@@ -13,12 +13,14 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 - `CommonDataStore`, which owns one instance of each source, exposes them, and keeps the flat
   pre-split API delegating to them.
 - Persisted theme, review, ads, and consent-related values.
-- `AdsCoreManager` and the Koin DataStore module, which is the single place `CommonDataStore` is
-  registered; `appToolkitFoundationModules` includes it rather than defining its own copy.
+- The Koin DataStore module, which is the single place `CommonDataStore` is registered;
+  `appToolkitFoundationModules` includes it rather than defining its own copy.
 
 ## Does not own
 
 - Feature business decisions about consent, reviews, onboarding, or diagnostics.
+- Mobile Ads SDK initialization and app-open ad lifecycle, owned by
+  [`:library:integration:ads`](../../integration/ads/README.md).
 - Compose theme rendering, owned by `:library:core:designsystem` and `:library:core:ui`.
 
 ## Depends on
@@ -58,7 +60,7 @@ flowchart LR
 
 ## Internal implementations
 
-- DataStore key access, serialization-free preference mapping, and ads initialization coordination.
+- DataStore key access and serialization-free preference mapping.
 
 ## Current risks
 
@@ -84,14 +86,16 @@ Preserve these invariants:
 
 - `CommonDataStore.adsEnabledFlow`, including its host-configured `defaultAdsEnabled`, is the single
   source of truth for both `AdsCoreManager` and ad UI. Callers must not supply local defaults.
-- `AdsCoreManager` observes the flow instead of sampling it once, so enabling ads at runtime starts
+- The integration-owned `AdsCoreManager` observes the flow instead of sampling it once, so enabling ads at runtime starts
   initialization without a process restart.
 - Initialization is idempotent and mutex-protected, uses the validated host-manifest AdMob app ID,
   and is skipped when no valid ID exists.
 - `AdsSdkState.isReady` is published after initialization so UI can delay requests until the SDK is
   usable.
-- `AdsSdkInitializer` remains the test seam around the SDK's non-mock-friendly initialization API.
+- The integration-owned `AdsSdkInitializer` remains the test seam around the SDK's non-mock-friendly
+  initialization API.
 
-The JUnit 5 `AdsCoreManagerInitializationTest` is the executable regression suite for these rules.
+The JUnit 5 `AdsCoreManagerInitializationTest` in `:library:integration:ads` is the executable
+regression suite for these rules.
 Do not rely on the legacy JUnit 4 `TestAdsCoreManager`: the module uses the JUnit Platform without a
 Vintage engine, so that class compiles but is not executed.

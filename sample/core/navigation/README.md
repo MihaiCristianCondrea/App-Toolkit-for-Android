@@ -8,7 +8,8 @@ knowing which shell renders it.
 ## Owns
 
 - `AppNavKey` and the host route keys (`AppsListRoute`, `ToolkitTilesRoute`, `ComponentsRoute`).
-- `AppNavigationEntryContext` and `RandomAppHandler`, the parameters every feature entry builder takes.
+- `AppNavigationEntryContext` and `RandomAppHandler`, the parameters every feature entry builder
+  takes.
 - `NavigationManager` and `MainNavigationDefaults` (bottom-bar items, FAB-supported routes).
 
 ## Does not own
