@@ -102,17 +102,36 @@ class TestAdsCoreManager {
         every { Log.d(any(), any()) } returns 0
     }
 
+    /**
+     * The [dataStore] has to be passed, never left to the constructor default.
+     *
+     * That default is `CommonDataStore.getInstance(context)`, which builds a real Preferences
+     * `DataStore` over `context.commonDataStore` when the singleton is unset. Against a mocked
+     * [Context] the store's first read fails with `no answer found for Context.getFilesDir()`
+     * inside DataStore's own scope, so it surfaces as an uncaught exception on a background thread
+     * rather than here. `runTest` reports whatever it finds pending as
+     * `UncaughtExceptionsBeforeTest`, which failed an unrelated test in another class — whichever
+     * one happened to start next. Tests that replace the store by reflection after construction
+     * are too late: the real one already exists.
+     */
     private fun managerWith(
         context: Context,
         provider: BuildInfoProvider,
         adMobAppIdProvider: AdMobAppIdProvider = this.adMobAppIdProvider,
+        dataStore: CommonDataStore = stubDataStore(adsEnabled = false),
     ): AdsCoreManager = AdsCoreManager(
         context = context,
         buildInfoProvider = provider,
         dispatchers = eagerDispatchers(),
         adMobAppIdProvider = adMobAppIdProvider,
         adsSdkInitializer = initializer,
+        dataStore = dataStore,
     )
+
+    /** Ads off by default, so a manager built without an explicit store initializes nothing. */
+    private fun stubDataStore(adsEnabled: Boolean): CommonDataStore = mockk {
+        every { adsEnabledFlow } returns MutableStateFlow(adsEnabled)
+    }
 
     /**
      * [AdsCoreManager] now resolves the AdMob app id from the host manifest instead of using a

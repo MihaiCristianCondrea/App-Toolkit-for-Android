@@ -36,6 +36,6 @@ subprojects {
     // one shared group, `:sample:core:common` depending on `:library:core:common` produced the same
     // coordinates on both sides, and Gradle rejected it as a circular dependency on itself rather
     // than reporting a name clash. Only the library is published, so this affects nothing else.
-    group = if (path.startsWith(":sample")) "${'$'}{publishingGroupId.get()}.sample" else publishingGroupId.get()
+    group = if (path.startsWith(":sample")) "${publishingGroupId.get()}.sample" else publishingGroupId.get()
     version = publishingVersion.get()
 }
