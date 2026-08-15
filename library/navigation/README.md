@@ -51,7 +51,7 @@ flowchart LR
 
 - Navigation destination/item models, including `NavigationDrawerItem` and `BottomBarItem`.
 - `StableNavKey` and `AppToolkitNavKey` route implementations.
-- `NavigationDrawerRoutes` and `NavigationRepository`.
+- `NavigationDrawerRoutes` and `navigation.data.repositories.NavigationRepository`.
 - Back-stack action extensions and transition helpers.
 - `NavigationIcon`.
 - `BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerItemContent`, and

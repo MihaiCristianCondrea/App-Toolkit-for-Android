@@ -25,7 +25,7 @@ import androidx.compose.material.icons.outlined.Share
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.repositories.NavigationRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

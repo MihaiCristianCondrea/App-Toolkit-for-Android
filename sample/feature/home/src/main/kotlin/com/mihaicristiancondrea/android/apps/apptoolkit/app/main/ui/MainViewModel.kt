@@ -43,8 +43,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoadin
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setNoData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.repositories.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repositories.InAppUpdateRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.models.InAppUpdateHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.models.InAppUpdateResult
@@ -297,5 +297,4 @@ class MainViewModel(
         const val REASON: String = "reason"
     }
 }
-
 

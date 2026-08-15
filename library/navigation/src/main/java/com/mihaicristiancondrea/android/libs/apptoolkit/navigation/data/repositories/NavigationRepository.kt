@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.repositories
+package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import kotlinx.coroutines.flow.Flow

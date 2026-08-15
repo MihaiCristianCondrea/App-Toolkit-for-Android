@@ -35,7 +35,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDis
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.repositories.NavigationRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.NavigationRepository
 import io.mockk.clearAllMocks
 import io.mockk.coVerify
 import io.mockk.mockk
