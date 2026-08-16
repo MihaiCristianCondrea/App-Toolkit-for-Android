@@ -20,8 +20,6 @@
     <string name="contact_us_description">詳しくお聞かせください。サポートいたします。</string>
     <string name="feedback">フィードバック</string>
     <string name="help">ヘルプ</string>
-    <string name="help_feedback_sheet_contact_description">直接サポートのために、私の公式コンタクトページを開きます。</string>
-    <string name="help_feedback_sheet_contact_title">個別に連絡する</string>
     <string name="help_feedback_sheet_feature_request_description">公式フォームから、各アプリへの新しいアイデアを提案してください。</string>
     <string name="help_feedback_sheet_feature_request_title">機能リクエストを送信</string>
     <string name="help_feedback_sheet_review_description">評価を共有して、より多くのユーザーがアプリを見つけられるようにしてください。</string>
@@ -34,4 +32,6 @@
     <string name="version">バージョン %1$s</string>
     <string name="version_info">バージョン情報</string>
     <string name="view_in_google_play_store">Google Playストアで表示</string>
+    <string name="need_more_help">さらにサポートが必要ですか？</string>
+    <string name="show_more">さらに表示</string>
 </resources>

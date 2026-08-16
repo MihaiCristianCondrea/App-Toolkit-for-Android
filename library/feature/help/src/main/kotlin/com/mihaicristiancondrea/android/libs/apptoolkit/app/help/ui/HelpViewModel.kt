@@ -74,7 +74,6 @@ class HelpViewModel(
             is HelpEvent.LoadFaq -> loadFaq()
             is HelpEvent.DismissSnackbar -> dismissSnackbar()
             is HelpEvent.OpenFeatureRequestForm -> sendAction(HelpAction.OpenUrl(AppLinks.FEATURE_REQUESTS_FORM))
-            is HelpEvent.OpenContactPage -> sendAction(HelpAction.OpenUrl(AppLinks.CONTACT_PAGE))
             is HelpEvent.RequestReview -> requestReview(host = event.host)
         }
     }

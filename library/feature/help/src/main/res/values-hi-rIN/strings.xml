@@ -20,8 +20,6 @@
     <string name="contact_us_description">हमें अधिक बताएं और हम आपकी मदद करेंगे</string>
     <string name="feedback">प्रतिक्रिया</string>
     <string name="help">मदद</string>
-    <string name="help_feedback_sheet_contact_description">सीधे सहायता के लिए मेरा आधिकारिक संपर्क पेज खोलें।</string>
-    <string name="help_feedback_sheet_contact_title">मुझसे व्यक्तिगत रूप से संपर्क करें</string>
     <string name="help_feedback_sheet_feature_request_description">आधिकारिक फ़ॉर्म के माध्यम से हमारे किसी भी ऐप के लिए नए विचार सुझाएँ।</string>
     <string name="help_feedback_sheet_feature_request_title">फ़ीचर अनुरोध भेजें</string>
     <string name="help_feedback_sheet_review_description">अपनी रेटिंग साझा करें और अधिक उपयोगकर्ताओं को ऐप खोजने में मदद करें।</string>
@@ -34,4 +32,6 @@
     <string name="version">संस्करण %1$s</string>
     <string name="version_info">संस्करण जानकारी</string>
     <string name="view_in_google_play_store">गूगल प्ले स्टोर में देखें</string>
+    <string name="need_more_help">और मदद चाहिए?</string>
+    <string name="show_more">और दिखाएँ</string>
 </resources>

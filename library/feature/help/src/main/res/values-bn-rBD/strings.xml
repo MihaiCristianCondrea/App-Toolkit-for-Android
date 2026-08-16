@@ -20,8 +20,6 @@
     <string name="contact_us_description">আমাদের আরও জানান এবং আমরা আপনাকে সেখানে পৌঁছাতে সাহায্য করব</string>
     <string name="feedback">প্রতিক্রিয়া</string>
     <string name="help">সাহায্য</string>
-    <string name="help_feedback_sheet_contact_description">সরাসরি সহায়তার জন্য আমার অফিসিয়াল যোগাযোগ পেজ খুলুন।</string>
-    <string name="help_feedback_sheet_contact_title">ব্যক্তিগতভাবে আমার সাথে যোগাযোগ করুন</string>
     <string name="help_feedback_sheet_feature_request_description">অফিশিয়াল ফর্মের মাধ্যমে আমাদের যেকোনো অ্যাপের জন্য নতুন ধারণা জানান।</string>
     <string name="help_feedback_sheet_feature_request_title">ফিচার অনুরোধ পাঠান</string>
     <string name="help_feedback_sheet_review_description">আপনার রেটিং শেয়ার করুন এবং আরও ব্যবহারকারীকে অ্যাপটি খুঁজে পেতে সাহায্য করুন।</string>
@@ -34,4 +32,6 @@
     <string name="version">সংস্করণ %1$s</string>
     <string name="version_info">সংস্করণের তথ্য</string>
     <string name="view_in_google_play_store">গুগল প্লে স্টোরে দেখুন</string>
+    <string name="need_more_help">আরও সাহায্য প্রয়োজন?</string>
+    <string name="show_more">আরও দেখুন</string>
 </resources>

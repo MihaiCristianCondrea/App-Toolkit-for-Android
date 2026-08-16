@@ -20,8 +20,6 @@
     <string name="contact_us_description">告訴我們更多資訊，我們會協助您</string>
     <string name="feedback">反饋</string>
     <string name="help">幫助</string>
-    <string name="help_feedback_sheet_contact_description">開啟我的官方聯絡頁面以獲得直接支援。</string>
-    <string name="help_feedback_sheet_contact_title">與我個人聯絡</string>
     <string name="help_feedback_sheet_feature_request_description">透過官方表單為我們的任何應用程式提出新想法。</string>
     <string name="help_feedback_sheet_feature_request_title">提交功能請求</string>
     <string name="help_feedback_sheet_review_description">分享您的評分，幫助更多使用者發現此應用程式。</string>
@@ -34,4 +32,6 @@
     <string name="version">版本 %1$s</string>
     <string name="version_info">版本資訊</string>
     <string name="view_in_google_play_store">在 Google Play 商店中查看</string>
+    <string name="need_more_help">需要更多協助嗎？</string>
+    <string name="show_more">顯示更多</string>
 </resources>

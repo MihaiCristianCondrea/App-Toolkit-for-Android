@@ -20,8 +20,6 @@
     <string name="contact_us_description">Mondj el többet, és segítünk neked</string>
     <string name="feedback">Visszajelzés</string>
     <string name="help">Segítség</string>
-    <string name="help_feedback_sheet_contact_description">Nyisd meg a hivatalos kapcsolatfelvételi oldalamat közvetlen támogatásért.</string>
-    <string name="help_feedback_sheet_contact_title">Lépj velem kapcsolatba személyesen</string>
     <string name="help_feedback_sheet_feature_request_description">Javasolj új ötleteket bármelyik alkalmazásunkhoz a hivatalos űrlapon keresztül.</string>
     <string name="help_feedback_sheet_feature_request_title">Funkciókérés küldése</string>
     <string name="help_feedback_sheet_review_description">Oszd meg az értékelésedet, és segíts, hogy többen felfedezzék az alkalmazást.</string>
@@ -34,4 +32,6 @@
     <string name="version">Verzió: %1$s</string>
     <string name="version_info">Verzió információ</string>
     <string name="view_in_google_play_store">Megtekintés a Google Play Áruházban</string>
+    <string name="need_more_help">További segítségre van szükséged?</string>
+    <string name="show_more">Továbbiak megjelenítése</string>
 </resources>

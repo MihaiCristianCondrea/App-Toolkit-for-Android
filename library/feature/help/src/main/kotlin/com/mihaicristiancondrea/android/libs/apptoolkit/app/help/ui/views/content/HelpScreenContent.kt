@@ -20,14 +20,18 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.views.conte
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.models.FaqItem
@@ -45,12 +49,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.HelpNa
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
+
+private const val INITIAL_VISIBLE_QUESTION_COUNT = 5
 
 @Composable
 fun HelpScreenContent(
@@ -62,7 +69,16 @@ fun HelpScreenContent(
     val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.HELP_LARGE_BANNER_AD))
     val adsEnabled = rememberAdsEnabled()
     val hasAdSlot = adsEnabled && adsConfig.bannerAdUnitId.isNotBlank()
-    val groupItemCount = questions.size + 1 + if (hasAdSlot) 1 else 0
+    var showAllQuestions by rememberSaveable { mutableStateOf(false) }
+    var isAdLoaded by remember { mutableStateOf(false) }
+    val visibleQuestions = if (showAllQuestions) {
+        questions
+    } else {
+        questions.take(INITIAL_VISIBLE_QUESTION_COUNT)
+    }
+    val hasHiddenQuestions = visibleQuestions.size < questions.size
+    val popularGroupItemCount = visibleQuestions.size + if (hasHiddenQuestions) 1 else 0
+    val supportGroupItemCount = 1 + if (hasAdSlot && isAdLoaded) 1 else 0
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -75,10 +91,12 @@ fun HelpScreenContent(
         verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
     ) {
         item {
-            Text(text = stringResource(id = R.string.popular_help_resources))
+            Text(
+                text = stringResource(id = R.string.popular_help_resources)
+            )
         }
 
-        questions.forEachIndexed { index: Int, question: FaqItem ->
+        visibleQuestions.forEachIndexed { index: Int, question: FaqItem ->
             item(key = question.id.value) {
                 var isExpanded by rememberSaveable(question.id.value) {
                     mutableStateOf(false)
@@ -89,7 +107,7 @@ fun HelpScreenContent(
                     isExpanded = isExpanded,
                     groupedPosition = groupedItemPosition(
                         index = index,
-                        size = groupItemCount,
+                        size = popularGroupItemCount,
                     ),
                     onToggleExpand = {
                         val expanded = !isExpanded
@@ -108,15 +126,45 @@ fun HelpScreenContent(
             }
         }
 
+        if (hasHiddenQuestions) {
+            item(key = "show_more_questions") {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .groupedCorners(
+                            position = groupedItemPosition(
+                                index = popularGroupItemCount - 1,
+                                size = popularGroupItemCount,
+                            ),
+                            outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+                        ),
+                    shape = RectangleShape,
+                    onClick = {
+                        firebaseController.logGa4Event(
+                            helpPreferenceTapEvent(preferenceKey = "show_more_questions")
+                        )
+                        showAllQuestions = true
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.show_more), modifier = Modifier.fillMaxWidth())
+                }
+            }
+        }
+
+        item {
+            Text(text = stringResource(id = R.string.need_more_help))
+        }
+
         if (hasAdSlot) {
             item {
                 HelpNativeAdCard(
                     adUnitId = adsConfig.bannerAdUnitId,
                     groupedPosition = groupedItemPosition(
-                        index = questions.size,
-                        size = groupItemCount,
+                        index = 0,
+                        size = supportGroupItemCount,
                     ),
-                    modifier = Modifier.animateItem()
+                    modifier = Modifier.animateItem(),
+                    onAdLoaded = { isAdLoaded = it },
                 )
             }
         }
@@ -124,8 +172,8 @@ fun HelpScreenContent(
         item {
             ContactUsCard(
                 groupedPosition = groupedItemPosition(
-                    index = groupItemCount - 1,
-                    size = groupItemCount,
+                    index = supportGroupItemCount - 1,
+                    size = supportGroupItemCount,
                 ),
                 onClick = {
                     firebaseController.logEvent(

@@ -20,8 +20,6 @@
     <string name="contact_us_description">자세히 알려주시면 도움을 드리겠습니다.</string>
     <string name="feedback">의견</string>
     <string name="help">도움말</string>
-    <string name="help_feedback_sheet_contact_description">직접 지원을 위해 내 공식 연락처 페이지를 여세요.</string>
-    <string name="help_feedback_sheet_contact_title">개인적으로 연락하기</string>
     <string name="help_feedback_sheet_feature_request_description">공식 양식을 통해 앱에 대한 새로운 아이디어를 제안해 주세요.</string>
     <string name="help_feedback_sheet_feature_request_title">기능 요청 보내기</string>
     <string name="help_feedback_sheet_review_description">평점을 남겨 더 많은 사용자가 앱을 발견하도록 도와주세요.</string>
@@ -34,4 +32,6 @@
     <string name="version">버전 %1$s</string>
     <string name="version_info">버전 정보</string>
     <string name="view_in_google_play_store">Google Play 스토어에서 보기</string>
+    <string name="need_more_help">도움이 더 필요하신가요?</string>
+    <string name="show_more">더 보기</string>
 </resources>

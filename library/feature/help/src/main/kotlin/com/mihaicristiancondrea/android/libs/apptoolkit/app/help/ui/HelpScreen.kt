@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.contracts.HelpAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.contracts.HelpEvent
@@ -88,7 +86,6 @@ private const val HELP_SCREEN_CLASS: String = "HelpScreen"
 
 private object HelpPreferenceKeys {
     const val FEEDBACK: String = "feedback"
-    const val CONTACT_US: String = "contact_us"
     const val REQUEST_FEATURE: String = "request_feature"
     const val LEAVE_REVIEW: String = "leave_review"
 }
@@ -266,10 +263,10 @@ fun HelpScreen(
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(horizontal = SizeConstants.ExtraLargeCompactSize)
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
 
             GroupedActionList(
-                modifier = Modifier.padding(horizontal = 12.dp),
+                modifier = Modifier.padding(horizontal = SizeConstants.MediumSize),
                 actions = persistentListOf(
                     GroupedAction(
                         title = stringResource(id = R.string.help_feedback_sheet_feature_request_title),
@@ -279,16 +276,6 @@ fun HelpScreen(
                             firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.REQUEST_FEATURE))
                             showFeedbackBottomSheet.value = false
                             viewModel.onEvent(HelpEvent.OpenFeatureRequestForm)
-                        },
-                    ),
-                    GroupedAction(
-                        title = stringResource(id = R.string.help_feedback_sheet_contact_title),
-                        description = stringResource(id = R.string.help_feedback_sheet_contact_description),
-                        icon = Icons.AutoMirrored.Outlined.ContactSupport,
-                        onClick = {
-                            firebaseController.logGa4Event(helpPreferenceTapEvent(HelpPreferenceKeys.CONTACT_US))
-                            showFeedbackBottomSheet.value = false
-                            viewModel.onEvent(HelpEvent.OpenContactPage)
                         },
                     ),
                     GroupedAction(

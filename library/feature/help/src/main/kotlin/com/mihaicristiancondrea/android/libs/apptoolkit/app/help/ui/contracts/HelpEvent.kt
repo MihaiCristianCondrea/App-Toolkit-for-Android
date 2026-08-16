@@ -24,6 +24,5 @@ sealed interface HelpEvent : UiEvent {
     data object LoadFaq : HelpEvent
     data object DismissSnackbar : HelpEvent
     data object OpenFeatureRequestForm : HelpEvent
-    data object OpenContactPage : HelpEvent
     data class RequestReview(val host: ReviewHost) : HelpEvent
 }

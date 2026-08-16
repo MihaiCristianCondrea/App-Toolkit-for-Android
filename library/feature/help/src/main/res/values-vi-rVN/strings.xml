@@ -20,8 +20,6 @@
     <string name="contact_us_description">Hãy cho chúng tôi biết thêm và chúng tôi sẽ giúp bạn</string>
     <string name="feedback">Phản hồi</string>
     <string name="help">Trợ giúp</string>
-    <string name="help_feedback_sheet_contact_description">Mở trang liên hệ chính thức của tôi để được hỗ trợ trực tiếp.</string>
-    <string name="help_feedback_sheet_contact_title">Liên hệ trực tiếp với tôi</string>
     <string name="help_feedback_sheet_feature_request_description">Đề xuất ý tưởng mới cho bất kỳ ứng dụng nào của chúng tôi qua biểu mẫu chính thức.</string>
     <string name="help_feedback_sheet_feature_request_title">Gửi yêu cầu tính năng</string>
     <string name="help_feedback_sheet_review_description">Chia sẻ đánh giá của bạn và giúp nhiều người dùng hơn khám phá ứng dụng.</string>
@@ -34,4 +32,6 @@
     <string name="version">Phiên bản %1$s</string>
     <string name="version_info">Thông tin phiên bản</string>
     <string name="view_in_google_play_store">Xem trên Google Play Store</string>
+    <string name="need_more_help">Bạn cần thêm trợ giúp?</string>
+    <string name="show_more">Hiển thị thêm</string>
 </resources>

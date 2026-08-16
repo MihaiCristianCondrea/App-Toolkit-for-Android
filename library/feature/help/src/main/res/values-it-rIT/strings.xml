@@ -20,8 +20,6 @@
     <string name="contact_us_description">Dicci di più e ti aiuteremo</string>
     <string name="feedback">Feedback</string>
     <string name="help">Aiuto</string>
-    <string name="help_feedback_sheet_contact_description">Apri la mia pagina di contatto ufficiale per supporto diretto.</string>
-    <string name="help_feedback_sheet_contact_title">Contattami personalmente</string>
     <string name="help_feedback_sheet_feature_request_description">Suggerisci nuove idee per una delle nostre app tramite il modulo ufficiale.</string>
     <string name="help_feedback_sheet_feature_request_title">Invia richiesta di funzionalità</string>
     <string name="help_feedback_sheet_review_description">Condividi la tua valutazione e aiuta più utenti a scoprire l’app.</string>
@@ -34,4 +32,6 @@
     <string name="version">Versione %1$s</string>
     <string name="version_info">Informazioni sulla versione</string>
     <string name="view_in_google_play_store">Visualizza su Google Play Store</string>
+    <string name="need_more_help">Hai bisogno di ulteriore assistenza?</string>
+    <string name="show_more">Mostra altro</string>
 </resources>
