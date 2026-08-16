@@ -30,11 +30,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings.modules.hostSettingsProvidersModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.help.HelpConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitFeatureModules
-import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitFoundationModules
-import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitSettingsModules
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.di.billingModule
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di.firebaseModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -52,22 +48,19 @@ fun initializeKoin(context: Context) {
         androidContext(androidContext = context)
         modules(
             modules = buildList {
-                addAll(appToolkitFoundationModules(hostBuildConfig = appToolkitBuildConfig))
-                add(firebaseModule)
-                add(billingModule)
-                add(dataStoreModule)
-                add(appModule)
-                add(hostSettingsProvidersModule)
-                addAll(appToolkitSettingsModules())
-                add(generalSettingsModule)
-                add(adsModule)
-                add(appsListModule)
+                // The toolkit's own graph, complete. Everything after this overrides it.
                 addAll(
-                    appToolkitFeatureModules(
+                    appToolkitModules(
                         hostBuildConfig = appToolkitBuildConfig,
                         startupProviderFactory = ::AppStartupProvider,
                     )
                 )
+                add(dataStoreModule)
+                add(appModule)
+                add(hostSettingsProvidersModule)
+                add(generalSettingsModule)
+                add(adsModule)
+                add(appsListModule)
                 add(onboardingModule)
                 add(startupModule)
             }

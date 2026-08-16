@@ -8,7 +8,9 @@ Koin modules and Navigation 3 destinations while re-exporting the toolkit module
 
 ## Owns
 
-- `appToolkitFoundationModules`, `appToolkitFeatureModules`, and `appToolkitSettingsModules`.
+- `appToolkitModules`, the single entry point returning the toolkit's whole Koin graph.
+- `appToolkitFoundationModules`, `appToolkitFeatureModules`, and `appToolkitSettingsModules`, the
+  granular lists `appToolkitModules` composes.
 - `appToolkitNavigationEntryBuilders` for shared embedded destinations.
 - Host-to-library composition using `AppToolkitHostBuildConfig` and host provider factories.
 
@@ -51,7 +53,8 @@ flowchart TD
 
 ## Public contracts
 
-- The three DI module-list factories and `appToolkitNavigationEntryBuilders`.
+- `appToolkitModules`, the three DI module-list factories it composes, and
+  `appToolkitNavigationEntryBuilders`.
 - Transitive APIs from all `api(project(...))` dependencies are also visible to consumers.
 
 ## Internal implementations
@@ -109,6 +112,32 @@ as
 missing. And `verify` reflects on the produced type's constructor regardless of how the definition
 builds it, so types created by a factory function (`HttpClient`, `ColorPalette`) need their
 constructor parameters listed as externally supplied rather than the check being skipped.
+
+### Host integration: one entry point
+
+`appToolkitModules(hostBuildConfig, startupProviderFactory)` returns every module the toolkit
+needs, `:library:integration:billing` and `:library:integration:firebase` included. A host that
+loads it has a complete toolkit graph and does not track which Gradle module owns which binding.
+
+Before 3.0.0-pre2 a host assembled the graph from three module-list factories plus the loose
+`firebaseModule` and `billingModule` values. Missing one produced no build error — only a
+`NoDefinitionFoundException` the first time the app touched that dependency. Smart Cleaner shipped
+without `billingModule` and died on first resume.
+
+Hosts override toolkit defaults by load order. Koin's `allowOverride` defaults to true, so
+definitions loaded after the toolkit replace it:
+
+```kotlin
+modules(
+    buildList {
+        addAll(appToolkitModules(hostBuildConfig, ::AppStartupProvider))
+        add(hostSettingsProvidersModule)  // overrides the toolkit's defaults
+        add(appModule)
+    }
+)
+```
+
+The granular factories stay public for hosts that need to compose a partial graph.
 
 ## Migration notes
 

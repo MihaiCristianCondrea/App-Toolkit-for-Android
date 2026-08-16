@@ -34,11 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.provi
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AdvancedSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitFeatureModules
-import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitFoundationModules
-import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitSettingsModules
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.di.billingModule
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di.firebaseModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitModules
 import io.ktor.client.engine.HttpClientEngine
 import org.junit.jupiter.api.Test
 import org.koin.core.module.Module
@@ -114,25 +110,25 @@ class HostKoinGraphTest {
      * which is the point: the check is only as good as its agreement with production.
      */
     private fun hostModules(): List<Module> = buildList {
-        addAll(appToolkitFoundationModules(hostBuildConfig = hostBuildConfig))
-        add(firebaseModule)
-        add(billingModule)
+        addAll(toolkitModules())
         add(dataStoreModule)
         add(appModule)
         add(hostSettingsProvidersModule)
-        addAll(appToolkitSettingsModules())
         add(generalSettingsModule)
         add(adsModule)
         add(appsListModule)
-        addAll(
-            appToolkitFeatureModules(
-                hostBuildConfig = hostBuildConfig,
-                startupProviderFactory = ::AppStartupProvider,
-            )
-        )
         add(onboardingModule)
         add(startupModule)
     }
+
+    /**
+     * The toolkit's whole graph. Sharing one call with `initializeKoin` means a module added to the
+     * toolkit is covered by both tests without either list being edited.
+     */
+    private fun toolkitModules(): List<Module> = appToolkitModules(
+        hostBuildConfig = hostBuildConfig,
+        startupProviderFactory = ::AppStartupProvider,
+    )
 
     @Test
     fun `every host definition can be resolved`() {
@@ -149,18 +145,7 @@ class HostKoinGraphTest {
         // The toolkit ships to other hosts, so anything it needs beyond `hostExtensionPoints` is a
         // dependency it silently relies on this sample to provide — which would fail in any other
         // host, at first resolution, as the same `Unable to start activity` crash.
-        buildList {
-            addAll(appToolkitFoundationModules(hostBuildConfig = hostBuildConfig))
-            addAll(appToolkitSettingsModules())
-            addAll(
-                appToolkitFeatureModules(
-                    hostBuildConfig = hostBuildConfig,
-                    startupProviderFactory = ::AppStartupProvider,
-                )
-            )
-            add(firebaseModule)
-            add(billingModule)
-        }.let { toolkitModules -> module { includes(toolkitModules) } }
+        module { includes(toolkitModules()) }
             .verify(extraTypes = platformTypes + builtByFactoryFunction + hostExtensionPoints)
     }
 }
