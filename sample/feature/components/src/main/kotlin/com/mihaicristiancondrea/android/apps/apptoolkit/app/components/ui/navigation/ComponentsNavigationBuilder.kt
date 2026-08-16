@@ -21,7 +21,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavig
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.ComponentsRoute as ComponentsScreenRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.ComponentsScreen
 
 /**
  * Registers the components showcase entry in the app navigation graph.
@@ -30,7 +30,7 @@ fun componentsEntryBuilder(
     context: AppNavigationEntryContext,
 ): NavigationEntryBuilder<StableNavKey> = {
     entry<ComponentsRoute>(clazzContentKey = { route -> route }) {
-        ComponentsScreenRoute(
+        ComponentsScreen(
             paddingValues = context.paddingValues,
         )
     }

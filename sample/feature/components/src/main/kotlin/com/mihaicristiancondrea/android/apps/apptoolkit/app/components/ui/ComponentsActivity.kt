@@ -29,7 +29,7 @@ class ComponentsActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                ComponentsRoute(isEmbedded = false)
+                ComponentsScreen(isEmbedded = false)
             }
         }
     }
