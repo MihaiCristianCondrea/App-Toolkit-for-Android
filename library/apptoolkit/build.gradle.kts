@@ -59,9 +59,10 @@ android {
 
 }
 
-// `RepositoryConventionsTest` reads production source trees rather than the classpath, and Gradle
-// cannot infer that. Without declaring it, moving a repositories into the wrong package leaves the
-// test task up to date and the violation ships unnoticed — the exact failure the test exists to
+// `RepositoryConventionsTest` and `ManifestContractTest` read production source trees rather than
+// the classpath, and Gradle cannot infer that. Without declaring it, moving a repositories into the
+// wrong package — or re-adding an `<application>` attribute to a library manifest — leaves the test
+// task up to date and the violation ships unnoticed, the exact failure these tests exist to
 // prevent.
 tasks.withType<Test>().configureEach {
     // `build` is excluded so the scan stops before it reaches this module's own intermediates —
@@ -75,6 +76,15 @@ tasks.withType<Test>().configureEach {
         }
     )
         .withPropertyName("productionSources")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+
+    inputs.files(
+        rootProject.fileTree(rootProject.layout.projectDirectory.dir("library")) {
+            include("**/src/main/AndroidManifest.xml")
+            exclude("**/build/**")
+        }
+    )
+        .withPropertyName("libraryManifests")
         .withPathSensitivity(PathSensitivity.RELATIVE)
 }
 
