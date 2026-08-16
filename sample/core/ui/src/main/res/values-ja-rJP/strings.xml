@@ -230,4 +230,27 @@
     <string name="app_short_description">便利な Android ツールとユーティリティのコレクション。</string>
     <string name="settings_disabled_message">設定は現在利用できません。</string>
     <string name="long_settings_label">設定を開く</string>
+    <string name="tile_flash_dimmer_title">フラッシュ調光</string>
+    <string name="tile_flash_dimmer_summary">ライトの明るさを調整し、クイック設定から使用できます</string>
+    <string name="flash_dimmer_unavailable">ライトを利用できません</string>
+    <string name="flash_dimmer_off">オフ</string>
+    <string name="flash_dimmer_on">オン</string>
+    <string name="flash_dimmer_tile_level">レベル %1$d/%2$d</string>
+    <string name="flash_dimmer_level">明るさ %1$d/%2$d</string>
+    <string name="flash_dimmer_minimum">最小</string>
+    <string name="flash_dimmer_half">半分</string>
+    <string name="flash_dimmer_maximum">最大</string>
+    <string name="flash_dimmer_turn_off">オフにする</string>
+    <string name="flash_dimmer_turn_on">オンにする</string>
+    <string name="tile_morse_summary">カスタムメッセージをモールス信号で点滅させます</string>
+    <string name="tile_morse_title">モールス懐中電灯</string>
+    <string name="morse_message_label">メッセージ</string>
+    <string name="morse_start">点滅を開始</string>
+    <string name="morse_stop">停止</string>
+    <string name="morse_ready">準備完了</string>
+    <string name="morse_active">点滅中</string>
+    <string name="morse_error_empty">メッセージを入力してください</string>
+    <string name="morse_error_length">200文字以内で入力してください</string>
+    <string name="morse_error_characters">A～Zの英字、数字、スペースのみ使用できます</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

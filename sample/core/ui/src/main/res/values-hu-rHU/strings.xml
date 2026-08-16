@@ -230,4 +230,27 @@
     <string name="app_short_description">Hasznos Android-eszközök és segédprogramok gyűjteménye.</string>
     <string name="settings_disabled_message">A beállítások jelenleg nem érhetők el.</string>
     <string name="long_settings_label">Beállítások megnyitása</string>
+    <string name="tile_flash_dimmer_title">Zseblámpa fényerő</string>
+    <string name="tile_flash_dimmer_summary">Állítsd be a zseblámpa fényerejét, és használd a Gyorsbeállításokból</string>
+    <string name="flash_dimmer_unavailable">A zseblámpa nem érhető el</string>
+    <string name="flash_dimmer_off">Ki</string>
+    <string name="flash_dimmer_on">Be</string>
+    <string name="flash_dimmer_tile_level">Szint: %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Fényerő: %1$d/%2$d</string>
+    <string name="flash_dimmer_minimum">Minimum</string>
+    <string name="flash_dimmer_half">Fél</string>
+    <string name="flash_dimmer_maximum">Maximum</string>
+    <string name="flash_dimmer_turn_off">Kikapcsolás</string>
+    <string name="flash_dimmer_turn_on">Bekapcsolás</string>
+    <string name="tile_morse_summary">Egyéni üzenet villogtatása Morse-kóddal</string>
+    <string name="tile_morse_title">Morse-zseblámpa</string>
+    <string name="morse_message_label">Üzenet</string>
+    <string name="morse_start">Villogás indítása</string>
+    <string name="morse_stop">Leállítás</string>
+    <string name="morse_ready">Kész</string>
+    <string name="morse_active">Villogás</string>
+    <string name="morse_error_empty">Adjon meg egy üzenetet</string>
+    <string name="morse_error_length">Legfeljebb 200 karaktert használjon</string>
+    <string name="morse_error_characters">Csak A–Z betűket, számokat és szóközöket használjon</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

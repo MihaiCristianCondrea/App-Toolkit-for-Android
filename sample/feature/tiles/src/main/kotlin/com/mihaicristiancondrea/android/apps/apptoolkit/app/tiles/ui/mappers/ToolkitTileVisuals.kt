@@ -26,9 +26,11 @@ import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Dehaze
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.FlashlightOn
 import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MonetizationOn
+import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Straighten
@@ -72,6 +74,8 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Music -> Icons.Outlined.MusicNote
     ToolkitTileIcon.Breathing -> Icons.Outlined.FavoriteBorder
     ToolkitTileIcon.Sos -> Icons.Outlined.WarningAmber
+    ToolkitTileIcon.Morse -> Icons.Outlined.MoreHoriz
+    ToolkitTileIcon.FlashDimmer -> Icons.Outlined.FlashlightOn
     ToolkitTileIcon.Palette -> Icons.Outlined.Palette
 }
 
@@ -84,11 +88,13 @@ internal fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
     ToolkitTileIcon.Caffeine,
     ToolkitTileIcon.Breathing -> R.drawable.background_soft_burst
 
-    ToolkitTileIcon.Sound -> R.drawable.background_flower
+    ToolkitTileIcon.Sound,
+    ToolkitTileIcon.FlashDimmer -> R.drawable.background_flower
 
     ToolkitTileIcon.Coin,
     ToolkitTileIcon.Dice,
-    ToolkitTileIcon.Counter -> R.drawable.background_12_sided_cookie
+    ToolkitTileIcon.Counter,
+    ToolkitTileIcon.Morse -> R.drawable.background_12_sided_cookie
 
     ToolkitTileIcon.Sos -> R.drawable.background_gem
 
@@ -134,12 +140,14 @@ internal fun ToolkitTileIcon.iconColors(): StatusColors {
 
         ToolkitTileIcon.Coin,
         ToolkitTileIcon.Dice,
-        ToolkitTileIcon.Counter -> StatusColors(
+        ToolkitTileIcon.Counter,
+        ToolkitTileIcon.Morse -> StatusColors(
             container = if (isDark) Color(0xFF6B5E00) else Color(0xFFE2C900),
             content = if (isDark) Color(0xFFFBE44D) else Color(0xFF6B5E00),
         )
 
-        ToolkitTileIcon.Sound -> StatusColors(
+        ToolkitTileIcon.Sound,
+        ToolkitTileIcon.FlashDimmer -> StatusColors(
             container = if (isDark) Color(0xFF91005A) else Color(0xFFE2008E),
             content = if (isDark) Color(0xFFFFB0D3) else Color(0xFF91005A),
         )

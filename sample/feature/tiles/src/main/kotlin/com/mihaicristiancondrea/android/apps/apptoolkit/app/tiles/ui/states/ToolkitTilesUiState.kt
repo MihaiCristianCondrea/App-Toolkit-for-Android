@@ -18,9 +18,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.BreathingState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.CaffeineState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.RingerMode
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileCategory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentSet
@@ -33,21 +30,7 @@ data class ToolkitTilesUiState(
     val categories: ImmutableList<ToolkitTileCategory> = persistentListOf(),
     val selectedFilter: ToolkitTilesFilter = ToolkitTilesFilter.All,
     val expandedCategoryIds: PersistentSet<String> = persistentSetOf(),
-    val sensorData: ToolkitSensorData = ToolkitSensorData(),
-    val breathingState: BreathingState = BreathingState(),
-    val caffeineState: CaffeineState = CaffeineState.Off,
-    val ringerMode: RingerMode = RingerMode.Normal,
-    val isSosActive: Boolean = false,
     val loadedAdIds: PersistentSet<String> = persistentSetOf(),
-)
-
-@Immutable
-data class ToolkitSensorData(
-    val compassAzimuth: Float = 0f,
-    val levelPitch: Float = 0f,
-    val levelRoll: Float = 0f,
-    val luxLevel: Float = 0f,
-    val batteryTemperature: Float = 0f,
 )
 
 enum class ToolkitTilesFilter {

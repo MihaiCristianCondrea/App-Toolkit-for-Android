@@ -230,4 +230,27 @@
     <string name="app_short_description">實用的 Android 工具與公用程式集合。</string>
     <string name="settings_disabled_message">設定目前無法使用。</string>
     <string name="long_settings_label">開啟設定</string>
+    <string name="tile_flash_dimmer_title">手電筒調光器</string>
+    <string name="tile_flash_dimmer_summary">調整手電筒亮度，並從快速設定使用</string>
+    <string name="flash_dimmer_unavailable">無法使用手電筒</string>
+    <string name="flash_dimmer_off">關閉</string>
+    <string name="flash_dimmer_on">開啟</string>
+    <string name="flash_dimmer_tile_level">等級 %1$d/%2$d</string>
+    <string name="flash_dimmer_level">亮度 %1$d／%2$d</string>
+    <string name="flash_dimmer_minimum">最低</string>
+    <string name="flash_dimmer_half">一半</string>
+    <string name="flash_dimmer_maximum">最高</string>
+    <string name="flash_dimmer_turn_off">關閉</string>
+    <string name="flash_dimmer_turn_on">開啟</string>
+    <string name="tile_morse_summary">以摩斯密碼閃爍自訂訊息</string>
+    <string name="tile_morse_title">摩斯手電筒</string>
+    <string name="morse_message_label">訊息</string>
+    <string name="morse_start">開始閃爍</string>
+    <string name="morse_stop">停止</string>
+    <string name="morse_ready">就緒</string>
+    <string name="morse_active">閃爍中</string>
+    <string name="morse_error_empty">輸入訊息</string>
+    <string name="morse_error_length">請使用 200 個字元以內</string>
+    <string name="morse_error_characters">僅可使用 A–Z 字母、數字和空格</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

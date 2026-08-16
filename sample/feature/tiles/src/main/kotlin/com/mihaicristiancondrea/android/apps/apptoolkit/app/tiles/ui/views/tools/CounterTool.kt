@@ -29,10 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ResultPill
@@ -40,16 +36,15 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
 @Composable
-fun CounterTool() {
-    var count by remember { mutableIntStateOf(0) }
+fun CounterTool(count: Int, onIncrement: () -> Unit, onReset: () -> Unit) {
 
     Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
         ResultPill(label = count.toString())
         Row(horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
-            Button(onClick = { count += 1 }) {
+            Button(onClick = onIncrement) {
                 Text(text = stringResource(id = R.string.tool_counter_increment))
             }
-            OutlinedButton(onClick = { count = 0 }) {
+            OutlinedButton(onClick = onReset) {
                 Icon(imageVector = Icons.Outlined.Refresh, contentDescription = null)
                 Spacer(modifier = Modifier.width(SizeConstants.SmallSize))
                 Text(text = stringResource(id = R.string.tool_counter_reset))

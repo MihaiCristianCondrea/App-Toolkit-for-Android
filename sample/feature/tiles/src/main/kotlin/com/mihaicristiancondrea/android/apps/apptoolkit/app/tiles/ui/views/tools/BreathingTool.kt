@@ -64,7 +64,7 @@ fun BreathingTool(state: BreathingState) {
         }
         Box(
             modifier = Modifier
-                .size(200.dp)
+                .size(SizeConstants.TwoHundredSize)
                 .scale(scale)
                 .background(
                     when (state.phase) {

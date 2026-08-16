@@ -230,4 +230,27 @@
     <string name="app_short_description">সহজ অ্যান্ড্রয়েড টুল ও ইউটিলিটির একটি সংগ্রহ।</string>
     <string name="settings_disabled_message">সেটিংস বর্তমানে উপলব্ধ নয়।</string>
     <string name="long_settings_label">সেটিংস খুলুন</string>
+    <string name="tile_flash_dimmer_title">ফ্ল্যাশ ডিমার</string>
+    <string name="tile_flash_dimmer_summary">ফ্ল্যাশলাইটের উজ্জ্বলতা সামঞ্জস্য করুন এবং দ্রুত সেটিংস থেকে ব্যবহার করুন</string>
+    <string name="flash_dimmer_unavailable">ফ্ল্যাশলাইট উপলভ্য নয়</string>
+    <string name="flash_dimmer_off">বন্ধ</string>
+    <string name="flash_dimmer_on">চালু</string>
+    <string name="flash_dimmer_tile_level">লেভেল %1$d/%2$d</string>
+    <string name="flash_dimmer_level">উজ্জ্বলতা %1$d / %2$d</string>
+    <string name="flash_dimmer_minimum">সর্বনিম্ন</string>
+    <string name="flash_dimmer_half">অর্ধেক</string>
+    <string name="flash_dimmer_maximum">সর্বোচ্চ</string>
+    <string name="flash_dimmer_turn_off">বন্ধ করুন</string>
+    <string name="flash_dimmer_turn_on">চালু করুন</string>
+    <string name="tile_morse_summary">মোর্স কোডে কাস্টম বার্তা ফ্ল্যাশ করুন</string>
+    <string name="tile_morse_title">মোর্স ফ্ল্যাশলাইট</string>
+    <string name="morse_message_label">বার্তা</string>
+    <string name="morse_start">ফ্ল্যাশ শুরু করুন</string>
+    <string name="morse_stop">বন্ধ করুন</string>
+    <string name="morse_ready">প্রস্তুত</string>
+    <string name="morse_active">ফ্ল্যাশ হচ্ছে</string>
+    <string name="morse_error_empty">একটি বার্তা লিখুন</string>
+    <string name="morse_error_length">২০০টি বা তার কম অক্ষর ব্যবহার করুন</string>
+    <string name="morse_error_characters">শুধু A–Z অক্ষর, সংখ্যা ও স্পেস ব্যবহার করুন</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

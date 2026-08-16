@@ -38,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.RingerMode
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
@@ -69,7 +68,7 @@ fun SoundModeTool(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                modifier = Modifier.size(100.dp),
+                modifier = Modifier.size(SizeConstants.OneHundredSize),
                 tint = MaterialTheme.colorScheme.primary
             )
         }

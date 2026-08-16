@@ -230,4 +230,27 @@
     <string name="app_short_description">उपयोगी Android टूल और यूटिलिटी का संग्रह।</string>
     <string name="settings_disabled_message">सेटिंग्स फ़िलहाल उपलब्ध नहीं हैं।</string>
     <string name="long_settings_label">सेटिंग्स खोलें</string>
+    <string name="tile_flash_dimmer_title">फ़्लैश डिमर</string>
+    <string name="tile_flash_dimmer_summary">फ़्लैशलाइट की चमक समायोजित करें और क्विक सेटिंग से इस्तेमाल करें</string>
+    <string name="flash_dimmer_unavailable">फ़्लैशलाइट उपलब्ध नहीं है</string>
+    <string name="flash_dimmer_off">बंद</string>
+    <string name="flash_dimmer_on">चालू</string>
+    <string name="flash_dimmer_tile_level">स्तर %1$d/%2$d</string>
+    <string name="flash_dimmer_level">चमक %1$d / %2$d</string>
+    <string name="flash_dimmer_minimum">न्यूनतम</string>
+    <string name="flash_dimmer_half">आधा</string>
+    <string name="flash_dimmer_maximum">अधिकतम</string>
+    <string name="flash_dimmer_turn_off">बंद करें</string>
+    <string name="flash_dimmer_turn_on">चालू करें</string>
+    <string name="tile_morse_summary">मॉर्स कोड में अपना संदेश फ़्लैश करें</string>
+    <string name="tile_morse_title">मॉर्स फ़्लैशलाइट</string>
+    <string name="morse_message_label">संदेश</string>
+    <string name="morse_start">फ़्लैश करना शुरू करें</string>
+    <string name="morse_stop">रोकें</string>
+    <string name="morse_ready">तैयार</string>
+    <string name="morse_active">फ़्लैश हो रहा है</string>
+    <string name="morse_error_empty">संदेश दर्ज करें</string>
+    <string name="morse_error_length">200 या उससे कम वर्ण इस्तेमाल करें</string>
+    <string name="morse_error_characters">सिर्फ़ A–Z अक्षर, संख्याएँ और स्पेस इस्तेमाल करें</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

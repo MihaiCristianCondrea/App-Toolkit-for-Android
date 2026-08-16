@@ -40,6 +40,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -54,13 +55,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import kotlin.random.Random
 
 @Composable
-fun CoinFlipTool() {
-    var isHeads by remember { mutableStateOf(true) }
+fun CoinFlipTool(isHeads: Boolean, flipRequest: Int, onFlip: () -> Unit) {
     var flipping by remember { mutableStateOf(false) }
     var rotationTarget by remember { mutableFloatStateOf(0f) }
+
+    LaunchedEffect(flipRequest) {
+        if (flipRequest > 0) {
+            flipping = true
+            rotationTarget += 1800f + (if (isHeads) 0f else 180f)
+        }
+    }
 
     val rotation by animateFloatAsState(
         targetValue = rotationTarget,
@@ -104,9 +110,7 @@ fun CoinFlipTool() {
         Button(
             onClick = {
                 if (!flipping) {
-                    flipping = true
-                    isHeads = Random.nextBoolean()
-                    rotationTarget += 1800f + (if (isHeads) 0f else 180f)
+                    onFlip()
                 }
             },
             enabled = !flipping
@@ -173,7 +177,7 @@ private fun CoinFace(
         modifier = Modifier
             .fillMaxSize()
             .background(color, CircleShape)
-            .border(4.dp, color.copy(alpha = 0.5f), CircleShape),
+            .border(SizeConstants.ExtraSmallSize, color.copy(alpha = 0.5f), CircleShape),
         contentAlignment = Alignment.Center
     ) {
         Icon(

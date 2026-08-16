@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contracts
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.RingerMode
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 
@@ -28,11 +27,5 @@ sealed interface ToolkitTilesEvent : UiEvent {
     data class CategoryToggled(val categoryId: String) : ToolkitTilesEvent
     data class AddTileClicked(val requestKey: String?) : ToolkitTilesEvent
     data class TileSetupClicked(val tileId: String) : ToolkitTilesEvent
-    data class TilePreviewOpened(val tileId: String) : ToolkitTilesEvent
-    data object TilePreviewClosed : ToolkitTilesEvent
-    data object CaffeineCycleClicked : ToolkitTilesEvent
-    data class SoundModeClicked(val current: RingerMode) : ToolkitTilesEvent
-    data object MusicSearchClicked : ToolkitTilesEvent
-    data object SosClicked : ToolkitTilesEvent
     data class AdStatusChanged(val adId: String, val isLoaded: Boolean) : ToolkitTilesEvent
 }

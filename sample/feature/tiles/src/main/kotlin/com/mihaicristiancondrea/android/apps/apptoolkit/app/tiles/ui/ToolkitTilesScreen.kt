@@ -37,7 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -110,12 +109,6 @@ fun ToolkitTilesRoute(
                 ToolkitTilesAction.ShowSetupRequiredMessage -> Toast.makeText(
                     context,
                     R.string.tiles_setup_required_message,
-                    Toast.LENGTH_SHORT,
-                ).show()
-
-                is ToolkitTilesAction.ShowMessage -> Toast.makeText(
-                    context,
-                    action.message,
                     Toast.LENGTH_SHORT,
                 ).show()
             }
@@ -199,18 +192,10 @@ fun ToolkitTilesScreen(
             .toImmutableList()
     }
 
-    LaunchedEffect(selectedTile) {
-        selectedTile?.let { tile ->
-            onEvent(ToolkitTilesEvent.TilePreviewOpened(tile.id))
-        } ?: run {
-            onEvent(ToolkitTilesEvent.TilePreviewClosed)
-        }
-    }
-
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(2.dp),
+            verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
             contentPadding = PaddingValues(
                 start = SizeConstants.LargeSize,
                 top = paddingValues.calculateTopPadding() + SizeConstants.LargeSize,
@@ -295,18 +280,9 @@ fun ToolkitTilesScreen(
     selectedTile?.let { tile ->
         ToolkitToolBottomSheet(
             tile = tile,
-            sensorData = state.sensorData,
-            breathingState = state.breathingState,
-            caffeineState = state.caffeineState,
-            ringerMode = state.ringerMode,
-            isSosActive = state.isSosActive,
             onClose = { selectedTile = null },
             onAddTile = { onEvent(ToolkitTilesEvent.AddTileClicked(tile.requestKey)) },
             onSetupTile = { onEvent(ToolkitTilesEvent.TileSetupClicked(tile.id)) },
-            onCaffeineCycle = { onEvent(ToolkitTilesEvent.CaffeineCycleClicked) },
-            onSoundModeCycle = { current -> onEvent(ToolkitTilesEvent.SoundModeClicked(current)) },
-            onMusicSearchLaunch = { onEvent(ToolkitTilesEvent.MusicSearchClicked) },
-            onSosToggle = { onEvent(ToolkitTilesEvent.SosClicked) },
         )
     }
 

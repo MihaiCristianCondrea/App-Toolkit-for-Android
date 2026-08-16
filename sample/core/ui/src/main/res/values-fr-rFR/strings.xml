@@ -230,4 +230,27 @@
     <string name="app_short_description">Une collection d’outils et d’utilitaires Android pratiques.</string>
     <string name="settings_disabled_message">Les paramètres sont actuellement indisponibles.</string>
     <string name="long_settings_label">Ouvrir les paramètres</string>
+    <string name="tile_flash_dimmer_title">Variateur de lampe torche</string>
+    <string name="tile_flash_dimmer_summary">Réglez la luminosité de la lampe torche et utilisez-la depuis les réglages rapides</string>
+    <string name="flash_dimmer_unavailable">Lampe torche indisponible</string>
+    <string name="flash_dimmer_off">Éteinte</string>
+    <string name="flash_dimmer_on">Allumée</string>
+    <string name="flash_dimmer_tile_level">Niveau %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Luminosité %1$d sur %2$d</string>
+    <string name="flash_dimmer_minimum">Minimum</string>
+    <string name="flash_dimmer_half">Moitié</string>
+    <string name="flash_dimmer_maximum">Maximum</string>
+    <string name="flash_dimmer_turn_off">Éteindre</string>
+    <string name="flash_dimmer_turn_on">Allumer</string>
+    <string name="tile_morse_summary">Faire clignoter un message personnalisé en code Morse</string>
+    <string name="tile_morse_title">Lampe Morse</string>
+    <string name="morse_message_label">Message</string>
+    <string name="morse_start">Démarrer les flashs</string>
+    <string name="morse_stop">Arrêter</string>
+    <string name="morse_ready">Prêt</string>
+    <string name="morse_active">Clignotement en cours</string>
+    <string name="morse_error_empty">Saisissez un message</string>
+    <string name="morse_error_length">Utilisez 200 caractères maximum</string>
+    <string name="morse_error_characters">Utilisez uniquement les lettres A–Z, les chiffres et les espaces</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

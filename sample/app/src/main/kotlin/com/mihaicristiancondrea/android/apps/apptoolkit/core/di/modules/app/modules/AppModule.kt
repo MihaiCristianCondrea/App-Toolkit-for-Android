@@ -26,6 +26,26 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositor
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.SosRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.SystemRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.ToolkitTilesRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.torch.AndroidTorchDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.torch.TorchDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.DefaultTorchRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.MorseRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.TorchRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.BatteryToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.BreathingToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CaffeineToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CoinFlipToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CompassToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CounterToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.DiceRollToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.FlashDimmerToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.LevelToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.LuxMeterToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.MusicSearchToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.MorseToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.SosToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.SoundModeToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.TemperatureToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
@@ -43,7 +63,12 @@ val appModule: Module = module {
             firebaseController = get()
         )
     }
-    single<ToolkitTilesRepository> { DefaultToolkitTilesRepository(context = androidContext()) }
+    single<TorchDataSource> { AndroidTorchDataSource(context = androidContext()) }
+    single<TorchRepository> { DefaultTorchRepository(dataSource = get(), dispatchers = get()) }
+    single<ToolkitTilesRepository> {
+        DefaultToolkitTilesRepository(context = androidContext(), torchRepository = get())
+    }
+    single { MorseRepository(torchRepository = get(), dispatchers = get()) }
     single {
         SensorRepository(
             context = androidContext(),
@@ -63,8 +88,7 @@ val appModule: Module = module {
     }
     single {
         SosRepository(
-            context = androidContext(),
-            dispatchers = get()
+            morseRepository = get(),
         )
     }
     single {
@@ -76,15 +100,25 @@ val appModule: Module = module {
     viewModel {
         ToolkitTilesViewModel(
             toolkitTilesRepository = get(),
-            sensorRepository = get(),
-            breathingRepository = get(),
-            caffeineRepository = get(),
-            systemRepository = get(),
-            sosRepository = get(),
             dispatchers = get(),
             firebaseController = get(),
         )
     }
+    viewModel { CoinFlipToolViewModel() }
+    viewModel { DiceRollToolViewModel() }
+    viewModel { CounterToolViewModel() }
+    viewModel { BatteryToolViewModel(repository = get()) }
+    viewModel { CompassToolViewModel(repository = get()) }
+    viewModel { LevelToolViewModel(repository = get()) }
+    viewModel { LuxMeterToolViewModel(repository = get()) }
+    viewModel { TemperatureToolViewModel(repository = get()) }
+    viewModel { BreathingToolViewModel(repository = get()) }
+    viewModel { CaffeineToolViewModel(repository = get()) }
+    viewModel { SoundModeToolViewModel(repository = get()) }
+    viewModel { MusicSearchToolViewModel(repository = get()) }
+    viewModel { SosToolViewModel(repository = get()) }
+    viewModel { MorseToolViewModel(repository = get()) }
+    viewModel { FlashDimmerToolViewModel(torchRepository = get(), morseRepository = get()) }
 
     viewModel {
         MainViewModel(

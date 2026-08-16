@@ -36,6 +36,8 @@ enum class ToolkitTileIcon {
     Music,
     Breathing,
     Sos,
+    Morse,
+    FlashDimmer,
     Palette,
 }
 

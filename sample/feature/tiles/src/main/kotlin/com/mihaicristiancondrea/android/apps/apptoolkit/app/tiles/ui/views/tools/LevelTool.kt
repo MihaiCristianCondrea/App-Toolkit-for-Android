@@ -50,7 +50,7 @@ fun LevelTool(pitch: Float, roll: Float) {
         }
         Box(
             modifier = Modifier
-                .size(200.dp)
+                .size(SizeConstants.TwoHundredSize)
                 .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
             contentAlignment = Alignment.Center
         ) {
@@ -59,15 +59,17 @@ fun LevelTool(pitch: Float, roll: Float) {
                 modifier = Modifier
                     .size(40.dp)
                     .background(Color.Transparent, CircleShape)
-                    .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape)
+                    .border(SizeConstants.ExtraTinySize, MaterialTheme.colorScheme.outline, CircleShape)
             )
             // Moving bubble
             Box(
                 modifier = Modifier
                     .size(30.dp)
                     .graphicsLayer {
-                        translationX = -(roll.coerceIn(-45f, 45f) / 45f) * 80.dp.toPx()
-                        translationY = -(pitch.coerceIn(-45f, 45f) / 45f) * 80.dp.toPx()
+                        translationX = -(roll.coerceIn(-45f, 45f) / 45f) *
+                            SizeConstants.EightySize.toPx()
+                        translationY = -(pitch.coerceIn(-45f, 45f) / 45f) *
+                            SizeConstants.EightySize.toPx()
                     }
                     .background(
                         if (abs(pitch) < 1f && abs(roll) < 1f)

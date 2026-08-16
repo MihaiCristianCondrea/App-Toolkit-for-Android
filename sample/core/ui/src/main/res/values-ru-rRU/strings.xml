@@ -230,4 +230,27 @@
     <string name="app_short_description">Коллекция удобных инструментов и утилит для Android.</string>
     <string name="settings_disabled_message">Настройки сейчас недоступны.</string>
     <string name="long_settings_label">Открыть настройки</string>
+    <string name="tile_flash_dimmer_title">Регулятор фонарика</string>
+    <string name="tile_flash_dimmer_summary">Настройте яркость фонарика и используйте его из быстрых настроек</string>
+    <string name="flash_dimmer_unavailable">Фонарик недоступен</string>
+    <string name="flash_dimmer_off">Выключен</string>
+    <string name="flash_dimmer_on">Включен</string>
+    <string name="flash_dimmer_tile_level">Уровень %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Яркость %1$d из %2$d</string>
+    <string name="flash_dimmer_minimum">Минимум</string>
+    <string name="flash_dimmer_half">Половина</string>
+    <string name="flash_dimmer_maximum">Максимум</string>
+    <string name="flash_dimmer_turn_off">Выключить</string>
+    <string name="flash_dimmer_turn_on">Включить</string>
+    <string name="tile_morse_summary">Передайте своё сообщение азбукой Морзе с помощью фонарика</string>
+    <string name="tile_morse_title">Фонарик Морзе</string>
+    <string name="morse_message_label">Сообщение</string>
+    <string name="morse_start">Начать мигание</string>
+    <string name="morse_stop">Остановить</string>
+    <string name="morse_ready">Готово</string>
+    <string name="morse_active">Мигание</string>
+    <string name="morse_error_empty">Введите сообщение</string>
+    <string name="morse_error_length">Используйте не более 200 символов</string>
+    <string name="morse_error_characters">Используйте только буквы A–Z, цифры и пробелы</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

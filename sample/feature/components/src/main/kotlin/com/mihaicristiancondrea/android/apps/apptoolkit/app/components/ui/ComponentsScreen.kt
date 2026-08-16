@@ -19,24 +19,27 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.StarOutline
-import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,9 +51,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.states.ComponentsUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
@@ -58,6 +61,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
@@ -65,10 +69,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.SmallFloatingActionButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.carousel.CustomCarousel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.DatePickerTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.DropdownMenuBox
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.TopListFilters
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.InfoMessageSection
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedAction
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedActionList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.CheckBoxPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceCategoryItem
@@ -78,10 +86,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItemWithDivider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraTinyVerticalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.koinInject
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as ToolkitR
@@ -207,7 +217,9 @@ fun ComponentsScreen(
     val iconContentDescription = stringResource(id = R.string.components_icon_content_description)
     val menuLabel = stringResource(id = R.string.components_menu_label)
     val switchCardState: State<Boolean> = rememberUpdatedState(state.switchCardEnabled)
+    val carouselState = rememberPagerState(pageCount = { state.dropdownOptions.size })
     val screenParam = AnalyticsValue.Str("components")
+    val preferenceItemCount = 6 + state.radioOptions.size
 
     fun ga4Event(component: String, variant: String? = null): Ga4EventData {
         val params = buildMap {
@@ -226,301 +238,389 @@ fun ComponentsScreen(
     ) {
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.components_section_buttons))
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SizeConstants.LargeSize)
-            ) {
-                GeneralButton(
-                    label = stringResource(id = R.string.components_button_primary),
-                    onClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "button", variant = "primary"),
-                )
-                SmallVerticalSpacer()
-                GeneralButton(
-                    label = stringResource(id = R.string.components_button_primary),
-                    vectorIcon = Icons.Outlined.StarOutline,
-                    iconContentDescription = iconContentDescription,
-                    onClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "button", variant = "primary_icon"),
-                )
-                SmallVerticalSpacer()
-                GeneralButton(
-                    vectorIcon = Icons.Outlined.StarOutline,
-                    iconContentDescription = iconContentDescription,
-                    onClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "button", variant = "primary_icon_only"),
-                )
-                SmallVerticalSpacer()
-                GeneralTonalButton(
-                    label = stringResource(id = R.string.components_button_tonal),
-                    onClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "button", variant = "tonal"),
-                )
-                SmallVerticalSpacer()
-                GeneralTonalButton(
-                    label = stringResource(id = R.string.components_button_tonal),
-                    vectorIcon = Icons.Outlined.Favorite,
-                    iconContentDescription = iconContentDescription,
-                    onClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "button", variant = "tonal_icon"),
-                )
-                SmallVerticalSpacer()
-                GeneralTonalButton(
-                    vectorIcon = Icons.Outlined.Favorite,
-                    iconContentDescription = iconContentDescription,
-                    onClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "button", variant = "tonal_icon_only"),
-                )
-                SmallVerticalSpacer()
-                GeneralOutlinedButton(
-                    label = stringResource(id = R.string.components_button_outlined),
-                    onClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "button", variant = "outlined"),
-                )
-                SmallVerticalSpacer()
-                GeneralOutlinedButton(
-                    label = stringResource(id = R.string.components_button_outlined),
-                    vectorIcon = Icons.Outlined.Info,
-                    iconContentDescription = iconContentDescription,
-                    onClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "button", variant = "outlined_icon"),
-                )
-                SmallVerticalSpacer()
-                GeneralOutlinedButton(
-                    vectorIcon = Icons.Outlined.Info,
-                    iconContentDescription = iconContentDescription,
-                    onClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "button", variant = "outlined_icon_only"),
-                )
-                SmallVerticalSpacer()
-                GeneralTextButton(
-                    label = stringResource(id = R.string.components_button_text),
-                    onClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "button", variant = "text"),
-                )
-                SmallVerticalSpacer()
-                GeneralTextButton(
-                    label = stringResource(id = R.string.components_button_text),
-                    vectorIcon = Icons.Outlined.Favorite,
-                    iconContentDescription = iconContentDescription,
-                    onClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "button", variant = "text_icon"),
-                )
-                SmallVerticalSpacer()
-                GeneralTextButton(
-                    vectorIcon = Icons.Outlined.Favorite,
-                    iconContentDescription = iconContentDescription,
-                    onClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "button", variant = "text_icon_only"),
-                )
-                ExtraSmallVerticalSpacer()
+            ShowcaseSection {
+                ShowcaseSurface(position = GroupedItemPosition.FIRST) {
+                    GeneralButton(
+                        label = stringResource(id = R.string.components_button_primary),
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "primary"),
+                    )
+                    SmallVerticalSpacer()
+                    GeneralButton(
+                        label = stringResource(id = R.string.components_button_primary),
+                        vectorIcon = Icons.Outlined.StarOutline,
+                        iconContentDescription = iconContentDescription,
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "primary_icon"),
+                    )
+                    SmallVerticalSpacer()
+                    GeneralButton(
+                        vectorIcon = Icons.Outlined.StarOutline,
+                        iconContentDescription = iconContentDescription,
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "primary_icon_only"),
+                    )
+                }
+                ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+                    GeneralTonalButton(
+                        label = stringResource(id = R.string.components_button_tonal),
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "tonal"),
+                    )
+                    SmallVerticalSpacer()
+                    GeneralTonalButton(
+                        label = stringResource(id = R.string.components_button_tonal),
+                        vectorIcon = Icons.Outlined.Favorite,
+                        iconContentDescription = iconContentDescription,
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "tonal_icon"),
+                    )
+                    SmallVerticalSpacer()
+                    GeneralTonalButton(
+                        vectorIcon = Icons.Outlined.Favorite,
+                        iconContentDescription = iconContentDescription,
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "tonal_icon_only"),
+                    )
+                }
+                ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+                    GeneralOutlinedButton(
+                        label = stringResource(id = R.string.components_button_outlined),
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "outlined"),
+                    )
+                    SmallVerticalSpacer()
+                    GeneralOutlinedButton(
+                        label = stringResource(id = R.string.components_button_outlined),
+                        vectorIcon = Icons.Outlined.Info,
+                        iconContentDescription = iconContentDescription,
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "outlined_icon"),
+                    )
+                    SmallVerticalSpacer()
+                    GeneralOutlinedButton(
+                        vectorIcon = Icons.Outlined.Info,
+                        iconContentDescription = iconContentDescription,
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "outlined_icon_only"),
+                    )
+                }
+                ShowcaseSurface(position = GroupedItemPosition.LAST) {
+                    GeneralTextButton(
+                        label = stringResource(id = R.string.components_button_text),
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "text"),
+                    )
+                    SmallVerticalSpacer()
+                    GeneralTextButton(
+                        label = stringResource(id = R.string.components_button_text),
+                        vectorIcon = Icons.Outlined.Favorite,
+                        iconContentDescription = iconContentDescription,
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "text_icon"),
+                    )
+                    SmallVerticalSpacer()
+                    GeneralTextButton(
+                        vectorIcon = Icons.Outlined.Favorite,
+                        iconContentDescription = iconContentDescription,
+                        onClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "text_icon_only"),
+                    )
+                    SmallVerticalSpacer()
+                    AnimatedIconButtonDirection(
+                        icon = Icons.Filled.MoreVert,
+                        contentDescription = iconContentDescription,
+                        onClick = {},
+                        fromRight = true,
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "button", variant = "animated_direction"),
+                    )
+                }
             }
         }
 
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.components_section_fabs))
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SizeConstants.LargeSize)
-            ) {
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    AnimatedFloatingActionButton(
-                        isVisible = true,
-                        icon = Icons.Filled.Add,
-                        contentDescription = iconContentDescription,
+            ShowcaseSection {
+                ShowcaseSurface(position = GroupedItemPosition.SINGLE) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)) {
+                        AnimatedFloatingActionButton(
+                            isVisible = true,
+                            icon = Icons.Filled.Add,
+                            contentDescription = iconContentDescription,
+                            onClick = {},
+                            firebaseController = firebaseController,
+                            ga4Event = ga4Event(component = "fab", variant = "animated"),
+                        )
+                        SmallFloatingActionButton(
+                            isVisible = true,
+                            isExtended = true,
+                            icon = Icons.Filled.Add,
+                            contentDescription = iconContentDescription,
+                            onClick = {},
+                            onLogClick = {
+                                firebaseController.logGa4Event(
+                                    ga4Event(component = "fab", variant = "small")
+                                )
+                            },
+                        )
+                    }
+                    SmallVerticalSpacer()
+                    AnimatedExtendedFloatingActionButton(
                         onClick = {},
+                        visible = true,
+                        expanded = true,
+                        icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
+                        text = { Text(text = stringResource(id = R.string.components_fab_extended)) },
                         firebaseController = firebaseController,
-                        ga4Event = ga4Event(component = "fab", variant = "animated"),
-                    )
-                    SmallFloatingActionButton(
-                        isVisible = true,
-                        isExtended = true,
-                        icon = Icons.Filled.Add,
-                        contentDescription = iconContentDescription,
-                        onClick = {},
-                        onLogClick = {
-                            firebaseController.logGa4Event(
-                                ga4Event(component = "fab", variant = "small")
-                            )
-                        },
+                        ga4Event = ga4Event(component = "fab", variant = "extended"),
                     )
                 }
-                SmallVerticalSpacer()
-                AnimatedExtendedFloatingActionButton(
-                    onClick = {},
-                    visible = true,
-                    expanded = true,
-                    icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
-                    text = { Text(text = stringResource(id = R.string.components_fab_extended)) },
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "fab", variant = "extended"),
-                )
             }
         }
 
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.components_section_inputs))
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SizeConstants.LargeSize)
-            ) {
-                var showMenu by rememberSaveable { mutableStateOf(false) }
-                Column {
-                    GeneralOutlinedButton(
-                        label = menuLabel,
-                        vectorIcon = Icons.Filled.MoreVert,
-                        iconContentDescription = iconContentDescription,
-                        onClick = { showMenu = true },
-                        firebaseController = firebaseController,
-                        ga4Event = ga4Event(component = "dropdown", variant = "menu_button"),
-                    )
-                    DropdownMenu(
-                        expanded = showMenu,
-                        shape = MaterialTheme.shapes.largeIncreased,
-                        onDismissRequest = { showMenu = false },
-                    ) {
-                        CommonDropdownMenuItem(
-                            textResId = R.string.components_menu_option_primary,
-                            icon = Icons.Outlined.Info,
-                            onClick = { showMenu = false },
+            ShowcaseSection {
+                ShowcaseSurface(position = GroupedItemPosition.FIRST) {
+                    var showMenu by rememberSaveable { mutableStateOf(false) }
+                    Column {
+                        GeneralOutlinedButton(
+                            label = menuLabel,
+                            vectorIcon = Icons.Filled.MoreVert,
+                            iconContentDescription = iconContentDescription,
+                            onClick = { showMenu = true },
                             firebaseController = firebaseController,
-                            ga4Event = ga4Event(
-                                component = "dropdown",
-                                variant = "menu_option_primary"
-                            ),
+                            ga4Event = ga4Event(component = "dropdown", variant = "menu_button"),
                         )
-                        CommonDropdownMenuItem(
-                            textResId = R.string.components_menu_option_secondary,
-                            icon = Icons.Outlined.Favorite,
-                            onClick = { showMenu = false },
-                            firebaseController = firebaseController,
-                            ga4Event = ga4Event(
-                                component = "dropdown",
-                                variant = "menu_option_secondary"
-                            ),
-                        )
+                        DropdownMenu(
+                            expanded = showMenu,
+                            shape = MaterialTheme.shapes.largeIncreased,
+                            onDismissRequest = { showMenu = false },
+                        ) {
+                            CommonDropdownMenuItem(
+                                textResId = R.string.components_menu_option_primary,
+                                icon = Icons.Outlined.Info,
+                                onClick = { showMenu = false },
+                                firebaseController = firebaseController,
+                                ga4Event = ga4Event(
+                                    component = "dropdown",
+                                    variant = "menu_option_primary"
+                                ),
+                            )
+                            CommonDropdownMenuItem(
+                                textResId = R.string.components_menu_option_secondary,
+                                icon = Icons.Outlined.Favorite,
+                                onClick = { showMenu = false },
+                                firebaseController = firebaseController,
+                                ga4Event = ga4Event(
+                                    component = "dropdown",
+                                    variant = "menu_option_secondary"
+                                ),
+                            )
+                        }
                     }
                 }
-                SmallVerticalSpacer()
-                DatePickerTextField(
-                    dateMillis = state.dateMillis,
-                    onDateSelected = onDateSelected,
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "input", variant = "date_picker"),
-                )
-                SmallVerticalSpacer()
-                DropdownMenuBox(
-                    selectedText = state.selectedDropdownOption,
-                    options = state.dropdownOptions,
-                    onOptionSelected = onDropdownOptionSelected,
-                    firebaseController = firebaseController,
-                    ga4Event = ga4Event(component = "input", variant = "dropdown"),
-                )
+                ShowcaseSurface(position = GroupedItemPosition.LAST) {
+                    DatePickerTextField(
+                        dateMillis = state.dateMillis,
+                        onDateSelected = onDateSelected,
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "input", variant = "date_picker"),
+                    )
+                    SmallVerticalSpacer()
+                    DropdownMenuBox(
+                        selectedText = state.selectedDropdownOption,
+                        options = state.dropdownOptions,
+                        onOptionSelected = onDropdownOptionSelected,
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "input", variant = "dropdown"),
+                    )
+                }
             }
         }
 
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.components_section_preferences))
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SizeConstants.LargeSize)
-            ) {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(SizeConstants.LargeSize),
+            ShowcaseSection {
+                SettingsPreferenceItem(
+                    modifier = Modifier.groupedCorners(
+                        groupedItemPosition(index = 0, size = preferenceItemCount)
+                    ),
+                    title = stringResource(id = R.string.components_preference_title),
+                    summary = stringResource(id = R.string.components_preference_summary),
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(
+                        component = "preference",
+                        variant = "settings_primary"
+                    ),
+                )
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .groupedCorners(groupedItemPosition(index = 1, size = preferenceItemCount)),
+                    color = MaterialTheme.colorScheme.surface,
                 ) {
-                    Column {
-                        SettingsPreferenceItem(
-                            title = stringResource(id = R.string.components_preference_title),
-                            summary = stringResource(id = R.string.components_preference_summary),
-                            firebaseController = firebaseController,
-                            ga4Event = ga4Event(
-                                component = "preference",
-                                variant = "settings_primary"
-                            ),
+                    PreferenceItem(
+                        title = stringResource(id = R.string.components_preference_secondary_title),
+                        summary = stringResource(id = R.string.components_preference_secondary_summary),
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(component = "preference", variant = "secondary"),
+                    )
+                }
+                SwitchPreferenceItem(
+                    modifier = Modifier.groupedCorners(
+                        groupedItemPosition(index = 2, size = preferenceItemCount)
+                    ),
+                    icon = Icons.Outlined.Favorite,
+                    title = stringResource(id = R.string.components_switch_title),
+                    summary = stringResource(id = R.string.components_switch_summary),
+                    checked = state.switchEnabled,
+                    onCheckedChange = onSwitchEnabledChanged,
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "preference", variant = "switch"),
+                )
+                SwitchPreferenceItemWithDivider(
+                    modifier = Modifier.groupedCorners(
+                        groupedItemPosition(index = 3, size = preferenceItemCount)
+                    ),
+                    icon = Icons.Outlined.Info,
+                    title = stringResource(id = R.string.components_switch_divider_title),
+                    summary = stringResource(id = R.string.components_switch_divider_summary),
+                    checked = state.switchWithDividerEnabled,
+                    onCheckedChange = onSwitchWithDividerChanged,
+                    onClick = {},
+                    onSwitchClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(
+                        component = "preference",
+                        variant = "switch_divider"
+                    ),
+                )
+                SwitchCardItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .groupedCorners(
+                            groupedItemPosition(index = 4, size = preferenceItemCount)
+                        ),
+                    title = stringResource(id = R.string.components_switch_card_title),
+                    switchState = switchCardState,
+                    onSwitchToggled = onSwitchCardChanged,
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "preference", variant = "switch_card"),
+                )
+                CheckBoxPreferenceItem(
+                    modifier = Modifier.groupedCorners(
+                        groupedItemPosition(index = 5, size = preferenceItemCount)
+                    ),
+                    icon = Icons.Outlined.Favorite,
+                    title = stringResource(id = R.string.components_checkbox_title),
+                    summary = stringResource(id = R.string.components_checkbox_summary),
+                    checked = state.checkboxChecked,
+                    onCheckedChange = onCheckboxChanged,
+                    firebaseController = firebaseController,
+                    ga4Event = ga4Event(component = "preference", variant = "checkbox"),
+                )
+                state.radioOptions.forEachIndexed { index, option ->
+                    RadioButtonPreferenceItem(
+                        modifier = Modifier.groupedCorners(
+                            groupedItemPosition(
+                                index = index + 6,
+                                size = preferenceItemCount,
+                            )
+                        ),
+                        text = option,
+                        isChecked = state.selectedRadioOption == option,
+                        onCheckedChange = { onRadioOptionSelected(option) },
+                        firebaseController = firebaseController,
+                        ga4Event = ga4Event(
+                            component = "preference",
+                            variant = "radio_$option"
+                        ),
+                    )
+                }
+            }
+        }
+
+        item {
+            PreferenceCategoryItem(title = stringResource(id = R.string.components_title))
+            val primaryTitle = stringResource(id = R.string.components_preference_title)
+            val primarySummary = stringResource(id = R.string.components_preference_summary)
+            val secondaryTitle = stringResource(id = R.string.components_preference_secondary_title)
+            val secondarySummary =
+                stringResource(id = R.string.components_preference_secondary_summary)
+            val groupedActions = remember(
+                primaryTitle,
+                primarySummary,
+                secondaryTitle,
+                secondarySummary,
+            ) {
+                persistentListOf(
+                    GroupedAction(
+                        title = primaryTitle,
+                        description = primarySummary,
+                        icon = Icons.Outlined.StarOutline,
+                        onClick = {},
+                    ),
+                    GroupedAction(
+                        title = secondaryTitle,
+                        description = secondarySummary,
+                        icon = Icons.Outlined.Info,
+                        onClick = {},
+                    ),
+                )
+            }
+            ShowcaseSection {
+                GroupedActionList(
+                    actions = groupedActions,
+                    modifier = Modifier.groupedCorners(GroupedItemPosition.FIRST),
+                )
+                ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
+                    CustomCarousel(
+                        items = state.dropdownOptions,
+                        sidePadding = SizeConstants.SmallSize,
+                        pagerState = carouselState,
+                    ) { option ->
+                        Text(
+                            text = option,
+                            modifier = Modifier.padding(SizeConstants.ExtraLargeSize),
+                            style = MaterialTheme.typography.headlineSmall,
                         )
-                        ExtraTinyVerticalSpacer()
-                        PreferenceItem(
-                            title = stringResource(id = R.string.components_preference_secondary_title),
-                            summary = stringResource(id = R.string.components_preference_secondary_summary),
-                            firebaseController = firebaseController,
-                            ga4Event = ga4Event(component = "preference", variant = "secondary"),
+                    }
+                }
+                ShowcaseSurface(position = GroupedItemPosition.LAST) {
+                    InfoMessageSection(
+                        message = secondarySummary,
+                        learnMoreText = stringResource(id = R.string.components_button_text),
+                        learnMoreAction = {},
+                        newLine = false,
+                    )
+                    SmallVerticalSpacer()
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.components_switch_title),
+                            style = MaterialTheme.typography.titleMedium,
                         )
-                        ExtraTinyVerticalSpacer()
-                        SwitchPreferenceItem(
-                            icon = Icons.Outlined.Favorite,
-                            title = stringResource(id = R.string.components_switch_title),
-                            summary = stringResource(id = R.string.components_switch_summary),
+                        CustomSwitch(
                             checked = state.switchEnabled,
                             onCheckedChange = onSwitchEnabledChanged,
-                            firebaseController = firebaseController,
-                            ga4Event = ga4Event(component = "preference", variant = "switch"),
                         )
-                        ExtraTinyVerticalSpacer()
-                        SwitchPreferenceItemWithDivider(
-                            icon = Icons.Outlined.Info,
-                            title = stringResource(id = R.string.components_switch_divider_title),
-                            summary = stringResource(id = R.string.components_switch_divider_summary),
-                            checked = state.switchWithDividerEnabled,
-                            onCheckedChange = onSwitchWithDividerChanged,
-                            onClick = {},
-                            onSwitchClick = {},
-                            firebaseController = firebaseController,
-                            ga4Event = ga4Event(
-                                component = "preference",
-                                variant = "switch_divider"
-                            ),
-                        )
-                        ExtraTinyVerticalSpacer()
-                        SwitchCardItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(all = SizeConstants.MediumSize * 2),
-                            title = stringResource(id = R.string.components_switch_card_title),
-                            switchState = switchCardState,
-                            onSwitchToggled = onSwitchCardChanged,
-                            firebaseController = firebaseController,
-                            ga4Event = ga4Event(component = "preference", variant = "switch_card"),
-                        )
-                        ExtraTinyVerticalSpacer()
-                        CheckBoxPreferenceItem(
-                            icon = Icons.Outlined.Favorite,
-                            title = stringResource(id = R.string.components_checkbox_title),
-                            summary = stringResource(id = R.string.components_checkbox_summary),
-                            checked = state.checkboxChecked,
-                            onCheckedChange = onCheckboxChanged,
-                            firebaseController = firebaseController,
-                            ga4Event = ga4Event(component = "preference", variant = "checkbox"),
-                        )
-                        ExtraTinyVerticalSpacer()
-                        state.radioOptions.forEach { option ->
-                            RadioButtonPreferenceItem(
-                                text = option,
-                                isChecked = state.selectedRadioOption == option,
-                                onCheckedChange = { onRadioOptionSelected(option) },
-                                firebaseController = firebaseController,
-                                ga4Event = ga4Event(
-                                    component = "preference",
-                                    variant = "radio_$option"
-                                ),
-                            )
-                        }
                     }
                 }
             }
@@ -528,19 +628,58 @@ fun ComponentsScreen(
 
         item {
             PreferenceCategoryItem(title = stringResource(id = R.string.components_section_filters))
-            TopListFilters(
-                filters = state.filters,
-                selectedFilter = state.selectedFilter,
-                onFilterSelected = onFilterSelected,
-                firebaseController = firebaseController,
-                ga4EventProvider = { filter ->
-                    ga4Event(component = "filter", variant = filter)
-                },
-            )
+            ShowcaseSection {
+                ShowcaseSurface(position = GroupedItemPosition.SINGLE) {
+                    TopListFilters(
+                        filters = state.filters,
+                        selectedFilter = state.selectedFilter,
+                        onFilterSelected = onFilterSelected,
+                        firebaseController = firebaseController,
+                        ga4EventProvider = { filter ->
+                            ga4Event(component = "filter", variant = filter)
+                        },
+                    )
+                }
+            }
         }
 
         item {
             NavigationBarSpacer()
         }
+    }
+}
+
+@Composable
+private fun ShowcaseSection(
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .widthIn(max = SizeConstants.TwoHundredFiftySixSize * 3)
+                .fillMaxWidth()
+                .padding(horizontal = SizeConstants.LargeSize),
+            verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
+            content = content,
+        )
+    }
+}
+
+@Composable
+private fun ShowcaseSurface(
+    position: GroupedItemPosition,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .groupedCorners(position = position),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+    ) {
+        Column(
+            modifier = Modifier.padding(SizeConstants.LargeSize),
+            content = content,
+        )
     }
 }

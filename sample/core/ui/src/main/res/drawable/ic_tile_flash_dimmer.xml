@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (©) 2026 Mihai-Cristian Condrea -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M9,2h6v2h-1v2.17c2.33,0.82 4,3.04 4,5.63V22H6V11.8c0,-2.59 1.67,-4.81 4,-5.63V4H9V2zM12,8c-2.21,0 -4,1.7 -4,3.8V20h8v-8.2C16,9.7 14.21,8 12,8zM9,13h6v2H9v-2z" />
+</vector>

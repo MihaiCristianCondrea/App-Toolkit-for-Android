@@ -10,10 +10,11 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
   read
   which tiles are added to Quick Settings.
 - The platform-wrapping repositories: `SensorRepository`, `BreathingRepository`,
-  `CaffeineRepository`,
-  `SystemRepository`, `SosRepository`.
-- `ToolkitTilesViewModel`, the tool composables, the bottom sheet, and `toolkitTilesEntryBuilder`.
-- The Quick Settings tile services and `CaffeineService`.
+  `CaffeineRepository`, `SystemRepository`, `TorchRepository`, `MorseRepository`,
+  `SosRepository`.
+- `ToolkitTilesViewModel`, dedicated stateful-tool ViewModels, the tool composables, the bottom
+  sheet, and `toolkitTilesEntryBuilder`.
+- The Quick Settings tile services, including Flash Dimmer, and `CaffeineService`.
 
 ## Does not own
 
@@ -40,17 +41,23 @@ flowchart TD
     VM --> Tiles[ToolkitTilesRepository]
     Tiles --> Catalogue[Tile catalogue]
     Tiles --> QS[Quick Settings state]
-    VM --> Platform[Sensor / caffeine / system / sos repositories]
+    ToolVMs[Dedicated tool ViewModels] --> Platform[Sensor / caffeine / system / torch repositories]
+    Screen --> ToolVMs
+    Sos[SOS repository] --> Morse[Morse repository]
+    Morse --> Torch
+    Dimmer[Flash Dimmer tile service] --> Torch
     Services[Tile services] --> Platform
 ```
 
 ## Public contracts
 
-- `ToolkitTilesRepository`, `ToolkitTilesViewModel`, `toolkitTilesEntryBuilder`, the tile models.
+- `ToolkitTilesRepository`, `TorchRepository`, `MorseRepository`, `ToolkitTilesViewModel`, the dedicated tool
+  ViewModels, `toolkitTilesEntryBuilder`, and the tile models.
 
 ## Internal implementations
 
-- Sensor sampling, the caffeine foreground service, ringer-mode cycling, tool composables.
+- Camera2 torch discovery/control, sensor sampling, the caffeine foreground service, ringer-mode
+  cycling, and tool composables.
 
 ## Current risks
 
@@ -60,7 +67,15 @@ means those paths cannot be faked in a unit test.
 
 `ToolkitTilesRepository` is the exception and has a contract, because it serves the catalogue as
 well
-as reading the platform.
+as reading the platform. It removes SOS, Morse and Flash Dimmer from the published catalogue when
+the shared torch capability reports that no flashlight is available.
+
+`TorchRepository` also has a contract because Morse/SOS, the in-app dimmer and a system-created
+Quick Settings service share one observable source of truth. `MorseRepository` owns the only
+patterned torch playback job; SOS delegates its fixed message to it so custom Morse, SOS and steady
+brightness controls cannot compete. Torch strength is exposed on Android 13+ when hardware reports
+multiple levels; older and single-level devices fall back to a binary toggle. Closing any torch
+bottom sheet stops patterned playback and turns the light off.
 
 ## Migration notes
 
@@ -73,3 +88,7 @@ now applies statuses itself.
 the launcher activity through the package manager instead, so a quick-tool service does not depend
 on
 the application module.
+
+Tool runtime state used to be aggregated in `ToolkitTilesViewModel`. Each stateful or
+platform-backed bottom-sheet tool now owns a dedicated ViewModel; the catalogue ViewModel owns only
+catalogue, filter, expansion, ad and add/setup state. Animation-only state remains in Compose.

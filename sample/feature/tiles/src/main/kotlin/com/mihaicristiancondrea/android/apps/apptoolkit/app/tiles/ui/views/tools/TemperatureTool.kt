@@ -43,7 +43,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
@@ -73,7 +72,7 @@ fun TemperatureTool(celsius: Float) {
 
         Row(
             modifier = Modifier
-                .height(180.dp)
+                .height(SizeConstants.OneEightySize)
                 .padding(vertical = SizeConstants.MediumSize),
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize)
@@ -81,9 +80,9 @@ fun TemperatureTool(celsius: Float) {
             // Thermometer visual
             Box(
                 modifier = Modifier
-                    .width(24.dp)
+                    .width(SizeConstants.ExtraLargeCompactSize)
                     .fillMaxHeight()
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(SizeConstants.MediumSize))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.BottomCenter
             ) {
@@ -108,7 +107,7 @@ fun TemperatureTool(celsius: Float) {
             Icon(
                 imageVector = Icons.Outlined.DeviceThermostat,
                 contentDescription = null,
-                modifier = Modifier.size(48.dp),
+                modifier = Modifier.size(SizeConstants.LauncherIconSize),
                 tint = color
             )
         }
@@ -129,7 +128,7 @@ private fun TemperatureMark(text: String) {
     ) {
         Box(
             modifier = Modifier
-                .size(width = 8.dp, height = 2.dp)
+                .size(width = SizeConstants.SmallSize, height = SizeConstants.ExtraTinySize)
                 .background(MaterialTheme.colorScheme.outlineVariant, CircleShape)
         )
         Text(

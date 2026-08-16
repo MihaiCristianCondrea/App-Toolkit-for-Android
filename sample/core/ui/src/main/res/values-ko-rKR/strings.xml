@@ -230,4 +230,27 @@
     <string name="app_short_description">유용한 Android 도구와 유틸리티 모음입니다.</string>
     <string name="settings_disabled_message">설정을 현재 사용할 수 없습니다.</string>
     <string name="long_settings_label">설정 열기</string>
+    <string name="tile_flash_dimmer_title">플래시 조광</string>
+    <string name="tile_flash_dimmer_summary">손전등 밝기를 조절하고 빠른 설정에서 사용하세요</string>
+    <string name="flash_dimmer_unavailable">손전등을 사용할 수 없음</string>
+    <string name="flash_dimmer_off">꺼짐</string>
+    <string name="flash_dimmer_on">켜짐</string>
+    <string name="flash_dimmer_tile_level">단계 %1$d/%2$d</string>
+    <string name="flash_dimmer_level">밝기 %1$d/%2$d</string>
+    <string name="flash_dimmer_minimum">최소</string>
+    <string name="flash_dimmer_half">절반</string>
+    <string name="flash_dimmer_maximum">최대</string>
+    <string name="flash_dimmer_turn_off">끄기</string>
+    <string name="flash_dimmer_turn_on">켜기</string>
+    <string name="tile_morse_summary">사용자 지정 메시지를 모스 부호로 깜박입니다</string>
+    <string name="tile_morse_title">모스 손전등</string>
+    <string name="morse_message_label">메시지</string>
+    <string name="morse_start">깜박임 시작</string>
+    <string name="morse_stop">중지</string>
+    <string name="morse_ready">준비됨</string>
+    <string name="morse_active">깜박이는 중</string>
+    <string name="morse_error_empty">메시지를 입력하세요</string>
+    <string name="morse_error_length">200자 이하로 입력하세요</string>
+    <string name="morse_error_characters">A–Z 문자, 숫자, 공백만 사용하세요</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

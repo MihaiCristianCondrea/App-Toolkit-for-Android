@@ -62,31 +62,29 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
-import kotlin.random.Random
 
 @Composable
-fun DiceRollTool() {
-    DiceRollerApp()
+fun DiceRollTool(result: Int, rollRequest: Int, onRoll: () -> Unit) {
+    DiceRollerApp(result = result, rollRequest = rollRequest, onRoll = onRoll)
 }
 
 @Composable
-fun DiceRollerApp() {
-    val rollDice: () -> Int = remember {
-        { Random.nextInt(from = 1, until = 7) }
-    }
-
+fun DiceRollerApp(result: Int, rollRequest: Int, onRoll: () -> Unit) {
     DiceWithButtonAndProceduralDice(
-        rollDice = rollDice
+        result = result,
+        rollRequest = rollRequest,
+        onRoll = onRoll,
     )
 }
 
 @Composable
 fun DiceWithButtonAndProceduralDice(
     modifier: Modifier = Modifier,
-    rollDice: () -> Int,
+    result: Int,
+    rollRequest: Int,
+    onRoll: () -> Unit,
 ) {
     var displayedResult: Int by remember { mutableIntStateOf(1) }
-    var rollRequest: Int by remember { mutableIntStateOf(0) }
     var rolling: Boolean by remember { mutableStateOf(false) }
 
     val rotationX = remember { Animatable(targetAnglesFor(displayedResult).first) }
@@ -100,7 +98,7 @@ fun DiceWithButtonAndProceduralDice(
 
         rolling = true
 
-        val finalResult: Int = rollDice().coerceIn(
+        val finalResult: Int = result.coerceIn(
             minimumValue = MinDiceValue,
             maximumValue = MaxDiceValue,
         )
@@ -226,7 +224,7 @@ fun DiceWithButtonAndProceduralDice(
         Button(
             onClick = {
                 if (!rolling) {
-                    rollRequest++
+                    onRoll()
                 }
             },
             enabled = !rolling,

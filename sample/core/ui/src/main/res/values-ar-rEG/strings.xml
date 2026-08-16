@@ -230,4 +230,27 @@
     <string name="app_short_description">مجموعة من أدوات وبرامج أندرويد المفيدة.</string>
     <string name="settings_disabled_message">الإعدادات غير متاحة حاليًا.</string>
     <string name="long_settings_label">فتح الإعدادات</string>
+    <string name="tile_flash_dimmer_title">مُعتم المصباح</string>
+    <string name="tile_flash_dimmer_summary">اضبط سطوع المصباح واستخدمه من الإعدادات السريعة</string>
+    <string name="flash_dimmer_unavailable">المصباح غير متاح</string>
+    <string name="flash_dimmer_off">إيقاف</string>
+    <string name="flash_dimmer_on">تشغيل</string>
+    <string name="flash_dimmer_tile_level">المستوى %1$d/%2$d</string>
+    <string name="flash_dimmer_level">السطوع %1$d من %2$d</string>
+    <string name="flash_dimmer_minimum">الحد الأدنى</string>
+    <string name="flash_dimmer_half">النصف</string>
+    <string name="flash_dimmer_maximum">الحد الأقصى</string>
+    <string name="flash_dimmer_turn_off">إيقاف التشغيل</string>
+    <string name="flash_dimmer_turn_on">تشغيل</string>
+    <string name="tile_morse_summary">ومّض رسالة مخصصة بشفرة مورس</string>
+    <string name="tile_morse_title">مصباح مورس</string>
+    <string name="morse_message_label">الرسالة</string>
+    <string name="morse_start">بدء الوميض</string>
+    <string name="morse_stop">إيقاف</string>
+    <string name="morse_ready">جاهز</string>
+    <string name="morse_active">جارٍ الوميض</string>
+    <string name="morse_error_empty">أدخل رسالة</string>
+    <string name="morse_error_length">استخدم 200 حرف أو أقل</string>
+    <string name="morse_error_characters">استخدم الأحرف A–Z والأرقام والمسافات فقط</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

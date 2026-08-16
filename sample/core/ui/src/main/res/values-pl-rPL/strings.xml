@@ -230,4 +230,27 @@
     <string name="app_short_description">Zbiór przydatnych narzędzi i programów użytkowych dla Androida.</string>
     <string name="settings_disabled_message">Ustawienia są obecnie niedostępne.</string>
     <string name="long_settings_label">Otwórz ustawienia</string>
+    <string name="tile_flash_dimmer_title">Ściemniacz latarki</string>
+    <string name="tile_flash_dimmer_summary">Dostosuj jasność latarki i korzystaj z niej w Szybkich ustawieniach</string>
+    <string name="flash_dimmer_unavailable">Latarka jest niedostępna</string>
+    <string name="flash_dimmer_off">Wyłączona</string>
+    <string name="flash_dimmer_on">Włączona</string>
+    <string name="flash_dimmer_tile_level">Poziom %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Jasność %1$d z %2$d</string>
+    <string name="flash_dimmer_minimum">Minimum</string>
+    <string name="flash_dimmer_half">Połowa</string>
+    <string name="flash_dimmer_maximum">Maksimum</string>
+    <string name="flash_dimmer_turn_off">Wyłącz</string>
+    <string name="flash_dimmer_turn_on">Włącz</string>
+    <string name="tile_morse_summary">Nadaj własną wiadomość alfabetem Morse’a za pomocą latarki</string>
+    <string name="tile_morse_title">Latarka Morse’a</string>
+    <string name="morse_message_label">Wiadomość</string>
+    <string name="morse_start">Rozpocznij miganie</string>
+    <string name="morse_stop">Zatrzymaj</string>
+    <string name="morse_ready">Gotowe</string>
+    <string name="morse_active">Miganie</string>
+    <string name="morse_error_empty">Wpisz wiadomość</string>
+    <string name="morse_error_length">Użyj maksymalnie 200 znaków</string>
+    <string name="morse_error_characters">Użyj tylko liter A–Z, cyfr i spacji</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

@@ -230,4 +230,27 @@
     <string name="app_short_description">کارآمد اینڈرائیڈ ٹولز اور یوٹیلیٹیز کا مجموعہ۔</string>
     <string name="settings_disabled_message">ترتیبات اس وقت دستیاب نہیں ہیں۔</string>
     <string name="long_settings_label">ترتیبات کھولیں</string>
+    <string name="tile_flash_dimmer_title">فلیش ڈمر</string>
+    <string name="tile_flash_dimmer_summary">فلیش لائٹ کی روشنی ایڈجسٹ کریں اور فوری ترتیبات سے استعمال کریں</string>
+    <string name="flash_dimmer_unavailable">فلیش لائٹ دستیاب نہیں</string>
+    <string name="flash_dimmer_off">بند</string>
+    <string name="flash_dimmer_on">چالو</string>
+    <string name="flash_dimmer_tile_level">سطح %1$d/%2$d</string>
+    <string name="flash_dimmer_level">روشنی %1$d از %2$d</string>
+    <string name="flash_dimmer_minimum">کم از کم</string>
+    <string name="flash_dimmer_half">آدھی</string>
+    <string name="flash_dimmer_maximum">زیادہ سے زیادہ</string>
+    <string name="flash_dimmer_turn_off">بند کریں</string>
+    <string name="flash_dimmer_turn_on">چالو کریں</string>
+    <string name="tile_morse_summary">مورس کوڈ میں حسبِ ضرورت پیغام فلیش کریں</string>
+    <string name="tile_morse_title">مورس فلیش لائٹ</string>
+    <string name="morse_message_label">پیغام</string>
+    <string name="morse_start">فلیش شروع کریں</string>
+    <string name="morse_stop">روکیں</string>
+    <string name="morse_ready">تیار</string>
+    <string name="morse_active">فلیش ہو رہا ہے</string>
+    <string name="morse_error_empty">پیغام درج کریں</string>
+    <string name="morse_error_length">200 یا اس سے کم حروف استعمال کریں</string>
+    <string name="morse_error_characters">صرف A–Z حروف، اعداد اور اسپیس استعمال کریں</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

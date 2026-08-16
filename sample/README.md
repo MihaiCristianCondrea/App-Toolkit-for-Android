@@ -28,6 +28,8 @@ free and open-source software!
 - **Precision Compass & Level**: High-accuracy tools for navigation and perfect alignment.
 - **Lux Meter**: Professional light intensity measurement using your device's ambient sensors.
 - **SOS Emergency Flash**: One-touch SOS signaling and a powerful flashlight for any situation.
+- **Flash Dimmer**: Adjust supported flashlight strength in-app or cycle levels from Quick Settings.
+- **Morse Flashlight**: Flash a custom letters-and-numbers message in Morse code.
 - **Music Search**: Lightning-fast shortcut to identify any song playing nearby.
 - **Caffeine Mode**: Keep your screen awake and prevent timeouts while reading or working.
 

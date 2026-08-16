@@ -38,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.CaffeineState
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
@@ -81,7 +80,7 @@ fun CaffeineTool(
             Icon(
                 imageVector = Icons.Outlined.Coffee,
                 contentDescription = null,
-                modifier = Modifier.size(100.dp),
+                modifier = Modifier.size(SizeConstants.OneHundredSize),
                 tint = if (state != CaffeineState.Off)
                     MaterialTheme.colorScheme.primary
                 else

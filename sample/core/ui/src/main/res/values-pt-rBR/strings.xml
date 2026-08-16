@@ -230,4 +230,27 @@
     <string name="app_short_description">Uma coleção de ferramentas e utilitários práticos para Android.</string>
     <string name="settings_disabled_message">As configurações não estão disponíveis no momento.</string>
     <string name="long_settings_label">Abrir configurações</string>
+    <string name="tile_flash_dimmer_title">Dimmer da lanterna</string>
+    <string name="tile_flash_dimmer_summary">Ajuste o brilho da lanterna e acesse pelos Ajustes rápidos</string>
+    <string name="flash_dimmer_unavailable">Lanterna indisponível</string>
+    <string name="flash_dimmer_off">Desligada</string>
+    <string name="flash_dimmer_on">Ligada</string>
+    <string name="flash_dimmer_tile_level">Nível %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Brilho %1$d de %2$d</string>
+    <string name="flash_dimmer_minimum">Mínimo</string>
+    <string name="flash_dimmer_half">Metade</string>
+    <string name="flash_dimmer_maximum">Máximo</string>
+    <string name="flash_dimmer_turn_off">Desligar</string>
+    <string name="flash_dimmer_turn_on">Ligar</string>
+    <string name="tile_morse_summary">Pisque uma mensagem personalizada em código Morse</string>
+    <string name="tile_morse_title">Lanterna Morse</string>
+    <string name="morse_message_label">Mensagem</string>
+    <string name="morse_start">Iniciar flashes</string>
+    <string name="morse_stop">Parar</string>
+    <string name="morse_ready">Pronto</string>
+    <string name="morse_active">Piscando</string>
+    <string name="morse_error_empty">Digite uma mensagem</string>
+    <string name="morse_error_length">Use no máximo 200 caracteres</string>
+    <string name="morse_error_characters">Use apenas letras de A–Z, números e espaços</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

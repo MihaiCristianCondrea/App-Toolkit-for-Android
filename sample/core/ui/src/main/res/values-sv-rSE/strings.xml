@@ -230,4 +230,27 @@
     <string name="app_short_description">En samling praktiska Android-verktyg och tillbehör.</string>
     <string name="settings_disabled_message">Inställningarna är inte tillgängliga just nu.</string>
     <string name="long_settings_label">Öppna inställningar</string>
+    <string name="tile_flash_dimmer_title">Ficklampsdimmer</string>
+    <string name="tile_flash_dimmer_summary">Justera ficklampans ljusstyrka och använd den från Snabbinställningar</string>
+    <string name="flash_dimmer_unavailable">Ficklampan är inte tillgänglig</string>
+    <string name="flash_dimmer_off">Av</string>
+    <string name="flash_dimmer_on">På</string>
+    <string name="flash_dimmer_tile_level">Nivå %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Ljusstyrka %1$d av %2$d</string>
+    <string name="flash_dimmer_minimum">Minimum</string>
+    <string name="flash_dimmer_half">Halv</string>
+    <string name="flash_dimmer_maximum">Maximum</string>
+    <string name="flash_dimmer_turn_off">Stäng av</string>
+    <string name="flash_dimmer_turn_on">Slå på</string>
+    <string name="tile_morse_summary">Blinka ett eget meddelande med morsekod</string>
+    <string name="tile_morse_title">Morseficklampa</string>
+    <string name="morse_message_label">Meddelande</string>
+    <string name="morse_start">Starta blinkning</string>
+    <string name="morse_stop">Stoppa</string>
+    <string name="morse_ready">Klar</string>
+    <string name="morse_active">Blinkar</string>
+    <string name="morse_error_empty">Ange ett meddelande</string>
+    <string name="morse_error_length">Använd högst 200 tecken</string>
+    <string name="morse_error_characters">Använd endast bokstäverna A–Z, siffror och mellanslag</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

@@ -230,4 +230,27 @@
     <string name="app_short_description">Kullanışlı Android araçları ve yardımcı programlarından oluşan bir koleksiyon.</string>
     <string name="settings_disabled_message">Ayarlar şu anda kullanılamıyor.</string>
     <string name="long_settings_label">Ayarları aç</string>
+    <string name="tile_flash_dimmer_title">Fener karartıcı</string>
+    <string name="tile_flash_dimmer_summary">Fener parlaklığını ayarlayın ve Hızlı Ayarlar’dan kullanın</string>
+    <string name="flash_dimmer_unavailable">Fener kullanılamıyor</string>
+    <string name="flash_dimmer_off">Kapalı</string>
+    <string name="flash_dimmer_on">Açık</string>
+    <string name="flash_dimmer_tile_level">Seviye %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Parlaklık %1$d/%2$d</string>
+    <string name="flash_dimmer_minimum">Minimum</string>
+    <string name="flash_dimmer_half">Yarı</string>
+    <string name="flash_dimmer_maximum">Maksimum</string>
+    <string name="flash_dimmer_turn_off">Kapat</string>
+    <string name="flash_dimmer_turn_on">Aç</string>
+    <string name="tile_morse_summary">Özel bir mesajı Mors koduyla yanıp söndürün</string>
+    <string name="tile_morse_title">Mors feneri</string>
+    <string name="morse_message_label">Mesaj</string>
+    <string name="morse_start">Yanıp sönmeyi başlat</string>
+    <string name="morse_stop">Durdur</string>
+    <string name="morse_ready">Hazır</string>
+    <string name="morse_active">Yanıp sönüyor</string>
+    <string name="morse_error_empty">Bir mesaj girin</string>
+    <string name="morse_error_length">En fazla 200 karakter kullanın</string>
+    <string name="morse_error_characters">Yalnızca A–Z harflerini, sayıları ve boşlukları kullanın</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

@@ -230,4 +230,27 @@
     <string name="app_short_description">Kumpulan alat dan utilitas Android yang praktis.</string>
     <string name="settings_disabled_message">Setelan saat ini tidak tersedia.</string>
     <string name="long_settings_label">Buka setelan</string>
+    <string name="tile_flash_dimmer_title">Peredup senter</string>
+    <string name="tile_flash_dimmer_summary">Sesuaikan kecerahan senter dan akses dari Setelan Cepat</string>
+    <string name="flash_dimmer_unavailable">Senter tidak tersedia</string>
+    <string name="flash_dimmer_off">Mati</string>
+    <string name="flash_dimmer_on">Nyala</string>
+    <string name="flash_dimmer_tile_level">Tingkat %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Kecerahan %1$d dari %2$d</string>
+    <string name="flash_dimmer_minimum">Minimum</string>
+    <string name="flash_dimmer_half">Setengah</string>
+    <string name="flash_dimmer_maximum">Maksimum</string>
+    <string name="flash_dimmer_turn_off">Matikan</string>
+    <string name="flash_dimmer_turn_on">Nyalakan</string>
+    <string name="tile_morse_summary">Kedipkan pesan khusus dalam kode Morse</string>
+    <string name="tile_morse_title">Senter Morse</string>
+    <string name="morse_message_label">Pesan</string>
+    <string name="morse_start">Mulai berkedip</string>
+    <string name="morse_stop">Berhenti</string>
+    <string name="morse_ready">Siap</string>
+    <string name="morse_active">Berkedip</string>
+    <string name="morse_error_empty">Masukkan pesan</string>
+    <string name="morse_error_length">Gunakan maksimal 200 karakter</string>
+    <string name="morse_error_characters">Gunakan hanya huruf A–Z, angka, dan spasi</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

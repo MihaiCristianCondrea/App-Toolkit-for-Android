@@ -230,4 +230,27 @@
     <string name="app_short_description">ชุดเครื่องมือและยูทิลิตี Android ที่ใช้งานสะดวก</string>
     <string name="settings_disabled_message">ขณะนี้การตั้งค่าไม่พร้อมใช้งาน</string>
     <string name="long_settings_label">เปิดการตั้งค่า</string>
+    <string name="tile_flash_dimmer_title">ตัวหรี่ไฟฉาย</string>
+    <string name="tile_flash_dimmer_summary">ปรับความสว่างของไฟฉายและใช้งานจากการตั้งค่าด่วน</string>
+    <string name="flash_dimmer_unavailable">ไม่สามารถใช้ไฟฉายได้</string>
+    <string name="flash_dimmer_off">ปิด</string>
+    <string name="flash_dimmer_on">เปิด</string>
+    <string name="flash_dimmer_tile_level">ระดับ %1$d/%2$d</string>
+    <string name="flash_dimmer_level">ความสว่าง %1$d จาก %2$d</string>
+    <string name="flash_dimmer_minimum">ต่ำสุด</string>
+    <string name="flash_dimmer_half">ครึ่งหนึ่ง</string>
+    <string name="flash_dimmer_maximum">สูงสุด</string>
+    <string name="flash_dimmer_turn_off">ปิดไฟ</string>
+    <string name="flash_dimmer_turn_on">เปิดไฟ</string>
+    <string name="tile_morse_summary">กะพริบข้อความที่กำหนดเองเป็นรหัสมอร์ส</string>
+    <string name="tile_morse_title">ไฟฉายรหัสมอร์ส</string>
+    <string name="morse_message_label">ข้อความ</string>
+    <string name="morse_start">เริ่มกะพริบ</string>
+    <string name="morse_stop">หยุด</string>
+    <string name="morse_ready">พร้อม</string>
+    <string name="morse_active">กำลังกะพริบ</string>
+    <string name="morse_error_empty">ป้อนข้อความ</string>
+    <string name="morse_error_length">ใช้ไม่เกิน 200 อักขระ</string>
+    <string name="morse_error_characters">ใช้เฉพาะตัวอักษร A–Z ตัวเลข และเว้นวรรค</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

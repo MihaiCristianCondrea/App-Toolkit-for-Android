@@ -33,8 +33,11 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-/** Serves the curated Toolkit Tiles catalog and reads active Quick Settings tiles. */
-class DefaultToolkitTilesRepository(private val context: Context) : ToolkitTilesRepository {
+/** Serves the supported Toolkit Tiles catalog and reads active Quick Settings tiles. */
+class DefaultToolkitTilesRepository(
+    private val context: Context,
+    private val torchRepository: TorchRepository,
+) : ToolkitTilesRepository {
 
     override fun tileCategories(): Flow<ImmutableList<ToolkitTileCategory>> =
         flowOf(withCurrentStatuses(catalogue).toImmutableList())
@@ -43,7 +46,10 @@ class DefaultToolkitTilesRepository(private val context: Context) : ToolkitTiles
         categories: List<ToolkitTileCategory>,
     ): List<ToolkitTileCategory> {
         val activeTiles = activeQuickSettingsTiles()
-        return categories.map { category ->
+        return filterUnavailableTorchTools(
+            categories = categories,
+            isTorchAvailable = torchRepository.state.value.capabilities.isAvailable,
+        ).map { category ->
             category.copy(
                 tiles = category.tiles.map { tile ->
                     val componentName = tile.requestKey?.let(::componentFlattenedName)
@@ -149,6 +155,13 @@ class DefaultToolkitTilesRepository(private val context: Context) : ToolkitTiles
                     icon = ToolkitTileIcon.Music,
                     status = ToolkitTileStatus.Available,
                 ),
+                ToolkitTile(
+                    id = "morse",
+                    titleResId = R.string.tile_morse_title,
+                    summaryResId = R.string.tile_morse_summary,
+                    icon = ToolkitTileIcon.Morse,
+                    status = ToolkitTileStatus.Available,
+                ),
             ),
         ),
         ToolkitTileCategory(
@@ -177,6 +190,14 @@ class DefaultToolkitTilesRepository(private val context: Context) : ToolkitTiles
                     summaryResId = R.string.tile_sound_mode_summary,
                     icon = ToolkitTileIcon.Sound,
                     status = ToolkitTileStatus.Available,
+                ),
+                ToolkitTile(
+                    id = "flash_dimmer",
+                    titleResId = R.string.tile_flash_dimmer_title,
+                    summaryResId = R.string.tile_flash_dimmer_summary,
+                    icon = ToolkitTileIcon.FlashDimmer,
+                    status = ToolkitTileStatus.Available,
+                    requestKey = "flash_dimmer",
                 ),
             ),
         ),
@@ -211,3 +232,16 @@ class DefaultToolkitTilesRepository(private val context: Context) : ToolkitTiles
         const val SYSUI_QS_TILES: String = "sysui_qs_tiles"
     }
 }
+
+internal fun filterUnavailableTorchTools(
+    categories: List<ToolkitTileCategory>,
+    isTorchAvailable: Boolean,
+): List<ToolkitTileCategory> {
+    if (isTorchAvailable) return categories
+    return categories.mapNotNull { category ->
+        val visibleTiles = category.tiles.filterNot { it.id in TORCH_TOOL_IDS }.toImmutableList()
+        category.copy(tiles = visibleTiles).takeIf { visibleTiles.isNotEmpty() }
+    }
+}
+
+private val TORCH_TOOL_IDS: Set<String> = setOf("flash_dimmer", "morse", "sos")

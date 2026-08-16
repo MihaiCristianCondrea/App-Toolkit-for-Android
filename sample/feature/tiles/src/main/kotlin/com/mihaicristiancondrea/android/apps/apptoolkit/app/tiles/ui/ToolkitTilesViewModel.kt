@@ -18,16 +18,9 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.BreathingRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.CaffeineRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.SensorRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.SosRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.SystemRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.ToolkitTilesRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.RingerMode
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contracts.ToolkitTilesAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contracts.ToolkitTilesEvent
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.ToolkitSensorData
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.ToolkitTilesUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
@@ -53,11 +46,6 @@ import kotlinx.coroutines.launch
 /** Coordinates the static Toolkit Tiles catalog, filtering, and add-tile requests. */
 class ToolkitTilesViewModel(
     private val toolkitTilesRepository: ToolkitTilesRepository,
-    private val sensorRepository: SensorRepository,
-    private val breathingRepository: BreathingRepository,
-    private val caffeineRepository: CaffeineRepository,
-    private val systemRepository: SystemRepository,
-    private val sosRepository: SosRepository,
     private val dispatchers: DispatcherProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<ToolkitTilesUiState, ToolkitTilesEvent, ToolkitTilesAction>(
@@ -66,7 +54,6 @@ class ToolkitTilesViewModel(
     screenName = "ToolkitTiles",
 ) {
     private var loadJob: Job? = null
-    private var sensorJob: Job? = null
 
     init {
         onEvent(ToolkitTilesEvent.Initialize)
@@ -80,12 +67,6 @@ class ToolkitTilesViewModel(
             is ToolkitTilesEvent.CategoryToggled -> toggleCategory(event.categoryId)
             is ToolkitTilesEvent.AddTileClicked -> handleAddTile(event.requestKey)
             is ToolkitTilesEvent.TileSetupClicked -> handleTileSetup(event.tileId)
-            is ToolkitTilesEvent.TilePreviewOpened -> startSensorTracking(event.tileId)
-            is ToolkitTilesEvent.TilePreviewClosed -> stopSensorTracking()
-            is ToolkitTilesEvent.CaffeineCycleClicked -> caffeineRepository.cycleState()
-            is ToolkitTilesEvent.SoundModeClicked -> handleSoundModeCycle(event.current)
-            is ToolkitTilesEvent.MusicSearchClicked -> systemRepository.launchMusicSearch()
-            is ToolkitTilesEvent.SosClicked -> sosRepository.toggle()
             is ToolkitTilesEvent.AdStatusChanged -> updateAdStatus(event.adId, event.isLoaded)
         }
     }
@@ -174,120 +155,8 @@ class ToolkitTilesViewModel(
         showSetupMessage()
     }
 
-    private fun startSensorTracking(tileId: String) {
-        sensorJob?.cancel()
-        sensorJob = viewModelScope.launch(dispatchers.default) {
-            when (tileId) {
-                "compass" -> {
-                    sensorRepository.getCompassAzimuth()
-                        .onEach { azimuth ->
-                            updateSensorData { it.copy(compassAzimuth = azimuth) }
-                        }
-                        .launchIn(this)
-                }
-
-                "bubble_level" -> {
-                    sensorRepository.getLevelOrientation()
-                        .onEach { (pitch, roll) ->
-                            updateSensorData { it.copy(levelPitch = pitch, levelRoll = roll) }
-                        }
-                        .launchIn(this)
-                }
-
-                "lux_meter" -> {
-                    sensorRepository.getLuxLevel()
-                        .onEach { lux ->
-                            updateSensorData { it.copy(luxLevel = lux) }
-                        }
-                        .launchIn(this)
-                }
-
-                "temperature" -> {
-                    sensorRepository.getBatteryTemperature()
-                        .onEach { temperature ->
-                            updateSensorData { it.copy(batteryTemperature = temperature) }
-                        }
-                        .launchIn(this)
-                }
-
-                "caffeine" -> {
-                    caffeineRepository.currentState
-                        .onEach { state ->
-                            screenState.update { current ->
-                                val data = current.data ?: return@update current
-                                current.copy(data = data.copy(caffeineState = state))
-                            }
-                        }
-                        .launchIn(this)
-                }
-
-                "sound_mode" -> {
-                    systemRepository.getRingerMode()
-                        .onEach { mode ->
-                            screenState.update { current ->
-                                val data = current.data ?: return@update current
-                                current.copy(data = data.copy(ringerMode = mode))
-                            }
-                        }
-                        .launchIn(this)
-                }
-
-                "sos" -> {
-                    sosRepository.isActive
-                        .onEach { active ->
-                            screenState.update { current ->
-                                val data = current.data ?: return@update current
-                                current.copy(data = data.copy(isSosActive = active))
-                            }
-                        }
-                        .launchIn(this)
-                }
-
-                "breathing" -> {
-                    breathingRepository.start()
-                    breathingRepository.breathingState
-                        .onEach { state ->
-                            screenState.update { current ->
-                                val data = current.data ?: return@update current
-                                current.copy(data = data.copy(breathingState = state))
-                            }
-                        }
-                        .launchIn(this)
-                }
-            }
-        }
-    }
-
-    private fun stopSensorTracking() {
-        sensorJob?.cancel()
-        sensorJob = null
-        breathingRepository.stop()
-        sosRepository.cleanup()
-        updateSensorData { ToolkitSensorData() }
-    }
-
-    private fun updateSensorData(update: (ToolkitSensorData) -> ToolkitSensorData) {
-        screenState.update { current ->
-            val data = current.data ?: return@update current
-            current.copy(data = data.copy(sensorData = update(data.sensorData)))
-        }
-    }
-
     private fun showSetupMessage() {
         sendAction(ToolkitTilesAction.ShowSetupRequiredMessage)
-    }
-
-    private fun handleSoundModeCycle(current: RingerMode) {
-        val next = when (current) {
-            RingerMode.Normal -> RingerMode.Vibrate
-            RingerMode.Vibrate,
-            RingerMode.Silent -> RingerMode.Normal
-        }
-        try {
-            systemRepository.setRingerMode(next)
-        } catch (_: Exception) {
-            sendAction(ToolkitTilesAction.ShowMessage("Unable to change sound mode"))
-        }
     }
 
     private object Actions {

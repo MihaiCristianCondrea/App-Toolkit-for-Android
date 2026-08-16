@@ -45,27 +45,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.BreathingState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.CaffeineState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.RingerMode
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.ToolkitSensorData
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.previews.GenericToolPreview
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.BatteryTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.BreathingTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.CaffeineTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.CoinFlipTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.CompassTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.CounterTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.DiceRollTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.LevelTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.LuxMeterTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.MusicSearchTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.SosTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.SoundModeTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.TemperatureTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
@@ -79,18 +62,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 @Composable
 fun ToolkitToolBottomSheet(
     tile: ToolkitTile,
-    sensorData: ToolkitSensorData,
-    breathingState: BreathingState,
-    caffeineState: CaffeineState,
-    ringerMode: RingerMode,
-    isSosActive: Boolean,
     onClose: () -> Unit,
     onAddTile: () -> Unit,
     onSetupTile: () -> Unit,
-    onCaffeineCycle: () -> Unit,
-    onSoundModeCycle: (RingerMode) -> Unit,
-    onMusicSearchLaunch: () -> Unit,
-    onSosToggle: () -> Unit,
 ) {
     val sheetState = rememberBottomSheetState(
         initialValue = SheetValue.Hidden,
@@ -111,18 +85,7 @@ fun ToolkitToolBottomSheet(
             ToolSheetHeader(tile = tile, onClose = onClose)
             ToolStatusSummary(tile = tile)
             HorizontalDivider()
-            ToolInteractiveContent(
-                tile = tile,
-                sensorData = sensorData,
-                breathingState = breathingState,
-                caffeineState = caffeineState,
-                ringerMode = ringerMode,
-                isSosActive = isSosActive,
-                onCaffeineCycle = onCaffeineCycle,
-                onSoundModeCycle = onSoundModeCycle,
-                onMusicSearchLaunch = onMusicSearchLaunch,
-                onSosToggle = onSosToggle,
-            )
+            ToolInteractiveContent(tile = tile)
             ToolSheetActions(
                 tile = tile,
                 onAddTile = onAddTile,
@@ -222,30 +185,23 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
 @Composable
 private fun ToolInteractiveContent(
     tile: ToolkitTile,
-    sensorData: ToolkitSensorData,
-    breathingState: BreathingState,
-    caffeineState: CaffeineState,
-    ringerMode: RingerMode,
-    isSosActive: Boolean,
-    onCaffeineCycle: () -> Unit,
-    onSoundModeCycle: (RingerMode) -> Unit,
-    onMusicSearchLaunch: () -> Unit,
-    onSosToggle: () -> Unit,
 ) {
     when (tile.id) {
-        "coin_flip" -> CoinFlipTool()
-        "dice_roll" -> DiceRollTool()
-        "counter" -> CounterTool()
-        "battery" -> BatteryTool()
-        "compass" -> CompassTool(azimuth = sensorData.compassAzimuth)
-        "bubble_level" -> LevelTool(pitch = sensorData.levelPitch, roll = sensorData.levelRoll)
-        "lux_meter" -> LuxMeterTool(lux = sensorData.luxLevel)
-        "temperature" -> TemperatureTool(celsius = sensorData.batteryTemperature)
-        "caffeine" -> CaffeineTool(state = caffeineState, onCycle = onCaffeineCycle)
-        "sound_mode" -> SoundModeTool(mode = ringerMode, onCycle = { onSoundModeCycle(ringerMode) })
-        "music_search" -> MusicSearchTool(onLaunch = onMusicSearchLaunch)
-        "sos" -> SosTool(isActive = isSosActive, onToggle = onSosToggle)
-        "breathing" -> BreathingTool(state = breathingState)
+        "coin_flip" -> CoinFlipToolRoute()
+        "dice_roll" -> DiceRollToolRoute()
+        "counter" -> CounterToolRoute()
+        "battery" -> BatteryToolRoute()
+        "compass" -> CompassToolRoute()
+        "bubble_level" -> LevelToolRoute()
+        "lux_meter" -> LuxMeterToolRoute()
+        "temperature" -> TemperatureToolRoute()
+        "caffeine" -> CaffeineToolRoute()
+        "sound_mode" -> SoundModeToolRoute()
+        "music_search" -> MusicSearchToolRoute()
+        "sos" -> SosToolRoute()
+        "morse" -> MorseToolRoute()
+        "breathing" -> BreathingToolRoute()
+        "flash_dimmer" -> FlashDimmerToolRoute()
         else -> GenericToolPreview(tile = tile)
     }
 }

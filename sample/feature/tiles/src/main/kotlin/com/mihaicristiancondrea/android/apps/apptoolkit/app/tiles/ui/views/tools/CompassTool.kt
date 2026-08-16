@@ -37,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -57,7 +56,7 @@ fun CompassTool(azimuth: Float) {
         )
         Box(
             modifier = Modifier
-                .size(200.dp)
+                .size(SizeConstants.TwoHundredSize)
                 .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
             contentAlignment = Alignment.Center
         ) {
@@ -72,8 +71,8 @@ fun CompassTool(azimuth: Float) {
             )
             Box(
                 modifier = Modifier
-                    .width(2.dp)
-                    .height(20.dp)
+                    .width(SizeConstants.ExtraTinySize)
+                    .height(SizeConstants.LargeIncreasedSize)
                     .background(MaterialTheme.colorScheme.error)
                     .align(Alignment.TopCenter)
             )

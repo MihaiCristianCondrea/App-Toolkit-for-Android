@@ -57,4 +57,9 @@ fun getTileServiceRequests(): Map<String, TileServiceRequest> = mapOf(
         R.string.tile_dice_roll_title,
         R.drawable.ic_tile_dice
     ),
+    "flash_dimmer" to TileServiceRequest(
+        FlashDimmerTileService::class.java,
+        R.string.tile_flash_dimmer_title,
+        R.drawable.ic_tile_flash_dimmer,
+    ),
 )

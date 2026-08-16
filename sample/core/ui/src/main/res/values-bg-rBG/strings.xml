@@ -230,4 +230,27 @@
     <string name="app_short_description">Колекция от полезни инструменти и помощни програми за Android.</string>
     <string name="settings_disabled_message">Настройките в момента не са налични.</string>
     <string name="long_settings_label">Отваряне на настройките</string>
+    <string name="tile_flash_dimmer_title">Димер на фенерчето</string>
+    <string name="tile_flash_dimmer_summary">Регулирайте яркостта на фенерчето и го използвайте от Бързи настройки</string>
+    <string name="flash_dimmer_unavailable">Фенерчето не е налично</string>
+    <string name="flash_dimmer_off">Изключено</string>
+    <string name="flash_dimmer_on">Включено</string>
+    <string name="flash_dimmer_tile_level">Ниво %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Яркост %1$d от %2$d</string>
+    <string name="flash_dimmer_minimum">Минимум</string>
+    <string name="flash_dimmer_half">Половина</string>
+    <string name="flash_dimmer_maximum">Максимум</string>
+    <string name="flash_dimmer_turn_off">Изключване</string>
+    <string name="flash_dimmer_turn_on">Включване</string>
+    <string name="tile_morse_summary">Предайте персонализирано съобщение с фенерчето в морзов код</string>
+    <string name="tile_morse_title">Морзов фенер</string>
+    <string name="morse_message_label">Съобщение</string>
+    <string name="morse_start">Стартиране на мигането</string>
+    <string name="morse_stop">Спиране</string>
+    <string name="morse_ready">Готово</string>
+    <string name="morse_active">Мигане</string>
+    <string name="morse_error_empty">Въведете съобщение</string>
+    <string name="morse_error_length">Използвайте до 200 знака</string>
+    <string name="morse_error_characters">Използвайте само букви A–Z, цифри и интервали</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
 </resources>

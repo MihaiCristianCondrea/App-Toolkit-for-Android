@@ -50,7 +50,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
@@ -73,7 +72,7 @@ internal fun HiddenAdPreloaders(
     adItems: ImmutableList<ToolkitTilesListItem.Ad>,
     onEvent: (ToolkitTilesEvent) -> Unit,
 ) {
-    Box(modifier = Modifier.size(0.dp)) {
+    Box(modifier = Modifier.size(SizeConstants.ZeroSize)) {
         adItems.forEach { item ->
             QuickToolsNativeAdCard(
                 adUnitId = item.adUnitId,
