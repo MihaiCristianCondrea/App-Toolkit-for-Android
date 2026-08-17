@@ -20,14 +20,10 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,14 +31,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.SmallFloatingActionButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseSection
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseSurface
 
 @Composable
 fun FabShowcase(
@@ -56,15 +53,9 @@ fun FabShowcase(
         icon = Icons.Filled.AutoAwesome,
     )
     ShowcaseSection {
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-            ),
-            shape = MaterialTheme.shapes.extraLarge,
-        ) {
+        ShowcaseSurface(position = GroupedItemPosition.SINGLE) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(SizeConstants.LargeSize),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
             ) {

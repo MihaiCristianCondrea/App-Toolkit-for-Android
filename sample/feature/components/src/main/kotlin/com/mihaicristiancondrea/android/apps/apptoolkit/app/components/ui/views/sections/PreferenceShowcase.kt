@@ -17,25 +17,23 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.sections
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.TouchApp
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,7 +43,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.CheckBoxPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.PreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.RadioButtonPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
@@ -53,9 +50,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItemWithDivider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseSection
 import kotlinx.collections.immutable.ImmutableList
@@ -82,7 +77,7 @@ fun PreferenceShowcase(
     )
 
     // Group 1: Standard & Mixed Preferences
-    val group1Size = 6
+    val group1Size = 4
     ShowcaseSection {
         Text(
             text = "Interactive Toggles",
@@ -99,95 +94,65 @@ fun PreferenceShowcase(
             color = MaterialTheme.colorScheme.surfaceContainerLow,
             tonalElevation = 1.dp,
         ) {
-            Column {
-                SettingsPreferenceItem(
-                    modifier = Modifier.groupedCorners(
-                        groupedItemPosition(index = 0, size = group1Size),
-                    ),
-                    title = stringResource(id = R.string.components_preference_title),
-                    summary = stringResource(id = R.string.components_preference_summary),
-                    firebaseController = firebaseController,
-                    ga4Event = onLogEvent("preference", "settings_primary"),
+            MaterialTheme(
+                colorScheme = MaterialTheme.colorScheme.copy(
+                    surface = Color.Transparent,
                 )
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .groupedCorners(groupedItemPosition(index = 1, size = group1Size)),
-                    color = MaterialTheme.colorScheme.surface,
-                ) {
-                    PreferenceItem(
-                        title = stringResource(id = R.string.components_preference_secondary_title),
-                        summary = stringResource(id = R.string.components_preference_secondary_summary),
+            ) {
+                Column {
+                    SettingsPreferenceItem(
+                        modifier = Modifier.groupedCorners(
+                            groupedItemPosition(index = 0, size = group1Size),
+                        ),
+                        title = stringResource(id = R.string.components_preference_title),
+                        summary = stringResource(id = R.string.components_preference_summary),
                         firebaseController = firebaseController,
-                        ga4Event = onLogEvent("preference", "secondary"),
+                        ga4Event = onLogEvent("preference", "settings_primary"),
                     )
-                }
-                SwitchPreferenceItem(
-                    modifier = Modifier.groupedCorners(
-                        groupedItemPosition(index = 2, size = group1Size),
-                    ),
-                    icon = Icons.Outlined.Favorite,
-                    title = stringResource(id = R.string.components_switch_title),
-                    summary = stringResource(id = R.string.components_switch_summary),
-                    checked = switchEnabled,
-                    onCheckedChange = onSwitchEnabledChanged,
-                    firebaseController = firebaseController,
-                    ga4Event = onLogEvent("preference", "switch"),
-                )
-                SwitchPreferenceItemWithDivider(
-                    modifier = Modifier.groupedCorners(
-                        groupedItemPosition(index = 3, size = group1Size),
-                    ),
-                    icon = Icons.Outlined.Info,
-                    title = stringResource(id = R.string.components_switch_divider_title),
-                    summary = stringResource(id = R.string.components_switch_divider_summary),
-                    checked = switchWithDividerEnabled,
-                    onCheckedChange = onSwitchWithDividerChanged,
-                    onClick = {},
-                    onSwitchClick = {},
-                    firebaseController = firebaseController,
-                    ga4Event = onLogEvent("preference", "switch_divider"),
-                )
-                CheckBoxPreferenceItem(
-                    modifier = Modifier.groupedCorners(
-                        groupedItemPosition(index = 4, size = group1Size),
-                    ),
-                    icon = Icons.Outlined.CheckCircle,
-                    title = stringResource(id = R.string.components_checkbox_title),
-                    summary = stringResource(id = R.string.components_checkbox_summary),
-                    checked = checkboxChecked,
-                    onCheckedChange = onCheckboxChanged,
-                    firebaseController = firebaseController,
-                    ga4Event = onLogEvent("preference", "checkbox"),
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .groupedCorners(groupedItemPosition(index = 5, size = group1Size))
-                        .padding(SizeConstants.LargeSize),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Outlined.TouchApp,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
-                        MediumHorizontalSpacer()
-                        Text(
-                            text = "Live Toggle",
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    }
-                    CustomSwitch(
+                    SwitchPreferenceItem(
+                        modifier = Modifier.groupedCorners(
+                            groupedItemPosition(index = 1, size = group1Size),
+                        ),
+                        icon = Icons.Outlined.Favorite,
+                        title = stringResource(id = R.string.components_switch_title),
+                        summary = stringResource(id = R.string.components_switch_summary),
                         checked = switchEnabled,
                         onCheckedChange = onSwitchEnabledChanged,
+                        firebaseController = firebaseController,
+                        ga4Event = onLogEvent("preference", "switch"),
+                    )
+                    SwitchPreferenceItemWithDivider(
+                        modifier = Modifier.groupedCorners(
+                            groupedItemPosition(index = 2, size = group1Size),
+                        ),
+                        icon = Icons.Outlined.Info,
+                        title = stringResource(id = R.string.components_switch_divider_title),
+                        summary = stringResource(id = R.string.components_switch_divider_summary),
+                        checked = switchWithDividerEnabled,
+                        onCheckedChange = onSwitchWithDividerChanged,
+                        onClick = {},
+                        onSwitchClick = {},
+                        firebaseController = firebaseController,
+                        ga4Event = onLogEvent("preference", "switch_divider"),
+                    )
+                    CheckBoxPreferenceItem(
+                        modifier = Modifier.groupedCorners(
+                            groupedItemPosition(index = 3, size = group1Size),
+                        ),
+                        icon = Icons.Outlined.CheckCircle,
+                        title = stringResource(id = R.string.components_checkbox_title),
+                        summary = stringResource(id = R.string.components_checkbox_summary),
+                        checked = checkboxChecked,
+                        onCheckedChange = onCheckboxChanged,
+                        firebaseController = firebaseController,
+                        ga4Event = onLogEvent("preference", "checkbox"),
                     )
                 }
             }
         }
     }
+
+    Spacer(modifier = Modifier.height(2.dp))
 
     // Group 2: Switch Card
     ShowcaseSection {
@@ -199,17 +164,25 @@ fun PreferenceShowcase(
             modifier = Modifier.padding(start = SizeConstants.SmallSize),
         )
         SmallVerticalSpacer()
-        SwitchCardItem(
-            modifier = Modifier
-                .fillMaxWidth()
-                .groupedCorners(GroupedItemPosition.SINGLE),
-            title = stringResource(id = R.string.components_switch_card_title),
-            switchState = switchCardState,
-            onSwitchToggled = onSwitchCardChanged,
-            firebaseController = firebaseController,
-            ga4Event = onLogEvent("preference", "switch_card"),
-        )
+        MaterialTheme(
+            colorScheme = MaterialTheme.colorScheme.copy(
+                secondaryContainer = MaterialTheme.colorScheme.surfaceContainerLow,
+            )
+        ) {
+            SwitchCardItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .groupedCorners(GroupedItemPosition.SINGLE),
+                title = stringResource(id = R.string.components_switch_card_title),
+                switchState = switchCardState,
+                onSwitchToggled = onSwitchCardChanged,
+                firebaseController = firebaseController,
+                ga4Event = onLogEvent("preference", "switch_card"),
+            )
+        }
     }
+
+    Spacer(modifier = Modifier.height(2.dp))
 
     // Group 3: Radio Selections
     ShowcaseSection {
@@ -228,21 +201,27 @@ fun PreferenceShowcase(
             color = MaterialTheme.colorScheme.surfaceContainerLow,
             tonalElevation = 1.dp,
         ) {
-            Column {
-                radioOptions.forEachIndexed { index, option ->
-                    RadioButtonPreferenceItem(
-                        modifier = Modifier.groupedCorners(
-                            groupedItemPosition(
-                                index = index,
-                                size = radioOptions.size,
+            MaterialTheme(
+                colorScheme = MaterialTheme.colorScheme.copy(
+                    surface = Color.Transparent,
+                )
+            ) {
+                Column {
+                    radioOptions.forEachIndexed { index, option ->
+                        RadioButtonPreferenceItem(
+                            modifier = Modifier.groupedCorners(
+                                groupedItemPosition(
+                                    index = index,
+                                    size = radioOptions.size,
+                                ),
                             ),
-                        ),
-                        text = option,
-                        isChecked = selectedRadioOption == option,
-                        onCheckedChange = { onRadioOptionSelected(option) },
-                        firebaseController = firebaseController,
-                        ga4Event = onLogEvent("preference", "radio_$option"),
-                    )
+                            text = option,
+                            isChecked = selectedRadioOption == option,
+                            onCheckedChange = { onRadioOptionSelected(option) },
+                            firebaseController = firebaseController,
+                            ga4Event = onLogEvent("preference", "radio_$option"),
+                        )
+                    }
                 }
             }
         }
