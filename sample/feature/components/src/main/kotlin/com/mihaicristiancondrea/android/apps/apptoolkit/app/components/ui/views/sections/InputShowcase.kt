@@ -70,7 +70,6 @@ fun InputShowcase(
     ShowcaseHeader(
         title = stringResource(id = R.string.components_section_inputs),
         icon = Icons.Outlined.Tune,
-        badge = "Stateful",
     )
     ShowcaseSection {
         ShowcaseSurface(position = GroupedItemPosition.FIRST) {
@@ -81,12 +80,12 @@ fun InputShowcase(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Action Menus",
+                        text = "Action Menus", // TODO: String res
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                     )
                     Text(
-                        text = "Tap to reveal options",
+                        text = "Tap to reveal options", // TODO: String res
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

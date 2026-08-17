@@ -48,7 +48,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 fun ShowcaseHeader(
     title: String,
     icon: ImageVector,
-    badge: String? = null,
 ) {
     Row(
         modifier = Modifier
@@ -75,27 +74,9 @@ fun ShowcaseHeader(
         Text(
             text = title,
             style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.ExtraBold,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier.weight(1f),
         )
-        if (badge != null) {
-            FilterChip(
-                selected = true,
-                onClick = {},
-                label = { Text(text = badge) },
-                colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    selectedLabelColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                ),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = null,
-                        modifier = Modifier.size(FilterChipDefaults.IconSize),
-                    )
-                },
-            )
-        }
     }
 }
 
@@ -110,7 +91,7 @@ fun ShowcaseSection(
                 .widthIn(max = SizeConstants.TwoHundredFiftySixSize * 3)
                 .fillMaxWidth()
                 .padding(horizontal = SizeConstants.LargeSize),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+            verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
             content = content,
         )
     }

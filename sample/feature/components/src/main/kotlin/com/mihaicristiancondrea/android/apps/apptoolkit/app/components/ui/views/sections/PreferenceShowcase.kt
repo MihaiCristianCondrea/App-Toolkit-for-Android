@@ -65,7 +65,6 @@ fun PreferenceShowcase(
     ShowcaseHeader(
         title = stringResource(id = R.string.components_section_preferences),
         icon = Icons.Outlined.Category,
-        badge = "Full Set",
     )
     ShowcaseSection {
         SettingsPreferenceItem(

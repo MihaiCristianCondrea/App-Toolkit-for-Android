@@ -72,7 +72,6 @@ fun LayoutShowcase(
     ShowcaseHeader(
         title = "Feedback & Rich Layouts",
         icon = Icons.Outlined.Extension,
-        badge = "Premium",
     )
     val primaryTitle = stringResource(id = R.string.components_preference_title)
     val primarySummary = stringResource(id = R.string.components_preference_summary)

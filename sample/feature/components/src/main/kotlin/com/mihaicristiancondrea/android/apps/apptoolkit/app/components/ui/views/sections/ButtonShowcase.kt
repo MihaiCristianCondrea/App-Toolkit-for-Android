@@ -57,7 +57,6 @@ fun ButtonShowcase(
     ShowcaseHeader(
         title = stringResource(id = R.string.components_section_buttons),
         icon = Icons.Outlined.SmartButton,
-        badge = "Interactive",
     )
     ShowcaseSection {
         ShowcaseSurface(position = GroupedItemPosition.SINGLE) {
@@ -65,7 +64,7 @@ fun ButtonShowcase(
                 text = "Standard Buttons",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.SemiBold,
             )
             SmallVerticalSpacer()
             FlowRow(
