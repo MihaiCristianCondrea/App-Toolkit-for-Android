@@ -59,7 +59,7 @@ fun FabShowcase(
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
             ),
             shape = MaterialTheme.shapes.extraLarge,
         ) {

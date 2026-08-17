@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.sections
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,7 +29,6 @@ import androidx.compose.material.icons.outlined.Extension
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.StarOutline
-import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material.icons.outlined.ViewCarousel
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -52,10 +50,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.Grou
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.lists.GroupedActionList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseSurface
@@ -66,8 +62,6 @@ import kotlinx.collections.immutable.persistentListOf
 fun LayoutShowcase(
     dropdownOptions: ImmutableList<String>,
     carouselState: PagerState,
-    switchEnabled: Boolean,
-    onSwitchEnabledChanged: (Boolean) -> Unit,
 ) {
     ShowcaseHeader(
         title = "Feedback & Rich Layouts",
@@ -177,30 +171,6 @@ fun LayoutShowcase(
                 learnMoreAction = {},
                 newLine = false,
             )
-            LargeVerticalSpacer()
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Outlined.TouchApp,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                    MediumHorizontalSpacer()
-                    Text(
-                        text = "Live Toggle",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                    )
-                }
-                CustomSwitch(
-                    checked = switchEnabled,
-                    onCheckedChange = onSwitchEnabledChanged,
-                )
-            }
         }
     }
 }

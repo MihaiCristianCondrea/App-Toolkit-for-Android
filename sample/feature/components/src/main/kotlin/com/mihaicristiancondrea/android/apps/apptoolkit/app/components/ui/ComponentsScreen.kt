@@ -109,9 +109,8 @@ fun ComponentsScreen(
         }
 
         val switchCardState: State<Boolean> = rememberUpdatedState(switchCardEnabled)
-        val carouselState = rememberPagerState(pageCount = { dropdownOptions.size })
+        val carouselState = rememberPagerState { dropdownOptions.size }
         val screenParam = AnalyticsValue.Str("components")
-        val preferenceItemCount = 6 + radioOptions.size
 
         fun ga4Event(component: String, variant: String? = null): Ga4EventData {
             val params = buildMap {
@@ -158,7 +157,6 @@ fun ComponentsScreen(
                 PreferenceShowcase(
                     firebaseController = firebaseController,
                     onLogEvent = ::ga4Event,
-                    preferenceItemCount = preferenceItemCount,
                     switchEnabled = switchEnabled,
                     onSwitchEnabledChanged = { switchEnabled = it },
                     switchWithDividerEnabled = switchWithDividerEnabled,
@@ -177,8 +175,6 @@ fun ComponentsScreen(
                 LayoutShowcase(
                     dropdownOptions = dropdownOptions,
                     carouselState = carouselState,
-                    switchEnabled = switchEnabled,
-                    onSwitchEnabledChanged = { switchEnabled = it },
                 )
             }
 
