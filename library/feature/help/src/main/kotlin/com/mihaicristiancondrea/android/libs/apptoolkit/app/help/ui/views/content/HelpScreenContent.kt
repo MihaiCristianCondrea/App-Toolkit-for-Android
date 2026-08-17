@@ -56,6 +56,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.HelpNa
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
@@ -144,7 +145,9 @@ fun HelpScreenContent(
                                 size = popularGroupItemCount,
                             ),
                             outerRadius = SizeConstants.ExtraLargeIncreasedSize,
-                        ),
+                        )
+                        .bounceClick()
+                        .animateVisibility(index = popularGroupItemCount - 1),
                     shape = RectangleShape,
                     onClick = {
                         firebaseController.logGa4Event(
