@@ -15,8 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.constants
+plugins {
+    id("com.mihaicristiancondrea.android.apptoolkit.sample-module")
+}
 
-object SettingsConstants {
-    const val KEY_SETTINGS_NOTIFICATION: String = "notifications"
+android {
+    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit"
+}
+
+dependencies {
+    // The toolkit is this module's whole reason to exist, so it is exposed rather than hidden:
+    // the host has to name toolkit types (AppToolkitHostBuildConfig, Module) to call into it.
+    api(project(":library:apptoolkit"))
+    // Strings the settings and permissions screens are written from.
+    api(project(":sample:core:ui"))
+
+    testImplementation(project(":library:core:testing"))
 }

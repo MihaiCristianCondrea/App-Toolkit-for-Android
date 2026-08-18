@@ -15,14 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.providers
+package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings
 
 import android.content.Context
 import android.os.Build
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.BuildConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 
-class AppAboutSettingsProvider(val context: Context) : AboutSettingsProvider {
+class AppAboutSettingsProvider(
+    val context: Context,
+    private val hostBuildConfig: AppToolkitHostBuildConfig,
+) : AboutSettingsProvider {
     override val deviceInfo: String
         get() {
             return context.getString(
@@ -32,7 +35,7 @@ class AppAboutSettingsProvider(val context: Context) : AboutSettingsProvider {
                 "${context.getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.android_version)} ${Build.VERSION.RELEASE}",
                 "${context.getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.api_level)} ${Build.VERSION.SDK_INT}",
                 "${context.getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.arch)} ${Build.SUPPORTED_ABIS.joinToString()}",
-                if (BuildConfig.DEBUG) context.getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.debug) else context.getString(
+                if (hostBuildConfig.isDebugBuild) context.getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.debug) else context.getString(
                     com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.release
                 )
             )

@@ -19,7 +19,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.di
 
 import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.startup.utils.interfaces.providers.AppStartupProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.adsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.appModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.appsListModule
@@ -27,10 +26,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modu
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.onboardingModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.startupModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings.modules.generalSettingsModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings.modules.hostSettingsProvidersModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.help.HelpConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -48,16 +46,11 @@ fun initializeKoin(context: Context) {
         androidContext(androidContext = context)
         modules(
             modules = buildList {
-                // The toolkit's own graph, complete. Everything after this overrides it.
-                addAll(
-                    appToolkitModules(
-                        hostBuildConfig = appToolkitBuildConfig,
-                        startupProviderFactory = ::AppStartupProvider,
-                    )
-                )
+                // The toolkit's graph plus the sample's answers to its extension points.
+                // Everything after this overrides it.
+                addAll(appToolkitHostModules(hostBuildConfig = appToolkitBuildConfig))
                 add(dataStoreModule)
                 add(appModule)
-                add(hostSettingsProvidersModule)
                 add(generalSettingsModule)
                 add(adsModule)
                 add(appsListModule)

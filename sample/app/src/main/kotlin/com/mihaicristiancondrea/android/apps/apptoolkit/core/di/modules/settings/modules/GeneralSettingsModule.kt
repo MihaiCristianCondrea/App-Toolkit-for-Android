@@ -20,24 +20,14 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.setting
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repositories.ComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.ComponentsUnlockViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.about.ui.AppAboutSettingsContent
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.providers.AppDisplaySettingsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.utils.providers.AppPrivacySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.data.repositories.GeneralSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.DisplaySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.PrivacySettingsProvider
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val generalSettingsModule: Module = module {
-    single<DisplaySettingsProvider> {
-        AppDisplaySettingsProvider(context = get())
-    }
-    single<PrivacySettingsProvider> {
-        AppPrivacySettingsProvider(context = get())
-    }
     single {
         ComponentsShowcaseRepository(dataStore = get(), firebaseController = get())
     }

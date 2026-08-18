@@ -235,6 +235,7 @@ dependencies {
     implementation(project(":sample:feature:settings"))
     implementation(project(":sample:feature:tiles"))
     implementation(project(":sample:widget"))
+    implementation(project(":sample:core:apptoolkit"))
     implementation(project(":sample:core:ui"))
     implementation(project(":library:apptoolkit"))
     implementation(project(":library:core:common"))

@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.di
 import android.app.Activity
 import android.content.Context
 import androidx.compose.material3.ColorScheme
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.startup.utils.interfaces.providers.AppStartupProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.adsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.appModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.appsListModule
@@ -28,13 +27,12 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modu
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.onboardingModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules.startupModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings.modules.generalSettingsModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.settings.modules.hostSettingsProvidersModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AdvancedSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitModules
 import io.ktor.client.engine.HttpClientEngine
 import org.junit.jupiter.api.Test
 import org.koin.core.module.Module
@@ -113,7 +111,6 @@ class HostKoinGraphTest {
         addAll(toolkitModules())
         add(dataStoreModule)
         add(appModule)
-        add(hostSettingsProvidersModule)
         add(generalSettingsModule)
         add(adsModule)
         add(appsListModule)
@@ -125,10 +122,12 @@ class HostKoinGraphTest {
      * The toolkit's whole graph. Sharing one call with `initializeKoin` means a module added to the
      * toolkit is covered by both tests without either list being edited.
      */
-    private fun toolkitModules(): List<Module> = appToolkitModules(
-        hostBuildConfig = hostBuildConfig,
-        startupProviderFactory = ::AppStartupProvider,
-    )
+    /**
+     * The toolkit's graph as the app takes it: library modules plus `:sample:core:apptoolkit`'s
+     * answers to the extension points. Production calls the same function.
+     */
+    private fun toolkitModules(): List<Module> =
+        appToolkitHostModules(hostBuildConfig = hostBuildConfig)
 
     @Test
     fun `every host definition can be resolved`() {

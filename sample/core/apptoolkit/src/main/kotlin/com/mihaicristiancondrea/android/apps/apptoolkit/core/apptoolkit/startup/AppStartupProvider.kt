@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.startup.utils.interfaces.providers
+package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.startup
 
 import android.Manifest
 import android.content.Context
