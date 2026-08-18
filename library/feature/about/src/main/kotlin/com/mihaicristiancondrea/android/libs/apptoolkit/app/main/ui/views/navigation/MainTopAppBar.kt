@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.navig
 import android.content.Context
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -39,9 +40,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -91,7 +94,7 @@ fun MainTopAppBar(
                     (fadeIn(animationSpec = tween(durationMillis = 220, delayMillis = 90)) +
                             scaleIn(
                                 initialScale = 0.92f,
-                                animationSpec = tween(durationMillis = 220, delayMillis = 90)
+                                animationSpec = tween(durationMillis = 220, delayMillis = 90),
                             ))
                         .togetherWith(fadeOut(animationSpec = tween(durationMillis = 90)))
                 },
@@ -104,9 +107,9 @@ fun MainTopAppBar(
             }
         },
         navigationIcon = {
-            if (navigationIcon != null) {
+            navigationIcon?.let {
                 AnimatedIconButtonDirection(
-                    icon = navigationIcon,
+                    icon = it,
                     contentDescription = stringResource(id = R.string.go_back),
                     onClick = onNavigationIconClick,
                     feedback = ButtonFeedback(hapticFeedbackType = null),
@@ -131,7 +134,13 @@ private fun SupportMenuAction(onSupportClick: (() -> Unit)?) {
     val context: Context = LocalContext.current
     val (expandedMenu, setExpandedMenu) = remember { mutableStateOf(value = false) }
 
+    val rotation by animateFloatAsState(
+        targetValue = if (expandedMenu) 90f else 0f,
+        label = "SupportMenuRotation"
+    )
+
     AnimatedIconButtonDirection(
+        modifier = Modifier.graphicsLayer { rotationZ = rotation },
         fromRight = true,
         icon = Icons.Outlined.MoreVert,
         contentDescription = stringResource(id = R.string.content_description_more_options),

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.views.dropdowns
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Balance
@@ -29,8 +30,11 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.licenses.ui.LicensesActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
@@ -47,12 +51,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R
 fun HelpScreenMenuActions(
     config: AppVersionInfo,
     showDialog: Boolean,
-    onShowDialogChange: (Boolean) -> Unit
+    onShowDialogChange: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
-    val showMenu = rememberSaveable { mutableStateOf(false) }
+    val showMenu = rememberSaveable { mutableStateOf(value = false) }
+
+    val rotation by animateFloatAsState(
+        targetValue = if (showMenu.value) 90f else 0f,
+        label = "HelpScreenMenuRotation"
+    )
 
     AnimatedIconButtonDirection(
+        modifier = Modifier.graphicsLayer { rotationZ = rotation },
         fromRight = true,
         contentDescription = null,
         icon = Icons.Default.MoreVert,

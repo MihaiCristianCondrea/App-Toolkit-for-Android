@@ -17,6 +17,13 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.views.content
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -76,14 +83,14 @@ fun HelpScreenContent(
     val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.HELP_LARGE_BANNER_AD))
     val adsEnabled = rememberAdsEnabled()
     val hasAdSlot = adsEnabled && adsConfig.bannerAdUnitId.isNotBlank()
-    var showAllQuestions by rememberSaveable { mutableStateOf(false) }
-    var isAdLoaded by remember { mutableStateOf(false) }
+    var showAllQuestions by rememberSaveable { mutableStateOf(value = false) }
+    var isAdLoaded by remember { mutableStateOf(value = false) }
     val visibleQuestions = if (showAllQuestions) {
         questions
     } else {
         questions.take(INITIAL_VISIBLE_QUESTION_COUNT)
     }
-    val hasHiddenQuestions = visibleQuestions.size < questions.size
+    val hasHiddenQuestions = questions.size > INITIAL_VISIBLE_QUESTION_COUNT
     val popularGroupItemCount = visibleQuestions.size + if (hasHiddenQuestions) 1 else 0
     val supportGroupItemCount = 1 + if (hasAdSlot && isAdLoaded) 1 else 0
 
@@ -93,7 +100,7 @@ fun HelpScreenContent(
             top = paddingValues.calculateTopPadding(),
             bottom = paddingValues.calculateBottomPadding(),
             start = SizeConstants.LargeSize,
-            end = SizeConstants.LargeSize
+            end = SizeConstants.LargeSize,
         ),
         verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)
     ) {
@@ -106,7 +113,7 @@ fun HelpScreenContent(
         visibleQuestions.forEachIndexed { index: Int, question: FaqItem ->
             item(key = question.id.value) {
                 var isExpanded by rememberSaveable(question.id.value) {
-                    mutableStateOf(false)
+                    mutableStateOf(value = false)
                 }
                 QuestionCard(
                     title = question.question,
@@ -114,7 +121,7 @@ fun HelpScreenContent(
                     isExpanded = isExpanded,
                     groupedPosition = groupedItemPosition(
                         index = index,
-                        size = popularGroupItemCount,
+                        size = if (showAllQuestions) questions.size else popularGroupItemCount,
                     ),
                     onToggleExpand = {
                         val expanded = !isExpanded
@@ -128,50 +135,76 @@ fun HelpScreenContent(
                         )
                         isExpanded = expanded
                     },
-                    modifier = Modifier.animateVisibility(index = index),
+                    modifier = Modifier
+                        .animateItem(
+                            placementSpec = spring(
+                                dampingRatio = Spring.DampingRatioLowBouncy,
+                                stiffness = Spring.StiffnessLow,
+                            )
+                        )
+                        .animateVisibility(index = index),
                 )
             }
         }
 
         if (hasHiddenQuestions) {
             item(key = "show_more_questions") {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .groupedCorners(
-                            position = groupedItemPosition(
-                                index = popularGroupItemCount - 1,
-                                size = popularGroupItemCount,
-                            ),
-                            outerRadius = SizeConstants.ExtraLargeIncreasedSize,
-                        ),
-                    shape = RectangleShape,
-                    onClick = {
-                        firebaseController.logGa4Event(
-                            helpPreferenceTapEvent(preferenceKey = "show_more_questions")
-                        )
-                        showAllQuestions = true
-                    }
+                AnimatedVisibility(
+                    visible = !showAllQuestions,
+                    exit = slideOutVertically(
+                        targetOffsetY = { it },
+                        animationSpec = tween(durationMillis = 500)
+                    ) + fadeOut(
+                        animationSpec = tween(durationMillis = 300)
+                    ) + shrinkVertically(
+                        animationSpec = tween(durationMillis = 500)
+                    )
                 ) {
-                    Row(
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(
-                                horizontal = SizeConstants.LargeSize,
-                                vertical = SizeConstants.MediumSize,
-                            ),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
+                            .animateItem(
+                                placementSpec = spring(
+                                    dampingRatio = Spring.DampingRatioLowBouncy,
+                                    stiffness = Spring.StiffnessLow,
+                                )
+                            )
+                            .groupedCorners(
+                                position = groupedItemPosition(
+                                    index = popularGroupItemCount - 1,
+                                    size = popularGroupItemCount,
+                                ),
+                                outerRadius = SizeConstants.ExtraLargeIncreasedSize,
+                            )
+                            .animateVisibility(index = popularGroupItemCount - 1),
+                        shape = RectangleShape,
+                        onClick = {
+                            firebaseController.logGa4Event(
+                                helpPreferenceTapEvent(preferenceKey = "show_more_questions")
+                            )
+                            showAllQuestions = true
+                        }
                     ) {
-                        Text(
-                            text = stringResource(id = R.string.show_more),
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                        Icon(
-                            imageVector = Icons.Filled.ExpandMore,
-                            contentDescription = null,
-                            modifier = Modifier.padding(start = SizeConstants.SmallSize),
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    horizontal = SizeConstants.LargeSize,
+                                    vertical = SizeConstants.MediumSize,
+                                ),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.show_more),
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                            Icon(
+                                imageVector = Icons.Filled.ExpandMore,
+                                contentDescription = null,
+                                modifier = Modifier.padding(start = SizeConstants.SmallSize),
+                            )
+                        }
                     }
                 }
             }

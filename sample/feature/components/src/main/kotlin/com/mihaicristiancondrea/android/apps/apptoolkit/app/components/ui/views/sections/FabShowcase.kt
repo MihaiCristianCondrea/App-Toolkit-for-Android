@@ -18,17 +18,12 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.sections
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,14 +31,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedExtendedFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.AnimatedFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab.SmallFloatingActionButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseSection
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseSurface
 
 @Composable
 fun FabShowcase(
@@ -55,47 +51,14 @@ fun FabShowcase(
     ShowcaseHeader(
         title = stringResource(id = R.string.components_section_fabs),
         icon = Icons.Filled.AutoAwesome,
-        badge = "Expressive",
     )
     ShowcaseSection {
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            ),
-            shape = MaterialTheme.shapes.extraLarge,
-        ) {
-            Column(
-                modifier = Modifier.padding(SizeConstants.LargeSize),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
+        ShowcaseSurface(position = GroupedItemPosition.SINGLE) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    AnimatedFloatingActionButton(
-                        isVisible = true,
-                        icon = Icons.Filled.Add,
-                        contentDescription = iconContentDescription,
-                        onClick = {},
-                        firebaseController = firebaseController,
-                        ga4Event = onLogEvent("fab", "animated"),
-                    )
-                    SmallFloatingActionButton(
-                        isVisible = true,
-                        isExtended = true,
-                        icon = Icons.Filled.Add,
-                        contentDescription = iconContentDescription,
-                        onClick = {},
-                        onLogClick = {
-                            firebaseController.logGa4Event(
-                                onLogEvent("fab", "small"),
-                            )
-                        },
-                    )
-                }
                 AnimatedExtendedFloatingActionButton(
                     onClick = {},
                     visible = true,
@@ -104,6 +67,26 @@ fun FabShowcase(
                     text = { Text(text = stringResource(id = R.string.components_fab_extended)) },
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("fab", "extended"),
+                )
+                AnimatedFloatingActionButton(
+                    isVisible = true,
+                    icon = Icons.Filled.Add,
+                    contentDescription = iconContentDescription,
+                    onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = onLogEvent("fab", "animated"),
+                )
+                SmallFloatingActionButton(
+                    isVisible = true,
+                    isExtended = true,
+                    icon = Icons.Filled.Add,
+                    contentDescription = iconContentDescription,
+                    onClick = {},
+                    onLogClick = {
+                        firebaseController.logGa4Event(
+                            onLogEvent("fab", "small"),
+                        )
+                    },
                 )
             }
         }

@@ -21,6 +21,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -87,14 +89,24 @@ fun AnimatedIconButtonDirection(
 
     AnimatedVisibility(
         visible = animatedVisibility.value && visible,
-        enter = fadeIn(animationSpec = tween(durationMillis = durationMillis)) + slideInHorizontally(
-            initialOffsetX = { if (fromRight) it else -it },
-            animationSpec = tween(durationMillis = durationMillis)
-        ),
-        exit = fadeOut(animationSpec = tween(durationMillis = durationMillis)) + slideOutHorizontally(
-            targetOffsetX = { if (fromRight) it else -it },
-            animationSpec = tween(durationMillis = durationMillis)
-        )
+        enter = fadeIn(animationSpec = tween(durationMillis = durationMillis)) +
+                slideInHorizontally(
+                    initialOffsetX = { if (fromRight) it else -it },
+                    animationSpec = tween(durationMillis = durationMillis)
+                ) +
+                scaleIn(
+                    initialScale = 0.8f,
+                    animationSpec = tween(durationMillis = durationMillis)
+                ),
+        exit = fadeOut(animationSpec = tween(durationMillis = durationMillis)) +
+                slideOutHorizontally(
+                    targetOffsetX = { if (fromRight) it else -it },
+                    animationSpec = tween(durationMillis = durationMillis)
+                ) +
+                scaleOut(
+                    targetScale = 0.8f,
+                    animationSpec = tween(durationMillis = durationMillis)
+                )
     ) {
         IconOnlyButton(
             modifier = modifier,

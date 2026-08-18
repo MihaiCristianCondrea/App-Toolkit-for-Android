@@ -42,7 +42,6 @@ fun FilterShowcase(
     ShowcaseHeader(
         title = stringResource(id = R.string.components_section_filters),
         icon = Icons.Outlined.Tune,
-        badge = "Adaptive",
     )
     ShowcaseSection {
         ShowcaseSurface(position = GroupedItemPosition.SINGLE) {

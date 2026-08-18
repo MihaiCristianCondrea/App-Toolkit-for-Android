@@ -26,10 +26,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -48,7 +44,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 fun ShowcaseHeader(
     title: String,
     icon: ImageVector,
-    badge: String? = null,
 ) {
     Row(
         modifier = Modifier
@@ -75,27 +70,9 @@ fun ShowcaseHeader(
         Text(
             text = title,
             style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.ExtraBold,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier.weight(1f),
         )
-        if (badge != null) {
-            FilterChip(
-                selected = true,
-                onClick = {},
-                label = { Text(text = badge) },
-                colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    selectedLabelColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                ),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = null,
-                        modifier = Modifier.size(FilterChipDefaults.IconSize),
-                    )
-                },
-            )
-        }
     }
 }
 
@@ -110,7 +87,7 @@ fun ShowcaseSection(
                 .widthIn(max = SizeConstants.TwoHundredFiftySixSize * 3)
                 .fillMaxWidth()
                 .padding(horizontal = SizeConstants.LargeSize),
-            verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+            verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize),
             content = content,
         )
     }
