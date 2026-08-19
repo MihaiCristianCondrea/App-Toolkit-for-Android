@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,18 +38,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.BatteryFull
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.CheckBox
-import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -61,7 +52,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,6 +65,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import coil3.compose.AsyncImage
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.models.AppInfoChipUi
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -107,7 +98,7 @@ fun AppDetailsBottomSheet(
         modifier = modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         LargeVerticalSpacer()
         AppDetailsHeader(
@@ -129,10 +120,10 @@ fun AppDetailsBottomSheet(
         LargeVerticalSpacer()
         AppDetailsNativeAd(
             modifier = Modifier.fillMaxWidth(),
-            adsConfig = adsConfig
+            adsConfig = adsConfig,
         )
         LargeVerticalSpacer()
-        QuickActionsPanel(
+        AppDetailsQuickActions(
             appInfo = appInfo,
             isFavorite = isFavorite,
             isAppInstalled = isAppInstalled,
@@ -144,7 +135,7 @@ fun AppDetailsBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = SizeConstants.LargeSize),
-            adsConfig = adsConfig
+            adsConfig = adsConfig,
         )
 
         when {
@@ -189,12 +180,12 @@ fun AppDetailsBottomSheet(
                     text = stringResource(id = R.string.app_details_screenshots_title),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(horizontal = SizeConstants.LargeSize)
+                    modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
                 )
                 LargeVerticalSpacer()
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = SizeConstants.LargeSize),
-                    horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize)
+                    horizontalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
                 ) {
                     items(appDetails.screenshots) { screenshot ->
                         Card(shape = RoundedCornerShape(SizeConstants.LargeSize)) {
@@ -205,7 +196,7 @@ fun AppDetailsBottomSheet(
                                 modifier = Modifier
                                     .height(SizeConstants.TwoHundredFortySize)
                                     .aspectRatio(screenshot.aspectRatio.toDisplayRatio())
-                                    .clip(RoundedCornerShape(SizeConstants.LargeSize))
+                                    .clip(RoundedCornerShape(SizeConstants.LargeSize)),
                             )
                         }
                     }
@@ -227,13 +218,13 @@ private fun AppDetailsHeader(
             .fillMaxWidth()
             .padding(horizontal = SizeConstants.LargeSize),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize)
+        horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
     ) {
         Card(shape = RoundedCornerShape(SizeConstants.LargeSize)) {
             AsyncImage(
                 model = appInfo.iconUrl,
                 contentDescription = appInfo.name,
-                modifier = Modifier.size(SizeConstants.LauncherIconSize * 2)
+                modifier = Modifier.size(SizeConstants.LauncherIconSize * 2),
             )
         }
         Column(modifier = Modifier.weight(1f)) {
@@ -272,7 +263,7 @@ private fun AppDetailsActions(
             .fillMaxWidth()
             .padding(horizontal = SizeConstants.LargeSize),
         horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         when (isAppInstalled) {
             true -> {
@@ -280,13 +271,13 @@ private fun AppDetailsActions(
                     onClick = { actionLauncher.shareApp(appInfo.packageName, appInfo.name) },
                     vectorIcon = Icons.Outlined.Share,
                     label = stringResource(id = R.string.app_details_share),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 GeneralButton(
                     onClick = { actionLauncher.openApp(appInfo.packageName) },
                     vectorIcon = Icons.AutoMirrored.Outlined.OpenInNew,
                     label = stringResource(id = R.string.app_details_open_app),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
 
@@ -302,7 +293,7 @@ private fun AppDetailsActions(
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,
-                        ) { actionLauncher.openPlayStore(appInfo.packageName) }
+                        ) { actionLauncher.openPlayStore(appInfo.packageName) },
                 )
             }
 
@@ -329,7 +320,7 @@ private fun AppMetadataChips(
                 true -> stringResource(id = R.string.app_details_installed)
                 false -> stringResource(id = R.string.app_details_not_installed)
                 null -> stringResource(id = R.string.app_details_checking_install_state)
-            }
+            },
         ),
         appInfo.category?.label?.takeIf { it.isNotBlank() }?.let { category ->
             AppInfoChipUi(icon = Icons.Outlined.Category, label = category)
@@ -337,7 +328,7 @@ private fun AppMetadataChips(
         installedVersionInfo?.versionName?.takeIf { it.isNotBlank() }?.let { versionName ->
             AppInfoChipUi(
                 icon = Icons.Outlined.Verified,
-                label = stringResource(id = R.string.app_details_version, versionName)
+                label = stringResource(id = R.string.app_details_version, versionName),
             )
         },
         appDetails?.latestVersion?.versionName?.takeIf { it.isNotBlank() }?.let { versionName ->
@@ -382,113 +373,6 @@ private fun AppInfoChip(
 }
 
 @Composable
-private fun QuickActionsPanel(
-    appInfo: AppInfo,
-    isFavorite: Boolean,
-    isAppInstalled: Boolean?,
-    actionLauncher: AppActionLauncher,
-    onFavoriteClick: () -> Unit,
-) {
-    val quickActions =
-        remember(appInfo, isFavorite, isAppInstalled, actionLauncher, onFavoriteClick) {
-            listOfNotNull(
-                QuickActionUi(R.string.app_details_notifications, Icons.Outlined.Notifications) {
-                    actionLauncher.openNotifications(appInfo.packageName)
-                }.takeIf { isAppInstalled == true },
-                QuickActionUi(R.string.app_details_permissions, Icons.Outlined.Security) {
-                    actionLauncher.openPermissions(appInfo.packageName)
-                }.takeIf { isAppInstalled == true },
-                QuickActionUi(R.string.app_details_storage, Icons.Outlined.Storage) {
-                    actionLauncher.openStorage(appInfo.packageName)
-                }.takeIf { isAppInstalled == true },
-                QuickActionUi(R.string.app_details_battery, Icons.Outlined.BatteryFull) {
-                    actionLauncher.openBattery(appInfo.packageName)
-                }.takeIf { isAppInstalled == true },
-                QuickActionUi(
-                    labelRes = R.string.favorite_apps,
-                    icon = if (isFavorite) Icons.Outlined.Star else Icons.Default.Star,
-                    onClick = onFavoriteClick,
-                ),
-                QuickActionUi(R.string.app_details_play_store, Icons.Outlined.PlayArrow) {
-                    actionLauncher.openPlayStore(appInfo.packageName)
-                },
-                QuickActionUi(R.string.app_details_copy_package, Icons.Outlined.ContentCopy) {
-                    actionLauncher.copyPackageName(appInfo.packageName)
-                },
-            )
-        }
-
-    Text(
-        text = stringResource(id = R.string.app_details_quick_actions_title),
-        style = MaterialTheme.typography.titleMedium,
-        fontWeight = FontWeight.SemiBold,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = SizeConstants.LargeSize)
-    )
-    ExtraSmallVerticalSpacer()
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = SizeConstants.LargeSize),
-        verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-    ) {
-        quickActions.chunked(QUICK_ACTION_COLUMNS).forEach { rowActions ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-            ) {
-                rowActions.forEach { quickAction ->
-                    QuickActionTile(
-                        quickAction = quickAction,
-                        modifier = Modifier.weight(1f),
-                    )
-                }
-                repeat(QUICK_ACTION_COLUMNS - rowActions.size) {
-                    Box(modifier = Modifier.weight(1f))
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun QuickActionTile(
-    quickAction: QuickActionUi,
-    modifier: Modifier = Modifier,
-) {
-    ElevatedCard(
-        onClick = quickAction.onClick,
-        modifier = modifier.height(SizeConstants.NinetySixSize),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-        ),
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(SizeConstants.MediumSize),
-            contentAlignment = Alignment.Center,
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(
-                    space = SizeConstants.SmallSize,
-                    alignment = Alignment.CenterVertically,
-                ),
-            ) {
-                Icon(imageVector = quickAction.icon, contentDescription = null)
-                Text(
-                    text = stringResource(id = quickAction.labelRes),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun AppSection(
     title: String,
     icon: ImageVector,
@@ -513,21 +397,6 @@ private fun AppSection(
         content()
     }
 }
-
-private const val QUICK_ACTION_COLUMNS: Int = 3
-
-@Immutable
-private data class AppInfoChipUi(
-    val icon: ImageVector,
-    val label: String,
-)
-
-@Immutable
-private data class QuickActionUi(
-    val labelRes: Int,
-    val icon: ImageVector,
-    val onClick: () -> Unit,
-)
 
 private fun String.toDisplayRatio(): Float {
     val parts = split(':', limit = 2)
