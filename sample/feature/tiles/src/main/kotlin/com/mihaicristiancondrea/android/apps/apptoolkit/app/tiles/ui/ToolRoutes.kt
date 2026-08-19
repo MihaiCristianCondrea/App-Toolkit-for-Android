@@ -14,7 +14,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.BatteryTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.BreathingTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.CaffeineTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.CoinFlipTool
@@ -28,7 +27,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.MorseTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.SosTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.SoundModeTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.TemperatureTool
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -53,12 +51,6 @@ internal fun CounterToolRoute(viewModel: CounterToolViewModel = koinViewModel())
 }
 
 @Composable
-internal fun BatteryToolRoute(viewModel: BatteryToolViewModel = koinViewModel()) {
-    val percent by viewModel.percent.collectAsStateWithLifecycle()
-    BatteryTool(percent, viewModel::refresh)
-}
-
-@Composable
 internal fun CompassToolRoute(viewModel: CompassToolViewModel = koinViewModel()) {
     val value by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(viewModel::open, viewModel::dismiss)
@@ -77,13 +69,6 @@ internal fun LuxMeterToolRoute(viewModel: LuxMeterToolViewModel = koinViewModel(
     val value by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(viewModel::open, viewModel::dismiss)
     LuxMeterTool(value)
-}
-
-@Composable
-internal fun TemperatureToolRoute(viewModel: TemperatureToolViewModel = koinViewModel()) {
-    val value by viewModel.state.collectAsStateWithLifecycle()
-    StartStopTool(viewModel::open, viewModel::dismiss)
-    TemperatureTool(value)
 }
 
 @Composable

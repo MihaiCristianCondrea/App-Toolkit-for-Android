@@ -47,10 +47,6 @@ free and open-source software!
 - **App Portfolio**: Browse a dynamic, real-time list of all my published apps on Google Play.
 - **One-Tap Discovery**: Instantly launch your favorite apps or view them on the Play Store.
 
-
-• Battery Health Monitor: Real-time tracking of battery temperature and hardware status.
-
-
 # Benefits
 
 🛠️ All-in-One Productivity Hub

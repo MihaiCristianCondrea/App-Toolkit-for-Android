@@ -15,11 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Close
@@ -34,7 +32,6 @@ import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Straighten
-import androidx.compose.material.icons.outlined.Thermostat
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material.icons.outlined.WbSunny
@@ -64,11 +61,9 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Level -> Icons.Outlined.Straighten
     ToolkitTileIcon.Compass -> Icons.Outlined.Explore
     ToolkitTileIcon.Lux -> Icons.Outlined.WbSunny
-    ToolkitTileIcon.Temperature -> Icons.Outlined.Thermostat
     ToolkitTileIcon.Coin -> Icons.Outlined.MonetizationOn
     ToolkitTileIcon.Dice -> Icons.Outlined.Casino
     ToolkitTileIcon.Counter -> Icons.Outlined.Dehaze
-    ToolkitTileIcon.Battery -> Icons.Outlined.BatteryChargingFull
     ToolkitTileIcon.Caffeine -> Icons.Outlined.Timer
     ToolkitTileIcon.Sound -> Icons.Outlined.GraphicEq
     ToolkitTileIcon.Music -> Icons.Outlined.MusicNote
@@ -84,7 +79,6 @@ internal fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
     ToolkitTileIcon.Compass,
     ToolkitTileIcon.Lux -> R.drawable.background_8_sided_cookie
 
-    ToolkitTileIcon.Temperature,
     ToolkitTileIcon.Caffeine,
     ToolkitTileIcon.Breathing -> R.drawable.background_soft_burst
 
@@ -126,12 +120,6 @@ internal fun ToolkitTileIcon.iconColors(): StatusColors {
             content = if (isDark) Color(0xFF74DED1) else Color(0xFF006A60),
         )
 
-        ToolkitTileIcon.Battery -> StatusColors(
-            container = if (isDark) Color(0xFF5A2D91) else Color(0xFF9158E2),
-            content = if (isDark) Color(0xFFD3BFFF) else Color(0xFF5A2D91),
-        )
-
-        ToolkitTileIcon.Temperature,
         ToolkitTileIcon.Caffeine,
         ToolkitTileIcon.Breathing -> StatusColors(
             container = if (isDark) Color(0xFF8B4100) else Color(0xFFFF8B26),

@@ -37,11 +37,6 @@ data class TileServiceRequest(
 
 /** Registry of tiles this app can ask the system to add, keyed by `ToolkitTile.requestKey`. */
 fun getTileServiceRequests(): Map<String, TileServiceRequest> = mapOf(
-    "battery" to TileServiceRequest(
-        BatteryTileService::class.java,
-        R.string.tile_battery_title,
-        R.drawable.ic_tile_battery
-    ),
     "coin_flip" to TileServiceRequest(
         CoinFlipTileService::class.java,
         R.string.tile_coin_flip_title,

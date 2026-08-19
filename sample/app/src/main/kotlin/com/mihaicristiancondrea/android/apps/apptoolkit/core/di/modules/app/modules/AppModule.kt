@@ -31,7 +31,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.tor
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.DefaultTorchRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.MorseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.TorchRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.BatteryToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.BreathingToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CaffeineToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CoinFlipToolViewModel
@@ -45,7 +44,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.MusicSearch
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.MorseToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.SoundModeToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.TemperatureToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
@@ -107,11 +105,9 @@ val appModule: Module = module {
     viewModel { CoinFlipToolViewModel() }
     viewModel { DiceRollToolViewModel() }
     viewModel { CounterToolViewModel() }
-    viewModel { BatteryToolViewModel(repository = get()) }
     viewModel { CompassToolViewModel(repository = get()) }
     viewModel { LevelToolViewModel(repository = get()) }
     viewModel { LuxMeterToolViewModel(repository = get()) }
-    viewModel { TemperatureToolViewModel(repository = get()) }
     viewModel { BreathingToolViewModel(repository = get()) }
     viewModel { CaffeineToolViewModel(repository = get()) }
     viewModel { SoundModeToolViewModel(repository = get()) }

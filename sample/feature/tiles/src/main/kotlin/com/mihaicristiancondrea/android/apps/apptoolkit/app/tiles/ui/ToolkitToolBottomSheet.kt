@@ -136,7 +136,6 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
 
     val customInfo = when (tile.id) {
         "lux_meter" -> stringResource(id = R.string.tile_lux_meter_info)
-        "temperature" -> stringResource(id = R.string.tile_temperature_info)
         else -> null
     }
 
@@ -190,11 +189,9 @@ private fun ToolInteractiveContent(
         "coin_flip" -> CoinFlipToolRoute()
         "dice_roll" -> DiceRollToolRoute()
         "counter" -> CounterToolRoute()
-        "battery" -> BatteryToolRoute()
         "compass" -> CompassToolRoute()
         "bubble_level" -> LevelToolRoute()
         "lux_meter" -> LuxMeterToolRoute()
-        "temperature" -> TemperatureToolRoute()
         "caffeine" -> CaffeineToolRoute()
         "sound_mode" -> SoundModeToolRoute()
         "music_search" -> MusicSearchToolRoute()

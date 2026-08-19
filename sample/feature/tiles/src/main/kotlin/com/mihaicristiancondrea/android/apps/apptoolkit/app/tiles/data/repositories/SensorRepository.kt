@@ -18,28 +18,21 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories
 
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.hardware.display.DisplayManager
-import android.os.BatteryManager
 import android.os.Build
 import android.view.Display
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlin.math.atan2
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
-import kotlin.time.Duration.Companion.milliseconds
 
 /** Converts Android sensor callbacks into streams consumed by tile previews. */
 class SensorRepository(
@@ -109,7 +102,7 @@ class SensorRepository(
                             rotationMatrix,
                             null,
                             gravity,
-                            geomagnetic
+                            geomagnetic,
                         )
                     ) {
                         remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
@@ -136,12 +129,12 @@ class SensorRepository(
                 sensorManager.registerListener(
                     listener,
                     accelerometer,
-                    SensorManager.SENSOR_DELAY_UI
+                    SensorManager.SENSOR_DELAY_UI,
                 )
                 sensorManager.registerListener(
                     listener,
                     magnetometer,
-                    SensorManager.SENSOR_DELAY_UI
+                    SensorManager.SENSOR_DELAY_UI,
                 )
             } else {
                 close()
@@ -195,7 +188,7 @@ class SensorRepository(
                             rotationMatrix,
                             null,
                             gravity,
-                            geomagnetic
+                            geomagnetic,
                         )
                     ) {
                         remapRotationMatrix(rotationMatrix, rotation, remappedMatrix)
@@ -205,19 +198,18 @@ class SensorRepository(
                         trySend(pitch to roll)
                     }
                 } else if (hasGravity && !hasGeomagnetic) {
-                    // Fallback to accelerometer-only for pitch/roll if magnetometer is missing
-                    // This is less stable but better than nothing
+                    // Fallback to accelerometer-only for pitch/roll if magnetometer is missing.
                     val normGravity =
                         gravity[0] * gravity[0] + gravity[1] * gravity[1] + gravity[2] * gravity[2]
                     if (normGravity > 0.1f) {
                         val pitch = Math.toDegrees(
-                            atan2(gravity[1].toDouble(), gravity[2].toDouble())
+                            atan2(gravity[1].toDouble(), gravity[2].toDouble()),
                         ).toFloat()
                         val roll = Math.toDegrees(
                             atan2(
                                 -gravity[0].toDouble(),
-                                sqrt((gravity[1] * gravity[1] + gravity[2] * gravity[2]).toDouble())
-                            )
+                                sqrt((gravity[1] * gravity[1] + gravity[2] * gravity[2]).toDouble()),
+                            ),
                         ).toFloat()
                         trySend(pitch to roll)
                     }
@@ -240,14 +232,14 @@ class SensorRepository(
                 sensorManager.registerListener(
                     listener,
                     accelerometer,
-                    SensorManager.SENSOR_DELAY_UI
+                    SensorManager.SENSOR_DELAY_UI,
                 )
             }
             if (magnetometer != null) {
                 sensorManager.registerListener(
                     listener,
                     magnetometer,
-                    SensorManager.SENSOR_DELAY_UI
+                    SensorManager.SENSOR_DELAY_UI,
                 )
             }
 
@@ -278,28 +270,10 @@ class SensorRepository(
         awaitClose { sensorManager.unregisterListener(listener) }
     }.flowOn(dispatchers.default)
 
-    fun getBatteryTemperature(): Flow<Float> = callbackFlow {
-        val job = launch {
-            while (isActive) {
-                val intent =
-                    context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
-                val temperature = intent?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) ?: 0
-                trySend(temperature / 10f)
-                delay(2000.milliseconds)
-            }
-        }
-        awaitClose { job.cancel() }
-    }.flowOn(dispatchers.default)
-
-    fun getBatteryPercent(): Int {
-        val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
-        val level = intent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
-        val scale = intent?.getIntExtra(BatteryManager.EXTRA_SCALE, 100) ?: 100
-        return if (level >= 0 && scale > 0) level * 100 / scale else 0
-    }
-
     private fun remapRotationMatrix(
-        rotationMatrix: FloatArray, displayRotation: Int, remappedMatrix: FloatArray
+        rotationMatrix: FloatArray,
+        displayRotation: Int,
+        remappedMatrix: FloatArray,
     ) {
         val axisX = SensorManager.AXIS_X
         val axisY = SensorManager.AXIS_Y
@@ -307,7 +281,7 @@ class SensorRepository(
             android.view.Surface.ROTATION_90 -> Pair(axisY, SensorManager.AXIS_MINUS_X)
             android.view.Surface.ROTATION_180 -> Pair(
                 SensorManager.AXIS_MINUS_X,
-                SensorManager.AXIS_MINUS_Y
+                SensorManager.AXIS_MINUS_Y,
             )
 
             android.view.Surface.ROTATION_270 -> Pair(SensorManager.AXIS_MINUS_Y, axisX)

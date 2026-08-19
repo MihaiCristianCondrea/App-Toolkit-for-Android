@@ -101,13 +101,6 @@ class DefaultToolkitTilesRepository(
                     icon = ToolkitTileIcon.Lux,
                     status = ToolkitTileStatus.NeedsSetup,
                 ),
-                ToolkitTile(
-                    id = "temperature",
-                    titleResId = R.string.tile_temperature_title,
-                    summaryResId = R.string.tile_temperature_summary,
-                    icon = ToolkitTileIcon.Temperature,
-                    status = ToolkitTileStatus.Available,
-                ),
             ),
         ),
         ToolkitTileCategory(
@@ -167,16 +160,8 @@ class DefaultToolkitTilesRepository(
         ToolkitTileCategory(
             id = CATEGORY_SYSTEM,
             titleResId = R.string.tiles_category_system,
-            icon = ToolkitTileIcon.Battery,
+            icon = ToolkitTileIcon.Sound,
             tiles = persistentListOf(
-                ToolkitTile(
-                    id = "battery",
-                    titleResId = R.string.tile_battery_title,
-                    summaryResId = R.string.tile_battery_summary,
-                    icon = ToolkitTileIcon.Battery,
-                    status = ToolkitTileStatus.Available,
-                    requestKey = "battery",
-                ),
                 ToolkitTile(
                     id = "caffeine",
                     titleResId = R.string.tile_caffeine_title,

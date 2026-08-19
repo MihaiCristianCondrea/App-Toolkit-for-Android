@@ -59,12 +59,6 @@ class CounterToolViewModel : ViewModel() {
     fun dismiss() = reset()
 }
 
-class BatteryToolViewModel(private val repository: SensorRepository) : ViewModel() {
-    private val mutablePercent = MutableStateFlow(repository.getBatteryPercent())
-    val percent: StateFlow<Int> = mutablePercent.asStateFlow()
-    fun refresh() { mutablePercent.value = repository.getBatteryPercent() }
-}
-
 abstract class FlowToolViewModel<T>(initial: T) : ViewModel() {
     protected val mutableState = MutableStateFlow(initial)
     val state: StateFlow<T> = mutableState.asStateFlow()
@@ -82,10 +76,6 @@ class LevelToolViewModel(private val repository: SensorRepository) : FlowToolVie
 
 class LuxMeterToolViewModel(private val repository: SensorRepository) : FlowToolViewModel<Float>(0f) {
     fun open() { observation?.cancel(); observation = repository.getLuxLevel().onEach { mutableState.value = it }.launchIn(viewModelScope) }
-}
-
-class TemperatureToolViewModel(private val repository: SensorRepository) : FlowToolViewModel<Float>(0f) {
-    fun open() { observation?.cancel(); observation = repository.getBatteryTemperature().onEach { mutableState.value = it }.launchIn(viewModelScope) }
 }
 
 class BreathingToolViewModel(private val repository: BreathingRepository) : FlowToolViewModel<BreathingState>(BreathingState()) {
