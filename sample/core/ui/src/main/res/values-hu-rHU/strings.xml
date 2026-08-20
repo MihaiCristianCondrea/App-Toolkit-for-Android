@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">Alkalmazás értesítéseinek kezelése</string>
     <string name="summary_preference_settings_privacy_and_security">Kezeld az adatvédelmi beállításaidat</string>
     <string name="summary_share_message">Nézd meg ezt a fantasztikus alkalmazást, amit használok. Nagyon érdekes funkciói vannak, amik neked is tetszhetnek. Letöltheted a Play Áruházból itt: %1$s</string>
-    <string name="tile_battery_summary">Az akkumulátor aktuális töltöttségi szintjének megjelenítése</string>
-    <string name="tile_battery_title">Akkumulátor</string>
     <string name="tile_breathing_summary">Kezdjen egy rövid irányított légzési szünetet</string>
     <string name="tile_breathing_title">Lélegezz</string>
     <string name="tile_bubble_level_summary">Felület igazítás és dőlésérzékelés</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Váltás normál, rezgő és néma üzemmódok között</string>
     <string name="tile_sound_mode_title">Hang mód</string>
-    <string name="tile_temperature_info">Megjeleníti az eszköz akkumulátorának valós idejű belső hőmérsékletét. Ez segíthet a hő figyelésében intenzív feladatok vagy töltés közben.</string>
-    <string name="tile_temperature_summary">Az akkumulátor hőmérséklete</string>
-    <string name="tile_temperature_title">Hőmérséklet</string>
     <string name="tile_volume_panel_summary">Nyissa meg gyorsan a hangerőszabályzót</string>
     <string name="tile_volume_panel_title">Hangerő panel</string>
     <string name="tiles_add">Hozzáadás</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">Nem támogatott</string>
     <string name="tiles_subtitle">Nyissa meg a gyors párbeszédpaneleket, és fedezze fel a kibővített eszközöket, amelyeken jól láthatóan meg vannak jelölve a csempekész funkciók.</string>
     <string name="tiles_title">Gyors eszközök</string>
-    <string name="tool_battery_refresh">Frissítse az akkumulátort</string>
-    <string name="tool_battery_unknown">Akkumulátor ismeretlen</string>
     <string name="tool_coin_flip_action">Flip érme</string>
     <string name="tool_coin_flip_waiting">Kész?</string>
     <string name="tool_counter_increment">Növekedés</string>

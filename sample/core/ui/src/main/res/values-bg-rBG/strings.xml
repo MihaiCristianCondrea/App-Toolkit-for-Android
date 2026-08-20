@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">Управлявайте известията на приложението</string>
     <string name="summary_preference_settings_privacy_and_security">Управлявайте настройките за поверителност</string>
     <string name="summary_share_message">Вижте това невероятно приложение, което използвам. То има наистина страхотни функции, които може да ви бъдат интересни. Можете да го изтеглите от Play Store на адрес: %1$s</string>
-    <string name="tile_battery_summary">Показване на текущото ниво на батерията</string>
-    <string name="tile_battery_title">Батерия</string>
     <string name="tile_breathing_summary">Започнете кратка насочена дихателна пауза</string>
     <string name="tile_breathing_title">Дишайте</string>
     <string name="tile_bubble_level_summary">Подравняване на повърхността и откриване на наклон</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Превключване на нормален, вибриращ и безшумен режим</string>
     <string name="tile_sound_mode_title">Звуков режим</string>
-    <string name="tile_temperature_info">Показва вътрешната температура в реално време на батерията на вашето устройство. Това може да помогне за наблюдение на топлината по време на интензивни задачи или зареждане.</string>
-    <string name="tile_temperature_summary">Температура на батерията</string>
-    <string name="tile_temperature_title">температура</string>
     <string name="tile_volume_panel_summary">Отворете бързо контролите за сила на звука</string>
     <string name="tile_volume_panel_title">Панел за сила на звука</string>
     <string name="tiles_add">Добавете</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">Не се поддържа</string>
     <string name="tiles_subtitle">Отваряйте бързи диалогови прозорци и откривайте разширени инструменти с ясно обозначени готови за плочки функции.</string>
     <string name="tiles_title">Бързи инструменти</string>
-    <string name="tool_battery_refresh">Опресняване на батерията</string>
-    <string name="tool_battery_unknown">Батерията е неизвестна</string>
     <string name="tool_coin_flip_action">Хвърлете монета</string>
     <string name="tool_coin_flip_waiting">готова</string>
     <string name="tool_counter_increment">Увеличаване</string>

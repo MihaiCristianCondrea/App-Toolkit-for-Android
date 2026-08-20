@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">Gestiona las notificaciones de la aplicación</string>
     <string name="summary_preference_settings_privacy_and_security">Gestiona tu configuración de privacidad</string>
     <string name="summary_share_message">Mira esta increíble aplicación que estoy usando. Tiene funciones muy interesantes que podrían gustarte. Puedes descargarla desde Play Store en: %1$s</string>
-    <string name="tile_battery_summary">Mostrar el nivel actual de la batería</string>
-    <string name="tile_battery_title">Batería</string>
     <string name="tile_breathing_summary">Iniciar una breve pausa de respiración guiada.</string>
     <string name="tile_breathing_title">respirar</string>
     <string name="tile_bubble_level_summary">Alineación de superficies y detección de inclinación</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Cambia los modos normal, vibración y silencio</string>
     <string name="tile_sound_mode_title">Modo de sonido</string>
-    <string name="tile_temperature_info">Muestra la temperatura interna en tiempo real de la batería de su dispositivo. Esto puede ayudar a controlar el calor durante tareas intensivas o durante la carga.</string>
-    <string name="tile_temperature_summary">Temperatura de la batería</string>
-    <string name="tile_temperature_title">Temperatura</string>
     <string name="tile_volume_panel_summary">Abre los controles de volumen rápidamente</string>
     <string name="tile_volume_panel_title">Panel de volumen</string>
     <string name="tiles_add">Añadir</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">No compatible</string>
     <string name="tiles_subtitle">Abra cuadros de diálogo rápidos y descubra herramientas ampliadas, con funciones listas para mosaicos claramente marcadas.</string>
     <string name="tiles_title">Herramientas rápidas</string>
-    <string name="tool_battery_refresh">Actualizar batería</string>
-    <string name="tool_battery_unknown">Batería desconocida</string>
     <string name="tool_coin_flip_action">lanzar moneda</string>
     <string name="tool_coin_flip_waiting">¿Listo?</string>
     <string name="tool_counter_increment">incremento</string>

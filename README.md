@@ -43,7 +43,7 @@ Then add the façade artifact to the consuming module:
 
 ```kotlin
 dependencies {
-    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:3.0.0-pre1")
+    implementation("com.github.MihaiCristianCondrea.App-Toolkit-for-Android:apptoolkit:3.0.0-pre3")
 }
 ```
 

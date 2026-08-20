@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">Hantera appnotifikationer</string>
     <string name="summary_preference_settings_privacy_and_security">Hantera dina sekretessinställningar</string>
     <string name="summary_share_message">Kolla in den här fantastiska appen som jag använder. Den har några riktigt coola funktioner som du kanske tycker är intressanta. Du kan ladda ner den från Play Store på: %1$s</string>
-    <string name="tile_battery_summary">Visa aktuell batterinivå</string>
-    <string name="tile_battery_title">Batteri</string>
     <string name="tile_breathing_summary">Starta en kort guidad andningspaus</string>
     <string name="tile_breathing_title">Andas</string>
     <string name="tile_bubble_level_summary">Ytjustering och lutningsdetektering</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Växla normalt, vibrerande och tyst läge</string>
     <string name="tile_sound_mode_title">Ljudläge</string>
-    <string name="tile_temperature_info">Visar den interna temperaturen i realtid för enhetens batteri. Detta kan hjälpa till att övervaka värmen under intensiva uppgifter eller laddning.</string>
-    <string name="tile_temperature_summary">Batteritemperatur</string>
-    <string name="tile_temperature_title">Temperatur</string>
     <string name="tile_volume_panel_summary">Öppna volymkontrollerna snabbt</string>
     <string name="tile_volume_panel_title">Volympanel</string>
     <string name="tiles_add">Lägg till</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">Stöds inte</string>
     <string name="tiles_subtitle">Öppna snabba dialogrutor och upptäck utökade verktyg, med funktioner som är klara för brickor tydligt markerade.</string>
     <string name="tiles_title">Snabba verktyg</string>
-    <string name="tool_battery_refresh">Uppdatera batteriet</string>
-    <string name="tool_battery_unknown">Batteri okänt</string>
     <string name="tool_coin_flip_action">Vänd mynt</string>
     <string name="tool_coin_flip_waiting">Redo?</string>
     <string name="tool_counter_increment">Öka</string>

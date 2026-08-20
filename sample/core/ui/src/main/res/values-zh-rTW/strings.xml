@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">管理應用程式通知</string>
     <string name="summary_preference_settings_privacy_and_security">管理您的隱私設定</string>
     <string name="summary_share_message">看看我正在使用的這個很棒的應用程式！它有一些您可能感興趣的酷炫功能。您可以從 Play 商店下載：%1$s</string>
-    <string name="tile_battery_summary">顯示目前電池電量</string>
-    <string name="tile_battery_title">電池</string>
     <string name="tile_breathing_summary">開始短暫的引導呼吸暫停</string>
     <string name="tile_breathing_title">呼吸</string>
     <string name="tile_bubble_level_summary">表面對準和傾斜檢測</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">求救</string>
     <string name="tile_sound_mode_summary">切換正常、震動和靜音模式</string>
     <string name="tile_sound_mode_title">聲音模式</string>
-    <string name="tile_temperature_info">顯示設備電池的即時內部溫度。這可以幫助監測密集任務或充電期間的熱量。</string>
-    <string name="tile_temperature_summary">電池溫度</string>
-    <string name="tile_temperature_title">溫度</string>
     <string name="tile_volume_panel_summary">快速開啟音量控制</string>
     <string name="tile_volume_panel_title">音量面板</string>
     <string name="tiles_add">添加</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">不支援</string>
     <string name="tiles_subtitle">開啟快速對話方塊並發現擴充功能的工具，並清楚地標記了磁貼就緒功能。</string>
     <string name="tiles_title">快速工具</string>
-    <string name="tool_battery_refresh">刷新電池</string>
-    <string name="tool_battery_unknown">電池未知</string>
     <string name="tool_coin_flip_action">翻轉硬幣</string>
     <string name="tool_coin_flip_waiting">準備好？</string>
     <string name="tool_counter_increment">增量</string>

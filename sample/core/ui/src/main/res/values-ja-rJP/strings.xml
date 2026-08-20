@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">アプリの通知を管理する</string>
     <string name="summary_preference_settings_privacy_and_security">プライバシー設定を管理する</string>
     <string name="summary_share_message">この素晴らしいアプリを見てください！本当に面白い機能があります。Playストアからダウンロードできます：%1$s</string>
-    <string name="tile_battery_summary">現在のバッテリーレベルを表示</string>
-    <string name="tile_battery_title">バッテリー</string>
     <string name="tile_breathing_summary">ガイド付きの短い呼吸停止を開始します</string>
     <string name="tile_breathing_title">呼吸する</string>
     <string name="tile_bubble_level_summary">面合わせと傾き検出</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">通常モード、振動モード、サイレントモードを切り替える</string>
     <string name="tile_sound_mode_title">サウンドモード</string>
-    <string name="tile_temperature_info">デバイスのバッテリーのリアルタイムの内部温度を表示します。これは、集中的なタスクや充電中の熱を監視するのに役立ちます。</string>
-    <string name="tile_temperature_summary">バッテリー温度</string>
-    <string name="tile_temperature_title">温度</string>
     <string name="tile_volume_panel_summary">音量コントロールをすばやく開きます</string>
     <string name="tile_volume_panel_title">ボリュームパネル</string>
     <string name="tiles_add">追加</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">サポートされていません</string>
     <string name="tiles_subtitle">クイック ダイアログを開いて、タイル対応の機能が明確にマークされた拡張ツールを見つけます。</string>
     <string name="tiles_title">クイックツール</string>
-    <string name="tool_battery_refresh">バッテリーをリフレッシュする</string>
-    <string name="tool_battery_unknown">バッテリー不明</string>
     <string name="tool_coin_flip_action">コインを投げる</string>
     <string name="tool_coin_flip_waiting">準備ができて？</string>
     <string name="tool_counter_increment">インクリメント</string>

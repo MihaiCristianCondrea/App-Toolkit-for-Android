@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">ایپ اطلاعات کا نظم کریں</string>
     <string name="summary_preference_settings_privacy_and_security">اپنی رازداری کی ترتیبات کا نظم کریں</string>
     <string name="summary_share_message">یہ حیرت انگیز ایپ دیکھیں جو میں استعمال کر رہا ہوں. اس میں کچھ واقعی عمدہ خصوصیات ہیں جو آپ کو دلچسپ لگ سکتی ہیں۔ آپ اسے پلے اسٹور سے یہاں سے ڈاؤن لوڈ کر سکتے ہیں: %1$s</string>
-    <string name="tile_battery_summary">بیٹری کی موجودہ سطح دکھائیں۔</string>
-    <string name="tile_battery_title">بیٹری</string>
     <string name="tile_breathing_summary">ایک مختصر ہدایت کے ساتھ سانس لینے کا وقفہ شروع کریں۔</string>
     <string name="tile_breathing_title">سانس لینا</string>
     <string name="tile_bubble_level_summary">سطح کی سیدھ اور جھکاؤ کا پتہ لگانا</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">نارمل، وائبریٹ، اور سائلنٹ موڈز کو سوئچ کریں۔</string>
     <string name="tile_sound_mode_title">ساؤنڈ موڈ</string>
-    <string name="tile_temperature_info">آپ کے آلے کی بیٹری کا اصل وقت کا اندرونی درجہ حرارت دکھاتا ہے۔ اس سے سخت کاموں یا چارجنگ کے دوران گرمی کی نگرانی میں مدد مل سکتی ہے۔</string>
-    <string name="tile_temperature_summary">بیٹری کا درجہ حرارت</string>
-    <string name="tile_temperature_title">درجہ حرارت</string>
     <string name="tile_volume_panel_summary">والیوم کنٹرولز کو تیزی سے کھولیں۔</string>
     <string name="tile_volume_panel_title">والیوم پینل</string>
     <string name="tiles_add">شامل کریں۔</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">غیر تعاون یافتہ</string>
     <string name="tiles_subtitle">فوری ڈائیلاگ کھولیں اور وسیع شدہ ٹولز دریافت کریں، جس میں ٹائل کے لیے تیار خصوصیات واضح طور پر نشان زد ہوں۔</string>
     <string name="tiles_title">فوری ٹولز</string>
-    <string name="tool_battery_refresh">بیٹری ریفریش کریں۔</string>
-    <string name="tool_battery_unknown">بیٹری نامعلوم ہے۔</string>
     <string name="tool_coin_flip_action">سکہ پلٹائیں۔</string>
     <string name="tool_coin_flip_waiting">تیار ہیں؟</string>
     <string name="tool_counter_increment">اضافہ</string>

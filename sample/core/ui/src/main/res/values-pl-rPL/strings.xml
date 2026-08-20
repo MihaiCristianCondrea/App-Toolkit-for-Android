@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">Zarządzaj powiadomieniami aplikacji</string>
     <string name="summary_preference_settings_privacy_and_security">Zarządzaj ustawieniami prywatności</string>
     <string name="summary_share_message">Sprawdź tę niesamowitą aplikację, której używam. Ma kilka naprawdę ciekawych funkcji, które mogą Ci się spodobać. Pobierz ją z Play Store pod adresem: %1$s</string>
-    <string name="tile_battery_summary">Pokaż aktualny poziom naładowania baterii</string>
-    <string name="tile_battery_title">Bateria</string>
     <string name="tile_breathing_summary">Rozpocznij krótką sterowaną pauzę oddechową</string>
     <string name="tile_breathing_title">Oddychaj</string>
     <string name="tile_bubble_level_summary">Wyrównanie powierzchni i wykrywanie pochylenia</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Przełączaj tryby normalny, wibracyjny i cichy</string>
     <string name="tile_sound_mode_title">Tryb dźwięku</string>
-    <string name="tile_temperature_info">Wyświetla w czasie rzeczywistym temperaturę wewnętrzną baterii urządzenia. Może to pomóc w monitorowaniu ciepła podczas intensywnych zadań lub ładowania.</string>
-    <string name="tile_temperature_summary">Temperatura akumulatora</string>
-    <string name="tile_temperature_title">Temperatura</string>
     <string name="tile_volume_panel_summary">Szybko otwieraj elementy sterujące głośnością</string>
     <string name="tile_volume_panel_title">Panel głośności</string>
     <string name="tiles_add">Dodaj</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">Nieobsługiwane</string>
     <string name="tiles_subtitle">Otwórz szybkie okna dialogowe i odkryj rozszerzone narzędzia z wyraźnie zaznaczonymi funkcjami gotowymi do kafelków.</string>
     <string name="tiles_title">Szybkie narzędzia</string>
-    <string name="tool_battery_refresh">Odśwież baterię</string>
-    <string name="tool_battery_unknown">Bateria nieznana</string>
     <string name="tool_coin_flip_action">Rzuć monetą</string>
     <string name="tool_coin_flip_waiting">Gotowy?</string>
     <string name="tool_counter_increment">Przyrost</string>

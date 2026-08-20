@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">Управляйте уведомлениями приложения</string>
     <string name="summary_preference_settings_privacy_and_security">Управляйте настройками конфиденциальности</string>
     <string name="summary_share_message">Оцените это удивительное приложение, которое я использую. В нём есть интересные функции. Вы можете скачать его из Play Store по адресу: %1$s</string>
-    <string name="tile_battery_summary">Показать текущий уровень заряда батареи</string>
-    <string name="tile_battery_title">Батарея</string>
     <string name="tile_breathing_summary">Сделайте короткую управляемую дыхательную паузу.</string>
     <string name="tile_breathing_title">Дышите</string>
     <string name="tile_bubble_level_summary">Выравнивание поверхности и обнаружение наклона</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Переключение обычного режима, режима вибрации и беззвучного режима.</string>
     <string name="tile_sound_mode_title">Звуковой режим</string>
-    <string name="tile_temperature_info">Отображает внутреннюю температуру аккумулятора вашего устройства в режиме реального времени. Это может помочь контролировать нагрев во время интенсивных задач или зарядки.</string>
-    <string name="tile_temperature_summary">Температура батареи</string>
-    <string name="tile_temperature_title">Температура</string>
     <string name="tile_volume_panel_summary">Быстро открывайте регуляторы громкости</string>
     <string name="tile_volume_panel_title">Панель громкости</string>
     <string name="tiles_add">Добавить</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">Не поддерживается</string>
     <string name="tiles_subtitle">Открывайте быстрые диалоговые окна и открывайте для себя расширенные инструменты с четко обозначенными готовыми к использованию плитками функциями.</string>
     <string name="tiles_title">Быстрые инструменты</string>
-    <string name="tool_battery_refresh">Обновить батарею</string>
-    <string name="tool_battery_unknown">Батарея неизвестна</string>
     <string name="tool_coin_flip_action">Подбросить монету</string>
     <string name="tool_coin_flip_waiting">Готовый?</string>
     <string name="tool_counter_increment">Приращение</string>

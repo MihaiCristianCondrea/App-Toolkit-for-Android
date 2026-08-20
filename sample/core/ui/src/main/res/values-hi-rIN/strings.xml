@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">ऐप सूचनाओं का प्रबंधन करें</string>
     <string name="summary_preference_settings_privacy_and_security">अपनी गोपनीयता सेटिंग्स का प्रबंधन करें</string>
     <string name="summary_share_message">इस शानदार ऐप को देखें जिसे मैं उपयोग कर रहा हूँ. इसमें कुछ बहुत ही शानदार फीचर्स हैं जो आपको रोचक लग सकते हैं। इसे Play Store से डाउनलोड करें: %1$s</string>
-    <string name="tile_battery_summary">वर्तमान बैटरी स्तर दिखाएँ</string>
-    <string name="tile_battery_title">बैटरी</string>
     <string name="tile_breathing_summary">एक छोटा सा निर्देशित श्वास विराम प्रारंभ करें</string>
     <string name="tile_breathing_title">साँस लें</string>
     <string name="tile_bubble_level_summary">सतह संरेखण और झुकाव का पता लगाना</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">एसओएस</string>
     <string name="tile_sound_mode_summary">सामान्य, कंपन और मौन मोड स्विच करें</string>
     <string name="tile_sound_mode_title">ध्वनि विधा</string>
-    <string name="tile_temperature_info">आपके डिवाइस की बैटरी का वास्तविक समय आंतरिक तापमान प्रदर्शित करता है। यह गहन कार्यों या चार्जिंग के दौरान गर्मी की निगरानी करने में मदद कर सकता है।</string>
-    <string name="tile_temperature_summary">बैटरी का तापमान</string>
-    <string name="tile_temperature_title">तापमान</string>
     <string name="tile_volume_panel_summary">वॉल्यूम नियंत्रण शीघ्रता से खोलें</string>
     <string name="tile_volume_panel_title">वॉल्यूम पैनल</string>
     <string name="tiles_add">जोड़ें</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">असमर्थित</string>
     <string name="tiles_subtitle">त्वरित संवाद खोलें और टाइल-तैयार सुविधाओं के साथ स्पष्ट रूप से चिह्नित विस्तारित टूल खोजें।</string>
     <string name="tiles_title">त्वरित उपकरण</string>
-    <string name="tool_battery_refresh">बैटरी ताज़ा करें</string>
-    <string name="tool_battery_unknown">बैटरी अज्ञात</string>
     <string name="tool_coin_flip_action">सिक्का उछालो</string>
     <string name="tool_coin_flip_waiting">तैयार?</string>
     <string name="tool_counter_increment">वृद्धि</string>

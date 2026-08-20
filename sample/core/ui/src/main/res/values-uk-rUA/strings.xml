@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">Керуйте сповіщеннями додатка</string>
     <string name="summary_preference_settings_privacy_and_security">Керуйте своїми налаштуваннями конфіденційності</string>
     <string name="summary_share_message">Перегляньте цей чудовий додаток, яким я користуюся. У ньому є цікаві функції, які можуть вас зацікавити. Ви можете завантажити його з Play Store за посиланням: %1$s</string>
-    <string name="tile_battery_summary">Показати поточний рівень заряду батареї</string>
-    <string name="tile_battery_title">Акумулятор</string>
     <string name="tile_breathing_summary">Почніть коротку дихальну паузу</string>
     <string name="tile_breathing_title">Дихайте</string>
     <string name="tile_bubble_level_summary">Вирівнювання поверхні та визначення нахилу</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Перемикайте звичайний, вібраційний і беззвучний режими</string>
     <string name="tile_sound_mode_title">Режим звуку</string>
-    <string name="tile_temperature_info">Відображає внутрішню температуру акумулятора пристрою в реальному часі. Це може допомогти контролювати тепло під час інтенсивних завдань або зарядки.</string>
-    <string name="tile_temperature_summary">Температура батареї</string>
-    <string name="tile_temperature_title">Температура</string>
     <string name="tile_volume_panel_summary">Швидко відкривайте регулятори гучності</string>
     <string name="tile_volume_panel_title">Панель гучності</string>
     <string name="tiles_add">додати</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">Не підтримується</string>
     <string name="tiles_subtitle">Відкривайте швидкі діалогові вікна та відкривайте для себе розширені інструменти з чітко позначеними функціями, готовими до плитки.</string>
     <string name="tiles_title">Швидкі інструменти</string>
-    <string name="tool_battery_refresh">Оновити акумулятор</string>
-    <string name="tool_battery_unknown">Акумулятор невідомий</string>
     <string name="tool_coin_flip_action">Підкинути монету</string>
     <string name="tool_coin_flip_waiting">готовий</string>
     <string name="tool_counter_increment">Приріст</string>

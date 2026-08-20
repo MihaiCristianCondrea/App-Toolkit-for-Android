@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">অ্যাপ বিজ্ঞপ্তি পরিচালনা করুন</string>
     <string name="summary_preference_settings_privacy_and_security">আপনার গোপনীয়তা সেটিংস পরিচালনা করুন</string>
     <string name="summary_share_message">আমার ব্যবহার করা এই অসাধারণ অ্যাপটি দেখুন. এর কিছু দারুণ ফিচার আছে যা আপনার আকর্ষণীয় লাগতে পারে। আপনি এটি প্লে স্টোর থেকে ডাউনলোড করতে পারেন: %1$s</string>
-    <string name="tile_battery_summary">বর্তমান ব্যাটারি স্তর দেখান</string>
-    <string name="tile_battery_title">ব্যাটারি</string>
     <string name="tile_breathing_summary">একটি সংক্ষিপ্ত নির্দেশিত শ্বাস বিরতি শুরু করুন</string>
     <string name="tile_breathing_title">শ্বাস নিন</string>
     <string name="tile_bubble_level_summary">পৃষ্ঠ প্রান্তিককরণ এবং কাত সনাক্তকরণ</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">এসওএস</string>
     <string name="tile_sound_mode_summary">স্বাভাবিক, ভাইব্রেট এবং নীরব মোড পরিবর্তন করুন</string>
     <string name="tile_sound_mode_title">সাউন্ড মোড</string>
-    <string name="tile_temperature_info">আপনার ডিভাইস ব্যাটারির রিয়েল-টাইম অভ্যন্তরীণ তাপমাত্রা প্রদর্শন করে। এটি নিবিড় কাজ বা চার্জ করার সময় তাপ নিরীক্ষণ করতে সাহায্য করতে পারে।</string>
-    <string name="tile_temperature_summary">ব্যাটারি তাপমাত্রা</string>
-    <string name="tile_temperature_title">তাপমাত্রা</string>
     <string name="tile_volume_panel_summary">দ্রুত ভলিউম নিয়ন্ত্রণ খুলুন</string>
     <string name="tile_volume_panel_title">ভলিউম প্যানেল</string>
     <string name="tiles_add">যোগ করুন</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">অসমর্থিত</string>
     <string name="tiles_subtitle">দ্রুত ডায়ালগ খুলুন এবং টাইল-প্রস্তুত বৈশিষ্ট্যগুলি স্পষ্টভাবে চিহ্নিত সহ প্রসারিত সরঞ্জামগুলি আবিষ্কার করুন৷</string>
     <string name="tiles_title">দ্রুত সরঞ্জাম</string>
-    <string name="tool_battery_refresh">ব্যাটারি রিফ্রেশ করুন</string>
-    <string name="tool_battery_unknown">ব্যাটারি অজানা</string>
     <string name="tool_coin_flip_action">মুদ্রা উল্টান</string>
     <string name="tool_coin_flip_waiting">প্রস্তুত?</string>
     <string name="tool_counter_increment">ইনক্রিমেন্ট</string>

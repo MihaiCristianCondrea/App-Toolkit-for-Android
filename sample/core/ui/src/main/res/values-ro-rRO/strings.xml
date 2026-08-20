@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">Gestionează notificările aplicației</string>
     <string name="summary_preference_settings_privacy_and_security">Gestionează setările de confidențialitate</string>
     <string name="summary_share_message">Verifică această aplicație uimitoare pe care o folosesc. Are câteva funcții interesante. O poți descărca din Play Store la: %1$s</string>
-    <string name="tile_battery_summary">Afișează nivelul actual al bateriei</string>
-    <string name="tile_battery_title">Bateria</string>
     <string name="tile_breathing_summary">Începeți o scurtă pauză de respirație ghidată</string>
     <string name="tile_breathing_title">Respiră</string>
     <string name="tile_bubble_level_summary">Alinierea suprafeței și detectarea înclinării</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Comutați modurile normal, vibrație și silențios</string>
     <string name="tile_sound_mode_title">Modul de sunet</string>
-    <string name="tile_temperature_info">Afișează temperatura internă în timp real a bateriei dispozitivului dvs. Acest lucru poate ajuta la monitorizarea căldurii în timpul sarcinilor intensive sau al încărcării.</string>
-    <string name="tile_temperature_summary">Temperatura bateriei</string>
-    <string name="tile_temperature_title">Temperatura</string>
     <string name="tile_volume_panel_summary">Deschideți rapid comenzile de volum</string>
     <string name="tile_volume_panel_title">Panoul de volum</string>
     <string name="tiles_add">Adăugați</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">Neacceptat</string>
     <string name="tiles_subtitle">Deschideți casete de dialog rapide și descoperiți instrumente extinse, cu caracteristici gata pentru plăci marcate clar.</string>
     <string name="tiles_title">Instrumente rapide</string>
-    <string name="tool_battery_refresh">Reîmprospătați bateria</string>
-    <string name="tool_battery_unknown">Bateria necunoscută</string>
     <string name="tool_coin_flip_action">Flip monedă</string>
     <string name="tool_coin_flip_waiting">Gata?</string>
     <string name="tool_counter_increment">Incrementare</string>

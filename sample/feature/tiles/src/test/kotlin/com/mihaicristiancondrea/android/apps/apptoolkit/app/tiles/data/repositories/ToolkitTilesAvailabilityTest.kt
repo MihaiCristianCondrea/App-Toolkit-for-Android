@@ -22,14 +22,14 @@ class ToolkitTilesAvailabilityTest {
     @Test
     fun `unavailable torch removes every torch tool and empty categories`() {
         val categories = persistentListOf(
-            category("system", tile("battery"), tile("flash_dimmer")),
+            category("system", tile("compass"), tile("flash_dimmer")),
             category("signals", tile("morse"), tile("sos")),
         )
 
         val result = filterUnavailableTorchTools(categories, isTorchAvailable = false)
 
         assertEquals(listOf("system"), result.map { it.id })
-        assertEquals(listOf("battery"), result.single().tiles.map { it.id })
+        assertEquals(listOf("compass"), result.single().tiles.map { it.id })
     }
 
     @Test
@@ -46,7 +46,7 @@ class ToolkitTilesAvailabilityTest {
     private fun category(id: String, vararg tiles: ToolkitTile) = ToolkitTileCategory(
         id = id,
         titleResId = 0,
-        icon = ToolkitTileIcon.Battery,
+        icon = ToolkitTileIcon.Compass,
         tiles = persistentListOf(*tiles),
     )
 
@@ -54,7 +54,7 @@ class ToolkitTilesAvailabilityTest {
         id = id,
         titleResId = 0,
         summaryResId = 0,
-        icon = ToolkitTileIcon.Battery,
+        icon = ToolkitTileIcon.Compass,
         status = ToolkitTileStatus.Available,
     )
 }

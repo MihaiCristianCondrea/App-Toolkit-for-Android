@@ -126,8 +126,6 @@
     <string name="summary_preference_settings_notifications">Manage app notifications</string>
     <string name="summary_preference_settings_privacy_and_security">Manage your privacy settings</string>
     <string name="summary_share_message">Check out this app that I\'m using. It has some really cool features that you might find interesting. You can download it from the Play Store at: %1$s</string>
-    <string name="tile_battery_summary">Show current battery level</string>
-    <string name="tile_battery_title">Battery</string>
     <string name="tile_breathing_summary">Start a short guided breathing pause</string>
     <string name="tile_breathing_title">Breathe</string>
     <string name="tile_bubble_level_summary">Surface alignment and tilt detection</string>
@@ -186,9 +184,6 @@
     <string name="morse_error_characters">Use letters A–Z, numbers, and spaces only</string>
     <string name="tile_sound_mode_summary">Switch normal, vibrate, and silent modes</string>
     <string name="tile_sound_mode_title">Sound Mode</string>
-    <string name="tile_temperature_info">Displays the real-time internal temperature of your device battery. This can help monitor heat during intensive tasks or charging.</string>
-    <string name="tile_temperature_summary">Battery temperature</string>
-    <string name="tile_temperature_title">Temperature</string>
     <string name="tile_volume_panel_summary">Open volume controls quickly</string>
     <string name="tile_volume_panel_title">Volume Panel</string>
     <string name="tiles_add">Add</string>
@@ -222,8 +217,6 @@
     <string name="tiles_status_unsupported">Unsupported</string>
     <string name="tiles_subtitle">Open quick dialogs and discover expanded tools, with tile-ready features clearly marked.</string>
     <string name="tiles_title">Quick Tools</string>
-    <string name="tool_battery_refresh">Refresh battery</string>
-    <string name="tool_battery_unknown">Battery unknown</string>
     <string name="tool_caffeine_10m" translatable="false">10m</string>
     <string name="tool_caffeine_1h" translatable="false">1h</string>
     <string name="tool_caffeine_30m" translatable="false">30m</string>

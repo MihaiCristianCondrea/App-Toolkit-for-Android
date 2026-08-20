@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">Quản lý thông báo ứng dụng</string>
     <string name="summary_preference_settings_privacy_and_security">Quản lý cài đặt quyền riêng tư của bạn</string>
     <string name="summary_share_message">Hãy xem ứng dụng tuyệt vời này mà tôi đang dùng. Nó có một số tính năng rất thú vị mà bạn có thể thấy hay. Bạn có thể tải xuống từ Play Store tại: %1$s</string>
-    <string name="tile_battery_summary">Hiển thị mức pin hiện tại</string>
-    <string name="tile_battery_title">Pin</string>
     <string name="tile_breathing_summary">Bắt đầu tạm dừng hơi thở có hướng dẫn ngắn</string>
     <string name="tile_breathing_title">thở</string>
     <string name="tile_bubble_level_summary">Căn chỉnh bề mặt và phát hiện độ nghiêng</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Chuyển đổi chế độ bình thường, rung và im lặng</string>
     <string name="tile_sound_mode_title">Chế độ âm thanh</string>
-    <string name="tile_temperature_info">Hiển thị nhiệt độ bên trong theo thời gian thực của pin thiết bị của bạn. Điều này có thể giúp theo dõi nhiệt độ trong khi thực hiện các tác vụ chuyên sâu hoặc khi sạc.</string>
-    <string name="tile_temperature_summary">Nhiệt độ pin</string>
-    <string name="tile_temperature_title">Nhiệt độ</string>
     <string name="tile_volume_panel_summary">Mở nhanh nút điều chỉnh âm lượng</string>
     <string name="tile_volume_panel_title">Bảng điều khiển âm lượng</string>
     <string name="tiles_add">Thêm</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">Không được hỗ trợ</string>
     <string name="tiles_subtitle">Mở hộp thoại nhanh và khám phá các công cụ mở rộng, với các tính năng sẵn sàng xếp theo ô được đánh dấu rõ ràng.</string>
     <string name="tiles_title">Công cụ nhanh</string>
-    <string name="tool_battery_refresh">Làm mới pin</string>
-    <string name="tool_battery_unknown">Không rõ pin</string>
     <string name="tool_coin_flip_action">Lật xu</string>
     <string name="tool_coin_flip_waiting">Sẵn sàng?</string>
     <string name="tool_counter_increment">Tăng</string>

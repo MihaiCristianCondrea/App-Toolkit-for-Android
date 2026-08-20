@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">Pamahalaan ang mga notipikasyon ng app</string>
     <string name="summary_preference_settings_privacy_and_security">Pamahalaan ang iyong mga setting ng privacy</string>
     <string name="summary_share_message">Tingnan itong kamangha-manghang app na ginagamit ko. Mayroon itong ilang mga talagang cool na feature na maaaring makita mong interesante. Maaari mo itong i-download mula sa Play Store sa: %1$s</string>
-    <string name="tile_battery_summary">Ipakita ang kasalukuyang antas ng baterya</string>
-    <string name="tile_battery_title">Baterya</string>
     <string name="tile_breathing_summary">Magsimula ng isang maikling guided breathing pause</string>
     <string name="tile_breathing_title">huminga</string>
     <string name="tile_bubble_level_summary">Pag-align sa ibabaw at pagtuklas ng ikiling</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Lumipat ng normal, vibrate, at silent mode</string>
     <string name="tile_sound_mode_title">Sound Mode</string>
-    <string name="tile_temperature_info">Ipinapakita ang real-time na panloob na temperatura ng baterya ng iyong device. Makakatulong ito sa pagsubaybay sa init sa panahon ng masinsinang gawain o pagcha-charge.</string>
-    <string name="tile_temperature_summary">Temperatura ng baterya</string>
-    <string name="tile_temperature_title">Temperatura</string>
     <string name="tile_volume_panel_summary">Buksan ang mga kontrol ng volume nang mabilis</string>
     <string name="tile_volume_panel_title">Volume Panel</string>
     <string name="tiles_add">Idagdag</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">Hindi suportado</string>
     <string name="tiles_subtitle">Magbukas ng mabilis na mga diyalogo at tumuklas ng mga pinalawak na tool, na may mga tampok na handa sa tile na malinaw na minarkahan.</string>
     <string name="tiles_title">Mga Mabilisang Tool</string>
-    <string name="tool_battery_refresh">I-refresh ang baterya</string>
-    <string name="tool_battery_unknown">Hindi alam ang baterya</string>
     <string name="tool_coin_flip_action">I-flip ang barya</string>
     <string name="tool_coin_flip_waiting">handa na?</string>
     <string name="tool_counter_increment">Pagtaas</string>

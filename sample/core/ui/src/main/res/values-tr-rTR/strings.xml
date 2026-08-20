@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">Uygulama bildirimlerini yönetin</string>
     <string name="summary_preference_settings_privacy_and_security">Gizlilik ayarlarınızı yönetin</string>
     <string name="summary_share_message">Bu harika uygulamaya bir göz atın. Kullanmakta olduğum ve ilginizi çekebilecek bazı harika özelliklere sahip. Play Store\'dan indirilebilir: %1$s</string>
-    <string name="tile_battery_summary">Mevcut pil seviyesini göster</string>
-    <string name="tile_battery_title">Pil</string>
     <string name="tile_breathing_summary">Kısa bir rehberli nefes duraklaması başlatın</string>
     <string name="tile_breathing_title">Nefes al</string>
     <string name="tile_bubble_level_summary">Yüzey hizalaması ve eğim algılama</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">Acil Durum</string>
     <string name="tile_sound_mode_summary">Normal, titreşim ve sessiz modları arasında geçiş yapın</string>
     <string name="tile_sound_mode_title">Ses Modu</string>
-    <string name="tile_temperature_info">Cihazınızın pilinin gerçek zamanlı iç sıcaklığını görüntüler. Bu, yoğun görevler veya şarj sırasında ısının izlenmesine yardımcı olabilir.</string>
-    <string name="tile_temperature_summary">Pil sıcaklığı</string>
-    <string name="tile_temperature_title">Sıcaklık</string>
     <string name="tile_volume_panel_summary">Ses kontrollerini hızlı bir şekilde açın</string>
     <string name="tile_volume_panel_title">Ses Paneli</string>
     <string name="tiles_add">Ekle</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">Desteklenmiyor</string>
     <string name="tiles_subtitle">Hızlı iletişim kutularını açın ve kutucuklara hazır özelliklerin açıkça işaretlendiği genişletilmiş araçları keşfedin.</string>
     <string name="tiles_title">Hızlı Araçlar</string>
-    <string name="tool_battery_refresh">Pili yenile</string>
-    <string name="tool_battery_unknown">Pil bilinmiyor</string>
     <string name="tool_coin_flip_action">Yazı tura at</string>
     <string name="tool_coin_flip_waiting">Hazır?</string>
     <string name="tool_counter_increment">Artış</string>

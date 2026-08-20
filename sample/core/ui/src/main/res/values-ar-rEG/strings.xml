@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">إدارة إشعارات التطبيق</string>
     <string name="summary_preference_settings_privacy_and_security">إدارة إعدادات الخصوصية الخاصة بك</string>
     <string name="summary_share_message">اطلع على هذا التطبيق الرائع الذي أستخدمه. يحتوي على بعض الميزات الرائعة التي قد تجدها مثيرة للاهتمام. يمكنك تنزيله من متجر Play على: %1$s</string>
-    <string name="tile_battery_summary">إظهار مستوى البطارية الحالي</string>
-    <string name="tile_battery_title">بطارية</string>
     <string name="tile_breathing_summary">ابدأ وقفة تنفس قصيرة موجهة</string>
     <string name="tile_breathing_title">يتنفس</string>
     <string name="tile_bubble_level_summary">محاذاة السطح وكشف الميل</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">قم بالتبديل بين الأوضاع العادية والاهتزازية والصامتة</string>
     <string name="tile_sound_mode_title">وضع الصوت</string>
-    <string name="tile_temperature_info">يعرض درجة الحرارة الداخلية في الوقت الحقيقي لبطارية جهازك. يمكن أن يساعد ذلك في مراقبة الحرارة أثناء المهام المكثفة أو الشحن.</string>
-    <string name="tile_temperature_summary">درجة حرارة البطارية</string>
-    <string name="tile_temperature_title">درجة حرارة</string>
     <string name="tile_volume_panel_summary">افتح عناصر التحكم في مستوى الصوت بسرعة</string>
     <string name="tile_volume_panel_title">لوحة الحجم</string>
     <string name="tiles_add">يضيف</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">غير مدعوم</string>
     <string name="tiles_subtitle">افتح مربعات حوار سريعة واكتشف الأدوات الموسعة، مع وضع علامات واضحة على الميزات الجاهزة للتجانب.</string>
     <string name="tiles_title">أدوات سريعة</string>
-    <string name="tool_battery_refresh">تحديث البطارية</string>
-    <string name="tool_battery_unknown">البطارية غير معروفة</string>
     <string name="tool_coin_flip_action">الوجه عملة</string>
     <string name="tool_coin_flip_waiting">مستعد؟</string>
     <string name="tool_counter_increment">زيادة</string>

@@ -120,8 +120,6 @@
     <string name="summary_preference_settings_notifications">จัดการการแจ้งเตือนแอป</string>
     <string name="summary_preference_settings_privacy_and_security">จัดการการตั้งค่าความเป็นส่วนตัวของคุณ</string>
     <string name="summary_share_message">ลองดูแอปนี้ที่ฉันใช้อยู่. มีฟีเจอร์เจ๋ง ๆ มากมายที่คุณอาจสนใจ ดาวน์โหลดได้จาก Play Store ที่: %1$s</string>
-    <string name="tile_battery_summary">แสดงระดับแบตเตอรี่ปัจจุบัน</string>
-    <string name="tile_battery_title">แบตเตอรี่</string>
     <string name="tile_breathing_summary">เริ่มการหยุดหายใจสั้นๆ ตามคำแนะนำ</string>
     <string name="tile_breathing_title">หายใจเข้า</string>
     <string name="tile_bubble_level_summary">การจัดตำแหน่งพื้นผิวและการตรวจจับการเอียง</string>
@@ -155,9 +153,6 @@
     <string name="tile_sos_title">สัญญาณขอความช่วยเหลือ</string>
     <string name="tile_sound_mode_summary">สลับโหมดปกติ สั่น และเงียบ</string>
     <string name="tile_sound_mode_title">โหมดเสียง</string>
-    <string name="tile_temperature_info">แสดงอุณหภูมิภายในแบบเรียลไทม์ของแบตเตอรี่อุปกรณ์ของคุณ ซึ่งสามารถช่วยตรวจสอบความร้อนระหว่างงานหนักหรือการชาร์จได้</string>
-    <string name="tile_temperature_summary">อุณหภูมิแบตเตอรี่</string>
-    <string name="tile_temperature_title">อุณหภูมิ</string>
     <string name="tile_volume_panel_summary">เปิดส่วนควบคุมระดับเสียงอย่างรวดเร็ว</string>
     <string name="tile_volume_panel_title">แผงระดับเสียง</string>
     <string name="tiles_add">เพิ่ม</string>
@@ -191,8 +186,6 @@
     <string name="tiles_status_unsupported">ไม่รองรับ</string>
     <string name="tiles_subtitle">เปิดกล่องโต้ตอบด่วนและค้นพบเครื่องมือเพิ่มเติม พร้อมทำเครื่องหมายคุณสมบัติที่พร้อมใช้งานไว้อย่างชัดเจน</string>
     <string name="tiles_title">เครื่องมือด่วน</string>
-    <string name="tool_battery_refresh">รีเฟรชแบตเตอรี่</string>
-    <string name="tool_battery_unknown">ไม่ทราบแบตเตอรี่</string>
     <string name="tool_coin_flip_action">พลิกเหรียญ</string>
     <string name="tool_coin_flip_waiting">พร้อม?</string>
     <string name="tool_counter_increment">เพิ่มขึ้น</string>
