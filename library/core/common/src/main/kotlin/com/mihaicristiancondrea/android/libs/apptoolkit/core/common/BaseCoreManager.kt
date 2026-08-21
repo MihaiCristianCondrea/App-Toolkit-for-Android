@@ -33,6 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.C
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.BillingCore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.crash.ConsentSdkCrashGuard
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.SupervisorJob
@@ -119,7 +120,19 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     private suspend fun initializeApp() = supervisorScope {
         val appComponentsInitialization: Deferred<Unit> = async { onInitializeApp() }
 
-        appComponentsInitialization.await()
+        try {
+            appComponentsInitialization.await()
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (throwable: Throwable) {
+            // A host that fails to set itself up is still a running app, and [isAppLoaded] is how
+            // anything else finds out startup is over. Leaving it false because an SDK could not
+            // reach the network would keep the app waiting on something that is never coming.
+            firebaseController.recordNonFatal(
+                throwable = throwable,
+                attributes = mapOf("phase" to "onInitializeApp"),
+            )
+        }
 
         finalizeInitialization()
     }

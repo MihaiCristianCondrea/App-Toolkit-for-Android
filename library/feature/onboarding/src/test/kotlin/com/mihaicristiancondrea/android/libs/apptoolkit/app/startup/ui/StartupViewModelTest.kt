@@ -25,10 +25,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedD
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class StartupViewModelTest {
@@ -62,6 +64,30 @@ class StartupViewModelTest {
         assertThat(actions).containsExactly(StartupAction.NavigateNext)
         job.cancel()
     }
+
+    /**
+     * The startup screen hides its only button while loading, so a consent round trip that never
+     * reports back has to stop mattering at some point.
+     */
+    @Test
+    fun `screen stops loading when consent never reports back`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = StartupViewModel(firebaseController = FakeFirebaseController())
+            val job = launch { viewModel.actionEvent.collect { } }
+
+            viewModel.onEvent(StartupEvent.RequestConsent)
+            advanceTimeBy(1.seconds)
+
+            assertThat(viewModel.uiState.value.screenState)
+                .isInstanceOf(ScreenState.IsLoading::class.java)
+
+            advanceUntilIdle()
+
+            assertThat(viewModel.uiState.value.screenState)
+                .isInstanceOf(ScreenState.Success::class.java)
+            assertThat(viewModel.uiState.value.data?.consentFormLoaded).isTrue()
+            job.cancel()
+        }
 
     @Test
     fun `request consent emits ui action`() = runTest(dispatcherExtension.testDispatcher) {

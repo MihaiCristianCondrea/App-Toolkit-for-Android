@@ -48,6 +48,7 @@ class StartupActivity : BaseActivity() {
     private val viewModel: StartupViewModel by viewModel()
     private val permissionLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
+    private var hasRequestedPermissions: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,10 +76,19 @@ class StartupActivity : BaseActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                if (provider.requiredPermissions.isNotEmpty()) {
+                // Asking for permissions pauses this activity, so the resume that follows the
+                // system dialog used to ask again: a user who declined was re-prompted on the spot.
+                if (!hasRequestedPermissions && provider.requiredPermissions.isNotEmpty()) {
+                    hasRequestedPermissions = true
                     permissionLauncher.launch(provider.requiredPermissions)
                 }
-                checkUserConsent()
+
+                // Consent is asked for again on a later resume only while it has not resolved,
+                // which recovers a failed round trip without sending the screen back to its loading
+                // state every time the user returns to it.
+                if (viewModel.uiState.value.data?.consentFormLoaded != true) {
+                    checkUserConsent()
+                }
             }
         }
     }

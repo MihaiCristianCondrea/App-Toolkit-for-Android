@@ -23,10 +23,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.contracts
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.states.StartupUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.successData
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * ViewModel for the startup screen.
@@ -50,6 +55,8 @@ class StartupViewModel(
         }
     }
 
+    private var consentWatchdogJob: Job? = null
+
     private fun requestConsent() {
         startOperation(action = Actions.REQUEST_CONSENT)
         viewModelScope.launch {
@@ -57,10 +64,29 @@ class StartupViewModel(
                 screenState.setLoading()
             }
             sendAction(StartupAction.RequestConsentUi)
+            startConsentWatchdog()
+        }
+    }
+
+    /**
+     * Guarantees the screen stops loading.
+     *
+     * This is the app's first screen and the only way off it is the button the loading state hides,
+     * so a consent round trip that never reports back leaves the user with nowhere to go. Waiting
+     * has a limit, after which the screen settles exactly as it does when consent fails.
+     */
+    private fun startConsentWatchdog() {
+        consentWatchdogJob?.cancel()
+        consentWatchdogJob = viewModelScope.launch {
+            delay(CONSENT_TIMEOUT)
+            if (screenState.value.screenState is ScreenState.IsLoading) {
+                markConsentFormLoaded()
+            }
         }
     }
 
     private fun markConsentFormLoaded() {
+        consentWatchdogJob?.cancel()
         viewModelScope.launch {
             updateStateThreadSafe {
                 screenState.successData { copy(consentFormLoaded = true) }
@@ -70,6 +96,11 @@ class StartupViewModel(
 
     private object Actions {
         const val REQUEST_CONSENT: String = "requestConsent"
+    }
+
+    private companion object {
+        /** How long the startup screen waits for consent before letting the user carry on. */
+        val CONSENT_TIMEOUT: Duration = 15.seconds
     }
 }
 

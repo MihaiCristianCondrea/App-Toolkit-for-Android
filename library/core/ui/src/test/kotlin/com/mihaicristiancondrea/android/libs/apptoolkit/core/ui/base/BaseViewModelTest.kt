@@ -60,6 +60,27 @@ class BaseViewModelTest {
         }
     }
 
+    /**
+     * The case that left a startup screen loading forever: the screen asked its ViewModel for work
+     * in onCreate and only began collecting a moment later, and the answer went nowhere.
+     */
+    @Test
+    fun `actions sent before anything collects are still delivered`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = TestViewModel()
+            val first = TestAction.ShowMessage("first")
+            val second = TestAction.ShowMessage("second")
+
+            viewModel.emitAction(first)
+            viewModel.emitAction(second)
+
+            viewModel.actionEvent.test {
+                assertThat(awaitItem()).isEqualTo(first)
+                assertThat(awaitItem()).isEqualTo(second)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
     @Test
     fun `onEvent updates state`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = TestViewModel()

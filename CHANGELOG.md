@@ -1,5 +1,10 @@
 # Unreleased:
 
+- **Patch**: The startup screen can no longer end up stuck on its loading state: it stops waiting on
+  a consent round trip that never reports back, asks for permissions once instead of on every
+  resume, and only retries consent while it has not resolved.
+- **Patch**: An app whose `onInitializeApp` fails is now marked as loaded anyway, and the failure is
+  recorded as a non-fatal, rather than leaving `isAppLoaded` false for the life of the process.
 - **Minor**: `UiTextHelper` gained `PluralResource`, so a state holder can describe a quantity
   string without holding a Context and without pinning the text to the configuration it was built
   in.
