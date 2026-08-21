@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platf
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 
 /**
@@ -32,6 +33,20 @@ sealed class UiTextHelper {
     data class DynamicString(val content: String) : UiTextHelper()
     data class StringResource(val resourceId: Int, val arguments: List<Any> = emptyList()) :
         UiTextHelper()
+
+    /**
+     * A `<plurals>` resource, where [count] picks the quantity.
+     *
+     * [count] selects the wording only; pass it again in [arguments] if the text also prints it.
+     * Without this case a state holder that needs a plural has to resolve the string itself, which
+     * means holding a Context and pinning the text to the configuration that was current when it
+     * was built.
+     */
+    data class PluralResource(
+        val resourceId: Int,
+        val count: Int,
+        val arguments: List<Any> = emptyList(),
+    ) : UiTextHelper()
 
     /**
      * Converts the current object to a String.
@@ -51,6 +66,11 @@ sealed class UiTextHelper {
         return when (this) {
             is DynamicString -> content
             is StringResource -> context.getString(resourceId, *arguments.toTypedArray())
+            is PluralResource -> context.resources.getQuantityString(
+                resourceId,
+                count,
+                *arguments.toTypedArray(),
+            )
         }
     }
 
@@ -81,6 +101,7 @@ sealed class UiTextHelper {
         return when (this) {
             is DynamicString -> content
             is StringResource -> stringResource(resourceId, *arguments.toTypedArray())
+            is PluralResource -> pluralStringResource(resourceId, count, *arguments.toTypedArray())
         }
     }
 }
