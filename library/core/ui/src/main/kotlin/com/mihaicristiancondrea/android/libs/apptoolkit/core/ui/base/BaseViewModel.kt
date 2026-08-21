@@ -18,19 +18,17 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -56,10 +54,18 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
     /** Current state exposed to the UI as a [StateFlow]. */
     val uiState: StateFlow<S> = uiStateFlow.asStateFlow()
 
-    private val _actionEvent = MutableSharedFlow<A>(extraBufferCapacity = 1)
+    private val actionChannel: Channel<A> = Channel(capacity = Channel.UNLIMITED)
 
-    /** One-off actions that the UI should react to. */
-    val actionEvent: SharedFlow<A> = _actionEvent.asSharedFlow()
+    /**
+     * One-off actions that the UI should react to.
+     *
+     * Actions are buffered until something collects them. They used to go through a
+     * [kotlinx.coroutines.flow.MutableSharedFlow] with no replay, which drops anything emitted
+     * while nobody is subscribed: an Activity that asks its ViewModel for work in `onCreate` and
+     * only starts collecting a moment later never heard the answer, which is how a startup screen
+     * ended up waiting on a consent prompt that was never going to be requested.
+     */
+    val actionEvent: Flow<A> = actionChannel.receiveAsFlow()
 
     protected val currentState: S
         get() = uiState.value
@@ -69,9 +75,7 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
 
     /** Emits an [action] for the UI to handle. */
     fun sendAction(action: A) {
-        viewModelScope.launch {
-            _actionEvent.emit(action)
-        }
+        actionChannel.trySend(action)
     }
 
     /**

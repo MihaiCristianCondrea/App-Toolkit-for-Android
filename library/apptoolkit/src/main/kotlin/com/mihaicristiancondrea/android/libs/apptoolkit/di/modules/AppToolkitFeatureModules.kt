@@ -35,6 +35,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repositori
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.data.repositories.DefaultChangelogRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.domain.usecases.GetChangelogUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.ChangelogViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.OnboardingThemeViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.ForceInAppReviewUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.StartupViewModel
@@ -75,6 +76,7 @@ fun appToolkitFeatureModules(
         hostBuildConfig = hostBuildConfig,
         startupProviderFactory = startupProviderFactory
     ),
+    onboardingModule(),
     supportModule(),
     helpModule(hostBuildConfig = hostBuildConfig),
     changelogModule(),
@@ -109,6 +111,20 @@ private fun appToolkitCoreModule(
 
     viewModel {
         StartupViewModel(firebaseController = get())
+    }
+}
+
+/**
+ * Bindings for the onboarding pages the toolkit itself draws.
+ *
+ * [OnboardingThemeViewModel] is resolved by the library's own ThemeOnboardingPageTab, so shipping
+ * the definition here is the only way a host can use that page without knowing it exists. Hosts
+ * still register their own OnboardingViewModel: that one takes host-supplied pages, so it cannot
+ * be built from the library side.
+ */
+private fun onboardingModule(): Module = module {
+    viewModel {
+        OnboardingThemeViewModel(preferences = get())
     }
 }
 
