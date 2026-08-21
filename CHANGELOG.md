@@ -1,5 +1,8 @@
 # Unreleased:
 
+- **Minor**: `UiTextHelper` gained `PluralResource`, so a state holder can describe a quantity
+  string without holding a Context and without pinning the text to the configuration it was built
+  in.
 - **Patch**: One-off ViewModel actions are buffered until the UI collects them, so an action sent
   before an Activity or screen starts collecting is no longer dropped. This is what left the startup
   screen loading forever when its consent request went out before the collector was listening.
