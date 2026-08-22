@@ -3,7 +3,7 @@
 * **Fixed Startup Freezes:** Resolved issues that could cause the app to get stuck on the launch or loading screen.
 * **Smoother Performance:** Optimized scrolling and loading animations for a faster, more responsive experience with lower battery and memory usage.
 * **Theme & Visual Polish:** Fixed layout inconsistencies across light, dark, and AMOLED modes, as well as text formatting across different languages.
-* **Onboarding Improvements:** Added clear alerts if setup fails and fixed crashes during initial theme selection.
+* **Onboarding Improvements:** Added clear alerts if setup fails, fixed crashes during initial theme selection, and made the Done button finish setup on the first tap.
 * **General Stability:** Enhanced update checks and resolved various background crashes.
 * **JitPack Builds:** Pinned the build JDK to a Temurin release so publishing no longer fails when the OpenJDK download is unavailable.
 

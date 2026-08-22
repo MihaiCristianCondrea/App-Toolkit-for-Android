@@ -18,17 +18,19 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.onSubscription
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -54,18 +56,23 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
     /** Current state exposed to the UI as a [StateFlow]. */
     val uiState: StateFlow<S> = uiStateFlow.asStateFlow()
 
-    private val actionChannel: Channel<A> = Channel(capacity = Channel.UNLIMITED)
+    private val actions: MutableSharedFlow<A> =
+        MutableSharedFlow(extraBufferCapacity = ACTION_BUFFER_CAPACITY)
+    private val pendingActions: ArrayDeque<A> = ArrayDeque()
+    private val pendingLock = Any()
 
     /**
      * One-off actions that the UI should react to.
      *
-     * Actions are buffered until something collects them. They used to go through a
-     * [kotlinx.coroutines.flow.MutableSharedFlow] with no replay, which drops anything emitted
-     * while nobody is subscribed: an Activity that asks its ViewModel for work in `onCreate` and
-     * only starts collecting a moment later never heard the answer, which is how a startup screen
-     * ended up waiting on a consent prompt that was never going to be requested.
+     * Every collector sees every action, because a screen and the Activity hosting it routinely
+     * watch the same ViewModel and each act on a different part of what it emits. Actions sent
+     * while nothing is collecting are held and handed to whatever subscribes first, so an Activity
+     * that asks its ViewModel for work in `onCreate` and starts collecting a moment later still
+     * hears the answer.
      */
-    val actionEvent: Flow<A> = actionChannel.receiveAsFlow()
+    val actionEvent: Flow<A> = actions.onSubscription {
+        drainPendingActions().forEach { action -> emit(action) }
+    }
 
     protected val currentState: S
         get() = uiState.value
@@ -75,7 +82,25 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
 
     /** Emits an [action] for the UI to handle. */
     fun sendAction(action: A) {
-        actionChannel.trySend(action)
+        synchronized(pendingLock) {
+            if (actions.subscriptionCount.value == 0) {
+                if (pendingActions.size >= ACTION_BUFFER_CAPACITY) pendingActions.removeFirst()
+                pendingActions.addLast(action)
+                return
+            }
+        }
+
+        if (!actions.tryEmit(action)) {
+            viewModelScope.launch { actions.emit(action) }
+        }
+    }
+
+    private fun drainPendingActions(): List<A> = synchronized(pendingLock) {
+        if (pendingActions.isEmpty()) {
+            emptyList()
+        } else {
+            pendingActions.toList().also { pendingActions.clear() }
+        }
     }
 
     /**
@@ -116,5 +141,10 @@ abstract class BaseViewModel<S : UiState, E : UiEvent, A : ActionEvent>(initialS
         val current = screenData.value
         if (current.screenState !is ScreenState.Success) return null
         return current.data
+    }
+
+    private companion object {
+        /** How many actions are held for a UI that has not started collecting yet. */
+        const val ACTION_BUFFER_CAPACITY = 64
     }
 }

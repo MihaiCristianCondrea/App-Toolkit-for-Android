@@ -24,6 +24,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.Ac
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.UiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -80,6 +82,32 @@ class BaseViewModelTest {
                 cancelAndIgnoreRemainingEvents()
             }
         }
+
+    /**
+     * A screen and the Activity hosting it watch the same ViewModel and act on different parts of
+     * what it emits. Handing an action to whichever of them happened to be listening first left the
+     * onboarding Done button doing nothing whenever the Activity won that race.
+     */
+    @Test
+    fun `every collector sees every action`() = runTest(dispatcherExtension.testDispatcher) {
+        val viewModel = TestViewModel()
+        val action = TestAction.ShowMessage("both")
+        val first = mutableListOf<TestAction>()
+        val second = mutableListOf<TestAction>()
+
+        val firstJob = launch { viewModel.actionEvent.collect { first += it } }
+        val secondJob = launch { viewModel.actionEvent.collect { second += it } }
+        runCurrent()
+
+        viewModel.emitAction(action)
+        runCurrent()
+
+        assertThat(first).containsExactly(action)
+        assertThat(second).containsExactly(action)
+
+        firstJob.cancel()
+        secondJob.cancel()
+    }
 
     @Test
     fun `onEvent updates state`() = runTest(dispatcherExtension.testDispatcher) {
