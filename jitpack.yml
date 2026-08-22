@@ -1,5 +1,17 @@
-jdk:
-  - openjdk21
+# JitPack build configuration.
+#
+# `jdk: openjdk21` makes JitPack install SDKMAN's `21.0.2-open` candidate, which is served from
+# download.java.net. That download failed on the 3.0.0-pre5 build, and because JitPack points
+# JAVA_HOME at the candidate directory whether or not the install succeeded, the build died with
+# "JAVA_HOME is set to an invalid directory" before Gradle ever started.
+#
+# Install Temurin explicitly instead: Adoptium publishes its builds as GitHub release assets and
+# keeps old ones, so a pinned version stays fetchable. `sdk update` refreshes the stale SDKMAN
+# cache the builder warns about on every run.
+before_install:
+  - sdk update || true
+  - sdk install java 21.0.7-tem
+  - sdk use java 21.0.7-tem
 
 install:
-  - ./gradlew clean publishToMavenLocal -x test -x lint
+  - export JAVA_HOME="$HOME/.sdkman/candidates/java/21.0.7-tem" && ./gradlew clean publishToMavenLocal -x test -x lint

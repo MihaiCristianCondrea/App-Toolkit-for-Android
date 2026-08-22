@@ -5,6 +5,7 @@
 * **Theme & Visual Polish:** Fixed layout inconsistencies across light, dark, and AMOLED modes, as well as text formatting across different languages.
 * **Onboarding Improvements:** Added clear alerts if setup fails and fixed crashes during initial theme selection.
 * **General Stability:** Enhanced update checks and resolved various background crashes.
+* **JitPack Builds:** Pinned the build JDK to a Temurin release so publishing no longer fails when the OpenJDK download is unavailable.
 
 # Version 26.07.1:
 
