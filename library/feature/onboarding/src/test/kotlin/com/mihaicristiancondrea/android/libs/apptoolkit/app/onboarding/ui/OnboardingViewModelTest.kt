@@ -148,6 +148,26 @@ class OnboardingViewModelTest {
         assertThat(viewModel.uiState.value.data?.isOnboardingCompleted).isTrue()
     }
 
+    /** Finishing is the only way out of onboarding, so a failure has to say something. */
+    @Test
+    fun `completeOnboarding failure reports an error the user can see`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val repository = FakeOnboardingRepository().apply { shouldFail = true }
+            val viewModel = createViewModel(repository)
+
+            viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
+            advanceUntilIdle()
+
+            val snackbar = viewModel.uiState.value.snackbar
+            assertThat(snackbar).isNotNull()
+            assertThat(snackbar?.isError).isTrue()
+
+            viewModel.onEvent(OnboardingEvent.DismissSnackbar)
+            advanceUntilIdle()
+
+            assertThat(viewModel.uiState.value.snackbar).isNull()
+        }
+
     @Test
     fun `completeOnboarding failure resets completion`() =
         runTest(dispatcherExtension.testDispatcher) {

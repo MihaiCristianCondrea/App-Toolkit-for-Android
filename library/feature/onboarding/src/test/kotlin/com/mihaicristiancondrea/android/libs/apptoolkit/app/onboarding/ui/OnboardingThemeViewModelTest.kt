@@ -18,7 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contracts.OnboardingThemeEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.models.theme.ThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import io.mockk.coVerify
 import io.mockk.every
@@ -46,14 +47,18 @@ class OnboardingThemeViewModelTest {
 
         viewModel.onEvent(OnboardingThemeEvent.SetAmoledMode(true))
 
-        coVerify { preferences.saveAmoledMode(true) }
+        coVerify { preferences.setAmoledMode(true) }
     }
 
-    private fun preferences(): ThemePreferencesDataSource = mockk(relaxed = true) {
-        every { themeMode } returns MutableStateFlow("system")
-        every { dynamicColors } returns MutableStateFlow(true)
-        every { amoledMode } returns MutableStateFlow(false)
-        every { dynamicPaletteVariant } returns MutableStateFlow(0)
-        every { staticPaletteId } returns MutableStateFlow("default")
+    private fun preferences(): ThemePreferencesRepository = mockk(relaxed = true) {
+        every { preferencesState } returns MutableStateFlow(
+            ThemePreferencesState(
+                themeMode = "system",
+                dynamicColors = true,
+                amoledMode = false,
+                dynamicPaletteVariant = 0,
+                staticPaletteId = "default",
+            )
+        )
     }
 }

@@ -34,6 +34,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -55,6 +56,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.hapticPagerSwipe
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 import kotlinx.coroutines.CoroutineScope
@@ -121,7 +123,17 @@ fun OnboardingScreen() {
         viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
     }
 
+    val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
+        snackbarHost = {
+            DefaultSnackbarHandler(
+                screenState = screenState,
+                snackbarHostState = snackbarHostState,
+                getDismissEvent = { OnboardingEvent.DismissSnackbar },
+                onEvent = { event -> viewModel.onEvent(event) },
+            )
+        },
         topBar = {
             if (pages.isNotEmpty()) {
                 TopAppBar(

@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.display.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.display.ui.contracts.DisplaySettingsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.DisplayPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.repositories.DisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import io.mockk.coVerify
 import io.mockk.every
@@ -59,22 +59,19 @@ class DisplaySettingsViewModelTest {
         viewModel.onEvent(DisplaySettingsEvent.ThemeModeChanged("light"))
         viewModel.onEvent(DisplaySettingsEvent.BouncyButtonsChanged(true))
 
-        coVerify { theme.saveThemeMode("light") }
-        coVerify { display.saveBouncyButtons(true) }
+        coVerify { theme.selectThemeMode("light") }
+        coVerify { display.setBouncyButtons(true) }
     }
 
-    private fun displayPreferences(): DisplayPreferencesDataSource = mockk(relaxed = true) {
+    private fun displayPreferences(): DisplayPreferencesRepository = mockk(relaxed = true) {
         every { showBottomBarLabels } returns MutableStateFlow(true)
         every { bouncyButtons } returns MutableStateFlow(false)
         every { language } returns MutableStateFlow("ro")
         every { startupPage(any()) } returns MutableStateFlow("home")
     }
 
-    private fun themePreferences(): ThemePreferencesDataSource = mockk(relaxed = true) {
+    private fun themePreferences(): ThemePreferencesRepository = mockk(relaxed = true) {
         every { themeMode } returns MutableStateFlow("dark")
         every { dynamicColors } returns MutableStateFlow(true)
-        every { amoledMode } returns MutableStateFlow(false)
-        every { dynamicPaletteVariant } returns MutableStateFlow(0)
-        every { staticPaletteId } returns MutableStateFlow("default")
     }
 }

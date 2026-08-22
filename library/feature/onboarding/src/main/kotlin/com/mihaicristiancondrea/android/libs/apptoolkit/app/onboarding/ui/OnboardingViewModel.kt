@@ -24,9 +24,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contra
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.states.OnboardingUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.copyData
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -63,6 +68,7 @@ class OnboardingViewModel(
             is OnboardingEvent.RequestConsent -> requestConsent()
             is OnboardingEvent.ShowCrashlyticsDialog -> setCrashlyticsDialogVisibility(isVisible = true)
             is OnboardingEvent.HideCrashlyticsDialog -> setCrashlyticsDialogVisibility(isVisible = false)
+            is OnboardingEvent.DismissSnackbar -> dismissSnackbar()
         }
     }
 
@@ -115,11 +121,30 @@ class OnboardingViewModel(
                     sendAction(OnboardingAction.OnboardingCompleted)
                 },
                 onError = {
+                    // Finishing is the only way out of onboarding, so a failure that says nothing
+                    // reads as a dead button: the user taps Finish and stays where they are.
                     updateStateThreadSafe {
                         screenState.copyData { copy(isOnboardingCompleted = false) }
+                        screenState.showSnackbar(
+                            snackbar = UiSnackbar(
+                                message = UiTextHelper.StringResource(
+                                    resourceId = R.string.onboarding_completion_failed,
+                                ),
+                                isError = true,
+                                timeStamp = System.currentTimeMillis(),
+                            ),
+                        )
                     }
                 },
             )
+        }
+    }
+
+    private fun dismissSnackbar() {
+        viewModelScope.launch {
+            updateStateThreadSafe {
+                screenState.dismissSnackbar()
+            }
         }
     }
 

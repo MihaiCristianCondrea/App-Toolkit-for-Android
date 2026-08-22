@@ -29,6 +29,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastor
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ReviewPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.UsageAndDiagnosticsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.repositories.DefaultDisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.repositories.DefaultThemePreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.repositories.DisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.repositories.ThemePreferencesRepository
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -60,5 +64,13 @@ fun dataStoreModule(isDebugBuild: Boolean): Module = module {
     single<ConsentPreferencesDataSource> { get<CommonDataStore>().diagnosticsPreferences }
     single<UsageAndDiagnosticsPreferencesDataSource> {
         get<CommonDataStore>().diagnosticsPreferences
+    }
+
+    // The entry points state holders use. The data sources above stay internal to this layer.
+    single<ThemePreferencesRepository> {
+        DefaultThemePreferencesRepository(preferences = get())
+    }
+    single<DisplayPreferencesRepository> {
+        DefaultDisplayPreferencesRepository(preferences = get())
     }
 }

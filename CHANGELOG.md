@@ -1,5 +1,13 @@
 # Unreleased:
 
+- **Minor**: Theme and display preferences are reached through `ThemePreferencesRepository` and
+  `DisplayPreferencesRepository` instead of their data sources, so state holders no longer talk to
+  the store directly. The rule that leaving AMOLED on makes no sense in the light theme now lives in
+  one place rather than in each screen that offers the choice, and it reads what is stored rather
+  than what a screen happens to be showing. The data sources are unchanged, so a host that uses them
+  keeps working.
+- **Patch**: Failing to finish onboarding now says so. The Finish button used to leave the user where
+  they were with no explanation when the completion flag could not be saved.
 - **Patch**: The startup screen can no longer end up stuck on its loading state: it stops waiting on
   a consent round trip that never reports back, asks for permissions once instead of on every
   resume, and only retries consent while it has not resolved.

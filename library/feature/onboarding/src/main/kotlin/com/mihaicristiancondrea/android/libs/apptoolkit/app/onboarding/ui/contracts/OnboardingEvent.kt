@@ -26,5 +26,6 @@ sealed interface OnboardingEvent : UiEvent {
     data object CompleteOnboarding : OnboardingEvent
     data object ShowCrashlyticsDialog : OnboardingEvent
     data object HideCrashlyticsDialog : OnboardingEvent
+    data object DismissSnackbar : OnboardingEvent
 }
 

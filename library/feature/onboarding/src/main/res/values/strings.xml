@@ -44,6 +44,7 @@
     <string name="next_button_text">Next</string>
     <string name="onboarding_amoled_mode_desc">Deeper blacks for OLED screens.</string>
     <string name="onboarding_complete_icon_desc">Onboarding complete</string>
+    <string name="onboarding_completion_failed">Your setup could not be saved. Please try again.</string>
     <string name="onboarding_crashlytics_about_body_1">In this app we use Firebase, a platform from Google that helps developers understand how an app is used, improve performance, and provide certain services like analytics. Firebase Analytics automatically collects information such as event usage, screen views, device properties, and other signals, but only if you grant consent for these types of data to be collected. If consent is not granted, Firebase will not log events or send data related to those categories.</string>
     <string name="onboarding_crashlytics_about_body_2">For detailed information about how Firebase and Google services handle data, and their respective privacy and security policies, please consult the official Firebase Privacy documentation and your regional privacy rights under laws like GDPR and CCPA.</string>
     <string name="onboarding_crashlytics_about_title">About consent and Firebase data usage</string>

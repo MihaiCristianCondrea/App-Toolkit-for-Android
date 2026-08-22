@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.display.ui
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.display.ui.contracts.DisplaySettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.display.ui.states.DisplaySettingsUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.DisplayPreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.repositories.DisplayPreferencesRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
@@ -36,8 +36,8 @@ import kotlinx.coroutines.launch
 
 /** Owns display-preference observation and persistence for [DisplaySettingsList]. */
 class DisplaySettingsViewModel(
-    private val displayPreferences: DisplayPreferencesDataSource,
-    private val themePreferences: ThemePreferencesDataSource,
+    private val displayPreferences: DisplayPreferencesRepository,
+    private val themePreferences: ThemePreferencesRepository,
 ) : ScreenViewModel<DisplaySettingsUiState, DisplaySettingsEvent, ActionEvent>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
@@ -80,17 +80,17 @@ class DisplaySettingsViewModel(
         when (event) {
             DisplaySettingsEvent.Initialize -> observePreferences()
             is DisplaySettingsEvent.ThemeModeChanged ->
-                persist { themePreferences.saveThemeMode(event.mode) }
+                persist { themePreferences.selectThemeMode(event.mode) }
             is DisplaySettingsEvent.DynamicColorsChanged ->
-                persist { themePreferences.saveDynamicColors(event.enabled) }
+                persist { themePreferences.setDynamicColors(event.enabled) }
             is DisplaySettingsEvent.BouncyButtonsChanged ->
-                persist { displayPreferences.saveBouncyButtons(event.enabled) }
+                persist { displayPreferences.setBouncyButtons(event.enabled) }
             is DisplaySettingsEvent.BottomBarLabelsChanged ->
-                persist { displayPreferences.saveShowBottomBarLabels(event.show) }
+                persist { displayPreferences.setShowBottomBarLabels(event.show) }
             is DisplaySettingsEvent.LanguageChanged ->
-                persist { displayPreferences.saveLanguage(event.language) }
+                persist { displayPreferences.setLanguage(event.language) }
             is DisplaySettingsEvent.StartupRouteChanged ->
-                persist { displayPreferences.saveStartupPage(event.route) }
+                persist { displayPreferences.setStartupPage(event.route) }
         }
     }
 

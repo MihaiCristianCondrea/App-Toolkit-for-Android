@@ -18,9 +18,10 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.contracts.ThemeSettingsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ThemePreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.models.theme.ThemePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
-import io.mockk.coVerifyOrder
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,23 +49,24 @@ class ThemeSettingsViewModelTest {
     }
 
     @Test
-    fun `selecting static palette disables dynamic colors and saves id`() = runTest {
+    fun `selecting a static palette asks the repository for it`() = runTest {
         val preferences = preferences()
         val viewModel = ThemeSettingsViewModel(preferences)
 
         viewModel.onEvent(ThemeSettingsEvent.SelectStaticPalette("rose"))
 
-        coVerifyOrder {
-            preferences.saveDynamicColors(false)
-            preferences.saveStaticPaletteId("rose")
-        }
+        coVerify { preferences.selectStaticPalette("rose") }
     }
 
-    private fun preferences(): ThemePreferencesDataSource = mockk(relaxed = true) {
-        every { themeMode } returns MutableStateFlow("dark")
-        every { dynamicColors } returns MutableStateFlow(true)
-        every { amoledMode } returns MutableStateFlow(false)
-        every { dynamicPaletteVariant } returns MutableStateFlow(2)
-        every { staticPaletteId } returns MutableStateFlow("default")
+    private fun preferences(): ThemePreferencesRepository = mockk(relaxed = true) {
+        every { preferencesState } returns MutableStateFlow(
+            ThemePreferencesState(
+                themeMode = "dark",
+                dynamicColors = true,
+                amoledMode = false,
+                dynamicPaletteVariant = 2,
+                staticPaletteId = "default",
+            )
+        )
     }
 }

@@ -21,8 +21,7 @@ import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contracts.OnboardingThemeEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ThemePreferencesDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.extensions.themePreferencesState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.repositories.ThemePreferencesRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.models.theme.ThemePreferencesState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.ScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
@@ -36,7 +35,7 @@ import kotlinx.coroutines.launch
 
 /** Owns theme preference state used by the onboarding theme page. */
 class OnboardingThemeViewModel(
-    private val preferences: ThemePreferencesDataSource,
+    private val preferences: ThemePreferencesRepository,
 ) : ScreenViewModel<ThemePreferencesState, OnboardingThemeEvent, ActionEvent>(
     initialState = UiStateScreen(
         screenState = ScreenState.Success(),
@@ -60,22 +59,20 @@ class OnboardingThemeViewModel(
             OnboardingThemeEvent.Initialize -> observePreferences()
             is OnboardingThemeEvent.SelectThemeMode -> selectThemeMode(event.mode)
             is OnboardingThemeEvent.SetAmoledMode -> persist {
-                preferences.saveAmoledMode(event.enabled)
+                preferences.setAmoledMode(event.enabled)
             }
             is OnboardingThemeEvent.SelectDynamicPalette -> persist {
-                preferences.saveDynamicColors(true)
-                preferences.saveDynamicPaletteVariant(event.variant)
+                preferences.selectDynamicPalette(event.variant)
             }
             is OnboardingThemeEvent.SelectStaticPalette -> persist {
-                preferences.saveDynamicColors(false)
-                preferences.saveStaticPaletteId(event.id)
+                preferences.selectStaticPalette(event.id)
             }
         }
     }
 
     private fun observePreferences() {
         observationJob?.cancel()
-        observationJob = preferences.themePreferencesState().onEach { state ->
+        observationJob = preferences.preferencesState.onEach { state ->
             updateStateThreadSafe {
                 screenState.updateData(newState = ScreenState.Success()) { state }
             }
@@ -83,10 +80,7 @@ class OnboardingThemeViewModel(
     }
 
     private fun selectThemeMode(mode: String) = persist {
-        preferences.saveThemeMode(mode)
-        if (mode == DataStoreNamesConstants.THEME_MODE_LIGHT && currentState.data?.amoledMode == true) {
-            preferences.saveAmoledMode(false)
-        }
+        preferences.selectThemeMode(mode)
     }
 
     private fun persist(block: suspend () -> Unit) {
