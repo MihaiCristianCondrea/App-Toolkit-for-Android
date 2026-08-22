@@ -44,6 +44,7 @@
     <string name="next_button_text">下一步</string>
     <string name="onboarding_amoled_mode_desc">OLED 螢幕可呈現更深邃的黑色。</string>
     <string name="onboarding_complete_icon_desc">引導完成</string>
+    <string name="onboarding_completion_failed">無法儲存您的設定。請再試一次。</string>
     <string name="onboarding_crashlytics_about_body_1">本應用程式使用 Firebase，這是 Google 提供的一個平台，可協助開發人員瞭解應用程式的使用情況、提升效能，並提供分析等服務。Firebase Analytics 會自動蒐集事件使用情形、畫面檢視、裝置屬性及其他訊號等資訊，但僅在您同意蒐集這些類型的資料時才會進行。若未提供同意，Firebase 將不會記錄事件或傳送與這些類別相關的資料。</string>
     <string name="onboarding_crashlytics_about_body_2">如需瞭解 Firebase 與 Google 服務如何處理資料，以及其各自的隱私與安全政策，請參閱官方 Firebase Privacy 文件，以及依據 GDPR 與 CCPA 等法規所享有的地區性隱私權利。</string>
     <string name="onboarding_crashlytics_about_title">關於同意與 Firebase 資料使用</string>

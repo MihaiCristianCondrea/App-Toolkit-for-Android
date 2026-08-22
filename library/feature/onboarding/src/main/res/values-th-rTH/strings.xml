@@ -44,6 +44,7 @@
     <string name="next_button_text">ถัดไป</string>
     <string name="onboarding_amoled_mode_desc">สีดำเข้มขึ้นสำหรับหน้าจอ OLED</string>
     <string name="onboarding_complete_icon_desc">การเริ่มต้นใช้งานเสร็จสมบูรณ์</string>
+    <string name="onboarding_completion_failed">ไม่สามารถบันทึกการตั้งค่าของคุณได้ โปรดลองอีกครั้ง</string>
     <string name="onboarding_crashlytics_about_body_1">ในแอปนี้เราใช้ Firebase ซึ่งเป็นแพลตฟอร์มจาก Google ที่ช่วยให้นักพัฒนาเข้าใจการใช้งานแอป ปรับปรุงประสิทธิภาพ และให้บริการบางอย่าง เช่น การวิเคราะห์ Firebase Analytics จะรวบรวมข้อมูลโดยอัตโนมัติ เช่น การใช้งานเหตุการณ์ การดูหน้าจอ คุณสมบัติของอุปกรณ์ และสัญญาณอื่น ๆ แต่จะทำก็ต่อเมื่อคุณให้ความยินยอมในการรวบรวมข้อมูลประเภทดังกล่าว หากไม่ได้ให้ความยินยอม Firebase จะไม่บันทึกเหตุการณ์หรือส่งข้อมูลที่เกี่ยวข้องกับหมวดหมู่เหล่านั้น</string>
     <string name="onboarding_crashlytics_about_body_2">สำหรับข้อมูลโดยละเอียดเกี่ยวกับวิธีที่ Firebase และบริการของ Google จัดการข้อมูล รวมถึงนโยบายด้านความเป็นส่วนตัวและความปลอดภัยของแต่ละบริการ โปรดดูเอกสาร Firebase Privacy อย่างเป็นทางการและสิทธิ์ด้านความเป็นส่วนตัวตามกฎหมาย เช่น GDPR และ CCPA</string>
     <string name="onboarding_crashlytics_about_title">เกี่ยวกับความยินยอมและการใช้งานข้อมูล Firebase</string>

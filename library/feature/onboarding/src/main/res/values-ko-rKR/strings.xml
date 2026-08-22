@@ -44,6 +44,7 @@
     <string name="next_button_text">다음</string>
     <string name="onboarding_amoled_mode_desc">OLED 화면을 위한 더 깊은 검은색.</string>
     <string name="onboarding_complete_icon_desc">온보딩 완료</string>
+    <string name="onboarding_completion_failed">설정을 저장하지 못했습니다. 다시 시도해 주세요.</string>
     <string name="onboarding_crashlytics_about_body_1">이 앱에서는 Google의 플랫폼인 Firebase를 사용합니다. Firebase는 앱 사용 방식을 이해하고 성능을 개선하며 분석과 같은 특정 서비스를 제공하는 데 도움을 줍니다. Firebase Analytics는 이벤트 사용, 화면 조회, 기기 속성 및 기타 신호와 같은 정보를 자동으로 수집하지만, 이러한 데이터 유형의 수집에 동의한 경우에만 수행됩니다. 동의하지 않으면 Firebase는 이벤트를 기록하거나 해당 범주와 관련된 데이터를 전송하지 않습니다.</string>
     <string name="onboarding_crashlytics_about_body_2">Firebase 및 Google 서비스가 데이터를 처리하는 방식과 각 서비스의 개인정보 보호 및 보안 정책에 대한 자세한 내용은 공식 Firebase 개인정보 보호 문서와 GDPR 및 CCPA와 같은 법률에 따른 지역별 개인정보 보호 권리를 참고하시기 바랍니다.</string>
     <string name="onboarding_crashlytics_about_title">동의 및 Firebase 데이터 사용에 관하여</string>

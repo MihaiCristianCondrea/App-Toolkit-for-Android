@@ -44,6 +44,7 @@
     <string name="next_button_text">Selanjutnya</string>
     <string name="onboarding_amoled_mode_desc">Hitam lebih pekat untuk layar OLED.</string>
     <string name="onboarding_complete_icon_desc">Orientasi selesai</string>
+    <string name="onboarding_completion_failed">Penyiapan Anda tidak dapat disimpan. Silakan coba lagi.</string>
     <string name="onboarding_crashlytics_about_body_1">Dalam aplikasi ini kami menggunakan Firebase, sebuah platform dari Google yang membantu pengembang memahami bagaimana aplikasi digunakan, meningkatkan kinerja, dan menyediakan layanan tertentu seperti analitik. Firebase Analytics secara otomatis mengumpulkan informasi seperti penggunaan peristiwa, tampilan layar, properti perangkat, dan sinyal lainnya, tetapi hanya jika Anda memberikan persetujuan untuk pengumpulan jenis data tersebut. Jika persetujuan tidak diberikan, Firebase tidak akan mencatat peristiwa atau mengirim data yang terkait dengan kategori tersebut.</string>
     <string name="onboarding_crashlytics_about_body_2">Untuk informasi terperinci tentang bagaimana Firebase dan layanan Google menangani data, serta kebijakan privasi dan keamanan masing-masing, silakan lihat dokumentasi resmi Privasi Firebase dan hak privasi regional Anda berdasarkan undang-undang seperti GDPR dan CCPA.</string>
     <string name="onboarding_crashlytics_about_title">Tentang persetujuan dan penggunaan data Firebase</string>

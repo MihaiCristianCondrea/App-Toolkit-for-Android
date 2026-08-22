@@ -44,6 +44,7 @@
     <string name="next_button_text">التالي</string>
     <string name="onboarding_amoled_mode_desc">أسود أعمق لشاشات OLED.</string>
     <string name="onboarding_complete_icon_desc">اكتمل الإعداد الأولي</string>
+    <string name="onboarding_completion_failed">تعذّر حفظ الإعداد. يُرجى المحاولة مرة أخرى.</string>
     <string name="onboarding_crashlytics_about_body_1">نستخدم في هذا التطبيق Firebase، وهي منصة من Google تساعد المطورين على فهم كيفية استخدام التطبيق، وتحسين الأداء، وتوفير خدمات مثل التحليلات. تقوم Firebase Analytics بجمع معلومات مثل استخدام الأحداث، وعرض الشاشات، وخصائص الجهاز، وإشارات أخرى تلقائيًا، ولكن فقط إذا منحت الموافقة على جمع هذه الأنواع من البيانات. في حال عدم منح الموافقة، لن تقوم Firebase بتسجيل الأحداث أو إرسال بيانات متعلقة بهذه الفئات.</string>
     <string name="onboarding_crashlytics_about_body_2">للحصول على معلومات تفصيلية حول كيفية تعامل Firebase وخدمات Google مع البيانات، وكذلك سياسات الخصوصية والأمان الخاصة بها، يرجى الرجوع إلى وثائق خصوصية Firebase الرسمية وحقوق الخصوصية الإقليمية الخاصة بك بموجب قوانين مثل GDPR وCCPA.</string>
     <string name="onboarding_crashlytics_about_title">حول الموافقة واستخدام بيانات Firebase</string>

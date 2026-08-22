@@ -44,6 +44,7 @@
     <string name="next_button_text">İleri̇</string>
     <string name="onboarding_amoled_mode_desc">OLED ekranlar için daha derin siyahlar.</string>
     <string name="onboarding_complete_icon_desc">Başlangıç tamamlandı</string>
+    <string name="onboarding_completion_failed">Kurulumunuz kaydedilemedi. Lütfen tekrar deneyin.</string>
     <string name="onboarding_crashlytics_about_body_1">Bu uygulamada, geliştiricilerin bir uygulamanın nasıl kullanıldığını anlamasına, performansı iyileştirmesine ve analiz gibi belirli hizmetleri sunmasına yardımcı olan Google tarafından sağlanan bir platform olan Firebase kullanıyoruz. Firebase Analytics; etkinlik kullanımı, ekran görüntülemeleri, cihaz özellikleri ve diğer sinyaller gibi bilgileri otomatik olarak toplar, ancak yalnızca bu tür verilerin toplanmasına onay verdiğinizde. Onay verilmezse Firebase etkinlikleri kaydetmez ve bu kategorilerle ilgili verileri göndermez.</string>
     <string name="onboarding_crashlytics_about_body_2">Firebase ve Google hizmetlerinin verileri nasıl işlediği ve ilgili gizlilik ile güvenlik politikaları hakkında ayrıntılı bilgi için lütfen resmi Firebase Privacy dokümantasyonuna ve GDPR ile CCPA gibi yasalar kapsamındaki bölgesel gizlilik haklarınıza başvurun.</string>
     <string name="onboarding_crashlytics_about_title">Onay ve Firebase veri kullanımı hakkında</string>

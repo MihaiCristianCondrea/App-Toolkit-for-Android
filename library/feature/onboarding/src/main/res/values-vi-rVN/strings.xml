@@ -44,6 +44,7 @@
     <string name="next_button_text">Tiếp theo</string>
     <string name="onboarding_amoled_mode_desc">Màu đen sâu hơn cho màn hình OLED.</string>
     <string name="onboarding_complete_icon_desc">Hoàn tất giới thiệu</string>
+    <string name="onboarding_completion_failed">Không thể lưu thiết lập của bạn. Vui lòng thử lại.</string>
     <string name="onboarding_crashlytics_about_body_1">Trong ứng dụng này, chúng tôi sử dụng Firebase, một nền tảng của Google giúp nhà phát triển hiểu cách ứng dụng được sử dụng, cải thiện hiệu năng và cung cấp một số dịch vụ như phân tích. Firebase Analytics tự động thu thập thông tin như mức sử dụng sự kiện, lượt xem màn hình, thuộc tính thiết bị và các tín hiệu khác, nhưng chỉ khi bạn cấp quyền đồng ý để thu thập các loại dữ liệu này. Nếu không có sự đồng ý, Firebase sẽ không ghi sự kiện hoặc gửi dữ liệu liên quan đến các danh mục đó.</string>
     <string name="onboarding_crashlytics_about_body_2">Để biết thông tin chi tiết về cách Firebase và các dịch vụ của Google xử lý dữ liệu, cũng như các chính sách quyền riêng tư và bảo mật tương ứng, vui lòng tham khảo tài liệu Firebase Privacy chính thức và các quyền riêng tư theo khu vực của bạn theo các luật như GDPR và CCPA.</string>
     <string name="onboarding_crashlytics_about_title">Giới thiệu về đồng ý và việc sử dụng dữ liệu Firebase</string>

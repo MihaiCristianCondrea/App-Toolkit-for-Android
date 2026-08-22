@@ -44,6 +44,7 @@
     <string name="next_button_text">Dalej</string>
     <string name="onboarding_amoled_mode_desc">Głębsze czernie dla ekranów OLED.</string>
     <string name="onboarding_complete_icon_desc">Wprowadzenie ukończone</string>
+    <string name="onboarding_completion_failed">Nie udało się zapisać konfiguracji. Spróbuj ponownie.</string>
     <string name="onboarding_crashlytics_about_body_1">W tej aplikacji korzystamy z Firebase, platformy firmy Google, która pomaga deweloperom zrozumieć sposób korzystania z aplikacji, poprawić jej wydajność oraz oferować określone usługi, takie jak analityka. Firebase Analytics automatycznie zbiera informacje, takie jak wykorzystanie zdarzeń, wyświetlenia ekranów, właściwości urządzenia i inne sygnały, ale tylko wtedy, gdy wyrazisz zgodę na zbieranie tego typu danych. W przypadku braku zgody Firebase nie będzie rejestrować zdarzeń ani przesyłać danych związanych z tymi kategoriami.</string>
     <string name="onboarding_crashlytics_about_body_2">Aby uzyskać szczegółowe informacje na temat sposobu przetwarzania danych przez Firebase i usługi Google, a także ich odpowiednich zasad prywatności i bezpieczeństwa, zapoznaj się z oficjalną dokumentacją dotyczącą prywatności Firebase oraz z regionalnymi prawami do ochrony prywatności wynikającymi z przepisów takich jak GDPR i CCPA.</string>
     <string name="onboarding_crashlytics_about_title">Informacje o zgodzie i wykorzystaniu danych Firebase</string>

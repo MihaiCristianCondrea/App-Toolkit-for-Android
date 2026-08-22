@@ -44,6 +44,7 @@
     <string name="next_button_text">Nästa</string>
     <string name="onboarding_amoled_mode_desc">Djupare svärta för OLED-skärmar.</string>
     <string name="onboarding_complete_icon_desc">Introduktion klar</string>
+    <string name="onboarding_completion_failed">Din konfiguration kunde inte sparas. Försök igen.</string>
     <string name="onboarding_crashlytics_about_body_1">I den här appen använder vi Firebase, en plattform från Google som hjälper utvecklare att förstå hur en app används, förbättra prestanda och tillhandahålla vissa tjänster som analys. Firebase Analytics samlar automatiskt in information som händelseanvändning, skärmvisningar, enhetsegenskaper och andra signaler, men endast om du ger samtycke till att dessa typer av data samlas in. Om samtycke inte ges kommer Firebase inte att logga händelser eller skicka data som rör dessa kategorier.</string>
     <string name="onboarding_crashlytics_about_body_2">För detaljerad information om hur Firebase och Google-tjänster hanterar data, samt deras respektive integritets- och säkerhetspolicyer, se den officiella dokumentationen för Firebase Privacy och dina regionala integritetsrättigheter enligt lagar som GDPR och CCPA.</string>
     <string name="onboarding_crashlytics_about_title">Om samtycke och användning av Firebase-data</string>

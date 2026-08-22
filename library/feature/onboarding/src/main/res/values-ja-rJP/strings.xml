@@ -44,6 +44,7 @@
     <string name="next_button_text">次へ</string>
     <string name="onboarding_amoled_mode_desc">OLED画面でより深い黒を表現。</string>
     <string name="onboarding_complete_icon_desc">オンボーディング完了</string>
+    <string name="onboarding_completion_failed">設定を保存できませんでした。もう一度お試しください。</string>
     <string name="onboarding_crashlytics_about_body_1">このアプリでは、Google が提供する Firebase を使用しています。Firebase は、アプリの利用状況の把握、パフォーマンスの向上、分析などの特定のサービス提供を支援するプラットフォームです。Firebase Analytics は、イベントの使用状況、画面表示、デバイスのプロパティ、その他のシグナルなどの情報を自動的に収集しますが、これらのデータ収集に同意した場合にのみ行われます。同意が与えられない場合、Firebase はイベントを記録したり、該当するカテゴリに関するデータを送信したりしません。</string>
     <string name="onboarding_crashlytics_about_body_2">Firebase および Google サービスによるデータの取り扱い方法や、それぞれのプライバシーおよびセキュリティ ポリシーの詳細については、公式の Firebase プライバシー ドキュメントおよび GDPR や CCPA などの法律に基づく地域のプライバシー権をご確認ください。</string>
     <string name="onboarding_crashlytics_about_title">同意と Firebase のデータ使用について</string>

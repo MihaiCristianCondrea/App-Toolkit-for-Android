@@ -44,6 +44,7 @@
     <string name="next_button_text">Următorul</string>
     <string name="onboarding_amoled_mode_desc">Negru mai profund pentru ecranele OLED.</string>
     <string name="onboarding_complete_icon_desc">Integrare completă</string>
+    <string name="onboarding_completion_failed">Configurarea ta nu a putut fi salvată. Încearcă din nou.</string>
     <string name="onboarding_crashlytics_about_body_1">În această aplicație folosim Firebase, o platformă de la Google care ajută dezvoltatorii să înțeleagă cum este utilizată aplicația, să îmbunătățească performanța și să ofere anumite servicii precum analiticele. Firebase Analytics colectează automat informații precum utilizarea evenimentelor, vizualizările de ecran, proprietățile dispozitivului și alte semnale, dar numai dacă îți dai consimțământul pentru colectarea acestor tipuri de date. Dacă nu este acordat consimțământul, Firebase nu va înregistra evenimente și nu va trimite date legate de acele categorii.</string>
     <string name="onboarding_crashlytics_about_body_2">Pentru informații detaliate despre modul în care Firebase și serviciile Google gestionează datele, precum și despre politicile lor de confidențialitate și securitate, consultă documentația oficială Firebase Privacy și drepturile tale regionale privind confidențialitatea, conform unor legi precum GDPR și CCPA.</string>
     <string name="onboarding_crashlytics_about_title">Despre consimțământ și utilizarea datelor Firebase</string>

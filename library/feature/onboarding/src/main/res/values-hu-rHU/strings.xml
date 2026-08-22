@@ -44,6 +44,7 @@
     <string name="next_button_text">Tovább</string>
     <string name="onboarding_amoled_mode_desc">Mélyebb feketék OLED képernyőkhöz.</string>
     <string name="onboarding_complete_icon_desc">Bevezetés befejezve</string>
+    <string name="onboarding_completion_failed">A beállítás mentése nem sikerült. Kérjük, próbálja újra.</string>
     <string name="onboarding_crashlytics_about_body_1">Ebben az alkalmazásban a Firebase szolgáltatást használjuk, amely a Google egyik platformja, és segít a fejlesztőknek megérteni az alkalmazás használatát, javítani a teljesítményt, valamint bizonyos szolgáltatásokat, például elemzést biztosítani. A Firebase Analytics automatikusan gyűjt adatokat, például eseményhasználatot, képernyőmegtekintéseket, eszköztulajdonságokat és egyéb jeleket, de kizárólag akkor, ha Ön hozzájárul ezen adattípusok gyűjtéséhez. Hozzájárulás hiányában a Firebase nem naplóz eseményeket, és nem küld adatokat ezekkel a kategóriákkal kapcsolatban.</string>
     <string name="onboarding_crashlytics_about_body_2">A Firebase és a Google szolgáltatások adatkezelésével, valamint a vonatkozó adatvédelmi és biztonsági irányelvekkel kapcsolatos részletes információkért tekintse meg a hivatalos Firebase Privacy dokumentációt és a regionális adatvédelmi jogait olyan jogszabályok alapján, mint a GDPR és a CCPA.</string>
     <string name="onboarding_crashlytics_about_title">A hozzájárulásról és a Firebase adatkezeléséről</string>

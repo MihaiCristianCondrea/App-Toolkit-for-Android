@@ -44,6 +44,7 @@
     <string name="next_button_text">পরবর্তী</string>
     <string name="onboarding_amoled_mode_desc">OLED স্ক্রিনের জন্য আরও গভীর কালো।</string>
     <string name="onboarding_complete_icon_desc">অনবোর্ডিং সম্পন্ন</string>
+    <string name="onboarding_completion_failed">আপনার সেটআপ সংরক্ষণ করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।</string>
     <string name="onboarding_crashlytics_about_body_1">এই অ্যাপে আমরা Firebase ব্যবহার করি, যা Google-এর একটি প্ল্যাটফর্ম এবং ডেভেলপারদের অ্যাপটি কীভাবে ব্যবহৃত হচ্ছে তা বুঝতে, কর্মক্ষমতা উন্নত করতে এবং বিশ্লেষণের মতো কিছু পরিষেবা প্রদান করতে সহায়তা করে। Firebase Analytics স্বয়ংক্রিয়ভাবে ইভেন্ট ব্যবহারের তথ্য, স্ক্রিন ভিউ, ডিভাইসের বৈশিষ্ট্য এবং অন্যান্য সংকেত সংগ্রহ করে, তবে কেবল তখনই যখন আপনি এই ধরনের ডেটা সংগ্রহের জন্য সম্মতি দেন। সম্মতি না দিলে Firebase ইভেন্ট লগ করবে না বা সেই বিভাগগুলির সাথে সম্পর্কিত ডেটা পাঠাবে না।</string>
     <string name="onboarding_crashlytics_about_body_2">Firebase এবং Google পরিষেবাগুলি কীভাবে ডেটা পরিচালনা করে, এবং তাদের নিজ নিজ গোপনীয়তা ও নিরাপত্তা নীতিমালা সম্পর্কে বিস্তারিত জানতে, অনুগ্রহ করে অফিসিয়াল Firebase Privacy ডকুমেন্টেশন এবং GDPR ও CCPA-এর মতো আইনের অধীনে আপনার আঞ্চলিক গোপনীয়তা অধিকার দেখুন।</string>
     <string name="onboarding_crashlytics_about_title">সম্মতি এবং Firebase ডেটা ব্যবহারের বিষয়ে</string>

@@ -44,6 +44,7 @@
     <string name="next_button_text">Weiter</string>
     <string name="onboarding_amoled_mode_desc">Tiefere Schwarztöne für OLED-Bildschirme.</string>
     <string name="onboarding_complete_icon_desc">Onboarding abgeschlossen</string>
+    <string name="onboarding_completion_failed">Ihre Einrichtung konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.</string>
     <string name="onboarding_crashlytics_about_body_1">In dieser App verwenden wir Firebase, eine Plattform von Google, die Entwicklern hilft zu verstehen, wie eine App genutzt wird, die Leistung zu verbessern und bestimmte Dienste wie Analysen bereitzustellen. Firebase Analytics erfasst automatisch Informationen wie Ereignisnutzung, Bildschirmaufrufe, Geräteeigenschaften und andere Signale – jedoch nur, wenn Sie die Einwilligung zur Erfassung dieser Datentypen erteilen. Wird keine Einwilligung erteilt, protokolliert Firebase keine Ereignisse und sendet keine Daten in Bezug auf diese Kategorien.</string>
     <string name="onboarding_crashlytics_about_body_2">Ausführliche Informationen dazu, wie Firebase und Google-Dienste Daten verarbeiten sowie zu den jeweiligen Datenschutz- und Sicherheitsrichtlinien, finden Sie in der offiziellen Firebase-Datenschutzdokumentation und in Ihren regionalen Datenschutzrechten nach Gesetzen wie der DSGVO und dem CCPA.</string>
     <string name="onboarding_crashlytics_about_title">Über Einwilligungen und die Datennutzung durch Firebase</string>

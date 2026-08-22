@@ -44,6 +44,7 @@
     <string name="next_button_text">آگے</string>
     <string name="onboarding_amoled_mode_desc">OLED اسکرینوں کے لیے گہرے سیاہ رنگ۔</string>
     <string name="onboarding_complete_icon_desc">آن بورڈنگ مکمل</string>
+    <string name="onboarding_completion_failed">آپ کا سیٹ اپ محفوظ نہیں ہو سکا۔ براہ کرم دوبارہ کوشش کریں۔</string>
     <string name="onboarding_crashlytics_about_body_1">اس ایپ میں ہم Firebase استعمال کرتے ہیں، جو Google کا ایک پلیٹ فارم ہے اور ڈویلپرز کو یہ سمجھنے میں مدد دیتا ہے کہ ایپ کو کیسے استعمال کیا جاتا ہے، کارکردگی بہتر بناتا ہے اور تجزیات جیسی کچھ خدمات فراہم کرتا ہے۔ Firebase Analytics خودکار طور پر معلومات جمع کرتا ہے، جیسے ایونٹ کا استعمال، اسکرین ویوز، ڈیوائس کی خصوصیات اور دیگر اشارے، لیکن صرف اس صورت میں جب آپ ان اقسام کے ڈیٹا کو جمع کرنے کی رضامندی دیتے ہیں۔ اگر رضامندی نہ دی جائے تو Firebase ایونٹس کو لاگ نہیں کرے گا اور ان زمروں سے متعلق ڈیٹا ارسال نہیں کرے گا۔</string>
     <string name="onboarding_crashlytics_about_body_2">Firebase اور Google سروسز ڈیٹا کو کیسے ہینڈل کرتی ہیں، اور ان کی رازداری اور سیکیورٹی پالیسیوں کے بارے میں تفصیلی معلومات کے لیے، براہ کرم سرکاری Firebase Privacy دستاویزات اور GDPR اور CCPA جیسے قوانین کے تحت اپنے علاقائی رازداری کے حقوق ملاحظہ کریں۔</string>
     <string name="onboarding_crashlytics_about_title">رضامندی اور Firebase ڈیٹا کے استعمال کے بارے میں</string>

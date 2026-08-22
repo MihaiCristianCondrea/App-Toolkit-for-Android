@@ -44,6 +44,7 @@
     <string name="next_button_text">अगला</string>
     <string name="onboarding_amoled_mode_desc">OLED स्क्रीन के लिए गहरे काले रंग।</string>
     <string name="onboarding_complete_icon_desc">ऑनबोर्डिंग पूर्ण</string>
+    <string name="onboarding_completion_failed">आपका सेटअप सहेजा नहीं जा सका. कृपया फिर से कोशिश करें.</string>
     <string name="onboarding_crashlytics_about_body_1">इस ऐप में हम Firebase का उपयोग करते हैं, जो Google का एक प्लेटफ़ॉर्म है और डेवलपर्स को यह समझने में सहायता करता है कि ऐप का उपयोग कैसे किया जाता है, प्रदर्शन को बेहतर बनाता है और विश्लेषण जैसी कुछ सेवाएं प्रदान करता है। Firebase Analytics स्वचालित रूप से इवेंट उपयोग, स्क्रीन दृश्य, डिवाइस गुण और अन्य संकेतों जैसी जानकारी एकत्र करता है, लेकिन केवल तभी जब आप इन प्रकार के डेटा को एकत्र करने की सहमति देते हैं। यदि सहमति नहीं दी जाती है, तो Firebase इवेंट लॉग नहीं करेगा और इन श्रेणियों से संबंधित डेटा नहीं भेजेगा।</string>
     <string name="onboarding_crashlytics_about_body_2">Firebase और Google सेवाएं डेटा को कैसे संभालती हैं, साथ ही उनकी गोपनीयता और सुरक्षा नीतियों के बारे में विस्तृत जानकारी के लिए कृपया आधिकारिक Firebase Privacy दस्तावेज़ और GDPR तथा CCPA जैसे क़ानूनों के अंतर्गत अपने क्षेत्रीय गोपनीयता अधिकारों को देखें।</string>
     <string name="onboarding_crashlytics_about_title">सहमति और Firebase डेटा उपयोग के बारे में</string>

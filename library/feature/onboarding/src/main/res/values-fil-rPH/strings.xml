@@ -44,6 +44,7 @@
     <string name="next_button_text">Susunod</string>
     <string name="onboarding_amoled_mode_desc">Mas matingkad na itim para sa mga OLED screen.</string>
     <string name="onboarding_complete_icon_desc">Kumpleto na ang onboarding</string>
+    <string name="onboarding_completion_failed">Hindi na-save ang iyong setup. Pakisubukan muli.</string>
     <string name="onboarding_crashlytics_about_body_1">Sa app na ito, gumagamit kami ng Firebase, isang platform mula sa Google na tumutulong sa mga developer na maunawaan kung paano ginagamit ang isang app, mapabuti ang performance, at magbigay ng ilang serbisyo tulad ng analytics. Awtomatikong kinokolekta ng Firebase Analytics ang impormasyon gaya ng paggamit ng event, pagtingin sa screen, mga katangian ng device, at iba pang signal, ngunit kung ikaw ay nagbigay ng pahintulot para sa ganitong uri ng data. Kapag walang pahintulot, hindi magla-log ang Firebase ng mga event o magpapadala ng data na may kaugnayan sa mga kategoryang ito.</string>
     <string name="onboarding_crashlytics_about_body_2">Para sa detalyadong impormasyon kung paano pinangangasiwaan ng Firebase at mga serbisyo ng Google ang data, pati na rin ang kanilang mga patakaran sa privacy at seguridad, mangyaring sumangguni sa opisyal na dokumentasyon ng Firebase Privacy at sa iyong mga karapatang pang-privacy sa ilalim ng mga batas tulad ng GDPR at CCPA.</string>
     <string name="onboarding_crashlytics_about_title">Tungkol sa pahintulot at paggamit ng data ng Firebase</string>
