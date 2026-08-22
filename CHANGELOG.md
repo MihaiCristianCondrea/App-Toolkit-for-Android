@@ -1,40 +1,10 @@
 # Unreleased:
 
-- **Minor**: Theme and display preferences are reached through `ThemePreferencesRepository` and
-  `DisplayPreferencesRepository` instead of their data sources, so state holders no longer talk to
-  the store directly. The rule that leaving AMOLED on makes no sense in the light theme now lives in
-  one place rather than in each screen that offers the choice, and it reads what is stored rather
-  than what a screen happens to be showing. The data sources are unchanged, so a host that uses them
-  keeps working.
-- **Patch**: Failing to finish onboarding now says so. The Finish button used to leave the user where
-  they were with no explanation when the completion flag could not be saved.
-- **Patch**: The startup screen can no longer end up stuck on its loading state: it stops waiting on
-  a consent round trip that never reports back, asks for permissions once instead of on every
-  resume, and only retries consent while it has not resolved.
-- **Patch**: An app whose `onInitializeApp` fails is now marked as loaded anyway, and the failure is
-  recorded as a non-fatal, rather than leaving `isAppLoaded` false for the life of the process.
-- **Minor**: `UiTextHelper` gained `PluralResource`, so a state holder can describe a quantity
-  string without holding a Context and without pinning the text to the configuration it was built
-  in.
-- **Patch**: One-off ViewModel actions are buffered until the UI collects them, so an action sent
-  before an Activity or screen starts collecting is no longer dropped. This is what left the startup
-  screen loading forever when its consent request went out before the collector was listening.
-- **Patch**: The library now registers `OnboardingThemeViewModel`, so a host that uses the toolkit's
-  theme onboarding page no longer crashes with a missing Koin definition.
-- **Minor**: Enhanced the system for fetching app updates and handled internal errors more robustly.
-- **Minor**: Optimized resource usage and resolved various crashes to ensure a smoother experience.
-- **Patch**: Refined layouts and fixed visual inconsistencies across different themes and locales, including improved advertisement integration.
-- **Minor**: Reduced recomposition work in navigation, loading, and shimmer surfaces so scrolling and
-  placeholder animations cost less on the main thread.
-- **Minor**: Split the shared preference store into per-responsibility data sources (theme, display,
-  onboarding, consent/diagnostics, ads, review, changelog, app state, favorites), each registered in
-  the Koin graph. Stored keys and the `settings` file are unchanged, and `CommonDataStore` keeps its
-  full API, so existing data and existing call sites are unaffected.
-- **Minor**: Moved `BottomBarItem` to
-  `com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.navigation` and
-  `WallpaperSwatchColors` to
-  `com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.models`. Update imports; no
-  behavior changed.
+* **Fixed Startup Freezes:** Resolved issues that could cause the app to get stuck on the launch or loading screen.
+* **Smoother Performance:** Optimized scrolling and loading animations for a faster, more responsive experience with lower battery and memory usage.
+* **Theme & Visual Polish:** Fixed layout inconsistencies across light, dark, and AMOLED modes, as well as text formatting across different languages.
+* **Onboarding Improvements:** Added clear alerts if setup fails and fixed crashes during initial theme selection.
+* **General Stability:** Enhanced update checks and resolved various background crashes.
 
 # Version 26.07.1:
 
