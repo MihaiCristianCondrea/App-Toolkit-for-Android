@@ -45,7 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contracts.OnboardingAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contracts.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.models.OnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.states.OnboardingUiState
@@ -106,17 +105,6 @@ fun OnboardingScreen() {
 
     LaunchedEffect(pagerState.currentPage) {
         viewModel.onEvent(OnboardingEvent.UpdateCurrentTab(pagerState.currentPage))
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.actionEvent.collect { action ->
-            when (action) {
-                OnboardingAction.RequestConsentUi -> Unit
-                OnboardingAction.OnboardingCompleted -> onboardingProvider.onOnboardingFinished(
-                    context
-                )
-            }
-        }
     }
 
     val onSkipRequested = {

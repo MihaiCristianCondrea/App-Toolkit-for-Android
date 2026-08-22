@@ -26,6 +26,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contracts.OnboardingAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.contracts.OnboardingEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.BaseActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
 import kotlinx.coroutines.launch
@@ -36,6 +37,7 @@ class OnboardingActivity : BaseActivity() {
 
     private val viewModel: OnboardingViewModel by viewModel()
     private val consentRepository: ConsentRepository by inject()
+    private val onboardingProvider: OnboardingProvider by inject()
     private val lifecycleObserver = object : DefaultLifecycleObserver {
         override fun onResume(owner: LifecycleOwner) {
             checkUserConsent()
@@ -57,11 +59,18 @@ class OnboardingActivity : BaseActivity() {
         viewModel.onEvent(OnboardingEvent.RequestConsent)
     }
 
+    /**
+     * The one place onboarding's actions are handled.
+     *
+     * Each action reaches a single collector, so the screen must not watch this ViewModel as well:
+     * with two of them, an action went to whichever had subscribed first, and finishing onboarding
+     * took as many taps as it took to land on the one that acts on it.
+     */
     private fun observeActions() {
         observeActions(viewModel = viewModel) { action ->
             when (action) {
                 OnboardingAction.RequestConsentUi -> requestConsentFromUi()
-                OnboardingAction.OnboardingCompleted -> Unit
+                OnboardingAction.OnboardingCompleted -> onboardingProvider.onOnboardingFinished(this)
             }
         }
     }
