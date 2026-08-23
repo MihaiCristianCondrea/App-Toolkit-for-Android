@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="tile_breathing_summary">Rozpocznij krótką sterowaną pauzę oddechową</string>
+    <string name="tile_breathing_title">Oddychaj</string>
+    <string name="tile_bubble_level_summary">Wyrównanie powierzchni i wykrywanie pochylenia</string>
+    <string name="tile_bubble_level_title">Poziom bąbelkowy</string>
+    <string name="tile_caffeine_summary">Tymczasowo wyłącz ekran</string>
+    <string name="tile_caffeine_title">Kofeina</string>
+    <string name="tile_coin_flip_summary">Natychmiast odwracaj głowy lub reszki</string>
+    <string name="tile_coin_flip_title">Rzut monetą</string>
+    <string name="tile_compass_summary">Kierunki kardynalne i azymut</string>
+    <string name="tile_compass_title">Kompas</string>
+    <string name="tile_counter_summary">Zwiększ liczbę szybkich uruchomień</string>
+    <string name="tile_counter_title">Licznik</string>
+    <string name="tile_dice_roll_summary">Rzuć sześciościenną kostką</string>
+    <string name="tile_dice_roll_title">Rzut kostką</string>
+    <string name="tile_lux_meter_info">Monitorowanie natężenia światła otoczenia. Uwaga: ta funkcja zależy od fizycznego czujnika sprzętowego i może nie działać na wszystkich urządzeniach.</string>
+    <string name="tile_lux_meter_summary">Natężenie światła otoczenia (lux)</string>
+    <string name="tile_lux_meter_title">Miernik luksów</string>
+    <string name="tile_music_search_summary">Identyfikuj muzykę za pomocą skrótu</string>
+    <string name="tile_music_search_title">Wyszukiwanie muzyki</string>
+    <string name="tile_network_traffic_summary">Monitoruj prędkość sieci w czasie rzeczywistym</string>
+    <string name="tile_network_traffic_title">Ruch sieciowy</string>
+    <string name="tile_preview_close">Zamknij</string>
+    <string name="tile_preview_coin_result">Głowy</string>
+    <string name="tile_preview_compass_result">NE 45°</string>
+    <string name="tile_preview_default_result">Podgląd już wkrótce</string>
+    <string name="tile_preview_level_result">Poziom</string>
+    <string name="tile_service_dice_value">Walcowane %1$d</string>
+    <string name="tile_service_heads">Głowy</string>
+    <string name="tile_service_tails">Ogony</string>
+    <string name="tile_sos_summary">Trzymaj działania awaryjne blisko</string>
+    <string name="tile_sos_title">SOS</string>
+    <string name="tile_sound_mode_summary">Przełączaj tryby normalny, wibracyjny i cichy</string>
+    <string name="tile_sound_mode_title">Tryb dźwięku</string>
+    <string name="tile_volume_panel_summary">Szybko otwieraj elementy sterujące głośnością</string>
+    <string name="tile_volume_panel_title">Panel głośności</string>
+    <string name="tiles_add">Dodaj</string>
+    <string name="tiles_add_pre_android_13">Android 12 i starsze wymagają dodania kafelków w trybie edycji Szybkich ustawień.</string>
+    <string name="tiles_add_result_added">Kafelek dodany do Szybkich ustawień</string>
+    <string name="tiles_add_result_already_added">Kafelek jest już w Szybkich ustawieniach</string>
+    <string name="tiles_add_result_failed">Nie można dodać kafelka</string>
+    <string name="tiles_category_sensors">Czujniki i pomiary</string>
+    <string name="tiles_category_system">System i sterowanie</string>
+    <string name="tiles_category_utilities">Narzędzia i zabawa</string>
+    <string name="tiles_category_wellbeing">Dobre samopoczucie</string>
+    <string name="tiles_chip_expanded_tool">Rozbudowane narzędzie</string>
+    <string name="tiles_chip_quick_tool">Szybkie narzędzie</string>
+    <string name="tiles_chip_tile">Płytka</string>
+    <string name="tiles_collapse_category">Zwiń kategorię</string>
+    <string name="tiles_error_failed_to_load">Nie udało się załadować Szybkich narzędzi</string>
+    <string name="tiles_expand_category">Rozwiń kategorię</string>
+    <string name="tiles_filter_added">Dodano</string>
+    <string name="tiles_filter_all">Wszystkie narzędzia</string>
+    <string name="tiles_filter_empty">Żadne narzędzia nie pasują jeszcze do tego filtra.</string>
+    <string name="tiles_filter_needs_setup">Wymaga konfiguracji</string>
+    <string name="tiles_filter_unsupported">Nieobsługiwane</string>
+    <string name="tiles_how_to_add_summary">Narzędzia z chipem Tile można dodać do Szybkich ustawień. Stuknij Dodaj w systemie Android 13 lub nowszym lub otwórz tryb edycji Szybkich ustawień i przeciągnij kafelki App Toolkit do aktywnego panelu.</string>
+    <string name="tiles_how_to_add_title">Narzędzia gotowe do płytek</string>
+    <string name="tiles_more_options">Więcej opcji płytek</string>
+    <string name="tiles_setup">Konfiguracja</string>
+    <string name="tiles_setup_required_message">Ten kafelek wymaga dodatkowej konfiguracji, zanim będzie można go dodać.</string>
+    <string name="tiles_status_added">Dodano</string>
+    <string name="tiles_status_available">Dostępne</string>
+    <string name="tiles_status_needs_setup">Wymaga konfiguracji</string>
+    <string name="tiles_status_unsupported">Nieobsługiwane</string>
+    <string name="tiles_subtitle">Otwórz szybkie okna dialogowe i odkryj rozszerzone narzędzia z wyraźnie zaznaczonymi funkcjami gotowymi do kafelków.</string>
+    <string name="tool_coin_flip_action">Rzuć monetą</string>
+    <string name="tool_coin_flip_waiting">Gotowy?</string>
+    <string name="tool_counter_increment">Przyrost</string>
+    <string name="tool_counter_reset">Zresetuj</string>
+    <string name="tool_dialog_close_content_description">Zamknij szybkie narzędzie</string>
+    <string name="tool_dice_roll_action">Rzuć kostką</string>
+    <string name="tool_dice_roll_waiting">Rolka</string>
+    <string name="tool_generic_available_summary">To narzędzie jest gotowe do rozszerzonej implementacji i ma teraz podgląd materiału, dzięki czemu można sprawdzić jego zachowanie przed głębszą integracją.</string>
+    <string name="tool_generic_setup_summary">Ten podgląd dokumentuje zamierzone zachowanie, jednocześnie wyraźnie oddzielając pracę niedostępnej platformy od działań na kafelkach na żywo.</string>
+    <string name="tool_material_colors_android_accent_1">Akcent Androida 1</string>
+    <string name="tool_material_colors_android_accent_2">Akcent Androida 2</string>
+    <string name="tool_material_colors_android_accent_3">Akcent Androida 3</string>
+    <string name="tool_material_colors_android_neutral_1">Neutralny dla Androida 1</string>
+    <string name="tool_material_colors_android_neutral_2">Neutralny dla Androida 2</string>
+    <string name="tool_material_colors_android_unavailable">Palety systemowe Android Material You są dostępne na Androidzie 12 i nowszych.</string>
+    <string name="tool_material_colors_app_scheme">Schemat kolorów aplikacji</string>
+    <string name="tool_material_colors_description">Porównaj obecną kolorystykę aplikacji z akcentami systemu Android i neutralnymi paletami.</string>
+    <string name="tool_material_colors_summary">Wyświetl podgląd palety aplikacji i kolorów tonalnych Android Material You</string>
+    <string name="tool_material_colors_title">Kolory materiałów</string>
+    <string name="tool_status_added_summary">Wydaje się, że ten kafelek jest już dostępny w aktywnym panelu Szybkich ustawień.</string>
+    <string name="tool_status_added_title">Gotowe w Szybkich ustawieniach</string>
+    <string name="tool_status_available_summary">Wypróbuj podgląd w aplikacji poniżej lub dodaj kafelek do Szybkich ustawień, gdy pojawi się element Kafelek.</string>
+    <string name="tool_status_available_title">Gotowy do użycia</string>
+    <string name="tool_status_needs_setup_summary">Ta koncepcja wymaga uprawnień, obsługi urządzeń lub pełniejszego przepływu pracy, zanim będzie mogła działać jako kafelek aktywny.</string>
+    <string name="tool_status_needs_setup_title">Wymagana konfiguracja</string>
+    <string name="tool_status_unsupported_summary">Android nie udostępnia jeszcze bezpiecznego publicznego interfejsu API dla tej akcji, więc ten wpis jest udokumentowany jako podgląd.</string>
+    <string name="tool_status_unsupported_title">Tylko podgląd</string>
+    <string name="tile_flash_dimmer_title">Ściemniacz latarki</string>
+    <string name="tile_flash_dimmer_summary">Dostosuj jasność latarki i korzystaj z niej w Szybkich ustawieniach</string>
+    <string name="flash_dimmer_unavailable">Latarka jest niedostępna</string>
+    <string name="flash_dimmer_off">Wyłączona</string>
+    <string name="flash_dimmer_on">Włączona</string>
+    <string name="flash_dimmer_tile_level">Poziom %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Jasność %1$d z %2$d</string>
+    <string name="flash_dimmer_minimum">Minimum</string>
+    <string name="flash_dimmer_half">Połowa</string>
+    <string name="flash_dimmer_maximum">Maksimum</string>
+    <string name="flash_dimmer_turn_off">Wyłącz</string>
+    <string name="flash_dimmer_turn_on">Włącz</string>
+    <string name="tile_morse_summary">Nadaj własną wiadomość alfabetem Morse’a za pomocą latarki</string>
+    <string name="tile_morse_title">Latarka Morse’a</string>
+    <string name="morse_message_label">Wiadomość</string>
+    <string name="morse_start">Rozpocznij miganie</string>
+    <string name="morse_stop">Zatrzymaj</string>
+    <string name="morse_ready">Gotowe</string>
+    <string name="morse_active">Miganie</string>
+    <string name="morse_error_empty">Wpisz wiadomość</string>
+    <string name="morse_error_length">Użyj maksymalnie 200 znaków</string>
+    <string name="morse_error_characters">Użyj tylko liter A–Z, cyfr i spacji</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+</resources>

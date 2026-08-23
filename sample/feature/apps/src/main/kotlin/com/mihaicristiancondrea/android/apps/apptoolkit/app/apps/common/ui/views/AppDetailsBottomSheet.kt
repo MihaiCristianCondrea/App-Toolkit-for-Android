@@ -67,7 +67,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.m
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppVersionInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.models.AppInfoChipUi
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
@@ -284,7 +285,7 @@ private fun AppDetailsActions(
             false -> {
                 Spacer(modifier = Modifier.weight(1f))
                 Image(
-                    painter = painterResource(id = R.drawable.get_it_on_google_play),
+                    painter = painterResource(id = CoreUiR.drawable.get_it_on_google_play),
                     contentDescription = stringResource(R.string.app_details_view_on_play_store),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier

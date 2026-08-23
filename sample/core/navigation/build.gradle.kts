@@ -27,7 +27,6 @@ android {
 // Route keys and the entry-builder context live here so a feature can contribute a destination
 // without depending on the shell that hosts it, and without features depending on each other.
 dependencies {
-    api(project(":sample:core:ui"))
     api(project(":library:core:ui"))
     api(project(":library:navigation"))
     api(project(":library:apptoolkit"))

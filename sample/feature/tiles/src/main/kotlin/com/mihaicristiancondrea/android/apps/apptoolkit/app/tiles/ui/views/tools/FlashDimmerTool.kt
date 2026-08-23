@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.TorchPreset
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.TorchState
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ResultPill
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import kotlin.math.roundToInt
 

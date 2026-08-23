@@ -27,8 +27,5 @@ dependencies {
     // The toolkit is this module's whole reason to exist, so it is exposed rather than hidden:
     // the host has to name toolkit types (AppToolkitHostBuildConfig, Module) to call into it.
     api(project(":library:apptoolkit"))
-    // Strings the settings and permissions screens are written from.
-    api(project(":sample:core:ui"))
-
     testImplementation(project(":library:core:testing"))
 }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">زر ذو إطار</string>
+    <string name="components_button_primary">زر أساسي</string>
+    <string name="components_button_text">زر نصي</string>
+    <string name="components_button_tonal">زر لوني</string>
+    <string name="components_checkbox_summary">يعرض مربع اختيار مع ملخص اختياري.</string>
+    <string name="components_checkbox_title">تفضيل مربع اختيار</string>
+    <string name="components_fab_extended">إنشاء</string>
+    <string name="components_filter_popular">شائع</string>
+    <string name="components_filter_recent">الأحدث</string>
+    <string name="components_icon_content_description">أيقونة تجريبية</string>
+    <string name="components_menu_label">إظهار القائمة</string>
+    <string name="components_menu_option_primary">إجراء أساسي</string>
+    <string name="components_menu_option_secondary">إجراء ثانوي</string>
+    <string name="components_option_alpha">ألفا</string>
+    <string name="components_option_beta">بيتا</string>
+    <string name="components_option_gamma">جاما</string>
+    <string name="components_preference_secondary_summary">يعرض هذا العنصر التخطيط الأساسي للتفضيل.</string>
+    <string name="components_preference_secondary_title">تفضيل ثانوي</string>
+    <string name="components_preference_summary">نص ثانوي يصف التفضيل.</string>
+    <string name="components_preference_title">عنصر تفضيل</string>
+    <string name="components_section_buttons">الأزرار</string>
+    <string name="components_button_group_standard">الأزرار القياسية</string>
+    <string name="components_button_group_tonal">الأزرار اللونية</string>
+    <string name="components_button_group_outlined">الأزرار ذات الإطار</string>
+    <string name="components_button_group_text_and_icon">أزرار النص والرموز</string>
+    <string name="components_section_fabs">أزرار الإجراءات العائمة</string>
+    <string name="components_section_filters">فلاتر القائمة العلوية</string>
+    <string name="components_section_inputs">القوائم والإدخال</string>
+    <string name="components_section_preferences">التفضيلات</string>
+    <string name="components_switch_card_title">بطاقة مفتاح</string>
+    <string name="components_switch_divider_summary">يتضمن شيفرون وفاصل.</string>
+    <string name="components_switch_divider_title">مفتاح مع فاصل</string>
+    <string name="components_switch_summary">يوفر ملخصًا ومفتاحًا.</string>
+    <string name="components_switch_title">تفضيل المفتاح</string>
+    <string name="components_title">المكوّنات</string>
+    <string name="components_filter_favorites">المفضلة</string>
+</resources>

@@ -9,6 +9,7 @@ The hidden components showcase and the unlock gesture that reveals it.
 - The concrete `ComponentsShowcaseRepository`, which owns the unlock flag.
 - `ComponentsActivity`, `ComponentsScreen`, `ComponentsUnlockViewModel` and its contracts.
 - `ComponentsNavigationBuilder`.
+- Localized strings for the component showcase.
 
 ## Does not own
 
@@ -18,7 +19,7 @@ The hidden components showcase and the unlock gesture that reveals it.
 
 ## Depends on
 
-- `:sample:core:navigation`, `:sample:core:datastore`, `:sample:core:ui`.
+- `:sample:core:navigation`, `:sample:core:datastore`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the screen and state contracts.
 
 ## Used by

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Umrissene Schaltfläche</string>
+    <string name="components_button_primary">Primäre Schaltfläche</string>
+    <string name="components_button_text">Textschaltfläche</string>
+    <string name="components_button_tonal">Tonale Schaltfläche</string>
+    <string name="components_checkbox_summary">Zeigt ein Kontrollkästchen mit optionaler Zusammenfassung.</string>
+    <string name="components_checkbox_title">Kontrollkästchen-Einstellung</string>
+    <string name="components_fab_extended">Erstellen</string>
+    <string name="components_filter_popular">Beliebt</string>
+    <string name="components_filter_recent">Neueste</string>
+    <string name="components_icon_content_description">Demo-Symbol</string>
+    <string name="components_menu_label">Menü anzeigen</string>
+    <string name="components_menu_option_primary">Primäre Aktion</string>
+    <string name="components_menu_option_secondary">Sekundäre Aktion</string>
+    <string name="components_option_alpha">Alpha</string>
+    <string name="components_option_beta">Beta</string>
+    <string name="components_option_gamma">Gamma</string>
+    <string name="components_preference_secondary_summary">Dieses Element zeigt das Basislayout der Einstellung.</string>
+    <string name="components_preference_secondary_title">Sekundäre Einstellung</string>
+    <string name="components_preference_summary">Sekundärtext zur Beschreibung der Einstellung.</string>
+    <string name="components_preference_title">Einstellungselement</string>
+    <string name="components_section_buttons">Schaltflächen</string>
+    <string name="components_button_group_standard">Standardschaltflächen</string>
+    <string name="components_button_group_tonal">Tonale Schaltflächen</string>
+    <string name="components_button_group_outlined">Umrandete Schaltflächen</string>
+    <string name="components_button_group_text_and_icon">Text- und Symbolschaltflächen</string>
+    <string name="components_section_fabs">Schwebende Aktionsschaltflächen</string>
+    <string name="components_section_filters">Filter für oberste Listen</string>
+    <string name="components_section_inputs">Menüs &amp; Eingaben</string>
+    <string name="components_section_preferences">Einstellungen</string>
+    <string name="components_switch_card_title">Umschalter-Karte</string>
+    <string name="components_switch_divider_summary">Enthält einen Chevron und einen Trenner.</string>
+    <string name="components_switch_divider_title">Umschalter mit Trenner</string>
+    <string name="components_switch_summary">Bietet eine Zusammenfassung und einen Schalter.</string>
+    <string name="components_switch_title">Umschalter-Einstellung</string>
+    <string name="components_title">Komponenten</string>
+    <string name="components_filter_favorites">Favoriten</string>
+</resources>

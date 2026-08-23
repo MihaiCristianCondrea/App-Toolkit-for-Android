@@ -14,6 +14,7 @@ The developer's app catalogue: listing, details, favorites, and install state.
   catalogue as an atomic JSON file, plus `InstalledAppsLocalDataSource` for PackageManager access.
 - `AppsListViewModel`, the list and detail-sheet composables, and the native-ad placement in the
   list.
+- Localized app-catalogue strings and app-specific error-to-text mapping.
 - `appsListEntryBuilder`, this feature's navigation entry.
 - `FavoritesChangedReceiver`, which keeps the widget in step with favorites.
 

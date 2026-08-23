@@ -24,10 +24,7 @@ android {
 }
 
 dependencies {
-    api(project(":sample:core:common"))
-    api(project(":library:core:ui"))
     api(project(":library:core:designsystem"))
-    api(project(":library:core:network"))
 
     // This module owns themes.xml, whose AppTheme.Starting style sets
     // windowSplashScreenBackground / windowSplashScreenAnimatedIcon / postSplashScreenTheme. Those

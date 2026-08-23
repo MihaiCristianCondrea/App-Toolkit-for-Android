@@ -42,7 +42,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileIcon
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 
 /** Container and content colors used by a tile badge or status chip. */
 internal data class StatusColors(
@@ -77,22 +78,22 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
 internal fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
     ToolkitTileIcon.Level,
     ToolkitTileIcon.Compass,
-    ToolkitTileIcon.Lux -> R.drawable.background_8_sided_cookie
+    ToolkitTileIcon.Lux -> CoreUiR.drawable.background_8_sided_cookie
 
     ToolkitTileIcon.Caffeine,
-    ToolkitTileIcon.Breathing -> R.drawable.background_soft_burst
+    ToolkitTileIcon.Breathing -> CoreUiR.drawable.background_soft_burst
 
     ToolkitTileIcon.Sound,
-    ToolkitTileIcon.FlashDimmer -> R.drawable.background_flower
+    ToolkitTileIcon.FlashDimmer -> CoreUiR.drawable.background_flower
 
     ToolkitTileIcon.Coin,
     ToolkitTileIcon.Dice,
     ToolkitTileIcon.Counter,
-    ToolkitTileIcon.Morse -> R.drawable.background_12_sided_cookie
+    ToolkitTileIcon.Morse -> CoreUiR.drawable.background_12_sided_cookie
 
-    ToolkitTileIcon.Sos -> R.drawable.background_gem
+    ToolkitTileIcon.Sos -> CoreUiR.drawable.background_gem
 
-    else -> R.drawable.background_circle
+    else -> CoreUiR.drawable.background_circle
 }
 
 internal fun ToolkitTileStatus.labelResId(): Int = when (this) {

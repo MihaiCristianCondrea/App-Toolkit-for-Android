@@ -27,6 +27,5 @@ dependencies {
     testImplementation(project(":library:core:testing"))
     api(project(":sample:feature:components"))
     api(project(":sample:core:datastore"))
-    api(project(":sample:core:ui"))
     api(project(":library:apptoolkit"))
 }

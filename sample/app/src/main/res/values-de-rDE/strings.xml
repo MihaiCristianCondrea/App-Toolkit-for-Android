@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="onboarding_feature1_description">App Toolkit präsentiert eine Auswahl an Apps, die jeweils verschiedene Aspekte der AppToolkit-Bibliothek hervorheben und dein Android-Erlebnis verbessern. Sieh, was mit der AppToolkit-Bibliothek möglich ist.</string>
+    <string name="onboarding_feature1_title">Apps entdecken</string>
+    <string name="onboarding_personalization_description">Diese App zeigt, wie die AppToolkit-Bibliothek vielseitige, nutzerorientierte Anwendungen ermöglicht. Entdecke die Beispiel-Apps, um verschiedene Funktionen und Implementierungen der Bibliothek zu sehen.</string>
+    <string name="onboarding_personalization_title">Die AppToolkit-Bibliothek in Aktion</string>
+    <string name="onboarding_welcome_description">Erkunde die Möglichkeiten der AppToolkit-Bibliothek. Entdecke Anwendungen, die entwickelt wurden, um die Leistungsfähigkeit der Bibliothek zu zeigen und deine Android-Entwicklung sowie das Nutzungserlebnis zu verbessern.</string>
+    <string name="onboarding_welcome_title">Willkommen bei App Toolkit</string>
+    <string name="app_short_description">Eine Sammlung praktischer Android-Tools und -Dienstprogramme.</string>
+    <string name="settings_disabled_message">Die Einstellungen sind derzeit nicht verfügbar.</string>
+    <string name="long_settings_label">Einstellungen öffnen</string>
+</resources>

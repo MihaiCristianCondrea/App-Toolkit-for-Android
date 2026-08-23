@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 
 /** Quick Settings tile that increments an in-memory counter while System UI keeps it alive. */
 class CounterTileService : TileService() {

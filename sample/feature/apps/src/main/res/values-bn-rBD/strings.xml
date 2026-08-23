@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="all_apps">সব অ্যাপ</string>
+    <string name="app_details_about_title">এই অ্যাপ সম্পর্কে</string>
+    <string name="app_details_app_info">App info</string>
+    <string name="app_details_battery">Battery</string>
+    <string name="app_details_checking_install_state">Checking install status</string>
+    <string name="app_details_copy_package">Copy package</string>
+    <string name="app_details_github_repository">GitHub Repository</string>
+    <string name="app_details_github_repository_summary">View source code and contribute</string>
+    <string name="app_details_installed">Installed</string>
+    <string name="app_details_links_title">Links</string>
+    <string name="app_details_not_installed">Not installed</string>
+    <string name="app_details_notifications">Notifications</string>
+    <string name="app_details_open_app">অ্যাপ খুলুন</string>
+    <string name="app_details_package_name_clip_label">Package name</string>
+    <string name="app_details_package_name_copied">Package name copied</string>
+    <string name="app_details_permissions">Permissions</string>
+    <string name="app_details_play_store">Play Store</string>
+    <string name="app_details_privacy_policy">Privacy Policy</string>
+    <string name="app_details_privacy_policy_summary">Read our privacy policy</string>
+    <string name="app_details_quick_actions_title">Quick actions</string>
+    <string name="app_details_screenshots_title">স্ক্রিনশট</string>
+    <string name="app_details_share">Share</string>
+    <string name="app_details_share_content_description">অ্যাপ শেয়ার করুন</string>
+    <string name="app_details_share_text">Check out %1$s:\n%2$s</string>
+    <string name="app_details_share_title">Share app</string>
+    <string name="app_details_storage">Storage</string>
+    <string name="app_details_version">Version %1$s</string>
+    <string name="app_details_view_on_play_store">Google Play এ দেখুন</string>
+    <string name="apps_filter_all">সব</string>
+    <string name="error_failed_to_fetch_our_apps">অ্যাপের তালিকা লোড করা যায়নি</string>
+    <string name="error_failed_to_load_apps">অ্যাপ লোড করা যায়নি</string>
+    <string name="error_failed_to_update_favorite">প্রিয় আপডেট করা যায়নি</string>
+    <string name="favorite_apps">প্রিয়</string>
+    <string name="no_apps_added_to_favorites">প্রিয়তে কোনো অ্যাপ যোগ করা নেই</string>
+    <string name="summary_share_message">আমার ব্যবহার করা এই অসাধারণ অ্যাপটি দেখুন. এর কিছু দারুণ ফিচার আছে যা আপনার আকর্ষণীয় লাগতে পারে। আপনি এটি প্লে স্টোর থেকে ডাউনলোড করতে পারেন: %1$s</string>
+</resources>

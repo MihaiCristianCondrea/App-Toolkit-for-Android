@@ -39,7 +39,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.sections.InputShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.sections.LayoutShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.sections.PreferenceShowcase
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -71,7 +71,7 @@ fun ComponentsScreen(
 
         val filterPopular = stringResource(id = R.string.components_filter_popular)
         val filterRecent = stringResource(id = R.string.components_filter_recent)
-        val filterFavorites = stringResource(id = R.string.favorite_apps)
+        val filterFavorites = stringResource(id = R.string.components_filter_favorites)
         val filters = remember(filterPopular, filterRecent, filterFavorites) {
             persistentListOf(filterPopular, filterRecent, filterFavorites)
         }

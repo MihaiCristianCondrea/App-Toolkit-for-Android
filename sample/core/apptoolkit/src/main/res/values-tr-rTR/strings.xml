@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">Hakkında</string>
+    <string name="advanced">Gelişmiş</string>
+    <string name="dark_theme">Koyu tema</string>
+    <string name="display">Ekran</string>
+    <string name="notifications">Bildirimler</string>
+    <string name="question_1">App Toolkit nedir?</string>
+    <string name="question_2">App Toolkit’te gösterilen farklı uygulamalara nasıl erişirim?</string>
+    <string name="question_3">App Toolkit’te öne çıkan uygulamalar ücretsiz mi?</string>
+    <string name="question_4">Listelenen belirli bir uygulama hakkında nasıl daha fazla bilgi edinebilirim?</string>
+    <string name="question_5">Listelenen uygulamalardan biri için yardım veya destek nerede bulunur?</string>
+    <string name="question_6">App Toolkit’te uygulama listesi ne sıklıkla güncellenir?</string>
+    <string name="question_7">App Toolkit neden İnternet erişimi gibi izinlere ihtiyaç duyar?</string>
+    <string name="question_8">App Toolkit veya uygulamalar hakkında nasıl geri bildirimde bulunabilirim?</string>
+    <string name="question_9">App Toolkit’i kullanarak diğer uygulamaları bulurken verilerim güvende mi?</string>
+    <string name="security_and_privacy">Güvenlik ve gizlilik</string>
+    <string name="settings">Ayarlar</string>
+    <string name="summary_preference_faq_1">App Toolkit, AppToolkit kitaplığıyla oluşturulmuş uygulamaları tanıtmak ve göstermek için tasarlanmış bir uygulamadır. Bu ekosistemi keşfetmeniz ve AppToolkit kitaplığını iş başında görmeniz için bir rehberdir.</string>
+    <string name="summary_preference_faq_2">App Toolkit çeşitli uygulamaları listeler. Bir uygulama kaydına dokunduğunuzda genellikle daha fazla bilgi ve onu Google Play Store’dan yüklemek veya açmak için bir bağlantı görürsünüz; böylece doğrudan deneyimleyebilirsiniz.</string>
+    <string name="summary_preference_faq_3">App Toolkit’te öne çıkan birçok uygulama temel bir özellik setini ücretsiz sunar. Bazıları premium sürüm veya uygulama içi satın alımlar üzerinden gelişmiş işlevler sağlayabilir. Her uygulamanın ayrıntıları Google Play Store sayfasında bulunabilir.</string>
+    <string name="summary_preference_faq_4">Bir uygulama, özellikleri ve kullanıcı yorumları hakkında tam bilgi için App Toolkit’te uygulamaya dokunarak Google Play Store sayfasını ziyaret edin.</string>
+    <string name="summary_preference_faq_5">Her uygulamanın kendi destek kanalları vardır; bunlar genellikle Google Play Store sayfasında veya uygulama içinde belirtilir. App Toolkit bu uygulamaları keşfetmek içindir; uygulamaya özel sorunlar için uygulamanın destek seçeneklerini kullanın.</string>
+    <string name="summary_preference_faq_6">App Toolkit düzenli olarak güncellenir, böylece AppToolkit kitaplığını kullanan en yeni uygulamaları her zaman görürsünüz. Yeni uygulamalar veya önemli güncellemeler burada yer alabilir.</string>
+    <string name="summary_preference_faq_7">En güncel uygulama listesini göstermek için App Toolkit, Google Play Store’dan bilgi almak ve doğru şekilde göstermek üzere İnternet erişimini kullanır. Genellikle başka istilacı izinler gerekmez.</string>
+    <string name="summary_preference_faq_8">App Toolkit ve listelenen uygulamalar hakkındaki geri bildiriminiz değerlidir. Genellikle App Toolkit ayarlarında veya Google Play Store’daki geliştirici sayfasında "Geri Bildirim" ya da "İletişim" seçeneğini bulabilirsiniz. AppToolkit kitaplığı hakkındaki geri bildirimler de uygun kanallar üzerinden memnuniyetle karşılanır.</string>
+    <string name="summary_preference_faq_9">App Toolkit çoğunlukla listelenen uygulamalarla ilgili herkese açık bilgileri getirir. Bu uygulamalardan birini yüklemeyi veya kullanmayı seçtiğinizde, uygulamanın kendi gizlilik politikası geçerlidir; mutlaka gözden geçirin. App Toolkit’in veri işleme yaklaşımı kendi gizlilik politikasında açıklanır.</string>
+    <string name="summary_preference_settings_about">Uygulama hakkında daha fazla bilgi edinin</string>
+    <string name="summary_preference_settings_advanced">Daha gelişmiş ayarları keşfedin</string>
+    <string name="summary_preference_settings_display">Uygulamanızın görünümünü ve hissini kişiselleştirin</string>
+    <string name="summary_preference_settings_notifications">Uygulama bildirimlerini yönetin</string>
+    <string name="summary_preference_settings_privacy_and_security">Gizlilik ayarlarınızı yönetin</string>
+    <string name="usage_and_diagnostics">Kullanım ve teşhis</string>
+</resources>

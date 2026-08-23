@@ -53,7 +53,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
 @Composable
@@ -152,14 +153,14 @@ private fun Coin(
         if (isBackVisible) {
             Box(Modifier.graphicsLayer { this.rotationY = 180f }) {
                 CoinFace(
-                    iconRes = R.drawable.ic_coin_tails,
+                    iconRes = CoreUiR.drawable.ic_coin_tails,
                     color = MaterialTheme.colorScheme.secondaryContainer,
                     tint = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             }
         } else {
             CoinFace(
-                iconRes = R.drawable.ic_coin_heads,
+                iconRes = CoreUiR.drawable.ic_coin_heads,
                 color = MaterialTheme.colorScheme.primaryContainer,
                 tint = MaterialTheme.colorScheme.onPrimaryContainer
             )

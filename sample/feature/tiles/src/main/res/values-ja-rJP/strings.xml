@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="tile_breathing_summary">ガイド付きの短い呼吸停止を開始します</string>
+    <string name="tile_breathing_title">呼吸する</string>
+    <string name="tile_bubble_level_summary">面合わせと傾き検出</string>
+    <string name="tile_bubble_level_title">バブルレベル</string>
+    <string name="tile_caffeine_summary">画面を一時的に起動したままにする</string>
+    <string name="tile_caffeine_title">カフェイン</string>
+    <string name="tile_coin_flip_summary">表か裏を瞬時に反転します</string>
+    <string name="tile_coin_flip_title">コイン投げ</string>
+    <string name="tile_compass_summary">基本方位と方位</string>
+    <string name="tile_compass_title">コンパス</string>
+    <string name="tile_counter_summary">クイック実行カウントを増やす</string>
+    <string name="tile_counter_title">カウンター</string>
+    <string name="tile_dice_roll_summary">6面サイコロを振る</string>
+    <string name="tile_dice_roll_title">サイコロロール</string>
+    <string name="tile_lux_meter_info">周囲光強度の監視。注: この機能は物理ハードウェア センサーに依存するため、すべてのデバイスで動作するとは限りません。</string>
+    <string name="tile_lux_meter_summary">周囲光の強さ（ルクス）</string>
+    <string name="tile_lux_meter_title">ルクスメーター</string>
+    <string name="tile_music_search_summary">ショートカットで音楽を識別する</string>
+    <string name="tile_music_search_title">音楽検索</string>
+    <string name="tile_network_traffic_summary">リアルタイムのネットワーク速度を監視する</string>
+    <string name="tile_network_traffic_title">ネットワークトラフィック</string>
+    <string name="tile_preview_close">閉じる</string>
+    <string name="tile_preview_coin_result">ヘッズ</string>
+    <string name="tile_preview_compass_result">北東45度</string>
+    <string name="tile_preview_default_result">プレビューは近日公開予定</string>
+    <string name="tile_preview_level_result">レベル</string>
+    <string name="tile_service_dice_value">ロールド %1$d</string>
+    <string name="tile_service_heads">ヘッズ</string>
+    <string name="tile_service_tails">テイルス</string>
+    <string name="tile_sos_summary">緊急行動は身近にしておくこと</string>
+    <string name="tile_sos_title">SOS</string>
+    <string name="tile_sound_mode_summary">通常モード、振動モード、サイレントモードを切り替える</string>
+    <string name="tile_sound_mode_title">サウンドモード</string>
+    <string name="tile_volume_panel_summary">音量コントロールをすばやく開きます</string>
+    <string name="tile_volume_panel_title">ボリュームパネル</string>
+    <string name="tiles_add">追加</string>
+    <string name="tiles_add_pre_android_13">Android 12 以降では、クイック設定編集モードからタイルを追加する必要があります。</string>
+    <string name="tiles_add_result_added">クイック設定にタイルを追加しました</string>
+    <string name="tiles_add_result_already_added">タイルはすでにクイック設定にあります</string>
+    <string name="tiles_add_result_failed">タイルを追加できませんでした</string>
+    <string name="tiles_category_sensors">センサーと測定</string>
+    <string name="tiles_category_system">システムと制御</string>
+    <string name="tiles_category_utilities">ユーティリティと楽しみ</string>
+    <string name="tiles_category_wellbeing">幸福</string>
+    <string name="tiles_chip_expanded_tool">拡張ツール</string>
+    <string name="tiles_chip_quick_tool">クイックツール</string>
+    <string name="tiles_chip_tile">タイル</string>
+    <string name="tiles_collapse_category">カテゴリを折りたたむ</string>
+    <string name="tiles_error_failed_to_load">クイックツールのロードに失敗しました</string>
+    <string name="tiles_expand_category">カテゴリを展開する</string>
+    <string name="tiles_filter_added">追加されました</string>
+    <string name="tiles_filter_all">すべてのツール</string>
+    <string name="tiles_filter_empty">このフィルターに一致するツールはまだありません。</string>
+    <string name="tiles_filter_needs_setup">セットアップが必要です</string>
+    <string name="tiles_filter_unsupported">サポートされていません</string>
+    <string name="tiles_how_to_add_summary">タイルチップを搭載したツールをクイック設定に追加できます。 Android 13 以降で [追加] をタップするか、クイック設定編集モードを開いて、App Toolkit タイルをアクティブなパネルにドラッグします。</string>
+    <string name="tiles_how_to_add_title">タイル対応ツール</string>
+    <string name="tiles_more_options">その他のタイルオプション</string>
+    <string name="tiles_setup">セットアップ</string>
+    <string name="tiles_setup_required_message">このタイルを追加するには、さらにセットアップが必要です。</string>
+    <string name="tiles_status_added">追加されました</string>
+    <string name="tiles_status_available">利用可能</string>
+    <string name="tiles_status_needs_setup">セットアップが必要です</string>
+    <string name="tiles_status_unsupported">サポートされていません</string>
+    <string name="tiles_subtitle">クイック ダイアログを開いて、タイル対応の機能が明確にマークされた拡張ツールを見つけます。</string>
+    <string name="tool_coin_flip_action">コインを投げる</string>
+    <string name="tool_coin_flip_waiting">準備ができて？</string>
+    <string name="tool_counter_increment">インクリメント</string>
+    <string name="tool_counter_reset">リセット</string>
+    <string name="tool_dialog_close_content_description">クイックツールを閉じる</string>
+    <string name="tool_dice_roll_action">ロールダイ</string>
+    <string name="tool_dice_roll_waiting">ロール</string>
+    <string name="tool_generic_available_summary">このツールは拡張実装の準備ができており、マテリアル プレビューが追加されたため、より深く統合する前に動作を検証できます。</string>
+    <string name="tool_generic_setup_summary">このプレビューは、使用できないプラットフォームの作業をライブ タイルのアクションから明確に分離しながら、意図された動作を文書化します。</string>
+    <string name="tool_material_colors_android_accent_1">アンドロイドアクセント1</string>
+    <string name="tool_material_colors_android_accent_2">アンドロイドアクセント2</string>
+    <string name="tool_material_colors_android_accent_3">アンドロイドアクセント3</string>
+    <string name="tool_material_colors_android_neutral_1">Android ニュートラル 1</string>
+    <string name="tool_material_colors_android_neutral_2">Android ニュートラル 2</string>
+    <string name="tool_material_colors_android_unavailable">Android マテリアル ユー システム パレットは、Android 12 以降で利用できます。</string>
+    <string name="tool_material_colors_app_scheme">アプリの配色</string>
+    <string name="tool_material_colors_description">現在のアプリケーションの配色を Android システムのアクセントおよびニュートラル パレットと比較します。</string>
+    <string name="tool_material_colors_summary">アプリパレットと Android マテリアルの色調をプレビューする</string>
+    <string name="tool_material_colors_title">素材の色</string>
+    <string name="tool_status_added_summary">このタイルは、アクティブなクイック設定パネルですでに使用できるようです。</string>
+    <string name="tool_status_added_title">クイック設定で準備完了</string>
+    <string name="tool_status_available_summary">以下のアプリ内プレビューを試すか、タイル チップが表示されたらクイック設定にタイルを追加してください。</string>
+    <string name="tool_status_available_title">すぐに使用できます</string>
+    <string name="tool_status_needs_setup_summary">このコンセプトをライブ タイルとして実行するには、アクセス許可、デバイス サポート、またはより完全なワークフローが必要です。</string>
+    <string name="tool_status_needs_setup_title">セットアップが必要です</string>
+    <string name="tool_status_unsupported_summary">Android はこのアクション用の安全なパブリック API をまだ公開していないため、このエントリはプレビューとして文書化されています。</string>
+    <string name="tool_status_unsupported_title">プレビューのみ</string>
+    <string name="tile_flash_dimmer_title">フラッシュ調光</string>
+    <string name="tile_flash_dimmer_summary">ライトの明るさを調整し、クイック設定から使用できます</string>
+    <string name="flash_dimmer_unavailable">ライトを利用できません</string>
+    <string name="flash_dimmer_off">オフ</string>
+    <string name="flash_dimmer_on">オン</string>
+    <string name="flash_dimmer_tile_level">レベル %1$d/%2$d</string>
+    <string name="flash_dimmer_level">明るさ %1$d/%2$d</string>
+    <string name="flash_dimmer_minimum">最小</string>
+    <string name="flash_dimmer_half">半分</string>
+    <string name="flash_dimmer_maximum">最大</string>
+    <string name="flash_dimmer_turn_off">オフにする</string>
+    <string name="flash_dimmer_turn_on">オンにする</string>
+    <string name="tile_morse_summary">カスタムメッセージをモールス信号で点滅させます</string>
+    <string name="tile_morse_title">モールス懐中電灯</string>
+    <string name="morse_message_label">メッセージ</string>
+    <string name="morse_start">点滅を開始</string>
+    <string name="morse_stop">停止</string>
+    <string name="morse_ready">準備完了</string>
+    <string name="morse_active">点滅中</string>
+    <string name="morse_error_empty">メッセージを入力してください</string>
+    <string name="morse_error_length">200文字以内で入力してください</string>
+    <string name="morse_error_characters">A～Zの英字、数字、スペースのみ使用できます</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+</resources>

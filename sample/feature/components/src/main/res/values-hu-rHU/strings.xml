@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Körvonalas gomb</string>
+    <string name="components_button_primary">Elsődleges gomb</string>
+    <string name="components_button_text">Szöveggomb</string>
+    <string name="components_button_tonal">Tónusos gomb</string>
+    <string name="components_checkbox_summary">Jelölőnégyzetet mutat opcionális összefoglalóval.</string>
+    <string name="components_checkbox_title">Jelölőnégyzet beállítás</string>
+    <string name="components_fab_extended">Létrehozás</string>
+    <string name="components_filter_popular">Népszerű</string>
+    <string name="components_filter_recent">Legutóbbi</string>
+    <string name="components_icon_content_description">Bemutató ikon</string>
+    <string name="components_menu_label">Menü megjelenítése</string>
+    <string name="components_menu_option_primary">Elsődleges művelet</string>
+    <string name="components_menu_option_secondary">Másodlagos művelet</string>
+    <string name="components_option_alpha">Alfa</string>
+    <string name="components_option_beta">Béta</string>
+    <string name="components_option_gamma">Gamma</string>
+    <string name="components_preference_secondary_summary">Ez az elem az alap beállítási elrendezést mutatja.</string>
+    <string name="components_preference_secondary_title">Másodlagos beállítás</string>
+    <string name="components_preference_summary">A beállítást leíró másodlagos szöveg.</string>
+    <string name="components_preference_title">Beállítás elem</string>
+    <string name="components_section_buttons">Gombok</string>
+    <string name="components_button_group_standard">Normál gombok</string>
+    <string name="components_button_group_tonal">Tónusos gombok</string>
+    <string name="components_button_group_outlined">Körvonalas gombok</string>
+    <string name="components_button_group_text_and_icon">Szöveges és ikongombok</string>
+    <string name="components_section_fabs">Lebegő műveletgombok</string>
+    <string name="components_section_filters">Felső lista szűrők</string>
+    <string name="components_section_inputs">Menük és bevitel</string>
+    <string name="components_section_preferences">Beállítások</string>
+    <string name="components_switch_card_title">Kapcsoló kártya</string>
+    <string name="components_switch_divider_summary">Tartalmaz egy chevront és elválasztót.</string>
+    <string name="components_switch_divider_title">Elválasztós kapcsoló</string>
+    <string name="components_switch_summary">Összefoglalót és kapcsolót ad.</string>
+    <string name="components_switch_title">Kapcsoló beállítás</string>
+    <string name="components_title">Komponensek</string>
+    <string name="components_filter_favorites">Kedvencek</string>
+</resources>

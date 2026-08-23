@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.setting
 
 import android.content.Context
 import android.content.Intent
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.AdsSettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.PermissionsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity

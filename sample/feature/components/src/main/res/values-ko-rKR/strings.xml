@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">윤곽선 버튼</string>
+    <string name="components_button_primary">기본 버튼</string>
+    <string name="components_button_text">텍스트 버튼</string>
+    <string name="components_button_tonal">톤 버튼</string>
+    <string name="components_checkbox_summary">선택적 요약이 있는 체크박스를 표시합니다.</string>
+    <string name="components_checkbox_title">체크박스 환경설정</string>
+    <string name="components_fab_extended">생성</string>
+    <string name="components_filter_popular">인기</string>
+    <string name="components_filter_recent">최근</string>
+    <string name="components_icon_content_description">데모 아이콘</string>
+    <string name="components_menu_label">메뉴 표시</string>
+    <string name="components_menu_option_primary">기본 작업</string>
+    <string name="components_menu_option_secondary">보조 작업</string>
+    <string name="components_option_alpha">알파</string>
+    <string name="components_option_beta">베타</string>
+    <string name="components_option_gamma">감마</string>
+    <string name="components_preference_secondary_summary">이 항목은 기본 환경설정 레이아웃을 보여줍니다.</string>
+    <string name="components_preference_secondary_title">보조 환경설정</string>
+    <string name="components_preference_summary">환경설정을 설명하는 보조 텍스트입니다.</string>
+    <string name="components_preference_title">환경설정 항목</string>
+    <string name="components_section_buttons">버튼</string>
+    <string name="components_button_group_standard">표준 버튼</string>
+    <string name="components_button_group_tonal">톤 버튼</string>
+    <string name="components_button_group_outlined">윤곽선 버튼</string>
+    <string name="components_button_group_text_and_icon">텍스트 및 아이콘 버튼</string>
+    <string name="components_section_fabs">플로팅 액션 버튼</string>
+    <string name="components_section_filters">상단 목록 필터</string>
+    <string name="components_section_inputs">메뉴 및 입력</string>
+    <string name="components_section_preferences">환경설정</string>
+    <string name="components_switch_card_title">스위치 카드</string>
+    <string name="components_switch_divider_summary">셰브론과 구분선이 포함됩니다.</string>
+    <string name="components_switch_divider_title">구분선이 있는 스위치</string>
+    <string name="components_switch_summary">요약과 스위치를 제공합니다.</string>
+    <string name="components_switch_title">스위치 환경설정</string>
+    <string name="components_title">컴포넌트</string>
+    <string name="components_filter_favorites">즐겨찾기</string>
+</resources>

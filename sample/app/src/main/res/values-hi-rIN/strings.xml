@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="onboarding_feature1_description">App Toolkit ऐप्स का चयन प्रस्तुत करता है, जिनमें से हर एक AppToolkit लाइब्रेरी के अलग-अलग पहलुओं को दिखाने और आपके Android अनुभव को बेहतर बनाने के लिए बनाया गया है। देखें कि AppToolkit लाइब्रेरी से क्या संभव है।</string>
+    <string name="onboarding_feature1_title">ऐप्स खोजें</string>
+    <string name="onboarding_personalization_description">यह ऐप दिखाती है कि AppToolkit लाइब्रेरी कैसे बहुमुखी, उपयोगकर्ता-केंद्रित ऐप्स बनाती है। लाइब्रेरी की अलग-अलग सुविधाएँ और कार्यान्वयन देखने के लिए नमूना ऐप्स देखें।</string>
+    <string name="onboarding_personalization_title">AppToolkit लाइब्रेरी को काम करते हुए देखें</string>
+    <string name="onboarding_welcome_description">AppToolkit लाइब्रेरी की क्षमताओं का अन्वेषण करें। ऐसी ऐप्स खोजें जो लाइब्रेरी की क्षमता दिखाने और आपके Android विकास व उपयोगकर्ता अनुभव को बेहतर बनाने के लिए बनाई गई हैं।</string>
+    <string name="onboarding_welcome_title">App Toolkit में आपका स्वागत है</string>
+    <string name="app_short_description">उपयोगी Android टूल और यूटिलिटी का संग्रह।</string>
+    <string name="settings_disabled_message">सेटिंग्स फ़िलहाल उपलब्ध नहीं हैं।</string>
+    <string name="long_settings_label">सेटिंग्स खोलें</string>
+</resources>

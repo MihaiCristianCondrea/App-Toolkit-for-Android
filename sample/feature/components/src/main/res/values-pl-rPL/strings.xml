@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Przycisk z obramowaniem</string>
+    <string name="components_button_primary">Przycisk główny</string>
+    <string name="components_button_text">Przycisk tekstowy</string>
+    <string name="components_button_tonal">Przycisk tonalny</string>
+    <string name="components_checkbox_summary">Pokazuje pole wyboru z opcjonalnym opisem.</string>
+    <string name="components_checkbox_title">Preferencja pola wyboru</string>
+    <string name="components_fab_extended">Utwórz</string>
+    <string name="components_filter_popular">Popularne</string>
+    <string name="components_filter_recent">Najnowsze</string>
+    <string name="components_icon_content_description">Ikona demonstracyjna</string>
+    <string name="components_menu_label">Pokaż menu</string>
+    <string name="components_menu_option_primary">Akcja główna</string>
+    <string name="components_menu_option_secondary">Akcja dodatkowa</string>
+    <string name="components_option_alpha">Alpha</string>
+    <string name="components_option_beta">Beta</string>
+    <string name="components_option_gamma">Gamma</string>
+    <string name="components_preference_secondary_summary">Ten element pokazuje podstawowy układ preferencji.</string>
+    <string name="components_preference_secondary_title">Preferencja pomocnicza</string>
+    <string name="components_preference_summary">Tekst pomocniczy opisujący preferencję.</string>
+    <string name="components_preference_title">Element preferencji</string>
+    <string name="components_section_buttons">Przyciski</string>
+    <string name="components_button_group_standard">Przyciski standardowe</string>
+    <string name="components_button_group_tonal">Przyciski tonalne</string>
+    <string name="components_button_group_outlined">Przyciski z obramowaniem</string>
+    <string name="components_button_group_text_and_icon">Przyciski tekstowe i ikonowe</string>
+    <string name="components_section_fabs">Pływające przyciski akcji</string>
+    <string name="components_section_filters">Filtry listy najwyższej</string>
+    <string name="components_section_inputs">Menu i pola</string>
+    <string name="components_section_preferences">Preferencje</string>
+    <string name="components_switch_card_title">Karta przełącznika</string>
+    <string name="components_switch_divider_summary">Zawiera chevron i separator.</string>
+    <string name="components_switch_divider_title">Przełącznik z separatorem</string>
+    <string name="components_switch_summary">Zawiera opis i przełącznik.</string>
+    <string name="components_switch_title">Preferencja przełącznika</string>
+    <string name="components_title">Komponenty</string>
+    <string name="components_filter_favorites">Ulubione</string>
+</resources>

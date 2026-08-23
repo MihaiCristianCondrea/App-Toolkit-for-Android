@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">ปุ่มเส้นขอบ</string>
+    <string name="components_button_primary">ปุ่มหลัก</string>
+    <string name="components_button_text">ปุ่มข้อความ</string>
+    <string name="components_button_tonal">ปุ่มโทน</string>
+    <string name="components_checkbox_summary">แสดงกล่องกาเครื่องหมายพร้อมสรุปแบบเลือกได้</string>
+    <string name="components_checkbox_title">การตั้งค่ากล่องกาเครื่องหมาย</string>
+    <string name="components_fab_extended">สร้าง</string>
+    <string name="components_filter_popular">ยอดนิยม</string>
+    <string name="components_filter_recent">ล่าสุด</string>
+    <string name="components_icon_content_description">ไอคอนเดโม</string>
+    <string name="components_menu_label">แสดงเมนู</string>
+    <string name="components_menu_option_primary">การกระทำหลัก</string>
+    <string name="components_menu_option_secondary">การกระทำรอง</string>
+    <string name="components_option_alpha">อัลฟา</string>
+    <string name="components_option_beta">เบตา</string>
+    <string name="components_option_gamma">แกมมา</string>
+    <string name="components_preference_secondary_summary">รายการนี้แสดงเลย์เอาต์การตั้งค่าพื้นฐาน</string>
+    <string name="components_preference_secondary_title">การตั้งค่ารอง</string>
+    <string name="components_preference_summary">ข้อความรองที่อธิบายการตั้งค่า</string>
+    <string name="components_preference_title">รายการการตั้งค่า</string>
+    <string name="components_section_buttons">ปุ่ม</string>
+    <string name="components_button_group_standard">ปุ่มมาตรฐาน</string>
+    <string name="components_button_group_tonal">ปุ่มโทนสี</string>
+    <string name="components_button_group_outlined">ปุ่มแบบมีเส้นขอบ</string>
+    <string name="components_button_group_text_and_icon">ปุ่มข้อความและไอคอน</string>
+    <string name="components_section_fabs">ปุ่มการทำงานแบบลอย</string>
+    <string name="components_section_filters">ตัวกรองรายการยอดนิยม</string>
+    <string name="components_section_inputs">เมนูและการป้อนข้อมูล</string>
+    <string name="components_section_preferences">การตั้งค่า</string>
+    <string name="components_switch_card_title">การ์ดสวิตช์</string>
+    <string name="components_switch_divider_summary">มีเชฟรอนและตัวแบ่ง</string>
+    <string name="components_switch_divider_title">สวิตช์พร้อมตัวแบ่ง</string>
+    <string name="components_switch_summary">มีสรุปและสวิตช์</string>
+    <string name="components_switch_title">การตั้งค่าสวิตช์</string>
+    <string name="components_title">คอมโพเนนต์</string>
+    <string name="components_filter_favorites">รายการโปรด</string>
+</resources>

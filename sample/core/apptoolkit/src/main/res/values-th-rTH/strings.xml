@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">เกี่ยวกับแอป</string>
+    <string name="advanced">ขั้นสูง</string>
+    <string name="dark_theme">ธีมมืด</string>
+    <string name="display">หน้าจอ</string>
+    <string name="notifications">การแจ้งเตือน</string>
+    <string name="question_1">App Toolkit คืออะไร?</string>
+    <string name="question_2">จะเข้าถึงแอปต่าง ๆ ที่แสดงใน App Toolkit ได้อย่างไร?</string>
+    <string name="question_3">แอปที่นำเสนอใน App Toolkit ฟรีหรือไม่?</string>
+    <string name="question_4">จะรู้เพิ่มเติมเกี่ยวกับแอปที่ระบุไว้ได้อย่างไร?</string>
+    <string name="question_5">ฉันจะหาความช่วยเหลือหรือการสนับสนุนสำหรับแอปที่อยู่ในรายการได้ที่ไหน?</string>
+    <string name="question_6">รายการแอปใน App Toolkit อัปเดตบ่อยแค่ไหน?</string>
+    <string name="question_7">ทำไม App Toolkit ต้องขอสิทธิ์อย่างการเข้าถึงอินเทอร์เน็ต?</string>
+    <string name="question_8">ฉันจะส่งความคิดเห็นเกี่ยวกับ App Toolkit หรือแอปได้อย่างไร?</string>
+    <string name="question_9">ข้อมูลของฉันปลอดภัยไหมเมื่อใช้ App Toolkit เพื่อหาแอปอื่น ๆ?</string>
+    <string name="security_and_privacy">ความปลอดภัยและความเป็นส่วนตัว</string>
+    <string name="settings">การตั้งค่า</string>
+    <string name="summary_preference_faq_1">App Toolkit เป็นแอปที่ออกแบบมาเพื่อแนะนำและสาธิตแอปที่สร้างด้วยไลบรารี AppToolkit นี่คือคู่มือของคุณในการสำรวจระบบนิเวศนี้และดูไลบรารี AppToolkit ในการใช้งานจริง</string>
+    <string name="summary_preference_faq_2">App Toolkit แสดงรายการแอปต่าง ๆ เมื่อแตะแอป คุณมักจะเห็นข้อมูลเพิ่มเติมและลิงก์สำหรับติดตั้งหรือเปิดจาก Google Play Store เพื่อทดลองใช้งานได้ทันที</string>
+    <string name="summary_preference_faq_3">แอปจำนวนมากที่นำเสนอใน App Toolkit มีฟีเจอร์พื้นฐานให้ใช้ฟรี บางแอปอาจมีฟีเจอร์ขั้นสูงผ่านเวอร์ชันพรีเมียมหรือการซื้อในแอป รายละเอียดของแต่ละแอปสามารถดูได้ที่หน้าของแอปใน Google Play Store</string>
+    <string name="summary_preference_faq_4">หากต้องการรายละเอียดครบถ้วนเกี่ยวกับแอป ฟีเจอร์ และรีวิวจากผู้ใช้ ให้แตะแอปใน App Toolkit เพื่อไปที่หน้าบน Google Play Store</string>
+    <string name="summary_preference_faq_5">แต่ละแอปมีช่องทางสนับสนุนของตนเอง ซึ่งมักระบุไว้บนหน้า Google Play Store หรือภายในแอป App Toolkit ใช้เพื่อค้นพบแอปเหล่านี้; สำหรับปัญหาเฉพาะของแอป ให้ใช้ตัวเลือกการสนับสนุนของแอปนั้น</string>
+    <string name="summary_preference_faq_6">App Toolkit มีการอัปเดตเป็นประจำเพื่อให้คุณเห็นแอปล่าสุดที่ใช้ไลบรารี AppToolkit อยู่เสมอ อาจมีแอปใหม่หรือการอัปเดตสำคัญปรากฏที่นี่</string>
+    <string name="summary_preference_faq_7">เพื่อแสดงรายการแอปล่าสุด App Toolkit ใช้การเข้าถึงอินเทอร์เน็ตในการดึงข้อมูลจาก Google Play Store และแสดงอย่างถูกต้อง โดยทั่วไปไม่จำเป็นต้องมีสิทธิ์ที่รุกล้ำอื่น ๆ</string>
+    <string name="summary_preference_faq_8">เรายินดีรับความคิดเห็นของคุณเกี่ยวกับ App Toolkit และแอปที่อยู่ในรายการ โดยทั่วไปคุณสามารถพบตัวเลือก "Feedback" หรือ "Contact" ในการตั้งค่า App Toolkit หรือหน้าโปรไฟล์นักพัฒนาใน Google Play Store ความคิดเห็นเกี่ยวกับไลบรารี AppToolkit ก็ยินดีรับผ่านช่องทางที่เหมาะสม</string>
+    <string name="summary_preference_faq_9">App Toolkit ดึงข้อมูลสาธารณะเกี่ยวกับแอปที่อยู่ในรายการเป็นหลัก เมื่อคุณเลือกติดตั้งหรือใช้แอปใดแอปหนึ่ง นโยบายความเป็นส่วนตัวของแอปนั้นจะมีผลบังคับใช้ โปรดอ่านให้ครบถ้วน การจัดการข้อมูลของ App Toolkit อธิบายไว้ในนโยบายความเป็นส่วนตัวของแอปนี้</string>
+    <string name="summary_preference_settings_about">เรียนรู้เพิ่มเติมเกี่ยวกับแอป</string>
+    <string name="summary_preference_settings_advanced">สำรวจการตั้งค่าขั้นสูงเพิ่มเติม</string>
+    <string name="summary_preference_settings_display">ปรับแต่งรูปลักษณ์ของแอปตามที่คุณต้องการ</string>
+    <string name="summary_preference_settings_notifications">จัดการการแจ้งเตือนแอป</string>
+    <string name="summary_preference_settings_privacy_and_security">จัดการการตั้งค่าความเป็นส่วนตัวของคุณ</string>
+    <string name="usage_and_diagnostics">การใช้งานและการวินิจฉัย</string>
+</resources>

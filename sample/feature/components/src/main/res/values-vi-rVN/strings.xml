@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Nút viền</string>
+    <string name="components_button_primary">Nút chính</string>
+    <string name="components_button_text">Nút văn bản</string>
+    <string name="components_button_tonal">Nút tông màu</string>
+    <string name="components_checkbox_summary">Hiển thị hộp kiểm với phần tóm tắt tùy chọn.</string>
+    <string name="components_checkbox_title">Tùy chọn hộp kiểm</string>
+    <string name="components_fab_extended">Tạo</string>
+    <string name="components_filter_popular">Phổ biến</string>
+    <string name="components_filter_recent">Gần đây</string>
+    <string name="components_icon_content_description">Biểu tượng demo</string>
+    <string name="components_menu_label">Hiển thị menu</string>
+    <string name="components_menu_option_primary">Hành động chính</string>
+    <string name="components_menu_option_secondary">Hành động phụ</string>
+    <string name="components_option_alpha">Alpha</string>
+    <string name="components_option_beta">Beta</string>
+    <string name="components_option_gamma">Gamma</string>
+    <string name="components_preference_secondary_summary">Mục này hiển thị bố cục tùy chọn cơ bản.</string>
+    <string name="components_preference_secondary_title">Tùy chọn phụ</string>
+    <string name="components_preference_summary">Văn bản phụ mô tả tùy chọn.</string>
+    <string name="components_preference_title">Mục tùy chọn</string>
+    <string name="components_section_buttons">Nút</string>
+    <string name="components_button_group_standard">Nút tiêu chuẩn</string>
+    <string name="components_button_group_tonal">Nút có tông màu</string>
+    <string name="components_button_group_outlined">Nút có đường viền</string>
+    <string name="components_button_group_text_and_icon">Nút văn bản và biểu tượng</string>
+    <string name="components_section_fabs">Nút hành động nổi</string>
+    <string name="components_section_filters">Bộ lọc danh sách hàng đầu</string>
+    <string name="components_section_inputs">Menu và nhập liệu</string>
+    <string name="components_section_preferences">Tùy chọn</string>
+    <string name="components_switch_card_title">Thẻ công tắc</string>
+    <string name="components_switch_divider_summary">Bao gồm chevron và vạch chia.</string>
+    <string name="components_switch_divider_title">Công tắc có vạch chia</string>
+    <string name="components_switch_summary">Cung cấp tóm tắt và công tắc.</string>
+    <string name="components_switch_title">Tùy chọn công tắc</string>
+    <string name="components_title">Thành phần</string>
+    <string name="components_filter_favorites">Yêu thích</string>
+</resources>

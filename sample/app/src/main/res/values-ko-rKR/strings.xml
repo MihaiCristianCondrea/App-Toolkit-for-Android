@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="onboarding_feature1_description">App Toolkit은 AppToolkit 라이브러리의 다양한 측면을 강조하고 Android 경험을 개선하도록 설계된 앱을 소개합니다. AppToolkit 라이브러리로 가능한 것을 확인해 보세요.</string>
+    <string name="onboarding_feature1_title">앱을 살펴보기</string>
+    <string name="onboarding_personalization_description">이 앱은 AppToolkit 라이브러리가 어떻게 다재다능하고 사용자 중심의 앱을 만드는지 보여 줍니다. 샘플 앱을 살펴보며 라이브러리의 다양한 기능과 구현을 확인하세요.</string>
+    <string name="onboarding_personalization_title">AppToolkit 라이브러리를 직접 확인하세요</string>
+    <string name="onboarding_welcome_description">AppToolkit 라이브러리의 기능을 살펴보세요. 라이브러리의 힘을 보여 주고 Android 개발과 사용자 경험을 향상시키기 위해 만든 앱을 발견하세요.</string>
+    <string name="onboarding_welcome_title">App Toolkit에 오신 것을 환영합니다</string>
+    <string name="app_short_description">유용한 Android 도구와 유틸리티 모음입니다.</string>
+    <string name="settings_disabled_message">설정을 현재 사용할 수 없습니다.</string>
+    <string name="long_settings_label">설정 열기</string>
+</resources>

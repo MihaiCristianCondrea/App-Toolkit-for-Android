@@ -11,6 +11,7 @@ knowing which shell renders it.
 - `AppNavigationEntryContext` and `RandomAppHandler`, the parameters every feature entry builder
   takes.
 - `NavigationManager` and `MainNavigationDefaults` (bottom-bar items, FAB-supported routes).
+- The localized destination titles and startup option arrays used by those navigation defaults.
 
 ## Does not own
 
@@ -19,9 +20,7 @@ knowing which shell renders it.
 
 ## Depends on
 
-- [`:sample:core:ui`](../ui/README.md) for the strings and icons the bottom bar uses.
-- [`:library:navigation`](../../../library/navigation/README.md) and
-  [`:library:navigation`](../../../library/navigation/README.md) for `StableNavKey` and destination
+- [`:library:navigation`](../../../library/navigation/README.md) for `StableNavKey` and destination
   types, plus [`:library:core:ui`](../../../library/core/ui/README.md) for shared UI state.
 
 ## Used by

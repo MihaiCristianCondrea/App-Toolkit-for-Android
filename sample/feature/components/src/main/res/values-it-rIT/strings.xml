@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Pulsante con contorno</string>
+    <string name="components_button_primary">Pulsante principale</string>
+    <string name="components_button_text">Pulsante di testo</string>
+    <string name="components_button_tonal">Pulsante tonale</string>
+    <string name="components_checkbox_summary">Mostra una casella di controllo con riepilogo opzionale.</string>
+    <string name="components_checkbox_title">Preferenza casella di controllo</string>
+    <string name="components_fab_extended">Crea</string>
+    <string name="components_filter_popular">Popolare</string>
+    <string name="components_filter_recent">Recente</string>
+    <string name="components_icon_content_description">Icona demo</string>
+    <string name="components_menu_label">Mostra menu</string>
+    <string name="components_menu_option_primary">Azione principale</string>
+    <string name="components_menu_option_secondary">Azione secondaria</string>
+    <string name="components_option_alpha">Alpha</string>
+    <string name="components_option_beta">Beta</string>
+    <string name="components_option_gamma">Gamma</string>
+    <string name="components_preference_secondary_summary">Questo elemento mostra il layout base della preferenza.</string>
+    <string name="components_preference_secondary_title">Preferenza secondaria</string>
+    <string name="components_preference_summary">Testo secondario che descrive la preferenza.</string>
+    <string name="components_preference_title">Elemento di preferenza</string>
+    <string name="components_section_buttons">Pulsanti</string>
+    <string name="components_button_group_standard">Pulsanti standard</string>
+    <string name="components_button_group_tonal">Pulsanti tonali</string>
+    <string name="components_button_group_outlined">Pulsanti con contorno</string>
+    <string name="components_button_group_text_and_icon">Pulsanti di testo e icona</string>
+    <string name="components_section_fabs">Pulsanti di azione flottanti</string>
+    <string name="components_section_filters">Filtri elenco superiore</string>
+    <string name="components_section_inputs">Menu e input</string>
+    <string name="components_section_preferences">Preferenze</string>
+    <string name="components_switch_card_title">Scheda interruttore</string>
+    <string name="components_switch_divider_summary">Include un chevron e un divisore.</string>
+    <string name="components_switch_divider_title">Interruttore con divisore</string>
+    <string name="components_switch_summary">Fornisce un riepilogo e un interruttore.</string>
+    <string name="components_switch_title">Preferenza interruttore</string>
+    <string name="components_title">Componenti</string>
+    <string name="components_filter_favorites">Preferiti</string>
+</resources>

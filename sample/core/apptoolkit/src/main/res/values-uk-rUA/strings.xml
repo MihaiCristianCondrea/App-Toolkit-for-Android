@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">Про додаток</string>
+    <string name="advanced">Додаткові налаштування</string>
+    <string name="dark_theme">Темна тема</string>
+    <string name="display">Екран</string>
+    <string name="notifications">Сповіщення</string>
+    <string name="question_1">Що таке App Toolkit?</string>
+    <string name="question_2">Як отримати доступ до різних застосунків, показаних в App Toolkit?</string>
+    <string name="question_3">Чи є застосунки, представлені в App Toolkit, безплатними?</string>
+    <string name="question_4">Як дізнатися більше про конкретний застосунок зі списку?</string>
+    <string name="question_5">Де знайти допомогу чи підтримку для одного зі застосунків зі списку?</string>
+    <string name="question_6">Як часто оновлюється список застосунків в App Toolkit?</string>
+    <string name="question_7">Чому App Toolkit потребує дозволів, наприклад доступу до Інтернету?</string>
+    <string name="question_8">Як залишити відгук про App Toolkit або застосунки?</string>
+    <string name="question_9">Чи безпечно мої дані, коли я використовую App Toolkit для пошуку інших застосунків?</string>
+    <string name="security_and_privacy">Безпека та конфіденційність</string>
+    <string name="settings">Налаштування</string>
+    <string name="summary_preference_faq_1">App Toolkit — це застосунок, створений для демонстрації застосунків, побудованих з бібліотекою AppToolkit. Це ваш путівник для дослідження цієї екосистеми та перегляду бібліотеки AppToolkit у дії.</string>
+    <string name="summary_preference_faq_2">App Toolkit перелічує різні застосунки. Торкнувшись застосунку, ви зазвичай побачите більше інформації та посилання, щоб установити або відкрити його в Google Play Store і спробувати на практиці.</string>
+    <string name="summary_preference_faq_3">Багато застосунків, представлених в App Toolkit, пропонують базовий набір функцій безплатно. Деякі можуть мати розширені можливості через преміум-версію або покупки в застосунку. Деталі про кожен застосунок можна знайти на його сторінці в Google Play Store.</string>
+    <string name="summary_preference_faq_4">Щоб отримати повні відомості про застосунок, його функції та відгуки користувачів, торкніться його в App Toolkit, щоб відкрити його сторінку в Google Play Store.</string>
+    <string name="summary_preference_faq_5">Кожен застосунок має власні канали підтримки, зазвичай зазначені на сторінці Google Play Store або в самому застосунку. App Toolkit призначений для пошуку цих застосунків; щодо конкретних проблем використовуйте варіанти підтримки цього застосунку.</string>
+    <string name="summary_preference_faq_6">App Toolkit регулярно оновлюється, щоб ви завжди бачили найновіші застосунки, які використовують бібліотеку AppToolkit. Нові застосунки або важливі оновлення можуть з’являтися тут.</string>
+    <string name="summary_preference_faq_7">Щоб показувати найактуальніший список застосунків, App Toolkit використовує доступ до Інтернету для отримання інформації з Google Play Store та коректного відображення. Зазвичай інші інвазивні дозволи не потрібні.</string>
+    <string name="summary_preference_faq_8">Ваші відгуки про App Toolkit та перелічені застосунки цінуються. Зазвичай можна знайти опцію "Відгук" або "Контакт" у налаштуваннях App Toolkit або на сторінці розробника в Google Play Store. Відгуки про бібліотеку AppToolkit також вітаються через відповідні канали.</string>
+    <string name="summary_preference_faq_9">App Toolkit переважно отримує загальнодоступну інформацію про перелічені застосунки. Коли ви вирішуєте встановити або використовувати один із цих застосунків, діє його власна політика конфіденційності; ознайомтеся з нею. Обробка даних в App Toolkit описана в його політиці конфіденційності.</string>
+    <string name="summary_preference_settings_about">Дізнайтеся більше про додаток</string>
+    <string name="summary_preference_settings_advanced">Досліджуйте більше розширених налаштувань</string>
+    <string name="summary_preference_settings_display">Персоналізуйте вигляд та функціонал вашого додатка</string>
+    <string name="summary_preference_settings_notifications">Керуйте сповіщеннями додатка</string>
+    <string name="summary_preference_settings_privacy_and_security">Керуйте своїми налаштуваннями конфіденційності</string>
+    <string name="usage_and_diagnostics">Використання та діагностика</string>
+</resources>

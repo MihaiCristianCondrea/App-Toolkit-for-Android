@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Buton conturat</string>
+    <string name="components_button_primary">Buton principal</string>
+    <string name="components_button_text">Buton text</string>
+    <string name="components_button_tonal">Buton tonal</string>
+    <string name="components_checkbox_summary">Afișează o bifă cu rezumat opțional.</string>
+    <string name="components_checkbox_title">Preferință bifă</string>
+    <string name="components_fab_extended">Creează</string>
+    <string name="components_filter_popular">Popular</string>
+    <string name="components_filter_recent">Recente</string>
+    <string name="components_icon_content_description">Pictogramă demo</string>
+    <string name="components_menu_label">Afișează meniul</string>
+    <string name="components_menu_option_primary">Acțiune principală</string>
+    <string name="components_menu_option_secondary">Acțiune secundară</string>
+    <string name="components_option_alpha">Alfa</string>
+    <string name="components_option_beta">Beta</string>
+    <string name="components_option_gamma">Gamma</string>
+    <string name="components_preference_secondary_summary">Acest element arată aspectul de bază al preferinței.</string>
+    <string name="components_preference_secondary_title">Preferință secundară</string>
+    <string name="components_preference_summary">Text secundar care descrie preferința.</string>
+    <string name="components_preference_title">Element de preferință</string>
+    <string name="components_section_buttons">Butoane</string>
+    <string name="components_button_group_standard">Butoane standard</string>
+    <string name="components_button_group_tonal">Butoane tonale</string>
+    <string name="components_button_group_outlined">Butoane conturate</string>
+    <string name="components_button_group_text_and_icon">Butoane text și pictogramă</string>
+    <string name="components_section_fabs">Butoane de acțiune flotante</string>
+    <string name="components_section_filters">Filtre pentru lista de sus</string>
+    <string name="components_section_inputs">Meniuri și intrări</string>
+    <string name="components_section_preferences">Preferințe</string>
+    <string name="components_switch_card_title">Card comutator</string>
+    <string name="components_switch_divider_summary">Include un chevron și un separator.</string>
+    <string name="components_switch_divider_title">Comutator cu separator</string>
+    <string name="components_switch_summary">Oferă un rezumat și un comutator.</string>
+    <string name="components_switch_title">Preferință comutator</string>
+    <string name="components_title">Componente</string>
+    <string name="components_filter_favorites">Favorite</string>
+</resources>

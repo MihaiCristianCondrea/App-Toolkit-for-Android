@@ -2,46 +2,43 @@
 
 ## Purpose
 
-Every shared resource in the host app, plus the error-to-text mapping that resolves them.
+Shared visual resources and themes used by the host application and features.
 
 ## Owns
 
-- All `values*` resources: 230 strings across 30 locale folders, arrays, colors, themes, ad unit
-  ids.
-- Shared `drawable`, `drawable-anydpi`, `drawable-xhdpi` and `layout` resources.
-- `ErrorExtensions`, which maps `AppErrors` to `UiTextHelper`.
+- Shared colors and themes.
+- Shared `drawable`, `drawable-anydpi`, and `drawable-xhdpi` artwork.
 
 ## Does not own
 
-- Resources that identify the application — launcher mipmaps and the `xml/` configuration the
-  manifest points at — which stay in `:sample:app`.
-- Composables. Every screen lives with its feature; this module is resources plus one mapper.
+- Feature and application strings, which live in the module that owns each user flow.
+- Resources that identify the application, such as launcher mipmaps and the manifest's `xml/`
+  configuration, which stay in `:sample:app`.
+- Composables and error-to-text mappings, which live with their consuming feature.
 
 ## Depends on
 
-- [`:sample:core:common`](../common/README.md) for `AppErrors`.
-- [`:library:core:ui`](../../../library/core/ui/README.md) for `UiTextHelper` and the toolkit mapper
-  it delegates to.
-- [`:library:core:designsystem`](../../../library/core/designsystem/README.md) for the theme the
-  resources feed.
+- [`:library:core:designsystem`](../../../library/core/designsystem/README.md) for the theme and font
+  resources this module uses.
+- AndroidX core splash screen for the attributes referenced by `SplashScreenTheme`.
 
 ## Used by
 
-- Every `:sample` module. The generated `R` class here is the host's only resource namespace.
+- `:sample:app` for its theme and shared application artwork.
+- `:sample:feature:apps` and `:sample:feature:tiles` for shared visual assets.
 
 ## Flow chart
 
 ```mermaid
 flowchart LR
-    Feature[Any host feature] --> R[core.ui R]
-    Feature --> Mapper[ErrorExtensions]
-    Mapper --> Errors[AppErrors]
-    Mapper --> Text[UiTextHelper]
+    App[":sample:app"] --> Theme[Themes and colors]
+    Apps[":sample:feature:apps"] --> Artwork[Shared artwork]
+    Tiles[":sample:feature:tiles"] --> Artwork
 ```
 
 ## Public contracts
 
-- The `R` class and `AppErrors.asUiText()`.
+- The shared visual resources exposed through this module's `R` class.
 
 ## Internal implementations
 
@@ -49,20 +46,11 @@ flowchart LR
 
 ## Current risks
 
-Resources are centralised rather than owned per feature, so any string change recompiles every
-module that reads `R`, and nothing prevents one feature from using another's strings.
-
-The alternative was worse: with 230 strings across 30 locale folders, splitting them per feature
-means editing 30 files per module and re-splitting on every future move, with a silently missing
-translation as the failure mode.
+Some artwork is still centralised because it is consumed across the application or has not yet
+been split into a feature-specific asset. Feature text must not be added here.
 
 ## Migration notes
 
-`ErrorExtensions` was in the host's `core/utils` package. It moved here rather than to
-`:sample:core:common` because it resolves string resources, and putting it in `common` would have
-pointed the constants module at the resource module.
-
-Its package is now `core.ui.utils.extensions`. It kept the `core.utils` root through the first move,
-which left that root split across two modules — `:sample:core:common` owned `core.utils.constants.*`
-while this module owned `core.utils.extensions`. Each `core.*` root now belongs to exactly one
-module.
+Feature strings, localized plurals, startup arrays, widget layouts, and application-owned string
+configuration moved to their owning modules. The app-catalogue error mapper moved with the apps
+feature because it resolves apps-owned error text.

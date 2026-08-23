@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="onboarding_feature1_description">App Toolkit prezentuje wybór aplikacji, z których każda podkreśla różne aspekty biblioteki AppToolkit i poprawia Twoje doświadczenie z Androidem. Zobacz, co jest możliwe dzięki bibliotece AppToolkit.</string>
+    <string name="onboarding_feature1_title">Odkrywaj aplikacje</string>
+    <string name="onboarding_personalization_description">Ta aplikacja pokazuje, jak biblioteka AppToolkit tworzy wszechstronne aplikacje skoncentrowane na użytkowniku. Poznaj aplikacje przykładowe, aby zobaczyć różne funkcje i implementacje biblioteki.</string>
+    <string name="onboarding_personalization_title">Zobacz bibliotekę AppToolkit w akcji</string>
+    <string name="onboarding_welcome_description">Poznaj możliwości biblioteki AppToolkit. Odkryj aplikacje stworzone, aby pokazać możliwości biblioteki i usprawnić rozwój na Androidzie oraz doświadczenie użytkownika.</string>
+    <string name="onboarding_welcome_title">Witamy w App Toolkit</string>
+    <string name="app_short_description">Zbiór przydatnych narzędzi i programów użytkowych dla Androida.</string>
+    <string name="settings_disabled_message">Ustawienia są obecnie niedostępne.</string>
+    <string name="long_settings_label">Otwórz ustawienia</string>
+</resources>

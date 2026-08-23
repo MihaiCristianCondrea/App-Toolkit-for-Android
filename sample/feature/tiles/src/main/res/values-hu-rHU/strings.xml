@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="tile_breathing_summary">Kezdjen egy rövid irányított légzési szünetet</string>
+    <string name="tile_breathing_title">Lélegezz</string>
+    <string name="tile_bubble_level_summary">Felület igazítás és dőlésérzékelés</string>
+    <string name="tile_bubble_level_title">Buborék szint</string>
+    <string name="tile_caffeine_summary">Tartsa átmenetileg ébren a képernyőt</string>
+    <string name="tile_caffeine_title">Koffein</string>
+    <string name="tile_coin_flip_summary">Azonnal fordítsa meg a fejét vagy a farkát</string>
+    <string name="tile_coin_flip_title">Coin Flip</string>
+    <string name="tile_compass_summary">Kardinális irányok és azimut</string>
+    <string name="tile_compass_title">Iránytű</string>
+    <string name="tile_counter_summary">Növelje a gyors futás számlálóját</string>
+    <string name="tile_counter_title">Számláló</string>
+    <string name="tile_dice_roll_summary">Dobj egy hatoldalú kockával</string>
+    <string name="tile_dice_roll_title">Kockadobás</string>
+    <string name="tile_lux_meter_info">Környezeti fényintenzitás figyelése. Megjegyzés: Ez a funkció egy fizikai hardverérzékelőtől függ, és előfordulhat, hogy nem működik minden eszközön.</string>
+    <string name="tile_lux_meter_summary">Környezeti fény intenzitása (lux)</string>
+    <string name="tile_lux_meter_title">Luxus mérő</string>
+    <string name="tile_music_search_summary">A zene azonosítása egy parancsikon segítségével</string>
+    <string name="tile_music_search_title">Zene keresése</string>
+    <string name="tile_network_traffic_summary">Kövesse a valós idejű hálózati sebességet</string>
+    <string name="tile_network_traffic_title">Hálózati forgalom</string>
+    <string name="tile_preview_close">Bezárás</string>
+    <string name="tile_preview_coin_result">Fejek</string>
+    <string name="tile_preview_compass_result">ÉK 45°</string>
+    <string name="tile_preview_default_result">Előzetes hamarosan</string>
+    <string name="tile_preview_level_result">Szint</string>
+    <string name="tile_service_dice_value">Hengerelt %1$d</string>
+    <string name="tile_service_heads">Fejek</string>
+    <string name="tile_service_tails">Farok</string>
+    <string name="tile_sos_summary">Tartsa közel a vészhelyzeti intézkedéseket</string>
+    <string name="tile_sos_title">SOS</string>
+    <string name="tile_sound_mode_summary">Váltás normál, rezgő és néma üzemmódok között</string>
+    <string name="tile_sound_mode_title">Hang mód</string>
+    <string name="tile_volume_panel_summary">Nyissa meg gyorsan a hangerőszabályzót</string>
+    <string name="tile_volume_panel_title">Hangerő panel</string>
+    <string name="tiles_add">Hozzáadás</string>
+    <string name="tiles_add_pre_android_13">Az Android 12 és régebbi verzióihoz a Gyorsbeállítások szerkesztési módból csempék hozzáadása szükséges.</string>
+    <string name="tiles_add_result_added">Csempe hozzáadva a Gyorsbeállításokhoz</string>
+    <string name="tiles_add_result_already_added">A csempe már a Gyorsbeállításokban van</string>
+    <string name="tiles_add_result_failed">Nem sikerült hozzáadni a csempét</string>
+    <string name="tiles_category_sensors">Érzékelők és mérések</string>
+    <string name="tiles_category_system">Rendszer és vezérlők</string>
+    <string name="tiles_category_utilities">Utilities &amp; Fun</string>
+    <string name="tiles_category_wellbeing">Jó közérzet</string>
+    <string name="tiles_chip_expanded_tool">Kibővített eszköz</string>
+    <string name="tiles_chip_quick_tool">Gyors eszköz</string>
+    <string name="tiles_chip_tile">Csempe</string>
+    <string name="tiles_collapse_category">Kategória összecsukása</string>
+    <string name="tiles_error_failed_to_load">Nem sikerült betölteni a Gyorseszközöket</string>
+    <string name="tiles_expand_category">Kategória kibontása</string>
+    <string name="tiles_filter_added">Hozzáadva</string>
+    <string name="tiles_filter_all">Minden eszköz</string>
+    <string name="tiles_filter_empty">Ennek a szűrőnek még egyetlen eszköz sem felel meg.</string>
+    <string name="tiles_filter_needs_setup">Beállítás szükséges</string>
+    <string name="tiles_filter_unsupported">Nem támogatott</string>
+    <string name="tiles_how_to_add_summary">A Csempe chippel rendelkező eszközök hozzáadhatók a Gyorsbeállításokhoz. Koppintson a Hozzáadás elemre Android 13 vagy újabb rendszeren, vagy nyissa meg a Gyorsbeállítások szerkesztési módot, és húzza az App Toolkit csempéket az aktív panelre.</string>
+    <string name="tiles_how_to_add_title">Csempe-kész eszközök</string>
+    <string name="tiles_more_options">További csempe lehetőségek</string>
+    <string name="tiles_setup">Beállítás</string>
+    <string name="tiles_setup_required_message">Ez a csempe további beállítást igényel, mielőtt hozzáadható.</string>
+    <string name="tiles_status_added">Hozzáadva</string>
+    <string name="tiles_status_available">Elérhető</string>
+    <string name="tiles_status_needs_setup">Beállítás szükséges</string>
+    <string name="tiles_status_unsupported">Nem támogatott</string>
+    <string name="tiles_subtitle">Nyissa meg a gyors párbeszédpaneleket, és fedezze fel a kibővített eszközöket, amelyeken jól láthatóan meg vannak jelölve a csempekész funkciók.</string>
+    <string name="tool_coin_flip_action">Flip érme</string>
+    <string name="tool_coin_flip_waiting">Kész?</string>
+    <string name="tool_counter_increment">Növekedés</string>
+    <string name="tool_counter_reset">Reset</string>
+    <string name="tool_dialog_close_content_description">Zárja be a gyorseszközt</string>
+    <string name="tool_dice_roll_action">Dobj kockát</string>
+    <string name="tool_dice_roll_waiting">Roll</string>
+    <string name="tool_generic_available_summary">Ez az eszköz készen áll a kiterjesztett megvalósításra, és most már rendelkezik egy anyag előnézetével, így a viselkedés ellenőrizhető a mélyebb integráció előtt.</string>
+    <string name="tool_generic_setup_summary">Ez az előnézet dokumentálja a tervezett viselkedést, miközben egyértelműen elkülöníti a nem elérhető platformmunkát az élő csempeműveletektől.</string>
+    <string name="tool_material_colors_android_accent_1">Android akcentus 1</string>
+    <string name="tool_material_colors_android_accent_2">Android akcentus 2</string>
+    <string name="tool_material_colors_android_accent_3">Android akcentus 3</string>
+    <string name="tool_material_colors_android_neutral_1">Android semleges 1</string>
+    <string name="tool_material_colors_android_neutral_2">Android semleges 2</string>
+    <string name="tool_material_colors_android_unavailable">Az Android Material You rendszerpaletták Android 12 és újabb rendszereken érhetők el.</string>
+    <string name="tool_material_colors_app_scheme">Alkalmazás színséma</string>
+    <string name="tool_material_colors_description">Hasonlítsa össze a jelenlegi alkalmazás színsémáját az Android rendszer akcentusával és a semleges palettákkal.</string>
+    <string name="tool_material_colors_summary">Tekintse meg az alkalmazáspaletta és az Android Material You tónusszíneinek előnézetét</string>
+    <string name="tool_material_colors_title">Anyag színek</string>
+    <string name="tool_status_added_summary">Úgy tűnik, hogy ez a csempe már elérhető az aktív Gyorsbeállítások panelen.</string>
+    <string name="tool_status_added_title">Készen áll a Gyorsbeállításokban</string>
+    <string name="tool_status_available_summary">Próbálja ki az alábbi alkalmazáson belüli előnézetet, vagy adja hozzá a csempét a Gyorsbeállításokhoz, amikor megjelenik a Csempe chip.</string>
+    <string name="tool_status_available_title">Használatra kész</string>
+    <string name="tool_status_needs_setup_summary">Ehhez a koncepcióhoz engedélyekre, eszköztámogatásra vagy teljesebb munkafolyamatra van szüksége, mielőtt élő csempeként futhat.</string>
+    <string name="tool_status_needs_setup_title">Beállítás szükséges</string>
+    <string name="tool_status_unsupported_summary">Az Android még nem tesz közzé biztonságos nyilvános API-t ehhez a művelethez, ezért ez a bejegyzés előnézetként van dokumentálva.</string>
+    <string name="tool_status_unsupported_title">Csak előnézet</string>
+    <string name="tile_flash_dimmer_title">Zseblámpa fényerő</string>
+    <string name="tile_flash_dimmer_summary">Állítsd be a zseblámpa fényerejét, és használd a Gyorsbeállításokból</string>
+    <string name="flash_dimmer_unavailable">A zseblámpa nem érhető el</string>
+    <string name="flash_dimmer_off">Ki</string>
+    <string name="flash_dimmer_on">Be</string>
+    <string name="flash_dimmer_tile_level">Szint: %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Fényerő: %1$d/%2$d</string>
+    <string name="flash_dimmer_minimum">Minimum</string>
+    <string name="flash_dimmer_half">Fél</string>
+    <string name="flash_dimmer_maximum">Maximum</string>
+    <string name="flash_dimmer_turn_off">Kikapcsolás</string>
+    <string name="flash_dimmer_turn_on">Bekapcsolás</string>
+    <string name="tile_morse_summary">Egyéni üzenet villogtatása Morse-kóddal</string>
+    <string name="tile_morse_title">Morse-zseblámpa</string>
+    <string name="morse_message_label">Üzenet</string>
+    <string name="morse_start">Villogás indítása</string>
+    <string name="morse_stop">Leállítás</string>
+    <string name="morse_ready">Kész</string>
+    <string name="morse_active">Villogás</string>
+    <string name="morse_error_empty">Adjon meg egy üzenetet</string>
+    <string name="morse_error_length">Legfeljebb 200 karaktert használjon</string>
+    <string name="morse_error_characters">Csak A–Z betűket, számokat és szóközöket használjon</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+</resources>

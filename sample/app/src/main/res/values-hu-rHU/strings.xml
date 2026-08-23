@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="onboarding_feature1_description">Az App Toolkit alkalmazásválogatást mutat be, amelyek mind az AppToolkit könyvtár különböző aspektusait emelik ki és javítják az Android-élményt. Nézze meg, mi lehetséges az AppToolkit könyvtárral.</string>
+    <string name="onboarding_feature1_title">Fedezze fel az alkalmazásokat</string>
+    <string name="onboarding_personalization_description">Ez az app megmutatja, hogyan hoz létre az AppToolkit könyvtár sokoldalú, felhasználóközpontú alkalmazásokat. Nézze meg a mintalkalmazásokat, hogy különböző funkciókat és megvalósításokat lásson.</string>
+    <string name="onboarding_personalization_title">Az AppToolkit könyvtár működés közben</string>
+    <string name="onboarding_welcome_description">Fedezze fel az AppToolkit könyvtár képességeit. Ismerjen meg olyan alkalmazásokat, amelyek a könyvtár erejét mutatják be, és javítják az Android-fejlesztést és a felhasználói élményt.</string>
+    <string name="onboarding_welcome_title">Üdvözöljük az App Toolkitben</string>
+    <string name="app_short_description">Hasznos Android-eszközök és segédprogramok gyűjteménye.</string>
+    <string name="settings_disabled_message">A beállítások jelenleg nem érhetők el.</string>
+    <string name="long_settings_label">Beállítások megnyitása</string>
+</resources>

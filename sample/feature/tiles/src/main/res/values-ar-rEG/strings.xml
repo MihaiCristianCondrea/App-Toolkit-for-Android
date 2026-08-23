@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="tile_breathing_summary">ابدأ وقفة تنفس قصيرة موجهة</string>
+    <string name="tile_breathing_title">يتنفس</string>
+    <string name="tile_bubble_level_summary">محاذاة السطح وكشف الميل</string>
+    <string name="tile_bubble_level_title">مستوى الفقاعة</string>
+    <string name="tile_caffeine_summary">أبقِ الشاشة نشطة مؤقتًا</string>
+    <string name="tile_caffeine_title">الكافيين</string>
+    <string name="tile_coin_flip_summary">اقلب الرؤوس أو الذيول على الفور</string>
+    <string name="tile_coin_flip_title">عملة الوجه</string>
+    <string name="tile_compass_summary">الاتجاهات الكاردينال والسمت</string>
+    <string name="tile_compass_title">بوصلة</string>
+    <string name="tile_counter_summary">زيادة عدد التشغيل السريع</string>
+    <string name="tile_counter_title">عداد</string>
+    <string name="tile_dice_roll_summary">قم برمي حجر نرد ذو ستة جوانب</string>
+    <string name="tile_dice_roll_title">لفة النرد</string>
+    <string name="tile_lux_meter_info">مراقبة شدة الضوء المحيط. ملاحظة: تعتمد هذه الميزة على مستشعر الأجهزة الفعلي وقد لا تعمل على جميع الأجهزة.</string>
+    <string name="tile_lux_meter_summary">شدة الإضاءة المحيطة (لوكس)</string>
+    <string name="tile_lux_meter_title">لوكس متر</string>
+    <string name="tile_music_search_summary">التعرف على الموسيقى باستخدام الاختصار</string>
+    <string name="tile_music_search_title">بحث الموسيقى</string>
+    <string name="tile_network_traffic_summary">مراقبة سرعة الشبكة في الوقت الحقيقي</string>
+    <string name="tile_network_traffic_title">حركة مرور الشبكة</string>
+    <string name="tile_preview_close">يغلق</string>
+    <string name="tile_preview_coin_result">رؤساء</string>
+    <string name="tile_preview_compass_result">شمال شرق 45 درجة</string>
+    <string name="tile_preview_default_result">المعاينة قريبا</string>
+    <string name="tile_preview_level_result">مستوى</string>
+    <string name="tile_service_dice_value">توالت %1$d</string>
+    <string name="tile_service_heads">رؤساء</string>
+    <string name="tile_service_tails">ذيول</string>
+    <string name="tile_sos_summary">إبقاء إجراءات الطوارئ قريبة</string>
+    <string name="tile_sos_title">SOS</string>
+    <string name="tile_sound_mode_summary">قم بالتبديل بين الأوضاع العادية والاهتزازية والصامتة</string>
+    <string name="tile_sound_mode_title">وضع الصوت</string>
+    <string name="tile_volume_panel_summary">افتح عناصر التحكم في مستوى الصوت بسرعة</string>
+    <string name="tile_volume_panel_title">لوحة الحجم</string>
+    <string name="tiles_add">يضيف</string>
+    <string name="tiles_add_pre_android_13">يتطلب نظام التشغيل Android 12 والإصدارات الأقدم إضافة مربعات من وضع تحرير الإعدادات السريعة.</string>
+    <string name="tiles_add_result_added">تمت إضافة البلاط إلى الإعدادات السريعة</string>
+    <string name="tiles_add_result_already_added">البلاط موجود بالفعل في الإعدادات السريعة</string>
+    <string name="tiles_add_result_failed">لا يمكن إضافة البلاط</string>
+    <string name="tiles_category_sensors">أجهزة الاستشعار والقياس</string>
+    <string name="tiles_category_system">النظام والضوابط</string>
+    <string name="tiles_category_utilities">المرافق والمرح</string>
+    <string name="tiles_category_wellbeing">الرفاهية</string>
+    <string name="tiles_chip_expanded_tool">أداة موسعة</string>
+    <string name="tiles_chip_quick_tool">أداة سريعة</string>
+    <string name="tiles_chip_tile">بلاط</string>
+    <string name="tiles_collapse_category">طي الفئة</string>
+    <string name="tiles_error_failed_to_load">فشل تحميل الأدوات السريعة</string>
+    <string name="tiles_expand_category">قم بتوسيع الفئة</string>
+    <string name="tiles_filter_added">تمت الإضافة</string>
+    <string name="tiles_filter_all">جميع الأدوات</string>
+    <string name="tiles_filter_empty">لا توجد أدوات تتطابق مع هذا الفلتر حتى الآن.</string>
+    <string name="tiles_filter_needs_setup">يحتاج إلى إعداد</string>
+    <string name="tiles_filter_unsupported">غير مدعوم</string>
+    <string name="tiles_how_to_add_summary">يمكن إضافة الأدوات التي تحتوي على شريحة Tile إلى الإعدادات السريعة. انقر فوق "إضافة" على نظام Android 13 أو الإصدارات الأحدث، أو افتح وضع تحرير "الإعدادات السريعة" واسحب مربعات مجموعة أدوات التطبيق إلى اللوحة النشطة.</string>
+    <string name="tiles_how_to_add_title">أدوات جاهزة للبلاط</string>
+    <string name="tiles_more_options">المزيد من خيارات البلاط</string>
+    <string name="tiles_setup">يثبت</string>
+    <string name="tiles_setup_required_message">يحتاج هذا المربع إلى مزيد من الإعداد قبل إضافته.</string>
+    <string name="tiles_status_added">تمت الإضافة</string>
+    <string name="tiles_status_available">متاح</string>
+    <string name="tiles_status_needs_setup">يحتاج إلى إعداد</string>
+    <string name="tiles_status_unsupported">غير مدعوم</string>
+    <string name="tiles_subtitle">افتح مربعات حوار سريعة واكتشف الأدوات الموسعة، مع وضع علامات واضحة على الميزات الجاهزة للتجانب.</string>
+    <string name="tool_coin_flip_action">الوجه عملة</string>
+    <string name="tool_coin_flip_waiting">مستعد؟</string>
+    <string name="tool_counter_increment">زيادة</string>
+    <string name="tool_counter_reset">إعادة ضبط</string>
+    <string name="tool_dialog_close_content_description">إغلاق أداة سريعة</string>
+    <string name="tool_dice_roll_action">لفة يموت</string>
+    <string name="tool_dice_roll_waiting">لفافة</string>
+    <string name="tool_generic_available_summary">هذه الأداة جاهزة للتنفيذ الموسع ولديها الآن معاينة للمواد حتى يمكن التحقق من صحة السلوك قبل التكامل الأعمق.</string>
+    <string name="tool_generic_setup_summary">تقوم هذه المعاينة بتوثيق السلوك المقصود مع إبقاء عمل النظام الأساسي غير المتاح منفصلاً بشكل واضح عن إجراءات التجانب المباشر.</string>
+    <string name="tool_material_colors_android_accent_1">لهجة الروبوت 1</string>
+    <string name="tool_material_colors_android_accent_2">لهجة أندرويد 2</string>
+    <string name="tool_material_colors_android_accent_3">لهجة أندرويد 3</string>
+    <string name="tool_material_colors_android_neutral_1">أندرويد محايد 1</string>
+    <string name="tool_material_colors_android_neutral_2">أندرويد محايد 2</string>
+    <string name="tool_material_colors_android_unavailable">تتوفر لوحات نظام Android Material You على نظام التشغيل Android 12 والإصدارات الأحدث.</string>
+    <string name="tool_material_colors_app_scheme">نظام ألوان التطبيق</string>
+    <string name="tool_material_colors_description">قارن نظام ألوان التطبيق الحالي مع لهجة نظام Android واللوحات المحايدة.</string>
+    <string name="tool_material_colors_summary">قم بمعاينة لوحة التطبيق وألوان Android Material You</string>
+    <string name="tool_material_colors_title">ألوان المواد</string>
+    <string name="tool_status_added_summary">يبدو أن هذا المربع متاح بالفعل في لوحة الإعدادات السريعة النشطة.</string>
+    <string name="tool_status_added_title">جاهز في الإعدادات السريعة</string>
+    <string name="tool_status_available_summary">جرب المعاينة داخل التطبيق أدناه أو أضف المربع إلى الإعدادات السريعة عندما تظهر شريحة البلاط.</string>
+    <string name="tool_status_available_title">جاهز للاستخدام</string>
+    <string name="tool_status_needs_setup_summary">يحتاج هذا المفهوم إلى أذونات أو دعم الجهاز أو سير عمل أكمل قبل أن يتم تشغيله كمربع مباشر.</string>
+    <string name="tool_status_needs_setup_title">الإعداد مطلوب</string>
+    <string name="tool_status_unsupported_summary">لم يكشف Android عن واجهة برمجة تطبيقات عامة آمنة لهذا الإجراء حتى الآن، لذلك تم توثيق هذا الإدخال كمعاينة.</string>
+    <string name="tool_status_unsupported_title">معاينة فقط</string>
+    <string name="tile_flash_dimmer_title">مُعتم المصباح</string>
+    <string name="tile_flash_dimmer_summary">اضبط سطوع المصباح واستخدمه من الإعدادات السريعة</string>
+    <string name="flash_dimmer_unavailable">المصباح غير متاح</string>
+    <string name="flash_dimmer_off">إيقاف</string>
+    <string name="flash_dimmer_on">تشغيل</string>
+    <string name="flash_dimmer_tile_level">المستوى %1$d/%2$d</string>
+    <string name="flash_dimmer_level">السطوع %1$d من %2$d</string>
+    <string name="flash_dimmer_minimum">الحد الأدنى</string>
+    <string name="flash_dimmer_half">النصف</string>
+    <string name="flash_dimmer_maximum">الحد الأقصى</string>
+    <string name="flash_dimmer_turn_off">إيقاف التشغيل</string>
+    <string name="flash_dimmer_turn_on">تشغيل</string>
+    <string name="tile_morse_summary">ومّض رسالة مخصصة بشفرة مورس</string>
+    <string name="tile_morse_title">مصباح مورس</string>
+    <string name="morse_message_label">الرسالة</string>
+    <string name="morse_start">بدء الوميض</string>
+    <string name="morse_stop">إيقاف</string>
+    <string name="morse_ready">جاهز</string>
+    <string name="morse_active">جارٍ الوميض</string>
+    <string name="morse_error_empty">أدخل رسالة</string>
+    <string name="morse_error_length">استخدم 200 حرف أو أقل</string>
+    <string name="morse_error_characters">استخدم الأحرف A–Z والأرقام والمسافات فقط</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+</resources>

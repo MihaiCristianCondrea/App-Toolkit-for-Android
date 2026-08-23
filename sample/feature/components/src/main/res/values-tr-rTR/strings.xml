@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Çerçeveli düğme</string>
+    <string name="components_button_primary">Birincil düğme</string>
+    <string name="components_button_text">Metin düğmesi</string>
+    <string name="components_button_tonal">Tonlu düğme</string>
+    <string name="components_checkbox_summary">İsteğe bağlı özetli onay kutusu gösterir.</string>
+    <string name="components_checkbox_title">Onay kutusu tercihi</string>
+    <string name="components_fab_extended">Oluştur</string>
+    <string name="components_filter_popular">Popüler</string>
+    <string name="components_filter_recent">Son</string>
+    <string name="components_icon_content_description">Demo simgesi</string>
+    <string name="components_menu_label">Menüyü göster</string>
+    <string name="components_menu_option_primary">Birincil eylem</string>
+    <string name="components_menu_option_secondary">İkincil eylem</string>
+    <string name="components_option_alpha">Alfa</string>
+    <string name="components_option_beta">Beta</string>
+    <string name="components_option_gamma">Gamma</string>
+    <string name="components_preference_secondary_summary">Bu öğe temel tercih düzenini gösterir.</string>
+    <string name="components_preference_secondary_title">İkincil tercih</string>
+    <string name="components_preference_summary">Tercihi açıklayan ikincil metin.</string>
+    <string name="components_preference_title">Tercih öğesi</string>
+    <string name="components_section_buttons">Düğmeler</string>
+    <string name="components_button_group_standard">Standart düğmeler</string>
+    <string name="components_button_group_tonal">Tonal düğmeler</string>
+    <string name="components_button_group_outlined">Çerçeveli düğmeler</string>
+    <string name="components_button_group_text_and_icon">Metin ve simge düğmeleri</string>
+    <string name="components_section_fabs">Yüzen eylem düğmeleri</string>
+    <string name="components_section_filters">Üst liste filtreleri</string>
+    <string name="components_section_inputs">Menüler ve girişler</string>
+    <string name="components_section_preferences">Tercihler</string>
+    <string name="components_switch_card_title">Anahtar kartı</string>
+    <string name="components_switch_divider_summary">Bir şerit ve ayırıcı içerir.</string>
+    <string name="components_switch_divider_title">Ayırıcıyla anahtar</string>
+    <string name="components_switch_summary">Özet ve anahtar sağlar.</string>
+    <string name="components_switch_title">Anahtar tercihi</string>
+    <string name="components_title">Bileşenler</string>
+    <string name="components_filter_favorites">Favoriler</string>
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="widget_apps_description">Mở nhanh các ứng dụng nổi bật của Mihai-Cristian Condrea.</string>
+    <string name="widget_apps_error_message">Không thể tải ứng dụng lúc này.</string>
+    <string name="widget_apps_error_retry">Thử lại</string>
+    <string name="widget_apps_preview_secondary_item">Lịch</string>
+    <string name="widget_apps_preview_third_item">Ghi chú</string>
+    <string name="widget_apps_title">Ứng dụng của Mihai-Cristian Condrea</string>
+</resources>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="tile_breathing_summary">짧은 유도 호흡 일시정지 시작</string>
+    <string name="tile_breathing_title">숨을 쉬다</string>
+    <string name="tile_bubble_level_summary">표면 정렬 및 기울기 감지</string>
+    <string name="tile_bubble_level_title">버블 레벨</string>
+    <string name="tile_caffeine_summary">화면을 일시적으로 활성 상태로 유지</string>
+    <string name="tile_caffeine_title">카페인</string>
+    <string name="tile_coin_flip_summary">즉시 머리 또는 꼬리 뒤집기</string>
+    <string name="tile_coin_flip_title">동전 뒤집기</string>
+    <string name="tile_compass_summary">기본 방위 및 방위각</string>
+    <string name="tile_compass_title">나침반</string>
+    <string name="tile_counter_summary">빠른 실행 횟수 증가</string>
+    <string name="tile_counter_title">카운터</string>
+    <string name="tile_dice_roll_summary">6면체 주사위를 굴립니다.</string>
+    <string name="tile_dice_roll_title">주사위 굴리기</string>
+    <string name="tile_lux_meter_info">주변광 강도 모니터링. 참고: 이 기능은 물리적 하드웨어 센서에 따라 다르며 모든 장치에서 작동하지 않을 수 있습니다.</string>
+    <string name="tile_lux_meter_summary">주변광 강도(럭스)</string>
+    <string name="tile_lux_meter_title">럭스 미터</string>
+    <string name="tile_music_search_summary">바로가기로 음악 식별</string>
+    <string name="tile_music_search_title">음악 검색</string>
+    <string name="tile_network_traffic_summary">실시간 네트워크 속도 모니터링</string>
+    <string name="tile_network_traffic_title">네트워크 트래픽</string>
+    <string name="tile_preview_close">닫기</string>
+    <string name="tile_preview_coin_result">머리</string>
+    <string name="tile_preview_compass_result">북동 45°</string>
+    <string name="tile_preview_default_result">미리보기가 곧 제공됩니다</string>
+    <string name="tile_preview_level_result">레벨</string>
+    <string name="tile_service_dice_value">압연 %1$d</string>
+    <string name="tile_service_heads">머리</string>
+    <string name="tile_service_tails">꼬리</string>
+    <string name="tile_sos_summary">비상 조치를 가까이에 두십시오</string>
+    <string name="tile_sos_title">조난 신호</string>
+    <string name="tile_sound_mode_summary">일반, 진동, 무음 모드 전환</string>
+    <string name="tile_sound_mode_title">사운드 모드</string>
+    <string name="tile_volume_panel_summary">빠르게 볼륨 컨트롤 열기</string>
+    <string name="tile_volume_panel_title">볼륨 패널</string>
+    <string name="tiles_add">추가</string>
+    <string name="tiles_add_pre_android_13">Android 12 이상에서는 빠른 설정 편집 모드에서 타일을 추가해야 합니다.</string>
+    <string name="tiles_add_result_added">빠른 설정에 타일이 추가되었습니다.</string>
+    <string name="tiles_add_result_already_added">타일이 이미 빠른 설정에 있습니다.</string>
+    <string name="tiles_add_result_failed">타일을 추가할 수 없습니다.</string>
+    <string name="tiles_category_sensors">센서 및 측정</string>
+    <string name="tiles_category_system">시스템 및 제어</string>
+    <string name="tiles_category_utilities">유틸리티 및 재미</string>
+    <string name="tiles_category_wellbeing">웰빙</string>
+    <string name="tiles_chip_expanded_tool">확장된 도구</string>
+    <string name="tiles_chip_quick_tool">빠른 도구</string>
+    <string name="tiles_chip_tile">타일</string>
+    <string name="tiles_collapse_category">카테고리 접기</string>
+    <string name="tiles_error_failed_to_load">빠른 도구를 로드하지 못했습니다.</string>
+    <string name="tiles_expand_category">카테고리 펼치기</string>
+    <string name="tiles_filter_added">추가됨</string>
+    <string name="tiles_filter_all">모든 도구</string>
+    <string name="tiles_filter_empty">아직 이 필터와 일치하는 도구가 없습니다.</string>
+    <string name="tiles_filter_needs_setup">설정 필요</string>
+    <string name="tiles_filter_unsupported">지원되지 않음</string>
+    <string name="tiles_how_to_add_summary">타일 칩이 포함된 도구를 빠른 설정에 추가할 수 있습니다. Android 13 이상에서 추가를 탭하거나 빠른 설정 편집 모드를 열고 앱 툴킷 타일을 활성 패널로 드래그하세요.</string>
+    <string name="tiles_how_to_add_title">타일 준비 도구</string>
+    <string name="tiles_more_options">더 많은 타일 옵션</string>
+    <string name="tiles_setup">설정</string>
+    <string name="tiles_setup_required_message">이 타일을 추가하려면 추가 설정이 필요합니다.</string>
+    <string name="tiles_status_added">추가됨</string>
+    <string name="tiles_status_available">가능</string>
+    <string name="tiles_status_needs_setup">설정 필요</string>
+    <string name="tiles_status_unsupported">지원되지 않음</string>
+    <string name="tiles_subtitle">빠른 대화 상자를 열고 타일 지원 기능이 명확하게 표시된 확장된 도구를 찾아보세요.</string>
+    <string name="tool_coin_flip_action">동전 뒤집기</string>
+    <string name="tool_coin_flip_waiting">준비가 된?</string>
+    <string name="tool_counter_increment">증분</string>
+    <string name="tool_counter_reset">재설정</string>
+    <string name="tool_dialog_close_content_description">빠른 도구 닫기</string>
+    <string name="tool_dice_roll_action">롤 다이</string>
+    <string name="tool_dice_roll_waiting">롤</string>
+    <string name="tool_generic_available_summary">이 도구는 확장된 구현이 가능하며 이제 머티리얼 미리보기가 있으므로 심층적인 통합 전에 동작을 검증할 수 있습니다.</string>
+    <string name="tool_generic_setup_summary">이 미리보기는 사용할 수 없는 플랫폼 작업을 라이브 타일 작업과 명확하게 분리하면서 의도된 동작을 문서화합니다.</string>
+    <string name="tool_material_colors_android_accent_1">안드로이드 액센트 1</string>
+    <string name="tool_material_colors_android_accent_2">안드로이드 액센트 2</string>
+    <string name="tool_material_colors_android_accent_3">안드로이드 액센트 3</string>
+    <string name="tool_material_colors_android_neutral_1">안드로이드 중립 1</string>
+    <string name="tool_material_colors_android_neutral_2">안드로이드 중립 2</string>
+    <string name="tool_material_colors_android_unavailable">Android Material You 시스템 팔레트는 Android 12 이상에서 사용할 수 있습니다.</string>
+    <string name="tool_material_colors_app_scheme">앱 색 구성표</string>
+    <string name="tool_material_colors_description">현재 애플리케이션 색상 구성표를 Android 시스템 액센트 및 중립 팔레트와 비교하세요.</string>
+    <string name="tool_material_colors_summary">앱 팔레트 및 Android 머티리얼 색조 색상 미리보기</string>
+    <string name="tool_material_colors_title">재료 색상</string>
+    <string name="tool_status_added_summary">이 타일은 활성 빠른 설정 패널에서 이미 사용할 수 있는 것 같습니다.</string>
+    <string name="tool_status_added_title">빠른 설정에서 준비됨</string>
+    <string name="tool_status_available_summary">아래의 인앱 미리보기를 시도하거나 타일 칩이 표시되면 빠른 설정에 타일을 추가하세요.</string>
+    <string name="tool_status_available_title">사용 준비 완료</string>
+    <string name="tool_status_needs_setup_summary">이 개념을 라이브 타일로 실행하려면 권한, 장치 지원 또는 더 완전한 워크플로가 필요합니다.</string>
+    <string name="tool_status_needs_setup_title">설정 필요</string>
+    <string name="tool_status_unsupported_summary">Android는 아직 이 작업에 대한 안전한 공개 API를 공개하지 않으므로 이 항목은 미리보기로 문서화되어 있습니다.</string>
+    <string name="tool_status_unsupported_title">미리보기만 가능</string>
+    <string name="tile_flash_dimmer_title">플래시 조광</string>
+    <string name="tile_flash_dimmer_summary">손전등 밝기를 조절하고 빠른 설정에서 사용하세요</string>
+    <string name="flash_dimmer_unavailable">손전등을 사용할 수 없음</string>
+    <string name="flash_dimmer_off">꺼짐</string>
+    <string name="flash_dimmer_on">켜짐</string>
+    <string name="flash_dimmer_tile_level">단계 %1$d/%2$d</string>
+    <string name="flash_dimmer_level">밝기 %1$d/%2$d</string>
+    <string name="flash_dimmer_minimum">최소</string>
+    <string name="flash_dimmer_half">절반</string>
+    <string name="flash_dimmer_maximum">최대</string>
+    <string name="flash_dimmer_turn_off">끄기</string>
+    <string name="flash_dimmer_turn_on">켜기</string>
+    <string name="tile_morse_summary">사용자 지정 메시지를 모스 부호로 깜박입니다</string>
+    <string name="tile_morse_title">모스 손전등</string>
+    <string name="morse_message_label">메시지</string>
+    <string name="morse_start">깜박임 시작</string>
+    <string name="morse_stop">중지</string>
+    <string name="morse_ready">준비됨</string>
+    <string name="morse_active">깜박이는 중</string>
+    <string name="morse_error_empty">메시지를 입력하세요</string>
+    <string name="morse_error_length">200자 이하로 입력하세요</string>
+    <string name="morse_error_characters">A–Z 문자, 숫자, 공백만 사용하세요</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+</resources>

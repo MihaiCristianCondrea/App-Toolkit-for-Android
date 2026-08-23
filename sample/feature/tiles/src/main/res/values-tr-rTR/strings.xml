@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="tile_breathing_summary">Kısa bir rehberli nefes duraklaması başlatın</string>
+    <string name="tile_breathing_title">Nefes al</string>
+    <string name="tile_bubble_level_summary">Yüzey hizalaması ve eğim algılama</string>
+    <string name="tile_bubble_level_title">Kabarcık Seviyesi</string>
+    <string name="tile_caffeine_summary">Ekranı geçici olarak uyanık tut</string>
+    <string name="tile_caffeine_title">Kafein</string>
+    <string name="tile_coin_flip_summary">Kafaları veya kuyrukları anında çevirin</string>
+    <string name="tile_coin_flip_title">Yazı-tura</string>
+    <string name="tile_compass_summary">Ana yönler ve azimut</string>
+    <string name="tile_compass_title">Pusula</string>
+    <string name="tile_counter_summary">Hızlı koşu sayısını artırın</string>
+    <string name="tile_counter_title">Sayaç</string>
+    <string name="tile_dice_roll_summary">Altı yüzlü bir zar atın</string>
+    <string name="tile_dice_roll_title">Zar Atma</string>
+    <string name="tile_lux_meter_info">Ortam ışığı yoğunluğunun izlenmesi. Not: Bu özellik fiziksel donanım sensörüne bağlıdır ve tüm cihazlarda çalışmayabilir.</string>
+    <string name="tile_lux_meter_summary">Ortam ışığı yoğunluğu (lüks)</string>
+    <string name="tile_lux_meter_title">Lüks Ölçer</string>
+    <string name="tile_music_search_summary">Müziği kısayolla tanımlayın</string>
+    <string name="tile_music_search_title">Müzik Arama</string>
+    <string name="tile_network_traffic_summary">Gerçek zamanlı ağ hızını izleyin</string>
+    <string name="tile_network_traffic_title">Ağ Trafiği</string>
+    <string name="tile_preview_close">Kapat</string>
+    <string name="tile_preview_coin_result">Kafalar</string>
+    <string name="tile_preview_compass_result">KD 45°</string>
+    <string name="tile_preview_default_result">Önizleme yakında gelecek</string>
+    <string name="tile_preview_level_result">Seviye</string>
+    <string name="tile_service_dice_value">Haddelenmiş %1$d</string>
+    <string name="tile_service_heads">Kafalar</string>
+    <string name="tile_service_tails">Kuyruklar</string>
+    <string name="tile_sos_summary">Acil durum eylemlerini yakın tutun</string>
+    <string name="tile_sos_title">Acil Durum</string>
+    <string name="tile_sound_mode_summary">Normal, titreşim ve sessiz modları arasında geçiş yapın</string>
+    <string name="tile_sound_mode_title">Ses Modu</string>
+    <string name="tile_volume_panel_summary">Ses kontrollerini hızlı bir şekilde açın</string>
+    <string name="tile_volume_panel_title">Ses Paneli</string>
+    <string name="tiles_add">Ekle</string>
+    <string name="tiles_add_pre_android_13">Android 12 ve daha eski sürümler, Hızlı Ayarlar düzenleme modundan kutucuk eklenmesini gerektirir.</string>
+    <string name="tiles_add_result_added">Hızlı Ayarlar\'a kutucuk eklendi</string>
+    <string name="tiles_add_result_already_added">Kutucuk zaten Hızlı Ayarlar\'da</string>
+    <string name="tiles_add_result_failed">Parça eklenemedi</string>
+    <string name="tiles_category_sensors">Sensörler ve Ölçüm</string>
+    <string name="tiles_category_system">Sistem ve Kontroller</string>
+    <string name="tiles_category_utilities">Yardımcı Programlar ve Eğlence</string>
+    <string name="tiles_category_wellbeing">Refah</string>
+    <string name="tiles_chip_expanded_tool">Genişletilmiş araç</string>
+    <string name="tiles_chip_quick_tool">Hızlı araç</string>
+    <string name="tiles_chip_tile">Fayans</string>
+    <string name="tiles_collapse_category">Kategoriyi daralt</string>
+    <string name="tiles_error_failed_to_load">Hızlı Araçlar yüklenemedi</string>
+    <string name="tiles_expand_category">Kategoriyi genişlet</string>
+    <string name="tiles_filter_added">Eklendi</string>
+    <string name="tiles_filter_all">Tüm araçlar</string>
+    <string name="tiles_filter_empty">Henüz bu filtreyle eşleşen araç yok.</string>
+    <string name="tiles_filter_needs_setup">Kurulum gerekiyor</string>
+    <string name="tiles_filter_unsupported">Desteklenmiyor</string>
+    <string name="tiles_how_to_add_summary">Döşeme çipine sahip araçlar Hızlı Ayarlar\'a eklenebilir. Android 13 veya daha yeni sürümlerde Ekle\'ye dokunun veya Hızlı Ayarlar düzenleme modunu açın ve Uygulama Araç Seti kutucuklarını etkin panelinize sürükleyin.</string>
+    <string name="tiles_how_to_add_title">Döşemeye hazır araçlar</string>
+    <string name="tiles_more_options">Daha fazla döşeme seçeneği</string>
+    <string name="tiles_setup">Kurulum</string>
+    <string name="tiles_setup_required_message">Bu kutucuğun eklenebilmesi için daha fazla kurulum yapılması gerekiyor.</string>
+    <string name="tiles_status_added">Eklendi</string>
+    <string name="tiles_status_available">Mevcut</string>
+    <string name="tiles_status_needs_setup">Kurulum gerekiyor</string>
+    <string name="tiles_status_unsupported">Desteklenmiyor</string>
+    <string name="tiles_subtitle">Hızlı iletişim kutularını açın ve kutucuklara hazır özelliklerin açıkça işaretlendiği genişletilmiş araçları keşfedin.</string>
+    <string name="tool_coin_flip_action">Yazı tura at</string>
+    <string name="tool_coin_flip_waiting">Hazır?</string>
+    <string name="tool_counter_increment">Artış</string>
+    <string name="tool_counter_reset">Sıfırla</string>
+    <string name="tool_dialog_close_content_description">Hızlı aracı kapat</string>
+    <string name="tool_dice_roll_action">Rulo kalıp</string>
+    <string name="tool_dice_roll_waiting">Rulo</string>
+    <string name="tool_generic_available_summary">Bu araç, genişletilmiş bir uygulamaya hazırdır ve artık daha derin entegrasyondan önce davranışın doğrulanabilmesi için bir Malzeme ön izlemesine sahiptir.</string>
+    <string name="tool_generic_setup_summary">Bu önizleme, amaçlanan davranışı belgelerken, kullanılamayan platform çalışmasını canlı kutucuk eylemlerinden net bir şekilde ayrı tutar.</string>
+    <string name="tool_material_colors_android_accent_1">Android aksanı 1</string>
+    <string name="tool_material_colors_android_accent_2">Android aksanı 2</string>
+    <string name="tool_material_colors_android_accent_3">Android aksanı 3</string>
+    <string name="tool_material_colors_android_neutral_1">Android nötr 1</string>
+    <string name="tool_material_colors_android_neutral_2">Android nötr 2</string>
+    <string name="tool_material_colors_android_unavailable">Android Malzemesi Sistem paletleri Android 12 ve daha yeni sürümlerde mevcuttur.</string>
+    <string name="tool_material_colors_app_scheme">Uygulama renk şeması</string>
+    <string name="tool_material_colors_description">Mevcut uygulama renk şemasını Android sistem vurgusu ve nötr paletlerle karşılaştırın.</string>
+    <string name="tool_material_colors_summary">Uygulama paletini ve Android Material You ton renklerini önizleyin</string>
+    <string name="tool_material_colors_title">Malzeme Renkleri</string>
+    <string name="tool_status_added_summary">Bu kutucuk etkin Hızlı Ayarlar panelinizde zaten mevcut görünüyor.</string>
+    <string name="tool_status_added_title">Hızlı Ayarlar\'da Hazır</string>
+    <string name="tool_status_available_summary">Aşağıdaki uygulama içi önizlemeyi deneyin veya Döşeme çipi gösterildiğinde kutucuğu Hızlı Ayarlar\'a ekleyin.</string>
+    <string name="tool_status_available_title">Kullanıma hazır</string>
+    <string name="tool_status_needs_setup_summary">Bu konseptin canlı kutucuk olarak çalıştırılabilmesi için izinlere, cihaz desteğine veya daha kapsamlı bir iş akışına ihtiyacı var.</string>
+    <string name="tool_status_needs_setup_title">Kurulum gerekli</string>
+    <string name="tool_status_unsupported_summary">Android henüz bu eylem için güvenli bir genel API sunmadığından bu giriş bir önizleme olarak belgelenmiştir.</string>
+    <string name="tool_status_unsupported_title">Yalnızca önizleme</string>
+    <string name="tile_flash_dimmer_title">Fener karartıcı</string>
+    <string name="tile_flash_dimmer_summary">Fener parlaklığını ayarlayın ve Hızlı Ayarlar’dan kullanın</string>
+    <string name="flash_dimmer_unavailable">Fener kullanılamıyor</string>
+    <string name="flash_dimmer_off">Kapalı</string>
+    <string name="flash_dimmer_on">Açık</string>
+    <string name="flash_dimmer_tile_level">Seviye %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Parlaklık %1$d/%2$d</string>
+    <string name="flash_dimmer_minimum">Minimum</string>
+    <string name="flash_dimmer_half">Yarı</string>
+    <string name="flash_dimmer_maximum">Maksimum</string>
+    <string name="flash_dimmer_turn_off">Kapat</string>
+    <string name="flash_dimmer_turn_on">Aç</string>
+    <string name="tile_morse_summary">Özel bir mesajı Mors koduyla yanıp söndürün</string>
+    <string name="tile_morse_title">Mors feneri</string>
+    <string name="morse_message_label">Mesaj</string>
+    <string name="morse_start">Yanıp sönmeyi başlat</string>
+    <string name="morse_stop">Durdur</string>
+    <string name="morse_ready">Hazır</string>
+    <string name="morse_active">Yanıp sönüyor</string>
+    <string name="morse_error_empty">Bir mesaj girin</string>
+    <string name="morse_error_length">En fazla 200 karakter kullanın</string>
+    <string name="morse_error_characters">Yalnızca A–Z harflerini, sayıları ve boşlukları kullanın</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+</resources>

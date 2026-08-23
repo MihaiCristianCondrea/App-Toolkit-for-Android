@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Konturerad knapp</string>
+    <string name="components_button_primary">Primär knapp</string>
+    <string name="components_button_text">Textknapp</string>
+    <string name="components_button_tonal">Tonal knapp</string>
+    <string name="components_checkbox_summary">Visar en kryssruta med valfri sammanfattning.</string>
+    <string name="components_checkbox_title">Kryssruteinställning</string>
+    <string name="components_fab_extended">Skapa</string>
+    <string name="components_filter_popular">Populär</string>
+    <string name="components_filter_recent">Senaste</string>
+    <string name="components_icon_content_description">Demonstrationsikon</string>
+    <string name="components_menu_label">Visa meny</string>
+    <string name="components_menu_option_primary">Primär åtgärd</string>
+    <string name="components_menu_option_secondary">Sekundär åtgärd</string>
+    <string name="components_option_alpha">Alpha</string>
+    <string name="components_option_beta">Beta</string>
+    <string name="components_option_gamma">Gamma</string>
+    <string name="components_preference_secondary_summary">Det här objektet visar grundlayouten för preferensen.</string>
+    <string name="components_preference_secondary_title">Sekundär preferens</string>
+    <string name="components_preference_summary">Sekundär text som beskriver preferensen.</string>
+    <string name="components_preference_title">Preferensobjekt</string>
+    <string name="components_section_buttons">Knappar</string>
+    <string name="components_button_group_standard">Standardknappar</string>
+    <string name="components_button_group_tonal">Tonade knappar</string>
+    <string name="components_button_group_outlined">Konturknappar</string>
+    <string name="components_button_group_text_and_icon">Text- och ikonknappar</string>
+    <string name="components_section_fabs">Flytande åtgärdsknappar</string>
+    <string name="components_section_filters">Filter för topplista</string>
+    <string name="components_section_inputs">Menyer och inmatning</string>
+    <string name="components_section_preferences">Inställningar</string>
+    <string name="components_switch_card_title">Växelkort</string>
+    <string name="components_switch_divider_summary">Innehåller en chevron och avdelare.</string>
+    <string name="components_switch_divider_title">Växel med avdelare</string>
+    <string name="components_switch_summary">Ger en sammanfattning och växel.</string>
+    <string name="components_switch_title">Växlarpreferens</string>
+    <string name="components_title">Komponenter</string>
+    <string name="components_filter_favorites">Favoriter</string>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="onboarding_feature1_description">App Toolkit предлагает подборку приложений, каждое из которых подчёркивает разные аспекты библиотеки AppToolkit и улучшает ваш опыт работы с Android. Посмотрите, что возможно с библиотекой AppToolkit.</string>
+    <string name="onboarding_feature1_title">Откройте приложения</string>
+    <string name="onboarding_personalization_description">Это приложение показывает, как библиотека AppToolkit создаёт универсальные приложения, ориентированные на пользователя. Посмотрите примеры приложений, чтобы увидеть разные функции и реализации библиотеки.</string>
+    <string name="onboarding_personalization_title">Библиотека AppToolkit в действии</string>
+    <string name="onboarding_welcome_description">Изучите возможности библиотеки AppToolkit. Откройте приложения, созданные для демонстрации её возможностей и улучшения разработки под Android и пользовательского опыта.</string>
+    <string name="onboarding_welcome_title">Добро пожаловать в App Toolkit</string>
+    <string name="app_short_description">Коллекция удобных инструментов и утилит для Android.</string>
+    <string name="settings_disabled_message">Настройки сейчас недоступны.</string>
+    <string name="long_settings_label">Открыть настройки</string>
+</resources>

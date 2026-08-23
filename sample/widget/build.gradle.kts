@@ -29,6 +29,5 @@ dependencies {
     testImplementation(libs.androidx.glance.testing)
     testImplementation(libs.androidx.glance.appwidget.testing)
     api(project(":sample:feature:apps"))
-    api(project(":sample:core:ui"))
     api(project(":library:apptoolkit"))
 }

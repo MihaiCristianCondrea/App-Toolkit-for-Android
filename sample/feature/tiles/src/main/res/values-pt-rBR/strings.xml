@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="tile_breathing_summary">Inicie uma breve pausa respiratória guiada</string>
+    <string name="tile_breathing_title">Respire</string>
+    <string name="tile_bubble_level_summary">Alinhamento de superfície e detecção de inclinação</string>
+    <string name="tile_bubble_level_title">Nível de bolha</string>
+    <string name="tile_caffeine_summary">Mantenha a tela ativa temporariamente</string>
+    <string name="tile_caffeine_title">Cafeína</string>
+    <string name="tile_coin_flip_summary">Vire cara ou coroa instantaneamente</string>
+    <string name="tile_coin_flip_title">Moeda</string>
+    <string name="tile_compass_summary">Direções cardeais e azimute</string>
+    <string name="tile_compass_title">Bússola</string>
+    <string name="tile_counter_summary">Aumentar uma contagem rápida</string>
+    <string name="tile_counter_title">Contador</string>
+    <string name="tile_dice_roll_summary">Jogue um dado de seis lados</string>
+    <string name="tile_dice_roll_title">Rolagem de dados</string>
+    <string name="tile_lux_meter_info">Monitoramento da intensidade da luz ambiente. Nota: Este recurso depende de um sensor de hardware físico e pode não funcionar em todos os dispositivos.</string>
+    <string name="tile_lux_meter_summary">Intensidade da luz ambiente (lux)</string>
+    <string name="tile_lux_meter_title">Luxímetro</string>
+    <string name="tile_music_search_summary">Identifique músicas com um atalho</string>
+    <string name="tile_music_search_title">Pesquisa de música</string>
+    <string name="tile_network_traffic_summary">Monitore a velocidade da rede em tempo real</string>
+    <string name="tile_network_traffic_title">Tráfego de rede</string>
+    <string name="tile_preview_close">Fechar</string>
+    <string name="tile_preview_coin_result">Cabeças</string>
+    <string name="tile_preview_compass_result">NE 45°</string>
+    <string name="tile_preview_default_result">Prévia em breve</string>
+    <string name="tile_preview_level_result">Nível</string>
+    <string name="tile_service_dice_value">%1$d laminado</string>
+    <string name="tile_service_heads">Cabeças</string>
+    <string name="tile_service_tails">Caudas</string>
+    <string name="tile_sos_summary">Mantenha as ações de emergência por perto</string>
+    <string name="tile_sos_title">SOS</string>
+    <string name="tile_sound_mode_summary">Alterne os modos normal, vibratório e silencioso</string>
+    <string name="tile_sound_mode_title">Modo de som</string>
+    <string name="tile_volume_panel_summary">Abra os controles de volume rapidamente</string>
+    <string name="tile_volume_panel_title">Painel de Volume</string>
+    <string name="tiles_add">Adicionar</string>
+    <string name="tiles_add_pre_android_13">O Android 12 e versões anteriores exigem a adição de blocos no modo de edição de configurações rápidas.</string>
+    <string name="tiles_add_result_added">Bloco adicionado às configurações rápidas</string>
+    <string name="tiles_add_result_already_added">O bloco já está nas configurações rápidas</string>
+    <string name="tiles_add_result_failed">Não foi possível adicionar o bloco</string>
+    <string name="tiles_category_sensors">Sensores e Medição</string>
+    <string name="tiles_category_system">Sistema e controles</string>
+    <string name="tiles_category_utilities">Utilitários e diversão</string>
+    <string name="tiles_category_wellbeing">Bem-estar</string>
+    <string name="tiles_chip_expanded_tool">Ferramenta expandida</string>
+    <string name="tiles_chip_quick_tool">Ferramenta rápida</string>
+    <string name="tiles_chip_tile">Azulejo</string>
+    <string name="tiles_collapse_category">Recolher categoria</string>
+    <string name="tiles_error_failed_to_load">Falha ao carregar Ferramentas Rápidas</string>
+    <string name="tiles_expand_category">Expandir categoria</string>
+    <string name="tiles_filter_added">Adicionado</string>
+    <string name="tiles_filter_all">Todas as ferramentas</string>
+    <string name="tiles_filter_empty">Nenhuma ferramenta corresponde a este filtro ainda.</string>
+    <string name="tiles_filter_needs_setup">Precisa de configuração</string>
+    <string name="tiles_filter_unsupported">Não compatível</string>
+    <string name="tiles_how_to_add_summary">Ferramentas com o chip Tile podem ser adicionadas às Configurações rápidas. Toque em Adicionar no Android 13 ou mais recente ou abra o modo de edição de configurações rápidas e arraste os blocos do App Toolkit para o painel ativo.</string>
+    <string name="tiles_how_to_add_title">Ferramentas prontas para blocos</string>
+    <string name="tiles_more_options">Mais opções de blocos</string>
+    <string name="tiles_setup">Configuração</string>
+    <string name="tiles_setup_required_message">Este bloco precisa de mais configuração antes de poder ser adicionado.</string>
+    <string name="tiles_status_added">Adicionado</string>
+    <string name="tiles_status_available">Disponível</string>
+    <string name="tiles_status_needs_setup">Precisa de configuração</string>
+    <string name="tiles_status_unsupported">Não compatível</string>
+    <string name="tiles_subtitle">Abra caixas de diálogo rápidas e descubra ferramentas expandidas, com recursos prontos para blocos claramente marcados.</string>
+    <string name="tool_coin_flip_action">Jogar moeda</string>
+    <string name="tool_coin_flip_waiting">Preparar?</string>
+    <string name="tool_counter_increment">Incremento</string>
+    <string name="tool_counter_reset">Redefinir</string>
+    <string name="tool_dialog_close_content_description">Fechar ferramenta rápida</string>
+    <string name="tool_dice_roll_action">Role o dado</string>
+    <string name="tool_dice_roll_waiting">Rolar</string>
+    <string name="tool_generic_available_summary">Esta ferramenta está pronta para uma implementação expandida e agora possui uma visualização do Material para que o comportamento possa ser validado antes de uma integração mais profunda.</string>
+    <string name="tool_generic_setup_summary">Esta visualização documenta o comportamento pretendido, mantendo o trabalho da plataforma indisponível claramente separado das ações dos blocos dinâmicos.</string>
+    <string name="tool_material_colors_android_accent_1">Sotaque Android 1</string>
+    <string name="tool_material_colors_android_accent_2">Sotaque Android 2</string>
+    <string name="tool_material_colors_android_accent_3">Sotaque Android 3</string>
+    <string name="tool_material_colors_android_neutral_1">Android neutro 1</string>
+    <string name="tool_material_colors_android_neutral_2">Android neutro 2</string>
+    <string name="tool_material_colors_android_unavailable">As paletas do sistema Android Material You estão disponíveis no Android 12 e versões mais recentes.</string>
+    <string name="tool_material_colors_app_scheme">Esquema de cores do aplicativo</string>
+    <string name="tool_material_colors_description">Compare o esquema de cores atual do aplicativo com o destaque do sistema Android e as paletas neutras.</string>
+    <string name="tool_material_colors_summary">Visualize a paleta do aplicativo e as cores tonais do Android Material You</string>
+    <string name="tool_material_colors_title">Cores materiais</string>
+    <string name="tool_status_added_summary">Este bloco parece já estar disponível no painel de configurações rápidas ativo.</string>
+    <string name="tool_status_added_title">Pronto em configurações rápidas</string>
+    <string name="tool_status_available_summary">Experimente a visualização no aplicativo abaixo ou adicione o bloco às Configurações rápidas quando o chip Tile for exibido.</string>
+    <string name="tool_status_available_title">Pronto para usar</string>
+    <string name="tool_status_needs_setup_summary">Este conceito precisa de permissões, suporte a dispositivos ou um fluxo de trabalho mais completo antes de poder ser executado como um bloco dinâmico.</string>
+    <string name="tool_status_needs_setup_title">Configuração necessária</string>
+    <string name="tool_status_unsupported_summary">O Android ainda não expõe uma API pública segura para esta ação, portanto, esta entrada está documentada como uma visualização.</string>
+    <string name="tool_status_unsupported_title">Somente visualização</string>
+    <string name="tile_flash_dimmer_title">Dimmer da lanterna</string>
+    <string name="tile_flash_dimmer_summary">Ajuste o brilho da lanterna e acesse pelos Ajustes rápidos</string>
+    <string name="flash_dimmer_unavailable">Lanterna indisponível</string>
+    <string name="flash_dimmer_off">Desligada</string>
+    <string name="flash_dimmer_on">Ligada</string>
+    <string name="flash_dimmer_tile_level">Nível %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Brilho %1$d de %2$d</string>
+    <string name="flash_dimmer_minimum">Mínimo</string>
+    <string name="flash_dimmer_half">Metade</string>
+    <string name="flash_dimmer_maximum">Máximo</string>
+    <string name="flash_dimmer_turn_off">Desligar</string>
+    <string name="flash_dimmer_turn_on">Ligar</string>
+    <string name="tile_morse_summary">Pisque uma mensagem personalizada em código Morse</string>
+    <string name="tile_morse_title">Lanterna Morse</string>
+    <string name="morse_message_label">Mensagem</string>
+    <string name="morse_start">Iniciar flashes</string>
+    <string name="morse_stop">Parar</string>
+    <string name="morse_ready">Pronto</string>
+    <string name="morse_active">Piscando</string>
+    <string name="morse_error_empty">Digite uma mensagem</string>
+    <string name="morse_error_length">Use no máximo 200 caracteres</string>
+    <string name="morse_error_characters">Use apenas letras de A–Z, números e espaços</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+</resources>

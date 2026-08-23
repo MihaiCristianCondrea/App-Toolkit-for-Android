@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="tile_breathing_summary">एक छोटा सा निर्देशित श्वास विराम प्रारंभ करें</string>
+    <string name="tile_breathing_title">साँस लें</string>
+    <string name="tile_bubble_level_summary">सतह संरेखण और झुकाव का पता लगाना</string>
+    <string name="tile_bubble_level_title">बुलबुला स्तर</string>
+    <string name="tile_caffeine_summary">स्क्रीन को अस्थायी रूप से चालू रखें</string>
+    <string name="tile_caffeine_title">कैफीन</string>
+    <string name="tile_coin_flip_summary">तुरंत सिर या पूंछ पलटें</string>
+    <string name="tile_coin_flip_title">सिक्का पलटना</string>
+    <string name="tile_compass_summary">कार्डिनल दिशाएँ और अज़ीमुथ</string>
+    <string name="tile_compass_title">दिशा सूचक यंत्र</string>
+    <string name="tile_counter_summary">तेजी से चलने वाली गिनती बढ़ाएँ</string>
+    <string name="tile_counter_title">काउंटर</string>
+    <string name="tile_dice_roll_summary">छह-तरफा पासा रोल करें</string>
+    <string name="tile_dice_roll_title">पासा पलटना</string>
+    <string name="tile_lux_meter_info">परिवेश प्रकाश तीव्रता की निगरानी। नोट: यह सुविधा भौतिक हार्डवेयर सेंसर पर निर्भर करती है और हो सकता है कि यह सभी डिवाइस पर काम न करे।</string>
+    <string name="tile_lux_meter_summary">परिवेश प्रकाश तीव्रता (लक्स)</string>
+    <string name="tile_lux_meter_title">लक्स मीटर</string>
+    <string name="tile_music_search_summary">शॉर्टकट से संगीत को पहचानें</string>
+    <string name="tile_music_search_title">संगीत खोज</string>
+    <string name="tile_network_traffic_summary">वास्तविक समय नेटवर्क गति की निगरानी करें</string>
+    <string name="tile_network_traffic_title">नेटवर्क ट्रैफ़िक</string>
+    <string name="tile_preview_close">बंद करें</string>
+    <string name="tile_preview_coin_result">प्रमुखों</string>
+    <string name="tile_preview_compass_result">पूर्वोत्तर 45°</string>
+    <string name="tile_preview_default_result">पूर्वावलोकन जल्द ही आ रहा है</string>
+    <string name="tile_preview_level_result">स्तर</string>
+    <string name="tile_service_dice_value">लुढ़का हुआ %1$d</string>
+    <string name="tile_service_heads">प्रमुखों</string>
+    <string name="tile_service_tails">पूंछ</string>
+    <string name="tile_sos_summary">आपातकालीन कार्रवाइयां बंद रखें</string>
+    <string name="tile_sos_title">एसओएस</string>
+    <string name="tile_sound_mode_summary">सामान्य, कंपन और मौन मोड स्विच करें</string>
+    <string name="tile_sound_mode_title">ध्वनि विधा</string>
+    <string name="tile_volume_panel_summary">वॉल्यूम नियंत्रण शीघ्रता से खोलें</string>
+    <string name="tile_volume_panel_title">वॉल्यूम पैनल</string>
+    <string name="tiles_add">जोड़ें</string>
+    <string name="tiles_add_pre_android_13">Android 12 और पुराने संस्करणों में त्वरित सेटिंग्स संपादन मोड से टाइल जोड़ने की आवश्यकता होती है।</string>
+    <string name="tiles_add_result_added">टाइल को त्वरित सेटिंग्स में जोड़ा गया</string>
+    <string name="tiles_add_result_already_added">टाइल पहले से ही त्वरित सेटिंग्स में है</string>
+    <string name="tiles_add_result_failed">टाइल नहीं जोड़ा जा सका</string>
+    <string name="tiles_category_sensors">सेंसर और माप</string>
+    <string name="tiles_category_system">सिस्टम एवं नियंत्रण</string>
+    <string name="tiles_category_utilities">उपयोगिताएँ और मनोरंजन</string>
+    <string name="tiles_category_wellbeing">कल्याण</string>
+    <string name="tiles_chip_expanded_tool">विस्तारित उपकरण</string>
+    <string name="tiles_chip_quick_tool">त्वरित उपकरण</string>
+    <string name="tiles_chip_tile">टाइल</string>
+    <string name="tiles_collapse_category">श्रेणी संक्षिप्त करें</string>
+    <string name="tiles_error_failed_to_load">त्वरित उपकरण लोड करने में विफल</string>
+    <string name="tiles_expand_category">श्रेणी का विस्तार करें</string>
+    <string name="tiles_filter_added">जोड़ा गया</string>
+    <string name="tiles_filter_all">सभी उपकरण</string>
+    <string name="tiles_filter_empty">अभी तक कोई भी उपकरण इस फ़िल्टर से मेल नहीं खाता है।</string>
+    <string name="tiles_filter_needs_setup">सेटअप की आवश्यकता है</string>
+    <string name="tiles_filter_unsupported">असमर्थित</string>
+    <string name="tiles_how_to_add_summary">टाइल चिप वाले टूल को त्वरित सेटिंग्स में जोड़ा जा सकता है। एंड्रॉइड 13 या नए पर जोड़ें टैप करें, या त्वरित सेटिंग्स संपादन मोड खोलें और ऐप टूलकिट टाइल्स को अपने सक्रिय पैनल में खींचें।</string>
+    <string name="tiles_how_to_add_title">टाइल-तैयार उपकरण</string>
+    <string name="tiles_more_options">अधिक टाइल विकल्प</string>
+    <string name="tiles_setup">सेटअप</string>
+    <string name="tiles_setup_required_message">इस टाइल को जोड़ने से पहले अधिक सेटअप की आवश्यकता है।</string>
+    <string name="tiles_status_added">जोड़ा गया</string>
+    <string name="tiles_status_available">उपलब्ध</string>
+    <string name="tiles_status_needs_setup">सेटअप की आवश्यकता है</string>
+    <string name="tiles_status_unsupported">असमर्थित</string>
+    <string name="tiles_subtitle">त्वरित संवाद खोलें और टाइल-तैयार सुविधाओं के साथ स्पष्ट रूप से चिह्नित विस्तारित टूल खोजें।</string>
+    <string name="tool_coin_flip_action">सिक्का उछालो</string>
+    <string name="tool_coin_flip_waiting">तैयार?</string>
+    <string name="tool_counter_increment">वृद्धि</string>
+    <string name="tool_counter_reset">रीसेट करें</string>
+    <string name="tool_dialog_close_content_description">त्वरित उपकरण बंद करें</string>
+    <string name="tool_dice_roll_action">रोल डाई</string>
+    <string name="tool_dice_roll_waiting">रोल</string>
+    <string name="tool_generic_available_summary">यह उपकरण विस्तारित कार्यान्वयन के लिए तैयार है और अब इसमें एक सामग्री पूर्वावलोकन है ताकि गहन एकीकरण से पहले व्यवहार को मान्य किया जा सके।</string>
+    <string name="tool_generic_setup_summary">यह पूर्वावलोकन अनुपलब्ध प्लेटफ़ॉर्म कार्य को लाइव टाइल क्रियाओं से स्पष्ट रूप से अलग रखते हुए इच्छित व्यवहार का दस्तावेजीकरण करता है।</string>
+    <string name="tool_material_colors_android_accent_1">एंड्रॉइड एक्सेंट 1</string>
+    <string name="tool_material_colors_android_accent_2">एंड्रॉइड एक्सेंट 2</string>
+    <string name="tool_material_colors_android_accent_3">एंड्रॉइड एक्सेंट 3</string>
+    <string name="tool_material_colors_android_neutral_1">एंड्रॉइड न्यूट्रल 1</string>
+    <string name="tool_material_colors_android_neutral_2">एंड्रॉइड न्यूट्रल 2</string>
+    <string name="tool_material_colors_android_unavailable">एंड्रॉइड मटेरियल यू सिस्टम पैलेट एंड्रॉइड 12 और नए पर उपलब्ध हैं।</string>
+    <string name="tool_material_colors_app_scheme">ऐप रंग योजना</string>
+    <string name="tool_material_colors_description">एंड्रॉइड सिस्टम एक्सेंट और न्यूट्रल पैलेट के साथ वर्तमान एप्लिकेशन रंग योजना की तुलना करें।</string>
+    <string name="tool_material_colors_summary">ऐप पैलेट और एंड्रॉइड मटेरियल यू टोनल रंगों का पूर्वावलोकन करें</string>
+    <string name="tool_material_colors_title">सामग्री रंग</string>
+    <string name="tool_status_added_summary">ऐसा प्रतीत होता है कि यह टाइल आपके सक्रिय त्वरित सेटिंग्स पैनल में पहले से ही उपलब्ध है।</string>
+    <string name="tool_status_added_title">त्वरित सेटिंग्स में तैयार</string>
+    <string name="tool_status_available_summary">नीचे इन-ऐप पूर्वावलोकन आज़माएं या टाइल चिप दिखाए जाने पर टाइल को त्वरित सेटिंग्स में जोड़ें।</string>
+    <string name="tool_status_available_title">उपयोग के लिए तैयार</string>
+    <string name="tool_status_needs_setup_summary">इस अवधारणा को लाइव टाइल के रूप में चलाने से पहले अनुमतियों, डिवाइस समर्थन या पूर्ण वर्कफ़्लो की आवश्यकता होती है।</string>
+    <string name="tool_status_needs_setup_title">सेटअप आवश्यक है</string>
+    <string name="tool_status_unsupported_summary">एंड्रॉइड ने अभी तक इस कार्रवाई के लिए एक सुरक्षित सार्वजनिक एपीआई का खुलासा नहीं किया है, इसलिए इस प्रविष्टि को पूर्वावलोकन के रूप में प्रलेखित किया गया है।</string>
+    <string name="tool_status_unsupported_title">केवल पूर्वावलोकन करें</string>
+    <string name="tile_flash_dimmer_title">फ़्लैश डिमर</string>
+    <string name="tile_flash_dimmer_summary">फ़्लैशलाइट की चमक समायोजित करें और क्विक सेटिंग से इस्तेमाल करें</string>
+    <string name="flash_dimmer_unavailable">फ़्लैशलाइट उपलब्ध नहीं है</string>
+    <string name="flash_dimmer_off">बंद</string>
+    <string name="flash_dimmer_on">चालू</string>
+    <string name="flash_dimmer_tile_level">स्तर %1$d/%2$d</string>
+    <string name="flash_dimmer_level">चमक %1$d / %2$d</string>
+    <string name="flash_dimmer_minimum">न्यूनतम</string>
+    <string name="flash_dimmer_half">आधा</string>
+    <string name="flash_dimmer_maximum">अधिकतम</string>
+    <string name="flash_dimmer_turn_off">बंद करें</string>
+    <string name="flash_dimmer_turn_on">चालू करें</string>
+    <string name="tile_morse_summary">मॉर्स कोड में अपना संदेश फ़्लैश करें</string>
+    <string name="tile_morse_title">मॉर्स फ़्लैशलाइट</string>
+    <string name="morse_message_label">संदेश</string>
+    <string name="morse_start">फ़्लैश करना शुरू करें</string>
+    <string name="morse_stop">रोकें</string>
+    <string name="morse_ready">तैयार</string>
+    <string name="morse_active">फ़्लैश हो रहा है</string>
+    <string name="morse_error_empty">संदेश दर्ज करें</string>
+    <string name="morse_error_length">200 या उससे कम वर्ण इस्तेमाल करें</string>
+    <string name="morse_error_characters">सिर्फ़ A–Z अक्षर, संख्याएँ और स्पेस इस्तेमाल करें</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+</resources>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="tile_breathing_summary">Mulailah jeda pernapasan singkat yang dipandu</string>
+    <string name="tile_breathing_title">Bernafas</string>
+    <string name="tile_bubble_level_summary">Penjajaran permukaan dan deteksi kemiringan</string>
+    <string name="tile_bubble_level_title">Tingkat Gelembung</string>
+    <string name="tile_caffeine_summary">Biarkan layar tetap aktif untuk sementara</string>
+    <string name="tile_caffeine_title">Kafein</string>
+    <string name="tile_coin_flip_summary">Balikkan kepala atau ekor secara instan</string>
+    <string name="tile_coin_flip_title">Balik Koin</string>
+    <string name="tile_compass_summary">Arah mata angin dan azimuth</string>
+    <string name="tile_compass_title">Kompas</string>
+    <string name="tile_counter_summary">Tingkatkan hitungan lari cepat</string>
+    <string name="tile_counter_title">Penghitung</string>
+    <string name="tile_dice_roll_summary">Pelemparan sebuah dadu bersisi enam</string>
+    <string name="tile_dice_roll_title">Gulungan Dadu</string>
+    <string name="tile_lux_meter_info">Pemantauan intensitas cahaya sekitar. Catatan: Fitur ini bergantung pada sensor perangkat keras fisik dan mungkin tidak berfungsi di semua perangkat.</string>
+    <string name="tile_lux_meter_summary">Intensitas cahaya sekitar (lux)</string>
+    <string name="tile_lux_meter_title">Meteran Lux</string>
+    <string name="tile_music_search_summary">Identifikasi musik dengan pintasan</string>
+    <string name="tile_music_search_title">Pencarian Musik</string>
+    <string name="tile_network_traffic_summary">Pantau kecepatan jaringan waktu nyata</string>
+    <string name="tile_network_traffic_title">Lalu Lintas Jaringan</string>
+    <string name="tile_preview_close">Tutup</string>
+    <string name="tile_preview_coin_result">Kepala</string>
+    <string name="tile_preview_compass_result">NE 45°</string>
+    <string name="tile_preview_default_result">Pratinjau segera hadir</string>
+    <string name="tile_preview_level_result">Tingkat</string>
+    <string name="tile_service_dice_value">Digulung %1$d</string>
+    <string name="tile_service_heads">Kepala</string>
+    <string name="tile_service_tails">Ekor</string>
+    <string name="tile_sos_summary">Dekatkan tindakan darurat</string>
+    <string name="tile_sos_title">SOS</string>
+    <string name="tile_sound_mode_summary">Beralih mode normal, getar, dan senyap</string>
+    <string name="tile_sound_mode_title">Modus Suara</string>
+    <string name="tile_volume_panel_summary">Buka kontrol volume dengan cepat</string>
+    <string name="tile_volume_panel_title">Panel Volume</string>
+    <string name="tiles_add">Tambahkan</string>
+    <string name="tiles_add_pre_android_13">Android 12 dan yang lebih lama memerlukan penambahan ubin dari mode edit Pengaturan Cepat.</string>
+    <string name="tiles_add_result_added">Ubin ditambahkan ke Pengaturan Cepat</string>
+    <string name="tiles_add_result_already_added">Ubin sudah ada di Pengaturan Cepat</string>
+    <string name="tiles_add_result_failed">Tidak dapat menambahkan ubin</string>
+    <string name="tiles_category_sensors">Sensor &amp; Pengukuran</string>
+    <string name="tiles_category_system">Sistem &amp; Kontrol</string>
+    <string name="tiles_category_utilities">Utilitas &amp; Kesenangan</string>
+    <string name="tiles_category_wellbeing">Kesejahteraan</string>
+    <string name="tiles_chip_expanded_tool">Alat yang diperluas</string>
+    <string name="tiles_chip_quick_tool">Alat cepat</string>
+    <string name="tiles_chip_tile">Ubin</string>
+    <string name="tiles_collapse_category">Ciutkan kategori</string>
+    <string name="tiles_error_failed_to_load">Gagal memuat Alat Cepat</string>
+    <string name="tiles_expand_category">Perluas kategori</string>
+    <string name="tiles_filter_added">Ditambahkan</string>
+    <string name="tiles_filter_all">Semua alat</string>
+    <string name="tiles_filter_empty">Belum ada alat yang cocok dengan filter ini.</string>
+    <string name="tiles_filter_needs_setup">Perlu pengaturan</string>
+    <string name="tiles_filter_unsupported">Tidak didukung</string>
+    <string name="tiles_how_to_add_summary">Alat dengan chip Tile dapat ditambahkan ke Pengaturan Cepat. Ketuk Tambah di Android 13 atau lebih baru, atau buka mode edit Pengaturan Cepat dan seret ubin App Toolkit ke panel aktif Anda.</string>
+    <string name="tiles_how_to_add_title">Alat siap ubin</string>
+    <string name="tiles_more_options">Opsi ubin lainnya</string>
+    <string name="tiles_setup">Pengaturan</string>
+    <string name="tiles_setup_required_message">Ubin ini memerlukan pengaturan lebih lanjut sebelum dapat ditambahkan.</string>
+    <string name="tiles_status_added">Ditambahkan</string>
+    <string name="tiles_status_available">Tersedia</string>
+    <string name="tiles_status_needs_setup">Perlu pengaturan</string>
+    <string name="tiles_status_unsupported">Tidak didukung</string>
+    <string name="tiles_subtitle">Buka dialog cepat dan temukan alat yang diperluas, dengan fitur siap ubin yang ditandai dengan jelas.</string>
+    <string name="tool_coin_flip_action">Balik koin</string>
+    <string name="tool_coin_flip_waiting">Siap?</string>
+    <string name="tool_counter_increment">Kenaikan</string>
+    <string name="tool_counter_reset">Setel ulang</string>
+    <string name="tool_dialog_close_content_description">Tutup alat cepat</string>
+    <string name="tool_dice_roll_action">Gulung mati</string>
+    <string name="tool_dice_roll_waiting">Gulung</string>
+    <string name="tool_generic_available_summary">Alat ini siap untuk penerapan yang diperluas dan kini memiliki pratinjau Material sehingga perilaku dapat divalidasi sebelum integrasi lebih dalam.</string>
+    <string name="tool_generic_setup_summary">Pratinjau ini mendokumentasikan perilaku yang diinginkan sekaligus menjaga agar pekerjaan platform yang tidak tersedia terpisah dengan jelas dari tindakan ubin langsung.</string>
+    <string name="tool_material_colors_android_accent_1">Aksen Android 1</string>
+    <string name="tool_material_colors_android_accent_2">Aksen Android 2</string>
+    <string name="tool_material_colors_android_accent_3">Aksen Android 3</string>
+    <string name="tool_material_colors_android_neutral_1">Android netral 1</string>
+    <string name="tool_material_colors_android_neutral_2">Android netral 2</string>
+    <string name="tool_material_colors_android_unavailable">Palet sistem Android Material You tersedia di Android 12 dan yang lebih baru.</string>
+    <string name="tool_material_colors_app_scheme">Skema warna aplikasi</string>
+    <string name="tool_material_colors_description">Bandingkan skema warna aplikasi saat ini dengan aksen sistem Android dan palet netral.</string>
+    <string name="tool_material_colors_summary">Pratinjau palet aplikasi dan warna tonal Android Material You</string>
+    <string name="tool_material_colors_title">Warna Bahan</string>
+    <string name="tool_status_added_summary">Ubin ini tampaknya sudah tersedia di panel Pengaturan Cepat Anda yang aktif.</string>
+    <string name="tool_status_added_title">Siap di Pengaturan Cepat</string>
+    <string name="tool_status_available_summary">Coba pratinjau dalam aplikasi di bawah atau tambahkan ubin ke Pengaturan Cepat saat chip Ubin ditampilkan.</string>
+    <string name="tool_status_available_title">Siap digunakan</string>
+    <string name="tool_status_needs_setup_summary">Konsep ini memerlukan izin, dukungan perangkat, atau alur kerja yang lebih lengkap sebelum dapat dijalankan sebagai ubin langsung.</string>
+    <string name="tool_status_needs_setup_title">Diperlukan pengaturan</string>
+    <string name="tool_status_unsupported_summary">Android belum mengekspos API publik yang aman untuk tindakan ini, jadi entri ini didokumentasikan sebagai pratinjau.</string>
+    <string name="tool_status_unsupported_title">Hanya pratinjau</string>
+    <string name="tile_flash_dimmer_title">Peredup senter</string>
+    <string name="tile_flash_dimmer_summary">Sesuaikan kecerahan senter dan akses dari Setelan Cepat</string>
+    <string name="flash_dimmer_unavailable">Senter tidak tersedia</string>
+    <string name="flash_dimmer_off">Mati</string>
+    <string name="flash_dimmer_on">Nyala</string>
+    <string name="flash_dimmer_tile_level">Tingkat %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Kecerahan %1$d dari %2$d</string>
+    <string name="flash_dimmer_minimum">Minimum</string>
+    <string name="flash_dimmer_half">Setengah</string>
+    <string name="flash_dimmer_maximum">Maksimum</string>
+    <string name="flash_dimmer_turn_off">Matikan</string>
+    <string name="flash_dimmer_turn_on">Nyalakan</string>
+    <string name="tile_morse_summary">Kedipkan pesan khusus dalam kode Morse</string>
+    <string name="tile_morse_title">Senter Morse</string>
+    <string name="morse_message_label">Pesan</string>
+    <string name="morse_start">Mulai berkedip</string>
+    <string name="morse_stop">Berhenti</string>
+    <string name="morse_ready">Siap</string>
+    <string name="morse_active">Berkedip</string>
+    <string name="morse_error_empty">Masukkan pesan</string>
+    <string name="morse_error_length">Gunakan maksimal 200 karakter</string>
+    <string name="morse_error_characters">Gunakan hanya huruf A–Z, angka, dan spasi</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+</resources>

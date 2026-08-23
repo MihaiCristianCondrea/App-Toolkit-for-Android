@@ -26,8 +26,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contrac
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.models.network.AppErrors
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.utils.extensions.toErrorMessage
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.utils.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper

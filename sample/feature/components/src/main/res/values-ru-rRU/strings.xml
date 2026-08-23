@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Кнопка с контуром</string>
+    <string name="components_button_primary">Основная кнопка</string>
+    <string name="components_button_text">Текстовая кнопка</string>
+    <string name="components_button_tonal">Тональная кнопка</string>
+    <string name="components_checkbox_summary">Показывает флажок с необязательным описанием.</string>
+    <string name="components_checkbox_title">Настройка флажка</string>
+    <string name="components_fab_extended">Создать</string>
+    <string name="components_filter_popular">Популярное</string>
+    <string name="components_filter_recent">Недавние</string>
+    <string name="components_icon_content_description">Демонстрационная иконка</string>
+    <string name="components_menu_label">Показать меню</string>
+    <string name="components_menu_option_primary">Основное действие</string>
+    <string name="components_menu_option_secondary">Дополнительное действие</string>
+    <string name="components_option_alpha">Альфа</string>
+    <string name="components_option_beta">Бета</string>
+    <string name="components_option_gamma">Гамма</string>
+    <string name="components_preference_secondary_summary">Этот элемент показывает базовый макет настройки.</string>
+    <string name="components_preference_secondary_title">Вторичная настройка</string>
+    <string name="components_preference_summary">Вторичный текст, описывающий настройку.</string>
+    <string name="components_preference_title">Элемент настройки</string>
+    <string name="components_section_buttons">Кнопки</string>
+    <string name="components_button_group_standard">Стандартные кнопки</string>
+    <string name="components_button_group_tonal">Тональные кнопки</string>
+    <string name="components_button_group_outlined">Контурные кнопки</string>
+    <string name="components_button_group_text_and_icon">Текстовые кнопки и кнопки со значками</string>
+    <string name="components_section_fabs">Плавающие кнопки действий</string>
+    <string name="components_section_filters">Фильтры верхнего списка</string>
+    <string name="components_section_inputs">Меню и ввод</string>
+    <string name="components_section_preferences">Настройки</string>
+    <string name="components_switch_card_title">Карточка переключателя</string>
+    <string name="components_switch_divider_summary">Включает шеврон и разделитель.</string>
+    <string name="components_switch_divider_title">Переключатель с разделителем</string>
+    <string name="components_switch_summary">Содержит описание и переключатель.</string>
+    <string name="components_switch_title">Переключатель настройки</string>
+    <string name="components_title">Компоненты</string>
+    <string name="components_filter_favorites">Избранное</string>
+</resources>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">آؤٹ لائن بٹن</string>
+    <string name="components_button_primary">پرائمری بٹن</string>
+    <string name="components_button_text">ٹیکسٹ بٹن</string>
+    <string name="components_button_tonal">ٹونل بٹن</string>
+    <string name="components_checkbox_summary">اختیاری خلاصے کے ساتھ چیک باکس دکھاتا ہے۔</string>
+    <string name="components_checkbox_title">چیک باکس ترجیح</string>
+    <string name="components_fab_extended">بنائیں</string>
+    <string name="components_filter_popular">مقبول</string>
+    <string name="components_filter_recent">حالیہ</string>
+    <string name="components_icon_content_description">ڈیمو آئیکن</string>
+    <string name="components_menu_label">مینو دکھائیں</string>
+    <string name="components_menu_option_primary">پرائمری عمل</string>
+    <string name="components_menu_option_secondary">ثانوی عمل</string>
+    <string name="components_option_alpha">الفا</string>
+    <string name="components_option_beta">بیٹا</string>
+    <string name="components_option_gamma">گاما</string>
+    <string name="components_preference_secondary_summary">یہ آئٹم بنیادی ترجیحی لے آؤٹ دکھاتا ہے۔</string>
+    <string name="components_preference_secondary_title">ثانوی ترجیح</string>
+    <string name="components_preference_summary">ترجیح کی وضاحت کرنے والا ثانوی متن۔</string>
+    <string name="components_preference_title">ترجیح آئٹم</string>
+    <string name="components_section_buttons">بٹن</string>
+    <string name="components_button_group_standard">معیاری بٹن</string>
+    <string name="components_button_group_tonal">ٹونل بٹن</string>
+    <string name="components_button_group_outlined">آؤٹ لائن بٹن</string>
+    <string name="components_button_group_text_and_icon">متن اور آئیکن بٹن</string>
+    <string name="components_section_fabs">فلوٹنگ ایکشن بٹن</string>
+    <string name="components_section_filters">اوپر والی فہرست کے فلٹر</string>
+    <string name="components_section_inputs">مینوز اور ان پٹ</string>
+    <string name="components_section_preferences">ترجیحات</string>
+    <string name="components_switch_card_title">سوئچ کارڈ</string>
+    <string name="components_switch_divider_summary">اس میں شیورون اور ڈوائیڈر شامل ہیں۔</string>
+    <string name="components_switch_divider_title">ڈوائیڈر کے ساتھ سوئچ</string>
+    <string name="components_switch_summary">خلاصہ اور سوئچ فراہم کرتا ہے۔</string>
+    <string name="components_switch_title">سوئچ ترجیح</string>
+    <string name="components_title">اجزاء</string>
+    <string name="components_filter_favorites">پسندیدہ</string>
+</resources>

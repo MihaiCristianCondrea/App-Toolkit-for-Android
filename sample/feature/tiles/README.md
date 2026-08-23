@@ -15,6 +15,7 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
   points and own coordination or runtime state.
 - UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
   `toolkitTilesEntryBuilder`, and the Quick Settings services.
+- Localized Quick Tools strings and plurals.
 
 ## Does not own
 

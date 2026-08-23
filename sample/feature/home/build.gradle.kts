@@ -28,6 +28,5 @@ dependencies {
     api(project(":sample:feature:components"))
     api(project(":sample:core:navigation"))
     api(project(":sample:core:datastore"))
-    api(project(":sample:core:ui"))
     api(project(":library:apptoolkit"))
 }

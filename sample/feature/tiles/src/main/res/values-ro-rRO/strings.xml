@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="tile_breathing_summary">Începeți o scurtă pauză de respirație ghidată</string>
+    <string name="tile_breathing_title">Respiră</string>
+    <string name="tile_bubble_level_summary">Alinierea suprafeței și detectarea înclinării</string>
+    <string name="tile_bubble_level_title">Nivel cu bule</string>
+    <string name="tile_caffeine_summary">Țineți ecranul treaz temporar</string>
+    <string name="tile_caffeine_title">Cofeina</string>
+    <string name="tile_coin_flip_summary">Întoarceți capetele sau cozile instantaneu</string>
+    <string name="tile_coin_flip_title">Coin Flip</string>
+    <string name="tile_compass_summary">Direcții cardinale și azimut</string>
+    <string name="tile_compass_title">busola</string>
+    <string name="tile_counter_summary">Creșteți un număr de rulare rapidă</string>
+    <string name="tile_counter_title">Contor</string>
+    <string name="tile_dice_roll_summary">Lansați un zar cu șase fețe</string>
+    <string name="tile_dice_roll_title">Rol de zaruri</string>
+    <string name="tile_lux_meter_info">Monitorizarea intensității luminii ambientale. Notă: această caracteristică depinde de un senzor hardware fizic și este posibil să nu funcționeze pe toate dispozitivele.</string>
+    <string name="tile_lux_meter_summary">Intensitatea luminii ambientale (lux)</string>
+    <string name="tile_lux_meter_title">Luxmetru</string>
+    <string name="tile_music_search_summary">Identificați muzica cu o comandă rapidă</string>
+    <string name="tile_music_search_title">Căutare de muzică</string>
+    <string name="tile_network_traffic_summary">Monitorizați viteza rețelei în timp real</string>
+    <string name="tile_network_traffic_title">Trafic de rețea</string>
+    <string name="tile_preview_close">Închide</string>
+    <string name="tile_preview_coin_result">Capete</string>
+    <string name="tile_preview_compass_result">NE 45°</string>
+    <string name="tile_preview_default_result">Previzualizare în curând</string>
+    <string name="tile_preview_level_result">Nivel</string>
+    <string name="tile_service_dice_value">%1$d rulat</string>
+    <string name="tile_service_heads">Capete</string>
+    <string name="tile_service_tails">Cozi</string>
+    <string name="tile_sos_summary">Țineți acțiunile de urgență aproape</string>
+    <string name="tile_sos_title">SOS</string>
+    <string name="tile_sound_mode_summary">Comutați modurile normal, vibrație și silențios</string>
+    <string name="tile_sound_mode_title">Modul de sunet</string>
+    <string name="tile_volume_panel_summary">Deschideți rapid comenzile de volum</string>
+    <string name="tile_volume_panel_title">Panoul de volum</string>
+    <string name="tiles_add">Adăugați</string>
+    <string name="tiles_add_pre_android_13">Android 12 și versiuni mai vechi necesită adăugarea de piese din modul de editare Setări rapide.</string>
+    <string name="tiles_add_result_added">Tila adăugată la Setări rapide</string>
+    <string name="tiles_add_result_already_added">Tile este deja în Setări rapide</string>
+    <string name="tiles_add_result_failed">Nu s-a putut adăuga gresie</string>
+    <string name="tiles_category_sensors">Senzori și măsurători</string>
+    <string name="tiles_category_system">Sistem și comenzi</string>
+    <string name="tiles_category_utilities">Utilități și distracție</string>
+    <string name="tiles_category_wellbeing">bunăstare</string>
+    <string name="tiles_chip_expanded_tool">Instrument extins</string>
+    <string name="tiles_chip_quick_tool">Instrument rapid</string>
+    <string name="tiles_chip_tile">Tigla</string>
+    <string name="tiles_collapse_category">Restrânge categoria</string>
+    <string name="tiles_error_failed_to_load">Nu s-a încărcat Instrumentele rapide</string>
+    <string name="tiles_expand_category">Extinde categoria</string>
+    <string name="tiles_filter_added">Adăugat</string>
+    <string name="tiles_filter_all">Toate instrumentele</string>
+    <string name="tiles_filter_empty">Niciun instrument nu se potrivește încă cu acest filtru.</string>
+    <string name="tiles_filter_needs_setup">Necesita setare</string>
+    <string name="tiles_filter_unsupported">Neacceptat</string>
+    <string name="tiles_how_to_add_summary">Instrumentele cu cip Tile pot fi adăugate la Setări rapide. Atingeți Adăugați pe Android 13 sau mai nou sau deschideți modul de editare Setări rapide și trageți piese App Toolkit în panoul activ.</string>
+    <string name="tiles_how_to_add_title">Instrumente pregătite pentru plăci</string>
+    <string name="tiles_more_options">Mai multe opțiuni de plăci</string>
+    <string name="tiles_setup">Configurare</string>
+    <string name="tiles_setup_required_message">Această țiglă necesită mai multe configurații înainte de a putea fi adăugată.</string>
+    <string name="tiles_status_added">Adăugat</string>
+    <string name="tiles_status_available">Disponibil</string>
+    <string name="tiles_status_needs_setup">Necesita setare</string>
+    <string name="tiles_status_unsupported">Neacceptat</string>
+    <string name="tiles_subtitle">Deschideți casete de dialog rapide și descoperiți instrumente extinse, cu caracteristici gata pentru plăci marcate clar.</string>
+    <string name="tool_coin_flip_action">Flip monedă</string>
+    <string name="tool_coin_flip_waiting">Gata?</string>
+    <string name="tool_counter_increment">Incrementare</string>
+    <string name="tool_counter_reset">Resetați</string>
+    <string name="tool_dialog_close_content_description">Închideți instrumentul rapid</string>
+    <string name="tool_dice_roll_action">Rulează moara</string>
+    <string name="tool_dice_roll_waiting">Roll</string>
+    <string name="tool_generic_available_summary">Acest instrument este pregătit pentru o implementare extinsă și are acum o previzualizare Material, astfel încât comportamentul poate fi validat înainte de o integrare mai profundă.</string>
+    <string name="tool_generic_setup_summary">Această previzualizare documentează comportamentul intenționat, menținând în același timp munca pe platformă indisponibilă separată clar de acțiunile din tigla live.</string>
+    <string name="tool_material_colors_android_accent_1">Accent Android 1</string>
+    <string name="tool_material_colors_android_accent_2">Accent Android 2</string>
+    <string name="tool_material_colors_android_accent_3">Accent Android 3</string>
+    <string name="tool_material_colors_android_neutral_1">Android neutru 1</string>
+    <string name="tool_material_colors_android_neutral_2">Android neutru 2</string>
+    <string name="tool_material_colors_android_unavailable">Material Android Paletele dvs. de sistem sunt disponibile pe Android 12 și mai nou.</string>
+    <string name="tool_material_colors_app_scheme">Schema de culori a aplicației</string>
+    <string name="tool_material_colors_description">Comparați schema de culori actuală a aplicației cu accent de sistem Android și paletele neutre.</string>
+    <string name="tool_material_colors_summary">Previzualizează paleta de aplicații și culorile tonale Android Material You</string>
+    <string name="tool_material_colors_title">Culori materiale</string>
+    <string name="tool_status_added_summary">Această țiglă pare să fie deja disponibilă în panoul dvs. activ Setări rapide.</string>
+    <string name="tool_status_added_title">Gata în Setări rapide</string>
+    <string name="tool_status_available_summary">Încercați previzualizarea în aplicație de mai jos sau adăugați țiglă la Setări rapide când este afișat cipul Tile.</string>
+    <string name="tool_status_available_title">Gata de utilizare</string>
+    <string name="tool_status_needs_setup_summary">Acest concept are nevoie de permisiuni, asistență pentru dispozitiv sau un flux de lucru mai complet înainte de a putea rula ca o placă live.</string>
+    <string name="tool_status_needs_setup_title">Este necesară configurarea</string>
+    <string name="tool_status_unsupported_summary">Android nu expune încă un API public sigur pentru această acțiune, așa că această intrare este documentată ca o previzualizare.</string>
+    <string name="tool_status_unsupported_title">Doar previzualizare</string>
+    <string name="tile_flash_dimmer_title">Reglare lanternă</string>
+    <string name="tile_flash_dimmer_summary">Reglează luminozitatea lanternei și acceseaz-o din Setări rapide</string>
+    <string name="flash_dimmer_unavailable">Lanterna nu este disponibilă</string>
+    <string name="flash_dimmer_off">Oprită</string>
+    <string name="flash_dimmer_on">Pornită</string>
+    <string name="flash_dimmer_tile_level">Nivel %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Luminozitate %1$d din %2$d</string>
+    <string name="flash_dimmer_minimum">Minim</string>
+    <string name="flash_dimmer_half">Jumătate</string>
+    <string name="flash_dimmer_maximum">Maxim</string>
+    <string name="flash_dimmer_turn_off">Oprește</string>
+    <string name="flash_dimmer_turn_on">Pornește</string>
+    <string name="tile_morse_summary">Transmite un mesaj personalizat în cod Morse cu lanterna</string>
+    <string name="tile_morse_title">Lanternă Morse</string>
+    <string name="morse_message_label">Mesaj</string>
+    <string name="morse_start">Pornește semnalul</string>
+    <string name="morse_stop">Oprește</string>
+    <string name="morse_ready">Pregătit</string>
+    <string name="morse_active">Semnal în curs</string>
+    <string name="morse_error_empty">Introdu un mesaj</string>
+    <string name="morse_error_length">Folosește cel mult 200 de caractere</string>
+    <string name="morse_error_characters">Folosește numai litere A–Z, cifre și spații</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+</resources>

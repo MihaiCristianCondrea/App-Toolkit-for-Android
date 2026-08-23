@@ -26,7 +26,7 @@ import android.provider.Settings
 import android.widget.Toast
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.getTileServiceRequests
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.toNewTaskIntent
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 
 internal fun requestQuickSettingsTile(
     context: Context,

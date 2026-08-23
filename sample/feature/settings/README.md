@@ -21,7 +21,7 @@ The host's settings providers: what the sample contributes to the toolkit's sett
 ## Depends on
 
 - `:sample:feature:components` for `ComponentsUnlockViewModel`, driven by the About tap gesture.
-- `:sample:core:datastore`, `:sample:core:ui`.
+- `:sample:core:datastore`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the provider contracts.
 
 ## Used by

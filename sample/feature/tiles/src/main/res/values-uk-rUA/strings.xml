@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="tile_breathing_summary">Почніть коротку дихальну паузу</string>
+    <string name="tile_breathing_title">Дихайте</string>
+    <string name="tile_bubble_level_summary">Вирівнювання поверхні та визначення нахилу</string>
+    <string name="tile_bubble_level_title">Бульбашковий рівень</string>
+    <string name="tile_caffeine_summary">Тимчасово не активний екран</string>
+    <string name="tile_caffeine_title">Кофеїн</string>
+    <string name="tile_coin_flip_summary">Миттєво змінюйте голови або решки</string>
+    <string name="tile_coin_flip_title">Підкидання монети</string>
+    <string name="tile_compass_summary">Свіжі сторони й азимут</string>
+    <string name="tile_compass_title">компас</string>
+    <string name="tile_counter_summary">Збільште швидкий підрахунок</string>
+    <string name="tile_counter_title">Лічильник</string>
+    <string name="tile_dice_roll_summary">Киньте шестигранний кубик</string>
+    <string name="tile_dice_roll_title">Кидок кубика</string>
+    <string name="tile_lux_meter_info">Моніторинг інтенсивності зовнішнього освітлення. Примітка. Ця функція залежить від фізичного апаратного датчика та може працювати не на всіх пристроях.</string>
+    <string name="tile_lux_meter_summary">Інтенсивність зовнішнього освітлення (люкс)</string>
+    <string name="tile_lux_meter_title">Люксометр</string>
+    <string name="tile_music_search_summary">Визначайте музику за допомогою швидкого доступу</string>
+    <string name="tile_music_search_title">Пошук музики</string>
+    <string name="tile_network_traffic_summary">Відстежуйте швидкість мережі в реальному часі</string>
+    <string name="tile_network_traffic_title">Мережевий трафік</string>
+    <string name="tile_preview_close">Закрити</string>
+    <string name="tile_preview_coin_result">Голови</string>
+    <string name="tile_preview_compass_result">СХ 45°</string>
+    <string name="tile_preview_default_result">Попередній перегляд незабаром</string>
+    <string name="tile_preview_level_result">Рівень</string>
+    <string name="tile_service_dice_value">Прокат %1$d</string>
+    <string name="tile_service_heads">Голови</string>
+    <string name="tile_service_tails">Хвости</string>
+    <string name="tile_sos_summary">Тримайте екстрені дії поблизу</string>
+    <string name="tile_sos_title">SOS</string>
+    <string name="tile_sound_mode_summary">Перемикайте звичайний, вібраційний і беззвучний режими</string>
+    <string name="tile_sound_mode_title">Режим звуку</string>
+    <string name="tile_volume_panel_summary">Швидко відкривайте регулятори гучності</string>
+    <string name="tile_volume_panel_title">Панель гучності</string>
+    <string name="tiles_add">додати</string>
+    <string name="tiles_add_pre_android_13">Для Android 12 і старіших версій потрібно додавати плитки з режиму редагування швидких налаштувань.</string>
+    <string name="tiles_add_result_added">Плитку додано до швидких налаштувань</string>
+    <string name="tiles_add_result_already_added">Плитка вже є в швидких налаштуваннях</string>
+    <string name="tiles_add_result_failed">Не вдалося додати плитку</string>
+    <string name="tiles_category_sensors">Датчики та вимірювання</string>
+    <string name="tiles_category_system">Система та елементи керування</string>
+    <string name="tiles_category_utilities">Утиліти та розваги</string>
+    <string name="tiles_category_wellbeing">благополуччя</string>
+    <string name="tiles_chip_expanded_tool">Розширений інструмент</string>
+    <string name="tiles_chip_quick_tool">Швидкий інструмент</string>
+    <string name="tiles_chip_tile">Плитка</string>
+    <string name="tiles_collapse_category">Згорнути категорію</string>
+    <string name="tiles_error_failed_to_load">Не вдалося завантажити швидкі інструменти</string>
+    <string name="tiles_expand_category">Розгорнути категорію</string>
+    <string name="tiles_filter_added">Додано</string>
+    <string name="tiles_filter_all">Всі інструменти</string>
+    <string name="tiles_filter_empty">Цей фільтр поки не відповідає жодному інструменту.</string>
+    <string name="tiles_filter_needs_setup">Потребує налаштування</string>
+    <string name="tiles_filter_unsupported">Не підтримується</string>
+    <string name="tiles_how_to_add_summary">Інструменти з чіпом Tile можна додати до швидких налаштувань. Торкніться «Додати» на Android 13 або новішої версії або відкрийте режим редагування швидких налаштувань і перетягніть плитки App Toolkit на активну панель.</string>
+    <string name="tiles_how_to_add_title">Готові інструменти для плитки</string>
+    <string name="tiles_more_options">Більше варіантів плитки</string>
+    <string name="tiles_setup">Налаштування</string>
+    <string name="tiles_setup_required_message">Цю плитку потрібно додатково налаштувати, перш ніж її можна буде додати.</string>
+    <string name="tiles_status_added">Додано</string>
+    <string name="tiles_status_available">в наявності</string>
+    <string name="tiles_status_needs_setup">Потребує налаштування</string>
+    <string name="tiles_status_unsupported">Не підтримується</string>
+    <string name="tiles_subtitle">Відкривайте швидкі діалогові вікна та відкривайте для себе розширені інструменти з чітко позначеними функціями, готовими до плитки.</string>
+    <string name="tool_coin_flip_action">Підкинути монету</string>
+    <string name="tool_coin_flip_waiting">готовий</string>
+    <string name="tool_counter_increment">Приріст</string>
+    <string name="tool_counter_reset">Скинути</string>
+    <string name="tool_dialog_close_content_description">Закрити швидкий інструмент</string>
+    <string name="tool_dice_roll_action">Рулонна матриця</string>
+    <string name="tool_dice_roll_waiting">рулет</string>
+    <string name="tool_generic_available_summary">Цей інструмент готовий для розширеного впровадження та тепер має попередній перегляд Material, щоб поведінку можна було перевірити перед глибшою інтеграцією.</string>
+    <string name="tool_generic_setup_summary">Цей попередній перегляд документує заплановану поведінку, чітко відокремлюючи недоступну роботу платформи від дій живої плитки.</string>
+    <string name="tool_material_colors_android_accent_1">Android accent 1</string>
+    <string name="tool_material_colors_android_accent_2">Android accent 2</string>
+    <string name="tool_material_colors_android_accent_3">Android accent 3</string>
+    <string name="tool_material_colors_android_neutral_1">Android нейтральний 1</string>
+    <string name="tool_material_colors_android_neutral_2">Android нейтральний 2</string>
+    <string name="tool_material_colors_android_unavailable">Системні палітри Android Material You доступні на Android 12 і новіших версіях.</string>
+    <string name="tool_material_colors_app_scheme">Колірна схема програми</string>
+    <string name="tool_material_colors_description">Порівняйте поточну колірну схему програми з системним акцентом і нейтральними палітрами Android.</string>
+    <string name="tool_material_colors_summary">Попередній перегляд палітри програм і тональних кольорів Android Material You</string>
+    <string name="tool_material_colors_title">Кольори матеріалу</string>
+    <string name="tool_status_added_summary">Здається, ця плитка вже доступна на вашій активній панелі швидких налаштувань.</string>
+    <string name="tool_status_added_title">Готово в швидких налаштуваннях</string>
+    <string name="tool_status_available_summary">Спробуйте попередній перегляд у додатку нижче або додайте плитку до швидких налаштувань, коли з’явиться фішка плитки.</string>
+    <string name="tool_status_available_title">Готовий до використання</string>
+    <string name="tool_status_needs_setup_summary">Ця концепція потребує дозволів, підтримки пристрою або повнішого робочого процесу, перш ніж її можна буде запускати як живу плитку.</string>
+    <string name="tool_status_needs_setup_title">Потрібне налаштування</string>
+    <string name="tool_status_unsupported_summary">Android ще не надає безпечного публічного API для цієї дії, тому цей запис задокументовано як попередній перегляд.</string>
+    <string name="tool_status_unsupported_title">Тільки попередній перегляд</string>
+    <string name="tile_flash_dimmer_title">Регулятор ліхтарика</string>
+    <string name="tile_flash_dimmer_summary">Налаштуйте яскравість ліхтарика та використовуйте його зі швидких налаштувань</string>
+    <string name="flash_dimmer_unavailable">Ліхтарик недоступний</string>
+    <string name="flash_dimmer_off">Вимкнено</string>
+    <string name="flash_dimmer_on">Увімкнено</string>
+    <string name="flash_dimmer_tile_level">Рівень %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Яскравість %1$d із %2$d</string>
+    <string name="flash_dimmer_minimum">Мінімум</string>
+    <string name="flash_dimmer_half">Половина</string>
+    <string name="flash_dimmer_maximum">Максимум</string>
+    <string name="flash_dimmer_turn_off">Вимкнути</string>
+    <string name="flash_dimmer_turn_on">Увімкнути</string>
+    <string name="tile_morse_summary">Передайте власне повідомлення азбукою Морзе за допомогою ліхтарика</string>
+    <string name="tile_morse_title">Ліхтарик Морзе</string>
+    <string name="morse_message_label">Повідомлення</string>
+    <string name="morse_start">Почати блимання</string>
+    <string name="morse_stop">Зупинити</string>
+    <string name="morse_ready">Готово</string>
+    <string name="morse_active">Блимання</string>
+    <string name="morse_error_empty">Введіть повідомлення</string>
+    <string name="morse_error_length">Використовуйте не більше 200 символів</string>
+    <string name="morse_error_characters">Використовуйте лише літери A–Z, цифри та пробіли</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+</resources>

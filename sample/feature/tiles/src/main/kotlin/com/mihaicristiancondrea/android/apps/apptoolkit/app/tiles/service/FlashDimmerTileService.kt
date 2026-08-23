@@ -14,7 +14,7 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.MorseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.TorchRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

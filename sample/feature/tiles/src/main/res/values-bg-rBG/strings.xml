@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="tile_breathing_summary">Започнете кратка насочена дихателна пауза</string>
+    <string name="tile_breathing_title">Дишайте</string>
+    <string name="tile_bubble_level_summary">Подравняване на повърхността и откриване на наклон</string>
+    <string name="tile_bubble_level_title">Балонче ниво</string>
+    <string name="tile_caffeine_summary">Дръжте екрана буден временно</string>
+    <string name="tile_caffeine_title">Кофеин</string>
+    <string name="tile_coin_flip_summary">Обърнете незабавно глави или опашки</string>
+    <string name="tile_coin_flip_title">Хвърляне на монета</string>
+    <string name="tile_compass_summary">Кардинални посоки и азимут</string>
+    <string name="tile_compass_title">Компас</string>
+    <string name="tile_counter_summary">Увеличаване на бързо отброяване</string>
+    <string name="tile_counter_title">Брояч</string>
+    <string name="tile_dice_roll_summary">Хвърлете шестстранен зар</string>
+    <string name="tile_dice_roll_title">Хвърляне на зарове</string>
+    <string name="tile_lux_meter_info">Мониторинг на интензитета на околната светлина. Забележка: Тази функция зависи от физически хардуерен сензор и може да не работи на всички устройства.</string>
+    <string name="tile_lux_meter_summary">Интензитет на околната светлина (лукс)</string>
+    <string name="tile_lux_meter_title">Лукс метър</string>
+    <string name="tile_music_search_summary">Идентифицирайте музика с пряк път</string>
+    <string name="tile_music_search_title">Търсене на музика</string>
+    <string name="tile_network_traffic_summary">Наблюдавайте скоростта на мрежата в реално време</string>
+    <string name="tile_network_traffic_title">Мрежов трафик</string>
+    <string name="tile_preview_close">затвори</string>
+    <string name="tile_preview_coin_result">Глави</string>
+    <string name="tile_preview_compass_result">NE 45°</string>
+    <string name="tile_preview_default_result">Предварителен преглед очаквайте скоро</string>
+    <string name="tile_preview_level_result">Ниво</string>
+    <string name="tile_service_dice_value">Навит %1$d</string>
+    <string name="tile_service_heads">Глави</string>
+    <string name="tile_service_tails">Опашки</string>
+    <string name="tile_sos_summary">Дръжте аварийните действия наблизо</string>
+    <string name="tile_sos_title">SOS</string>
+    <string name="tile_sound_mode_summary">Превключване на нормален, вибриращ и безшумен режим</string>
+    <string name="tile_sound_mode_title">Звуков режим</string>
+    <string name="tile_volume_panel_summary">Отворете бързо контролите за сила на звука</string>
+    <string name="tile_volume_panel_title">Панел за сила на звука</string>
+    <string name="tiles_add">Добавете</string>
+    <string name="tiles_add_pre_android_13">Android 12 и по-стари версии изискват добавяне на плочки от режима за редактиране на Бързи настройки.</string>
+    <string name="tiles_add_result_added">Плочката е добавена към Бързи настройки</string>
+    <string name="tiles_add_result_already_added">Плочката вече е в Бързи настройки</string>
+    <string name="tiles_add_result_failed">Не можа да се добави плочка</string>
+    <string name="tiles_category_sensors">Сензори и измервания</string>
+    <string name="tiles_category_system">Система и контроли</string>
+    <string name="tiles_category_utilities">Помощни програми и забавление</string>
+    <string name="tiles_category_wellbeing">Благосъстояние</string>
+    <string name="tiles_chip_expanded_tool">Разширен инструмент</string>
+    <string name="tiles_chip_quick_tool">Бърз инструмент</string>
+    <string name="tiles_chip_tile">Плочка</string>
+    <string name="tiles_collapse_category">Свиване на категорията</string>
+    <string name="tiles_error_failed_to_load">Неуспешно зареждане на Бързи инструменти</string>
+    <string name="tiles_expand_category">Разширете категорията</string>
+    <string name="tiles_filter_added">Добавено</string>
+    <string name="tiles_filter_all">Всички инструменти</string>
+    <string name="tiles_filter_empty">Все още няма инструменти, които отговарят на този филтър.</string>
+    <string name="tiles_filter_needs_setup">Нуждае се от настройка</string>
+    <string name="tiles_filter_unsupported">Не се поддържа</string>
+    <string name="tiles_how_to_add_summary">Инструменти с чип Tile могат да се добавят към Quick Settings. Докоснете Добавяне на Android 13 или по-нова версия или отворете режима за редактиране на Бързи настройки и плъзнете плочките на App Toolkit във вашия активен панел.</string>
+    <string name="tiles_how_to_add_title">Готови за плочки инструменти</string>
+    <string name="tiles_more_options">Още опции за плочки</string>
+    <string name="tiles_setup">Настройка</string>
+    <string name="tiles_setup_required_message">Тази плочка се нуждае от допълнителна настройка, преди да може да бъде добавена.</string>
+    <string name="tiles_status_added">Добавено</string>
+    <string name="tiles_status_available">Наличен</string>
+    <string name="tiles_status_needs_setup">Нуждае се от настройка</string>
+    <string name="tiles_status_unsupported">Не се поддържа</string>
+    <string name="tiles_subtitle">Отваряйте бързи диалогови прозорци и откривайте разширени инструменти с ясно обозначени готови за плочки функции.</string>
+    <string name="tool_coin_flip_action">Хвърлете монета</string>
+    <string name="tool_coin_flip_waiting">готова</string>
+    <string name="tool_counter_increment">Увеличаване</string>
+    <string name="tool_counter_reset">Нулиране</string>
+    <string name="tool_dialog_close_content_description">Затворете бързия инструмент</string>
+    <string name="tool_dice_roll_action">Матрица за преобръщане</string>
+    <string name="tool_dice_roll_waiting">Руло</string>
+    <string name="tool_generic_available_summary">Този инструмент е готов за разширено внедряване и вече има предварителен преглед на материала, така че поведението може да бъде валидирано преди по-дълбока интеграция.</string>
+    <string name="tool_generic_setup_summary">Този предварителен преглед документира предвиденото поведение, като същевременно поддържа недостъпната работа на платформата ясно отделена от действията с живи плочки.</string>
+    <string name="tool_material_colors_android_accent_1">Акцент на Android 1</string>
+    <string name="tool_material_colors_android_accent_2">Акцент на Android 2</string>
+    <string name="tool_material_colors_android_accent_3">Android акцент 3</string>
+    <string name="tool_material_colors_android_neutral_1">Android неутрален 1</string>
+    <string name="tool_material_colors_android_neutral_2">Android неутрален 2</string>
+    <string name="tool_material_colors_android_unavailable">Системните палети на Android Material You са налични на Android 12 и по-нови.</string>
+    <string name="tool_material_colors_app_scheme">Цветова схема на приложението</string>
+    <string name="tool_material_colors_description">Сравнете текущата цветова схема на приложението със системния акцент на Android и неутралните палитри.</string>
+    <string name="tool_material_colors_summary">Визуализирайте палитрата на приложението и тоналните цветове на Android Material You</string>
+    <string name="tool_material_colors_title">Материални цветове</string>
+    <string name="tool_status_added_summary">Тази плочка изглежда вече е налична във вашия активен панел за бързи настройки.</string>
+    <string name="tool_status_added_title">Готово в Бързи настройки</string>
+    <string name="tool_status_available_summary">Опитайте визуализацията в приложението по-долу или добавете плочката към Бързи настройки, когато се покаже чипът на плочката.</string>
+    <string name="tool_status_available_title">Готов за употреба</string>
+    <string name="tool_status_needs_setup_summary">Тази концепция се нуждае от разрешения, поддръжка на устройство или по-пълен работен процес, преди да може да работи като жива плочка.</string>
+    <string name="tool_status_needs_setup_title">Изисква се настройка</string>
+    <string name="tool_status_unsupported_summary">Android все още не излага безопасен публичен API за това действие, така че този запис е документиран като предварителен преглед.</string>
+    <string name="tool_status_unsupported_title">Само преглед</string>
+    <string name="tile_flash_dimmer_title">Димер на фенерчето</string>
+    <string name="tile_flash_dimmer_summary">Регулирайте яркостта на фенерчето и го използвайте от Бързи настройки</string>
+    <string name="flash_dimmer_unavailable">Фенерчето не е налично</string>
+    <string name="flash_dimmer_off">Изключено</string>
+    <string name="flash_dimmer_on">Включено</string>
+    <string name="flash_dimmer_tile_level">Ниво %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Яркост %1$d от %2$d</string>
+    <string name="flash_dimmer_minimum">Минимум</string>
+    <string name="flash_dimmer_half">Половина</string>
+    <string name="flash_dimmer_maximum">Максимум</string>
+    <string name="flash_dimmer_turn_off">Изключване</string>
+    <string name="flash_dimmer_turn_on">Включване</string>
+    <string name="tile_morse_summary">Предайте персонализирано съобщение с фенерчето в морзов код</string>
+    <string name="tile_morse_title">Морзов фенер</string>
+    <string name="morse_message_label">Съобщение</string>
+    <string name="morse_start">Стартиране на мигането</string>
+    <string name="morse_stop">Спиране</string>
+    <string name="morse_ready">Готово</string>
+    <string name="morse_active">Мигане</string>
+    <string name="morse_error_empty">Въведете съобщение</string>
+    <string name="morse_error_length">Използвайте до 200 знака</string>
+    <string name="morse_error_characters">Използвайте само букви A–Z, цифри и интервали</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+</resources>

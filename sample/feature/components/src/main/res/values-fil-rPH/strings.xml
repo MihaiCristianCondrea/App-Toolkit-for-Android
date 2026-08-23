@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Button na may outline</string>
+    <string name="components_button_primary">Pangunahing button</string>
+    <string name="components_button_text">Text na button</string>
+    <string name="components_button_tonal">Tonal na button</string>
+    <string name="components_checkbox_summary">Ipinapakita ang checkbox na may opsyonal na buod.</string>
+    <string name="components_checkbox_title">Kagustuhan sa checkbox</string>
+    <string name="components_fab_extended">Lumikha</string>
+    <string name="components_filter_popular">Sikat</string>
+    <string name="components_filter_recent">Kamakailan</string>
+    <string name="components_icon_content_description">Demo na icon</string>
+    <string name="components_menu_label">Ipakita ang menu</string>
+    <string name="components_menu_option_primary">Pangunahing aksyon</string>
+    <string name="components_menu_option_secondary">Pangalawang aksyon</string>
+    <string name="components_option_alpha">Alpha</string>
+    <string name="components_option_beta">Beta</string>
+    <string name="components_option_gamma">Gamma</string>
+    <string name="components_preference_secondary_summary">Ipinapakita ng item na ito ang pangunahing layout ng kagustuhan.</string>
+    <string name="components_preference_secondary_title">Pangalawang kagustuhan</string>
+    <string name="components_preference_summary">Pangalawang text na naglalarawan ng kagustuhan.</string>
+    <string name="components_preference_title">Item ng kagustuhan</string>
+    <string name="components_section_buttons">Mga button</string>
+    <string name="components_button_group_standard">Mga karaniwang button</string>
+    <string name="components_button_group_tonal">Mga tonal na button</string>
+    <string name="components_button_group_outlined">Mga button na may outline</string>
+    <string name="components_button_group_text_and_icon">Mga text at icon button</string>
+    <string name="components_section_fabs">Mga floating action button</string>
+    <string name="components_section_filters">Mga filter ng nangungunang listahan</string>
+    <string name="components_section_inputs">Mga menu at input</string>
+    <string name="components_section_preferences">Mga kagustuhan</string>
+    <string name="components_switch_card_title">Switch card</string>
+    <string name="components_switch_divider_summary">May kasamang chevron at divider.</string>
+    <string name="components_switch_divider_title">Switch na may divider</string>
+    <string name="components_switch_summary">Nagbibigay ng buod at switch.</string>
+    <string name="components_switch_title">Kagustuhan sa switch</string>
+    <string name="components_title">Mga bahagi</string>
+    <string name="components_filter_favorites">Mga paborito</string>
+</resources>

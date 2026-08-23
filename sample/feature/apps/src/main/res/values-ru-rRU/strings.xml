@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="all_apps">Все приложения</string>
+    <string name="app_details_about_title">Об этом приложении</string>
+    <string name="app_details_app_info">App info</string>
+    <string name="app_details_battery">Battery</string>
+    <string name="app_details_checking_install_state">Checking install status</string>
+    <string name="app_details_copy_package">Copy package</string>
+    <string name="app_details_github_repository">GitHub Repository</string>
+    <string name="app_details_github_repository_summary">View source code and contribute</string>
+    <string name="app_details_installed">Installed</string>
+    <string name="app_details_links_title">Links</string>
+    <string name="app_details_not_installed">Not installed</string>
+    <string name="app_details_notifications">Notifications</string>
+    <string name="app_details_open_app">Открыть приложение</string>
+    <string name="app_details_package_name_clip_label">Package name</string>
+    <string name="app_details_package_name_copied">Package name copied</string>
+    <string name="app_details_permissions">Permissions</string>
+    <string name="app_details_play_store">Play Store</string>
+    <string name="app_details_privacy_policy">Privacy Policy</string>
+    <string name="app_details_privacy_policy_summary">Read our privacy policy</string>
+    <string name="app_details_quick_actions_title">Quick actions</string>
+    <string name="app_details_screenshots_title">Скриншоты</string>
+    <string name="app_details_share">Share</string>
+    <string name="app_details_share_content_description">Поделиться приложением</string>
+    <string name="app_details_share_text">Check out %1$s:\n%2$s</string>
+    <string name="app_details_share_title">Share app</string>
+    <string name="app_details_storage">Storage</string>
+    <string name="app_details_version">Version %1$s</string>
+    <string name="app_details_view_on_play_store">Посмотреть в Google Play</string>
+    <string name="apps_filter_all">Все</string>
+    <string name="error_failed_to_fetch_our_apps">Не удалось загрузить списки приложений</string>
+    <string name="error_failed_to_load_apps">Не удалось загрузить приложения</string>
+    <string name="error_failed_to_update_favorite">Не удалось обновить избранное</string>
+    <string name="favorite_apps">Избранное</string>
+    <string name="no_apps_added_to_favorites">В избранное ничего не добавлено</string>
+    <string name="summary_share_message">Оцените это удивительное приложение, которое я использую. В нём есть интересные функции. Вы можете скачать его из Play Store по адресу: %1$s</string>
+</resources>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">關於</string>
+    <string name="advanced">進階</string>
+    <string name="dark_theme">深色主題</string>
+    <string name="display">顯示</string>
+    <string name="notifications">通知</string>
+    <string name="question_1">什麼是 App Toolkit？</string>
+    <string name="question_2">如何存取 App Toolkit 中顯示的不同應用程式？</string>
+    <string name="question_3">App Toolkit 中展示的應用程式是免費的嗎？</string>
+    <string name="question_4">如何進一步了解清單中的特定應用程式？</string>
+    <string name="question_5">哪裡可以找到清單中應用程式的協助或支援？</string>
+    <string name="question_6">App Toolkit 的應用程式清單多久更新一次？</string>
+    <string name="question_7">為什麼 App Toolkit 需要像網際網路存取這樣的權限？</string>
+    <string name="question_8">如何提供 App Toolkit 或應用程式的意見回饋？</string>
+    <string name="question_9">使用 App Toolkit 尋找其他應用程式時，我的資料安全嗎？</string>
+    <string name="security_and_privacy">安全與隱私</string>
+    <string name="settings">設定</string>
+    <string name="summary_preference_faq_1">App Toolkit 是用來展示與示範使用 AppToolkit 程式庫打造的應用程式的應用程式。它是你探索此生態系並查看 AppToolkit 程式庫實際運作的指南。</string>
+    <string name="summary_preference_faq_2">App Toolkit 會列出各種應用程式。點選某個應用程式通常會看到更多資訊與連結，可從 Google Play Store 安裝或開啟，以便親自體驗。</string>
+    <string name="summary_preference_faq_3">許多在 App Toolkit 中展示的應用程式提供基本功能免費使用。部分應用程式可能透過進階版或應用程式內購提供進階功能。每個應用程式的詳細資訊可在其 Google Play Store 頁面找到。</string>
+    <string name="summary_preference_faq_4">若要查看應用程式的完整細節、功能與使用者評價，請在 App Toolkit 中點選該應用程式以開啟其 Google Play Store 頁面。</string>
+    <string name="summary_preference_faq_5">每個應用程式都有自己的支援管道，通常會在 Google Play Store 頁面或應用程式內說明。App Toolkit 用於探索這些應用程式；若有特定應用程式問題，請使用該應用程式的支援選項。</string>
+    <string name="summary_preference_faq_6">App Toolkit 會定期更新，讓你隨時看到使用 AppToolkit 程式庫的最新應用程式。新應用程式或重要更新可能會出現在此處。</string>
+    <string name="summary_preference_faq_7">為了顯示最新的應用程式清單，App Toolkit 會使用網際網路存取從 Google Play Store 取得資訊並正確顯示。通常不需要其他具侵入性的權限。</string>
+    <string name="summary_preference_faq_8">我們感謝你對 App Toolkit 與清單中的應用程式提供意見。你通常可以在 App Toolkit 設定或 Google Play Store 的開發者頁面中找到 "Feedback" 或 "Contact" 選項。對 AppToolkit 程式庫的回饋也歡迎透過適當管道提供。</string>
+    <string name="summary_preference_faq_9">App Toolkit 主要取得清單中應用程式的公開資訊。當你選擇安裝或使用其中一個應用程式時，將適用該應用程式的隱私權政策；請務必查看。App Toolkit 的資料處理方式已在其隱私權政策中說明。</string>
+    <string name="summary_preference_settings_about">了解更多關於應用程式</string>
+    <string name="summary_preference_settings_advanced">探索更多進階設定</string>
+    <string name="summary_preference_settings_display">個性化您的應用程式外觀和感受</string>
+    <string name="summary_preference_settings_notifications">管理應用程式通知</string>
+    <string name="summary_preference_settings_privacy_and_security">管理您的隱私設定</string>
+    <string name="usage_and_diagnostics">使用與診斷</string>
+</resources>

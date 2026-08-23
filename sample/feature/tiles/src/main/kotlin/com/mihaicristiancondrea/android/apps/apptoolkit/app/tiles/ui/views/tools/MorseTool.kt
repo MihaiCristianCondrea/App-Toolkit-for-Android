@@ -26,7 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.MorseInputError
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.MorseToolState
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ResultPill
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
 @Composable

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">रूपरेखित बटन</string>
+    <string name="components_button_primary">प्राथमिक बटन</string>
+    <string name="components_button_text">टेक्स्ट बटन</string>
+    <string name="components_button_tonal">टोनल बटन</string>
+    <string name="components_checkbox_summary">वैकल्पिक सारांश के साथ चेकबॉक्स दिखाता है।</string>
+    <string name="components_checkbox_title">चेकबॉक्स प्राथमिकता</string>
+    <string name="components_fab_extended">बनाएँ</string>
+    <string name="components_filter_popular">लोकप्रिय</string>
+    <string name="components_filter_recent">हाल का</string>
+    <string name="components_icon_content_description">डेमो आइकन</string>
+    <string name="components_menu_label">मेनू दिखाएँ</string>
+    <string name="components_menu_option_primary">प्राथमिक कार्रवाई</string>
+    <string name="components_menu_option_secondary">द्वितीयक कार्रवाई</string>
+    <string name="components_option_alpha">अल्फ़ा</string>
+    <string name="components_option_beta">बीटा</string>
+    <string name="components_option_gamma">गामा</string>
+    <string name="components_preference_secondary_summary">यह आइटम प्राथमिकता का आधार लेआउट दिखाता है।</string>
+    <string name="components_preference_secondary_title">द्वितीयक प्राथमिकता</string>
+    <string name="components_preference_summary">प्राथमिकता का वर्णन करने वाला द्वितीयक पाठ।</string>
+    <string name="components_preference_title">प्राथमिकता आइटम</string>
+    <string name="components_section_buttons">बटन</string>
+    <string name="components_button_group_standard">मानक बटन</string>
+    <string name="components_button_group_tonal">टोनल बटन</string>
+    <string name="components_button_group_outlined">आउटलाइन बटन</string>
+    <string name="components_button_group_text_and_icon">टेक्स्ट और आइकन बटन</string>
+    <string name="components_section_fabs">फ्लोटिंग एक्शन बटन</string>
+    <string name="components_section_filters">शीर्ष सूची फ़िल्टर</string>
+    <string name="components_section_inputs">मेनू और इनपुट</string>
+    <string name="components_section_preferences">प्राथमिकताएँ</string>
+    <string name="components_switch_card_title">स्विच कार्ड</string>
+    <string name="components_switch_divider_summary">एक शेवरॉन और डिवाइडर शामिल है।</string>
+    <string name="components_switch_divider_title">डिवाइडर सहित स्विच</string>
+    <string name="components_switch_summary">सारांश और स्विच प्रदान करता है।</string>
+    <string name="components_switch_title">स्विच प्राथमिकता</string>
+    <string name="components_title">कॉम्पोनेंट्स</string>
+    <string name="components_filter_favorites">पसंदीदा</string>
+</resources>

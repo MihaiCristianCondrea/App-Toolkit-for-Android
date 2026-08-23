@@ -19,7 +19,8 @@ libraries with the host's own feature modules.
 
 - Any feature. Screens, repositories and ViewModels live in `:sample:feature:*` and
   `:sample:widget`.
-- Shared resources and strings, owned by [`:sample:core:ui`](../core/ui/README.md).
+- Feature strings and layouts, owned by their respective `:sample:feature:*`, core, or widget
+  module. Shared themes and visual artwork remain in [`:sample:core:ui`](../core/ui/README.md).
 - Route keys and the entry-builder context, owned by
   [`:sample:core:navigation`](../core/navigation/README.md).
 

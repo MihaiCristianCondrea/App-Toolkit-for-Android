@@ -22,7 +22,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.Ma
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainUiState
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.home.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.models.ReviewHost

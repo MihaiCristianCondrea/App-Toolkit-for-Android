@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="onboarding_feature1_description">App Toolkit นำเสนอชุดแอปที่คัดสรรมา โดยแต่ละแอปออกแบบเพื่อเน้นแง่มุมต่าง ๆ ของไลบรารี AppToolkit และปรับปรุงประสบการณ์ Android ของคุณ ดูว่าทำอะไรได้บ้างด้วยไลบรารี AppToolkit</string>
+    <string name="onboarding_feature1_title">ค้นพบแอป</string>
+    <string name="onboarding_personalization_description">แอปนี้แสดงให้เห็นว่าไลบรารี AppToolkit สร้างแอปที่ยืดหยุ่นและเน้นผู้ใช้อย่างไร สำรวจแอปตัวอย่างเพื่อดูฟีเจอร์และการใช้งานที่หลากหลายของไลบรารี</string>
+    <string name="onboarding_personalization_title">ดูไลบรารี AppToolkit ในการใช้งานจริง</string>
+    <string name="onboarding_welcome_description">สำรวจความสามารถของไลบรารี AppToolkit ค้นพบแอปที่สร้างขึ้นเพื่อแสดงศักยภาพของไลบรารี และยกระดับการพัฒนา Android และประสบการณ์ผู้ใช้ของคุณ</string>
+    <string name="onboarding_welcome_title">ยินดีต้อนรับสู่ App Toolkit</string>
+    <string name="app_short_description">ชุดเครื่องมือและยูทิลิตี Android ที่ใช้งานสะดวก</string>
+    <string name="settings_disabled_message">ขณะนี้การตั้งค่าไม่พร้อมใช้งาน</string>
+    <string name="long_settings_label">เปิดการตั้งค่า</string>
+</resources>

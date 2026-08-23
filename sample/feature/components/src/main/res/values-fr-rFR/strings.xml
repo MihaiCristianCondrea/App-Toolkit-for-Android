@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Bouton contouré</string>
+    <string name="components_button_primary">Bouton principal</string>
+    <string name="components_button_text">Bouton texte</string>
+    <string name="components_button_tonal">Bouton tonal</string>
+    <string name="components_checkbox_summary">Affiche une case à cocher avec un résumé optionnel.</string>
+    <string name="components_checkbox_title">Préférence de case à cocher</string>
+    <string name="components_fab_extended">Créer</string>
+    <string name="components_filter_popular">Populaire</string>
+    <string name="components_filter_recent">Récent</string>
+    <string name="components_icon_content_description">Icône de démonstration</string>
+    <string name="components_menu_label">Afficher le menu</string>
+    <string name="components_menu_option_primary">Action principale</string>
+    <string name="components_menu_option_secondary">Action secondaire</string>
+    <string name="components_option_alpha">Alpha</string>
+    <string name="components_option_beta">Bêta</string>
+    <string name="components_option_gamma">Gamma</string>
+    <string name="components_preference_secondary_summary">Cet élément affiche la mise en page de base des préférences.</string>
+    <string name="components_preference_secondary_title">Préférence secondaire</string>
+    <string name="components_preference_summary">Texte secondaire décrivant la préférence.</string>
+    <string name="components_preference_title">Élément de préférence</string>
+    <string name="components_section_buttons">Boutons</string>
+    <string name="components_button_group_standard">Boutons standards</string>
+    <string name="components_button_group_tonal">Boutons tonals</string>
+    <string name="components_button_group_outlined">Boutons avec contour</string>
+    <string name="components_button_group_text_and_icon">Boutons texte et icône</string>
+    <string name="components_section_fabs">Boutons d’action flottants</string>
+    <string name="components_section_filters">Filtres de liste supérieure</string>
+    <string name="components_section_inputs">Menus et entrées</string>
+    <string name="components_section_preferences">Préférences</string>
+    <string name="components_switch_card_title">Carte de commutateur</string>
+    <string name="components_switch_divider_summary">Inclut un chevron et un séparateur.</string>
+    <string name="components_switch_divider_title">Commutateur avec séparateur</string>
+    <string name="components_switch_summary">Fournit un résumé et un commutateur.</string>
+    <string name="components_switch_title">Préférence de commutateur</string>
+    <string name="components_title">Composants</string>
+    <string name="components_filter_favorites">Favoris</string>
+</resources>

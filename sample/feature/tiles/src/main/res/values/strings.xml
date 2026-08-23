@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="caffeine_notification_channel_description" translatable="false">Active when the Caffeine screen-on timer is running.</string>
+    <string name="caffeine_notification_channel_name" translatable="false">Caffeine Tool</string>
+    <string name="caffeine_notification_text" translatable="false">Keeping your screen awake…</string>
+    <string name="tile_breathing_summary">Start a short guided breathing pause</string>
+    <string name="tile_breathing_title">Breathe</string>
+    <string name="tile_bubble_level_summary">Surface alignment and tilt detection</string>
+    <string name="tile_bubble_level_title">Bubble Level</string>
+    <string name="tile_caffeine_summary">Keep the screen awake temporarily</string>
+    <string name="tile_caffeine_title">Caffeine</string>
+    <string name="tile_coin_flip_summary">Flip heads or tails instantly</string>
+    <string name="tile_coin_flip_title">Coin Flip</string>
+    <string name="tile_compass_summary">Cardinal directions and azimuth</string>
+    <string name="tile_compass_title">Compass</string>
+    <string name="tile_counter_summary">Increment a quick running count</string>
+    <string name="tile_counter_title">Counter</string>
+    <string name="tile_dice_roll_summary">Roll a six-sided die</string>
+    <string name="tile_dice_roll_title">Dice Roll</string>
+    <string name="tile_flash_dimmer_summary">Adjust flashlight brightness and access it from Quick Settings</string>
+    <string name="tile_flash_dimmer_title">Flash Dimmer</string>
+    <string name="tile_lux_meter_info">Ambient light intensity monitoring. Note: This feature depends on a physical hardware sensor and may not work on all devices.</string>
+    <string name="tile_lux_meter_summary">Ambient light intensity (lux)</string>
+    <string name="tile_lux_meter_title">Lux Meter</string>
+    <string name="tile_music_search_summary">Identify music with a shortcut</string>
+    <string name="tile_music_search_title">Music Search</string>
+    <string name="tile_network_traffic_summary">Monitor real-time network speed</string>
+    <string name="tile_network_traffic_title">Network Traffic</string>
+    <string name="tile_preview_close">Close</string>
+    <string name="tile_preview_coin_result">Heads</string>
+    <string name="tile_preview_compass_result">NE 45°</string>
+    <string name="tile_preview_default_result">Preview coming soon</string>
+    <string name="tile_preview_level_result">Level</string>
+    <string name="tile_service_azimuth_format" translatable="false">%1$d°</string>
+    <string name="tile_service_dice_value">Rolled %1$d</string>
+    <string name="tile_service_heads">Heads</string>
+    <string name="tile_service_percent" translatable="false">%1$d%%</string>
+    <string name="tile_service_tails">Tails</string>
+    <string name="tile_sos_summary">Keep emergency actions close</string>
+    <string name="tile_sos_title">SOS</string>
+    <string name="flash_dimmer_unavailable">Flashlight unavailable</string>
+    <string name="flash_dimmer_off">Off</string>
+    <string name="flash_dimmer_on">On</string>
+    <string name="flash_dimmer_tile_level">Level %1$d/%2$d</string>
+    <string name="flash_dimmer_level">Brightness %1$d of %2$d</string>
+    <string name="flash_dimmer_minimum">Minimum</string>
+    <string name="flash_dimmer_half">Half</string>
+    <string name="flash_dimmer_maximum">Maximum</string>
+    <string name="flash_dimmer_turn_off">Turn off</string>
+    <string name="flash_dimmer_turn_on">Turn on</string>
+    <string name="tile_morse_summary">Flash a custom message in Morse code</string>
+    <string name="tile_morse_title">Morse Flashlight</string>
+    <string name="morse_message_label">Message</string>
+    <string name="morse_start">Start flashing</string>
+    <string name="morse_stop">Stop</string>
+    <string name="morse_ready">Ready</string>
+    <string name="morse_active">Flashing</string>
+    <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="morse_error_empty">Enter a message</string>
+    <string name="morse_error_length">Use 200 characters or fewer</string>
+    <string name="morse_error_characters">Use letters A–Z, numbers, and spaces only</string>
+    <string name="tile_sound_mode_summary">Switch normal, vibrate, and silent modes</string>
+    <string name="tile_sound_mode_title">Sound Mode</string>
+    <string name="tile_volume_panel_summary">Open volume controls quickly</string>
+    <string name="tile_volume_panel_title">Volume Panel</string>
+    <string name="tiles_add">Add</string>
+    <string name="tiles_add_pre_android_13">Android 12 and older require adding tiles from Quick Settings edit mode.</string>
+    <string name="tiles_add_result_added">Tile added to Quick Settings</string>
+    <string name="tiles_add_result_already_added">Tile is already in Quick Settings</string>
+    <string name="tiles_add_result_failed">Could not add tile</string>
+    <string name="tiles_category_sensors">Sensors &amp; Measurement</string>
+    <string name="tiles_category_system">System &amp; Controls</string>
+    <string name="tiles_category_utilities">Utilities &amp; Fun</string>
+    <string name="tiles_category_wellbeing">Wellbeing</string>
+    <string name="tiles_chip_expanded_tool">Expanded tool</string>
+    <string name="tiles_chip_quick_tool">Quick tool</string>
+    <string name="tiles_chip_tile">Tile</string>
+    <string name="tiles_collapse_category">Collapse category</string>
+    <string name="tiles_error_failed_to_load">Failed to load Quick Tools</string>
+    <string name="tiles_expand_category">Expand category</string>
+    <string name="tiles_filter_added">Added</string>
+    <string name="tiles_filter_all">All tools</string>
+    <string name="tiles_filter_empty">No tools match this filter yet.</string>
+    <string name="tiles_filter_needs_setup">Needs setup</string>
+    <string name="tiles_filter_unsupported">Unsupported</string>
+    <string name="tiles_how_to_add_summary">Tools with the Tile chip can be added to Quick Settings. Tap Add on Android 13 or newer, or open Quick Settings edit mode and drag App Toolkit tiles into your active panel.</string>
+    <string name="tiles_how_to_add_title">Tile-ready tools</string>
+    <string name="tiles_more_options">More tile options</string>
+    <string name="tiles_setup">Setup</string>
+    <string name="tiles_setup_required_message">This tile needs more setup before it can be added.</string>
+    <string name="tiles_status_added">Added</string>
+    <string name="tiles_status_available">Available</string>
+    <string name="tiles_status_needs_setup">Needs setup</string>
+    <string name="tiles_status_unsupported">Unsupported</string>
+    <string name="tiles_subtitle">Open quick dialogs and discover expanded tools, with tile-ready features clearly marked.</string>
+    <string name="tool_caffeine_10m" translatable="false">10m</string>
+    <string name="tool_caffeine_1h" translatable="false">1h</string>
+    <string name="tool_caffeine_30m" translatable="false">30m</string>
+    <string name="tool_caffeine_5m" translatable="false">5m</string>
+    <string name="tool_caffeine_infinite" translatable="false">Infinite</string>
+    <string name="tool_caffeine_off" translatable="false">Off</string>
+    <string name="tool_caffeine_remaining" translatable="false">Active: %1$s</string>
+    <string name="tool_coin_flip_action">Flip coin</string>
+    <string name="tool_coin_flip_waiting">Ready?</string>
+    <string name="tool_counter_increment">Increment</string>
+    <string name="tool_counter_reset">Reset</string>
+    <string name="tool_dialog_close_content_description">Close quick tool</string>
+    <string name="tool_dice_roll_action">Roll die</string>
+    <string name="tool_dice_roll_waiting">Roll</string>
+    <string name="tool_generic_available_summary">This tool is ready for an expanded implementation and now has a Material preview so behavior can be validated before deeper integration.</string>
+    <string name="tool_generic_setup_summary">This preview documents the intended behavior while keeping unavailable platform work clearly separated from live tile actions.</string>
+    <string name="tool_material_colors_android_accent_1">Android accent 1</string>
+    <string name="tool_material_colors_android_accent_2">Android accent 2</string>
+    <string name="tool_material_colors_android_accent_3">Android accent 3</string>
+    <string name="tool_material_colors_android_neutral_1">Android neutral 1</string>
+    <string name="tool_material_colors_android_neutral_2">Android neutral 2</string>
+    <string name="tool_material_colors_android_unavailable">Android Material You system palettes are available on Android 12 and newer.</string>
+    <string name="tool_material_colors_app_scheme">App color scheme</string>
+    <string name="tool_material_colors_description">Compare the current application color scheme with Android system accent and neutral palettes.</string>
+    <string name="tool_material_colors_summary">Preview the app palette and Android Material You tonal colors</string>
+    <string name="tool_material_colors_title">Material Colors</string>
+    <string name="tool_status_added_summary">This tile appears to already be available in your active Quick Settings panel.</string>
+    <string name="tool_status_added_title">Ready in Quick Settings</string>
+    <string name="tool_status_available_summary">Try the in-app preview below or add the tile to Quick Settings when the Tile chip is shown.</string>
+    <string name="tool_status_available_title">Ready to use</string>
+    <string name="tool_status_needs_setup_summary">This concept needs permissions, device support, or a fuller workflow before it can run as a live tile.</string>
+    <string name="tool_status_needs_setup_title">Setup required</string>
+    <string name="tool_status_unsupported_summary">Android does not expose a safe public API for this action yet, so this entry is documented as a preview.</string>
+    <string name="tool_status_unsupported_title">Preview only</string>
+    <string name="tool_system_cycle_mode" translatable="false">Cycle Mode</string>
+    <string name="tool_system_open_volume" translatable="false">Open Volume Panel</string>
+</resources>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">সম্পর্কে</string>
+    <string name="advanced">অ্যাডভান্সড</string>
+    <string name="dark_theme">ডার্ক থিম</string>
+    <string name="display">ডিসপ্লে</string>
+    <string name="notifications">বিজ্ঞপ্তি</string>
+    <string name="question_1">App Toolkit কী?</string>
+    <string name="question_2">App Toolkit এ দেখানো বিভিন্ন অ্যাপে আমি কীভাবে পৌঁছাব?</string>
+    <string name="question_3">App Toolkit এ প্রদর্শিত অ্যাপগুলো কি বিনামূল্যের?</string>
+    <string name="question_4">তালিকাভুক্ত কোনো নির্দিষ্ট অ্যাপ সম্পর্কে আরও কীভাবে জানব?</string>
+    <string name="question_5">তালিকাভুক্ত অ্যাপগুলোর কোনো একটির সাহায্য বা সাপোর্ট কোথায় পাব?</string>
+    <string name="question_6">App Toolkit এ অ্যাপের তালিকা কত ঘন ঘন আপডেট হয়?</string>
+    <string name="question_7">App Toolkit কে ইন্টারনেট অ্যাক্সেসের মতো অনুমতি কেন দরকার?</string>
+    <string name="question_8">App Toolkit বা অ্যাপগুলো সম্পর্কে আমি কীভাবে মতামত দিতে পারি?</string>
+    <string name="question_9">App Toolkit ব্যবহার করে অন্য অ্যাপ খুঁজলে কি আমার ডেটা নিরাপদ?</string>
+    <string name="security_and_privacy">নিরাপত্তা ও গোপনীয়তা</string>
+    <string name="settings">সেটিংস</string>
+    <string name="summary_preference_faq_1">App Toolkit হলো একটি অ্যাপ, যা AppToolkit লাইব্রেরি দিয়ে তৈরি অ্যাপগুলো প্রদর্শন ও দেখানোর জন্য তৈরি। এটি এই ইকোসিস্টেম অন্বেষণ এবং AppToolkit লাইব্রেরি কাজ করতে দেখার জন্য আপনার গাইড।</string>
+    <string name="summary_preference_faq_2">App Toolkit বিভিন্ন অ্যাপের তালিকা দেখায়। কোনো অ্যাপে ট্যাপ করলে সাধারণত আরও তথ্য এবং Google Play Store থেকে ইনস্টল বা খুলতে একটি লিংক পাওয়া যায়, যাতে আপনি সরাসরি ব্যবহার করে দেখতে পারেন।</string>
+    <string name="summary_preference_faq_3">App Toolkit এ প্রদর্শিত অনেক অ্যাপ বেসিক ফিচার বিনামূল্যে দেয়। কিছু অ্যাপে প্রিমিয়াম ভার্সন বা ইন-অ্যাপ ক্রয়ের মাধ্যমে উন্নত ফিচার থাকতে পারে। প্রতিটি অ্যাপের বিস্তারিত Google Play Store এর সংশ্লিষ্ট পাতায় পাওয়া যায়।</string>
+    <string name="summary_preference_faq_4">কোনো অ্যাপের সম্পূর্ণ বিবরণ, তার ফিচার এবং ব্যবহারকারীর রিভিউ জানতে App Toolkit এ অ্যাপটিতে ট্যাপ করে Google Play Store পাতায় যান।</string>
+    <string name="summary_preference_faq_5">প্রতিটি অ্যাপের নিজস্ব সাপোর্ট চ্যানেল থাকে, যা সাধারণত Google Play Store পাতায় বা অ্যাপের ভেতরে উল্লেখ থাকে। App Toolkit এই অ্যাপগুলো খুঁজে দেখার জন্য; নির্দিষ্ট অ্যাপের সমস্যার জন্য ওই অ্যাপের সাপোর্ট অপশন ব্যবহার করুন।</string>
+    <string name="summary_preference_faq_6">App Toolkit নিয়মিত আপডেট করা হয় যাতে আপনি AppToolkit লাইব্রেরি ব্যবহার করা সর্বশেষ অ্যাপগুলো দেখতে পারেন। নতুন অ্যাপ বা বড় আপডেট এখানে দেখা যেতে পারে।</string>
+    <string name="summary_preference_faq_7">সবচেয়ে নতুন অ্যাপের তালিকা দেখাতে App Toolkit Google Play Store থেকে তথ্য আনতে ইন্টারনেট অ্যাক্সেস ব্যবহার করে এবং সঠিকভাবে দেখায়। সাধারণত অন্য আক্রমণাত্মক অনুমতির প্রয়োজন হয় না।</string>
+    <string name="summary_preference_faq_8">App Toolkit এবং তালিকাভুক্ত অ্যাপগুলোর সম্পর্কে আপনার মতামত আমরা মূল্যায়ন করি। সাধারণত App Toolkit এর সেটিংসে বা Google Play Store এর ডেভেলপার পেজে "Feedback" বা "Contact" অপশন পাওয়া যায়। AppToolkit লাইব্রেরি সম্পর্কেও উপযুক্ত চ্যানেলে মতামত স্বাগত।</string>
+    <string name="summary_preference_faq_9">App Toolkit প্রধানত তালিকাভুক্ত অ্যাপগুলোর পাবলিক তথ্য সংগ্রহ করে। আপনি যখন এসব অ্যাপের কোনোটি ইনস্টল বা ব্যবহার করতে চান, তখন সেই অ্যাপের নিজস্ব প্রাইভেসি পলিসি প্রযোজ্য হয়; দয়া করে তা দেখুন। App Toolkit এর ডেটা ব্যবস্থাপনা তার নিজস্ব প্রাইভেসি পলিসিতে বর্ণনা করা আছে।</string>
+    <string name="summary_preference_settings_about">অ্যাপ সম্পর্কে আরও জানুন</string>
+    <string name="summary_preference_settings_advanced">আরও অ্যাডভান্সড সেটিংস অন্বেষণ করুন</string>
+    <string name="summary_preference_settings_display">আপনার অ্যাপের চেহারা ও অনুভূতি ব্যক্তিগত করুন</string>
+    <string name="summary_preference_settings_notifications">অ্যাপ বিজ্ঞপ্তি পরিচালনা করুন</string>
+    <string name="summary_preference_settings_privacy_and_security">আপনার গোপনীয়তা সেটিংস পরিচালনা করুন</string>
+    <string name="usage_and_diagnostics">ব্যবহার এবং ডায়াগনস্টিকস</string>
+</resources>

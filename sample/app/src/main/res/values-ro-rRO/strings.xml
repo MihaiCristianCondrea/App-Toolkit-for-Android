@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="onboarding_feature1_description">App Toolkit prezintă o selecție de aplicații, fiecare concepută pentru a evidenția diferite aspecte ale bibliotecii AppToolkit și pentru a îmbunătăți experiența ta Android. Vezi ce este posibil cu biblioteca AppToolkit.</string>
+    <string name="onboarding_feature1_title">Descoperă aplicații</string>
+    <string name="onboarding_personalization_description">Această aplicație arată cum biblioteca AppToolkit creează aplicații versatile, orientate către utilizator. Explorează aplicațiile de exemplu pentru a vedea funcții și implementări diferite ale bibliotecii.</string>
+    <string name="onboarding_personalization_title">Vezi biblioteca AppToolkit în acțiune</string>
+    <string name="onboarding_welcome_description">Explorează capabilitățile bibliotecii AppToolkit. Descoperă aplicații create pentru a demonstra puterea bibliotecii și pentru a îmbunătăți dezvoltarea Android și experiența utilizatorului.</string>
+    <string name="onboarding_welcome_title">Bine ai venit în App Toolkit</string>
+    <string name="app_short_description">O colecție de instrumente și utilitare Android practice.</string>
+    <string name="settings_disabled_message">Setările nu sunt disponibile momentan.</string>
+    <string name="long_settings_label">Deschide setările</string>
+</resources>

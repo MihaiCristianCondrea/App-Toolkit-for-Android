@@ -31,7 +31,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseHeader
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseSection
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseSurface
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
@@ -41,10 +44,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTonalButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseHeader
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseSection
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.ShowcaseSurface
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 
 @Composable
@@ -59,9 +58,9 @@ fun ButtonShowcase(
         icon = Icons.Outlined.SmartButton,
     )
     ShowcaseSection {
-        ShowcaseSurface(position = GroupedItemPosition.SINGLE) {
+        ShowcaseSurface(position = GroupedItemPosition.FIRST) {
             Text(
-                text = "Standard Buttons",
+                text = stringResource(id = R.string.components_button_group_standard),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold,
@@ -94,11 +93,10 @@ fun ButtonShowcase(
                     ga4Event = onLogEvent("button", "primary_icon_only"),
                 )
             }
-
-            LargeVerticalSpacer()
-
+        }
+        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
             Text(
-                text = "Tonal Buttons",
+                text = stringResource(id = R.string.components_button_group_tonal),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.secondary,
                 fontWeight = FontWeight.Bold,
@@ -131,11 +129,10 @@ fun ButtonShowcase(
                     ga4Event = onLogEvent("button", "tonal_icon_only"),
                 )
             }
-
-            LargeVerticalSpacer()
-
+        }
+        ShowcaseSurface(position = GroupedItemPosition.MIDDLE) {
             Text(
-                text = "Outlined & Text",
+                text = stringResource(id = R.string.components_button_group_outlined),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.tertiary,
                 fontWeight = FontWeight.Bold,
@@ -152,11 +149,56 @@ fun ButtonShowcase(
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "outlined"),
                 )
+                GeneralOutlinedButton(
+                    label = stringResource(id = R.string.components_button_outlined),
+                    vectorIcon = Icons.Outlined.StarOutline,
+                    iconContentDescription = iconContentDescription,
+                    onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = onLogEvent("button", "outlined_icon"),
+                )
+                GeneralOutlinedButton(
+                    vectorIcon = Icons.Outlined.StarOutline,
+                    iconContentDescription = iconContentDescription,
+                    onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = onLogEvent("button", "outlined_icon_only"),
+                )
+            }
+        }
+        ShowcaseSurface(position = GroupedItemPosition.LAST) {
+            Text(
+                text = stringResource(id = R.string.components_button_group_text_and_icon),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.tertiary,
+                fontWeight = FontWeight.Bold,
+            )
+            SmallVerticalSpacer()
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+            ) {
                 GeneralTextButton(
                     label = stringResource(id = R.string.components_button_text),
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "text"),
+                )
+                GeneralTextButton(
+                    label = stringResource(id = R.string.components_button_text),
+                    vectorIcon = Icons.Outlined.Favorite,
+                    iconContentDescription = iconContentDescription,
+                    onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = onLogEvent("button", "text_icon"),
+                )
+                GeneralTextButton(
+                    vectorIcon = Icons.Outlined.Favorite,
+                    iconContentDescription = iconContentDescription,
+                    onClick = {},
+                    firebaseController = firebaseController,
+                    ga4Event = onLogEvent("button", "text_icon_only"),
                 )
                 AnimatedIconButtonDirection(
                     icon = Icons.Filled.MoreVert,

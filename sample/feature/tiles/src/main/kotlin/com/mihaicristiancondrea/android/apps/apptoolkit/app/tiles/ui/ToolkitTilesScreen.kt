@@ -60,7 +60,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catal
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catalog.HowToAddTilesCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catalog.TileCategorySection
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catalog.TilesFilters
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen

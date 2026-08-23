@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="onboarding_feature1_description">App Toolkit giới thiệu một tuyển chọn ứng dụng, mỗi ứng dụng được thiết kế để làm nổi bật các khía cạnh khác nhau của thư viện AppToolkit và cải thiện trải nghiệm Android của bạn. Hãy xem những điều có thể làm với thư viện AppToolkit.</string>
+    <string name="onboarding_feature1_title">Khám phá các ứng dụng</string>
+    <string name="onboarding_personalization_description">Ứng dụng này cho thấy thư viện AppToolkit xây dựng các ứng dụng linh hoạt, lấy người dùng làm trung tâm như thế nào. Khám phá các ứng dụng mẫu để xem các tính năng và cách triển khai khác nhau của thư viện.</string>
+    <string name="onboarding_personalization_title">Xem thư viện AppToolkit hoạt động</string>
+    <string name="onboarding_welcome_description">Khám phá khả năng của thư viện AppToolkit. Hãy tìm các ứng dụng được tạo để thể hiện sức mạnh của thư viện và nâng cao quá trình phát triển Android cũng như trải nghiệm người dùng của bạn.</string>
+    <string name="onboarding_welcome_title">Chào mừng đến với App Toolkit</string>
+    <string name="app_short_description">Bộ sưu tập các công cụ và tiện ích Android hữu ích.</string>
+    <string name="settings_disabled_message">Hiện không thể sử dụng phần cài đặt.</string>
+    <string name="long_settings_label">Mở cài đặt</string>
+</resources>

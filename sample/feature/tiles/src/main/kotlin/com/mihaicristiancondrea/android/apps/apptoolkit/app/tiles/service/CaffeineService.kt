@@ -28,7 +28,8 @@ import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.CaffeineRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -125,7 +126,7 @@ class CaffeineService : Service() {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(getString(R.string.tile_caffeine_title))
             .setContentText(getString(R.string.caffeine_notification_text))
-            .setSmallIcon(R.drawable.ic_tile_caffeine)
+            .setSmallIcon(CoreUiR.drawable.ic_tile_caffeine)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
             .build()

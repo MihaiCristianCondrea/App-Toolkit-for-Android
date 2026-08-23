@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Tombol berbingkai</string>
+    <string name="components_button_primary">Tombol utama</string>
+    <string name="components_button_text">Tombol teks</string>
+    <string name="components_button_tonal">Tombol tonal</string>
+    <string name="components_checkbox_summary">Menampilkan kotak centang dengan ringkasan opsional.</string>
+    <string name="components_checkbox_title">Preferensi kotak centang</string>
+    <string name="components_fab_extended">Buat</string>
+    <string name="components_filter_popular">Populer</string>
+    <string name="components_filter_recent">Terbaru</string>
+    <string name="components_icon_content_description">Ikon demo</string>
+    <string name="components_menu_label">Tampilkan menu</string>
+    <string name="components_menu_option_primary">Tindakan utama</string>
+    <string name="components_menu_option_secondary">Tindakan sekunder</string>
+    <string name="components_option_alpha">Alfa</string>
+    <string name="components_option_beta">Beta</string>
+    <string name="components_option_gamma">Gamma</string>
+    <string name="components_preference_secondary_summary">Item ini menampilkan tata letak preferensi dasar.</string>
+    <string name="components_preference_secondary_title">Preferensi sekunder</string>
+    <string name="components_preference_summary">Teks sekunder yang menjelaskan preferensi.</string>
+    <string name="components_preference_title">Item preferensi</string>
+    <string name="components_section_buttons">Tombol</string>
+    <string name="components_button_group_standard">Tombol standar</string>
+    <string name="components_button_group_tonal">Tombol tonal</string>
+    <string name="components_button_group_outlined">Tombol berbingkai</string>
+    <string name="components_button_group_text_and_icon">Tombol teks dan ikon</string>
+    <string name="components_section_fabs">Tombol aksi mengambang</string>
+    <string name="components_section_filters">Filter daftar teratas</string>
+    <string name="components_section_inputs">Menu dan masukan</string>
+    <string name="components_section_preferences">Preferensi</string>
+    <string name="components_switch_card_title">Kartu sakelar</string>
+    <string name="components_switch_divider_summary">Mencakup chevron dan pemisah.</string>
+    <string name="components_switch_divider_title">Sakelar dengan pemisah</string>
+    <string name="components_switch_summary">Menyediakan ringkasan dan sakelar.</string>
+    <string name="components_switch_title">Preferensi sakelar</string>
+    <string name="components_title">Komponen</string>
+    <string name="components_filter_favorites">Favorit</string>
+</resources>

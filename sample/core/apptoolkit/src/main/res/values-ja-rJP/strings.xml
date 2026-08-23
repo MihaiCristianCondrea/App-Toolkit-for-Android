@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="about">アプリについて</string>
+    <string name="advanced">詳細設定</string>
+    <string name="dark_theme">ダークテーマ</string>
+    <string name="display">ディスプレイ</string>
+    <string name="notifications">通知</string>
+    <string name="question_1">App Toolkit とは？</string>
+    <string name="question_2">App Toolkit に表示されるさまざまなアプリへはどうやってアクセスしますか？</string>
+    <string name="question_3">App Toolkit に掲載されているアプリは無料ですか？</string>
+    <string name="question_4">掲載されている特定のアプリについて詳しく知るには？</string>
+    <string name="question_5">掲載されているアプリのサポートはどこで受けられますか？</string>
+    <string name="question_6">App Toolkit のアプリ一覧はどのくらいの頻度で更新されますか？</string>
+    <string name="question_7">App Toolkit がインターネットアクセスのような権限を必要とするのはなぜですか？</string>
+    <string name="question_8">App Toolkit やアプリへのフィードバックはどう送ればよいですか？</string>
+    <string name="question_9">App Toolkit を使って他のアプリを探すとき、私のデータは安全ですか？</string>
+    <string name="security_and_privacy">セキュリティとプライバシー</string>
+    <string name="settings">設定</string>
+    <string name="summary_preference_faq_1">App Toolkit は、AppToolkit ライブラリで作成されたアプリを紹介・実演するためのアプリです。このエコシステムを探索し、AppToolkit ライブラリの動作を確認するためのガイドです。</string>
+    <string name="summary_preference_faq_2">App Toolkit にはさまざまなアプリが一覧表示されます。アプリの項目をタップすると、通常は詳細情報と、Google Play Store からインストールまたは開くためのリンクが表示され、実際に試すことができます。</string>
+    <string name="summary_preference_faq_3">App Toolkit に掲載されている多くのアプリは、基本機能を無料で提供しています。プレミアム版やアプリ内購入で高度な機能が利用できる場合もあります。各アプリの詳細は Google Play Store の該当ページで確認できます。</string>
+    <string name="summary_preference_faq_4">アプリの詳細、機能、ユーザーのレビューを確認するには、App Toolkit でそのアプリをタップし、Google Play Store のページを開いてください。</string>
+    <string name="summary_preference_faq_5">各アプリには独自のサポートチャネルがあり、通常は Google Play Store のページまたはアプリ内に記載されています。App Toolkit はこれらのアプリを発見するためのものです。アプリ固有の問題はそのアプリのサポートオプションを利用してください。</string>
+    <string name="summary_preference_faq_6">App Toolkit は定期的に更新され、AppToolkit ライブラリを使用する最新のアプリを常に見られるようになっています。新しいアプリや重要な更新がここに表示されることがあります。</string>
+    <string name="summary_preference_faq_7">最新のアプリ一覧を表示するために、App Toolkit は Google Play Store から情報を取得し正確に表示するためのインターネットアクセスを使用します。通常、他の侵襲的な権限は必要ありません。</string>
+    <string name="summary_preference_faq_8">App Toolkit と掲載アプリへのフィードバックを歓迎します。通常、App Toolkit の設定または Google Play Store のデベロッパーページで "Feedback" または "Contact" のオプションを見つけられます。AppToolkit ライブラリへのフィードバックも適切なチャネルで受け付けています。</string>
+    <string name="summary_preference_faq_9">App Toolkit は主に公開されているアプリ情報を取得します。これらのアプリのいずれかをインストールまたは使用すると、そのアプリ固有のプライバシーポリシーが適用されますので、確認してください。App Toolkit のデータ取り扱いはそのプライバシーポリシーに記載されています。</string>
+    <string name="summary_preference_settings_about">アプリについて詳しく知る</string>
+    <string name="summary_preference_settings_advanced">さらに高度な設定を探索する</string>
+    <string name="summary_preference_settings_display">アプリの外観と操作感をカスタマイズする</string>
+    <string name="summary_preference_settings_notifications">アプリの通知を管理する</string>
+    <string name="summary_preference_settings_privacy_and_security">プライバシー設定を管理する</string>
+    <string name="usage_and_diagnostics">使用状況と診断</string>
+</resources>

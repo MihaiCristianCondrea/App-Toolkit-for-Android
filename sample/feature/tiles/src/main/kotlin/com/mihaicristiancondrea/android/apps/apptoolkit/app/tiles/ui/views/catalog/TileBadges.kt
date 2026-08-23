@@ -49,7 +49,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.ico
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.imageVector
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.labelResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.statusColors
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
 @Composable

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="components_button_outlined">Кнопка з контуром</string>
+    <string name="components_button_primary">Основна кнопка</string>
+    <string name="components_button_text">Текстова кнопка</string>
+    <string name="components_button_tonal">Тональна кнопка</string>
+    <string name="components_checkbox_summary">Показує прапорець з необов’язковим описом.</string>
+    <string name="components_checkbox_title">Налаштування прапорця</string>
+    <string name="components_fab_extended">Створити</string>
+    <string name="components_filter_popular">Популярне</string>
+    <string name="components_filter_recent">Останні</string>
+    <string name="components_icon_content_description">Демонстраційна іконка</string>
+    <string name="components_menu_label">Показати меню</string>
+    <string name="components_menu_option_primary">Основна дія</string>
+    <string name="components_menu_option_secondary">Додаткова дія</string>
+    <string name="components_option_alpha">Альфа</string>
+    <string name="components_option_beta">Бета</string>
+    <string name="components_option_gamma">Гамма</string>
+    <string name="components_preference_secondary_summary">Цей елемент показує базовий макет налаштувань.</string>
+    <string name="components_preference_secondary_title">Додаткове налаштування</string>
+    <string name="components_preference_summary">Додатковий текст, що описує налаштування.</string>
+    <string name="components_preference_title">Елемент налаштування</string>
+    <string name="components_section_buttons">Кнопки</string>
+    <string name="components_button_group_standard">Стандартні кнопки</string>
+    <string name="components_button_group_tonal">Тональні кнопки</string>
+    <string name="components_button_group_outlined">Контурні кнопки</string>
+    <string name="components_button_group_text_and_icon">Текстові кнопки та кнопки з піктограмами</string>
+    <string name="components_section_fabs">Плаваючі кнопки дії</string>
+    <string name="components_section_filters">Фільтри верхнього списку</string>
+    <string name="components_section_inputs">Меню та введення</string>
+    <string name="components_section_preferences">Налаштування</string>
+    <string name="components_switch_card_title">Картка перемикача</string>
+    <string name="components_switch_divider_summary">Містить шеврон і розділювач.</string>
+    <string name="components_switch_divider_title">Перемикач із розділювачем</string>
+    <string name="components_switch_summary">Містить опис і перемикач.</string>
+    <string name="components_switch_title">Перемикач налаштування</string>
+    <string name="components_title">Компоненти</string>
+    <string name="components_filter_favorites">Вибране</string>
+</resources>
