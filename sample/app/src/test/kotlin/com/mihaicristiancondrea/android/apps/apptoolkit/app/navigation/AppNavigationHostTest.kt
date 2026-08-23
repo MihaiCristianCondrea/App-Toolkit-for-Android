@@ -86,6 +86,20 @@ class AppNavigationHostTest {
     }
 
     @Test
+    fun `quick tools startup page maps to toolkit tiles`() = runTest {
+        every {
+            dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST)
+        } returns flowOf(NavigationRoutes.ROUTE_TOOLKIT_TILES)
+
+        val startDestination = dataStore.startupDestinationFlow(
+            defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
+            mapToKey = { route -> route.toNavKeyOrDefault() }
+        ).first()
+
+        assertEquals(ToolkitTilesRoute, startDestination)
+    }
+
+    @Test
     fun `navigation entries retain typed content keys required by scene routing`() {
         val entryProvider = entryProviderFor(
             appNavigationEntryBuilders(

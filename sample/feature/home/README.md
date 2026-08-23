@@ -46,7 +46,8 @@ flowchart TD
 
 ## Public contracts
 
-- `MainScreen(entryBuilders)`, `MainViewModel`, and `NavigationItemsProvider`.
+- `MainScreen(startRoute, entryBuilders)`, `MainViewModel`, and `NavigationItemsProvider`. The app
+  host resolves the persisted startup destination before composing the shell.
 
 ## Internal implementations
 

@@ -30,12 +30,15 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.Ma
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appNavigationEntryBuilders
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationRoutes
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.toNavKeyOrDefault
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -74,7 +77,13 @@ class MainActivity : AppCompatActivity() {
             if (isFirstLaunch) {
                 startStartupActivity()
             } else {
-                setMainActivityContent()
+                val startRoute: StableNavKey = withContext(context = dispatchers.io) {
+                    dataStore.startupDestinationFlow(
+                        defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
+                        mapToKey = String::toNavKeyOrDefault,
+                    ).first()
+                }
+                setMainActivityContent(startRoute = startRoute)
             }
         }
     }
@@ -84,10 +93,13 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun setMainActivityContent() {
+    private fun setMainActivityContent(startRoute: StableNavKey) {
         setContent {
             AppTheme {
-                MainScreen(entryBuilders = { context -> appNavigationEntryBuilders(context = context) })
+                MainScreen(
+                    startRoute = startRoute,
+                    entryBuilders = { context -> appNavigationEntryBuilders(context = context) },
+                )
             }
         }
     }

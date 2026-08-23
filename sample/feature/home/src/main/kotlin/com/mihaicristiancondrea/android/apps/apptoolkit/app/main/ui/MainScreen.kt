@@ -131,9 +131,12 @@ import org.koin.compose.viewmodel.koinViewModel
  * @param entryBuilders Supplies the navigation entries for this shell. Passed in rather than
  * imported so the shell does not have to see the feature modules whose destinations it renders;
  * `:sample:app` is the only module that knows the full set.
+ * @param startRoute The persisted top-level destination resolved by the application host before
+ * this shell is composed.
  */
 @Composable
 fun MainScreen(
+    startRoute: StableNavKey,
     entryBuilders: (AppNavigationEntryContext) -> List<NavigationEntryBuilder<StableNavKey>>,
 ) {
     val viewModel: MainViewModel = koinViewModel()
@@ -141,6 +144,7 @@ fun MainScreen(
 
     MainScreenContent(
         uiState = uiStateScreen.data ?: MainUiState(),
+        startRoute = startRoute,
         entryBuilders = entryBuilders,
     )
 }
@@ -149,12 +153,13 @@ fun MainScreen(
 @Composable
 private fun MainScreenContent(
     uiState: MainUiState,
+    startRoute: StableNavKey,
     entryBuilders: (AppNavigationEntryContext) -> List<NavigationEntryBuilder<StableNavKey>>,
 ) {
     val activity = LocalActivity.current
 
     val navigationState = rememberNavigationState(
-        startRoute = ToolkitTilesRoute,
+        startRoute = startRoute,
         topLevelRoutes = NavigationRoutes.topLevelRoutes
     )
     val navigator = remember(navigationState) { Navigator(state = navigationState) }
