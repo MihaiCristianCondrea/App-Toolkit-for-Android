@@ -50,9 +50,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileCategory
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTile
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contracts.ToolkitTilesEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.items
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTilesListItem

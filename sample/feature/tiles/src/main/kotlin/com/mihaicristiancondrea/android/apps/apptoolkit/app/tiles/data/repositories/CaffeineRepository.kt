@@ -17,16 +17,15 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories
 
-import android.content.Context
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.caffeine.CaffeineServiceDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.CaffeineState
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.CaffeineService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /** Owns caffeine-mode state and delegates wake-lock lifetime to [CaffeineService]. */
 class CaffeineRepository(
-    private val context: Context
+    private val serviceDataSource: CaffeineServiceDataSource,
 ) {
 
     private val _currentState = MutableStateFlow<CaffeineState>(CaffeineState.Off)
@@ -47,14 +46,14 @@ class CaffeineRepository(
         _currentState.value = nextState
 
         if (nextState == CaffeineState.Off) {
-            CaffeineService.stop(context)
+            serviceDataSource.stop()
         } else {
-            CaffeineService.start(context, nextState.durationMillis)
+            serviceDataSource.start(nextState.durationMillis)
         }
     }
 
     fun reset() {
         _currentState.value = CaffeineState.Off
-        CaffeineService.stop(context)
+        serviceDataSource.stop()
     }
 }

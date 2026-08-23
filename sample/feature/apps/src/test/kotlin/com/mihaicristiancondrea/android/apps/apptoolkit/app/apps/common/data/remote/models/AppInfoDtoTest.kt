@@ -24,15 +24,14 @@
  * (at your option) any later version.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.data.models.api
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.mappers.toDomain
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.mappers.toDomain
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppDetailsDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppLinkDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppScreenshotDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppSummaryDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDeviceType
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.utils.constants.PlayStoreUrls
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -93,7 +92,7 @@ class AppInfoDtoTest {
 
         val domain = dto.toDomain()
 
-        assertEquals(PlayStoreUrls.DEFAULT_ICON_URL, domain.iconUrl)
+        assertEquals("https://c.clc2l.com/t/g/o/google-playstore-Iauj7q.png", domain.iconUrl)
         assertEquals("Tools", domain.shortDescription)
         assertEquals(domain.category, null)
     }

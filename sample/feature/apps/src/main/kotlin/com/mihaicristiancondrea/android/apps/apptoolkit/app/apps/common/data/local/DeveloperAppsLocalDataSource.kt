@@ -9,11 +9,11 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppsListResponseDto
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppSummary
 
 /** Persistent source for the last successfully downloaded developer-app catalogue. */
 interface DeveloperAppsLocalDataSource {
-    suspend fun read(): AppsListResponseDto?
+    suspend fun read(): List<AppSummary>?
 
-    suspend fun write(value: AppsListResponseDto)
+    suspend fun write(value: List<AppSummary>)
 }

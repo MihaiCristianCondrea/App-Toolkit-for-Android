@@ -17,19 +17,34 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.data.repositories.AppNavigationRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.data.repositories.DefaultNavigationConfigurationRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.data.repositories.NavigationConfigurationRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.navigation.AppNavigationItemsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.navigation.NavigationItemsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.preferences.DefaultToolkitTilesPreferencesDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.preferences.ToolkitTilesPreferencesDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.caffeine.AndroidCaffeineServiceDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.caffeine.CaffeineServiceDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.haptics.AndroidBreathingHapticsDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.haptics.BreathingHapticsDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.quicksettings.AndroidQuickSettingsTilesLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.quicksettings.QuickSettingsTilesLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.sensors.AndroidSensorLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.sensors.SensorLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.system.AndroidSystemLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.system.SystemLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.torch.AndroidTorchDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.torch.TorchDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.BreathingRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.CaffeineRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.DefaultToolkitTilesRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.DefaultTorchRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.MorseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.SensorRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.SosRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.SystemRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.ToolkitTilesRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.torch.AndroidTorchDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.torch.TorchDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.DefaultTorchRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.MorseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.TorchRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.BreathingToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CaffeineToolViewModel
@@ -47,7 +62,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.SoundModeTo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.NavigationRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
@@ -55,33 +70,56 @@ import org.koin.dsl.module
 
 val appModule: Module = module {
     single { NavigationManager() }
-    single<NavigationRepository> {
-        AppNavigationRepository(
-            dataStore = get(),
-            firebaseController = get()
-        )
+    single<NavigationConfigurationRepository> {
+        DefaultNavigationConfigurationRepository(dataStore = get())
+    }
+    single<NavigationItemsProvider> {
+        AppNavigationItemsProvider(repository = get(), firebaseController = get())
     }
     single<TorchDataSource> { AndroidTorchDataSource(context = androidContext()) }
+    single<SensorLocalDataSource> {
+        AndroidSensorLocalDataSource(context = androidContext(), dispatchers = get())
+    }
+    single<SystemLocalDataSource> {
+        AndroidSystemLocalDataSource(context = androidContext(), dispatchers = get())
+    }
+    single<BreathingHapticsDataSource> {
+        AndroidBreathingHapticsDataSource(context = androidContext())
+    }
+    single<CaffeineServiceDataSource> {
+        AndroidCaffeineServiceDataSource(context = androidContext())
+    }
+    single<QuickSettingsTilesLocalDataSource> {
+        AndroidQuickSettingsTilesLocalDataSource(context = androidContext())
+    }
     single<TorchRepository> { DefaultTorchRepository(dataSource = get(), dispatchers = get()) }
+    single<ToolkitTilesPreferencesDataSource> {
+        DefaultToolkitTilesPreferencesDataSource(
+            dataStore = get<CommonDataStore>().dataStore,
+        )
+    }
     single<ToolkitTilesRepository> {
-        DefaultToolkitTilesRepository(context = androidContext(), torchRepository = get())
+        DefaultToolkitTilesRepository(
+            torchRepository = get(),
+            preferencesDataSource = get(),
+            quickSettingsDataSource = get(),
+        )
     }
     single { MorseRepository(torchRepository = get(), dispatchers = get()) }
     single {
         SensorRepository(
-            context = androidContext(),
-            dispatchers = get()
+            localDataSource = get(),
         )
     }
     single {
         BreathingRepository(
-            context = androidContext(),
+            hapticsDataSource = get(),
             dispatchers = get()
         )
     }
     single {
         CaffeineRepository(
-            context = androidContext()
+            serviceDataSource = get(),
         )
     }
     single {
@@ -91,8 +129,7 @@ val appModule: Module = module {
     }
     single {
         SystemRepository(
-            context = androidContext(),
-            dispatchers = get()
+            localDataSource = get(),
         )
     }
     viewModel {
@@ -118,7 +155,7 @@ val appModule: Module = module {
 
     viewModel {
         MainViewModel(
-            navigationRepository = get(),
+            navigationItemsProvider = get(),
             consentRepository = get(),
             requestInAppReviewUseCase = get<RequestInAppReviewUseCase>(),
             inAppUpdateRepository = get(),

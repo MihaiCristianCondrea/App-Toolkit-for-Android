@@ -18,64 +18,39 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DeveloperAppsLocalDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.mappers.toDomain
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppDetailsResponseDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppsListResponseDto
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.DeveloperAppsRemoteDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.DeveloperAppsRemoteError
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.DeveloperAppsRemoteException
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.models.network.AppErrors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.result.runSuspendCatching
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.HttpRequestTimeoutException
-import io.ktor.client.plugins.RedirectResponseException
-import io.ktor.client.plugins.ServerResponseException
-import io.ktor.client.request.get
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.serialization.SerializationException
-import java.io.IOException
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import kotlin.coroutines.cancellation.CancellationException
 
 class DefaultDeveloperAppsRepository(
-    private val client: HttpClient,
-    private val baseUrl: String,
+    private val remoteDataSource: DeveloperAppsRemoteDataSource,
     private val firebaseController: FirebaseController,
     private val localDataSource: DeveloperAppsLocalDataSource,
 ) : DeveloperAppsRepository {
 
     override fun fetchDeveloperApps(): Flow<DataState<List<AppSummary>, AppErrors>> = flow {
-        val requestUrl = ApiHost.appsUrl(baseUrl)
         firebaseController.logBreadcrumb(
             message = "Developer apps fetch",
-            attributes = mapOf("url" to requestUrl),
         )
-        val result = runSuspendCatching {
-            val response = client.get(requestUrl)
-            if (!response.status.isSuccess()) {
-                return@runSuspendCatching DataState.Error(
-                    data = localDataSource.read()?.toDomainApps(),
-                    error = mapHttpStatusToError(response.status),
-                )
-            }
+        val result: Result<DataState<List<AppSummary>, AppErrors>> = runSuspendCatching {
+            val apps = remoteDataSource.fetchDeveloperApps()
+                .sortedBy { it.name.lowercase() }
+            localDataSource.write(apps)
 
-            val dto = response.body<AppsListResponseDto>()
-            localDataSource.write(dto)
-            val apps = dto.toDomainApps()
-
-            DataState.Success(data = apps)
+            DataState.Success<List<AppSummary>, AppErrors>(data = apps)
         }
-        val cachedApps = if (result.isFailure) localDataSource.read()?.toDomainApps() else null
-        val state = result.fold(
+        val cachedApps = if (result.isFailure) localDataSource.read() else null
+        val state: DataState<List<AppSummary>, AppErrors> = result.fold(
             onSuccess = { state -> state },
             onFailure = { throwable ->
                 DataState.Error(
@@ -90,9 +65,6 @@ class DefaultDeveloperAppsRepository(
         emit(state)
     }
 
-    private fun AppsListResponseDto.toDomainApps(): List<AppSummary> =
-        data.apps.map { it.toDomain() }.sortedBy { it.name.lowercase() }
-
     override fun fetchAppDetails(
         packageName: String,
     ): Flow<DataState<AppDetails, AppErrors>> = flow {
@@ -100,20 +72,13 @@ class DefaultDeveloperAppsRepository(
             emit(DataState.Error(error = AppErrors.UseCase.FAILED_TO_LOAD_APP_DETAILS))
             return@flow
         }
-        val requestUrl = ApiHost.appDetailsUrl(packageName = packageName, baseUrl = baseUrl)
         firebaseController.logBreadcrumb(
             message = "Developer app details fetch",
             attributes = mapOf("packageName" to packageName),
         )
         val result: DataState<AppDetails, AppErrors> = runSuspendCatching {
-            val response = client.get(requestUrl)
-            if (!response.status.isSuccess()) {
-                return@runSuspendCatching DataState.Error(
-                    error = mapHttpStatusToError(response.status),
-                )
-            }
             DataState.Success<AppDetails, AppErrors>(
-                data = response.body<AppDetailsResponseDto>().data.app.toDomain(),
+                data = remoteDataSource.fetchAppDetails(packageName),
             )
         }.fold(
             onSuccess = { state -> state },
@@ -129,33 +94,28 @@ class DefaultDeveloperAppsRepository(
         emit(result)
     }
 
-    private fun mapHttpStatusToError(status: HttpStatusCode): AppErrors {
-        return when {
-            status == HttpStatusCode.RequestTimeout -> AppErrors.Common(Errors.Network.REQUEST_TIMEOUT)
-            status == HttpStatusCode.TooManyRequests -> AppErrors.Common(Errors.Network.RATE_LIMITED)
-            status.value in 300..399 -> AppErrors.Common(Errors.Network.HTTP_REDIRECT)
-            status.value in 400..499 -> AppErrors.Common(Errors.Network.HTTP_CLIENT_ERROR)
-            status.value >= 500 -> AppErrors.Common(Errors.Network.HTTP_SERVER_ERROR)
-            else -> AppErrors.Common(Errors.Network.UNKNOWN)
-        }
-    }
-
     private fun mapThrowableToError(
         throwable: Throwable,
         default: AppErrors.UseCase,
     ): AppErrors {
         return when (throwable) {
             is CancellationException -> throw throwable
-            is HttpRequestTimeoutException, is SocketTimeoutException ->
-                AppErrors.Common(Errors.Network.REQUEST_TIMEOUT)
-
-            is UnknownHostException -> AppErrors.Common(Errors.Network.NO_INTERNET)
-            is IOException -> AppErrors.Common(Errors.Network.CONNECTION_ERROR)
-            is SerializationException -> AppErrors.Common(Errors.Network.SERIALIZATION)
-            is RedirectResponseException -> mapHttpStatusToError(throwable.response.status)
-            is ClientRequestException -> mapHttpStatusToError(throwable.response.status)
-            is ServerResponseException -> mapHttpStatusToError(throwable.response.status)
+            is DeveloperAppsRemoteException -> throwable.error.toAppError()
             else -> default
         }
     }
+
+    private fun DeveloperAppsRemoteError.toAppError(): AppErrors.Common = AppErrors.Common(
+        when (this) {
+            DeveloperAppsRemoteError.RequestTimeout -> Errors.Network.REQUEST_TIMEOUT
+            DeveloperAppsRemoteError.RateLimited -> Errors.Network.RATE_LIMITED
+            DeveloperAppsRemoteError.Redirect -> Errors.Network.HTTP_REDIRECT
+            DeveloperAppsRemoteError.Client -> Errors.Network.HTTP_CLIENT_ERROR
+            DeveloperAppsRemoteError.Server -> Errors.Network.HTTP_SERVER_ERROR
+            DeveloperAppsRemoteError.NoInternet -> Errors.Network.NO_INTERNET
+            DeveloperAppsRemoteError.Connection -> Errors.Network.CONNECTION_ERROR
+            DeveloperAppsRemoteError.Serialization -> Errors.Network.SERIALIZATION
+            DeveloperAppsRemoteError.Unknown -> Errors.Network.UNKNOWN
+        }
+    )
 }

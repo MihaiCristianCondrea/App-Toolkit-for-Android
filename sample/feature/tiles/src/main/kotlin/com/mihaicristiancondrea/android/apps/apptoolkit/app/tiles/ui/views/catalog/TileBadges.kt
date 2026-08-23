@@ -39,10 +39,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileIcon
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitToolKind
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitToolKind
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTile
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.backgroundDrawableRes
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.icon
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.iconColors

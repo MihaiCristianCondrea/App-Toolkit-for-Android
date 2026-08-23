@@ -22,10 +22,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileCategory
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileIcon
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTile
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileCategory
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileIcon
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.ToolkitTilesUiState
@@ -58,7 +58,6 @@ fun ToolkitTilesScreenPreview() {
                         status = ToolkitTileStatus.NeedsSetup
                     )
                 ),
-                initiallyExpanded = true
             )
         ),
         selectedFilter = ToolkitTilesFilter.All,

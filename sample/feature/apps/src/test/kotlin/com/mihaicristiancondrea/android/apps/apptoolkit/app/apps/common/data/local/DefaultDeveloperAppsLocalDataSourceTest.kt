@@ -9,9 +9,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppSummaryDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppsListDataDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppsListResponseDto
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -59,15 +57,11 @@ class DefaultDeveloperAppsLocalDataSourceTest {
         directory.deleteRecursively()
     }
 
-    private fun response(name: String): AppsListResponseDto = AppsListResponseDto(
-        AppsListDataDto(
-            listOf(
-                AppSummaryDto(
-                    name = name,
-                    packageName = "com.example.${name.lowercase()}",
-                    iconUrl = "https://example.com/$name.png",
-                ),
-            ),
+    private fun response(name: String): List<AppSummary> = listOf(
+        AppSummary(
+            name = name,
+            packageName = "com.example.${name.lowercase()}",
+            iconUrl = "https://example.com/$name.png",
         ),
     )
 }

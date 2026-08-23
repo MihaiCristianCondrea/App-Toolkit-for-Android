@@ -23,8 +23,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.previewTextResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R

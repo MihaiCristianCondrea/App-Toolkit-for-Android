@@ -1,0 +1,43 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
+
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.preferences
+
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import java.nio.file.Path
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+
+class DefaultToolkitTilesPreferencesDataSourceTest {
+
+    @Test
+    fun `stored expansion distinguishes no preference from all collapsed`(
+        @TempDir directory: Path,
+    ) = runTest {
+        val dataStore = PreferenceDataStoreFactory.create(
+            scope = backgroundScope,
+            produceFile = { directory.resolve("toolkit-tiles.preferences_pb").toFile() },
+        )
+        val source = DefaultToolkitTilesPreferencesDataSource(dataStore)
+
+        assertNull(source.expandedCategoryIds.first())
+
+        source.saveExpandedCategoryIds(emptySet())
+
+        assertEquals(emptySet(), source.expandedCategoryIds.first())
+
+        source.saveExpandedCategoryIds(setOf("utilities", "system"))
+
+        assertEquals(setOf("utilities", "system"), source.expandedCategoryIds.first())
+    }
+}

@@ -7,9 +7,11 @@ The developer's app catalogue: listing, details, favorites, and install state.
 ## Owns
 
 - `DeveloperAppsRepository`, `InstalledAppsRepository`, `FavoritesRepository` and their `Default`
-  implementations, the API DTOs and their mapping.
+  implementations.
+- `DeveloperAppsRemoteDataSource`, which owns Ktor requests, DTO decoding, and remote failure
+  normalization.
 - `DeveloperAppsLocalDataSource`, which persists the last successfully downloaded compact
-  catalogue as an atomic JSON file.
+  catalogue as an atomic JSON file, plus `InstalledAppsLocalDataSource` for PackageManager access.
 - `AppsListViewModel`, the list and detail-sheet composables, and the native-ad placement in the
   list.
 - `appsListEntryBuilder`, this feature's navigation entry.
@@ -40,8 +42,10 @@ flowchart TD
     VM --> Developer[DeveloperAppsRepository]
     VM --> Installed[InstalledAppsRepository]
     VM --> Favorites[FavoritesRepository]
-    Developer --> Api[Apps metadata API]
+    Developer --> Remote[DeveloperAppsRemoteDataSource]
+    Remote --> Api[Apps metadata API]
     Developer --> CatalogueCache[DeveloperAppsLocalDataSource]
+    Installed --> Packages[InstalledAppsLocalDataSource]
     Favorites --> Store[DatastoreInterface]
     Receiver[FavoritesChangedReceiver] --> Favorites
 ```
@@ -53,8 +57,8 @@ flowchart TD
 
 ## Internal implementations
 
-- DTO mapping, catalogue-file serialization, ad interleaving, and install-state inspection through
-  the package manager.
+- Remote DTO mapping, local cache-model mapping and serialization, ad interleaving, and
+  PackageManager inspection.
 
 ## Source of truth and failure behavior
 

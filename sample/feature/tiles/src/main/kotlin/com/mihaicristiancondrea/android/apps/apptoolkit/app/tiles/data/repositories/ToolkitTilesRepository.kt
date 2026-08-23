@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileCategory
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileCategoryData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 
@@ -33,13 +33,14 @@ import kotlinx.coroutines.flow.Flow
 interface ToolkitTilesRepository {
 
     /** The curated catalogue, with each tile's current Quick Settings status already applied. */
-    fun tileCategories(): Flow<ImmutableList<ToolkitTileCategory>>
+    fun tileCategories(): Flow<ImmutableList<ToolkitTileCategoryData>>
 
-    /**
-     * Re-reads Quick Settings and returns [categories] with refreshed statuses.
-     *
-     * Used when returning from the system tile picker, where the catalogue has not changed but the
-     * set of added tiles has.
-     */
-    fun withCurrentStatuses(categories: List<ToolkitTileCategory>): List<ToolkitTileCategory>
+    /** Category IDs the user last left expanded, or catalogue defaults on first use. */
+    val expandedCategoryIds: Flow<Set<String>>
+
+    /** Persists the complete set of expanded category IDs. */
+    suspend fun saveExpandedCategoryIds(categoryIds: Set<String>)
+
+    /** Re-reads Quick Settings and returns the catalogue with refreshed statuses. */
+    fun currentTileCategories(): ImmutableList<ToolkitTileCategoryData>
 }

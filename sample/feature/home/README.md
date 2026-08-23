@@ -9,8 +9,8 @@ destination.
 
 - `MainScreen` and `MainShell`, the drawer, the FAB, and the changelog dialog trigger.
 - `MainViewModel` and its contracts.
-- `AppNavigationRepository`, which builds the drawer items and hides the showcase entry until it is
-  unlocked.
+- `NavigationConfigurationRepository`, which exposes the persisted showcase access flag, and
+  `AppNavigationItemsProvider`, which maps that configuration to drawer presentation models.
 
 ## Does not own
 
@@ -38,14 +38,15 @@ flowchart TD
     Builders --> Screen[MainScreen]
     Screen --> Shell[MainShell]
     Screen --> VM[MainViewModel]
-    VM --> NavRepo[AppNavigationRepository]
+    VM --> Provider[AppNavigationItemsProvider]
+    Provider --> NavRepo[NavigationConfigurationRepository]
     NavRepo --> Store[DatastoreInterface]
     Shell --> Entries[Feature destinations]
 ```
 
 ## Public contracts
 
-- `MainScreen(entryBuilders)`, `MainViewModel`, `AppNavigationRepository`.
+- `MainScreen(entryBuilders)`, `MainViewModel`, and `NavigationItemsProvider`.
 
 ## Internal implementations
 

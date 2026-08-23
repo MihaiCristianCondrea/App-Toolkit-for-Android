@@ -18,8 +18,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.utils
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileCategory
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.ToolkitTilesFilter
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList

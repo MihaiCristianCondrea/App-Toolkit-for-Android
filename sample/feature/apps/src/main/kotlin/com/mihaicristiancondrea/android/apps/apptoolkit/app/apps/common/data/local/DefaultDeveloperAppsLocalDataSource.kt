@@ -9,7 +9,10 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppsListResponseDto
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.mappers.toCache
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.mappers.toDomain
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.models.DeveloperAppsCache
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppSummary
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -22,20 +25,20 @@ class DefaultDeveloperAppsLocalDataSource(
     private val dispatchers: DispatcherProvider,
 ) : DeveloperAppsLocalDataSource {
 
-    override suspend fun read(): AppsListResponseDto? = withContext(dispatchers.io) {
+    override suspend fun read(): List<AppSummary>? = withContext(dispatchers.io) {
         if (!cacheFile.isFile) return@withContext null
         runCatching {
-            json.decodeFromString<AppsListResponseDto>(cacheFile.readText())
+            json.decodeFromString<DeveloperAppsCache>(cacheFile.readText()).toDomain()
         }.getOrElse {
             cacheFile.delete()
             null
         }
     }
 
-    override suspend fun write(value: AppsListResponseDto): Unit = withContext(dispatchers.io) {
+    override suspend fun write(value: List<AppSummary>): Unit = withContext(dispatchers.io) {
         cacheFile.parentFile?.mkdirs()
         val temporaryFile = File(cacheFile.parentFile, "${cacheFile.name}.tmp")
-        temporaryFile.writeText(json.encodeToString(value))
+        temporaryFile.writeText(json.encodeToString(value.toCache()))
         check(temporaryFile.renameTo(cacheFile)) {
             "Unable to replace developer apps cache"
         }

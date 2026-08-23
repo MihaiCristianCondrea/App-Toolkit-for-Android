@@ -17,43 +17,31 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models
 
-import androidx.annotation.StringRes
-import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 
-@Immutable
 sealed class CaffeineState {
-    @get:StringRes
-    abstract val labelResId: Int
     abstract val durationMillis: Long?
 
     data object Off : CaffeineState() {
-        override val labelResId: Int = R.string.tool_caffeine_off
         override val durationMillis: Long? = null
     }
 
     data object FiveMinutes : CaffeineState() {
-        override val labelResId: Int = R.string.tool_caffeine_5m
         override val durationMillis: Long = 5 * 60 * 1000L
     }
 
     data object TenMinutes : CaffeineState() {
-        override val labelResId: Int = R.string.tool_caffeine_10m
         override val durationMillis: Long = 10 * 60 * 1000L
     }
 
     data object ThirtyMinutes : CaffeineState() {
-        override val labelResId: Int = R.string.tool_caffeine_30m
         override val durationMillis: Long = 30 * 60 * 1000L
     }
 
     data object OneHour : CaffeineState() {
-        override val labelResId: Int = R.string.tool_caffeine_1h
         override val durationMillis: Long = 60 * 60 * 1000L
     }
 
     data object Infinite : CaffeineState() {
-        override val labelResId: Int = R.string.tool_caffeine_infinite
         override val durationMillis: Long? = null
     }
 }

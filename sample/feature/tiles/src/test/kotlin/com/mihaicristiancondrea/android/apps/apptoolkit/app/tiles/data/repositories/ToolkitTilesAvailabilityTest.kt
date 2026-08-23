@@ -9,10 +9,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileCategory
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileIcon
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileCategoryData
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileData
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileStatus
 import kotlin.test.assertEquals
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Test
@@ -43,18 +42,13 @@ class ToolkitTilesAvailabilityTest {
         assertEquals(categories, result)
     }
 
-    private fun category(id: String, vararg tiles: ToolkitTile) = ToolkitTileCategory(
+    private fun category(id: String, vararg tiles: ToolkitTileData) = ToolkitTileCategoryData(
         id = id,
-        titleResId = 0,
-        icon = ToolkitTileIcon.Compass,
         tiles = persistentListOf(*tiles),
     )
 
-    private fun tile(id: String) = ToolkitTile(
+    private fun tile(id: String) = ToolkitTileData(
         id = id,
-        titleResId = 0,
-        summaryResId = 0,
-        icon = ToolkitTileIcon.Compass,
         status = ToolkitTileStatus.Available,
     )
 }

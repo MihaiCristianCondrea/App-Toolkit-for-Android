@@ -6,23 +6,22 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
 
 ## Owns
 
-- `ToolkitTilesRepository` and `DefaultToolkitTilesRepository`, which own the tile catalogue and
-  read
-  which tiles are added to Quick Settings.
-- The platform-wrapping repositories: `SensorRepository`, `BreathingRepository`,
-  `CaffeineRepository`, `SystemRepository`, `TorchRepository`, `MorseRepository`,
-  `SosRepository`.
-- `ToolkitTilesViewModel`, dedicated stateful-tool ViewModels, the tool composables, the bottom
-  sheet, and `toolkitTilesEntryBuilder`.
-- The Quick Settings tile services, including Flash Dimmer, and `CaffeineService`.
+- `ToolkitTilesRepository`, which owns the source-neutral catalogue and coordinates current tile
+  status with persisted category expansion preferences.
+- Local data sources for preferences, Quick Settings, sensors/display, ringer mode and music
+  search, haptics, caffeine-service control, and torch access.
+- `SensorRepository`, `BreathingRepository`, `CaffeineRepository`, `SystemRepository`,
+  `TorchRepository`, `MorseRepository`, and `SosRepository`, which remain the data-layer entry
+  points and own coordination or runtime state.
+- UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
+  `toolkitTilesEntryBuilder`, and the Quick Settings services.
 
 ## Does not own
 
-- The route key it registers against, owned by [
-  `:sample:core:navigation`](../../core/navigation/README.md).
+- The route key it registers against, owned by
+  [`:sample:core:navigation`](../../core/navigation/README.md).
 - Native ad rendering, owned by [`:library:core:ui`](../../../library/core/ui/README.md); this
-  module
-  supplies only the quick-tools card styling.
+  module supplies only the quick-tools card styling.
 
 ## Depends on
 
@@ -39,56 +38,47 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
 flowchart TD
     Screen[ToolkitTilesScreen] --> VM[ToolkitTilesViewModel]
     VM --> Tiles[ToolkitTilesRepository]
-    Tiles --> Catalogue[Tile catalogue]
-    Tiles --> QS[Quick Settings state]
-    ToolVMs[Dedicated tool ViewModels] --> Platform[Sensor / caffeine / system / torch repositories]
+    Tiles --> Catalogue[Source-neutral tile catalogue]
+    Tiles --> Preferences[ToolkitTilesPreferencesDataSource]
+    Preferences --> Store[Shared Preferences DataStore]
+    Tiles --> QS[QuickSettingsTilesLocalDataSource]
+    ToolVMs[Dedicated tool ViewModels] --> Repositories[Tool repositories]
+    Repositories --> Platform[Feature-local Android data sources]
     Screen --> ToolVMs
     Sos[SOS repository] --> Morse[Morse repository]
-    Morse --> Torch
-    Dimmer[Flash Dimmer tile service] --> Torch
-    Services[Tile services] --> Platform
+    Morse --> Torch[Torch repository]
 ```
 
 ## Public contracts
 
-- `ToolkitTilesRepository`, `TorchRepository`, `MorseRepository`, `ToolkitTilesViewModel`, the dedicated tool
-  ViewModels, `toolkitTilesEntryBuilder`, and the tile models.
+- `ToolkitTilesRepository`, `TorchRepository`, `MorseRepository`, `ToolkitTilesViewModel`, the
+  dedicated tool ViewModels, `toolkitTilesEntryBuilder`, and the source-neutral tile models.
 
 ## Internal implementations
 
-- Camera2 torch discovery/control, sensor sampling, the caffeine foreground service, ringer-mode
-  cycling, and tool composables.
+- Camera2 torch discovery/control, sensor sampling, haptics, caffeine-service control, Quick
+  Settings inspection, UI catalogue mapping, and tool composables.
 
-## Current risks
+## Source ownership and risks
 
-The platform repositories stay concrete classes with no interface. Each wraps one Android source and
-has no alternate implementation, so an interface would add substitution nobody uses — but it also
-means those paths cannot be faked in a unit test.
+Android platform APIs are isolated in `data/local` sources. ViewModels and services use
+repositories as the data-layer entry points, while source interfaces provide deterministic test
+boundaries around external resources.
 
-`ToolkitTilesRepository` is the exception and has a contract, because it serves the catalogue as
-well
-as reading the platform. It removes SOS, Morse and Flash Dimmer from the published catalogue when
-the shared torch capability reports that no flashlight is available.
+`ToolkitTilesRepository` removes SOS, Morse and Flash Dimmer from the published catalogue when the
+shared torch capability reports that no flashlight is available. Catalogue resource IDs and
+artwork identifiers live in UI models and mappers; the repository publishes only source-neutral
+IDs, status, behavior kind, and platform request keys.
 
-`TorchRepository` also has a contract because Morse/SOS, the in-app dimmer and a system-created
-Quick Settings service share one observable source of truth. `MorseRepository` owns the only
-patterned torch playback job; SOS delegates its fixed message to it so custom Morse, SOS and steady
+`TorchRepository` has a contract because Morse/SOS, the in-app dimmer and a system-created Quick
+Settings service share one observable source of truth. `MorseRepository` owns the only patterned
+torch playback job; SOS delegates its fixed message to it so custom Morse, SOS and steady
 brightness controls cannot compete. Torch strength is exposed on Android 13+ when hardware reports
-multiple levels; older and single-level devices fall back to a binary toggle. Closing any torch
-bottom sheet stops patterned playback and turns the light off.
+multiple levels; older and single-level devices fall back to a binary toggle.
 
 ## Migration notes
 
-The catalogue was `GetToolkitTilesUseCase` and the status pass was `SyncToolkitTileStatusesUseCase`.
-Neither was a use case — one was a hardcoded data set in the domain layer, the other read the
-repository and mapped over the result — so both moved into the repository, where `tileCategories()`
-now applies statuses itself.
-
-`CaffeineService` used to build its notification intent from `MainActivity::class.java`. It resolves
-the launcher activity through the package manager instead, so a quick-tool service does not depend
-on
-the application module.
-
-Tool runtime state used to be aggregated in `ToolkitTilesViewModel`. Each stateful or
-platform-backed bottom-sheet tool now owns a dedicated ViewModel; the catalogue ViewModel owns only
-catalogue, filter, expansion, ad and add/setup state. Animation-only state remains in Compose.
+The catalogue and status pass formerly lived in pass-through use cases. They remain repository
+work, while all Android resource and artwork mapping now happens in the UI layer. Stateful or
+platform-backed bottom-sheet tools retain dedicated ViewModels; the catalogue ViewModel owns only
+catalogue, filter, expansion, ad and add/setup state.

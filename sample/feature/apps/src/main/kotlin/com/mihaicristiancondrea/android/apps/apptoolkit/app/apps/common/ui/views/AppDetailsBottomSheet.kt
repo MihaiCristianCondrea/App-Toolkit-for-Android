@@ -65,6 +65,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import coil3.compose.AsyncImage
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDetails
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppVersionInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.models.AppInfoChipUi
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.bounceClick
@@ -76,7 +77,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo as InstalledAppVersionInfo
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -87,7 +87,7 @@ fun AppDetailsBottomSheet(
     hasDetailsError: Boolean,
     isFavorite: Boolean,
     isAppInstalled: Boolean?,
-    installedVersionInfo: InstalledAppVersionInfo?,
+    installedVersionInfo: AppVersionInfo?,
     actionLauncher: AppActionLauncher,
     onFavoriteClick: () -> Unit,
     onRetryDetails: () -> Unit,
@@ -311,7 +311,7 @@ private fun AppMetadataChips(
     appInfo: AppInfo,
     appDetails: AppDetails?,
     isAppInstalled: Boolean?,
-    installedVersionInfo: InstalledAppVersionInfo?,
+    installedVersionInfo: AppVersionInfo?,
 ) {
     val chipItems = listOfNotNull(
         AppInfoChipUi(

@@ -61,7 +61,7 @@ fun CaffeineTool(
         val label = when (state) {
             CaffeineState.Off -> stringResource(id = R.string.tool_caffeine_off)
             CaffeineState.Infinite -> stringResource(id = R.string.tool_caffeine_infinite)
-            else -> stringResource(id = state.labelResId)
+            else -> stringResource(id = state.labelResId())
         }
 
         ResultPill(
@@ -100,4 +100,13 @@ fun CaffeineTool(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
+}
+
+private fun CaffeineState.labelResId(): Int = when (this) {
+    CaffeineState.Off -> R.string.tool_caffeine_off
+    CaffeineState.FiveMinutes -> R.string.tool_caffeine_5m
+    CaffeineState.TenMinutes -> R.string.tool_caffeine_10m
+    CaffeineState.ThirtyMinutes -> R.string.tool_caffeine_30m
+    CaffeineState.OneHour -> R.string.tool_caffeine_1h
+    CaffeineState.Infinite -> R.string.tool_caffeine_infinite
 }

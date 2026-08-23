@@ -17,25 +17,16 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories
 
-import android.content.Context
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.installed.InstalledAppsLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInstallInfo
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.isAppInstalled
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.packagemanager.getVersionInfo
 
-/** Android package-manager-backed implementation of [InstalledAppsRepository]. */
+/** Repository entry point for installed application metadata. */
 class DefaultInstalledAppsRepository(
-    private val context: Context,
+    private val localDataSource: InstalledAppsLocalDataSource,
 ) : InstalledAppsRepository {
-    override fun getInstalledPackages(packageNames: Collection<String>): Set<String> = packageNames
-        .asSequence()
-        .filter { packageName -> packageName.isNotBlank() && context.isAppInstalled(packageName) }
-        .toSet()
+    override fun getInstalledPackages(packageNames: Collection<String>): Set<String> =
+        localDataSource.getInstalledPackages(packageNames)
 
-    override fun getInstallInfo(packageName: String): AppInstallInfo {
-        if (packageName.isBlank()) return AppInstallInfo(isInstalled = false, versionInfo = null)
-        return AppInstallInfo(
-            isInstalled = context.isAppInstalled(packageName),
-            versionInfo = context.packageManager.getVersionInfo(packageName),
-        )
-    }
+    override fun getInstallInfo(packageName: String): AppInstallInfo =
+        localDataSource.getInstallInfo(packageName)
 }

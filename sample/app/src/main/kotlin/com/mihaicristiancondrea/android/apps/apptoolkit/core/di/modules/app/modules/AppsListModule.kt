@@ -19,6 +19,10 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.mod
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DefaultDeveloperAppsLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DeveloperAppsLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.installed.AndroidInstalledAppsLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.installed.InstalledAppsLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.DefaultDeveloperAppsRemoteDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.DeveloperAppsRemoteDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DefaultDeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DefaultFavoritesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DefaultInstalledAppsRepository
@@ -45,14 +49,23 @@ val appsListModule: Module = module {
 
     single<DeveloperAppsRepository> {
         DefaultDeveloperAppsRepository(
-            client = get(),
-            baseUrl = get(qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL)),
+            remoteDataSource = get(),
             firebaseController = get(),
             localDataSource = get(),
         )
     }
 
-    single<InstalledAppsRepository> { DefaultInstalledAppsRepository(context = androidContext()) }
+    single<DeveloperAppsRemoteDataSource> {
+        DefaultDeveloperAppsRemoteDataSource(
+            client = get(),
+            baseUrl = get(qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL)),
+        )
+    }
+
+    single<InstalledAppsLocalDataSource> {
+        AndroidInstalledAppsLocalDataSource(context = androidContext())
+    }
+    single<InstalledAppsRepository> { DefaultInstalledAppsRepository(localDataSource = get()) }
 
     viewModel {
         AppsListViewModel(

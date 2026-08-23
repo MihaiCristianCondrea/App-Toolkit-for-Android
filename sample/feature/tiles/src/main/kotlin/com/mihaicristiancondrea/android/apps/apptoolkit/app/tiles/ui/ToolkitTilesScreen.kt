@@ -41,8 +41,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitQuickTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitQuickTool
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contracts.ToolkitTilesAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contracts.ToolkitTilesEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.PositionedToolkitTilesListItem

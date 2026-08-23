@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models
 
-import androidx.compose.runtime.Immutable
 
 /**
  * Compact application metadata returned by the public catalog endpoint.
@@ -26,7 +25,6 @@ import androidx.compose.runtime.Immutable
  * catalog model compact now prevents description, screenshot, and link payloads from being loaded
  * for every grid item.
  */
-@Immutable
 data class AppSummary(
     val name: String,
     val packageName: String,
@@ -39,7 +37,6 @@ data class AppSummary(
 typealias AppInfo = AppSummary
 
 /** Full package-specific metadata loaded when an application is expanded. */
-@Immutable
 data class AppDetails(
     val name: String,
     val packageName: String,
@@ -53,14 +50,12 @@ data class AppDetails(
 )
 
 /** Category metadata provided by the remote developer-app catalog. */
-@Immutable
 data class AppCategory(
     val label: String,
     val id: String,
 )
 
 /** Screenshot metadata used to preserve the API-provided form factor and aspect ratio. */
-@Immutable
 data class AppScreenshot(
     val url: String,
     val aspectRatio: String,
@@ -77,14 +72,12 @@ enum class AppDeviceType {
 }
 
 /** Ordered external link provided by the application metadata document. */
-@Immutable
 data class AppLink(
     val label: String,
     val url: String,
 )
 
 /** Optional latest legacy release metadata returned with full application details. */
-@Immutable
 data class AppLatestVersion(
     val versionName: String,
     val versionCode: Long,

@@ -21,6 +21,7 @@ import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contracts.ToolkitTilesAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contracts.ToolkitTilesEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.toUiModels
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.ToolkitTilesFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.ToolkitTilesUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
@@ -33,9 +34,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setError
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
 import kotlinx.collections.immutable.mutate
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -84,7 +85,12 @@ class ToolkitTilesViewModel(
     private fun loadTiles() {
         startOperation(action = Actions.LOAD_TILES)
         loadJob = loadJob.restart {
-            toolkitTilesRepository.tileCategories()
+            combine(
+                toolkitTilesRepository.tileCategories(),
+                toolkitTilesRepository.expandedCategoryIds,
+            ) { categories, expandedCategoryIds ->
+                categories to expandedCategoryIds
+            }
                 .flowOn(dispatchers.default)
                 .onStart { screenState.setLoading() }
                 .catchReport(action = Actions.LOAD_TILES) {
@@ -92,16 +98,11 @@ class ToolkitTilesViewModel(
                         message = UiTextHelper.StringResource(R.string.tiles_error_failed_to_load),
                     )
                 }
-                .onEach { categories ->
-                    val expandedIds = categories
-                        .filter { category -> category.initiallyExpanded }
-                        .map { category -> category.id }
-                        .toPersistentSet()
-
+                .onEach { (categories, expandedCategoryIds) ->
                     screenState.setSuccess(
                         data = (screenData ?: ToolkitTilesUiState()).copy(
-                            categories = categories,
-                            expandedCategoryIds = expandedIds,
+                            categories = categories.toUiModels(),
+                            expandedCategoryIds = expandedCategoryIds.toPersistentSet(),
                         )
                     )
                 }
@@ -112,8 +113,8 @@ class ToolkitTilesViewModel(
     private fun refreshStatuses() {
         screenState.update { current ->
             val data = current.data ?: return@update current
-            val refreshed = toolkitTilesRepository.withCurrentStatuses(data.categories)
-            current.copy(data = data.copy(categories = refreshed.toImmutableList()))
+            val refreshed = toolkitTilesRepository.currentTileCategories().toUiModels()
+            current.copy(data = data.copy(categories = refreshed))
         }
     }
 
@@ -124,6 +125,7 @@ class ToolkitTilesViewModel(
     }
 
     private fun toggleCategory(categoryId: String) {
+        var updatedIds: Set<String>? = null
         screenState.update { current ->
             val data = current.data ?: return@update current
             val expandedIds = data.expandedCategoryIds
@@ -134,7 +136,13 @@ class ToolkitTilesViewModel(
                     it.add(categoryId)
                 }
             }
+            updatedIds = updated
             current.copy(data = data.copy(expandedCategoryIds = updated))
+        }
+        updatedIds?.let { categoryIds ->
+            viewModelScope.launch {
+                toolkitTilesRepository.saveExpandedCategoryIds(categoryIds)
+            }
         }
     }
 

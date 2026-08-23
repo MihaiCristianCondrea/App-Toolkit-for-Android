@@ -22,6 +22,7 @@ import androidx.compose.material.icons.outlined.Android
 import androidx.compose.ui.graphics.vector.ImageVector
 import app.cash.turbine.test
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
@@ -35,7 +36,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDis
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.NavigationRepository
 import io.mockk.clearAllMocks
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -83,7 +83,7 @@ class MainViewModelTest {
         val dispatchers = TestDispatchers(testDispatcher = dispatcherExtension.testDispatcher)
 
         MainViewModel(
-            navigationRepository = repo,
+            navigationItemsProvider = repo,
             consentRepository = FakeConsentRepository(),
             requestInAppReviewUseCase = mockk(relaxed = true),
             inAppUpdateRepository = mockk(relaxed = true),
@@ -104,7 +104,7 @@ class MainViewModelTest {
             val consentRepository = mockk<ConsentRepository>(relaxed = true)
 
             MainViewModel(
-                navigationRepository = FakeNavigationRepository(flowOf(emptyList())),
+                navigationItemsProvider = FakeNavigationRepository(flowOf(emptyList())),
                 consentRepository = consentRepository,
                 requestInAppReviewUseCase = mockk(relaxed = true),
                 inAppUpdateRepository = mockk(relaxed = true),
@@ -136,7 +136,7 @@ class MainViewModelTest {
             val dispatchers = TestDispatchers(dispatcherExtension.testDispatcher)
 
             val viewModel = MainViewModel(
-                navigationRepository = repo,
+                navigationItemsProvider = repo,
                 consentRepository = FakeConsentRepository(),
                 requestInAppReviewUseCase = mockk(relaxed = true),
                 inAppUpdateRepository = mockk(relaxed = true),
@@ -161,7 +161,7 @@ class MainViewModelTest {
         val firebaseController = mockk<FirebaseController>(relaxed = true)
 
         val viewModel = MainViewModel(
-            navigationRepository = repo,
+            navigationItemsProvider = repo,
             consentRepository = FakeConsentRepository(),
             requestInAppReviewUseCase = mockk(relaxed = true),
             inAppUpdateRepository = mockk(relaxed = true),
@@ -204,7 +204,7 @@ class MainViewModelTest {
         val firebaseController = mockk<FirebaseController>(relaxed = true)
 
         val viewModel = MainViewModel(
-            navigationRepository = repo,
+            navigationItemsProvider = repo,
             consentRepository = FakeConsentRepository(),
             requestInAppReviewUseCase = mockk(relaxed = true),
             inAppUpdateRepository = mockk(relaxed = true),
@@ -243,7 +243,7 @@ class MainViewModelTest {
             )
 
             val viewModel = MainViewModel(
-                navigationRepository = FakeNavigationRepository(flowOf(emptyList())),
+                navigationItemsProvider = FakeNavigationRepository(flowOf(emptyList())),
                 consentRepository = consentRepository,
                 requestInAppReviewUseCase = mockk(relaxed = true),
                 inAppUpdateRepository = mockk(relaxed = true),
@@ -264,11 +264,11 @@ class MainViewModelTest {
 
     private class FakeNavigationRepository(
         private val upstream: Flow<List<NavigationDrawerItem>>
-    ) : NavigationRepository {
+    ) : NavigationItemsProvider {
         var callCount: Int = 0
             private set
 
-        override fun getNavigationDrawerItems(): Flow<List<NavigationDrawerItem>> {
+        override fun items(): Flow<List<NavigationDrawerItem>> {
             callCount++
             return upstream
         }

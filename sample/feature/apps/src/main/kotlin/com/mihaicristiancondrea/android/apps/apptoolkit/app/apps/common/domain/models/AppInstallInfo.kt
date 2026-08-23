@@ -17,12 +17,14 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models
 
-import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 
 /** Package-manager install metadata for a catalog app. */
-@Immutable
 data class AppInstallInfo(
     val isInstalled: Boolean,
     val versionInfo: AppVersionInfo?,
+)
+
+data class AppVersionInfo(
+    val versionName: String?,
+    val versionCode: Long,
 )

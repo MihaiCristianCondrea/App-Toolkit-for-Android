@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.states.MainUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repositories.ConsentRepository
@@ -43,7 +44,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoadin
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setNoData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setSuccess
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repositories.InAppUpdateRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.domain.models.InAppUpdateHost
@@ -57,7 +57,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
 class MainViewModel(
-    private val navigationRepository: NavigationRepository,
+    private val navigationItemsProvider: NavigationItemsProvider,
     private val consentRepository: ConsentRepository,
     private val requestInAppReviewUseCase: RequestInAppReviewUseCase,
     private val inAppUpdateRepository: InAppUpdateRepository,
@@ -93,7 +93,7 @@ class MainViewModel(
     private fun loadNavigationItems() {
         startOperation(action = Actions.LOAD_NAVIGATION)
         navigationJob = navigationJob.restart {
-            navigationRepository.getNavigationDrawerItems()
+            navigationItemsProvider.items()
                 .flowOn(dispatchers.io)
                 .onStart {
                     updateStateThreadSafe {

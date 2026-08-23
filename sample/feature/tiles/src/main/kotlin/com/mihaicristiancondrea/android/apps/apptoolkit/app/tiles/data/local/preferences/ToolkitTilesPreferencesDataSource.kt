@@ -15,8 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.utils.constants
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.local.preferences
 
-object PlayStoreUrls {
-    const val DEFAULT_ICON_URL = "https://c.clc2l.com/t/g/o/google-playstore-Iauj7q.png"
+import kotlinx.coroutines.flow.Flow
+
+/** Local source for the user's Toolkit Tiles catalogue presentation preferences. */
+interface ToolkitTilesPreferencesDataSource {
+
+    /** Saved expanded category IDs, or `null` before the user has chosen a state. */
+    val expandedCategoryIds: Flow<Set<String>?>
+
+    /** Replaces the saved expanded category IDs, including a valid empty set. */
+    suspend fun saveExpandedCategoryIds(categoryIds: Set<String>)
 }

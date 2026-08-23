@@ -45,8 +45,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTile
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.previews.GenericToolPreview
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R

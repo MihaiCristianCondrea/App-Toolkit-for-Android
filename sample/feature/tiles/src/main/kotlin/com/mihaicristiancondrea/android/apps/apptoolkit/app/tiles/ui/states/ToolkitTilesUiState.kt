@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.domain.models.ToolkitTileCategory
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileCategory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentListOf

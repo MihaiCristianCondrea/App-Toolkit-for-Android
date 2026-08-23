@@ -24,9 +24,10 @@
  * (at your option) any later version.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.data.repositories
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.local.DeveloperAppsLocalDataSource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.DefaultDeveloperAppsRemoteDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppCategoryDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppDetailsDataDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppDetailsDto
@@ -40,6 +41,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.rem
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DefaultDeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDeviceType
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppSummary
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.models.network.AppErrors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
@@ -177,12 +179,12 @@ class DefaultDeveloperAppsRepositoryTest {
 
         repository.fetchDeveloperApps().first()
 
-        assertEquals(response, local.value)
+        assertEquals(listOf("Online"), local.value?.map { it.name })
     }
 
     @Test
     fun `fetchDeveloperApps exposes cached data with a network error`() = runTest {
-        val local = FakeDeveloperAppsLocalDataSource(catalogueResponse("Cached"))
+        val local = FakeDeveloperAppsLocalDataSource(cachedApps("Cached"))
         val repository = repositoryWithStatus(HttpStatusCode.InternalServerError, local)
 
         val result = repository.fetchDeveloperApps().first() as DataState.Error
@@ -236,11 +238,21 @@ class DefaultDeveloperAppsRepositoryTest {
         local: DeveloperAppsLocalDataSource = FakeDeveloperAppsLocalDataSource(),
     ): DefaultDeveloperAppsRepository =
         DefaultDeveloperAppsRepository(
-            client = client,
-            baseUrl = "https://example.com",
+            remoteDataSource = DefaultDeveloperAppsRemoteDataSource(
+                client = client,
+                baseUrl = "https://example.com",
+            ),
             firebaseController = mockk<FirebaseController>(relaxed = true),
             localDataSource = local,
         )
+
+    private fun cachedApps(name: String): List<AppSummary> = listOf(
+        AppSummary(
+            name = name,
+            packageName = "com.example.${name.lowercase()}",
+            iconUrl = "https://example.com/$name.png",
+        ),
+    )
 
     private fun catalogueResponse(name: String): AppsListResponseDto = AppsListResponseDto(
         data = AppsListDataDto(
@@ -256,11 +268,11 @@ class DefaultDeveloperAppsRepositoryTest {
 }
 
 private class FakeDeveloperAppsLocalDataSource(
-    var value: AppsListResponseDto? = null,
+    var value: List<AppSummary>? = null,
 ) : DeveloperAppsLocalDataSource {
-    override suspend fun read(): AppsListResponseDto? = value
+    override suspend fun read(): List<AppSummary>? = value
 
-    override suspend fun write(value: AppsListResponseDto) {
+    override suspend fun write(value: List<AppSummary>) {
         this.value = value
     }
 }
