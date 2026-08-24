@@ -66,8 +66,9 @@ flowchart TD
 Depending on this facade contributes the common `<application>` defaults needed by toolkit
 activities, including `@style/AppTheme`, RTL support, resizable/window behavior, and the bundled
 backup/data-extraction rules. It also supplies `AppTheme`, `SplashScreenTheme`, their splash assets,
-and the shared launcher/shortcut colors. Integration modules contribute the permissions and
-metadata they own; for example, ads owns network/ad-ID permissions and Mobile Ads tuning metadata.
+and the shared launcher/shortcut colors and shortcut artwork. Integration modules contribute the
+permissions and metadata they own; for example, ads owns network/ad-ID permissions and Mobile Ads
+tuning metadata.
 
 These are defaults, not locked policy. Android merges the consuming application's manifest and
 resources at higher priority, so a host can override an attribute in its own `<application>` tag or

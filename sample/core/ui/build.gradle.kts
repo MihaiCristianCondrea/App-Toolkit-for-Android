@@ -25,4 +25,5 @@ android {
 
 dependencies {
     api(project(":library:core:designsystem"))
+    api(libs.google.material)
 }

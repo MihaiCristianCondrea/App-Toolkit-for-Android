@@ -84,6 +84,9 @@ tasks.withType<Test>().configureEach {
             include("library/apptoolkit/src/main/res/**/*.xml")
             include("sample/app/src/main/AndroidManifest.xml")
             include("sample/app/src/main/res/xml/shortcuts.xml")
+            include(
+                "sample/core/ui/src/main/res/drawable-anydpi/ic_shortcut_settings_foreground.xml",
+            )
             include("sample/core/ui/src/main/res/values*/**/*.xml")
             exclude("**/build/**")
         }

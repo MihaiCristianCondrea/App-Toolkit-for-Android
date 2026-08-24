@@ -11,7 +11,7 @@ Shared host artwork used by the sample application and features.
 ## Does not own
 
 - Feature and application strings, which live in the module that owns each user flow.
-- Default colors, themes, splash artwork and backup rules, owned by
+- Default colors, themes, splash and shortcut artwork, and backup rules, owned by
   [`:library:apptoolkit`](../../../library/apptoolkit/README.md).
 - Resources that identify the application, such as launcher mipmaps and the manifest's `xml/`
   configuration, which stay in `:sample:app`.
@@ -21,6 +21,8 @@ Shared host artwork used by the sample application and features.
 
 - [`:library:core:designsystem`](../../../library/core/designsystem/README.md) for shared visual
   contracts exposed transitively to sample features.
+- Google Material resources for the `colorPrimaryContainer` theme attribute used by the shared
+  shape drawables.
 
 ## Used by
 

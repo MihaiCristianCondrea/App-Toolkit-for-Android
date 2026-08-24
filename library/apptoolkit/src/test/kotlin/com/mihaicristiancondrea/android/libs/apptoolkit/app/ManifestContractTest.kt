@@ -175,6 +175,7 @@ class ManifestContractTest {
         val TOOLKIT_DEFAULT_RESOURCES = listOf(
             "library/apptoolkit/src/main/res/values/themes.xml",
             "library/apptoolkit/src/main/res/values/colors.xml",
+            "library/apptoolkit/src/main/res/drawable-anydpi/ic_shortcut_settings_foreground.xml",
             "library/apptoolkit/src/main/res/xml/backup_rules.xml",
             "library/apptoolkit/src/main/res/xml/data_extraction_rules.xml",
         )
@@ -182,6 +183,7 @@ class ManifestContractTest {
         val FORMER_SAMPLE_DEFAULT_RESOURCES = listOf(
             "sample/core/ui/src/main/res/values/themes.xml",
             "sample/core/ui/src/main/res/values/colors.xml",
+            "sample/core/ui/src/main/res/drawable-anydpi/ic_shortcut_settings_foreground.xml",
             "sample/app/src/main/res/xml/backup_rules.xml",
             "sample/app/src/main/res/xml/data_extraction_rules.xml",
         )
