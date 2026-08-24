@@ -21,6 +21,7 @@ import android.app.Activity
 import app.cash.turbine.test
 import com.android.billingclient.api.ProductDetails
 import com.google.common.truth.Truth.assertThat
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.contracts.SupportEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.utils.constants.DonationProductIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.billing.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
@@ -33,8 +34,8 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -47,12 +48,15 @@ class SupportViewModelTest {
         val dispatcherExtension = UnconfinedDispatcherExtension()
     }
 
-    private val productDetailsFlow = MutableStateFlow<Map<String, ProductDetails>>(emptyMap())
+    private val productDetailsFlow = MutableSharedFlow<Map<String, ProductDetails>>(replay = 1)
+    private var queriedProducts: Map<String, ProductDetails> = emptyMap()
     private val purchaseResultFlow = MutableSharedFlow<PurchaseResult>()
     private val billingRepository = mockk<BillingRepository>(relaxed = true) {
         every { productDetails } returns productDetailsFlow
         every { purchaseResult } returns purchaseResultFlow
-        coEvery { queryProductDetails(any()) } returns Unit
+        coEvery { queryProductDetails(any()) } coAnswers {
+            productDetailsFlow.emit(queriedProducts)
+        }
         every { launchInAppDonationFlow(any(), any()) } returns Unit
     }
     private val firebaseController = FakeFirebaseController()
@@ -60,7 +64,7 @@ class SupportViewModelTest {
     private fun createViewModel(
         initialProducts: Map<String, ProductDetails> = emptyMap(),
     ): SupportViewModel {
-        productDetailsFlow.value = initialProducts
+        queriedProducts = initialProducts
         return SupportViewModel(billingRepository, firebaseController)
     }
 
@@ -116,6 +120,44 @@ class SupportViewModelTest {
 
                 cancelAndIgnoreRemainingEvents()
             }
+        }
+
+    @Test
+    fun `screen stays loading until the product query emits a result`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            coEvery { billingRepository.queryProductDetails(any()) } returns Unit
+
+            val viewModel = createViewModel()
+
+            assertThat(viewModel.uiState.value.screenState)
+                .isInstanceOf(ScreenState.IsLoading::class.java)
+
+            productDetailsFlow.emit(emptyMap())
+
+            assertThat(viewModel.uiState.value.screenState)
+                .isInstanceOf(ScreenState.NoData::class.java)
+        }
+
+    @Test
+    fun `retry replaces the error screen with loading while the query is running`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val queryCompleted = CompletableDeferred<Unit>()
+            coEvery { billingRepository.queryProductDetails(any()) } coAnswers {
+                queryCompleted.await()
+            }
+            val viewModel = createViewModel()
+
+            purchaseResultFlow.emit(PurchaseResult.Failed("boom"))
+            assertThat(viewModel.uiState.value.screenState)
+                .isInstanceOf(ScreenState.Error::class.java)
+
+            viewModel.onEvent(
+                SupportEvent.QueryProductDetails(billingClient = mockk(relaxed = true))
+            )
+
+            assertThat(viewModel.uiState.value.screenState)
+                .isInstanceOf(ScreenState.IsLoading::class.java)
+            queryCompleted.complete(Unit)
         }
 
     @Test

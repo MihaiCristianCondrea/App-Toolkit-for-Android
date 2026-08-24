@@ -39,9 +39,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -62,9 +60,9 @@ class DefaultBillingRepository private constructor(
     private val scope =
         CoroutineScope(externalScope.coroutineContext + SupervisorJob() + dispatchers.io)
 
-    private val _productDetails = MutableStateFlow<Map<String, ProductDetails>>(emptyMap())
+    private val _productDetails = MutableSharedFlow<Map<String, ProductDetails>>(replay = 1)
     override val productDetails: Flow<Map<String, ProductDetails>> =
-        _productDetails.asStateFlow()
+        _productDetails.asSharedFlow()
 
     private val _purchaseResult = MutableSharedFlow<PurchaseResult>()
     override val purchaseResult: Flow<PurchaseResult> =
@@ -240,7 +238,7 @@ class DefaultBillingRepository private constructor(
             if (callResult.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 val map =
                     callResult.data?.productDetailsList?.associateBy { it.productId }.orEmpty()
-                scope.launch { _productDetails.emit(map) }
+                _productDetails.emit(map)
             } else {
                 scope.launch { _purchaseResult.emit(callResult.billingResult.toFailureResult()) }
             }

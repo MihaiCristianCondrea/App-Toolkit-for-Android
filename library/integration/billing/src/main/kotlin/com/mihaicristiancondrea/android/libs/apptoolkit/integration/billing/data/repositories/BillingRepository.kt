@@ -40,7 +40,12 @@ import kotlinx.coroutines.flow.Flow
  */
 interface BillingRepository : BillingCore {
 
-    /** Products resolved by the most recent [queryProductDetails] call, keyed by product id. */
+    /**
+     * Products resolved by [queryProductDetails], keyed by product id.
+     *
+     * The flow does not emit an initial placeholder. It emits after a query completes and replays
+     * the most recent result, including an empty result.
+     */
     val productDetails: Flow<Map<String, ProductDetails>>
 
     /** Outcome of each purchase attempt, including failures reported by the Play Billing library. */

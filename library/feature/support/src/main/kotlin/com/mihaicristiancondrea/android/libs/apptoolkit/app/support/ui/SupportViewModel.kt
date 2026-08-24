@@ -272,9 +272,7 @@ class SupportViewModel(
                 action = Actions.QUERY_PRODUCT_DETAILS,
                 block = {
                     updateStateThreadSafe {
-                        if (screenData?.donationOptions.isNullOrEmpty()) {
-                            screenState.setLoading()
-                        }
+                        screenState.setLoading()
                     }
 
                     billingRepository.queryProductDetails(productIds = donationProductIds)

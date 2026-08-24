@@ -24,14 +24,9 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import kotlinx.coroutines.delay
 
 /**
  * Switches between different UI states with a fade animation.
@@ -59,14 +54,6 @@ fun <T> ScreenStateHandler(
     onSuccess: @Composable (T) -> Unit,
     onError: (@Composable () -> Unit)? = null
 ) {
-    var currentScreenState: ScreenState by remember { mutableStateOf(value = screenState.screenState) }
-
-    LaunchedEffect(screenState.screenState) {
-        if (screenState.screenState is ScreenState.IsLoading) {
-            delay(timeMillis = 2500)
-        }
-        currentScreenState = screenState.screenState
-    }
     val animationSpec: ContentTransform = remember {
         fadeIn(animationSpec = tween(durationMillis = 300)) togetherWith fadeOut(
             animationSpec = tween(
@@ -76,7 +63,7 @@ fun <T> ScreenStateHandler(
     }
 
     AnimatedContent(
-        targetState = currentScreenState,
+        targetState = screenState.screenState,
         transitionSpec = { animationSpec },
         label = "ScreenStateTransition"
     ) { currentState ->
