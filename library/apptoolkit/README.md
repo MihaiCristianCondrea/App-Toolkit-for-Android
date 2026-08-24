@@ -88,6 +88,10 @@ their product identity by defining `app_name`, `app_full_name`, and `copyright` 
 - Koin binding details, qualifier wiring, default palette registration, and private destination
   builders.
 
+## Publishing
+
+App Toolkit is published through [JitPack](https://jitpack.io/#MihaiCristianCondrea/App-Toolkit-for-Android).
+
 ## Current risks
 
 The façade exports nearly the complete internal graph, so consumers can couple to implementation
