@@ -43,14 +43,31 @@ several settings/help flows.
 
 ```mermaid
 flowchart TD
-    AboutScreen --> AboutVM[AboutViewModel]
+    AboutScreen[About screen] --> AboutVM[AboutViewModel]
     AboutVM --> AboutRepo[AboutRepository]
+    AboutRepo --> Build[Build and app-info providers]
     AboutVM --> CopyUC[CopyDeviceInfoUseCase]
-    ChangelogUI[Changelog dialog] --> ChangelogVM
-    ChangelogVM --> ChangelogRepo[ChangelogRepository]
-    ChangelogVM --> Update[In-app update integration]
-    Nav[Feature routes and handlers] --> Consumers[Host/help/settings]
+    CopyUC --> Clipboard[Device report to clipboard]
+    ChangelogUI[Changelog dialog] --> ChangelogVM[ChangelogViewModel]
+    ChangelogVM --> GetChangelog[GetChangelogUseCase]
+    GetChangelog --> ChangelogRepo[ChangelogRepository]
+    ChangelogRepo --> Remote[Remote changelog]
+    ChangelogRepo --> Cache[DataStore cached changelog]
+    ChangelogVM --> Update[InAppUpdateRepository]
+    Update --> Play[Play update flow]
+    Routes[About / privacy / license routes] --> Consumers[Host, help, and settings]
 ```
+
+## Architectural decisions
+
+- About and changelog are separate state holders because one is stable application metadata and the
+  other coordinates remote/cache/update work with an independent lifecycle.
+- Use cases are retained where they perform a named operation or combine concerns; repository calls
+  that only forwarded data were not given synthetic wrappers.
+- Changelog persistence provides fallback content, while the remote response remains authoritative
+  for new versions.
+- Shared typed routes live in `:library:navigation`; this feature owns only its screen-specific
+  builders, labels, and handlers.
 
 ## Public contracts
 

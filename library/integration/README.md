@@ -27,13 +27,27 @@ integration modules.
 
 ```mermaid
 flowchart TD
-    Parent[":library:integration"] --> Ads[ads]
-    Parent --> Billing[billing]
-    Parent --> Consent[consent]
-    Parent --> Firebase[firebase]
-    Parent --> Review[review]
-    Parent --> Update[update]
+    Parent[":library:integration implicit parent"] --> Ads["ads: Mobile Ads lifecycle"]
+    Parent --> Billing["billing: Play Billing client"]
+    Parent --> Consent["consent: UMP orchestration"]
+    Parent --> Firebase["firebase: analytics / crash / messaging"]
+    Parent --> Review["review: Play in-app review"]
+    Parent --> Update["update: Play in-app updates"]
+    Ads -->|gates initialization on| Consent
+    Features[":library:feature:* callers"] --> Ads
+    Features --> Billing
+    Features --> Consent
+    Features --> Review
+    Features --> Update
 ```
+
+## Architectural decisions
+
+- Each third-party SDK is isolated behind its own child module so ownership, manifests, lifecycle,
+  and upgrade risk remain explicit.
+- Features decide when an integration is invoked; integrations own how SDK work is performed.
+- Ads depends on consent because enablement must not bypass the consent state. Other integrations
+  remain independent siblings.
 
 ## Public contracts
 
@@ -45,4 +59,5 @@ There is no implementation; this is an implicit Gradle hierarchy node.
 
 ## Current risks
 
-No significant module-specific risks are currently identified.
+SDK-owned manifest entries merge into every consuming host without a compile-time call site. Each
+child README therefore documents the permissions, metadata, and lifecycle behavior it contributes.

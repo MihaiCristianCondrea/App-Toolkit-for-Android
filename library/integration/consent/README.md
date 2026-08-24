@@ -34,11 +34,35 @@ Platform (UMP).
 
 ```mermaid
 flowchart TD
-    UI[Onboarding or settings] --> Repo[ConsentRepository]
-    Repo --> Store[Consent preferences]
-    Repo --> UMP[UMP remote source]
-    Repo --> Host[ConsentHost callbacks]
+    UI[Onboarding, privacy, or diagnostics UI] --> Repo[ConsentRepository]
+    Repo --> Settings[ConsentSettings]
+    Settings --> Store[Consent preference source]
+    Host[ConsentHost] --> Availability{Host can show a form?}
+    Availability -->|no| Rejected[Terminal unavailable/error state]
+    Availability -->|yes| Flight{Matching request in flight?}
+    Repo --> Flight
+    Flight -->|yes| Join[Join replaying Loading and terminal state]
+    Flight -->|no| UMP[UmpConsentRemoteDataSource]
+    UMP --> Refresh[UMP consent-info refresh]
+    Refresh --> Callback{Form required or explicitly requested?}
+    Callback -->|yes and host still valid| Form[Show consent form]
+    Callback -->|no| Result[Terminal consent state]
+    Form --> Result
+    Result --> Store
+    Result --> Firebase[Firebase consent toggles]
+    Result --> Ads[Ads consumers]
 ```
+
+## Architectural decisions
+
+- The repository owns one consent round trip at a time. Matching callers join replaying state rather
+  than launching overlapping UMP requests.
+- `showIfRequired` is part of the in-flight key because an explicit privacy-form request cannot be
+  satisfied by a weaker conditional request.
+- Host validity is checked both before SDK work and immediately before form display; asynchronous
+  callbacks must not retain permission to use a destroyed activity.
+- Persistence records the resolved choice, while UMP remains the authority for whether a form is
+  currently available or required.
 
 ## Public contracts
 

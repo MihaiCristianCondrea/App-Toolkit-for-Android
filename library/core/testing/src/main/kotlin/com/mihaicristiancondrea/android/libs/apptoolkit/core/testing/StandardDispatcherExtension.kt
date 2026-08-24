@@ -27,8 +27,15 @@ import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 
+/**
+ * JUnit 5 extension that installs a lazily scheduled [StandardTestDispatcher] as `Dispatchers.Main`.
+ *
+ * Register this extension when a test should explicitly advance queued coroutine work. The global
+ * main dispatcher is restored after each test to prevent leakage into the next test class.
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 class StandardDispatcherExtension : BeforeEachCallback, AfterEachCallback {
+    /** Dispatcher and scheduler controlled by the registering test. */
     val testDispatcher: TestDispatcher = StandardTestDispatcher()
 
     override fun beforeEach(context: ExtensionContext) {

@@ -42,13 +42,30 @@ entry helpers, state handling, analytics hooks, and shared components.
 
 ```mermaid
 flowchart TD
-    Screen[Feature composable] --> Event[UiEvent]
+    User[User interaction] --> Screen[Feature composable]
+    Screen --> Event[UiEvent]
     Event --> VM[ScreenViewModel]
-    VM --> State[UiStateScreen]
-    VM --> Action[ActionEvent]
+    VM -->|persistent render state| State[StateFlow of UiStateScreen]
+    VM -->|one-off effect| Action[ActionEvent flow]
     State --> Handler[ScreenStateHandler]
-    Handler --> Screen
+    Handler --> Loading[Loading / no-data / error / success]
+    Loading --> Screen
+    Action --> Host[Navigation, intent, or transient UI handler]
+    Theme[AppTheme CompositionLocals] --> Components[Reusable components and ad slots]
+    Components --> Screen
+    Nav[Navigation entry helpers] --> Screen
 ```
+
+## Architectural decisions
+
+- Screen state and one-off actions use separate streams so recomposition cannot repeat navigation
+  or transient effects.
+- `ScreenViewModel` owns unidirectional event-to-state processing; feature composables render data
+  and forward user intent rather than reaching repositories.
+- `ScreenStateHandler` centralizes loading/no-data/error/success rendering, while feature content
+  remains responsible for its successful state.
+- Global UI preferences arrive through the design-system root. Reusable components must not start
+  their own persistence collectors unless a documented adapter still requires it.
 
 ## Public contracts
 

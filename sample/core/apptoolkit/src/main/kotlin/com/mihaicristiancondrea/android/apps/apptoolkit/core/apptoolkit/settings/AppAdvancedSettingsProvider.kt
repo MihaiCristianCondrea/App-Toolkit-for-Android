@@ -21,6 +21,7 @@ import android.content.Context
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AdvancedSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.github.GithubConstants
 
+/** Supplies the sample repository's GitHub issue URL to advanced settings. */
 class AppAdvancedSettingsProvider(val context: Context) : AdvancedSettingsProvider {
     override val bugReportUrl: String
         get() = "${GithubConstants.GITHUB_BASE}AppToolkit${GithubConstants.GITHUB_ISSUES_SUFFIX}"

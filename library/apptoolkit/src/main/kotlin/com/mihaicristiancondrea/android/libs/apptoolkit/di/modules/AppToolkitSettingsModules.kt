@@ -53,8 +53,10 @@ import org.koin.dsl.module
 /**
  * Settings-related modules owned by the library.
  *
- * Host apps provide `SettingsProvider`, `AboutSettingsProvider`, and `AdvancedSettingsProvider`
- * implementations in their own module and can then load these reusable toolkit bindings.
+ * Host apps provide `SettingsProvider`, `AboutSettingsProvider`, `DisplaySettingsProvider`,
+ * `AdvancedSettingsProvider`, and `PrivacySettingsProvider` implementations in modules loaded with
+ * these reusable toolkit bindings. Some are resolved from composables rather than constructors, so
+ * constructor-only Koin verification cannot discover every requirement.
  */
 fun appToolkitSettingsModules(): List<Module> = listOf(
     settingsRootModule(),

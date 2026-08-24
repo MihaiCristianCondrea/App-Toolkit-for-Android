@@ -39,18 +39,39 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
 
 ```mermaid
 flowchart TD
-    Screen[ToolkitTilesScreen] --> VM[ToolkitTilesViewModel]
+    Screen[ToolkitTilesScreen] -->|catalog events| VM[ToolkitTilesViewModel]
     VM --> Tiles[ToolkitTilesRepository]
-    Tiles --> Catalogue[Source-neutral tile catalogue]
+    Tiles --> Catalogue[Source-neutral catalog]
     Tiles --> Preferences[ToolkitTilesPreferencesDataSource]
-    Preferences --> Store[Shared Preferences DataStore]
+    Preferences --> Store[Preferences DataStore]
     Tiles --> QS[QuickSettingsTilesLocalDataSource]
-    ToolVMs[Dedicated tool ViewModels] --> Repositories[Tool repositories]
-    Repositories --> Platform[Feature-local Android data sources]
-    Screen --> ToolVMs
-    Sos[SOS repository] --> Morse[Morse repository]
-    Morse --> Torch[Torch repository]
+    Tiles --> TorchCapability[TorchRepository capability Flow]
+    TorchCapability --> Filter{Flashlight available?}
+    Catalogue --> Filter
+    Filter -->|no| Remove[Remove SOS / Morse / dimmer]
+    Filter -->|yes| Published[Published catalog state]
+    Remove --> Published
+    Published --> VM
+    VM --> UiMap[Resource and artwork UI mappers]
+    UiMap --> Screen
+    Screen --> ToolVMs[Dedicated stateful tool ViewModels]
+    ToolVMs --> Repositories[Sensor / breathing / caffeine / system / torch repositories]
+    Repositories --> Sources[Feature-local Android data sources]
+    Sos[SosRepository] --> Morse[MorseRepository single playback job]
+    Morse --> Torch[TorchRepository shared state]
+    Services[Quick Settings and caffeine services] --> Repositories
 ```
+
+## Architectural decisions
+
+- Repositories are the only entry points to platform-backed sources; ViewModels and framework
+  services do not call sensor, torch, haptics, or settings sources directly.
+- The catalog is source-neutral. Resource IDs, icons, descriptions, and ad styling are mapped in the
+  UI layer after availability filtering.
+- Torch state is shared because in-app tools and system-created services can operate concurrently.
+  One Morse playback job serializes patterned output, and SOS delegates to it.
+- Only stateful/platform-backed tools receive dedicated ViewModels; stateless decision tools remain
+  local UI behavior rather than creating pass-through layers.
 
 ## Public contracts
 

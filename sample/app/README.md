@@ -9,7 +9,8 @@ libraries with the host's own feature modules.
 
 - The `AppToolkit` application class, the manifest, `MainActivity`, and the Koin bootstrap.
 - `appNavigationEntryBuilders`, the one declaration that names every host feature.
-- Host implementations of the startup and onboarding provider contracts.
+- The sample onboarding provider; startup and settings provider adapters live in
+  [`:sample:core:apptoolkit`](../core/apptoolkit/README.md).
 - Application identity resources: launcher mipmaps and host-specific `xml/` configuration
   (shortcuts and widget provider info), including the shortcut target package generated from the
   released application ID.
@@ -32,7 +33,8 @@ libraries with the host's own feature modules.
 
 ## Depends on
 
-- Every `:sample:core:*`, `:sample:feature:*` and `:sample:widget` module.
+- Every `:sample:core:*`, `:sample:feature:*` and `:sample:widget` module, including
+  `:sample:core:apptoolkit` for the host's toolkit adapter.
 - [`:library:apptoolkit`](../../library/apptoolkit/README.md) for shared DI and navigation
   composition,
   plus the toolkit feature and integration modules it configures.
@@ -45,20 +47,41 @@ Nothing. This is the application entry point.
 
 ```mermaid
 flowchart TD
-    App[AppToolkit Application] --> Koin[Koin bootstrap]
-    Koin --> Facade[AppToolkit DI module lists]
-    Koin --> HostModules[Host DI modules]
-    Activity[MainActivity] --> Builders[appNavigationEntryBuilders]
-    Builders --> Features[":sample:feature:* entry builders"]
-    Builders --> ToolkitEntries[Toolkit destination builders]
-    Activity --> Shell["MainScreen (:sample:feature:home)"]
-    Shell --> Builders
+    Process[Android process] --> App[AppToolkit Application]
+    App --> Koin[initializeKoin]
+    Koin --> Adapter[":sample:core:apptoolkit host modules"]
+    Adapter --> Facade[AppToolkit module graph]
+    Koin --> HostModules[App-specific data and feature bindings]
+    App --> Lifecycle[Process/activity lifecycle]
+    Lifecycle --> Ads[Ads initialization and app-open display]
+    Lifecycle --> Billing[Past-purchase processing]
+    Launcher[MainActivity] --> FirstRun{Onboarding complete?}
+    FirstRun -->|no| Startup[Toolkit StartupActivity]
+    FirstRun -->|yes| Route[Persisted StableNavKey]
+    Route --> Theme[AppTheme]
+    Theme --> Shell["MainScreen (:sample:feature:home)"]
+    Launcher --> Builders[appNavigationEntryBuilders]
+    Builders --> HostEntries[":sample:feature:* entries"]
+    Builders --> ToolkitEntries[Toolkit entries]
+    Shell --> HostEntries
+    Shell --> ToolkitEntries
 ```
+
+## Architectural decisions
+
+- The application module is the only place that knows the complete runtime graph, final manifest,
+  and destination set; feature modules remain unaware of their siblings.
+- Host-to-toolkit provider adaptation is isolated in `:sample:core:apptoolkit`, while this module
+  retains final Koin startup and app-only configuration.
+- `MainActivity` resolves first-run state and the persisted startup key before composing the shell,
+  preventing a default destination from flashing before the real route is known.
+- Process-lifetime ads, billing recovery, seasonal palette selection, and current-activity tracking
+  stay in the application class because their lifetime exceeds any screen ViewModel.
 
 ## Public contracts
 
-Not a library. Its integration surface is the set of host provider implementations and configuration
-values passed into the AppToolkit DI factories.
+Not a library. Its integration surface is the host configuration and app-specific modules passed
+through the adapter in `:sample:core:apptoolkit`, plus the final manifest/resource overrides.
 
 The host inherits common application attributes, backup/data-extraction rules, colors and themes
 from `:library:apptoolkit`. Android's manifest and resource merger gives this application higher
@@ -88,8 +111,8 @@ self-contained: adding one to another host means editing this manifest.
 
 `HostKoinGraphTest` verifies the dependency graph `initializeKoin` assembles, because a Koin
 definition that cannot be created surfaces as a fatal `Unable to start activity` at
-`MainActivity.onCreate` rather than at startup. The mechanics and the four host extension points it
-pins are documented in [`:library:apptoolkit`](../../library/apptoolkit/README.md).
+`MainActivity.onCreate` rather than at startup. The reflection limits and host provider boundary are
+documented in [`:library:apptoolkit`](../../library/apptoolkit/README.md).
 
 The list of modules in that test mirrors `initializeKoin` by hand. A module added to one and not the
 other leaves the check passing while the app breaks, so they have to be edited together.

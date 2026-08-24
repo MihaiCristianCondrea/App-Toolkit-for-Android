@@ -24,12 +24,20 @@ import java.time.ZonedDateTime
 import java.util.Locale
 import java.util.Properties
 
+/** Registers the project-scoped [VersioningExtension] as `versioning`. */
 class VersioningPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.extensions.create("versioning", VersioningExtension::class.java, target)
     }
 }
 
+/**
+ * Typed access to SDK and phone-version values stored in the root `release.properties` file.
+ *
+ * Missing values deliberately become `0` so callers receive the validation error produced by
+ * [phoneVersion] instead of a nullable configuration surface. SDK accessors are used during Gradle
+ * configuration; [phoneVersion] additionally validates ordering and Play version-code limits.
+ */
 open class VersioningExtension(project: Project) {
     private val releasePropertiesFile = project.rootProject.file("release.properties")
     private val properties = Properties().apply {
@@ -44,6 +52,7 @@ open class VersioningExtension(project: Project) {
     val targetSdk get() = getProperty("TARGET_SDK").toInt()
     val compileSdk get() = getProperty("COMPILE_SDK").toInt()
 
+    /** Calculates the phone artifact version using the Bucharest release month and upload counter. */
     fun phoneVersion(): VersionInfo {
         return calculateVersion(
             productFamily = getProperty("PHONE_PRODUCT_FAMILY").toInt(),
@@ -104,6 +113,7 @@ open class VersioningExtension(project: Project) {
     }
 }
 
+/** Validated Android SDK and application-version values applied to a build variant. */
 data class VersionInfo(
     val compileSdk: Int,
     val minSdk: Int,

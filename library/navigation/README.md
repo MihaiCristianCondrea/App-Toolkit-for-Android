@@ -41,11 +41,31 @@ and transition helpers shared by host and feature UI.
 ## Flow chart
 
 ```mermaid
-flowchart LR
-    Destination[NavigationDestination] --> BackStack[Back-stack actions]
-    BackStack --> Transition[Shared transitions]
-    Transition --> UI[Host or feature UI]
+flowchart TD
+    Host[Host composition root] --> Builders[Feature entry builders]
+    Builders --> Entries[Navigation 3 entries]
+    Keys[StableNavKey route values] --> Entries
+    Keys --> Type{Destination type}
+    Type -->|TopLevel| Top[navigateTopLevel trims nested entries]
+    Type -->|ActivityLike or Nested| Single[navigateSingleTop]
+    Top --> Stack[SnapshotStateList back stack]
+    Single --> Stack
+    Stack --> Scenes[Host scene / destination content]
+    Items[Bottom bar / rail / drawer models] --> Shell[Navigation shell composables]
+    Stack --> Shell
+    Transitions[Shared activity and bottom-nav transitions] --> Scenes
 ```
+
+## Architectural decisions
+
+- Route keys are typed, parcelable, and Compose-stable so host and library destinations share one
+  Navigation 3 vocabulary without string parsing.
+- Destination type is data on the route contract. Back-stack helpers validate top-level navigation
+  and suppress duplicate single-top entries.
+- This module owns shell rendering and mutation primitives but not destination registration; only
+  the host/facade composition roots know the complete feature set.
+- The standard drawer repository contract is host-facing, while its default localized item list
+  remains in the About feature that owns those labels and actions.
 
 ## Public contracts
 

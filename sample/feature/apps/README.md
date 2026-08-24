@@ -39,17 +39,38 @@ The developer's app catalogue: listing, details, favorites, and install state.
 
 ```mermaid
 flowchart TD
-    Screen[AppsListScreen] --> VM[AppsListViewModel]
+    Screen[AppsListScreen] -->|events| VM[AppsListViewModel]
     VM --> Developer[DeveloperAppsRepository]
-    VM --> Installed[InstalledAppsRepository]
-    VM --> Favorites[FavoritesRepository]
     Developer --> Remote[DeveloperAppsRemoteDataSource]
     Remote --> Api[Apps metadata API]
-    Developer --> CatalogueCache[DeveloperAppsLocalDataSource]
-    Installed --> Packages[InstalledAppsLocalDataSource]
+    Api -->|successful compact catalog| Cache[Atomic JSON snapshot]
+    Api -->|failure| Fallback{Snapshot available?}
+    Cache --> Fallback
+    Fallback -->|yes| Stale[Stale catalog plus network error]
+    Fallback -->|no| Error[Error-only DataState]
+    Developer --> VM
+    VM --> Installed[InstalledAppsRepository]
+    Installed --> Packages[PackageManager local source]
+    VM --> Favorites[FavoritesRepository]
     Favorites --> Store[DatastoreInterface]
+    VM --> Items[UI models and ad interleaving]
+    Items --> Screen
+    Screen --> Actions[Launch app / store / details / favorite]
+    Actions --> VM
     Receiver[FavoritesChangedReceiver] --> Favorites
+    Receiver --> Widget[Request widget update]
 ```
+
+## Architectural decisions
+
+- The remote catalog is authoritative; the atomic JSON snapshot exists for offline/stale fallback
+  and is replaced only after a successful decode.
+- Corrupt snapshots are deleted and treated as misses so malformed cached data cannot create a
+  permanent failure loop.
+- Installed state and favorites have separate repositories because PackageManager and preferences
+  are independent sources with different lifetimes.
+- Ad interleaving and action/chip models are presentation transformations and remain outside the
+  source-neutral repositories.
 
 ## Public contracts
 

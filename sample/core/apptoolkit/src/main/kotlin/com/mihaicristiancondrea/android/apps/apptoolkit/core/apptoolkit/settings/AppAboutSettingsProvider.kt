@@ -22,6 +22,12 @@ import android.os.Build
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
 
+/**
+ * Formats sample build/device metadata for the reusable About screen.
+ *
+ * Build type comes from [hostBuildConfig], not this library module's `BuildConfig`, so the label
+ * describes the final application variant.
+ */
 class AppAboutSettingsProvider(
     val context: Context,
     private val hostBuildConfig: AppToolkitHostBuildConfig,

@@ -37,13 +37,33 @@ consent, and completion persistence.
 
 ```mermaid
 flowchart TD
-    Startup[StartupViewModel] --> Completed{Onboarding complete?}
-    Completed -->|No| Screen[OnboardingScreen]
+    Launch[StartupActivity] --> Startup[StartupViewModel]
+    Startup --> Completion[OnboardingRepository]
+    Completion --> Store[Onboarding Preferences DataStore]
+    Store --> Completed{First-run flow complete?}
+    Completed -->|no| Screen[OnboardingScreen]
+    Completed -->|yes| Provider[StartupProvider next destination]
+    Screen --> Pages[Provider-defined ordered pages]
+    Pages --> Theme[OnboardingThemeViewModel]
+    Theme --> ThemeRepo[ThemePreferencesRepository]
+    Pages --> Diagnostics[Diagnostics choice]
+    Diagnostics --> Consent[ConsentRepository]
     Screen --> VM[OnboardingViewModel]
-    VM --> Consent[ConsentRepository]
-    VM --> Store[Onboarding repository / DataStore]
-    Store -->|Complete| Host[Host start destination]
+    VM -->|final confirmation| Completion
+    Completion -->|persist complete| Store
+    VM -->|navigate once| Provider
 ```
+
+## Architectural decisions
+
+- Startup routing and onboarding presentation are separate state holders: startup decides whether
+  the flow is required, while onboarding owns page progress and completion.
+- The host supplies page/routing extension points, but toolkit state holders persist confirmed
+  choices. Presentation callbacks do not write DataStore directly.
+- Theme and consent pages use their owning repositories/ViewModels so onboarding does not become a
+  second implementation of settings behavior.
+- Completion is written only after the final confirmed action; navigation is emitted separately as
+  a one-off effect.
 
 ## Public contracts
 

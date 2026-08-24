@@ -32,13 +32,33 @@ Collects device/report data and submits structured issues to a configured GitHub
 
 ```mermaid
 flowchart TD
-    Screen[IssueReporterScreen] --> VM[IssueReporterViewModel]
+    Screen[IssueReporterScreen] -->|initialize| VM[IssueReporterViewModel]
+    VM -->|captureDeviceInfo| Repo[IssueReporterRepository]
+    Repo --> Device[DeviceInfoLocalDataSource]
+    Device --> Model[Immutable DeviceInfo]
+    Model --> Plain[Plain-text UI mapper]
+    Plain --> Screen
+    Screen -->|submit report| VM
     VM --> UseCase[SendIssueReportUseCase]
-    VM --> Repo2[IssueReporterRepository]
-    Repo2 --> Device[DeviceInfoProvider]
-    UseCase --> Repo[IssueReporterRepository]
-    Repo --> Remote[GitHub remote source]
+    UseCase --> Repo
+    Repo --> Target[Host-provided GitHub target and token]
+    Repo --> Remote[GitHub remote data source]
+    Remote --> DTO[GitHub issue request DTO]
+    DTO --> Api[GitHub issues API]
+    Api --> Result[IssueReportResult / normalized error]
+    Result --> VM
 ```
+
+## Architectural decisions
+
+- Device capture is a local data-source responsibility. The domain model is a plain immutable value
+  and does not read Android globals or a `Context` during construction.
+- The repository is the only data-layer entry point used by the ViewModel; the source-level
+  `DeviceInfoProvider` remains an internal replacement seam.
+- Plain-text rendering is an explicit mapper because a data class's generated `toString()` is not a
+  user-facing or GitHub-report contract.
+- Credentials are supplied by the host and used only at the remote boundary; logs and error models
+  must never include the token.
 
 ## Public contracts
 

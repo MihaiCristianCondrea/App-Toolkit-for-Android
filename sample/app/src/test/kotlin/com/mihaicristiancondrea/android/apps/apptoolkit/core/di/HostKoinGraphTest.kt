@@ -78,14 +78,13 @@ class HostKoinGraphTest {
     private val builtByFactoryFunction = listOf(HttpClientEngine::class, ColorScheme::class)
 
     /**
-     * What the toolkit requires a host to bind.
+     * Host/factory types accepted by constructor-based graph verification.
      *
-     * These are extension points, not gaps: the toolkit ships settings screens whose content each
-     * host supplies. `:sample:app` binds all four in `hostSettingsProvidersModule`.
+     * The sample adapter already binds its settings providers, but keeping the constructor-visible
+     * extension types explicit documents what a generic toolkit graph may receive externally.
      *
-     * Adding a type here means the toolkit gained a new integration requirement, and every existing
-     * host has to bind it or crash at first resolution. That is worth being explicit about, which is
-     * why this list exists rather than the toolkit check simply being skipped.
+     * `verify` cannot discover `koinInject()` calls inside composables, so display and privacy
+     * providers are instead resolved by `AppToolkitProvidersModuleTest`.
      */
     private val hostExtensionPoints = listOf(
         SettingsProvider::class,
@@ -123,8 +122,8 @@ class HostKoinGraphTest {
      * toolkit is covered by both tests without either list being edited.
      */
     /**
-     * The toolkit's graph as the app takes it: library modules plus `:sample:core:apptoolkit`'s
-     * answers to the extension points. Production calls the same function.
+     * The toolkit graph as the sample takes it: library modules plus
+     * `:sample:core:apptoolkit`'s provider implementations. Production calls the same function.
      */
     private fun toolkitModules(): List<Module> =
         appToolkitHostModules(hostBuildConfig = hostBuildConfig)
@@ -140,10 +139,9 @@ class HostKoinGraphTest {
     }
 
     @Test
-    fun `the toolkit only asks a host for its documented extension points`() {
-        // The toolkit ships to other hosts, so anything it needs beyond `hostExtensionPoints` is a
-        // dependency it silently relies on this sample to provide — which would fail in any other
-        // host, at first resolution, as the same `Unable to start activity` crash.
+    fun `sample adapter satisfies constructor-visible toolkit dependencies`() {
+        // This proves the sample adapter can satisfy constructor-visible dependencies. It is not a
+        // generic-host contract check: Compose-time lookups require direct provider resolution tests.
         module { includes(toolkitModules()) }
             .verify(extraTypes = platformTypes + builtByFactoryFunction + hostExtensionPoints)
     }

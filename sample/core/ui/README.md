@@ -32,11 +32,23 @@ Shared host artwork used by the sample application and features.
 ## Flow chart
 
 ```mermaid
-flowchart LR
-    App[":sample:app"] --> Artwork[Shared artwork]
-    Apps[":sample:feature:apps"] --> Artwork[Shared artwork]
-    Tiles[":sample:feature:tiles"] --> Artwork
+flowchart TD
+    Sources[Shared vector / bitmap / shape resources] --> Resource[":sample:core:ui R class"]
+    Resource --> App[":sample:app branding surfaces"]
+    Resource --> Apps[":sample:feature:apps visuals"]
+    Resource --> Tiles[":sample:feature:tiles visuals"]
+    ThemeAttrs[Material theme attributes] --> Shapes[Theme-aware shared drawables]
+    Shapes --> Resource
 ```
+
+## Architectural decisions
+
+- This is a resource-sharing module, not a Kotlin UI foundation; reusable composables stay in
+  `:library:core:ui` or their owning feature.
+- Artwork is centralized only when multiple sample modules consume it. Feature-only assets and all
+  user-facing text live with the feature.
+- Application identity, launcher icons, shortcuts, and widget provider XML remain in `:sample:app`
+  because they participate in the final package/manifest contract.
 
 ## Public contracts
 

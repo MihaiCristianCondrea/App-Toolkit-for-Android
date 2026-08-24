@@ -34,11 +34,30 @@ theme-selection visuals.
 
 ```mermaid
 flowchart TD
-    Store[Persisted theme preferences] --> AppTheme[AppTheme]
-    Palette[ThemePaletteProvider] --> AppTheme
-    Dynamic[Wallpaper colors] --> AppTheme
-    AppTheme --> Material[Material 3 color scheme and typography]
+    Store[ThemePreferencesRepository] --> State[ThemePreferencesState Flow]
+    State --> Root[AppTheme]
+    Host[Host default ColorPalette] --> Palette[Palette selection]
+    Seasonal[SeasonalPaletteFilter] --> Palette
+    Wallpaper[Android wallpaper colors] --> Dynamic{Dynamic colors enabled and supported?}
+    Dynamic -->|yes| Scheme[Dynamic Material color scheme]
+    Dynamic -->|no| Palette
+    Palette --> Scheme
+    Root --> Scheme
+    Root --> Typography[Toolkit typography]
+    Root --> Locals[Global bounce / labels / ad-slot CompositionLocals]
+    Scheme --> Content[Themed Compose content]
+    Typography --> Content
+    Locals --> Content
 ```
+
+## Architectural decisions
+
+- `AppTheme` is the single Compose collection boundary for global appearance preferences, avoiding
+  independent DataStore collectors in every reusable component.
+- Dynamic wallpaper colors are presentation inputs, not persisted palette data; unsupported or
+  disabled devices fall back to the selected static/seasonal palette.
+- Bounce behavior is owned here through a CompositionLocal and modifier so `core:ui` can consume it
+  without creating a design-system-to-UI dependency cycle.
 
 ## Public contracts
 

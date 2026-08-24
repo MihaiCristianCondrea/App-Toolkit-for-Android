@@ -44,9 +44,9 @@ import org.koin.dsl.module
  * the toolkit needs a module like this one, not a scattering of provider classes and bindings.
  *
  * The ordering matters and is the reason it lives here rather than being assembled at the call
- * site: the toolkit's own modules go first, and the host bindings follow so they override the
- * toolkit's defaults. Getting that backwards silently gives you the library's placeholder settings
- * screen instead of the app's.
+ * site: the toolkit's own modules go first, and host bindings follow. Koin's later definitions win
+ * when the sample intentionally replaces a toolkit binding, while contracts with no toolkit
+ * default are satisfied by this module.
  */
 fun appToolkitHostModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> = buildList {
     addAll(

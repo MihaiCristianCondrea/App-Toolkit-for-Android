@@ -28,14 +28,28 @@ modules.
 
 ```mermaid
 flowchart TD
-    Parent[":library:feature"] --> About[about]
-    Parent --> Help[help]
-    Parent --> Reporter[issuereporter]
-    Parent --> Onboarding[onboarding]
-    Parent --> Permissions[permissions]
-    Parent --> Settings[settings]
-    Parent --> Support[support]
+    Parent[":library:feature implicit parent"] --> About["about: app information and changelog"]
+    Parent --> Help["help: FAQ and review action"]
+    Parent --> Reporter["issuereporter: device capture and GitHub submission"]
+    Parent --> Onboarding["onboarding: startup and first-run flow"]
+    Parent --> Permissions["permissions: inspection and settings actions"]
+    Parent --> Settings["settings: toolkit settings surfaces"]
+    Parent --> Support["support: donation UI"]
+    Settings --> About
+    Settings --> Help
+    Settings --> Reporter
+    Onboarding --> Settings
+    Permissions --> Settings
+    About --> Support
 ```
+
+## Architectural decisions
+
+- Each child owns its current UI/data/domain slice; the parent contributes no runtime code.
+- Cross-feature dependencies shown above are existing composition edges, not a rule that features
+  may depend freely on siblings. New shared contracts should stay with their true owner.
+- Destination aggregation remains in `:library:apptoolkit` so this parent never becomes a service
+  locator or umbrella dependency.
 
 ## Public contracts
 
@@ -47,4 +61,5 @@ There is no implementation; this is an implicit Gradle hierarchy node.
 
 ## Current risks
 
-No significant module-specific risks are currently identified.
+Several feature-to-feature edges exist for settings composition. Changes to a shared route or
+provider can therefore ripple beyond the module that renders the screen.

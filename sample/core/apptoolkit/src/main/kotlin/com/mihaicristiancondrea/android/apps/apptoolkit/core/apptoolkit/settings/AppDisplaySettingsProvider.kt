@@ -25,6 +25,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.DisplaySettingsProvider
 
+/**
+ * Supplies the sample's theme route and startup-destination dialog to toolkit display settings.
+ *
+ * The dialog reports only a confirmed route; persistence remains owned by the toolkit state holder.
+ */
 class AppDisplaySettingsProvider(
     private val context: Context,
 ) : DisplaySettingsProvider {

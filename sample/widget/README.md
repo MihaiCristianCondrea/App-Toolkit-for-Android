@@ -29,13 +29,33 @@ The home-screen app-icons widget.
 
 ```mermaid
 flowchart TD
-    Receiver[AppIconsWidgetReceiver] --> Widget[AppIconsWidget]
-    Widget --> Repo[DeveloperAppsRepository]
-    Repo --> Api[Apps metadata API]
-    Repo --> Cache[Persistent catalogue snapshot]
-    Widget --> Launch[Glance activity action]
-    Widget --> Retry[RefreshWidgetAction]
+    System[AppWidgetManager / Glance] --> Receiver[AppIconsWidgetReceiver]
+    Receiver --> Widget[AppIconsWidget]
+    Widget -->|Koin GlobalContext lookup| Repo[DeveloperAppsRepository]
+    Repo --> Remote[Apps metadata API]
+    Repo --> Cache[Persistent catalog snapshot]
+    Remote --> State{DataState}
+    Cache --> State
+    State -->|loading| Loading[Loading content]
+    State -->|success or stale data| Grid[Bounded app-icon grid]
+    State -->|empty| Empty[Empty content]
+    State -->|error without data| Error[Error and retry content]
+    Grid --> Launch[Glance activity / store action]
+    Error --> Retry[RefreshWidgetAction]
+    Retry --> Repo
+    Favorites[FavoritesChangedReceiver] --> Receiver
 ```
+
+## Architectural decisions
+
+- The widget consumes the same repository and persistent fallback as the apps screen, preventing a
+  second catalog source of truth.
+- Framework construction prevents constructor injection, so the repository lookup is isolated at
+  the widget boundary and protected by host graph tests.
+- Loading, empty, stale-success, and error states render independently; retry is a Glance action so
+  it can run outside an activity.
+- Icon work is bounded to the visible widget capacity to avoid unbounded network/bitmap work during
+  an update.
 
 ## Public contracts
 

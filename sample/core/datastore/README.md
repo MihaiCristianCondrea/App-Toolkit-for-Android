@@ -30,11 +30,27 @@ stores.
 ## Flow chart
 
 ```mermaid
-flowchart LR
-    Repos[Host repositories] --> Interface[DatastoreInterface]
-    Interface --> Store[DataStore preferences]
-    Interface --> Common[CommonDataStore]
+flowchart TD
+    Repos[Host repositories] --> Contract[DatastoreInterface]
+    App[Application startup] --> Contract
+    Contract --> Adapter[Sample DataStore adapter]
+    Adapter --> Common[Toolkit CommonDataStore]
+    Common --> Store["shared settings Preferences DataStore"]
+    Store -->|startup / unlock / favorites / palette Flow| Adapter
+    Adapter -->|typed values and StableNavKey mapping| Contract
+    Contract --> Repos
+    Repos -->|suspend mutations| Contract
+    Contract -->|delegate edit| Common
 ```
+
+## Architectural decisions
+
+- The sample reuses the toolkit's single preferences file and exposes only host-required values
+  through `DatastoreInterface`; feature repositories do not depend on `CommonDataStore` directly.
+- Persisted routes remain strings at the storage boundary and are mapped to `StableNavKey` values by
+  a caller-supplied function, keeping host route knowledge out of the toolkit DataStore.
+- The contract groups sample-wide preference access because there is one implementation and one
+  backing store; feature repositories still own the meaning of each value.
 
 ## Public contracts
 

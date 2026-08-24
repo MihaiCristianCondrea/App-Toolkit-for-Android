@@ -27,6 +27,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.const
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.PrivacySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
 
+/** Maps toolkit privacy actions to the sample's permissions, ads, and diagnostics activities. */
 class AppPrivacySettingsProvider(
     private val context: Context,
 ) : PrivacySettingsProvider {

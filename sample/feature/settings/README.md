@@ -2,48 +2,58 @@
 
 ## Purpose
 
-The host's settings providers: what the sample contributes to the toolkit's settings screens.
+The sample-only About content that connects the toolkit About screen to the hidden components
+showcase unlock flow.
 
 ## Owns
 
-- `AppSettingsProvider`, `AppAboutSettingsProvider`, `AppDisplaySettingsProvider`,
-  `AppAdvancedSettingsProvider`, `AppPrivacySettingsProvider`.
 - `AppAboutSettingsContent`, including the tap gesture that unlocks the components showcase.
-- Host settings constants.
 
 ## Does not own
 
 - The settings screens themselves, owned by [
   `:library:feature:settings`](../../../library/feature/settings/README.md).
-  This module only fills in the provider contracts that module exposes.
+- Host settings/startup provider implementations and their localized resources, owned by
+  [`:sample:core:apptoolkit`](../../core/apptoolkit/README.md).
 - The unlock flag, owned by [`:sample:feature:components`](../components/README.md).
 
 ## Depends on
 
 - `:sample:feature:components` for `ComponentsUnlockViewModel`, driven by the About tap gesture.
-- `:sample:core:datastore`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the provider contracts.
 
 ## Used by
 
-- `:sample:app`, which binds the providers into Koin.
+- `:sample:app`, whose general-settings Koin module supplies this content for the About content key.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Toolkit[Toolkit settings screen] --> Providers[Host settings providers]
-    Providers --> Content[AppAboutSettingsContent]
-    Content --> Unlock[ComponentsUnlockViewModel]
+    AppModule[":sample:app GeneralSettingsModule"] --> Content[AppAboutSettingsContent]
+    Content --> Toolkit[Toolkit AboutScreen]
+    Toolkit -->|version tap count| Content
+    Content --> Event[ComponentsUnlockEvent.VersionTapped]
+    Event --> Unlock[ComponentsUnlockViewModel]
+    Unlock --> Repo[ComponentsShowcaseRepository]
+    Repo --> Store[Persisted unlock flag]
 ```
+
+## Architectural decisions
+
+- This feature is intentionally a thin UI bridge: the provider belongs to the reusable host adapter,
+  while unlock state belongs to the components feature.
+- The About composable receives the tap callback instead of depending on sample code, preserving the
+  toolkit feature's reusability.
+- No repository or data source is introduced here because the module owns no state or business rule.
 
 ## Public contracts
 
-- The five provider implementations and `AppAboutSettingsContent`.
+- `AppAboutSettingsContent`.
 
 ## Internal implementations
 
-- Version-string formatting and the debug/release label.
+- Callback wiring between the toolkit About screen and the components unlock ViewModel.
 
 ## Current risks
 

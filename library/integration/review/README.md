@@ -30,13 +30,35 @@ Encapsulates Google Play in-app review eligibility, prompting, and persisted req
 ## Flow chart
 
 ```mermaid
-flowchart LR
-    Feature[Feature event] --> UseCase[Review use case]
-    UseCase --> Repo[ReviewRepository]
-    Repo --> Store[Prompt history]
-    Repo --> Play[Play ReviewManager]
-    Play --> Outcome[ReviewOutcome]
+flowchart TD
+    Feature[Feature event] --> Choice{Forced request?}
+    Choice -->|no| Normal[RequestInAppReviewUseCase]
+    Choice -->|yes| Forced[ForceInAppReviewUseCase]
+    Normal --> Repo[ReviewRepository]
+    Forced --> Repo
+    Repo --> Store[Review preference source]
+    Store --> Eligible{Normal session / prompt eligibility met?}
+    Normal --> Eligible
+    Eligible -->|no| Skipped[ReviewOutcome.NotEligible]
+    Eligible -->|yes| Manager[Play ReviewManager]
+    Forced -->|availability check bypasses throttling| Manager
+    Host[ReviewHost activity boundary] --> Manager
+    Manager --> Outcome[ReviewOutcome]
+    Outcome -->|normal successful launch records prompted flag| Store
+    Normal -->|after every invocation| Increment[Increment session count]
+    Increment --> Store
+    Outcome --> Feature
+    Skipped --> Feature
 ```
+
+## Architectural decisions
+
+- The normal use case owns the three-session/previous-prompt eligibility rule; the repository owns
+  prompt-history persistence and Play Review calls, so every caller observes the same stored facts.
+- Forced and normal use cases express different product intent while sharing one SDK/repository
+  implementation.
+- Activity access is represented by `ReviewHost`; the repository does not retain a feature screen
+  or assume a global activity.
 
 ## Public contracts
 

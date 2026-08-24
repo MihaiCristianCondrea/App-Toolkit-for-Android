@@ -43,14 +43,33 @@ and exposes host provider extension points.
 
 ```mermaid
 flowchart TD
-    Provider[Host SettingsProvider] --> Root[SettingsScreen]
-    Root --> General[General settings]
-    Root --> Advanced[Advanced/cache settings]
-    Root --> Diagnostics[Usage and diagnostics]
-    General --> Repos[Feature repositories / preference state holders]
+    Host[Host application] --> Providers[Settings provider implementations]
+    Providers --> Root[SettingsScreen categories]
+    Root --> General[GeneralSettingsActivity content key]
+    General --> Display[DisplaySettingsViewModel]
+    General --> Theme[ThemeSettingsViewModel]
+    General --> Advanced[Advanced settings repository]
+    General --> Diagnostics[UsageAndDiagnostics repository]
+    Display --> DisplayRepo[DisplayPreferencesRepository]
+    Theme --> ThemeRepo[ThemePreferencesRepository]
+    DisplayRepo --> Store[Preferences DataStore]
+    ThemeRepo --> Store
+    Advanced --> Cache[Android cache operations]
+    Diagnostics --> Store
     Diagnostics --> Consent[ConsentRepository]
-    Repos --> Store[CommonDataStore / Android cache]
+    Root --> Related[About / help / issue reporter destinations]
 ```
+
+## Architectural decisions
+
+- Host provider contracts describe categories and callbacks; toolkit ViewModels remain the owners
+  of observable state and persistence.
+- Display and theme use dedicated state holders because they expose live preference state to more
+  than one presentation surface, including onboarding.
+- Content keys select a known toolkit surface instead of allowing providers to reach into internal
+  composables.
+- Cache work and consent application stay behind their repositories; settings UI coordinates them
+  but does not become a platform or SDK data source.
 
 ## Public contracts
 

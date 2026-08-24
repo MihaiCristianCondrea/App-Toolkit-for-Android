@@ -34,12 +34,35 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 
 ```mermaid
 flowchart TD
-    Screen[AdsSettingsScreen] --> VM[AdsSettingsViewModel]
+    Settings[AdsSettingsScreen] --> VM[AdsSettingsViewModel]
     VM --> Repo[AdsSettingsRepository]
-    Repo --> Store[CommonDataStore]
-    Repo --> Consent[Consent state]
-    Consent --> AdsSDK[Google Mobile Ads]
+    Repo -->|persist enablement| Store[CommonDataStore adsEnabledFlow]
+    Repo -->|apply privacy choice| Consent[ConsentRepository]
+    Store --> Manager[AdsCoreManager]
+    Manifest[Host manifest AdMob application ID] --> Id[AdMobAppIdProvider]
+    Id --> Manager
+    Manager --> Gate{Enabled and valid ID?}
+    Gate -->|no| Disabled[SDK remains not ready]
+    Gate -->|yes, once per process| Initializer[AdsSdkInitializer]
+    Initializer --> SDK[Google Mobile Ads]
+    SDK --> Ready[AdsSdkState.isReady]
+    Store --> Slot[Compose ad slot]
+    Ready --> Slot
+    Slot -->|enabled and ready| Request[Banner / native / app-open request]
+    Request --> SDK
+    Request -->|failure| Empty[Empty non-fatal slot]
 ```
+
+## Architectural decisions
+
+- Persisted ads enablement is the single source of truth for settings, initialization, and UI
+  requests. No consumer chooses a local default.
+- SDK initialization is idempotent, mutex-protected, and conditional on a valid host-manifest app
+  ID; the toolkit never supplies a fallback publisher ID.
+- Readiness is explicit state because enablement and asynchronous SDK initialization are different
+  facts. Ad slots wait and retry when readiness changes.
+- Ad rendering fails closed: SDK exceptions or unavailable consent produce an empty slot, never a
+  process-fatal composition error.
 
 ## Public contracts
 

@@ -38,17 +38,34 @@ No internal Gradle modules. This is the bottom shared runtime dependency for mos
 - `:library:integration:ads`, `:library:integration:billing`, `:library:integration:consent`,
   `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update`.
 
-`:library:navigation` and the empty `:library:core` project do not depend on this module.
+`:library:navigation` also depends on this module for shared sizing constants. The implicit
+`:library:core` parent has no dependencies.
 
 ## Flow chart
 
 ```mermaid
 flowchart TD
-    Host[Host configuration and platform providers] --> Contracts[Common contracts]
-    Contracts --> Features[Feature and integration modules]
-    Dispatchers[DispatcherProvider] --> Features
-    Features --> Models[Shared value models]
+    Host[Host application] --> Config[AppToolkitHostBuildConfig]
+    Android[Android platform] --> Helpers[App / permission / text helpers]
+    Config --> Contracts[SDK-neutral contracts and qualifiers]
+    Helpers --> Contracts
+    Dispatchers[DispatcherProvider] --> Consumers[Core, feature, integration, and navigation modules]
+    Contracts --> Consumers
+    Models[Theme / analytics / billing values] --> Consumers
+    Consumers --> Implementations[Datastore, Firebase, Billing, UI implementations]
+    Implementations -. implement .-> Contracts
 ```
+
+## Architectural decisions
+
+- `common` is the lowest shared production boundary, so it defines narrow SDK-neutral contracts
+  while concrete Firebase, Billing, persistence, and UI implementations live above it.
+- Android helpers remain behind small interfaces when tests or host substitution need a boundary;
+  pure constants and extensions stay concrete.
+- Shared models are added only when two layers genuinely exchange the same value. Persistence and
+  presentation-specific representations remain in their owning modules.
+- The manifest AdMob ID is the only ads identity source; a library fallback would silently bind a
+  host to the wrong publisher account.
 
 ## Public contracts
 

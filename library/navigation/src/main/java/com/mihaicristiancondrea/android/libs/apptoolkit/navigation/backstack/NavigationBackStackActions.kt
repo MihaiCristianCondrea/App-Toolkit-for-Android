@@ -21,6 +21,14 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDestination
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.isTopLevel
 
+/**
+ * Selects [destination] as the current top-level entry.
+ *
+ * Nested entries above the current root are removed first. A different top-level destination is
+ * then appended, preserving the previous root below it; selecting the current root is a no-op.
+ *
+ * @throws IllegalStateException when [destination] is not marked as top-level.
+ */
 fun <T : NavigationDestination> SnapshotStateList<T>.navigateTopLevel(
     destination: T,
 ) {
@@ -37,6 +45,7 @@ fun <T : NavigationDestination> SnapshotStateList<T>.navigateTopLevel(
     }
 }
 
+/** Pushes [destination] unless an equal key is already the last back-stack entry. */
 fun <T : NavigationDestination> SnapshotStateList<T>.navigateSingleTop(
     destination: T,
 ) {
@@ -45,6 +54,9 @@ fun <T : NavigationDestination> SnapshotStateList<T>.navigateSingleTop(
     }
 }
 
+/**
+ * Removes the current entry when possible, or invokes [onFinish] when the root is already visible.
+ */
 fun <T> SnapshotStateList<T>.navigateBack(onFinish: () -> Unit) {
     if (size > 1) {
         removeLastOrNull()

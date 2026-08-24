@@ -48,13 +48,34 @@ boundary.
 
 ```mermaid
 flowchart TD
-    Host[Host config and providers] --> Facade[":library:apptoolkit"]
-    Facade --> DI[Koin module lists]
-    Facade --> Nav[Navigation entry builders]
-    DI --> Features[Feature repositories and ViewModels]
-    DI --> Integrations[SDK integrations]
-    Nav --> Screens[Embedded toolkit screens]
+    Host[Host application] --> Config[AppToolkitHostBuildConfig]
+    Host --> Providers[Startup and settings provider factories]
+    Config --> Modules[appToolkitModules]
+    Providers --> Modules
+    Modules --> Foundation[appToolkitFoundationModules]
+    Modules --> Settings[appToolkitSettingsModules]
+    Modules --> Features[appToolkitFeatureModules]
+    Foundation --> Core[Core repositories and shared services]
+    Settings --> ProviderDefaults[Default host extension bindings]
+    Features --> FeatureVMs[Feature repositories and ViewModels]
+    Features --> Integrations[SDK-backed integrations]
+    Host --> NavBuilders[appToolkitNavigationEntryBuilders]
+    NavBuilders --> Entries[Navigation 3 entries]
+    Entries --> Screens[Embedded toolkit screens]
+    Manifest[Facade manifest and resources] -->|manifest/resource merge| Host
 ```
+
+## Architectural decisions
+
+- The facade is a composition boundary, not an implementation layer: constructors and SDK behavior
+  remain owned by their source modules even when their Koin bindings are assembled here.
+- The all-in-one `appToolkitModules` entry point includes every toolkit-owned binding. A host still
+  supplies the documented settings/startup provider contracts; granular factories remain public
+  for hosts intentionally building a partial graph.
+- All production child modules are `api` dependencies so a host can configure their public types;
+  this convenience intentionally trades away strict implementation hiding.
+- Manifest and resource values are overridable defaults. Product identity and policy remain owned
+  by the consuming application, which has higher merger priority.
 
 ## Public contracts
 
@@ -125,15 +146,18 @@ reports as `RuntimeException: Unable to start activity` caused by `InstanceCreat
 trace names only the outermost ViewModel and the innermost definition, never the dependency that was
 actually missing, and the app is dead before its first frame.
 
-`HostKoinGraphTest` in `:sample:app` now resolves the whole graph by reflection in a plain unit
-test,
-so a missing binding fails the build instead of a launch. It checks two things:
+`HostKoinGraphTest` in `:sample:app` now resolves the sample's whole graph by reflection in a plain
+unit test, so a missing constructor dependency fails the build instead of a launch. It checks two
+things:
 
 - every definition in the graph `initializeKoin` builds can be resolved;
-- the toolkit's own modules ask a host for nothing beyond four documented extension points
-  (`SettingsProvider`, `AboutSettingsProvider`, `AdvancedSettingsProvider`, and the default
-  `ColorPalette`). Adding a fifth is a new integration requirement that would crash every existing
-  host, so it has to be added to that list deliberately.
+- the sample adapter plus the accepted external/factory types can satisfy the toolkit graph.
+
+This is not a complete generic-host contract test. Reflection verification sees constructor
+dependencies, but it cannot discover `koinInject()` calls inside composables such as
+`DisplaySettingsProvider` and `PrivacySettingsProvider`. Those host requirements are documented and
+bound in [`:sample:core:apptoolkit`](../../sample/core/apptoolkit/README.md), whose own tests resolve
+the provider bindings directly.
 
 Two mechanics are easy to get wrong when editing that test. Koin resolves a definition against its
 own module plus that module's `includes`, so the graph must be wrapped as
@@ -145,9 +169,11 @@ constructor parameters listed as externally supplied rather than the check being
 
 ### Host integration: one entry point
 
-`appToolkitModules(hostBuildConfig, startupProviderFactory)` returns every module the toolkit
-needs, `:library:integration:billing` and `:library:integration:firebase` included. A host that
-loads it has a complete toolkit graph and does not track which Gradle module owns which binding.
+`appToolkitModules(hostBuildConfig, startupProviderFactory)` returns every module the toolkit owns,
+`:library:integration:billing` and `:library:integration:firebase` included. A host does not track
+which Gradle module owns those bindings, but it must add implementations of the host provider
+contracts used by the settings/about surfaces. The sample wraps both steps in
+`appToolkitHostModules`.
 
 Before 3.0.0-pre2 a host assembled the graph from three module-list factories plus the loose
 `firebaseModule` and `billingModule` values. Missing one produced no build error — only a

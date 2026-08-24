@@ -27,8 +27,15 @@ import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 
+/**
+ * JUnit 5 extension that installs an eager [UnconfinedTestDispatcher] as `Dispatchers.Main`.
+ *
+ * Use this when immediate coroutine entry is part of the fixture; prefer
+ * [StandardDispatcherExtension] when ordering and virtual-time control are under test.
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 class UnconfinedDispatcherExtension : BeforeEachCallback, AfterEachCallback {
+    /** Eager test dispatcher installed for the duration of each test. */
     val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
 
     override fun beforeEach(context: ExtensionContext) {

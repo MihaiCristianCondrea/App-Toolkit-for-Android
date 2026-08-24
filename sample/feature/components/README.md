@@ -31,12 +31,27 @@ The hidden components showcase and the unlock gesture that reveals it.
 
 ```mermaid
 flowchart TD
-    About[About settings tap] --> VM[ComponentsUnlockViewModel]
-    VM --> Repo[ComponentsShowcaseRepository]
-    Repo --> Store[DatastoreInterface]
-    Store --> Drawer[Navigation drawer entry]
+    About[Version taps in About content] --> Event[ComponentsUnlockEvent]
+    Event --> VM[ComponentsUnlockViewModel]
+    VM --> Counter{Unlock threshold reached?}
+    Counter -->|no| State[Updated tap progress]
+    Counter -->|yes| Repo[ComponentsShowcaseRepository]
+    Repo -->|persist unlocked| Store[DatastoreInterface]
+    Store --> Home[NavigationConfigurationRepository]
+    Home --> Drawer[Conditional drawer entry]
     Drawer --> Activity[ComponentsActivity]
+    Activity --> Screen[ComponentsScreen]
+    Screen --> Sections[Button / FAB / filter / input / layout / preference showcases]
 ```
+
+## Architectural decisions
+
+- The About surface owns the gesture location, while this feature owns threshold state and the
+  persisted unlock mutation.
+- The home feature observes the stored flag and decides whether to render navigation; the components
+  feature does not reach into the drawer.
+- A concrete repository is sufficient because there is one DataStore-backed implementation and no
+  module boundary that requires substitution.
 
 ## Public contracts
 

@@ -24,12 +24,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di.
 import org.koin.core.module.Module
 
 /**
- * Every Koin definition the toolkit needs, in one list.
+ * Every toolkit-owned Koin definition, in one list.
  *
- * A host that loads this has a complete toolkit graph. It does not need to know that billing
- * lives in `:library:integration:billing` or that Firebase lives in
+ * A host that loads this receives the complete toolkit-owned graph. It does not need to know that
+ * billing lives in `:library:integration:billing` or that Firebase lives in
  * `:library:integration:firebase` — adding a module to the toolkit adds it here, not in every
- * host.
+ * host. Host-owned provider contracts are still supplied in modules loaded after this list; they
+ * include settings, about, display, advanced, and privacy providers used by reusable screens.
  *
  * Why this exists: the modules used to be handed out as four separate entry points plus two loose
  * `Module` values, and a host had to remember all six. Missing one produced no build error and no
@@ -55,8 +56,9 @@ import org.koin.core.module.Module
  * }
  * ```
  *
- * This is how a host supplies its own `SettingsProvider`, `PermissionsProvider`, custom settings
- * screens, or a different `FirebaseController` without the toolkit needing to know about it.
+ * This is how a host supplies `SettingsProvider`, `PrivacySettingsProvider`, other host provider
+ * contracts, custom settings content, or a different `FirebaseController` without the toolkit
+ * needing to know the implementation.
  *
  * @param hostBuildConfig Host build values the toolkit cannot read from its own BuildConfig.
  * @param startupProviderFactory Produces the host's startup screen provider.

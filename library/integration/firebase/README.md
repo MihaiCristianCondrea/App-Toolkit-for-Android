@@ -33,10 +33,24 @@ Firebase Analytics, Crashlytics, Performance, and Messaging materially define th
 ```mermaid
 flowchart TD
     Features[Features and LoggedScreenViewModel] --> Contract[FirebaseController]
-    Contract --> Impl[FirebaseControllerImpl]
-    Impl --> SDK[Firebase SDKs]
-    FCM[Firebase message] --> Service[FirebaseNotificationsService]
+    Consent[Diagnostics and consent state] --> Contract
+    Contract -->|Koin binding| Impl[FirebaseControllerImpl]
+    Impl --> Analytics[Firebase Analytics]
+    Impl --> Crash[Crashlytics breadcrumbs and non-fatals]
+    Impl --> Performance[Firebase Performance enablement]
+    FCM[Firebase Cloud Messaging] --> Service[FirebaseNotificationsService]
+    Service --> Notification[Android notification]
+    Manifest[Permissions and service declaration] --> Service
 ```
+
+## Architectural decisions
+
+- Features depend on the SDK-neutral `FirebaseController`; only this module imports concrete
+  Firebase products.
+- Consent updates are applied through the same controller as analytics/crash/performance calls so
+  enablement policy does not leak into every feature.
+- Messaging remains a framework-created service and is wired through the manifest rather than the
+  Koin-created controller lifecycle.
 
 ## Public contracts
 

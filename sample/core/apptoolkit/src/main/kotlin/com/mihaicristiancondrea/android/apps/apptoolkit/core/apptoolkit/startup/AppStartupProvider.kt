@@ -25,6 +25,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.Onboar
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.utils.interfaces.providers.StartupProvider
 import javax.inject.Inject
 
+/**
+ * Sample startup policy used by the reusable startup feature.
+ *
+ * Notification permission is requested only where it is runtime-gated, and successful startup
+ * always proceeds to the toolkit onboarding activity.
+ */
 class AppStartupProvider @Inject constructor() : StartupProvider {
     override val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         arrayOf(Manifest.permission.POST_NOTIFICATIONS)

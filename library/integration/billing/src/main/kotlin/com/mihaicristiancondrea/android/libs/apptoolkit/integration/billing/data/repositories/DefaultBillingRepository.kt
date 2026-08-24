@@ -50,6 +50,15 @@ private const val RETRY_DELAY_SIMPLE_MS = 1_000L
 private const val RETRY_DELAY_EXPONENTIAL_MS = 2_000L
 private const val RETRY_MAX_DELAY_MS = 16_000L
 
+/**
+ * Process-scoped Play Billing implementation.
+ *
+ * The repository owns one [BillingClient], reconnects with bounded retries, replays the latest
+ * product query, and emits purchase outcomes as one-off events. One-time donations are consumed;
+ * unconsumed purchases are recovered on initial connection and later reconnects.
+ *
+ * Use [getInstance] rather than constructing a second callback/listener graph.
+ */
 class DefaultBillingRepository private constructor(
     context: Context,
     private val dispatchers: DispatcherProvider,
@@ -83,6 +92,7 @@ class DefaultBillingRepository private constructor(
         @Volatile
         private var INSTANCE: DefaultBillingRepository? = null
 
+        /** Returns the singleton backed by the application [context]. */
         fun getInstance(
             context: Context,
             dispatchers: DispatcherProvider,

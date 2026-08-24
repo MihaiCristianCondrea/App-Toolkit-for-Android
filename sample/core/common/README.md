@@ -29,11 +29,23 @@ Host-wide constants and error types that carry no UI and no Android state.
 ## Flow chart
 
 ```mermaid
-flowchart LR
-    Features[Host features] --> Constants[Ad units, qualifiers, log tags]
-    Features --> Errors[AppErrors]
-    Constants --> Toolkit[Toolkit ad-unit selectors]
+flowchart TD
+    Build[Per-module BuildConfig.DEBUG] --> Ads[AdsConstants]
+    ToolkitIds[Toolkit debug/release ad selectors] --> Ads
+    Ads --> Features[Apps, tiles, and app composition]
+    Qualifiers[AppAdsQualifiers] --> Features
+    Tuning[APPS_LIST_AD_FREQUENCY] --> Apps[Apps catalog UI]
+    Network[Toolkit Errors hierarchy] --> Errors[AppErrors]
+    Errors --> Mapper[Feature-owned UI text mapper]
 ```
+
+## Architectural decisions
+
+- This module contains only cross-feature values that need neither Android state nor resources.
+- Resource-backed mappings stay with the consuming UI because moving `R` here would turn a
+  constants/error module into a presentation dependency.
+- Fixed tuning values are source constants; build-dependent identities use each module's generated
+  `BuildConfig` and the shared debug/release selectors.
 
 ## Public contracts
 

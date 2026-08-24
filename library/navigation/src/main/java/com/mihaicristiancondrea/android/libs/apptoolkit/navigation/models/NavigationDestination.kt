@@ -19,21 +19,32 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models
 
 import androidx.navigation3.runtime.NavKey
 
+/** Determines how shared back-stack and shell logic treats a destination. */
 enum class NavigationDestinationType {
+    /** A root shell destination selected from bottom navigation, rail, or drawer UI. */
     TopLevel,
+
+    /** A destination presented with activity-like transition and navigation behavior. */
     ActivityLike,
+
+    /** A child destination pushed above its owning top-level destination. */
     Nested,
 }
 
+/** Navigation 3 key contract carrying the behavior category used by shared navigation helpers. */
 interface NavigationDestination : NavKey {
+    /** Category consumed by back-stack operations and transition selection. */
     val destinationType: NavigationDestinationType
 }
 
+/** Whether this key represents a root shell destination. */
 val NavigationDestination.isTopLevel: Boolean
     get() = destinationType == NavigationDestinationType.TopLevel
 
+/** Whether this key uses the activity-like presentation category. */
 val NavigationDestination.isActivityLike: Boolean
     get() = destinationType == NavigationDestinationType.ActivityLike
 
+/** Whether this key is pushed as a child of another destination. */
 val NavigationDestination.isNested: Boolean
     get() = destinationType == NavigationDestinationType.Nested

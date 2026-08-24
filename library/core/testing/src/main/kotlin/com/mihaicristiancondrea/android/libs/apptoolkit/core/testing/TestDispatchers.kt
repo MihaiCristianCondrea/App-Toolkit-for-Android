@@ -22,6 +22,12 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 
+/**
+ * Deterministic [DispatcherProvider] that routes every dispatcher lane to [testDispatcher].
+ *
+ * Sharing one scheduler is intentional: advancing virtual time drains work launched through main,
+ * IO, default, and unconfined dependencies without coordinating multiple test schedulers.
+ */
 class TestDispatchers(private val testDispatcher: TestDispatcher = StandardTestDispatcher()) :
     DispatcherProvider {
     override val main: CoroutineDispatcher get() = testDispatcher

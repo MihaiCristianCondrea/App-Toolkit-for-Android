@@ -35,13 +35,28 @@ exposing contact/review actions.
 
 ```mermaid
 flowchart TD
-    Screen[HelpScreen] --> VM[HelpViewModel]
+    Screen[HelpScreen] -->|events| VM[HelpViewModel]
     VM --> UseCase[GetFaqUseCase]
     UseCase --> Repo[FaqRepository]
-    Repo --> Local[Bundled FAQ]
-    Repo --> Remote[Remote FAQ catalog]
-    VM --> Review[Review use case]
+    Repo --> Remote[Remote FAQ data source]
+    Remote -->|success| Map[DTO to FaqItem mapping]
+    Remote -->|failure or empty catalog| Local[Bundled FAQ data source]
+    Local --> Map
+    Map --> State[Help UiStateScreen]
+    State --> Screen
+    Screen -->|review action| VM
+    VM --> Review[In-app review use case]
+    Screen -->|contact action| Host[Email / external intent]
 ```
+
+## Architectural decisions
+
+- The repository owns remote-versus-bundled fallback so the ViewModel receives one FAQ contract and
+  does not know which source answered.
+- Remote DTO mapping stays in the data layer; the localized bundled catalog is also a data source,
+  not hardcoded composable content.
+- Review and contact actions are triggered by UI intent but executed through their integration or
+  platform boundary rather than embedded in card rendering.
 
 ## Public contracts
 

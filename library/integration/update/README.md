@@ -25,12 +25,26 @@ Encapsulates Google Play in-app update checks and update-flow launches behind a 
 ## Flow chart
 
 ```mermaid
-flowchart LR
-    Feature[About/main flow] --> Repo[InAppUpdateRepository]
-    Repo --> Play[Play AppUpdateManager]
-    Play --> Host[InAppUpdateHost]
-    Host --> Result[InAppUpdateResult]
+flowchart TD
+    Feature[About or changelog flow] -->|check for update| Repo[InAppUpdateRepository]
+    Repo --> Manager[Play AppUpdateManager]
+    Manager --> Info[AppUpdateInfo]
+    Info --> Available{Allowed update available?}
+    Available -->|no| Result[InAppUpdateResult]
+    Available -->|yes| Host[InAppUpdateHost activity boundary]
+    Host --> Launch[Launch Play update flow]
+    Launch --> Result
+    Result --> Feature
 ```
+
+## Architectural decisions
+
+- Update availability and Play flow launch stay behind one repository so About/changelog UI does
+  not import `AppUpdateManager`.
+- The host boundary supplies only the lifecycle-capable activity needed by Play; navigation and
+  changelog decisions remain in the consuming feature.
+- Results are explicit values, allowing callers to distinguish unavailable, not allowed, started,
+  and failed outcomes without interpreting SDK callbacks.
 
 ## Public contracts
 

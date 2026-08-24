@@ -34,6 +34,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.const
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
 
+/**
+ * Builds the sample's root settings categories using an application context.
+ *
+ * Notification settings prefer the platform app-notification page and fall back to the toolkit's
+ * privacy surface when that intent is unavailable.
+ */
 class AppSettingsProvider(context: Context) : SettingsProvider {
     private val context: Context = context.applicationContext
 

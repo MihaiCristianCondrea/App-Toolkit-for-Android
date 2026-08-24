@@ -28,12 +28,28 @@ directly.
 
 ```mermaid
 flowchart TD
-    Library[":library"] --> Facade[":library:apptoolkit"]
+    Library[":library implicit parent"] --> Facade[":library:apptoolkit facade"]
     Library --> Core[":library:core:*"]
     Library --> Navigation[":library:navigation"]
     Library --> Features[":library:feature:*"]
     Library --> Integrations[":library:integration:*"]
+    Core --> Foundations["common / datastore / network / designsystem / ui"]
+    Core --> Testing["testing (test-only helpers)"]
+    Features --> ReusableScreens["about / help / issue reporter / onboarding / permissions / settings / support"]
+    Integrations --> SDKs["ads / billing / consent / Firebase / review / update"]
+    Facade -->|api dependencies| Foundations
+    Facade -->|api dependencies| Navigation
+    Facade -->|api dependencies| ReusableScreens
+    Facade -->|api dependencies| SDKs
 ```
+
+## Architectural decisions
+
+- The parent paths are organizational only; consumers select a child artifact or the facade.
+- `:library:apptoolkit` is the convenience boundary and intentionally re-exports production
+  modules. `:library:core:testing` is excluded because it belongs on test classpaths only.
+- Feature modules own user flows, integration modules own SDK behavior, and core modules own shared
+  foundations. The facade composes them but does not absorb their implementations.
 
 ## Public contracts
 

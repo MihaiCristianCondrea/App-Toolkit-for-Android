@@ -32,12 +32,27 @@ features.
 ## Flow chart
 
 ```mermaid
-flowchart LR
-    FeatureSource[Feature remote source] --> Client[KtorClient]
-    Client --> HTTP[HTTP endpoint]
-    HTTP --> Throwable[Response or Throwable]
-    Throwable --> State[DataState / Error]
+flowchart TD
+    Repository[Feature repository] --> Remote[Feature-owned remote data source]
+    Remote --> Client[Shared Ktor HttpClient]
+    Client --> Endpoint[Feature endpoint]
+    Endpoint -->|decoded response| Remote
+    Endpoint -->|HTTP / transport failure| Throwable[Throwable mapping]
+    Throwable --> Error[Error or Errors value]
+    Remote -->|success| State[DataState.Success]
+    Error --> StateError[DataState.Error]
+    State --> Repository
+    StateError --> Repository
 ```
+
+## Architectural decisions
+
+- Client construction and cross-feature error vocabulary are shared; URLs, DTOs, decoding choices,
+  and fallback policy stay with each feature's remote source and repository.
+- `DataState` can carry stale data in loading/error states, allowing a repository to expose cached
+  content without pretending the refresh succeeded.
+- Errors are normalized before presentation mapping, while localized `UiTextHelper` conversion
+  remains an edge concern.
 
 ## Public contracts
 

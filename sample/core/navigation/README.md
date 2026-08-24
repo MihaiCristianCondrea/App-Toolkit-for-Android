@@ -32,12 +32,29 @@ knowing which shell renders it.
 
 ```mermaid
 flowchart TD
+    Keys["AppsListRoute / ToolkitTilesRoute / ComponentsRoute"] --> Type[StableNavKey destination type]
     Feature[Feature entry builder] --> Context[AppNavigationEntryContext]
-    Feature --> Keys[Route keys]
+    Context --> Stack[Back stack]
+    Context --> Random[RandomAppHandler]
+    Feature --> Keys
     App[":sample:app"] --> Aggregate[appNavigationEntryBuilders]
     Aggregate --> Feature
-    Shell[":sample:feature:home"] --> Keys
+    Defaults[MainNavigationDefaults] --> Bottom[Bottom-bar order]
+    Defaults --> Fab[FAB-supported routes]
+    Defaults --> Startup[Localized startup options]
+    Bottom --> Shell[":sample:feature:home"]
+    Fab --> Shell
+    Keys --> Shell
 ```
+
+## Architectural decisions
+
+- Route vocabulary and entry-builder context are separated from aggregation: every feature may
+  depend on the former, while only the app may know the complete builder list.
+- `MainNavigationDefaults` is the host product's authoritative top-level order and startup-option
+  mapping, not a generic toolkit default.
+- Cross-feature actions such as random-app selection are callbacks in the entry context so the
+  navigation contract does not depend on the apps feature implementation.
 
 ## Public contracts
 

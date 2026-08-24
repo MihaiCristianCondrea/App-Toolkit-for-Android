@@ -34,15 +34,33 @@ destination.
 
 ```mermaid
 flowchart TD
-    App[":sample:app"] --> Builders[appNavigationEntryBuilders]
-    Builders --> Screen[MainScreen]
-    Screen --> Shell[MainShell]
+    App[":sample:app"] -->|start route and builders| Screen[MainScreen]
+    Screen --> BackStack[Navigation 3 back stack]
+    Screen --> Scene{Window / destination scene selection}
+    Scene --> Shell[MainShell]
+    Shell --> Drawer[Navigation drawer]
+    Shell --> Bottom[Bottom bar or rail]
+    Shell --> Fab[Contextual FAB]
     Screen --> VM[MainViewModel]
     VM --> Provider[AppNavigationItemsProvider]
     Provider --> NavRepo[NavigationConfigurationRepository]
-    NavRepo --> Store[DatastoreInterface]
-    Shell --> Entries[Feature destinations]
+    NavRepo --> Store[DatastoreInterface unlock Flow]
+    Provider --> Drawer
+    App --> Builders[appNavigationEntryBuilders]
+    Builders --> Entries[Host and toolkit destinations]
+    Entries --> Scene
+    Drawer --> BackStack
+    Bottom --> BackStack
 ```
+
+## Architectural decisions
+
+- The app injects destination builders into `MainScreen`; the shell never imports the full feature
+  graph and can be tested with a smaller set.
+- The back stack is the navigation source of truth. Drawer, bottom/rail, FAB, and adaptive scene
+  selection are projections of the current destination and window state.
+- Conditional navigation items come from an observable repository/provider pipeline so the drawer
+  updates when the showcase is unlocked without owning persistence.
 
 ## Public contracts
 

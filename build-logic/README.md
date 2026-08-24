@@ -26,11 +26,22 @@ The root build includes `build-logic` through `pluginManagement`, allowing activ
 
 ```mermaid
 flowchart LR
-    Root[Root pluginManagement] --> Included[build-logic]
-    Catalog[Root version catalog] --> Included
-    Included --> Convention[build-logic:convention]
-    Convention --> Modules[Android modules]
+    Settings[Root settings.gradle.kts] -->|includeBuild| Included[build-logic]
+    Catalog[gradle/libs.versions.toml] -->|imported by relative path| Included
+    Included --> Convention[":convention plugin project"]
+    Convention --> Plugins["versioning / JVM target / tests / publishing / sample baseline"]
+    Plugins --> LibraryModules[":library:* modules"]
+    Plugins --> SampleModules[":sample:* modules"]
 ```
+
+## Architectural decisions
+
+- Build conventions live in an included build so they are compiled, typed, and available in every
+  project `plugins` block without becoming runtime dependencies.
+- The included build reuses the root version catalog instead of maintaining a second set of AGP,
+  Kotlin, and test-plugin versions.
+- Runtime modules apply narrow convention plugins; the composite `sample-module` plugin is reserved
+  for the sample's Android library modules, which intentionally share one baseline.
 
 ## Public contracts
 

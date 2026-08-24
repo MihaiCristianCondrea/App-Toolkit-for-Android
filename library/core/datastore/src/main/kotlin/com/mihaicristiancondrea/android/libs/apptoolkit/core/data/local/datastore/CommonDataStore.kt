@@ -49,6 +49,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
+/** Process-safe delegate for the toolkit's single `settings` Preferences DataStore file. */
 val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(name = DataStoreNamesConstants.DATA_STORE_SETTINGS)
 
 /**
@@ -118,6 +119,13 @@ open class CommonDataStore(
         @Volatile
         private var instance: CommonDataStore? = null
 
+        /**
+         * Returns the process-wide facade, capturing [defaultAdsEnabled] on first construction.
+         *
+         * Prefer dependency injection in production. This compatibility accessor cannot change the
+         * ads default after an instance exists and callers must not use it to create a parallel
+         * preference graph.
+         */
         fun getInstance(
             context: Context,
             defaultAdsEnabled: Boolean = true,
