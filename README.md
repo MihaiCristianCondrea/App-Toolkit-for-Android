@@ -1,5 +1,13 @@
 # App Toolkit for Android
 
+<p>
+  <img alt="Android" height="28" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Android/android1.svg">
+  <img alt="Kotlin" height="28" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Kotlin/kotlin1.svg">
+  <img alt="Android Studio" height="28" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/AndroidStudio/androidstudio1.svg">
+  <img alt="GitHub" height="28" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Github/github1.svg">
+  <img alt="GPLv3 license" height="28" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/LicenceGPLv3/licencegplv31.svg">
+</p>
+
 [![Android CI](https://github.com/MihaiCristianCondrea/App-Toolkit-for-Android/actions/workflows/android.yml/badge.svg)](https://github.com/MihaiCristianCondrea/App-Toolkit-for-Android/actions/workflows/android.yml)
 [![Release](https://jitpack.io/v/MihaiCristianCondrea/App-Toolkit-for-Android.svg)](https://jitpack.io/#MihaiCristianCondrea/App-Toolkit-for-Android)
 
