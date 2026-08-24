@@ -26,6 +26,6 @@
         <intent
             android:action="com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
             android:targetClass="com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity"
-            android:targetPackage="com.d4rk.android.apps.apptoolkit" />
+            android:targetPackage="@string/app_package_name" />
     </shortcut>
 </shortcuts>

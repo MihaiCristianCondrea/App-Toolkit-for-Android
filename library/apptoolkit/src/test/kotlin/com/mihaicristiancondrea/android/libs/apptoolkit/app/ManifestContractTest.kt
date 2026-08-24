@@ -32,7 +32,9 @@ import java.io.File
  * every consuming application.
  *
  * Other library modules contribute only the components and permissions they own. The facade is the
- * single exception for common application attributes, themes, colors and backup rules.
+ * single exception for common application attributes, themes, colors, locale resources and backup
+ * rules. The host links the locale resource because Android does not merge `localeConfig` from a
+ * library into the final application manifest.
  */
 class ManifestContractTest {
 
@@ -65,23 +67,47 @@ class ManifestContractTest {
     }
 
     @Test
-    fun `app toolkit owns default themes colors and backup rules`() {
+    fun `app toolkit owns default themes colors locale config and backup rules`() {
         TOOLKIT_DEFAULT_RESOURCES.forEach { relativePath ->
             assertThat(File(repositoryRoot, relativePath).isFile).isTrue()
         }
         FORMER_SAMPLE_DEFAULT_RESOURCES.forEach { relativePath ->
             assertThat(File(repositoryRoot, relativePath).exists()).isFalse()
         }
+        assertThat(File(repositoryRoot, SAMPLE_MANIFEST).readText())
+            .contains("android:localeConfig=\"@xml/config_locales\"")
+    }
+
+    @Test
+    fun `toolkit identity placeholders are overridden by the sample host`() {
+        val defaultResources = File(repositoryRoot, TOOLKIT_IDENTITY_RESOURCES).readText()
+        val sampleResources = File(repositoryRoot, SAMPLE_IDENTITY_RESOURCES).readText()
+
+        TOOLKIT_IDENTITY_DEFAULTS.forEach { (name, value) ->
+            assertThat(defaultResources)
+                .contains("<string name=\"$name\" translatable=\"false\">$value</string>")
+        }
+        SAMPLE_IDENTITY_OVERRIDES.forEach { (name, value) ->
+            assertThat(sampleResources)
+                .contains("<string name=\"$name\" translatable=\"false\">$value</string>")
+            assertThat(resourceDefinitions(name))
+                .containsExactly(TOOLKIT_IDENTITY_RESOURCES, SAMPLE_IDENTITY_RESOURCES)
+        }
+        assertThat(resourceDefinitions("copyright")).containsExactly(TOOLKIT_IDENTITY_RESOURCES)
     }
 
     @Test
     fun `settings shortcut enters through the exported sample launcher`() {
         val shortcut = File(repositoryRoot, SAMPLE_SHORTCUTS).readText()
+        val buildScript = File(repositoryRoot, SAMPLE_BUILD_SCRIPT).readText()
         val mainActivity = File(repositoryRoot, SAMPLE_MAIN_ACTIVITY_SOURCE).readText()
 
         assertThat(shortcut).contains("android:action=\"$OPEN_SETTINGS_ACTION\"")
         assertThat(shortcut).contains("android:targetClass=\"$SAMPLE_MAIN_ACTIVITY\"")
-        assertThat(shortcut).contains("android:targetPackage=\"$SAMPLE_APPLICATION_ID\"")
+        assertThat(shortcut).contains("android:targetPackage=\"@string/app_package_name\"")
+        assertThat(buildScript).contains("applicationId = \"$SAMPLE_APPLICATION_ID\"")
+        assertThat(buildScript)
+            .contains("resValue(\"string\", \"app_package_name\", releasedApplicationId)")
         assertThat(mainActivity).contains("override fun onNewIntent(intent: Intent)")
         assertThat(mainActivity).contains("setIntent(intent)")
         assertThat(mainActivity).contains("\"$OPEN_SETTINGS_ACTION\"")
@@ -141,16 +167,34 @@ class ManifestContractTest {
 
     private fun File.relativePath(): String = relativeTo(repositoryRoot).invariantPath()
 
+    private fun resourceDefinitions(resourceName: String): List<String> =
+        listOf(LIBRARY_ROOT, SAMPLE_ROOT).flatMap { sourceRoot ->
+            File(repositoryRoot, sourceRoot)
+                .walkTopDown()
+                .filter { file ->
+                    file.isFile &&
+                        file.extension == "xml" &&
+                        MAIN_RESOURCES in file.invariantPath() &&
+                        "<string name=\"$resourceName\"" in file.readText()
+                }
+                .map { it.relativePath() }
+                .toList()
+        }
+
     private companion object {
         const val LIBRARY_ROOT = "library"
+        const val SAMPLE_ROOT = "sample"
         const val MANIFEST_FILE = "AndroidManifest.xml"
         const val MAIN_SOURCE_SET = "/src/main/"
+        const val MAIN_RESOURCES = "/src/main/res/"
         const val BUILD_DIRECTORY = "/build/"
         const val FACADE_MANIFEST = "library/apptoolkit/src/main/AndroidManifest.xml"
+        const val SAMPLE_MANIFEST = "sample/app/src/main/AndroidManifest.xml"
         const val INTENT_FILTER = "intent-filter"
         const val UNNAMED_COMPONENT = "<unnamed>"
         const val SETTINGS_FILE = "settings.gradle.kts"
         const val SAMPLE_SHORTCUTS = "sample/app/src/main/res/xml/shortcuts.xml"
+        const val SAMPLE_BUILD_SCRIPT = "sample/app/build.gradle.kts"
         const val OPEN_SETTINGS_ACTION = "com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
         const val SAMPLE_APPLICATION_ID = "com.d4rk.android.apps.apptoolkit"
         const val SAMPLE_MAIN_ACTIVITY =
@@ -177,6 +221,7 @@ class ManifestContractTest {
             "library/apptoolkit/src/main/res/values/colors.xml",
             "library/apptoolkit/src/main/res/drawable-anydpi/ic_shortcut_settings_foreground.xml",
             "library/apptoolkit/src/main/res/xml/backup_rules.xml",
+            "library/apptoolkit/src/main/res/xml/config_locales.xml",
             "library/apptoolkit/src/main/res/xml/data_extraction_rules.xml",
         )
 
@@ -185,7 +230,24 @@ class ManifestContractTest {
             "sample/core/ui/src/main/res/values/colors.xml",
             "sample/core/ui/src/main/res/drawable-anydpi/ic_shortcut_settings_foreground.xml",
             "sample/app/src/main/res/xml/backup_rules.xml",
+            "sample/app/src/main/res/xml/config_locales.xml",
             "sample/app/src/main/res/xml/data_extraction_rules.xml",
+        )
+
+        const val TOOLKIT_IDENTITY_RESOURCES =
+            "library/core/common/src/main/res/values/untranslatable_strings.xml"
+        const val SAMPLE_IDENTITY_RESOURCES =
+            "sample/app/src/main/res/values/untranslatable_strings.xml"
+
+        val TOOLKIT_IDENTITY_DEFAULTS = mapOf(
+            "app_full_name" to "App Name",
+            "app_name" to "App Name",
+            "copyright" to "Copyright ©2020-2026, Mihai-Cristian Condrea",
+        )
+
+        val SAMPLE_IDENTITY_OVERRIDES = mapOf(
+            "app_full_name" to "App Toolkit for Android",
+            "app_name" to "App Toolkit",
         )
 
         /** The opening `<application …>` tag only; its children are components, checked separately. */

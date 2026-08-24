@@ -17,6 +17,7 @@ several settings/help flows.
 ## Does not own
 
 - Host main screen and host route keys, owned by `:sample`.
+- Host identity strings, supplied as overridable defaults by `:library:core:common`.
 - Support, consent, review, and update implementations, owned by their feature/integration modules.
 - Root Navigation 3 entry assembly, owned by `:library:apptoolkit`.
 - Generic bottom navigation, rails, and drawer rendering, owned by

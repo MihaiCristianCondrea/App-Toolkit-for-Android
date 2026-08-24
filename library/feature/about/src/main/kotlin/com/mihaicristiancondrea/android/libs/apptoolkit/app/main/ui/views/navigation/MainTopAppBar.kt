@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
@@ -77,7 +78,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MainTopAppBar(
-    title: String = stringResource(id = R.string.app_name),
+    title: String = stringResource(id = CommonR.string.app_name),
     navigationIcon: ImageVector?,
     onNavigationIconClick: () -> Unit,
     onSupportClick: (() -> Unit)? = null,

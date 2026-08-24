@@ -16,6 +16,7 @@ exposing contact/review actions.
 - About/navigation route definitions, owned by `:library:feature:about`.
 - In-app review implementation, owned by `:library:integration:review`.
 - HTTP client construction, owned by `:library:core:network`.
+- Host identity strings, supplied as overridable defaults by `:library:core:common`.
 
 ## Depends on
 

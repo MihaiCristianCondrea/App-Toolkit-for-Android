@@ -104,6 +104,7 @@ android {
         // renamed freely, while changing `applicationId` publishes a different app and strands
         // every existing install. See docs/application-id.md.
         applicationId = "com.d4rk.android.apps.apptoolkit"
+        resValue("string", "app_package_name", releasedApplicationId)
         minSdk = appVersion.minSdk
         targetSdk = appVersion.targetSdk
         versionCode = appVersion.versionCode
@@ -200,6 +201,7 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
+        resValues = true
     }
 
     @Suppress("UnresolvedReference")

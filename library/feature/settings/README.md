@@ -20,6 +20,7 @@ and exposes host provider extension points.
 ## Does not own
 
 - Host-specific settings categories/content, owned by `:sample` provider implementations.
+- Host identity strings, supplied as overridable defaults by `:library:core:common`.
 - Consent SDK operations, delegated to `:library:integration:consent`.
 - About/help/issue-reporter feature implementations, owned by their modules.
 - Theme primitives and persisted storage, owned by core design system/DataStore.

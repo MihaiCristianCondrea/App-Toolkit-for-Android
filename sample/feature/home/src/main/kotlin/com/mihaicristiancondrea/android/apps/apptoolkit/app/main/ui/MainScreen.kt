@@ -388,7 +388,7 @@ private fun MainShell(
     val appBarTitleResId: Int = remember(currentRoute) {
         MainNavigationDefaults.bottomBarItems
             .find { item: BottomBarItem<StableNavKey> -> item.route == currentRoute }?.title
-            ?: com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.app_name
+            ?: com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R.string.app_name
     }
 
     val onNavigationDrawerItemClick: (NavigationDrawerItem, DrawerState?, CoroutineScope?) -> Unit =
@@ -700,9 +700,9 @@ private fun SubScreenShell(
         is PermissionsRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.permissions)
         is LicensesRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.oss_license_title)
         is SupportRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.support_us)
-        is LibraryExtrasRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.app_name)
+        is LibraryExtrasRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R.string.app_name)
         is ComponentsRoute -> stringResource(com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R.string.components_title)
-        else -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.app_name)
+        else -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R.string.app_name)
     }
 
     LargeTopAppBarWithScaffold(

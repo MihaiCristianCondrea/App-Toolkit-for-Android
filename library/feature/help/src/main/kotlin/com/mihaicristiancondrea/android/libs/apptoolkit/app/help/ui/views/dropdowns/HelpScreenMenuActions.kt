@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.licenses.ui.LicensesActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
@@ -142,8 +143,8 @@ fun HelpScreenMenuActions(
     if (showDialog) {
         VersionInfoAlertDialog(
             onDismiss = { onShowDialogChange(false) },
-            copyrightString = R.string.copyright,
-            appName = R.string.app_full_name,
+            copyrightString = CommonR.string.copyright,
+            appName = CommonR.string.app_full_name,
             versionName = config.versionName.orEmpty(),
             versionString = R.string.version
         )

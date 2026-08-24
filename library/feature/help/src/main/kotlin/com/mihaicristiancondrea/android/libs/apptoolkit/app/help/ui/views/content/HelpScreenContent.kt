@@ -51,6 +51,7 @@ import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.domain.models.FaqItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.views.cards.ContactUsCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.views.cards.QuestionCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
@@ -239,7 +240,7 @@ fun HelpScreenContent(
                         helpPreferenceTapEvent(preferenceKey = "contact_us").toAnalyticsEvent()
                     )
                     context.sendEmailToDeveloper(
-                        applicationNameRes = R.string.app_name
+                        applicationNameRes = CommonR.string.app_name
                     )
                 }
             )

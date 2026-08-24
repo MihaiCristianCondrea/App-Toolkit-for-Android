@@ -14,7 +14,8 @@ Koin modules and Navigation 3 destinations while re-exporting the toolkit module
 - `appToolkitNavigationEntryBuilders` for shared embedded destinations.
 - Host-to-library composition using `AppToolkitHostBuildConfig` and host provider factories.
 - Common host defaults contributed through manifest/resource merging: the AppCompat application
-  theme, RTL/window behavior, backup and data-extraction rules, splash resources, and shared colors.
+  theme, RTL/window behavior, backup and data-extraction rules, locale configuration resource,
+  splash resources, shared colors, and host identity fallbacks.
 
 ## Does not own
 
@@ -66,14 +67,21 @@ flowchart TD
 Depending on this facade contributes the common `<application>` defaults needed by toolkit
 activities, including `@style/AppTheme`, RTL support, resizable/window behavior, and the bundled
 backup/data-extraction rules. It also supplies `AppTheme`, `SplashScreenTheme`, their splash assets,
-and the shared launcher/shortcut colors and shortcut artwork. Integration modules contribute the
-permissions and metadata they own; for example, ads owns network/ad-ID permissions and Mobile Ads
-tuning metadata.
+the shared launcher/shortcut colors and shortcut artwork, `config_locales.xml`, plus `App Name`
+placeholders for `app_name` and `app_full_name`, and the copyright resource. Integration modules
+contribute the permissions and metadata they own; for example, ads owns network/ad-ID permissions
+and Mobile Ads tuning metadata.
+
+Android's manifest merger does not carry `android:localeConfig` from a library into the final
+application manifest. A host using the bundled locale list therefore keeps the one-line
+`android:localeConfig="@xml/config_locales"` application attribute while the XML list itself remains
+owned here.
 
 These are defaults, not locked policy. Android merges the consuming application's manifest and
 resources at higher priority, so a host can override an attribute in its own `<application>` tag or
 replace a same-named resource when its product requirements differ. A host should declare only its
-identity and intentional overrides rather than copy the defaults.
+identity and intentional overrides rather than copy the defaults. In particular, hosts customize
+their product identity by defining `app_name`, `app_full_name`, and `copyright` with the same names.
 
 ## Internal implementations
 

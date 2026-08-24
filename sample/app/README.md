@@ -11,7 +11,11 @@ libraries with the host's own feature modules.
 - `appNavigationEntryBuilders`, the one declaration that names every host feature.
 - Host implementations of the startup and onboarding provider contracts.
 - Application identity resources: launcher mipmaps and host-specific `xml/` configuration
-  (shortcuts, locale config, widget provider info).
+  (shortcuts and widget provider info), including the shortcut target package generated from the
+  released application ID.
+- The `app_name` and `app_full_name` overrides that replace AppToolkit's `App Name` placeholders.
+- The final-manifest link to AppToolkit's `config_locales.xml`; Android does not merge this
+  application attribute from a library manifest.
 - Signing, ProGuard, locale filters, Play/Firebase configuration, and the app-wide `BuildConfig`
   fields.
 
@@ -59,8 +63,10 @@ values passed into the AppToolkit DI factories.
 The host inherits common application attributes, backup/data-extraction rules, colors and themes
 from `:library:apptoolkit`. Android's manifest and resource merger gives this application higher
 priority, so it can replace any inherited default without copying the toolkit files pre-emptively.
-Host-specific identity remains here, including the application class, icons, label, locale config
-and AdMob application ID.
+Host-specific identity remains here, including the application class, icons, label and AdMob
+application ID. The sample provides its actual `app_name` and `app_full_name`, while accepting
+AppToolkit's copyright and locale defaults. Another host can replace those same-named resources or
+the locale config while retaining the application-level locale link.
 
 ## Internal implementations
 

@@ -40,6 +40,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.states.AboutUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.licenses.ui.LicensesActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
@@ -171,8 +172,8 @@ fun AboutScreen(
 
                     item {
                         SettingsPreferenceItem(
-                            title = stringResource(id = R.string.app_full_name),
-                            summary = stringResource(id = R.string.copyright),
+                            title = stringResource(id = CommonR.string.app_full_name),
+                            summary = stringResource(id = CommonR.string.copyright),
                             modifier = Modifier.groupedPreferenceItem(
                                 position = GroupedItemPosition.FIRST,
                                 outerRadius = SizeConstants.LargeMediumSize,

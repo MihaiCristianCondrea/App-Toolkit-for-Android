@@ -15,6 +15,9 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="app_full_name" translatable="false">App Name</string>
+    <string name="app_name" translatable="false">App Name</string>
+    <string name="copyright" translatable="false">Copyright ©2020-2026, Mihai-Cristian Condrea</string>
     <string name="dear_developer" translatable="false">Dear developer, </string>
     <string name="feedback_for" translatable="false">Feedback for %1$s</string>
     <string name="send_email_using" translatable="false">Send mail using</string>

@@ -63,6 +63,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.domain.models.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.contracts.SettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
@@ -271,7 +272,7 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
                     )
                     LargeVerticalSpacer()
                     Text(
-                        text = stringResource(id = R.string.app_name),
+                        text = stringResource(id = CommonR.string.app_name),
                         style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center,
                     )

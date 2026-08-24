@@ -16,5 +16,6 @@
   -->
 
 <resources>
-    <string name="copyright" translatable="false">Copyright ©2025-2026, Mihai-Cristian Condrea</string>
+    <string name="app_full_name" translatable="false">App Toolkit for Android</string>
+    <string name="app_name" translatable="false">App Toolkit</string>
 </resources>

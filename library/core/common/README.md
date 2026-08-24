@@ -13,6 +13,8 @@ Android utility abstractions shared across the toolkit.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).
 - Small platform and Kotlin extensions used across modules.
 - The Play Integrity license-check manifest permission required by the shared App Check setup.
+- The `App Name` placeholders for `app_name` and `app_full_name`, plus the default copyright
+  resource used by toolkit UI. A host replaces the name resources with its application identity.
 
 ## Does not own
 
