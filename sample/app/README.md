@@ -10,8 +10,8 @@ libraries with the host's own feature modules.
 - The `AppToolkit` application class, the manifest, `MainActivity`, and the Koin bootstrap.
 - `appNavigationEntryBuilders`, the one declaration that names every host feature.
 - Host implementations of the startup and onboarding provider contracts.
-- Application identity resources: launcher mipmaps and the `xml/` configuration the manifest points
-  at (shortcuts, backup and data-extraction rules, locale config, widget provider info).
+- Application identity resources: launcher mipmaps and host-specific `xml/` configuration
+  (shortcuts, locale config, widget provider info).
 - Signing, ProGuard, locale filters, Play/Firebase configuration, and the app-wide `BuildConfig`
   fields.
 
@@ -20,7 +20,9 @@ libraries with the host's own feature modules.
 - Any feature. Screens, repositories and ViewModels live in `:sample:feature:*` and
   `:sample:widget`.
 - Feature strings and layouts, owned by their respective `:sample:feature:*`, core, or widget
-  module. Shared themes and visual artwork remain in [`:sample:core:ui`](../core/ui/README.md).
+  module. Default themes, colors and backup policies come from
+  [`:library:apptoolkit`](../../library/apptoolkit/README.md); shared host artwork remains in
+  [`:sample:core:ui`](../core/ui/README.md).
 - Route keys and the entry-builder context, owned by
   [`:sample:core:navigation`](../core/navigation/README.md).
 
@@ -53,6 +55,12 @@ flowchart TD
 
 Not a library. Its integration surface is the set of host provider implementations and configuration
 values passed into the AppToolkit DI factories.
+
+The host inherits common application attributes, backup/data-extraction rules, colors and themes
+from `:library:apptoolkit`. Android's manifest and resource merger gives this application higher
+priority, so it can replace any inherited default without copying the toolkit files pre-emptively.
+Host-specific identity remains here, including the application class, icons, label, locale config
+and AdMob application ID.
 
 ## Internal implementations
 

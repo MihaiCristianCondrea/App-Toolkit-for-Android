@@ -79,12 +79,16 @@ tasks.withType<Test>().configureEach {
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
     inputs.files(
-        rootProject.fileTree(rootProject.layout.projectDirectory.dir("library")) {
-            include("**/src/main/AndroidManifest.xml")
+        rootProject.fileTree(rootProject.layout.projectDirectory) {
+            include("library/**/src/main/AndroidManifest.xml")
+            include("library/apptoolkit/src/main/res/**/*.xml")
+            include("sample/app/src/main/AndroidManifest.xml")
+            include("sample/app/src/main/res/xml/shortcuts.xml")
+            include("sample/core/ui/src/main/res/values*/**/*.xml")
             exclude("**/build/**")
         }
     )
-        .withPropertyName("libraryManifests")
+        .withPropertyName("manifestContracts")
         .withPathSensitivity(PathSensitivity.RELATIVE)
 }
 

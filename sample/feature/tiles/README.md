@@ -16,6 +16,8 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
 - UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
   `toolkitTilesEntryBuilder`, and the Quick Settings services.
 - Localized Quick Tools strings and plurals.
+- Feature-owned manifest permissions for haptics, wake locks, flashlight access, and the caffeine
+  foreground service.
 
 ## Does not own
 

@@ -9,7 +9,7 @@ service wiring.
 
 - `FirebaseControllerImpl` for analytics events, breadcrumbs, and crash reporting.
 - `firebaseModule` Koin bindings.
-- `FirebaseNotificationsService`.
+- `FirebaseNotificationsService` and its notification/wake-lock manifest permissions.
 
 ## Does not own
 

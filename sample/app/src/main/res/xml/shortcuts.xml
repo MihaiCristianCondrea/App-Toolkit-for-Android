@@ -24,8 +24,8 @@
         android:shortcutLongLabel="@string/long_settings_label"
         android:shortcutShortLabel="@string/settings">
         <intent
-            android:action="android.intent.action.VIEW"
-            android:targetClass="com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity"
-            android:targetPackage="com.mihaicristiancondrea.android.apps.apptoolkit" />
+            android:action="com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
+            android:targetClass="com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity"
+            android:targetPackage="com.d4rk.android.apps.apptoolkit" />
     </shortcut>
 </shortcuts>

@@ -13,12 +13,16 @@ Koin modules and Navigation 3 destinations while re-exporting the toolkit module
   granular lists `appToolkitModules` composes.
 - `appToolkitNavigationEntryBuilders` for shared embedded destinations.
 - Host-to-library composition using `AppToolkitHostBuildConfig` and host provider factories.
+- Common host defaults contributed through manifest/resource merging: the AppCompat application
+  theme, RTL/window behavior, backup and data-extraction rules, splash resources, and shared colors.
 
 ## Does not own
 
 - Feature screens, repositories, use cases, or SDK implementations; those stay in their
   feature/core/integration modules.
 - Host application startup, app-specific routes, providers, and business logic, owned by `:sample`.
+- Host identity and policy overrides such as the application class, icons, label, locale list,
+  AdMob application ID, or any explicit replacement for a toolkit default.
 
 ## Depends on
 
@@ -56,6 +60,19 @@ flowchart TD
 - `appToolkitModules`, the three DI module-list factories it composes, and
   `appToolkitNavigationEntryBuilders`.
 - Transitive APIs from all `api(project(...))` dependencies are also visible to consumers.
+
+### Manifest and resource defaults
+
+Depending on this facade contributes the common `<application>` defaults needed by toolkit
+activities, including `@style/AppTheme`, RTL support, resizable/window behavior, and the bundled
+backup/data-extraction rules. It also supplies `AppTheme`, `SplashScreenTheme`, their splash assets,
+and the shared launcher/shortcut colors. Integration modules contribute the permissions and
+metadata they own; for example, ads owns network/ad-ID permissions and Mobile Ads tuning metadata.
+
+These are defaults, not locked policy. Android merges the consuming application's manifest and
+resources at higher priority, so a host can override an attribute in its own `<application>` tag or
+replace a same-named resource when its product requirements differ. A host should declare only its
+identity and intentional overrides rather than copy the defaults.
 
 ## Internal implementations
 

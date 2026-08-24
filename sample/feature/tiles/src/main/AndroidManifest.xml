@@ -16,14 +16,15 @@
   -->
 
 <!--
-  The breathing tile plays haptics and the caffeine tile holds a wake lock, so this module declares
-  the permissions its own code needs instead of depending on the host app to remember them. Module
-  manifests merge into the consuming application.
+  The breathing tile plays haptics and the caffeine tile holds a wake lock and runs a foreground
+  service, so this module declares the permissions its own code needs instead of depending on the
+  host app to remember them. Module manifests merge into the consuming application.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
     <uses-feature

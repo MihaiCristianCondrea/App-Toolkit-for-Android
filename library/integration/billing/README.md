@@ -8,6 +8,7 @@ Wraps Google Play Billing behind a reusable repository and Koin module.
 
 - Billing client lifecycle, product queries, purchase launches, and purchase-state exposure.
 - The `BillingRepository` contract and its `DefaultBillingRepository` Play Billing implementation.
+- The Play Billing manifest permission merged into consuming applications.
 
 ## Does not own
 

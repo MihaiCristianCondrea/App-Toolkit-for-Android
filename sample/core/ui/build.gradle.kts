@@ -25,11 +25,4 @@ android {
 
 dependencies {
     api(project(":library:core:designsystem"))
-
-    // This module owns themes.xml, whose AppTheme.Starting style sets
-    // windowSplashScreenBackground / windowSplashScreenAnimatedIcon / postSplashScreenTheme. Those
-    // attributes are declared by core-splashscreen, which previously reached the theme transitively
-    // through :library:apptoolkit; the theme moved here during modularization, the dependency did
-    // not, and the release resource link could not resolve them.
-    api(libs.androidx.core.splashscreen)
 }

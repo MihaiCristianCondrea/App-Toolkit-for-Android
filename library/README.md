@@ -41,38 +41,30 @@ No runtime contracts are exposed.
 
 ### Manifest contract
 
-Every library manifest below `:library` contributes only:
+Library manifests contribute the components and permissions owned by their modules:
 
 - the components it owns, each declaring `android:exported` explicitly, and exported only when an
   intent filter makes it a genuine entry point;
-- the permissions its own code needs. Permissions belonging to a wrapped SDK arrive from that SDK's
-  own manifest and are not restated here.
+- the permissions and metadata its own code or wrapped SDK integration needs.
 
-A library manifest declares **no `<application>` attributes**. `theme`, `icon`, `label`, `name`,
-`allowBackup`, `dataExtractionRules`, `fullBackupContent`, `supportsRtl`, `usesCleartextTraffic`,
-`localeConfig`, `hardwareAccelerated`, `resizeableActivity`, `enableOnBackInvokedCallback` and
-`windowSoftInputMode` describe the application as a whole, and the application is the host's.
+`:library:apptoolkit` is the deliberate application-default facade. Its manifest contributes the
+common theme, backup, RTL, resizing, back-navigation, cleartext, acceleration and soft-input
+defaults used by toolkit hosts. Its resources own `AppTheme`, `SplashScreenTheme`, shared colors,
+splash assets, and backup/data-extraction rules.
 
-`ManifestContractTest` in `:library:apptoolkit` enforces all three rules.
+`ManifestContractTest` in `:library:apptoolkit` keeps application attributes out of every other
+library module, pins the facade defaults/resources, and verifies component export declarations.
 
-### What a host must declare
+### What a host declares
 
-The merger silently folds library `<application>` attributes into the host, which means removing one
-from the library removes it from every app with no build error. 2.0.19 shipped ten of them; 3.0.0-pre1
-dropped them all, and consuming apps lost their theme, RTL support and backup rules at once — the
-missing `android:theme` crashed every toolkit screen with `IllegalStateException: You need to use a
-Theme.AppCompat theme (or descendant) with this activity`.
+The host owns application identity and product-specific policy: its application class, icons,
+label, locale configuration, SDK IDs and any intentional overrides. It does not need to copy the
+toolkit's themes, colors, backup XML or common manifest defaults.
 
-A host therefore owns its whole `<application>` element. At minimum it declares:
-
-| Attribute | Why the toolkit needs it |
-| --- | --- |
-| `android:theme` | Toolkit activities extend `AppCompatActivity`; the platform default is not an AppCompat descendant and they will not start |
-| `android:supportsRtl` | Toolkit layouts mirror in RTL locales only when the host opts in |
-
-Everything else on `<application>` — backup rules, cleartext policy, locale config, window
-behaviour — is the host's own policy, and the toolkit neither sets nor requires it. `:sample:app`
-is the reference host.
+Android gives the consuming application higher manifest-merger and resource priority. A host that
+needs different backup exclusions, theme values, colors, RTL behavior, or another default declares
+that attribute or same-named resource locally, using the normal manifest/resource override
+mechanism. `:sample:app` demonstrates the minimal host boundary.
 
 ## Internal implementations
 
@@ -83,7 +75,6 @@ There is no implementation; this is an implicit Gradle hierarchy node.
 The container appears in Gradle project reports despite producing no artifact, so it should not be
 mistaken for an umbrella dependency.
 
-Manifest merging stays the quietest coupling between the toolkit and its hosts: it has no compile-time
-surface, so both adding and removing a library `<application>` attribute changes every host silently.
-`ManifestContractTest` covers the library side; the host side is a documented checklist, not something
-this repository can enforce.
+Manifest merging stays the quietest coupling between the toolkit and its hosts: it has no
+compile-time surface, so both adding and removing a facade default changes every host silently.
+`ManifestContractTest` therefore pins the defaults and their ownership in the facade.

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -33,6 +34,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastor
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationRoutes
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.toNavKeyOrDefault
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
@@ -69,7 +71,14 @@ class MainActivity : AppCompatActivity() {
         handleGmsEvents()
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        openSettingsForShortcut(intent)
+    }
+
     private fun handleStartup() {
+        val openSettings = intent.action == ACTION_OPEN_SETTINGS
         lifecycleScope.launch {
             val isFirstLaunch: Boolean =
                 withContext(context = dispatchers.io) { dataStore.startup.first() }
@@ -84,8 +93,21 @@ class MainActivity : AppCompatActivity() {
                     ).first()
                 }
                 setMainActivityContent(startRoute = startRoute)
+                if (openSettings) {
+                    openSettingsActivity()
+                }
             }
         }
+    }
+
+    private fun openSettingsForShortcut(intent: Intent) {
+        if (intent.action == ACTION_OPEN_SETTINGS) {
+            openSettingsActivity()
+        }
+    }
+
+    private fun openSettingsActivity() {
+        openActivity(activityClass = SettingsActivity::class.java)
     }
 
     private fun startStartupActivity() {
@@ -136,5 +158,10 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         )
+    }
+
+    private companion object {
+        const val ACTION_OPEN_SETTINGS =
+            "com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
     }
 }

@@ -22,39 +22,71 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 /**
- * Guards what a library manifest is allowed to contribute to the apps that depend on it.
+ * Guards the manifest and resource defaults contributed to AppToolkit hosts.
  *
  * The manifest merger folds every library `<application>` attribute into the host, and neither
  * adding nor removing one produces a build error. That makes the boundary invisible in review and
- * expensive to get wrong in both directions:
+ * expensive to get wrong in both directions. AppToolkit therefore owns the defaults that every
+ * host needs while the host keeps merger priority and can override them explicitly. This prevents
+ * a toolkit release from silently dropping the AppCompat theme, RTL support or backup rules from
+ * every consuming application.
  *
- * - 2.0.19 declared ten `<application>` attributes here — `theme`, `supportsRtl`, `allowBackup`,
- *   `usesCleartextTraffic` and others. Hosts inherited them without ever declaring them, so the
- *   library was silently deciding each app's backup policy, RTL support and cleartext policy.
- * - 3.0.0-pre1 dropped all ten. Every host lost them at once. Smart Cleaner crashed opening any
- *   toolkit screen, because without `android:theme` the activities fell back to a platform theme
- *   that is not an AppCompat descendant, and its Arabic and Urdu layouts stopped mirroring because
- *   `supportsRtl` was gone. Nothing failed to compile.
- *
- * The rule that avoids both: a library manifest contributes the components it owns and the
- * permissions its own code needs, and nothing that describes the application as a whole. Those are
- * host decisions. `library/README.md` carries the matching host checklist.
+ * Other library modules contribute only the components and permissions they own. The facade is the
+ * single exception for common application attributes, themes, colors and backup rules.
  */
 class ManifestContractTest {
 
     @Test
-    fun `library manifests declare no application attributes`() {
-        val offenders = libraryManifests().mapNotNull { manifest ->
-            val attributes = APPLICATION_TAG.find(manifest.readText())
-                ?.groupValues
-                ?.get(1)
-                ?.let { ATTRIBUTE_NAME.findAll(it).map { match -> match.groupValues[1] }.toList() }
-                .orEmpty()
+    fun `only app toolkit facade declares application attributes`() {
+        val offenders = libraryManifests()
+            .filterNot { it.invariantPath().endsWith(FACADE_MANIFEST) }
+            .mapNotNull { manifest ->
+                val attributes = APPLICATION_TAG.find(manifest.readText())
+                    ?.groupValues
+                    ?.get(1)
+                    ?.let { ATTRIBUTE_NAME.findAll(it).map { match -> match.groupValues[1] }.toList() }
+                    .orEmpty()
 
-            if (attributes.isEmpty()) null else "${manifest.relativePath()}: $attributes"
-        }
+                if (attributes.isEmpty()) null else "${manifest.relativePath()}: $attributes"
+            }
 
         assertThat(offenders).isEmpty()
+    }
+
+    @Test
+    fun `app toolkit facade declares the complete application defaults`() {
+        val attributes = APPLICATION_TAG.find(File(repositoryRoot, FACADE_MANIFEST).readText())
+            ?.groupValues
+            ?.get(1)
+            ?.let { ATTRIBUTE_NAME.findAll(it).map { match -> match.groupValues[1] }.toSet() }
+            .orEmpty()
+
+        assertThat(attributes).containsExactlyElementsIn(FACADE_APPLICATION_ATTRIBUTES)
+    }
+
+    @Test
+    fun `app toolkit owns default themes colors and backup rules`() {
+        TOOLKIT_DEFAULT_RESOURCES.forEach { relativePath ->
+            assertThat(File(repositoryRoot, relativePath).isFile).isTrue()
+        }
+        FORMER_SAMPLE_DEFAULT_RESOURCES.forEach { relativePath ->
+            assertThat(File(repositoryRoot, relativePath).exists()).isFalse()
+        }
+    }
+
+    @Test
+    fun `settings shortcut enters through the exported sample launcher`() {
+        val shortcut = File(repositoryRoot, SAMPLE_SHORTCUTS).readText()
+        val mainActivity = File(repositoryRoot, SAMPLE_MAIN_ACTIVITY_SOURCE).readText()
+
+        assertThat(shortcut).contains("android:action=\"$OPEN_SETTINGS_ACTION\"")
+        assertThat(shortcut).contains("android:targetClass=\"$SAMPLE_MAIN_ACTIVITY\"")
+        assertThat(shortcut).contains("android:targetPackage=\"$SAMPLE_APPLICATION_ID\"")
+        assertThat(mainActivity).contains("override fun onNewIntent(intent: Intent)")
+        assertThat(mainActivity).contains("setIntent(intent)")
+        assertThat(mainActivity).contains("\"$OPEN_SETTINGS_ACTION\"")
+        assertThat(mainActivity)
+            .contains("openActivity(activityClass = SettingsActivity::class.java)")
     }
 
     @Test
@@ -114,9 +146,45 @@ class ManifestContractTest {
         const val MANIFEST_FILE = "AndroidManifest.xml"
         const val MAIN_SOURCE_SET = "/src/main/"
         const val BUILD_DIRECTORY = "/build/"
+        const val FACADE_MANIFEST = "library/apptoolkit/src/main/AndroidManifest.xml"
         const val INTENT_FILTER = "intent-filter"
         const val UNNAMED_COMPONENT = "<unnamed>"
         const val SETTINGS_FILE = "settings.gradle.kts"
+        const val SAMPLE_SHORTCUTS = "sample/app/src/main/res/xml/shortcuts.xml"
+        const val OPEN_SETTINGS_ACTION = "com.d4rk.android.apps.apptoolkit.action.OPEN_SETTINGS"
+        const val SAMPLE_APPLICATION_ID = "com.d4rk.android.apps.apptoolkit"
+        const val SAMPLE_MAIN_ACTIVITY =
+            "com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.MainActivity"
+        const val SAMPLE_MAIN_ACTIVITY_SOURCE =
+            "sample/app/src/main/kotlin/com/mihaicristiancondrea/android/apps/apptoolkit/" +
+                "app/main/ui/MainActivity.kt"
+
+        val FACADE_APPLICATION_ATTRIBUTES = setOf(
+            "android:allowBackup",
+            "android:dataExtractionRules",
+            "android:enableOnBackInvokedCallback",
+            "android:fullBackupContent",
+            "android:hardwareAccelerated",
+            "android:resizeableActivity",
+            "android:supportsRtl",
+            "android:theme",
+            "android:usesCleartextTraffic",
+            "android:windowSoftInputMode",
+        )
+
+        val TOOLKIT_DEFAULT_RESOURCES = listOf(
+            "library/apptoolkit/src/main/res/values/themes.xml",
+            "library/apptoolkit/src/main/res/values/colors.xml",
+            "library/apptoolkit/src/main/res/xml/backup_rules.xml",
+            "library/apptoolkit/src/main/res/xml/data_extraction_rules.xml",
+        )
+
+        val FORMER_SAMPLE_DEFAULT_RESOURCES = listOf(
+            "sample/core/ui/src/main/res/values/themes.xml",
+            "sample/core/ui/src/main/res/values/colors.xml",
+            "sample/app/src/main/res/xml/backup_rules.xml",
+            "sample/app/src/main/res/xml/data_extraction_rules.xml",
+        )
 
         /** The opening `<application …>` tag only; its children are components, checked separately. */
         val APPLICATION_TAG = Regex("""<application([^>]*)>""")

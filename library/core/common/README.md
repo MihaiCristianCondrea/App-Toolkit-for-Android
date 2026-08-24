@@ -12,6 +12,7 @@ Android utility abstractions shared across the toolkit.
   contracts.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).
 - Small platform and Kotlin extensions used across modules.
+- The Play Integrity license-check manifest permission required by the shared App Check setup.
 
 ## Does not own
 

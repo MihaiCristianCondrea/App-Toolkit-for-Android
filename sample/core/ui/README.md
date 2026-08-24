@@ -2,43 +2,43 @@
 
 ## Purpose
 
-Shared visual resources and themes used by the host application and features.
+Shared host artwork used by the sample application and features.
 
 ## Owns
 
-- Shared colors and themes.
 - Shared `drawable`, `drawable-anydpi`, and `drawable-xhdpi` artwork.
 
 ## Does not own
 
 - Feature and application strings, which live in the module that owns each user flow.
+- Default colors, themes, splash artwork and backup rules, owned by
+  [`:library:apptoolkit`](../../../library/apptoolkit/README.md).
 - Resources that identify the application, such as launcher mipmaps and the manifest's `xml/`
   configuration, which stay in `:sample:app`.
 - Composables and error-to-text mappings, which live with their consuming feature.
 
 ## Depends on
 
-- [`:library:core:designsystem`](../../../library/core/designsystem/README.md) for the theme and font
-  resources this module uses.
-- AndroidX core splash screen for the attributes referenced by `SplashScreenTheme`.
+- [`:library:core:designsystem`](../../../library/core/designsystem/README.md) for shared visual
+  contracts exposed transitively to sample features.
 
 ## Used by
 
-- `:sample:app` for its theme and shared application artwork.
+- `:sample:app` for shared application artwork.
 - `:sample:feature:apps` and `:sample:feature:tiles` for shared visual assets.
 
 ## Flow chart
 
 ```mermaid
 flowchart LR
-    App[":sample:app"] --> Theme[Themes and colors]
+    App[":sample:app"] --> Artwork[Shared artwork]
     Apps[":sample:feature:apps"] --> Artwork[Shared artwork]
     Tiles[":sample:feature:tiles"] --> Artwork
 ```
 
 ## Public contracts
 
-- The shared visual resources exposed through this module's `R` class.
+- The shared host artwork exposed through this module's `R` class.
 
 ## Internal implementations
 
