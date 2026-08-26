@@ -21,5 +21,5 @@
     <string name="reduce_ads">Réduire les publicités</string>
     <string name="summary_ads">Voir des publicités pertinentes pour vous. Gérez les informations utilisées pour afficher des publicités personnalisées basées sur votre activité dans l\'application.</string>
     <string name="summary_ads_personalized_ads">Choisissez comment nous personnalisons les publicités en fonction de vos intérêts</string>
-    <string name="summary_reduce_ads">Supprime les publicités affichées à l\'ouverture de l\'application. Les autres publicités resteront affichées pour soutenir le développement.</string>
+    <string name="summary_reduce_ads">Supprime les publicités à l\'ouverture de l\'application. Les autres publicités restent affichées.</string>
 </resources>

@@ -21,5 +21,5 @@
     <string name="reduce_ads">Reduzir anúncios</string>
     <string name="summary_ads">Veja anúncios relevantes para você. Gerencie as informações usadas para mostrar anúncios personalizados com base em sua atividade no aplicativo. Você pode desativar a personalização aqui a qualquer momento.</string>
     <string name="summary_ads_personalized_ads">Escolha como personalizamos anúncios para você com base em seus interesses</string>
-    <string name="summary_reduce_ads">Remove os anúncios exibidos ao abrir o aplicativo. Os demais anúncios continuarão aparecendo para apoiar o desenvolvimento.</string>
+    <string name="summary_reduce_ads">Remove os anúncios ao abrir o aplicativo. Os demais anúncios continuarão aparecendo.</string>
 </resources>

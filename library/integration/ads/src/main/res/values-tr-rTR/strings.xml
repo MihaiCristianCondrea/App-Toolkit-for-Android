@@ -21,5 +21,5 @@
     <string name="reduce_ads">Reklamları azalt</string>
     <string name="summary_ads">Size uygun reklamları görün. Kişiselleştirilmiş reklamları yönetin</string>
     <string name="summary_ads_personalized_ads">Kişisel ilgi alanlarınıza göre reklamları nasıl özelleştirdiğimizi seçin</string>
-    <string name="summary_reduce_ads">Uygulamayı açarken gösterilen reklamları kaldırır. Diğer reklamlar geliştirmeyi desteklemek için gösterilmeye devam eder.</string>
+    <string name="summary_reduce_ads">Uygulama açılırken gösterilen reklamları kaldırır. Diğer reklamlar görünmeye devam eder.</string>
 </resources>

@@ -307,10 +307,8 @@ class CommonDataStoreTest {
         dataStore.close()
     }
 
-    // Separate keys: turning the reduced policy on must not touch the legacy ads-enabled gate, and
-    // an install grandfathered ad-free must not silently read as "reduced".
     @Test
-    fun `reduce ads defaults to off and is independent of ads enablement`() = runTest {
+    fun `reduce ads defaults to off`() = runTest {
         val dataStore = createDataStore(testScheduler)
 
         assertFalse(dataStore.reduceAds.first())
@@ -319,13 +317,28 @@ class CommonDataStoreTest {
         advanceUntilIdle()
 
         assertTrue(dataStore.reduceAds.first())
-        assertTrue(dataStore.ads(default = true).first())
+
+        dataStore.close()
+    }
+
+    // Once the user works the reduced-ads switch, the preference the old switch wrote must stop
+    // existing: leaving it behind would keep a second, invisible source of truth that the only
+    // remaining control cannot reach.
+    @Test
+    fun `saving reduce ads clears a stored ads override`() = runTest {
+        val dataStore = createDataStore(testScheduler)
 
         dataStore.saveAds(false)
         advanceUntilIdle()
+        assertFalse(dataStore.ads(default = true).first())
+
+        dataStore.saveReduceAds(true)
+        advanceUntilIdle()
 
         assertTrue(dataStore.reduceAds.first())
-        assertFalse(dataStore.ads(default = true).first())
+        // Cleared rather than forced to true, so enablement follows the host default again.
+        assertTrue(dataStore.ads(default = true).first())
+        assertFalse(dataStore.ads(default = false).first())
 
         dataStore.close()
     }

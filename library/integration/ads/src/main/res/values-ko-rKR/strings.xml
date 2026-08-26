@@ -21,5 +21,5 @@
     <string name="reduce_ads">광고 줄이기</string>
     <string name="summary_ads">귀하와 관련된 광고를 확인하세요. 앱 활동을 기반으로 맞춤 광고를 표시하는 데 사용되는 정보를 관리합니다. 언제든지 여기에서 맞춤 설정을 끌 수 있습니다.\n</string>
     <string name="summary_ads_personalized_ads">관심사를 기반으로 광고를 맞춤 설정하는 방법 선택</string>
-    <string name="summary_reduce_ads">앱을 열 때 나오는 광고를 없앱니다. 개발 지원을 위해 다른 광고는 계속 표시됩니다.</string>
+    <string name="summary_reduce_ads">앱을 열 때 나오는 광고를 없앱니다. 다른 광고는 계속 표시됩니다.</string>
 </resources>

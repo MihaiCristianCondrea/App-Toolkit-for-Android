@@ -21,5 +21,5 @@
     <string name="reduce_ads">広告を減らす</string>
     <string name="summary_ads">あなたに関連する広告を表示します。アプリのアクティビティに基づいた広告のパーソナライズを管理できます。ここでパーソナライズをいつでも無効にすることができます。</string>
     <string name="summary_ads_personalized_ads">興味に基づいて広告をパーソナライズする方法を選択する</string>
-    <string name="summary_reduce_ads">アプリ起動時の広告を非表示にします。開発を支援するため、その他の広告は引き続き表示されます。</string>
+    <string name="summary_reduce_ads">アプリ起動時の広告を非表示にします。その他の広告は表示されます。</string>
 </resources>

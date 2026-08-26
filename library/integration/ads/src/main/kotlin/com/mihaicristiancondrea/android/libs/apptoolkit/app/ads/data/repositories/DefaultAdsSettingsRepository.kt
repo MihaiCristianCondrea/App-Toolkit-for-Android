@@ -74,6 +74,9 @@ class DefaultAdsSettingsRepository(
         return persist { dataStore.saveAds(isChecked = enabled) }
     }
 
+    // The write also clears any stored ads-enabled override; see `AdsPreferencesDataSource`. It is
+    // one transaction down there rather than two calls here, so the two preferences cannot end up
+    // disagreeing if the process dies mid-way.
     override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> {
         firebaseController.logBreadcrumb(
             message = "Reduce ads settings updated",

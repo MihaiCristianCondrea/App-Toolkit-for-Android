@@ -175,6 +175,21 @@ class TestDefaultAdsSettingsRepository {
             coVerify { dataStore.saveReduceAds(isChecked = true) }
         }
 
+    // The clearing of the legacy override happens inside the data source's single edit; the
+    // repository's job is only to route the call there. `CommonDataStoreTest` pins the clearing.
+    @Test
+    fun `setReduceAds writes through the reduce-ads preference`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val dataStore = mockk<CommonDataStore>()
+            coEvery { dataStore.saveReduceAds(any()) } returns Unit
+            val repository = createRepository(dataStore, debugBuild = false)
+
+            repository.setReduceAds(true)
+
+            coVerify(exactly = 1) { dataStore.saveReduceAds(isChecked = true) }
+            coVerify(exactly = 0) { dataStore.saveAds(any()) }
+        }
+
     @Test
     fun `setReduceAds returns error on failure`() = runTest(dispatcherExtension.testDispatcher) {
         val dataStore = mockk<CommonDataStore>()

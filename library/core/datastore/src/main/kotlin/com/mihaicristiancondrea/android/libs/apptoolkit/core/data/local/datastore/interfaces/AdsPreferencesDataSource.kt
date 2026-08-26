@@ -47,7 +47,14 @@ interface AdsPreferencesDataSource {
     /** Emits the reduced-ads opt-in, `false` until the user turns it on. */
     val reduceAds: Flow<Boolean>
 
-    /** Persists the reduced-ads opt-in. */
+    /**
+     * Persists the reduced-ads opt-in and drops any stored [adsEnabled] override.
+     *
+     * Both happen in one transaction because they are one decision: the user has just made
+     * [reduceAds] their ad preference, so a stored enablement value from the switch this one
+     * replaced must not linger as a second, invisible source of truth. Enablement falls back to the
+     * host-configured default from here on.
+     */
     suspend fun saveReduceAds(isChecked: Boolean)
 
     /** Stops the sharing coroutine backing [adsEnabled]. */

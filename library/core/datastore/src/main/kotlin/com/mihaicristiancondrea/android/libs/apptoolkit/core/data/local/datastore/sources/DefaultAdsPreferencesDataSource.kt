@@ -45,7 +45,8 @@ import kotlinx.coroutines.flow.stateIn
  *
  * [reduceAds] is a separate key with a hard `false` default: unlike [adsEnabled] it is not a build
  * input, it is something the user opts into. Installs that had turned [adsEnabled] off under the
- * old switch are carried over to it by `ReduceAdsMigration` before any read is served.
+ * old switch are carried over to it by `ReduceAdsMigration` before any read is served, and writing
+ * [reduceAds] afterwards clears the old override for good.
  */
 class DefaultAdsPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
@@ -82,9 +83,13 @@ class DefaultAdsPreferencesDataSource(
             preferences[reduceAdsKey] ?: DEFAULT_REDUCE_ADS
         }.distinctUntilChanged()
 
+    // One edit, not two: a crash between separate writes could leave an install with the old
+    // override cleared and no reduced-ads value, silently turning ads back on for someone who had
+    // just asked for fewer.
     override suspend fun saveReduceAds(isChecked: Boolean) {
         dataStore.edit { preferences: MutablePreferences ->
             preferences[reduceAdsKey] = isChecked
+            preferences.remove(adsKey)
         }
     }
 

@@ -21,5 +21,5 @@
     <string name="reduce_ads">Менше реклами</string>
     <string name="summary_ads">Переглядайте релевантну рекламу та керуйте налаштуваннями</string>
     <string name="summary_ads_personalized_ads">Виберіть, як персоналізувати рекламу відповідно до ваших інтересів</string>
-    <string name="summary_reduce_ads">Вимикає рекламу під час відкриття застосунку. Решта реклами залишиться, щоб підтримати розробку.</string>
+    <string name="summary_reduce_ads">Вимикає рекламу під час відкриття застосунку. Решта реклами залишиться.</string>
 </resources>

@@ -21,5 +21,5 @@
     <string name="reduce_ads">تقليل الإعلانات</string>
     <string name="summary_ads">شاهد الإعلانات ذات الصلة بك. قم بإدارة المعلومات المستخدمة لعرض الإعلانات المخصصة بناءً على نشاطك في التطبيق. يمكنك دائمًا إيقاف التخصيص هنا.\n</string>
     <string name="summary_ads_personalized_ads">اختر كيف نخصص الإعلانات لك بناءً على اهتماماتك</string>
-    <string name="summary_reduce_ads">أوقف الإعلانات التي تظهر عند فتح التطبيق. ستظل الإعلانات الأخرى تُعرض لدعم التطوير.</string>
+    <string name="summary_reduce_ads">أوقف الإعلانات التي تظهر عند فتح التطبيق. ستظل الإعلانات الأخرى تظهر.</string>
 </resources>

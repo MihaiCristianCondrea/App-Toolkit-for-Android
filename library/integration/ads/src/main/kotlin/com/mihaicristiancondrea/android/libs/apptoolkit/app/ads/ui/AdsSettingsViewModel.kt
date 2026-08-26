@@ -29,7 +29,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
@@ -42,7 +41,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoadin
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -52,9 +50,8 @@ import kotlinx.coroutines.flow.onStart
 /**
  * ViewModel for ads settings and consent interaction.
  *
- * Both persisted ads preferences are observed together: `adsEnabled` is the hard gate that no
- * longer has a switch, and `reduceAds` is the opt-in the screen toggles. The gate is still needed
- * because the personalized-ads row is meaningless while ads are off entirely.
+ * Only `reduceAds` is observed. Ads enablement stays on the repository for hosts and tests, but no
+ * longer reaches this screen: nothing here is conditional on it.
  */
 class AdsSettingsViewModel(
     private val repository: AdsSettingsRepository,
@@ -68,12 +65,8 @@ class AdsSettingsViewModel(
 ) {
 
     private var observeJob: Job? = null
-    private var persistAdsEnabledJob: Job? = null
-    private var persistReduceAdsJob: Job? = null
+    private var persistJob: Job? = null
     private var consentJob: Job? = null
-
-    /** Last successfully observed pair, used to restore the screen after an observation failure. */
-    private var lastObserved: AdsSettingsUiState? = null
 
     init {
         onEvent(event = AdsSettingsEvent.Initialize)
@@ -82,8 +75,7 @@ class AdsSettingsViewModel(
     override fun handleEvent(event: AdsSettingsEvent) {
         when (event) {
             is AdsSettingsEvent.Initialize -> observe()
-            is AdsSettingsEvent.SetAdsEnabled -> persistAdsEnabled(enabled = event.enabled)
-            is AdsSettingsEvent.SetReduceAds -> persistReduceAds(enabled = event.enabled)
+            is AdsSettingsEvent.SetReduceAds -> persist(enabled = event.enabled)
             is AdsSettingsEvent.RequestConsent -> requestConsent(host = event.host)
         }
     }
@@ -97,14 +89,9 @@ class AdsSettingsViewModel(
         )
 
     private fun observe() {
-        startOperation(action = Actions.OBSERVE_ADS_SETTINGS)
+        startOperation(action = Actions.OBSERVE_REDUCE_ADS)
         observeJob = observeJob.restart {
-            combine(
-                repository.observeAdsEnabled(),
-                repository.observeReduceAds(),
-            ) { adsEnabled, reduceAds ->
-                AdsSettingsUiState(adsEnabled = adsEnabled, reduceAds = reduceAds)
-            }
+            repository.observeReduceAds()
                 .flowOn(dispatchers.io)
                 .onStart {
                     updateStateThreadSafe {
@@ -112,19 +99,16 @@ class AdsSettingsViewModel(
                         screenState.setLoading()
                     }
                 }
-                .onEach { observed ->
-                    lastObserved = observed
+                .onEach { reduceAds ->
                     updateStateThreadSafe {
-                        screenState.updateData(newState = ScreenState.Success()) { observed }
+                        screenState.updateData(newState = ScreenState.Success()) { current ->
+                            current.copy(reduceAds = reduceAds)
+                        }
                     }
                 }
-                .catchReport(action = Actions.OBSERVE_ADS_SETTINGS) {
+                .catchReport(action = Actions.OBSERVE_REDUCE_ADS) {
                     updateStateThreadSafe {
-                        // Nothing was observed yet, so the build default is the only value the
-                        // screen can honestly show; a later emission replaces it.
-                        val fallback = lastObserved
-                            ?: AdsSettingsUiState(adsEnabled = repository.defaultAdsEnabled)
-                        screenState.updateData(newState = ScreenState.Error()) { fallback }
+                        screenState.updateData(newState = ScreenState.Error()) { current -> current }
                         screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
                     }
                 }
@@ -132,76 +116,45 @@ class AdsSettingsViewModel(
         }
     }
 
-    private fun persistAdsEnabled(enabled: Boolean) {
-        persistAdsEnabledJob = persistAdsEnabledJob.restart {
-            persist(
-                action = Actions.PERSIST_ADS_ENABLED,
-                enabled = enabled,
-                currentValue = AdsSettingsUiState::adsEnabled,
-                withValue = { state, value -> state.copy(adsEnabled = value) },
-                write = { repository.setAdsEnabled(enabled) },
-            )
-        }
-    }
-
-    private fun persistReduceAds(enabled: Boolean) {
-        persistReduceAdsJob = persistReduceAdsJob.restart {
-            persist(
-                action = Actions.PERSIST_REDUCE_ADS,
-                enabled = enabled,
-                currentValue = AdsSettingsUiState::reduceAds,
-                withValue = { state, value -> state.copy(reduceAds = value) },
-                write = { repository.setReduceAds(enabled) },
-            )
-        }
-    }
-
-    /**
-     * Optimistically applies [enabled], then reverts to the previously rendered value if the write
-     * fails. [currentValue] and [withValue] are the only parts that differ per preference.
-     */
-    private fun persist(
-        action: String,
-        enabled: Boolean,
-        currentValue: (AdsSettingsUiState) -> Boolean,
-        withValue: (AdsSettingsUiState, Boolean) -> AdsSettingsUiState,
-        write: suspend () -> DataState<Unit, Errors.Database>,
-    ): Job {
+    /** Optimistically applies [enabled], reverting to the rendered value if the write fails. */
+    private fun persist(enabled: Boolean) {
         val extra = mapOf(ExtraKeys.ENABLED to enabled.toString())
-        startOperation(action = action, extra = extra)
+        startOperation(action = Actions.PERSIST_REDUCE_ADS, extra = extra)
 
         var previousValue = false
 
-        return flow { emit(write()) }
-            .flowOn(dispatchers.io)
-            .onStart {
-                updateStateThreadSafe {
-                    previousValue = screenState.value.data?.let(currentValue) == true
-                    screenState.dismissSnackbar()
-                    screenState.updateData(newState = ScreenState.Success()) { current ->
-                        withValue(current, enabled)
+        persistJob = persistJob.restart {
+            flow { emit(repository.setReduceAds(enabled)) }
+                .flowOn(dispatchers.io)
+                .onStart {
+                    updateStateThreadSafe {
+                        previousValue = screenState.value.data?.reduceAds == true
+                        screenState.dismissSnackbar()
+                        screenState.updateData(newState = ScreenState.Success()) { current ->
+                            current.copy(reduceAds = enabled)
+                        }
                     }
                 }
-            }
-            .onEach { result ->
-                result.onFailure { error ->
+                .onEach { result ->
+                    result.onFailure { error ->
+                        updateStateThreadSafe {
+                            screenState.updateData(newState = ScreenState.Error()) { current ->
+                                current.copy(reduceAds = previousValue)
+                            }
+                            screenState.setError(message = error.asUiText())
+                        }
+                    }
+                }
+                .catchReport(action = Actions.PERSIST_REDUCE_ADS, extra = extra) {
                     updateStateThreadSafe {
                         screenState.updateData(newState = ScreenState.Error()) { current ->
-                            withValue(current, previousValue)
+                            current.copy(reduceAds = previousValue)
                         }
-                        screenState.setError(message = error.asUiText())
+                        screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
                     }
                 }
-            }
-            .catchReport(action = action, extra = extra) {
-                updateStateThreadSafe {
-                    screenState.updateData(newState = ScreenState.Error()) { current ->
-                        withValue(current, previousValue)
-                    }
-                    screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
-                }
-            }
-            .launchIn(viewModelScope)
+                .launchIn(viewModelScope)
+        }
     }
 
     private fun requestConsent(host: ConsentHost) {
@@ -234,8 +187,7 @@ class AdsSettingsViewModel(
     }
 
     private object Actions {
-        const val OBSERVE_ADS_SETTINGS: String = "observeAdsSettings"
-        const val PERSIST_ADS_ENABLED: String = "persistAdsEnabled"
+        const val OBSERVE_REDUCE_ADS: String = "observeReduceAds"
         const val PERSIST_REDUCE_ADS: String = "persistReduceAds"
         const val REQUEST_CONSENT: String = "requestConsent"
     }

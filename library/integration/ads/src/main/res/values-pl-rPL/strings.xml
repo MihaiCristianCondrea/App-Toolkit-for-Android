@@ -21,5 +21,5 @@
     <string name="reduce_ads">Ogranicz reklamy</string>
     <string name="summary_ads">Wyświetlaj reklamy dostosowane do Ciebie. Zarządzaj informacjami używanymi do wyświetlania spersonalizowanych reklam. Możesz zawsze wyłączyć personalizację tutaj.</string>
     <string name="summary_ads_personalized_ads">Wybierz sposób personalizacji reklam na podstawie swoich zainteresowań</string>
-    <string name="summary_reduce_ads">Usuwa reklamy wyświetlane przy otwieraniu aplikacji. Pozostałe reklamy nadal będą wyświetlane, aby wspierać rozwój.</string>
+    <string name="summary_reduce_ads">Usuwa reklamy przy otwieraniu aplikacji. Pozostałe reklamy nadal się pojawią.</string>
 </resources>

@@ -20,12 +20,12 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.states
 /**
  * UI model for [AdsSettingsScreen].
  *
- * @property adsEnabled the hard gate. No switch writes it any more; the screen reads it only to
- * disable the personalized-ads row, which has nothing to act on when ads are off entirely.
- * @property reduceAds the user's opt-in to the host's reduced ad policy, and the only value the
- * screen's switch writes.
+ * Ads enablement is deliberately absent. It survives underneath as the host-facing gate, but no
+ * screen writes it and nothing here reads it: reducing ads leaves ordinary ads on, so every control
+ * on this screen is live regardless of it.
+ *
+ * @property reduceAds the user's opt-in to the host's reduced ad policy.
  */
 data class AdsSettingsUiState(
-    val adsEnabled: Boolean = true,
     val reduceAds: Boolean = false,
 )

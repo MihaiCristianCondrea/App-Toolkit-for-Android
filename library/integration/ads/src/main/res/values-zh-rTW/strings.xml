@@ -21,5 +21,5 @@
     <string name="reduce_ads">減少廣告</string>
     <string name="summary_ads">查看與您相關的廣告。管理應用程式活動所用資訊。</string>
     <string name="summary_ads_personalized_ads">選擇我們如何根據您的興趣個性化廣告</string>
-    <string name="summary_reduce_ads">移除開啟應用程式時顯示的廣告。其他廣告仍會顯示以支持開發。</string>
+    <string name="summary_reduce_ads">移除開啟應用程式時的廣告。其他廣告仍會顯示。</string>
 </resources>

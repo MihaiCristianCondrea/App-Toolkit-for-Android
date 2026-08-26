@@ -38,8 +38,8 @@ Owns ad preference settings and Google Mobile Ads integration UI used by AppTool
 flowchart TD
     Settings[AdsSettingsScreen] --> VM[AdsSettingsViewModel]
     VM --> Repo[AdsSettingsRepository]
-    Repo -->|persist reduced-ads opt-in| Reduce[CommonDataStore reduceAds]
-    Repo -->|read/write legacy gate| Store[CommonDataStore adsEnabledFlow]
+    Repo -->|persist opt-in, clear stale override| Reduce[CommonDataStore reduceAds]
+    Repo -->|host-facing read/write| Store[CommonDataStore adsEnabledFlow]
     Repo -->|apply privacy choice| Consent[ConsentRepository]
     Reduce --> Policy[Host ad policy]
     Store --> Manager[AdsCoreManager]
@@ -67,6 +67,9 @@ flowchart TD
   bound to the reduced-ads opt-in. Installs that had turned enablement off are carried onto that
   opt-in by `ReduceAdsMigration` in `:library:core:datastore`, so the switch is never off while the
   app shows nothing.
+- Enablement does not reach the screen at all: `AdsSettingsUiState` carries only the opt-in, and
+  personalized ads stays interactive. Reducing ads leaves ordinary ads on, so there is no state in
+  which the personalization row has nothing to act on.
 - SDK initialization is idempotent, mutex-protected, and conditional on a valid host-manifest app
   ID; the toolkit never supplies a fallback publisher ID.
 - Readiness is explicit state because enablement and asynchronous SDK initialization are different

@@ -73,6 +73,10 @@ flowchart TD
   and stays the gate hosts reach for in code, though no host UI writes it any more; `reduceAds` is a
   user opt-in with a hard `false` default and no build input. This module stores both and interprets
   neither.
+- Writing `reduceAds` clears any stored `adsEnabled` override in the same transaction. Once the user
+  works the only switch there is, the preference the old switch wrote must stop existing, or it
+  remains a second source of truth that no control can reach. One transaction rather than two writes
+  so a crash cannot leave the override cleared with no opt-in stored.
 - Preference migrations are `DataMigration`s on the `settings` store rather than work a data source
   does when constructed, so they finish before the first read is served and no consumer observes
   pre-migration values. `ReduceAdsMigration` is the first of them.
@@ -111,6 +115,9 @@ switch can act on: `reduceAds` becomes `true` and the `ads` key is cleared, so e
 the host-configured default as on a fresh install. A marker key — not the absence of `ads` — is what
 makes it run once, because hosts may still call `setAdsEnabled(false)` themselves and a later launch
 must not undo that.
+
+From then on, saving `reduceAds` clears the `ads` key again, so a host that later calls
+`setAdsEnabled(false)` keeps that value only until the user next touches the switch.
 
 
 ### Ads initialization must share the UI preference source
