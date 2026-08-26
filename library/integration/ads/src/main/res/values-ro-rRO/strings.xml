@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">Reclame</string>
     <string name="display_ads">Afișează reclame</string>
+    <string name="reduce_ads">Redu reclamele</string>
     <string name="learn_more">Află mai multe</string>
     <string name="personalized_ads">Reclame personalizate</string>
     <string name="summary_ads">Vezi reclame relevante pentru tine. Gestionează informațiile utilizate pentru a afișa reclame personalizate bazate pe activitatea ta în aplicație. Poți dezactiva personalizarea aici oricând.</string>

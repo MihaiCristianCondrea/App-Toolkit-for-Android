@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">Anúncios</string>
     <string name="display_ads">Exibir anúncios</string>
+    <string name="reduce_ads">Reduzir anúncios</string>
     <string name="learn_more">Saiba mais</string>
     <string name="personalized_ads">Anúncios personalizados</string>
     <string name="summary_ads">Veja anúncios relevantes para você. Gerencie as informações usadas para mostrar anúncios personalizados com base em sua atividade no aplicativo. Você pode desativar a personalização aqui a qualquer momento.</string>

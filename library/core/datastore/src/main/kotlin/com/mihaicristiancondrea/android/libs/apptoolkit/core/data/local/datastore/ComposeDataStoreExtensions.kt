@@ -18,14 +18,12 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
+import org.koin.compose.koinInject
 
 /**
  * Remembers a [CommonDataStore] scoped to the current composition.
  */
 @Composable
 fun rememberCommonDataStore(): CommonDataStore {
-    val context = LocalContext.current
-    return remember(context) { CommonDataStore.getInstance(context) }
+    return koinInject()
 }

@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">Реклама</string>
     <string name="display_ads">Показывать рекламу</string>
+    <string name="reduce_ads">Уменьшить количество рекламы</string>
     <string name="learn_more">Узнать больше</string>
     <string name="personalized_ads">Персонализированная реклама</string>
     <string name="summary_ads">Смотрите рекламу, которая вам подходит. Управляйте информацией, используемой для персонализации рекламы. Вы можете отключить её в любое время.</string>

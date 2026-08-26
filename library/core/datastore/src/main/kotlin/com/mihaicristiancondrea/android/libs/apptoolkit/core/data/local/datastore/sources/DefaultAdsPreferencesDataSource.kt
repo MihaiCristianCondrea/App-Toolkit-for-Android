@@ -52,6 +52,8 @@ class DefaultAdsPreferencesDataSource(
     private val scope = CoroutineScope(SupervisorJob() + dispatchers.io)
 
     private val adsKey = booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_ADS)
+    private val reduceAdsKey =
+        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_REDUCE_ADS)
 
     override fun ads(default: Boolean): Flow<Boolean> =
         dataStore.data.map { preferences: Preferences ->
@@ -64,9 +66,19 @@ class DefaultAdsPreferencesDataSource(
         initialValue = defaultAdsEnabled,
     )
 
+    override val reduceAds: Flow<Boolean> = dataStore.data.map { preferences: Preferences ->
+        preferences[reduceAdsKey] ?: false
+    }.distinctUntilChanged()
+
     override suspend fun saveAds(isChecked: Boolean) {
         dataStore.edit { preferences: MutablePreferences ->
             preferences[adsKey] = isChecked
+        }
+    }
+
+    override suspend fun saveReduceAds(isChecked: Boolean) {
+        dataStore.edit { preferences: MutablePreferences ->
+            preferences[reduceAdsKey] = isChecked
         }
     }
 

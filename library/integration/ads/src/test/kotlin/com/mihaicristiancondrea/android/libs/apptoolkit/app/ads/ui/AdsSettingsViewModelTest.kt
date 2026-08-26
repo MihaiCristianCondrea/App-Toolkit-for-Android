@@ -61,12 +61,21 @@ class AdsSettingsViewModelTest {
     ) : AdsSettingsRepository {
 
         private val state = MutableStateFlow(defaultAdsEnabled)
+        private val reduceAdsState = MutableStateFlow(false)
 
         override fun observeAdsEnabled(): Flow<Boolean> = state
+
+        override fun observeReduceAds(): Flow<Boolean> = reduceAdsState
 
         override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> {
             if (shouldFail) throw IOException("fail")
             state.value = enabled
+            return DataState.Success(Unit)
+        }
+
+        override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> {
+            if (shouldFail) throw IOException("fail")
+            reduceAdsState.value = enabled
             return DataState.Success(Unit)
         }
     }
@@ -98,7 +107,10 @@ class AdsSettingsViewModelTest {
             val repo = object : AdsSettingsRepository {
                 override val defaultAdsEnabled: Boolean = false
                 override fun observeAdsEnabled(): Flow<Boolean> = flow { throw IOException("boom") }
+                override fun observeReduceAds(): Flow<Boolean> = flowOf(false)
                 override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> =
+                    DataState.Success(Unit)
+                override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> =
                     DataState.Success(Unit)
             }
 

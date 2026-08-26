@@ -36,7 +36,7 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 flowchart TD
     Settings[AdsSettingsScreen] --> VM[AdsSettingsViewModel]
     VM --> Repo[AdsSettingsRepository]
-    Repo -->|persist enablement| Store[CommonDataStore adsEnabledFlow]
+    Repo -->|persist display and reduce settings| Store[CommonDataStore ad preferences]
     Repo -->|apply privacy choice| Consent[ConsentRepository]
     Store --> Manager[AdsCoreManager]
     Manifest[Host manifest AdMob application ID] --> Id[AdMobAppIdProvider]
@@ -51,12 +51,16 @@ flowchart TD
     Slot -->|enabled and ready| Request[Banner / native / app-open request]
     Request --> SDK
     Request -->|failure| Empty[Empty non-fatal slot]
+    Store --> Reduce{Reduce ads?}
+    Reduce -->|yes| Suppress[Suppress App Open only]
 ```
 
 ## Architectural decisions
 
 - Persisted ads enablement is the single source of truth for settings, initialization, and UI
   requests. No consumer chooses a local default.
+- Release builds expose the reduce-ads setting, while debug builds expose display-ads for testing.
+  Display ads continues to gate all ad surfaces; reduce ads gates only App Open display.
 - SDK initialization is idempotent, mutex-protected, and conditional on a valid host-manifest app
   ID; the toolkit never supplies a fallback publisher ID.
 - Readiness is explicit state because enablement and asynchronous SDK initialization are different

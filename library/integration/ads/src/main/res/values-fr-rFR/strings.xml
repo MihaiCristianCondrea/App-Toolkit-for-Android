@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">Publicités</string>
     <string name="display_ads">Afficher les publicités</string>
+    <string name="reduce_ads">Réduire les publicités</string>
     <string name="learn_more">En savoir plus</string>
     <string name="personalized_ads">Publicités personnalisées</string>
     <string name="summary_ads">Voir des publicités pertinentes pour vous. Gérez les informations utilisées pour afficher des publicités personnalisées basées sur votre activité dans l\'application.</string>

@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">Reklamlar</string>
     <string name="display_ads">Reklam göster</string>
+    <string name="reduce_ads">Reklamları azalt</string>
     <string name="learn_more">Daha fazla bilgi</string>
     <string name="personalized_ads">Kişiselleştirilmiş reklamlar</string>
     <string name="summary_ads">Size uygun reklamları görün. Kişiselleştirilmiş reklamları yönetin</string>

@@ -20,4 +20,5 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.states
 /** UI model for [AdsSettingsScreen]. */
 data class AdsSettingsUiState(
     val adsEnabled: Boolean = false,
+    val reduceAds: Boolean = false,
 )

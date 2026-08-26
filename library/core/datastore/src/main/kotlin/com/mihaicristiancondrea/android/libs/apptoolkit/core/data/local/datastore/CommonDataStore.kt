@@ -275,6 +275,10 @@ open class CommonDataStore(
 
     suspend fun saveAds(isChecked: Boolean) = adsPreferences.saveAds(isChecked)
 
+    val reduceAds: Flow<Boolean> get() = adsPreferences.reduceAds
+
+    suspend fun saveReduceAds(isChecked: Boolean) = adsPreferences.saveReduceAds(isChecked)
+
     // endregion
 
     // region Favorites

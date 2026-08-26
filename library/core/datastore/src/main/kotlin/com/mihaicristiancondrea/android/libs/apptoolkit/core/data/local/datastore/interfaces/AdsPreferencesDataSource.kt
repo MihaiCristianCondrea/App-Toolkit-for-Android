@@ -33,11 +33,17 @@ interface AdsPreferencesDataSource {
     /** Hot, always-current ads preference carrying the configured build default. */
     val adsEnabled: StateFlow<Boolean>
 
+    /** Emits whether App Open ads should be suppressed. */
+    val reduceAds: Flow<Boolean>
+
     /** Emits the ads preference with a caller-supplied default. */
     fun ads(default: Boolean): Flow<Boolean>
 
     /** Persists the ads preference. */
     suspend fun saveAds(isChecked: Boolean)
+
+    /** Persists whether App Open ads should be suppressed. */
+    suspend fun saveReduceAds(isChecked: Boolean)
 
     /** Stops the sharing coroutine backing [adsEnabled]. */
     fun close()

@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">廣告</string>
     <string name="display_ads">顯示廣告</string>
+    <string name="reduce_ads">減少廣告</string>
     <string name="learn_more">了解更多</string>
     <string name="personalized_ads">個性化廣告</string>
     <string name="summary_ads">查看與您相關的廣告。管理應用程式活動所用資訊。</string>

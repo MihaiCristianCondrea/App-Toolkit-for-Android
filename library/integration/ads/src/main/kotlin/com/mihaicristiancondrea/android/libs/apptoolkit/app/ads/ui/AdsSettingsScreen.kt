@@ -44,6 +44,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
@@ -64,6 +65,7 @@ private const val ADS_SETTINGS_SCREEN_CLASS = "AdsSettingsScreen"
 
 private object AdsPreferenceKeys {
     const val DISPLAY_ADS: String = "display_ads"
+    const val REDUCE_ADS: String = "reduce_ads"
     const val PERSONALIZED_ADS: String = "personalized_ads"
     const val LEARN_MORE: String = "learn_more"
 }
@@ -82,6 +84,7 @@ fun AdsSettingsScreen(
     val screenState: UiStateScreen<AdsSettingsUiState> by viewModel.uiState.collectAsStateWithLifecycle()
 
     val firebaseController: FirebaseController = koinInject()
+    val buildInfoProvider: BuildInfoProvider = koinInject()
     val context = LocalContext.current
 
     TrackScreenView(
@@ -124,10 +127,24 @@ fun AdsSettingsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = SizeConstants.LargeSize),
-                            title = stringResource(id = R.string.display_ads),
-                            switchState = rememberUpdatedState(data.adsEnabled),
+                            title = stringResource(
+                                id = if (buildInfoProvider.isDebugBuild) {
+                                    R.string.display_ads
+                                } else {
+                                    R.string.reduce_ads
+                                },
+                            ),
+                            switchState = rememberUpdatedState(
+                                if (buildInfoProvider.isDebugBuild) data.adsEnabled else data.reduceAds,
+                            ),
                             onSwitchToggled = { isChecked: Boolean ->
-                                viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(isChecked))
+                                viewModel.onEvent(
+                                    if (buildInfoProvider.isDebugBuild) {
+                                        AdsSettingsEvent.SetAdsEnabled(isChecked)
+                                    } else {
+                                        AdsSettingsEvent.SetReduceAds(isChecked)
+                                    },
+                                )
                             },
                             firebaseController = firebaseController,
                             ga4EventProvider = { isChecked ->
@@ -138,7 +155,11 @@ fun AdsSettingsScreen(
                                             ADS_SETTINGS_SCREEN_NAME
                                         ),
                                         SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-                                            AdsPreferenceKeys.DISPLAY_ADS
+                                            if (buildInfoProvider.isDebugBuild) {
+                                                AdsPreferenceKeys.DISPLAY_ADS
+                                            } else {
+                                                AdsPreferenceKeys.REDUCE_ADS
+                                            }
                                         ),
                                         SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(
                                             isChecked.toString()

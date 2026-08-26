@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">Reklam</string>
     <string name="display_ads">Visa annonser</string>
+    <string name="reduce_ads">Minska annonser</string>
     <string name="learn_more">Läs mer</string>
     <string name="personalized_ads">Personliga annonser</string>
     <string name="summary_ads">Se annonser som är relevanta för dig. Hantera informationen som används för personaliserade annonser.</string>

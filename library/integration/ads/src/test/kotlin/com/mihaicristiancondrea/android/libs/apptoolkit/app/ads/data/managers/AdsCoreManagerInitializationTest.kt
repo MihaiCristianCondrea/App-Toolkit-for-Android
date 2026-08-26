@@ -96,6 +96,7 @@ class AdsCoreManagerInitializationTest {
     fun `ads enablement is read from the same flow the ad views observe`() = runTest {
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val manager = managerWith(dataStore = dataStore)
 
         manager.initializeAds(appOpenUnitId = "unit")
@@ -108,6 +109,7 @@ class AdsCoreManagerInitializationTest {
     fun `the SDK is initialized when ads are enabled`() = runTest {
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val manager = managerWith(dataStore = dataStore)
 
         manager.initializeAds(appOpenUnitId = "unit")
@@ -120,6 +122,7 @@ class AdsCoreManagerInitializationTest {
         val adsEnabled = MutableStateFlow(false)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns adsEnabled
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val manager = managerWith(dataStore = dataStore)
 
         manager.initializeAds(appOpenUnitId = "unit")
@@ -135,6 +138,7 @@ class AdsCoreManagerInitializationTest {
         val adsEnabled = MutableStateFlow(true)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns adsEnabled
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val manager = managerWith(dataStore = dataStore)
 
         manager.initializeAds(appOpenUnitId = "unit")
@@ -148,6 +152,7 @@ class AdsCoreManagerInitializationTest {
     fun `the SDK is not initialized when the host declares no AdMob app id`() = runTest {
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val manager = managerWith(
             dataStore = dataStore,
             adMobAppIdProvider = { null },

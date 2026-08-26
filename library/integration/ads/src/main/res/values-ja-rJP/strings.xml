@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">広告</string>
     <string name="display_ads">広告を表示する</string>
+    <string name="reduce_ads">広告を減らす</string>
     <string name="learn_more">詳しく見る</string>
     <string name="personalized_ads">パーソナライズ広告</string>
     <string name="summary_ads">あなたに関連する広告を表示します。アプリのアクティビティに基づいた広告のパーソナライズを管理できます。ここでパーソナライズをいつでも無効にすることができます。</string>

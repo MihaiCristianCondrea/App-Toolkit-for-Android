@@ -56,6 +56,8 @@ class DefaultAdsSettingsRepository(
                 )
             }
 
+    override fun observeReduceAds(): Flow<Boolean> = dataStore.reduceAds
+
     // Previously returned Success unconditionally, so a DataStore write failure reached the caller
     // as an uncaught exception rather than the error state the settings screen renders.
     override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> {
@@ -72,5 +74,29 @@ class DefaultAdsSettingsRepository(
             },
         )
     }
-}
 
+    override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> =
+        persistPreference(
+            breadcrumb = "Reduce ads setting updated",
+            enabled = enabled,
+        ) { dataStore.saveReduceAds(isChecked = enabled) }
+
+    private suspend fun persistPreference(
+        breadcrumb: String,
+        enabled: Boolean,
+        save: suspend () -> Unit,
+    ): DataState<Unit, Errors.Database> {
+        firebaseController.logBreadcrumb(
+            message = breadcrumb,
+            attributes = mapOf("enabled" to enabled.toString()),
+        )
+        return runCatching { save() }.fold(
+            onSuccess = { DataState.Success(Unit) },
+            onFailure = { throwable ->
+                if (throwable is CancellationException) throw throwable
+                firebaseController.recordNonFatal(throwable = throwable)
+                DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
+            },
+        )
+    }
+}

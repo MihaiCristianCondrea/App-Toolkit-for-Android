@@ -155,6 +155,7 @@ class TestAdsCoreManager {
 
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
@@ -175,6 +176,7 @@ class TestAdsCoreManager {
 
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
@@ -210,6 +212,7 @@ class TestAdsCoreManager {
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
@@ -255,6 +258,7 @@ class TestAdsCoreManager {
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
@@ -295,6 +299,7 @@ class TestAdsCoreManager {
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
@@ -350,6 +355,7 @@ class TestAdsCoreManager {
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(false)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
@@ -374,6 +380,7 @@ class TestAdsCoreManager {
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
@@ -411,6 +418,7 @@ class TestAdsCoreManager {
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
@@ -448,6 +456,7 @@ class TestAdsCoreManager {
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
@@ -502,6 +511,7 @@ class TestAdsCoreManager {
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
@@ -534,6 +544,7 @@ class TestAdsCoreManager {
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(false)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)
@@ -557,6 +568,7 @@ class TestAdsCoreManager {
         val manager = managerWith(context, provider)
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
+        every { dataStore.reduceAds } returns kotlinx.coroutines.flow.flowOf(false)
         val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
         storeField.isAccessible = true
         storeField.set(manager, dataStore)

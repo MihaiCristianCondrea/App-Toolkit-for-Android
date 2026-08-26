@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">Ads</string>
     <string name="display_ads">Display ads</string>
+    <string name="reduce_ads">Reduce ads</string>
     <string name="learn_more">Learn more</string>
     <string name="personalized_ads">Personalized ads</string>
     <string name="summary_ads">See ads that are relevant to you. Manage the information used to show personalized ads based on your app activity. You can always turn off personalization here.\n</string>

@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">الإعلانات</string>
     <string name="display_ads">عرض الإعلانات</string>
+    <string name="reduce_ads">تقليل الإعلانات</string>
     <string name="learn_more">اعرف المزيد</string>
     <string name="personalized_ads">الإعلانات المخصصة</string>
     <string name="summary_ads">شاهد الإعلانات ذات الصلة بك. قم بإدارة المعلومات المستخدمة لعرض الإعلانات المخصصة بناءً على نشاطك في التطبيق. يمكنك دائمًا إيقاف التخصيص هنا.\n</string>

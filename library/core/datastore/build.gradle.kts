@@ -46,4 +46,5 @@ dependencies {
     api(project(":library:core:common"))
     api(libs.androidx.datastore.preferences)
     api(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.koin.androidx.compose)
 }

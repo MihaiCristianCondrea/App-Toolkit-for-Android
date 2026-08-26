@@ -12,7 +12,7 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
   diagnostics, ads, review, changelog, app state, and favorites.
 - `CommonDataStore`, which owns one instance of each source, exposes them, and keeps the flat
   pre-split API delegating to them.
-- Persisted theme, review, ads, and consent-related values.
+- Persisted theme, review, display-ads, reduce-ads, and consent-related values.
 - The Koin DataStore module, which is the single place `CommonDataStore` is registered;
   `appToolkitFoundationModules` includes it rather than defining its own copy.
 
@@ -51,6 +51,7 @@ flowchart TD
     Store -->|preference updates| Source
     Source -->|typed Flow| Caller
     Ads[DefaultAdsPreferencesDataSource] -->|eagerly shared| AdsState[adsEnabled StateFlow]
+    Ads --> Reduce[reduceAds Flow]
     Store --> Ads
     Module[dataStoreModule] -->|one process instance| Facade
     Module --> Narrow
@@ -66,6 +67,8 @@ flowchart TD
   source of truth except for explicitly documented UI mirrors.
 - Ads enablement is eagerly shared by one process-scoped instance because initialization and every
   ad surface must observe the same default and subsequent changes.
+- Reduce ads defaults to `false` and suppresses only App Open ads; it does not alter SDK
+  initialization or banner/native ad enablement.
 
 ## Public contracts
 

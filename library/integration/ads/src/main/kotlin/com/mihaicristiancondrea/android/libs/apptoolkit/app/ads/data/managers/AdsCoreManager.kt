@@ -234,8 +234,11 @@ open class AdsCoreManager(
             val isAdsChecked: Boolean = withContext(dispatchers.io) {
                 dataStore.adsEnabledFlow.first()
             }
+            val shouldReduceAds: Boolean = withContext(dispatchers.io) {
+                dataStore.reduceAds.first()
+            }
 
-            if (isShowingAd || !isAdsChecked) {
+            if (isShowingAd || !isAdsChecked || shouldReduceAds) {
                 return
             }
             if (!isAdAvailable()) {
@@ -272,5 +275,4 @@ open class AdsCoreManager(
         const val LOG_TAG: String = "AdsCoreManager"
     }
 }
-
 

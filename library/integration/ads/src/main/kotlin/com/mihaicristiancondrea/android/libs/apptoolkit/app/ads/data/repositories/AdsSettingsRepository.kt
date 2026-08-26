@@ -30,5 +30,7 @@ import kotlinx.coroutines.flow.Flow
 interface AdsSettingsRepository {
     val defaultAdsEnabled: Boolean
     fun observeAdsEnabled(): Flow<Boolean>
+    fun observeReduceAds(): Flow<Boolean>
     suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database>
+    suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database>
 }

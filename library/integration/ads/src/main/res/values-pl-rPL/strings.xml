@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">Reklamy</string>
     <string name="display_ads">Wyświetlaj reklamy</string>
+    <string name="reduce_ads">Ogranicz reklamy</string>
     <string name="learn_more">Dowiedz się więcej</string>
     <string name="personalized_ads">Spersonalizowane reklamy</string>
     <string name="summary_ads">Wyświetlaj reklamy dostosowane do Ciebie. Zarządzaj informacjami używanymi do wyświetlania spersonalizowanych reklam. Możesz zawsze wyłączyć personalizację tutaj.</string>

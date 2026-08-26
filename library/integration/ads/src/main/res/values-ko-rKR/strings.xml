@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">광고</string>
     <string name="display_ads">광고 표시</string>
+    <string name="reduce_ads">광고 줄이기</string>
     <string name="learn_more">더 알아보기</string>
     <string name="personalized_ads">맞춤 광고</string>
     <string name="summary_ads">귀하와 관련된 광고를 확인하세요. 앱 활동을 기반으로 맞춤 광고를 표시하는 데 사용되는 정보를 관리합니다. 언제든지 여기에서 맞춤 설정을 끌 수 있습니다.\n</string>

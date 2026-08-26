@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">اشتہارات</string>
     <string name="display_ads">اشتہارات دکھائیں</string>
+    <string name="reduce_ads">اشتہارات کم کریں</string>
     <string name="learn_more">مزید جانیں</string>
     <string name="personalized_ads">ذاتی نوعیت کے اشتہارات</string>
     <string name="summary_ads">وہ اشتہارات دیکھیں جو آپ سے متعلقہ ہوں۔ اپنی ایپ سرگرمی کی بنیاد پر ذاتی نوعیت کے اشتہارات دکھانے کے لیے استعمال ہونے والی معلومات کا نظم کریں۔ آپ یہاں ہمیشہ ذاتی نوعیت کو بند کر سکتے ہیں۔\n</string>

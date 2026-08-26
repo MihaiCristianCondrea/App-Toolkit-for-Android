@@ -17,6 +17,7 @@
 <resources>
     <string name="ads">Werbung</string>
     <string name="display_ads">Werbung anzeigen</string>
+    <string name="reduce_ads">Werbung reduzieren</string>
     <string name="learn_more">Mehr erfahren</string>
     <string name="personalized_ads">Personalisierte Werbung</string>
     <string name="summary_ads">Sehen Sie relevante Anzeigen. Verwalten Sie, welche Informationen verwendet werden, um personalisierte Anzeigen basierend auf Ihrer App-Nutzung anzuzeigen.</string>

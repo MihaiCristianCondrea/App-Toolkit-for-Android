@@ -43,6 +43,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.showSnack
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -75,6 +76,7 @@ class AdsSettingsViewModel(
         when (event) {
             is AdsSettingsEvent.Initialize -> observe()
             is AdsSettingsEvent.SetAdsEnabled -> persist(enabled = event.enabled)
+            is AdsSettingsEvent.SetReduceAds -> persistReduceAds(enabled = event.enabled)
             is AdsSettingsEvent.RequestConsent -> requestConsent(host = event.host)
         }
     }
@@ -90,7 +92,10 @@ class AdsSettingsViewModel(
     private fun observe() {
         startOperation(action = Actions.OBSERVE_ADS_ENABLED)
         observeJob = observeJob.restart {
-            repository.observeAdsEnabled()
+            combine(
+                repository.observeAdsEnabled(),
+                repository.observeReduceAds(),
+            ) { adsEnabled, reduceAds -> AdsSettingsUiState(adsEnabled, reduceAds) }
                 .flowOn(dispatchers.io)
                 .onStart {
                     updateStateThreadSafe {
@@ -98,11 +103,9 @@ class AdsSettingsViewModel(
                         screenState.setLoading()
                     }
                 }
-                .onEach { enabled ->
+                .onEach { settings ->
                     updateStateThreadSafe {
-                        screenState.updateData(newState = ScreenState.Success()) { current ->
-                            current.copy(adsEnabled = enabled)
-                        }
+                        screenState.updateData(newState = ScreenState.Success()) { settings }
                     }
                 }
                 .catchReport(action = Actions.OBSERVE_ADS_ENABLED) {
@@ -166,6 +169,46 @@ class AdsSettingsViewModel(
         }
     }
 
+    private fun persistReduceAds(enabled: Boolean) {
+        startOperation(
+            action = Actions.PERSIST_REDUCE_ADS,
+            extra = mapOf(ExtraKeys.ENABLED to enabled.toString()),
+        )
+        persistJob = persistJob.restart {
+            var previousValue = false
+            flow { emit(repository.setReduceAds(enabled)) }
+                .flowOn(dispatchers.io)
+                .onStart {
+                    updateStateThreadSafe {
+                        previousValue = screenState.value.data?.reduceAds ?: false
+                        screenState.dismissSnackbar()
+                        screenState.updateData(newState = ScreenState.Success()) { current ->
+                            current.copy(reduceAds = enabled)
+                        }
+                    }
+                }
+                .onEach { result ->
+                    result.onFailure { error ->
+                        updateStateThreadSafe {
+                            screenState.updateData(newState = ScreenState.Error()) { current ->
+                                current.copy(reduceAds = previousValue)
+                            }
+                            screenState.setError(message = error.asUiText())
+                        }
+                    }
+                }
+                .catchReport(action = Actions.PERSIST_REDUCE_ADS) {
+                    updateStateThreadSafe {
+                        screenState.updateData(newState = ScreenState.Error()) { current ->
+                            current.copy(reduceAds = previousValue)
+                        }
+                        screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
+                    }
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
     private fun persistAdsEnabled(enabled: Boolean): Flow<DataState<Unit, Errors>> =
         flow { emit(repository.setAdsEnabled(enabled)) }
 
@@ -201,6 +244,7 @@ class AdsSettingsViewModel(
     private object Actions {
         const val OBSERVE_ADS_ENABLED: String = "observeAdsEnabled"
         const val PERSIST_ADS_ENABLED: String = "persistAdsEnabled"
+        const val PERSIST_REDUCE_ADS: String = "persistReduceAds"
         const val REQUEST_CONSENT: String = "requestConsent"
     }
 
