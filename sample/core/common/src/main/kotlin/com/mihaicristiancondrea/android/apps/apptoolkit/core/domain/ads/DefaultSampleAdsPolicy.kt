@@ -26,44 +26,26 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
 
 /**
- * Derives the sample's ad policy from the two persisted preferences.
+ * Derives the App Open decision from the two persisted ads preferences.
  *
- * Takes flows rather than the preference store so this stays a pure policy object: it is the only
- * place that knows the reduced policy means "no App Open ads, native ads at twice the spacing".
+ * Takes flows rather than the preference store so this stays a pure policy object.
  *
- * Both values are shared eagerly because [appOpenAdsEnabled] is read synchronously from a process
- * lifecycle callback, which cannot wait for a first emission. Until the preferences arrive both
- * read `false`, so the app under-shows ads for a moment rather than showing one the user opted out
- * of.
+ * The state is shared eagerly because [appOpenAdsEnabled] is read synchronously from a process
+ * lifecycle callback, which cannot wait for a first emission. Until the preferences arrive it reads
+ * `false`, so a launch shows no App Open ad rather than one the user opted out of.
  *
- * @param adsEnabled the legacy hard gate.
- * @param reduceAdsPreference the user's reduced-ads opt-in.
+ * @param adsEnabled whether this install may see ads at all.
+ * @param reduceAds the user's reduced-ads opt-in.
  * @param scope scope backing the shared state; it must live as long as the process.
  */
 class DefaultSampleAdsPolicy(
     adsEnabled: Flow<Boolean>,
-    reduceAdsPreference: Flow<Boolean>,
+    reduceAds: Flow<Boolean>,
     scope: CoroutineScope,
 ) : SampleAdsPolicy {
 
-    override val reduceAds: StateFlow<Boolean> = reduceAdsPreference
-        .distinctUntilChanged()
-        .stateIn(scope = scope, started = SharingStarted.Eagerly, initialValue = false)
-
     override val appOpenAdsEnabled: StateFlow<Boolean> =
-        combine(adsEnabled, reduceAdsPreference) { enabled, reduced -> enabled && !reduced }
+        combine(adsEnabled, reduceAds) { enabled, reduced -> enabled && !reduced }
             .distinctUntilChanged()
             .stateIn(scope = scope, started = SharingStarted.Eagerly, initialValue = false)
-
-    override fun nativeAdInterval(placement: NativeAdPlacement): Int =
-        if (reduceAds.value) placement.normalInterval * REDUCED_INTERVAL_FACTOR
-        else placement.normalInterval
-
-    private companion object {
-        /**
-         * Reduced spacing is derived from the normal cadence rather than being a second set of
-         * tuning numbers, so retuning a placement keeps both policies in step.
-         */
-        const val REDUCED_INTERVAL_FACTOR: Int = 2
-    }
 }

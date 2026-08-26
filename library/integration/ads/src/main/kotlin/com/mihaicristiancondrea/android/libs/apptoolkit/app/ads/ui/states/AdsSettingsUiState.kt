@@ -20,10 +20,10 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.states
 /**
  * UI model for [AdsSettingsScreen].
  *
- * @property adsEnabled legacy hard gate. No switch writes it any more; the screen keeps reading it
- * so grandfathered ad-free installs are shown as such instead of rendering a reduced-ads toggle
- * that would appear to do nothing.
- * @property reduceAds the user's opt-in to the host's reduced ad policy.
+ * @property adsEnabled the hard gate. No switch writes it any more; the screen reads it only to
+ * disable the personalized-ads row, which has nothing to act on when ads are off entirely.
+ * @property reduceAds the user's opt-in to the host's reduced ad policy, and the only value the
+ * screen's switch writes.
  */
 data class AdsSettingsUiState(
     val adsEnabled: Boolean = true,

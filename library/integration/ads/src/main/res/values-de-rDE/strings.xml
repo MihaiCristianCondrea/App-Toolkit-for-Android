@@ -16,12 +16,10 @@
   -->
 <resources>
     <string name="ads">Werbung</string>
-    <string name="ads_disabled">Werbung deaktiviert</string>
     <string name="learn_more">Mehr erfahren</string>
     <string name="personalized_ads">Personalisierte Werbung</string>
     <string name="reduce_ads">Werbung reduzieren</string>
     <string name="summary_ads">Sehen Sie relevante Anzeigen. Verwalten Sie, welche Informationen verwendet werden, um personalisierte Anzeigen basierend auf Ihrer App-Nutzung anzuzeigen.</string>
-    <string name="summary_ads_disabled">Sie verwenden die frühere werbefreie Einstellung. Diese Einstellung wurde beibehalten.</string>
     <string name="summary_ads_personalized_ads">Wählen Sie, wie Werbung für Sie personalisiert wird</string>
-    <string name="summary_reduce_ads">Sehen Sie weniger Anzeigen und keine Werbung mehr beim Öffnen der App. Einige Anzeigen werden weiterhin angezeigt, um die Entwicklung zu unterstützen.</string>
+    <string name="summary_reduce_ads">Entfernt die Werbung beim Öffnen der App. Andere Anzeigen werden weiterhin angezeigt, um die Entwicklung zu unterstützen.</string>
 </resources>

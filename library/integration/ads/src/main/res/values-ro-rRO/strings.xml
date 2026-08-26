@@ -16,12 +16,10 @@
   -->
 <resources>
     <string name="ads">Reclame</string>
-    <string name="ads_disabled">Reclame dezactivate</string>
     <string name="learn_more">Află mai multe</string>
     <string name="personalized_ads">Reclame personalizate</string>
     <string name="reduce_ads">Redu reclamele</string>
     <string name="summary_ads">Vezi reclame relevante pentru tine. Gestionează informațiile utilizate pentru a afișa reclame personalizate bazate pe activitatea ta în aplicație. Poți dezactiva personalizarea aici oricând.</string>
-    <string name="summary_ads_disabled">Folosești setarea anterioară fără reclame. Această preferință a fost păstrată.</string>
     <string name="summary_ads_personalized_ads">Alege cum personalizăm reclamele pentru tine în funcție de interesele tale</string>
-    <string name="summary_reduce_ads">Vezi mai puține reclame și elimină reclamele afișate la deschiderea aplicației. Unele reclame vor fi afișate în continuare pentru a susține dezvoltarea.</string>
+    <string name="summary_reduce_ads">Elimină reclamele afișate la deschiderea aplicației. Celelalte reclame vor fi afișate în continuare pentru a susține dezvoltarea.</string>
 </resources>

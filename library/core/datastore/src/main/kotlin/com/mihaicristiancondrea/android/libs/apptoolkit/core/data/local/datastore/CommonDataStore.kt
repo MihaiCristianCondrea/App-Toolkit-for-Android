@@ -37,6 +37,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastor
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ReviewPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ThemePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.UsageAndDiagnosticsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.migrations.commonDataStoreMigrations
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultAdsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultAppStatePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultChangelogPreferencesDataSource
@@ -49,8 +50,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
-/** Process-safe delegate for the toolkit's single `settings` Preferences DataStore file. */
-val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(name = DataStoreNamesConstants.DATA_STORE_SETTINGS)
+/**
+ * Process-safe delegate for the toolkit's single `settings` Preferences DataStore file.
+ *
+ * Migrations run here rather than in a data source so they complete before the first read is
+ * served; a source that migrated on construction would let consumers observe the old values first.
+ */
+val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = DataStoreNamesConstants.DATA_STORE_SETTINGS,
+    produceMigrations = { commonDataStoreMigrations() },
+)
 
 /**
  * Facade over the toolkit's preference data sources.
@@ -92,7 +101,7 @@ open class CommonDataStore(
     val diagnosticsPreferences: DefaultDiagnosticsPreferencesDataSource =
         DefaultDiagnosticsPreferencesDataSource(dataStore = dataStore)
 
-    /** Ads preferences: the legacy [adsEnabledFlow] gate and the [reduceAds] opt-in. */
+    /** Ads preferences: the [adsEnabledFlow] gate and the [reduceAds] opt-in. */
     val adsPreferences: AdsPreferencesDataSource = DefaultAdsPreferencesDataSource(
         dataStore = dataStore,
         dispatchers = dispatchers,

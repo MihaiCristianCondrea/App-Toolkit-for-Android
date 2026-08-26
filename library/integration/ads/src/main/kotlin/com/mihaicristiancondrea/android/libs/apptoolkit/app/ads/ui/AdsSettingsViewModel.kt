@@ -52,10 +52,9 @@ import kotlinx.coroutines.flow.onStart
 /**
  * ViewModel for ads settings and consent interaction.
  *
- * Both persisted ads preferences are observed together: `adsEnabled` is the legacy hard gate that
- * no longer has a switch, and `reduceAds` is the opt-in the screen actually toggles. The screen
- * needs the gate anyway, to tell a grandfathered ad-free install apart from one running the normal
- * policy.
+ * Both persisted ads preferences are observed together: `adsEnabled` is the hard gate that no
+ * longer has a switch, and `reduceAds` is the opt-in the screen toggles. The gate is still needed
+ * because the personalized-ads row is meaningless while ads are off entirely.
  */
 class AdsSettingsViewModel(
     private val repository: AdsSettingsRepository,

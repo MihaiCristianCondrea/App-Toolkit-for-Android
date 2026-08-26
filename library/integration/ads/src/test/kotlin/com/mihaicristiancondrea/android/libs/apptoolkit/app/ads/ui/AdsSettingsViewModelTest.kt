@@ -175,7 +175,7 @@ class AdsSettingsViewModelTest {
             val state = viewModel.uiState.value
             assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
             assertThat(state.data?.reduceAds).isTrue()
-            // The legacy gate is a separate preference and must survive the new toggle untouched.
+            // The gate is a separate preference and must survive the new toggle untouched.
             assertThat(state.data?.adsEnabled).isTrue()
         }
 
@@ -194,7 +194,7 @@ class AdsSettingsViewModelTest {
     }
 
     @Test
-    fun `grandfathered ad-free install keeps ads disabled`() =
+    fun `disabling ads entirely leaves the reduced-ads opt-in alone`() =
         runTest(dispatcherExtension.testDispatcher) {
             val repo = FakeAdsSettingsRepository(defaultAdsEnabled = true)
             val viewModel = createViewModel(repo)

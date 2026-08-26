@@ -44,7 +44,8 @@ import kotlinx.coroutines.flow.stateIn
  * singleton and reached through the graph rather than built on demand.
  *
  * [reduceAds] is a separate key with a hard `false` default: unlike [adsEnabled] it is not a build
- * input, it is something the user opts into.
+ * input, it is something the user opts into. Installs that had turned [adsEnabled] off under the
+ * old switch are carried over to it by `ReduceAdsMigration` before any read is served.
  */
 class DefaultAdsPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,

@@ -16,12 +16,10 @@
   -->
 <resources>
     <string name="ads">Anúncios</string>
-    <string name="ads_disabled">Anúncios desativados</string>
     <string name="learn_more">Saiba mais</string>
     <string name="personalized_ads">Anúncios personalizados</string>
     <string name="reduce_ads">Reduzir anúncios</string>
     <string name="summary_ads">Veja anúncios relevantes para você. Gerencie as informações usadas para mostrar anúncios personalizados com base em sua atividade no aplicativo. Você pode desativar a personalização aqui a qualquer momento.</string>
-    <string name="summary_ads_disabled">Você está usando a configuração anterior sem anúncios. Essa preferência foi preservada.</string>
     <string name="summary_ads_personalized_ads">Escolha como personalizamos anúncios para você com base em seus interesses</string>
-    <string name="summary_reduce_ads">Veja menos anúncios e remova os exibidos ao abrir o aplicativo. Alguns anúncios continuarão aparecendo para apoiar o desenvolvimento.</string>
+    <string name="summary_reduce_ads">Remove os anúncios exibidos ao abrir o aplicativo. Os demais anúncios continuarão aparecendo para apoiar o desenvolvimento.</string>
 </resources>

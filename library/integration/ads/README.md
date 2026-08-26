@@ -16,8 +16,8 @@ Owns ad preference settings and Google Mobile Ads integration UI used by AppTool
 - Consent acquisition, owned by `:library:integration:consent`.
 - Generic native-ad rendering primitives, currently owned by `:library:core:ui`.
 - Host ad-unit IDs and host-specific ad policies, owned by the host/common configuration. That
-  includes what "reduce ads" means: this module stores and toggles the preference, the host decides
-  which ads it suppresses and how sparse the remaining ones are.
+  includes what "reduce ads" means: this module toggles the preference, the host decides what it
+  suppresses.
 
 ## Depends on
 
@@ -61,12 +61,12 @@ flowchart TD
 
 - Persisted ads enablement is the single source of truth for settings, initialization, and UI
   requests. No consumer chooses a local default.
-- Ads enablement and reduced ads are separate preferences. Enablement is the legacy hard gate — no
-  screen toggles it any more, but its stored value and repository read/write survive so
-  grandfathered ad-free installs stay ad-free and hosts keep a hook for migrations and purchases.
-  The settings screen toggles only the reduced-ads opt-in, and hides that switch behind an explicit
-  "ads disabled" notice when the gate is off, so a preserved entitlement never reads as a broken
-  toggle.
+- Ads enablement and reduced ads are separate preferences. Enablement is the hard gate — no screen
+  toggles it any more, but the repository read/write survives for hosts, tests, and features such as
+  purchases. The settings screen keeps exactly the shape it had: one always-visible switch, now
+  bound to the reduced-ads opt-in. Installs that had turned enablement off are carried onto that
+  opt-in by `ReduceAdsMigration` in `:library:core:datastore`, so the switch is never off while the
+  app shows nothing.
 - SDK initialization is idempotent, mutex-protected, and conditional on a valid host-manifest app
   ID; the toolkit never supplies a fallback publisher ID.
 - Readiness is explicit state because enablement and asynchronous SDK initialization are different

@@ -26,11 +26,10 @@ import kotlinx.coroutines.flow.Flow
  *
  * Two separate preferences are exposed because they answer different questions:
  *
- * - `adsEnabled` is the legacy hard gate — whether this install may see ads at all. No host UI
- *   toggles it any more, but installs that opted out stay ad-free, so the read/write pair is kept
- *   for compatibility, migrations, tests, and host-specific logic such as purchases.
- * - `reduceAds` is the user's opt-in to a less intrusive ad policy. What "reduced" means — fewer
- *   native ads, no app-open ads — is decided by the host, not here.
+ * - `adsEnabled` is the hard gate — whether this install may see ads at all. No screen toggles it
+ *   any more, but the read/write pair survives for hosts, tests, and features such as purchases.
+ * - `reduceAds` is the user's opt-in to a less intrusive ad policy. What "reduced" means is decided
+ *   by the host, not here; in the sample it suppresses app-open ads.
  */
 interface AdsSettingsRepository {
     val defaultAdsEnabled: Boolean

@@ -16,12 +16,10 @@
   -->
 <resources>
     <string name="ads">広告</string>
-    <string name="ads_disabled">広告は無効です</string>
     <string name="learn_more">詳しく見る</string>
     <string name="personalized_ads">パーソナライズ広告</string>
     <string name="reduce_ads">広告を減らす</string>
     <string name="summary_ads">あなたに関連する広告を表示します。アプリのアクティビティに基づいた広告のパーソナライズを管理できます。ここでパーソナライズをいつでも無効にすることができます。</string>
-    <string name="summary_ads_disabled">以前の広告なし設定を使用しています。この設定は維持されています。</string>
     <string name="summary_ads_personalized_ads">興味に基づいて広告をパーソナライズする方法を選択する</string>
-    <string name="summary_reduce_ads">表示される広告を減らし、アプリ起動時の広告を非表示にします。開発を支援するため、一部の広告は引き続き表示されます。</string>
+    <string name="summary_reduce_ads">アプリ起動時の広告を非表示にします。開発を支援するため、その他の広告は引き続き表示されます。</string>
 </resources>

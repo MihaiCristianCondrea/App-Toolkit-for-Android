@@ -25,9 +25,6 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
   [`:sample:core:navigation`](../../core/navigation/README.md).
 - Native ad rendering, owned by [`:library:core:ui`](../../../library/core/ui/README.md); this
   module supplies only the quick-tools card styling.
-- How often native ads appear, owned by the host's `SampleAdsPolicy` in
-  [`:sample:core:common`](../../core/common/README.md); this module decides only where they go in
-  the catalogue.
 
 ## Depends on
 

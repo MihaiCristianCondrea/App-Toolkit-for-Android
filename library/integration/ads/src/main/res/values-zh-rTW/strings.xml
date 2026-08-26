@@ -16,12 +16,10 @@
   -->
 <resources>
     <string name="ads">廣告</string>
-    <string name="ads_disabled">廣告已停用</string>
     <string name="learn_more">了解更多</string>
     <string name="personalized_ads">個性化廣告</string>
     <string name="reduce_ads">減少廣告</string>
     <string name="summary_ads">查看與您相關的廣告。管理應用程式活動所用資訊。</string>
-    <string name="summary_ads_disabled">您使用的是先前的無廣告設定，此偏好設定已保留。</string>
     <string name="summary_ads_personalized_ads">選擇我們如何根據您的興趣個性化廣告</string>
-    <string name="summary_reduce_ads">看到較少廣告，並移除開啟應用程式時顯示的廣告。仍會顯示部分廣告以支持開發。</string>
+    <string name="summary_reduce_ads">移除開啟應用程式時顯示的廣告。其他廣告仍會顯示以支持開發。</string>
 </resources>

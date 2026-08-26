@@ -16,12 +16,10 @@
   -->
 <resources>
     <string name="ads">광고</string>
-    <string name="ads_disabled">광고 사용 중지됨</string>
     <string name="learn_more">더 알아보기</string>
     <string name="personalized_ads">맞춤 광고</string>
     <string name="reduce_ads">광고 줄이기</string>
     <string name="summary_ads">귀하와 관련된 광고를 확인하세요. 앱 활동을 기반으로 맞춤 광고를 표시하는 데 사용되는 정보를 관리합니다. 언제든지 여기에서 맞춤 설정을 끌 수 있습니다.\n</string>
-    <string name="summary_ads_disabled">이전의 광고 없음 설정을 사용 중입니다. 이 설정은 그대로 유지되었습니다.</string>
     <string name="summary_ads_personalized_ads">관심사를 기반으로 광고를 맞춤 설정하는 방법 선택</string>
-    <string name="summary_reduce_ads">표시되는 광고를 줄이고 앱을 열 때 나오는 광고를 없앱니다. 개발 지원을 위해 일부 광고는 계속 표시됩니다.</string>
+    <string name="summary_reduce_ads">앱을 열 때 나오는 광고를 없앱니다. 개발 지원을 위해 다른 광고는 계속 표시됩니다.</string>
 </resources>

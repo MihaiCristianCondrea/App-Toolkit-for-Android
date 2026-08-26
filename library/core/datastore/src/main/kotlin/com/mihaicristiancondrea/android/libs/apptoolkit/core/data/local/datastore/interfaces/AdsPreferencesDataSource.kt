@@ -28,11 +28,10 @@ import kotlinx.coroutines.flow.StateFlow
  *
  * - [adsEnabled] answers "is this install allowed to see ads at all?". It is the hard gate both the
  *   SDK initializer and the ad views must read; sampling the preference separately with a different
- *   default is what previously let views request ads the SDK had never been initialized for. Hosts
- *   no longer offer a switch for it, but installs that turned it off keep that entitlement.
- * - [reduceAds] answers "how aggressive should the host's ad policy be?". It is an opt-in the user
- *   makes and carries no build-configurable default. Interpreting it — fewer native ads, no app-open
- *   ads — is host policy; this layer only stores the choice.
+ *   default is what previously let views request ads the SDK had never been initialized for. No
+ *   host UI toggles it any more, but it stays as the gate hosts reach for in code.
+ * - [reduceAds] answers "how intrusive may ads be?". It is an opt-in the user makes and carries no
+ *   build-configurable default. Interpreting it is host policy; this layer only stores the choice.
  */
 interface AdsPreferencesDataSource {
 

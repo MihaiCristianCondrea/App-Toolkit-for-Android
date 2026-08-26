@@ -40,14 +40,14 @@ class DefaultSampleAdsPolicyTest {
     private fun TestScope.withPolicy(
         adsEnabled: MutableStateFlow<Boolean>,
         reduceAds: MutableStateFlow<Boolean>,
-        block: (DefaultSampleAdsPolicy) -> Unit,
+        block: (SampleAdsPolicy) -> Unit,
     ) {
         val scope = CoroutineScope(UnconfinedTestDispatcher(testScheduler))
         try {
             block(
                 DefaultSampleAdsPolicy(
                     adsEnabled = adsEnabled,
-                    reduceAdsPreference = reduceAds,
+                    reduceAds = reduceAds,
                     scope = scope,
                 )
             )
@@ -57,10 +57,9 @@ class DefaultSampleAdsPolicyTest {
     }
 
     @Test
-    fun `app open ads follow the normal policy`() = runTest {
+    fun `app open ads are shown under the normal policy`() = runTest {
         withPolicy(MutableStateFlow(true), MutableStateFlow(false)) { policy ->
             assertThat(policy.appOpenAdsEnabled.value).isTrue()
-            assertThat(policy.reduceAds.value).isFalse()
         }
     }
 
@@ -76,30 +75,10 @@ class DefaultSampleAdsPolicyTest {
         }
     }
 
-    // The legacy gate is upstream of everything: an install that opted out stays ad-free even
-    // though it never opted into the reduced policy.
     @Test
-    fun `grandfathered ad-free install gets no app open ads`() = runTest {
+    fun `ads disabled entirely means no app open ads`() = runTest {
         withPolicy(MutableStateFlow(false), MutableStateFlow(false)) { policy ->
             assertThat(policy.appOpenAdsEnabled.value).isFalse()
-            assertThat(policy.reduceAds.value).isFalse()
-        }
-    }
-
-    @Test
-    fun `native ad interval doubles under the reduced policy`() = runTest {
-        val reduceAds = MutableStateFlow(false)
-        withPolicy(MutableStateFlow(true), reduceAds) { policy ->
-            NativeAdPlacement.entries.forEach { placement ->
-                assertThat(policy.nativeAdInterval(placement)).isEqualTo(placement.normalInterval)
-            }
-
-            reduceAds.value = true
-
-            NativeAdPlacement.entries.forEach { placement ->
-                assertThat(policy.nativeAdInterval(placement))
-                    .isEqualTo(placement.normalInterval * 2)
-            }
         }
     }
 }

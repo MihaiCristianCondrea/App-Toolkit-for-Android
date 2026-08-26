@@ -16,12 +16,10 @@
   -->
 <resources>
     <string name="ads">Reklamlar</string>
-    <string name="ads_disabled">Reklamlar kapalı</string>
     <string name="learn_more">Daha fazla bilgi</string>
     <string name="personalized_ads">Kişiselleştirilmiş reklamlar</string>
     <string name="reduce_ads">Reklamları azalt</string>
     <string name="summary_ads">Size uygun reklamları görün. Kişiselleştirilmiş reklamları yönetin</string>
-    <string name="summary_ads_disabled">Önceki reklamsız ayarı kullanıyorsunuz. Bu tercih korundu.</string>
     <string name="summary_ads_personalized_ads">Kişisel ilgi alanlarınıza göre reklamları nasıl özelleştirdiğimizi seçin</string>
-    <string name="summary_reduce_ads">Daha az reklam görün ve uygulamayı açarken gösterilen reklamları kaldırın. Geliştirmeyi desteklemek için bazı reklamlar gösterilmeye devam eder.</string>
+    <string name="summary_reduce_ads">Uygulamayı açarken gösterilen reklamları kaldırır. Diğer reklamlar geliştirmeyi desteklemek için gösterilmeye devam eder.</string>
 </resources>

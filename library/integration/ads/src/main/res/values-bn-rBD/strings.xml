@@ -16,12 +16,10 @@
   -->
 <resources>
     <string name="ads">বিজ্ঞাপন</string>
-    <string name="ads_disabled">বিজ্ঞাপন বন্ধ আছে</string>
     <string name="learn_more">আরও জানুন</string>
     <string name="personalized_ads">ব্যক্তিগতকৃত বিজ্ঞাপন</string>
     <string name="reduce_ads">বিজ্ঞাপন কমান</string>
     <string name="summary_ads">আপনার জন্য প্রাসঙ্গিক বিজ্ঞাপন দেখুন। আপনার অ্যাপ কার্যকলাপের উপর ভিত্তি করে ব্যক্তিগতকৃত বিজ্ঞাপন দেখানোর জন্য ব্যবহৃত তথ্য পরিচালনা করুন। আপনি সর্বদা এখানে ব্যক্তিগতকরণ বন্ধ করতে পারেন।\n</string>
-    <string name="summary_ads_disabled">আপনি পূর্ববর্তী বিজ্ঞাপন-মুক্ত সেটিং ব্যবহার করছেন। এই পছন্দটি সংরক্ষণ করা হয়েছে।</string>
     <string name="summary_ads_personalized_ads">আপনার আগ্রহের ভিত্তিতে আমরা কীভাবে আপনার জন্য বিজ্ঞাপন ব্যক্তিগতকৃত করি তা পছন্দ করুন</string>
-    <string name="summary_reduce_ads">কম বিজ্ঞাপন দেখুন এবং অ্যাপ খোলার সময় দেখানো বিজ্ঞাপন সরিয়ে দিন। উন্নয়নে সহায়তার জন্য কিছু বিজ্ঞাপন এখনও দেখানো হবে।</string>
+    <string name="summary_reduce_ads">অ্যাপ খোলার সময় দেখানো বিজ্ঞাপন সরিয়ে দিন। উন্নয়নে সহায়তার জন্য অন্যান্য বিজ্ঞাপন এখনও দেখানো হবে।</string>
 </resources>

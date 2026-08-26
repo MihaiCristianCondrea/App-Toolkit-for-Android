@@ -52,6 +52,7 @@ flowchart TD
     Source -->|typed Flow| Caller
     Ads[DefaultAdsPreferencesDataSource] -->|eagerly shared| AdsState[adsEnabled StateFlow]
     Ads -->|cold flow, hard false default| Reduce[reduceAds]
+    Migrations[ReduceAdsMigration] -->|before first read| Store
     Store --> Ads
     Module[dataStoreModule] -->|one process instance| Facade
     Module --> Narrow
@@ -68,10 +69,13 @@ flowchart TD
 - Ads enablement is eagerly shared by one process-scoped instance because initialization and every
   ad surface must observe the same default and subsequent changes.
 - `adsEnabled` and `reduceAds` are separate keys answering separate questions — "may this install
-  see ads at all?" and "how aggressive should the host's ad policy be?". `adsEnabled` keeps its
-  host-configured default and its stored value so installs that opted out stay ad-free even though
-  no host UI writes it any more; `reduceAds` is a user opt-in with a hard `false` default and no
-  build input. This module stores both and interprets neither.
+  see ads at all?" and "how intrusive may ads be?". `adsEnabled` keeps its host-configured default
+  and stays the gate hosts reach for in code, though no host UI writes it any more; `reduceAds` is a
+  user opt-in with a hard `false` default and no build input. This module stores both and interprets
+  neither.
+- Preference migrations are `DataMigration`s on the `settings` store rather than work a data source
+  does when constructed, so they finish before the first read is served and no consumer observes
+  pre-migration values. `ReduceAdsMigration` is the first of them.
 
 ## Public contracts
 
@@ -97,6 +101,17 @@ would need a `DataMigration` for installed apps and has not been done.
 process. Reach it through the graph rather than constructing it.
 
 ## Migration notes
+
+### `ads = false` became `reduceAds = true`
+
+The ads screen used to toggle `adsEnabled`; it now toggles `reduceAds`. An install left on
+`adsEnabled = false` would have shown that single switch off while displaying nothing, and turning
+it off again would have changed nothing. `ReduceAdsMigration` moves the intent to the preference the
+switch can act on: `reduceAds` becomes `true` and the `ads` key is cleared, so enablement returns to
+the host-configured default as on a fresh install. A marker key — not the absence of `ads` — is what
+makes it run once, because hosts may still call `setAdsEnabled(false)` themselves and a later launch
+must not undo that.
+
 
 ### Ads initialization must share the UI preference source
 

@@ -39,7 +39,7 @@ val adsModule: Module = module {
         val preferences: AdsPreferencesDataSource = get()
         DefaultSampleAdsPolicy(
             adsEnabled = preferences.adsEnabled,
-            reduceAdsPreference = preferences.reduceAds,
+            reduceAds = preferences.reduceAds,
             scope = CoroutineScope(SupervisorJob() + get<DispatcherProvider>().io),
         )
     }

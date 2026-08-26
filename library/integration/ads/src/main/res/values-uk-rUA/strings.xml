@@ -16,12 +16,10 @@
   -->
 <resources>
     <string name="ads">Реклама</string>
-    <string name="ads_disabled">Рекламу вимкнено</string>
     <string name="learn_more">Дізнатися більше</string>
     <string name="personalized_ads">Персоналізована реклама</string>
     <string name="reduce_ads">Менше реклами</string>
     <string name="summary_ads">Переглядайте релевантну рекламу та керуйте налаштуваннями</string>
-    <string name="summary_ads_disabled">Ви використовуєте попереднє налаштування без реклами. Це налаштування збережено.</string>
     <string name="summary_ads_personalized_ads">Виберіть, як персоналізувати рекламу відповідно до ваших інтересів</string>
-    <string name="summary_reduce_ads">Переглядайте менше реклами та вимкніть оголошення під час відкриття застосунку. Частина реклами залишиться, щоб підтримати розробку.</string>
+    <string name="summary_reduce_ads">Вимикає рекламу під час відкриття застосунку. Решта реклами залишиться, щоб підтримати розробку.</string>
 </resources>

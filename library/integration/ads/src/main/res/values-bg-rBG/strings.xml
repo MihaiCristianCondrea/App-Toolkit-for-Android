@@ -16,12 +16,10 @@
   -->
 <resources>
     <string name="ads">Реклами</string>
-    <string name="ads_disabled">Рекламите са изключени</string>
     <string name="learn_more">Научете повече</string>
     <string name="personalized_ads">Персонализирани реклами</string>
     <string name="reduce_ads">Намаляване на рекламите</string>
     <string name="summary_ads">Вижте реклами, които са подходящи за вас. Управлявайте информацията, използвана за персонализирани реклами. Можете да изключите персонализацията тук.</string>
-    <string name="summary_ads_disabled">Използвате предишната настройка без реклами. Тази настройка е запазена.</string>
     <string name="summary_ads_personalized_ads">Изберете как да се персонализират рекламите въз основа на вашите интереси</string>
-    <string name="summary_reduce_ads">Вижте по-малко реклами и премахнете рекламите при отваряне на приложението. Някои реклами ще продължат да се показват в подкрепа на разработката.</string>
+    <string name="summary_reduce_ads">Премахнете рекламите, показвани при отваряне на приложението. Останалите реклами ще продължат да се показват в подкрепа на разработката.</string>
 </resources>
