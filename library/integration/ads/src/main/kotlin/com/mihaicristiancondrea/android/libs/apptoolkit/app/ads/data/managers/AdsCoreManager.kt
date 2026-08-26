@@ -34,11 +34,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.interf
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.ManifestAdMobAppIdProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -48,9 +44,9 @@ import java.util.Date
 /**
  * Manager responsible for configuring and displaying App Open ads.
  *
- * It checks user preferences stored in [CommonDataStore] to determine
- * whether ads should be shown and manages the lifecycle of an
- * [AppOpenAd] instance.
+ * It answers one question — can this ad be initialized and shown correctly — and manages the
+ * lifecycle of an [AppOpenAd] instance. Whether the host *wants* an App Open ad is host policy and
+ * is decided by the caller before [showAdIfAvailable] is reached.
  */
 open class AdsCoreManager(
     protected val context: Context,
@@ -58,13 +54,10 @@ open class AdsCoreManager(
     private val dispatchers: DispatcherProvider,
     private val adMobAppIdProvider: AdMobAppIdProvider = ManifestAdMobAppIdProvider(context = context),
     private val adsSdkInitializer: AdsSdkInitializer = AdsSdkInitializer.Default,
-    private val dataStore: CommonDataStore = CommonDataStore.getInstance(context = context),
 ) {
     private var appOpenAdManager: AppOpenAdManager? = null
 
-    private val managerScope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatchers.io)
     private val initializationMutex = Mutex()
-    private var adsPreferenceJob: Job? = null
 
     @Volatile
     private var isSdkInitialized: Boolean = false
@@ -83,45 +76,13 @@ open class AdsCoreManager(
      * [disableNativeValidator] instead of a bespoke initialization when the host needs the SDK's
      * native ad validator turned off.
      *
-     * Change rationale: this used to sample the ads preference once at startup with its own default
-     * (`!isDebugBuild`), while the ad views read the preference through
-     * [CommonDataStore.adsEnabledFlow] with a different default. On a build where the two disagreed
-     * the views loaded ads that the SDK had never been initialized for, and the loader throws
-     * `IllegalStateException` for that. Both sides now read the same flow, and the preference is
-     * observed rather than sampled, so turning ads on at runtime initializes the SDK instead of
-     * waiting for the next process start.
+     * Initialization is unconditional apart from that id check. It used to be gated on a stored
+     * ads-enabled preference that the ad views read separately, and when the two defaults disagreed
+     * the views requested ads for an SDK that had never been initialized — which the loader answers
+     * with `IllegalStateException`. There is no such preference any more, so the two cannot
+     * disagree.
      */
     suspend fun initializeAds(appOpenUnitId: String, disableNativeValidator: Boolean = false) {
-        val isAdsChecked: Boolean = withContext(dispatchers.io) {
-            dataStore.adsEnabledFlow.first()
-        }
-        if (isAdsChecked) {
-            startAds(appOpenUnitId = appOpenUnitId, disableNativeValidator = disableNativeValidator)
-        }
-        observeAdsPreference(
-            appOpenUnitId = appOpenUnitId,
-            disableNativeValidator = disableNativeValidator,
-        )
-    }
-
-    /**
-     * Keeps the SDK in step with the ads preference for the rest of the process's life.
-     */
-    private fun observeAdsPreference(appOpenUnitId: String, disableNativeValidator: Boolean) {
-        if (adsPreferenceJob != null) return
-        adsPreferenceJob = managerScope.launch {
-            dataStore.adsEnabledFlow.collect { isEnabled ->
-                if (isEnabled) {
-                    startAds(
-                        appOpenUnitId = appOpenUnitId,
-                        disableNativeValidator = disableNativeValidator,
-                    )
-                }
-            }
-        }
-    }
-
-    private suspend fun startAds(appOpenUnitId: String, disableNativeValidator: Boolean) {
         if (!ensureAdsSdkInitialized(disableNativeValidator = disableNativeValidator)) return
         if (appOpenAdManager == null) {
             appOpenAdManager = AppOpenAdManager(appOpenUnitId)
@@ -231,11 +192,7 @@ open class AdsCoreManager(
         suspend fun showAdIfAvailable(
             activity: Activity, onShowAdCompleteListener: OnShowAdCompleteListener
         ) {
-            val isAdsChecked: Boolean = withContext(dispatchers.io) {
-                dataStore.adsEnabledFlow.first()
-            }
-
-            if (isShowingAd || !isAdsChecked) {
+            if (isShowingAd) {
                 return
             }
             if (!isAdAvailable()) {

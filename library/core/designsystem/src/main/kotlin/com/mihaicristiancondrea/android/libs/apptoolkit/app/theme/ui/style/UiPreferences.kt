@@ -25,5 +25,3 @@ val LocalBouncyAnimationsEnabled = staticCompositionLocalOf { true }
 /** Controls whether bottom navigation destinations always render labels. */
 val LocalShowBottomBarLabels = staticCompositionLocalOf { true }
 
-/** Controls whether UI ad slots may request and render ads. */
-val LocalAdsEnabled = staticCompositionLocalOf { false }

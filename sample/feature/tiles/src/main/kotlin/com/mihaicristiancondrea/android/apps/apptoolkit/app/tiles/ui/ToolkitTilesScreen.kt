@@ -65,14 +65,12 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.animateVisibility
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -141,7 +139,6 @@ fun ToolkitTilesScreen(
     paddingValues: PaddingValues,
     onEvent: (ToolkitTilesEvent) -> Unit,
 ) {
-    val showAds = rememberAdsEnabled()
     var selectedTile by remember { mutableStateOf<ToolkitTile?>(null) }
     var quickToolDialog by remember { mutableStateOf<ToolkitQuickTool?>(null) }
     val filteredCategories = remember(state.categories, state.selectedFilter) {
@@ -171,9 +168,9 @@ fun ToolkitTilesScreen(
         }.toImmutableList()
     }
 
-    val visibleListItems = remember(listItems, state.loadedAdIds, showAds) {
+    val visibleListItems = remember(listItems, state.loadedAdIds) {
         listItems
-            .filter { item -> item.isVisible(loadedAdIds = state.loadedAdIds, showAds = showAds) }
+            .filter { item -> item.isVisible(loadedAdIds = state.loadedAdIds) }
             .let { visibleItems ->
                 visibleItems.mapIndexed { index, item ->
                     PositionedToolkitTilesListItem(
@@ -184,8 +181,7 @@ fun ToolkitTilesScreen(
             }
             .toImmutableList()
     }
-    val preloadedAdItems = remember(listItems, state.loadedAdIds, showAds) {
-        if (!showAds) return@remember persistentListOf()
+    val preloadedAdItems = remember(listItems, state.loadedAdIds) {
         listItems
             .filterIsInstance<ToolkitTilesListItem.Ad>()
             .filterNot { adItem -> adItem.id in state.loadedAdIds }

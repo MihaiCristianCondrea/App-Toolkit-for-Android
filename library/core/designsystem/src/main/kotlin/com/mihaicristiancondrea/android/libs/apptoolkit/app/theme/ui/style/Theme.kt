@@ -109,8 +109,6 @@ fun AppTheme(content: @Composable () -> Unit) {
         .collectAsStateWithLifecycle(initialValue = true)
     val showBottomBarLabels = dataStore.getShowBottomBarLabels()
         .collectAsStateWithLifecycle(initialValue = true)
-    val adsEnabled = dataStore.adsEnabledFlow
-        .collectAsStateWithLifecycle()
 
     val isSystemDarkTheme: Boolean = isSystemInDarkTheme()
     val isDarkTheme: Boolean = when (themePreferences.themeMode) {
@@ -142,7 +140,6 @@ fun AppTheme(content: @Composable () -> Unit) {
     CompositionLocalProvider(
         LocalBouncyAnimationsEnabled provides bouncyAnimationsEnabled.value,
         LocalShowBottomBarLabels provides showBottomBarLabels.value,
-        LocalAdsEnabled provides adsEnabled.value,
     ) {
         MaterialExpressiveTheme(
             colorScheme = colorScheme,

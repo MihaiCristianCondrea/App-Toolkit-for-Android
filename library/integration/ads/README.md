@@ -23,7 +23,7 @@ Owns ad preference settings and Google Mobile Ads integration UI used by AppTool
 
 - [`:library:core:common`](../../core/common/README.md) for ads/Firebase contracts and host
   constants.
-- [`:library:core:datastore`](../../core/datastore/README.md) for persisted ads enablement.
+- [`:library:core:datastore`](../../core/datastore/README.md) for the persisted reduced-ads opt-in.
 - [`:library:core:network`](../../core/network/README.md) for shared result/error types.
 - [`:library:core:ui`](../../core/ui/README.md) for screen contracts and reusable Compose UI.
 - [`:library:integration:consent`](../consent/README.md) so ad state respects consent.
@@ -38,49 +38,46 @@ Owns ad preference settings and Google Mobile Ads integration UI used by AppTool
 flowchart TD
     Settings[AdsSettingsScreen] --> VM[AdsSettingsViewModel]
     VM --> Repo[AdsSettingsRepository]
-    Repo -->|persist opt-in, clear stale override| Reduce[CommonDataStore reduceAds]
-    Repo -->|host-facing read/write| Store[CommonDataStore adsEnabledFlow]
+    Repo -->|persist opt-in| Reduce[CommonDataStore reduceAds]
     Repo -->|apply privacy choice| Consent[ConsentRepository]
     Reduce --> Policy[Host ad policy]
-    Store --> Manager[AdsCoreManager]
+    Policy --> Manager[AdsCoreManager]
     Manifest[Host manifest AdMob application ID] --> Id[AdMobAppIdProvider]
     Id --> Manager
-    Manager --> Gate{Enabled and valid ID?}
+    Manager --> Gate{Valid app ID?}
     Gate -->|no| Disabled[SDK remains not ready]
     Gate -->|yes, once per process| Initializer[AdsSdkInitializer]
     Initializer --> SDK[Google Mobile Ads]
     SDK --> Ready[AdsSdkState.isReady]
-    Store --> Slot[Compose ad slot]
-    Ready --> Slot
-    Slot -->|enabled and ready| Request[Banner / native / app-open request]
+    Ready --> Slot[Compose ad slot]
+    Slot -->|ready| Request[Banner / native / app-open request]
     Request --> SDK
     Request -->|failure| Empty[Empty non-fatal slot]
 ```
 
 ## Architectural decisions
 
-- Persisted ads enablement is the single source of truth for settings, initialization, and UI
-  requests. No consumer chooses a local default.
-- Ads enablement and reduced ads are separate preferences. Enablement is the hard gate — no screen
-  toggles it any more, but the repository read/write survives for hosts, tests, and features such as
-  purchases. The settings screen keeps exactly the shape it had: one always-visible switch, now
-  bound to the reduced-ads opt-in. Installs that had turned enablement off are carried onto that
-  opt-in by `ReduceAdsMigration` in `:library:core:datastore`, so the switch is never off while the
-  app shows nothing.
-- Enablement does not reach the screen at all: `AdsSettingsUiState` carries only the opt-in, and
-  personalized ads stays interactive. Reducing ads leaves ordinary ads on, so there is no state in
-  which the personalization row has nothing to act on.
+- There is no ads-enabled preference. The SDK initializes and ad slots render for every install;
+  the only stored ads preference is the reduced-ads opt-in, and it never gates rendering. Two
+  readings of an enablement preference with different defaults is what used to take host processes
+  down, and the preference no longer exists to disagree with itself.
+- Reduced ads is one preference with one meaning here: store it and toggle it. What it suppresses is
+  host policy — in the sample, app-open ads and nothing else. `AdsSettingsUiState` carries only that
+  opt-in, so every control on the screen is live at all times.
+- Installs that had switched ads off under the removed preference are carried onto the opt-in by
+  `ReduceAdsMigration` in `:library:core:datastore`.
 - SDK initialization is idempotent, mutex-protected, and conditional on a valid host-manifest app
-  ID; the toolkit never supplies a fallback publisher ID.
-- Readiness is explicit state because enablement and asynchronous SDK initialization are different
-  facts. Ad slots wait and retry when readiness changes.
+  ID; the toolkit never supplies a fallback publisher ID. That id check is the only thing that can
+  stop it.
+- Readiness is explicit state because asynchronous SDK initialization is a different fact from
+  wanting an ad. Ad slots wait and retry when readiness changes.
 - Ad rendering fails closed: SDK exceptions or unavailable consent produce an empty slot, never a
   process-fatal composition error.
 
 ## Public contracts
 
-- Ads settings screen/activity, repository contract (`observeAdsEnabled`/`setAdsEnabled` and
-  `observeReduceAds`/`setReduceAds`), and UI event/action/state contracts.
+- Ads settings screen/activity, repository contract (`observeReduceAds`/`setReduceAds`), and UI
+  event/action/state contracts.
 - `AdsCoreManager` and its replaceable `AdsSdkInitializer` test seam.
 
 ## Internal implementations
@@ -104,8 +101,9 @@ Two independent causes, both fixed:
 
 - The ads-enabled preference had two sources with different defaults. `AdsCoreManager` gated SDK
   initialization on one and the ad views read the other, so in a debug build the views could believe
-  ads were on while the SDK had never been initialized. Both now read
-  `CommonDataStore.adsEnabledFlow`, and only the default is shared.
+  ads were on while the SDK had never been initialized. The preference has since been removed
+  outright: initialization and rendering are both unconditional, so there is nothing left to
+  disagree.
 - Even with one source, initialization is asynchronous. An ad slot composed during startup could
   request before the SDK was up. Requests now wait on `AdsSdkState.isReady` and re-key when
   readiness
@@ -119,13 +117,13 @@ consumer app. The durable safeguards are documented at the modules that own them
 
 - [`:library:core:common`](../../core/common/README.md) owns host-manifest AdMob ID validation and
   the narrowly scoped UMP crash guard.
-- [`:library:core:datastore`](../../core/datastore/README.md) owns the single ads-enabled preference
-  source, idempotent initialization, and SDK readiness publication.
+- [`:library:core:datastore`](../../core/datastore/README.md) owns the reduced-ads preference and
+  the migration off the removed enablement key.
 - [`:library:integration:consent`](../consent/README.md) owns consent single-flight and
   host-lifecycle
   validation.
 - [`:library:core:ui`](../../core/ui/README.md) owns fail-closed ad loading and host-overridable
   native-ad surfaces.
 
-Changes to ads enablement must preserve all four boundaries; fixing only the settings repository is
-not sufficient.
+Changes to ad initialization or rendering must preserve all four boundaries; fixing only the
+settings repository is not sufficient.

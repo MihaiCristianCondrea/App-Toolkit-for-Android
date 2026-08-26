@@ -46,7 +46,7 @@ flowchart TD
 - Each third-party SDK is isolated behind its own child module so ownership, manifests, lifecycle,
   and upgrade risk remain explicit.
 - Features decide when an integration is invoked; integrations own how SDK work is performed.
-- Ads depends on consent because enablement must not bypass the consent state. Other integrations
+- Ads depends on consent because ad requests must not bypass the consent state. Other integrations
   remain independent siblings.
 
 ## Public contracts

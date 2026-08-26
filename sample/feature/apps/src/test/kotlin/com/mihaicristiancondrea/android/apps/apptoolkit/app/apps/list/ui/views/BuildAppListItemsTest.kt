@@ -32,10 +32,10 @@ class BuildAppListItemsTest {
         val apps = makeApps(count = 8)
 
         val items: List<AppListItem> =
-            buildAppListItems(apps, adsEnabled = true, adFrequency = 4)
+            buildAppListItems(apps, adFrequency = 4)
 
         val expected: List<AppListItem> =
-            expectedItems(apps, adsEnabled = true, adFrequency = 4)
+            expectedItems(apps, adFrequency = 4)
 
         assertEquals(expected, items)
     }
@@ -45,20 +45,19 @@ class BuildAppListItemsTest {
         val apps = makeApps(count = 5)
 
         val items: List<AppListItem> =
-            buildAppListItems(apps, adsEnabled = true, adFrequency = 4)
+            buildAppListItems(apps, adFrequency = 4)
 
         val expected: List<AppListItem> =
-            expectedItems(apps, adsEnabled = true, adFrequency = 4)
+            expectedItems(apps, adFrequency = 4)
 
         assertEquals(expected, items)
     }
 
     @Test
-    fun `buildAppListItems returns only apps when ads disabled`() {
+    fun `buildAppListItems returns only apps when frequency is not positive`() {
         val apps = makeApps(count = 5)
 
-        val items: List<AppListItem> =
-            buildAppListItems(apps, adsEnabled = false, adFrequency = 4)
+        val items: List<AppListItem> = buildAppListItems(apps, adFrequency = 0)
 
         val expected: List<AppListItem> =
             apps.map<AppInfo, AppListItem> { app -> AppListItem.App(app) }
@@ -83,10 +82,9 @@ class BuildAppListItemsTest {
      */
     private fun expectedItems(
         apps: ImmutableList<AppInfo>,
-        adsEnabled: Boolean,
         adFrequency: Int
     ): List<AppListItem> {
-        if (!adsEnabled || adFrequency <= 0) {
+        if (adFrequency <= 0) {
             return apps.map<AppInfo, AppListItem> { app -> AppListItem.App(app) }
         }
 

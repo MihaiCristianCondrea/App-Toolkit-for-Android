@@ -83,7 +83,6 @@ import org.koin.core.qualifier.named
  * @param favorites A set of package names for the apps marked as favorite.
  * @param installedPackages A set of package names detected as installed on the current device.
  * @param paddingValues Padding to be applied from the outside, typically from a Scaffold.
- * @param adsEnabled A boolean flag to determine if ads should be displayed in the list.
  * @param onFilterSelected A callback invoked when the user chooses an app filter chip.
  * @param onFavoriteToggle A lambda function to be invoked when the favorite icon on an app card is toggled. It receives the package name.
  * @param onAppClick A lambda function to be invoked when an app card is clicked. It receives the [AppInfo] of the clicked app.
@@ -97,7 +96,6 @@ fun AppsList(
     favorites: ImmutableSet<String>,
     installedPackages: ImmutableSet<String>,
     paddingValues: PaddingValues,
-    adsEnabled: Boolean,
     onFilterSelected: (AppsListFilter) -> Unit,
     onFavoriteToggle: (String) -> Unit,
     onAppClick: (AppInfo) -> Unit,
@@ -131,8 +129,8 @@ fun AppsList(
 
     val listState = rememberLazyGridState()
 
-    val items: ImmutableList<AppListItem> = remember(apps, adsEnabled, adFrequency) {
-        buildAppListItems(apps, adsEnabled, adFrequency)
+    val items: ImmutableList<AppListItem> = remember(apps, adFrequency) {
+        buildAppListItems(apps, adFrequency)
     }
 
     val adsConfig: AdsConfig = koinInject(qualifier = named(AppAdsQualifiers.APPS_LIST_NATIVE_AD))

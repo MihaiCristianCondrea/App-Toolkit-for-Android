@@ -31,26 +31,19 @@ import org.junit.jupiter.api.Test
 class DefaultSampleAdsPolicyTest {
 
     /**
-     * Builds a policy over [adsEnabled]/[reduceAds] and cancels its sharing scope afterwards.
+     * Builds a policy over [reduceAds] and cancels its sharing scope afterwards.
      *
-     * The scope is unconfined so the eagerly shared state settles as soon as a preference changes,
-     * and separate from the test scope, which would otherwise wait forever for a collector that by
-     * design never completes.
+     * The scope is unconfined so the eagerly shared state settles as soon as the preference
+     * changes, and separate from the test scope, which would otherwise wait forever for a collector
+     * that by design never completes.
      */
     private fun TestScope.withPolicy(
-        adsEnabled: MutableStateFlow<Boolean>,
         reduceAds: MutableStateFlow<Boolean>,
         block: (SampleAdsPolicy) -> Unit,
     ) {
         val scope = CoroutineScope(UnconfinedTestDispatcher(testScheduler))
         try {
-            block(
-                DefaultSampleAdsPolicy(
-                    adsEnabled = adsEnabled,
-                    reduceAds = reduceAds,
-                    scope = scope,
-                )
-            )
+            block(DefaultSampleAdsPolicy(reduceAds = reduceAds, scope = scope))
         } finally {
             scope.cancel()
         }
@@ -58,7 +51,7 @@ class DefaultSampleAdsPolicyTest {
 
     @Test
     fun `app open ads are shown under the normal policy`() = runTest {
-        withPolicy(MutableStateFlow(true), MutableStateFlow(false)) { policy ->
+        withPolicy(MutableStateFlow(false)) { policy ->
             assertThat(policy.appOpenAdsEnabled.value).isTrue()
         }
     }
@@ -66,7 +59,7 @@ class DefaultSampleAdsPolicyTest {
     @Test
     fun `reducing ads suppresses app open ads`() = runTest {
         val reduceAds = MutableStateFlow(false)
-        withPolicy(MutableStateFlow(true), reduceAds) { policy ->
+        withPolicy(reduceAds) { policy ->
             assertThat(policy.appOpenAdsEnabled.value).isTrue()
 
             reduceAds.value = true
@@ -76,8 +69,8 @@ class DefaultSampleAdsPolicyTest {
     }
 
     @Test
-    fun `ads disabled entirely means no app open ads`() = runTest {
-        withPolicy(MutableStateFlow(false), MutableStateFlow(false)) { policy ->
+    fun `an install that already opted in gets no app open ad`() = runTest {
+        withPolicy(MutableStateFlow(true)) { policy ->
             assertThat(policy.appOpenAdsEnabled.value).isFalse()
         }
     }

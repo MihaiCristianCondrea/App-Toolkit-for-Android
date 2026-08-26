@@ -56,23 +56,13 @@ class AdsSettingsViewModelTest {
     private val firebaseController = FakeFirebaseController()
 
     private class FakeAdsSettingsRepository(
-        override val defaultAdsEnabled: Boolean = true,
         reduceAds: Boolean = false,
         var shouldFail: Boolean = false
     ) : AdsSettingsRepository {
 
-        private val adsEnabledState = MutableStateFlow(defaultAdsEnabled)
         private val reduceAdsState = MutableStateFlow(reduceAds)
 
-        override fun observeAdsEnabled(): Flow<Boolean> = adsEnabledState
-
         override fun observeReduceAds(): Flow<Boolean> = reduceAdsState
-
-        override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> {
-            if (shouldFail) throw IOException("fail")
-            adsEnabledState.value = enabled
-            return DataState.Success(Unit)
-        }
 
         override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> {
             if (shouldFail) throw IOException("fail")
@@ -106,12 +96,7 @@ class AdsSettingsViewModelTest {
     fun `emission error keeps the opt-in off and reports the error`() =
         runTest(dispatcherExtension.testDispatcher) {
             val repo = object : AdsSettingsRepository {
-                override val defaultAdsEnabled: Boolean = true
-                override fun observeAdsEnabled(): Flow<Boolean> = flowOf(true)
                 override fun observeReduceAds(): Flow<Boolean> = flow { throw IOException("boom") }
-                override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> =
-                    DataState.Success(Unit)
-
                 override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> =
                     DataState.Success(Unit)
             }

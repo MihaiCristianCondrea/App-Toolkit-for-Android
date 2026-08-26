@@ -23,14 +23,15 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 /**
- * Builds the list of [AppListItem] entries by interleaving ads between app items when enabled.
+ * Builds the list of [AppListItem] entries by interleaving an ad every [adFrequency] apps.
+ *
+ * A non-positive [adFrequency] interleaves nothing.
  */
 fun buildAppListItems(
     apps: ImmutableList<AppInfo>,
-    adsEnabled: Boolean,
     adFrequency: Int
 ): ImmutableList<AppListItem> {
-    if (!adsEnabled || adFrequency <= 0) {
+    if (adFrequency <= 0) {
         return apps.map { AppListItem.App(it) }.toImmutableList()
     }
 

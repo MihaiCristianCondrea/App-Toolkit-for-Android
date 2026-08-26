@@ -22,21 +22,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.netwo
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Repository interface for managing advertisement settings.
+ * Repository interface for the ads settings screen.
  *
- * Two separate preferences are exposed because they answer different questions:
- *
- * - `adsEnabled` is the hard gate — whether this install may see ads at all. No screen toggles it
- *   any more, but the read/write pair survives for hosts, tests, and features such as purchases.
- * - `reduceAds` is the user's opt-in to a less intrusive ad policy, and the only one a screen
- *   writes. What "reduced" means is decided by the host, not here; in the sample it suppresses
- *   app-open ads. Writing it also drops any stored `adsEnabled` override, so the two can never
- *   disagree about what the user asked for.
+ * One preference, one question: how intrusive may ads be? There is no enablement preference any
+ * more — the SDK initializes and ad slots render unconditionally. What "reduced" means is decided
+ * by the host, not here; in the sample it suppresses app-open ads.
  */
 interface AdsSettingsRepository {
-    val defaultAdsEnabled: Boolean
-    fun observeAdsEnabled(): Flow<Boolean>
     fun observeReduceAds(): Flow<Boolean>
-    suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database>
     suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database>
 }

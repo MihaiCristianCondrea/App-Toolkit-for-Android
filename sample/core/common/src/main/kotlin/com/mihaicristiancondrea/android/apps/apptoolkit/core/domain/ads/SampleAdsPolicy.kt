@@ -24,16 +24,10 @@ import kotlinx.coroutines.flow.StateFlow
  *
  * The toolkit's ads integration knows only whether it can initialize and show an ad; whether this
  * app wants one is host policy, so it lives here rather than in `AdsCoreManager`. App Open ads are
- * the only thing the reduced-ads preference changes — native ad placement and cadence are
- * unaffected everywhere.
+ * the only thing the reduced-ads preference changes — native ads render everywhere regardless.
  */
 interface SampleAdsPolicy {
 
-    /**
-     * Whether an App Open ad may be shown when the process comes to the foreground.
-     *
-     * `false` when ads are off for this install entirely, and `false` when the user has opted into
-     * reduced ads.
-     */
+    /** Whether an App Open ad may be shown when the process comes to the foreground. */
     val appOpenAdsEnabled: StateFlow<Boolean>
 }

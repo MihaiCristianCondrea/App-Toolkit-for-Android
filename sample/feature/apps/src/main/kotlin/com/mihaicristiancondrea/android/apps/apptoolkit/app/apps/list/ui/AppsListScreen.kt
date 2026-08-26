@@ -49,7 +49,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
@@ -95,7 +94,6 @@ fun AppsListRoute(
     val canOpenRandomApp by viewModel.canOpenRandomApp.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
-    val adsEnabled = rememberAdsEnabled()
 
     val appDetailsAdsConfig: AdsConfig =
         koinInject(qualifier = named(AppAdsQualifiers.APP_DETAILS_NATIVE_AD))
@@ -219,7 +217,6 @@ fun AppsListRoute(
                 favorites = favorites,
                 installedPackages = uiHomeScreen.installedPackages,
                 paddingValues = paddingValues,
-                adsEnabled = adsEnabled,
                 onFilterSelected = { filter -> viewModel.onEvent(HomeEvent.FilterSelected(filter)) },
                 onFavoriteToggle = onFavoriteToggle,
                 onAppClick = { app ->

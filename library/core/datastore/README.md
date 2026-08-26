@@ -50,8 +50,7 @@ flowchart TD
     Narrow -->|edit transaction| Store
     Store -->|preference updates| Source
     Source -->|typed Flow| Caller
-    Ads[DefaultAdsPreferencesDataSource] -->|eagerly shared| AdsState[adsEnabled StateFlow]
-    Ads -->|cold flow, hard false default| Reduce[reduceAds]
+    Ads[DefaultAdsPreferencesDataSource] -->|cold flow, hard false default| Reduce[reduceAds]
     Migrations[ReduceAdsMigration] -->|before first read| Store
     Store --> Ads
     Module[dataStoreModule] -->|one process instance| Facade
@@ -66,17 +65,10 @@ flowchart TD
   `CommonDataStore` facade remains only for source compatibility with older callers.
 - Reads are observable `Flow`s and mutations are suspend functions; the stored preferences are the
   source of truth except for explicitly documented UI mirrors.
-- Ads enablement is eagerly shared by one process-scoped instance because initialization and every
-  ad surface must observe the same default and subsequent changes.
-- `adsEnabled` and `reduceAds` are separate keys answering separate questions — "may this install
-  see ads at all?" and "how intrusive may ads be?". `adsEnabled` keeps its host-configured default
-  and stays the gate hosts reach for in code, though no host UI writes it any more; `reduceAds` is a
-  user opt-in with a hard `false` default and no build input. This module stores both and interprets
-  neither.
-- Writing `reduceAds` clears any stored `adsEnabled` override in the same transaction. Once the user
-  works the only switch there is, the preference the old switch wrote must stop existing, or it
-  remains a second source of truth that no control can reach. One transaction rather than two writes
-  so a crash cannot leave the override cleared with no opt-in stored.
+- `reduceAds` is the only stored ads preference. It answers "how intrusive may ads be?" — never
+  "may this install see ads at all?", which is no longer a question anyone asks. It is a user opt-in
+  with a hard `false` default and no build input. This module stores it and interprets it not at
+  all.
 - Preference migrations are `DataMigration`s on the `settings` store rather than work a data source
   does when constructed, so they finish before the first read is served and no consumer observes
   pre-migration values. `ReduceAdsMigration` is the first of them.
@@ -108,16 +100,14 @@ process. Reach it through the graph rather than constructing it.
 
 ### `ads = false` became `reduceAds = true`
 
-The ads screen used to toggle `adsEnabled`; it now toggles `reduceAds`. An install left on
-`adsEnabled = false` would have shown that single switch off while displaying nothing, and turning
-it off again would have changed nothing. `ReduceAdsMigration` moves the intent to the preference the
-switch can act on: `reduceAds` becomes `true` and the `ads` key is cleared, so enablement returns to
-the host-configured default as on a fresh install. A marker key — not the absence of `ads` — is what
-makes it run once, because hosts may still call `setAdsEnabled(false)` themselves and a later launch
-must not undo that.
+The `ads` preference is gone: nothing reads it, the SDK initializes unconditionally, and ad slots
+render for everyone. Left alone, an install that had switched ads off would simply start seeing
+every ad again. `ReduceAdsMigration` moves the intent to the preference that still exists —
+`reduceAds` becomes `true`, which is as much of the old promise as the new model can express: no ad
+when the app is opened.
 
-From then on, saving `reduceAds` clears the `ads` key again, so a host that later calls
-`setAdsEnabled(false)` keeps that value only until the user next touches the switch.
+The stale key is dropped whichever value it held, and because nothing writes it any more, its
+absence is what makes the migration run once. No marker preference is needed.
 
 
 ### Ads initialization must share the UI preference source
@@ -131,8 +121,9 @@ had previously masked the disagreement.
 
 Preserve these invariants:
 
-- `CommonDataStore.adsEnabledFlow`, including its host-configured `defaultAdsEnabled`, is the single
-  source of truth for both `AdsCoreManager` and ad UI. Callers must not supply local defaults.
+- The preference that caused it no longer exists. `AdsCoreManager` initializes the SDK
+  unconditionally and ad UI renders unconditionally, so there is no default for the two to disagree
+  about.
 - The integration-owned `AdsCoreManager` observes the flow instead of sampling it once, so enabling ads at runtime starts
   initialization without a process restart.
 - Initialization is idempotent and mutex-protected, uses the validated host-manifest AdMob app ID,

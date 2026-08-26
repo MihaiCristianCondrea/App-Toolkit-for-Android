@@ -23,8 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.AdsPreferencesDataSource
@@ -48,7 +46,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastor
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultReviewPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultThemePreferencesDataSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Process-safe delegate for the toolkit's single `settings` Preferences DataStore file.
@@ -73,13 +70,9 @@ val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(
  *
  * The members below delegate to those sources and exist so that callers written against the
  * previous single-class API keep compiling.
- *
- * @property defaultAdsEnabled value [adsEnabledFlow] carries until the preference is set.
  */
 open class CommonDataStore(
     context: Context,
-    dispatchers: DispatcherProvider = StandardDispatchers(),
-    val defaultAdsEnabled: Boolean = true,
 ) : OnboardingPreferencesDataSource, UsageAndDiagnosticsPreferencesDataSource,
     ConsentPreferencesDataSource, CommonDataStoreCore {
 
@@ -101,12 +94,9 @@ open class CommonDataStore(
     val diagnosticsPreferences: DefaultDiagnosticsPreferencesDataSource =
         DefaultDiagnosticsPreferencesDataSource(dataStore = dataStore)
 
-    /** Ads preferences: the [adsEnabledFlow] gate and the [reduceAds] opt-in. */
-    val adsPreferences: AdsPreferencesDataSource = DefaultAdsPreferencesDataSource(
-        dataStore = dataStore,
-        dispatchers = dispatchers,
-        defaultAdsEnabled = defaultAdsEnabled,
-    )
+    /** The reduced-ads opt-in, the only stored ads preference. */
+    val adsPreferences: AdsPreferencesDataSource =
+        DefaultAdsPreferencesDataSource(dataStore = dataStore)
 
     /** In-app review counters. */
     val reviewPreferences: ReviewPreferencesDataSource =
@@ -129,28 +119,22 @@ open class CommonDataStore(
         private var instance: CommonDataStore? = null
 
         /**
-         * Returns the process-wide facade, capturing [defaultAdsEnabled] on first construction.
+         * Returns the process-wide facade.
          *
-         * Prefer dependency injection in production. This compatibility accessor cannot change the
-         * ads default after an instance exists and callers must not use it to create a parallel
+         * Prefer dependency injection in production; callers must not use this to create a parallel
          * preference graph.
          */
-        fun getInstance(
-            context: Context,
-            defaultAdsEnabled: Boolean = true,
-        ): CommonDataStore {
+        fun getInstance(context: Context): CommonDataStore {
             return instance ?: synchronized(lock = this) {
-                instance ?: CommonDataStore(
-                    context = context.applicationContext,
-                    defaultAdsEnabled = defaultAdsEnabled,
-                ).also { instance = it }
+                instance ?: CommonDataStore(context = context.applicationContext)
+                    .also { instance = it }
             }
         }
     }
 
-    override fun close() {
-        adsPreferences.close()
-    }
+    // Nothing here owns a coroutine any more; the member stays because `CommonDataStoreCore`
+    // declares it and hosts call it on teardown.
+    override fun close() = Unit
 
     // region App state
 
@@ -277,12 +261,6 @@ open class CommonDataStore(
     // endregion
 
     // region Ads
-
-    fun ads(default: Boolean): Flow<Boolean> = adsPreferences.ads(default = default)
-
-    val adsEnabledFlow: StateFlow<Boolean> get() = adsPreferences.adsEnabled
-
-    suspend fun saveAds(isChecked: Boolean) = adsPreferences.saveAds(isChecked)
 
     /** The user's reduced-ads opt-in; how a host acts on it is host policy, not storage. */
     val reduceAds: Flow<Boolean> get() = adsPreferences.reduceAds

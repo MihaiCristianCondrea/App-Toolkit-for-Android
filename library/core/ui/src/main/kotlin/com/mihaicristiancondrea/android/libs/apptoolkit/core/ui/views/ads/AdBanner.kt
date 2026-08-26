@@ -70,7 +70,6 @@ fun AdBanner(
     if (LocalInspectionMode.current) return
 
     val context: Context = LocalContext.current
-    val showAds: Boolean = rememberAdsEnabled()
 
     var isAdLoaded by remember(adsConfig.bannerAdUnitId) { mutableStateOf(false) }
 
@@ -91,8 +90,8 @@ fun AdBanner(
         }
     }
 
-    LaunchedEffect(adView, showAds, adsConfig.bannerAdUnitId, adsConfig.adSize) {
-        if (!showAds || adView == null) {
+    LaunchedEffect(adView, adsConfig.bannerAdUnitId, adsConfig.adSize) {
+        if (adView == null) {
             isAdLoaded = false
             return@LaunchedEffect
         }
@@ -126,7 +125,7 @@ fun AdBanner(
     }
 
     AnimatedVisibility(
-        visible = showAds && isAdLoaded && adView != null,
+        visible = isAdLoaded && adView != null,
         enter = expandVertically(),
         exit = shrinkVertically()
     ) {

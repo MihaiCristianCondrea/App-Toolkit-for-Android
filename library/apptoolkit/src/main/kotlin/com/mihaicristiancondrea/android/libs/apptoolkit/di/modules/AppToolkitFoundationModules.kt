@@ -55,7 +55,7 @@ fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): Lis
         // :library:core:datastore owns the CommonDataStore definition and the preference
         // data-source bindings that hang off it. Including it here keeps one registration for
         // every host instead of a second copy in corePlatformModule.
-        dataStoreModule(isDebugBuild = hostBuildConfig.isDebugBuild),
+        dataStoreModule(),
         corePlatformModule(hostBuildConfig = hostBuildConfig),
         consentModule(),
         mainSharedModule(),
@@ -74,10 +74,6 @@ private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Modu
             buildInfoProvider = get(),
             dispatchers = get(),
             adMobAppIdProvider = get(),
-            // Injected so the manager reads the same CommonDataStore the rest of the graph uses.
-            // Its default falls back to the static singleton, which is a second wrapper over the
-            // same preferences file with its own eagerly started adsEnabledFlow.
-            dataStore = get(),
         )
     }
     single { KtorClient.createClient(enableLogging = hostBuildConfig.isDebugBuild) }

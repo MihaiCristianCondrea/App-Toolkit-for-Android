@@ -22,22 +22,16 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import app.cash.turbine.test
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.sources.DefaultAdsPreferencesDataSource
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -83,19 +77,6 @@ class CommonDataStoreTest {
         verify(atLeast = 1) { appContext.commonDataStore }
 
         first.close()
-    }
-
-    @Test
-    fun `close cancels internal coroutine scope`() = runTest {
-        val dataStore = createDataStore(testScheduler)
-        val scope = dataStore.extractScope()
-        val job = scope.coroutineContext[Job]
-
-        assertEquals(job?.isActive, true)
-
-        dataStore.close()
-
-        assertEquals(job?.isCancelled, true)
     }
 
     @Test
@@ -292,22 +273,6 @@ class CommonDataStoreTest {
     }
 
     @Test
-    fun `ads flow honors default and updates state`() = runTest {
-        val dataStore = createDataStore(testScheduler)
-
-        assertTrue(dataStore.ads(default = true).first())
-        assertTrue(dataStore.adsEnabledFlow.value)
-
-        dataStore.saveAds(false)
-        advanceUntilIdle()
-
-        assertFalse(dataStore.ads(default = true).first())
-        assertFalse(dataStore.adsEnabledFlow.value)
-
-        dataStore.close()
-    }
-
-    @Test
     fun `reduce ads defaults to off`() = runTest {
         val dataStore = createDataStore(testScheduler)
 
@@ -317,28 +282,6 @@ class CommonDataStoreTest {
         advanceUntilIdle()
 
         assertTrue(dataStore.reduceAds.first())
-
-        dataStore.close()
-    }
-
-    // Once the user works the reduced-ads switch, the preference the old switch wrote must stop
-    // existing: leaving it behind would keep a second, invisible source of truth that the only
-    // remaining control cannot reach.
-    @Test
-    fun `saving reduce ads clears a stored ads override`() = runTest {
-        val dataStore = createDataStore(testScheduler)
-
-        dataStore.saveAds(false)
-        advanceUntilIdle()
-        assertFalse(dataStore.ads(default = true).first())
-
-        dataStore.saveReduceAds(true)
-        advanceUntilIdle()
-
-        assertTrue(dataStore.reduceAds.first())
-        // Cleared rather than forced to true, so enablement follows the host default again.
-        assertTrue(dataStore.ads(default = true).first())
-        assertFalse(dataStore.ads(default = false).first())
 
         dataStore.close()
     }
@@ -430,18 +373,7 @@ class CommonDataStoreTest {
         every { context.applicationContext } returns context
         val fakeStore = FakePreferencesDataStore()
         every { context.commonDataStore } returns fakeStore
-        return CommonDataStore(context, TestDispatcherProvider(StandardTestDispatcher(scheduler)))
-    }
-
-    /**
-     * The sharing scope behind `adsEnabledFlow` now belongs to the ads preference source, which is
-     * what `CommonDataStore.close()` shuts down.
-     */
-    private fun CommonDataStore.extractScope(): CoroutineScope {
-        val adsSource = adsPreferences as DefaultAdsPreferencesDataSource
-        val field = DefaultAdsPreferencesDataSource::class.java.getDeclaredField("scope")
-        field.isAccessible = true
-        return field.get(adsSource) as CoroutineScope
+        return CommonDataStore(context)
     }
 
     private fun resetSingleton() {
@@ -462,12 +394,4 @@ class CommonDataStoreTest {
         }
     }
 
-    private class TestDispatcherProvider(
-        private val dispatcher: CoroutineDispatcher,
-    ) : DispatcherProvider {
-        override val main: CoroutineDispatcher get() = dispatcher
-        override val io: CoroutineDispatcher get() = dispatcher
-        override val default: CoroutineDispatcher get() = dispatcher
-        override val unconfined: CoroutineDispatcher get() = dispatcher
-    }
 }

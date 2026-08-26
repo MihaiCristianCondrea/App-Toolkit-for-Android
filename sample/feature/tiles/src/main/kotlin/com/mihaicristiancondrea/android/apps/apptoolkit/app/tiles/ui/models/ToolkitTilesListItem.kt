@@ -32,12 +32,10 @@ internal val ToolkitTilesListItem.stableKey: String
         is ToolkitTilesListItem.Ad -> id
     }
 
-internal fun ToolkitTilesListItem.isVisible(
-    loadedAdIds: Set<String>,
-    showAds: Boolean,
-): Boolean = when (this) {
+internal fun ToolkitTilesListItem.isVisible(loadedAdIds: Set<String>): Boolean = when (this) {
     is ToolkitTilesListItem.Category -> true
-    is ToolkitTilesListItem.Ad -> showAds && id in loadedAdIds
+    // An ad slot takes no space until it has something to show.
+    is ToolkitTilesListItem.Ad -> id in loadedAdIds
 }
 
 internal sealed class ToolkitTilesListItem {

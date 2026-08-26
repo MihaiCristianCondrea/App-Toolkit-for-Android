@@ -24,20 +24,16 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 
 /**
- * Carries an install that turned ads off under the old switch over to the reduced-ads preference.
+ * Carries an install that had switched ads off over to the reduced-ads preference.
  *
- * The ads screen now offers a single "Reduce ads" toggle. Leaving a grandfathered install on
- * `adsEnabled = false` would show that toggle off while the app displayed nothing, and turning it
- * off again would change nothing — the screen would be lying about the only control it has. So the
- * intent moves to where the switch can act on it: `reduceAds` becomes `true` and the old key is
- * cleared, which returns ads enablement to the host-configured default exactly as on a fresh
- * install.
+ * The ads-enabled preference is gone: the SDK initializes and ad slots render unconditionally, and
+ * the ads screen offers a single "Reduce ads" toggle. Left alone, an install that had switched ads
+ * off would simply start seeing every ad again with the toggle off. So the intent moves to the
+ * preference that still exists — `reduceAds` becomes `true`, which is as much of the old promise as
+ * the new model can express: no ad when the app is opened.
  *
- * These users keep the part of the promise the new preference can express — no ad when the app is
- * opened — and see ordinary in-app ads again.
- *
- * A marker key, rather than the absence of `ads`, is what makes this run once: hosts may still call
- * `setAdsEnabled(false)` for their own reasons, and a later launch must not silently undo that.
+ * The stale `ads` key is always dropped, whichever value it held. Nothing writes it any more, so
+ * its absence is what makes this run once; no marker preference is needed.
  *
  * This runs as a [DataMigration] on the `settings` DataStore, so it completes before the first read
  * is served and no consumer ever observes the pre-migration values.
@@ -49,21 +45,17 @@ class ReduceAdsMigration : DataMigration<Preferences> {
     private val reduceAdsKey =
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_REDUCE_ADS)
 
-    private val migratedKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_REDUCE_ADS_MIGRATED)
-
     override suspend fun shouldMigrate(currentData: Preferences): Boolean =
-        currentData[migratedKey] != true
+        currentData.contains(adsKey)
 
     override suspend fun migrate(currentData: Preferences): Preferences {
         val migrated: MutablePreferences = currentData.toMutablePreferences()
 
         if (currentData[adsKey] == false) {
             migrated[reduceAdsKey] = true
-            migrated.remove(adsKey)
         }
 
-        migrated[migratedKey] = true
+        migrated.remove(adsKey)
         return migrated
     }
 

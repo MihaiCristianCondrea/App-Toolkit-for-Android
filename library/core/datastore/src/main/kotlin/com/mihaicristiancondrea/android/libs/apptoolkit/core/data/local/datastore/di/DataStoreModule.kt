@@ -39,20 +39,13 @@ import org.koin.dsl.module
 /**
  * Koin module for the data store.
  */
-fun dataStoreModule(isDebugBuild: Boolean): Module = module {
-    single<CommonDataStore> {
-        CommonDataStore(
-            context = get(),
-            dispatchers = get(),
-            defaultAdsEnabled = !isDebugBuild,
-        )
-    }
+fun dataStoreModule(): Module = module {
+    single<CommonDataStore> { CommonDataStore(context = get()) }
 
     single<CommonDataStoreCore> { get<CommonDataStore>() }
 
     // Bound from the facade rather than constructed here so that exactly one instance of each
-    // group exists per process. DefaultAdsPreferencesDataSource in particular starts an eager
-    // collector, so a second copy would observe the same preference twice.
+    // group exists per process.
     single<ThemePreferencesDataSource> { get<CommonDataStore>().themePreferences }
     single<DisplayPreferencesDataSource> { get<CommonDataStore>().displayPreferences }
     single<AdsPreferencesDataSource> { get<CommonDataStore>().adsPreferences }

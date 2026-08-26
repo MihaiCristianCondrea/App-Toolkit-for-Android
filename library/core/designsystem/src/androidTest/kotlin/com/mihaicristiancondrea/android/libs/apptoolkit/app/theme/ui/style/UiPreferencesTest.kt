@@ -38,7 +38,7 @@ class UiPreferencesTest {
             PreferenceValues()
         }
 
-        composeRule.onNodeWithTag(VALUES_TAG).assertTextEquals("true,true,false")
+        composeRule.onNodeWithTag(VALUES_TAG).assertTextEquals("true,true")
     }
 
     @Test
@@ -47,13 +47,12 @@ class UiPreferencesTest {
             CompositionLocalProvider(
                 LocalBouncyAnimationsEnabled provides false,
                 LocalShowBottomBarLabels provides false,
-                LocalAdsEnabled provides true,
             ) {
                 PreferenceValues()
             }
         }
 
-        composeRule.onNodeWithTag(VALUES_TAG).assertTextEquals("false,false,true")
+        composeRule.onNodeWithTag(VALUES_TAG).assertTextEquals("false,false")
     }
 
     private companion object {
@@ -68,8 +67,6 @@ private fun PreferenceValues() {
             append(LocalBouncyAnimationsEnabled.current)
             append(',')
             append(LocalShowBottomBarLabels.current)
-            append(',')
-            append(LocalAdsEnabled.current)
         },
         modifier = Modifier.testTag("ui_preferences"),
     )

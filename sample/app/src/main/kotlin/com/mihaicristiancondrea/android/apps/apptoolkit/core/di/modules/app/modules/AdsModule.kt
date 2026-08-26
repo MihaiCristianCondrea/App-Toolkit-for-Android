@@ -36,10 +36,8 @@ val adsModule: Module = module {
     // Process-wide: the policy shares its state eagerly so the App Open decision can be read
     // synchronously from the process lifecycle observer.
     single<SampleAdsPolicy> {
-        val preferences: AdsPreferencesDataSource = get()
         DefaultSampleAdsPolicy(
-            adsEnabled = preferences.adsEnabled,
-            reduceAds = preferences.reduceAds,
+            reduceAds = get<AdsPreferencesDataSource>().reduceAds,
             scope = CoroutineScope(SupervisorJob() + get<DispatcherProvider>().io),
         )
     }

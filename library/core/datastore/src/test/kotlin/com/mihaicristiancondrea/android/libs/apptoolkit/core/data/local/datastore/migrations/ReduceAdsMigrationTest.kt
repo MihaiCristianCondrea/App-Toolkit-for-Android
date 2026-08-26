@@ -33,9 +33,6 @@ class ReduceAdsMigrationTest {
 
     private val adsKey = booleanPreferencesKey(DataStoreNamesConstants.DATA_STORE_ADS)
     private val reduceAdsKey = booleanPreferencesKey(DataStoreNamesConstants.DATA_STORE_REDUCE_ADS)
-    private val migratedKey =
-        booleanPreferencesKey(DataStoreNamesConstants.DATA_STORE_REDUCE_ADS_MIGRATED)
-
     private val migration = ReduceAdsMigration()
 
     @Test
@@ -46,25 +43,22 @@ class ReduceAdsMigrationTest {
         val after: Preferences = migration.migrate(before)
 
         assertEquals(true, after[reduceAdsKey])
-        // Cleared rather than flipped, so enablement falls back to the host default exactly as it
-        // does on a fresh install.
         assertNull(after[adsKey])
     }
 
+    // The preference is gone, so the key is dropped whichever value it held; only an install that
+    // had switched ads off carries anything forward.
     @Test
-    fun `install with ads on is left alone`() = runTest {
+    fun `install with ads on only loses the stale key`() = runTest {
         val after = migration.migrate(mutablePreferencesOf(adsKey to true))
 
-        assertEquals(true, after[adsKey])
+        assertNull(after[adsKey])
         assertNull(after[reduceAdsKey])
     }
 
     @Test
-    fun `fresh install is left alone`() = runTest {
-        val after = migration.migrate(emptyPreferences())
-
-        assertNull(after[adsKey])
-        assertNull(after[reduceAdsKey])
+    fun `fresh install has nothing to migrate`() = runTest {
+        assertFalse(migration.shouldMigrate(emptyPreferences()))
     }
 
     @Test
@@ -76,15 +70,11 @@ class ReduceAdsMigrationTest {
         assertEquals(true, after[other])
     }
 
-    // Hosts may still call `setAdsEnabled(false)` themselves; a second launch must not quietly
-    // convert that into a reduced-ads opt-in.
+    // Nothing writes the key any more, so its absence is what stops this running a second time.
     @Test
     fun `does not run twice`() = runTest {
         val migrated = migration.migrate(mutablePreferencesOf(adsKey to false))
-        assertTrue(migrated[migratedKey] == true)
-        assertFalse(migration.shouldMigrate(migrated))
 
-        val hostDisabledAdsLater = migrated.toMutablePreferences().apply { set(adsKey, false) }
-        assertFalse(migration.shouldMigrate(hostDisabledAdsLater))
+        assertFalse(migration.shouldMigrate(migrated))
     }
 }

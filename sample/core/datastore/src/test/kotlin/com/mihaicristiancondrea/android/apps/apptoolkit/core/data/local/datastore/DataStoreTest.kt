@@ -48,7 +48,7 @@ class DataStoreTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
         val context = ApplicationProvider.getApplicationContext<Application>()
         val dispatchers = TestDispatcherProvider(dispatcher)
-        val dataStore = CommonDataStore(context = context, dispatchers = dispatchers)
+        val dataStore = CommonDataStore(context = context)
 
         val dataStoreFile =
             context.preferencesDataStoreFile(DataStoreNamesConstants.DATA_STORE_SETTINGS)

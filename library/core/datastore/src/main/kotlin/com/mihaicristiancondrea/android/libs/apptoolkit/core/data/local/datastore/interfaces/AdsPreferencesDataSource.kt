@@ -19,44 +19,19 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Persisted ads preferences.
+ * Persisted ads preference.
  *
- * Two independent facts live here and must not be collapsed into one:
- *
- * - [adsEnabled] answers "is this install allowed to see ads at all?". It is the hard gate both the
- *   SDK initializer and the ad views must read; sampling the preference separately with a different
- *   default is what previously let views request ads the SDK had never been initialized for. No
- *   host UI toggles it any more, but it stays as the gate hosts reach for in code.
- * - [reduceAds] answers "how intrusive may ads be?". It is an opt-in the user makes and carries no
- *   build-configurable default. Interpreting it is host policy; this layer only stores the choice.
+ * [reduceAds] is the only stored ads preference. It answers "how intrusive may ads be?" — never
+ * "may this app show ads at all?". There is no enablement switch any more: the SDK initializes and
+ * ad slots render unconditionally, and interpreting the opt-in is host policy, not storage.
  */
 interface AdsPreferencesDataSource {
-
-    /** Hot, always-current ads preference carrying the configured build default. */
-    val adsEnabled: StateFlow<Boolean>
-
-    /** Emits the ads preference with a caller-supplied default. */
-    fun ads(default: Boolean): Flow<Boolean>
-
-    /** Persists the ads preference. */
-    suspend fun saveAds(isChecked: Boolean)
 
     /** Emits the reduced-ads opt-in, `false` until the user turns it on. */
     val reduceAds: Flow<Boolean>
 
-    /**
-     * Persists the reduced-ads opt-in and drops any stored [adsEnabled] override.
-     *
-     * Both happen in one transaction because they are one decision: the user has just made
-     * [reduceAds] their ad preference, so a stored enablement value from the switch this one
-     * replaced must not linger as a second, invisible source of truth. Enablement falls back to the
-     * host-configured default from here on.
-     */
+    /** Persists the reduced-ads opt-in. */
     suspend fun saveReduceAds(isChecked: Boolean)
-
-    /** Stops the sharing coroutine backing [adsEnabled]. */
-    fun close()
 }

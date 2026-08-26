@@ -28,9 +28,8 @@ import kotlinx.coroutines.flow.onStart
 /**
  * Concrete implementation of [AdsSettingsRepository].
  *
- * This class manages the persistence and retrieval of ad-related settings: the legacy ads-enabled
- * gate and the reduced-ads opt-in. [CommonDataStore] owns both the persistence and the
- * build-dependent ads default, so this repository never recomputes either.
+ * [CommonDataStore] owns the persistence, so this repository never recomputes a default; reducing
+ * ads is an opt-in and its stored `false` is the only starting point.
  *
  * @param dataStore The data store used for persisting ad settings.
  */
@@ -39,54 +38,22 @@ class DefaultAdsSettingsRepository(
     private val firebaseController: FirebaseController,
 ) : AdsSettingsRepository {
 
-    // Deliberately delegated rather than recomputed. `AdsCoreManager` gates SDK initialization on
-    // the same preference and the ad views observe it; a repositories with its own default is how the
-    // two came to disagree before, which made ad views request ads for an uninitialized SDK.
-    override val defaultAdsEnabled: Boolean = dataStore.defaultAdsEnabled
-
-    // The cold `ads(...)` flow rather than `adsEnabledFlow`: the settings screen needs IO errors and
-    // cancellation to reach it, and the eagerly-started StateFlow swallows both into its own scope.
-    // Only the default is shared — that is what used to diverge.
-    override fun observeAdsEnabled(): Flow<Boolean> =
-        dataStore.ads(default = defaultAdsEnabled)
-            .onStart {
-                firebaseController.logBreadcrumb(
-                    message = "Ads settings observe",
-                    attributes = mapOf("defaultAdsEnabled" to defaultAdsEnabled.toString()),
-                )
-            }
-
-    // No build-configurable default: reducing ads is an opt-in, so the stored `false` is the only
-    // sensible starting point and the data source already applies it.
+    // The cold flow rather than a shared one: the settings screen needs IO errors and cancellation
+    // to reach it, and an eagerly-started StateFlow swallows both into its own scope.
     override fun observeReduceAds(): Flow<Boolean> =
         dataStore.reduceAds
             .onStart {
                 firebaseController.logBreadcrumb(message = "Reduce ads settings observe")
             }
 
-    // Previously returned Success unconditionally, so a DataStore write failure reached the caller
-    // as an uncaught exception rather than the error state the settings screen renders.
-    override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> {
-        firebaseController.logBreadcrumb(
-            message = "Ads settings updated",
-            attributes = mapOf("enabled" to enabled.toString()),
-        )
-        return persist { dataStore.saveAds(isChecked = enabled) }
-    }
-
-    // The write also clears any stored ads-enabled override; see `AdsPreferencesDataSource`. It is
-    // one transaction down there rather than two calls here, so the two preferences cannot end up
-    // disagreeing if the process dies mid-way.
+    // Returns the failure as a value rather than throwing: the settings screen renders it, and a
+    // raw throw from a suspend call reaches the ViewModel's crash reporter instead of the snackbar.
     override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> {
         firebaseController.logBreadcrumb(
             message = "Reduce ads settings updated",
             attributes = mapOf("enabled" to enabled.toString()),
         )
-        return persist { dataStore.saveReduceAds(isChecked = enabled) }
-    }
-
-    private suspend fun persist(write: suspend () -> Unit): DataState<Unit, Errors.Database> =
-        runCatching { write() }.fold(
+        return runCatching { dataStore.saveReduceAds(isChecked = enabled) }.fold(
             onSuccess = { DataState.Success(Unit) },
             onFailure = { throwable ->
                 if (throwable is CancellationException) throw throwable
@@ -94,5 +61,5 @@ class DefaultAdsSettingsRepository(
                 DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
             },
         )
+    }
 }
-

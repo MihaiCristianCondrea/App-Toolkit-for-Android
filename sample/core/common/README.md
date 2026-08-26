@@ -10,13 +10,13 @@ Host-wide constants, the host's ad policy, and error types that carry no UI and 
 - `AppErrors`, the host's extension of the toolkit `Errors` hierarchy.
 - `AdsConstants.APPS_LIST_AD_FREQUENCY`.
 - `SampleAdsPolicy`/`DefaultSampleAdsPolicy`, which decide whether an App Open ad is wanted under
-  the current ads preferences.
+  the reduced-ads preference.
 
 ## Does not own
 
 - Anything that needs `R`. Error-to-text mapping lives in [`:sample:core:ui`](../ui/README.md),
   because it returns `UiTextHelper` and resolves string resources.
-- Storing the ads preferences, owned by
+- Storing the ads preference, owned by
   [`:library:core:datastore`](../../../library/core/datastore/README.md); the policy is constructed
   from flows so it stays free of persistence.
 - Initializing or rendering ads, owned by
@@ -43,7 +43,7 @@ flowchart TD
     Ads --> Features[Apps, tiles, and app composition]
     Qualifiers[AppAdsQualifiers] --> Features
     Tuning[APPS_LIST_AD_FREQUENCY] --> Apps[Apps catalog UI]
-    Prefs[adsEnabled and reduceAds flows] --> Policy[DefaultSampleAdsPolicy]
+    Prefs[reduceAds flow] --> Policy[DefaultSampleAdsPolicy]
     Policy -->|appOpenAdsEnabled| AppOpen[AppToolkit process lifecycle]
     Network[Toolkit Errors hierarchy] --> Errors[AppErrors]
     Errors --> Mapper[Feature-owned UI text mapper]
@@ -59,8 +59,8 @@ flowchart TD
 - Reducing ads suppresses App Open ads and nothing else. Native ad placement and cadence are the
   same under either policy, which keeps the preference to one decision in one place instead of a
   `reduceAds` check spread across feature composables.
-- The policy takes preference `Flow`s rather than the preference store, which keeps this module free
-  of persistence and Android state while still owning the host's ad decisions.
+- The policy takes a preference `Flow` rather than the preference store, which keeps this module
+  free of persistence and Android state while still owning the host's ad decision.
 
 ## Public contracts
 

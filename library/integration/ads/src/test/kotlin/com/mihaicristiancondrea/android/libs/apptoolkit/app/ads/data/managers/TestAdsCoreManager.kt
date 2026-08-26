@@ -27,7 +27,6 @@ import com.google.android.libraries.ads.mobile.sdk.initialization.Initialization
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.interfaces.OnShowAdCompleteListener
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import io.mockk.every
 import io.mockk.justRun
@@ -38,7 +37,6 @@ import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -102,36 +100,17 @@ class TestAdsCoreManager {
         every { Log.d(any(), any()) } returns 0
     }
 
-    /**
-     * The [dataStore] has to be passed, never left to the constructor default.
-     *
-     * That default is `CommonDataStore.getInstance(context)`, which builds a real Preferences
-     * `DataStore` over `context.commonDataStore` when the singleton is unset. Against a mocked
-     * [Context] the store's first read fails with `no answer found for Context.getFilesDir()`
-     * inside DataStore's own scope, so it surfaces as an uncaught exception on a background thread
-     * rather than here. `runTest` reports whatever it finds pending as
-     * `UncaughtExceptionsBeforeTest`, which failed an unrelated test in another class — whichever
-     * one happened to start next. Tests that replace the store by reflection after construction
-     * are too late: the real one already exists.
-     */
     private fun managerWith(
         context: Context,
         provider: BuildInfoProvider,
         adMobAppIdProvider: AdMobAppIdProvider = this.adMobAppIdProvider,
-        dataStore: CommonDataStore = stubDataStore(adsEnabled = false),
     ): AdsCoreManager = AdsCoreManager(
         context = context,
         buildInfoProvider = provider,
         dispatchers = eagerDispatchers(),
         adMobAppIdProvider = adMobAppIdProvider,
         adsSdkInitializer = initializer,
-        dataStore = dataStore,
     )
-
-    /** Ads off by default, so a manager built without an explicit store initializes nothing. */
-    private fun stubDataStore(adsEnabled: Boolean): CommonDataStore = mockk {
-        every { adsEnabledFlow } returns MutableStateFlow(adsEnabled)
-    }
 
     /**
      * [AdsCoreManager] now resolves the AdMob app id from the host manifest instead of using a
@@ -153,11 +132,6 @@ class TestAdsCoreManager {
         val provider = mockk<BuildInfoProvider>()
         val manager = managerWith(context, provider)
 
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
 
         runBlocking { manager.initializeAds("id") }
 
@@ -173,11 +147,6 @@ class TestAdsCoreManager {
         val provider = mockk<BuildInfoProvider>()
         val manager = managerWith(context, provider, adMobAppIdProvider = { null })
 
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
 
         runBlocking { manager.initializeAds("id") }
 
@@ -208,11 +177,6 @@ class TestAdsCoreManager {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
 
         val mgrField = AdsCoreManager::class.java.getDeclaredField("appOpenAdManager")
@@ -253,11 +217,6 @@ class TestAdsCoreManager {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
 
         mockkObject(AppOpenAd.Companion)
@@ -293,11 +252,6 @@ class TestAdsCoreManager {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
 
         val ad = mockk<AppOpenAd>(relaxed = true)
@@ -342,41 +296,12 @@ class TestAdsCoreManager {
     }
 
     @Test
-    fun `ads disabled skips load and show`() {
-        println("🚀 [TEST] ads disabled skips load and show")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
-        val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(false)
-        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
-        runBlocking { manager.initializeAds("unit") }
-
-        mockkObject(AppOpenAd.Companion)
-        justRun { AppOpenAd.load(any(), any()) }
-
-        val activity = mockk<Activity>()
-        manager.showAdIfAvailable(activity, testScope)
-
-        verify(exactly = 0) { AppOpenAd.load(any(), any()) }
-        println("🏁 [TEST DONE] ads disabled skips load and show")
-    }
-
-    @Test
     fun `load failure resets loading flag`() {
         println("🚀 [TEST] load failure resets loading flag")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
 
         val mgrField = AdsCoreManager::class.java.getDeclaredField("appOpenAdManager")
@@ -409,11 +334,6 @@ class TestAdsCoreManager {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
 
         val mgrField = AdsCoreManager::class.java.getDeclaredField("appOpenAdManager")
@@ -446,11 +366,6 @@ class TestAdsCoreManager {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
 
         val mgrField = AdsCoreManager::class.java.getDeclaredField("appOpenAdManager")
@@ -500,11 +415,6 @@ class TestAdsCoreManager {
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
 
         val mgrField = AdsCoreManager::class.java.getDeclaredField("appOpenAdManager")
@@ -526,40 +436,12 @@ class TestAdsCoreManager {
     }
 
     @Test
-    fun `no app open ad is loaded while ads are disabled`() {
-        println("🚀 [TEST] no app open ad is loaded while ads are disabled")
+    fun `an app open ad is loaded on show`() {
+        println("🚀 [TEST] an app open ad is loaded on show")
         val context = mockk<Context>()
         every { context.applicationContext } returns context
         val provider = mockk<BuildInfoProvider>()
         val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(false)
-        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
-        runBlocking { manager.initializeAds("unit") }
-
-        mockkObject(AppOpenAd.Companion)
-        justRun { AppOpenAd.load(any(), any()) }
-
-        manager.showAdIfAvailable(mockk(), testScope)
-
-        verify(exactly = 0) { AppOpenAd.load(any(), any()) }
-        println("🏁 [TEST DONE] no app open ad is loaded while ads are disabled")
-    }
-
-    @Test
-    fun `an app open ad is loaded while ads are enabled`() {
-        println("🚀 [TEST] an app open ad is loaded while ads are enabled")
-        val context = mockk<Context>()
-        every { context.applicationContext } returns context
-        val provider = mockk<BuildInfoProvider>()
-        val manager = managerWith(context, provider)
-        val dataStore = mockk<CommonDataStore>()
-        every { dataStore.adsEnabledFlow } returns MutableStateFlow(true)
-        val storeField = AdsCoreManager::class.java.getDeclaredField("dataStore")
-        storeField.isAccessible = true
-        storeField.set(manager, dataStore)
         runBlocking { manager.initializeAds("unit") }
 
         mockkObject(AppOpenAd.Companion)
@@ -568,7 +450,7 @@ class TestAdsCoreManager {
         manager.showAdIfAvailable(mockk(), testScope)
 
         verify { AppOpenAd.load(any(), any()) }
-        println("🏁 [TEST DONE] an app open ad is loaded while ads are enabled")
+        println("🏁 [TEST DONE] an app open ad is loaded on show")
     }
 
 }
