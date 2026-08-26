@@ -58,41 +58,41 @@ class AppNavigationHostTest {
     }
 
     @Test
-    fun `blank startup page defaults to apps list`() = runTest {
-        every { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST) } returns flowOf(
+    fun `blank startup page defaults to toolkit tiles`() = runTest {
+        every { dataStore.getStartupPage(default = NavigationRoutes.ROUTE_TOOLKIT_TILES) } returns flowOf(
             ""
         )
 
         val startDestination = dataStore.startupDestinationFlow(
-            defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
+            defaultRoute = NavigationRoutes.ROUTE_TOOLKIT_TILES,
             mapToKey = { route -> route.toNavKeyOrDefault() }
         ).first()
 
-        assertEquals(AppsListRoute, startDestination)
+        assertEquals(ToolkitTilesRoute, startDestination)
     }
 
     @Test
-    fun `legacy favorite startup page falls back to apps list`() = runTest {
+    fun `legacy favorite startup page falls back to toolkit tiles`() = runTest {
         every {
-            dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST)
+            dataStore.getStartupPage(default = NavigationRoutes.ROUTE_TOOLKIT_TILES)
         } returns flowOf("favorite_apps")
 
         val startDestination = dataStore.startupDestinationFlow(
-            defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
+            defaultRoute = NavigationRoutes.ROUTE_TOOLKIT_TILES,
             mapToKey = { route -> route.toNavKeyOrDefault() }
         ).first()
 
-        assertEquals(AppsListRoute, startDestination)
+        assertEquals(ToolkitTilesRoute, startDestination)
     }
 
     @Test
     fun `quick tools startup page maps to toolkit tiles`() = runTest {
         every {
-            dataStore.getStartupPage(default = NavigationRoutes.ROUTE_APPS_LIST)
+            dataStore.getStartupPage(default = NavigationRoutes.ROUTE_TOOLKIT_TILES)
         } returns flowOf(NavigationRoutes.ROUTE_TOOLKIT_TILES)
 
         val startDestination = dataStore.startupDestinationFlow(
-            defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
+            defaultRoute = NavigationRoutes.ROUTE_TOOLKIT_TILES,
             mapToKey = { route -> route.toNavKeyOrDefault() }
         ).first()
 

@@ -62,5 +62,5 @@ fun String.toNavKeyOrDefault(): StableNavKey =
         NavigationRoutes.ROUTE_APPS_LIST -> AppsListRoute
         NavigationRoutes.ROUTE_TOOLKIT_TILES -> ToolkitTilesRoute
         NavigationRoutes.ROUTE_COMPONENTS -> ComponentsRoute
-        else -> AppsListRoute
+        else -> ToolkitTilesRoute
     }

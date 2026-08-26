@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 val startRoute: StableNavKey = withContext(context = dispatchers.io) {
                     dataStore.startupDestinationFlow(
-                        defaultRoute = NavigationRoutes.ROUTE_APPS_LIST,
+                        defaultRoute = NavigationRoutes.ROUTE_TOOLKIT_TILES,
                         mapToKey = String::toNavKeyOrDefault,
                     ).first()
                 }
