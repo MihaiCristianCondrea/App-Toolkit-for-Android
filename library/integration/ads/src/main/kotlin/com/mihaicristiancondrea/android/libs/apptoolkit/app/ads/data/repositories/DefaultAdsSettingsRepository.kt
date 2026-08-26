@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.onStart
 /**
  * Concrete implementation of [AdsSettingsRepository].
  *
- * [CommonDataStore] owns the persistence, so this repository never recomputes a default; reducing
+ * [CommonDataStore] owns the persistence, so this repository never recomputes a default; limiting
  * ads is an opt-in and its stored `false` is the only starting point.
  *
  * @param dataStore The data store used for persisting ad settings.
@@ -38,22 +38,23 @@ class DefaultAdsSettingsRepository(
     private val firebaseController: FirebaseController,
 ) : AdsSettingsRepository {
 
-    // The cold flow rather than a shared one: the settings screen needs IO errors and cancellation
-    // to reach it, and an eagerly-started StateFlow swallows both into its own scope.
-    override fun observeReduceAds(): Flow<Boolean> =
-        dataStore.reduceAds
+    // The cold flow rather than the shared one behind `AdsDisplayPolicy`: the settings screen needs
+    // IO errors and cancellation to reach it, and an eagerly-started StateFlow swallows both into
+    // its own scope.
+    override fun observeLimitAds(): Flow<Boolean> =
+        dataStore.limitAds
             .onStart {
-                firebaseController.logBreadcrumb(message = "Reduce ads settings observe")
+                firebaseController.logBreadcrumb(message = "Limit ads settings observe")
             }
 
     // Returns the failure as a value rather than throwing: the settings screen renders it, and a
     // raw throw from a suspend call reaches the ViewModel's crash reporter instead of the snackbar.
-    override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> {
+    override suspend fun setLimitAds(enabled: Boolean): DataState<Unit, Errors.Database> {
         firebaseController.logBreadcrumb(
-            message = "Reduce ads settings updated",
+            message = "Limit ads settings updated",
             attributes = mapOf("enabled" to enabled.toString()),
         )
-        return runCatching { dataStore.saveReduceAds(isChecked = enabled) }.fold(
+        return runCatching { dataStore.saveLimitAds(isChecked = enabled) }.fold(
             onSuccess = { DataState.Success(Unit) },
             onFailure = { throwable ->
                 if (throwable is CancellationException) throw throwable

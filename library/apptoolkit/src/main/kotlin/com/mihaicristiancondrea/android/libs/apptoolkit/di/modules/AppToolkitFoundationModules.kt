@@ -31,13 +31,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.api.ApiHost
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.ads.AdsDisplayPolicy
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.ads.DefaultAdsDisplayPolicy
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.ManifestAdMobAppIdProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.di.dataStoreModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.AdsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.client.KtorClient
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repositories.DefaultInAppUpdateRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.playservices.update.data.repositories.InAppUpdateRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -68,6 +73,16 @@ private fun dispatchersModule(): Module = module {
 
 private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<AdMobAppIdProvider> { ManifestAdMobAppIdProvider(context = get()) }
+    // The one place the limit-ads preference becomes a rendering decision. Bound here rather than
+    // in the datastore module because it needs the host's build type, and process-scoped because
+    // every ad slot reads the same instance.
+    single<AdsDisplayPolicy> {
+        DefaultAdsDisplayPolicy(
+            limitAds = get<AdsPreferencesDataSource>().limitAds,
+            isDebugBuild = hostBuildConfig.isDebugBuild,
+            scope = CoroutineScope(SupervisorJob() + get<DispatcherProvider>().io),
+        )
+    }
     single<AdsCoreManager> {
         AdsCoreManager(
             context = get(),
@@ -120,6 +135,7 @@ private fun adsSettingsSharedModule(): Module = module {
             repository = get(),
             consentRepository = get(),
             dispatchers = get(),
+            buildInfoProvider = get(),
             firebaseController = get(),
         )
     }

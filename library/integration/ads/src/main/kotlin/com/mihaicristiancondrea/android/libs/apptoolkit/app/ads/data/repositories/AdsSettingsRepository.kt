@@ -24,11 +24,11 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Repository interface for the ads settings screen.
  *
- * One preference, one question: how intrusive may ads be? There is no enablement preference any
- * more — the SDK initializes and ad slots render unconditionally. What "reduced" means is decided
- * by the host, not here; in the sample it suppresses app-open ads.
+ * One preference, stored and toggled without interpretation. The screen shows it as "Reduce ads" in
+ * a release build and "Disable ads" in a debug one, and `AdsDisplayPolicy` is the single place that
+ * decides what each means — nothing here branches on the build type.
  */
 interface AdsSettingsRepository {
-    fun observeReduceAds(): Flow<Boolean>
-    suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database>
+    fun observeLimitAds(): Flow<Boolean>
+    suspend fun setLimitAds(enabled: Boolean): DataState<Unit, Errors.Database>
 }

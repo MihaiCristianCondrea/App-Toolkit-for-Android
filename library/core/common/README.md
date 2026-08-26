@@ -10,6 +10,9 @@ Android utility abstractions shared across the toolkit.
 - Analytics and billing value models, and the application-facing theme preference model.
 - `FirebaseController`, `BillingCore`, dispatcher, build-info, app-info, permissions, and ad-SDK
   contracts.
+- `AdsDisplayPolicy`, the single decision of whether ad slots may render, and the one place in the
+  toolkit that behaves differently in debug and release builds. See
+  [`:library:integration:ads`](../../integration/ads/README.md) for the table and the reasoning.
 - Host DI configuration (`AppToolkitHostBuildConfig`, qualifiers, and constants).
 - Small platform and Kotlin extensions used across modules.
 - The Play Integrity license-check manifest permission required by the shared App Check setup.
@@ -18,7 +21,9 @@ Android utility abstractions shared across the toolkit.
 
 ## Does not own
 
-- DataStore implementations, owned by [`:library:core:datastore`](../datastore/README.md).
+- DataStore implementations, owned by [`:library:core:datastore`](../datastore/README.md). The
+  limit-ads preference lives there; `AdsDisplayPolicy` takes it as a `Flow`, so this module gains no
+  persistence dependency.
 - HTTP clients and network error mapping, owned by [`:library:core:network`](../network/README.md).
 - Compose state and components, owned by [`:library:core:ui`](../ui/README.md).
 - Firebase and Billing SDK implementations, owned by their integration modules.

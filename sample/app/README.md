@@ -76,8 +76,8 @@ flowchart TD
   retains final Koin startup and app-only configuration.
 - `MainActivity` resolves first-run state and the persisted startup key before composing the shell,
   preventing a default destination from flashing before the real route is known.
-- App-open ads are shown only when the host's `SampleAdsPolicy` wants one: they are the only thing
-  the reduced-ads preference drops, and `AdsCoreManager` stays unaware of that policy.
+- App-open ads are shown only when the host's `SampleAdsPolicy` wants one: the ads toggle drops them
+  in every build, and `AdsCoreManager` stays unaware of that policy.
 - Process-lifetime ads, billing recovery, seasonal palette selection, and current-activity tracking
   stay in the application class because their lifetime exceeds any screen ViewModel.
 

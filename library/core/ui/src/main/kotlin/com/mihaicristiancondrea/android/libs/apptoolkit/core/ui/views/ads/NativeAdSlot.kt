@@ -79,7 +79,8 @@ fun NativeAdSlot(
         return
     }
 
-    val nativeAd: NativeAd? = rememberNativeAd(adUnitId = adUnitId)
+    val nativeAd: NativeAd? =
+        rememberNativeAd(adUnitId = adUnitId, enabled = rememberAdsAllowed())
 
     LaunchedEffect(nativeAd) {
         currentOnAdLoaded(nativeAd != null)

@@ -37,7 +37,7 @@ val adsModule: Module = module {
     // synchronously from the process lifecycle observer.
     single<SampleAdsPolicy> {
         DefaultSampleAdsPolicy(
-            reduceAds = get<AdsPreferencesDataSource>().reduceAds,
+            limitAds = get<AdsPreferencesDataSource>().limitAds,
             scope = CoroutineScope(SupervisorJob() + get<DispatcherProvider>().io),
         )
     }

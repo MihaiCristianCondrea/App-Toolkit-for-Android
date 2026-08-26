@@ -29,20 +29,20 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class ReduceAdsMigrationTest {
+class LimitAdsMigrationTest {
 
     private val adsKey = booleanPreferencesKey(DataStoreNamesConstants.DATA_STORE_ADS)
-    private val reduceAdsKey = booleanPreferencesKey(DataStoreNamesConstants.DATA_STORE_REDUCE_ADS)
-    private val migration = ReduceAdsMigration()
+    private val limitAdsKey = booleanPreferencesKey(DataStoreNamesConstants.DATA_STORE_LIMIT_ADS)
+    private val migration = LimitAdsMigration()
 
     @Test
-    fun `install that had turned ads off opts into reduced ads`() = runTest {
+    fun `install that had turned ads off opts into limited ads`() = runTest {
         val before = mutablePreferencesOf(adsKey to false)
 
         assertTrue(migration.shouldMigrate(before))
         val after: Preferences = migration.migrate(before)
 
-        assertEquals(true, after[reduceAdsKey])
+        assertEquals(true, after[limitAdsKey])
         assertNull(after[adsKey])
     }
 
@@ -53,7 +53,7 @@ class ReduceAdsMigrationTest {
         val after = migration.migrate(mutablePreferencesOf(adsKey to true))
 
         assertNull(after[adsKey])
-        assertNull(after[reduceAdsKey])
+        assertNull(after[limitAdsKey])
     }
 
     @Test

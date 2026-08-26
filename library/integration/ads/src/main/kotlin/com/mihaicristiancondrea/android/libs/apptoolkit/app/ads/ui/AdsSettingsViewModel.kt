@@ -22,11 +22,13 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repositorie
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.contracts.AdsSettingsAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.contracts.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.states.AdsSettingsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.states.AdsToggleMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
@@ -50,16 +52,26 @@ import kotlinx.coroutines.flow.onStart
 /**
  * ViewModel for ads settings and consent interaction.
  *
- * Only `reduceAds` is observed. Ads enablement stays on the repository for hosts and tests, but no
- * longer reaches this screen: nothing here is conditional on it.
+ * One preference is observed. The build type only picks the toggle's wording, through
+ * [AdsToggleMode]; what the preference actually does is `AdsDisplayPolicy`'s decision, and nothing
+ * here branches on it.
  */
 class AdsSettingsViewModel(
     private val repository: AdsSettingsRepository,
     private val consentRepository: ConsentRepository,
     private val dispatchers: DispatcherProvider,
+    buildInfoProvider: BuildInfoProvider,
     firebaseController: FirebaseController,
 ) : LoggedScreenViewModel<AdsSettingsUiState, AdsSettingsEvent, AdsSettingsAction>(
-    initialState = UiStateScreen(data = AdsSettingsUiState()),
+    initialState = UiStateScreen(
+        data = AdsSettingsUiState(
+            mode = if (buildInfoProvider.isDebugBuild) {
+                AdsToggleMode.DISABLE
+            } else {
+                AdsToggleMode.REDUCE
+            },
+        ),
+    ),
     firebaseController = firebaseController,
     screenName = "AdsSettings",
 ) {
@@ -75,7 +87,7 @@ class AdsSettingsViewModel(
     override fun handleEvent(event: AdsSettingsEvent) {
         when (event) {
             is AdsSettingsEvent.Initialize -> observe()
-            is AdsSettingsEvent.SetReduceAds -> persist(enabled = event.enabled)
+            is AdsSettingsEvent.SetLimitAds -> persist(enabled = event.enabled)
             is AdsSettingsEvent.RequestConsent -> requestConsent(host = event.host)
         }
     }
@@ -89,9 +101,9 @@ class AdsSettingsViewModel(
         )
 
     private fun observe() {
-        startOperation(action = Actions.OBSERVE_REDUCE_ADS)
+        startOperation(action = Actions.OBSERVE_LIMIT_ADS)
         observeJob = observeJob.restart {
-            repository.observeReduceAds()
+            repository.observeLimitAds()
                 .flowOn(dispatchers.io)
                 .onStart {
                     updateStateThreadSafe {
@@ -99,14 +111,14 @@ class AdsSettingsViewModel(
                         screenState.setLoading()
                     }
                 }
-                .onEach { reduceAds ->
+                .onEach { limitAds ->
                     updateStateThreadSafe {
                         screenState.updateData(newState = ScreenState.Success()) { current ->
-                            current.copy(reduceAds = reduceAds)
+                            current.copy(limitAds = limitAds)
                         }
                     }
                 }
-                .catchReport(action = Actions.OBSERVE_REDUCE_ADS) {
+                .catchReport(action = Actions.OBSERVE_LIMIT_ADS) {
                     updateStateThreadSafe {
                         screenState.updateData(newState = ScreenState.Error()) { current -> current }
                         screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
@@ -119,19 +131,19 @@ class AdsSettingsViewModel(
     /** Optimistically applies [enabled], reverting to the rendered value if the write fails. */
     private fun persist(enabled: Boolean) {
         val extra = mapOf(ExtraKeys.ENABLED to enabled.toString())
-        startOperation(action = Actions.PERSIST_REDUCE_ADS, extra = extra)
+        startOperation(action = Actions.PERSIST_LIMIT_ADS, extra = extra)
 
         var previousValue = false
 
         persistJob = persistJob.restart {
-            flow { emit(repository.setReduceAds(enabled)) }
+            flow { emit(repository.setLimitAds(enabled)) }
                 .flowOn(dispatchers.io)
                 .onStart {
                     updateStateThreadSafe {
-                        previousValue = screenState.value.data?.reduceAds == true
+                        previousValue = screenState.value.data?.limitAds == true
                         screenState.dismissSnackbar()
                         screenState.updateData(newState = ScreenState.Success()) { current ->
-                            current.copy(reduceAds = enabled)
+                            current.copy(limitAds = enabled)
                         }
                     }
                 }
@@ -139,16 +151,16 @@ class AdsSettingsViewModel(
                     result.onFailure { error ->
                         updateStateThreadSafe {
                             screenState.updateData(newState = ScreenState.Error()) { current ->
-                                current.copy(reduceAds = previousValue)
+                                current.copy(limitAds = previousValue)
                             }
                             screenState.setError(message = error.asUiText())
                         }
                     }
                 }
-                .catchReport(action = Actions.PERSIST_REDUCE_ADS, extra = extra) {
+                .catchReport(action = Actions.PERSIST_LIMIT_ADS, extra = extra) {
                     updateStateThreadSafe {
                         screenState.updateData(newState = ScreenState.Error()) { current ->
-                            current.copy(reduceAds = previousValue)
+                            current.copy(limitAds = previousValue)
                         }
                         screenState.setError(message = Errors.Database.DATABASE_OPERATION_FAILED.asUiText())
                     }
@@ -187,8 +199,8 @@ class AdsSettingsViewModel(
     }
 
     private object Actions {
-        const val OBSERVE_REDUCE_ADS: String = "observeReduceAds"
-        const val PERSIST_REDUCE_ADS: String = "persistReduceAds"
+        const val OBSERVE_LIMIT_ADS: String = "observeLimitAds"
+        const val PERSIST_LIMIT_ADS: String = "persistLimitAds"
         const val REQUEST_CONSENT: String = "requestConsent"
     }
 

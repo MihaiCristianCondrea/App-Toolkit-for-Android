@@ -10,7 +10,7 @@ Host-wide constants, the host's ad policy, and error types that carry no UI and 
 - `AppErrors`, the host's extension of the toolkit `Errors` hierarchy.
 - `AdsConstants.APPS_LIST_AD_FREQUENCY`.
 - `SampleAdsPolicy`/`DefaultSampleAdsPolicy`, which decide whether an App Open ad is wanted under
-  the reduced-ads preference.
+  the limit-ads preference.
 
 ## Does not own
 
@@ -43,7 +43,7 @@ flowchart TD
     Ads --> Features[Apps, tiles, and app composition]
     Qualifiers[AppAdsQualifiers] --> Features
     Tuning[APPS_LIST_AD_FREQUENCY] --> Apps[Apps catalog UI]
-    Prefs[reduceAds flow] --> Policy[DefaultSampleAdsPolicy]
+    Prefs[limitAds flow] --> Policy[DefaultSampleAdsPolicy]
     Policy -->|appOpenAdsEnabled| AppOpen[AppToolkit process lifecycle]
     Network[Toolkit Errors hierarchy] --> Errors[AppErrors]
     Errors --> Mapper[Feature-owned UI text mapper]
@@ -56,9 +56,10 @@ flowchart TD
   constants/error module into a presentation dependency.
 - Fixed tuning values are source constants; build-dependent identities use each module's generated
   `BuildConfig` and the shared debug/release selectors.
-- Reducing ads suppresses App Open ads and nothing else. Native ad placement and cadence are the
-  same under either policy, which keeps the preference to one decision in one place instead of a
-  `reduceAds` check spread across feature composables.
+- This is the half of the ads toggle that does not vary by build: the opt-in stops App Open ads in
+  every build, and native ad placement and cadence never change. Whether the remaining slots render
+  is the toolkit's `AdsDisplayPolicy` decision, which is the only part that differs between debug
+  and release.
 - The policy takes a preference `Flow` rather than the preference store, which keeps this module
   free of persistence and Android state while still owning the host's ad decision.
 

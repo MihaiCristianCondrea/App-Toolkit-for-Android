@@ -94,7 +94,7 @@ open class CommonDataStore(
     val diagnosticsPreferences: DefaultDiagnosticsPreferencesDataSource =
         DefaultDiagnosticsPreferencesDataSource(dataStore = dataStore)
 
-    /** The reduced-ads opt-in, the only stored ads preference. */
+    /** The limit-ads opt-in, the only stored ads preference. */
     val adsPreferences: AdsPreferencesDataSource =
         DefaultAdsPreferencesDataSource(dataStore = dataStore)
 
@@ -262,10 +262,10 @@ open class CommonDataStore(
 
     // region Ads
 
-    /** The user's reduced-ads opt-in; how a host acts on it is host policy, not storage. */
-    val reduceAds: Flow<Boolean> get() = adsPreferences.reduceAds
+    /** The user's limit-ads opt-in; how a build acts on it is policy, not storage. */
+    val limitAds: Flow<Boolean> get() = adsPreferences.limitAds
 
-    suspend fun saveReduceAds(isChecked: Boolean) = adsPreferences.saveReduceAds(isChecked)
+    suspend fun saveLimitAds(isChecked: Boolean) = adsPreferences.saveLimitAds(isChecked)
 
     // endregion
 

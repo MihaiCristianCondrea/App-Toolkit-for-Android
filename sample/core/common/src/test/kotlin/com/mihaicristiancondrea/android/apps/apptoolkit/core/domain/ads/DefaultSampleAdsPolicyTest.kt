@@ -31,19 +31,19 @@ import org.junit.jupiter.api.Test
 class DefaultSampleAdsPolicyTest {
 
     /**
-     * Builds a policy over [reduceAds] and cancels its sharing scope afterwards.
+     * Builds a policy over [limitAds] and cancels its sharing scope afterwards.
      *
      * The scope is unconfined so the eagerly shared state settles as soon as the preference
      * changes, and separate from the test scope, which would otherwise wait forever for a collector
      * that by design never completes.
      */
     private fun TestScope.withPolicy(
-        reduceAds: MutableStateFlow<Boolean>,
+        limitAds: MutableStateFlow<Boolean>,
         block: (SampleAdsPolicy) -> Unit,
     ) {
         val scope = CoroutineScope(UnconfinedTestDispatcher(testScheduler))
         try {
-            block(DefaultSampleAdsPolicy(reduceAds = reduceAds, scope = scope))
+            block(DefaultSampleAdsPolicy(limitAds = limitAds, scope = scope))
         } finally {
             scope.cancel()
         }
@@ -57,12 +57,12 @@ class DefaultSampleAdsPolicyTest {
     }
 
     @Test
-    fun `reducing ads suppresses app open ads`() = runTest {
-        val reduceAds = MutableStateFlow(false)
-        withPolicy(reduceAds) { policy ->
+    fun `limiting ads suppresses app open ads`() = runTest {
+        val limitAds = MutableStateFlow(false)
+        withPolicy(limitAds) { policy ->
             assertThat(policy.appOpenAdsEnabled.value).isTrue()
 
-            reduceAds.value = true
+            limitAds.value = true
 
             assertThat(policy.appOpenAdsEnabled.value).isFalse()
         }

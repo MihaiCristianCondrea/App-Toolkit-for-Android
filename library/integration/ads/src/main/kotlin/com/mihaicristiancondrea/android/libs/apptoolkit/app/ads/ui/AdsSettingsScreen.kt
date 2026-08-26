@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.contracts.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.states.AdsSettingsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.states.AdsToggleMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
@@ -63,7 +64,7 @@ private const val ADS_SETTINGS_SCREEN_NAME = "AdsSettings"
 private const val ADS_SETTINGS_SCREEN_CLASS = "AdsSettingsScreen"
 
 private object AdsPreferenceKeys {
-    const val REDUCE_ADS: String = "reduce_ads"
+    const val LIMIT_ADS: String = "limit_ads"
     const val PERSONALIZED_ADS: String = "personalized_ads"
     const val LEARN_MORE: String = "learn_more"
 }
@@ -120,15 +121,24 @@ fun AdsSettingsScreen(
                 ) {
 
                     item {
+                        // One switch over one preference; the build only changes what it is called.
+                        val titleRes: Int = when (data.mode) {
+                            AdsToggleMode.REDUCE -> R.string.reduce_ads
+                            AdsToggleMode.DISABLE -> R.string.disable_ads
+                        }
+                        val summaryRes: Int = when (data.mode) {
+                            AdsToggleMode.REDUCE -> R.string.summary_reduce_ads
+                            AdsToggleMode.DISABLE -> R.string.summary_disable_ads
+                        }
                         SwitchCardItem(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = SizeConstants.LargeSize),
-                            title = stringResource(id = R.string.reduce_ads),
-                            summary = stringResource(id = R.string.summary_reduce_ads),
-                            switchState = rememberUpdatedState(data.reduceAds),
+                            title = stringResource(id = titleRes),
+                            summary = stringResource(id = summaryRes),
+                            switchState = rememberUpdatedState(data.limitAds),
                             onSwitchToggled = { isChecked: Boolean ->
-                                viewModel.onEvent(AdsSettingsEvent.SetReduceAds(isChecked))
+                                viewModel.onEvent(AdsSettingsEvent.SetLimitAds(isChecked))
                             },
                             firebaseController = firebaseController,
                             ga4EventProvider = { isChecked ->
@@ -139,7 +149,7 @@ fun AdsSettingsScreen(
                                             ADS_SETTINGS_SCREEN_NAME
                                         ),
                                         SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-                                            AdsPreferenceKeys.REDUCE_ADS
+                                            AdsPreferenceKeys.LIMIT_ADS
                                         ),
                                         SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(
                                             isChecked.toString()

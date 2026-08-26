@@ -59,6 +59,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.sendEmailToDeveloper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsAllowed
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.HelpNativeAdCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
@@ -81,7 +82,7 @@ fun HelpScreenContent(
     val firebaseController: FirebaseController = koinInject()
     val context = LocalContext.current
     val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.HELP_LARGE_BANNER_AD))
-    val hasAdSlot = adsConfig.bannerAdUnitId.isNotBlank()
+    val hasAdSlot = rememberAdsAllowed() && adsConfig.bannerAdUnitId.isNotBlank()
     var showAllQuestions by rememberSaveable { mutableStateOf(value = false) }
     var isAdLoaded by remember { mutableStateOf(value = false) }
     val visibleQuestions = if (showAllQuestions) {

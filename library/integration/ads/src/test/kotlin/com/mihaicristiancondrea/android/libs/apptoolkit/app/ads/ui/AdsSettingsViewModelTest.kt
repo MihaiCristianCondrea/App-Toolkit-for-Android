@@ -20,10 +20,12 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.contracts.AdsSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.states.AdsToggleMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.consent.domain.models.ConsentSettings
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.DataState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.domain.models.network.Errors
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
@@ -34,6 +36,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -56,48 +59,59 @@ class AdsSettingsViewModelTest {
     private val firebaseController = FakeFirebaseController()
 
     private class FakeAdsSettingsRepository(
-        reduceAds: Boolean = false,
+        limitAds: Boolean = false,
         var shouldFail: Boolean = false
     ) : AdsSettingsRepository {
 
-        private val reduceAdsState = MutableStateFlow(reduceAds)
+        private val limitAdsState = MutableStateFlow(limitAds)
 
-        override fun observeReduceAds(): Flow<Boolean> = reduceAdsState
+        override fun observeLimitAds(): Flow<Boolean> = limitAdsState
 
-        override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> {
+        override suspend fun setLimitAds(enabled: Boolean): DataState<Unit, Errors.Database> {
             if (shouldFail) throw IOException("fail")
-            reduceAdsState.value = enabled
+            limitAdsState.value = enabled
             return DataState.Success(Unit)
         }
     }
 
-    private fun createViewModel(repository: AdsSettingsRepository): AdsSettingsViewModel {
+    private fun buildInfo(isDebugBuild: Boolean): BuildInfoProvider = object : BuildInfoProvider {
+        override val appVersion: String = "1.0.0"
+        override val appVersionCode: Int = 1
+        override val packageName: String = "com.example"
+        override val isDebugBuild: Boolean = isDebugBuild
+    }
+
+    private fun createViewModel(
+        repository: AdsSettingsRepository,
+        isDebugBuild: Boolean = false,
+    ): AdsSettingsViewModel {
         return AdsSettingsViewModel(
             repository = repository,
             consentRepository = FakeConsentRepository(),
             dispatchers = testDispatchers(),
+            buildInfoProvider = buildInfo(isDebugBuild = isDebugBuild),
             firebaseController = firebaseController,
         )
     }
 
     @Test
     fun `initial state reflects repository value`() = runTest(dispatcherExtension.testDispatcher) {
-        val repo = FakeAdsSettingsRepository(reduceAds = true)
+        val repo = FakeAdsSettingsRepository(limitAds = true)
         val viewModel = createViewModel(repo)
 
         advanceUntilIdle()
 
         val state = viewModel.uiState.value
         assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
-        assertThat(state.data?.reduceAds).isTrue()
+        assertThat(state.data?.limitAds).isTrue()
     }
 
     @Test
     fun `emission error keeps the opt-in off and reports the error`() =
         runTest(dispatcherExtension.testDispatcher) {
             val repo = object : AdsSettingsRepository {
-                override fun observeReduceAds(): Flow<Boolean> = flow { throw IOException("boom") }
-                override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> =
+                override fun observeLimitAds(): Flow<Boolean> = flow { throw IOException("boom") }
+                override suspend fun setLimitAds(enabled: Boolean): DataState<Unit, Errors.Database> =
                     DataState.Success(Unit)
             }
 
@@ -107,44 +121,82 @@ class AdsSettingsViewModelTest {
 
             val state = viewModel.uiState.value
             assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
-            assertThat(state.data?.reduceAds).isFalse()
+            assertThat(state.data?.limitAds).isFalse()
+        }
+
+    // The toggle is one preference over one code path. All the build type changes is its wording,
+    // so these two are the whole difference between a release and a debug ads screen.
+    @Test
+    fun `a release build labels the toggle Reduce ads`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(FakeAdsSettingsRepository(), isDebugBuild = false)
+
+            advanceUntilIdle()
+
+            assertThat(viewModel.uiState.value.data?.mode).isEqualTo(AdsToggleMode.REDUCE)
         }
 
     @Test
-    fun `reduce ads defaults to off`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `a debug build labels the toggle Disable ads`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(FakeAdsSettingsRepository(), isDebugBuild = true)
+
+            advanceUntilIdle()
+
+            assertThat(viewModel.uiState.value.data?.mode).isEqualTo(AdsToggleMode.DISABLE)
+        }
+
+    @Test
+    fun `the toggle writes the same preference in either build`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val debugRepo = FakeAdsSettingsRepository()
+            val releaseRepo = FakeAdsSettingsRepository()
+
+            createViewModel(debugRepo, isDebugBuild = true)
+                .onEvent(AdsSettingsEvent.SetLimitAds(true))
+            createViewModel(releaseRepo, isDebugBuild = false)
+                .onEvent(AdsSettingsEvent.SetLimitAds(true))
+            advanceUntilIdle()
+
+            assertThat(debugRepo.observeLimitAds().first()).isTrue()
+            assertThat(releaseRepo.observeLimitAds().first()).isTrue()
+        }
+
+    @Test
+    fun `limit ads defaults to off`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(FakeAdsSettingsRepository())
 
         advanceUntilIdle()
 
-        assertThat(viewModel.uiState.value.data?.reduceAds).isFalse()
+        assertThat(viewModel.uiState.value.data?.limitAds).isFalse()
     }
 
     @Test
-    fun `setReduceAds success updates state`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `setLimitAds success updates state`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = FakeAdsSettingsRepository()
         val viewModel = createViewModel(repo)
         advanceUntilIdle()
 
-        viewModel.onEvent(AdsSettingsEvent.SetReduceAds(true))
+        viewModel.onEvent(AdsSettingsEvent.SetLimitAds(true))
         advanceUntilIdle()
 
         val state = viewModel.uiState.value
         assertThat(state.screenState).isInstanceOf(ScreenState.Success::class.java)
-        assertThat(state.data?.reduceAds).isTrue()
+        assertThat(state.data?.limitAds).isTrue()
     }
 
     @Test
-    fun `setReduceAds error reverts state`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `setLimitAds error reverts state`() = runTest(dispatcherExtension.testDispatcher) {
         val repo = FakeAdsSettingsRepository(shouldFail = true)
         val viewModel = createViewModel(repo)
         advanceUntilIdle()
 
-        viewModel.onEvent(AdsSettingsEvent.SetReduceAds(true))
+        viewModel.onEvent(AdsSettingsEvent.SetLimitAds(true))
         advanceUntilIdle()
 
         val state = viewModel.uiState.value
         assertThat(state.screenState).isInstanceOf(ScreenState.Error::class.java)
-        assertThat(state.data?.reduceAds).isFalse()
+        assertThat(state.data?.limitAds).isFalse()
     }
 
 }

@@ -51,9 +51,9 @@ open class DataStoreNamesConstants {
         const val DATA_STORE_AD_USER_DATA_CONSENT = "consent_ad_user_data"
         const val DATA_STORE_AD_PERSONALIZATION_CONSENT = "consent_ad_personalization"
 
-        /** Removed preference. Named only so `ReduceAdsMigration` can read and clear it. */
+        /** Removed preference. Named only so `LimitAdsMigration` can read and clear it. */
         const val DATA_STORE_ADS = "ads"
-        const val DATA_STORE_REDUCE_ADS = "reduce_ads"
+        const val DATA_STORE_LIMIT_ADS = "limit_ads"
         const val DATA_STORE_REVIEW_DONE = "review_done"
         const val DATA_STORE_SESSION_COUNT = "session_count"
         const val DATA_STORE_REVIEW_PROMPTED = "review_prompted"

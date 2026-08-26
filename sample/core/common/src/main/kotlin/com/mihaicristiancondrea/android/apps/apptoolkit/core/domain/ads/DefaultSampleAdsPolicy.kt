@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 /**
- * Derives the App Open decision from the reduced-ads preference.
+ * Derives the App Open decision from the limit-ads preference.
  *
  * Takes a flow rather than the preference store so this stays a pure policy object.
  *
@@ -34,16 +34,16 @@ import kotlinx.coroutines.flow.stateIn
  * lifecycle callback, which cannot wait for a first emission. Until the preference arrives it reads
  * `false`, so a launch shows no App Open ad rather than one the user opted out of.
  *
- * @param reduceAds the user's reduced-ads opt-in.
+ * @param limitAds the user's limit-ads opt-in.
  * @param scope scope backing the shared state; it must live as long as the process.
  */
 class DefaultSampleAdsPolicy(
-    reduceAds: Flow<Boolean>,
+    limitAds: Flow<Boolean>,
     scope: CoroutineScope,
 ) : SampleAdsPolicy {
 
-    override val appOpenAdsEnabled: StateFlow<Boolean> = reduceAds
-        .map { reduced -> !reduced }
+    override val appOpenAdsEnabled: StateFlow<Boolean> = limitAds
+        .map { limited -> !limited }
         .distinctUntilChanged()
         .stateIn(scope = scope, started = SharingStarted.Eagerly, initialValue = false)
 }

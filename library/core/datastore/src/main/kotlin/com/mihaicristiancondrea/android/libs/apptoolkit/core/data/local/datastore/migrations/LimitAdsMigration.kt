@@ -24,13 +24,16 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 
 /**
- * Carries an install that had switched ads off over to the reduced-ads preference.
+ * Carries an install that had switched ads off over to the limit-ads preference.
  *
- * The ads-enabled preference is gone: the SDK initializes and ad slots render unconditionally, and
- * the ads screen offers a single "Reduce ads" toggle. Left alone, an install that had switched ads
- * off would simply start seeing every ad again with the toggle off. So the intent moves to the
- * preference that still exists — `reduceAds` becomes `true`, which is as much of the old promise as
- * the new model can express: no ad when the app is opened.
+ * The ads-enabled preference is gone: the SDK initializes for every install and the ads screen
+ * offers a single toggle. Left alone, an install that had switched ads off would simply start
+ * seeing every ad again, so the intent moves to the preference that still exists — `limit_ads`
+ * becomes `true`.
+ *
+ * That reads correctly under both builds: a release build stops showing it app-open ads, and a
+ * debug build, where the toggle means "disable ads", shows it none at all — which is what the
+ * install originally asked for.
  *
  * The stale `ads` key is always dropped, whichever value it held. Nothing writes it any more, so
  * its absence is what makes this run once; no marker preference is needed.
@@ -38,12 +41,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  * This runs as a [DataMigration] on the `settings` DataStore, so it completes before the first read
  * is served and no consumer ever observes the pre-migration values.
  */
-class ReduceAdsMigration : DataMigration<Preferences> {
+class LimitAdsMigration : DataMigration<Preferences> {
 
     private val adsKey = booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_ADS)
 
-    private val reduceAdsKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_REDUCE_ADS)
+    private val limitAdsKey =
+        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_LIMIT_ADS)
 
     override suspend fun shouldMigrate(currentData: Preferences): Boolean =
         currentData.contains(adsKey)
@@ -52,7 +55,7 @@ class ReduceAdsMigration : DataMigration<Preferences> {
         val migrated: MutablePreferences = currentData.toMutablePreferences()
 
         if (currentData[adsKey] == false) {
-            migrated[reduceAdsKey] = true
+            migrated[limitAdsKey] = true
         }
 
         migrated.remove(adsKey)
@@ -64,4 +67,4 @@ class ReduceAdsMigration : DataMigration<Preferences> {
 
 /** The migrations every AppToolkit host must apply to the shared `settings` DataStore. */
 internal fun commonDataStoreMigrations(): List<DataMigration<Preferences>> =
-    listOf(ReduceAdsMigration())
+    listOf(LimitAdsMigration())

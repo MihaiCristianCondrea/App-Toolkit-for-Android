@@ -53,62 +53,62 @@ class TestDefaultAdsSettingsRepository {
         )
 
     @Test
-    fun `observeReduceAds emits datastore value`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `observeLimitAds emits datastore value`() = runTest(dispatcherExtension.testDispatcher) {
         val dataStore = mockk<CommonDataStore>()
-        every { dataStore.reduceAds } returns flowOf(true)
+        every { dataStore.limitAds } returns flowOf(true)
         val repository = createRepository(dataStore)
 
-        repository.observeReduceAds().test {
+        repository.observeLimitAds().test {
             assertThat(awaitItem()).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `observeReduceAds propagates error`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `observeLimitAds propagates error`() = runTest(dispatcherExtension.testDispatcher) {
         val dataStore = mockk<CommonDataStore>()
-        every { dataStore.reduceAds } returns flow { throw IOException("boom") }
+        every { dataStore.limitAds } returns flow { throw IOException("boom") }
         val repository = createRepository(dataStore)
 
-        repository.observeReduceAds().test {
+        repository.observeLimitAds().test {
             val error = awaitError()
             assertThat(error).isInstanceOf(IOException::class.java)
         }
     }
 
     @Test
-    fun `observeReduceAds rethrows cancellation`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `observeLimitAds rethrows cancellation`() = runTest(dispatcherExtension.testDispatcher) {
         val dataStore = mockk<CommonDataStore>()
-        every { dataStore.reduceAds } returns flow { throw CancellationException("boom") }
+        every { dataStore.limitAds } returns flow { throw CancellationException("boom") }
         val repository = createRepository(dataStore)
 
-        val thrown = runCatching { repository.observeReduceAds().collect() }.exceptionOrNull()
+        val thrown = runCatching { repository.observeLimitAds().collect() }.exceptionOrNull()
 
         assertThat(thrown).isInstanceOf(CancellationException::class.java)
     }
 
     @Test
-    fun `setReduceAds returns success when persisted`() =
+    fun `setLimitAds returns success when persisted`() =
         runTest(dispatcherExtension.testDispatcher) {
             val dataStore = mockk<CommonDataStore>()
-            coEvery { dataStore.saveReduceAds(any()) } returns Unit
+            coEvery { dataStore.saveLimitAds(any()) } returns Unit
             val repository = createRepository(dataStore)
 
-            val result = repository.setReduceAds(true)
+            val result = repository.setLimitAds(true)
 
             assertThat(result).isInstanceOf(DataState.Success::class.java)
-            coVerify { dataStore.saveReduceAds(isChecked = true) }
+            coVerify { dataStore.saveLimitAds(isChecked = true) }
         }
 
     // The failure has to be a value, not a throw: the settings screen renders it, and a raw throw
     // from a suspend call reaches the ViewModel's crash reporter instead of the snackbar.
     @Test
-    fun `setReduceAds returns error on failure`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `setLimitAds returns error on failure`() = runTest(dispatcherExtension.testDispatcher) {
         val dataStore = mockk<CommonDataStore>()
-        coEvery { dataStore.saveReduceAds(any()) } throws IOException("boom")
+        coEvery { dataStore.saveLimitAds(any()) } throws IOException("boom")
         val repository = createRepository(dataStore)
 
-        val result = repository.setReduceAds(true)
+        val result = repository.setLimitAds(true)
 
         assertThat(result).isInstanceOf(DataState.Error::class.java)
         assertThat((result as DataState.Error).error)
@@ -116,11 +116,11 @@ class TestDefaultAdsSettingsRepository {
     }
 
     @Test
-    fun `setReduceAds rethrows cancellation`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `setLimitAds rethrows cancellation`() = runTest(dispatcherExtension.testDispatcher) {
         val dataStore = mockk<CommonDataStore>()
-        coEvery { dataStore.saveReduceAds(any()) } throws CancellationException("cancelled")
+        coEvery { dataStore.saveLimitAds(any()) } throws CancellationException("cancelled")
         val repository = createRepository(dataStore)
 
-        assertThrows<CancellationException> { repository.setReduceAds(true) }
+        assertThrows<CancellationException> { repository.setLimitAds(true) }
     }
 }

@@ -23,6 +23,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.Ui
 /** User interactions on the ads settings screen. */
 sealed interface AdsSettingsEvent : UiEvent {
     data object Initialize : AdsSettingsEvent
-    data class SetReduceAds(val enabled: Boolean) : AdsSettingsEvent
+    data class SetLimitAds(val enabled: Boolean) : AdsSettingsEvent
     data class RequestConsent(val host: ConsentHost) : AdsSettingsEvent
 }

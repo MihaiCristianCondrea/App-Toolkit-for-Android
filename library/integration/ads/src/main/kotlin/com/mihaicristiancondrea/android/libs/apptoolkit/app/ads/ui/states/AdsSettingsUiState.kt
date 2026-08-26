@@ -18,14 +18,27 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.states
 
 /**
+ * How the ads screen labels its single toggle.
+ *
+ * The toggle writes one preference either way; only its wording and what the build does with it
+ * differ. Carried in UI state rather than read from `BuildConfig` in the composable so the screen
+ * stays a function of its state and both labels are reachable from a test.
+ */
+enum class AdsToggleMode {
+    /** Release builds: the opt-in stops app-open ads and leaves the rest. */
+    REDUCE,
+
+    /** Debug builds: the opt-in stops every ad, so ad-free behaviour can be checked. */
+    DISABLE,
+}
+
+/**
  * UI model for [AdsSettingsScreen].
  *
- * Ads enablement is deliberately absent. It survives underneath as the host-facing gate, but no
- * screen writes it and nothing here reads it: reducing ads leaves ordinary ads on, so every control
- * on this screen is live regardless of it.
- *
- * @property reduceAds the user's opt-in to the host's reduced ad policy.
+ * @property limitAds the user's opt-in, and the only value the switch writes.
+ * @property mode which wording the toggle carries in this build.
  */
 data class AdsSettingsUiState(
-    val reduceAds: Boolean = false,
+    val limitAds: Boolean = false,
+    val mode: AdsToggleMode = AdsToggleMode.REDUCE,
 )

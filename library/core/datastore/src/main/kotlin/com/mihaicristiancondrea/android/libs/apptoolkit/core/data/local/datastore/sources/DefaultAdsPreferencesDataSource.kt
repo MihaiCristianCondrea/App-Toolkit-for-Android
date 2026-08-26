@@ -30,32 +30,32 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 /**
- * Reduced-ads preference stored in the shared `settings` Preferences DataStore.
+ * Limit-ads preference stored in the shared `settings` Preferences DataStore.
  *
- * The default is a hard `false` with no build input: reducing ads is something the user opts into.
+ * The default is a hard `false` with no build input: limiting ads is something the user opts into.
  * Installs that had switched ads off under the preference this one replaced are carried over by
- * `ReduceAdsMigration` before any read is served.
+ * `LimitAdsMigration` before any read is served.
  */
 class DefaultAdsPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
 ) : AdsPreferencesDataSource {
 
-    private val reduceAdsKey =
-        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_REDUCE_ADS)
+    private val limitAdsKey =
+        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_LIMIT_ADS)
 
-    override val reduceAds: Flow<Boolean> =
+    override val limitAds: Flow<Boolean> =
         dataStore.data.map { preferences: Preferences ->
-            preferences[reduceAdsKey] ?: DEFAULT_REDUCE_ADS
+            preferences[limitAdsKey] ?: DEFAULT_LIMIT_ADS
         }.distinctUntilChanged()
 
-    override suspend fun saveReduceAds(isChecked: Boolean) {
+    override suspend fun saveLimitAds(isChecked: Boolean) {
         dataStore.edit { preferences: MutablePreferences ->
-            preferences[reduceAdsKey] = isChecked
+            preferences[limitAdsKey] = isChecked
         }
     }
 
     private companion object {
-        /** Reducing ads is an opt-in, so it is never on until the user asks for it. */
-        const val DEFAULT_REDUCE_ADS: Boolean = false
+        /** Limiting ads is an opt-in, so it is never on until the user asks for it. */
+        const val DEFAULT_LIMIT_ADS: Boolean = false
     }
 }

@@ -23,8 +23,11 @@ import kotlinx.coroutines.flow.StateFlow
  * The sample's answer to "do I want an App Open ad right now?".
  *
  * The toolkit's ads integration knows only whether it can initialize and show an ad; whether this
- * app wants one is host policy, so it lives here rather than in `AdsCoreManager`. App Open ads are
- * the only thing the reduced-ads preference changes — native ads render everywhere regardless.
+ * app wants one is host policy, so it lives here rather than in `AdsCoreManager`.
+ *
+ * This is the half of the ads toggle that does *not* vary by build: the opt-in stops app-open ads
+ * in every build. Whether the remaining native and banner slots keep rendering is
+ * `AdsDisplayPolicy`'s decision, and that one does vary.
  */
 interface SampleAdsPolicy {
 

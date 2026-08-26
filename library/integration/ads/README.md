@@ -16,14 +16,14 @@ Owns ad preference settings and Google Mobile Ads integration UI used by AppTool
 - Consent acquisition, owned by `:library:integration:consent`.
 - Generic native-ad rendering primitives, currently owned by `:library:core:ui`.
 - Host ad-unit IDs and host-specific ad policies, owned by the host/common configuration. That
-  includes what "reduce ads" means: this module toggles the preference, the host decides what it
-  suppresses.
+  includes which ads the opt-in suppresses: this module toggles the preference, `AdsDisplayPolicy`
+  and the host's own policy decide what it does.
 
 ## Depends on
 
 - [`:library:core:common`](../../core/common/README.md) for ads/Firebase contracts and host
   constants.
-- [`:library:core:datastore`](../../core/datastore/README.md) for the persisted reduced-ads opt-in.
+- [`:library:core:datastore`](../../core/datastore/README.md) for the persisted limit-ads opt-in.
 - [`:library:core:network`](../../core/network/README.md) for shared result/error types.
 - [`:library:core:ui`](../../core/ui/README.md) for screen contracts and reusable Compose UI.
 - [`:library:integration:consent`](../consent/README.md) so ad state respects consent.
@@ -38,10 +38,11 @@ Owns ad preference settings and Google Mobile Ads integration UI used by AppTool
 flowchart TD
     Settings[AdsSettingsScreen] --> VM[AdsSettingsViewModel]
     VM --> Repo[AdsSettingsRepository]
-    Repo -->|persist opt-in| Reduce[CommonDataStore reduceAds]
+    Repo -->|persist opt-in| Limit[CommonDataStore limitAds]
     Repo -->|apply privacy choice| Consent[ConsentRepository]
-    Reduce --> Policy[Host ad policy]
-    Policy --> Manager[AdsCoreManager]
+    Limit --> Display[AdsDisplayPolicy: debug stops slots, release never does]
+    Limit --> Host[Host policy: app-open ads]
+    Host --> Manager[AdsCoreManager]
     Manifest[Host manifest AdMob application ID] --> Id[AdMobAppIdProvider]
     Id --> Manager
     Manager --> Gate{Valid app ID?}
@@ -50,22 +51,20 @@ flowchart TD
     Initializer --> SDK[Google Mobile Ads]
     SDK --> Ready[AdsSdkState.isReady]
     Ready --> Slot[Compose ad slot]
-    Slot -->|ready| Request[Banner / native / app-open request]
+    Display --> Slot
+    Slot -->|allowed and ready| Request[Banner / native / app-open request]
     Request --> SDK
     Request -->|failure| Empty[Empty non-fatal slot]
 ```
 
 ## Architectural decisions
 
-- There is no ads-enabled preference. The SDK initializes and ad slots render for every install;
-  the only stored ads preference is the reduced-ads opt-in, and it never gates rendering. Two
-  readings of an enablement preference with different defaults is what used to take host processes
-  down, and the preference no longer exists to disagree with itself.
-- Reduced ads is one preference with one meaning here: store it and toggle it. What it suppresses is
-  host policy — in the sample, app-open ads and nothing else. `AdsSettingsUiState` carries only that
-  opt-in, so every control on the screen is live at all times.
-- Installs that had switched ads off under the removed preference are carried onto the opt-in by
-  `ReduceAdsMigration` in `:library:core:datastore`.
+- One stored ads preference, `limit_ads`, and one switch over it. This module stores and toggles it
+  and interprets it nowhere; `AdsDisplayPolicy` in `:library:core:common` is the single place that
+  turns it into a rendering decision. `AdsSettingsUiState` carries the opt-in and the toggle's
+  wording, so every control on the screen is live at all times.
+- Installs that had switched ads off under the removed enablement preference are carried onto the
+  opt-in by `LimitAdsMigration` in `:library:core:datastore`.
 - SDK initialization is idempotent, mutex-protected, and conditional on a valid host-manifest app
   ID; the toolkit never supplies a fallback publisher ID. That id check is the only thing that can
   stop it.
@@ -74,9 +73,48 @@ flowchart TD
 - Ad rendering fails closed: SDK exceptions or unavailable consent produce an empty slot, never a
   process-fatal composition error.
 
+## One toggle, two behaviours
+
+The ads screen shows a single switch over a single preference. Its wording and its effect differ by
+build type:
+
+| Build   | Toggle reads | Opt-in on                                       |
+|---------|--------------|-------------------------------------------------|
+| Release | Reduce ads   | app-open ads stop; native and banner slots render |
+| Debug   | Disable ads  | app-open ads stop; nothing else renders either   |
+
+App-open ads are suppressed identically in both, by the host's own `SampleAdsPolicy`. The *only*
+behavioural difference is whether native and banner slots may render, and `AdsDisplayPolicy` is the
+one place that decides it.
+
+### Why debug differs
+
+Checking how the app looks and behaves with no ads at all needs a switch that actually stops them,
+and a developer build is the right place for it. Shipping that switch is what the removed
+ads-enabled preference did, and it handed every user a permanently ad-free build.
+
+### Where premium fits
+
+A paid ad-free tier is the planned third answer to the same question, and it belongs in
+`AdsDisplayPolicy`: the release branch becomes "allowed unless the user has bought ad removal". No
+ad slot, no settings screen, no SDK code and no new preference changes. Resist adding a second
+preference that ad slots also consult — see the migration notes below for what that costs.
+
+### Rules this arrangement depends on
+
+- **One preference.** The two behaviours are two readings of `limit_ads`, never two flags. Neither
+  mode may reference the other.
+- **The preference never gates SDK initialization.** `AdsCoreManager` reads no preference at all;
+  initialization is conditional only on a valid host-manifest AdMob app id. Skipping initialization
+  when ads are off is exactly the optimisation that used to crash host processes.
+- **One reader for ad slots.** Every slot resolves the same process-scoped `AdsDisplayPolicy`
+  through `rememberAdsAllowed()`. A slot that decides for itself is the other half of that crash.
+- **The debug label is not translated.** `disable_ads`/`summary_disable_ads` exist in the default
+  locale only; no shipped build can reach them.
+
 ## Public contracts
 
-- Ads settings screen/activity, repository contract (`observeReduceAds`/`setReduceAds`), and UI
+- Ads settings screen/activity, repository contract (`observeLimitAds`/`setLimitAds`), and UI
   event/action/state contracts.
 - `AdsCoreManager` and its replaceable `AdsSdkInitializer` test seam.
 
@@ -101,8 +139,9 @@ Two independent causes, both fixed:
 
 - The ads-enabled preference had two sources with different defaults. `AdsCoreManager` gated SDK
   initialization on one and the ad views read the other, so in a debug build the views could believe
-  ads were on while the SDK had never been initialized. The preference has since been removed
-  outright: initialization and rendering are both unconditional, so there is nothing left to
+  ads were on while the SDK had never been initialized. The preference was removed outright, and the
+  debug-only stop that replaced part of it never reaches initialization: `AdsCoreManager` reads no
+  preference, and every slot reads one shared `AdsDisplayPolicy`. There is no second reading left to
   disagree.
 - Even with one source, initialization is asynchronous. An ad slot composed during startup could
   request before the SDK was up. Requests now wait on `AdsSdkState.isReady` and re-key when
@@ -117,8 +156,8 @@ consumer app. The durable safeguards are documented at the modules that own them
 
 - [`:library:core:common`](../../core/common/README.md) owns host-manifest AdMob ID validation and
   the narrowly scoped UMP crash guard.
-- [`:library:core:datastore`](../../core/datastore/README.md) owns the reduced-ads preference and
-  the migration off the removed enablement key.
+- [`:library:core:datastore`](../../core/datastore/README.md) owns the limit-ads preference and the
+  migration off the removed enablement key.
 - [`:library:integration:consent`](../consent/README.md) owns consent single-flight and
   host-lifecycle
   validation.

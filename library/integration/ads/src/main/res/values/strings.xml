@@ -18,8 +18,15 @@
     <string name="ads">Ads</string>
     <string name="learn_more">Learn more</string>
     <string name="personalized_ads">Personalized ads</string>
+    <!--
+      ~ Debug-only labels for the same toggle `reduce_ads`/`summary_reduce_ads` name in a release
+      ~ build. Marked untranslatable rather than left for the translators: no shipped build can
+      ~ reach them, so a locale that lacks them is correct, not a gap.
+      -->
+    <string name="disable_ads" translatable="false">Disable ads</string>
     <string name="reduce_ads">Reduce ads</string>
     <string name="summary_ads">See ads that are relevant to you. Manage the information used to show personalized ads based on your app activity. You can always turn off personalization here.\n</string>
     <string name="summary_ads_personalized_ads">Choose how ads are personalized for you based on your interests</string>
+    <string name="summary_disable_ads" translatable="false">Show no ads at all. Debug builds only, for checking how the app behaves without them.</string>
     <string name="summary_reduce_ads">Remove ads shown when opening the app. Other ads will still appear.</string>
 </resources>

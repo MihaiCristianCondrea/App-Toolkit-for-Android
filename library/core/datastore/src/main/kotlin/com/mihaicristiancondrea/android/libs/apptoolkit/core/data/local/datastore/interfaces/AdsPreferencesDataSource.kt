@@ -23,15 +23,16 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Persisted ads preference.
  *
- * [reduceAds] is the only stored ads preference. It answers "how intrusive may ads be?" — never
- * "may this app show ads at all?". There is no enablement switch any more: the SDK initializes and
- * ad slots render unconditionally, and interpreting the opt-in is host policy, not storage.
+ * [limitAds] is the only stored ads preference, and this layer stores it without interpreting it.
+ * It records that the user asked for fewer ads; *how many fewer* is decided by `AdsDisplayPolicy`
+ * and differs between debug and release builds, which is why the key is not named after either
+ * behaviour.
  */
 interface AdsPreferencesDataSource {
 
-    /** Emits the reduced-ads opt-in, `false` until the user turns it on. */
-    val reduceAds: Flow<Boolean>
+    /** Emits the limit-ads opt-in, `false` until the user turns it on. */
+    val limitAds: Flow<Boolean>
 
-    /** Persists the reduced-ads opt-in. */
-    suspend fun saveReduceAds(isChecked: Boolean)
+    /** Persists the limit-ads opt-in. */
+    suspend fun saveLimitAds(isChecked: Boolean)
 }

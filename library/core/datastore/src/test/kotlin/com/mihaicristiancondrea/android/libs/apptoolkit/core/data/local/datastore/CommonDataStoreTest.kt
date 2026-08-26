@@ -273,15 +273,15 @@ class CommonDataStoreTest {
     }
 
     @Test
-    fun `reduce ads defaults to off`() = runTest {
+    fun `limit ads defaults to off`() = runTest {
         val dataStore = createDataStore(testScheduler)
 
-        assertFalse(dataStore.reduceAds.first())
+        assertFalse(dataStore.limitAds.first())
 
-        dataStore.saveReduceAds(true)
+        dataStore.saveLimitAds(true)
         advanceUntilIdle()
 
-        assertTrue(dataStore.reduceAds.first())
+        assertTrue(dataStore.limitAds.first())
 
         dataStore.close()
     }

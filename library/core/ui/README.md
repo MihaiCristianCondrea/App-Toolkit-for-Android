@@ -99,13 +99,16 @@ Compose effect and kill the host process — reported as
 `IllegalStateException: MobileAds.initialize must be called before using the Google Mobile Ads SDK`
 with `NativeAdLoader.load` under `DisposableEffectImpl.onRemembered`. Preserve the current behavior:
 
-- Ad slots consult no preference. The ads-enabled preference that `rememberAdsEnabled` observed is
-  gone, and with it the possibility of the UI and `AdsCoreManager` disagreeing about it.
+- Every ad slot asks `rememberAdsAllowed()`, which resolves one process-scoped `AdsDisplayPolicy`
+  and collects its already-shared `StateFlow`. It always answers `true` in a release build and
+  follows the ads toggle in a debug one. No slot may choose a default of its own: a slot deciding
+  for itself, while `AdsCoreManager` decided differently, is what used to crash host processes.
+  `AdsCoreManager` now reads no preference at all, so there is nothing to disagree with.
 - `rememberNativeAd` and `AdBanner` wait for `AdsSdkState`, retry when readiness changes, and treat
   a
   synchronous SDK exception as a failed/empty ad slot rather than a fatal UI error.
-- Loaded native ads are destroyed when their unit ID changes, when a caller passes
-  `rememberNativeAd(enabled = false)`, or when the composable leaves composition.
+- Loaded native ads are destroyed when their unit ID changes, when ads stop being allowed, and when
+  the composable leaves composition.
 - `NativeAdSlot.containerColor` is a call-site override. Its default remains an unstyled Material
   card, while exceptional toolkit screens and consumer apps may match their own surfaces without
   changing every native ad.
