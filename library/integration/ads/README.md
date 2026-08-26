@@ -78,14 +78,30 @@ flowchart TD
 The ads screen shows a single switch over a single preference. Its wording and its effect differ by
 build type:
 
-| Build   | Toggle reads | Opt-in on                                       |
-|---------|--------------|-------------------------------------------------|
-| Release | Reduce ads   | app-open ads stop; native and banner slots render |
-| Debug   | Disable ads  | app-open ads stop; nothing else renders either   |
+| Build   | Toggle reads | Opt-in on                                                             |
+|---------|--------------|-----------------------------------------------------------------------|
+| Release | Reduce ads   | app-open ads stop; native and banner slots render                     |
+| Debug   | Disable ads  | app-open ads stop; nothing else renders; personalized ads goes inert  |
 
 App-open ads are suppressed identically in both, by the host's own `SampleAdsPolicy`. The *only*
 behavioural difference is whether native and banner slots may render, and `AdsDisplayPolicy` is the
 one place that decides it.
+
+The personalized-ads row follows from that: personalization shapes the ads that get shown, so the
+row is disabled exactly where none are. `AdsSettingsUiState.personalizedAdsEnabled` restates the
+condition rather than reading the policy, so the row and the switch move together during the
+optimistic update instead of the row lagging a write — the two must stay in step.
+
+### What existing installs get on update
+
+| Stored before update | After `LimitAdsMigration`        | Release behaviour              |
+|----------------------|----------------------------------|--------------------------------|
+| `ads = false`        | `limit_ads = true`, `ads` dropped | no app-open ads, ads elsewhere |
+| `ads = true`         | `ads` dropped, no opt-in written  | ads, unchanged                 |
+| nothing stored       | untouched, migration never runs   | ads, unchanged                 |
+
+The opt-in defaults to `false`, so ads are shown by default and only the population that had
+explicitly switched them off is carried onto the new toggle.
 
 ### Why debug differs
 

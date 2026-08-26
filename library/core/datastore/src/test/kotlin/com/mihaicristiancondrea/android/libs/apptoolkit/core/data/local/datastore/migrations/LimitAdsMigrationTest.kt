@@ -21,7 +21,12 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.mutablePreferencesOf
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.ads.DefaultAdsDisplayPolicy
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -68,6 +73,27 @@ class LimitAdsMigrationTest {
         val after = migration.migrate(mutablePreferencesOf(adsKey to false, other to true))
 
         assertEquals(true, after[other])
+    }
+
+    // What an existing install actually gets after updating. The migration only sets the opt-in;
+    // this pins that a release build still renders ads for those users, so "reduce" cannot quietly
+    // become "ad-free" for the population that predates the preference.
+    @Test
+    fun `a migrated install still sees ads on a release build`() = runTest {
+        val migrated = migration.migrate(mutablePreferencesOf(adsKey to false))
+        val scope = CoroutineScope(UnconfinedTestDispatcher(testScheduler))
+
+        try {
+            val policy = DefaultAdsDisplayPolicy(
+                limitAds = flowOf(migrated[limitAdsKey] == true),
+                isDebugBuild = false,
+                scope = scope,
+            )
+
+            assertTrue(policy.adsAllowed.value)
+        } finally {
+            scope.cancel()
+        }
     }
 
     // Nothing writes the key any more, so its absence is what stops this running a second time.

@@ -162,6 +162,33 @@ class AdsSettingsViewModelTest {
             assertThat(releaseRepo.observeLimitAds().first()).isTrue()
         }
 
+    // Personalization shapes ads that get shown, so the row goes dead only where none are.
+    @Test
+    fun `personalized ads is disabled once a debug build stops every ad`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(FakeAdsSettingsRepository(), isDebugBuild = true)
+            advanceUntilIdle()
+            assertThat(viewModel.uiState.value.data?.personalizedAdsEnabled).isTrue()
+
+            viewModel.onEvent(AdsSettingsEvent.SetLimitAds(true))
+            advanceUntilIdle()
+
+            assertThat(viewModel.uiState.value.data?.personalizedAdsEnabled).isFalse()
+        }
+
+    @Test
+    fun `personalized ads stays live on a release build with the opt-in on`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val viewModel = createViewModel(FakeAdsSettingsRepository(), isDebugBuild = false)
+            advanceUntilIdle()
+
+            viewModel.onEvent(AdsSettingsEvent.SetLimitAds(true))
+            advanceUntilIdle()
+
+            assertThat(viewModel.uiState.value.data?.limitAds).isTrue()
+            assertThat(viewModel.uiState.value.data?.personalizedAdsEnabled).isTrue()
+        }
+
     @Test
     fun `limit ads defaults to off`() = runTest(dispatcherExtension.testDispatcher) {
         val viewModel = createViewModel(FakeAdsSettingsRepository())

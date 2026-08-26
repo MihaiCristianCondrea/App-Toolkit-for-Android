@@ -164,6 +164,7 @@ fun AdsSettingsScreen(
                         Box(modifier = Modifier.padding(horizontal = SizeConstants.SmallSize)) {
                             PreferenceItem(
                                 title = stringResource(id = R.string.personalized_ads),
+                                enabled = data.personalizedAdsEnabled,
                                 summary = stringResource(id = R.string.summary_ads_personalized_ads),
                                 onClick = {
                                     consentHost?.let { host ->

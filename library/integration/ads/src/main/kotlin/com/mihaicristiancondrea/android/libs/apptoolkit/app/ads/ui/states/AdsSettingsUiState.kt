@@ -41,4 +41,19 @@ enum class AdsToggleMode {
 data class AdsSettingsUiState(
     val limitAds: Boolean = false,
     val mode: AdsToggleMode = AdsToggleMode.REDUCE,
-)
+) {
+
+    /**
+     * Whether the personalized-ads row has anything to act on.
+     *
+     * Personalization shapes the ads that get shown, so the row is live except in the one state
+     * where none are: a debug build with [AdsToggleMode.DISABLE] switched on. A release build keeps
+     * showing ads under the opt-in, so the row stays live there.
+     *
+     * `AdsDisplayPolicy` is what actually stops the ads; this restates the condition so the row and
+     * the switch move together during the optimistic update instead of the row lagging a write.
+     * The two must stay in step — see the module README.
+     */
+    val personalizedAdsEnabled: Boolean
+        get() = !(mode == AdsToggleMode.DISABLE && limitAds)
+}
