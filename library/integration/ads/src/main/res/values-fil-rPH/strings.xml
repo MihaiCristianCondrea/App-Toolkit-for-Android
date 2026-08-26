@@ -16,9 +16,12 @@
   -->
 <resources>
     <string name="ads">Mga Ad</string>
-    <string name="display_ads">Ipakita ang mga ad</string>
+    <string name="ads_disabled">Naka-off ang mga ad</string>
     <string name="learn_more">Matuto pa</string>
     <string name="personalized_ads">Mga personalized na ad</string>
+    <string name="reduce_ads">Bawasan ang mga ad</string>
     <string name="summary_ads">Tingnan ang mga ad na nauugnay sa iyo. Pamahalaan ang impormasyong ginagamit para ipakita ang mga personalized na ad batay sa iyong aktibidad sa app. Maaari mong palaging i-off ang personalization dito.\n</string>
+    <string name="summary_ads_disabled">Ginagamit mo ang dating setting na walang ad. Napanatili ang preference na ito.</string>
     <string name="summary_ads_personalized_ads">Piliin kung paano namin pini-personalize ang mga ad para sa iyo batay sa iyong mga interes</string>
+    <string name="summary_reduce_ads">Tingnan ang mas kaunting mga ad at alisin ang mga ad na ipinapakita kapag binubuksan ang app. May ilang ad pa ring ipapakita upang suportahan ang pag-develop.</string>
 </resources>

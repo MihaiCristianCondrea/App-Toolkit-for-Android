@@ -44,6 +44,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contracts.HomeAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.contracts.HomeEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppListUiState
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.ads.NativeAdPlacement
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.ads.SampleAdsPolicy
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.RandomAppHandler
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
@@ -96,6 +98,14 @@ fun AppsListRoute(
 
     val context = LocalContext.current
     val adsEnabled = rememberAdsEnabled()
+
+    // Interleaving is a presentation decision, so the ad cadence is resolved here rather than in
+    // the repositories or in the generic ad slot.
+    val adsPolicy: SampleAdsPolicy = koinInject()
+    val reduceAds: Boolean by adsPolicy.reduceAds.collectAsStateWithLifecycle()
+    val adFrequency: Int = remember(adsPolicy, reduceAds) {
+        adsPolicy.nativeAdInterval(placement = NativeAdPlacement.APPS)
+    }
 
     val appDetailsAdsConfig: AdsConfig =
         koinInject(qualifier = named(AppAdsQualifiers.APP_DETAILS_NATIVE_AD))
@@ -220,6 +230,7 @@ fun AppsListRoute(
                 installedPackages = uiHomeScreen.installedPackages,
                 paddingValues = paddingValues,
                 adsEnabled = adsEnabled,
+                adFrequency = adFrequency,
                 onFilterSelected = { filter -> viewModel.onEvent(HomeEvent.FilterSelected(filter)) },
                 onFavoriteToggle = onFavoriteToggle,
                 onAppClick = { app ->

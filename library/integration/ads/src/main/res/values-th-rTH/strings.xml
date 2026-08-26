@@ -16,9 +16,12 @@
   -->
 <resources>
     <string name="ads">โฆษณา</string>
-    <string name="display_ads">แสดงโฆษณา</string>
+    <string name="ads_disabled">ปิดโฆษณาอยู่</string>
     <string name="learn_more">เรียนรู้เพิ่มเติม</string>
     <string name="personalized_ads">โฆษณาเฉพาะบุคคล</string>
+    <string name="reduce_ads">ลดโฆษณา</string>
     <string name="summary_ads">ดูโฆษณาที่ตรงกับความสนใจของคุณ จัดการข้อมูลสำหรับโฆษณาที่ปรับแต่งได้</string>
+    <string name="summary_ads_disabled">คุณกำลังใช้การตั้งค่าแบบไม่มีโฆษณาก่อนหน้านี้ การตั้งค่านี้ถูกเก็บไว้</string>
     <string name="summary_ads_personalized_ads">เลือกวิธีที่เราใช้ข้อมูลส่วนตัวในการปรับแต่งโฆษณา</string>
+    <string name="summary_reduce_ads">ดูโฆษณาน้อยลงและนำโฆษณาที่แสดงตอนเปิดแอปออก โฆษณาบางส่วนจะยังแสดงอยู่เพื่อสนับสนุนการพัฒนา</string>
 </resources>

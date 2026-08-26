@@ -60,6 +60,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catal
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catalog.HowToAddTilesCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catalog.TileCategorySection
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catalog.TilesFilters
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.ads.NativeAdPlacement
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.ads.SampleAdsPolicy
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -74,6 +76,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 /** Route-level composable for the Toolkit Tiles catalog. */
@@ -85,6 +88,14 @@ fun ToolkitTilesRoute(
     val screenState: UiStateScreen<ToolkitTilesUiState> by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    // The catalogue owns where ads go; how sparse they are is one shared host policy so this screen
+    // and the apps list cannot drift apart.
+    val adsPolicy: SampleAdsPolicy = koinInject()
+    val reduceAds: Boolean by adsPolicy.reduceAds.collectAsStateWithLifecycle()
+    val adInterval: Int = remember(adsPolicy, reduceAds) {
+        adsPolicy.nativeAdInterval(placement = NativeAdPlacement.QUICK_TOOLS)
+    }
 
     DisposableEffect(viewModel, lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -127,6 +138,7 @@ fun ToolkitTilesRoute(
                 ToolkitTilesScreen(
                     state = state,
                     paddingValues = paddingValues,
+                    adInterval = adInterval,
                     onEvent = viewModel::onEvent,
                 )
             }
@@ -134,11 +146,17 @@ fun ToolkitTilesRoute(
     )
 }
 
-/** Stateless Material 3 screen that renders Quick Settings tile categories and actions. */
+/**
+ * Stateless Material 3 screen that renders Quick Settings tile categories and actions.
+ *
+ * @param adInterval how many categories to show between native ads, resolved by the host's ad
+ * policy so the reduced policy applies here the same way it does in the apps list.
+ */
 @Composable
 fun ToolkitTilesScreen(
     state: ToolkitTilesUiState,
     paddingValues: PaddingValues,
+    adInterval: Int = AdsConstants.QUICK_TOOLS_AD_FREQUENCY,
     onEvent: (ToolkitTilesEvent) -> Unit,
 ) {
     val showAds = rememberAdsEnabled()
@@ -147,11 +165,11 @@ fun ToolkitTilesScreen(
     val filteredCategories = remember(state.categories, state.selectedFilter) {
         state.categories.filterFor(state.selectedFilter)
     }
-    val listItems = remember(filteredCategories) {
+    val listItems = remember(filteredCategories, adInterval) {
         buildList {
             filteredCategories.forEachIndexed { index, category ->
                 add(ToolkitTilesListItem.Category(category))
-                if ((index + 1) % 2 == 0) {
+                if (adInterval > 0 && (index + 1) % adInterval == 0) {
                     add(
                         ToolkitTilesListItem.Ad(
                             id = "ad_after_${category.id}",

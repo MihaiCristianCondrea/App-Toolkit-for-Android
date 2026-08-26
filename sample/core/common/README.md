@@ -2,18 +2,26 @@
 
 ## Purpose
 
-Host-wide constants and error types that carry no UI and no Android state.
+Host-wide constants, the host's ad policy, and error types that carry no UI and no Android state.
 
 ## Owns
 
 - Ad unit ids and Koin qualifiers for the host's ad placements, help-screen constants, log tags.
 - `AppErrors`, the host's extension of the toolkit `Errors` hierarchy.
-- `AdsConstants.APPS_LIST_AD_FREQUENCY`.
+- `AdsConstants.APPS_LIST_AD_FREQUENCY` and `AdsConstants.QUICK_TOOLS_AD_FREQUENCY`.
+- `SampleAdsPolicy`/`DefaultSampleAdsPolicy` and `NativeAdPlacement`: the host's single ad governor,
+  deciding whether App Open ads are wanted and how sparse native ads are at each placement.
 
 ## Does not own
 
 - Anything that needs `R`. Error-to-text mapping lives in [`:sample:core:ui`](../ui/README.md),
   because it returns `UiTextHelper` and resolves string resources.
+- Storing the ads preferences, owned by
+  [`:library:core:datastore`](../../../library/core/datastore/README.md); the policy is constructed
+  from flows so it stays free of persistence.
+- Initializing or rendering ads, owned by
+  [`:library:integration:ads`](../../../library/integration/ads/README.md) and
+  [`:library:core:ui`](../../../library/core/ui/README.md).
 
 ## Depends on
 
@@ -34,7 +42,11 @@ flowchart TD
     ToolkitIds[Toolkit debug/release ad selectors] --> Ads
     Ads --> Features[Apps, tiles, and app composition]
     Qualifiers[AppAdsQualifiers] --> Features
-    Tuning[APPS_LIST_AD_FREQUENCY] --> Apps[Apps catalog UI]
+    Tuning[Per-placement ad frequencies] --> Placement[NativeAdPlacement]
+    Prefs[adsEnabled and reduceAds flows] --> Policy[DefaultSampleAdsPolicy]
+    Placement --> Policy
+    Policy -->|appOpenAdsEnabled| AppOpen[AppToolkit process lifecycle]
+    Policy -->|nativeAdInterval| Lists[Apps catalog and Quick Tools UI]
     Network[Toolkit Errors hierarchy] --> Errors[AppErrors]
     Errors --> Mapper[Feature-owned UI text mapper]
 ```
@@ -46,14 +58,21 @@ flowchart TD
   constants/error module into a presentation dependency.
 - Fixed tuning values are source constants; build-dependent identities use each module's generated
   `BuildConfig` and the shared debug/release selectors.
+- Ad intensity is one policy object rather than a `reduceAds` check per composable, so the apps
+  catalogue and Quick Tools cannot drift in what "reduced" means. Reduced spacing is derived from
+  each placement's normal cadence (×2) instead of being a second set of tuning numbers.
+- The policy takes preference `Flow`s rather than the preference store, which keeps this module free
+  of persistence and Android state while still owning the host's ad decisions.
 
 ## Public contracts
 
-- `AdsConstants`, `AppAdsQualifiers`, `HelpConstants`, `LogTags`, `AppErrors`.
+- `AdsConstants`, `AppAdsQualifiers`, `HelpConstants`, `LogTags`, `AppErrors`, `SampleAdsPolicy`,
+  `DefaultSampleAdsPolicy`, `NativeAdPlacement`.
 
 ## Internal implementations
 
-- None. Every declaration here is a constant or a data type.
+- `DefaultSampleAdsPolicy`, the only code here with behavior. Everything else is a constant or a
+  data type.
 
 ## Current risks
 

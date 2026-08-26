@@ -51,6 +51,7 @@ flowchart TD
     Store -->|preference updates| Source
     Source -->|typed Flow| Caller
     Ads[DefaultAdsPreferencesDataSource] -->|eagerly shared| AdsState[adsEnabled StateFlow]
+    Ads -->|cold flow, hard false default| Reduce[reduceAds]
     Store --> Ads
     Module[dataStoreModule] -->|one process instance| Facade
     Module --> Narrow
@@ -66,6 +67,11 @@ flowchart TD
   source of truth except for explicitly documented UI mirrors.
 - Ads enablement is eagerly shared by one process-scoped instance because initialization and every
   ad surface must observe the same default and subsequent changes.
+- `adsEnabled` and `reduceAds` are separate keys answering separate questions — "may this install
+  see ads at all?" and "how aggressive should the host's ad policy be?". `adsEnabled` keeps its
+  host-configured default and its stored value so installs that opted out stay ad-free even though
+  no host UI writes it any more; `reduceAds` is a user opt-in with a hard `false` default and no
+  build input. This module stores both and interprets neither.
 
 ## Public contracts
 

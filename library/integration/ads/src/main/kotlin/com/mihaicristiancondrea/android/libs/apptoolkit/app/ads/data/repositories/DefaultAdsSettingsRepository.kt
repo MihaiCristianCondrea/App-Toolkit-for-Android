@@ -28,9 +28,9 @@ import kotlinx.coroutines.flow.onStart
 /**
  * Concrete implementation of [AdsSettingsRepository].
  *
- * This class manages the persistence and retrieval of ad-related settings, specifically whether ads
- * are enabled or disabled. [CommonDataStore] owns both the persistence and the build-dependent
- * default, so this repositories never recomputes either.
+ * This class manages the persistence and retrieval of ad-related settings: the legacy ads-enabled
+ * gate and the reduced-ads opt-in. [CommonDataStore] owns both the persistence and the
+ * build-dependent ads default, so this repository never recomputes either.
  *
  * @param dataStore The data store used for persisting ad settings.
  */
@@ -56,6 +56,14 @@ class DefaultAdsSettingsRepository(
                 )
             }
 
+    // No build-configurable default: reducing ads is an opt-in, so the stored `false` is the only
+    // sensible starting point and the data source already applies it.
+    override fun observeReduceAds(): Flow<Boolean> =
+        dataStore.reduceAds
+            .onStart {
+                firebaseController.logBreadcrumb(message = "Reduce ads settings observe")
+            }
+
     // Previously returned Success unconditionally, so a DataStore write failure reached the caller
     // as an uncaught exception rather than the error state the settings screen renders.
     override suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database> {
@@ -63,7 +71,19 @@ class DefaultAdsSettingsRepository(
             message = "Ads settings updated",
             attributes = mapOf("enabled" to enabled.toString()),
         )
-        return runCatching { dataStore.saveAds(isChecked = enabled) }.fold(
+        return persist { dataStore.saveAds(isChecked = enabled) }
+    }
+
+    override suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database> {
+        firebaseController.logBreadcrumb(
+            message = "Reduce ads settings updated",
+            attributes = mapOf("enabled" to enabled.toString()),
+        )
+        return persist { dataStore.saveReduceAds(isChecked = enabled) }
+    }
+
+    private suspend fun persist(write: suspend () -> Unit): DataState<Unit, Errors.Database> =
+        runCatching { write() }.fold(
             onSuccess = { DataState.Success(Unit) },
             onFailure = { throwable ->
                 if (throwable is CancellationException) throw throwable
@@ -71,6 +91,5 @@ class DefaultAdsSettingsRepository(
                 DataState.Error(error = Errors.Database.DATABASE_OPERATION_FAILED)
             },
         )
-    }
 }
 

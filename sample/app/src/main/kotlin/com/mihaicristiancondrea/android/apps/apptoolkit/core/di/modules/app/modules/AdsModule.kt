@@ -18,15 +18,32 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.di.modules.app.modules
 
 import com.google.android.libraries.ads.mobile.sdk.banner.AdSize
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.ads.DefaultSampleAdsPolicy
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.ads.SampleAdsPolicy
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.AdsPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val adsModule: Module = module {
+    // Process-wide: the policy shares its state eagerly so the App Open decision can be read
+    // synchronously from the process lifecycle observer.
+    single<SampleAdsPolicy> {
+        val preferences: AdsPreferencesDataSource = get()
+        DefaultSampleAdsPolicy(
+            adsEnabled = preferences.adsEnabled,
+            reduceAdsPreference = preferences.reduceAds,
+            scope = CoroutineScope(SupervisorJob() + get<DispatcherProvider>().io),
+        )
+    }
+
     single<AdsConfig>(named(name = AdsQualifiers.NATIVE_AD)) {
         AdsConfig(bannerAdUnitId = AdsConstants.NATIVE_AD_UNIT_ID)
     }

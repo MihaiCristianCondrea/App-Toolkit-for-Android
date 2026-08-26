@@ -27,6 +27,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.initializeKoin
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.domain.ads.SampleAdsPolicy
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.managers.AdsCoreManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.AppThemeConfig
@@ -62,12 +63,15 @@ import java.time.ZoneId
  * @property currentActivity The currently active [Activity] instance, used for showing ads.
  * @property appScope A [CoroutineScope] tied to the application's lifecycle for background tasks.
  * @property adsCoreManager Manager responsible for handling advertisement logic.
+ * @property adsPolicy Decides whether this app wants an App Open ad; the integration only knows
+ * how to show one.
  */
 class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     private var currentActivity: Activity? = null
     private val appScope = CoroutineScope(SupervisorJob() + dispatchers.io)
 
     private val adsCoreManager: AdsCoreManager by lazy { getKoin().get<AdsCoreManager>() }
+    private val adsPolicy: SampleAdsPolicy by lazy { getKoin().get<SampleAdsPolicy>() }
 
     override fun onCreate() {
         initializeKoin(context = this)
@@ -128,6 +132,9 @@ class AppToolkit : BaseCoreManager(), DefaultLifecycleObserver {
     }
 
     override fun onStart(owner: LifecycleOwner) {
+        // App Open ads are the loudest ad this app shows, so they are the first thing the reduced
+        // policy drops. The rule is the host's; AdsCoreManager stays unaware of "reduced".
+        if (!adsPolicy.appOpenAdsEnabled.value) return
         currentActivity?.let { adsCoreManager.showAdIfAvailable(it, owner.lifecycleScope) }
     }
 

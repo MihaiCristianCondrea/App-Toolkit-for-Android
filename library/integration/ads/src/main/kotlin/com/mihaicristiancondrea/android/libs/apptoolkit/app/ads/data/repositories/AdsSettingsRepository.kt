@@ -24,11 +24,18 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Repository interface for managing advertisement settings.
  *
- * This interface defines the contract for accessing and modifying
- * user preferences related to advertisements within the application.
+ * Two separate preferences are exposed because they answer different questions:
+ *
+ * - `adsEnabled` is the legacy hard gate — whether this install may see ads at all. No host UI
+ *   toggles it any more, but installs that opted out stay ad-free, so the read/write pair is kept
+ *   for compatibility, migrations, tests, and host-specific logic such as purchases.
+ * - `reduceAds` is the user's opt-in to a less intrusive ad policy. What "reduced" means — fewer
+ *   native ads, no app-open ads — is decided by the host, not here.
  */
 interface AdsSettingsRepository {
     val defaultAdsEnabled: Boolean
     fun observeAdsEnabled(): Flow<Boolean>
+    fun observeReduceAds(): Flow<Boolean>
     suspend fun setAdsEnabled(enabled: Boolean): DataState<Unit, Errors.Database>
+    suspend fun setReduceAds(enabled: Boolean): DataState<Unit, Errors.Database>
 }

@@ -307,6 +307,29 @@ class CommonDataStoreTest {
         dataStore.close()
     }
 
+    // Separate keys: turning the reduced policy on must not touch the legacy ads-enabled gate, and
+    // an install grandfathered ad-free must not silently read as "reduced".
+    @Test
+    fun `reduce ads defaults to off and is independent of ads enablement`() = runTest {
+        val dataStore = createDataStore(testScheduler)
+
+        assertFalse(dataStore.reduceAds.first())
+
+        dataStore.saveReduceAds(true)
+        advanceUntilIdle()
+
+        assertTrue(dataStore.reduceAds.first())
+        assertTrue(dataStore.ads(default = true).first())
+
+        dataStore.saveAds(false)
+        advanceUntilIdle()
+
+        assertTrue(dataStore.reduceAds.first())
+        assertFalse(dataStore.ads(default = true).first())
+
+        dataStore.close()
+    }
+
     @Test
     fun `favorite apps flow emits updated sets when toggled`() = runTest {
         val dataStore = createDataStore(testScheduler)

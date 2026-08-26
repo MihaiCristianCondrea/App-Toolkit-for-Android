@@ -16,9 +16,12 @@
   -->
 <resources>
     <string name="ads">Ads</string>
-    <string name="display_ads">Display ads</string>
+    <string name="ads_disabled">Ads disabled</string>
     <string name="learn_more">Learn more</string>
     <string name="personalized_ads">Personalized ads</string>
+    <string name="reduce_ads">Reduce ads</string>
     <string name="summary_ads">See ads that are relevant to you. Manage the information used to show personalized ads based on your app activity. You can always turn off personalization here.\n</string>
+    <string name="summary_ads_disabled">You\'re using the previous ad-free setting. This preference has been preserved.</string>
     <string name="summary_ads_personalized_ads">Choose how ads are personalized for you based on your interests</string>
+    <string name="summary_reduce_ads">See fewer ads and remove ads shown when opening the app. Some ads will still be displayed to support development.</string>
 </resources>

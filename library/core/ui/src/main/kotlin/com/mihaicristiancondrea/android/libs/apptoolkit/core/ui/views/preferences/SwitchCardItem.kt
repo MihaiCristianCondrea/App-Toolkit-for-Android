@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferenc
 import android.view.SoundEffectConstants
 import android.view.View
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -53,6 +54,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.C
  * The switch visually indicates its 'on' state by displaying a check icon within the thumb.
  *
  * @param title The text displayed as the card's title.
+ * @param summary Optional supporting text under the title, for preferences whose effect is not
+ * obvious from the title alone.
  * @param switchState A [State] object holding the current on/off state of the switch. Use `true` for the 'on' state and `false` for the 'off' state.
  * @param onSwitchToggled A callback function invoked when the switch is toggled, either by clicking the card or the switch itself.  It receives the new state of the switch (a `Boolean` value) as a parameter.
  *
@@ -73,6 +76,7 @@ fun SwitchCardItem(
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     title: String,
+    summary: String? = null,
     enabled: Boolean = true,
     switchState: State<Boolean>,
     onSwitchToggled: (Boolean) -> Unit,
@@ -110,12 +114,20 @@ fun SwitchCardItem(
                     Icon(imageVector = it, contentDescription = null)
                     LargeHorizontalSpacer()
                 }
-                Text(
-                    text = title,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.SemiBold
-                )
+                Column(modifier = Modifier.weight(weight = 1f)) {
+                    Text(
+                        text = title,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    summary?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+                }
             }
             CustomSwitch(
                 checked = switchState.value,

@@ -16,9 +16,12 @@
   -->
 <resources>
     <string name="ads">Quảng cáo</string>
-    <string name="display_ads">Hiển thị quảng cáo</string>
+    <string name="ads_disabled">Quảng cáo đã tắt</string>
     <string name="learn_more">Tìm hiểu thêm</string>
     <string name="personalized_ads">Quảng cáo được cá nhân hóa</string>
+    <string name="reduce_ads">Giảm quảng cáo</string>
     <string name="summary_ads">Xem quảng cáo phù hợp với bạn. Quản lý thông tin được sử dụng để hiển thị quảng cáo được cá nhân hóa dựa trên hoạt động ứng dụng của bạn. Bạn luôn có thể tắt cá nhân hóa tại đây.\n</string>
+    <string name="summary_ads_disabled">Bạn đang dùng cài đặt không quảng cáo trước đây. Tùy chọn này đã được giữ nguyên.</string>
     <string name="summary_ads_personalized_ads">Chọn cách chúng tôi cá nhân hóa quảng cáo cho bạn dựa trên sở thích của bạn</string>
+    <string name="summary_reduce_ads">Xem ít quảng cáo hơn và bỏ quảng cáo hiển thị khi mở ứng dụng. Một số quảng cáo vẫn sẽ xuất hiện để hỗ trợ việc phát triển.</string>
 </resources>

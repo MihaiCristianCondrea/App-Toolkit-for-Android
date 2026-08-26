@@ -54,6 +54,7 @@ flowchart TD
     Koin --> HostModules[App-specific data and feature bindings]
     App --> Lifecycle[Process/activity lifecycle]
     Lifecycle --> Ads[Ads initialization and app-open display]
+    Policy[SampleAdsPolicy appOpenAdsEnabled] --> Ads
     Lifecycle --> Billing[Past-purchase processing]
     Launcher[MainActivity] --> FirstRun{Onboarding complete?}
     FirstRun -->|no| Startup[Toolkit StartupActivity]
@@ -75,6 +76,8 @@ flowchart TD
   retains final Koin startup and app-only configuration.
 - `MainActivity` resolves first-run state and the persisted startup key before composing the shell,
   preventing a default destination from flashing before the real route is known.
+- App-open ads are shown only when the host's `SampleAdsPolicy` wants one: they are the first thing
+  the reduced-ads preference drops, and `AdsCoreManager` stays unaware of that policy.
 - Process-lifetime ads, billing recovery, seasonal palette selection, and current-activity tracking
   stay in the application class because their lifetime exceeds any screen ViewModel.
 

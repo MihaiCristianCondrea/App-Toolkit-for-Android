@@ -20,12 +20,18 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -33,6 +39,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.contracts.AdsSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.states.AdsSettingsUiState
@@ -63,7 +70,7 @@ private const val ADS_SETTINGS_SCREEN_NAME = "AdsSettings"
 private const val ADS_SETTINGS_SCREEN_CLASS = "AdsSettingsScreen"
 
 private object AdsPreferenceKeys {
-    const val DISPLAY_ADS: String = "display_ads"
+    const val REDUCE_ADS: String = "reduce_ads"
     const val PERSONALIZED_ADS: String = "personalized_ads"
     const val LEARN_MORE: String = "learn_more"
 }
@@ -120,33 +127,45 @@ fun AdsSettingsScreen(
                 ) {
 
                     item {
-                        SwitchCardItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = SizeConstants.LargeSize),
-                            title = stringResource(id = R.string.display_ads),
-                            switchState = rememberUpdatedState(data.adsEnabled),
-                            onSwitchToggled = { isChecked: Boolean ->
-                                viewModel.onEvent(AdsSettingsEvent.SetAdsEnabled(isChecked))
-                            },
-                            firebaseController = firebaseController,
-                            ga4EventProvider = { isChecked ->
-                                Ga4EventData(
-                                    name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
-                                    params = mapOf(
-                                        SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
-                                            ADS_SETTINGS_SCREEN_NAME
+                        // An install that opted out under the previous ad-free switch keeps that
+                        // entitlement, but a "Reduce ads" toggle would look broken there: it would
+                        // read as off while no ads are shown at all. Say so instead.
+                        if (data.adsEnabled) {
+                            SwitchCardItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = SizeConstants.LargeSize),
+                                title = stringResource(id = R.string.reduce_ads),
+                                summary = stringResource(id = R.string.summary_reduce_ads),
+                                switchState = rememberUpdatedState(data.reduceAds),
+                                onSwitchToggled = { isChecked: Boolean ->
+                                    viewModel.onEvent(AdsSettingsEvent.SetReduceAds(isChecked))
+                                },
+                                firebaseController = firebaseController,
+                                ga4EventProvider = { isChecked ->
+                                    Ga4EventData(
+                                        name = SettingsAnalytics.Events.PREFERENCE_TOGGLE,
+                                        params = mapOf(
+                                            SettingsAnalytics.Params.SCREEN to AnalyticsValue.Str(
+                                                ADS_SETTINGS_SCREEN_NAME
+                                            ),
+                                            SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
+                                                AdsPreferenceKeys.REDUCE_ADS
+                                            ),
+                                            SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(
+                                                isChecked.toString()
+                                            ),
                                         ),
-                                        SettingsAnalytics.Params.PREFERENCE_KEY to AnalyticsValue.Str(
-                                            AdsPreferenceKeys.DISPLAY_ADS
-                                        ),
-                                        SettingsAnalytics.Params.ENABLED to AnalyticsValue.Str(
-                                            isChecked.toString()
-                                        ),
-                                    ),
-                                )
-                            }
-                        )
+                                    )
+                                }
+                            )
+                        } else {
+                            AdsDisabledCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = SizeConstants.LargeSize),
+                            )
+                        }
                     }
 
                     item {
@@ -231,5 +250,31 @@ fun AdsSettingsScreen(
             },
             content = content
         )
+    }
+}
+
+/**
+ * Explains why an install grandfathered on the previous ad-free setting has no ad controls.
+ *
+ * Without it the screen would show a reduced-ads switch that is off while the app shows no ads,
+ * which reads as a bug rather than as a preserved entitlement.
+ */
+@Composable
+private fun AdsDisabledCard(modifier: Modifier = Modifier) {
+    Card(
+        shape = RoundedCornerShape(size = SizeConstants.ExtraLargeSize),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+        modifier = modifier,
+    ) {
+        Column(modifier = Modifier.padding(all = SizeConstants.LargeSize)) {
+            Text(
+                text = stringResource(id = R.string.ads_disabled),
+                fontWeight = FontWeight.SemiBold,
+            )
+            Text(
+                text = stringResource(id = R.string.summary_ads_disabled),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
     }
 }

@@ -37,11 +37,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 /**
- * Ads preference stored in the shared `settings` Preferences DataStore.
+ * Ads preferences stored in the shared `settings` Preferences DataStore.
  *
  * Owns the single eagerly started [adsEnabled] StateFlow. Constructing this class more than once
  * per process starts a second collector over the same preference, so it is registered as a
  * singleton and reached through the graph rather than built on demand.
+ *
+ * [reduceAds] is a separate key with a hard `false` default: unlike [adsEnabled] it is not a build
+ * input, it is something the user opts into.
  */
 class DefaultAdsPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
@@ -52,6 +55,9 @@ class DefaultAdsPreferencesDataSource(
     private val scope = CoroutineScope(SupervisorJob() + dispatchers.io)
 
     private val adsKey = booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_ADS)
+
+    private val reduceAdsKey =
+        booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_REDUCE_ADS)
 
     override fun ads(default: Boolean): Flow<Boolean> =
         dataStore.data.map { preferences: Preferences ->
@@ -70,7 +76,23 @@ class DefaultAdsPreferencesDataSource(
         }
     }
 
+    override val reduceAds: Flow<Boolean> =
+        dataStore.data.map { preferences: Preferences ->
+            preferences[reduceAdsKey] ?: DEFAULT_REDUCE_ADS
+        }.distinctUntilChanged()
+
+    override suspend fun saveReduceAds(isChecked: Boolean) {
+        dataStore.edit { preferences: MutablePreferences ->
+            preferences[reduceAdsKey] = isChecked
+        }
+    }
+
     override fun close() {
         scope.cancel()
+    }
+
+    private companion object {
+        /** Reducing ads is an opt-in, so it is never on until the user asks for it. */
+        const val DEFAULT_REDUCE_ADS: Boolean = false
     }
 }

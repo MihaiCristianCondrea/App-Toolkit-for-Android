@@ -16,9 +16,12 @@
   -->
 <resources>
     <string name="ads">اشتہارات</string>
-    <string name="display_ads">اشتہارات دکھائیں</string>
+    <string name="ads_disabled">اشتہارات بند ہیں</string>
     <string name="learn_more">مزید جانیں</string>
     <string name="personalized_ads">ذاتی نوعیت کے اشتہارات</string>
+    <string name="reduce_ads">اشتہارات کم کریں</string>
     <string name="summary_ads">وہ اشتہارات دیکھیں جو آپ سے متعلقہ ہوں۔ اپنی ایپ سرگرمی کی بنیاد پر ذاتی نوعیت کے اشتہارات دکھانے کے لیے استعمال ہونے والی معلومات کا نظم کریں۔ آپ یہاں ہمیشہ ذاتی نوعیت کو بند کر سکتے ہیں۔\n</string>
+    <string name="summary_ads_disabled">آپ پچھلی بغیر اشتہار والی ترتیب استعمال کر رہے ہیں۔ یہ ترجیح محفوظ رکھی گئی ہے۔</string>
     <string name="summary_ads_personalized_ads">منتخب کریں کہ ہم آپ کی دلچسپیوں کی بنیاد پر آپ کے لیے اشتہارات کو کیسے ذاتی بناتے ہیں</string>
+    <string name="summary_reduce_ads">کم اشتہارات دیکھیں اور ایپ کھولنے پر دکھائے جانے والے اشتہارات ہٹا دیں۔ ترقی میں معاونت کے لیے کچھ اشتہارات پھر بھی دکھائے جائیں گے۔</string>
 </resources>

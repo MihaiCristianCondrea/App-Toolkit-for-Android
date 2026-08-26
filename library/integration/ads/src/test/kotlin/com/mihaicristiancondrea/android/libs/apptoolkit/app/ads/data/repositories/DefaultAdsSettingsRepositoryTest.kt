@@ -135,6 +135,69 @@ class TestDefaultAdsSettingsRepository {
     }
 
     @Test
+    fun `observeReduceAds emits datastore value`() = runTest(dispatcherExtension.testDispatcher) {
+        println("\uD83D\uDE80 [TEST] observeReduceAds emits datastore value")
+        val dataStore = mockk<CommonDataStore>()
+        every { dataStore.reduceAds } returns flowOf(true)
+        val repository = createRepository(dataStore, debugBuild = false)
+
+        repository.observeReduceAds().test {
+            assertThat(awaitItem()).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    // Unlike ads enablement, reducing ads has no build-configurable default: the data source's
+    // hard `false` is the only starting point, so nothing here recomputes one.
+    @Test
+    fun `observeReduceAds propagates error`() = runTest(dispatcherExtension.testDispatcher) {
+        val dataStore = mockk<CommonDataStore>()
+        every { dataStore.reduceAds } returns flow { throw IOException("boom") }
+        val repository = createRepository(dataStore, debugBuild = false)
+
+        repository.observeReduceAds().test {
+            val error = awaitError()
+            assertThat(error).isInstanceOf(IOException::class.java)
+        }
+    }
+
+    @Test
+    fun `setReduceAds returns success when persisted`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            println("\uD83D\uDE80 [TEST] setReduceAds returns success when persisted")
+            val dataStore = mockk<CommonDataStore>()
+            coEvery { dataStore.saveReduceAds(any()) } returns Unit
+            val repository = createRepository(dataStore, debugBuild = false)
+
+            val result = repository.setReduceAds(true)
+
+            assertThat(result).isInstanceOf(DataState.Success::class.java)
+            coVerify { dataStore.saveReduceAds(isChecked = true) }
+        }
+
+    @Test
+    fun `setReduceAds returns error on failure`() = runTest(dispatcherExtension.testDispatcher) {
+        val dataStore = mockk<CommonDataStore>()
+        coEvery { dataStore.saveReduceAds(any()) } throws IOException("boom")
+        val repository = createRepository(dataStore, debugBuild = false)
+
+        val result = repository.setReduceAds(true)
+
+        assertThat(result).isInstanceOf(DataState.Error::class.java)
+        assertThat((result as DataState.Error).error)
+            .isEqualTo(Errors.Database.DATABASE_OPERATION_FAILED)
+    }
+
+    @Test
+    fun `setReduceAds rethrows cancellation`() = runTest(dispatcherExtension.testDispatcher) {
+        val dataStore = mockk<CommonDataStore>()
+        coEvery { dataStore.saveReduceAds(any()) } throws CancellationException("cancelled")
+        val repository = createRepository(dataStore, debugBuild = false)
+
+        assertThrows<CancellationException> { repository.setReduceAds(true) }
+    }
+
+    @Test
     fun `defaultAdsEnabled false in debug builds`() = runTest(dispatcherExtension.testDispatcher) {
         val repository = createRepository(dataStore = mockk(), debugBuild = true)
         assertThat(repository.defaultAdsEnabled).isFalse()

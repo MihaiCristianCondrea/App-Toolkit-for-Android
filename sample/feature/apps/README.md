@@ -53,6 +53,7 @@ flowchart TD
     Installed --> Packages[PackageManager local source]
     VM --> Favorites[FavoritesRepository]
     Favorites --> Store[DatastoreInterface]
+    Policy[SampleAdsPolicy native ad interval] --> Items
     VM --> Items[UI models and ad interleaving]
     Items --> Screen
     Screen --> Actions[Launch app / store / details / favorite]
@@ -70,7 +71,9 @@ flowchart TD
 - Installed state and favorites have separate repositories because PackageManager and preferences
   are independent sources with different lifetimes.
 - Ad interleaving and action/chip models are presentation transformations and remain outside the
-  source-neutral repositories.
+  source-neutral repositories. Where the ads go is this feature's decision; how often they appear
+  comes from the host's `SampleAdsPolicy`, so the reduced-ads preference never reaches
+  `DeveloperAppsRepository` or the generic ad slot.
 
 ## Public contracts
 

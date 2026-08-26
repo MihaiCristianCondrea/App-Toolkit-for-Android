@@ -16,9 +16,12 @@
   -->
 <resources>
     <string name="ads">Hirdetések</string>
-    <string name="display_ads">Hirdetések megjelenítése</string>
+    <string name="ads_disabled">Hirdetések kikapcsolva</string>
     <string name="learn_more">Tudj meg többet</string>
     <string name="personalized_ads">Személyre szabott hirdetések</string>
+    <string name="reduce_ads">Hirdetések csökkentése</string>
     <string name="summary_ads">Nézz meg számodra releváns hirdetéseket. A személyre szabást bármikor kikapcsolhatod itt.</string>
+    <string name="summary_ads_disabled">A korábbi hirdetésmentes beállítást használod. Ez a beállítás megmaradt.</string>
     <string name="summary_ads_personalized_ads">Válaszd ki, hogyan személyre szabjuk a hirdetéseket az érdeklődési köreid alapján</string>
+    <string name="summary_reduce_ads">Láss kevesebb hirdetést, és ne jelenjen meg hirdetés az alkalmazás megnyitásakor. Néhány hirdetés továbbra is megjelenik a fejlesztés támogatásához.</string>
 </resources>

@@ -16,9 +16,12 @@
   -->
 <resources>
     <string name="ads">Reklam</string>
-    <string name="display_ads">Visa annonser</string>
+    <string name="ads_disabled">Annonser avstängda</string>
     <string name="learn_more">Läs mer</string>
     <string name="personalized_ads">Personliga annonser</string>
+    <string name="reduce_ads">Minska annonser</string>
     <string name="summary_ads">Se annonser som är relevanta för dig. Hantera informationen som används för personaliserade annonser.</string>
+    <string name="summary_ads_disabled">Du använder den tidigare annonsfria inställningen. Inställningen har bevarats.</string>
     <string name="summary_ads_personalized_ads">Välj hur vi personaliserar annonser baserat på dina intressen</string>
+    <string name="summary_reduce_ads">Se färre annonser och ta bort annonser som visas när appen öppnas. Vissa annonser visas fortfarande för att stödja utvecklingen.</string>
 </resources>

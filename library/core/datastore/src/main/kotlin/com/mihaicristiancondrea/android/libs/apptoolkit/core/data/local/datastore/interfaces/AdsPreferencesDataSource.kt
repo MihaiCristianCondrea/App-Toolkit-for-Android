@@ -22,11 +22,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Persisted ads preference.
+ * Persisted ads preferences.
  *
- * [adsEnabled] is the value both the SDK initializer and the ad views must read; sampling the
- * preference separately with a different default is what previously let views request ads the SDK
- * had never been initialized for.
+ * Two independent facts live here and must not be collapsed into one:
+ *
+ * - [adsEnabled] answers "is this install allowed to see ads at all?". It is the hard gate both the
+ *   SDK initializer and the ad views must read; sampling the preference separately with a different
+ *   default is what previously let views request ads the SDK had never been initialized for. Hosts
+ *   no longer offer a switch for it, but installs that turned it off keep that entitlement.
+ * - [reduceAds] answers "how aggressive should the host's ad policy be?". It is an opt-in the user
+ *   makes and carries no build-configurable default. Interpreting it — fewer native ads, no app-open
+ *   ads — is host policy; this layer only stores the choice.
  */
 interface AdsPreferencesDataSource {
 
@@ -38,6 +44,12 @@ interface AdsPreferencesDataSource {
 
     /** Persists the ads preference. */
     suspend fun saveAds(isChecked: Boolean)
+
+    /** Emits the reduced-ads opt-in, `false` until the user turns it on. */
+    val reduceAds: Flow<Boolean>
+
+    /** Persists the reduced-ads opt-in. */
+    suspend fun saveReduceAds(isChecked: Boolean)
 
     /** Stops the sharing coroutine backing [adsEnabled]. */
     fun close()

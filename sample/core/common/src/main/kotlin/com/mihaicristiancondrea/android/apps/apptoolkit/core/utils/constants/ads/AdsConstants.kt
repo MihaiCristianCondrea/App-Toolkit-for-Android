@@ -68,4 +68,7 @@ object AdsConstants {
      * value, not a build input, so it belongs in shared code rather than in the generated class.
      */
     const val APPS_LIST_AD_FREQUENCY: Int = 4
+
+    /** How many tile categories to show between native ads on the Quick Tools screen. */
+    const val QUICK_TOOLS_AD_FREQUENCY: Int = 2
 }
