@@ -26,7 +26,12 @@ plugins {
     // mismatched plugin also drags in a different Kotlin than the embedded one, which the Kotlin DSL
     // does not support. When bumping Gradle, run any task and let the warning name the expected
     // version — Gradle 9.7 pairs with kotlin-dsl 6.7.3.
-    id("org.gradle.kotlin.kotlin-dsl") version "6.7.3" // FIXME: A newer version of org.gradle.kotlin.kotlin-dsl than 6.7.3 is available: 6.7.9
+    //
+    // The IDE's "a newer version is available" hint is wrong here for that reason, and acting on it
+    // is not harmless: 6.7.9 resolves Kotlin 2.4.20-RC2 for the script compiler classpath, which is
+    // the "different Kotlin than the embedded one" failure described above. Bump this only when the
+    // Gradle wrapper moves and the warning names a new expected version.
+    id("org.gradle.kotlin.kotlin-dsl") version "6.7.3"
 }
 
 group = "com.mihaicristiancondrea.android.apptoolkit.buildlogic"

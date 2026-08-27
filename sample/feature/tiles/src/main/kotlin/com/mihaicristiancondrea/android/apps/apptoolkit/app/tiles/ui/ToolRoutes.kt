@@ -29,101 +29,109 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.SoundModeTool
 import org.koin.compose.viewmodel.koinViewModel
 
+/*
+ * These routes take their ViewModel as a defaulted parameter, which Compose reports as unstable and
+ * therefore unskippable. That is not worth chasing: a route is the content of one navigation
+ * destination, composed once and never re-invoked with different arguments, so skippability buys
+ * nothing. Removing the parameter to satisfy the inspection would only cost the tests their seam
+ * for injecting a fake.
+ */
+
 @Composable
-internal fun CoinFlipToolRoute(viewModel: CoinFlipToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun CoinFlipToolRoute(viewModel: CoinFlipToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool(viewModel::dismiss)
     CoinFlipTool(state.isHeads, state.request, viewModel::flip)
 }
 
 @Composable
-internal fun DiceRollToolRoute(viewModel: DiceRollToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun DiceRollToolRoute(viewModel: DiceRollToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool(viewModel::dismiss)
     DiceRollTool(state.result, state.request, viewModel::roll)
 }
 
 @Composable
-internal fun CounterToolRoute(viewModel: CounterToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun CounterToolRoute(viewModel: CounterToolViewModel = koinViewModel()) {
     val count by viewModel.count.collectAsStateWithLifecycle()
     DisposeTool(viewModel::dismiss)
     CounterTool(count, viewModel::increment, viewModel::reset)
 }
 
 @Composable
-internal fun CompassToolRoute(viewModel: CompassToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun CompassToolRoute(viewModel: CompassToolViewModel = koinViewModel()) {
     val value by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(viewModel::open, viewModel::dismiss)
     CompassTool(value)
 }
 
 @Composable
-internal fun LevelToolRoute(viewModel: LevelToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun LevelToolRoute(viewModel: LevelToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(viewModel::open, viewModel::dismiss)
     LevelTool(state.pitch, state.roll)
 }
 
 @Composable
-internal fun LuxMeterToolRoute(viewModel: LuxMeterToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun LuxMeterToolRoute(viewModel: LuxMeterToolViewModel = koinViewModel()) {
     val value by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(viewModel::open, viewModel::dismiss)
     LuxMeterTool(value)
 }
 
 @Composable
-internal fun BreathingToolRoute(viewModel: BreathingToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun BreathingToolRoute(viewModel: BreathingToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(viewModel::open, viewModel::close)
     BreathingTool(state)
 }
 
 @Composable
-internal fun CaffeineToolRoute(viewModel: CaffeineToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun CaffeineToolRoute(viewModel: CaffeineToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     CaffeineTool(state, viewModel::cycle)
 }
 
 @Composable
-internal fun SoundModeToolRoute(viewModel: SoundModeToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun SoundModeToolRoute(viewModel: SoundModeToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(viewModel::open, viewModel::dismiss)
     SoundModeTool(state, viewModel::cycle)
 }
 
 @Composable
-internal fun MusicSearchToolRoute(viewModel: MusicSearchToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun MusicSearchToolRoute(viewModel: MusicSearchToolViewModel = koinViewModel()) {
     MusicSearchTool(viewModel::launch)
 }
 
 @Composable
-internal fun SosToolRoute(viewModel: SosToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun SosToolRoute(viewModel: SosToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool(viewModel::dismiss)
     SosTool(state.isActive && state.message == "SOS", viewModel::toggle)
 }
 
 @Composable
-internal fun MorseToolRoute(viewModel: MorseToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun MorseToolRoute(viewModel: MorseToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool(viewModel::dismiss)
     MorseTool(state, viewModel::updateInput, viewModel::toggle)
 }
 
 @Composable
-internal fun FlashDimmerToolRoute(viewModel: FlashDimmerToolViewModel = koinViewModel()) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+internal fun FlashDimmerToolRoute(viewModel: FlashDimmerToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool(viewModel::dismiss)
     FlashDimmerTool(state, viewModel::setLevel, viewModel::applyPreset)
 }
 
 @Composable
-private fun StartStopTool(start: () -> Unit, stop: () -> Unit) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+private fun StartStopTool(start: () -> Unit, stop: () -> Unit) {
     LaunchedEffect(Unit) { start() }
     DisposeTool(stop)
 }
 
 @Composable
-private fun DisposeTool(dispose: () -> Unit) { // FIXME: Unstable parameter 'viewModel' prevents composable from being skippable
+private fun DisposeTool(dispose: () -> Unit) {
     DisposableEffect(Unit) { onDispose(dispose) }
 }

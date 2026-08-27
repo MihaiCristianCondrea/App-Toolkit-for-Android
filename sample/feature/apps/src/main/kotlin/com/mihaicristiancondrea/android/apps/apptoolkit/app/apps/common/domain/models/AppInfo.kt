@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models
 
+import androidx.compose.runtime.Immutable
 
 /**
  * Compact application metadata returned by the public catalog endpoint.
@@ -36,7 +37,14 @@ data class AppSummary(
 /** Source-compatible name retained for existing list/widget integrations. */
 typealias AppInfo = AppSummary
 
-/** Full package-specific metadata loaded when an application is expanded. */
+/**
+ * Full package-specific metadata loaded when an application is expanded.
+ *
+ * `@Immutable` because the `List` properties leave Compose unable to infer stability, which made
+ * every composable taking an `AppDetails` unskippable. The lists are produced once by the DTO
+ * mappers and never mutated afterwards, so the promise holds.
+ */
+@Immutable
 data class AppDetails(
     val name: String,
     val packageName: String,

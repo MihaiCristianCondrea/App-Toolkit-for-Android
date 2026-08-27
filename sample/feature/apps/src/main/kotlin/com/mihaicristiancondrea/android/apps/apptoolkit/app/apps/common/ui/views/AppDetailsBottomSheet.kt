@@ -83,7 +83,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.Me
 @Composable
 fun AppDetailsBottomSheet(
     appInfo: AppInfo,
-    appDetails: AppDetails?, // FIXME: Parameter 'appDetails' has runtime-determined stability
+    appDetails: AppDetails?,
     isDetailsLoading: Boolean,
     hasDetailsError: Boolean,
     isFavorite: Boolean,
@@ -310,7 +310,7 @@ private fun AppDetailsActions(
 @Composable
 private fun AppMetadataChips(
     appInfo: AppInfo,
-    appDetails: AppDetails?, // FIXME: Parameter 'appDetails' has runtime-determined stability
+    appDetails: AppDetails?,
     isAppInstalled: Boolean?,
     installedVersionInfo: AppVersionInfo?,
 ) {

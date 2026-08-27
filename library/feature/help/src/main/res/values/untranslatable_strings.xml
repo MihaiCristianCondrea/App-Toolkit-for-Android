@@ -15,7 +15,16 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <!--FIXME: These should not be marked as translatable false-->
+    <!--
+      ~ Empty slots, not copy. The library renders whatever the host declares under these names, and
+      ~ the host translates it: `:sample:core:apptoolkit` carries all nine questions and answers in
+      ~ every supported locale.
+      ~
+      ~ `translatable="false"` therefore describes these placeholders correctly — there is nothing
+      ~ here to send to a translator. Dropping it does not make the FAQ translatable; it makes lint
+      ~ demand 25 translations of an empty string, and `MissingTranslation` is an error in this
+      ~ project, so the build fails.
+      -->
     <string name="question_1" translatable="false" />
     <string name="question_2" translatable="false" />
     <string name="question_3" translatable="false" />

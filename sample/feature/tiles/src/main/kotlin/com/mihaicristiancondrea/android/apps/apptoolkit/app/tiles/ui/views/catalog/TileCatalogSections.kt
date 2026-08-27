@@ -203,7 +203,9 @@ internal fun ToolkitTileCard(
     tile: ToolkitTile,
     position: GroupedItemPosition,
     modifier: Modifier = Modifier,
-    key: Any? = null, // FIXME: Parameter 'key' has runtime-determined stability
+    // `String?` rather than `Any?`: the only caller passes a string, and `Any?` is stability-opaque
+    // to Compose, which made every card unskippable.
+    key: String? = null,
     onPreviewTile: () -> Unit,
 ) {
     key(key) {
