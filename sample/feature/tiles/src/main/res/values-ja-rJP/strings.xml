@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">ルクスメーター</string>
     <string name="tile_music_search_summary">ショートカットで音楽を識別する</string>
     <string name="tile_music_search_title">音楽検索</string>
-    <string name="tile_network_traffic_summary">リアルタイムのネットワーク速度を監視する</string>
-    <string name="tile_network_traffic_title">ネットワークトラフィック</string>
-    <string name="tile_preview_close">閉じる</string>
     <string name="tile_preview_coin_result">ヘッズ</string>
     <string name="tile_preview_compass_result">北東45度</string>
     <string name="tile_preview_default_result">プレビューは近日公開予定</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">通常モード、振動モード、サイレントモードを切り替える</string>
     <string name="tile_sound_mode_title">サウンドモード</string>
-    <string name="tile_volume_panel_summary">音量コントロールをすばやく開きます</string>
-    <string name="tile_volume_panel_title">ボリュームパネル</string>
     <string name="tiles_add">追加</string>
     <string name="tiles_add_pre_android_13">Android 12 以降では、クイック設定編集モードからタイルを追加する必要があります。</string>
     <string name="tiles_add_result_added">クイック設定にタイルを追加しました</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">サポートされていません</string>
     <string name="tiles_how_to_add_summary">タイルチップを搭載したツールをクイック設定に追加できます。 Android 13 以降で [追加] をタップするか、クイック設定編集モードを開いて、App Toolkit タイルをアクティブなパネルにドラッグします。</string>
     <string name="tiles_how_to_add_title">タイル対応ツール</string>
-    <string name="tiles_more_options">その他のタイルオプション</string>
     <string name="tiles_setup">セットアップ</string>
     <string name="tiles_setup_required_message">このタイルを追加するには、さらにセットアップが必要です。</string>
     <string name="tiles_status_added">追加されました</string>

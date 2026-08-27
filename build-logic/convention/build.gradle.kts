@@ -26,7 +26,7 @@ plugins {
     // mismatched plugin also drags in a different Kotlin than the embedded one, which the Kotlin DSL
     // does not support. When bumping Gradle, run any task and let the warning name the expected
     // version — Gradle 9.7 pairs with kotlin-dsl 6.7.3.
-    id("org.gradle.kotlin.kotlin-dsl") version "6.7.3"
+    id("org.gradle.kotlin.kotlin-dsl") version "6.7.3" // FIXME: A newer version of org.gradle.kotlin.kotlin-dsl than 6.7.3 is available: 6.7.9
 }
 
 group = "com.mihaicristiancondrea.android.apptoolkit.buildlogic"

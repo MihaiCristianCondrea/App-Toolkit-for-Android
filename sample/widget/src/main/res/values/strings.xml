@@ -18,7 +18,5 @@
     <string name="widget_apps_description">Quickly open featured apps by Mihai-Cristian Condrea.</string>
     <string name="widget_apps_error_message">Unable to load apps right now.</string>
     <string name="widget_apps_error_retry">Try again</string>
-    <string name="widget_apps_preview_secondary_item">Calendar</string>
-    <string name="widget_apps_preview_third_item">Notes</string>
     <string name="widget_apps_title">Apps by Mihai-Cristian Condrea</string>
 </resources>

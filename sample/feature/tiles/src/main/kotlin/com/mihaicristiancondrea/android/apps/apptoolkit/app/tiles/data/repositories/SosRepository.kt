@@ -30,7 +30,7 @@ class SosRepository(
         if (isActive) {
             stop()
         } else {
-            morseRepository.start(SosMessage)
+            morseRepository.start(SOS_MESSAGE)
         }
     }
 
@@ -39,9 +39,9 @@ class SosRepository(
     }
 
     val isActive: Boolean
-        get() = state.value.isActive && state.value.message == SosMessage
+        get() = state.value.isActive && state.value.message == SOS_MESSAGE
 
     private companion object {
-        const val SosMessage: String = "SOS"
+        const val SOS_MESSAGE: String = "SOS"
     }
 }

@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">لوكس متر</string>
     <string name="tile_music_search_summary">التعرف على الموسيقى باستخدام الاختصار</string>
     <string name="tile_music_search_title">بحث الموسيقى</string>
-    <string name="tile_network_traffic_summary">مراقبة سرعة الشبكة في الوقت الحقيقي</string>
-    <string name="tile_network_traffic_title">حركة مرور الشبكة</string>
-    <string name="tile_preview_close">يغلق</string>
     <string name="tile_preview_coin_result">رؤساء</string>
     <string name="tile_preview_compass_result">شمال شرق 45 درجة</string>
     <string name="tile_preview_default_result">المعاينة قريبا</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">قم بالتبديل بين الأوضاع العادية والاهتزازية والصامتة</string>
     <string name="tile_sound_mode_title">وضع الصوت</string>
-    <string name="tile_volume_panel_summary">افتح عناصر التحكم في مستوى الصوت بسرعة</string>
-    <string name="tile_volume_panel_title">لوحة الحجم</string>
     <string name="tiles_add">يضيف</string>
     <string name="tiles_add_pre_android_13">يتطلب نظام التشغيل Android 12 والإصدارات الأقدم إضافة مربعات من وضع تحرير الإعدادات السريعة.</string>
     <string name="tiles_add_result_added">تمت إضافة البلاط إلى الإعدادات السريعة</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">غير مدعوم</string>
     <string name="tiles_how_to_add_summary">يمكن إضافة الأدوات التي تحتوي على شريحة Tile إلى الإعدادات السريعة. انقر فوق "إضافة" على نظام Android 13 أو الإصدارات الأحدث، أو افتح وضع تحرير "الإعدادات السريعة" واسحب مربعات مجموعة أدوات التطبيق إلى اللوحة النشطة.</string>
     <string name="tiles_how_to_add_title">أدوات جاهزة للبلاط</string>
-    <string name="tiles_more_options">المزيد من خيارات البلاط</string>
     <string name="tiles_setup">يثبت</string>
     <string name="tiles_setup_required_message">يحتاج هذا المربع إلى مزيد من الإعداد قبل إضافته.</string>
     <string name="tiles_status_added">تمت الإضافة</string>

@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Meteran Lux</string>
     <string name="tile_music_search_summary">Identifikasi musik dengan pintasan</string>
     <string name="tile_music_search_title">Pencarian Musik</string>
-    <string name="tile_network_traffic_summary">Pantau kecepatan jaringan waktu nyata</string>
-    <string name="tile_network_traffic_title">Lalu Lintas Jaringan</string>
-    <string name="tile_preview_close">Tutup</string>
     <string name="tile_preview_coin_result">Kepala</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Pratinjau segera hadir</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Beralih mode normal, getar, dan senyap</string>
     <string name="tile_sound_mode_title">Modus Suara</string>
-    <string name="tile_volume_panel_summary">Buka kontrol volume dengan cepat</string>
-    <string name="tile_volume_panel_title">Panel Volume</string>
     <string name="tiles_add">Tambahkan</string>
     <string name="tiles_add_pre_android_13">Android 12 dan yang lebih lama memerlukan penambahan ubin dari mode edit Pengaturan Cepat.</string>
     <string name="tiles_add_result_added">Ubin ditambahkan ke Pengaturan Cepat</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Tidak didukung</string>
     <string name="tiles_how_to_add_summary">Alat dengan chip Tile dapat ditambahkan ke Pengaturan Cepat. Ketuk Tambah di Android 13 atau lebih baru, atau buka mode edit Pengaturan Cepat dan seret ubin App Toolkit ke panel aktif Anda.</string>
     <string name="tiles_how_to_add_title">Alat siap ubin</string>
-    <string name="tiles_more_options">Opsi ubin lainnya</string>
     <string name="tiles_setup">Pengaturan</string>
     <string name="tiles_setup_required_message">Ubin ini memerlukan pengaturan lebih lanjut sebelum dapat ditambahkan.</string>
     <string name="tiles_status_added">Ditambahkan</string>

@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Luxmetro</string>
     <string name="tile_music_search_summary">Identifica la musica con una scorciatoia</string>
     <string name="tile_music_search_title">Ricerca musicale</string>
-    <string name="tile_network_traffic_summary">Monitora la velocità della rete in tempo reale</string>
-    <string name="tile_network_traffic_title">Traffico di rete</string>
-    <string name="tile_preview_close">Chiudi</string>
     <string name="tile_preview_coin_result">Teste</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Anteprima in arrivo</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Cambia la modalità normale, vibrazione e silenziosa</string>
     <string name="tile_sound_mode_title">Modalità audio</string>
-    <string name="tile_volume_panel_summary">Apri rapidamente i controlli del volume</string>
-    <string name="tile_volume_panel_title">Pannello del volume</string>
     <string name="tiles_add">Aggiungi</string>
     <string name="tiles_add_pre_android_13">Android 12 e versioni precedenti richiedono l\'aggiunta di riquadri dalla modalità di modifica Impostazioni rapide.</string>
     <string name="tiles_add_result_added">Riquadro aggiunto alle Impostazioni rapide</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Non supportato</string>
     <string name="tiles_how_to_add_summary">Gli strumenti con il chip Tile possono essere aggiunti alle Impostazioni rapide. Tocca Aggiungi su Android 13 o versioni successive oppure apri la modalità di modifica Impostazioni rapide e trascina i riquadri App Toolkit nel pannello attivo.</string>
     <string name="tiles_how_to_add_title">Strumenti pronti per il riquadro</string>
-    <string name="tiles_more_options">Altre opzioni per le tessere</string>
     <string name="tiles_setup">Installazione</string>
     <string name="tiles_setup_required_message">Questo riquadro richiede ulteriori impostazioni prima di poter essere aggiunto.</string>
     <string name="tiles_status_added">Aggiunto</string>

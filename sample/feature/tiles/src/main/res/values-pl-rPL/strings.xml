@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Miernik luksów</string>
     <string name="tile_music_search_summary">Identyfikuj muzykę za pomocą skrótu</string>
     <string name="tile_music_search_title">Wyszukiwanie muzyki</string>
-    <string name="tile_network_traffic_summary">Monitoruj prędkość sieci w czasie rzeczywistym</string>
-    <string name="tile_network_traffic_title">Ruch sieciowy</string>
-    <string name="tile_preview_close">Zamknij</string>
     <string name="tile_preview_coin_result">Głowy</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Podgląd już wkrótce</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Przełączaj tryby normalny, wibracyjny i cichy</string>
     <string name="tile_sound_mode_title">Tryb dźwięku</string>
-    <string name="tile_volume_panel_summary">Szybko otwieraj elementy sterujące głośnością</string>
-    <string name="tile_volume_panel_title">Panel głośności</string>
     <string name="tiles_add">Dodaj</string>
     <string name="tiles_add_pre_android_13">Android 12 i starsze wymagają dodania kafelków w trybie edycji Szybkich ustawień.</string>
     <string name="tiles_add_result_added">Kafelek dodany do Szybkich ustawień</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Nieobsługiwane</string>
     <string name="tiles_how_to_add_summary">Narzędzia z chipem Tile można dodać do Szybkich ustawień. Stuknij Dodaj w systemie Android 13 lub nowszym lub otwórz tryb edycji Szybkich ustawień i przeciągnij kafelki App Toolkit do aktywnego panelu.</string>
     <string name="tiles_how_to_add_title">Narzędzia gotowe do płytek</string>
-    <string name="tiles_more_options">Więcej opcji płytek</string>
     <string name="tiles_setup">Konfiguracja</string>
     <string name="tiles_setup_required_message">Ten kafelek wymaga dodatkowej konfiguracji, zanim będzie można go dodać.</string>
     <string name="tiles_status_added">Dodano</string>

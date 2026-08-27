@@ -22,7 +22,6 @@ import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.GridView
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.BottomBarItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import kotlinx.collections.immutable.ImmutableList

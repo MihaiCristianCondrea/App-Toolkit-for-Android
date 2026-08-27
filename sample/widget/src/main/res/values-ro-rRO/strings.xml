@@ -18,7 +18,6 @@
     <string name="widget_apps_description">Deschide rapid aplicațiile recomandate de Mihai-Cristian Condrea.</string>
     <string name="widget_apps_error_message">Aplicațiile nu pot fi încărcate acum.</string>
     <string name="widget_apps_error_retry">Încearcă din nou</string>
-    <string name="widget_apps_preview_secondary_item">Calendar</string>
     <string name="widget_apps_preview_third_item">Notițe</string>
     <string name="widget_apps_title">Aplicații de la Mihai-Cristian Condrea</string>
 </resources>

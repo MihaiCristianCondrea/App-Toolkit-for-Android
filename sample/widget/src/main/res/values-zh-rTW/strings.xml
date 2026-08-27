@@ -18,7 +18,6 @@
     <string name="widget_apps_description">快速開啟 Mihai-Cristian Condrea 精選的應用程式。</string>
     <string name="widget_apps_error_message">目前無法載入應用程式。</string>
     <string name="widget_apps_error_retry">再試一次</string>
-    <string name="widget_apps_preview_secondary_item">日曆</string>
     <string name="widget_apps_preview_third_item">筆記</string>
     <string name="widget_apps_title">Mihai-Cristian Condrea 的應用程式</string>
 </resources>

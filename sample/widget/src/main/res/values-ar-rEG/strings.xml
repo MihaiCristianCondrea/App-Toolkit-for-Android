@@ -18,7 +18,6 @@
     <string name="widget_apps_description">افتح بسرعة التطبيقات المميزة من Mihai-Cristian Condrea.</string>
     <string name="widget_apps_error_message">يتعذر تحميل التطبيقات الآن.</string>
     <string name="widget_apps_error_retry">حاول مرة أخرى</string>
-    <string name="widget_apps_preview_secondary_item">التقويم</string>
     <string name="widget_apps_preview_third_item">الملاحظات</string>
     <string name="widget_apps_title">تطبيقات من Mihai-Cristian Condrea</string>
 </resources>

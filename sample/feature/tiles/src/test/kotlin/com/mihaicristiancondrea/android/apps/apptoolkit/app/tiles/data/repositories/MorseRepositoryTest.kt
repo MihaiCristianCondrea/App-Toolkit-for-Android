@@ -24,6 +24,7 @@ import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MorseRepositoryTest {
@@ -50,7 +51,7 @@ class MorseRepositoryTest {
         assertEquals(".", repository.state.value.currentCode)
         assertEquals("Maximum", torch.commands.last())
 
-        advanceTimeBy(200)
+        advanceTimeBy(200.milliseconds)
         runCurrent()
 
         assertEquals("Off", torch.commands.last())

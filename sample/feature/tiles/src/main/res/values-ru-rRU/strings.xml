@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Люкс метр</string>
     <string name="tile_music_search_summary">Определите музыку с помощью ярлыка</string>
     <string name="tile_music_search_title">Поиск музыки</string>
-    <string name="tile_network_traffic_summary">Мониторинг скорости сети в режиме реального времени</string>
-    <string name="tile_network_traffic_title">Сетевой трафик</string>
-    <string name="tile_preview_close">Закрыть</string>
     <string name="tile_preview_coin_result">Руководители</string>
     <string name="tile_preview_compass_result">СВ 45°</string>
     <string name="tile_preview_default_result">Предварительный просмотр скоро появится</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Переключение обычного режима, режима вибрации и беззвучного режима.</string>
     <string name="tile_sound_mode_title">Звуковой режим</string>
-    <string name="tile_volume_panel_summary">Быстро открывайте регуляторы громкости</string>
-    <string name="tile_volume_panel_title">Панель громкости</string>
     <string name="tiles_add">Добавить</string>
     <string name="tiles_add_pre_android_13">Android 12 и старше требуют добавления плиток из режима редактирования быстрых настроек.</string>
     <string name="tiles_add_result_added">Плитка добавлена в быстрые настройки</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Не поддерживается</string>
     <string name="tiles_how_to_add_summary">Инструменты с чипом Tile можно добавить в быстрые настройки. Нажмите «Добавить» на Android 13 или более поздней версии или откройте режим редактирования быстрых настроек и перетащите плитки App Toolkit на активную панель.</string>
     <string name="tiles_how_to_add_title">Готовые инструменты для плитки</string>
-    <string name="tiles_more_options">Больше вариантов плитки</string>
     <string name="tiles_setup">Настройка</string>
     <string name="tiles_setup_required_message">Перед добавлением этой плитки требуется дополнительная настройка.</string>
     <string name="tiles_status_added">Добавлено</string>

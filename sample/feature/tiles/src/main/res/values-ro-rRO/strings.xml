@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Luxmetru</string>
     <string name="tile_music_search_summary">Identificați muzica cu o comandă rapidă</string>
     <string name="tile_music_search_title">Căutare de muzică</string>
-    <string name="tile_network_traffic_summary">Monitorizați viteza rețelei în timp real</string>
-    <string name="tile_network_traffic_title">Trafic de rețea</string>
-    <string name="tile_preview_close">Închide</string>
     <string name="tile_preview_coin_result">Capete</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Previzualizare în curând</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Comutați modurile normal, vibrație și silențios</string>
     <string name="tile_sound_mode_title">Modul de sunet</string>
-    <string name="tile_volume_panel_summary">Deschideți rapid comenzile de volum</string>
-    <string name="tile_volume_panel_title">Panoul de volum</string>
     <string name="tiles_add">Adăugați</string>
     <string name="tiles_add_pre_android_13">Android 12 și versiuni mai vechi necesită adăugarea de piese din modul de editare Setări rapide.</string>
     <string name="tiles_add_result_added">Tila adăugată la Setări rapide</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Neacceptat</string>
     <string name="tiles_how_to_add_summary">Instrumentele cu cip Tile pot fi adăugate la Setări rapide. Atingeți Adăugați pe Android 13 sau mai nou sau deschideți modul de editare Setări rapide și trageți piese App Toolkit în panoul activ.</string>
     <string name="tiles_how_to_add_title">Instrumente pregătite pentru plăci</string>
-    <string name="tiles_more_options">Mai multe opțiuni de plăci</string>
     <string name="tiles_setup">Configurare</string>
     <string name="tiles_setup_required_message">Această țiglă necesită mai multe configurații înainte de a putea fi adăugată.</string>
     <string name="tiles_status_added">Adăugat</string>

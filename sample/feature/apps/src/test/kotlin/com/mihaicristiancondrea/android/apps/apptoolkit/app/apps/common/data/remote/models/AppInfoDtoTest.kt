@@ -27,10 +27,6 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.mappers.toDomain
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppDetailsDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppLinkDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppScreenshotDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppSummaryDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDeviceType
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

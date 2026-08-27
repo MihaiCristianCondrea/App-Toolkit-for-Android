@@ -18,7 +18,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 
 internal data class PositionedToolkitTilesListItem(

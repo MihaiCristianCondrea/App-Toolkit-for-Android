@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Lux Metro</string>
     <string name="tile_music_search_summary">Tukuyin ang musika gamit ang isang shortcut</string>
     <string name="tile_music_search_title">Paghahanap ng Musika</string>
-    <string name="tile_network_traffic_summary">Subaybayan ang real-time na bilis ng network</string>
-    <string name="tile_network_traffic_title">Trapiko sa Network</string>
-    <string name="tile_preview_close">Isara</string>
     <string name="tile_preview_coin_result">Mga ulo</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Paparating na ang preview</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Lumipat ng normal, vibrate, at silent mode</string>
     <string name="tile_sound_mode_title">Sound Mode</string>
-    <string name="tile_volume_panel_summary">Buksan ang mga kontrol ng volume nang mabilis</string>
-    <string name="tile_volume_panel_title">Volume Panel</string>
     <string name="tiles_add">Idagdag</string>
     <string name="tiles_add_pre_android_13">Ang Android 12 at mas luma ay nangangailangan ng pagdaragdag ng mga tile mula sa Quick Settings edit mode.</string>
     <string name="tiles_add_result_added">Idinagdag ang tile sa Mga Mabilisang Setting</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Hindi suportado</string>
     <string name="tiles_how_to_add_summary">Ang mga tool na may Tile chip ay maaaring idagdag sa Mga Mabilisang Setting. I-tap ang Idagdag sa Android 13 o mas bago, o buksan ang Quick Settings edit mode at i-drag ang mga tile ng App Toolkit sa iyong aktibong panel.</string>
     <string name="tiles_how_to_add_title">Mga tool na nakahanda sa tile</string>
-    <string name="tiles_more_options">Higit pang mga pagpipilian sa tile</string>
     <string name="tiles_setup">Setup</string>
     <string name="tiles_setup_required_message">Ang tile na ito ay nangangailangan ng higit pang setup bago ito maidagdag.</string>
     <string name="tiles_status_added">Idinagdag</string>

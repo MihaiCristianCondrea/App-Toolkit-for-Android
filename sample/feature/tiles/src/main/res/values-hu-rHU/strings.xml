@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Luxus mérő</string>
     <string name="tile_music_search_summary">A zene azonosítása egy parancsikon segítségével</string>
     <string name="tile_music_search_title">Zene keresése</string>
-    <string name="tile_network_traffic_summary">Kövesse a valós idejű hálózati sebességet</string>
-    <string name="tile_network_traffic_title">Hálózati forgalom</string>
-    <string name="tile_preview_close">Bezárás</string>
     <string name="tile_preview_coin_result">Fejek</string>
     <string name="tile_preview_compass_result">ÉK 45°</string>
     <string name="tile_preview_default_result">Előzetes hamarosan</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Váltás normál, rezgő és néma üzemmódok között</string>
     <string name="tile_sound_mode_title">Hang mód</string>
-    <string name="tile_volume_panel_summary">Nyissa meg gyorsan a hangerőszabályzót</string>
-    <string name="tile_volume_panel_title">Hangerő panel</string>
     <string name="tiles_add">Hozzáadás</string>
     <string name="tiles_add_pre_android_13">Az Android 12 és régebbi verzióihoz a Gyorsbeállítások szerkesztési módból csempék hozzáadása szükséges.</string>
     <string name="tiles_add_result_added">Csempe hozzáadva a Gyorsbeállításokhoz</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Nem támogatott</string>
     <string name="tiles_how_to_add_summary">A Csempe chippel rendelkező eszközök hozzáadhatók a Gyorsbeállításokhoz. Koppintson a Hozzáadás elemre Android 13 vagy újabb rendszeren, vagy nyissa meg a Gyorsbeállítások szerkesztési módot, és húzza az App Toolkit csempéket az aktív panelre.</string>
     <string name="tiles_how_to_add_title">Csempe-kész eszközök</string>
-    <string name="tiles_more_options">További csempe lehetőségek</string>
     <string name="tiles_setup">Beállítás</string>
     <string name="tiles_setup_required_message">Ez a csempe további beállítást igényel, mielőtt hozzáadható.</string>
     <string name="tiles_status_added">Hozzáadva</string>

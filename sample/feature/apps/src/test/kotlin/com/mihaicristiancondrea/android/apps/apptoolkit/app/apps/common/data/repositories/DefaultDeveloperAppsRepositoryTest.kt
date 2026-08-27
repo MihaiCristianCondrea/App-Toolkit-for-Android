@@ -38,7 +38,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.rem
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppSummaryDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppsListDataDto
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.remote.models.AppsListResponseDto
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DefaultDeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppDeviceType
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppSummary

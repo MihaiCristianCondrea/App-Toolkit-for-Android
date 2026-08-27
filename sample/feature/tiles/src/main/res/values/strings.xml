@@ -39,9 +39,6 @@
     <string name="tile_lux_meter_title">Lux Meter</string>
     <string name="tile_music_search_summary">Identify music with a shortcut</string>
     <string name="tile_music_search_title">Music Search</string>
-    <string name="tile_network_traffic_summary">Monitor real-time network speed</string>
-    <string name="tile_network_traffic_title">Network Traffic</string>
-    <string name="tile_preview_close">Close</string>
     <string name="tile_preview_coin_result">Heads</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Preview coming soon</string>
@@ -49,7 +46,6 @@
     <string name="tile_service_azimuth_format" translatable="false">%1$d°</string>
     <string name="tile_service_dice_value">Rolled %1$d</string>
     <string name="tile_service_heads">Heads</string>
-    <string name="tile_service_percent" translatable="false">%1$d%%</string>
     <string name="tile_service_tails">Tails</string>
     <string name="tile_sos_summary">Keep emergency actions close</string>
     <string name="tile_sos_title">SOS</string>
@@ -76,8 +72,6 @@
     <string name="morse_error_characters">Use letters A–Z, numbers, and spaces only</string>
     <string name="tile_sound_mode_summary">Switch normal, vibrate, and silent modes</string>
     <string name="tile_sound_mode_title">Sound Mode</string>
-    <string name="tile_volume_panel_summary">Open volume controls quickly</string>
-    <string name="tile_volume_panel_title">Volume Panel</string>
     <string name="tiles_add">Add</string>
     <string name="tiles_add_pre_android_13">Android 12 and older require adding tiles from Quick Settings edit mode.</string>
     <string name="tiles_add_result_added">Tile added to Quick Settings</string>
@@ -100,14 +94,12 @@
     <string name="tiles_filter_unsupported">Unsupported</string>
     <string name="tiles_how_to_add_summary">Tools with the Tile chip can be added to Quick Settings. Tap Add on Android 13 or newer, or open Quick Settings edit mode and drag App Toolkit tiles into your active panel.</string>
     <string name="tiles_how_to_add_title">Tile-ready tools</string>
-    <string name="tiles_more_options">More tile options</string>
     <string name="tiles_setup">Setup</string>
     <string name="tiles_setup_required_message">This tile needs more setup before it can be added.</string>
     <string name="tiles_status_added">Added</string>
     <string name="tiles_status_available">Available</string>
     <string name="tiles_status_needs_setup">Needs setup</string>
     <string name="tiles_status_unsupported">Unsupported</string>
-    <string name="tiles_subtitle">Open quick dialogs and discover expanded tools, with tile-ready features clearly marked.</string>
     <string name="tool_caffeine_10m" translatable="false">10m</string>
     <string name="tool_caffeine_1h" translatable="false">1h</string>
     <string name="tool_caffeine_30m" translatable="false">30m</string>
@@ -143,5 +135,4 @@
     <string name="tool_status_unsupported_summary">Android does not expose a safe public API for this action yet, so this entry is documented as a preview.</string>
     <string name="tool_status_unsupported_title">Preview only</string>
     <string name="tool_system_cycle_mode" translatable="false">Cycle Mode</string>
-    <string name="tool_system_open_volume" translatable="false">Open Volume Panel</string>
 </resources>

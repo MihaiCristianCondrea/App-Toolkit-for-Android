@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Luxmeter</string>
     <string name="tile_music_search_summary">Identifizieren Sie Musik mit einer Verknüpfung</string>
     <string name="tile_music_search_title">Musiksuche</string>
-    <string name="tile_network_traffic_summary">Überwachen Sie die Netzwerkgeschwindigkeit in Echtzeit</string>
-    <string name="tile_network_traffic_title">Netzwerkverkehr</string>
-    <string name="tile_preview_close">Schließen</string>
     <string name="tile_preview_coin_result">Köpfe</string>
     <string name="tile_preview_compass_result">Nordost 45°</string>
     <string name="tile_preview_default_result">Vorschau folgt bald</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Wechseln Sie zwischen Normal-, Vibrations- und Lautlosmodus</string>
     <string name="tile_sound_mode_title">Tonmodus</string>
-    <string name="tile_volume_panel_summary">Lautstärkeregler schnell öffnen</string>
-    <string name="tile_volume_panel_title">Lautstärke-Panel</string>
     <string name="tiles_add">Hinzufügen</string>
     <string name="tiles_add_pre_android_13">Für Android 12 und älter ist das Hinzufügen von Kacheln aus dem Bearbeitungsmodus „Schnelleinstellungen“ erforderlich.</string>
     <string name="tiles_add_result_added">Kachel zu den Schnelleinstellungen hinzugefügt</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Nicht unterstützt</string>
     <string name="tiles_how_to_add_summary">Werkzeuge mit dem Tile-Chip können zu den Schnelleinstellungen hinzugefügt werden. Tippen Sie auf „Hinzufügen“ auf Android 13 oder neuer oder öffnen Sie den Bearbeitungsmodus „Schnelleinstellungen“ und ziehen Sie App Toolkit-Kacheln in Ihr aktives Bedienfeld.</string>
     <string name="tiles_how_to_add_title">Fliesenfertige Werkzeuge</string>
-    <string name="tiles_more_options">Weitere Kacheloptionen</string>
     <string name="tiles_setup">Einrichtung</string>
     <string name="tiles_setup_required_message">Diese Kachel muss noch mehr eingerichtet werden, bevor sie hinzugefügt werden kann.</string>
     <string name="tiles_status_added">Hinzugefügt</string>

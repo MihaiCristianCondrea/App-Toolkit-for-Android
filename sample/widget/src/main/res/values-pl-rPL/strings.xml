@@ -18,7 +18,6 @@
     <string name="widget_apps_description">Szybko otwieraj polecane aplikacje Mihai-Cristian Condrea.</string>
     <string name="widget_apps_error_message">Nie można teraz załadować aplikacji.</string>
     <string name="widget_apps_error_retry">Spróbuj ponownie</string>
-    <string name="widget_apps_preview_secondary_item">Kalendarz</string>
     <string name="widget_apps_preview_third_item">Notatki</string>
     <string name="widget_apps_title">Aplikacje od Mihai-Cristian Condrea</string>
 </resources>

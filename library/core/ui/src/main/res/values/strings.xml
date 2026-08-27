@@ -40,7 +40,7 @@
          stands alone; the plain form where a surrounding chip or container already
          separates it. Keep the wording identical between them when translating. -->
     <string name="sponsored_ad_label">● Sponsored Ad</string>
-    <string name="sponsored_ad_label_plain">Sponsored Ad</string>
+    <string name="sponsored_ad_label_plain">Sponsored Ad</string> <!--TODO: sponsored_ad_label_plain ensure we use it in some native ads where it fits wihout the dot-->
     <string name="startup_page">Startup page</string>
     <string name="summary_dark_theme">Dark theme leverages a deep background to significantly extend your battery life. To activate it, simply navigate to your Android\'s system manager and select your preferred theme in</string>
     <string name="theme_mode">Theme mode</string>

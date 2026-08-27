@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">লাক্স মিটার</string>
     <string name="tile_music_search_summary">একটি শর্টকাট দিয়ে সঙ্গীত সনাক্ত করুন</string>
     <string name="tile_music_search_title">সঙ্গীত অনুসন্ধান</string>
-    <string name="tile_network_traffic_summary">রিয়েল-টাইম নেটওয়ার্ক গতি নিরীক্ষণ</string>
-    <string name="tile_network_traffic_title">নেটওয়ার্ক ট্রাফিক</string>
-    <string name="tile_preview_close">বন্ধ</string>
     <string name="tile_preview_coin_result">মাথা</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">পূর্বরূপ শীঘ্রই আসছে</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">এসওএস</string>
     <string name="tile_sound_mode_summary">স্বাভাবিক, ভাইব্রেট এবং নীরব মোড পরিবর্তন করুন</string>
     <string name="tile_sound_mode_title">সাউন্ড মোড</string>
-    <string name="tile_volume_panel_summary">দ্রুত ভলিউম নিয়ন্ত্রণ খুলুন</string>
-    <string name="tile_volume_panel_title">ভলিউম প্যানেল</string>
     <string name="tiles_add">যোগ করুন</string>
     <string name="tiles_add_pre_android_13">Android 12 এবং তার বেশি বয়সের জন্য দ্রুত সেটিংস সম্পাদনা মোড থেকে টাইলস যোগ করতে হবে।</string>
     <string name="tiles_add_result_added">দ্রুত সেটিংসে টাইল যোগ করা হয়েছে</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">অসমর্থিত</string>
     <string name="tiles_how_to_add_summary">টাইল চিপ সহ সরঞ্জামগুলি দ্রুত সেটিংসে যোগ করা যেতে পারে৷ অ্যান্ড্রয়েড 13 বা তার পরবর্তীতে যোগ করুন আলতো চাপুন, অথবা দ্রুত সেটিংস সম্পাদনা মোড খুলুন এবং আপনার সক্রিয় প্যানেলে অ্যাপ টুলকিট টাইলস টেনে আনুন।</string>
     <string name="tiles_how_to_add_title">টালি-প্রস্তুত সরঞ্জাম</string>
-    <string name="tiles_more_options">আরও টাইল বিকল্প</string>
     <string name="tiles_setup">সেটআপ</string>
     <string name="tiles_setup_required_message">এই টাইলটি যোগ করার আগে আরও সেটআপ প্রয়োজন৷</string>
     <string name="tiles_status_added">যোগ করা হয়েছে</string>

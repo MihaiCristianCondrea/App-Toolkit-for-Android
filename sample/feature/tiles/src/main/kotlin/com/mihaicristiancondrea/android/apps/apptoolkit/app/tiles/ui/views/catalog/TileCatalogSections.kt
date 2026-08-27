@@ -203,7 +203,7 @@ internal fun ToolkitTileCard(
     tile: ToolkitTile,
     position: GroupedItemPosition,
     modifier: Modifier = Modifier,
-    key: Any? = null,
+    key: Any? = null, // FIXME: Parameter 'key' has runtime-determined stability
     onPreviewTile: () -> Unit,
 ) {
     key(key) {

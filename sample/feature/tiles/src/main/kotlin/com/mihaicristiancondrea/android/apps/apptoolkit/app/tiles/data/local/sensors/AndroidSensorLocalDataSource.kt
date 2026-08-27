@@ -36,7 +36,7 @@ import kotlin.math.sqrt
 
 /** Converts Android sensor callbacks into streams consumed by tile previews. */
 class AndroidSensorLocalDataSource(
-    private val context: Context,
+    context: Context,
     private val dispatchers: DispatcherProvider,
 ) : SensorLocalDataSource {
 

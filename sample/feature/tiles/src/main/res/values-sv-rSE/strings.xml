@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Lux mätare</string>
     <string name="tile_music_search_summary">Identifiera musik med en genväg</string>
     <string name="tile_music_search_title">Musiksökning</string>
-    <string name="tile_network_traffic_summary">Övervaka nätverkshastighet i realtid</string>
-    <string name="tile_network_traffic_title">Nätverkstrafik</string>
-    <string name="tile_preview_close">Stäng</string>
     <string name="tile_preview_coin_result">Huvuden</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Förhandsvisning kommer snart</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Växla normalt, vibrerande och tyst läge</string>
     <string name="tile_sound_mode_title">Ljudläge</string>
-    <string name="tile_volume_panel_summary">Öppna volymkontrollerna snabbt</string>
-    <string name="tile_volume_panel_title">Volympanel</string>
     <string name="tiles_add">Lägg till</string>
     <string name="tiles_add_pre_android_13">Android 12 och äldre kräver att du lägger till brickor från redigeringsläget för snabbinställningar.</string>
     <string name="tiles_add_result_added">Kakel har lagts till i snabbinställningar</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Stöds inte</string>
     <string name="tiles_how_to_add_summary">Verktyg med Tile chip kan läggas till i Snabbinställningar. Tryck på Lägg till på Android 13 eller senare, eller öppna redigeringsläget för snabbinställningar och dra App Toolkit-rutor till din aktiva panel.</string>
     <string name="tiles_how_to_add_title">Kakelfärdiga verktyg</string>
-    <string name="tiles_more_options">Fler kakelalternativ</string>
     <string name="tiles_setup">Inställning</string>
     <string name="tiles_setup_required_message">Den här brickan behöver mer konfigurering innan den kan läggas till.</string>
     <string name="tiles_status_added">Tillagd</string>

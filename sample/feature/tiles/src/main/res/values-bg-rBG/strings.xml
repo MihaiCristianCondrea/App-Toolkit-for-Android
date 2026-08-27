@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Лукс метър</string>
     <string name="tile_music_search_summary">Идентифицирайте музика с пряк път</string>
     <string name="tile_music_search_title">Търсене на музика</string>
-    <string name="tile_network_traffic_summary">Наблюдавайте скоростта на мрежата в реално време</string>
-    <string name="tile_network_traffic_title">Мрежов трафик</string>
-    <string name="tile_preview_close">затвори</string>
     <string name="tile_preview_coin_result">Глави</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Предварителен преглед очаквайте скоро</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Превключване на нормален, вибриращ и безшумен режим</string>
     <string name="tile_sound_mode_title">Звуков режим</string>
-    <string name="tile_volume_panel_summary">Отворете бързо контролите за сила на звука</string>
-    <string name="tile_volume_panel_title">Панел за сила на звука</string>
     <string name="tiles_add">Добавете</string>
     <string name="tiles_add_pre_android_13">Android 12 и по-стари версии изискват добавяне на плочки от режима за редактиране на Бързи настройки.</string>
     <string name="tiles_add_result_added">Плочката е добавена към Бързи настройки</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Не се поддържа</string>
     <string name="tiles_how_to_add_summary">Инструменти с чип Tile могат да се добавят към Quick Settings. Докоснете Добавяне на Android 13 или по-нова версия или отворете режима за редактиране на Бързи настройки и плъзнете плочките на App Toolkit във вашия активен панел.</string>
     <string name="tiles_how_to_add_title">Готови за плочки инструменти</string>
-    <string name="tiles_more_options">Още опции за плочки</string>
     <string name="tiles_setup">Настройка</string>
     <string name="tiles_setup_required_message">Тази плочка се нуждае от допълнителна настройка, преди да може да бъде добавена.</string>
     <string name="tiles_status_added">Добавено</string>

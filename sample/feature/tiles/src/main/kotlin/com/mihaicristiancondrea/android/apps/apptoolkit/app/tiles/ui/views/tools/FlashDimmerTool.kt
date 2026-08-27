@@ -46,7 +46,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun FlashDimmerTool(
-    state: TorchState,
+    state: TorchState, // FIXME: Parameter 'state' has runtime-determined stability
     onLevelChanged: (Int) -> Unit,
     onPresetSelected: (TorchPreset) -> Unit,
 ) {
@@ -245,7 +245,7 @@ private fun SegmentedLevelControl(
 
 @Composable
 private fun SimpleTorchControl(
-    state: TorchState,
+    state: TorchState, // FIXME: Parameter 'state' has runtime-determined stability
     onPresetSelected: (TorchPreset) -> Unit,
 ) {
     Column(

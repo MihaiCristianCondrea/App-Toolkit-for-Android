@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Máy đo Lux</string>
     <string name="tile_music_search_summary">Nhận dạng nhạc bằng phím tắt</string>
     <string name="tile_music_search_title">Tìm kiếm âm nhạc</string>
-    <string name="tile_network_traffic_summary">Giám sát tốc độ mạng thời gian thực</string>
-    <string name="tile_network_traffic_title">Lưu lượng mạng</string>
-    <string name="tile_preview_close">Đóng</string>
     <string name="tile_preview_coin_result">đầu</string>
     <string name="tile_preview_compass_result">ĐB 45°</string>
     <string name="tile_preview_default_result">Sắp có bản xem trước</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Chuyển đổi chế độ bình thường, rung và im lặng</string>
     <string name="tile_sound_mode_title">Chế độ âm thanh</string>
-    <string name="tile_volume_panel_summary">Mở nhanh nút điều chỉnh âm lượng</string>
-    <string name="tile_volume_panel_title">Bảng điều khiển âm lượng</string>
     <string name="tiles_add">Thêm</string>
     <string name="tiles_add_pre_android_13">Android 12 trở lên yêu cầu thêm ô từ chế độ chỉnh sửa Cài đặt nhanh.</string>
     <string name="tiles_add_result_added">Đã thêm ô vào Cài đặt nhanh</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Không được hỗ trợ</string>
     <string name="tiles_how_to_add_summary">Bạn có thể thêm các công cụ có chip Ngói vào Cài đặt nhanh. Nhấn vào Thêm trên Android 13 trở lên hoặc mở chế độ chỉnh sửa Cài đặt nhanh và kéo các ô Bộ công cụ ứng dụng vào bảng điều khiển hoạt động của bạn.</string>
     <string name="tiles_how_to_add_title">Công cụ sẵn sàng cho ô xếp</string>
-    <string name="tiles_more_options">Nhiều tùy chọn gạch hơn</string>
     <string name="tiles_setup">thiết lập</string>
     <string name="tiles_setup_required_message">Ô này cần thiết lập thêm trước khi có thể thêm nó.</string>
     <string name="tiles_status_added">Đã thêm</string>

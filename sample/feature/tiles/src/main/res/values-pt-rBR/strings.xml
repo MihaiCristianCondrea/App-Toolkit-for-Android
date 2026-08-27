@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Luxímetro</string>
     <string name="tile_music_search_summary">Identifique músicas com um atalho</string>
     <string name="tile_music_search_title">Pesquisa de música</string>
-    <string name="tile_network_traffic_summary">Monitore a velocidade da rede em tempo real</string>
-    <string name="tile_network_traffic_title">Tráfego de rede</string>
-    <string name="tile_preview_close">Fechar</string>
     <string name="tile_preview_coin_result">Cabeças</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Prévia em breve</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Alterne os modos normal, vibratório e silencioso</string>
     <string name="tile_sound_mode_title">Modo de som</string>
-    <string name="tile_volume_panel_summary">Abra os controles de volume rapidamente</string>
-    <string name="tile_volume_panel_title">Painel de Volume</string>
     <string name="tiles_add">Adicionar</string>
     <string name="tiles_add_pre_android_13">O Android 12 e versões anteriores exigem a adição de blocos no modo de edição de configurações rápidas.</string>
     <string name="tiles_add_result_added">Bloco adicionado às configurações rápidas</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Não compatível</string>
     <string name="tiles_how_to_add_summary">Ferramentas com o chip Tile podem ser adicionadas às Configurações rápidas. Toque em Adicionar no Android 13 ou mais recente ou abra o modo de edição de configurações rápidas e arraste os blocos do App Toolkit para o painel ativo.</string>
     <string name="tiles_how_to_add_title">Ferramentas prontas para blocos</string>
-    <string name="tiles_more_options">Mais opções de blocos</string>
     <string name="tiles_setup">Configuração</string>
     <string name="tiles_setup_required_message">Este bloco precisa de mais configuração antes de poder ser adicionado.</string>
     <string name="tiles_status_added">Adicionado</string>

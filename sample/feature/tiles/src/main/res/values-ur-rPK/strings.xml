@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">لکس میٹر</string>
     <string name="tile_music_search_summary">شارٹ کٹ کے ساتھ موسیقی کی شناخت کریں۔</string>
     <string name="tile_music_search_title">موسیقی کی تلاش</string>
-    <string name="tile_network_traffic_summary">ریئل ٹائم نیٹ ورک کی رفتار کی نگرانی کریں۔</string>
-    <string name="tile_network_traffic_title">نیٹ ورک ٹریفک</string>
-    <string name="tile_preview_close">بند</string>
     <string name="tile_preview_coin_result">سر</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">پیش نظارہ جلد آرہا ہے۔</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">نارمل، وائبریٹ، اور سائلنٹ موڈز کو سوئچ کریں۔</string>
     <string name="tile_sound_mode_title">ساؤنڈ موڈ</string>
-    <string name="tile_volume_panel_summary">والیوم کنٹرولز کو تیزی سے کھولیں۔</string>
-    <string name="tile_volume_panel_title">والیوم پینل</string>
     <string name="tiles_add">شامل کریں۔</string>
     <string name="tiles_add_pre_android_13">Android 12 اور اس سے زیادہ کے لیے کوئیک سیٹنگز ایڈٹ موڈ سے ٹائلز شامل کرنے کی ضرورت ہے۔</string>
     <string name="tiles_add_result_added">ٹائل کو فوری ترتیبات میں شامل کر دیا گیا۔</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">غیر تعاون یافتہ</string>
     <string name="tiles_how_to_add_summary">ٹائل چپ والے ٹولز کو فوری سیٹنگز میں شامل کیا جا سکتا ہے۔ اینڈرائیڈ 13 یا جدید تر پر ایڈ پر ٹیپ کریں یا کوئیک سیٹنگز ایڈٹ موڈ کھولیں اور ایپ ٹول کٹ ٹائلز کو اپنے ایکٹو پینل میں گھسیٹیں۔</string>
     <string name="tiles_how_to_add_title">ٹائل کے لیے تیار ٹولز</string>
-    <string name="tiles_more_options">مزید ٹائل کے اختیارات</string>
     <string name="tiles_setup">سیٹ اپ</string>
     <string name="tiles_setup_required_message">اس ٹائل کو شامل کرنے سے پہلے مزید سیٹ اپ کی ضرورت ہے۔</string>
     <string name="tiles_status_added">شامل کیا گیا۔</string>

@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">ลักซ์มิเตอร์</string>
     <string name="tile_music_search_summary">ระบุเพลงด้วยทางลัด</string>
     <string name="tile_music_search_title">ค้นหาเพลง</string>
-    <string name="tile_network_traffic_summary">ตรวจสอบความเร็วเครือข่ายแบบเรียลไทม์</string>
-    <string name="tile_network_traffic_title">การรับส่งข้อมูลเครือข่าย</string>
-    <string name="tile_preview_close">ปิด</string>
     <string name="tile_preview_coin_result">หัว</string>
     <string name="tile_preview_compass_result">ตะวันออกเฉียงเหนือ 45°</string>
     <string name="tile_preview_default_result">ดูตัวอย่างในเร็วๆ นี้</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">สัญญาณขอความช่วยเหลือ</string>
     <string name="tile_sound_mode_summary">สลับโหมดปกติ สั่น และเงียบ</string>
     <string name="tile_sound_mode_title">โหมดเสียง</string>
-    <string name="tile_volume_panel_summary">เปิดส่วนควบคุมระดับเสียงอย่างรวดเร็ว</string>
-    <string name="tile_volume_panel_title">แผงระดับเสียง</string>
     <string name="tiles_add">เพิ่ม</string>
     <string name="tiles_add_pre_android_13">Android 12 และเก่ากว่าต้องเพิ่มไทล์จากโหมดแก้ไขการตั้งค่าด่วน</string>
     <string name="tiles_add_result_added">เพิ่มไทล์ในการตั้งค่าด่วน</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">ไม่รองรับ</string>
     <string name="tiles_how_to_add_summary">สามารถเพิ่มเครื่องมือที่มีชิปไทล์ลงในการตั้งค่าด่วนได้ แตะเพิ่มใน Android 13 หรือใหม่กว่า หรือเปิดโหมดแก้ไขการตั้งค่าด่วนแล้วลากแถบเครื่องมือ App Toolkit ลงในแผงที่ใช้งานอยู่</string>
     <string name="tiles_how_to_add_title">เครื่องมือพร้อมกระเบื้อง</string>
-    <string name="tiles_more_options">ตัวเลือกไทล์เพิ่มเติม</string>
     <string name="tiles_setup">ตั้งค่า</string>
     <string name="tiles_setup_required_message">การ์ดนี้ต้องมีการตั้งค่าเพิ่มเติมก่อนจึงจะเพิ่มได้</string>
     <string name="tiles_status_added">เพิ่มแล้ว</string>

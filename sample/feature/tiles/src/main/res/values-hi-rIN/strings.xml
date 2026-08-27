@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">लक्स मीटर</string>
     <string name="tile_music_search_summary">शॉर्टकट से संगीत को पहचानें</string>
     <string name="tile_music_search_title">संगीत खोज</string>
-    <string name="tile_network_traffic_summary">वास्तविक समय नेटवर्क गति की निगरानी करें</string>
-    <string name="tile_network_traffic_title">नेटवर्क ट्रैफ़िक</string>
-    <string name="tile_preview_close">बंद करें</string>
     <string name="tile_preview_coin_result">प्रमुखों</string>
     <string name="tile_preview_compass_result">पूर्वोत्तर 45°</string>
     <string name="tile_preview_default_result">पूर्वावलोकन जल्द ही आ रहा है</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">एसओएस</string>
     <string name="tile_sound_mode_summary">सामान्य, कंपन और मौन मोड स्विच करें</string>
     <string name="tile_sound_mode_title">ध्वनि विधा</string>
-    <string name="tile_volume_panel_summary">वॉल्यूम नियंत्रण शीघ्रता से खोलें</string>
-    <string name="tile_volume_panel_title">वॉल्यूम पैनल</string>
     <string name="tiles_add">जोड़ें</string>
     <string name="tiles_add_pre_android_13">Android 12 और पुराने संस्करणों में त्वरित सेटिंग्स संपादन मोड से टाइल जोड़ने की आवश्यकता होती है।</string>
     <string name="tiles_add_result_added">टाइल को त्वरित सेटिंग्स में जोड़ा गया</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">असमर्थित</string>
     <string name="tiles_how_to_add_summary">टाइल चिप वाले टूल को त्वरित सेटिंग्स में जोड़ा जा सकता है। एंड्रॉइड 13 या नए पर जोड़ें टैप करें, या त्वरित सेटिंग्स संपादन मोड खोलें और ऐप टूलकिट टाइल्स को अपने सक्रिय पैनल में खींचें।</string>
     <string name="tiles_how_to_add_title">टाइल-तैयार उपकरण</string>
-    <string name="tiles_more_options">अधिक टाइल विकल्प</string>
     <string name="tiles_setup">सेटअप</string>
     <string name="tiles_setup_required_message">इस टाइल को जोड़ने से पहले अधिक सेटअप की आवश्यकता है।</string>
     <string name="tiles_status_added">जोड़ा गया</string>

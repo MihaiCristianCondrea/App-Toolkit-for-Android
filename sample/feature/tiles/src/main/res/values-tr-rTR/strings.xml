@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Lüks Ölçer</string>
     <string name="tile_music_search_summary">Müziği kısayolla tanımlayın</string>
     <string name="tile_music_search_title">Müzik Arama</string>
-    <string name="tile_network_traffic_summary">Gerçek zamanlı ağ hızını izleyin</string>
-    <string name="tile_network_traffic_title">Ağ Trafiği</string>
-    <string name="tile_preview_close">Kapat</string>
     <string name="tile_preview_coin_result">Kafalar</string>
     <string name="tile_preview_compass_result">KD 45°</string>
     <string name="tile_preview_default_result">Önizleme yakında gelecek</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">Acil Durum</string>
     <string name="tile_sound_mode_summary">Normal, titreşim ve sessiz modları arasında geçiş yapın</string>
     <string name="tile_sound_mode_title">Ses Modu</string>
-    <string name="tile_volume_panel_summary">Ses kontrollerini hızlı bir şekilde açın</string>
-    <string name="tile_volume_panel_title">Ses Paneli</string>
     <string name="tiles_add">Ekle</string>
     <string name="tiles_add_pre_android_13">Android 12 ve daha eski sürümler, Hızlı Ayarlar düzenleme modundan kutucuk eklenmesini gerektirir.</string>
     <string name="tiles_add_result_added">Hızlı Ayarlar\'a kutucuk eklendi</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Desteklenmiyor</string>
     <string name="tiles_how_to_add_summary">Döşeme çipine sahip araçlar Hızlı Ayarlar\'a eklenebilir. Android 13 veya daha yeni sürümlerde Ekle\'ye dokunun veya Hızlı Ayarlar düzenleme modunu açın ve Uygulama Araç Seti kutucuklarını etkin panelinize sürükleyin.</string>
     <string name="tiles_how_to_add_title">Döşemeye hazır araçlar</string>
-    <string name="tiles_more_options">Daha fazla döşeme seçeneği</string>
     <string name="tiles_setup">Kurulum</string>
     <string name="tiles_setup_required_message">Bu kutucuğun eklenebilmesi için daha fazla kurulum yapılması gerekiyor.</string>
     <string name="tiles_status_added">Eklendi</string>

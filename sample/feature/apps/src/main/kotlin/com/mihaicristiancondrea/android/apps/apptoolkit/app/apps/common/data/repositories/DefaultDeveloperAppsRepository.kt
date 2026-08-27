@@ -47,7 +47,7 @@ class DefaultDeveloperAppsRepository(
                 .sortedBy { it.name.lowercase() }
             localDataSource.write(apps)
 
-            DataState.Success<List<AppSummary>, AppErrors>(data = apps)
+            DataState.Success(data = apps)
         }
         val cachedApps = if (result.isFailure) localDataSource.read() else null
         val state: DataState<List<AppSummary>, AppErrors> = result.fold(

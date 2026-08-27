@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">럭스 미터</string>
     <string name="tile_music_search_summary">바로가기로 음악 식별</string>
     <string name="tile_music_search_title">음악 검색</string>
-    <string name="tile_network_traffic_summary">실시간 네트워크 속도 모니터링</string>
-    <string name="tile_network_traffic_title">네트워크 트래픽</string>
-    <string name="tile_preview_close">닫기</string>
     <string name="tile_preview_coin_result">머리</string>
     <string name="tile_preview_compass_result">북동 45°</string>
     <string name="tile_preview_default_result">미리보기가 곧 제공됩니다</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">조난 신호</string>
     <string name="tile_sound_mode_summary">일반, 진동, 무음 모드 전환</string>
     <string name="tile_sound_mode_title">사운드 모드</string>
-    <string name="tile_volume_panel_summary">빠르게 볼륨 컨트롤 열기</string>
-    <string name="tile_volume_panel_title">볼륨 패널</string>
     <string name="tiles_add">추가</string>
     <string name="tiles_add_pre_android_13">Android 12 이상에서는 빠른 설정 편집 모드에서 타일을 추가해야 합니다.</string>
     <string name="tiles_add_result_added">빠른 설정에 타일이 추가되었습니다.</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">지원되지 않음</string>
     <string name="tiles_how_to_add_summary">타일 칩이 포함된 도구를 빠른 설정에 추가할 수 있습니다. Android 13 이상에서 추가를 탭하거나 빠른 설정 편집 모드를 열고 앱 툴킷 타일을 활성 패널로 드래그하세요.</string>
     <string name="tiles_how_to_add_title">타일 준비 도구</string>
-    <string name="tiles_more_options">더 많은 타일 옵션</string>
     <string name="tiles_setup">설정</string>
     <string name="tiles_setup_required_message">이 타일을 추가하려면 추가 설정이 필요합니다.</string>
     <string name="tiles_status_added">추가됨</string>

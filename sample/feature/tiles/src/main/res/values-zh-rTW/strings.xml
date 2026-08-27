@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">照度計</string>
     <string name="tile_music_search_summary">用快捷方式辨識音樂</string>
     <string name="tile_music_search_title">音樂搜尋</string>
-    <string name="tile_network_traffic_summary">監控即時網路速度</string>
-    <string name="tile_network_traffic_title">網路流量</string>
-    <string name="tile_preview_close">關閉</string>
     <string name="tile_preview_coin_result">頭</string>
     <string name="tile_preview_compass_result">東北45°</string>
     <string name="tile_preview_default_result">預覽即將推出</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">求救</string>
     <string name="tile_sound_mode_summary">切換正常、震動和靜音模式</string>
     <string name="tile_sound_mode_title">聲音模式</string>
-    <string name="tile_volume_panel_summary">快速開啟音量控制</string>
-    <string name="tile_volume_panel_title">音量面板</string>
     <string name="tiles_add">添加</string>
     <string name="tiles_add_pre_android_13">Android 12 及更早版本需要從「快速設定」編輯模式新增圖塊。</string>
     <string name="tiles_add_result_added">磁貼已新增至快速設定</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">不支援</string>
     <string name="tiles_how_to_add_summary">具有Tile晶片的工具可以添加到快速設定中。在 Android 13 或更高版本上點擊“新增”，或開啟“快速設定”編輯模式並將“App Toolkit”圖塊拖曳到活動面板中。</string>
     <string name="tiles_how_to_add_title">磁磚就緒工具</string>
-    <string name="tiles_more_options">更多瓷磚選項</string>
     <string name="tiles_setup">設定</string>
     <string name="tiles_setup_required_message">此圖塊需要更多設定才能新增。</string>
     <string name="tiles_status_added">已新增</string>

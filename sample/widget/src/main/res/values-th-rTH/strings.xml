@@ -18,7 +18,6 @@
     <string name="widget_apps_description">เปิดแอปเด่นจาก Mihai-Cristian Condrea ได้อย่างรวดเร็ว</string>
     <string name="widget_apps_error_message">ไม่สามารถโหลดแอปได้ในขณะนี้</string>
     <string name="widget_apps_error_retry">ลองอีกครั้ง</string>
-    <string name="widget_apps_preview_secondary_item">ปฏิทิน</string>
     <string name="widget_apps_preview_third_item">บันทึกย่อ</string>
     <string name="widget_apps_title">แอปโดย Mihai-Cristian Condrea</string>
 </resources>

@@ -18,7 +18,6 @@
     <string name="widget_apps_description">Öffnen Sie schnell empfohlene Apps von Mihai-Cristian Condrea.</string>
     <string name="widget_apps_error_message">Apps können derzeit nicht geladen werden.</string>
     <string name="widget_apps_error_retry">Erneut versuchen</string>
-    <string name="widget_apps_preview_secondary_item">Kalender</string>
     <string name="widget_apps_preview_third_item">Notizen</string>
     <string name="widget_apps_title">Apps von Mihai-Cristian Condrea</string>
 </resources>

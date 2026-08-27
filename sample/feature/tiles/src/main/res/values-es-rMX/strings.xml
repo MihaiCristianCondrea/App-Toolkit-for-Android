@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Medidor de lux</string>
     <string name="tile_music_search_summary">Identificar música con un atajo</string>
     <string name="tile_music_search_title">Búsqueda de música</string>
-    <string name="tile_network_traffic_summary">Supervise la velocidad de la red en tiempo real</string>
-    <string name="tile_network_traffic_title">Tráfico de red</string>
-    <string name="tile_preview_close">Cerrar</string>
     <string name="tile_preview_coin_result">cabezas</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Vista previa próximamente</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Cambia los modos normal, vibración y silencio</string>
     <string name="tile_sound_mode_title">Modo de sonido</string>
-    <string name="tile_volume_panel_summary">Abre los controles de volumen rápidamente</string>
-    <string name="tile_volume_panel_title">Panel de volumen</string>
     <string name="tiles_add">Añadir</string>
     <string name="tiles_add_pre_android_13">Android 12 y versiones anteriores requieren agregar mosaicos desde el modo de edición de Configuración rápida.</string>
     <string name="tiles_add_result_added">Mosaico agregado a Configuración rápida</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">No compatible</string>
     <string name="tiles_how_to_add_summary">Las herramientas con el chip Tile se pueden agregar a la Configuración rápida. Toque Agregar en Android 13 o posterior, o abra el modo de edición de Configuración rápida y arrastre los mosaicos del App Toolkit a su panel activo.</string>
     <string name="tiles_how_to_add_title">Herramientas listas para colocar mosaicos</string>
-    <string name="tiles_more_options">Más opciones de mosaicos</string>
     <string name="tiles_setup">Configuración</string>
     <string name="tiles_setup_required_message">Este mosaico necesita más configuración antes de poder agregarse.</string>
     <string name="tiles_status_added">Añadido</string>

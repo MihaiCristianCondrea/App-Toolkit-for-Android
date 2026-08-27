@@ -151,7 +151,7 @@ open class CommonDataStore(
 
     val settingsInteracted: Flow<Boolean> get() = appStatePreferences.settingsInteracted
 
-    suspend fun markSettingsInteracted() = appStatePreferences.markSettingsInteracted()
+    suspend fun markSettingsInteracted() = appStatePreferences.markSettingsInteracted() // FIXME: Function "markSettingsInteracted" is never used
 
     val componentsShowcaseUnlocked: Flow<Boolean>
         get() = appStatePreferences.componentsShowcaseUnlocked
@@ -207,7 +207,7 @@ open class CommonDataStore(
      * round-trips through DataStore. Presentation state rather than stored data; the persisted
      * value is [themeMode].
      */
-    val themeModeState = mutableStateOf(value = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM)
+    val themeModeState = mutableStateOf(value = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM) // FIXME: Property "themeModeState" is never used
 
     val themeMode: Flow<String> get() = themePreferences.themeMode
 
@@ -224,12 +224,12 @@ open class CommonDataStore(
 
     val dynamicPaletteVariant: Flow<Int> get() = themePreferences.dynamicPaletteVariant
 
-    suspend fun saveDynamicPaletteVariant(variant: Int) =
+    suspend fun saveDynamicPaletteVariant(variant: Int) = // FIXME: Function "saveDynamicPaletteVariant" is never used
         themePreferences.saveDynamicPaletteVariant(variant)
 
     val staticPaletteId: Flow<String> get() = themePreferences.staticPaletteId
 
-    suspend fun saveStaticPaletteId(id: String) = themePreferences.saveStaticPaletteId(id)
+    suspend fun saveStaticPaletteId(id: String) = themePreferences.saveStaticPaletteId(id) // FIXME: Function "saveStaticPaletteId" is never used
 
     // endregion
 

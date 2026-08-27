@@ -15,6 +15,7 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
+    <!--FIXME: These should not be marked as translatable false-->
     <string name="question_1" translatable="false" />
     <string name="question_2" translatable="false" />
     <string name="question_3" translatable="false" />

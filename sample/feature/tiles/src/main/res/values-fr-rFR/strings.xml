@@ -34,9 +34,6 @@
     <string name="tile_lux_meter_title">Luxmètre</string>
     <string name="tile_music_search_summary">Identifiez la musique avec un raccourci</string>
     <string name="tile_music_search_title">Recherche de musique</string>
-    <string name="tile_network_traffic_summary">Surveillez la vitesse du réseau en temps réel</string>
-    <string name="tile_network_traffic_title">Trafic réseau</string>
-    <string name="tile_preview_close">Fermer</string>
     <string name="tile_preview_coin_result">Têtes</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Aperçu à venir</string>
@@ -48,8 +45,6 @@
     <string name="tile_sos_title">SOS</string>
     <string name="tile_sound_mode_summary">Changer les modes normal, vibreur et silencieux</string>
     <string name="tile_sound_mode_title">Mode son</string>
-    <string name="tile_volume_panel_summary">Ouvrez rapidement les commandes de volume</string>
-    <string name="tile_volume_panel_title">Panneau de volume</string>
     <string name="tiles_add">Ajouter</string>
     <string name="tiles_add_pre_android_13">Android 12 et versions antérieures nécessitent l’ajout de vignettes à partir du mode d’édition des paramètres rapides.</string>
     <string name="tiles_add_result_added">Tuile ajoutée aux paramètres rapides</string>
@@ -72,7 +67,6 @@
     <string name="tiles_filter_unsupported">Non pris en charge</string>
     <string name="tiles_how_to_add_summary">Les outils dotés de la puce Tile peuvent être ajoutés aux paramètres rapides. Appuyez sur Ajouter sur Android 13 ou version ultérieure, ou ouvrez le mode d\'édition des paramètres rapides et faites glisser les vignettes App Toolkit dans votre panneau actif.</string>
     <string name="tiles_how_to_add_title">Outils prêts à être carrelés</string>
-    <string name="tiles_more_options">Plus d\'options de tuiles</string>
     <string name="tiles_setup">Configuration</string>
     <string name="tiles_setup_required_message">Cette vignette nécessite davantage de configuration avant de pouvoir être ajoutée.</string>
     <string name="tiles_status_added">Ajouté</string>
