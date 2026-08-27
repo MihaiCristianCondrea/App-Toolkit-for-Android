@@ -81,7 +81,7 @@ fun HelpScreenContent(
 ) {
     val firebaseController: FirebaseController = koinInject()
     val context = LocalContext.current
-    val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.HELP_LARGE_BANNER_AD))
+    val adsConfig: AdsConfig = koinInject(qualifier = named(AdsQualifiers.HELP_NATIVE_AD))
     val adsEnabled = rememberAdsEnabled()
     val hasAdSlot = adsEnabled && adsConfig.bannerAdUnitId.isNotBlank()
     var showAllQuestions by rememberSaveable { mutableStateOf(value = false) }

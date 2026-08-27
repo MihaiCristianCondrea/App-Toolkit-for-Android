@@ -68,6 +68,67 @@ flowchart TD
 - Ad rendering fails closed: SDK exceptions or unavailable consent produce an empty slot, never a
   process-fatal composition error.
 
+## Ad unit IDs a host must provide
+
+The toolkit ships no ad unit IDs. A host supplies its own, and the two halves are supplied
+differently.
+
+### 1. The AdMob application id — manifest meta-data
+
+```xml
+<meta-data
+    android:name="com.google.android.gms.ads.APPLICATION_ID"
+    android:value="@string/ad_mob_app_id" />
+```
+
+`ManifestAdMobAppIdProvider` reads it from there and nowhere else, and `AdsCoreManager` refuses to
+initialize the SDK without a valid one rather than falling back to a sample id. Declare the string
+in the **host**, never in a library module: a library-owned `ad_mob_app_id` is inherited by every
+consumer app that does not declare the same name, silently pointing that app's consent request and
+SDK initialization at the wrong publisher account.
+
+### 2. Ad unit IDs — Koin `AdsConfig` bindings
+
+Each placement resolves an `AdsConfig` by qualifier:
+
+```kotlin
+single<AdsConfig>(named(name = AdsQualifiers.SUPPORT_NATIVE_AD)) {
+    AdsConfig(bannerAdUnitId = "ca-app-pub-…/…")
+}
+```
+
+**Required if the host ships the screen.** These are injected with `koinInject`, which throws
+`NoDefinitionFoundException` when the binding is missing — the screen crashes rather than rendering
+without an ad, so bind every qualifier whose screen you include:
+
+| Qualifier            | Injected by                                     | Format          |
+|----------------------|-------------------------------------------------|-----------------|
+| `NO_DATA_NATIVE_AD`  | `NoDataScreen`, in `:library:core:ui`           | Native advanced |
+| `HELP_NATIVE_AD`     | `HelpScreenContent`, in `:library:feature:help` | Native advanced |
+| `SUPPORT_NATIVE_AD`  | `SupportScreen`, in `:library:feature:support`  | Native advanced |
+
+`NoDataScreen` is the one to watch: it is a shared empty/error state rather than a screen a host
+opts into, so almost every host reaches it eventually.
+
+**Optional.** Offered for host placements; nothing in the toolkit injects them, so leaving them
+unbound costs nothing: `NATIVE_AD`, `BOTTOM_NAV_BAR_NATIVE_AD`, and the size-named `BANNER_AD`,
+`LARGE_BANNER_AD`, `MEDIUM_RECTANGLE_AD`, `FULL_BANNER_AD`, `LEADERBOARD_AD`, `FLUID_AD`.
+
+Hosts add their own qualifiers for their own screens rather than extending `AdsQualifiers`; the
+sample keeps `AppAdsQualifiers` for its apps list and app details placements.
+
+### Choosing the format
+
+`AdsConfig.adSize` applies to `AdBanner` only. Native slots — `NativeAdSlot` and the
+`*NativeAdCard` wrappers — ignore it, so a native placement should leave it at its default and bind
+a **Native advanced** unit id. Binding a banner unit id to a native slot, or the reverse, produces
+no fill rather than an error.
+
+### App Open
+
+`AdsCoreManager.initializeAds(appOpenUnitId = …)` takes the id directly; there is no qualifier. The
+host decides whether it wants the ad at all — see the toggle table above.
+
 ## Public contracts
 
 - Ads settings screen/activity, repository contract, and UI event/action/state contracts.

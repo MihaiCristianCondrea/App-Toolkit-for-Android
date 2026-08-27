@@ -22,6 +22,9 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.const
  * bindings.
  */
 object AdsQualifiers {
+
+    // Generic size-based names offered to hosts for their own banner placements. No toolkit screen
+    // asks for them, so leaving them unbound costs nothing.
     const val BANNER_AD: String = "banner_ad"
     const val LARGE_BANNER_AD: String = "large_banner_ad"
     const val MEDIUM_RECTANGLE_AD: String = "medium_rectangle_ad"
@@ -29,9 +32,15 @@ object AdsQualifiers {
     const val LEADERBOARD_AD: String = "leaderboard_ad"
     const val FLUID_AD: String = "fluid_ad"
 
+    /** Offered to hosts for a general-purpose native placement; no toolkit screen requests it. */
     const val NATIVE_AD: String = "native_ad"
-    const val NO_DATA_NATIVE_AD: String = "no_data_native_ad"
+
+    /** Offered to hosts; `BottomAppBarNativeAdBanner` has no call site in this repository. */
     const val BOTTOM_NAV_BAR_NATIVE_AD: String = "bottom_nav_bar_native_ad"
-    const val HELP_LARGE_BANNER_AD: String = "help_large_banner_ad"
+
+    // Required. A toolkit screen injects each of these and Koin throws if the host has not bound
+    // it, so a host that ships the screen must supply the id. See the ads module README.
+    const val NO_DATA_NATIVE_AD: String = "no_data_native_ad"
+    const val HELP_NATIVE_AD: String = "help_native_ad"
     const val SUPPORT_NATIVE_AD: String = "support_native_ad"
 }
