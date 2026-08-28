@@ -19,7 +19,6 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore
 
 import android.content.Context
-import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -28,6 +27,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.datastore.DataStoreNamesConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.AdsPreferencesDataSource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.migrations.commonDataStoreMigrations
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.AppStatePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ChangelogPreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.interfaces.ConsentPreferencesDataSource
@@ -49,8 +49,17 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
-/** Process-safe delegate for the toolkit's single `settings` Preferences DataStore file. */
-val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(name = DataStoreNamesConstants.DATA_STORE_SETTINGS)
+/**
+ * Process-safe delegate for the toolkit's single `settings` Preferences DataStore file.
+ *
+ * Migrations run here rather than as work a data source does when constructed, so they finish
+ * before the first read is served. `AdsCoreManager` samples the ads preference once at startup and
+ * would otherwise race them.
+ */
+val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = DataStoreNamesConstants.DATA_STORE_SETTINGS,
+    produceMigrations = { commonDataStoreMigrations() },
+)
 
 /**
  * Facade over the toolkit's preference data sources.
@@ -63,7 +72,10 @@ val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(name
  * on — instead of on this whole surface.
  *
  * The members below delegate to those sources and exist so that callers written against the
- * previous single-class API keep compiling.
+ * previous single-class API keep compiling. Several have no caller left inside this repository and
+ * are marked `@Suppress("unused")` for that reason: this module is published, so "unused here" says
+ * nothing about the consumers the delegates exist for. Delete one only as a deliberate breaking
+ * change.
  *
  * @property defaultAdsEnabled value [adsEnabledFlow] carries until the preference is set.
  */
@@ -122,9 +134,12 @@ open class CommonDataStore(
         /**
          * Returns the process-wide facade, capturing [defaultAdsEnabled] on first construction.
          *
-         * Prefer dependency injection in production. This compatibility accessor cannot change the
-         * ads default after an instance exists and callers must not use it to create a parallel
-         * preference graph.
+         * Prefer dependency injection in production. This cannot change the ads default after an
+         * instance exists, so `dataStoreModule` calls it eagerly at Koin start with the host's real
+         * default and every later caller — `rememberCommonDataStore()` included — receives that
+         * same object. Callers must not construct a parallel preference graph: two stores
+         * disagreeing about the ads default is how ad slots once believed ads were on while the SDK
+         * had never been initialized for them.
          */
         fun getInstance(
             context: Context,
@@ -151,7 +166,8 @@ open class CommonDataStore(
 
     val settingsInteracted: Flow<Boolean> get() = appStatePreferences.settingsInteracted
 
-    suspend fun markSettingsInteracted() = appStatePreferences.markSettingsInteracted() // FIXME: Function "markSettingsInteracted" is never used
+    @Suppress("unused") // Compatibility delegate; see the class KDoc.
+    suspend fun markSettingsInteracted() = appStatePreferences.markSettingsInteracted()
 
     val componentsShowcaseUnlocked: Flow<Boolean>
         get() = appStatePreferences.componentsShowcaseUnlocked
@@ -202,13 +218,6 @@ open class CommonDataStore(
 
     // region Theme
 
-    /**
-     * Theme mode mirrored as Compose state so the settings UI can reflect a tap before the write
-     * round-trips through DataStore. Presentation state rather than stored data; the persisted
-     * value is [themeMode].
-     */
-    val themeModeState = mutableStateOf(value = DataStoreNamesConstants.THEME_MODE_FOLLOW_SYSTEM) // FIXME: Property "themeModeState" is never used
-
     val themeMode: Flow<String> get() = themePreferences.themeMode
 
     suspend fun saveThemeMode(mode: String) = themePreferences.saveThemeMode(mode)
@@ -224,12 +233,14 @@ open class CommonDataStore(
 
     val dynamicPaletteVariant: Flow<Int> get() = themePreferences.dynamicPaletteVariant
 
-    suspend fun saveDynamicPaletteVariant(variant: Int) = // FIXME: Function "saveDynamicPaletteVariant" is never used
+    @Suppress("unused") // Compatibility delegate; see the class KDoc.
+    suspend fun saveDynamicPaletteVariant(variant: Int) =
         themePreferences.saveDynamicPaletteVariant(variant)
 
     val staticPaletteId: Flow<String> get() = themePreferences.staticPaletteId
 
-    suspend fun saveStaticPaletteId(id: String) = themePreferences.saveStaticPaletteId(id) // FIXME: Function "saveStaticPaletteId" is never used
+    @Suppress("unused") // Compatibility delegate; see the class KDoc.
+    suspend fun saveStaticPaletteId(id: String) = themePreferences.saveStaticPaletteId(id)
 
     // endregion
 

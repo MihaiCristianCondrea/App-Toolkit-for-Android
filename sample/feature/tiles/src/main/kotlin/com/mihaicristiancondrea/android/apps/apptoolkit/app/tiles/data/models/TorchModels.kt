@@ -9,6 +9,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models
 
+import androidx.compose.runtime.Immutable
+
 /** Device capabilities relevant to steady and patterned torch operation. */
 data class TorchCapabilities(
     val isAvailable: Boolean = false,
@@ -18,7 +20,14 @@ data class TorchCapabilities(
         get() = maximumLevel > 1
 }
 
-/** Current torch state exposed to in-app tools and the Quick Settings service. */
+/**
+ * Current torch state exposed to in-app tools and the Quick Settings service.
+ *
+ * `@Immutable` because [error] is a `Throwable`, whose stability Compose cannot infer, which left
+ * every composable taking a `TorchState` unskippable. Instances are built once per emission and
+ * never mutated, so the promise holds.
+ */
+@Immutable
 data class TorchState(
     val capabilities: TorchCapabilities = TorchCapabilities(),
     val currentLevel: Int = 0,

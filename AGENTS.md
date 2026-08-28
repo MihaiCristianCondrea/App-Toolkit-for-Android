@@ -43,3 +43,9 @@ Update technical documentation only when your change makes it inaccurate or chan
 Do not duplicate module documentation or skill guidance into `AGENTS.md`.
 
 Do not add comments or KDoc that merely restate the implementation. When touching code, add, improve, or correct relevant KDoc when it helps explain public APIs, contracts, invariants, side effects, ownership, assumptions, or non-obvious behavior. If existing KDoc is inaccurate or outdated, update it to match the current implementation.
+
+## Changelog
+
+When a change may require a changelog update, use the project's changelog skill.
+
+Do not duplicate changelog rules or formatting guidance here. The changelog skill defines when an entry is needed, where it belongs, and how it should be written.
