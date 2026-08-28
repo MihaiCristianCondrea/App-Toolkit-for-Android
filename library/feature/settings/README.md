@@ -12,7 +12,8 @@ and exposes host provider extension points.
   display list and selection dialogs remain presentation-only.
 - `ThemeSettingsViewModel`, which owns theme preference observation and mutations for the dedicated
   theme settings surface.
-- General settings repository/presentation flow.
+- General settings repository/presentation flow, including the standalone screen's Help & feedback
+  top-app-bar shortcut.
 - Advanced cache repository and settings flow.
 - Usage-and-diagnostics repository/model/presentation flow.
 - `SettingsProvider`, display/advanced provider contracts, and default content providers.
@@ -46,6 +47,7 @@ flowchart TD
     Host[Host application] --> Providers[Settings provider implementations]
     Providers --> Root[SettingsScreen categories]
     Root --> General[GeneralSettingsActivity content key]
+    General --> Help[Help & feedback top-app-bar action]
     General --> Display[DisplaySettingsViewModel]
     General --> Theme[ThemeSettingsViewModel]
     General --> Advanced[Advanced settings repository]

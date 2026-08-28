@@ -2,6 +2,10 @@
 
 # Unreleased
 
+### Added
+
+- Added a **Help & feedback** shortcut to the top app bar on standalone General Settings screens.
+
 ### Improved
 
 - Improved translations and wording across multiple screens.
@@ -33,14 +37,6 @@ Reliability-focused release with major improvements to startup, onboarding, Quic
 
 - Fixed the startup dialog flow.
 - Fixed several Sample App onboarding and navigation edge cases.
-
----
-
-# August 22, 2026
-
-### Improved
-
-- Updated the Sample App to use the corrected onboarding behavior.
 
 ---
 
@@ -79,14 +75,6 @@ Major structural update that separated reusable App Toolkit responsibilities fro
 - Fixed incorrect Sample App application configuration.
 - Fixed Firebase configuration validation.
 - Fixed several Sample App module dependency and resource ownership issues.
-
----
-
-# August 2026
-
-### Changed
-
-- Updated the Sample App to consume the new modular App Toolkit structure instead of owning reusable infrastructure directly.
 
 ---
 

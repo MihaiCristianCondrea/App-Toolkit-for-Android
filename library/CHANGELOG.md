@@ -1,6 +1,14 @@
 # Changelog
 
-# Unreleased
+---
+
+# August 28, 2026
+
+**Version:** `3.0.0-pre11`
+
+### Added
+
+- Added a **Help & feedback** action to the standalone General Settings top app bar.
 
 ### Fixed
 
