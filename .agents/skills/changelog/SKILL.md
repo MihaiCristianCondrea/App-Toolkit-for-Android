@@ -5,7 +5,7 @@ description: >
   consumers, Sample App users, release notes, or production release history.
 metadata:
   author: Mihai-Cristian Condrea
-  last-updated: '2026-08-27'
+  last-updated: '2026-08-28'
   keywords:
     - changelog
     - releases
@@ -25,8 +25,7 @@ Add entries for changes that meaningfully affect:
 
 - App Toolkit Library consumers;
 - Sample App users;
-- public behavior, APIs, integration, compatibility, reliability, performance, accessibility, or
-  important bug fixes.
+- public behavior, APIs, integration, compatibility, reliability, performance, accessibility, or important bug fixes.
 
 Skip routine refactors, formatting, tests, documentation, file moves, dependency bumps, and internal
 cleanup when externally observable behavior is unchanged.
@@ -59,9 +58,33 @@ New work belongs under `# Unreleased`.
 Do not create a release section from source-control versions, version bumps, tags, or library
 prereleases alone.
 
+When creating an actual release section, format it as:
+
+```md
+# Month Day, Year
+
+**Version:** `x.x.x` (`versioncode`)
+```
+
+For library releases:
+
+```md
+# Month Day, Year
+
+**Version:** `x.x.x`
+```
+
+Use the actual release date as the heading.
+
+For Sample App releases, include both `versionName` and `versionCode` when known.
+
+For library releases, include the published library version.
+
 Sample App release history follows actual Google Play production releases. When production release
 information is available, treat it as the source of truth for version names, version codes, dates,
 and release boundaries.
+
+Library release history follows actual published library releases.
 
 Changes from development versions that never reached production belong to the next production
 release that actually shipped them.
