@@ -1,5 +1,13 @@
 # Changelog
 
+# Unreleased
+
+### Fixed
+
+- Fixed the ads migration removing an explicit opt-in as well as an opt-out, which on debug builds turned ads off again at every launch.
+
+---
+
 # August 26, 2026
 
 **Version:** `3.0.0-pre10`

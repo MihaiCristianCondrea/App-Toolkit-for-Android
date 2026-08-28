@@ -49,12 +49,16 @@ class AdsOptOutMigrationTest {
         assertEquals(true, after[reduceAdsKey])
     }
 
+    // A stored `true` is left alone. It reads as harmless to drop — on release the default is on,
+    // so the two are the same state — but on a debug build the default is off, and the switch that
+    // wrote the `true` is the one a developer uses. Dropping it turned ads off at the next launch,
+    // and since the switch rewrites the key, dropped it again on every launch after that.
     @Test
-    fun `an opted-in install only loses the stale key`() = runTest {
-        val after = migration.migrate(mutablePreferencesOf(adsKey to true))
+    fun `an opted-in install is left alone`() = runTest {
+        val before = mutablePreferencesOf(adsKey to true)
 
-        assertNull(after[adsKey])
-        assertNull(after[reduceAdsKey])
+        assertFalse(migration.shouldMigrate(before))
+        assertEquals(true, before[adsKey])
     }
 
     @Test
@@ -75,10 +79,25 @@ class AdsOptOutMigrationTest {
     @Test
     fun `an existing reduced-ads choice is left alone`() = runTest {
         val after = migration.migrate(
-            mutablePreferencesOf(adsKey to true, reduceAdsKey to true)
+            mutablePreferencesOf(adsKey to false, reduceAdsKey to true)
         )
 
         assertEquals(true, after[reduceAdsKey])
+    }
+
+    // The regression this guards: an explicit opt-in survives every restart, however many times the
+    // store is opened and the migration is offered the data again.
+    @Test
+    fun `an opt-in survives repeated launches`() = runTest {
+        var data: Preferences = mutablePreferencesOf(adsKey to true)
+
+        repeat(times = 3) {
+            if (migration.shouldMigrate(data)) {
+                data = migration.migrate(data)
+            }
+        }
+
+        assertEquals(true, data[adsKey])
     }
 
     @Test

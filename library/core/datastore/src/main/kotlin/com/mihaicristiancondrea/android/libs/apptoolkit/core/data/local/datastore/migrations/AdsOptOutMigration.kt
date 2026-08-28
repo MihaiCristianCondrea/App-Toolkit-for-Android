@@ -38,10 +38,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  * app-open ad. Those installs see ordinary in-app ads again, which is the deliberate trade for
  * giving them a working control.
  *
- * The key is dropped whichever value it held, so that after this runs the stored state matches a
- * fresh install in every build. Its absence is also what stops this running twice; the debug switch
- * writing `ads` again is a deliberate choice by a developer, and gets migrated the same way on the
- * next upgrade.
+ * Only an explicit `false` is migrated. Dropping a stored `true` as well looks harmless — on a
+ * release build the default is on, so the two are the same state — but the default is `false` on a
+ * debug build, where the switch still exists and a developer uses it. Dropping their `true` turned
+ * ads off at the next launch, and because the switch rewrites the key, this migration deleted it
+ * again on every launch after that: the setting could be turned on but never stayed on. A stored
+ * `true` therefore stays where it is; there is nothing to release it from.
+ *
+ * An opt-out is migrated once, since afterwards the key is gone and [shouldMigrate] no longer
+ * matches.
  *
  * Runs as a [DataMigration] on the `settings` store, so it completes before the first read is
  * served and no consumer — least of all `AdsCoreManager`, which samples the preference once at
@@ -55,15 +60,12 @@ class AdsOptOutMigration : DataMigration<Preferences> {
         booleanPreferencesKey(name = DataStoreNamesConstants.DATA_STORE_REDUCE_ADS)
 
     override suspend fun shouldMigrate(currentData: Preferences): Boolean =
-        currentData.contains(adsKey)
+        currentData[adsKey] == false
 
     override suspend fun migrate(currentData: Preferences): Preferences {
         val migrated: MutablePreferences = currentData.toMutablePreferences()
 
-        if (currentData[adsKey] == false) {
-            migrated[reduceAdsKey] = true
-        }
-
+        migrated[reduceAdsKey] = true
         migrated.remove(adsKey)
         return migrated
     }
