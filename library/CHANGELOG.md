@@ -12,7 +12,7 @@
 
 ### Documentation
 
-- Documented what a host must do to render an ad view of its own: wait for `AdsSdkState`, re-key the request on readiness, and catch the loader's throw.
+- Documented how a host should render ads: use `NativeAdSlot`, `rememberNativeAd` or `AdBanner` rather than the Mobile Ads loaders directly, and what the toolkit handles on the host's behalf.
 
 ### Fixed
 
