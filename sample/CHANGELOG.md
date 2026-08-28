@@ -1,6 +1,6 @@
 # Changelog
 
-# Unreleased
+**Version:** `28.08.13` (`1370013`)
 
 ### Added
 
