@@ -40,6 +40,5 @@
     <string name="error_failed_to_load_apps">Impossibile caricare le app</string>
     <string name="error_failed_to_update_favorite">Impossibile aggiornare il preferito</string>
     <string name="favorite_apps">Preferiti</string>
-    <string name="no_apps_added_to_favorites">Nessuna app aggiunta ai preferiti</string>
     <string name="summary_share_message">Guarda questa fantastica app che sto usando. Ha alcune funzionalità davvero interessanti che potrebbero piacerti. Puoi scaricarla dal Play Store al link: %1$s</string>
 </resources>

@@ -76,9 +76,9 @@ differently.
 ### 1. The AdMob application id, manifest meta-data
 
 ```xml
-<meta-data
-        android:name="com.google.android.gms.ads.APPLICATION_ID"
-        android:value="@string/ad_mob_app_id" />
+
+<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
+    android:value="@string/ad_mob_app_id" />
 ```
 
 `ManifestAdMobAppIdProvider` reads it from there and nowhere else, and `AdsCoreManager` refuses to
@@ -93,7 +93,7 @@ Each placement resolves an `AdsConfig` by qualifier:
 
 ```kotlin
 single<AdsConfig>(named(name = AdsQualifiers.SUPPORT_NATIVE_AD)) {
-  AdsConfig(bannerAdUnitId = "ca-app-pub-.../...")
+    AdsConfig(bannerAdUnitId = "ca-app-pub-.../...")
 }
 ```
 
@@ -101,11 +101,11 @@ single<AdsConfig>(named(name = AdsQualifiers.SUPPORT_NATIVE_AD)) {
 `NoDefinitionFoundException` when the binding is missing, the screen crashes rather than rendering
 without an ad, so bind every qualifier whose screen you include:
 
-| Qualifier            | Injected by                                     | Format          |
-|----------------------|-------------------------------------------------|-----------------|
-| `NO_DATA_NATIVE_AD`  | `NoDataScreen`, in `:library:core:ui`           | Native advanced |
-| `HELP_NATIVE_AD`     | `HelpScreenContent`, in `:library:feature:help` | Native advanced |
-| `SUPPORT_NATIVE_AD`  | `SupportScreen`, in `:library:feature:support`  | Native advanced |
+| Qualifier           | Injected by                                     | Format          |
+|---------------------|-------------------------------------------------|-----------------|
+| `NO_DATA_NATIVE_AD` | `NoDataScreen`, in `:library:core:ui`           | Native advanced |
+| `HELP_NATIVE_AD`    | `HelpScreenContent`, in `:library:feature:help` | Native advanced |
+| `SUPPORT_NATIVE_AD` | `SupportScreen`, in `:library:feature:support`  | Native advanced |
 
 `NoDataScreen` is the one to watch: it is a shared empty/error state rather than a screen a host
 opts into, so almost every host reaches it eventually.
@@ -126,7 +126,8 @@ no fill rather than an error.
 
 ### App Open
 
-`AdsCoreManager.initializeAds(appOpenUnitId = ...)` takes the id directly; there is no qualifier. The
+`AdsCoreManager.initializeAds(appOpenUnitId = ...)` takes the id directly; there is no qualifier.
+The
 host decides whether it wants the ad at all, see the toggle table above.
 
 ## Rendering an ad
@@ -135,11 +136,11 @@ host decides whether it wants the ad at all, see the toggle table above.
 host has to write its own loading code, and every host that has written one has eventually
 rediscovered the same handful of bugs. Reach for these in this order:
 
-| Want | Use | Where |
-| --- | --- | --- |
-| A finished native card | `NativeAdSlot` and the `*NativeAdCard` wrappers | `:library:core:ui` |
+| Want                                   | Use                                                | Where              |
+|----------------------------------------|----------------------------------------------------|--------------------|
+| A finished native card                 | `NativeAdSlot` and the `*NativeAdCard` wrappers    | `:library:core:ui` |
 | Your own layout, the toolkit's loading | `rememberNativeAd(adUnitId)` returning `NativeAd?` | `:library:core:ui` |
-| A banner | `AdBanner` | `:library:core:ui` |
+| A banner                               | `AdBanner`                                         | `:library:core:ui` |
 
 `rememberNativeAd` is the one to know about. It returns a `NativeAd?` and imposes nothing on the
 layout, so a host that wants a card of its own design still gets the whole request lifecycle for
@@ -164,11 +165,13 @@ Worth knowing, because these are the failures a hand-rolled loader ships with:
   `IllegalStateException("MobileAds.initialize must be called before using the Google Mobile Ads
   SDK.")` when asked too early, and the SDK offers no way to ask whether it is ready. That is what
   `AdsSdkState` exists for.
-- **It asks again when the SDK comes up.** Readiness is part of the effect key, not just the ad unit.
+- **It asks again when the SDK comes up.** Readiness is part of the effect key, not just the ad
+  unit.
   A request keyed on the ad unit alone makes one attempt at the earliest possible moment and never
   retries, so the slot stays blank for the life of the composition even though the SDK came up a
   moment later. The signature of this bug is a running native ad validator over empty slots: the
-  validator flag can only be applied by an `initialize` call that ran, so seeing it rules out the SDK
+  validator flag can only be applied by an `initialize` call that ran, so seeing it rules out the
+  SDK
   and points at the slot.
 - **It catches the loader's throw.** The load happens during composition, where an unhandled
   `IllegalStateException` takes the process down. An ad slot that cannot load renders nothing; it is
@@ -176,14 +179,16 @@ Worth knowing, because these are the failures a hand-rolled loader ships with:
 - **It owns the ad's lifetime.** Re-keying destroys the previous `NativeAd` before requesting
   another, and an ad that arrives after disposal is destroyed rather than retained.
 
-If you are ever tempted to call `NativeAdLoader.load` or `MobileAds.initialize` directly from a host,
+If you are ever tempted to call `NativeAdLoader.load` or `MobileAds.initialize` directly from a
+host,
 that list is what you are signing up to reimplement, and the second item is the one nobody remembers
 until an app ships with silent, empty ad slots.
 
 ### The native ad validator
 
 The validator is the SDK's own debug overlay, configured at initialization:
-`initializeAds(appOpenUnitId, disableNativeValidator = true)` turns it off. It is left on by default.
+`initializeAds(appOpenUnitId, disableNativeValidator = true)` turns it off. It is left on by
+default.
 
 ## Public contracts
 
@@ -202,6 +207,7 @@ boundary and makes the generic UI module depend conceptually on an optional SDK 
 ## Migration notes
 
 ### Fixed:
+
 `IllegalStateException: MobileAds.initialize must be called before using the Google Mobile Ads SDK`
 
 Reported from `NativeAdLoader.load` inside a Compose `DisposableEffect`, which made it fatal: the

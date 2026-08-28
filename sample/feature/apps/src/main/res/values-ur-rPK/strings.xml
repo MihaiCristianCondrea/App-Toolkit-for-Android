@@ -40,6 +40,5 @@
     <string name="error_failed_to_load_apps">ایپس لوڈ نہیں ہو سکیں</string>
     <string name="error_failed_to_update_favorite">پسندیدہ اپ ڈیٹ نہیں ہو سکا</string>
     <string name="favorite_apps">پسندیدہ</string>
-    <string name="no_apps_added_to_favorites">پسندیدہ میں کوئی ایپ شامل نہیں</string>
     <string name="summary_share_message">یہ حیرت انگیز ایپ دیکھیں جو میں استعمال کر رہا ہوں. اس میں کچھ واقعی عمدہ خصوصیات ہیں جو آپ کو دلچسپ لگ سکتی ہیں۔ آپ اسے پلے اسٹور سے یہاں سے ڈاؤن لوڈ کر سکتے ہیں: %1$s</string>
 </resources>

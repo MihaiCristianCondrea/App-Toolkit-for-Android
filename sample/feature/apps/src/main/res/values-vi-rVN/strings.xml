@@ -40,6 +40,5 @@
     <string name="error_failed_to_load_apps">Không thể tải ứng dụng</string>
     <string name="error_failed_to_update_favorite">Không thể cập nhật mục yêu thích</string>
     <string name="favorite_apps">Yêu thích</string>
-    <string name="no_apps_added_to_favorites">Chưa có ứng dụng nào trong mục yêu thích</string>
     <string name="summary_share_message">Hãy xem ứng dụng tuyệt vời này mà tôi đang dùng. Nó có một số tính năng rất thú vị mà bạn có thể thấy hay. Bạn có thể tải xuống từ Play Store tại: %1$s</string>
 </resources>

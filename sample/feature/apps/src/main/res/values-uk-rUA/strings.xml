@@ -40,6 +40,5 @@
     <string name="error_failed_to_load_apps">Не вдалося завантажити застосунки</string>
     <string name="error_failed_to_update_favorite">Не вдалося оновити вибране</string>
     <string name="favorite_apps">Вибране</string>
-    <string name="no_apps_added_to_favorites">У вибране нічого не додано</string>
     <string name="summary_share_message">Перегляньте цей чудовий додаток, яким я користуюся. У ньому є цікаві функції, які можуть вас зацікавити. Ви можете завантажити його з Play Store за посиланням: %1$s</string>
 </resources>

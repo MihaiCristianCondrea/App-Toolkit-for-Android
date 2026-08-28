@@ -40,6 +40,5 @@
     <string name="error_failed_to_load_apps">Det gick inte att ladda appar</string>
     <string name="error_failed_to_update_favorite">Det gick inte att uppdatera favoriten</string>
     <string name="favorite_apps">Favoriter</string>
-    <string name="no_apps_added_to_favorites">Inga appar tillagda i favoriter</string>
     <string name="summary_share_message">Kolla in den här fantastiska appen som jag använder. Den har några riktigt coola funktioner som du kanske tycker är intressanta. Du kan ladda ner den från Play Store på: %1$s</string>
 </resources>

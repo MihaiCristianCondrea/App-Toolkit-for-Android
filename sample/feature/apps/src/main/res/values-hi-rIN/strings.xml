@@ -40,6 +40,5 @@
     <string name="error_failed_to_load_apps">ऐप्स लोड नहीं हो सकीं</string>
     <string name="error_failed_to_update_favorite">पसंदीदा अपडेट नहीं हो सका</string>
     <string name="favorite_apps">पसंदीदा</string>
-    <string name="no_apps_added_to_favorites">पसंदीदा में कोई ऐप नहीं जोड़ी गई</string>
     <string name="summary_share_message">इस शानदार ऐप को देखें जिसे मैं उपयोग कर रहा हूँ. इसमें कुछ बहुत ही शानदार फीचर्स हैं जो आपको रोचक लग सकते हैं। इसे Play Store से डाउनलोड करें: %1$s</string>
 </resources>
