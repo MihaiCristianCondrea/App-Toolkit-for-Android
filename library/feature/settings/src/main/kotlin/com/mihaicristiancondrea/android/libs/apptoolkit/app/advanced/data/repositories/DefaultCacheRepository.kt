@@ -47,7 +47,7 @@ class DefaultCacheRepository(
             message = "Cache clear requested",
             attributes = mapOf("source" to "DefaultCacheRepository"),
         )
-        // Resolving and deleting cache directories can both throw — SecurityException from a
+        // Resolving and deleting cache directories can both throw, SecurityException from a
         // restricted profile, IO failures mid-delete. Those have to surface as DataState.Error, or
         // the exception escapes the flow and the caller reports nothing at all.
         val state: DataState<Unit, Errors.Database> = runCatching {

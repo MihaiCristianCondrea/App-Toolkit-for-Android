@@ -18,6 +18,5 @@
     <string name="widget_apps_description">Mihai-Cristian Condrea tarafından öne çıkan uygulamaları hızla açın.</string>
     <string name="widget_apps_error_message">Uygulamalar şu anda yüklenemiyor.</string>
     <string name="widget_apps_error_retry">Tekrar dene</string>
-    <string name="widget_apps_preview_third_item">Notlar</string>
     <string name="widget_apps_title">Mihai-Cristian Condrea uygulamaları</string>
 </resources>

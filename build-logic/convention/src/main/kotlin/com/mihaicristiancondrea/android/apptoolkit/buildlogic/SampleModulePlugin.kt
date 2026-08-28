@@ -27,13 +27,13 @@ import org.gradle.kotlin.dsl.getByType
  *
  * The host app was one module, so its Android/Compose/versioning setup was written once. Splitting
  * it into ten would have copied that block ten times, and the modules would drift the way the
- * library modules did before the JVM-target and unit-test plugins landed — silently, because a
+ * library modules did before the JVM-target and unit-test plugins landed, silently, because a
  * module with the wrong `compileSdk` or a missing `compose = true` still assembles until something
  * in it needs the missing piece.
  *
  * `buildConfig` is on for all of them: several sample modules branch on `BuildConfig.DEBUG`, which
  * is per-module but reflects the same build type, so each needs its own generated class. Fields
- * that are genuinely app-wide — the application id, version, GitHub token — stay in `:sample:app`,
+ * that are genuinely app-wide, the application id, version, GitHub token, stay in `:sample:app`,
  * which is the only module that can meaningfully declare them.
  */
 class SampleModulePlugin : Plugin<Project> {

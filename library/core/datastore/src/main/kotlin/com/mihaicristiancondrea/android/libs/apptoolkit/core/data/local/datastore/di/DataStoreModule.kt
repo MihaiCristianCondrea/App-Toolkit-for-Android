@@ -43,7 +43,7 @@ fun dataStoreModule(isDebugBuild: Boolean): Module = module {
     // Through `getInstance`, not the constructor, and eagerly: this is what makes the graph's store
     // and the one `rememberCommonDataStore()` hands to Compose the same object. Built lazily via
     // the constructor, Koin's copy never populated the companion, so the first `getInstance` caller
-    // created a second store carrying the accessor's `defaultAdsEnabled = true` — and on a debug
+    // created a second store carrying the accessor's `defaultAdsEnabled = true`, and on a debug
     // build, where the graph's default is `false`, the two then disagreed about whether ads were on
     // for any install with no stored value. `createdAtStart` closes the race for good: Koin starts
     // in `Application.onCreate`, long before anything can compose.

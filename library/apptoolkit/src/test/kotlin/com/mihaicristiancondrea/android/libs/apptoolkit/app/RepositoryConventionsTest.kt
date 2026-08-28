@@ -67,7 +67,7 @@ class RepositoryConventionsTest {
         const val REPOSITORY_IMPL = "RepositoryImpl"
 
         // A regex, not the literal "class RepositoryImpl": that substring never appears in a real
-        // declaration, because the class name always carries a prefix — `class AboutRepositoryImpl`
+        // declaration, because the class name always carries a prefix, `class AboutRepositoryImpl`
         // does not contain it. The check silently passed everything, leaving the file-name check as
         // the only live rule and a mis-named class inside a correctly named file undetected.
         val REPOSITORY_IMPL_DECLARATION = Regex("""class\s+\w*RepositoryImpl\b""")

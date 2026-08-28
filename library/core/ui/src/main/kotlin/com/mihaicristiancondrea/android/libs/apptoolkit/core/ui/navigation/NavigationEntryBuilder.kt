@@ -39,7 +39,7 @@ typealias NavigationEntryProvider<T> = (T) -> NavEntry<T>
 /**
  * Combine multiple [NavigationEntryBuilder] installers into a single entry provider.
  *
- * Important: Do NOT expose androidx.navigation3.runtime.EntryProvider here — in some versions
+ * Important: Do NOT expose androidx.navigation3.runtime.EntryProvider here, in some versions
  * it’s not accessible (private-in-file), and Kotlin 2.4+ will hard-error on inline leakage.
  */
 fun <T : NavKey> entryProviderFor(

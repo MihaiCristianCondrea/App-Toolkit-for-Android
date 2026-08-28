@@ -49,8 +49,8 @@ class AdsOptOutMigrationTest {
         assertEquals(true, after[reduceAdsKey])
     }
 
-    // A stored `true` is left alone. It reads as harmless to drop — on release the default is on,
-    // so the two are the same state — but on a debug build the default is off, and the switch that
+    // A stored `true` is left alone. It reads as harmless to drop, on release the default is on,
+    // so the two are the same state, but the default is `false` on a debug build, where the switch that
     // wrote the `true` is the one a developer uses. Dropping it turned ads off at the next launch,
     // and since the switch rewrites the key, dropped it again on every launch after that.
     @Test

@@ -28,7 +28,7 @@ import androidx.compose.ui.graphics.Color
  *
  * Change rationale: this used to inflate `R.layout.native_ad_apps_list_card` through
  * `NativeAdViewHost` and bind it with `findViewById`, while duplicating the "render nothing until
- * loaded" logic locally. Both now come from [NativeAdSlot] — see [SupportNativeAdCard] for the
+ * loaded" logic locally. Both now come from [NativeAdSlot], see [SupportNativeAdCard] for the
  * behaviour changes that come with the shared renderer.
  *
  * @param containerColor overrides the card container for hosts whose surfaces are their own.

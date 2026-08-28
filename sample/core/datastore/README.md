@@ -63,7 +63,7 @@ flowchart TD
 ## Current risks
 
 `DataStoreTest` is `@Disabled`. It needs Robolectric's runner for `ApplicationProvider`, and this
-build runs the JUnit platform with no vintage engine, so `@RunWith` is never honoured — the test has
+build runs the JUnit platform with no vintage engine, so `@RunWith` is never honoured, the test has
 never executed. It was silently skipped while the sample was one module and only surfaced when it
 became this module's only test. Re-enabling it needs either a Robolectric JUnit 5 integration or a
 constructor that takes the DataStore file path so no Android context is required.

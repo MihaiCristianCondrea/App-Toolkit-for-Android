@@ -46,7 +46,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  * it as a non-fatal instead. The ping is pure telemetry for Google: dropping it has no functional
  * effect on the consent flow, which has already reported its own error to the caller by this point.
  *
- * The predicate is deliberately narrow — every condition must hold:
+ * The predicate is deliberately narrow, every condition must hold:
  * - the throwable is a [NoSuchElementException];
  * - the stack trace contains a `java.util.Scanner` frame;
  * - the stack trace contains a `com.google.android.gms.internal.consent_sdk` frame;
@@ -58,7 +58,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  * our side: pointing the consent request at the host app's own AdMob app id (see
  * `AdMobAppIdProvider`) and never running two consent round trips at once (see
  * `DefaultConsentRepository`). This guard covers the remainder and should be removed once a
- * `user-messaging-platform` release fixes the read — verified by decompiling, not by release notes.
+ * `user-messaging-platform` release fixes the read, verified by decompiling, not by release notes.
  */
 object ConsentSdkCrashGuard {
 

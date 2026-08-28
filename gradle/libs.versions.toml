@@ -310,7 +310,7 @@ unitTest = [
 ]
 
 # NOTE: `test-junit-vintage-engine` is declared but deliberately not in this bundle yet. Adding it
-# makes the 13 JUnit 4 suites run — and 11 of their tests fail immediately, because they stub
+# makes the 13 JUnit 4 suites run, and 11 of their tests fail immediately, because they stub
 # `Build.VERSION.SDK_INT` with `mockkStatic`, which cannot intercept a static final field. Those
 # suites have therefore never passed; they need porting to Robolectric's `@Config(sdk = …)` first.
 #

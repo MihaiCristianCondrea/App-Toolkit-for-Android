@@ -28,7 +28,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
  *
  * Change rationale: this used to inflate `R.layout.native_ad_help_card` through `NativeAdViewHost`
  * and bind it with `findViewById`. It is now a thin wrapper over [NativeAdSlot], which builds the
- * same `NativeAdView` in Kotlin — see [SupportNativeAdCard] for the behaviour changes that come
+ * same `NativeAdView` in Kotlin, see [SupportNativeAdCard] for the behaviour changes that come
  * with the shared renderer.
  *
  * Integration and compliance notes:

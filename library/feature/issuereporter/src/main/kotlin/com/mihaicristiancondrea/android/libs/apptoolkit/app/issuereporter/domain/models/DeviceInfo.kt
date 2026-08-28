@@ -22,7 +22,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domai
  *
  * A plain value type: no Android imports, no construction from a `Context`, no formatting. It used
  * to read `android.os.Build` in its own field initialisers, expose a `create(context)` companion
- * that mutated a half-built instance, and — worst of it — import a `core:ui` extension to read the
+ * that mutated a half-built instance, and, worst of it, import a `core:ui` extension to read the
  * package version, which pointed the domain layer at the UI module.
  *
  * Capture now lives in `DeviceInfoLocalDataSource` and formatting in `domain/mappers`, so this can

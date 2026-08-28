@@ -165,8 +165,8 @@ class UmpConsentRemoteDataSource(
      * Change rationale: the app id used to come from `R.string.ad_mob_app_id`, a *library* string
      * resource holding the demo app's id. Consumer apps that declared their id under a different
      * name never overrode it, so every consent request was scoped to the toolkit's own publisher
-     * app. The id is now resolved from the host app's manifest meta-data — the same value the
-     * Google Mobile Ads SDK reads — and `setAdMobAppId` is skipped entirely when no valid id is
+     * app. The id is now resolved from the host app's manifest meta-data, the same value the
+     * Google Mobile Ads SDK reads, and `setAdMobAppId` is skipped entirely when no valid id is
      * available, rather than falling back to a library constant.
      *
      * `setAdMobAppId` exists for UMP-without-GMA integrations; hosts that ship GMA already supply

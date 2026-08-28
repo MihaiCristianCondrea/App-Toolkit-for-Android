@@ -69,8 +69,8 @@ internal fun NativeAdSurface(
 
     val grouped: Boolean = position != GroupedItemPosition.SINGLE
     // The default is deliberately an unstyled card: an ad sits among ordinary content and should
-    // read as ordinary content. Screens whose own cards are not default cards — and consumer apps
-    // with their own surfaces — pass `containerColor` rather than getting a toolkit-wide tint that
+    // read as ordinary content. Screens whose own cards are not default cards, and consumer apps
+    // with their own surfaces, pass `containerColor` rather than getting a toolkit-wide tint that
     // is wrong everywhere else.
     Card(
         modifier = if (grouped) {

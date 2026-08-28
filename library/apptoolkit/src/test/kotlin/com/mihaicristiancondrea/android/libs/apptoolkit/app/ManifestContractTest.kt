@@ -127,7 +127,7 @@ class ManifestContractTest {
     @Test
     fun `library components are only exported when they answer an intent filter`() {
         // An exported component is reachable from any other app on the device. The toolkit has one
-        // legitimate case — the activity the system opens for VIEW_PERMISSION_USAGE — and it is
+        // legitimate case, the activity the system opens for VIEW_PERMISSION_USAGE, and it is
         // exported precisely because a filter makes it a system entry point. Anything exported
         // without a filter is reachable by other apps for no reason at all.
         val offenders = libraryComponents()

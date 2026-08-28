@@ -80,7 +80,7 @@ val LocalNativeAdViewFactory = staticCompositionLocalOf<NativeAdViewFactory> {
  * Renders [nativeAd] inside a programmatically built [NativeAdView].
  *
  * "No XML" does not mean "no `NativeAdView`". Ad assets must still be rendered inside a registered
- * [NativeAdView] with a real [MediaView] and a `registerNativeAd` call — drawing headline, icon and
+ * [NativeAdView] with a real [MediaView] and a `registerNativeAd` call, drawing headline, icon and
  * CTA as pure Compose would break AdMob policy and click reporting. What the Kotlin renderer removes
  * is the layout inflater and `findViewById`, not the ad view.
  *
@@ -263,7 +263,7 @@ private fun createFeatured(context: Context): NativeAdViewHolder {
     val label = sponsoredLabelView(context = context)
 
     // The MediaView is sized by the creative, so on its own it renders at whatever height the asset
-    // happens to have — which is what made this card look arbitrary from one ad to the next. The
+    // happens to have, which is what made this card look arbitrary from one ad to the next. The
     // 16:9 frame reproduces the constraint the XML layout used to impose.
     val mediaFrame =
         AspectRatioFrameLayout(context = context, widthToHeightRatio = MEDIA_ASPECT_RATIO)

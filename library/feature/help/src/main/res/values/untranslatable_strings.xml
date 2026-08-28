@@ -20,7 +20,7 @@
       ~ the host translates it: `:sample:core:apptoolkit` carries all nine questions and answers in
       ~ every supported locale.
       ~
-      ~ `translatable="false"` therefore describes these placeholders correctly — there is nothing
+      ~ `translatable="false"` therefore describes these placeholders correctly, there is nothing
       ~ here to send to a translator. Dropping it does not make the FAQ translatable; it makes lint
       ~ demand 25 translations of an empty string, and `MissingTranslation` is an error in this
       ~ project, so the build fails.

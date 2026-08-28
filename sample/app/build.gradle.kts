@@ -76,7 +76,7 @@ if (hasMatchingGoogleServicesConfig) {
 }
 
 // `google-services.json` is gitignored, so an absent file is the normal state on CI and on any
-// clone — it means "not configured here", which is obvious and harmless. A file that is present but
+// clone, it means "not configured here", which is obvious and harmless. A file that is present but
 // names a different package means "configured wrong", which is invisible: Firebase is skipped and
 // the release ships with no crash reporting. Only the second case fails the build; failing on the
 // first would break `./gradlew build` on CI, which assembles release variants.

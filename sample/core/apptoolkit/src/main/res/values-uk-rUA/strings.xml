@@ -31,7 +31,7 @@
     <string name="question_9">Чи безпечно мої дані, коли я використовую App Toolkit для пошуку інших застосунків?</string>
     <string name="security_and_privacy">Безпека та конфіденційність</string>
     <string name="settings">Налаштування</string>
-    <string name="summary_preference_faq_1">App Toolkit — це застосунок, створений для демонстрації застосунків, побудованих з бібліотекою AppToolkit. Це ваш путівник для дослідження цієї екосистеми та перегляду бібліотеки AppToolkit у дії.</string>
+    <string name="summary_preference_faq_1">App Toolkit, це застосунок, створений для демонстрації застосунків, побудованих з бібліотекою AppToolkit. Це ваш путівник для дослідження цієї екосистеми та перегляду бібліотеки AppToolkit у дії.</string>
     <string name="summary_preference_faq_2">App Toolkit перелічує різні застосунки. Торкнувшись застосунку, ви зазвичай побачите більше інформації та посилання, щоб установити або відкрити його в Google Play Store і спробувати на практиці.</string>
     <string name="summary_preference_faq_3">Багато застосунків, представлених в App Toolkit, пропонують базовий набір функцій безплатно. Деякі можуть мати розширені можливості через преміум-версію або покупки в застосунку. Деталі про кожен застосунок можна знайти на його сторінці в Google Play Store.</string>
     <string name="summary_preference_faq_4">Щоб отримати повні відомості про застосунок, його функції та відгуки користувачів, торкніться його в App Toolkit, щоб відкрити його сторінку в Google Play Store.</string>

@@ -41,8 +41,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as About
  * Top-app-bar actions for the settings root.
  *
  * Help belongs to the screen the settings tree starts at, not to each page inside it. This first
- * hung off `GeneralSettingsScreen`, which is the host every standalone sub-page renders through —
- * Display, Security & privacy, Advanced, About — so the overflow appeared on all of them and on
+ * hung off `GeneralSettingsScreen`, which is the host every standalone sub-page renders through,
+ * Display, Security & privacy, Advanced, About, so the overflow appeared on all of them and on
  * none of the places a reader would look for it, while the root Settings list had no actions at all.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

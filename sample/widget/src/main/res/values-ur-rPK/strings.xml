@@ -18,6 +18,5 @@
     <string name="widget_apps_description">Mihai-Cristian Condrea کی نمایاں ایپس فوراً کھولیں۔</string>
     <string name="widget_apps_error_message">اس وقت ایپس لوڈ نہیں ہو سکیں۔</string>
     <string name="widget_apps_error_retry">دوبارہ کوشش کریں</string>
-    <string name="widget_apps_preview_third_item">نوٹس</string>
     <string name="widget_apps_title">Mihai-Cristian Condrea کی ایپس</string>
 </resources>

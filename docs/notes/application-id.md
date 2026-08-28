@@ -30,21 +30,21 @@ So `sample/app/build.gradle.kts` deliberately sets an `applicationId` that does 
 `namespace`. That mismatch is correct and should not be "tidied up".
 
 There is no `applicationIdSuffix`. The ID is written out in full, because a suffix split across two
-declarations is how the wrong value got shipped in the first place — the pieces read as plausible
+declarations is how the wrong value got shipped in the first place, the pieces read as plausible
 on their own.
 
 ## What is tied to the application ID
 
 Changing it, or getting it wrong, breaks all of these:
 
-- **Firebase** — `google-services.json` is matched by package name.
-- **AdMob** — the app ID in the manifest belongs to a specific Play listing.
-- **Play Billing** — products are registered against the application ID.
-- **Deep links, backup, shortcuts** — anything keyed on the package name.
+- **Firebase**, `google-services.json` is matched by package name.
+- **AdMob**, the app ID in the manifest belongs to a specific Play listing.
+- **Play Billing**, products are registered against the application ID.
+- **Deep links, backup, shortcuts**, anything keyed on the package name.
 
 ## google-services.json
 
-The file is **not committed** — it is gitignored, and holds API keys and client IDs issued by
+The file is **not committed**, it is gitignored, and holds API keys and client IDs issued by
 Firebase. Each machine that needs Firebase keeps its own copy at `sample/app/google-services.json`,
 downloaded from the Firebase console for the app registered as `com.d4rk.android.apps.apptoolkit`.
 
@@ -58,7 +58,7 @@ application ID. The check distinguishes two states that a plain file-exists test
 | File present, right package | Configured          | Firebase plugins applied         |
 
 Absence is the normal state on CI and on a fresh clone. It is obvious and harmless, so it must not
-fail the build — `./gradlew build` assembles release variants, so failing on absence would break CI
+fail the build, `./gradlew build` assembles release variants, so failing on absence would break CI
 for everyone.
 
 A file that is present but names a different package is the case worth failing on. Nothing looks
@@ -74,7 +74,7 @@ reporting, which is exactly what happened when the ID was corrected.
 unzip -p sample/app/build/outputs/apk/debug/app-debug.apk AndroidManifest.xml | strings | grep -i d4rk
 ```
 
-This warning means a `google-services.json` is present but registered to a different package —
+This warning means a `google-services.json` is present but registered to a different package,
 re-download it from the Firebase console for `com.d4rk.android.apps.apptoolkit`:
 
 ```text

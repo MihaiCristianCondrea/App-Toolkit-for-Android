@@ -66,7 +66,7 @@ data class GroupedAction(
  * sheet uses, extracted so other apps can present their own actions the same way.
  *
  * Corner rounding is derived from each item's index rather than passed in. A caller cannot label a
- * middle row as the last one, and a single-item list correctly rounds both ends — a case the
+ * middle row as the last one, and a single-item list correctly rounds both ends, a case the
  * previous hand-passed first/middle/last enum could not express.
  *
  * @param actions Rows to render, in order. An empty list renders nothing.

@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsCo
  * Icon-led native ad rendered inline in an app details sheet, without a card of its own.
  *
  * Change rationale: this used to inflate `R.layout.native_ad_app_details` and bind it with
- * `findViewById`. It is now a thin wrapper over [NativeAdSlot] — see [SupportNativeAdCard] for the
+ * `findViewById`. It is now a thin wrapper over [NativeAdSlot], see [SupportNativeAdCard] for the
  * behaviour changes that come with the shared renderer.
  *
  * @param adsConfig ad configuration; [AdsConfig.bannerAdUnitId] is used as the native ad unit.

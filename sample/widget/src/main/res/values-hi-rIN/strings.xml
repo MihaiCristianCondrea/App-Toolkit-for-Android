@@ -18,6 +18,5 @@
     <string name="widget_apps_description">Mihai-Cristian Condrea के चुने हुए ऐप्स तुरंत खोलें।</string>
     <string name="widget_apps_error_message">अभी ऐप्स लोड नहीं हो सके।</string>
     <string name="widget_apps_error_retry">फिर से कोशिश करें</string>
-    <string name="widget_apps_preview_third_item">नोट्स</string>
     <string name="widget_apps_title">Mihai-Cristian Condrea के ऐप्स</string>
 </resources>

@@ -32,14 +32,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  * `AdsSdkState.isReady` never turned true and every native and banner slot waited on it forever.
  * The switch that could have undone it only exists in debug builds.
  *
- * So the stored value is dropped and enablement falls back to the build's default — on for release,
+ * So the stored value is dropped and enablement falls back to the build's default, on for release,
  * off for debug, exactly as a fresh install. The intent behind an explicit opt-out is not thrown
  * away: it moves to `reduce_ads`, the preference release builds *do* expose, which suppresses the
  * app-open ad. Those installs see ordinary in-app ads again, which is the deliberate trade for
  * giving them a working control.
  *
- * Only an explicit `false` is migrated. Dropping a stored `true` as well looks harmless — on a
- * release build the default is on, so the two are the same state — but the default is `false` on a
+ * Only an explicit `false` is migrated. Dropping a stored `true` as well looks harmless, on a
+ * release build the default is on, so the two are the same state, but the default is `false` on a
  * debug build, where the switch still exists and a developer uses it. Dropping their `true` turned
  * ads off at the next launch, and because the switch rewrites the key, this migration deleted it
  * again on every launch after that: the setting could be turned on but never stayed on. A stored
@@ -49,8 +49,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
  * matches.
  *
  * Runs as a [DataMigration] on the `settings` store, so it completes before the first read is
- * served and no consumer — least of all `AdsCoreManager`, which samples the preference once at
- * startup — can observe the pre-migration value.
+ * served and no consumer, least of all `AdsCoreManager`, which samples the preference once at
+ * startup, can observe the pre-migration value.
  */
 class AdsOptOutMigration : DataMigration<Preferences> {
 

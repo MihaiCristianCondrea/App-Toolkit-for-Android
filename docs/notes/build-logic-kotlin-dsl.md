@@ -22,7 +22,7 @@ plugins {
 
 That accessor is generated for the build script from the Gradle distribution running the build, and
 it carries no coordinates. JitPack resolves this project's included build separately from the main
-build when it produces a publication, and the accessor is not on the plugin classpath it assembles —
+build when it produces a publication, and the accessor is not on the plugin classpath it assembles,
 the build fails there while succeeding locally. Spelling out the plugin id and version makes the
 plugin resolvable from coordinates alone, which is what JitPack needs.
 
@@ -57,7 +57,7 @@ sync with each other.
 
 1. Update the wrapper.
 2. Run any task (`./gradlew help` is enough).
-3. If Gradle warns about the `kotlin-dsl` version, it names the version it expects — set that value
+3. If Gradle warns about the `kotlin-dsl` version, it names the version it expects, set that value
    here.
 4. Re-run to confirm both warnings are gone.
 

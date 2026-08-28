@@ -18,6 +18,5 @@
     <string name="widget_apps_description">Nyisd meg gyorsan Mihai-Cristian Condrea kiemelt alkalmazásait.</string>
     <string name="widget_apps_error_message">Az alkalmazások jelenleg nem tölthetők be.</string>
     <string name="widget_apps_error_retry">Próbáld újra</string>
-    <string name="widget_apps_preview_third_item">Jegyzetek</string>
     <string name="widget_apps_title">Mihai-Cristian Condrea alkalmazásai</string>
 </resources>

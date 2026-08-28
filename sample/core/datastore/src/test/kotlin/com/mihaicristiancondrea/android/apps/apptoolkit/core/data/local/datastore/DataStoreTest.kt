@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test
 @Disabled(
     "Needs Robolectric's runner for ApplicationProvider, and this build runs the JUnit platform " +
             "with no vintage engine, so @RunWith is never honoured. The test has therefore never " +
-            "executed — it was silently skipped while it shared :sample with JUnit 5 suites, and only " +
+            "executed, it was silently skipped while it shared :sample with JUnit 5 suites, and only " +
             "surfaced once :sample:core:datastore made it the module's only test. Re-enable by adding " +
             "a Robolectric JUnit 5 integration, or by taking the DataStore file path as a parameter " +
             "so no Android context is needed."

@@ -63,9 +63,9 @@ open class BaseCoreManager : MultiDexApplication(), Application.ActivityLifecycl
     /**
      * Whether [ConsentSdkCrashGuard] is installed for this app.
      *
-     * Override with `false` to opt out. The guard swallows exactly one failure — a telemetry ping
+     * Override with `false` to opt out. The guard swallows exactly one failure, a telemetry ping
      * inside the UMP SDK whose empty error body makes `Scanner.next()` throw on the SDK's own
-     * executor — and swallowing it has no functional effect on the consent flow. Every other
+     * executor, and swallowing it has no functional effect on the consent flow. Every other
      * throwable is delegated to the handler that was installed before it.
      */
     protected open val installsConsentSdkCrashGuard: Boolean = true

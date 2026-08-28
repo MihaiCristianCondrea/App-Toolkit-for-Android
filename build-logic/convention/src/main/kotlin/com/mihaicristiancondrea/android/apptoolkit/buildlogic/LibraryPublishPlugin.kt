@@ -35,7 +35,7 @@ import org.gradle.kotlin.dsl.getByType
  * POM and then failed on every one of them.
  *
  * The artifact id is the Gradle project name, which is exactly what the consuming POM already
- * references — `:library:core:ui` is published as `ui`, `:library:feature:about` as `about`. Group
+ * references, `:library:core:ui` is published as `ui`, `:library:feature:about` as `about`. Group
  * and version come from the root `subprojects` block, so a module cannot drift from the release it
  * ships in.
  */

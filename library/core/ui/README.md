@@ -95,14 +95,14 @@ module. The native-ad UI also exposes an advertising concern from the shared UI 
 
 Native and banner ad requests previously assumed the Mobile Ads SDK had already initialized. When
 the preference/UI path disagreed with initialization, SDK calls could throw synchronously from a
-Compose effect and kill the host process — reported as
+Compose effect and kill the host process, reported as
 `IllegalStateException: MobileAds.initialize must be called before using the Google Mobile Ads SDK`
 with `NativeAdLoader.load` under `DisposableEffectImpl.onRemembered`. Preserve the current behavior:
 
 - `rememberAdsEnabled` observes the same `CommonDataStore.adsEnabledFlow` used by
   `AdsCoreManager`; it must not choose its own default.
 - Ad slots take their unit id from a host-bound `AdsConfig` resolved by Koin qualifier, and
-  `NoDataScreen` injects `NO_DATA_NATIVE_AD` without a fallback — a host that has not bound it
+  `NoDataScreen` injects `NO_DATA_NATIVE_AD` without a fallback, a host that has not bound it
   crashes on the empty state rather than rendering without an ad. The host checklist lives in
   [`:library:integration:ads`](../../integration/ads/README.md).
 - `rememberNativeAd` and `AdBanner` wait for `AdsSdkState`, retry when readiness changes, and treat

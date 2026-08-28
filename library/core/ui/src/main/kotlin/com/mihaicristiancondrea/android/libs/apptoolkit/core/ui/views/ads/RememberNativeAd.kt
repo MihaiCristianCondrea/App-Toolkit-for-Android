@@ -43,7 +43,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads.Ad
  *
  * The request waits for [AdsSdkState.isReady]. Initialization of the Mobile Ads SDK is asynchronous
  * and starts during app startup, so a slot composed early would otherwise ask a SDK that is not up
- * yet — which throws — and then never retry. Keying the effect on readiness means the request starts
+ * yet, which throws, and then never retry. Keying the effect on readiness means the request starts
  * by itself the moment the SDK is up.
  *
  * @param adUnitId the ad unit to request; a blank value loads nothing.
@@ -69,7 +69,7 @@ fun rememberNativeAd(adUnitId: String, enabled: Boolean = true): NativeAd? {
 
         var disposed = false
         // The loader throws synchronously when the Mobile Ads SDK has not been initialized, and this
-        // effect runs during composition — an unhandled throw here takes the whole process down. An
+        // effect runs during composition, an unhandled throw here takes the whole process down. An
         // ad slot must never do that: a slot that cannot load is a slot that renders nothing.
         runCatching {
             loaderClient.load(

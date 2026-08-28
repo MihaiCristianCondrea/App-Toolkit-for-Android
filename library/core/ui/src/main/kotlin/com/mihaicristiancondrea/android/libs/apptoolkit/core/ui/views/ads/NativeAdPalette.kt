@@ -28,8 +28,8 @@ import androidx.compose.ui.graphics.toArgb
  * An ARGB snapshot of the Compose theme, for the Android views that render an ad.
  *
  * Ad assets have to live inside a real `NativeAdView`, which is a `View` and cannot read
- * [MaterialTheme]. Snapshotting the colours the ad needs keeps the ad visually part of the app —
- * including dynamic colour and in-app theme switches — without duplicating the palette in XML
+ * [MaterialTheme]. Snapshotting the colours the ad needs keeps the ad visually part of the app,
+ * including dynamic colour and in-app theme switches, without duplicating the palette in XML
  * themes.
  */
 @Immutable

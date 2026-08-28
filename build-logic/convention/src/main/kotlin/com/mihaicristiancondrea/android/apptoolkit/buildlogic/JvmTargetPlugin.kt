@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * Change rationale: only two modules declared a target after the toolkit was split up, so the other
  * twenty silently compiled to Java 11. Production code got away with it; test code did not, because
  * inlining a Java 17 `inline fun` from mockk or `kotlinx-coroutines-test` into an 11-target module
- * is a hard compile error. The fix belongs in one place — a module should not have to remember.
+ * is a hard compile error. The fix belongs in one place, a module should not have to remember.
  *
  * Apply this *after* the Android application/library plugin in the `plugins {}` block: a plugins
  * block applies in source order, and the Android extension does not exist until its own plugin has

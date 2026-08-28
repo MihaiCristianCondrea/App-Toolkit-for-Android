@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.domain
  *
  * These were `toMarkdown()` and an overridden `toString()` on the model itself. Making the model a
  * data class would have replaced that `toString()` with the generated one, so the device panel would
- * have started rendering `DeviceInfo(appVersionName=…)` — the formatting has to move out with it,
+ * have started rendering `DeviceInfo(appVersionName=…)`, the formatting has to move out with it,
  * not just disappear.
  */
 
@@ -44,7 +44,7 @@ fun DeviceInfo.toPlainText(): String =
     rows().joinToString(separator = "\n") { (label, value) -> "$label: $value" }
 
 /**
- * Single source for the field order and labels, so the two renderings cannot drift apart — they
+ * Single source for the field order and labels, so the two renderings cannot drift apart, they
  * previously repeated the same fifteen fields in two hand-maintained lists.
  */
 private fun DeviceInfo.rows(): List<Pair<String, String>> = listOf(

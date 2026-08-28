@@ -32,7 +32,7 @@ val publishingVersion = providers.gradleProperty("PUBLISHING_VERSION")
 
 subprojects {
     // The sample gets its own group. Project dependencies resolve by `group:name:version`, and the
-    // sample mirrors the library's module names — `core:common`, `core:ui`, `core:datastore`. With
+    // sample mirrors the library's module names: `core:common`, `core:ui`, `core:datastore`. With
     // one shared group, `:sample:core:common` depending on `:library:core:common` produced the same
     // coordinates on both sides, and Gradle rejected it as a circular dependency on itself rather
     // than reporting a name clash. Only the library is published, so this affects nothing else.

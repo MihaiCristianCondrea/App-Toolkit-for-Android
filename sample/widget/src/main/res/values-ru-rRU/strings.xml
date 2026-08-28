@@ -18,6 +18,5 @@
     <string name="widget_apps_description">Быстро открывайте рекомендуемые приложения от Mihai-Cristian Condrea.</string>
     <string name="widget_apps_error_message">Сейчас не удаётся загрузить приложения.</string>
     <string name="widget_apps_error_retry">Повторить</string>
-    <string name="widget_apps_preview_third_item">Заметки</string>
     <string name="widget_apps_title">Приложения от Mihai-Cristian Condrea</string>
 </resources>

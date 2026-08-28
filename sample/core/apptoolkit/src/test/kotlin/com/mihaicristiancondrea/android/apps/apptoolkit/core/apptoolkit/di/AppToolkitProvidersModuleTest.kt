@@ -60,7 +60,7 @@ class AppToolkitProvidersModuleTest {
      * The graph as a host gets it, minus the Context that `androidContext()` supplies at runtime.
      *
      * The providers only reach for resources inside their methods, so a relaxed stand-in is enough
-     * to build them — which is the thing under test.
+     * to build them, which is the thing under test.
      */
     private fun koin(): Koin {
         val context = mockk<Context>(relaxed = true)
@@ -74,14 +74,14 @@ class AppToolkitProvidersModuleTest {
     /**
      * The toolkit interfaces the sample has to answer.
      *
-     * If the toolkit adds a requirement, this list is where it gets acknowledged — a new extension
+     * If the toolkit adds a requirement, this list is where it gets acknowledged, a new extension
      * point every host must bind is worth being explicit about rather than meeting at runtime.
      */
     @Test
     fun `resolves every toolkit extension point`() {
         // Resolving `AboutSettingsProvider` is also what covers the build-config change: it now
         // takes `hostBuildConfig` by constructor, so a graph that cannot supply one fails here.
-        // Its `deviceInfo` output is not asserted — the getter reads `Build.SUPPORTED_ABIS`, which
+        // Its `deviceInfo` output is not asserted, the getter reads `Build.SUPPORTED_ABIS`, which
         // is null off-device, and Robolectric would be a lot of machinery for a formatted string.
         with(koin()) {
             get<SettingsProvider>()

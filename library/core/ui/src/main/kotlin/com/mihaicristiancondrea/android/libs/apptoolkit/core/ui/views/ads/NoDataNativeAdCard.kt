@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.Color
  * Media-led native ad card used on empty and error states.
  *
  * Change rationale: this used to inflate `R.layout.native_ad_no_data_card` through
- * `NativeAdViewHost` and bind it with `findViewById`. It is now a thin wrapper over [NativeAdSlot] —
+ * `NativeAdViewHost` and bind it with `findViewById`. It is now a thin wrapper over [NativeAdSlot],
  * see [SupportNativeAdCard] for the behaviour changes that come with the shared renderer.
  *
  * @param containerColor overrides the card container for hosts whose surfaces are their own.

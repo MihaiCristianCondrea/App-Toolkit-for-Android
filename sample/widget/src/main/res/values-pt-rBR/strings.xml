@@ -18,6 +18,5 @@
     <string name="widget_apps_description">Abra rapidamente os apps em destaque de Mihai-Cristian Condrea.</string>
     <string name="widget_apps_error_message">Não foi possível carregar os apps agora.</string>
     <string name="widget_apps_error_retry">Tentar novamente</string>
-    <string name="widget_apps_preview_third_item">Notas</string>
     <string name="widget_apps_title">Apps de Mihai-Cristian Condrea</string>
 </resources>

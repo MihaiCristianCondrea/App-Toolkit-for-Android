@@ -55,7 +55,7 @@ class AdvancedSettingsViewModelTest {
 
     companion object {
         // `viewModelScope` binds to `Dispatchers.Main.immediate`, and Lifecycle falls back to an
-        // empty context — meaning `Dispatchers.Default` — when Main is missing instead of throwing.
+        // empty context, meaning `Dispatchers.Default`, when Main is missing instead of throwing.
         // Without this the ViewModel's coroutines run on real threads that `advanceUntilIdle()`
         // knows nothing about, so every assertion below races the work it is waiting for.
         @JvmField

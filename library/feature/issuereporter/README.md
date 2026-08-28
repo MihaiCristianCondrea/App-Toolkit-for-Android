@@ -82,7 +82,7 @@ credential.
 `DeviceInfo` was a mutable class that read `android.os.Build` in its field initialisers, built
 itself
 from a `Context` through a `create()` companion, and imported a `core:ui` extension to read the
-package version — a domain model depending on the UI module. It is now a plain data class; capture
+package version, a domain model depending on the UI module. It is now a plain data class; capture
 lives in `DeviceInfoLocalDataSource` and the two renderings live in `domain/mappers`.
 
 That last part matters more than it looks: the model's `toString()` was the device panel's text, so

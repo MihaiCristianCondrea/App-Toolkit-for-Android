@@ -35,7 +35,7 @@ import java.util.Locale
 
 /**
  * Verifies that [UiTextHelper.StringResource] resolves against the composition's `LocalContext`
- * rather than a context captured when the helper was created — a locale override applied through
+ * rather than a context captured when the helper was created, a locale override applied through
  * `CompositionLocalProvider` has to reach the resolved string.
  *
  * Instrumentation rather than Robolectric because the assertion is about real resource resolution

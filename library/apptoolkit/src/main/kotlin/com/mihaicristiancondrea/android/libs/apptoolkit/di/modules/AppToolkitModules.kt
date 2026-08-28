@@ -28,13 +28,13 @@ import org.koin.core.module.Module
  *
  * A host that loads this receives the complete toolkit-owned graph. It does not need to know that
  * billing lives in `:library:integration:billing` or that Firebase lives in
- * `:library:integration:firebase` — adding a module to the toolkit adds it here, not in every
+ * `:library:integration:firebase`, adding a module to the toolkit adds it here, not in every
  * host. Host-owned provider contracts are still supplied in modules loaded after this list; they
  * include settings, about, display, advanced, and privacy providers used by reusable screens.
  *
  * Why this exists: the modules used to be handed out as four separate entry points plus two loose
  * `Module` values, and a host had to remember all six. Missing one produced no build error and no
- * warning — just a `NoDefinitionFoundException` the first time the app touched that dependency at
+ * warning, just a `NoDefinitionFoundException` the first time the app touched that dependency at
  * runtime. `billingModule` was missed exactly this way.
  *
  * ## Overriding toolkit defaults

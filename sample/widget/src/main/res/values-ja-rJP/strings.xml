@@ -18,6 +18,5 @@
     <string name="widget_apps_description">Mihai-Cristian Condrea の注目アプリをすばやく開きます。</string>
     <string name="widget_apps_error_message">現在アプリを読み込めません。</string>
     <string name="widget_apps_error_retry">再試行</string>
-    <string name="widget_apps_preview_third_item">メモ</string>
     <string name="widget_apps_title">Mihai-Cristian Condrea のアプリ</string>
 </resources>

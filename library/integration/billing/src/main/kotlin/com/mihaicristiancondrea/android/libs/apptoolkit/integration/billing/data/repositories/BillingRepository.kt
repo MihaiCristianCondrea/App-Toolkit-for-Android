@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.Flow
  * substitute nor fake in a test.
  *
  * It extends [BillingCore] because the core manager closes billing during teardown but must not see
- * the rest of this surface — that narrower contract is what breaks the dependency cycle between
+ * the rest of this surface, that narrower contract is what breaks the dependency cycle between
  * `:library:core:common` and this module.
  *
  * [ProductDetails] stays a Play Billing type on purpose. Offer tokens and pricing phases are read

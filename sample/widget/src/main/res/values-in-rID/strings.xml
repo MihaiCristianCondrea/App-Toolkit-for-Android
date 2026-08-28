@@ -18,6 +18,5 @@
     <string name="widget_apps_description">Buka cepat aplikasi unggulan dari Mihai-Cristian Condrea.</string>
     <string name="widget_apps_error_message">Aplikasi tidak dapat dimuat saat ini.</string>
     <string name="widget_apps_error_retry">Coba lagi</string>
-    <string name="widget_apps_preview_third_item">Catatan</string>
     <string name="widget_apps_title">Aplikasi oleh Mihai-Cristian Condrea</string>
 </resources>

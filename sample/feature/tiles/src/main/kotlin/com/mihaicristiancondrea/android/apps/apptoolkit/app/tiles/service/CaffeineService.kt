@@ -76,7 +76,7 @@ class CaffeineService : Service() {
      *
      * [PowerManager.SCREEN_BRIGHT_WAKE_LOCK] is deprecated in favour of
      * `WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON`, but that replacement needs a window and this
-     * runs in a service with no UI of its own — keeping the screen awake for whatever app is in the
+     * runs in a service with no UI of its own, keeping the screen awake for whatever app is in the
      * foreground is the whole point of the tile. The deprecated flag is still honoured, so it stays
      * with the suppression documented rather than silenced.
      */

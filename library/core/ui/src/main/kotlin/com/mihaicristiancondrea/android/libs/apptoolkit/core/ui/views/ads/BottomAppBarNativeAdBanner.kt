@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
  * Full-width native ad strip styled to sit in a bottom app bar.
  *
  * Change rationale: this used to inflate `R.layout.native_ad_bottom_bar` and bind it with
- * `findViewById`. It is now a thin wrapper over [NativeAdSlot] — see [SupportNativeAdCard] for the
+ * `findViewById`. It is now a thin wrapper over [NativeAdSlot], see [SupportNativeAdCard] for the
  * behaviour changes that come with the shared renderer. The strip paints its own surface, so it
  * renders without a card container.
  *

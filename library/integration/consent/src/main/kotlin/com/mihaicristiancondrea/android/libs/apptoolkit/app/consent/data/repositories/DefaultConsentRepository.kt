@@ -66,7 +66,7 @@ class DefaultConsentRepository(
      *
      * Change rationale: consent used to be requested straight from the data source, once per
      * caller. `OnboardingActivity`, `StartupActivity`, and each host's `MainActivity` can all ask
-     * within the same second, which produced overlapping UMP requests — including requests issued
+     * within the same second, which produced overlapping UMP requests, including requests issued
      * by an activity that was already finishing. Overlapping requests are what drives the SDK into
      * its failure path, and a failing metrics ping with an empty error body crashes the process
      * from the SDK's own executor where no caller-side `catch` can reach it.

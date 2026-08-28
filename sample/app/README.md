@@ -98,8 +98,8 @@ the locale config while retaining the application-level locale link.
 ## Current risks
 
 `appNavigationEntryBuilders` is the single place that knows the full feature set, so every new
-destination touches this module. That is deliberate — it is what keeps the feature modules from
-depending on each other — but it does make this file a merge point.
+destination touches this module. That is deliberate, it is what keeps the feature modules from
+depending on each other, but it does make this file a merge point.
 
 Components declared by feature modules (Quick Settings tile services, the caffeine foreground
 service, `ComponentsActivity`, the widget receiver) are still declared in this manifest rather than

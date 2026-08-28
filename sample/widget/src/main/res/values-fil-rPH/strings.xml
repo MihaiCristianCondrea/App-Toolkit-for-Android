@@ -18,6 +18,5 @@
     <string name="widget_apps_description">Mabilis na buksan ang mga tampok na app ni Mihai-Cristian Condrea.</string>
     <string name="widget_apps_error_message">Hindi ma-load ang mga app ngayon.</string>
     <string name="widget_apps_error_retry">Subukan muli</string>
-    <string name="widget_apps_preview_third_item">Mga Tala</string>
     <string name="widget_apps_title">Mga app ni Mihai-Cristian Condrea</string>
 </resources>

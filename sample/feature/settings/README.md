@@ -58,5 +58,5 @@ flowchart TD
 ## Current risks
 
 The About content carries the components-unlock gesture, so a change to the showcase can require a
-change here. The alternative — putting the gesture in the components module — would invert the
+change here. The alternative, putting the gesture in the components module, would invert the
 dependency without removing it, because the gesture has to live on the About screen.

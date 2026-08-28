@@ -44,8 +44,8 @@ import org.junit.jupiter.api.Test
  * `IllegalStateException("MobileAds.initialize must be called before using the Google Mobile Ads
  * SDK.")`, from inside composition, and the process dies.
  *
- * The cause was two different readings of the same preference — this manager sampled it once with a
- * `!isDebugBuild` default while the views read it with a `true` default — plus initialization that
+ * The cause was two different readings of the same preference, this manager sampled it once with a
+ * `!isDebugBuild` default while the views read it with a `true` default, plus initialization that
  * was never retried when the preference changed.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -90,7 +90,7 @@ class AdsCoreManagerInitializationTest {
     }
 
     // `ads(…)` returns a Flow, and inside a mockk `verify` block the call is recorded rather than
-    // executed — nothing constructs a real flow here, so the UnusedFlow check does not apply.
+    // executed, nothing constructs a real flow here, so the UnusedFlow check does not apply.
     @Suppress("UnusedFlow")
     @Test
     fun `ads enablement is read from the same flow the ad views observe`() = runTest {

@@ -140,7 +140,7 @@ run.
 
 ### Fixed: `Unable to start activity` from an unresolvable Koin definition
 
-A definition that cannot be created does not fail when Koin starts — it fails the first time
+A definition that cannot be created does not fail when Koin starts, it fails the first time
 something asks for it. In practice that is `MainActivity.onCreate` resolving `MainViewModel`, which
 reports as `RuntimeException: Unable to start activity` caused by `InstanceCreationException`. The
 trace names only the outermost ViewModel and the innermost definition, never the dependency that was
@@ -161,7 +161,7 @@ the provider bindings directly.
 
 Two mechanics are easy to get wrong when editing that test. Koin resolves a definition against its
 own module plus that module's `includes`, so the graph must be wrapped as
-`module { includes(allModules) }` — verifying a flat list makes every cross-module dependency read
+`module { includes(allModules) }`, verifying a flat list makes every cross-module dependency read
 as
 missing. And `verify` reflects on the produced type's constructor regardless of how the definition
 builds it, so types created by a factory function (`HttpClient`, `ColorPalette`) need their
@@ -176,7 +176,7 @@ contracts used by the settings/about surfaces. The sample wraps both steps in
 `appToolkitHostModules`.
 
 Before 3.0.0-pre2 a host assembled the graph from three module-list factories plus the loose
-`firebaseModule` and `billingModule` values. Missing one produced no build error — only a
+`firebaseModule` and `billingModule` values. Missing one produced no build error, only a
 `NoDefinitionFoundException` the first time the app touched that dependency. Smart Cleaner shipped
 without `billingModule` and died on first resume.
 

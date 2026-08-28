@@ -46,7 +46,7 @@ class DefaultAdsSettingsRepository(
 
     // The cold `ads(...)` flow rather than `adsEnabledFlow`: the settings screen needs IO errors and
     // cancellation to reach it, and the eagerly-started StateFlow swallows both into its own scope.
-    // Only the default is shared — that is what used to diverge.
+    // Only the default is shared, that is what used to diverge.
     override fun observeAdsEnabled(): Flow<Boolean> =
         dataStore.ads(default = defaultAdsEnabled)
             .onStart {

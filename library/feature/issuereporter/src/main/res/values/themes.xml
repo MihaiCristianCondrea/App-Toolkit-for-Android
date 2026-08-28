@@ -19,7 +19,7 @@
 
     <!--
       The reporter activity used to ask for @style/Theme.Material3.DayNight.NoActionBar, which comes
-      from com.google.android.material — a dependency this module does not have. It resolved only
+      from com.google.android.material, a dependency this module does not have. It resolved only
       because the sample app happens to pull Material Components in; a host app without it would
       have failed to link the manifest. BaseActivity extends AppCompatActivity and the screen itself
       is Compose, so an AppCompat parent is all the platform side actually needs, and it ships with

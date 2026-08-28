@@ -62,7 +62,7 @@ class TestAdsCoreManager {
      * `StandardTestDispatcher`: that dispatcher only queues work and runs it when a
      * `TestCoroutineScheduler` is advanced, which nothing outside `runTest` does. `initializeAds`
      * opens with `withContext(dispatchers.io) { … }`, so under `runBlocking` that block was queued
-     * and never executed, and every one of these tests parked forever — the whole
+     * and never executed, and every one of these tests parked forever, the whole
      * `testDebugUnitTest` task hung on this file rather than failing.
      *
      * `UnconfinedTestDispatcher` runs eagerly on the calling thread, so the `withContext` completes
@@ -110,7 +110,7 @@ class TestAdsCoreManager {
      * [Context] the store's first read fails with `no answer found for Context.getFilesDir()`
      * inside DataStore's own scope, so it surfaces as an uncaught exception on a background thread
      * rather than here. `runTest` reports whatever it finds pending as
-     * `UncaughtExceptionsBeforeTest`, which failed an unrelated test in another class — whichever
+     * `UncaughtExceptionsBeforeTest`, which failed an unrelated test in another class, whichever
      * one happened to start next. Tests that replace the store by reflection after construction
      * are too late: the real one already exists.
      */
@@ -314,7 +314,7 @@ class TestAdsCoreManager {
         adField.set(inner3, ad)
         // isAdAvailable() is `appOpenAd != null && wasLoadTimeLessThanNHoursAgo()`. Planting the ad
         // without a load time leaves loadTime at 0, so the ad reads as expired, showAdIfAvailable
-        // takes its reload branch, and adEventCallback is never assigned — which is what left the
+        // takes its reload branch, and adEventCallback is never assigned, which is what left the
         // capturing slot empty.
         val loadTimeField = inner3.javaClass.getDeclaredField("loadTime")
         loadTimeField.isAccessible = true

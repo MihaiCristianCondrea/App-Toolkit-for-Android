@@ -42,7 +42,7 @@ import org.koin.test.verify.verify
 /**
  * Verifies the dependency graph the app actually starts with.
  *
- * A Koin definition that cannot be created does not fail at startup — it fails the first time
+ * A Koin definition that cannot be created does not fail at startup, it fails the first time
  * something asks for it. In practice that is `MainActivity.onCreate` resolving `MainViewModel`,
  * which reports as `Unable to start activity` with an `InstanceCreationException` naming only the
  * outermost ViewModel and the innermost definition. The app is dead before its first frame and the
@@ -103,7 +103,7 @@ class HostKoinGraphTest {
     )
 
     /**
-     * Mirrors `initializeKoin`. If that function gains a module, this list has to gain it too —
+     * Mirrors `initializeKoin`. If that function gains a module, this list has to gain it too,
      * which is the point: the check is only as good as its agreement with production.
      */
     private fun hostModules(): List<Module> = buildList {

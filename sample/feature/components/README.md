@@ -65,8 +65,8 @@ flowchart TD
 ## Current risks
 
 Two other feature modules depend on this one, which is more inbound coupling than a leaf feature
-usually carries. Both edges are real — the gesture is in settings and the entry point is in the
-drawer — but they mean this module cannot be removed without touching both.
+usually carries. Both edges are real, the gesture is in settings and the entry point is in the
+drawer, but they mean this module cannot be removed without touching both.
 
 ## Migration notes
 

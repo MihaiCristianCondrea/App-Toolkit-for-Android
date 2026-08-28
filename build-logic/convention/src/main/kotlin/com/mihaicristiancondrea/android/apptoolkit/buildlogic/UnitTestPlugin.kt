@@ -29,7 +29,7 @@ import org.gradle.kotlin.dsl.withType
  * Wires unit testing for an Android module: the JUnit 5 platform and the shared test dependency
  * bundles.
  *
- * Change rationale: every module used to repeat the same four blocks — the `mannodermaus` plugin,
+ * Change rationale: every module used to repeat the same four blocks, the `mannodermaus` plugin,
  * `useJUnitPlatform()`, the JVM agent flag, and two dependency bundles. When the toolkit was split
  * into modules that repetition was simply not carried over, so 46 test files ended up in modules
  * with no test dependencies at all. `testDebugUnitTest` never ran anywhere and nothing reported it,

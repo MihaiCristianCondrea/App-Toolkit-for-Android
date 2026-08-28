@@ -68,8 +68,8 @@ val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(
  * [Context.commonDataStore] hands out; the preferences are grouped into cohesive data sources
  * rather than split across files so that no stored key moves and existing installs keep their
  * data. Each group is exposed here and registered in the Koin graph, so new code can depend on the
- * narrow contract it needs — [ThemePreferencesDataSource], [ReviewPreferencesDataSource], and so
- * on — instead of on this whole surface.
+ * narrow contract it needs, [ThemePreferencesDataSource], [ReviewPreferencesDataSource], and so
+ * on, instead of on this whole surface.
  *
  * The members below delegate to those sources and exist so that callers written against the
  * previous single-class API keep compiling. Several have no caller left inside this repository and
@@ -136,7 +136,7 @@ open class CommonDataStore(
          *
          * Prefer dependency injection in production. This cannot change the ads default after an
          * instance exists, so `dataStoreModule` calls it eagerly at Koin start with the host's real
-         * default and every later caller — `rememberCommonDataStore()` included — receives that
+         * default and every later caller, `rememberCommonDataStore()` included, receives that
          * same object. Callers must not construct a parallel preference graph: two stores
          * disagreeing about the ads default is how ad slots once believed ads were on while the SDK
          * had never been initialized for them.

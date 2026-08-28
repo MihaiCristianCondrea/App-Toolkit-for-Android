@@ -128,7 +128,7 @@ private fun ColorScheme.withGroups(
 )
 
 /**
- * Variant 1: "Soft" — swap accents with containers *within each role*.
+ * Variant 1: "Soft", swap accents with containers *within each role*.
  * Keeps fixed roles untouched.
  */
 private fun ColorScheme.softSwapAccentsWithContainers(): ColorScheme {
@@ -147,7 +147,7 @@ private fun ColorScheme.softSwapAccentsWithContainers(): ColorScheme {
 }
 
 /**
- * Variant 2: "Rotate forward" — tertiary -> primary -> secondary -> tertiary.
+ * Variant 2: "Rotate forward", tertiary -> primary -> secondary -> tertiary.
  */
 private fun ColorScheme.rotateForward(): ColorScheme {
     val p = primaryGroup()
@@ -157,7 +157,7 @@ private fun ColorScheme.rotateForward(): ColorScheme {
 }
 
 /**
- * Variant 3: "Swap" — primary <-> tertiary.
+ * Variant 3: "Swap", primary <-> tertiary.
  */
 private fun ColorScheme.swapPrimaryTertiary(): ColorScheme {
     val p = primaryGroup()
@@ -187,7 +187,7 @@ private fun ColorScheme.swapSecondaryTertiary(): ColorScheme {
 }
 
 /**
- * Variant 6: "Rotate backward" — secondary -> primary -> tertiary -> secondary.
+ * Variant 6: "Rotate backward", secondary -> primary -> tertiary -> secondary.
  * (Reverse direction vs rotateForward, but keeps the same “nice mapping” rules.)
  */
 private fun ColorScheme.rotateBackward(): ColorScheme {
@@ -198,7 +198,7 @@ private fun ColorScheme.rotateBackward(): ColorScheme {
 }
 
 /**
- * Variant 7: "Fixed-Dim accents" — use *FixedDim + on*Fixed for accents when available.
+ * Variant 7: "Fixed-Dim accents", use *FixedDim + on*Fixed for accents when available.
  * Containers remain unchanged, so the UI stays familiar.
  *
  * This is safe even if fixed roles are Color.Unspecified (we just fall back to the current accents).

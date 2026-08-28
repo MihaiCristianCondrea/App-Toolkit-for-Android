@@ -32,8 +32,8 @@ import kotlinx.coroutines.flow.asStateFlow
  * asynchronous and starts during app startup, so an ad surface composed early would otherwise either
  * crash or silently give up and never retry.
  *
- * `AdsCoreManager` is the only writer; ad views observe [isReady] and start their request when — and
- * only when — it turns `true`.
+ * `AdsCoreManager` is the only writer; ad views observe [isReady] and start their request when, and
+ * only when, it turns `true`.
  */
 object AdsSdkState {
 
@@ -51,7 +51,7 @@ object AdsSdkState {
      * Whether an ad may be requested right now.
      *
      * [isReady] only knows about initialization the toolkit performed. A host that initializes the
-     * SDK itself — which the toolkit asks it not to do, but cannot prevent — would otherwise leave
+     * SDK itself, which the toolkit asks it not to do, but cannot prevent, would otherwise leave
      * every ad slot permanently empty, so the SDK's own `MobileAds.isInitialized` is consulted as a
      * fallback.
      */

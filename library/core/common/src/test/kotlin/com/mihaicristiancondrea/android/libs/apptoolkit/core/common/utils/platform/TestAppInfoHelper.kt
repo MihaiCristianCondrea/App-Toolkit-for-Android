@@ -183,7 +183,7 @@ class TestAppInfoHelper {
     }
 
     @Disabled(
-        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
+        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed, they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
     )
     @Test
     fun `openApp returns false on start failure`() = runTest {
@@ -211,7 +211,7 @@ class TestAppInfoHelper {
     }
 
     @Disabled(
-        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed — they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
+        "These stub Build.VERSION.SDK_INT with mockkStatic, which cannot intercept a static final field, so they have never passed, they were JUnit 4 in a JUnit-platform-only build and silently skipped. Porting them needs Robolectric's @Config(sdk = …) or an injectable SDK-level provider on the helper under test."
     )
     @Test
     fun `openAppResult exposes failure`() = runTest {
