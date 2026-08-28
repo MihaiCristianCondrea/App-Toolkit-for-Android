@@ -129,54 +129,61 @@ no fill rather than an error.
 `AdsCoreManager.initializeAds(appOpenUnitId = ...)` takes the id directly; there is no qualifier. The
 host decides whether it wants the ad at all, see the toggle table above.
 
-## Rendering an ad view the toolkit does not provide
+## Rendering an ad
 
-A host that writes its own native ad composable, rather than using `NativeAdSlot` or
-`rememberNativeAd`, takes on three obligations the toolkit's own views already meet. Miss them and
-the slot renders nothing, silently and permanently, on a process where ads are working everywhere
-else.
+**Use the toolkit's own ad composables.** Every app in this family depends on this library, so no
+host has to write its own loading code, and every host that has written one has eventually
+rediscovered the same handful of bugs. Reach for these in this order:
 
-**Wait for the SDK.** `MobileAds.initialize` runs asynchronously from the host's startup coroutine,
-so a screen composed early reaches its ad slot before the SDK is up. The loaders throw
-`IllegalStateException("MobileAds.initialize must be called before using the Google Mobile Ads
-SDK.")` when asked too early, and there is no public way to ask the SDK whether it is ready, which
-is what `AdsSdkState` exists for:
+| Want | Use | Where |
+| --- | --- | --- |
+| A finished native card | `NativeAdSlot` and the `*NativeAdCard` wrappers | `:library:core:ui` |
+| Your own layout, the toolkit's loading | `rememberNativeAd(adUnitId)` returning `NativeAd?` | `:library:core:ui` |
+| A banner | `AdBanner` | `:library:core:ui` |
+
+`rememberNativeAd` is the one to know about. It returns a `NativeAd?` and imposes nothing on the
+layout, so a host that wants a card of its own design still gets the whole request lifecycle for
+free:
 
 ```kotlin
-val isSdkReady: Boolean by AdsSdkState.isReady.collectAsStateWithLifecycle()
+val nativeAd: NativeAd = rememberNativeAd(adUnitId = adUnitId) ?: return
 
-DisposableEffect(adUnitId, enabled, isSdkReady) {
-    if (!enabled || adUnitId.isBlank() || !AdsSdkState.canRequestAds()) {
-        return@DisposableEffect onDispose { }
-    }
-    runCatching { NativeAdLoader.load(request, callback) }
-    ...
+MyOwnCard {
+    AndroidView(factory = ::buildMyAdView, update = { bind(it, nativeAd) })
 }
 ```
 
-**Re-key on readiness, not just on the ad unit.** This is the half that is easy to miss and hard to
-notice. An effect keyed on `(adUnitId, enabled)` alone makes exactly one attempt, at the earliest
-possible moment, and never retries, so the slot stays empty for the life of the composition even
-after initialization completes moments later. The symptom is an app whose native ad validator is
-plainly running while its ad slots are blank: the validator's presence proves the SDK came up, and
-the blank slot proves nobody asked it again. Putting readiness in the key means the request starts
-by itself the moment the SDK is up.
+That is the entire integration. Nothing below this line is something a host should be writing.
 
-**Catch the throw.** The load call runs inside composition, so an unhandled `IllegalStateException`
-takes the process down rather than leaving an empty slot. An ad slot that cannot load is a slot that
-renders nothing; it is never a crash.
+### What the toolkit is doing for you
 
-The same three rules apply to banners, and `AdBanner` shows them in the simplest form. A host that
-does not want to reimplement any of this should call `rememberNativeAd`, which returns a `NativeAd?`
-and leaves the layout entirely to the caller.
+Worth knowing, because these are the failures a hand-rolled loader ships with:
+
+- **It waits for the SDK.** `MobileAds.initialize` runs asynchronously from the host's startup
+  coroutine, so a screen composed early reaches its ad slot before the SDK exists. The loaders throw
+  `IllegalStateException("MobileAds.initialize must be called before using the Google Mobile Ads
+  SDK.")` when asked too early, and the SDK offers no way to ask whether it is ready. That is what
+  `AdsSdkState` exists for.
+- **It asks again when the SDK comes up.** Readiness is part of the effect key, not just the ad unit.
+  A request keyed on the ad unit alone makes one attempt at the earliest possible moment and never
+  retries, so the slot stays blank for the life of the composition even though the SDK came up a
+  moment later. The signature of this bug is a running native ad validator over empty slots: the
+  validator flag can only be applied by an `initialize` call that ran, so seeing it rules out the SDK
+  and points at the slot.
+- **It catches the loader's throw.** The load happens during composition, where an unhandled
+  `IllegalStateException` takes the process down. An ad slot that cannot load renders nothing; it is
+  never a crash.
+- **It owns the ad's lifetime.** Re-keying destroys the previous `NativeAd` before requesting
+  another, and an ad that arrives after disposal is destroyed rather than retained.
+
+If you are ever tempted to call `NativeAdLoader.load` or `MobileAds.initialize` directly from a host,
+that list is what you are signing up to reimplement, and the second item is the one nobody remembers
+until an app ships with silent, empty ad slots.
 
 ### The native ad validator
 
-The validator is the SDK's own debug overlay, and it is configured at initialization:
-`initializeAds(appOpenUnitId, disableNativeValidator = true)` turns it off. It is left on by
-default. Note what its appearance means when debugging an empty slot, the flag can only be applied
-by an `initialize` call that actually ran, so a visible validator rules out "the SDK never came up"
-and points at the slot's own request instead.
+The validator is the SDK's own debug overlay, configured at initialization:
+`initializeAds(appOpenUnitId, disableNativeValidator = true)` turns it off. It is left on by default.
 
 ## Public contracts
 
