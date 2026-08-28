@@ -27,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.contracts.GeneralSettingsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.states.GeneralSettingsUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.views.dropdowns.GeneralSettingsMenuActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -89,7 +88,6 @@ fun GeneralSettingsScreen(
         LargeTopAppBarWithScaffold(
             title = title,
             onBackClicked = onBackClicked,
-            actions = { GeneralSettingsMenuActions() },
             snackbarHostState = snackbarHostState,
             content = content
         )

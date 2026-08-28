@@ -129,6 +129,55 @@ no fill rather than an error.
 `AdsCoreManager.initializeAds(appOpenUnitId = …)` takes the id directly; there is no qualifier. The
 host decides whether it wants the ad at all — see the toggle table above.
 
+## Rendering an ad view the toolkit does not provide
+
+A host that writes its own native ad composable — rather than using `NativeAdSlot` or
+`rememberNativeAd` — takes on three obligations the toolkit's own views already meet. Miss them and
+the slot renders nothing, silently and permanently, on a process where ads are working everywhere
+else.
+
+**Wait for the SDK.** `MobileAds.initialize` runs asynchronously from the host's startup coroutine,
+so a screen composed early reaches its ad slot before the SDK is up. The loaders throw
+`IllegalStateException("MobileAds.initialize must be called before using the Google Mobile Ads
+SDK.")` when asked too early, and there is no public way to ask the SDK whether it is ready — which
+is what `AdsSdkState` exists for:
+
+```kotlin
+val isSdkReady: Boolean by AdsSdkState.isReady.collectAsStateWithLifecycle()
+
+DisposableEffect(adUnitId, enabled, isSdkReady) {
+    if (!enabled || adUnitId.isBlank() || !AdsSdkState.canRequestAds()) {
+        return@DisposableEffect onDispose { }
+    }
+    runCatching { NativeAdLoader.load(request, callback) }
+    …
+}
+```
+
+**Re-key on readiness, not just on the ad unit.** This is the half that is easy to miss and hard to
+notice. An effect keyed on `(adUnitId, enabled)` alone makes exactly one attempt, at the earliest
+possible moment, and never retries — so the slot stays empty for the life of the composition even
+after initialization completes moments later. The symptom is an app whose native ad validator is
+plainly running while its ad slots are blank: the validator's presence proves the SDK came up, and
+the blank slot proves nobody asked it again. Putting readiness in the key means the request starts
+by itself the moment the SDK is up.
+
+**Catch the throw.** The load call runs inside composition, so an unhandled `IllegalStateException`
+takes the process down rather than leaving an empty slot. An ad slot that cannot load is a slot that
+renders nothing; it is never a crash.
+
+The same three rules apply to banners, and `AdBanner` shows them in the simplest form. A host that
+does not want to reimplement any of this should call `rememberNativeAd`, which returns a `NativeAd?`
+and leaves the layout entirely to the caller.
+
+### The native ad validator
+
+The validator is the SDK's own debug overlay, and it is configured at initialization:
+`initializeAds(appOpenUnitId, disableNativeValidator = true)` turns it off. It is left on by
+default. Note what its appearance means when debugging an empty slot — the flag can only be applied
+by an `initialize` call that actually ran, so a visible validator rules out "the SDK never came up"
+and points at the slot's own request instead.
+
 ## Public contracts
 
 - Ads settings screen/activity, repository contract, and UI event/action/state contracts.

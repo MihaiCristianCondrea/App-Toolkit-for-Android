@@ -10,9 +10,14 @@
 
 - Added a **Help & feedback** action to the standalone General Settings top app bar.
 
+### Documentation
+
+- Documented what a host must do to render an ad view of its own: wait for `AdsSdkState`, re-key the request on readiness, and catch the loader's throw.
+
 ### Fixed
 
 - Fixed the ads migration removing an explicit opt-in as well as an opt-out, which on debug builds turned ads off again at every launch.
+- Fixed the **Help & feedback** overflow action appearing on every standalone settings sub-page instead of on the settings root.
 
 ---
 

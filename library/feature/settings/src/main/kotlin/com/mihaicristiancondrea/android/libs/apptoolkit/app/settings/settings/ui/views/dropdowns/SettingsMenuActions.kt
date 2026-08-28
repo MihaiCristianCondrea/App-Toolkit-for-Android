@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.views.dropdowns
+package com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.views.dropdowns
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.material.icons.Icons
@@ -37,15 +37,22 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.An
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as AboutR
 
-/** Top-app-bar actions shared by standalone general settings destinations. */
+/**
+ * Top-app-bar actions for the settings root.
+ *
+ * Help belongs to the screen the settings tree starts at, not to each page inside it. This first
+ * hung off `GeneralSettingsScreen`, which is the host every standalone sub-page renders through —
+ * Display, Security & privacy, Advanced, About — so the overflow appeared on all of them and on
+ * none of the places a reader would look for it, while the root Settings list had no actions at all.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun GeneralSettingsMenuActions() {
+fun SettingsMenuActions() {
     val context = LocalContext.current
     val showMenu = rememberSaveable { mutableStateOf(value = false) }
     val rotation by animateFloatAsState(
         targetValue = if (showMenu.value) 90f else 0f,
-        label = "GeneralSettingsMenuRotation",
+        label = "SettingsMenuRotation",
     )
 
     AnimatedIconButtonDirection(

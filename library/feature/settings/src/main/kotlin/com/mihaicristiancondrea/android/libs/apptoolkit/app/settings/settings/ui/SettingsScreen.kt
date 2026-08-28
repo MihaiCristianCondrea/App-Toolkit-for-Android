@@ -78,6 +78,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.No
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.views.dropdowns.SettingsMenuActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
@@ -166,6 +167,7 @@ fun SettingsScreen(
                 )
                 (context as? android.app.Activity)?.finish()
             },
+            actions = { SettingsMenuActions() },
             content = content
         )
     }
