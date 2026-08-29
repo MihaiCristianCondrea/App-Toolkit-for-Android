@@ -4,17 +4,23 @@
 
 # August 28, 2026
 
-**Version:** `3.0.0-pre11`
-
-### Added
-
-- Added a **Help & feedback** action to the standalone General Settings top app bar.
+**Version:** `3.0.0-pre12`
 
 ### Added
 
 - Added `AdLoadReporter`, which logs every ad load failure, adds a Crashlytics breadcrumb, and records a non-fatal for the failures that are not simply no fill.
 - Added `AdSlotDebugPlaceholder`, shown by `NativeAdSlot` on debug builds where an empty ad slot would otherwise render nothing.
 - Added `rememberNativeAdState`, which returns why a slot is empty alongside the ad.
+
+---
+
+# August 28, 2026
+
+**Version:** `3.0.0-pre11`
+
+### Added
+
+- Added a **Help & feedback** action to the standalone General Settings top app bar.
 
 ### Documentation
 
