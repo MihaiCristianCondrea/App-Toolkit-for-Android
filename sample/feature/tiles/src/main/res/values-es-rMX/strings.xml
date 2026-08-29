@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Disponible</string>
     <string name="tiles_status_needs_setup">Necesita configuración</string>
     <string name="tiles_status_unsupported">No compatible</string>
-    <string name="tiles_subtitle">Abra cuadros de diálogo rápidos y descubra herramientas ampliadas, con funciones listas para mosaicos claramente marcadas.</string>
     <string name="tool_coin_flip_action">lanzar moneda</string>
     <string name="tool_coin_flip_waiting">¿Listo?</string>
     <string name="tool_counter_increment">incremento</string>

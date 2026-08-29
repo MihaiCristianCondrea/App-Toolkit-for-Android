@@ -73,7 +73,6 @@
     <string name="tiles_status_available">มีจำหน่าย</string>
     <string name="tiles_status_needs_setup">จำเป็นต้องตั้งค่า</string>
     <string name="tiles_status_unsupported">ไม่รองรับ</string>
-    <string name="tiles_subtitle">เปิดกล่องโต้ตอบด่วนและค้นพบเครื่องมือเพิ่มเติม พร้อมทำเครื่องหมายคุณสมบัติที่พร้อมใช้งานไว้อย่างชัดเจน</string>
     <string name="tool_coin_flip_action">พลิกเหรียญ</string>
     <string name="tool_coin_flip_waiting">พร้อม?</string>
     <string name="tool_counter_increment">เพิ่มขึ้น</string>

@@ -164,6 +164,6 @@ Determine your execution capabilities and proceed with either Mode A OR Mode B.
 
 #### Finalization (Both Modes)
 
-4. **Present findings**: Run `python3 <repo_root>/scripts/generate_report.py <temp_dir>`.
+1. **Present findings**: Run `python3 <repo_root>/scripts/generate_report.py <temp_dir>`.
    It will produce `<temp_dir>/compliance_report.md`. Present this output file to user.
-5. **STOP**: The audit is complete. Await further instructions.
+2. **STOP**: The audit is complete. Await further instructions.

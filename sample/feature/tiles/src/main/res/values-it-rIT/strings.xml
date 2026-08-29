@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Disponibile</string>
     <string name="tiles_status_needs_setup">Necessita di configurazione</string>
     <string name="tiles_status_unsupported">Non supportato</string>
-    <string name="tiles_subtitle">Apri finestre di dialogo rapide e scopri strumenti estesi, con le funzionalità pronte per il riquadro chiaramente contrassegnate.</string>
     <string name="tool_coin_flip_action">Lancia la moneta</string>
     <string name="tool_coin_flip_waiting">Pronto?</string>
     <string name="tool_counter_increment">Incremento</string>

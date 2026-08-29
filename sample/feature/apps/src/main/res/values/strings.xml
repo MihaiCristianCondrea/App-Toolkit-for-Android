@@ -36,7 +36,6 @@
     <string name="app_details_version">Version %1$s</string>
     <string name="app_details_view_on_play_store">View on Google Play</string>
     <string name="apps_filter_all">All</string>
-    <string name="error_failed_to_fetch_our_apps">Failed to load app listings</string>
     <string name="error_failed_to_load_apps">Failed to load apps</string>
     <string name="error_failed_to_update_favorite">Failed to update favorite</string>
     <string name="favorite_apps">Favorites</string>

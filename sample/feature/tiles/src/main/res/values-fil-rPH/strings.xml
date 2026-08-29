@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Available</string>
     <string name="tiles_status_needs_setup">Kailangan ng setup</string>
     <string name="tiles_status_unsupported">Hindi suportado</string>
-    <string name="tiles_subtitle">Magbukas ng mabilis na mga diyalogo at tumuklas ng mga pinalawak na tool, na may mga tampok na handa sa tile na malinaw na minarkahan.</string>
     <string name="tool_coin_flip_action">I-flip ang barya</string>
     <string name="tool_coin_flip_waiting">handa na?</string>
     <string name="tool_counter_increment">Pagtaas</string>

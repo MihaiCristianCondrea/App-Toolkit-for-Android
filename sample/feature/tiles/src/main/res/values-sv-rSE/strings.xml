@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Tillgänglig</string>
     <string name="tiles_status_needs_setup">Behöver installation</string>
     <string name="tiles_status_unsupported">Stöds inte</string>
-    <string name="tiles_subtitle">Öppna snabba dialogrutor och upptäck utökade verktyg, med funktioner som är klara för brickor tydligt markerade.</string>
     <string name="tool_coin_flip_action">Vänd mynt</string>
     <string name="tool_coin_flip_waiting">Redo?</string>
     <string name="tool_counter_increment">Öka</string>

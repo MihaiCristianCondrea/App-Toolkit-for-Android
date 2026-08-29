@@ -73,7 +73,6 @@
     <string name="tiles_status_available">可用</string>
     <string name="tiles_status_needs_setup">需要設定</string>
     <string name="tiles_status_unsupported">不支援</string>
-    <string name="tiles_subtitle">開啟快速對話方塊並發現擴充功能的工具，並清楚地標記了磁貼就緒功能。</string>
     <string name="tool_coin_flip_action">翻轉硬幣</string>
     <string name="tool_coin_flip_waiting">準備好？</string>
     <string name="tool_counter_increment">增量</string>

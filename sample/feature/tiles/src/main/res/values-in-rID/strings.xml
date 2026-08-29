@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Tersedia</string>
     <string name="tiles_status_needs_setup">Perlu pengaturan</string>
     <string name="tiles_status_unsupported">Tidak didukung</string>
-    <string name="tiles_subtitle">Buka dialog cepat dan temukan alat yang diperluas, dengan fitur siap ubin yang ditandai dengan jelas.</string>
     <string name="tool_coin_flip_action">Balik koin</string>
     <string name="tool_coin_flip_waiting">Siap?</string>
     <string name="tool_counter_increment">Kenaikan</string>

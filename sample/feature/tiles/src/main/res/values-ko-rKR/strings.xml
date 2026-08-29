@@ -73,7 +73,6 @@
     <string name="tiles_status_available">가능</string>
     <string name="tiles_status_needs_setup">설정 필요</string>
     <string name="tiles_status_unsupported">지원되지 않음</string>
-    <string name="tiles_subtitle">빠른 대화 상자를 열고 타일 지원 기능이 명확하게 표시된 확장된 도구를 찾아보세요.</string>
     <string name="tool_coin_flip_action">동전 뒤집기</string>
     <string name="tool_coin_flip_waiting">준비가 된?</string>
     <string name="tool_counter_increment">증분</string>

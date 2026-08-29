@@ -73,7 +73,6 @@
     <string name="tiles_status_available">دستیاب ہے۔</string>
     <string name="tiles_status_needs_setup">سیٹ اپ کی ضرورت ہے۔</string>
     <string name="tiles_status_unsupported">غیر تعاون یافتہ</string>
-    <string name="tiles_subtitle">فوری ڈائیلاگ کھولیں اور وسیع شدہ ٹولز دریافت کریں، جس میں ٹائل کے لیے تیار خصوصیات واضح طور پر نشان زد ہوں۔</string>
     <string name="tool_coin_flip_action">سکہ پلٹائیں۔</string>
     <string name="tool_coin_flip_waiting">تیار ہیں؟</string>
     <string name="tool_counter_increment">اضافہ</string>

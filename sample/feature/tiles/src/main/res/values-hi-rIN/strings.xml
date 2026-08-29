@@ -73,7 +73,6 @@
     <string name="tiles_status_available">उपलब्ध</string>
     <string name="tiles_status_needs_setup">सेटअप की आवश्यकता है</string>
     <string name="tiles_status_unsupported">असमर्थित</string>
-    <string name="tiles_subtitle">त्वरित संवाद खोलें और टाइल-तैयार सुविधाओं के साथ स्पष्ट रूप से चिह्नित विस्तारित टूल खोजें।</string>
     <string name="tool_coin_flip_action">सिक्का उछालो</string>
     <string name="tool_coin_flip_waiting">तैयार?</string>
     <string name="tool_counter_increment">वृद्धि</string>

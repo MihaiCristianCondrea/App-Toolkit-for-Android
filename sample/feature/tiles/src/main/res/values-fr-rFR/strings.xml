@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Disponible</string>
     <string name="tiles_status_needs_setup">Nécessite une configuration</string>
     <string name="tiles_status_unsupported">Non pris en charge</string>
-    <string name="tiles_subtitle">Ouvrez des boîtes de dialogue rapides et découvrez des outils étendus, avec des fonctionnalités prêtes à être carrelées clairement indiquées.</string>
     <string name="tool_coin_flip_action">Lancer une pièce</string>
     <string name="tool_coin_flip_waiting">Prêt?</string>
     <string name="tool_counter_increment">Incrément</string>

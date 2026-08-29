@@ -39,13 +39,13 @@ companion object {
 }
 ```
 
-2. **@Data with JPA entities** — Do NOT use `data class` for JPA entities. Use regular
+1. **@Data with JPA entities** — Do NOT use `data class` for JPA entities. Use regular
    `open class` with properties instead. Data classes break Hibernate proxies.
 
-3. **@Builder** — Prefer default parameter values. Only create an explicit builder
+2. **@Builder** — Prefer default parameter values. Only create an explicit builder
    pattern if the Java code has complex builder logic beyond simple setters.
 
-4. **Lombok `val`** — Replace with Kotlin's `val` (they serve the same purpose).
+3. **Lombok `val`** — Replace with Kotlin's `val` (they serve the same purpose).
 
 ---
 

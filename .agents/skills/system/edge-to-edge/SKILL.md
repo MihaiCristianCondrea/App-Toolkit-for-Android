@@ -89,7 +89,7 @@ metadata:
             1. **PREFERRED:** `TopAppBar(windowInsets = AppBarDefaults.topAppBarWindowInsets)`
             2.
             `TopAppBar(windowInsets = WindowInsets.systemBars.exclude(WindowInsets.navigationBars))`
-            3. `TopAppBar(windowInsets = WindowInsets.systemBars.add(WindowInsets.captionBar))`
+            1. `TopAppBar(windowInsets = WindowInsets.systemBars.add(WindowInsets.captionBar))`
     2. For components outside a Scaffold, use padding modifiers, such as
        `Modifier.safeDrawingPadding()` or `Modifier.windowInsetsPadding(WindowInsets.safeDrawing)`.
 
@@ -141,7 +141,7 @@ metadata:
            container. This is preferred over `imePadding()` because it reduces jank and extra
            padding caused by forgetting to consume insets upstream in the hierarchy.
     -
-        2. Add `imePadding` to the content container. The padding modifier **MUST** be placed before
+        1. Add `imePadding` to the content container. The padding modifier **MUST** be placed before
            `Modifier.verticalScroll()`. Do NOT use `Modifier.imePadding()` if the parent already
            accounts for the IME with `contentWindowInsets` (e.g.
            `contentWindowInsets = WindowInsets.safeDrawing`). Doing so will cause double padding.

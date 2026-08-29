@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Verfügbar</string>
     <string name="tiles_status_needs_setup">Muss eingerichtet werden</string>
     <string name="tiles_status_unsupported">Nicht unterstützt</string>
-    <string name="tiles_subtitle">Öffnen Sie Schnelldialoge und entdecken Sie erweiterte Tools mit deutlich gekennzeichneten Kachelfunktionen.</string>
     <string name="tool_coin_flip_action">Münze werfen</string>
     <string name="tool_coin_flip_waiting">Bereit?</string>
     <string name="tool_counter_increment">Inkrement</string>

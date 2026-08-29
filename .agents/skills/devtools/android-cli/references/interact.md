@@ -106,7 +106,7 @@ swipes from the center to the top over 500ms.
 1. Always ensure text input fields have `"focused"` in their `"state"` list before entering text
 2. If an element has `"scrollable"` in its `"interactions"` list, try scrolling it when looking for
    missing UI elements
-2. Always scroll slowly when executing scroll inputs. The 5th argument to `adb shell input swipe`
+3. Always scroll slowly when executing scroll inputs. The 5th argument to `adb shell input swipe`
    controls scroll duration.
-3. Content may take time to load; if a `layout` is missing information after you take an action,
+4. Content may take time to load; if a `layout` is missing information after you take an action,
    wait a few seconds, then perform `layout --diff` to see if anything changes.

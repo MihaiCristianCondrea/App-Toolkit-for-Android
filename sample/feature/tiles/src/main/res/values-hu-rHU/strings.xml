@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Elérhető</string>
     <string name="tiles_status_needs_setup">Beállítás szükséges</string>
     <string name="tiles_status_unsupported">Nem támogatott</string>
-    <string name="tiles_subtitle">Nyissa meg a gyors párbeszédpaneleket, és fedezze fel a kibővített eszközöket, amelyeken jól láthatóan meg vannak jelölve a csempekész funkciók.</string>
     <string name="tool_coin_flip_action">Flip érme</string>
     <string name="tool_coin_flip_waiting">Kész?</string>
     <string name="tool_counter_increment">Növekedés</string>

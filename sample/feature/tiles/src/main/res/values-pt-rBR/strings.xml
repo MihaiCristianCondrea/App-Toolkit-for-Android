@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Disponível</string>
     <string name="tiles_status_needs_setup">Precisa de configuração</string>
     <string name="tiles_status_unsupported">Não compatível</string>
-    <string name="tiles_subtitle">Abra caixas de diálogo rápidas e descubra ferramentas expandidas, com recursos prontos para blocos claramente marcados.</string>
     <string name="tool_coin_flip_action">Jogar moeda</string>
     <string name="tool_coin_flip_waiting">Preparar?</string>
     <string name="tool_counter_increment">Incremento</string>

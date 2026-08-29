@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Có sẵn</string>
     <string name="tiles_status_needs_setup">Cần thiết lập</string>
     <string name="tiles_status_unsupported">Không được hỗ trợ</string>
-    <string name="tiles_subtitle">Mở hộp thoại nhanh và khám phá các công cụ mở rộng, với các tính năng sẵn sàng xếp theo ô được đánh dấu rõ ràng.</string>
     <string name="tool_coin_flip_action">Lật xu</string>
     <string name="tool_coin_flip_waiting">Sẵn sàng?</string>
     <string name="tool_counter_increment">Tăng</string>

@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Dostępne</string>
     <string name="tiles_status_needs_setup">Wymaga konfiguracji</string>
     <string name="tiles_status_unsupported">Nieobsługiwane</string>
-    <string name="tiles_subtitle">Otwórz szybkie okna dialogowe i odkryj rozszerzone narzędzia z wyraźnie zaznaczonymi funkcjami gotowymi do kafelków.</string>
     <string name="tool_coin_flip_action">Rzuć monetą</string>
     <string name="tool_coin_flip_waiting">Gotowy?</string>
     <string name="tool_counter_increment">Przyrost</string>

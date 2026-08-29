@@ -73,7 +73,6 @@
     <string name="tiles_status_available">متاح</string>
     <string name="tiles_status_needs_setup">يحتاج إلى إعداد</string>
     <string name="tiles_status_unsupported">غير مدعوم</string>
-    <string name="tiles_subtitle">افتح مربعات حوار سريعة واكتشف الأدوات الموسعة، مع وضع علامات واضحة على الميزات الجاهزة للتجانب.</string>
     <string name="tool_coin_flip_action">الوجه عملة</string>
     <string name="tool_coin_flip_waiting">مستعد؟</string>
     <string name="tool_counter_increment">زيادة</string>

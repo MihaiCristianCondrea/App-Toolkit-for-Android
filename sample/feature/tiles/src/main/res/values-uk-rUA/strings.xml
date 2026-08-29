@@ -73,7 +73,6 @@
     <string name="tiles_status_available">в наявності</string>
     <string name="tiles_status_needs_setup">Потребує налаштування</string>
     <string name="tiles_status_unsupported">Не підтримується</string>
-    <string name="tiles_subtitle">Відкривайте швидкі діалогові вікна та відкривайте для себе розширені інструменти з чітко позначеними функціями, готовими до плитки.</string>
     <string name="tool_coin_flip_action">Підкинути монету</string>
     <string name="tool_coin_flip_waiting">готовий</string>
     <string name="tool_counter_increment">Приріст</string>

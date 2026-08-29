@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Mevcut</string>
     <string name="tiles_status_needs_setup">Kurulum gerekiyor</string>
     <string name="tiles_status_unsupported">Desteklenmiyor</string>
-    <string name="tiles_subtitle">Hızlı iletişim kutularını açın ve kutucuklara hazır özelliklerin açıkça işaretlendiği genişletilmiş araçları keşfedin.</string>
     <string name="tool_coin_flip_action">Yazı tura at</string>
     <string name="tool_coin_flip_waiting">Hazır?</string>
     <string name="tool_counter_increment">Artış</string>

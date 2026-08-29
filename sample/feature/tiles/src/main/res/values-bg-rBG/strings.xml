@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Наличен</string>
     <string name="tiles_status_needs_setup">Нуждае се от настройка</string>
     <string name="tiles_status_unsupported">Не се поддържа</string>
-    <string name="tiles_subtitle">Отваряйте бързи диалогови прозорци и откривайте разширени инструменти с ясно обозначени готови за плочки функции.</string>
     <string name="tool_coin_flip_action">Хвърлете монета</string>
     <string name="tool_coin_flip_waiting">готова</string>
     <string name="tool_counter_increment">Увеличаване</string>

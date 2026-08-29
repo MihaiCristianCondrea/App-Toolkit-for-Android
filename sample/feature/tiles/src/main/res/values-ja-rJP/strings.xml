@@ -73,7 +73,6 @@
     <string name="tiles_status_available">利用可能</string>
     <string name="tiles_status_needs_setup">セットアップが必要です</string>
     <string name="tiles_status_unsupported">サポートされていません</string>
-    <string name="tiles_subtitle">クイック ダイアログを開いて、タイル対応の機能が明確にマークされた拡張ツールを見つけます。</string>
     <string name="tool_coin_flip_action">コインを投げる</string>
     <string name="tool_coin_flip_waiting">準備ができて？</string>
     <string name="tool_counter_increment">インクリメント</string>

@@ -73,7 +73,6 @@
     <string name="tiles_status_available">Disponibil</string>
     <string name="tiles_status_needs_setup">Necesita setare</string>
     <string name="tiles_status_unsupported">Neacceptat</string>
-    <string name="tiles_subtitle">Deschideți casete de dialog rapide și descoperiți instrumente extinse, cu caracteristici gata pentru plăci marcate clar.</string>
     <string name="tool_coin_flip_action">Flip monedă</string>
     <string name="tool_coin_flip_waiting">Gata?</string>
     <string name="tool_counter_increment">Incrementare</string>

@@ -73,7 +73,6 @@
     <string name="tiles_status_available">পাওয়া যায়</string>
     <string name="tiles_status_needs_setup">সেটআপ প্রয়োজন</string>
     <string name="tiles_status_unsupported">অসমর্থিত</string>
-    <string name="tiles_subtitle">দ্রুত ডায়ালগ খুলুন এবং টাইল-প্রস্তুত বৈশিষ্ট্যগুলি স্পষ্টভাবে চিহ্নিত সহ প্রসারিত সরঞ্জামগুলি আবিষ্কার করুন৷</string>
     <string name="tool_coin_flip_action">মুদ্রা উল্টান</string>
     <string name="tool_coin_flip_waiting">প্রস্তুত?</string>
     <string name="tool_counter_increment">ইনক্রিমেন্ট</string>
