@@ -184,6 +184,46 @@ host,
 that list is what you are signing up to reimplement, and the second item is the one nobody remembers
 until an app ships with silent, empty ad slots.
 
+### When a slot is empty
+
+An empty ad slot is silent by design: the SDK hands the failure to a callback and the UI renders
+nothing. That is right for users and useless for debugging, because no fill, a wrong ad unit id and
+an SDK that was never initialized all look identical from the outside. The toolkit routes every ad
+failure through `AdLoadReporter`, in `:library:core:ui`, so they can be told apart:
+
+- **Logcat**, tag `AdSlot`, carries the slot name, the ad unit and the SDK's error code on every
+  failure.
+- **A Crashlytics breadcrumb** is logged for every failure, so a crash report shows what the ad
+  slots were doing beforehand.
+- **A non-fatal** is recorded only for failures a developer can act on. No fill is expected on small
+  apps and on devices Google has no inventory for, so it is logged but never reported. Two markers
+  exist: `AdSlotLoadException` for an SDK error other than no fill, and
+  `AdSlotNotRequestedException` for a request that was never made.
+
+`rememberNativeAdState` is the variant that returns the reason as well as the ad, for a caller that
+wants to say something about an empty slot. `rememberNativeAd` returns just the ad and is what most
+callers want.
+
+### Debug placeholders
+
+On a debug build, `NativeAdSlot` draws `AdSlotDebugPlaceholder` where an empty slot would be: the
+slot name, whether the request came back without an ad or was never made, and the SDK's own words.
+Release renders nothing, exactly as before. The switch is `AdLoadReporter.showsDebugPlaceholder`,
+which reads `BuildInfoProvider.isDebugBuild`, so the placeholder cannot reach a release build.
+
+A host drawing its own ad view can use the same placeholder:
+
+```kotlin
+val slot = rememberNativeAdState(adUnitId = adUnitId, slotName = "dashboard_large")
+val ad = slot.ad
+if (ad == null) {
+    slot.failure?.takeIf { reporter.showsDebugPlaceholder }?.let { reason ->
+        AdSlotDebugPlaceholder(slotName = "dashboard_large", reason = reason, detail = slot.detail)
+    }
+    return
+}
+```
+
 ### The native ad validator
 
 The validator is the SDK's own debug overlay, configured at initialization:

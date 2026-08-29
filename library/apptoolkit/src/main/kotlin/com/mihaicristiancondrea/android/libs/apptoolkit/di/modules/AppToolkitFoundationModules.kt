@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.managers.AdsCoreManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AdLoadReporter
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repositories.AdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.repositories.DefaultAdsSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.AdsSettingsViewModel
@@ -68,6 +69,10 @@ private fun dispatchersModule(): Module = module {
 
 private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
     single<AdMobAppIdProvider> { ManifestAdMobAppIdProvider(context = get()) }
+    // Every toolkit ad surface resolves this, so it is bound here rather than left to the host:
+    // an unbound reporter would turn a blank ad slot into a crash, which is the opposite of the
+    // point.
+    single { AdLoadReporter(firebaseController = get(), buildInfoProvider = get()) }
     single<AdsCoreManager> {
         AdsCoreManager(
             context = get(),

@@ -19,8 +19,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +31,7 @@ import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdLoaderCallback
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads.AdsSdkState
+import org.koin.compose.koinInject
 
 /**
  * Loads a [NativeAd] for [adUnitId] and keeps it alive for as long as it is composed.
@@ -51,19 +52,68 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.ads.Ad
  * @return the loaded ad, or `null` while loading, after a failure, or when disabled.
  */
 @Composable
-fun rememberNativeAd(adUnitId: String, enabled: Boolean = true): NativeAd? {
+fun rememberNativeAd(adUnitId: String, enabled: Boolean = true): NativeAd? =
+    rememberNativeAdState(adUnitId = adUnitId, enabled = enabled).ad
+
+/**
+ * What a slot has: an ad, or the reason it has none.
+ *
+ * [rememberNativeAd] returns only the ad, because that is all a caller needs to render one. A
+ * caller that wants to say something about an empty slot, such as the debug placeholder, needs to
+ * know whether the request came back without an ad or was never made at all, which is what this
+ * carries.
+ *
+ * @property ad the loaded ad, or null while loading, after a failure, or when disabled.
+ * @property failure why there is no ad, or null when one is loaded or still on its way.
+ * @property detail the SDK's own description of the failure, when it gave one.
+ */
+@Immutable
+data class NativeAdSlotState(
+    val ad: NativeAd? = null,
+    val failure: AdSlotFailure? = null,
+    val detail: String? = null,
+)
+
+/**
+ * [rememberNativeAd] with the reason an empty slot is empty.
+ *
+ * Failures are handed to [AdLoadReporter] on the way through, so every toolkit ad surface reports
+ * the same way without each one remembering to.
+ *
+ * @param slotName how this placement is named in logs and Crashlytics. Defaults to the ad unit,
+ * which is better than nothing but worth passing when the caller has a real name.
+ */
+@Composable
+fun rememberNativeAdState(
+    adUnitId: String,
+    enabled: Boolean = true,
+    slotName: String = adUnitId,
+): NativeAdSlotState {
     val loaderClient: NativeAdLoaderClient = LocalNativeAdLoaderClient.current
+    val reporter: AdLoadReporter = koinInject()
     val mainHandler: Handler = remember { Handler(Looper.getMainLooper()) }
     val isToolkitSdkReady: Boolean by AdsSdkState.isReady.collectAsStateWithLifecycle()
     // Named `loadedAd` rather than `nativeAd` so the `onNativeAdLoaded` override below can use the
     // parameter name its supertype declares without shadowing this state.
     var loadedAd: NativeAd? by remember { mutableStateOf(value = null) }
+    var failure: AdSlotFailure? by remember { mutableStateOf(value = null) }
+    var failureDetail: String? by remember { mutableStateOf(value = null) }
 
     DisposableEffect(adUnitId, enabled, isToolkitSdkReady, loaderClient) {
         loadedAd?.destroy()
         loadedAd = null
+        failure = null
+        failureDetail = null
 
-        if (!enabled || adUnitId.isBlank() || !AdsSdkState.canRequestAds()) {
+        if (!enabled || adUnitId.isBlank()) {
+            return@DisposableEffect onDispose { }
+        }
+
+        if (!AdsSdkState.canRequestAds()) {
+            // Not reported: the SDK is still starting and this effect re-runs when it is ready.
+            // Only a request that was attempted and could not be made is worth a non-fatal.
+            failure = AdSlotFailure.NOT_REQUESTED
+            failureDetail = "Waiting for the Mobile Ads SDK."
             return@DisposableEffect onDispose { }
         }
 
@@ -91,12 +141,26 @@ fun rememberNativeAd(adUnitId: String, enabled: Boolean = true): NativeAd? {
                             if (disposed) return@post
                             loadedAd?.destroy()
                             loadedAd = null
+                            failure = AdSlotFailure.NO_AD
+                            failureDetail = "code=${adError.code} ${adError.message}"
+                            reporter.onAdFailedToLoad(
+                                slotName = slotName,
+                                adUnitId = adUnitId,
+                                errorCode = adError.code.toString(),
+                                errorMessage = adError.message,
+                            )
                         }
                     }
                 },
             )
         }.onFailure { throwable ->
-            Log.w(LOG_TAG, "Native ad request for '$adUnitId' could not be started.", throwable)
+            failure = AdSlotFailure.NOT_REQUESTED
+            failureDetail = throwable.message
+            reporter.onAdRequestNotStarted(
+                slotName = slotName,
+                adUnitId = adUnitId,
+                throwable = throwable,
+            )
         }
 
         onDispose {
@@ -106,7 +170,5 @@ fun rememberNativeAd(adUnitId: String, enabled: Boolean = true): NativeAd? {
         }
     }
 
-    return loadedAd
+    return NativeAdSlotState(ad = loadedAd, failure = failure, detail = failureDetail)
 }
-
-private const val LOG_TAG: String = "NativeAdSlot"

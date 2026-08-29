@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.Dp
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import org.koin.compose.koinInject
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 
 /**
@@ -80,13 +81,32 @@ fun NativeAdSlot(
     }
 
     val adsEnabled: Boolean = rememberAdsEnabled()
-    val nativeAd: NativeAd? = rememberNativeAd(adUnitId = adUnitId, enabled = adsEnabled)
+    val reporter: AdLoadReporter = koinInject()
+    val slotState: NativeAdSlotState = rememberNativeAdState(
+        adUnitId = adUnitId,
+        enabled = adsEnabled,
+    )
+    val nativeAd: NativeAd? = slotState.ad
 
     LaunchedEffect(nativeAd) {
         currentOnAdLoaded(nativeAd != null)
     }
 
-    if (nativeAd == null) return
+    if (nativeAd == null) {
+        // Release renders nothing, which is right for users and tells a developer nothing. On a
+        // debug build the slot says why it is empty instead, so no fill, a wrong unit id and an SDK
+        // that was not ready stop looking identical.
+        val failure: AdSlotFailure? = slotState.failure
+        if (adsEnabled && failure != null && reporter.showsDebugPlaceholder) {
+            AdSlotDebugPlaceholder(
+                slotName = adUnitId,
+                reason = failure,
+                modifier = modifier,
+                detail = slotState.detail,
+            )
+        }
+        return
+    }
 
     NativeAdSurface(
         modifier = modifier,

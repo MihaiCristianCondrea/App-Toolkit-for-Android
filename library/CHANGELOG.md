@@ -10,6 +10,12 @@
 
 - Added a **Help & feedback** action to the standalone General Settings top app bar.
 
+### Added
+
+- Added `AdLoadReporter`, which logs every ad load failure, adds a Crashlytics breadcrumb, and records a non-fatal for the failures that are not simply no fill.
+- Added `AdSlotDebugPlaceholder`, shown by `NativeAdSlot` on debug builds where an empty ad slot would otherwise render nothing.
+- Added `rememberNativeAdState`, which returns why a slot is empty alongside the ad.
+
 ### Documentation
 
 - Documented how a host should render ads: use `NativeAdSlot`, `rememberNativeAd` or `AdBanner` rather than the Mobile Ads loaders directly, and what the toolkit handles on the host's behalf.
