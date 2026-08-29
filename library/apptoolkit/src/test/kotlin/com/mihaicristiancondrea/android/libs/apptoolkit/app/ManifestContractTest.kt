@@ -214,6 +214,7 @@ class ManifestContractTest {
             "android:theme",
             "android:usesCleartextTraffic",
             "android:windowSoftInputMode",
+            "tools:targetApi",
         )
 
         val TOOLKIT_DEFAULT_RESOURCES = listOf(
