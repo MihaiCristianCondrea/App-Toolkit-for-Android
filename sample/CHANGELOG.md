@@ -1,5 +1,15 @@
 # Changelog
 
+# Unreleased
+
+**Version:** `Unknown` (`unknown`)
+
+### Improved
+
+- Removed the unused code from the app to have a smaller app.
+
+---
+
 # August 28, 2026
 
 **Version:** `28.08.13` (`1370013`)

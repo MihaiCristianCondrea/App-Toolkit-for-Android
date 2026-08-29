@@ -131,7 +131,7 @@ fun MainTopAppBar(
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun SupportMenuAction(onSupportClick: (() -> Unit)?) {
+fun SupportMenuAction(onSupportClick: (() -> Unit)?) {
     val context: Context = LocalContext.current
     val (expandedMenu, setExpandedMenu) = remember { mutableStateOf(value = false) }
 
