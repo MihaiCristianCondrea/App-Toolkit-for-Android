@@ -39,18 +39,22 @@ import org.koin.dsl.module
 /**
  * Koin module for the data store.
  */
-fun dataStoreModule(isDebugBuild: Boolean): Module = module {
+fun dataStoreModule(): Module = module {
     // Through `getInstance`, not the constructor, and eagerly: this is what makes the graph's store
     // and the one `rememberCommonDataStore()` hands to Compose the same object. Built lazily via
     // the constructor, Koin's copy never populated the companion, so the first `getInstance` caller
-    // created a second store carrying the accessor's `defaultAdsEnabled = true`, and on a debug
-    // build, where the graph's default is `false`, the two then disagreed about whether ads were on
-    // for any install with no stored value. `createdAtStart` closes the race for good: Koin starts
-    // in `Application.onCreate`, long before anything can compose.
+    // created a second store, and the two then disagreed about whether ads were on for any install
+    // with no stored value. `createdAtStart` closes the race for good: Koin starts in
+    // `Application.onCreate`, long before anything can compose.
+    //
+    // Ads default on in every build, debug included. The default used to be `!isDebugBuild`, which
+    // meant a fresh debug install had no ads at all until someone found the switch, so the one build
+    // where ad rendering is actually inspected was the one build that rendered none. A developer who
+    // turns them off still has that stored and honoured; only the starting point changed.
     single<CommonDataStore>(createdAtStart = true) {
         CommonDataStore.getInstance(
             context = get(),
-            defaultAdsEnabled = !isDebugBuild,
+            defaultAdsEnabled = true,
         )
     }
 

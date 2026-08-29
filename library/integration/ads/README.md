@@ -61,6 +61,9 @@ flowchart TD
   requests. No consumer chooses a local default.
 - Release builds expose the reduce-ads setting, while debug builds expose display-ads for testing.
   Display ads continues to gate all ad surfaces; reduce ads gates only App Open display.
+- Both preferences start in the same place in every build: display ads on, reduce ads off. A fresh
+  debug install therefore renders ads, which is the point of having the switch there at all. Once
+  either is changed the stored value wins, in every build, forever.
 - SDK initialization is idempotent, mutex-protected, and conditional on a valid host-manifest app
   ID; the toolkit never supplies a fallback publisher ID.
 - Readiness is explicit state because enablement and asynchronous SDK initialization are different
