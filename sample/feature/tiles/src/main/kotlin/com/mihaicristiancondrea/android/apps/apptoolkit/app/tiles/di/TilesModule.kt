@@ -60,11 +60,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastor
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
-import org.koin.dsl.bind
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val tilesModule: Module = module {
-    single<StartupScreenContribution> {
+    single<StartupScreenContribution>(qualifier = named(name = "toolkit_tiles")) {
         object : StartupScreenContribution {
             override val label: String = androidContext().getString(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R.string.tiles_title)
             override val routeValue: String = "toolkit_tiles"

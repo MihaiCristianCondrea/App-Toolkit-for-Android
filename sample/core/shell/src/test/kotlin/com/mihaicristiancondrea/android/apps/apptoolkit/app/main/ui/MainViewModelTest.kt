@@ -36,7 +36,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.StandardDis
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import io.mockk.clearAllMocks
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -273,8 +272,6 @@ class MainViewModelTest {
             callCount++
             return upstream
         }
-
-        override fun isSelected(itemRoute: String, currentRoute: StableNavKey): Boolean = false
     }
 
     private fun createIcon(): ImageVector =

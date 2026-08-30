@@ -32,6 +32,10 @@ interface AppNavKey : StableNavKey {
 
 /**
  * A contract for feature modules to contribute their navigation items to the application shell.
+ *
+ * The shell aggregates every binding with `getAll()`. Each feature must therefore register its
+ * contribution under a qualifier unique to that feature: two unqualified bindings of the same type
+ * override each other in Koin, and the shell would silently see only the last one loaded.
  */
 interface NavigationItemContribution {
     /**
@@ -43,6 +47,9 @@ interface NavigationItemContribution {
 
 /**
  * A contract for feature modules to register themselves as a selectable startup screen.
+ *
+ * Aggregated with `getAll()`, so every binding needs a feature-unique qualifier for the same reason
+ * as [NavigationItemContribution].
  */
 interface StartupScreenContribution {
     /** The human-readable name of the screen (e.g., from R.string). */

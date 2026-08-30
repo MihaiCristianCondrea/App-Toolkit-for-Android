@@ -27,6 +27,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.Naviga
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val componentsModule: Module = module {
@@ -37,7 +38,7 @@ val componentsModule: Module = module {
         )
     }
 
-    single<NavigationItemContribution> {
+    single<NavigationItemContribution>(qualifier = named(name = "components")) {
         val repository: ComponentsShowcaseRepository = get()
         object : NavigationItemContribution {
             override fun navigationItems(): Flow<List<NavigationDrawerItem>> =

@@ -37,11 +37,10 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
-import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val appsModule: Module = module {
-    single<StartupScreenContribution> {
+    single<StartupScreenContribution>(qualifier = named(name = "apps_list")) {
         object : StartupScreenContribution {
             override val label: String = androidContext().getString(com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R.string.apps_tools_title)
             override val routeValue: String = "apps_list"

@@ -11,6 +11,8 @@ knowing which shell renders it.
 - `AppNavigationEntryContext` and `RandomAppHandler`, the parameters every feature entry builder
   takes.
 - `NavigationManager`, which allows different components to request navigation events.
+- `NavigationItemContribution` and `StartupScreenContribution`, the contracts a feature implements
+  to appear in the shell's drawer and in the startup-screen setting.
 
 ## Does not own
 
@@ -51,8 +53,8 @@ flowchart TD
 
 ## Public contracts
 
-- Route keys, `AppNavigationEntryContext`, `RandomAppHandler`, `NavigationManager`,
-  `MainNavigationDefaults`.
+- `AppNavKey`, `AppNavigationEntryContext`, `RandomAppHandler`, `NavigationManager`,
+  `NavigationItemContribution`, `StartupScreenContribution`.
 
 ## Internal implementations
 
@@ -60,8 +62,9 @@ flowchart TD
 
 ## Current risks
 
-`MainNavigationDefaults` hardcodes the bottom-bar item order. Adding a top-level destination means
-editing this module as well as the feature that provides it.
+Both contribution contracts are aggregated with Koin's `getAll()`, which returns one instance per
+definition. A feature that registers its contribution without a unique qualifier overrides another
+feature's binding instead of adding to it, and the missing entry fails silently.
 
 ## Migration notes
 
