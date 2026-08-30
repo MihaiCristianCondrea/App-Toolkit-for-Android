@@ -28,8 +28,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,6 +54,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.PI
@@ -221,23 +220,16 @@ fun DiceWithButtonAndProceduralDice(
 
         Spacer(modifier = Modifier.height(SizeConstants.ExtraLargeSize))
 
-        Button(
+        GeneralButton(
             onClick = {
                 if (!rolling) {
                     onRoll()
                 }
             },
             enabled = !rolling,
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.PlayArrow,
-                contentDescription = null,
-            )
-
-            Spacer(modifier = Modifier.size(SizeConstants.SmallSize))
-
-            Text(text = stringResource(id = R.string.tool_dice_roll_action))
-        }
+            vectorIcon = Icons.Outlined.PlayArrow,
+            label = stringResource(id = R.string.tool_dice_roll_action),
+        )
 
         Spacer(modifier = Modifier.height(SizeConstants.MediumSize))
 

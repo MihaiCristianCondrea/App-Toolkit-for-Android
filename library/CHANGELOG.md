@@ -2,6 +2,14 @@
 
 ---
 
+# Unreleased
+
+### Improved
+
+- Standardized changelog, alert-dialog, and date-picker actions with consistent button styling, haptic feedback, and press animations.
+
+---
+
 # August 28, 2026
 
 **Version:** `3.0.0-pre12`

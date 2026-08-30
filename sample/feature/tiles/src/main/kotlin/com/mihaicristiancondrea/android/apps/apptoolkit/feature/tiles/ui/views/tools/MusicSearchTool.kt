@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MusicNote
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 
 @Composable
 fun MusicSearchTool(
@@ -59,9 +59,7 @@ fun MusicSearchTool(
 
         Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
 
-        Button(onClick = onLaunch) {
-            Text(text = "Launch Music Search")
-        }
+        GeneralButton(onClick = onLaunch, label = "Launch Music Search")
 
         Text(
             text = "Identify music playing around you",

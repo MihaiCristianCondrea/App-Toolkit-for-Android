@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Coffee
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,6 +41,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.mod
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 
 @Composable
 fun CaffeineTool(
@@ -90,9 +90,10 @@ fun CaffeineTool(
 
         Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
 
-        Button(onClick = onCycle) {
-            Text(text = stringResource(id = R.string.tool_system_cycle_mode))
-        }
+        GeneralButton(
+            onClick = onCycle,
+            label = stringResource(id = R.string.tool_system_cycle_mode),
+        )
 
         Text(
             text = "Tap to cycle durations",

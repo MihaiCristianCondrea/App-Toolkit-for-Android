@@ -8,6 +8,7 @@
 
 - Removed the unused code from the app to have a smaller app.
 - Improved Components showcase labels and translations.
+- Standardized Quick Tools actions with consistent button styling, haptic feedback, and press animations.
 
 ### Fixed
 

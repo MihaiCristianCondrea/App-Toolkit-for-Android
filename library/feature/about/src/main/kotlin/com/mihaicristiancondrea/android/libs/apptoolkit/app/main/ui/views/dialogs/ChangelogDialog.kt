@@ -38,7 +38,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.NewReleases
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -60,6 +59,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.states.Chang
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import dev.jeziellago.compose.markdowntext.MarkdownText
@@ -116,7 +116,7 @@ fun ChangelogDialog(
             ) {
                 ChangelogDialogContent(screenState = screenState)
             }
-            Button(
+            GeneralButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     if (isError) {
@@ -125,15 +125,12 @@ fun ChangelogDialog(
                         onDismiss()
                     }
                 },
-            ) {
-                Text(
-                    text = if (isError) {
-                        stringResource(id = R.string.try_again)
-                    } else {
-                        stringResource(id = R.string.done_button_content_description)
-                    },
-                )
-            }
+                label = if (isError) {
+                    stringResource(id = R.string.try_again)
+                } else {
+                    stringResource(id = R.string.done_button_content_description)
+                },
+            )
         }
     }
 }

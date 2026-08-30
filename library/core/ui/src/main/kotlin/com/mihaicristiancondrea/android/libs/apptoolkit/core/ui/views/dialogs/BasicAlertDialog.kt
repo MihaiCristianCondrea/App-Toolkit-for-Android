@@ -17,29 +17,22 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs
 
-import android.view.SoundEffectConstants
-import android.view.View
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.hapticfeedback.HapticFeedback
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 
 /**
  * Reusable alert dialog with optional icon, custom body content, and confirm/dismiss actions.
@@ -67,8 +60,6 @@ fun BasicAlertDialog(
     dismissEnabled: Boolean = true,
     showDismissButton: Boolean = true
 ) {
-    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
     AlertDialog(onDismissRequest = onDismiss, icon = {
         icon?.let { vector ->
             Icon(
@@ -94,22 +85,18 @@ fun BasicAlertDialog(
             targetContent()
         }
     }, confirmButton = {
-        Button(modifier = Modifier.bounceClick(), onClick = {
-            view.playSoundEffect(SoundEffectConstants.CLICK)
-            hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-            onConfirm()
-        }, enabled = confirmEnabled) {
-            Text(text = confirmButtonText ?: stringResource(id = android.R.string.ok))
-        }
+        GeneralButton(
+            onClick = onConfirm,
+            enabled = confirmEnabled,
+            label = confirmButtonText ?: stringResource(id = android.R.string.ok),
+        )
     }, dismissButton = {
         if (showDismissButton) {
-            OutlinedButton(modifier = Modifier.bounceClick(), onClick = {
-                view.playSoundEffect(SoundEffectConstants.CLICK)
-                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                onCancel()
-            }, enabled = dismissEnabled) {
-                Text(text = dismissButtonText ?: stringResource(id = android.R.string.cancel))
-            }
+            GeneralOutlinedButton(
+                onClick = onCancel,
+                enabled = dismissEnabled,
+                label = dismissButtonText ?: stringResource(id = android.R.string.cancel),
+            )
         }
     })
 }

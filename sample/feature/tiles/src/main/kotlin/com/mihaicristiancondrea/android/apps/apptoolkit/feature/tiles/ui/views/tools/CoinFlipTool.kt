@@ -31,11 +31,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -56,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 
 @Composable
 fun CoinFlipTool(isHeads: Boolean, flipRequest: Int, onFlip: () -> Unit) {
@@ -108,18 +107,16 @@ fun CoinFlipTool(isHeads: Boolean, flipRequest: Int, onFlip: () -> Unit) {
 
         Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
 
-        Button(
+        GeneralButton(
             onClick = {
                 if (!flipping) {
                     onFlip()
                 }
             },
-            enabled = !flipping
-        ) {
-            Icon(imageVector = Icons.Outlined.PlayArrow, contentDescription = null)
-            Spacer(modifier = Modifier.width(SizeConstants.SmallSize))
-            Text(text = stringResource(id = R.string.tool_coin_flip_action))
-        }
+            enabled = !flipping,
+            vectorIcon = Icons.Outlined.PlayArrow,
+            label = stringResource(id = R.string.tool_coin_flip_action),
+        )
 
         Text(
             text = if (flipping) {

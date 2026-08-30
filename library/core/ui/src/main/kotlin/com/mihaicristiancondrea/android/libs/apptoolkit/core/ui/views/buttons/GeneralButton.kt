@@ -19,6 +19,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons
 
 import android.view.View
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -48,6 +50,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.Bu
  * @param vectorIcon The [ImageVector] to be displayed as the leading icon.
  * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
  * @param iconSize The icon size used when this composable renders icon + text content.
+ * @param colors The colors used to resolve the button colors in different states.
  * @param feedback The feedback configuration for sound and haptics.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
@@ -62,6 +65,7 @@ fun GeneralButton(
     vectorIcon: ImageVector? = null,
     painterIcon: Painter? = null,
     iconSize: Dp = SizeConstants.ButtonIconSize,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
     feedback: ButtonFeedback = ButtonFeedback(),
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
@@ -97,6 +101,7 @@ fun GeneralButton(
             onClick()
         },
         enabled = enabled,
+        colors = colors,
         modifier = modifier.bounceClick(),
     ) {
         if (hasIcon) {

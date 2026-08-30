@@ -27,8 +27,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,6 +48,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTonalButton
 import kotlin.math.roundToInt
 
 @Composable
@@ -166,16 +166,18 @@ private fun PresetButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Button(
-        onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
-        colors = if (selected) {
-            ButtonDefaults.buttonColors()
-        } else {
-            ButtonDefaults.filledTonalButtonColors()
-        },
-    ) {
-        Text(text = label)
+    if (selected) {
+        GeneralButton(
+            onClick = onClick,
+            modifier = modifier.fillMaxWidth(),
+            label = label,
+        )
+    } else {
+        GeneralTonalButton(
+            onClick = onClick,
+            modifier = modifier.fillMaxWidth(),
+            label = label,
+        )
     }
 }
 
@@ -266,17 +268,14 @@ private fun SimpleTorchControl(
                 if (state.isEnabled) R.string.flash_dimmer_on else R.string.flash_dimmer_off
             )
         )
-        Button(
+        GeneralButton(
             onClick = {
                 onPresetSelected(if (state.isEnabled) TorchPreset.Off else TorchPreset.Maximum)
             },
-        ) {
-            Text(
-                stringResource(
-                    if (state.isEnabled) R.string.flash_dimmer_turn_off
-                    else R.string.flash_dimmer_turn_on
-                )
-            )
-        }
+            label = stringResource(
+                if (state.isEnabled) R.string.flash_dimmer_turn_off
+                else R.string.flash_dimmer_turn_on
+            ),
+        )
     }
 }

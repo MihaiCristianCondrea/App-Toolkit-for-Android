@@ -20,7 +20,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -36,6 +35,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 
 @Composable
 fun MorseTool(
@@ -96,14 +96,13 @@ fun MorseTool(
             )
         }
 
-        Button(
+        GeneralButton(
             onClick = onToggle,
             modifier = Modifier.fillMaxWidth(),
             enabled = playback.isAvailable && (playback.isActive || state.input.isNotBlank()),
-        ) {
-            Text(
-                stringResource(if (playback.isActive) R.string.morse_stop else R.string.morse_start)
-            )
-        }
+            label = stringResource(
+                if (playback.isActive) R.string.morse_stop else R.string.morse_start
+            ),
+        )
     }
 }

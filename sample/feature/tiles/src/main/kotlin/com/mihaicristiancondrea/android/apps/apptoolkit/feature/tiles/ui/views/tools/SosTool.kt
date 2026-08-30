@@ -32,7 +32,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.WarningAmber
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -46,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 
 @Composable
 fun SosTool(
@@ -94,16 +94,15 @@ fun SosTool(
 
         Spacer(modifier = Modifier.height(SizeConstants.SmallSize))
 
-        Button(
+        GeneralButton(
             onClick = onToggle,
             colors = if (isActive) {
                 ButtonDefaults.buttonColors(containerColor = Color.Red, contentColor = Color.White)
             } else {
                 ButtonDefaults.buttonColors()
-            }
-        ) {
-            Text(text = if (isActive) "STOP SOS" else "START SOS")
-        }
+            },
+            label = if (isActive) "STOP SOS" else "START SOS",
+        )
 
         Text(
             text = "Flashes flashlight in Morse code (SOS)",
