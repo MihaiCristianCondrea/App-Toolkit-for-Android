@@ -13,6 +13,10 @@
 
 - Fixed Sample App startup graph verification and navigation composition after modularization.
 - Fixed missing ad-placement and analytics-contract verification.
+- Fixed missing `VIBRATE` permission declaration for Toolkit Tiles.
+- Fixed AdMob application ID metadata location.
+- Fixed duplicate dependency injection bindings and centralized route identifiers.
+- Fixed startup screen aggregation and shell test compilation.
 
 ---
 
