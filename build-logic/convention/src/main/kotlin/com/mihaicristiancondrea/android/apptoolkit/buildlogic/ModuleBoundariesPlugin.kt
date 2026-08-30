@@ -25,7 +25,8 @@ import org.gradle.api.artifacts.ProjectDependency
  * Enforces architectural boundaries for the sample modules.
  * - core modules cannot depend on feature modules.
  * - feature modules cannot depend on sibling feature modules.
- * - core/feature modules cannot depend on the app module.
+ * - integration modules cannot depend on feature modules.
+ * - core/feature/integration modules cannot depend on the app module.
  */
 class ModuleBoundariesPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -41,13 +42,13 @@ class ModuleBoundariesPlugin : Plugin<Project> {
                 }
             }
 
-            if (projectPath.startsWith(":sample:core:")) {
+            if (projectPath.startsWith(":sample:core:") || projectPath.startsWith(":sample:integration:")) {
                 projectDependencies.forEach { dep ->
                     if (dep.startsWith(":sample:feature:")) {
-                        throw IllegalStateException("Architecture violation: Core module $projectPath cannot depend on feature module $dep")
+                        throw IllegalStateException("Architecture violation: $projectPath cannot depend on feature module $dep")
                     }
                     if (dep == ":sample:app") {
-                        throw IllegalStateException("Architecture violation: Core module $projectPath cannot depend on app module")
+                        throw IllegalStateException("Architecture violation: $projectPath cannot depend on app module")
                     }
                 }
             }

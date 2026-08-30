@@ -231,7 +231,7 @@ dependencies {
     implementation(project(":sample:core:common"))
     implementation(project(":sample:core:datastore"))
     implementation(project(":sample:core:navigation"))
-    implementation(project(":sample:feature:ads"))
+    implementation(project(":sample:integration:ads"))
     implementation(project(":sample:feature:apps"))
     implementation(project(":sample:feature:components"))
     implementation(project(":sample:core:shell"))

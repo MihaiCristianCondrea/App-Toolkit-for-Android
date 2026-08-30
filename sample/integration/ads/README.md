@@ -1,9 +1,10 @@
-# `:sample:feature:ads` Logic Graph
+# `:sample:integration:ads` Logic Graph
 
 ## Purpose
 
 Centralizes the Ad configuration for the sample app, bridging specific Ad Unit IDs to the App
-Toolkit's Ad infrastructure.
+Toolkit's Ad infrastructure. This module serves as an integration layer between the sample app's
+logic and the toolkit's advertising components.
 
 ## Owns
 
@@ -37,6 +38,6 @@ flowchart TD
 ## Architectural decisions
 
 - **Decentralized Configuration**: Ad Unit IDs are maintained in the sample's `core:common` and
-  mapped to library contracts in this feature module.
+  mapped to library contracts in this integration module.
 - **Qualifier-based Injection**: Uses Koin's `named` qualifiers to provide different ad
   configurations for different UI contexts.

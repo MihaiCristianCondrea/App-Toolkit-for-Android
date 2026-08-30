@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.feature.ads"
+    namespace = "com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads"
 }
 
 dependencies {
