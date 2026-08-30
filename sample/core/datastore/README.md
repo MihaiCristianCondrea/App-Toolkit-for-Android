@@ -24,7 +24,7 @@ stores.
 
 ## Used by
 
-- `:sample:feature:apps`, `:sample:feature:components`, `:sample:feature:home`,
+- `:sample:feature:apps`, `:sample:feature:components`, `:sample:core:shell`,
   `:sample:feature:settings`, `:sample:app`.
 
 ## Flow chart

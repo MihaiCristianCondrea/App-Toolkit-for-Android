@@ -26,7 +26,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.di.initializeKoin
+import com.mihaicristiancondrea.android.apps.apptoolkit.di.initializeKoin
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.data.managers.AdsCoreManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.AppThemeConfig

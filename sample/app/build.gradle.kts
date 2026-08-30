@@ -227,12 +227,13 @@ android {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
+    implementation(project(":sample:core:analytics"))
     implementation(project(":sample:core:common"))
     implementation(project(":sample:core:datastore"))
     implementation(project(":sample:core:navigation"))
     implementation(project(":sample:feature:apps"))
     implementation(project(":sample:feature:components"))
-    implementation(project(":sample:feature:home"))
+    implementation(project(":sample:core:shell"))
     implementation(project(":sample:feature:settings"))
     implementation(project(":sample:feature:tiles"))
     implementation(project(":sample:widget"))

@@ -26,7 +26,7 @@ knowing which shell renders it.
 ## Used by
 
 - `:sample:feature:apps`, `:sample:feature:tiles`, `:sample:feature:components`,
-  `:sample:feature:home`, `:sample:app`.
+  `:sample:core:shell`, `:sample:app`.
 
 ## Flow chart
 
@@ -42,7 +42,7 @@ flowchart TD
     Defaults[MainNavigationDefaults] --> Bottom[Bottom-bar order]
     Defaults --> Fab[FAB-supported routes]
     Defaults --> Startup[Localized startup options]
-    Bottom --> Shell[":sample:feature:home"]
+    Bottom --> Shell[":sample:core:shell"]
     Fab --> Shell
     Keys --> Shell
 ```

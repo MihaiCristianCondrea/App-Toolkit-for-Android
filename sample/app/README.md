@@ -59,7 +59,7 @@ flowchart TD
     FirstRun -->|no| Startup[Toolkit StartupActivity]
     FirstRun -->|yes| Route[Persisted StableNavKey]
     Route --> Theme[AppTheme]
-    Theme --> Shell["MainScreen (:sample:feature:home)"]
+    Theme --> Shell["MainScreen (:sample:core:shell)"]
     Launcher --> Builders[appNavigationEntryBuilders]
     Builders --> HostEntries[":sample:feature:* entries"]
     Builders --> ToolkitEntries[Toolkit entries]

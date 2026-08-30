@@ -46,6 +46,7 @@ class SampleModulePlugin : Plugin<Project> {
         pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
         pluginManager.apply("com.mihaicristiancondrea.android.apptoolkit.versioning")
         pluginManager.apply("com.mihaicristiancondrea.android.apptoolkit.unit-test")
+        pluginManager.apply("com.mihaicristiancondrea.android.apptoolkit.module-boundaries")
 
         val versioning = extensions.getByType<VersioningExtension>()
         extensions.getByType<LibraryExtension>().apply {

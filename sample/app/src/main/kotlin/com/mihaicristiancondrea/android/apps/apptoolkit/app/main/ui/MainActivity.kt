@@ -27,18 +27,24 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainAction
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.main.ui.contracts.MainEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.ComponentsActivity
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appNavigationEntryBuilders
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationRoutes
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.toNavKeyOrDefault
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainAction
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainScreen
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.StartupActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.BaseViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import kotlinx.coroutines.flow.first
@@ -63,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         splashScreen.setKeepOnScreenCondition { keepSplashVisible }
         enableEdgeToEdge()
         handleStartup()
-        observeActions()
+        initObservers()
     }
 
     override fun onResume() {
@@ -121,13 +127,21 @@ class MainActivity : AppCompatActivity() {
                 MainScreen(
                     startRoute = startRoute,
                     entryBuilders = { context -> appNavigationEntryBuilders(context = context) },
+                    onLaunchActivity = { route: StableNavKey ->
+                        if (route is ComponentsRoute) {
+                            openActivity(activityClass = ComponentsActivity::class.java)
+                            true
+                        } else {
+                            false
+                        }
+                    }
                 )
             }
         }
     }
 
-    private fun observeActions() {
-        observeActions(viewModel = viewModel) { action ->
+    private fun initObservers() {
+        observeActions<MainAction>(viewModel = viewModel) { action ->
             when (action) {
                 is MainAction.ReviewOutcomeReported -> Unit
                 is MainAction.InAppUpdateResultReported -> Unit

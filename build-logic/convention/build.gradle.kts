@@ -64,5 +64,9 @@ gradlePlugin {
             id = "com.mihaicristiancondrea.android.apptoolkit.sample-module"
             implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.SampleModulePlugin"
         }
+        register("moduleBoundaries") {
+            id = "com.mihaicristiancondrea.android.apptoolkit.module-boundaries"
+            implementationClass = "com.mihaicristiancondrea.android.apptoolkit.buildlogic.ModuleBoundariesPlugin"
+        }
     }
 }

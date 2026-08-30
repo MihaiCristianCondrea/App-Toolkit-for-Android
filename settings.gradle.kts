@@ -50,14 +50,15 @@ plugins {
 rootProject.name = "App-Toolkit-for-Android"
 
 include(":sample:app")
+include(":sample:core:analytics")
 include(":sample:core:apptoolkit")
 include(":sample:core:common")
 include(":sample:core:datastore")
 include(":sample:core:navigation")
 include(":sample:core:ui")
+include(":sample:core:shell")
 include(":sample:feature:apps")
 include(":sample:feature:components")
-include(":sample:feature:home")
 include(":sample:feature:settings")
 include(":sample:feature:tiles")
 include(":sample:widget")

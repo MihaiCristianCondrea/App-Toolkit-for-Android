@@ -69,6 +69,13 @@ free and open-source software!
   </tr>
 </table>
 
+# Architecture
+
+App Toolkit uses a modular, layered architecture designed for scalability and maintainability.
+
+- [Module Taxonomy](docs/architecture/module-taxonomy.md): Detailed explanation of core and feature modules.
+- [Feature Module Template](docs/architecture/feature-module-template.md): Guidelines for creating new features.
+
 # How it works
 
 App Toolkit uses a modular architecture with a shared core that powers every screen. The home screen

@@ -15,7 +15,7 @@ The hidden components showcase and the unlock gesture that reveals it.
 
 - Where the unlock gesture is performed. That is the About settings content in
   [`:sample:feature:settings`](../settings/README.md), which drives this module's ViewModel.
-- The drawer entry that opens the showcase, owned by [`:sample:feature:home`](../home/README.md).
+- The drawer entry that opens the showcase, owned by [`:sample:core:shell`](../../core/shell/README.md).
 
 ## Depends on
 
@@ -24,7 +24,7 @@ The hidden components showcase and the unlock gesture that reveals it.
 
 ## Used by
 
-- `:sample:feature:settings` (unlock gesture), `:sample:feature:home` (drawer entry),
+- `:sample:feature:settings` (unlock gesture), `:sample:core:shell` (drawer entry),
   `:sample:app` (DI).
 
 ## Flow chart

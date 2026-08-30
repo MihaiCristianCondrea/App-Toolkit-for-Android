@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.about.ui
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.ComponentsUnlockViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.contracts.ComponentsUnlockEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.ComponentsUnlockViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.ComponentsUnlockEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.AboutScreen
 import org.koin.compose.viewmodel.koinViewModel
 
