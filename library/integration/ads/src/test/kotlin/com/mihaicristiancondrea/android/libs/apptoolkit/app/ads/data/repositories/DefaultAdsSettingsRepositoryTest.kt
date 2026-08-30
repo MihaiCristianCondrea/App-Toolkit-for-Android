@@ -48,9 +48,9 @@ class TestDefaultAdsSettingsRepository {
 
     private fun createRepository(
         dataStore: CommonDataStore,
-        debugBuild: Boolean = false,
+        storeDefaultAdsEnabled: Boolean = true,
     ): DefaultAdsSettingsRepository {
-        every { dataStore.defaultAdsEnabled } returns !debugBuild
+        every { dataStore.defaultAdsEnabled } returns storeDefaultAdsEnabled
         return DefaultAdsSettingsRepository(
             dataStore = dataStore,
             firebaseController = mockk<FirebaseController>(relaxed = true),
@@ -62,7 +62,7 @@ class TestDefaultAdsSettingsRepository {
         println("\uD83D\uDE80 [TEST] observeAdsEnabled emits datastore value")
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(default = true) } returns flowOf(false)
-        val repository = createRepository(dataStore, debugBuild = false)
+        val repository = createRepository(dataStore)
 
         repository.observeAdsEnabled().test {
             assertThat(awaitItem()).isFalse()
@@ -74,7 +74,7 @@ class TestDefaultAdsSettingsRepository {
     fun `observeAdsEnabled propagates error`() = runTest(dispatcherExtension.testDispatcher) {
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(default = true) } returns flow { throw IOException("boom") }
-        val repository = createRepository(dataStore, debugBuild = false)
+        val repository = createRepository(dataStore)
 
         repository.observeAdsEnabled().test {
             val error = awaitError()
@@ -87,7 +87,7 @@ class TestDefaultAdsSettingsRepository {
         println("\uD83D\uDE80 [TEST] observeAdsEnabled rethrows cancellation")
         val dataStore = mockk<CommonDataStore>()
         every { dataStore.ads(default = true) } returns flow { throw CancellationException("boom") }
-        val repository = createRepository(dataStore, debugBuild = false)
+        val repository = createRepository(dataStore)
 
         val thrown = runCatching { repository.observeAdsEnabled().collect() }.exceptionOrNull()
 
@@ -100,7 +100,7 @@ class TestDefaultAdsSettingsRepository {
             println("\uD83D\uDE80 [TEST] setAdsEnabled returns success when persisted")
             val dataStore = mockk<CommonDataStore>()
             coEvery { dataStore.saveAds(any()) } returns Unit
-            val repository = createRepository(dataStore, debugBuild = false)
+            val repository = createRepository(dataStore)
 
             val result = repository.setAdsEnabled(true)
 
@@ -113,7 +113,7 @@ class TestDefaultAdsSettingsRepository {
         println("\uD83D\uDE80 [TEST] setAdsEnabled returns error on failure")
         val dataStore = mockk<CommonDataStore>()
         coEvery { dataStore.saveAds(any()) } throws IOException("boom")
-        val repository = createRepository(dataStore, debugBuild = false)
+        val repository = createRepository(dataStore)
 
         val result = repository.setAdsEnabled(true)
 
@@ -129,21 +129,25 @@ class TestDefaultAdsSettingsRepository {
     fun `setAdsEnabled rethrows cancellation`() = runTest(dispatcherExtension.testDispatcher) {
         val dataStore = mockk<CommonDataStore>()
         coEvery { dataStore.saveAds(any()) } throws CancellationException("cancelled")
-        val repository = createRepository(dataStore, debugBuild = false)
+        val repository = createRepository(dataStore)
 
         assertThrows<CancellationException> { repository.setAdsEnabled(true) }
     }
 
+    // The default belongs to the store, which `dataStoreModule` builds with ads on in every build.
+    // These two only check that the repository reports what it was given rather than deciding for
+    // itself; the pair used to be named for debug and release, which read as a policy this class
+    // does not own.
     @Test
-    fun `defaultAdsEnabled false in debug builds`() = runTest(dispatcherExtension.testDispatcher) {
-        val repository = createRepository(dataStore = mockk(), debugBuild = true)
-        assertThat(repository.defaultAdsEnabled).isFalse()
+    fun `defaultAdsEnabled mirrors an enabled store`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = createRepository(dataStore = mockk(), storeDefaultAdsEnabled = true)
+        assertThat(repository.defaultAdsEnabled).isTrue()
     }
 
     @Test
-    fun `defaultAdsEnabled true in release builds`() = runTest(dispatcherExtension.testDispatcher) {
-        val repository = createRepository(dataStore = mockk(), debugBuild = false)
-        assertThat(repository.defaultAdsEnabled).isTrue()
+    fun `defaultAdsEnabled mirrors a disabled store`() = runTest(dispatcherExtension.testDispatcher) {
+        val repository = createRepository(dataStore = mockk(), storeDefaultAdsEnabled = false)
+        assertThat(repository.defaultAdsEnabled).isFalse()
     }
 }
 

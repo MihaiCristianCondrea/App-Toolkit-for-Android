@@ -6,6 +6,11 @@
 
 **Version:** `3.0.0-pre12`
 
+### Changed
+
+- Display ads now defaults to on in debug builds as well as release, so a fresh debug install renders ads instead of none. A stored choice still wins in every build. Reduce ads continues to default to off everywhere.
+- `dataStoreModule()` no longer takes `isDebugBuild`, which it only used to pick that default.
+
 ### Added
 
 - Added `AdLoadReporter`, which logs every ad load failure, adds a Crashlytics breadcrumb, and records a non-fatal for the failures that are not simply no fill.

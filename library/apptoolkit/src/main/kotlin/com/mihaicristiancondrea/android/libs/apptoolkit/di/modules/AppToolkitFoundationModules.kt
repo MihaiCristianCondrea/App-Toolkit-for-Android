@@ -56,7 +56,7 @@ fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): Lis
         // :library:core:datastore owns the CommonDataStore definition and the preference
         // data-source bindings that hang off it. Including it here keeps one registration for
         // every host instead of a second copy in corePlatformModule.
-        dataStoreModule(isDebugBuild = hostBuildConfig.isDebugBuild),
+        dataStoreModule(),
         corePlatformModule(hostBuildConfig = hostBuildConfig),
         consentModule(),
         mainSharedModule(),
