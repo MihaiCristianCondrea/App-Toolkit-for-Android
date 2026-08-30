@@ -17,15 +17,25 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.di
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.StartupScreenContribution
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.data.repositories.GeneralSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val settingsModule: Module = module {
     factory { GeneralSettingsContentProvider() }
+
+    single<List<String>>(qualifier = named(name = "startup_entries")) {
+        getAll<StartupScreenContribution>().map { it.label }
+    }
+
+    single<List<String>>(qualifier = named(name = "startup_values")) {
+        getAll<StartupScreenContribution>().map { it.routeValue }
+    }
 
     single {
         GeneralSettingsRepository(

@@ -25,5 +25,6 @@ android {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
+    api(project(":sample:core:navigation"))
     api(project(":library:apptoolkit"))
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (©) 2026 Mihai-Cristian Condrea
   ~
   ~ This program is free software: you can redistribute it and/or modify
@@ -15,7 +14,16 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
+
+<!--
+  This app id belongs to the demo app only.
+
+  It deliberately lives here rather than in the library: a library-owned `ad_mob_app_id` is
+  inherited by every consumer app that does not declare a resource with the exact same name, which
+  silently points both the UMP consent request and MobileAds.initialize at the demo app's publisher
+  account. The manifest `com.google.android.gms.ads.APPLICATION_ID` meta-data is the single source
+  of truth, and the toolkit reads it from there.
+-->
 <resources>
-    <!-- Placeholder for AdMob App ID. The host application should provide the real value. -->
-    <string name="ad_mob_app_id" translatable="false">ca-app-pub-xxxxxxxxxxxxxxxx~xxxxxxxxxx</string>
+    <item name="ad_mob_app_id" type="string" translatable="false">ca-app-pub-5294151573817700~1979784742</item>
 </resources>

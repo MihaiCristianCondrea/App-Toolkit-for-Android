@@ -17,13 +17,16 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
-import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.integration.components.AppAboutSettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
 import org.koin.core.module.Module
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+/**
+ * Main application module for `:sample:app`.
+ *
+ * Handles cross-feature integrations and app-specific implementations of toolkit extension points.
+ */
 val appModule: Module = module {
     // TODO: these should be in a module feature:settings
     // TODO: all of these should be moved to com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.di
@@ -36,18 +39,5 @@ val appModule: Module = module {
                 )
             },
         )
-    }
-
-    // TODO: these too:
-    single<List<String>>(qualifier = named(name = "startup_entries")) {
-        listOf(
-            get<Context>().getString(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R.string.tiles_title),
-            get<Context>().getString(com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R.string.apps_tools_title)
-        )
-    }
-
-    // TODO: these too:
-    single<List<String>>(qualifier = named(name = "startup_values")) {
-        listOf("toolkit_tiles", "apps_list")
     }
 }

@@ -17,18 +17,44 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.di
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Widgets
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repositories.ComponentsShowcaseRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.navigation.ComponentsNavigationContribution
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.BuildConfig
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationItemContribution
-import org.koin.dsl.bind
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import org.koin.core.module.Module
 import org.koin.dsl.module
 
-val componentsModule = module {
+val componentsModule: Module = module {
     single {
         ComponentsShowcaseRepository(
             dataStore = get(),
             firebaseController = get(),
         )
     }
-    single { ComponentsNavigationContribution(repository = get()) } bind NavigationItemContribution::class
+
+    single<NavigationItemContribution> {
+        val repository: ComponentsShowcaseRepository = get()
+        object : NavigationItemContribution {
+            override fun navigationItems(): Flow<List<NavigationDrawerItem>> =
+                repository.isUnlocked.map { isUnlocked ->
+                    if (BuildConfig.DEBUG || isUnlocked) {
+                        listOf(
+                            NavigationDrawerItem(
+                                title = R.string.components_title,
+                                icon = Icons.Outlined.Widgets,
+                                selectedIcon = Icons.Outlined.Widgets,
+                                route = "components"
+                            )
+                        )
+                    } else {
+                        emptyList()
+                    }
+                }
+        }
+    }
 }

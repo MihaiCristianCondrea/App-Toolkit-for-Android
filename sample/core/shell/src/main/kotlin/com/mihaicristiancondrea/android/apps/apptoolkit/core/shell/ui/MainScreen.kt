@@ -385,7 +385,7 @@ private fun MainShell(
                     onNavigationRequested(route)
                 },
                 additionalHandlers = mapOf(
-                    item.route to { onNavigationRequested(item.route) }
+                    item.route to { _ -> onNavigationRequested(item.route) }
                 )
             )
         }

@@ -151,7 +151,7 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
     val helperSummary = stringResource(id = tile.status.helperSummaryResId())
 
     val customInfo = when (tile.id) {
-        "lux_meter" -> stringResource(id = R.string.tile_lux_meter_info)
+        ToolkitTileIds.LUX_METER -> stringResource(id = R.string.tile_lux_meter_info)
         else -> null
     }
 
