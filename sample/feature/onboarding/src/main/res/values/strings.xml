@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="onboarding_feature1_description">App Toolkit introduces a selection of applications, explore the list of apps and open your favorites.</string>
+    <string name="onboarding_feature1_title">Discover applications</string>
+    <string name="onboarding_personalization_description">This app demonstrates how the AppToolkit library can be used in your own projects to create professional and user-friendly apps.</string>
+    <string name="onboarding_personalization_title">See the AppToolkit library in action</string>
+    <string name="onboarding_welcome_description">Explore the capabilities of the AppToolkit library. Discover features, components, and tools that help you build better apps faster.</string>
+    <string name="onboarding_welcome_title">Welcome to App Toolkit</string>
+</resources>

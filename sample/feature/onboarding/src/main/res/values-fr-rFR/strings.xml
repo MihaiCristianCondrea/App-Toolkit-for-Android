@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="onboarding_feature1_description">App Toolkit propose une sélection d’applications, chacune conçue pour mettre en valeur différents aspects de la bibliothèque AppToolkit et améliorer votre expérience Android. Voyez ce qu’il est possible de faire avec la bibliothèque AppToolkit.</string>
+    <string name="onboarding_feature1_title">Découvrez des applications</string>
+    <string name="onboarding_personalization_description">Cette application montre comment la bibliothèque AppToolkit crée des applications polyvalentes et centrées sur l’utilisateur. Explorez les applications d’exemple pour voir différentes fonctionnalités et implémentations de la bibliothèque.</string>
+    <string name="onboarding_personalization_title">Voyez la bibliothèque AppToolkit en action</string>
+    <string name="onboarding_welcome_description">Explorez les capacités de la bibliothèque AppToolkit. Découvrez des applications conçues pour démontrer la puissance de la bibliothèque et améliorer votre développement Android et l’expérience utilisateur.</string>
+    <string name="onboarding_welcome_title">Bienvenue dans App Toolkit</string>
+</resources>

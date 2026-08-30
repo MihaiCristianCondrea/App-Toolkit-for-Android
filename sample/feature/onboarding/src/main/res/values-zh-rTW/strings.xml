@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="onboarding_feature1_description">App Toolkit 提供一系列應用程式，每個都旨在突顯 AppToolkit 程式庫的不同面向並提升你的 Android 體驗。看看 AppToolkit 程式庫可以做到什麼。</string>
+    <string name="onboarding_feature1_title">探索應用程式</string>
+    <string name="onboarding_personalization_description">此應用程式展示 AppToolkit 程式庫如何打造多元且以使用者為中心的應用程式。探索範例應用程式，了解程式庫的不同功能與實作。</string>
+    <string name="onboarding_personalization_title">看看 AppToolkit 程式庫的實際運作</string>
+    <string name="onboarding_welcome_description">探索 AppToolkit 程式庫的能力。發現為展示程式庫威力並提升 Android 開發與使用者體驗而打造的應用程式。</string>
+    <string name="onboarding_welcome_title">歡迎使用 App Toolkit</string>
+</resources>
