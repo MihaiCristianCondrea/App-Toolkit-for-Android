@@ -51,4 +51,7 @@
     <string name="components_switch_title">स्विच प्राथमिकता</string>
     <string name="components_title">कॉम्पोनेंट्स</string>
     <string name="components_filter_favorites">पसंदीदा</string>
+    <string name="components_action_menus">कार्रवाई मेन्यू</string>
+    <string name="components_action_menus_summary">विकल्प देखने के लिए टैप करें</string>
+    <string name="components_data_selection">डेटा चयन</string>
 </resources>

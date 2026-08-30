@@ -51,4 +51,7 @@
     <string name="components_switch_title">Preferenza interruttore</string>
     <string name="components_title">Componenti</string>
     <string name="components_filter_favorites">Preferiti</string>
+    <string name="components_action_menus">Menu azioni</string>
+    <string name="components_action_menus_summary">Tocca per mostrare le opzioni</string>
+    <string name="components_data_selection">Selezione dei dati</string>
 </resources>

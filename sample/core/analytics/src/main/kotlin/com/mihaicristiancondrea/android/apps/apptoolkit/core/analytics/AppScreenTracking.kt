@@ -17,14 +17,25 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import org.koin.compose.koinInject
+/** Stable name/class pair emitted for a sample screen. */
+data class TrackedScreen(
+    val name: String,
+    val className: String,
+)
 
-@Composable
-fun TrackScreenView(screenName: String) {
-    val tracker: AnalyticsTracker = koinInject()
-    LaunchedEffect(screenName) {
-        tracker.logScreenView(screenName)
+/** Single source of truth for sample-app screen telemetry identifiers. */
+object AppScreenTracking {
+    object Screens {
+        val MAIN = TrackedScreen(name = "Main", className = "MainScreen")
+        val APPS_LIST = TrackedScreen(name = "AppsList", className = "AppsListScreen")
+        val TOOLKIT_TILES = TrackedScreen(name = "ToolkitTiles", className = "ToolkitTilesScreen")
+        val COMPONENTS = TrackedScreen(name = "Components", className = "ComponentsScreen")
+
+        val all: List<TrackedScreen> = listOf(
+            MAIN,
+            APPS_LIST,
+            TOOLKIT_TILES,
+            COMPONENTS,
+        )
     }
 }

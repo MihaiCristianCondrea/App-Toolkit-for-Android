@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">Gagal memuat navigasi</string>
     <string name="open_random_app">Buka aplikasi acak</string>
-    <string name="components_title">Komponen</string>
 </resources>

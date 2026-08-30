@@ -36,8 +36,12 @@
     <string name="app_details_version">Version %1$s</string>
     <string name="app_details_view_on_play_store">View on Google Play</string>
     <string name="apps_filter_all">All</string>
+    <string name="error_failed_to_fetch_our_apps">Failed to load app lists</string>
     <string name="error_failed_to_load_apps">Failed to load apps</string>
     <string name="error_failed_to_update_favorite">Failed to update favorite</string>
     <string name="favorite_apps">Favorites</string>
     <string name="summary_share_message">Check out this app that I\'m using. It has some really cool features that you might find interesting. You can download it from the Play Store at: %1$s</string>
+    <!-- Navigation -->
+    <string name="apps_tools_title">Apps</string>
+
 </resources>

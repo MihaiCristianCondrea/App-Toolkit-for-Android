@@ -41,4 +41,5 @@
     <string name="error_failed_to_update_favorite">پسندیدہ اپ ڈیٹ نہیں ہو سکا</string>
     <string name="favorite_apps">پسندیدہ</string>
     <string name="summary_share_message">یہ حیرت انگیز ایپ دیکھیں جو میں استعمال کر رہا ہوں. اس میں کچھ واقعی عمدہ خصوصیات ہیں جو آپ کو دلچسپ لگ سکتی ہیں۔ آپ اسے پلے اسٹور سے یہاں سے ڈاؤن لوڈ کر سکتے ہیں: %1$s</string>
+    <string name="apps_tools_title">ایپس</string>
 </resources>

@@ -37,7 +37,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -49,15 +48,19 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.toAppColorTable
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.toHexString
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.AndroidColorData
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.AndroidColorTable
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ColorSwatchData
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ColorTable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import java.util.Locale
@@ -222,55 +225,6 @@ private fun ColorSwatch(
         }
     }
 }
-
-private fun ColorScheme.toAppColorTable(title: String): ColorTable =
-    ColorTable(
-        title = title,
-        colors = listOf(
-            ColorSwatchData("primary", primary),
-            ColorSwatchData("on primary", onPrimary),
-            ColorSwatchData("primary container", primaryContainer),
-            ColorSwatchData("secondary", secondary),
-            ColorSwatchData("tertiary", tertiary),
-            ColorSwatchData("error", error),
-            ColorSwatchData("background", background),
-            ColorSwatchData("surface", surface),
-            ColorSwatchData("surface variant", surfaceVariant),
-            ColorSwatchData("outline", outline),
-            ColorSwatchData("inverse surface", inverseSurface),
-            ColorSwatchData("scrim", scrim),
-        ),
-    )
-
-
-//TODO: move all these from below to ui.mappers or ui.model etc, where is relevant
-
-
-private fun Color.toHexString(): String = String.format(Locale.US, "#%08X", toArgb())
-
-@Immutable
-private data class ColorSwatchData(
-    val name: String,
-    val color: Color,
-)
-
-@Immutable
-private data class ColorTable(
-    val title: String,
-    val colors: List<ColorSwatchData>,
-)
-
-@Immutable
-private data class AndroidColorData(
-    val name: String,
-    @ColorRes val colorResId: Int,
-)
-
-@Immutable
-private data class AndroidColorTable(
-    val title: String,
-    val colors: List<AndroidColorData>,
-)
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable

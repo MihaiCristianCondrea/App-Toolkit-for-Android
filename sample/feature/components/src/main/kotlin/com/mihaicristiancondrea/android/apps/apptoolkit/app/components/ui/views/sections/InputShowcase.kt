@@ -80,12 +80,12 @@ fun InputShowcase(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Action Menus", // TODO: String res
+                        text = stringResource(id = R.string.components_action_menus),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                     )
                     Text(
-                        text = "Tap to reveal options", // TODO: String res
+                        text = stringResource(id = R.string.components_action_menus_summary),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -125,7 +125,7 @@ fun InputShowcase(
         }
         ShowcaseSurface(position = GroupedItemPosition.LAST) {
             Text(
-                text = "Data Selection",
+                text = stringResource(id = R.string.components_data_selection),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
             )

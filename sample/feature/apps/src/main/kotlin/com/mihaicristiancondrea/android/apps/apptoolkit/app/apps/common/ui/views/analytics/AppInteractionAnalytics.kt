@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views.analytics
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.domain.models.AppInfo
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.AppGa4Contract
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
@@ -47,15 +48,21 @@ fun FirebaseController.logAppInteraction(
 ) {
     logEvent(
         event = AnalyticsEvent(
-            name = "app_card_interaction",
+            name = AppGa4Contract.EventName.APP_CARD_INTERACTION,
             params = buildMap {
-                put("source", AnalyticsValue.Str(source))
-                put("interaction", AnalyticsValue.Str(interaction.name.lowercase()))
-                put("package_name", AnalyticsValue.Str(appInfo.packageName))
-                put("app_name", AnalyticsValue.Str(appInfo.name))
-                appInfo.category?.id?.let { put("app_category_id", AnalyticsValue.Str(it)) }
-                appInfo.category?.label?.let { put("app_category_label", AnalyticsValue.Str(it)) }
-                interactionContext?.let { put("interaction_context", AnalyticsValue.Str(it)) }
+                put(AppGa4Contract.Param.SOURCE, AnalyticsValue.Str(source))
+                put(AppGa4Contract.Param.INTERACTION, AnalyticsValue.Str(interaction.name.lowercase()))
+                put(AppGa4Contract.Param.PACKAGE_NAME, AnalyticsValue.Str(appInfo.packageName))
+                put(AppGa4Contract.Param.APP_NAME, AnalyticsValue.Str(appInfo.name))
+                appInfo.category?.id?.let {
+                    put(AppGa4Contract.Param.APP_CATEGORY_ID, AnalyticsValue.Str(it))
+                }
+                appInfo.category?.label?.let {
+                    put(AppGa4Contract.Param.APP_CATEGORY_LABEL, AnalyticsValue.Str(it))
+                }
+                interactionContext?.let {
+                    put(AppGa4Contract.Param.INTERACTION_CONTEXT, AnalyticsValue.Str(it))
+                }
             }
         )
     )

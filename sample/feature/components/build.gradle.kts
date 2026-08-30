@@ -17,6 +17,7 @@
 
 plugins {
     id("com.mihaicristiancondrea.android.apptoolkit.sample-module")
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -25,7 +26,7 @@ android {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
-    api(project(":sample:core:shell"))
+    implementation(project(":sample:core:analytics"))
     api(project(":sample:core:navigation"))
     api(project(":sample:core:datastore"))
     api(project(":library:apptoolkit"))

@@ -51,4 +51,7 @@
     <string name="components_switch_title">การตั้งค่าสวิตช์</string>
     <string name="components_title">คอมโพเนนต์</string>
     <string name="components_filter_favorites">รายการโปรด</string>
+    <string name="components_action_menus">เมนูการทำงาน</string>
+    <string name="components_action_menus_summary">แตะเพื่อแสดงตัวเลือก</string>
+    <string name="components_data_selection">การเลือกข้อมูล</string>
 </resources>

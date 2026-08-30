@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">Nu s-a putut încărca navigarea</string>
     <string name="open_random_app">Deschide o aplicație aleatorie</string>
-    <string name="components_title">Componente</string>
 </resources>

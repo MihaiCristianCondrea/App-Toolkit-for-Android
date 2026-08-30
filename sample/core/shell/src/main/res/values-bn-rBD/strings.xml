@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">নেভিগেশন লোড করা যায়নি</string>
     <string name="open_random_app">এলোমেলো অ্যাপ খুলুন</string>
-    <string name="components_title">উপাদানসমূহ</string>
 </resources>

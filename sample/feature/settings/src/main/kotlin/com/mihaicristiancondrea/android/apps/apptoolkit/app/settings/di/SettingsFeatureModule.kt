@@ -17,27 +17,13 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.about.ui.AppAboutSettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.data.repositories.GeneralSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val settingsFeatureModule: Module = module {
-    // Keep as factory: this provider carries composable content lambdas and should stay short-lived
-    // to avoid accidental capture of screen-scoped references in global state.
-    factory<GeneralSettingsContentProvider> {
-        GeneralSettingsContentProvider(
-            aboutContent = { paddingValues, snackbarHostState ->
-                AppAboutSettingsContent(
-                    paddingValues = paddingValues,
-                    snackbarHostState = snackbarHostState,
-                )
-            }
-        )
-    }
     single {
         GeneralSettingsRepository(
             firebaseController = get(),

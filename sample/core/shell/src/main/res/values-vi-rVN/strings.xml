@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">Không thể tải điều hướng</string>
     <string name="open_random_app">Mở ứng dụng ngẫu nhiên</string>
-    <string name="components_title">Thành phần</string>
 </resources>

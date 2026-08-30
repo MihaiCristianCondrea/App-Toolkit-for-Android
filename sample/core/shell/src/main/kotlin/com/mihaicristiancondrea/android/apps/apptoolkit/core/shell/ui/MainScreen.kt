@@ -17,7 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui
 
-import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
@@ -68,26 +67,17 @@ import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
 import androidx.navigation3.ui.NavDisplay
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.states.MainUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.views.fab.MainFloatingActionButton
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.views.navigation.isDrawerItemSelected
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppsListRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ComponentsRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.MainNavigationDefaults
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationRoutes
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ToolkitTilesRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.HelpActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.views.dropdowns.HelpScreenMenuActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.dialogs.ChangelogDialog
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.navigation.MainTopAppBar
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.Navigator
@@ -108,61 +98,45 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.Bottom
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.isTopLevel
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerItemContent
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-/** Hosts the adaptive app shell and pushed navigation destinations. */
 /**
+ * Hosts the adaptive app shell and pushed navigation destinations.
+ *
  * @param entryBuilders Supplies the navigation entries for this shell. Passed in rather than
  * imported so the shell does not have to see the feature modules whose destinations it renders;
  * `:sample:app` is the only module that knows the full set.
  * @param startRoute The persisted top-level destination resolved by the application host before
  * this shell is composed.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     startRoute: StableNavKey,
+    bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>>,
+    fabSupportedRoutes: ImmutableSet<StableNavKey>,
     entryBuilders: (AppNavigationEntryContext) -> List<NavigationEntryBuilder<StableNavKey>>,
+    onTitleLookup: @Composable (StableNavKey) -> String,
     onLaunchActivity: (StableNavKey) -> Boolean = { false },
+    onNavigationRequested: (String) -> Unit = {},
 ) {
     val viewModel: MainViewModel = koinViewModel()
     val uiStateScreen by viewModel.uiState.collectAsStateWithLifecycle()
-
-    MainScreenContent(
-        uiState = uiStateScreen.data ?: MainUiState(),
-        startRoute = startRoute,
-        entryBuilders = entryBuilders,
-        onLaunchActivity = onLaunchActivity,
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun MainScreenContent(
-    uiState: MainUiState,
-    startRoute: StableNavKey,
-    entryBuilders: (AppNavigationEntryContext) -> List<NavigationEntryBuilder<StableNavKey>>,
-    onLaunchActivity: (StableNavKey) -> Boolean,
-) {
+    val uiState = uiStateScreen.data ?: MainUiState()
     val activity = LocalActivity.current
 
     val navigationState = rememberNavigationState(
         startRoute = startRoute,
-        topLevelRoutes = NavigationRoutes.topLevelRoutes
+        topLevelRoutes = remember(bottomBarItems) { bottomBarItems.map { it.route }.toImmutableSet() }
     )
     val navigator = remember(navigationState) { Navigator(state = navigationState) }
 
@@ -174,9 +148,9 @@ private fun MainScreenContent(
 
     val navigationManager: NavigationManager = koinInject()
 
-    LaunchedEffect(activity, navigationManager, navigator) {
+    LaunchedEffect(navigationManager, navigator, onLaunchActivity) {
         navigationManager.navigationRequests.collect { route ->
-            if (!launchStandaloneToolkitActivity(activity, route, onLaunchActivity)) {
+            if (!onLaunchActivity(route)) {
                 navigator.navigate(route)
             }
         }
@@ -212,6 +186,9 @@ private fun MainScreenContent(
         randomAppHandlerState,
         nativeActivityTransitions,
         entryProvider,
+        onTitleLookup,
+        bottomBarItems,
+        fabSupportedRoutes,
     ) {
         MainSceneStrategy(
             uiState = uiState,
@@ -222,7 +199,10 @@ private fun MainScreenContent(
             randomAppHandlerState = randomAppHandlerState,
             nativeActivityTransitions = nativeActivityTransitions,
             entryProvider = entryProvider,
-            onLaunchActivity = onLaunchActivity,
+            onTitleLookup = onTitleLookup,
+            onNavigationRequested = onNavigationRequested,
+            bottomBarItems = bottomBarItems,
+            fabSupportedRoutes = fabSupportedRoutes,
         )
     }
 
@@ -247,24 +227,6 @@ private fun MainScreenContent(
     }
 }
 
-private fun launchStandaloneToolkitActivity(
-    context: Context?,
-    route: StableNavKey,
-    onLaunchActivity: (StableNavKey) -> Boolean,
-): Boolean {
-    if (onLaunchActivity(route)) return true
-
-    val targetActivity = when (route) {
-        is SettingsRoute -> SettingsActivity::class.java
-        is HelpRoute -> HelpActivity::class.java
-        is SupportRoute -> SupportActivity::class.java
-        else -> return false
-    }
-
-    val safeContext = context ?: return false
-    return safeContext.startActivitySafely(Intent(safeContext, targetActivity))
-}
-
 /**
  * Selects a persistent shell for top-level tabs and a focused shell for pushed destinations.
  *
@@ -282,7 +244,10 @@ private class MainSceneStrategy(
     private val randomAppHandlerState: State<(() -> Unit)?>,
     private val nativeActivityTransitions: NativeActivityTransitions,
     private val entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
-    private val onLaunchActivity: (StableNavKey) -> Boolean,
+    private val onTitleLookup: @Composable (StableNavKey) -> String,
+    private val onNavigationRequested: (String) -> Unit,
+    private val bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>>,
+    private val fabSupportedRoutes: ImmutableSet<StableNavKey>,
 ) : SceneStrategy<StableNavKey> {
     override fun SceneStrategyScope<StableNavKey>.calculateScene(
         entries: List<NavEntry<StableNavKey>>
@@ -306,21 +271,26 @@ private class MainSceneStrategy(
                 onBack = onBack,
                 nativeActivityTransitions = nativeActivityTransitions,
                 entryProvider = entryProvider,
-                onLaunchActivity = onLaunchActivity,
+                onTitleLookup = onTitleLookup,
+                onNavigationRequested = onNavigationRequested,
+                bottomBarItems = bottomBarItems,
+                fabSupportedRoutes = fabSupportedRoutes,
             )
         } else {
             SubScreenScene(
-                key = currentRoute,
+                route = currentRoute,
                 entry = currentEntry,
                 previousEntries = entries.dropLast(1),
                 onBack = onBack,
                 nativeActivityTransitions = nativeActivityTransitions,
-                entryProvider = entryProvider
+                entryProvider = entryProvider,
+                onTitleLookup = onTitleLookup,
             )
         }
     }
 }
 
+/** Shell-owned scene for top-level destinations and their persistent navigation chrome. */
 private data class MainShellScene(
     override val key: Any,
     private val entry: NavEntry<StableNavKey>,
@@ -334,7 +304,10 @@ private data class MainShellScene(
     private val onBack: () -> Unit,
     private val nativeActivityTransitions: NativeActivityTransitions,
     private val entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
-    private val onLaunchActivity: (StableNavKey) -> Boolean,
+    private val onTitleLookup: @Composable (StableNavKey) -> String,
+    private val onNavigationRequested: (String) -> Unit,
+    private val bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>>,
+    private val fabSupportedRoutes: ImmutableSet<StableNavKey>,
 ) : Scene<StableNavKey> {
     override val entries: List<NavEntry<StableNavKey>> = listOf(entry)
     override val metadata: Map<String, Any> = metadata {
@@ -353,7 +326,10 @@ private data class MainShellScene(
             randomAppHandlerState = randomAppHandlerState,
             onBack = onBack,
             entryProvider = entryProvider,
-            onLaunchActivity = onLaunchActivity,
+            onTitleLookup = onTitleLookup,
+            onNavigationRequested = onNavigationRequested,
+            bottomBarItems = bottomBarItems,
+            fabSupportedRoutes = fabSupportedRoutes,
         )
     }
 }
@@ -369,24 +345,15 @@ private fun MainShell(
     randomAppHandlerState: State<(() -> Unit)?>,
     onBack: () -> Unit,
     entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
-    onLaunchActivity: (StableNavKey) -> Boolean,
+    onTitleLookup: @Composable (StableNavKey) -> String,
+    onNavigationRequested: (String) -> Unit,
+    bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>>,
+    fabSupportedRoutes: ImmutableSet<StableNavKey>,
 ) {
     val context = LocalContext.current
+    val navigationItemsProvider: NavigationItemsProvider = koinInject()
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val bottomNavTransitions = rememberBottomNavTransitions()
-    val appRouteHandlers: Map<String, (NavigationDrawerItem) -> Unit> = remember(navigator) {
-        mapOf(
-            NavigationRoutes.ROUTE_APPS_LIST to { navigator.navigate(AppsListRoute) },
-            NavigationRoutes.ROUTE_TOOLKIT_TILES to { navigator.navigate(ToolkitTilesRoute) },
-            NavigationRoutes.ROUTE_COMPONENTS to {
-                launchStandaloneToolkitActivity(
-                    context,
-                    ComponentsRoute,
-                    onLaunchActivity
-                )
-            },
-        )
-    }
     val currentRoute = navigator.state.currentBackStack.last()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -399,11 +366,7 @@ private fun MainShell(
         derivedStateOf { scrollBehavior.state.contentOffset > -SizeConstants.MediumSize.value }
     }
 
-    val appBarTitleResId: Int = remember(currentRoute) {
-        MainNavigationDefaults.bottomBarItems
-            .find { item: BottomBarItem<StableNavKey> -> item.route == currentRoute }?.title
-            ?: com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R.string.app_name
-    }
+    val appBarTitle = onTitleLookup(currentRoute)
 
     val onNavigationDrawerItemClick: (NavigationDrawerItem, DrawerState?, CoroutineScope?) -> Unit =
         { item, state, scope ->
@@ -414,37 +377,15 @@ private fun MainShell(
                 coroutineScope = scope,
                 onChangelogRequested = onChangelogRequested,
                 onInternalNavigationRequested = { route ->
-                    when (route) {
-                        NavigationDrawerRoutes.ROUTE_SETTINGS -> launchStandaloneToolkitActivity(
-                            context,
-                            SettingsRoute,
-                            onLaunchActivity
-                        )
-
-                        NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> launchStandaloneToolkitActivity(
-                            context,
-                            HelpRoute,
-                            onLaunchActivity
-                        )
-
-                        NavigationDrawerRoutes.ROUTE_SUPPORT -> launchStandaloneToolkitActivity(
-                            context,
-                            SupportRoute,
-                            onLaunchActivity
-                        )
-                    }
+                    onNavigationRequested(route)
                 },
-                additionalHandlers = appRouteHandlers,
             )
         }
 
-    val isFabVisible: Boolean = remember(currentRoute) {
-        MainNavigationDefaults.fabSupportedRoutes.contains(currentRoute)
+    val isFabVisible: Boolean = remember(currentRoute, fabSupportedRoutes) {
+        fabSupportedRoutes.contains(currentRoute)
     }
     val isFabExtended: Boolean = isScrollingUp
-
-    val bottomItems: ImmutableList<BottomBarItem<StableNavKey>> =
-        MainNavigationDefaults.bottomBarItems
 
     val railDrawerItems: Pair<List<NavigationDrawerItem>, List<NavigationDrawerItem>> =
         remember(uiState.navigationDrawerItems) {
@@ -465,7 +406,7 @@ private fun MainShell(
         ) {
             if (!modalDrawerEnabled) {
                 NavigationRail {
-                    bottomItems.forEach { item ->
+                    bottomBarItems.forEach { item ->
                         val isSelected = currentRoute == item.route
                         NavigationRailItem(
                             selected = isSelected,
@@ -480,7 +421,7 @@ private fun MainShell(
                         )
                     }
                     railDrawerItems.first.forEach { item ->
-                        val isSelected = isDrawerItemSelected(item.route, currentRoute)
+                        val isSelected = isDrawerItemSelected(item.route, currentRoute, navigationItemsProvider)
                         NavigationRailItem(
                             selected = isSelected,
                             onClick = { onNavigationDrawerItemClick(item, null, null) },
@@ -494,7 +435,7 @@ private fun MainShell(
                         )
                     }
                     railDrawerItems.second.forEach { item ->
-                        val isSelected = isDrawerItemSelected(item.route, currentRoute)
+                        val isSelected = isDrawerItemSelected(item.route, currentRoute, navigationItemsProvider)
                         NavigationRailItem(
                             selected = isSelected,
                             onClick = { onNavigationDrawerItemClick(item, null, null) },
@@ -516,7 +457,7 @@ private fun MainShell(
                     .nestedScroll(scrollBehavior.nestedScrollConnection),
                 topBar = {
                     MainTopAppBar(
-                        title = stringResource(appBarTitleResId),
+                        title = appBarTitle,
                         navigationIcon = when {
                             drawerState.isOpen -> Icons.AutoMirrored.Outlined.MenuOpen
                             modalDrawerEnabled -> Icons.Outlined.Menu
@@ -529,20 +470,18 @@ private fun MainShell(
                             }
                         },
                         onSupportClick = {
-                            launchStandaloneToolkitActivity(
-                                context,
-                                SupportRoute,
-                                onLaunchActivity
-                            )
+                            onNavigationRequested(NavigationDrawerRoutes.ROUTE_SUPPORT)
                         },
-                        showSupportAction = NavigationRoutes.topLevelRoutes.contains(currentRoute),
+                        showSupportAction = remember(currentRoute, bottomBarItems) {
+                            bottomBarItems.any { it.route == currentRoute }
+                        },
                         scrollBehavior = scrollBehavior,
                     )
                 },
                 bottomBar = {
                     if (modalDrawerEnabled) {
                         NavigationBar {
-                            bottomItems.forEach { item ->
+                            bottomBarItems.forEach { item ->
                                 val isSelected = currentRoute == item.route
                                 NavigationBarItem(
                                     selected = isSelected,
@@ -584,6 +523,7 @@ private fun MainShell(
                         entryProvider = entryProvider,
                         onBack = onBack,
                         bottomNavTransitions = bottomNavTransitions,
+                        bottomBarItems = bottomBarItems,
                     )
                 }
             }
@@ -601,7 +541,7 @@ private fun MainShell(
                     uiState.navigationDrawerItems.forEach { item ->
                         NavigationDrawerItemContent(
                             item = item,
-                            selected = false,
+                            selected = isDrawerItemSelected(item.route, currentRoute, navigationItemsProvider),
                             dividerRoutes = persistentSetOf(),
                             handleNavigationItemClick = {
                                 onNavigationDrawerItemClick(
@@ -627,6 +567,7 @@ private fun TopLevelContentNavDisplay(
     entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
     onBack: () -> Unit,
     bottomNavTransitions: BottomNavTransitions,
+    bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>>,
 ) {
     NavDisplay(
         entries = navigator.state.toDecoratedTopLevelEntries(entryProvider),
@@ -635,18 +576,21 @@ private fun TopLevelContentNavDisplay(
             bottomNavTransitions.betweenTabEntries(
                 initialState = initialState,
                 targetState = targetState,
+                bottomBarItems = bottomBarItems,
             )
         },
         popTransitionSpec = {
             bottomNavTransitions.betweenTabEntries(
                 initialState = initialState,
                 targetState = targetState,
+                bottomBarItems = bottomBarItems,
             )
         },
         predictivePopTransitionSpec = {
             bottomNavTransitions.betweenTabEntries(
                 initialState = initialState,
                 targetState = targetState,
+                bottomBarItems = bottomBarItems,
             )
         },
     )
@@ -655,9 +599,10 @@ private fun TopLevelContentNavDisplay(
 private fun BottomNavTransitions.betweenTabEntries(
     initialState: Any?,
     targetState: Any?,
+    bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>>,
 ) = run {
-    val initialTabIndex = tabIndex(initialState)
-    val targetTabIndex = tabIndex(targetState)
+    val initialTabIndex = tabIndex(initialState, bottomBarItems)
+    val targetTabIndex = tabIndex(targetState, bottomBarItems)
 
     if (initialTabIndex >= 0 && targetTabIndex >= 0) {
         betweenTabs(forward = targetTabIndex >= initialTabIndex)
@@ -666,7 +611,10 @@ private fun BottomNavTransitions.betweenTabEntries(
     }
 }
 
-private fun tabIndex(state: Any?): Int {
+private fun tabIndex(
+    state: Any?,
+    bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>>,
+): Int {
     val entry: NavEntry<*>? = when (state) {
         // Navigation 3 transition scopes animate Scene objects; read their visible entry so
         // predictive back between bottom tabs can use the same tab-direction motion as taps.
@@ -675,17 +623,19 @@ private fun tabIndex(state: Any?): Int {
         else -> null
     }
     val route = entry?.contentKey as? StableNavKey
-    return MainNavigationDefaults.bottomBarItems.indexOfFirst { item -> item.route == route }
+    return bottomBarItems.indexOfFirst { item -> item.route == route }
 }
 
 private data class SubScreenScene(
-    override val key: Any,
+    private val route: StableNavKey,
     private val entry: NavEntry<StableNavKey>,
     override val previousEntries: List<NavEntry<StableNavKey>>,
     private val onBack: () -> Unit,
     private val nativeActivityTransitions: NativeActivityTransitions,
     private val entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
+    private val onTitleLookup: @Composable (StableNavKey) -> String,
 ) : Scene<StableNavKey> {
+    override val key: Any = route
     override val entries: List<NavEntry<StableNavKey>> = listOf(entry)
     override val metadata: Map<String, Any> = metadata {
         put(NavDisplay.TransitionKey) { nativeActivityTransitions.forward() }
@@ -696,7 +646,7 @@ private data class SubScreenScene(
     @OptIn(ExperimentalMaterial3Api::class)
     override val content: @Composable () -> Unit = {
         SubScreenShell(
-            currentRoute = key as StableNavKey,
+            title = onTitleLookup(route),
             onBack = onBack,
             content = { entry.Content() }
         )
@@ -706,41 +656,16 @@ private data class SubScreenScene(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SubScreenShell(
-    currentRoute: StableNavKey,
+    title: String,
     onBack: () -> Unit,
     content: @Composable () -> Unit,
 ) {
-    val scrollBehavior = when (currentRoute) {
-        is HelpRoute, is LicensesRoute -> TopAppBarDefaults.enterAlwaysScrollBehavior()
-        else -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    }
-    var showHelpVersionDialog by rememberSaveable(currentRoute) { mutableStateOf(false) }
-    val appBarTitle: String = when (currentRoute) {
-        is SettingsRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.settings)
-        is GeneralSettingsRoute -> currentRoute.title
-        is HelpRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R.string.help)
-        is AdsSettingsRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.ads)
-        is PermissionsRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.permissions)
-        is LicensesRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.oss_license_title)
-        is SupportRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R.string.support_us)
-        is LibraryExtrasRoute -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R.string.app_name)
-        is ComponentsRoute -> stringResource(com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.R.string.components_title)
-        else -> stringResource(com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R.string.app_name)
-    }
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     LargeTopAppBarWithScaffold(
-        title = appBarTitle,
+        title = title,
         onBackClicked = onBack,
-        actions = {
-            if (currentRoute is HelpRoute) {
-                val config: AppVersionInfo = koinInject()
-                HelpScreenMenuActions(
-                    config = config,
-                    showDialog = showHelpVersionDialog,
-                    onShowDialogChange = { showHelpVersionDialog = it },
-                )
-            }
-        },
+        actions = {},
         scrollBehavior = scrollBehavior,
     ) { paddingValues ->
         Box(

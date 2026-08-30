@@ -123,4 +123,5 @@
     <string name="morse_error_length">Utilisez 200 caractères maximum</string>
     <string name="morse_error_characters">Utilisez uniquement les lettres A–Z, les chiffres et les espaces</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">Outils rapides</string>
 </resources>

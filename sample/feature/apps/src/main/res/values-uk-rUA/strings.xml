@@ -41,4 +41,5 @@
     <string name="error_failed_to_update_favorite">Не вдалося оновити вибране</string>
     <string name="favorite_apps">Вибране</string>
     <string name="summary_share_message">Перегляньте цей чудовий додаток, яким я користуюся. У ньому є цікаві функції, які можуть вас зацікавити. Ви можете завантажити його з Play Store за посиланням: %1$s</string>
+    <string name="apps_tools_title">програми</string>
 </resources>

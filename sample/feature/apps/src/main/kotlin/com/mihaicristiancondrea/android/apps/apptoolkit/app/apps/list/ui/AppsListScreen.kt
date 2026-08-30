@@ -82,7 +82,7 @@ import org.koin.core.qualifier.named
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppsListRoute(
+fun AppsListScreen(
     paddingValues: PaddingValues,
     windowWidthSizeClass: AppWindowWidthSizeClass,
     onRegisterRandomAppHandler: (RandomAppHandler?) -> Unit,

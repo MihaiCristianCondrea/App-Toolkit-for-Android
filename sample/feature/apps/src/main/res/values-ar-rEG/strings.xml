@@ -41,4 +41,5 @@
     <string name="error_failed_to_update_favorite">تعذر تحديث المفضلة</string>
     <string name="favorite_apps">المفضلة</string>
     <string name="summary_share_message">اطلع على هذا التطبيق الرائع الذي أستخدمه. يحتوي على بعض الميزات الرائعة التي قد تجدها مثيرة للاهتمام. يمكنك تنزيله من متجر Play على: %1$s</string>
+    <string name="apps_tools_title">تطبيقات</string>
 </resources>

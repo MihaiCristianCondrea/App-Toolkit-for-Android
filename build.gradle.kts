@@ -16,6 +16,7 @@
  */
 
 plugins {
+    id("com.mihaicristiancondrea.android.apptoolkit.module-boundaries")
     alias(notation = libs.plugins.android.application) apply false
     alias(notation = libs.plugins.android.library) apply false
     alias(notation = libs.plugins.kotlin.compose) apply false

@@ -20,13 +20,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.di
 import android.app.Activity
 import android.content.Context
 import androidx.compose.material3.ColorScheme
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.di.appsFeatureModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.di.settingsFeatureModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.di.tilesFeatureModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.di.dataStoreModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.di.navigationModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.di.shellModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.di.analyticsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
@@ -62,19 +55,7 @@ class HostKoinGraphTest {
         faqProductId = "app-toolkit",
     )
 
-    private fun hostModules(): List<Module> = buildList {
-        addAll(toolkitModules())
-        add(dataStoreModule)
-        add(navigationModule)
-        add(analyticsModule)
-        add(shellModule)
-        add(appModule)
-        add(settingsFeatureModule)
-        add(tilesFeatureModule)
-        add(appsFeatureModule)
-        add(adsModule)
-        add(onboardingModule)
-    }
+    private fun hostModules(): List<Module> = sampleAppModules(hostBuildConfig = hostBuildConfig)
 
     private fun toolkitModules(): List<Module> =
         appToolkitHostModules(hostBuildConfig = hostBuildConfig)

@@ -73,7 +73,8 @@ free and open-source software!
 
 App Toolkit uses a modular, layered architecture designed for scalability and maintainability.
 
-- [Module Taxonomy](docs/architecture/module-taxonomy.md): Detailed explanation of core and feature modules.
+- [Module Boundaries](docs/architecture/module-boundaries.md): Ownership and dependency rules enforced by the build.
+- [Modularization Status](docs/architecture/modularization-status.md): Current migration state and remaining risks.
 - [Feature Module Template](docs/architecture/feature-module-template.md): Guidelines for creating new features.
 
 # How it works

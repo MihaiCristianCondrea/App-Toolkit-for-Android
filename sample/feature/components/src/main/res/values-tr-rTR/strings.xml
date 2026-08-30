@@ -51,4 +51,7 @@
     <string name="components_switch_title">Anahtar tercihi</string>
     <string name="components_title">Bileşenler</string>
     <string name="components_filter_favorites">Favoriler</string>
+    <string name="components_action_menus">İşlem menüleri</string>
+    <string name="components_action_menus_summary">Seçenekleri göstermek için dokunun</string>
+    <string name="components_data_selection">Veri seçimi</string>
 </resources>

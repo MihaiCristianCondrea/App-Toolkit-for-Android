@@ -123,4 +123,5 @@
     <string name="morse_error_length">২০০টি বা তার কম অক্ষর ব্যবহার করুন</string>
     <string name="morse_error_characters">শুধু A–Z অক্ষর, সংখ্যা ও স্পেস ব্যবহার করুন</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">দ্রুত সরঞ্জাম</string>
 </resources>

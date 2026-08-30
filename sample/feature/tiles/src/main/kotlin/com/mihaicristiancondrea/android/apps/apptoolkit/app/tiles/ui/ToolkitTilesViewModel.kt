@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.AppScreenTracking
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.repositories.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.contracts.ToolkitTilesAction
@@ -52,7 +53,7 @@ class ToolkitTilesViewModel(
 ) : LoggedScreenViewModel<ToolkitTilesUiState, ToolkitTilesEvent, ToolkitTilesAction>(
     initialState = UiStateScreen(data = ToolkitTilesUiState()),
     firebaseController = firebaseController,
-    screenName = "ToolkitTiles",
+    screenName = AppScreenTracking.Screens.TOOLKIT_TILES.name,
 ) {
     private var loadJob: Job? = null
 

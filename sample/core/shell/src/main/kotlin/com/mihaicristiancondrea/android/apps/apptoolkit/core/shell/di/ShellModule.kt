@@ -17,10 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.data.repositories.ComponentsShowcaseRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.data.repositories.DefaultNavigationConfigurationRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.data.repositories.NavigationConfigurationRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.ComponentsUnlockViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.AppNavigationItemsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
@@ -30,14 +26,8 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val shellModule: Module = module {
-    single<NavigationConfigurationRepository> {
-        DefaultNavigationConfigurationRepository(dataStore = get())
-    }
     single<NavigationItemsProvider> {
-        AppNavigationItemsProvider(repository = get(), firebaseController = get())
-    }
-    single {
-        ComponentsShowcaseRepository(dataStore = get(), firebaseController = get())
+        AppNavigationItemsProvider(contributions = getAll(), firebaseController = get())
     }
     viewModel {
         MainViewModel(
@@ -47,13 +37,6 @@ val shellModule: Module = module {
             inAppUpdateRepository = get(),
             firebaseController = get(),
             dispatchers = get(),
-        )
-    }
-    viewModel {
-        ComponentsUnlockViewModel(
-            componentsShowcaseRepository = get(),
-            dispatchers = get(),
-            firebaseController = get(),
         )
     }
 }

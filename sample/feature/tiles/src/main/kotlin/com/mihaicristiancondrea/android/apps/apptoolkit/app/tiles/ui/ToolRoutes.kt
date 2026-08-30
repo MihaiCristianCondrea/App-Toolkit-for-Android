@@ -45,6 +45,7 @@ import org.koin.compose.viewmodel.koinViewModel
  * for injecting a fake.
  */
 
+// TODO: these should not exist in root. based by the android tree skill these should not exist in the .ui layer directly. because the .ui has the screen and the view model.
 @Composable
 internal fun CoinFlipToolRoute(viewModel: CoinFlipToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()

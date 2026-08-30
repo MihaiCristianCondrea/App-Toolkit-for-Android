@@ -123,4 +123,5 @@
     <string name="morse_error_length">Sử dụng tối đa 200 ký tự</string>
     <string name="morse_error_characters">Chỉ sử dụng chữ cái A–Z, số và dấu cách</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">Công cụ nhanh</string>
 </resources>

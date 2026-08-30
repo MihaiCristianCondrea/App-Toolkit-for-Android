@@ -41,4 +41,5 @@
     <string name="error_failed_to_update_favorite">প্রিয় আপডেট করা যায়নি</string>
     <string name="favorite_apps">প্রিয়</string>
     <string name="summary_share_message">আমার ব্যবহার করা এই অসাধারণ অ্যাপটি দেখুন. এর কিছু দারুণ ফিচার আছে যা আপনার আকর্ষণীয় লাগতে পারে। আপনি এটি প্লে স্টোর থেকে ডাউনলোড করতে পারেন: %1$s</string>
+    <string name="apps_tools_title">অ্যাপস</string>
 </resources>

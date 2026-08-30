@@ -53,6 +53,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.states.Tool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.utils.filterFor
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.utils.requestQuickSettingsTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.MaterialColorsToolDialog
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ToolkitToolBottomSheet
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ads.QuickToolsNativeAdCard
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.ads.ToolkitTilesNativeAdViewFactory
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catalog.EmptyFilterCard
@@ -78,7 +79,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 /** Route-level composable for the Toolkit Tiles catalog. */
 @Composable
-fun ToolkitTilesRoute(
+fun ToolkitTilesScreen(
     paddingValues: PaddingValues,
 ) {
     val viewModel: ToolkitTilesViewModel = koinViewModel()

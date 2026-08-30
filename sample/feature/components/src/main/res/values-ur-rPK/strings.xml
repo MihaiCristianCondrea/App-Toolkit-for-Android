@@ -51,4 +51,7 @@
     <string name="components_switch_title">سوئچ ترجیح</string>
     <string name="components_title">اجزاء</string>
     <string name="components_filter_favorites">پسندیدہ</string>
+    <string name="components_action_menus">ایکشن مینیوز</string>
+    <string name="components_action_menus_summary">اختیارات دکھانے کے لیے ٹیپ کریں</string>
+    <string name="components_data_selection">ڈیٹا کا انتخاب</string>
 </resources>

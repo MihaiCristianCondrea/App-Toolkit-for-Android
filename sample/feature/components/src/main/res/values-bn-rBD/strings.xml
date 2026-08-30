@@ -51,4 +51,7 @@
     <string name="components_switch_title">সুইচ পছন্দ</string>
     <string name="components_title">উপাদানসমূহ</string>
     <string name="components_filter_favorites">প্রিয়</string>
+    <string name="components_action_menus">অ্যাকশন মেনু</string>
+    <string name="components_action_menus_summary">বিকল্প দেখাতে ট্যাপ করুন</string>
+    <string name="components_data_selection">ডেটা নির্বাচন</string>
 </resources>

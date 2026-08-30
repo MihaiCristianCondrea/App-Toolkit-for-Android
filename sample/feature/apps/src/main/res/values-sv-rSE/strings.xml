@@ -41,4 +41,5 @@
     <string name="error_failed_to_update_favorite">Det gick inte att uppdatera favoriten</string>
     <string name="favorite_apps">Favoriter</string>
     <string name="summary_share_message">Kolla in den här fantastiska appen som jag använder. Den har några riktigt coola funktioner som du kanske tycker är intressanta. Du kan ladda ner den från Play Store på: %1$s</string>
+    <string name="apps_tools_title">Appar</string>
 </resources>

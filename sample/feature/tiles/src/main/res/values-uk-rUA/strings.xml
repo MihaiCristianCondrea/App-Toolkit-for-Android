@@ -123,4 +123,5 @@
     <string name="morse_error_length">Використовуйте не більше 200 символів</string>
     <string name="morse_error_characters">Використовуйте лише літери A–Z, цифри та пробіли</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">Швидкі інструменти</string>
 </resources>

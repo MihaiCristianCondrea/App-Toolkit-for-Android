@@ -51,4 +51,7 @@
     <string name="components_switch_title">Перемикач налаштування</string>
     <string name="components_title">Компоненти</string>
     <string name="components_filter_favorites">Вибране</string>
+    <string name="components_action_menus">Меню дій</string>
+    <string name="components_action_menus_summary">Торкніться, щоб показати варіанти</string>
+    <string name="components_data_selection">Вибір даних</string>
 </resources>

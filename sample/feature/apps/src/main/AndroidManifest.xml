@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+
+        <package android:name="com.mihaicristiancondrea.android.apps.budgeta" />
+        <package android:name="com.d4rk.cartcalculator" />
+        <package android:name="com.d4rk.cleaner" />
+        <package android:name="com.d4rk.androidtutorials" />
+        <package android:name="com.d4rk.qrcodescanner.plus" />
+        <package android:name="com.d4rk.netprobe" />
+        <package android:name="com.d4rk.androidtutorials.java" />
+        <package android:name="com.d4rk.musicsleeptimer.plus" />
+        <package android:name="com.d4rk.englishwithlidia.plus" />
+        <package android:name="com.d4rk.lowbrightness" />
+        <package android:name="com.d4rk.android.apps.weddix" />
+    </queries>
+
+    <application>
+        <receiver
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.broadcast.FavoritesChangedReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.mihaicristiancondrea.android.apps.apptoolkit.action.FAVORITES_CHANGED" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

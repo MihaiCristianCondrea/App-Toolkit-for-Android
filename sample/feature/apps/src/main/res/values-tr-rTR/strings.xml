@@ -41,4 +41,5 @@
     <string name="error_failed_to_update_favorite">Favori güncellenemedi</string>
     <string name="favorite_apps">Favoriler</string>
     <string name="summary_share_message">Bu harika uygulamaya bir göz atın. Kullanmakta olduğum ve ilginizi çekebilecek bazı harika özelliklere sahip. Play Store\'dan indirilebilir: %1$s</string>
+    <string name="apps_tools_title">Uygulamalar</string>
 </resources>

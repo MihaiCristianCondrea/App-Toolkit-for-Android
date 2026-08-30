@@ -27,19 +27,25 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.ComponentsActivity
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.navigation.ComponentsRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.MainNavigationDefaults
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appNavigationEntryBuilders
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.toNavKeyOrDefault
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ComponentsRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationRoutes
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.toNavKeyOrDefault
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.NavigationRoutes
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.HelpActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.StartupActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
@@ -47,6 +53,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.BaseViewMod
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as AboutR
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R as HelpR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -57,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
     private val dataStore: DatastoreInterface by inject()
     private val dispatchers: DispatcherProvider by inject()
+    private val navigationManager: NavigationManager by inject()
     private val viewModel: MainViewModel by viewModel()
     private val gmsHostFactory: GmsHostFactory by inject()
     private var updateResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
@@ -126,14 +145,50 @@ class MainActivity : AppCompatActivity() {
             AppTheme {
                 MainScreen(
                     startRoute = startRoute,
+                    bottomBarItems = MainNavigationDefaults.bottomBarItems,
+                    fabSupportedRoutes = MainNavigationDefaults.fabSupportedRoutes,
                     entryBuilders = { context -> appNavigationEntryBuilders(context = context) },
-                    onLaunchActivity = { route: StableNavKey ->
-                        if (route is ComponentsRoute) {
-                            openActivity(activityClass = ComponentsActivity::class.java)
-                            true
-                        } else {
-                            false
+                    onTitleLookup = { route ->
+                        when (route) {
+                            is SettingsRoute -> stringResource(AboutR.string.settings)
+                            is GeneralSettingsRoute -> route.title
+                            is HelpRoute -> stringResource(HelpR.string.help)
+                            is AdsSettingsRoute -> stringResource(AboutR.string.ads)
+                            is PermissionsRoute -> stringResource(AboutR.string.permissions)
+                            is LicensesRoute -> stringResource(AboutR.string.oss_license_title)
+                            is SupportRoute -> stringResource(AboutR.string.support_us)
+                            is LibraryExtrasRoute -> stringResource(CommonR.string.app_name)
+                            is ComponentsRoute -> stringResource(ComponentsR.string.components_title)
+                            else -> {
+                                MainNavigationDefaults.bottomBarItems
+                                    .find { it.route == route }?.let { stringResource(it.title) }
+                                    ?: stringResource(CommonR.string.app_name)
+                            }
                         }
+                    },
+                    onLaunchActivity = { route: StableNavKey ->
+                        when (route) {
+                            is ComponentsRoute -> {
+                                openActivity(activityClass = ComponentsActivity::class.java)
+                                true
+                            }
+                            is SettingsRoute -> {
+                                openActivity(activityClass = SettingsActivity::class.java)
+                                true
+                            }
+                            is HelpRoute -> {
+                                openActivity(activityClass = HelpActivity::class.java)
+                                true
+                            }
+                            is SupportRoute -> {
+                                openActivity(activityClass = SupportActivity::class.java)
+                                true
+                            }
+                            else -> false
+                        }
+                    },
+                    onNavigationRequested = { route ->
+                        navigationManager.navigateTo(route = route.toNavKeyOrDefault())
                     }
                 )
             }

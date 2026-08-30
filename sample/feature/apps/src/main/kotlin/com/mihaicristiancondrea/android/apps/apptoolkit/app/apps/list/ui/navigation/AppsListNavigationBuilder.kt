@@ -17,9 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.navigation
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.AppsListRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.AppsListScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppsListRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 
@@ -27,7 +26,7 @@ fun appsListEntryBuilder(
     context: AppNavigationEntryContext,
 ): NavigationEntryBuilder<StableNavKey> = {
     entry<AppsListRoute>(clazzContentKey = { route -> route }) {
-        AppsListRoute(
+        AppsListScreen(
             paddingValues = context.paddingValues,
             windowWidthSizeClass = context.windowWidthSizeClass,
             onRegisterRandomAppHandler = context.registerRandomAppHandlerFor(AppsListRoute),

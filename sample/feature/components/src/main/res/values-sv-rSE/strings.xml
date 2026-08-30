@@ -51,4 +51,7 @@
     <string name="components_switch_title">Växlarpreferens</string>
     <string name="components_title">Komponenter</string>
     <string name="components_filter_favorites">Favoriter</string>
+    <string name="components_action_menus">Åtgärdsmenyer</string>
+    <string name="components_action_menus_summary">Tryck för att visa alternativ</string>
+    <string name="components_data_selection">Dataval</string>
 </resources>

@@ -123,4 +123,5 @@
     <string name="morse_error_length">200 یا اس سے کم حروف استعمال کریں</string>
     <string name="morse_error_characters">صرف A–Z حروف، اعداد اور اسپیس استعمال کریں</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">فوری ٹولز</string>
 </resources>

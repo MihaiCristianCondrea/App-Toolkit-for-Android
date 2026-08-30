@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">नेविगेशन लोड नहीं हो सका</string>
     <string name="open_random_app">रैंडम ऐप खोलें</string>
-    <string name="components_title">कॉम्पोनेंट्स</string>
 </resources>

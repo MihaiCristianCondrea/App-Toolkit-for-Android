@@ -51,4 +51,7 @@
     <string name="components_switch_title">Tùy chọn công tắc</string>
     <string name="components_title">Thành phần</string>
     <string name="components_filter_favorites">Yêu thích</string>
+    <string name="components_action_menus">Trình đơn thao tác</string>
+    <string name="components_action_menus_summary">Nhấn để hiển thị các tùy chọn</string>
+    <string name="components_data_selection">Chọn dữ liệu</string>
 </resources>

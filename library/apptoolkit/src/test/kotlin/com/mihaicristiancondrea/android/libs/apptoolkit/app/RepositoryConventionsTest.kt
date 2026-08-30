@@ -47,7 +47,12 @@ class RepositoryConventionsTest {
     }
 
     private fun productionSources(): List<File> = ACTIVE_SOURCE_ROOTS
-        .flatMap { directory -> File(repositoryRoot, directory).walkTopDown().toList() }
+        .flatMap { directory ->
+            File(repositoryRoot, directory)
+                .walkTopDown()
+                .onEnter { it.name !in IGNORED_DIRECTORIES }
+                .toList()
+        }
         .filter { it.isFile && it.extension == KOTLIN_EXTENSION }
         .filter { MAIN_SOURCE_SET in it.invariantPath() }
 
@@ -59,6 +64,7 @@ class RepositoryConventionsTest {
 
     private companion object {
         val ACTIVE_SOURCE_ROOTS: List<String> = listOf("library", "sample")
+        val IGNORED_DIRECTORIES: Set<String> = setOf("build", ".gradle")
         const val MAIN_SOURCE_SET = "/src/main/"
         const val KOTLIN_EXTENSION = "kt"
 

@@ -33,6 +33,8 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.AppGa4Contract
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.sections.ButtonShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.sections.FabShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.views.sections.FilterShowcase
@@ -45,6 +47,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.koinInject
@@ -60,6 +63,13 @@ fun ComponentsScreen(
 ) {
     val firebaseController: FirebaseController = koinInject()
     val activity = LocalActivity.current
+    val trackedScreen = AppScreenTracking.Screens.COMPONENTS
+
+    TrackScreenView(
+        firebaseController = firebaseController,
+        screenName = trackedScreen.name,
+        screenClass = trackedScreen.className,
+    )
 
     val content: @Composable (PaddingValues) -> Unit = { innerPadding ->
         val dropdownOptionOne = stringResource(id = R.string.components_option_alpha)
@@ -110,17 +120,17 @@ fun ComponentsScreen(
 
         val switchCardState: State<Boolean> = rememberUpdatedState(switchCardEnabled)
         val carouselState = rememberPagerState { dropdownOptions.size }
-        val screenParam = AnalyticsValue.Str("components")
+        val screenParam = AnalyticsValue.Str(trackedScreen.name)
 
         fun ga4Event(component: String, variant: String? = null): Ga4EventData {
             val params = buildMap {
-                put("screen", screenParam)
-                put("component", AnalyticsValue.Str(component))
+                put(AppGa4Contract.Param.SCREEN, screenParam)
+                put(AppGa4Contract.Param.COMPONENT, AnalyticsValue.Str(component))
                 variant?.let {
-                    put("variant", AnalyticsValue.Str(it))
+                    put(AppGa4Contract.Param.VARIANT, AnalyticsValue.Str(it))
                 }
             }
-            return Ga4EventData(name = "components_click", params = params)
+            return Ga4EventData(name = AppGa4Contract.EventName.COMPONENTS_CLICK, params = params)
         }
 
         LazyColumn(

@@ -51,4 +51,7 @@
     <string name="components_switch_title">Umschalter-Einstellung</string>
     <string name="components_title">Komponenten</string>
     <string name="components_filter_favorites">Favoriten</string>
+    <string name="components_action_menus">Aktionsmenüs</string>
+    <string name="components_action_menus_summary">Tippen, um Optionen anzuzeigen</string>
+    <string name="components_data_selection">Datenauswahl</string>
 </resources>

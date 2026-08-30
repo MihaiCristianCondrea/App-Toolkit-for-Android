@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.AppScreenTracking
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.DeveloperAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.FavoritesRepository
@@ -80,7 +81,7 @@ class AppsListViewModel(
 ) : LoggedScreenViewModel<AppListUiState, HomeEvent, HomeAction>(
     initialState = UiStateScreen(data = AppListUiState()),
     firebaseController = firebaseController,
-    screenName = "AppsList",
+    screenName = AppScreenTracking.Screens.APPS_LIST.name,
 ) {
 
     private val fetchAppsTrigger = MutableSharedFlow<Unit>(replay = 1)

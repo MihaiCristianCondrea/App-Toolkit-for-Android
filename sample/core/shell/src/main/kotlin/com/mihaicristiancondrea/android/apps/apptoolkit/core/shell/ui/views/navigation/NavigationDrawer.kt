@@ -17,33 +17,17 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.views.navigation
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppsListRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ComponentsRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationRoutes
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
 
 fun isDrawerItemSelected(
     itemRoute: String,
     currentRoute: StableNavKey,
-): Boolean =
-    when (itemRoute) {
-        NavigationRoutes.ROUTE_APPS_LIST -> currentRoute == AppsListRoute
-        NavigationRoutes.ROUTE_TOOLKIT_TILES -> currentRoute == ToolkitTilesRoute
-        NavigationRoutes.ROUTE_COMPONENTS -> currentRoute == ComponentsRoute
-        NavigationDrawerRoutes.ROUTE_SETTINGS -> currentRoute is SettingsRoute || currentRoute is GeneralSettingsRoute
-        NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> currentRoute is HelpRoute
-        NavigationDrawerRoutes.ROUTE_SUPPORT -> currentRoute is SupportRoute
-        else -> false
-    }
+    navigationItemsProvider: NavigationItemsProvider,
+): Boolean = navigationItemsProvider.isSelected(itemRoute, currentRoute)
 
 fun drawerItemClickEvent(route: String): AnalyticsEvent =
     AnalyticsEvent(

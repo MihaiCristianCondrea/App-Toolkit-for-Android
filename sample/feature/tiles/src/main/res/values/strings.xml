@@ -135,4 +135,7 @@
     <string name="tool_status_unsupported_summary">Android does not expose a safe public API for this action yet, so this entry is documented as a preview.</string>
     <string name="tool_status_unsupported_title">Preview only</string>
     <string name="tool_system_cycle_mode" translatable="false">Cycle Mode</string>
+    <!-- Navigation -->
+    <string name="tiles_title">Quick Tools</string>
+
 </resources>

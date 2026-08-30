@@ -51,4 +51,7 @@
     <string name="components_switch_title">Kapcsoló beállítás</string>
     <string name="components_title">Komponensek</string>
     <string name="components_filter_favorites">Kedvencek</string>
+    <string name="components_action_menus">Műveleti menük</string>
+    <string name="components_action_menus_summary">Koppintson a lehetőségek megjelenítéséhez</string>
+    <string name="components_data_selection">Adatkiválasztás</string>
 </resources>

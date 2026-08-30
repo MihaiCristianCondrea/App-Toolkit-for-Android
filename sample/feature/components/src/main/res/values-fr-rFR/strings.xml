@@ -51,4 +51,7 @@
     <string name="components_switch_title">Préférence de commutateur</string>
     <string name="components_title">Composants</string>
     <string name="components_filter_favorites">Favoris</string>
+    <string name="components_action_menus">Menus d’action</string>
+    <string name="components_action_menus_summary">Appuyez pour afficher les options</string>
+    <string name="components_data_selection">Sélection des données</string>
 </resources>

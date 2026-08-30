@@ -2,12 +2,11 @@
 
 ## Purpose
 
-The sample-only About content that connects the toolkit About screen to the hidden components
-showcase unlock flow.
+Sample-owned General Settings repository and ViewModel bindings.
 
 ## Owns
 
-- `AppAboutSettingsContent`, including the tap gesture that unlocks the components showcase.
+- The sample binding for `GeneralSettingsRepository` and `GeneralSettingsViewModel`.
 
 ## Does not own
 
@@ -15,11 +14,11 @@ showcase unlock flow.
   `:library:feature:settings`](../../../library/feature/settings/README.md).
 - Host settings/startup provider implementations and their localized resources, owned by
   [`:sample:core:apptoolkit`](../../core/apptoolkit/README.md).
+- App-specific About content and cross-feature callback wiring, owned by `:sample:app`.
 - The unlock flag, owned by [`:sample:feature:components`](../components/README.md).
 
 ## Depends on
 
-- `:sample:feature:components` for `ComponentsUnlockViewModel`, driven by the About tap gesture.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the provider contracts.
 
 ## Used by
@@ -30,33 +29,28 @@ showcase unlock flow.
 
 ```mermaid
 flowchart TD
-    AppModule[":sample:app GeneralSettingsModule"] --> Content[AppAboutSettingsContent]
-    Content --> Toolkit[Toolkit AboutScreen]
-    Toolkit -->|version tap count| Content
-    Content --> Event[ComponentsUnlockEvent.VersionTapped]
-    Event --> Unlock[ComponentsUnlockViewModel]
-    Unlock --> Repo[ComponentsShowcaseRepository]
-    Repo --> Store[Persisted unlock flag]
+    App[":sample:app"] --> Module[SettingsFeatureModule]
+    Module --> Repo[GeneralSettingsRepository]
+    Module --> VM[GeneralSettingsViewModel]
+    VM --> Repo
+    Repo --> Toolkit[Toolkit settings preferences]
 ```
 
 ## Architectural decisions
 
-- This feature is intentionally a thin UI bridge: the provider belongs to the reusable host adapter,
-  while unlock state belongs to the components feature.
-- The About composable receives the tap callback instead of depending on sample code, preserving the
-  toolkit feature's reusability.
+- This feature binds sample runtime dependencies to reusable settings implementations.
+- Cross-feature UI composition stays in the app module so this feature remains independent.
 - No repository or data source is introduced here because the module owns no state or business rule.
 
 ## Public contracts
 
-- `AppAboutSettingsContent`.
+- `settingsFeatureModule`.
 
 ## Internal implementations
 
-- Callback wiring between the toolkit About screen and the components unlock ViewModel.
+- General Settings repository and ViewModel construction.
 
 ## Current risks
 
-The About content carries the components-unlock gesture, so a change to the showcase can require a
-change here. The alternative, putting the gesture in the components module, would invert the
-dependency without removing it, because the gesture has to live on the About screen.
+This module wraps library-owned settings implementations. Changes to their constructor contracts
+must be reflected in this binding module.

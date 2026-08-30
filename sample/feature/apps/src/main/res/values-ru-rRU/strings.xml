@@ -41,4 +41,5 @@
     <string name="error_failed_to_update_favorite">Не удалось обновить избранное</string>
     <string name="favorite_apps">Избранное</string>
     <string name="summary_share_message">Оцените это удивительное приложение, которое я использую. В нём есть интересные функции. Вы можете скачать его из Play Store по адресу: %1$s</string>
+    <string name="apps_tools_title">Приложения</string>
 </resources>

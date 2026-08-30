@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">Échec du chargement de la navigation</string>
     <string name="open_random_app">Ouvrir une application aléatoire</string>
-    <string name="components_title">Composants</string>
 </resources>

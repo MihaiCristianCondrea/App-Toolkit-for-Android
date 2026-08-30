@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (©) 2026 Mihai-Cristian Condrea
   ~
   ~ This program is free software: you can redistribute it and/or modify
@@ -15,20 +16,57 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<!--
-  The breathing tile plays haptics and the caffeine tile holds a wake lock and runs a foreground
-  service, so this module declares the permissions its own code needs instead of depending on the
-  host app to remember them. Module manifests merge into the consuming application.
--->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <application>
+        <service
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.CoinFlipTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_coin"
+            android:label="@string/tile_coin_flip_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
 
-    <uses-feature
-        android:name="android.hardware.camera.flash"
-        android:required="false" />
+        <service
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.CounterTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_counter"
+            android:label="@string/tile_counter_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.DiceRollTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_dice"
+            android:label="@string/tile_dice_roll_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.CaffeineService"
+            android:exported="false"
+            android:foregroundServiceType="shortService" />
+
+        <service
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.FlashDimmerTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_flash_dimmer"
+            android:label="@string/tile_flash_dimmer_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+    </application>
 
 </manifest>

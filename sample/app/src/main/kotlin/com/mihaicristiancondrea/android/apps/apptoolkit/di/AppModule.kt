@@ -17,9 +17,34 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
+import android.content.Context
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.integration.components.AppAboutSettingsContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val appModule: Module = module {
-    // App-level definitions go here
+    // TODO: these should be in a module feature:settings
+    factory<GeneralSettingsContentProvider> {
+        GeneralSettingsContentProvider(
+            aboutContent = { paddingValues, snackbarHostState ->
+                AppAboutSettingsContent(
+                    paddingValues = paddingValues,
+                    snackbarHostState = snackbarHostState,
+                )
+            },
+        )
+    }
+
+    single<List<String>>(qualifier = named(name = "startup_entries")) {
+        listOf(
+            get<Context>().getString(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R.string.tiles_title),
+            get<Context>().getString(com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R.string.apps_tools_title)
+        )
+    }
+
+    single<List<String>>(qualifier = named(name = "startup_values")) {
+        listOf("toolkit_tiles", "apps_list")
+    }
 }

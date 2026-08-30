@@ -123,4 +123,5 @@
     <string name="morse_error_length">ใช้ไม่เกิน 200 อักขระ</string>
     <string name="morse_error_characters">ใช้เฉพาะตัวอักษร A–Z ตัวเลข และเว้นวรรค</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">เครื่องมือด่วน</string>
 </resources>

@@ -8,6 +8,9 @@ libraries with the host's own feature modules.
 ## Owns
 
 - The `AppToolkit` application class, the manifest, `MainActivity`, and the Koin bootstrap.
+- `sampleAppModules`, the single source of truth used by runtime startup and DI graph tests.
+- App-only bridges that intentionally connect otherwise independent features, such as the About
+  version-tap callback to the Components unlock repository.
 - `appNavigationEntryBuilders`, the one declaration that names every host feature.
 - The sample onboarding provider; startup and settings provider adapters live in
   [`:sample:core:apptoolkit`](../core/apptoolkit/README.md).
@@ -101,11 +104,8 @@ the locale config while retaining the application-level locale link.
 destination touches this module. That is deliberate, it is what keeps the feature modules from
 depending on each other, but it does make this file a merge point.
 
-Components declared by feature modules (Quick Settings tile services, the caffeine foreground
-service, `ComponentsActivity`, the widget receiver) are still declared in this manifest rather than
-in
-each feature's own. They resolve because every module is a dependency here, but a feature is not yet
-self-contained: adding one to another host means editing this manifest.
+The application still names the complete feature and destination set. This is an intentional merge
+point, but conflicts are possible when several features are added at once.
 
 ## Architecture guards
 
@@ -114,8 +114,8 @@ definition that cannot be created surfaces as a fatal `Unable to start activity`
 `MainActivity.onCreate` rather than at startup. The reflection limits and host provider boundary are
 documented in [`:library:apptoolkit`](../../library/apptoolkit/README.md).
 
-The list of modules in that test mirrors `initializeKoin` by hand. A module added to one and not the
-other leaves the check passing while the app breaks, so they have to be edited together.
+The test and `initializeKoin` both consume `sampleAppModules`, so a module cannot be added to runtime
+startup without also becoming part of graph verification.
 
 ## Migration notes
 

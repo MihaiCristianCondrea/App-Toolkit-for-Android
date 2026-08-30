@@ -51,4 +51,7 @@
     <string name="components_switch_title">Preferință comutator</string>
     <string name="components_title">Componente</string>
     <string name="components_filter_favorites">Favorite</string>
+    <string name="components_action_menus">Meniuri de acțiuni</string>
+    <string name="components_action_menus_summary">Atinge pentru a afișa opțiunile</string>
+    <string name="components_data_selection">Selectarea datelor</string>
 </resources>

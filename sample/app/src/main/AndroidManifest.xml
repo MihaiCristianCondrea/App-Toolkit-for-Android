@@ -19,25 +19,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="auto">
 
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="https" />
-        </intent>
-
-        <package android:name="com.mihaicristiancondrea.android.apps.budgeta" />
-        <package android:name="com.d4rk.cartcalculator" />
-        <package android:name="com.d4rk.cleaner" />
-        <package android:name="com.d4rk.androidtutorials" />
-        <package android:name="com.d4rk.qrcodescanner.plus" />
-        <package android:name="com.d4rk.netprobe" />
-        <package android:name="com.d4rk.androidtutorials.java" />
-        <package android:name="com.d4rk.musicsleeptimer.plus" />
-        <package android:name="com.d4rk.englishwithlidia.plus" />
-        <package android:name="com.d4rk.lowbrightness" />
-        <package android:name="com.d4rk.android.apps.weddix" />
-    </queries>
-
     <application
         android:name=".AppToolkit"
         android:appCategory="productivity"
@@ -70,82 +51,5 @@
                 android:resource="@xml/shortcuts" />
         </activity>
 
-        <activity
-            android:name=".app.components.ui.ComponentsActivity"
-            android:exported="false"
-            android:label="@string/components_title" />
-
-        <service
-            android:name=".app.tiles.service.CoinFlipTileService"
-            android:exported="true"
-            android:icon="@drawable/ic_tile_coin"
-            android:label="@string/tile_coin_flip_title"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name=".app.tiles.service.CounterTileService"
-            android:exported="true"
-            android:icon="@drawable/ic_tile_counter"
-            android:label="@string/tile_counter_title"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name=".app.tiles.service.DiceRollTileService"
-            android:exported="true"
-            android:icon="@drawable/ic_tile_dice"
-            android:label="@string/tile_dice_roll_title"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name=".app.tiles.service.CaffeineService"
-            android:exported="false"
-            android:foregroundServiceType="shortService" />
-
-        <service
-            android:name=".app.tiles.service.FlashDimmerTileService"
-            android:exported="true"
-            android:icon="@drawable/ic_tile_flash_dimmer"
-            android:label="@string/tile_flash_dimmer_title"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/ad_mob_app_id" />
-
-        <receiver
-            android:name=".app.apps.common.broadcast.FavoritesChangedReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.mihaicristiancondrea.android.apps.apptoolkit.action.FAVORITES_CHANGED" />
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name=".app.widgets.apps.AppIconsWidgetReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/app_icons_widget_info" />
-        </receiver>
     </application>
 </manifest>

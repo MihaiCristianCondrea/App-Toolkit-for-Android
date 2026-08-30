@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">Не удалось загрузить навигацию</string>
     <string name="open_random_app">Открыть случайное приложение</string>
-    <string name="components_title">Компоненты</string>
 </resources>

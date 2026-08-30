@@ -123,4 +123,5 @@
     <string name="morse_error_length">Gunakan maksimal 200 karakter</string>
     <string name="morse_error_characters">Gunakan hanya huruf A–Z, angka, dan spasi</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">Alat Cepat</string>
 </resources>

@@ -22,17 +22,33 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.di.appsFeatureModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.di.settingsFeatureModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.di.tilesFeatureModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.di.componentsFeatureModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.di.adsIntegrationModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di.onboardingFeatureModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.di.navigationModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.di.shellModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.di.analyticsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.help.HelpConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import org.koin.core.module.Module
+
+/** The exact Koin graph started by the sample application. */
+fun sampleAppModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> = buildList {
+    addAll(appToolkitHostModules(hostBuildConfig = hostBuildConfig))
+    add(dataStoreModule)
+    add(navigationModule)
+    add(shellModule)
+    add(appModule)
+    add(settingsFeatureModule)
+    add(tilesFeatureModule)
+    add(appsFeatureModule)
+    add(componentsFeatureModule)
+    add(adsIntegrationModule)
+    add(onboardingFeatureModule)
+}
 
 fun initializeKoin(context: Context) {
     val appToolkitBuildConfig = AppToolkitHostBuildConfig(
@@ -46,22 +62,6 @@ fun initializeKoin(context: Context) {
 
     startKoin {
         androidContext(androidContext = context)
-        modules(
-            modules = buildList {
-                // The toolkit's graph plus the sample's answers to its extension points.
-                // Everything after this overrides it.
-                addAll(appToolkitHostModules(hostBuildConfig = appToolkitBuildConfig))
-                add(dataStoreModule)
-                add(navigationModule)
-                add(analyticsModule)
-                add(shellModule)
-                add(appModule)
-                add(settingsFeatureModule)
-                add(tilesFeatureModule)
-                add(appsFeatureModule)
-                add(adsIntegrationModule)
-                add(onboardingFeatureModule)
-            }
-        )
+        modules(modules = sampleAppModules(hostBuildConfig = appToolkitBuildConfig))
     }
 }

@@ -7,6 +7,12 @@
 ### Improved
 
 - Removed the unused code from the app to have a smaller app.
+- Improved Components showcase labels and translations.
+
+### Fixed
+
+- Fixed Sample App startup graph verification and navigation composition after modularization.
+- Fixed missing ad-placement and analytics-contract verification.
 
 ---
 

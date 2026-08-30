@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">تعذر تحميل التنقل</string>
     <string name="open_random_app">فتح تطبيق عشوائي</string>
-    <string name="components_title">المكوّنات</string>
 </resources>

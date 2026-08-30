@@ -41,4 +41,5 @@
     <string name="error_failed_to_update_favorite">Неуспешно обновяване на любимите</string>
     <string name="favorite_apps">Любими</string>
     <string name="summary_share_message">Вижте това невероятно приложение, което използвам. То има наистина страхотни функции, които може да ви бъдат интересни. Можете да го изтеглите от Play Store на адрес: %1$s</string>
+    <string name="apps_tools_title">Приложения</string>
 </resources>

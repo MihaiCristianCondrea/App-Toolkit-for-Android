@@ -51,4 +51,7 @@
     <string name="components_switch_title">Preferência de alternância</string>
     <string name="components_title">Componentes</string>
     <string name="components_filter_favorites">Favoritos</string>
+    <string name="components_action_menus">Menus de ações</string>
+    <string name="components_action_menus_summary">Toque para mostrar as opções</string>
+    <string name="components_data_selection">Seleção de dados</string>
 </resources>

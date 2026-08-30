@@ -123,4 +123,5 @@
     <string name="morse_error_length">Använd högst 200 tecken</string>
     <string name="morse_error_characters">Använd endast bokstäverna A–Z, siffror och mellanslag</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">Snabba verktyg</string>
 </resources>

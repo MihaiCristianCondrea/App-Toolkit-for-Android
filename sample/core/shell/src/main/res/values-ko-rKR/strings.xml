@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">탐색을 불러오지 못했습니다</string>
     <string name="open_random_app">무작위 앱 열기</string>
-    <string name="components_title">컴포넌트</string>
 </resources>

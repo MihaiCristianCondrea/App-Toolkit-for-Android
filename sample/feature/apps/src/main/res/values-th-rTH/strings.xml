@@ -41,4 +41,5 @@
     <string name="error_failed_to_update_favorite">ไม่สามารถอัปเดตรายการโปรดได้</string>
     <string name="favorite_apps">รายการโปรด</string>
     <string name="summary_share_message">ลองดูแอปนี้ที่ฉันใช้อยู่. มีฟีเจอร์เจ๋ง ๆ มากมายที่คุณอาจสนใจ ดาวน์โหลดได้จาก Play Store ที่: %1$s</string>
+    <string name="apps_tools_title">แอพ</string>
 </resources>

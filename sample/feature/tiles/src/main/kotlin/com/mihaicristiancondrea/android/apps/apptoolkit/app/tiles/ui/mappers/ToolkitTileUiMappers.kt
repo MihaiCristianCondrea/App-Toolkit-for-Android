@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers
 import androidx.annotation.StringRes
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileCategoryData
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileData
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileIcon
@@ -76,6 +77,22 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
     "breathing" -> TileVisuals(R.string.tile_breathing_title, R.string.tile_breathing_summary, ToolkitTileIcon.Breathing)
     "sos" -> TileVisuals(R.string.tile_sos_title, R.string.tile_sos_summary, ToolkitTileIcon.Sos)
     else -> error("Unknown Toolkit Tile: $this")
+}
+
+@StringRes
+internal fun ToolkitTileStatus.helperTitleResId(): Int = when (this) {
+    ToolkitTileStatus.Added -> R.string.tool_status_added_title
+    ToolkitTileStatus.Available -> R.string.tool_status_available_title
+    ToolkitTileStatus.NeedsSetup -> R.string.tool_status_needs_setup_title
+    ToolkitTileStatus.Unsupported -> R.string.tool_status_unsupported_title
+}
+
+@StringRes
+internal fun ToolkitTileStatus.helperSummaryResId(): Int = when (this) {
+    ToolkitTileStatus.Added -> R.string.tool_status_added_summary
+    ToolkitTileStatus.Available -> R.string.tool_status_available_summary
+    ToolkitTileStatus.NeedsSetup -> R.string.tool_status_needs_setup_summary
+    ToolkitTileStatus.Unsupported -> R.string.tool_status_unsupported_summary
 }
 
 private data class CategoryVisuals(@StringRes val titleResId: Int, val icon: ToolkitTileIcon)

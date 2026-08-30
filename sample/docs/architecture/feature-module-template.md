@@ -42,4 +42,6 @@ dependencies {
 
 ## Documentation
 
-Every feature module must have a `README.md` following the [logic graph pattern](../../feature/home/README.md).
+Every feature module must have a `README.md` that documents ownership, dependencies, public
+contracts, important flows, and current risks. Follow the repository's
+[module boundaries](module-boundaries.md).

@@ -51,4 +51,7 @@
     <string name="components_switch_title">Предпочитание за превключвател</string>
     <string name="components_title">Компоненти</string>
     <string name="components_filter_favorites">Любими</string>
+    <string name="components_action_menus">Менюта с действия</string>
+    <string name="components_action_menus_summary">Докоснете, за да покажете опциите</string>
+    <string name="components_data_selection">Избор на данни</string>
 </resources>

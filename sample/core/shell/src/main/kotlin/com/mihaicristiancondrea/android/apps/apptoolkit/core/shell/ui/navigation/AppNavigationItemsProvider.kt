@@ -22,30 +22,38 @@ import androidx.compose.material.icons.automirrored.outlined.EventNote
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.icons.outlined.Widgets
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.data.repositories.NavigationConfigurationRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationRoutes
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.BuildConfig
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationItemContribution
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as ToolkitR
 
-/** Produces presentation-ready drawer items from source-neutral navigation configuration. */
+/** Produces presentation-ready drawer items from contributed feature navigation items. */
 class AppNavigationItemsProvider(
-    private val repository: NavigationConfigurationRepository,
+    private val contributions: List<NavigationItemContribution>,
     private val firebaseController: FirebaseController,
 ) : NavigationItemsProvider {
-    override fun items(): Flow<List<NavigationDrawerItem>> =
-        repository.componentsShowcaseUnlocked.map { isUnlocked ->
+    override fun items(): Flow<List<NavigationDrawerItem>> {
+        val contributionFlows = contributions.map { it.navigationItems() }
+        val combinedContributions = if (contributionFlows.isEmpty()) {
+            flowOf(emptyList())
+        } else {
+            combine(contributionFlows) { it.flatMap { list -> list } }
+        }
+
+        return combinedContributions.map { contributedItems ->
             buildList {
-                if (BuildConfig.DEBUG || isUnlocked) {
-                    add(item(R.string.components_title, Icons.Outlined.Widgets, NavigationRoutes.ROUTE_COMPONENTS))
-                }
+                addAll(contributedItems)
                 add(item(ToolkitR.string.settings, Icons.Outlined.Settings, NavigationDrawerRoutes.ROUTE_SETTINGS))
                 add(item(ToolkitR.string.help_and_feedback, Icons.AutoMirrored.Outlined.HelpOutline, NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK))
                 add(item(ToolkitR.string.updates, Icons.AutoMirrored.Outlined.EventNote, NavigationDrawerRoutes.ROUTE_UPDATES))
@@ -57,6 +65,20 @@ class AppNavigationItemsProvider(
                 attributes = mapOf("source" to "AppNavigationItemsProvider"),
             )
         }
+    }
+
+    override fun isSelected(itemRoute: String, currentRoute: StableNavKey): Boolean {
+        if (contributions.any { it.isSelected(itemRoute, currentRoute) }) {
+            return true
+        }
+
+        return when (itemRoute) {
+            NavigationDrawerRoutes.ROUTE_SETTINGS -> currentRoute is SettingsRoute || currentRoute is GeneralSettingsRoute
+            NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> currentRoute is HelpRoute
+            NavigationDrawerRoutes.ROUTE_SUPPORT -> currentRoute is SupportRoute
+            else -> false
+        }
+    }
 }
 
 private fun item(

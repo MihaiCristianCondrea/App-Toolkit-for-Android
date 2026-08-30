@@ -17,18 +17,17 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesRoute as ToolkitTilesScreenRoute
 
 /** Registers the Toolkit Tiles destination in the app navigation graph. */
 fun toolkitTilesEntryBuilder(
     context: AppNavigationEntryContext,
 ): NavigationEntryBuilder<StableNavKey> = {
     entry<ToolkitTilesRoute>(clazzContentKey = { route -> route }) {
-        ToolkitTilesScreenRoute(
+        ToolkitTilesScreen(
             paddingValues = context.paddingValues,
         )
     }

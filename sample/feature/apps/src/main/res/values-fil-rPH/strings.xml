@@ -41,4 +41,5 @@
     <string name="error_failed_to_update_favorite">Nabigong i-update ang paborito</string>
     <string name="favorite_apps">Mga paborito</string>
     <string name="summary_share_message">Tingnan itong kamangha-manghang app na ginagamit ko. Mayroon itong ilang mga talagang cool na feature na maaaring makita mong interesante. Maaari mo itong i-download mula sa Play Store sa: %1$s</string>
+    <string name="apps_tools_title">Mga app</string>
 </resources>

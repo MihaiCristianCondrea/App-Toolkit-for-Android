@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">Nabigong i-load ang nabigasyon</string>
     <string name="open_random_app">Buksan ang random na app</string>
-    <string name="components_title">Mga bahagi</string>
 </resources>

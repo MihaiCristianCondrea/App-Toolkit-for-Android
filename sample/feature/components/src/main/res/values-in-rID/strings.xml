@@ -51,4 +51,7 @@
     <string name="components_switch_title">Preferensi sakelar</string>
     <string name="components_title">Komponen</string>
     <string name="components_filter_favorites">Favorit</string>
+    <string name="components_action_menus">Menu tindakan</string>
+    <string name="components_action_menus_summary">Ketuk untuk menampilkan opsi</string>
+    <string name="components_data_selection">Pemilihan data</string>
 </resources>

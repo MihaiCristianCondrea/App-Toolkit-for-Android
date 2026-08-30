@@ -51,4 +51,7 @@
     <string name="components_switch_title">Переключатель настройки</string>
     <string name="components_title">Компоненты</string>
     <string name="components_filter_favorites">Избранное</string>
+    <string name="components_action_menus">Меню действий</string>
+    <string name="components_action_menus_summary">Нажмите, чтобы показать варианты</string>
+    <string name="components_data_selection">Выбор данных</string>
 </resources>

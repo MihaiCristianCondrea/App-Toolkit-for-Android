@@ -123,4 +123,5 @@
     <string name="morse_error_length">Използвайте до 200 знака</string>
     <string name="morse_error_characters">Използвайте само букви A–Z, цифри и интервали</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">Бързи инструменти</string>
 </resources>

@@ -120,7 +120,7 @@ internal fun NativeAdPlaceholder(
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = stringResource(id = R.string.sponsored_ad_label),
+                text = stringResource(id = R.string.sponsored_ad_label_plain),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

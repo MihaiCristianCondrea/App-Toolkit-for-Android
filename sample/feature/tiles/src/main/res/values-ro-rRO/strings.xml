@@ -123,4 +123,5 @@
     <string name="morse_error_length">Folosește cel mult 200 de caractere</string>
     <string name="morse_error_characters">Folosește numai litere A–Z, cifre și spații</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">Instrumente rapide</string>
 </resources>

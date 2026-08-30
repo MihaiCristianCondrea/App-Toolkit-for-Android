@@ -17,21 +17,10 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.di
 
-import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.R
 import org.koin.core.module.Module
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val navigationModule: Module = module {
     single { NavigationManager() }
-
-    single<List<String>>(qualifier = named(name = "startup_entries")) {
-        get<Context>().resources.getStringArray(R.array.preference_startup_entries).toList()
-    }
-
-    single<List<String>>(qualifier = named(name = "startup_values")) {
-        get<Context>().resources.getStringArray(R.array.preference_startup_values).toList()
-    }
 }

@@ -51,4 +51,7 @@
     <string name="components_switch_title">Kagustuhan sa switch</string>
     <string name="components_title">Mga bahagi</string>
     <string name="components_filter_favorites">Mga paborito</string>
+    <string name="components_action_menus">Mga menu ng pagkilos</string>
+    <string name="components_action_menus_summary">I-tap para ipakita ang mga opsyon</string>
+    <string name="components_data_selection">Pagpili ng data</string>
 </resources>

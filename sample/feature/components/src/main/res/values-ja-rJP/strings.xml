@@ -51,4 +51,7 @@
     <string name="components_switch_title">スイッチ設定</string>
     <string name="components_title">コンポーネント</string>
     <string name="components_filter_favorites">お気に入り</string>
+    <string name="components_action_menus">操作メニュー</string>
+    <string name="components_action_menus_summary">タップしてオプションを表示</string>
+    <string name="components_data_selection">データ選択</string>
 </resources>

@@ -9,8 +9,8 @@ destination.
 
 - `MainScreen` and `MainShell`, the drawer, the FAB, and the changelog dialog trigger.
 - `MainViewModel` and its contracts.
-- `NavigationConfigurationRepository`, which exposes the persisted showcase access flag, and
-  `AppNavigationItemsProvider`, which maps that configuration to drawer presentation models.
+- `AppNavigationItemsProvider`, which combines module-owned navigation contributions into drawer
+  presentation models.
 
 ## Does not own
 
@@ -22,7 +22,7 @@ destination.
 
 ## Depends on
 
-- `:sample:core:navigation`, `:sample:core:datastore`.
+- `:sample:core:navigation` and `:sample:core:analytics`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the toolkit's own destinations,
   top bar and drawer content.
 
@@ -44,8 +44,7 @@ flowchart TD
     Shell --> Fab[Contextual FAB]
     Screen --> VM[MainViewModel]
     VM --> Provider[AppNavigationItemsProvider]
-    Provider --> NavRepo[NavigationConfigurationRepository]
-    NavRepo --> Store[DatastoreInterface unlock Flow]
+    Contributions[Feature navigation contributions] --> Provider
     Provider --> Drawer
     App --> Builders[appNavigationEntryBuilders]
     Builders --> Entries[Host and toolkit destinations]
@@ -62,8 +61,8 @@ flowchart TD
   (like the Components showcase), decoupling it from feature modules.
 - The back stack is the navigation source of truth. Drawer, bottom/rail, FAB, and adaptive scene
   selection are projections of the current destination and window state.
-- Conditional navigation items come from an observable repository/provider pipeline so the drawer
-  updates when the showcase is unlocked without owning persistence.
+- Conditional navigation items are exposed by their owning feature contributions, so the shell can
+  react to availability without owning feature persistence.
 
 ## Public contracts
 

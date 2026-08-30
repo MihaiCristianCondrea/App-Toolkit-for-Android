@@ -51,4 +51,7 @@
     <string name="components_switch_title">切換偏好設定</string>
     <string name="components_title">元件</string>
     <string name="components_filter_favorites">最愛</string>
+    <string name="components_action_menus">操作選單</string>
+    <string name="components_action_menus_summary">輕觸以顯示選項</string>
+    <string name="components_data_selection">資料選擇</string>
 </resources>

@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.AppScreenTracking
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainEvent
@@ -66,7 +67,7 @@ class MainViewModel(
 ) : LoggedScreenViewModel<MainUiState, MainEvent, MainAction>(
     initialState = UiStateScreen(data = MainUiState()),
     firebaseController = firebaseController,
-    screenName = "Main",
+    screenName = AppScreenTracking.Screens.MAIN.name,
 ) {
 
     private var navigationJob: Job? = null

@@ -7,15 +7,15 @@ knowing which shell renders it.
 
 ## Owns
 
-- `AppNavKey` and the host route keys (`AppsListRoute`, `ToolkitTilesRoute`, `ComponentsRoute`).
+- `AppNavKey`, the base interface for all navigation route keys in the sample app.
 - `AppNavigationEntryContext` and `RandomAppHandler`, the parameters every feature entry builder
   takes.
-- `NavigationManager` and `MainNavigationDefaults` (bottom-bar items, FAB-supported routes).
-- The localized destination titles and startup option arrays used by those navigation defaults.
+- `NavigationManager`, which allows different components to request navigation events.
 
 ## Does not own
 
-- The list of entry builders. That names every feature, so it lives in `:sample:app`.
+- The list of entry builders or the specific navigation routes (e.g., `NavigationRoutes`). Those
+  live in `:sample:app`.
 - Any destination content, owned by the feature modules.
 
 ## Depends on
@@ -32,27 +32,20 @@ knowing which shell renders it.
 
 ```mermaid
 flowchart TD
-    Keys["AppsListRoute / ToolkitTilesRoute / ComponentsRoute"] --> Type[StableNavKey destination type]
+    Keys[Feature Route Keys] --> Type[StableNavKey destination type]
     Feature[Feature entry builder] --> Context[AppNavigationEntryContext]
     Context --> Stack[Back stack]
     Context --> Random[RandomAppHandler]
     Feature --> Keys
     App[":sample:app"] --> Aggregate[appNavigationEntryBuilders]
     Aggregate --> Feature
-    Defaults[MainNavigationDefaults] --> Bottom[Bottom-bar order]
-    Defaults --> Fab[FAB-supported routes]
-    Defaults --> Startup[Localized startup options]
-    Bottom --> Shell[":sample:core:shell"]
-    Fab --> Shell
-    Keys --> Shell
+    Keys --> Shell[":sample:core:shell"]
 ```
 
 ## Architectural decisions
 
 - Route vocabulary and entry-builder context are separated from aggregation: every feature may
   depend on the former, while only the app may know the complete builder list.
-- `MainNavigationDefaults` is the host product's authoritative top-level order and startup-option
-  mapping, not a generic toolkit default.
 - Cross-feature actions such as random-app selection are callbacks in the entry context so the
   navigation contract does not depend on the apps feature implementation.
 

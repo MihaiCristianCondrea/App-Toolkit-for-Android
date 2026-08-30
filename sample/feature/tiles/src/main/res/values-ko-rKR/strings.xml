@@ -123,4 +123,5 @@
     <string name="morse_error_length">200자 이하로 입력하세요</string>
     <string name="morse_error_characters">A–Z 문자, 숫자, 공백만 사용하세요</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">빠른 도구</string>
 </resources>

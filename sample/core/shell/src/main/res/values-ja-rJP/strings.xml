@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">ナビゲーションを読み込めませんでした</string>
     <string name="open_random_app">ランダムなアプリを開く</string>
-    <string name="components_title">コンポーネント</string>
 </resources>

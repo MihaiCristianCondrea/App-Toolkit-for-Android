@@ -24,5 +24,8 @@ android {
 }
 
 dependencies {
-    api(project(":library:apptoolkit"))
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.runtime)
+
+    testImplementation(project(":library:core:testing"))
 }

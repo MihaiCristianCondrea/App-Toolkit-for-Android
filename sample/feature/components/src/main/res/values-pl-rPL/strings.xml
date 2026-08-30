@@ -51,4 +51,7 @@
     <string name="components_switch_title">Preferencja przełącznika</string>
     <string name="components_title">Komponenty</string>
     <string name="components_filter_favorites">Ulubione</string>
+    <string name="components_action_menus">Menu działań</string>
+    <string name="components_action_menus_summary">Dotknij, aby wyświetlić opcje</string>
+    <string name="components_data_selection">Wybór danych</string>
 </resources>

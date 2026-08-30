@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">Nem sikerült betölteni a navigációt</string>
     <string name="open_random_app">Véletlenszerű app megnyitása</string>
-    <string name="components_title">Komponensek</string>
 </resources>

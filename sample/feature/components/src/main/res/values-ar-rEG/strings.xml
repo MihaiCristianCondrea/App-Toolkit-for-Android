@@ -51,4 +51,7 @@
     <string name="components_switch_title">تفضيل المفتاح</string>
     <string name="components_title">المكوّنات</string>
     <string name="components_filter_favorites">المفضلة</string>
+    <string name="components_action_menus">قوائم الإجراءات</string>
+    <string name="components_action_menus_summary">انقر لإظهار الخيارات</string>
+    <string name="components_data_selection">تحديد البيانات</string>
 </resources>

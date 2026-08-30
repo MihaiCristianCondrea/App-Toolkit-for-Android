@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">Failed to load navigation</string>
     <string name="open_random_app">Open random app</string>
-    <string name="components_title">Components</string>
 </resources>

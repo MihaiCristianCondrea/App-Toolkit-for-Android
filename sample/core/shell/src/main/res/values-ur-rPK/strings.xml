@@ -17,5 +17,4 @@
 <resources>
     <string name="error_failed_to_load_navigation">نیویگیشن لوڈ نہیں ہو سکا</string>
     <string name="open_random_app">بے ترتیب ایپ کھولیں</string>
-    <string name="components_title">اجزاء</string>
 </resources>

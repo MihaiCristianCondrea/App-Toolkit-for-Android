@@ -123,4 +123,5 @@
     <string name="morse_error_length">200 या उससे कम वर्ण इस्तेमाल करें</string>
     <string name="morse_error_characters">सिर्फ़ A–Z अक्षर, संख्याएँ और स्पेस इस्तेमाल करें</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">त्वरित उपकरण</string>
 </resources>

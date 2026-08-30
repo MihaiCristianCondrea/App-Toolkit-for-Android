@@ -123,4 +123,5 @@
     <string name="morse_error_length">En fazla 200 karakter kullanın</string>
     <string name="morse_error_characters">Yalnızca A–Z harflerini, sayıları ve boşlukları kullanın</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">Hızlı Araçlar</string>
 </resources>

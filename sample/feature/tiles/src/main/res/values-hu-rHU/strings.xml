@@ -123,4 +123,5 @@
     <string name="morse_error_length">Legfeljebb 200 karaktert használjon</string>
     <string name="morse_error_characters">Csak A–Z betűket, számokat és szóközöket használjon</string>
     <string name="morse_current_character">%1$s  %2$s</string>
+    <string name="tiles_title">Gyors eszközök</string>
 </resources>

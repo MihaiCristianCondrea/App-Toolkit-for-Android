@@ -41,4 +41,5 @@
     <string name="error_failed_to_update_favorite">No se pudo actualizar el favorito</string>
     <string name="favorite_apps">Favoritos</string>
     <string name="summary_share_message">Mira esta increíble aplicación que estoy usando. Tiene funciones muy interesantes que podrían gustarte. Puedes descargarla desde Play Store en: %1$s</string>
+    <string name="apps_tools_title">Aplicaciones</string>
 </resources>
