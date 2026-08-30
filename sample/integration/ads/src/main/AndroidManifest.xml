@@ -28,7 +28,7 @@
     <application>
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/ad_mob_app_id" />
+            android:value="@string/ad_mob_app_id" /> <!--FIXME: Cannot resolve symbol '@string/ad_mob_app_id'-->
     </application>
 
 </manifest>
