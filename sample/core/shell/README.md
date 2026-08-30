@@ -9,8 +9,8 @@ destination.
 
 - `MainScreen` and `MainShell`, the drawer, the FAB, and the changelog dialog trigger.
 - `MainViewModel` and its contracts.
-- `AppNavigationItemsProvider`, which combines module-owned navigation contributions into drawer
-  presentation models.
+- `NavigationItemsProvider`, the port the shell reads drawer items from. `:sample:app` implements
+  it, so the shell renders the drawer without knowing which features fill it.
 
 ## Does not own
 
@@ -43,8 +43,8 @@ flowchart TD
     Shell --> Bottom[Bottom bar or rail]
     Shell --> Fab[Contextual FAB]
     Screen --> VM[MainViewModel]
-    VM --> Provider[AppNavigationItemsProvider]
-    Contributions[Feature navigation contributions] --> Provider
+    VM --> Provider[NavigationItemsProvider]
+    App -->|NavigationItemsProvider implementation| Provider
     Provider --> Drawer
     App --> Builders[appNavigationEntryBuilders]
     Builders --> Entries[Host and toolkit destinations]
@@ -61,8 +61,8 @@ flowchart TD
   (like the Components showcase), decoupling it from feature modules.
 - The back stack is the navigation source of truth. Drawer, bottom/rail, FAB, and adaptive scene
   selection are projections of the current destination and window state.
-- Conditional navigation items are exposed by their owning feature contributions, so the shell can
-  react to availability without owning feature persistence.
+- Drawer items arrive as a flow through `NavigationItemsProvider`, so an item that appears only
+  once a feature unlocks it changes the drawer without the shell knowing why.
 
 ## Public contracts
 

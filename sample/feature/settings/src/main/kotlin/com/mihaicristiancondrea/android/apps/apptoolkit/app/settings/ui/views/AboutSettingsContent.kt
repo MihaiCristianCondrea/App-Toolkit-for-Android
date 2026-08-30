@@ -15,25 +15,25 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.integration.components
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.ui.views
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repositories.ComponentsShowcaseRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.data.repositories.ShowcaseUnlockRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.AboutScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
-/** App-owned bridge between the toolkit About surface and the Components feature. */
+/** The About surface for this app: the toolkit screen plus the hidden version-tap unlock. */
 @Composable
-fun AppAboutSettingsContent(
+fun AboutSettingsContent(
     paddingValues: PaddingValues,
     snackbarHostState: SnackbarHostState,
 ) {
-    val repository: ComponentsShowcaseRepository = koinInject()
+    val showcaseUnlockRepository: ShowcaseUnlockRepository = koinInject()
     val firebaseController: FirebaseController = koinInject()
     val coroutineScope = rememberCoroutineScope()
 
@@ -43,7 +43,7 @@ fun AppAboutSettingsContent(
         onVersionTap = { tapCount ->
             coroutineScope.launch {
                 runCatching {
-                    repository.unlockAfterVersionTaps(tapCount = tapCount)
+                    showcaseUnlockRepository.unlockAfterVersionTaps(tapCount = tapCount)
                 }.onFailure { throwable ->
                     firebaseController.recordNonFatal(
                         throwable = throwable,

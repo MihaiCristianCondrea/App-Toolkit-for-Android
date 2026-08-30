@@ -40,30 +40,26 @@ dependencies {
 }
 ```
 
-## Registering with the shell
+## Appearing in the app
 
-A feature is invisible until it contributes itself. Both contracts live in
-`:sample:core:navigation` and are aggregated by the shell with Koin's `getAll()`, so each binding
-needs a qualifier unique to the feature — two unqualified bindings of the same type override each
-other and the lost entry fails silently.
+A feature does not register itself. It exports what it owns — its route key, its screen, its Koin
+module — and `:sample:app` decides where those appear, because the app is the only module allowed
+to see the whole feature set. To add a destination:
 
-Declare the identifier once, on the route key the feature owns, and reference it everywhere else —
-never repeat the raw string:
+1. Declare the route key and its identifier in the feature:
 
-```kotlin
-@Parcelize
-data object MyFeatureRoute : AppNavKey {
-    const val ROUTE_ID: String = "my_feature"
-}
+   ```kotlin
+   @Parcelize
+   data object MyFeatureRoute : AppNavKey {
+       const val ROUTE_ID: String = "my_feature"
+   }
+   ```
 
-val myFeatureModule: Module = module {
-    // Drawer entry, optionally conditional.
-    single<NavigationItemContribution>(qualifier = named(name = MyFeatureRoute.ROUTE_ID)) { ... }
+2. In `:sample:app`, add the entry builder to `appNavigationEntryBuilders`, and the destination to
+   `MainNavigationDefaults` (bottom bar), `AppNavigationItemsProvider` (drawer) or the startup lists
+   in `appModule` as appropriate.
 
-    // Selectable startup screen in Settings.
-    single<StartupScreenContribution>(qualifier = named(name = MyFeatureRoute.ROUTE_ID)) { ... }
-}
-```
+Reference `MyFeatureRoute.ROUTE_ID` everywhere the identifier is needed — never repeat the string.
 
 ## Documentation
 

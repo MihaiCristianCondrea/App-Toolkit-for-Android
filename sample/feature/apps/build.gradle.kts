@@ -31,6 +31,7 @@ dependencies {
     testImplementation(project(":library:core:testing"))
     implementation(project(":sample:core:analytics"))
     api(project(":sample:core:navigation"))
+    api(project(":sample:integration:ads"))
     api(project(":sample:core:common"))
     api(project(":sample:core:datastore"))
     api(project(":sample:core:ui"))

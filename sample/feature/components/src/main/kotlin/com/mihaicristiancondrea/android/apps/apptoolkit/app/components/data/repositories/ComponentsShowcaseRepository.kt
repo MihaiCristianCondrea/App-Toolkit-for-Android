@@ -18,38 +18,16 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.BuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
-/** Owns the persisted availability and hidden unlock policy for the Components showcase. */
+/**
+ * Exposes whether the hidden Components showcase has been unlocked.
+ *
+ * The flag is written by the Settings About gesture and stored in `:sample:core:datastore`, so this
+ * feature observes its own availability without owning the surface that reveals it.
+ */
 class ComponentsShowcaseRepository(
-    private val dataStore: DatastoreInterface,
-    private val firebaseController: FirebaseController,
-    private val isDebugBuild: Boolean = BuildConfig.DEBUG,
+    dataStore: DatastoreInterface,
 ) {
     val isUnlocked: Flow<Boolean> = dataStore.componentsShowcaseUnlocked
-
-    private val unlockMutex = Mutex()
-
-    /** Persists the unlock after the About screen reports the required number of version taps. */
-    suspend fun unlockAfterVersionTaps(tapCount: Int) {
-        if (isDebugBuild || tapCount < COMPONENTS_UNLOCK_TAP_THRESHOLD) return
-
-        unlockMutex.withLock {
-            if (isUnlocked.first()) return
-            firebaseController.logBreadcrumb(
-                message = "Components showcase unlocked",
-                attributes = mapOf("source" to "ComponentsShowcaseRepository"),
-            )
-            dataStore.saveComponentsShowcaseUnlocked(isUnlocked = true)
-        }
-    }
-
-    private companion object {
-        const val COMPONENTS_UNLOCK_TAP_THRESHOLD: Int = 7
-    }
 }

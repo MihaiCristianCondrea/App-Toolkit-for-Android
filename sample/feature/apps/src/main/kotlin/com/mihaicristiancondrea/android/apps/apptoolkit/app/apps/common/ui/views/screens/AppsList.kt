@@ -56,8 +56,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.ui.views
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AdsConstants
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
+import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
+import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AppsListNativeAdCard

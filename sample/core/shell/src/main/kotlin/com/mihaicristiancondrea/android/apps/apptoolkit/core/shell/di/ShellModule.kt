@@ -18,17 +18,12 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.AppNavigationItemsProvider
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.review.domain.usecases.RequestInAppReviewUseCase
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val shellModule: Module = module {
-    single<NavigationItemsProvider> {
-        AppNavigationItemsProvider(contributions = getAll(), firebaseController = get())
-    }
     viewModel {
         MainViewModel(
             navigationItemsProvider = get(),

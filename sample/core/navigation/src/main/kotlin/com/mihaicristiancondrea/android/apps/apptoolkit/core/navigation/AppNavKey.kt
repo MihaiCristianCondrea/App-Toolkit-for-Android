@@ -19,42 +19,10 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation
 
 import androidx.compose.runtime.Immutable
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDestinationType
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
 @Immutable
 interface AppNavKey : StableNavKey {
     override val destinationType: NavigationDestinationType
         get() = NavigationDestinationType.ActivityLike
-}
-
-/**
- * A contract for feature modules to contribute their navigation items to the application shell.
- *
- * The shell aggregates every binding with `getAll()`. Each feature must therefore register its
- * contribution under a qualifier unique to that feature: two unqualified bindings of the same type
- * override each other in Koin, and the shell would silently see only the last one loaded.
- */
-interface NavigationItemContribution {
-    /**
-     * Emits the list of navigation items this feature provides.
-     * Some items might be conditional (e.g., hidden until unlocked).
-     */
-    fun navigationItems(): Flow<List<NavigationDrawerItem>> = flowOf(emptyList())
-}
-
-/**
- * A contract for feature modules to register themselves as a selectable startup screen.
- *
- * Aggregated with `getAll()`, so every binding needs a feature-unique qualifier for the same reason
- * as [NavigationItemContribution].
- */
-interface StartupScreenContribution {
-    /** The human-readable name of the screen (e.g., from R.string). */
-    val label: String
-
-    /** The unique identifier for this startup destination (must match the route identifier). */
-    val routeValue: String
 }

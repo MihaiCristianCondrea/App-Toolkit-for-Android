@@ -10,17 +10,18 @@ logic and the toolkit's advertising components.
 
 - `adsIntegrationModule`, which defines the `AdsConfig` instances for different surfaces (Apps List, App
   Details, Bottom Nav, etc.).
-- The mapping between the sample's `AdsConstants` and the library's `AdsQualifiers`.
+- `AdsConstants` (the sample's ad unit IDs, debug/release selection and ad frequency) and
+  `AppAdsQualifiers` (the placements this app adds beyond the toolkit's own).
 
 ## Depends on
 
-- `:sample:core:common` for `AdsConstants`.
 - [`:library:apptoolkit`](../../../library/apptoolkit/README.md) for the `AdsConfig` model and
   `AdsQualifiers`.
 
 ## Used by
 
-- `:sample:app` to compose the DI graph.
+- `:sample:app` to compose the DI graph and to read `AdsConstants.APP_OPEN_UNIT_ID`.
+- `:sample:feature:apps` and `:sample:feature:tiles`, for their placement qualifiers and unit IDs.
 - Various features in the sample app via the library's Ad components (which inject the `AdsConfig`
   provided here).
 

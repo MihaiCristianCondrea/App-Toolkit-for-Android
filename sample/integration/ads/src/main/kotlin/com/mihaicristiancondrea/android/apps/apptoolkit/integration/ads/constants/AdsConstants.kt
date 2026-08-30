@@ -15,9 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads
+package com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.common.BuildConfig
+import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.BuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.DebugAdsConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.bannerAdUnitId as selectBannerAdUnitId
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.nativeAdUnitId as selectNativeAdUnitId

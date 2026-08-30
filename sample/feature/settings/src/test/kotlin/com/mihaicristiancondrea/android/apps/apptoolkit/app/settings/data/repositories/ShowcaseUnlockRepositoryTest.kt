@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repositories
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
-class ComponentsShowcaseRepositoryTest {
+class ShowcaseUnlockRepositoryTest {
 
     private val dataStore = mockk<DatastoreInterface>()
     private val firebaseController = mockk<FirebaseController>(relaxed = true)
@@ -39,7 +39,7 @@ class ComponentsShowcaseRepositoryTest {
         coEvery { dataStore.saveComponentsShowcaseUnlocked(any()) } coAnswers {
             unlocked.value = firstArg()
         }
-        val repository = ComponentsShowcaseRepository(
+        val repository = ShowcaseUnlockRepository(
             dataStore = dataStore,
             firebaseController = firebaseController,
             isDebugBuild = false,
@@ -55,7 +55,7 @@ class ComponentsShowcaseRepositoryTest {
     @Test
     fun `debug build does not persist an unlock flag`() = runTest {
         every { dataStore.componentsShowcaseUnlocked } returns MutableStateFlow(false)
-        val repository = ComponentsShowcaseRepository(
+        val repository = ShowcaseUnlockRepository(
             dataStore = dataStore,
             firebaseController = firebaseController,
             isDebugBuild = true,

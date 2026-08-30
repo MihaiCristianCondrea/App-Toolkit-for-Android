@@ -3,13 +3,14 @@
 ## Current state
 
 - Runtime and tests share `sampleAppModules` as the single DI composition declaration.
-- Apps, Tiles, and Components own their Navigation 3 route keys and entry contributions.
-- Components owns its unlock repository, threshold rule, and conditional navigation item.
+- Apps, Tiles, and Components own their Navigation 3 route keys and route identifiers; the app
+  composes them into the drawer, bottom bar and startup-screen choices.
+- Components owns its unlock repository and threshold rule; the app renders the drawer entry.
 - The app owns the About-to-Components bridge because it is cross-feature composition.
 - Sample analytics identifiers live in `:sample:core:analytics`; Firebase delivery remains in the
   reusable library.
-- Sample ad unit IDs are bound only in `:sample:integration:ads` and covered by a qualifier graph
-  test.
+- Sample ad unit IDs, placement qualifiers and `AdsConfig` bindings all live in
+  `:sample:integration:ads`, covered by a qualifier graph test.
 - Feature Android components are declared by their owning module manifests.
 - `checkModuleBoundaries` guards dependency direction, package separation, navigation ownership,
   app composition imports, and inline screen identifiers.

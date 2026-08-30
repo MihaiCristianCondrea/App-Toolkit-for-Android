@@ -27,8 +27,9 @@ the repository-wide check.
 
 ## Ownership guidance
 
-- A feature owns its route key and navigation contribution. The app aggregates entry builders; the
-  shell consumes neutral contributions.
+- A feature owns its route key and route identifier, and exports its screen and Koin module. It
+  does not register itself anywhere: the app aggregates entry builders, drawer items, bottom-bar
+  items and startup-screen choices, because it is the only module that may see every feature.
 - A feature owns persistence and business rules used only by that feature.
 - Cross-feature adapters belong in the app composition root. They should connect public contracts
   without making either feature depend on its sibling.

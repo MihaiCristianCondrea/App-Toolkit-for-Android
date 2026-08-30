@@ -8,7 +8,7 @@ The hidden components showcase and the unlock gesture that reveals it.
 
 - The concrete `ComponentsShowcaseRepository`, which owns the unlock flag.
 - `ComponentsActivity`, `ComponentsScreen`, and the unlock threshold behavior.
-- `ComponentsNavigationContribution`, including the conditional drawer item.
+- `ComponentsShowcaseRepository`, which owns the unlock rule and exposes `isUnlocked`.
 - Localized strings for the component showcase.
 
 ## Does not own
@@ -35,8 +35,8 @@ flowchart TD
     Repo --> Counter{Unlock threshold reached?}
     Counter -->|no| State[Updated tap progress]
     Counter -->|yes| Store[DatastoreInterface]
-    Store --> Contribution[ComponentsNavigationContribution]
-    Contribution --> Drawer[Conditional drawer entry]
+    Store --> Repo[ComponentsShowcaseRepository.isUnlocked]
+    Repo --> Drawer[":sample:app" drawer entry, shown when unlocked]
     Drawer --> Activity[ComponentsActivity]
     Activity --> Screen[ComponentsScreen]
     Screen --> Sections[Button / FAB / filter / input / layout / preference showcases]
@@ -44,15 +44,16 @@ flowchart TD
 
 ## Architectural decisions
 
-- The app owns the cross-feature gesture bridge, while this feature owns the threshold rule,
-  persisted unlock state, and navigation availability.
-- The shell consumes a neutral navigation contribution and does not depend on this feature.
+- The app owns the cross-feature gesture bridge and the drawer entry, while this feature owns the
+  threshold rule and the persisted unlock state it exposes as `isUnlocked`.
+- The shell never sees this feature: it renders whatever drawer items the app hands it.
 - A concrete repository is sufficient because there is one DataStore-backed implementation and no
   module boundary that requires substitution.
 
 ## Public contracts
 
-- `ComponentsShowcaseRepository`, `ComponentsActivity`, and `ComponentsNavigationContribution`.
+- `ComponentsShowcaseRepository` and `ComponentsActivity`. The drawer entry that reveals the
+  showcase is assembled by `:sample:app`, which reads `isUnlocked`.
 
 ## Internal implementations
 

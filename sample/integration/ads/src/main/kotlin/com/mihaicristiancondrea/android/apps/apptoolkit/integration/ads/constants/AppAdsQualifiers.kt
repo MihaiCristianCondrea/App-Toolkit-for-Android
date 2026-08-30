@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads
+package com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants
 
 /** App-module Koin qualifier names for app-specific native ad placements. */
 object AppAdsQualifiers {

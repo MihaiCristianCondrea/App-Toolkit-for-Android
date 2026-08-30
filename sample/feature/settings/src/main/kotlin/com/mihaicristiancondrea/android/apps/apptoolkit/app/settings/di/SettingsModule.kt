@@ -17,22 +17,32 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.StartupScreenContribution
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.data.repositories.ShowcaseUnlockRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.ui.views.AboutSettingsContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.data.repositories.GeneralSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val settingsModule: Module = module {
-    single<List<String>>(qualifier = named(name = AppToolkitDiConstants.STARTUP_ENTRIES)) {
-        getAll<StartupScreenContribution>().map { it.label }
+    single {
+        ShowcaseUnlockRepository(
+            dataStore = get(),
+            firebaseController = get(),
+        )
     }
 
-    single<List<String>>(qualifier = named(name = AppToolkitDiConstants.STARTUP_VALUES)) {
-        getAll<StartupScreenContribution>().map { it.routeValue }
+    factory {
+        GeneralSettingsContentProvider(
+            aboutContent = { paddingValues, snackbarHostState ->
+                AboutSettingsContent(
+                    paddingValues = paddingValues,
+                    snackbarHostState = snackbarHostState,
+                )
+            },
+        )
     }
 
     single {

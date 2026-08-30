@@ -9,7 +9,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.utils.constants.ads.AppAdsQualifiers
+import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import kotlin.test.assertTrue

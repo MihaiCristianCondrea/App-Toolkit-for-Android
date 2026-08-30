@@ -17,29 +17,42 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.integration.components.AppAboutSettingsContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.navigation.AppsListRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.AppNavigationItemsProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R as AppsR
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R as TilesR
 
 /**
  * Main application module for `:sample:app`.
  *
- * Handles cross-feature integrations and app-specific implementations of toolkit extension points.
+ * Holds the wiring that needs to see more than one feature: the drawer, the startup-screen choices
+ * and the toolkit extension points this app implements. Features stay unaware of each other.
  */
 val appModule: Module = module {
-    // Bound here rather than in :sample:feature:settings because the About content it injects is
-    // the Settings-to-Components bridge, and cross-feature composition is the app's job. Only one
-    // module may bind this type: a second, unqualified binding silently overrides this one and
-    // takes the version-tap handler with it.
-    factory<GeneralSettingsContentProvider> {
-        GeneralSettingsContentProvider(
-            aboutContent = { paddingValues, snackbarHostState ->
-                AppAboutSettingsContent(
-                    paddingValues = paddingValues,
-                    snackbarHostState = snackbarHostState,
-                )
-            },
+    single<NavigationItemsProvider> {
+        AppNavigationItemsProvider(
+            componentsShowcaseRepository = get(),
+            firebaseController = get(),
         )
+    }
+
+    // The startup picker offers the app's top-level destinations, in bottom-bar order. Entries and
+    // values are parallel lists: index N of one describes index N of the other.
+    single<List<String>>(qualifier = named(name = AppToolkitDiConstants.STARTUP_ENTRIES)) {
+        listOf(
+            androidContext().getString(TilesR.string.tiles_title),
+            androidContext().getString(AppsR.string.apps_tools_title),
+        )
+    }
+
+    single<List<String>>(qualifier = named(name = AppToolkitDiConstants.STARTUP_VALUES)) {
+        listOf(ToolkitTilesRoute.ROUTE_ID, AppsListRoute.ROUTE_ID)
     }
 }
