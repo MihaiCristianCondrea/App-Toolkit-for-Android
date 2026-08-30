@@ -15,12 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="onboarding_feature1_description">App Toolkit ایپس کا ایک انتخاب پیش کرتا ہے، جن میں سے ہر ایک AppToolkit لائبریری کے مختلف پہلوؤں کو نمایاں کرنے اور آپ کے Android تجربے کو بہتر بنانے کے لیے بنائی گئی ہے۔ دیکھیں AppToolkit لائبریری سے کیا ممکن ہے۔</string>
-    <string name="onboarding_feature1_title">ایپس دریافت کریں</string>
-    <string name="onboarding_personalization_description">یہ ایپ دکھاتی ہے کہ AppToolkit لائبریری کیسے ہمہ جہت، صارف مرکوز ایپس بناتی ہے۔ لائبریری کے مختلف فیچرز اور نفاذ دیکھنے کے لیے نمونہ ایپس دریافت کریں۔</string>
-    <string name="onboarding_personalization_title">AppToolkit لائبریری کو عمل میں دیکھیں</string>
-    <string name="onboarding_welcome_description">AppToolkit لائبریری کی صلاحیتیں دریافت کریں۔ ایسی ایپس دریافت کریں جو لائبریری کی طاقت دکھانے اور آپ کی Android ڈیولپمنٹ اور صارف تجربہ بہتر بنانے کے لیے بنائی گئی ہیں۔</string>
-    <string name="onboarding_welcome_title">App Toolkit میں خوش آمدید</string>
     <string name="app_short_description">کارآمد اینڈرائیڈ ٹولز اور یوٹیلیٹیز کا مجموعہ۔</string>
     <string name="settings_disabled_message">ترتیبات اس وقت دستیاب نہیں ہیں۔</string>
     <string name="long_settings_label">ترتیبات کھولیں</string>

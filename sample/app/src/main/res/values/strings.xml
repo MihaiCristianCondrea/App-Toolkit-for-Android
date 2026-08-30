@@ -16,12 +16,6 @@
   -->
 <resources>
     <string name="app_short_description">A collection of handy Android tools and utilities.</string>
-    <string name="onboarding_feature1_description">App Toolkit introduces a selection of applications, each designed to highlight different aspects of the AppToolkit library and enhance your Android experience. See what\'s possible with the AppToolkit library.</string>
-    <string name="onboarding_feature1_title">Discover applications</string>
-    <string name="onboarding_personalization_description">This app demonstrates how the AppToolkit library builds versatile, user-focused applications. Explore the sample apps to see different features and implementations of the library.</string>
-    <string name="onboarding_personalization_title">See the AppToolkit library in action</string>
-    <string name="onboarding_welcome_description">Explore the capabilities of the AppToolkit library. Discover applications built to demonstrate the library\'s power and enhance your Android development and user experience.</string>
-    <string name="onboarding_welcome_title">Welcome to App Toolkit</string>
     <string name="settings_disabled_message">Settings are currently unavailable.</string>
     <string name="long_settings_label">Open Settings</string>
 </resources>

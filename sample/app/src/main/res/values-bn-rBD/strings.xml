@@ -15,12 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="onboarding_feature1_description">App Toolkit বিভিন্ন অ্যাপের একটি সংগ্রহ উপস্থাপন করে, যার প্রতিটি AppToolkit লাইব্রেরির ভিন্ন ভিন্ন দিক তুলে ধরে এবং আপনার Android অভিজ্ঞতা উন্নত করে। AppToolkit লাইব্রেরি দিয়ে কী সম্ভব তা দেখুন।</string>
-    <string name="onboarding_feature1_title">অ্যাপগুলো আবিষ্কার করুন</string>
-    <string name="onboarding_personalization_description">এই অ্যাপটি দেখায় AppToolkit লাইব্রেরি কীভাবে বহুমুখী, ব্যবহারকারীকেন্দ্রিক অ্যাপ তৈরি করে। লাইব্রেরির ভিন্ন ভিন্ন বৈশিষ্ট্য ও বাস্তবায়ন দেখতে নমুনা অ্যাপগুলো দেখুন।</string>
-    <string name="onboarding_personalization_title">AppToolkit লাইব্রেরি কাজ করতে দেখুন</string>
-    <string name="onboarding_welcome_description">AppToolkit লাইব্রেরির সক্ষমতা অন্বেষণ করুন। লাইব্রেরির ক্ষমতা দেখাতে এবং আপনার Android ডেভেলপমেন্ট ও ব্যবহারকারী অভিজ্ঞতা উন্নত করতে তৈরি অ্যাপগুলো আবিষ্কার করুন।</string>
-    <string name="onboarding_welcome_title">App Toolkit এ স্বাগতম</string>
     <string name="app_short_description">সহজ অ্যান্ড্রয়েড টুল ও ইউটিলিটির একটি সংগ্রহ।</string>
     <string name="settings_disabled_message">সেটিংস বর্তমানে উপলব্ধ নয়।</string>
     <string name="long_settings_label">সেটিংস খুলুন</string>

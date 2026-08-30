@@ -15,12 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="onboarding_feature1_description">App Toolkit menghadirkan pilihan aplikasi, masing-masing dirancang untuk menyoroti berbagai aspek pustaka AppToolkit dan meningkatkan pengalaman Android Anda. Lihat apa yang mungkin dilakukan dengan pustaka AppToolkit.</string>
-    <string name="onboarding_feature1_title">Temukan aplikasi</string>
-    <string name="onboarding_personalization_description">Aplikasi ini menunjukkan bagaimana pustaka AppToolkit membangun aplikasi yang serbaguna dan berfokus pada pengguna. Jelajahi aplikasi contoh untuk melihat berbagai fitur dan implementasi pustaka.</string>
-    <string name="onboarding_personalization_title">Lihat pustaka AppToolkit beraksi</string>
-    <string name="onboarding_welcome_description">Jelajahi kemampuan pustaka AppToolkit. Temukan aplikasi yang dibuat untuk menunjukkan kekuatan pustaka dan meningkatkan pengembangan Android serta pengalaman pengguna Anda.</string>
-    <string name="onboarding_welcome_title">Selamat datang di App Toolkit</string>
     <string name="app_short_description">Kumpulan alat dan utilitas Android yang praktis.</string>
     <string name="settings_disabled_message">Setelan saat ini tidak tersedia.</string>
     <string name="long_settings_label">Buka setelan</string>

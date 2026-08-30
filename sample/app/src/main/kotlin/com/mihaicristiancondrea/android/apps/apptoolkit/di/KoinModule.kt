@@ -22,6 +22,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.di.appsFeatureModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.di.settingsFeatureModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.di.tilesFeatureModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.ads.di.adsFeatureModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di.onboardingFeatureModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.di.navigationModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.di.shellModule
@@ -57,8 +59,8 @@ fun initializeKoin(context: Context) {
                 add(settingsFeatureModule)
                 add(tilesFeatureModule)
                 add(appsFeatureModule)
-                add(adsModule)
-                add(onboardingModule)
+                add(adsFeatureModule)
+                add(onboardingFeatureModule)
             }
         )
     }

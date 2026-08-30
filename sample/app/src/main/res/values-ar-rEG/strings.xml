@@ -15,12 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="onboarding_feature1_description">يوفر App Toolkit مجموعة من التطبيقات، صُمم كل منها لإبراز جوانب مختلفة من مكتبة AppToolkit وتحسين تجربتك على Android. شاهد ما يمكن تحقيقه باستخدام مكتبة AppToolkit.</string>
-    <string name="onboarding_feature1_title">اكتشف التطبيقات</string>
-    <string name="onboarding_personalization_description">يوضح هذا التطبيق كيف تُنشئ مكتبة AppToolkit تطبيقات مرنة ومتمحورة حول المستخدم. استكشف تطبيقات العينات لرؤية ميزات وتنفيذات مختلفة للمكتبة.</string>
-    <string name="onboarding_personalization_title">شاهد مكتبة AppToolkit قيد الاستخدام</string>
-    <string name="onboarding_welcome_description">استكشف إمكانات مكتبة AppToolkit. اكتشف تطبيقات صُممت لعرض قوة المكتبة وتعزيز تطوير Android وتجربة المستخدم.</string>
-    <string name="onboarding_welcome_title">مرحبًا بك في App Toolkit</string>
     <string name="app_short_description">مجموعة من أدوات وبرامج أندرويد المفيدة.</string>
     <string name="settings_disabled_message">الإعدادات غير متاحة حاليًا.</string>
     <string name="long_settings_label">فتح الإعدادات</string>

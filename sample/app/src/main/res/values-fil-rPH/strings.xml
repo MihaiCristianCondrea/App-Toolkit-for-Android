@@ -15,12 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="onboarding_feature1_description">Ipinapakita ng App Toolkit ang isang pagpili ng mga app, bawat isa ay idinisenyo upang itampok ang iba’t ibang aspeto ng AppToolkit library at pagbutihin ang iyong karanasan sa Android. Tingnan kung ano ang posible gamit ang AppToolkit library.</string>
-    <string name="onboarding_feature1_title">Tuklasin ang mga app</string>
-    <string name="onboarding_personalization_description">Ipinapakita ng app na ito kung paano bumubuo ang AppToolkit library ng mga versatile at user-focused na app. Tuklasin ang mga sample na app upang makita ang iba’t ibang feature at implementasyon ng library.</string>
-    <string name="onboarding_personalization_title">Makita ang AppToolkit library sa aksyon</string>
-    <string name="onboarding_welcome_description">Tuklasin ang mga kakayahan ng AppToolkit library. Maghanap ng mga app na ginawa upang ipakita ang lakas ng library at pagbutihin ang iyong Android development at karanasan ng user.</string>
-    <string name="onboarding_welcome_title">Maligayang pagdating sa App Toolkit</string>
     <string name="app_short_description">Isang koleksyon ng mga madaling gamitin na Android tool at utility.</string>
     <string name="settings_disabled_message">Hindi available ang mga setting sa ngayon.</string>
     <string name="long_settings_label">Buksan ang mga setting</string>

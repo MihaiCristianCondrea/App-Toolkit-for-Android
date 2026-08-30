@@ -15,12 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="onboarding_feature1_description">App Toolkit presenta una selección de aplicaciones, cada una diseñada para resaltar distintos aspectos de la biblioteca AppToolkit y mejorar tu experiencia en Android. Descubre lo que es posible con la biblioteca AppToolkit.</string>
-    <string name="onboarding_feature1_title">Descubre aplicaciones</string>
-    <string name="onboarding_personalization_description">Esta app muestra cómo la biblioteca AppToolkit crea aplicaciones versátiles y centradas en el usuario. Explora las apps de muestra para ver distintas funciones e implementaciones de la biblioteca.</string>
-    <string name="onboarding_personalization_title">Ve la biblioteca AppToolkit en acción</string>
-    <string name="onboarding_welcome_description">Explora las capacidades de la biblioteca AppToolkit. Descubre aplicaciones creadas para demostrar el potencial de la biblioteca y mejorar tu desarrollo Android y la experiencia de usuario.</string>
-    <string name="onboarding_welcome_title">Bienvenido a App Toolkit</string>
     <string name="app_short_description">Una colección de prácticas herramientas y utilidades para Android.</string>
     <string name="settings_disabled_message">Los ajustes no están disponibles en este momento.</string>
     <string name="long_settings_label">Abrir ajustes</string>

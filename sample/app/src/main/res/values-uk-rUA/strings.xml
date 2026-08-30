@@ -15,12 +15,6 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="onboarding_feature1_description">App Toolkit пропонує добірку застосунків, кожен з яких підкреслює різні аспекти бібліотеки AppToolkit і покращує ваш досвід з Android. Подивіться, що можливо з бібліотекою AppToolkit.</string>
-    <string name="onboarding_feature1_title">Відкривайте застосунки</string>
-    <string name="onboarding_personalization_description">Цей застосунок показує, як бібліотека AppToolkit створює універсальні застосунки, орієнтовані на користувача. Перегляньте приклади, щоб побачити різні функції та реалізації бібліотеки.</string>
-    <string name="onboarding_personalization_title">Бібліотека AppToolkit у дії</string>
-    <string name="onboarding_welcome_description">Ознайомтеся з можливостями бібліотеки AppToolkit. Відкрийте застосунки, створені для демонстрації її потужності та покращення розробки під Android і користувацького досвіду.</string>
-    <string name="onboarding_welcome_title">Ласкаво просимо до App Toolkit</string>
     <string name="app_short_description">Колекція зручних інструментів і утиліт для Android.</string>
     <string name="settings_disabled_message">Наразі налаштування недоступні.</string>
     <string name="long_settings_label">Відкрити налаштування</string>
