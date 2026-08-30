@@ -61,7 +61,7 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val tilesFeatureModule: Module = module {
+val tilesModule: Module = module {
     single<TorchDataSource> { AndroidTorchDataSource(context = androidContext()) }
     single<SensorLocalDataSource> {
         AndroidSensorLocalDataSource(context = androidContext(), dispatchers = get())

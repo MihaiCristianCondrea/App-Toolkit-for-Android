@@ -17,19 +17,11 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.views.navigation
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 
-fun isDrawerItemSelected(
-    itemRoute: String,
-    currentRoute: StableNavKey,
-    navigationItemsProvider: NavigationItemsProvider,
-): Boolean = navigationItemsProvider.isSelected(itemRoute, currentRoute)
-
-fun drawerItemClickEvent(route: String): AnalyticsEvent =
+fun drawerItemClickEvent(route: String): AnalyticsEvent = // FIXME: Function "drawerItemClickEvent" is never used
     AnalyticsEvent(
         name = SettingsAnalytics.Events.ACTION,
         params = mapOf(

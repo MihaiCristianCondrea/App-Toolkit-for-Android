@@ -24,6 +24,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.To
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileCategory
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileIcon
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.utils.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -62,20 +63,20 @@ private fun String.categoryVisuals(): CategoryVisuals = when (this) {
 }
 
 private fun String.tileVisuals(): TileVisuals = when (this) {
-    "bubble_level" -> TileVisuals(R.string.tile_bubble_level_title, R.string.tile_bubble_level_summary, ToolkitTileIcon.Level)
-    "compass" -> TileVisuals(R.string.tile_compass_title, R.string.tile_compass_summary, ToolkitTileIcon.Compass)
-    "lux_meter" -> TileVisuals(R.string.tile_lux_meter_title, R.string.tile_lux_meter_summary, ToolkitTileIcon.Lux)
-    "coin_flip" -> TileVisuals(R.string.tile_coin_flip_title, R.string.tile_coin_flip_summary, ToolkitTileIcon.Coin)
-    "dice_roll" -> TileVisuals(R.string.tile_dice_roll_title, R.string.tile_dice_roll_summary, ToolkitTileIcon.Dice)
-    "counter" -> TileVisuals(R.string.tile_counter_title, R.string.tile_counter_summary, ToolkitTileIcon.Counter)
+    ToolkitTileIds.BUBBLE_LEVEL -> TileVisuals(R.string.tile_bubble_level_title, R.string.tile_bubble_level_summary, ToolkitTileIcon.Level)
+    ToolkitTileIds.COMPASS -> TileVisuals(R.string.tile_compass_title, R.string.tile_compass_summary, ToolkitTileIcon.Compass)
+    ToolkitTileIds.LUX_METER -> TileVisuals(R.string.tile_lux_meter_title, R.string.tile_lux_meter_summary, ToolkitTileIcon.Lux)
+    ToolkitTileIds.COIN_FLIP -> TileVisuals(R.string.tile_coin_flip_title, R.string.tile_coin_flip_summary, ToolkitTileIcon.Coin)
+    ToolkitTileIds.DICE_ROLL -> TileVisuals(R.string.tile_dice_roll_title, R.string.tile_dice_roll_summary, ToolkitTileIcon.Dice)
+    ToolkitTileIds.COUNTER -> TileVisuals(R.string.tile_counter_title, R.string.tile_counter_summary, ToolkitTileIcon.Counter)
     "material_colors" -> TileVisuals(R.string.tool_material_colors_title, R.string.tool_material_colors_summary, ToolkitTileIcon.Palette)
-    "music_search" -> TileVisuals(R.string.tile_music_search_title, R.string.tile_music_search_summary, ToolkitTileIcon.Music)
-    "morse" -> TileVisuals(R.string.tile_morse_title, R.string.tile_morse_summary, ToolkitTileIcon.Morse)
-    "caffeine" -> TileVisuals(R.string.tile_caffeine_title, R.string.tile_caffeine_summary, ToolkitTileIcon.Caffeine)
-    "sound_mode" -> TileVisuals(R.string.tile_sound_mode_title, R.string.tile_sound_mode_summary, ToolkitTileIcon.Sound)
-    "flash_dimmer" -> TileVisuals(R.string.tile_flash_dimmer_title, R.string.tile_flash_dimmer_summary, ToolkitTileIcon.FlashDimmer)
-    "breathing" -> TileVisuals(R.string.tile_breathing_title, R.string.tile_breathing_summary, ToolkitTileIcon.Breathing)
-    "sos" -> TileVisuals(R.string.tile_sos_title, R.string.tile_sos_summary, ToolkitTileIcon.Sos)
+    ToolkitTileIds.MUSIC_SEARCH -> TileVisuals(R.string.tile_music_search_title, R.string.tile_music_search_summary, ToolkitTileIcon.Music)
+    ToolkitTileIds.MORSE -> TileVisuals(R.string.tile_morse_title, R.string.tile_morse_summary, ToolkitTileIcon.Morse)
+    ToolkitTileIds.CAFFEINE -> TileVisuals(R.string.tile_caffeine_title, R.string.tile_caffeine_summary, ToolkitTileIcon.Caffeine)
+    ToolkitTileIds.SOUND_MODE -> TileVisuals(R.string.tile_sound_mode_title, R.string.tile_sound_mode_summary, ToolkitTileIcon.Sound)
+    ToolkitTileIds.FLASH_DIMMER -> TileVisuals(R.string.tile_flash_dimmer_title, R.string.tile_flash_dimmer_summary, ToolkitTileIcon.FlashDimmer)
+    ToolkitTileIds.BREATHING -> TileVisuals(R.string.tile_breathing_title, R.string.tile_breathing_summary, ToolkitTileIcon.Breathing)
+    ToolkitTileIds.SOS -> TileVisuals(R.string.tile_sos_title, R.string.tile_sos_summary, ToolkitTileIcon.Sos)
     else -> error("Unknown Toolkit Tile: $this")
 }
 

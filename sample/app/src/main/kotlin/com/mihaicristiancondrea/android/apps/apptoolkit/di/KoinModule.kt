@@ -19,12 +19,12 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
 import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.di.appsFeatureModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.di.settingsFeatureModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.di.tilesFeatureModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.di.componentsFeatureModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.di.appsModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.di.settingsModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.di.tilesModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.di.componentsModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.di.adsIntegrationModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di.onboardingFeatureModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di.onboardingModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.di.navigationModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.di.shellModule
@@ -42,12 +42,12 @@ fun sampleAppModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> =
     add(navigationModule)
     add(shellModule)
     add(appModule)
-    add(settingsFeatureModule)
-    add(tilesFeatureModule)
-    add(appsFeatureModule)
-    add(componentsFeatureModule)
+    add(settingsModule)
+    add(tilesModule)
+    add(appsModule)
+    add(componentsModule)
     add(adsIntegrationModule)
-    add(onboardingFeatureModule)
+    add(onboardingModule)
 }
 
 fun initializeKoin(context: Context) {

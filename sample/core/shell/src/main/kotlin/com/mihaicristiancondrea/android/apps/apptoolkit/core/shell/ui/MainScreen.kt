@@ -70,7 +70,6 @@ import androidx.navigation3.ui.NavDisplay
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.states.MainUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.views.fab.MainFloatingActionButton
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.views.navigation.isDrawerItemSelected
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.handleNavigationItemClick
@@ -126,6 +125,7 @@ fun MainScreen(
     fabSupportedRoutes: ImmutableSet<StableNavKey>,
     entryBuilders: (AppNavigationEntryContext) -> List<NavigationEntryBuilder<StableNavKey>>,
     onTitleLookup: @Composable (StableNavKey) -> String,
+    onIsSelected: (String, StableNavKey) -> Boolean = { _, _ -> false },
     onLaunchActivity: (StableNavKey) -> Boolean = { false },
     onNavigationRequested: (String) -> Unit = {},
 ) {
@@ -200,6 +200,7 @@ fun MainScreen(
             nativeActivityTransitions = nativeActivityTransitions,
             entryProvider = entryProvider,
             onTitleLookup = onTitleLookup,
+            onIsSelected = onIsSelected,
             onNavigationRequested = onNavigationRequested,
             bottomBarItems = bottomBarItems,
             fabSupportedRoutes = fabSupportedRoutes,
@@ -245,6 +246,7 @@ private class MainSceneStrategy(
     private val nativeActivityTransitions: NativeActivityTransitions,
     private val entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
     private val onTitleLookup: @Composable (StableNavKey) -> String,
+    private val onIsSelected: (String, StableNavKey) -> Boolean,
     private val onNavigationRequested: (String) -> Unit,
     private val bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>>,
     private val fabSupportedRoutes: ImmutableSet<StableNavKey>,
@@ -272,6 +274,7 @@ private class MainSceneStrategy(
                 nativeActivityTransitions = nativeActivityTransitions,
                 entryProvider = entryProvider,
                 onTitleLookup = onTitleLookup,
+                onIsSelected = onIsSelected,
                 onNavigationRequested = onNavigationRequested,
                 bottomBarItems = bottomBarItems,
                 fabSupportedRoutes = fabSupportedRoutes,
@@ -305,6 +308,7 @@ private data class MainShellScene(
     private val nativeActivityTransitions: NativeActivityTransitions,
     private val entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
     private val onTitleLookup: @Composable (StableNavKey) -> String,
+    private val onIsSelected: (String, StableNavKey) -> Boolean,
     private val onNavigationRequested: (String) -> Unit,
     private val bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>>,
     private val fabSupportedRoutes: ImmutableSet<StableNavKey>,
@@ -327,6 +331,7 @@ private data class MainShellScene(
             onBack = onBack,
             entryProvider = entryProvider,
             onTitleLookup = onTitleLookup,
+            onIsSelected = onIsSelected,
             onNavigationRequested = onNavigationRequested,
             bottomBarItems = bottomBarItems,
             fabSupportedRoutes = fabSupportedRoutes,
@@ -346,12 +351,12 @@ private fun MainShell(
     onBack: () -> Unit,
     entryProvider: (StableNavKey) -> NavEntry<StableNavKey>,
     onTitleLookup: @Composable (StableNavKey) -> String,
+    onIsSelected: (String, StableNavKey) -> Boolean,
     onNavigationRequested: (String) -> Unit,
     bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>>,
     fabSupportedRoutes: ImmutableSet<StableNavKey>,
 ) {
     val context = LocalContext.current
-    val navigationItemsProvider: NavigationItemsProvider = koinInject()
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val bottomNavTransitions = rememberBottomNavTransitions()
     val currentRoute = navigator.state.currentBackStack.last()
@@ -379,6 +384,9 @@ private fun MainShell(
                 onInternalNavigationRequested = { route ->
                     onNavigationRequested(route)
                 },
+                additionalHandlers = mapOf(
+                    item.route to { onNavigationRequested(item.route) }
+                )
             )
         }
 
@@ -421,7 +429,7 @@ private fun MainShell(
                         )
                     }
                     railDrawerItems.first.forEach { item ->
-                        val isSelected = isDrawerItemSelected(item.route, currentRoute, navigationItemsProvider)
+                        val isSelected = onIsSelected(item.route, currentRoute)
                         NavigationRailItem(
                             selected = isSelected,
                             onClick = { onNavigationDrawerItemClick(item, null, null) },
@@ -435,7 +443,7 @@ private fun MainShell(
                         )
                     }
                     railDrawerItems.second.forEach { item ->
-                        val isSelected = isDrawerItemSelected(item.route, currentRoute, navigationItemsProvider)
+                        val isSelected = onIsSelected(item.route, currentRoute)
                         NavigationRailItem(
                             selected = isSelected,
                             onClick = { onNavigationDrawerItemClick(item, null, null) },
@@ -541,7 +549,7 @@ private fun MainShell(
                     uiState.navigationDrawerItems.forEach { item ->
                         NavigationDrawerItemContent(
                             item = item,
-                            selected = isDrawerItemSelected(item.route, currentRoute, navigationItemsProvider),
+                            selected = onIsSelected(item.route, currentRoute),
                             dividerRoutes = persistentSetOf(),
                             handleNavigationItemClick = {
                                 onNavigationDrawerItemClick(

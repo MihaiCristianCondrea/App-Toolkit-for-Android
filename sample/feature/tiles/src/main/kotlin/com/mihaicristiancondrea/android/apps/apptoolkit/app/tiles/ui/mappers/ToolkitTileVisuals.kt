@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTileIcon
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.utils.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 
@@ -52,9 +53,9 @@ internal data class StatusColors(
 )
 
 internal fun ToolkitTile.previewTextResId(): Int = when (id) {
-    "coin_flip" -> R.string.tile_preview_coin_result
-    "compass" -> R.string.tile_preview_compass_result
-    "bubble_level" -> R.string.tile_preview_level_result
+    ToolkitTileIds.COIN_FLIP -> R.string.tile_preview_coin_result
+    ToolkitTileIds.COMPASS -> R.string.tile_preview_compass_result
+    ToolkitTileIds.BUBBLE_LEVEL -> R.string.tile_preview_level_result
     else -> R.string.tile_preview_default_result
 }
 

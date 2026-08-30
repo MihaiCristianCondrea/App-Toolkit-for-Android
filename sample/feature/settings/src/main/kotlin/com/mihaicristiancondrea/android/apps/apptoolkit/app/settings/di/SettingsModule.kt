@@ -19,11 +19,14 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.data.repositories.GeneralSettingsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.GeneralSettingsContentProvider
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val settingsFeatureModule: Module = module {
+val settingsModule: Module = module {
+    factory { GeneralSettingsContentProvider() }
+
     single {
         GeneralSettingsRepository(
             firebaseController = get(),

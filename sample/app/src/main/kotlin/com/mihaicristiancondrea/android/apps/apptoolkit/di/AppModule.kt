@@ -26,6 +26,7 @@ import org.koin.dsl.module
 
 val appModule: Module = module {
     // TODO: these should be in a module feature:settings
+    // TODO: all of these should be moved to com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.di
     factory<GeneralSettingsContentProvider> {
         GeneralSettingsContentProvider(
             aboutContent = { paddingValues, snackbarHostState ->
@@ -37,6 +38,7 @@ val appModule: Module = module {
         )
     }
 
+    // TODO: these too:
     single<List<String>>(qualifier = named(name = "startup_entries")) {
         listOf(
             get<Context>().getString(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R.string.tiles_title),
@@ -44,6 +46,7 @@ val appModule: Module = module {
         )
     }
 
+    // TODO: these too:
     single<List<String>>(qualifier = named(name = "startup_values")) {
         listOf("toolkit_tiles", "apps_list")
     }

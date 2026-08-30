@@ -46,24 +46,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileStatus
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.BreathingToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CaffeineToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CoinFlipToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CompassToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CounterToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.DiceRollToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.FlashDimmerToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.LevelToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.LuxMeterToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.MorseToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.MusicSearchToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.SosToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.SoundModeToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.BreathingToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.CaffeineToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.CoinFlipToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.CompassToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.CounterToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.DiceRollToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.FlashDimmerToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.LevelToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.LuxMeterToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.MorseToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.MusicSearchToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.SosToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.SoundModeToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.helperSummaryResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.mappers.helperTitleResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.previews.GenericToolPreview
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.utils.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 
@@ -200,22 +201,20 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
 private fun ToolInteractiveContent(
     tile: ToolkitTile,
 ) {
-
-    // TODO: make these constants in ui.utils
     when (tile.id) {
-        "coin_flip" -> CoinFlipToolRoute()
-        "dice_roll" -> DiceRollToolRoute()
-        "counter" -> CounterToolRoute()
-        "compass" -> CompassToolRoute()
-        "bubble_level" -> LevelToolRoute()
-        "lux_meter" -> LuxMeterToolRoute()
-        "caffeine" -> CaffeineToolRoute()
-        "sound_mode" -> SoundModeToolRoute()
-        "music_search" -> MusicSearchToolRoute()
-        "sos" -> SosToolRoute()
-        "morse" -> MorseToolRoute()
-        "breathing" -> BreathingToolRoute()
-        "flash_dimmer" -> FlashDimmerToolRoute()
+        ToolkitTileIds.COIN_FLIP -> CoinFlipToolRoute()
+        ToolkitTileIds.DICE_ROLL -> DiceRollToolRoute()
+        ToolkitTileIds.COUNTER -> CounterToolRoute()
+        ToolkitTileIds.COMPASS -> CompassToolRoute()
+        ToolkitTileIds.BUBBLE_LEVEL -> LevelToolRoute()
+        ToolkitTileIds.LUX_METER -> LuxMeterToolRoute()
+        ToolkitTileIds.CAFFEINE -> CaffeineToolRoute()
+        ToolkitTileIds.SOUND_MODE -> SoundModeToolRoute()
+        ToolkitTileIds.MUSIC_SEARCH -> MusicSearchToolRoute()
+        ToolkitTileIds.SOS -> SosToolRoute()
+        ToolkitTileIds.MORSE -> MorseToolRoute()
+        ToolkitTileIds.BREATHING -> BreathingToolRoute()
+        ToolkitTileIds.FLASH_DIMMER -> FlashDimmerToolRoute()
         else -> GenericToolPreview(tile = tile)
     }
 }

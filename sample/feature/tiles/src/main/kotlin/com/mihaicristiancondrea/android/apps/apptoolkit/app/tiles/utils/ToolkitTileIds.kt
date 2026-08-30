@@ -15,12 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.utils
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
-import kotlinx.coroutines.flow.Flow
-
-interface NavigationItemsProvider {
-    fun items(): Flow<List<NavigationDrawerItem>>
+object ToolkitTileIds {
+    const val COIN_FLIP = "coin_flip"
+    const val DICE_ROLL = "dice_roll"
+    const val COUNTER = "counter"
+    const val COMPASS = "compass"
+    const val BUBBLE_LEVEL = "bubble_level"
+    const val LUX_METER = "lux_meter"
+    const val CAFFEINE = "caffeine"
+    const val SOUND_MODE = "sound_mode"
+    const val MUSIC_SEARCH = "music_search"
+    const val SOS = "sos"
+    const val MORSE = "morse"
+    const val BREATHING = "breathing"
+    const val FLASH_DIMMER = "flash_dimmer"
 }

@@ -58,6 +58,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Genera
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LicensesRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
@@ -164,6 +165,15 @@ class MainActivity : AppCompatActivity() {
                                     .find { it.route == route }?.let { stringResource(it.title) }
                                     ?: stringResource(CommonR.string.app_name)
                             }
+                        }
+                    },
+                    onIsSelected = { itemRoute, currentRoute ->
+                        when (itemRoute) {
+                            "components" -> currentRoute is ComponentsRoute
+                            NavigationDrawerRoutes.ROUTE_SETTINGS -> currentRoute is SettingsRoute || currentRoute is GeneralSettingsRoute
+                            NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> currentRoute is HelpRoute
+                            NavigationDrawerRoutes.ROUTE_SUPPORT -> currentRoute is SupportRoute
+                            else -> false
                         }
                     },
                     onLaunchActivity = { route: StableNavKey ->

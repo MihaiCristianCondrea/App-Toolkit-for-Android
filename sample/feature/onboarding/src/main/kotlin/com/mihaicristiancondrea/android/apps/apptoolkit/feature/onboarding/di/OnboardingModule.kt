@@ -28,7 +28,7 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val onboardingFeatureModule: Module = module {
+val onboardingModule: Module = module {
     single<OnboardingProvider> { AppOnboardingProvider() }
     single<OnboardingPreferencesDataSource> { get<CommonDataStore>() }
     single<OnboardingRepository> { DefaultOnboardingRepository(dataStore = get()) }

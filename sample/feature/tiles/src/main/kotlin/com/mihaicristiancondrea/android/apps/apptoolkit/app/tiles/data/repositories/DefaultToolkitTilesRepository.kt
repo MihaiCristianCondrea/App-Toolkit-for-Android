@@ -23,6 +23,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.To
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileCategoryData
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileData
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.data.models.ToolkitTileStatus
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.utils.ToolkitTileIds
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -72,33 +73,33 @@ class DefaultToolkitTilesRepository(
             id = "sensors",
             initiallyExpanded = true,
             tiles = persistentListOf(
-                tile("bubble_level", ToolkitTileStatus.NeedsSetup),
-                tile("compass", ToolkitTileStatus.NeedsSetup),
-                tile("lux_meter", ToolkitTileStatus.NeedsSetup),
+                tile(ToolkitTileIds.BUBBLE_LEVEL, ToolkitTileStatus.NeedsSetup),
+                tile(ToolkitTileIds.COMPASS, ToolkitTileStatus.NeedsSetup),
+                tile(ToolkitTileIds.LUX_METER, ToolkitTileStatus.NeedsSetup),
             ),
         ),
         ToolkitTileCategoryData(
             id = "utilities",
             tiles = persistentListOf(
-                tile("coin_flip", requestKey = "coin_flip"),
-                tile("dice_roll", requestKey = "dice_roll"),
-                tile("counter", requestKey = "counter"),
+                tile(ToolkitTileIds.COIN_FLIP, requestKey = ToolkitTileIds.COIN_FLIP),
+                tile(ToolkitTileIds.DICE_ROLL, requestKey = ToolkitTileIds.DICE_ROLL),
+                tile(ToolkitTileIds.COUNTER, requestKey = ToolkitTileIds.COUNTER),
                 tile("material_colors", quickTool = ToolkitQuickTool.MaterialColors),
-                tile("music_search"),
-                tile("morse"),
+                tile(ToolkitTileIds.MUSIC_SEARCH),
+                tile(ToolkitTileIds.MORSE),
             ),
         ),
         ToolkitTileCategoryData(
             id = "system",
             tiles = persistentListOf(
-                tile("caffeine"),
-                tile("sound_mode"),
-                tile("flash_dimmer", requestKey = "flash_dimmer"),
+                tile(ToolkitTileIds.CAFFEINE),
+                tile(ToolkitTileIds.SOUND_MODE),
+                tile(ToolkitTileIds.FLASH_DIMMER, requestKey = ToolkitTileIds.FLASH_DIMMER),
             ),
         ),
         ToolkitTileCategoryData(
             id = "wellbeing",
-            tiles = persistentListOf(tile("breathing"), tile("sos")),
+            tiles = persistentListOf(tile(ToolkitTileIds.BREATHING), tile(ToolkitTileIds.SOS)),
         ),
     )
 }
@@ -121,4 +122,8 @@ internal fun filterUnavailableTorchTools(
     }
 }
 
-private val TORCH_TOOL_IDS = setOf("flash_dimmer", "morse", "sos")
+private val TORCH_TOOL_IDS = setOf(
+    ToolkitTileIds.FLASH_DIMMER,
+    ToolkitTileIds.MORSE,
+    ToolkitTileIds.SOS,
+)

@@ -38,7 +38,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val appsFeatureModule: Module = module {
+val appsModule: Module = module {
     single<DeveloperAppsLocalDataSource> {
         DefaultDeveloperAppsLocalDataSource(
             cacheFile = androidContext().filesDir.resolve("developer_apps/catalogue.json"),

@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.Navigati
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val componentsFeatureModule = module {
+val componentsModule = module {
     single {
         ComponentsShowcaseRepository(
             dataStore = get(),

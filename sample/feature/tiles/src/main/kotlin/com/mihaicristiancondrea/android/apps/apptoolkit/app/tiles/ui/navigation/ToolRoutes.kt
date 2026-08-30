@@ -15,13 +15,26 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui
+package com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.BreathingToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CaffeineToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CoinFlipToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CompassToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.CounterToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.DiceRollToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.FlashDimmerToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.LevelToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.LuxMeterToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.MusicSearchToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.MorseToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.SosToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.SoundModeToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.BreathingTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.CaffeineTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.views.tools.CoinFlipTool
@@ -45,7 +58,6 @@ import org.koin.compose.viewmodel.koinViewModel
  * for injecting a fake.
  */
 
-// TODO: these should not exist in root. based by the android tree skill these should not exist in the .ui layer directly. because the .ui has the screen and the view model.
 @Composable
 internal fun CoinFlipToolRoute(viewModel: CoinFlipToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
