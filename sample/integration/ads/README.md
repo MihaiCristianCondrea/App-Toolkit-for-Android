@@ -8,8 +8,8 @@ logic and the toolkit's advertising components.
 
 ## Owns
 
-- `adsIntegrationModule`, which defines the `AdsConfig` instances for different surfaces (Apps List, App
-  Details, Bottom Nav, etc.).
+- `adsIntegrationModule`, which defines the `AdsConfig` instances for different surfaces (Apps List,
+  App Details, Bottom Nav, etc.).
 - `AdsConstants` (the sample's ad unit IDs, debug/release selection and ad frequency) and
   `AppAdsQualifiers` (the placements this app adds beyond the toolkit's own).
 
@@ -45,11 +45,11 @@ flowchart TD
 
 ## Host requirements
 
-The module's manifest contributes the `com.google.android.gms.ads.APPLICATION_ID` meta-data, which
-resolves `@string/ad_mob_app_id`. That resource is **not** declared here on purpose — the host app
-must declare it (`:sample:app`'s `ids.xml`). Shipping a placeholder would leak this publisher
-account into any consumer that names its own resource differently, which is the failure the
-toolkit's manifest-based `AdMobAppIdProvider` exists to prevent.
+The host app declares the `com.google.android.gms.ads.APPLICATION_ID` meta-data and the
+`ad_mob_app_id` resource it resolves (see `:sample:app`). That pair is the app's publisher identity
+rather than configuration of this module, and the toolkit's `AdMobAppIdProvider` reads it from the
+merged manifest. Declaring either here would leak one account into every consumer that does not
+happen to override the same resource name.
 
 ## Public contracts
 
