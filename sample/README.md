@@ -34,23 +34,29 @@ free and open-source software!
 - **Caffeine Mode**: Keep your screen awake and prevent timeouts while reading or working.
 
 📱 Device & Design Insights
+
 - **Material Colors Explorer**: Preview and explore your device's unique Material You color palette.
 - **Sound Mode Manager**: Quickly toggle between Silent, Vibrate, and Ring modes.
 
 🧘 Wellness & Focus
+
 - **Guided Breathing Helper**: Destress and relax with simple, effective breathing exercises.
 
 🚀 Developer Showcase
 
-- **Modern Material 3 Expressive UI**: Experience the best of Android design with full dynamic theming.
-- **Live Component Previews**: Explore functional implementations of professional UI building blocks.
+- **Modern Material 3 Expressive UI**: Experience the best of Android design with full dynamic
+  theming.
+- **Live Component Previews**: Explore functional implementations of professional UI building
+  blocks.
 - **App Portfolio**: Browse a dynamic, real-time list of all my published apps on Google Play.
 - **One-Tap Discovery**: Instantly launch your favorite apps or view them on the Play Store.
 
 # Benefits
 
 🛠️ All-in-One Productivity Hub
-- **Eliminate App Clutter**: Replace dozens of single-purpose utility apps with one lightweight, high-performance toolkit.
+
+- **Eliminate App Clutter**: Replace dozens of single-purpose utility apps with one lightweight,
+  high-performance toolkit.
 
 
 - See how shared components work
@@ -68,14 +74,6 @@ free and open-source software!
     <td><img src="/sample/app/src/main/play/listings/en-US/graphics/phone-screenshots/3-screenshot_onboarding_theme.png" width="300" alt="Screenshot Onboarding Theme"></td>
   </tr>
 </table>
-
-# Architecture
-
-App Toolkit uses a modular, layered architecture designed for scalability and maintainability.
-
-- [Module Boundaries](docs/architecture/module-boundaries.md): Ownership and dependency rules enforced by the build.
-- [Modularization Status](docs/architecture/modularization-status.md): Current migration state and remaining risks.
-- [Feature Module Template](docs/architecture/feature-module-template.md): Guidelines for creating new features.
 
 # How it works
 

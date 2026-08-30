@@ -159,7 +159,7 @@ class ModuleBoundariesPlugin : Plugin<Project> {
             "(?m)^import\\s+com\\.mihaicristiancondrea\\.android\\.apps\\.apptoolkit\\.app\\.(main|integration|navigation)(\\.|$)",
         )
         val FEATURE_IMPORT_REGEX = Regex(
-            "(?m)^import\\s+com\\.mihaicristiancondrea\\.android\\.apps\\.apptoolkit\\.app\\.(apps|components|settings|tiles)(\\.|$)",
+            "(?m)^import\\s+com\\.mihaicristiancondrea\\.android\\.apps\\.apptoolkit\\.feature\\.(apps|components|onboarding|settings|tiles)(\\.|$)",
         )
         val INLINE_SCREEN_NAME_REGEX = Regex("screenName\\s*=\\s*\"")
     }

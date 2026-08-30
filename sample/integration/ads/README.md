@@ -12,6 +12,8 @@ logic and the toolkit's advertising components.
   App Details, Bottom Nav, etc.).
 - `AdsConstants` (the sample's ad unit IDs, debug/release selection and ad frequency) and
   `AppAdsQualifiers` (the placements this app adds beyond the toolkit's own).
+- The sample app's AdMob application ID and the manifest meta-data that publishes it to the merged
+  application manifest.
 
 ## Depends on
 
@@ -43,13 +45,13 @@ flowchart TD
 - **Qualifier-based Injection**: Uses Koin's `named` qualifiers to provide different ad
   configurations for different UI contexts.
 
-## Host requirements
+## Manifest contribution
 
-The host app declares the `com.google.android.gms.ads.APPLICATION_ID` meta-data and the
-`ad_mob_app_id` resource it resolves (see `:sample:app`). That pair is the app's publisher identity
-rather than configuration of this module, and the toolkit's `AdMobAppIdProvider` reads it from the
-merged manifest. Declaring either here would leak one account into every consumer that does not
-happen to override the same resource name.
+This sample-specific integration module contributes the
+`com.google.android.gms.ads.APPLICATION_ID` meta-data and its `ad_mob_app_id` resource to the final
+sample APK. The toolkit's `AdMobAppIdProvider` reads that value from the merged manifest. Keeping the
+pair here places all of the sample's advertising configuration in one module; the reusable
+`:library:integration:ads` module still provides no publisher identity or fallback value.
 
 ## Public contracts
 

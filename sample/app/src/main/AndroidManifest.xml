@@ -31,16 +31,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         tools:targetApi="33">
 
-        <!--
-          Declared by the app, next to the `ad_mob_app_id` resource it resolves. The AdMob
-          application id is this app's publisher identity, not configuration of the ads module, and
-          the toolkit reads it from the merged manifest. Declaring it in a library module instead
-          would leak this account into every consumer that does not override the resource.
-        -->
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/ad_mob_app_id" />
-
         <activity
             android:name=".app.main.ui.MainActivity"
             android:exported="true"

@@ -20,7 +20,7 @@
 
     <application>
         <activity
-            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.ComponentsActivity"
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsActivity"
             android:exported="false"
             android:label="@string/components_title" />
     </application>

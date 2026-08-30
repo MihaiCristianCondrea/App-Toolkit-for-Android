@@ -8,7 +8,6 @@ The hidden components showcase and the unlock gesture that reveals it.
 
 - The concrete `ComponentsShowcaseRepository`, which owns the unlock flag.
 - `ComponentsActivity`, `ComponentsScreen`, and the unlock threshold behavior.
-- `ComponentsShowcaseRepository`, which owns the unlock rule and exposes `isUnlocked`.
 - Localized strings for the component showcase.
 
 ## Does not own

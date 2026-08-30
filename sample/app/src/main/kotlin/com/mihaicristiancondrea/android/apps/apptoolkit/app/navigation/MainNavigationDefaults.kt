@@ -22,8 +22,8 @@ import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.GridView
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.navigation.AppsListRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.AppsListRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.BottomBarItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import kotlinx.collections.immutable.ImmutableList

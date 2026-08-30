@@ -39,7 +39,7 @@
 
     <application>
         <receiver
-            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.broadcast.FavoritesChangedReceiver"
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.data.broadcast.FavoritesChangedReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.mihaicristiancondrea.android.apps.apptoolkit.action.FAVORITES_CHANGED" />

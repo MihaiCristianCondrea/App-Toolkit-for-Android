@@ -18,8 +18,8 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.navigation.AppsListRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.AppsListRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.entryProviderFor

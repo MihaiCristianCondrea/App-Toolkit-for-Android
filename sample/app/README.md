@@ -31,6 +31,8 @@ libraries with the host's own feature modules.
   module. Default themes, colors and backup policies come from
   [`:library:apptoolkit`](../../library/apptoolkit/README.md); shared host artwork remains in
   [`:sample:core:ui`](../core/ui/README.md).
+- Advertising configuration, including the sample's AdMob application ID and merged-manifest
+  declaration, owned by [`:sample:integration:ads`](../integration/ads/README.md).
 - Route keys and the entry-builder context, owned by
   [`:sample:core:navigation`](../core/navigation/README.md).
 
@@ -89,10 +91,11 @@ through the adapter in `:sample:core:apptoolkit`, plus the final manifest/resour
 The host inherits common application attributes, backup/data-extraction rules, colors and themes
 from `:library:apptoolkit`. Android's manifest and resource merger gives this application higher
 priority, so it can replace any inherited default without copying the toolkit files pre-emptively.
-Host-specific identity remains here, including the application class, icons, label and AdMob
-application ID. The sample provides its actual `app_name` and `app_full_name`, while accepting
-AppToolkit's copyright and locale defaults. Another host can replace those same-named resources or
-the locale config while retaining the application-level locale link.
+Host-specific identity remains here, including the application class, icons and label. The sample
+provides its actual `app_name` and `app_full_name`, while accepting AppToolkit's copyright and locale
+defaults. The sample-specific ads integration contributes its AdMob application ID to the final
+manifest. Another host can replace the app's same-named resources or locale config while retaining
+the application-level locale link.
 
 ## Internal implementations
 

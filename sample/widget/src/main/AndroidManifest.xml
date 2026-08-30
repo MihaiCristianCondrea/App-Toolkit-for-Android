@@ -20,7 +20,7 @@
 
     <application>
         <receiver
-            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.widgets.apps.AppIconsWidgetReceiver"
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.AppIconsWidgetReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

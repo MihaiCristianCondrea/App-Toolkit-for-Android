@@ -17,9 +17,9 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.navigation.AppsListRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.navigation.ComponentsRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.AppsListRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.LibraryExtrasRoute

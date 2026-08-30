@@ -29,12 +29,12 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.ComponentsActivity
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.navigation.ComponentsRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsActivity
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.MainNavigationDefaults
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appNavigationEntryBuilders
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.toNavKeyOrDefault
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.data.local.datastore.DatastoreInterface
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DatastoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.NavigationRoutes
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainAction

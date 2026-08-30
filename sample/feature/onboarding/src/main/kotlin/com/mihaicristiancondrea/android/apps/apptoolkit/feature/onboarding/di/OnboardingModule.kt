@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.AppOnboardingProvider
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.ui.AppOnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.data.repositories.DefaultOnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.data.repositories.OnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.OnboardingViewModel

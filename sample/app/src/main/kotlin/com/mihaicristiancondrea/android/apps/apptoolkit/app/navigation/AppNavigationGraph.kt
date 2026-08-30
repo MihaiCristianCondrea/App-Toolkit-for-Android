@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.navigation.appsListEntryBuilder
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.toolkitTilesEntryBuilder
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.appsListEntryBuilder
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.toolkitTilesEntryBuilder
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
 import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.appToolkitNavigationEntryBuilders
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder

@@ -20,7 +20,7 @@
 
     <application>
         <service
-            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.CoinFlipTileService"
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.CoinFlipTileService"
             android:exported="true"
             android:icon="@drawable/ic_tile_coin"
             android:label="@string/tile_coin_flip_title"
@@ -31,7 +31,7 @@
         </service>
 
         <service
-            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.CounterTileService"
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.CounterTileService"
             android:exported="true"
             android:icon="@drawable/ic_tile_counter"
             android:label="@string/tile_counter_title"
@@ -42,7 +42,7 @@
         </service>
 
         <service
-            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.DiceRollTileService"
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.DiceRollTileService"
             android:exported="true"
             android:icon="@drawable/ic_tile_dice"
             android:label="@string/tile_dice_roll_title"
@@ -53,12 +53,12 @@
         </service>
 
         <service
-            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.CaffeineService"
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.CaffeineService"
             android:exported="false"
             android:foregroundServiceType="shortService" />
 
         <service
-            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.service.FlashDimmerTileService"
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.FlashDimmerTileService"
             android:exported="true"
             android:icon="@drawable/ic_tile_flash_dimmer"
             android:label="@string/tile_flash_dimmer_title"
