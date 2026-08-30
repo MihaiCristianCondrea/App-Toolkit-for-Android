@@ -15,15 +15,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
- * Copyright (Â©) 2026 Mihai-Cristian Condrea
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- */
-
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.MorsePlaybackState
