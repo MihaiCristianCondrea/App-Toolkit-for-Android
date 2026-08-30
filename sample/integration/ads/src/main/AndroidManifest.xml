@@ -18,6 +18,13 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--
+      The host application must declare `ad_mob_app_id` itself (see `:sample:app`'s ids.xml).
+      This module deliberately ships no placeholder: a value declared here would be inherited by
+      every consumer that does not happen to use the exact same resource name, silently pointing
+      MobileAds and the UMP consent request at the wrong publisher account. A host that forgets
+      fails to link, which is the intended outcome.
+    -->
     <application>
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

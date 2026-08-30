@@ -42,6 +42,14 @@ flowchart TD
 - **Qualifier-based Injection**: Uses Koin's `named` qualifiers to provide different ad
   configurations for different UI contexts.
 
+## Host requirements
+
+The module's manifest contributes the `com.google.android.gms.ads.APPLICATION_ID` meta-data, which
+resolves `@string/ad_mob_app_id`. That resource is **not** declared here on purpose — the host app
+must declare it (`:sample:app`'s `ids.xml`). Shipping a placeholder would leak this publisher
+account into any consumer that names its own resource differently, which is the failure the
+toolkit's manifest-based `AdMobAppIdProvider` exists to prevent.
+
 ## Public contracts
 
 The module binds seven placements: general native, no-data, bottom navigation, Help, Support, Apps

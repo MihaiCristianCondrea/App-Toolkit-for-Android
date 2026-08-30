@@ -28,8 +28,10 @@ import org.koin.dsl.module
  * Handles cross-feature integrations and app-specific implementations of toolkit extension points.
  */
 val appModule: Module = module {
-    // TODO: these should be in a module feature:settings
-    // TODO: all of these should be moved to com.mihaicristiancondrea.android.apps.apptoolkit.app.settings.di
+    // Bound here rather than in :sample:feature:settings because the About content it injects is
+    // the Settings-to-Components bridge, and cross-feature composition is the app's job. Only one
+    // module may bind this type: a second, unqualified binding silently overrides this one and
+    // takes the version-tap handler with it.
     factory<GeneralSettingsContentProvider> {
         GeneralSettingsContentProvider(
             aboutContent = { paddingValues, snackbarHostState ->

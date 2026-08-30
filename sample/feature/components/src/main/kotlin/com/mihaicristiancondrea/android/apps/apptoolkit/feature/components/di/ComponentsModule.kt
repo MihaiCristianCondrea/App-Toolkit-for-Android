@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.di
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Widgets
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.data.repositories.ComponentsShowcaseRepository
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.components.ui.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationItemContribution
@@ -38,7 +39,7 @@ val componentsModule: Module = module {
         )
     }
 
-    single<NavigationItemContribution>(qualifier = named(name = "components")) {
+    single<NavigationItemContribution>(qualifier = named(name = ComponentsRoute.ROUTE_ID)) {
         val repository: ComponentsShowcaseRepository = get()
         object : NavigationItemContribution {
             override fun navigationItems(): Flow<List<NavigationDrawerItem>> =
@@ -49,7 +50,7 @@ val componentsModule: Module = module {
                                 title = R.string.components_title,
                                 icon = Icons.Outlined.Widgets,
                                 selectedIcon = Icons.Outlined.Widgets,
-                                route = "components"
+                                route = ComponentsRoute.ROUTE_ID
                             )
                         )
                     } else {

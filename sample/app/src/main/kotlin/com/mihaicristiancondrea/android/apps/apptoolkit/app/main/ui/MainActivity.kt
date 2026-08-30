@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity() {
                     },
                     onIsSelected = { itemRoute, currentRoute ->
                         when (itemRoute) {
-                            "components" -> currentRoute is ComponentsRoute
+                            NavigationRoutes.ROUTE_COMPONENTS -> currentRoute is ComponentsRoute
                             NavigationDrawerRoutes.ROUTE_SETTINGS -> currentRoute is SettingsRoute || currentRoute is GeneralSettingsRoute
                             NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> currentRoute is HelpRoute
                             NavigationDrawerRoutes.ROUTE_SUPPORT -> currentRoute is SupportRoute

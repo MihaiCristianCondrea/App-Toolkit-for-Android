@@ -47,13 +47,21 @@ A feature is invisible until it contributes itself. Both contracts live in
 needs a qualifier unique to the feature — two unqualified bindings of the same type override each
 other and the lost entry fails silently.
 
+Declare the identifier once, on the route key the feature owns, and reference it everywhere else —
+never repeat the raw string:
+
 ```kotlin
+@Parcelize
+data object MyFeatureRoute : AppNavKey {
+    const val ROUTE_ID: String = "my_feature"
+}
+
 val myFeatureModule: Module = module {
     // Drawer entry, optionally conditional.
-    single<NavigationItemContribution>(qualifier = named(name = "my_feature")) { ... }
+    single<NavigationItemContribution>(qualifier = named(name = MyFeatureRoute.ROUTE_ID)) { ... }
 
     // Selectable startup screen in Settings.
-    single<StartupScreenContribution>(qualifier = named(name = "my_feature")) { ... }
+    single<StartupScreenContribution>(qualifier = named(name = MyFeatureRoute.ROUTE_ID)) { ... }
 }
 ```
 

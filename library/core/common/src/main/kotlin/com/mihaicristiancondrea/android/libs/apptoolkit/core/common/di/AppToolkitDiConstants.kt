@@ -23,6 +23,12 @@ object AppToolkitDiConstants {
     const val GITHUB_CHANGELOG = "github_changelog"
     const val ANDROID_APPS_METADATA_API_BASE_URL = "android_apps_metadata_api_base_url"
 
+    /** Host-supplied labels for the startup-screen picker, in the same order as [STARTUP_VALUES]. */
+    const val STARTUP_ENTRIES = "startup_entries"
+
+    /** Host-supplied route identifiers for the startup-screen picker, parallel to [STARTUP_ENTRIES]. */
+    const val STARTUP_VALUES = "startup_values"
+
     const val DEFAULT_THEME_PALETTE = "default_theme_palette"
     const val MONOCHROME_THEME_PALETTE = "monochromePalette"
     const val BLUE_THEME_PALETTE = "bluePalette"

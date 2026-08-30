@@ -30,6 +30,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.rep
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.FavoritesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.common.data.repositories.InstalledAppsRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.AppsListViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.apps.list.ui.navigation.AppsListRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.StartupScreenContribution
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import kotlinx.serialization.json.Json
@@ -40,10 +41,10 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val appsModule: Module = module {
-    single<StartupScreenContribution>(qualifier = named(name = "apps_list")) {
+    single<StartupScreenContribution>(qualifier = named(name = AppsListRoute.ROUTE_ID)) {
         object : StartupScreenContribution {
             override val label: String = androidContext().getString(com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R.string.apps_tools_title)
-            override val routeValue: String = "apps_list"
+            override val routeValue: String = AppsListRoute.ROUTE_ID
         }
     }
 

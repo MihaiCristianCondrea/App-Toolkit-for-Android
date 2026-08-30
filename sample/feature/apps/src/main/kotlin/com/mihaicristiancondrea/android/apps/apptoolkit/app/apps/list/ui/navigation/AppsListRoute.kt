@@ -25,4 +25,7 @@ import kotlinx.parcelize.Parcelize
 data object AppsListRoute : AppNavKey {
     override val destinationType: NavigationDestinationType
         get() = NavigationDestinationType.TopLevel
+
+    /** Persisted identifier for this destination, shared by DI qualifiers and the startup-page setting. */
+    const val ROUTE_ID: String = "apps_list"
 }

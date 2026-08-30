@@ -27,10 +27,16 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Naviga
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
 
+/**
+ * The app-side view of the route identifiers the features own.
+ *
+ * Each value is re-exported from its owning feature rather than re-declared, so a feature's DI
+ * qualifier, its drawer item and the persisted startup-page value can never drift apart.
+ */
 object NavigationRoutes {
-    const val ROUTE_APPS_LIST: String = "apps_list"
-    const val ROUTE_TOOLKIT_TILES: String = "toolkit_tiles"
-    const val ROUTE_COMPONENTS: String = "components"
+    const val ROUTE_APPS_LIST: String = AppsListRoute.ROUTE_ID
+    const val ROUTE_TOOLKIT_TILES: String = ToolkitTilesRoute.ROUTE_ID
+    const val ROUTE_COMPONENTS: String = ComponentsRoute.ROUTE_ID
 }
 
 fun String.toNavKeyOrDefault(): StableNavKey =

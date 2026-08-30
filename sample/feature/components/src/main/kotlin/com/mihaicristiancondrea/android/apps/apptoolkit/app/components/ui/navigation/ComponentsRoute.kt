@@ -21,4 +21,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavKe
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data object ComponentsRoute : AppNavKey
+data object ComponentsRoute : AppNavKey {
+    /** Persisted identifier for this destination, shared by DI qualifiers and the drawer item. */
+    const val ROUTE_ID: String = "components"
+}

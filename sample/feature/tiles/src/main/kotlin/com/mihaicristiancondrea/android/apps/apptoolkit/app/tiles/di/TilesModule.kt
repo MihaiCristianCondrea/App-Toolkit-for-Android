@@ -55,6 +55,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.MusicSearch
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.SoundModeToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.ToolkitTilesViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.tiles.ui.navigation.ToolkitTilesRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.StartupScreenContribution
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore.CommonDataStore
 import org.koin.android.ext.koin.androidContext
@@ -64,10 +65,10 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val tilesModule: Module = module {
-    single<StartupScreenContribution>(qualifier = named(name = "toolkit_tiles")) {
+    single<StartupScreenContribution>(qualifier = named(name = ToolkitTilesRoute.ROUTE_ID)) {
         object : StartupScreenContribution {
             override val label: String = androidContext().getString(com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R.string.tiles_title)
-            override val routeValue: String = "toolkit_tiles"
+            override val routeValue: String = ToolkitTilesRoute.ROUTE_ID
         }
     }
 

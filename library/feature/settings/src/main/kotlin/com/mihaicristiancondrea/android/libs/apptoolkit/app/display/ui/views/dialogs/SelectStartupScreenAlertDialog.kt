@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -73,8 +74,8 @@ fun SelectStartupScreenAlertDialog(
      */
     sizing: DialogContentSizing = DialogContentSizing.WrapContent,
 ) {
-    val entriesRaw: List<String> = koinInject(qualifier = named("startup_entries"))
-    val valuesRaw: List<String> = koinInject(qualifier = named("startup_values"))
+    val entriesRaw: List<String> = koinInject(qualifier = named(AppToolkitDiConstants.STARTUP_ENTRIES))
+    val valuesRaw: List<String> = koinInject(qualifier = named(AppToolkitDiConstants.STARTUP_VALUES))
 
     val entries: ImmutableList<String> = remember(entriesRaw) { entriesRaw.toImmutableList() }
     val values: ImmutableList<String> = remember(valuesRaw) { valuesRaw.toImmutableList() }
