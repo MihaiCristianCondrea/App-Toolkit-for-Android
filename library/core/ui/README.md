@@ -117,5 +117,14 @@ with `NativeAdLoader.load` under `DisposableEffectImpl.onRemembered`. Preserve t
   minimum height merely to align one screen.
 - Featured/no-data presentations retain the sponsored-label container, a clipped 16:9 media frame,
   and an end-aligned CTA. Grid presentations keep their content centered.
+- There are two ways to draw a native ad, and they share everything except layout.
+  `NativeAdSlot(adUnitId, presentation)` renders one of the toolkit's presentations through
+  `NativeAdRenderer`. `NativeAdSlot(adUnitId) { ... }` gives the caller a `NativeAdScope` and lets
+  it lay the assets out in Compose, for screens whose ad has to match a layout the toolkit does not
+  ship. A `NativeAdViewFactory` remains the way to change a *presentation's* view tree; it is the
+  wrong tool for matching one screen's design, which is what the Compose slot is for.
+- A Compose-drawn ad is not "an ad in Compose": every asset the caller draws is still hosted in its
+  own registered view inside the `NativeAdView`. Callers must draw the scope's `SponsoredLabel` and
+  must not render ad text through their own `Text` — unregistered ad content is a policy violation.
 
 These are compatibility safeguards for host applications, not incidental styling details.

@@ -4,6 +4,11 @@
 
 # Unreleased
 
+### Added
+
+- Added a Compose-drawn native ad slot: `NativeAdSlot(adUnitId) { ... }` hands the caller a `NativeAdScope` of the ad's assets — headline, body, advertiser, icon, media, call to action and the sponsored disclosure — and the caller lays them out in Compose. Each asset is still a real registered view inside a `NativeAdView`, so AdMob click reporting and policy are unchanged, but the ad can use the host's own typography, shapes and components instead of a hand-built Android view tree. Screens whose ad has to match a layout the toolkit does not know about should prefer this over a `NativeAdViewFactory`.
+- Compose-drawn slots render the caller's layout with placeholder assets under `LocalInspectionMode`, so an ad surface has a usable `@Preview`.
+
 ### Improved
 
 - Standardized changelog, alert-dialog, and date-picker actions with consistent button styling, haptic feedback, and press animations.
