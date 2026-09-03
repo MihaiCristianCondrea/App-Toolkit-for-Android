@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Zähler</string>
     <string name="tile_dice_roll_summary">Wirf einen sechsseitigen Würfel</string>
     <string name="tile_dice_roll_title">Würfeln</string>
-    <string name="tile_lux_meter_info">Überwachung der Umgebungslichtintensität. Hinweis: Diese Funktion hängt von einem physischen Hardwaresensor ab und funktioniert möglicherweise nicht auf allen Geräten.</string>
-    <string name="tile_lux_meter_summary">Umgebungslichtintensität (Lux)</string>
-    <string name="tile_lux_meter_title">Luxmeter</string>
     <string name="tile_music_search_summary">Identifizieren Sie Musik mit einer Verknüpfung</string>
     <string name="tile_music_search_title">Musiksuche</string>
     <string name="tile_preview_coin_result">Köpfe</string>

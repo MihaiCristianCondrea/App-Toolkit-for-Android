@@ -75,12 +75,6 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
         ToolkitTileIcon.Compass
     )
 
-    ToolkitTileIds.LUX_METER -> TileVisuals(
-        R.string.tile_lux_meter_title,
-        R.string.tile_lux_meter_summary,
-        ToolkitTileIcon.Lux
-    )
-
     ToolkitTileIds.COIN_FLIP -> TileVisuals(
         R.string.tile_coin_flip_title,
         R.string.tile_coin_flip_summary,

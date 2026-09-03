@@ -251,25 +251,6 @@ class AndroidSensorLocalDataSource(
         awaitClose { sensorManager.unregisterListener(listener) }
     }.flowOn(dispatchers.default)
 
-    override fun getLuxLevel(): Flow<Float> = callbackFlow {
-        val listener = object : SensorEventListener {
-            override fun onSensorChanged(event: SensorEvent?) {
-                event?.let { trySend(it.values[0]) }
-            }
-
-            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
-        }
-
-        val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
-        if (sensor != null) {
-            sensorManager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_UI)
-        } else {
-            close()
-        }
-
-        awaitClose { sensorManager.unregisterListener(listener) }
-    }.flowOn(dispatchers.default)
-
     private fun remapRotationMatrix(
         rotationMatrix: FloatArray,
         displayRotation: Int,

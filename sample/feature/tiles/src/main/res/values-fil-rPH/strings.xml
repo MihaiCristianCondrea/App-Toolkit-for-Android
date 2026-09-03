@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Kontra</string>
     <string name="tile_dice_roll_summary">Gumulong ng anim na panig na die</string>
     <string name="tile_dice_roll_title">Dice Roll</string>
-    <string name="tile_lux_meter_info">Pagsubaybay sa intensity ng ilaw sa paligid. Tandaan: Nakadepende ang feature na ito sa isang pisikal na hardware sensor at maaaring hindi gumana sa lahat ng device.</string>
-    <string name="tile_lux_meter_summary">intensity ng ilaw sa paligid (lux)</string>
-    <string name="tile_lux_meter_title">Lux Metro</string>
     <string name="tile_music_search_summary">Tukuyin ang musika gamit ang isang shortcut</string>
     <string name="tile_music_search_title">Paghahanap ng Musika</string>
     <string name="tile_preview_coin_result">Mga ulo</string>

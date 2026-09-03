@@ -26,6 +26,4 @@ class SensorRepository(
     fun getCompassAzimuth(): Flow<Float> = localDataSource.getCompassAzimuth()
 
     fun getLevelOrientation(): Flow<Pair<Float, Float>> = localDataSource.getLevelOrientation()
-
-    fun getLuxLevel(): Flow<Float> = localDataSource.getLuxLevel()
 }

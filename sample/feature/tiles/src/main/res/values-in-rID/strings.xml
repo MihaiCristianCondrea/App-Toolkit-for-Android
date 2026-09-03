@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Penghitung</string>
     <string name="tile_dice_roll_summary">Pelemparan sebuah dadu bersisi enam</string>
     <string name="tile_dice_roll_title">Gulungan Dadu</string>
-    <string name="tile_lux_meter_info">Pemantauan intensitas cahaya sekitar. Catatan: Fitur ini bergantung pada sensor perangkat keras fisik dan mungkin tidak berfungsi di semua perangkat.</string>
-    <string name="tile_lux_meter_summary">Intensitas cahaya sekitar (lux)</string>
-    <string name="tile_lux_meter_title">Meteran Lux</string>
     <string name="tile_music_search_summary">Identifikasi musik dengan pintasan</string>
     <string name="tile_music_search_title">Pencarian Musik</string>
     <string name="tile_preview_coin_result">Kepala</string>

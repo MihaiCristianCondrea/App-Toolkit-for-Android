@@ -29,9 +29,6 @@
     <string name="tile_counter_title">カウンター</string>
     <string name="tile_dice_roll_summary">6面サイコロを振る</string>
     <string name="tile_dice_roll_title">サイコロロール</string>
-    <string name="tile_lux_meter_info">周囲光強度の監視。注: この機能は物理ハードウェア センサーに依存するため、すべてのデバイスで動作するとは限りません。</string>
-    <string name="tile_lux_meter_summary">周囲光の強さ（ルクス）</string>
-    <string name="tile_lux_meter_title">ルクスメーター</string>
     <string name="tile_music_search_summary">ショートカットで音楽を識別する</string>
     <string name="tile_music_search_title">音楽検索</string>
     <string name="tile_preview_coin_result">ヘッズ</string>

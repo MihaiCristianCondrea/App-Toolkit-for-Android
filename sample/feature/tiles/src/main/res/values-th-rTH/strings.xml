@@ -29,9 +29,6 @@
     <string name="tile_counter_title">เคาน์เตอร์</string>
     <string name="tile_dice_roll_summary">ทอยลูกเต๋าหกด้าน</string>
     <string name="tile_dice_roll_title">ทอยลูกเต๋า</string>
-    <string name="tile_lux_meter_info">การตรวจสอบความเข้มของแสงโดยรอบ หมายเหตุ: คุณสมบัตินี้ขึ้นอยู่กับเซ็นเซอร์ฮาร์ดแวร์ทางกายภาพและอาจใช้งานไม่ได้กับอุปกรณ์ทั้งหมด</string>
-    <string name="tile_lux_meter_summary">ความเข้มของแสงโดยรอบ (ลักซ์)</string>
-    <string name="tile_lux_meter_title">ลักซ์มิเตอร์</string>
     <string name="tile_music_search_summary">ระบุเพลงด้วยทางลัด</string>
     <string name="tile_music_search_title">ค้นหาเพลง</string>
     <string name="tile_preview_coin_result">หัว</string>

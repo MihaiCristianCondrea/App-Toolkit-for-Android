@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Брояч</string>
     <string name="tile_dice_roll_summary">Хвърлете шестстранен зар</string>
     <string name="tile_dice_roll_title">Хвърляне на зарове</string>
-    <string name="tile_lux_meter_info">Мониторинг на интензитета на околната светлина. Забележка: Тази функция зависи от физически хардуерен сензор и може да не работи на всички устройства.</string>
-    <string name="tile_lux_meter_summary">Интензитет на околната светлина (лукс)</string>
-    <string name="tile_lux_meter_title">Лукс метър</string>
     <string name="tile_music_search_summary">Идентифицирайте музика с пряк път</string>
     <string name="tile_music_search_title">Търсене на музика</string>
     <string name="tile_preview_coin_result">Глави</string>

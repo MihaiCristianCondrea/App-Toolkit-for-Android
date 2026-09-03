@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Licznik</string>
     <string name="tile_dice_roll_summary">Rzuć sześciościenną kostką</string>
     <string name="tile_dice_roll_title">Rzut kostką</string>
-    <string name="tile_lux_meter_info">Monitorowanie natężenia światła otoczenia. Uwaga: ta funkcja zależy od fizycznego czujnika sprzętowego i może nie działać na wszystkich urządzeniach.</string>
-    <string name="tile_lux_meter_summary">Natężenie światła otoczenia (lux)</string>
-    <string name="tile_lux_meter_title">Miernik luksów</string>
     <string name="tile_music_search_summary">Identyfikuj muzykę za pomocą skrótu</string>
     <string name="tile_music_search_title">Wyszukiwanie muzyki</string>
     <string name="tile_preview_coin_result">Głowy</string>

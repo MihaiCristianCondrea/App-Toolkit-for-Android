@@ -29,9 +29,6 @@
     <string name="tile_counter_title">काउंटर</string>
     <string name="tile_dice_roll_summary">छह-तरफा पासा रोल करें</string>
     <string name="tile_dice_roll_title">पासा पलटना</string>
-    <string name="tile_lux_meter_info">परिवेश प्रकाश तीव्रता की निगरानी। नोट: यह सुविधा भौतिक हार्डवेयर सेंसर पर निर्भर करती है और हो सकता है कि यह सभी डिवाइस पर काम न करे।</string>
-    <string name="tile_lux_meter_summary">परिवेश प्रकाश तीव्रता (लक्स)</string>
-    <string name="tile_lux_meter_title">लक्स मीटर</string>
     <string name="tile_music_search_summary">शॉर्टकट से संगीत को पहचानें</string>
     <string name="tile_music_search_title">संगीत खोज</string>
     <string name="tile_preview_coin_result">प्रमुखों</string>

@@ -29,9 +29,6 @@
     <string name="tile_counter_title">عداد</string>
     <string name="tile_dice_roll_summary">قم برمي حجر نرد ذو ستة جوانب</string>
     <string name="tile_dice_roll_title">لفة النرد</string>
-    <string name="tile_lux_meter_info">مراقبة شدة الضوء المحيط. ملاحظة: تعتمد هذه الميزة على مستشعر الأجهزة الفعلي وقد لا تعمل على جميع الأجهزة.</string>
-    <string name="tile_lux_meter_summary">شدة الإضاءة المحيطة (لوكس)</string>
-    <string name="tile_lux_meter_title">لوكس متر</string>
     <string name="tile_music_search_summary">التعرف على الموسيقى باستخدام الاختصار</string>
     <string name="tile_music_search_title">بحث الموسيقى</string>
     <string name="tile_preview_coin_result">رؤساء</string>

@@ -25,7 +25,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import kotlinx.collections.immutable.ImmutableList
 
 enum class ToolkitTileIcon {
-    Level, Compass, Lux, Coin, Dice, Counter, Caffeine, Sound, Music, Breathing, Sos, Morse,
+    Level, Compass, Coin, Dice, Counter, Caffeine, Sound, Music, Breathing, Sos, Morse,
     FlashDimmer, Palette,
 }
 

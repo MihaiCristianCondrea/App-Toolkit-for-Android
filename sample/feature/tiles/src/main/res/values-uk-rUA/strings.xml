@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Лічильник</string>
     <string name="tile_dice_roll_summary">Киньте шестигранний кубик</string>
     <string name="tile_dice_roll_title">Кидок кубика</string>
-    <string name="tile_lux_meter_info">Моніторинг інтенсивності зовнішнього освітлення. Примітка. Ця функція залежить від фізичного апаратного датчика та може працювати не на всіх пристроях.</string>
-    <string name="tile_lux_meter_summary">Інтенсивність зовнішнього освітлення (люкс)</string>
-    <string name="tile_lux_meter_title">Люксометр</string>
     <string name="tile_music_search_summary">Визначайте музику за допомогою швидкого доступу</string>
     <string name="tile_music_search_title">Пошук музики</string>
     <string name="tile_preview_coin_result">Голови</string>

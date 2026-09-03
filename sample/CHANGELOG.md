@@ -6,7 +6,8 @@
 
 ### Improved
 
-- Removed the unused code from the app to have a smaller app.
+- Removed the Lux Meter tool and ambient light feature in favor to let Low Brightness have this feature.
+- Removed unused code from the app to have a smaller app.
 - Improved Components showcase labels and translations.
 - Standardized Quick Tools actions with consistent button styling, haptic feedback, and press
   animations.

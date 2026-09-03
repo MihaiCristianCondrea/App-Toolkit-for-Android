@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Räknare</string>
     <string name="tile_dice_roll_summary">Slå en sexsidig tärning</string>
     <string name="tile_dice_roll_title">Tärningskast</string>
-    <string name="tile_lux_meter_info">Övervakning av omgivande ljusintensitet. Obs: Den här funktionen beror på en fysisk hårdvarusensor och kanske inte fungerar på alla enheter.</string>
-    <string name="tile_lux_meter_summary">Omgivande ljusintensitet (lux)</string>
-    <string name="tile_lux_meter_title">Lux mätare</string>
     <string name="tile_music_search_summary">Identifiera musik med en genväg</string>
     <string name="tile_music_search_title">Musiksökning</string>
     <string name="tile_preview_coin_result">Huvuden</string>

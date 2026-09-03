@@ -29,9 +29,6 @@
     <string name="tile_counter_title">کاؤنٹر</string>
     <string name="tile_dice_roll_summary">چھ طرفہ ڈائی رول کریں۔</string>
     <string name="tile_dice_roll_title">ڈائس رول</string>
-    <string name="tile_lux_meter_info">محیطی روشنی کی شدت کی نگرانی۔ نوٹ: یہ خصوصیت فزیکل ہارڈویئر سینسر پر منحصر ہے اور ہو سکتا ہے کہ تمام آلات پر کام نہ کرے۔</string>
-    <string name="tile_lux_meter_summary">محیطی روشنی کی شدت (لکس)</string>
-    <string name="tile_lux_meter_title">لکس میٹر</string>
     <string name="tile_music_search_summary">شارٹ کٹ کے ساتھ موسیقی کی شناخت کریں۔</string>
     <string name="tile_music_search_title">موسیقی کی تلاش</string>
     <string name="tile_preview_coin_result">سر</string>

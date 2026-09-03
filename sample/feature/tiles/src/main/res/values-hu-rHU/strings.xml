@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Számláló</string>
     <string name="tile_dice_roll_summary">Dobj egy hatoldalú kockával</string>
     <string name="tile_dice_roll_title">Kockadobás</string>
-    <string name="tile_lux_meter_info">Környezeti fényintenzitás figyelése. Megjegyzés: Ez a funkció egy fizikai hardverérzékelőtől függ, és előfordulhat, hogy nem működik minden eszközön.</string>
-    <string name="tile_lux_meter_summary">Környezeti fény intenzitása (lux)</string>
-    <string name="tile_lux_meter_title">Luxus mérő</string>
     <string name="tile_music_search_summary">A zene azonosítása egy parancsikon segítségével</string>
     <string name="tile_music_search_title">Zene keresése</string>
     <string name="tile_preview_coin_result">Fejek</string>

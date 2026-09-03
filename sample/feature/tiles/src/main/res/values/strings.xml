@@ -34,9 +34,6 @@
     <string name="tile_dice_roll_title">Dice Roll</string>
     <string name="tile_flash_dimmer_summary">Adjust flashlight brightness and access it from Quick Settings</string>
     <string name="tile_flash_dimmer_title">Flash Dimmer</string>
-    <string name="tile_lux_meter_info">Ambient light intensity monitoring. Note: This feature depends on a physical hardware sensor and may not work on all devices.</string>
-    <string name="tile_lux_meter_summary">Ambient light intensity (lux)</string>
-    <string name="tile_lux_meter_title">Lux Meter</string>
     <string name="tile_music_search_summary">Identify music with a shortcut</string>
     <string name="tile_music_search_title">Music Search</string>
     <string name="tile_preview_coin_result">Heads</string>

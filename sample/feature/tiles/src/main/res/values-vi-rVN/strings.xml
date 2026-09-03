@@ -29,9 +29,6 @@
     <string name="tile_counter_title">quầy</string>
     <string name="tile_dice_roll_summary">Đổ xúc xắc sáu mặt</string>
     <string name="tile_dice_roll_title">cuộn xúc xắc</string>
-    <string name="tile_lux_meter_info">Giám sát cường độ ánh sáng xung quanh. Lưu ý: Tính năng này phụ thuộc vào cảm biến phần cứng vật lý và có thể không hoạt động trên tất cả các thiết bị.</string>
-    <string name="tile_lux_meter_summary">Cường độ ánh sáng xung quanh (lux)</string>
-    <string name="tile_lux_meter_title">Máy đo Lux</string>
     <string name="tile_music_search_summary">Nhận dạng nhạc bằng phím tắt</string>
     <string name="tile_music_search_title">Tìm kiếm âm nhạc</string>
     <string name="tile_preview_coin_result">đầu</string>

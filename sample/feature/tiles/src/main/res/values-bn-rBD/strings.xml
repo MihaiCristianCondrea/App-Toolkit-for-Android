@@ -29,9 +29,6 @@
     <string name="tile_counter_title">কাউন্টার</string>
     <string name="tile_dice_roll_summary">একটি ছয় পার্শ্বযুক্ত ডাই রোল</string>
     <string name="tile_dice_roll_title">ডাইস রোল</string>
-    <string name="tile_lux_meter_info">পরিবেষ্টিত আলোর তীব্রতা পর্যবেক্ষণ। দ্রষ্টব্য: এই বৈশিষ্ট্যটি একটি শারীরিক হার্ডওয়্যার সেন্সরের উপর নির্ভর করে এবং সমস্ত ডিভাইসে কাজ নাও করতে পারে৷</string>
-    <string name="tile_lux_meter_summary">পরিবেষ্টিত আলোর তীব্রতা (লাক্স)</string>
-    <string name="tile_lux_meter_title">লাক্স মিটার</string>
     <string name="tile_music_search_summary">একটি শর্টকাট দিয়ে সঙ্গীত সনাক্ত করুন</string>
     <string name="tile_music_search_title">সঙ্গীত অনুসন্ধান</string>
     <string name="tile_preview_coin_result">মাথা</string>

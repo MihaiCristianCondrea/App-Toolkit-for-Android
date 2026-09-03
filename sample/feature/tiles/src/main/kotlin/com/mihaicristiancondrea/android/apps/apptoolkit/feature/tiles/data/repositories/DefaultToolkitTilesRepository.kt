@@ -75,7 +75,6 @@ class DefaultToolkitTilesRepository(
             tiles = persistentListOf(
                 tile(ToolkitTileIds.BUBBLE_LEVEL, ToolkitTileStatus.NeedsSetup),
                 tile(ToolkitTileIds.COMPASS, ToolkitTileStatus.NeedsSetup),
-                tile(ToolkitTileIds.LUX_METER, ToolkitTileStatus.NeedsSetup),
             ),
         ),
         ToolkitTileCategoryData(

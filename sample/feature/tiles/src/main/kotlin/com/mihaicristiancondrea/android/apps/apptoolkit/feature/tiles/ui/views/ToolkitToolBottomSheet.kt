@@ -59,7 +59,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigat
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.DiceRollToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.FlashDimmerToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.LevelToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.LuxMeterToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.MorseToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.MusicSearchToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.SosToolRoute
@@ -150,11 +149,6 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
     val helperTitle = stringResource(id = tile.status.helperTitleResId())
     val helperSummary = stringResource(id = tile.status.helperSummaryResId())
 
-    val customInfo = when (tile.id) {
-        ToolkitTileIds.LUX_METER -> stringResource(id = R.string.tile_lux_meter_info)
-        else -> null
-    }
-
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(SizeConstants.LargeSize),
@@ -175,23 +169,15 @@ private fun ToolStatusSummary(tile: ToolkitTile) {
                 tint = MaterialTheme.colorScheme.primary,
             )
             Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
-                if (customInfo != null) {
-                    Text(
-                        text = customInfo,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                } else {
-                    Text(
-                        text = helperTitle,
-                        style = MaterialTheme.typography.titleSmall,
-                    )
-                    Text(
-                        text = helperSummary,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
+                Text(
+                    text = helperTitle,
+                    style = MaterialTheme.typography.titleSmall,
+                )
+                Text(
+                    text = helperSummary,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
     }
@@ -207,7 +193,6 @@ private fun ToolInteractiveContent(
         ToolkitTileIds.COUNTER -> CounterToolRoute()
         ToolkitTileIds.COMPASS -> CompassToolRoute()
         ToolkitTileIds.BUBBLE_LEVEL -> LevelToolRoute()
-        ToolkitTileIds.LUX_METER -> LuxMeterToolRoute()
         ToolkitTileIds.CAFFEINE -> CaffeineToolRoute()
         ToolkitTileIds.SOUND_MODE -> SoundModeToolRoute()
         ToolkitTileIds.MUSIC_SEARCH -> MusicSearchToolRoute()

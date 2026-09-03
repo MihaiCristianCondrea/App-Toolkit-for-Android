@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Contor</string>
     <string name="tile_dice_roll_summary">Lansați un zar cu șase fețe</string>
     <string name="tile_dice_roll_title">Rol de zaruri</string>
-    <string name="tile_lux_meter_info">Monitorizarea intensității luminii ambientale. Notă: această caracteristică depinde de un senzor hardware fizic și este posibil să nu funcționeze pe toate dispozitivele.</string>
-    <string name="tile_lux_meter_summary">Intensitatea luminii ambientale (lux)</string>
-    <string name="tile_lux_meter_title">Luxmetru</string>
     <string name="tile_music_search_summary">Identificați muzica cu o comandă rapidă</string>
     <string name="tile_music_search_title">Căutare de muzică</string>
     <string name="tile_preview_coin_result">Capete</string>

@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Sayaç</string>
     <string name="tile_dice_roll_summary">Altı yüzlü bir zar atın</string>
     <string name="tile_dice_roll_title">Zar Atma</string>
-    <string name="tile_lux_meter_info">Ortam ışığı yoğunluğunun izlenmesi. Not: Bu özellik fiziksel donanım sensörüne bağlıdır ve tüm cihazlarda çalışmayabilir.</string>
-    <string name="tile_lux_meter_summary">Ortam ışığı yoğunluğu (lüks)</string>
-    <string name="tile_lux_meter_title">Lüks Ölçer</string>
     <string name="tile_music_search_summary">Müziği kısayolla tanımlayın</string>
     <string name="tile_music_search_title">Müzik Arama</string>
     <string name="tile_preview_coin_result">Kafalar</string>

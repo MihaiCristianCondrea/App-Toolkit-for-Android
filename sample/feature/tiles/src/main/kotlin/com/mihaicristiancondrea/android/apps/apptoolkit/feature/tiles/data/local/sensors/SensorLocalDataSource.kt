@@ -19,11 +19,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.loca
 
 import kotlinx.coroutines.flow.Flow
 
-/** Android sensor source used by compass, level, and lux tools. */
+/** Android sensor source used by compass and level tools. */
 interface SensorLocalDataSource {
     fun getCompassAzimuth(): Flow<Float>
 
     fun getLevelOrientation(): Flow<Pair<Float, Float>>
-
-    fun getLuxLevel(): Flow<Float>
 }

@@ -29,9 +29,6 @@
     <string name="tile_counter_title">카운터</string>
     <string name="tile_dice_roll_summary">6면체 주사위를 굴립니다.</string>
     <string name="tile_dice_roll_title">주사위 굴리기</string>
-    <string name="tile_lux_meter_info">주변광 강도 모니터링. 참고: 이 기능은 물리적 하드웨어 센서에 따라 다르며 모든 장치에서 작동하지 않을 수 있습니다.</string>
-    <string name="tile_lux_meter_summary">주변광 강도(럭스)</string>
-    <string name="tile_lux_meter_title">럭스 미터</string>
     <string name="tile_music_search_summary">바로가기로 음악 식별</string>
     <string name="tile_music_search_title">음악 검색</string>
     <string name="tile_preview_coin_result">머리</string>

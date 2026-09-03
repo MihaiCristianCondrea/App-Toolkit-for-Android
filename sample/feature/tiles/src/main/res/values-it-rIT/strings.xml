@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Contatore</string>
     <string name="tile_dice_roll_summary">Lancia un dado a sei facce</string>
     <string name="tile_dice_roll_title">Lancio dei dadi</string>
-    <string name="tile_lux_meter_info">Monitoraggio dell\'intensità della luce ambientale. Nota: questa funzionalità dipende da un sensore hardware fisico e potrebbe non funzionare su tutti i dispositivi.</string>
-    <string name="tile_lux_meter_summary">Intensità della luce ambientale (lux)</string>
-    <string name="tile_lux_meter_title">Luxmetro</string>
     <string name="tile_music_search_summary">Identifica la musica con una scorciatoia</string>
     <string name="tile_music_search_title">Ricerca musicale</string>
     <string name="tile_preview_coin_result">Teste</string>

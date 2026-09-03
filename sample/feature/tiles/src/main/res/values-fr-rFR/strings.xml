@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Compteur</string>
     <string name="tile_dice_roll_summary">Lancez un dé à six faces</string>
     <string name="tile_dice_roll_title">Lancement de dés</string>
-    <string name="tile_lux_meter_info">Surveillance de l\'intensité lumineuse ambiante. Remarque : Cette fonctionnalité dépend d\'un capteur matériel physique et peut ne pas fonctionner sur tous les appareils.</string>
-    <string name="tile_lux_meter_summary">Intensité de la lumière ambiante (lux)</string>
-    <string name="tile_lux_meter_title">Luxmètre</string>
     <string name="tile_music_search_summary">Identifiez la musique avec un raccourci</string>
     <string name="tile_music_search_title">Recherche de musique</string>
     <string name="tile_preview_coin_result">Têtes</string>

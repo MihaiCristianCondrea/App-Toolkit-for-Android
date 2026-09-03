@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Contador</string>
     <string name="tile_dice_roll_summary">Tira un dado de seis caras</string>
     <string name="tile_dice_roll_title">Tirada de dados</string>
-    <string name="tile_lux_meter_info">Monitoreo de la intensidad de la luz ambiental. Nota: Esta función depende de un sensor de hardware físico y es posible que no funcione en todos los dispositivos.</string>
-    <string name="tile_lux_meter_summary">Intensidad de la luz ambiental (lux)</string>
-    <string name="tile_lux_meter_title">Medidor de lux</string>
     <string name="tile_music_search_summary">Identificar música con un atajo</string>
     <string name="tile_music_search_title">Búsqueda de música</string>
     <string name="tile_preview_coin_result">cabezas</string>

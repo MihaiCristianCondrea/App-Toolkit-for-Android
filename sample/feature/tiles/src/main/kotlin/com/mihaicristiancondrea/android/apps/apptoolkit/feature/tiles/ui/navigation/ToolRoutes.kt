@@ -30,7 +30,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.Counter
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DiceRollToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.FlashDimmerToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LuxMeterToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MusicSearchToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
@@ -43,7 +42,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.t
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.DiceRollTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.FlashDimmerTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.LevelTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.LuxMeterTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.MorseTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.MusicSearchTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.SosTool
@@ -91,13 +89,6 @@ internal fun LevelToolRoute(viewModel: LevelToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(viewModel::open, viewModel::dismiss)
     LevelTool(state.pitch, state.roll)
-}
-
-@Composable
-internal fun LuxMeterToolRoute(viewModel: LuxMeterToolViewModel = koinViewModel()) {
-    val value by viewModel.state.collectAsStateWithLifecycle()
-    StartStopTool(viewModel::open, viewModel::dismiss)
-    LuxMeterTool(value)
 }
 
 @Composable

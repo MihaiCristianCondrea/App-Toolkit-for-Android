@@ -49,7 +49,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.Counter
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DiceRollToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.FlashDimmerToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LuxMeterToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MusicSearchToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
@@ -130,7 +129,6 @@ val tilesModule: Module = module {
     viewModel { CounterToolViewModel() }
     viewModel { CompassToolViewModel(repository = get()) }
     viewModel { LevelToolViewModel(repository = get()) }
-    viewModel { LuxMeterToolViewModel(repository = get()) }
     viewModel { BreathingToolViewModel(repository = get()) }
     viewModel { CaffeineToolViewModel(repository = get()) }
     viewModel { SoundModeToolViewModel(repository = get()) }

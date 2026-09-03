@@ -29,9 +29,6 @@
     <string name="tile_counter_title">櫃檯</string>
     <string name="tile_dice_roll_summary">擲六面骰</string>
     <string name="tile_dice_roll_title">擲骰子</string>
-    <string name="tile_lux_meter_info">環境光強度監測。注意：此功能取決於實體硬體感測器，可能不適用於所有裝置。</string>
-    <string name="tile_lux_meter_summary">環境光強度（勒克斯）</string>
-    <string name="tile_lux_meter_title">照度計</string>
     <string name="tile_music_search_summary">用快捷方式辨識音樂</string>
     <string name="tile_music_search_title">音樂搜尋</string>
     <string name="tile_preview_coin_result">頭</string>

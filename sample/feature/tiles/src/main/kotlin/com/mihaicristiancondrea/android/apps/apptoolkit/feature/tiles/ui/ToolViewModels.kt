@@ -110,14 +110,6 @@ class LevelToolViewModel(private val repository: SensorRepository) :
     }
 }
 
-class LuxMeterToolViewModel(private val repository: SensorRepository) :
-    FlowToolViewModel<Float>(0f) {
-    fun open() {
-        observation?.cancel(); observation =
-            repository.getLuxLevel().onEach { mutableState.value = it }.launchIn(viewModelScope)
-    }
-}
-
 class BreathingToolViewModel(private val repository: BreathingRepository) :
     FlowToolViewModel<BreathingState>(BreathingState()) {
     fun open() {

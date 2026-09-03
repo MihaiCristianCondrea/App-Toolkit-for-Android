@@ -29,9 +29,6 @@
     <string name="tile_counter_title">Счетчик</string>
     <string name="tile_dice_roll_summary">Бросьте шестигранный кубик</string>
     <string name="tile_dice_roll_title">Бросок кубиков</string>
-    <string name="tile_lux_meter_info">Мониторинг интенсивности окружающего освещения. Примечание. Эта функция зависит от физического аппаратного датчика и может работать не на всех устройствах.</string>
-    <string name="tile_lux_meter_summary">Интенсивность окружающего освещения (люкс)</string>
-    <string name="tile_lux_meter_title">Люкс метр</string>
     <string name="tile_music_search_summary">Определите музыку с помощью ярлыка</string>
     <string name="tile_music_search_title">Поиск музыки</string>
     <string name="tile_preview_coin_result">Руководители</string>

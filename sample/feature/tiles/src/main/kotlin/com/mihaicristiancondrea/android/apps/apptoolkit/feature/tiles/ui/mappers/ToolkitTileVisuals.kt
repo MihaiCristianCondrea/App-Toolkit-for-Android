@@ -34,7 +34,6 @@ import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.WarningAmber
-import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -62,7 +61,6 @@ internal fun ToolkitTile.previewTextResId(): Int = when (id) {
 internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Level -> Icons.Outlined.Straighten
     ToolkitTileIcon.Compass -> Icons.Outlined.Explore
-    ToolkitTileIcon.Lux -> Icons.Outlined.WbSunny
     ToolkitTileIcon.Coin -> Icons.Outlined.MonetizationOn
     ToolkitTileIcon.Dice -> Icons.Outlined.Casino
     ToolkitTileIcon.Counter -> Icons.Outlined.Dehaze
@@ -78,8 +76,7 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
 
 internal fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
     ToolkitTileIcon.Level,
-    ToolkitTileIcon.Compass,
-    ToolkitTileIcon.Lux -> CoreUiR.drawable.background_8_sided_cookie
+    ToolkitTileIcon.Compass -> CoreUiR.drawable.background_8_sided_cookie
 
     ToolkitTileIcon.Caffeine,
     ToolkitTileIcon.Breathing -> CoreUiR.drawable.background_soft_burst
@@ -116,8 +113,7 @@ internal fun ToolkitTileIcon.iconColors(): StatusColors {
     val isDark = androidx.compose.foundation.isSystemInDarkTheme()
     return when (this) {
         ToolkitTileIcon.Level,
-        ToolkitTileIcon.Compass,
-        ToolkitTileIcon.Lux -> StatusColors(
+        ToolkitTileIcon.Compass -> StatusColors(
             container = if (isDark) Color(0xFF006A60) else Color(0xFF00A091),
             content = if (isDark) Color(0xFF74DED1) else Color(0xFF006A60),
         )
