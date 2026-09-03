@@ -20,7 +20,7 @@
     <application>
         <!-- Internal support entry screen. Keep private to reduce intent spoofing surface. -->
         <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportActivity"
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportActivity"
             android:exported="false" />
     </application>
 </manifest>

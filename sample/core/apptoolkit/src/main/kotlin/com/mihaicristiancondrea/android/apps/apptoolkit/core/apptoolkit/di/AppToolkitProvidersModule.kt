@@ -23,16 +23,16 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings.AppPrivacySettingsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.settings.AppSettingsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.startup.AppStartupProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.interfaces.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AdvancedSettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.DisplaySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.PrivacySettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.ColorPalette
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.colors.google.blue.bluePalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.blue.bluePalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.di.modules.appToolkitModules
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.settings.utils.providers.AboutSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.settings.utils.providers.PrivacySettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.interfaces.SettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.providers.AdvancedSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.providers.DisplaySettingsProvider
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -64,13 +64,14 @@ fun appToolkitHostModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Modu
  * Every binding here answers a question the library asks of its host: what the settings screen
  * lists, what "about" says, what the default theme is.
  */
-internal fun appToolkitProvidersModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = module {
-    single<SettingsProvider> { AppSettingsProvider(context = get()) }
-    single<AboutSettingsProvider> {
-        AppAboutSettingsProvider(context = get(), hostBuildConfig = hostBuildConfig)
+internal fun appToolkitProvidersModule(hostBuildConfig: AppToolkitHostBuildConfig): Module =
+    module {
+        single<SettingsProvider> { AppSettingsProvider(context = get()) }
+        single<AboutSettingsProvider> {
+            AppAboutSettingsProvider(context = get(), hostBuildConfig = hostBuildConfig)
+        }
+        single<AdvancedSettingsProvider> { AppAdvancedSettingsProvider(context = get()) }
+        single<DisplaySettingsProvider> { AppDisplaySettingsProvider(context = get()) }
+        single<PrivacySettingsProvider> { AppPrivacySettingsProvider(context = get()) }
+        single<ColorPalette>(named(AppToolkitDiConstants.DEFAULT_THEME_PALETTE)) { bluePalette }
     }
-    single<AdvancedSettingsProvider> { AppAdvancedSettingsProvider(context = get()) }
-    single<DisplaySettingsProvider> { AppDisplaySettingsProvider(context = get()) }
-    single<PrivacySettingsProvider> { AppPrivacySettingsProvider(context = get()) }
-    single<ColorPalette>(named(AppToolkitDiConstants.DEFAULT_THEME_PALETTE)) { bluePalette }
-}

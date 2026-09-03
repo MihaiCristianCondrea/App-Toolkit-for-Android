@@ -20,9 +20,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileCategoryData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
-import kotlin.test.assertEquals
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class ToolkitTilesAvailabilityTest {
 

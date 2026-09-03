@@ -20,9 +20,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.servic
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.MorseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.TorchRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -57,12 +57,14 @@ class FlashDimmerTileService : TileService(), KoinComponent {
                 subtitle = when {
                     !state.capabilities.isAvailable ->
                         getString(R.string.flash_dimmer_unavailable)
+
                     !state.isEnabled -> getString(R.string.flash_dimmer_off)
                     state.capabilities.supportsDimming -> getString(
                         R.string.flash_dimmer_tile_level,
                         state.currentLevel,
                         state.capabilities.maximumLevel,
                     )
+
                     else -> getString(R.string.flash_dimmer_on)
                 }
             }

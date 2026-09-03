@@ -8,7 +8,8 @@
 
 - Removed the unused code from the app to have a smaller app.
 - Improved Components showcase labels and translations.
-- Standardized Quick Tools actions with consistent button styling, haptic feedback, and press animations.
+- Standardized Quick Tools actions with consistent button styling, haptic feedback, and press
+  animations.
 
 ### Fixed
 
@@ -43,11 +44,13 @@
 
 **Version:** `26.08.9` (`1370009`)
 
-Reliability-focused release with major improvements to startup, onboarding, Quick Tools, and the way App Toolkit communicates one-time UI actions.
+Reliability-focused release with major improvements to startup, onboarding, Quick Tools, and the way
+App Toolkit communicates one-time UI actions.
 
 ### Changed
 
-- Reworked Quick Tools architecture to more closely follow the project's current architecture conventions.
+- Reworked Quick Tools architecture to more closely follow the project's current architecture
+  conventions.
 - Quick Tools categories now remember whether they were expanded or collapsed.
 
 ### Improved
@@ -67,7 +70,8 @@ Reliability-focused release with major improvements to startup, onboarding, Quic
 
 **Version:** `26.08.8` (`1370008`)
 
-Major structural update that separated reusable App Toolkit responsibilities from Sample App-specific features much more clearly.
+Major structural update that separated reusable App Toolkit responsibilities from Sample
+App-specific features much more clearly.
 
 ### Added
 
@@ -77,10 +81,12 @@ Major structural update that separated reusable App Toolkit responsibilities fro
 
 ### Changed
 
-- Rebuilt the Sample App into dedicated app, core, feature, navigation, integration, and widget modules.
+- Rebuilt the Sample App into dedicated app, core, feature, navigation, integration, and widget
+  modules.
 - Reorganized Sample App packages around clearer feature ownership.
 - Updated the Sample App to demonstrate the new App Toolkit integration model.
-- Removed battery percentage, battery temperature, and battery Quick Settings tools after moving that functionality out of the Sample App.
+- Removed battery percentage, battery temperature, and battery Quick Settings tools after moving
+  that functionality out of the Sample App.
 
 ### Improved
 
@@ -105,7 +111,8 @@ Major structural update that separated reusable App Toolkit responsibilities fro
 
 **Version:** `26.07.2` (`1370002`)
 
-Feature-heavy Sample App release alongside continued refinement of App Toolkit's reusable navigation and UI foundations.
+Feature-heavy Sample App release alongside continued refinement of App Toolkit's reusable navigation
+and UI foundations.
 
 ### Added
 
@@ -114,13 +121,17 @@ Feature-heavy Sample App release alongside continued refinement of App Toolkit's
 - Added distinctive visual backgrounds for Toolkit Tile icons.
 - Added the **Material Colors** Quick Tool.
 - Added a new landing screen with Quick Tools previews.
-- Added richer app-detail quick actions for notifications, permissions, storage, battery settings, sharing, and system settings.
-- Added richer app information including installation state, version information, repository links, and privacy policy information.
+- Added richer app-detail quick actions for notifications, permissions, storage, battery settings,
+  sharing, and system settings.
+- Added richer app information including installation state, version information, repository links,
+  and privacy policy information.
 
 ### Changed
 
-- Integrated Favorites into Apps & Tools instead of maintaining a separate top-level Favorites destination.
-- Moved settings, Help, permissions, ads, licenses, and related toolkit screens into the main application navigation hierarchy.
+- Integrated Favorites into Apps & Tools instead of maintaining a separate top-level Favorites
+  destination.
+- Moved settings, Help, permissions, ads, licenses, and related toolkit screens into the main
+  application navigation hierarchy.
 - Updated the Sample App to demonstrate the newer Navigation 3 architecture.
 - Added centralized Sample App version generation and release metadata.
 

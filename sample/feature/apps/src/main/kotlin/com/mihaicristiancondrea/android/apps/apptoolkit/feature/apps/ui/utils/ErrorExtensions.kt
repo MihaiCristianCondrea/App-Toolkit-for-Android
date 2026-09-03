@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.common.domain.models.network.AppErrors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.extensions.asUiText
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.extensions.asUiText
 
 /** Maps app-catalogue failures to feature-owned UI text. */
 fun AppErrors.toErrorMessage(): UiTextHelper = when (this) {

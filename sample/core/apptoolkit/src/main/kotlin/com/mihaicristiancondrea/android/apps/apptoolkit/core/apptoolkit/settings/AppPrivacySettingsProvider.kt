@@ -20,12 +20,12 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.setting
 import android.content.Context
 import android.content.Intent
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.AdsSettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.PermissionsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.constants.SettingsContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.PrivacySettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.settings.utils.providers.PrivacySettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.PermissionsActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.general.ui.GeneralSettingsActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.constants.SettingsContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsActivity
 
 /** Maps toolkit privacy actions to the sample's permissions, ads, and diagnostics activities. */
 class AppPrivacySettingsProvider(

@@ -31,8 +31,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DiceRol
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.FlashDimmerToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LuxMeterToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MusicSearchToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MusicSearchToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SoundModeToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.BreathingTool
@@ -44,8 +44,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.t
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.FlashDimmerTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.LevelTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.LuxMeterTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.MusicSearchTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.MorseTool
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.MusicSearchTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.SosTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.SoundModeTool
 import org.koin.compose.viewmodel.koinViewModel

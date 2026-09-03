@@ -24,5 +24,7 @@
   and the toolkit reads it from the final merged manifest.
 -->
 <resources>
-    <item name="ad_mob_app_id" type="string" translatable="false">ca-app-pub-5294151573817700~1979784742</item>
+    <item name="ad_mob_app_id" translatable="false" type="string">
+        ca-app-pub-5294151573817700~1979784742
+    </item>
 </resources>

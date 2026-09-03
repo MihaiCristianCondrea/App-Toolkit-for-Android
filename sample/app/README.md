@@ -92,7 +92,8 @@ The host inherits common application attributes, backup/data-extraction rules, c
 from `:library:apptoolkit`. Android's manifest and resource merger gives this application higher
 priority, so it can replace any inherited default without copying the toolkit files pre-emptively.
 Host-specific identity remains here, including the application class, icons and label. The sample
-provides its actual `app_name` and `app_full_name`, while accepting AppToolkit's copyright and locale
+provides its actual `app_name` and `app_full_name`, while accepting AppToolkit's copyright and
+locale
 defaults. The sample-specific ads integration contributes its AdMob application ID to the final
 manifest. Another host can replace the app's same-named resources or locale config while retaining
 the application-level locale link.
@@ -117,7 +118,8 @@ definition that cannot be created surfaces as a fatal `Unable to start activity`
 `MainActivity.onCreate` rather than at startup. The reflection limits and host provider boundary are
 documented in [`:library:apptoolkit`](../../library/apptoolkit/README.md).
 
-The test and `initializeKoin` both consume `sampleAppModules`, so a module cannot be added to runtime
+The test and `initializeKoin` both consume `sampleAppModules`, so a module cannot be added to
+runtime
 startup without also becoming part of graph verification.
 
 ## Migration notes

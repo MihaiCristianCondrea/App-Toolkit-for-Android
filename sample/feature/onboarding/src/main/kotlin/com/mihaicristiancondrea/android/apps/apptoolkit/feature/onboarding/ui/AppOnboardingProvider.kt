@@ -24,11 +24,11 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material.icons.outlined.Star
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.models.OnboardingPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.finish.FinishOnboardingPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.firebase.FirebaseOnboardingPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.views.pages.theme.ThemeOnboardingPageTab
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.utils.interfaces.providers.OnboardingProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.models.OnboardingPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.finish.FinishOnboardingPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.FirebaseOnboardingPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.theme.ThemeOnboardingPageTab
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.utils.interfaces.providers.OnboardingProvider
 
 class AppOnboardingProvider : OnboardingProvider {
 

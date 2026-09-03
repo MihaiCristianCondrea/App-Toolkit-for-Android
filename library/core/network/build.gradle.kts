@@ -28,7 +28,7 @@ plugins {
 val versioning = extensions.getByType<VersioningExtension>()
 
 android {
-    namespace = "com.mihaicristiancondrea.android.libs.apptoolkit.core.data.remote.network"
+    namespace = "com.mihaicristiancondrea.android.libs.apptoolkit.core.network"
     compileSdk = versioning.compileSdk
 
     defaultConfig {

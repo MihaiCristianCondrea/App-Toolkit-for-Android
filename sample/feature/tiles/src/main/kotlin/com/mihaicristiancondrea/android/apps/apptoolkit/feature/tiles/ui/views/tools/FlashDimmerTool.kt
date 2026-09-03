@@ -43,10 +43,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.setProgress
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchPreset
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTonalButton
@@ -211,9 +211,9 @@ private fun SegmentedLevelControl(
                     var lastRequestedLevel = Int.MIN_VALUE
                     fun updateLevel(y: Float) {
                         val selectedLevel = (
-                            maximumLevel *
-                                (1f - y.coerceIn(0f, size.height.toFloat()) / size.height)
-                            ).roundToInt().coerceIn(0, maximumLevel)
+                                maximumLevel *
+                                        (1f - y.coerceIn(0f, size.height.toFloat()) / size.height)
+                                ).roundToInt().coerceIn(0, maximumLevel)
                         if (selectedLevel != lastRequestedLevel) {
                             lastRequestedLevel = selectedLevel
                             onLevelChanged(selectedLevel)
@@ -233,8 +233,8 @@ private fun SegmentedLevelControl(
     ) {
         val segmentGap = minOf(3.dp.toPx(), size.height / maximumLevel * 0.3f)
         val segmentHeight = (
-            (size.height - segmentGap * (maximumLevel - 1)) / maximumLevel
-            ).coerceAtLeast(1f)
+                (size.height - segmentGap * (maximumLevel - 1)) / maximumLevel
+                ).coerceAtLeast(1f)
         val cornerRadius = CornerRadius(SizeConstants.SmallSize.toPx())
 
         repeat(maximumLevel) { index ->

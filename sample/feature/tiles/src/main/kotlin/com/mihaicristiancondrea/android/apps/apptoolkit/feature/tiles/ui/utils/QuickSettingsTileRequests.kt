@@ -24,9 +24,9 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toNewTaskIntent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toNewTaskIntent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
 
 internal fun requestQuickSettingsTile(
     context: Context,

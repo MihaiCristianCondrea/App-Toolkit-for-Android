@@ -1,0 +1,54 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.data.local
+
+import android.content.Context
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.domain.models.FaqId
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.domain.models.FaqItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R
+
+/**
+ * Local data source responsible for retrieving FAQ items from the application's resources.
+ *
+ * This class maps predefined string resources to [FaqItem] domain models, providing
+ * a static list of questions and answers available offline.
+ *
+ * @property context The [Context] used to resolve string resources.
+ */
+class HelpLocalDataSource(private val context: Context) {
+    fun loadLocalQuestions(): List<FaqItem> {
+        val faq = listOf(
+            R.string.question_1 to R.string.summary_preference_faq_1,
+            R.string.question_2 to R.string.summary_preference_faq_2,
+            R.string.question_3 to R.string.summary_preference_faq_3,
+            R.string.question_4 to R.string.summary_preference_faq_4,
+            R.string.question_5 to R.string.summary_preference_faq_5,
+            R.string.question_6 to R.string.summary_preference_faq_6,
+            R.string.question_7 to R.string.summary_preference_faq_7,
+            R.string.question_8 to R.string.summary_preference_faq_8,
+            R.string.question_9 to R.string.summary_preference_faq_9
+        ).map { (questionRes, answerRes) ->
+            FaqItem(
+                id = FaqId("local:$questionRes"),
+                question = context.getString(questionRes),
+                answer = context.getString(answerRes),
+            )
+        }
+        return faq
+    }
+}

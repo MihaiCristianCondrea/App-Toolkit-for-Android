@@ -20,9 +20,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.r
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DatastoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.BuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.flow.first
 
 /**
  * Turns the About screen's version taps into the persisted showcase-unlock flag.

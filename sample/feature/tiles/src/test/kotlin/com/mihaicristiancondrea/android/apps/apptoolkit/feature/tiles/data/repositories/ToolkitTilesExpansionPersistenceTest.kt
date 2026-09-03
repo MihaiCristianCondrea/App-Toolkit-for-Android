@@ -20,25 +20,26 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.ToolkitTilesPreferencesDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.QuickSettingsTilesLocalDataSource
 import io.mockk.mockk
-import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class ToolkitTilesExpansionPersistenceTest {
 
     @Test
-    fun `missing preference uses the catalogue default while saved empty set stays empty`() = runTest {
-        val storedIds = MutableStateFlow<Set<String>?>(null)
-        val repository = repository(storedIds)
+    fun `missing preference uses the catalogue default while saved empty set stays empty`() =
+        runTest {
+            val storedIds = MutableStateFlow<Set<String>?>(null)
+            val repository = repository(storedIds)
 
-        assertEquals(setOf("sensors"), repository.expandedCategoryIds.first())
+            assertEquals(setOf("sensors"), repository.expandedCategoryIds.first())
 
-        storedIds.value = emptySet()
+            storedIds.value = emptySet()
 
-        assertEquals(emptySet(), repository.expandedCategoryIds.first())
-    }
+            assertEquals(emptySet(), repository.expandedCategoryIds.first())
+        }
 
     @Test
     fun `saving expansion delegates the complete set to app storage`() = runTest {

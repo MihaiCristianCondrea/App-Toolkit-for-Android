@@ -1,0 +1,73 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.main.ui.navigation
+
+import android.content.Context
+import androidx.compose.material3.DrawerState
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.shareApp
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
+/**
+ * Handles clicks coming from the navigation drawer.
+ *
+ * Exposed from the library so applications can easily reuse the same behavior
+ * while still customizing the changelog handling callback.
+ */
+fun handleNavigationItemClick(
+    context: Context,
+    item: NavigationDrawerItem,
+    drawerState: DrawerState? = null,
+    coroutineScope: CoroutineScope? = null,
+    onChangelogRequested: () -> Unit = {},
+    onInternalNavigationRequested: (String) -> Unit = {},
+    additionalHandlers: Map<String, (NavigationDrawerItem) -> Unit> = emptyMap(),
+) {
+    val handled = when (item.route) {
+        NavigationDrawerRoutes.ROUTE_SETTINGS -> {
+            onInternalNavigationRequested(item.route)
+            true
+        }
+
+        NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK -> {
+            onInternalNavigationRequested(item.route)
+            true
+        }
+
+        NavigationDrawerRoutes.ROUTE_SUPPORT -> {
+            onInternalNavigationRequested(item.route)
+            true
+        }
+
+        NavigationDrawerRoutes.ROUTE_UPDATES -> onChangelogRequested().let { true }
+        NavigationDrawerRoutes.ROUTE_SHARE -> context.shareApp(
+            shareMessageFormat = R.string.summary_share_message
+        ).let { true }
+
+        else -> additionalHandlers[item.route]?.let { handler ->
+            handler(item)
+            true
+        } ?: false
+    }
+    if (handled && (drawerState != null) && (coroutineScope != null)) {
+        coroutineScope.launch { drawerState.close() }
+    }
+}

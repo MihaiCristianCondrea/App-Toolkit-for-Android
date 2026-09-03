@@ -1,0 +1,30 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.CopyDeviceInfoResult
+
+/**
+ * Repository interface for managing and retrieving application-related information
+ * and performing device-specific utility operations.
+ */
+interface AboutRepository {
+    suspend fun getAboutInfo(): AboutInfo
+    fun copyDeviceInfo(label: String, deviceInfo: String): CopyDeviceInfoResult
+}

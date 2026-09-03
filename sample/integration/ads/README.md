@@ -49,7 +49,8 @@ flowchart TD
 
 This sample-specific integration module contributes the
 `com.google.android.gms.ads.APPLICATION_ID` meta-data and its `ad_mob_app_id` resource to the final
-sample APK. The toolkit's `AdMobAppIdProvider` reads that value from the merged manifest. Keeping the
+sample APK. The toolkit's `AdMobAppIdProvider` reads that value from the merged manifest. Keeping
+the
 pair here places all of the sample's advertising configuration in one module; the reusable
 `:library:integration:ads` module still provides no publisher identity or fallback value.
 

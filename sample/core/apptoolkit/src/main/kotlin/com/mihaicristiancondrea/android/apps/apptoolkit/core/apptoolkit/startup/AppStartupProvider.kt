@@ -21,8 +21,8 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.OnboardingActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.utils.interfaces.providers.StartupProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.startup.utils.interfaces.providers.StartupProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingActivity
 import javax.inject.Inject
 
 /**

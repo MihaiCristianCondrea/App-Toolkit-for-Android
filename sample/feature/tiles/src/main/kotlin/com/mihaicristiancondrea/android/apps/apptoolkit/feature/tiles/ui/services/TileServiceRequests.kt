@@ -19,9 +19,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.servic
 
 import android.content.ComponentName
 import android.content.Context
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.utils.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 
 /**
  * Quick Settings registration details for one [android.service.quicksettings.TileService].

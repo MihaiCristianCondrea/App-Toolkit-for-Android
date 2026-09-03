@@ -51,10 +51,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 
 @Composable
 fun CoinFlipTool(isHeads: Boolean, flipRequest: Int, onFlip: () -> Unit) {

@@ -4,6 +4,10 @@
 
 # Unreleased
 
+### Changed
+
+- Standardized library APIs under module-owned `feature.*`, `core.*`, and `integration.*` package roots; consumers must update imports to the new packages.
+
 ### Improved
 
 - Standardized changelog, alert-dialog, and date-picker actions with consistent button styling, haptic feedback, and press animations.

@@ -19,17 +19,17 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.di
 
 import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.di.appsModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.di.settingsModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.di.tilesModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.di.componentsModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.di.adsIntegrationModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di.onboardingModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.common.utils.constants.help.HelpConstants
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.di.navigationModule
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.di.shellModule
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.common.utils.constants.help.HelpConstants
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.di.appsModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.di.componentsModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.di.onboardingModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.di.settingsModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.di.tilesModule
+import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.di.adsIntegrationModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin

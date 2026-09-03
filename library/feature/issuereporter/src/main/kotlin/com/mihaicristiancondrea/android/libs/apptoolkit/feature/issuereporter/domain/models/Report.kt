@@ -1,0 +1,56 @@
+﻿/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.mappers.toMarkdown
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.ExtraInfo
+
+class Report(
+    val title: String,
+    private val description: String,
+    private val deviceInfo: DeviceInfo,
+    private val extraInfo: ExtraInfo,
+    private val email: String?
+) {
+    fun getDescription(): String {
+        val builder = StringBuilder()
+        if (!email.isNullOrEmpty()) {
+            builder.append("*Sent by [**")
+                .append(email)
+                .append("**](mailto:")
+                .append(email)
+                .append(")*")
+                .append(PARAGRAPH_BREAK)
+        }
+        builder.append("Description:\n")
+            .append(HORIZONTAL_RULE)
+            .append(PARAGRAPH_BREAK)
+            .append(description)
+            .append(PARAGRAPH_BREAK)
+            .append(deviceInfo.toMarkdown())
+            .append(PARAGRAPH_BREAK)
+            .append(extraInfo.toMarkdown())
+        return builder.toString()
+    }
+
+    companion object {
+        private const val PARAGRAPH_BREAK = "\n\n"
+        private const val HORIZONTAL_RULE = "---"
+    }
+}
+

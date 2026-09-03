@@ -22,7 +22,7 @@
 
     <application>
         <service
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.core.services.firebase.notifications.FirebaseNotificationsService"
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.notifications.FirebaseNotificationsService"
             android:directBootAware="true"
             android:exported="false">
             <intent-filter>

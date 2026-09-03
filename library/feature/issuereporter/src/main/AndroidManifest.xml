@@ -20,7 +20,7 @@
     <application>
         <!-- Internal issue reporter screen; not intended as an externally callable API. -->
         <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.issuereporter.ui.IssueReporterActivity"
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterActivity"
             android:exported="false"
             android:theme="@style/Theme.AppToolkit.IssueReporter" />
     </application>

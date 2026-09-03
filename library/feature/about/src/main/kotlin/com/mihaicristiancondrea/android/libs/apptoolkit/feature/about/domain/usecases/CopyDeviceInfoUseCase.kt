@@ -1,0 +1,70 @@
+/*
+ * Copyright (©) 2026 Mihai-Cristian Condrea
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.usecases
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.CopyDeviceInfoResult
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.DataState
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.Errors
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+
+/**
+ * Use case responsible for copying device information to the clipboard.
+ *
+ * This use case interacts with the [AboutRepository] to perform the copy operation
+ * and returns a [Flow] emitting the state of the operation as [DataState].
+ *
+ * @property repository The repositories used to perform the copy operation.
+ */
+class CopyDeviceInfoUseCase(
+    private val repository: AboutRepository,
+    private val firebaseController: FirebaseController,
+) {
+
+    operator fun invoke(
+        label: String,
+        deviceInfo: String,
+    ): Flow<DataState<CopyDeviceInfoResult, Errors>> =
+        flow {
+            firebaseController.logBreadcrumb(
+                message = "Copy device info started",
+                attributes = mapOf(
+                    "label" to label,
+                    "deviceInfoLength" to deviceInfo.length.toString(),
+                ),
+            )
+            val result = runCatching {
+                repository.copyDeviceInfo(
+                    label = label,
+                    deviceInfo = deviceInfo
+                )
+            }.getOrElse {
+                emit(DataState.Error(error = Errors.UseCase.INVALID_STATE))
+                return@flow
+            }
+
+            if (result.copied) {
+                emit(DataState.Success(result))
+            } else {
+                emit(DataState.Error(data = result, error = Errors.UseCase.INVALID_STATE))
+            }
+        }
+}
+

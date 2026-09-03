@@ -59,7 +59,11 @@ fun LevelTool(pitch: Float, roll: Float) {
                 modifier = Modifier
                     .size(40.dp)
                     .background(Color.Transparent, CircleShape)
-                    .border(SizeConstants.ExtraTinySize, MaterialTheme.colorScheme.outline, CircleShape)
+                    .border(
+                        SizeConstants.ExtraTinySize,
+                        MaterialTheme.colorScheme.outline,
+                        CircleShape
+                    )
             )
             // Moving bubble
             Box(
@@ -67,9 +71,9 @@ fun LevelTool(pitch: Float, roll: Float) {
                     .size(30.dp)
                     .graphicsLayer {
                         translationX = -(roll.coerceIn(-45f, 45f) / 45f) *
-                            SizeConstants.EightySize.toPx()
+                                SizeConstants.EightySize.toPx()
                         translationY = -(pitch.coerceIn(-45f, 45f) / 45f) *
-                            SizeConstants.EightySize.toPx()
+                                SizeConstants.EightySize.toPx()
                     }
                     .background(
                         if (abs(pitch) < 1f && abs(roll) < 1f)

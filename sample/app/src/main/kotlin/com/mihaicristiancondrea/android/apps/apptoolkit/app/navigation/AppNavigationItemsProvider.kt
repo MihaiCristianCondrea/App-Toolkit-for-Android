@@ -25,9 +25,9 @@ import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
@@ -60,10 +60,34 @@ class AppNavigationItemsProvider(
                         )
                     )
                 }
-                add(item(ToolkitR.string.settings, Icons.Outlined.Settings, NavigationDrawerRoutes.ROUTE_SETTINGS))
-                add(item(ToolkitR.string.help_and_feedback, Icons.AutoMirrored.Outlined.HelpOutline, NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK))
-                add(item(ToolkitR.string.updates, Icons.AutoMirrored.Outlined.EventNote, NavigationDrawerRoutes.ROUTE_UPDATES))
-                add(item(ToolkitR.string.share, Icons.Outlined.Share, NavigationDrawerRoutes.ROUTE_SHARE))
+                add(
+                    item(
+                        ToolkitR.string.settings,
+                        Icons.Outlined.Settings,
+                        NavigationDrawerRoutes.ROUTE_SETTINGS
+                    )
+                )
+                add(
+                    item(
+                        ToolkitR.string.help_and_feedback,
+                        Icons.AutoMirrored.Outlined.HelpOutline,
+                        NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK
+                    )
+                )
+                add(
+                    item(
+                        ToolkitR.string.updates,
+                        Icons.AutoMirrored.Outlined.EventNote,
+                        NavigationDrawerRoutes.ROUTE_UPDATES
+                    )
+                )
+                add(
+                    item(
+                        ToolkitR.string.share,
+                        Icons.Outlined.Share,
+                        NavigationDrawerRoutes.ROUTE_SHARE
+                    )
+                )
             }
         }.onStart {
             firebaseController.logBreadcrumb(

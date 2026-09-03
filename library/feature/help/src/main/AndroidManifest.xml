@@ -20,7 +20,7 @@
     <application>
         <!-- Internal help center screen. External apps should not deep-link directly. -->
         <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.HelpActivity"
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.HelpActivity"
             android:exported="false" />
     </application>
 </manifest>

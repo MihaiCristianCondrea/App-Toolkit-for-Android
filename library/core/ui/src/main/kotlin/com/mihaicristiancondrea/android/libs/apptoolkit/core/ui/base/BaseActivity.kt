@@ -22,7 +22,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.AppTheme
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 
 /**
  * Activity that provides shared Compose setup for screens.

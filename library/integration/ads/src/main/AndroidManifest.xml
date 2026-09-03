@@ -27,7 +27,7 @@
     <application>
         <!-- Internal ads/preferences screen launched only from in-app navigation. -->
         <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.AdsSettingsActivity"
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsActivity"
             android:exported="false" />
 
         <meta-data

@@ -27,9 +27,8 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.CaffeineRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.CaffeineRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -37,6 +36,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.time.Duration.Companion.milliseconds
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 
 class CaffeineService : Service() {
 

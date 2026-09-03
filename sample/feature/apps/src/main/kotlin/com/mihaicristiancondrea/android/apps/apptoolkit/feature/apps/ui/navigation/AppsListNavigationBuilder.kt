@@ -17,8 +17,8 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 

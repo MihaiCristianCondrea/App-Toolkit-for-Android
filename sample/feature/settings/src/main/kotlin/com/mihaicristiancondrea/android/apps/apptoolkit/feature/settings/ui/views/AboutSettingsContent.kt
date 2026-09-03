@@ -22,8 +22,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories.ShowcaseUnlockRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.about.ui.AboutScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutScreen
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 

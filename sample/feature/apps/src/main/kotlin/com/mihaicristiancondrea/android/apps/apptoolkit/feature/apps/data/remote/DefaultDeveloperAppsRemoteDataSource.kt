@@ -50,7 +50,8 @@ class DefaultDeveloperAppsRemoteDataSource(
     }
 
     override suspend fun fetchAppDetails(packageName: String): AppDetails = remoteCall {
-        val response = client.get(ApiHost.appDetailsUrl(packageName = packageName, baseUrl = baseUrl))
+        val response =
+            client.get(ApiHost.appDetailsUrl(packageName = packageName, baseUrl = baseUrl))
         if (!response.status.isSuccess()) throw response.status.toRemoteException()
         response.body<AppDetailsResponseDto>().data.app.toDomain()
     }
@@ -67,8 +68,17 @@ private fun Throwable.toRemoteException(): DeveloperAppsRemoteException = when (
     is CancellationException -> throw this
     is HttpRequestTimeoutException, is SocketTimeoutException ->
         DeveloperAppsRemoteException(DeveloperAppsRemoteError.RequestTimeout, this)
-    is UnknownHostException -> DeveloperAppsRemoteException(DeveloperAppsRemoteError.NoInternet, this)
-    is SerializationException -> DeveloperAppsRemoteException(DeveloperAppsRemoteError.Serialization, this)
+
+    is UnknownHostException -> DeveloperAppsRemoteException(
+        DeveloperAppsRemoteError.NoInternet,
+        this
+    )
+
+    is SerializationException -> DeveloperAppsRemoteException(
+        DeveloperAppsRemoteError.Serialization,
+        this
+    )
+
     is RedirectResponseException -> response.status.toRemoteException(this)
     is ClientRequestException -> response.status.toRemoteException(this)
     is ServerResponseException -> response.status.toRemoteException(this)

@@ -25,33 +25,30 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsActivity
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.MainNavigationDefaults
+import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.NavigationRoutes
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appNavigationEntryBuilders
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.toNavKeyOrDefault
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DatastoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
-import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.NavigationRoutes
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainAction
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainEvent
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.HelpActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.factory.GmsHostFactory
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.StartupActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.theme.ui.style.AppTheme
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainAction
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainEvent
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.ComponentsActivity
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.BaseViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.ActionEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.main.ui.factory.GmsHostFactory
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.HelpActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.startup.ui.StartupActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.ui.SettingsActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
@@ -62,15 +59,15 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Naviga
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as AboutR
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R as HelpR
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as AboutR
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R as HelpR
 
 class MainActivity : AppCompatActivity() {
 
@@ -182,18 +179,22 @@ class MainActivity : AppCompatActivity() {
                                 openActivity(activityClass = ComponentsActivity::class.java)
                                 true
                             }
+
                             is SettingsRoute -> {
                                 openActivity(activityClass = SettingsActivity::class.java)
                                 true
                             }
+
                             is HelpRoute -> {
                                 openActivity(activityClass = HelpActivity::class.java)
                                 true
                             }
+
                             is SupportRoute -> {
                                 openActivity(activityClass = SupportActivity::class.java)
                                 true
                             }
+
                             else -> false
                         }
                     },
@@ -206,7 +207,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
-        observeActions<MainAction>(viewModel = viewModel) { action ->
+        observeActions(viewModel = viewModel) { action ->
             when (action) {
                 is MainAction.ReviewOutcomeReported -> Unit
                 is MainAction.InAppUpdateResultReported -> Unit

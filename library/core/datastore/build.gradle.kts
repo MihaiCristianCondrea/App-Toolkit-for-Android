@@ -29,7 +29,7 @@ plugins {
 val versioning = extensions.getByType<VersioningExtension>()
 
 android {
-    namespace = "com.mihaicristiancondrea.android.libs.apptoolkit.core.data.local.datastore"
+    namespace = "com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore"
     compileSdk = versioning.compileSdk
 
     defaultConfig {

@@ -20,7 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.setting
 import android.content.Context
 import android.os.Build
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.utils.providers.AboutSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.settings.utils.providers.AboutSettingsProvider
 
 /**
  * Formats sample build/device metadata for the reusable About screen.

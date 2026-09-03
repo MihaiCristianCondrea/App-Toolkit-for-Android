@@ -36,34 +36,50 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.LevelToolState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseInputError
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseToolState
-import java.util.Locale
-import kotlin.random.Random
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.util.Locale
+import kotlin.random.Random
 
 class CoinFlipToolViewModel : ViewModel() {
     private val mutableState = MutableStateFlow(CoinFlipToolState())
     val state: StateFlow<CoinFlipToolState> = mutableState.asStateFlow()
-    fun flip() { mutableState.value = CoinFlipToolState(Random.nextBoolean(), state.value.request + 1) }
-    fun dismiss() { mutableState.value = CoinFlipToolState() }
+    fun flip() {
+        mutableState.value = CoinFlipToolState(Random.nextBoolean(), state.value.request + 1)
+    }
+
+    fun dismiss() {
+        mutableState.value = CoinFlipToolState()
+    }
 }
 
 class DiceRollToolViewModel : ViewModel() {
     private val mutableState = MutableStateFlow(DiceRollToolState())
     val state: StateFlow<DiceRollToolState> = mutableState.asStateFlow()
-    fun roll() { mutableState.value = DiceRollToolState(Random.nextInt(1, 7), state.value.request + 1) }
-    fun dismiss() { mutableState.value = DiceRollToolState() }
+    fun roll() {
+        mutableState.value = DiceRollToolState(Random.nextInt(1, 7), state.value.request + 1)
+    }
+
+    fun dismiss() {
+        mutableState.value = DiceRollToolState()
+    }
 }
 
 class CounterToolViewModel : ViewModel() {
     private val mutableCount = MutableStateFlow(0)
     val count: StateFlow<Int> = mutableCount.asStateFlow()
-    fun increment() { mutableCount.value++ }
-    fun reset() { mutableCount.value = 0 }
+    fun increment() {
+        mutableCount.value++
+    }
+
+    fun reset() {
+        mutableCount.value = 0
+    }
+
     fun dismiss() = reset()
 }
 
@@ -71,28 +87,49 @@ abstract class FlowToolViewModel<T>(initial: T) : ViewModel() {
     protected val mutableState = MutableStateFlow(initial)
     val state: StateFlow<T> = mutableState.asStateFlow()
     protected var observation: Job? = null
-    fun dismiss() { observation?.cancel(); observation = null }
+    fun dismiss() {
+        observation?.cancel(); observation = null
+    }
 }
 
-class CompassToolViewModel(private val repository: SensorRepository) : FlowToolViewModel<Float>(0f) {
-    fun open() { observation?.cancel(); observation = repository.getCompassAzimuth().onEach { mutableState.value = it }.launchIn(viewModelScope) }
+class CompassToolViewModel(private val repository: SensorRepository) :
+    FlowToolViewModel<Float>(0f) {
+    fun open() {
+        observation?.cancel(); observation =
+            repository.getCompassAzimuth().onEach { mutableState.value = it }
+                .launchIn(viewModelScope)
+    }
 }
 
-class LevelToolViewModel(private val repository: SensorRepository) : FlowToolViewModel<LevelToolState>(LevelToolState()) {
-    fun open() { observation?.cancel(); observation = repository.getLevelOrientation().onEach { mutableState.value = LevelToolState(it.first, it.second) }.launchIn(viewModelScope) }
+class LevelToolViewModel(private val repository: SensorRepository) :
+    FlowToolViewModel<LevelToolState>(LevelToolState()) {
+    fun open() {
+        observation?.cancel(); observation = repository.getLevelOrientation()
+            .onEach { mutableState.value = LevelToolState(it.first, it.second) }
+            .launchIn(viewModelScope)
+    }
 }
 
-class LuxMeterToolViewModel(private val repository: SensorRepository) : FlowToolViewModel<Float>(0f) {
-    fun open() { observation?.cancel(); observation = repository.getLuxLevel().onEach { mutableState.value = it }.launchIn(viewModelScope) }
+class LuxMeterToolViewModel(private val repository: SensorRepository) :
+    FlowToolViewModel<Float>(0f) {
+    fun open() {
+        observation?.cancel(); observation =
+            repository.getLuxLevel().onEach { mutableState.value = it }.launchIn(viewModelScope)
+    }
 }
 
-class BreathingToolViewModel(private val repository: BreathingRepository) : FlowToolViewModel<BreathingState>(BreathingState()) {
+class BreathingToolViewModel(private val repository: BreathingRepository) :
+    FlowToolViewModel<BreathingState>(BreathingState()) {
     fun open() {
         observation?.cancel()
         repository.start()
-        observation = repository.breathingState.onEach { mutableState.value = it }.launchIn(viewModelScope)
+        observation =
+            repository.breathingState.onEach { mutableState.value = it }.launchIn(viewModelScope)
     }
-    fun close() { dismiss(); repository.stop(); mutableState.value = BreathingState() }
+
+    fun close() {
+        dismiss(); repository.stop(); mutableState.value = BreathingState()
+    }
 }
 
 class CaffeineToolViewModel(private val repository: CaffeineRepository) : ViewModel() {
@@ -100,8 +137,13 @@ class CaffeineToolViewModel(private val repository: CaffeineRepository) : ViewMo
     fun cycle() = repository.cycleState()
 }
 
-class SoundModeToolViewModel(private val repository: SystemRepository) : FlowToolViewModel<RingerMode>(RingerMode.Normal) {
-    fun open() { observation?.cancel(); observation = repository.getRingerMode().onEach { mutableState.value = it }.launchIn(viewModelScope) }
+class SoundModeToolViewModel(private val repository: SystemRepository) :
+    FlowToolViewModel<RingerMode>(RingerMode.Normal) {
+    fun open() {
+        observation?.cancel(); observation =
+            repository.getRingerMode().onEach { mutableState.value = it }.launchIn(viewModelScope)
+    }
+
     fun cycle() {
         val next = when (state.value) {
             RingerMode.Normal -> RingerMode.Vibrate
@@ -149,6 +191,7 @@ class MorseToolViewModel(private val repository: MorseRepository) : ViewModel() 
             message.length > MorseRepository.MAXIMUM_MESSAGE_LENGTH -> MorseInputError.TooLong
             !MorseRepository.isSupportedMessage(message.uppercase(Locale.ROOT)) ->
                 MorseInputError.UnsupportedCharacters
+
             else -> null
         }
         mutableState.value = mutableState.value.copy(inputError = error)
@@ -163,7 +206,15 @@ class FlashDimmerToolViewModel(
     private val morseRepository: MorseRepository,
 ) : ViewModel() {
     val state: StateFlow<TorchState> = torchRepository.state
-    fun setLevel(level: Int) { morseRepository.stop(); torchRepository.setLevel(level) }
-    fun applyPreset(preset: TorchPreset) { morseRepository.stop(); torchRepository.applyPreset(preset) }
-    fun dismiss() { morseRepository.stop(); torchRepository.turnOff() }
+    fun setLevel(level: Int) {
+        morseRepository.stop(); torchRepository.setLevel(level)
+    }
+
+    fun applyPreset(preset: TorchPreset) {
+        morseRepository.stop(); torchRepository.applyPreset(preset)
+    }
+
+    fun dismiss() {
+        morseRepository.stop(); torchRepository.turnOff()
+    }
 }

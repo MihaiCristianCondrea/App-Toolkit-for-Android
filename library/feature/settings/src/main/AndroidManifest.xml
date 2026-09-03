@@ -20,12 +20,12 @@
     <application>
         <!-- Internal settings entry screen. No cross-app launch contract is exposed. -->
         <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsActivity"
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.ui.SettingsActivity"
             android:exported="false" />
 
         <!-- Internal settings detail host. Not part of a public contract; keep non-exported. -->
         <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsActivity"
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.general.ui.GeneralSettingsActivity"
             android:exported="false" />
     </application>
 </manifest>

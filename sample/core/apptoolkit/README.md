@@ -46,7 +46,8 @@ flowchart TD
 ## Architectural decisions
 
 - Toolkit modules are added before host bindings because Koin's later definitions win when the host
-  intentionally replaces a toolkit binding; the ordering is part of `appToolkitHostModules`' contract.
+  intentionally replaces a toolkit binding; the ordering is part of `appToolkitHostModules`'
+  contract.
 - Provider implementations live in this core adapter rather than a screen feature because multiple
   toolkit features and the application composition root consume them.
 - The sample keeps the provider resources here so the module that constructs each settings model

@@ -15,13 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.main.ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.ads.ui.AdsSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.help.ui.HelpScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.licenses.ui.LicensesScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.views.extras.LibraryExtrasScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.HelpScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.licenses.ui.LicensesScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.main.ui.views.extras.LibraryExtrasScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.GeneralSettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.HelpRoute
@@ -30,10 +30,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.Licens
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.PermissionsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SettingsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.SupportRoute
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.PermissionsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.general.ui.GeneralSettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.settings.settings.ui.SettingsScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.app.support.ui.SupportScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.PermissionsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.general.ui.GeneralSettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.ui.SettingsScreen
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder

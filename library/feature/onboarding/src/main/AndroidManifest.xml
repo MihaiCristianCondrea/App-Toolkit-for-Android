@@ -19,13 +19,13 @@
 
     <application>
         <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.startup.ui.StartupActivity"
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.startup.ui.StartupActivity"
             android:exported="false"
             android:noHistory="true"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.onboarding.ui.OnboardingActivity"
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>

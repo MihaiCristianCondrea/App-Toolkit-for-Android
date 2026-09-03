@@ -19,7 +19,7 @@
 
     <application>
         <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.app.permissions.ui.PermissionsActivity"
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.PermissionsActivity"
             android:exported="true"
             android:permission="android.permission.START_VIEW_PERMISSION_USAGE"
             android:windowSoftInputMode="adjustResize">

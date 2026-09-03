@@ -55,13 +55,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toAppColorTable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toHexString
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.AndroidColorData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.AndroidColorTable
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ColorSwatchData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ColorTable
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import java.util.Locale
 

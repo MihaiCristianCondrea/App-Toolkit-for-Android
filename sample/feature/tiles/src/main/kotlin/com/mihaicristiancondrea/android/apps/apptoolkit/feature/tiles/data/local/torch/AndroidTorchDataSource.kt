@@ -65,7 +65,10 @@ class AndroidTorchDataSource(context: Context) : TorchDataSource {
                 }
             }
 
-            override fun onTorchStrengthLevelChanged(changedCameraId: String, newStrengthLevel: Int) {
+            override fun onTorchStrengthLevelChanged(
+                changedCameraId: String,
+                newStrengthLevel: Int
+            ) {
                 if (changedCameraId == id) {
                     trySend(TorchHardwareState(isEnabled = true, currentLevel = newStrengthLevel))
                 }
@@ -86,6 +89,7 @@ class AndroidTorchDataSource(context: Context) : TorchDataSource {
             validLevel == 0 -> cameraManager.setTorchMode(id, false)
             capabilities.supportsDimming && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
                 cameraManager.turnOnTorchWithStrengthLevel(id, validLevel)
+
             else -> cameraManager.setTorchMode(id, true)
         }
     }
@@ -94,8 +98,8 @@ class AndroidTorchDataSource(context: Context) : TorchDataSource {
         cameraManager.cameraIdList.firstOrNull { id ->
             val characteristics = cameraManager.getCameraCharacteristics(id)
             characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true &&
-                characteristics.get(CameraCharacteristics.LENS_FACING) ==
-                CameraCharacteristics.LENS_FACING_BACK
+                    characteristics.get(CameraCharacteristics.LENS_FACING) ==
+                    CameraCharacteristics.LENS_FACING_BACK
         }
     }.getOrNull()
 
