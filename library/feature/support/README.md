@@ -7,8 +7,7 @@ Presents donation/support products and coordinates purchases through the billing
 ## Owns
 
 - Support screen/activity/ViewModel and state/event/action contracts.
-- Donation product IDs, product-detail mapping helpers, and support-facing billing result types.
-- The support-level billing repository abstraction consumed by its UI.
+- Donation product IDs and product-detail mapping helpers.
 
 ## Does not own
 
@@ -31,7 +30,7 @@ Presents donation/support products and coordinates purchases through the billing
 ```mermaid
 flowchart TD
     Screen[SupportScreen] -->|setup| VM[SupportViewModel]
-    VM -->|query donation IDs| Billing[BillingRepository]
+    VM -->|query domain donation IDs| Billing[BillingRepository]
     Billing --> Play[Play BillingClient]
     Play -->|product details| ProductFlow[Replaying productDetails Flow]
     ProductFlow --> VM
@@ -49,6 +48,8 @@ flowchart TD
 
 ## Architectural decisions
 
+- Donation catalog policy lives in `domain`, billing-SDK mapping lives in `data`, presentation
+  constants and rendering live in `ui`, and feature bindings live in `di`.
 - The support feature depends on the billing contract, not `BillingClient`; Play types are limited
   to the boundary values required to launch the actual offer.
 - Product IDs belong to the feature because they define the donation catalog. Connection lifecycle,
@@ -60,7 +61,7 @@ flowchart TD
 
 ## Public contracts
 
-- Support presentation entry points/contracts and its billing abstraction/result.
+- Support presentation entry points/contracts and donation product IDs.
 
 ## Internal implementations
 

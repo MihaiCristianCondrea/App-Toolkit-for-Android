@@ -43,6 +43,8 @@ flowchart TD
 
 ## Architectural decisions
 
+- This UI showcase intentionally has no `domain` package. It only observes a persisted flag through
+  one repository, so a pass-through use case would add no business logic or reusable operation.
 - The app owns the cross-feature gesture bridge and the drawer entry, while this feature owns the
   threshold rule and the persisted unlock state it exposes as `isUnlocked`.
 - The shell never sees this feature: it renders whatever drawer items the app hands it.

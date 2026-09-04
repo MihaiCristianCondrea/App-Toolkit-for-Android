@@ -9,6 +9,7 @@ completion logic to the App Toolkit's onboarding infrastructure.
 
 - `AppOnboardingProvider`, which defines the set of pages shown to the user (Welcome,
   Personalization, Theme, Features, Crashlytics, Finish).
+- Stable onboarding page identifiers in `domain/models`.
 - Onboarding-specific strings and keys.
 - `OnboardingFeatureModule`, which connects the sample's provider to the library's
   `OnboardingViewModel`.
@@ -41,6 +42,9 @@ flowchart TD
 
 ## Architectural decisions
 
+- The sample module intentionally has no `data` package: persistence and its repository
+  implementation are owned by `:library:feature:onboarding`; this module only supplies host page
+  configuration and DI composition.
 - **Decoupled Completion**: The provider uses the package manager to find the launcher activity on
   completion, avoiding a hard dependency on `:sample:app`.
 - **Toolkit Integration**: This module demonstrates the "Provider Pattern" where the sample app

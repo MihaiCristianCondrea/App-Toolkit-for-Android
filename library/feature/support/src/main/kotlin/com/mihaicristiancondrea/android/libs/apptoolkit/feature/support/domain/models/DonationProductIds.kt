@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,13 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.ui
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.domain.models
 
-object OnboardingKeys {
-    const val WELCOME = "welcome"
-    const val PERSONALIZATION_OPTIONS = "personalization_options"
-    const val THEME_OPTIONS = "theme_options"
-    const val FEATURE_HIGHLIGHT_1 = "feature_highlight_1"
-    const val CRASHLYTICS_OPTIONS = "crashlytics_options"
-    const val ONBOARDING_COMPLETE = "onboarding_complete"
+/**
+ * Constant values for donation in-app product IDs.
+ */
+object DonationProductIds {
+    const val LOW_DONATION = "low_donation"
+    const val NORMAL_DONATION = "normal_donation"
+    const val HIGH_DONATION = "high_donation"
+    const val EXTREME_DONATION = "extreme_donation"
 }
+

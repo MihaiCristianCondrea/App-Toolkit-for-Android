@@ -49,8 +49,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.DonationOptionUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.SupportScreenUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.utils.constants.DonationProductIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.utils.constants.ShortenLinkConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.domain.models.DonationProductIds
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.constants.ShortenLinkConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue

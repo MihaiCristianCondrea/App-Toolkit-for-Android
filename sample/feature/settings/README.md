@@ -48,6 +48,8 @@ flowchart TD
 
 ## Architectural decisions
 
+- This sample adapter intentionally has no `domain` package. Its only app-owned operation is a
+  single repository mutation, so adding a forwarding use case would not isolate reusable logic.
 - This feature binds sample runtime dependencies to reusable settings implementations.
 - The About gesture lives with the Settings surface that hosts it. It reaches the Components
   showcase through the shared flag in `:sample:core:datastore` rather than through the feature, so

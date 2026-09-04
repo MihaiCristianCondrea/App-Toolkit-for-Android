@@ -13,6 +13,8 @@
 - Moved `ThemePreferencesState`, `BaseCoreManager`, and `FirebaseControllerImpl` into their
   layer-specific packages; consumers must update imports to `core.common.domain.models.theme`,
   `core.common.data.managers`, and `integration.firebase.data.repositories`.
+- Moved support donation product IDs to `feature.support.domain.models`; consumers importing
+  `DonationProductIds` must update to the new package.
 
 ### Improved
 

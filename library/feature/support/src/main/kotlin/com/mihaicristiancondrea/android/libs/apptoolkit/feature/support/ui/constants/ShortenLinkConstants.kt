@@ -15,15 +15,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.utils.constants
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.constants
 
-/**
- * Constant values for donation in-app product IDs.
- */
-object DonationProductIds {
-    const val LOW_DONATION = "low_donation"
-    const val NORMAL_DONATION = "normal_donation"
-    const val HIGH_DONATION = "high_donation"
-    const val EXTREME_DONATION = "extreme_donation"
+object ShortenLinkConstants {
+    const val LINKVERTISE_APP_DIRECT_LINK: String = "https://direct-link.net/548212/agOqI7123501341"
 }
-

@@ -24,9 +24,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contr
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.DonationOptionUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.SupportScreenUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.utils.constants.DonationProductIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.utils.extensions.hasOneTimePurchaseOffer
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.utils.extensions.primaryFormattedPrice
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.mappers.hasOneTimePurchaseOffer
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.data.mappers.primaryFormattedPrice
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.domain.models.DonationProductIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.billing.PurchaseResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.ScreenMessageType

@@ -48,6 +48,8 @@ flowchart TD
 
 ## Architectural decisions
 
+- This feature intentionally has no `domain` package: its ViewModel consumes one repository and
+  contains no reusable business rule or repository coordination that would justify a use case.
 - The screen is a disclosure catalog, not a permission checker. It does not query `PackageManager`
   or infer whether a runtime permission is currently granted.
 - Resource-backed catalog assembly stays in the repository so the ViewModel handles only

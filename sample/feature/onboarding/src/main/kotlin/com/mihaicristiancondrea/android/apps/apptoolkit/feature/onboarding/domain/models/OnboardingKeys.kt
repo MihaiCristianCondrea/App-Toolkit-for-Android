@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.utils.constants
+package com.mihaicristiancondrea.android.apps.apptoolkit.feature.onboarding.domain.models
 
-object ShortenLinkConstants {
-    const val LINKVERTISE_APP_DIRECT_LINK: String = "https://direct-link.net/548212/agOqI7123501341"
+object OnboardingKeys {
+    const val WELCOME = "welcome"
+    const val PERSONALIZATION_OPTIONS = "personalization_options"
+    const val THEME_OPTIONS = "theme_options"
+    const val FEATURE_HIGHLIGHT_1 = "feature_highlight_1"
+    const val CRASHLYTICS_OPTIONS = "crashlytics_options"
+    const val ONBOARDING_COMPLETE = "onboarding_complete"
 }
