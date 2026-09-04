@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavKey
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.AppNavKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

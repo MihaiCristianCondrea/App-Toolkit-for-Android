@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.common
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.managers
 
 import android.app.Activity
 import android.app.Application
@@ -26,7 +26,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.appcheck.appCheck
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.google.firebase.initialize
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.BaseCoreManager.Companion.isAppLoaded
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.managers.BaseCoreManager.Companion.isAppLoaded
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.local.CommonDataStoreCore

@@ -7,9 +7,10 @@ service wiring.
 
 ## Owns
 
-- `FirebaseControllerImpl` for analytics events, breadcrumbs, and crash reporting.
+- `data.repositories.FirebaseControllerImpl` for analytics events, breadcrumbs, and crash reporting.
 - `firebaseModule` Koin bindings.
-- `FirebaseNotificationsService` and its notification/wake-lock manifest permissions.
+- `data.notifications.FirebaseNotificationsService` and its notification/wake-lock manifest
+  permissions.
 
 ## Does not own
 

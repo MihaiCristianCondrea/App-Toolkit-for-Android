@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui
 
 import androidx.lifecycle.viewModelScope
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.AppScreenTracking
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainAction
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainEvent

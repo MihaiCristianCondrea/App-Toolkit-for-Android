@@ -7,8 +7,9 @@ Firebase transport or Compose tracking APIs.
 
 ## Owns
 
-- `AppScreenTracking`, the canonical name/class pairs for sample-owned screens.
-- `AppGa4Contract`, event names, parameter names, required schemas, and forbidden parameter keys.
+- `domain.models.AppScreenTracking`, the canonical name/class pairs for sample-owned screens.
+- `domain.contracts.AppGa4Contract`, event names, parameter names, required schemas, and forbidden
+  parameter keys.
 - Contract tests that reject invalid event names, duplicate screens, and unsafe required fields.
 
 ## Does not own

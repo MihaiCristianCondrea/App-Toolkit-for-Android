@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.data.repositories
 
 import android.os.Bundle
 import com.google.firebase.Firebase

@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.data.managers.NavigationManager
 import org.koin.core.module.Module
 import org.koin.dsl.module
 

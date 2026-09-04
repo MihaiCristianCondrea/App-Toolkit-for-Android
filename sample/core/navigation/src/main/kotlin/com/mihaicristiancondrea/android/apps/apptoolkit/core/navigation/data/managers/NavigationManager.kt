@@ -15,21 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation
+package com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.data.managers
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.AppNavigationEntryContext
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.AppsListScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
-fun appsListEntryBuilder(
-    context: AppNavigationEntryContext,
-): NavigationEntryBuilder<StableNavKey> = {
-    entry<AppsListRoute>(clazzContentKey = { route -> route }) {
-        AppsListScreen(
-            paddingValues = context.paddingValues,
-            windowWidthSizeClass = context.windowWidthSizeClass,
-            onRegisterRandomAppHandler = context.registerRandomAppHandlerFor(AppsListRoute),
-        )
+/**
+ * A manager that allows different components to request navigation events
+ * that can be handled by the main navigation container.
+ */
+class NavigationManager {
+    private val _navigationRequests = MutableSharedFlow<StableNavKey>(extraBufferCapacity = 1)
+    val navigationRequests: SharedFlow<StableNavKey> = _navigationRequests.asSharedFlow()
+
+    fun navigateTo(route: StableNavKey) {
+        _navigationRequests.tryEmit(route)
     }
 }

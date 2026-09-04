@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavKey
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.AppNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDestinationType
 import kotlinx.parcelize.Parcelize
 

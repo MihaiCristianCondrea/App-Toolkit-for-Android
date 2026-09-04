@@ -33,7 +33,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.Navigatio
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.appNavigationEntryBuilders
 import com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation.toNavKeyOrDefault
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DatastoreInterface
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.data.managers.NavigationManager
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.MainViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.contracts.MainAction

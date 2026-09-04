@@ -10,6 +10,9 @@
 - Moved library dependency-injection bindings into the owning feature/integration modules and
   exposed the datastore module from `core.datastore.di`; the toolkit facade now only composes those
   modules.
+- Moved `ThemePreferencesState`, `BaseCoreManager`, and `FirebaseControllerImpl` into their
+  layer-specific packages; consumers must update imports to `core.common.domain.models.theme`,
+  `core.common.data.managers`, and `integration.firebase.data.repositories`.
 
 ### Improved
 

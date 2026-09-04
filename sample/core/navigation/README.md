@@ -7,10 +7,11 @@ knowing which shell renders it.
 
 ## Owns
 
-- `AppNavKey`, the base interface for all navigation route keys in the sample app.
-- `AppNavigationEntryContext` and `RandomAppHandler`, the parameters every feature entry builder
-  takes.
-- `NavigationManager`, which allows different components to request navigation events.
+- `domain.models.AppNavKey`, the base interface for all navigation route keys in the sample app.
+- `domain.models.AppNavigationEntryContext` and `RandomAppHandler`, the parameters every feature
+  entry builder takes.
+- `data.managers.NavigationManager`, which allows different components to request navigation
+  events.
 
 ## Does not own
 

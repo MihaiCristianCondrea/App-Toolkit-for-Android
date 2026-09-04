@@ -65,8 +65,8 @@ import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
 import androidx.navigation3.ui.NavDisplay
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.AppNavigationEntryContext
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.NavigationManager
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.AppNavigationEntryContext
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.data.managers.NavigationManager
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.states.MainUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.views.fab.MainFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants

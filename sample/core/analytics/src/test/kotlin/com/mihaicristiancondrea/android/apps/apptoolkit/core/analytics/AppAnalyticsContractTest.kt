@@ -17,6 +17,10 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.contracts.AppGa4Contract
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.contracts.AppGa4ContractValidator
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.TrackedScreen
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

@@ -15,14 +15,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation
+package com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models
 
-import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDestinationType
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
-
-@Immutable
-interface AppNavKey : StableNavKey {
-    override val destinationType: NavigationDestinationType
-        get() = NavigationDestinationType.ActivityLike
-}
+typealias RandomAppHandler = () -> Unit

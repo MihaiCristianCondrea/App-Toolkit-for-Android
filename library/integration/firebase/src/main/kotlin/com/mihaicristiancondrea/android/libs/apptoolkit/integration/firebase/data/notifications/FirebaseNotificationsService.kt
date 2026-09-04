@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.notifications
+package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.data.notifications
 
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService

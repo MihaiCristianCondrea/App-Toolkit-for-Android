@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics
+package com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models
 
 /** Stable name/class pair emitted for a sample screen. */
 data class TrackedScreen(

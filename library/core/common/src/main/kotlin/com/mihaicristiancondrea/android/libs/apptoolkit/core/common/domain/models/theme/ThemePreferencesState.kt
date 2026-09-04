@@ -15,6 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.theme
 
-typealias RandomAppHandler = () -> Unit
+/**
+ * Represents the persisted theme-related preferences exposed to the UI layer.
+ */
+data class ThemePreferencesState(
+    val themeMode: String,
+    val dynamicColors: Boolean,
+    val amoledMode: Boolean,
+    val dynamicPaletteVariant: Int,
+    val staticPaletteId: String,
+)

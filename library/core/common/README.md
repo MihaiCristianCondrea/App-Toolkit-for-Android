@@ -71,12 +71,13 @@ flowchart TD
 
 - `FirebaseController`, `BillingCore`, `DispatcherProvider`, and provider/helper interfaces.
 - `AppToolkitHostBuildConfig`, DI qualifiers, common result/value models, and stable constants.
-- `ThemePreferencesState`, the immutable application-facing representation shared by persistence
-  and theme UI without a synthetic domain package.
+- `core.common.domain.models.theme.ThemePreferencesState`, the immutable application-facing
+  representation shared by persistence and theme UI.
 
 ## Internal implementations
 
-- `StandardDispatchers`, small Android adapters, extensions, and crash guards.
+- `StandardDispatchers`, `data.managers.BaseCoreManager`, small Android adapters, extensions, and
+  crash guards.
 
 ## Current risks
 

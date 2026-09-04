@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.FirebaseControllerImpl
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.data.repositories.FirebaseControllerImpl
 import org.koin.core.module.Module
 import org.koin.dsl.module
 

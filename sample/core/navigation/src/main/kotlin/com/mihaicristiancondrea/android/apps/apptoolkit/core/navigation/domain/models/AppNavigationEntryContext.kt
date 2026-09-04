@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation
+package com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Stable

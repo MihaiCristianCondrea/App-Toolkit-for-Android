@@ -28,7 +28,7 @@ import androidx.lifecycle.lifecycleScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DatastoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.di.initializeKoin
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.BaseCoreManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.managers.BaseCoreManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.colorscheme.StaticPaletteIds
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isChristmasSeason
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.date.isHalloweenSeason

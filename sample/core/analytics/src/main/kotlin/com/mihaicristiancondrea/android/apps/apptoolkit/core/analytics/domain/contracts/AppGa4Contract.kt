@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics
+package com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.contracts
 
 /** Stable GA4 schema used by sample-owned events. */
 object AppGa4Contract {
