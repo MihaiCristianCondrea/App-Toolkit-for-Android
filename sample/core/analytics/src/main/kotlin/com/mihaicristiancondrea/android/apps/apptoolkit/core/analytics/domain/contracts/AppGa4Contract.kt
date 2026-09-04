@@ -75,7 +75,7 @@ object AppGa4ContractValidator {
 
     fun isValidEventName(name: String): Boolean = eventNameRegex.matches(name)
 
-    fun missingRequiredParams(eventName: String, params: Set<String>): Set<String> =
+    fun missingRequiredParams(eventName: String, params: Set<String>): Set<String> = // FIXME: Function "missingRequiredParams" is never used
         AppGa4Contract.requiredParams(eventName) - params
 
     fun forbiddenParams(params: Set<String>): Set<String> =
