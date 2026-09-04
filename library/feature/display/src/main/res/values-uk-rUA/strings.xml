@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">Робота додатка</string>
+    <string name="appearance">Зовнішній вигляд</string>
+    <string name="bounce_buttons">Анімація натискання</string>
+    <string name="dark_theme">Темна тема</string>
+    <string name="dynamic_colors">Динамічні кольори</string>
+    <string name="language">Мова</string>
+    <string name="navigation">Навігація</string>
+    <string name="show_labels_on_bottom_bar">Показати етикетки на нижній панелі</string>
+    <string name="startup_page">Початкова сторінка</string>
+    <string name="summary_preference_settings_bounce_buttons">Додає легку анімацію відскоку для всіх натисканих елементів</string>
+    <string name="summary_preference_settings_dynamic_colors">Застосуйте кольори з шпалер до теми додатка</string>
+    <string name="summary_preference_settings_language">Змінити мову додатка</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Дисплея назви елементів нижче Піктограми в нижній панелі навігації</string>
+    <string name="summary_preference_settings_startup_page">Виберіть екран, який відображатиметься при запуску додатка.</string>
+    <string name="will_never_turn_on_automatically">Ніколи не буде ввімкнено автоматично</string>
+    <string name="will_turn_on_automatically_by_system">Автоматично увімкнеться системою</string>
+</resources>

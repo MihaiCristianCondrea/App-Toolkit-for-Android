@@ -6,6 +6,7 @@ Encapsulates Google Play in-app update checks and update-flow launches behind a 
 
 ## Owns
 
+- `di.updateModule()` binds the Play update repository for the host graph.
 - `InAppUpdateRepository`, its Play implementation, and host/result models.
 
 ## Does not own
@@ -56,5 +57,4 @@ flowchart TD
 
 ## Current risks
 
-Repository packages retain the historical `playservices` name, which does not match the active
-integration module path.
+Update launch still depends on a valid host activity and Google Play availability.

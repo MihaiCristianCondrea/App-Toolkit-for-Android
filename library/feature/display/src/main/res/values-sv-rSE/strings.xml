@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">Appbeteende</string>
+    <string name="appearance">Utseende</string>
+    <string name="bounce_buttons">Klickanimation</string>
+    <string name="dark_theme">Mörkt tema</string>
+    <string name="dynamic_colors">Dynamiska färger</string>
+    <string name="language">Språk</string>
+    <string name="navigation">Navigering</string>
+    <string name="show_labels_on_bottom_bar">Visa etiketter på bottenstången</string>
+    <string name="startup_page">Startsida</string>
+    <string name="summary_preference_settings_bounce_buttons">Tillämpa en subtil studsande animation på klickbara element</string>
+    <string name="summary_preference_settings_dynamic_colors">Applicera färger från tapeten till appens tema</string>
+    <string name="summary_preference_settings_language">Ändra det språk som används i appen</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Visa objekttitlar under ikoner i den nedre navigationsfältet</string>
+    <string name="summary_preference_settings_startup_page">Välj vilken skärm som ska visas vid appens start.</string>
+    <string name="will_never_turn_on_automatically">Kommer aldrig att aktiveras automatiskt</string>
+    <string name="will_turn_on_automatically_by_system">Kommer att aktiveras automatiskt av systemet</string>
+</resources>

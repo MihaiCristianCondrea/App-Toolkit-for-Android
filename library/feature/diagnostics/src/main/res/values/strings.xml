@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Advanced privacy settings</string>
+    <string name="consent_ad_personalization_description">Enable personalized ads based on your activity and preferences across Google services and apps.</string>
+    <string name="consent_ad_personalization_title">Personalized ads</string>
+    <string name="consent_ad_storage_description">Enable storing data like device identifiers or cookies for measuring ad performance and showing relevant ads.</string>
+    <string name="consent_ad_storage_title">Store advertising data</string>
+    <string name="consent_ad_user_data_description">Allow sending usage and device data to Google to support ad-related features such as conversions and campaign optimization.</string>
+    <string name="consent_ad_user_data_title">Send data for ads</string>
+    <string name="consent_analytics_storage_description">Allow storing data such as app usage and visit duration to improve analytics and app performance.</string>
+    <string name="consent_analytics_storage_title">Store analytics data</string>
+    <string name="consent_category_advertising_title">Personalized advertising</string>
+    <string name="consent_category_analytics_title">Analytics</string>
+    <string name="icon_desc_consent_category">Consent category icon</string>
+    <string name="icon_desc_expand_less">Expand less</string>
+    <string name="icon_desc_expand_more">Expand more</string>
+    <string name="learn_more">Learn more</string>
+    <string name="summary_usage_and_diagnostics">Help improve your experience by automatically sending diagnostic, device, and app usage data. This improves app performance, stability, and other enhancements. Some aggregate data also benefits the included apps.\n\nThis is general information about your device and how you use the apps, such as battery level, system and app activity, and errors. The data will be used to improve the apps.\n\nTurning off this feature doesn\'t affect your device\'s ability to send the information needed for essential services such as app updates and security.\n</string>
+    <string name="usage_and_diagnostics">Usage and diagnostics</string>
+</resources>

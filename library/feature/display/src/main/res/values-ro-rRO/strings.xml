@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">Comportamentul aplicației</string>
+    <string name="appearance">Aspect</string>
+    <string name="bounce_buttons">Animație la clic</string>
+    <string name="dark_theme">Temă întunecată</string>
+    <string name="dynamic_colors">Culori dinamice</string>
+    <string name="language">Limbă</string>
+    <string name="navigation">Navigare</string>
+    <string name="show_labels_on_bottom_bar">Afișați etichete pe bara de jos</string>
+    <string name="startup_page">Pagina de pornire</string>
+    <string name="summary_preference_settings_bounce_buttons">Aplică o animație subtilă de săritură la elementele clicabile</string>
+    <string name="summary_preference_settings_dynamic_colors">Aplică culorile din tapetul dispozitivului la tema aplicației</string>
+    <string name="summary_preference_settings_language">Schimbă limba utilizată în aplicație</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Afișați titlurile elementelor sub pictogramele din bara de navigare de jos</string>
+    <string name="summary_preference_settings_startup_page">Alege ecranul care va fi afișat la pornirea aplicației.</string>
+    <string name="will_never_turn_on_automatically">Nu se va activa niciodată automat</string>
+    <string name="will_turn_on_automatically_by_system">Se va activa automat prin setările sistemului</string>
+</resources>

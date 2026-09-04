@@ -44,7 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.resources.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 
 /**
  * A Composable that displays a header for a collapsible section, typically used for consent management.

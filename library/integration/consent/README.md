@@ -7,6 +7,8 @@ Platform (UMP).
 
 ## Owns
 
+- `di.consentModule()` binds the consent repository and UMP remote source; foundation providers and
+  preferences are supplied by the composing host graph.
 - Consent domain models and the repository contract covering apply/request.
 - `DefaultConsentRepository` and the UMP remote data source abstraction/implementation.
 - Mapping host availability into consent behavior.
@@ -14,7 +16,7 @@ Platform (UMP).
 ## Does not own
 
 - Ads loading/presentation, owned by `:library:integration:ads`.
-- Diagnostics screen UI, owned by `:library:feature:settings`.
+- Diagnostics screen UI, owned by `:library:feature:diagnostics`.
 - Preference storage implementation, owned by `:library:core:datastore`.
 
 ## Depends on

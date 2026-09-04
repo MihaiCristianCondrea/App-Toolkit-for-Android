@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">ऐप व्यवहार</string>
+    <string name="appearance">दिखावट</string>
+    <string name="bounce_buttons">क्लिक बाउंस</string>
+    <string name="dark_theme">डार्क थीम</string>
+    <string name="dynamic_colors">डायनामिक रंग</string>
+    <string name="language">भाषा</string>
+    <string name="navigation">नेविगेशन</string>
+    <string name="show_labels_on_bottom_bar">नीचे बार पर लेबल दिखाएं</string>
+    <string name="startup_page">स्टार्टअप पेज</string>
+    <string name="summary_preference_settings_bounce_buttons">क्लिक करने पर सभी क्लिकेबल तत्वों पर एक हल्का बाउंस एनीमेशन लागू करें</string>
+    <string name="summary_preference_settings_dynamic_colors">वॉलपेपर से रंगों को ऐप थीम में लागू करें</string>
+    <string name="summary_preference_settings_language">ऐप में उपयोग की जाने वाली भाषा बदलें</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">नीचे नेविगेशन बार में आइकन के नीचे आइटम शीर्षक प्रदर्शित करें</string>
+    <string name="summary_preference_settings_startup_page">ऐप शुरू होने पर प्रदर्शित होने वाली स्क्रीन चुनें।</string>
+    <string name="will_never_turn_on_automatically">स्वचालित रूप से कभी चालू नहीं होगी</string>
+    <string name="will_turn_on_automatically_by_system">सिस्टम द्वारा स्वचालित रूप से चालू हो जाएगी</string>
+</resources>

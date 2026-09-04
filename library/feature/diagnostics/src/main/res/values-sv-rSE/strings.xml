@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Avancerade sekretessinställningar</string>
+    <string name="consent_ad_personalization_description">Aktivera anpassade annonser baserat på din aktivitet och dina preferenser i Googles tjänster och appar.</string>
+    <string name="consent_ad_personalization_title">Anpassade annonser</string>
+    <string name="consent_ad_storage_description">Aktivera lagring av data (som enhetsidentifierare eller cookies) för att mäta annonsprestanda och visa relevanta annonser.</string>
+    <string name="consent_ad_storage_title">Lagra annonsdata</string>
+    <string name="consent_ad_user_data_description">Tillåt att användnings- och enhetsdata skickas till Google för att stödja annonsrelaterade funktioner såsom konverteringar och kampanjoptimering.</string>
+    <string name="consent_ad_user_data_title">Skicka data för annonser</string>
+    <string name="consent_analytics_storage_description">Tillåt lagring av data såsom appanvändning och besökslängd för att förbättra analys och appens prestanda.</string>
+    <string name="consent_analytics_storage_title">Lagra analysdata</string>
+    <string name="consent_category_advertising_title">Anpassad annonsering</string>
+    <string name="consent_category_analytics_title">Analys</string>
+    <string name="icon_desc_consent_category">Ikon för samtyckeskategori</string>
+    <string name="icon_desc_expand_less">Visa mindre</string>
+    <string name="icon_desc_expand_more">Visa mer</string>
+    <string name="learn_more">Läs mer</string>
+    <string name="summary_usage_and_diagnostics">Hjälp oss förbättra din upplevelse genom att automatiskt skicka diagnostikdata.</string>
+    <string name="usage_and_diagnostics">Användning och diagnostik</string>
+</resources>

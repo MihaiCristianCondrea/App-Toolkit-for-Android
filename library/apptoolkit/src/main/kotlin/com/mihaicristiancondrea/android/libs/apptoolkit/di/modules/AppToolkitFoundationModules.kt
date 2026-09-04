@@ -17,15 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.managers.AdsCoreManager
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AdLoadReporter
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.AdsSettingsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.data.repositories.DefaultAdsSettingsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.datasource.ConsentRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.datasource.UmpConsentRemoteDataSource
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.DefaultConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.factory.GmsHostFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
@@ -37,18 +29,18 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.provid
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.ManifestAdMobAppIdProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.client.KtorClient
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.data.repositories.DefaultInAppUpdateRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.data.repositories.InAppUpdateRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.di.adsIntegrationModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.di.consentModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.di.updateModule
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 /**
  * AppToolkit foundation modules to be loaded by the host app.
  *
- * Includes dispatchers, datastore, firebase, ktor, consent wiring, and shared main-feature
- * dependencies such as [GmsHostFactory].
+ * Composes dispatchers, datastore, host providers, networking, and the ads, consent, and update
+ * integration modules, along with shared dependencies such as [GmsHostFactory].
  */
 fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): List<Module> =
     listOf(
@@ -60,7 +52,8 @@ fun appToolkitFoundationModules(hostBuildConfig: AppToolkitHostBuildConfig): Lis
         corePlatformModule(hostBuildConfig = hostBuildConfig),
         consentModule(),
         mainSharedModule(),
-        adsSettingsSharedModule(),
+        adsIntegrationModule(),
+        updateModule(),
     )
 
 private fun dispatchersModule(): Module = module {
@@ -73,18 +66,6 @@ private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Modu
     // an unbound reporter would turn a blank ad slot into a crash, which is the opposite of the
     // point.
     single { AdLoadReporter(firebaseController = get(), buildInfoProvider = get()) }
-    single<AdsCoreManager> {
-        AdsCoreManager(
-            context = get(),
-            buildInfoProvider = get(),
-            dispatchers = get(),
-            adMobAppIdProvider = get(),
-            // Injected so the manager reads the same CommonDataStore the rest of the graph uses.
-            // Its default falls back to the static singleton, which is a second wrapper over the
-            // same preferences file with its own eagerly started adsEnabledFlow.
-            dataStore = get(),
-        )
-    }
     single { KtorClient.createClient(enableLogging = hostBuildConfig.isDebugBuild) }
     single<BuildInfoProvider> {
         object : BuildInfoProvider {
@@ -96,41 +77,10 @@ private fun corePlatformModule(hostBuildConfig: AppToolkitHostBuildConfig): Modu
     }
 }
 
-private fun consentModule(): Module = module {
-    single<ConsentRemoteDataSource> { UmpConsentRemoteDataSource(adMobAppIdProvider = get()) }
-    single<ConsentRepository> {
-        DefaultConsentRepository(
-            remote = get(),
-            local = get(),
-            configProvider = get(),
-            firebaseController = get(),
-        )
-    }
-}
-
 private fun mainSharedModule(): Module = module {
     single { GmsHostFactory() } // Lightweight creator without screen references; safe as singleton.
-    single<InAppUpdateRepository> { DefaultInAppUpdateRepository() }
     single<String>(qualifier = named(name = AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL)) {
         ApiHost.BASE_URL
-    }
-}
-
-private fun adsSettingsSharedModule(): Module = module {
-    single<AdsSettingsRepository> {
-        DefaultAdsSettingsRepository(
-            dataStore = get(),
-            firebaseController = get(),
-        )
-    }
-
-    viewModel {
-        AdsSettingsViewModel(
-            repository = get(),
-            consentRepository = get(),
-            dispatchers = get(),
-            firebaseController = get(),
-        )
     }
 }
 

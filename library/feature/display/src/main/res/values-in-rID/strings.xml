@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">Perilaku aplikasi</string>
+    <string name="appearance">Tampilan</string>
+    <string name="bounce_buttons">Klik pantulan</string>
+    <string name="dark_theme">Tema gelap</string>
+    <string name="dynamic_colors">Warna dinamis</string>
+    <string name="language">Bahasa</string>
+    <string name="navigation">Navigasi</string>
+    <string name="show_labels_on_bottom_bar">Tampilkan label di bar bawah</string>
+    <string name="startup_page">Halaman awal</string>
+    <string name="summary_preference_settings_bounce_buttons">Menerapkan animasi pantulan halus pada semua elemen yang dapat diklik saat diklik</string>
+    <string name="summary_preference_settings_dynamic_colors">Terapkan warna dari wallpaper ke tema aplikasi</string>
+    <string name="summary_preference_settings_language">Mengubah bahasa yang digunakan dalam aplikasi</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Tampilkan Judul Item Di Bawah Ikon Di Bilah Navigasi Bawah</string>
+    <string name="summary_preference_settings_startup_page">Pilih layar yang akan ditampilkan saat aplikasi dimulai.</string>
+    <string name="will_never_turn_on_automatically">Tidak akan pernah diaktifkan secara otomatis</string>
+    <string name="will_turn_on_automatically_by_system">Akan diaktifkan secara otomatis oleh sistem</string>
+</resources>

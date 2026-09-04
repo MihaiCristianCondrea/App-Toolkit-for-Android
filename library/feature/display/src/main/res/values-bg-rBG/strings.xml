@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">Поведение на приложението</string>
+    <string name="appearance">Външен вид</string>
+    <string name="bounce_buttons">Анимация при натискане</string>
+    <string name="dark_theme">Тъмна тема</string>
+    <string name="dynamic_colors">Динамични цветове</string>
+    <string name="language">Език</string>
+    <string name="navigation">Навигация</string>
+    <string name="show_labels_on_bottom_bar">Показване на етикети на долната лента</string>
+    <string name="startup_page">Начална страница</string>
+    <string name="summary_preference_settings_bounce_buttons">Прилага лека анимация на отскок към всички кликващи елементи</string>
+    <string name="summary_preference_settings_dynamic_colors">Приложете цветове от тапета към темата на приложението</string>
+    <string name="summary_preference_settings_language">Променете езика на приложението</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Показване на заглавия на елемент под иконите в долната навигационна лента</string>
+    <string name="summary_preference_settings_startup_page">Изберете екрана, който ще се показва при стартиране на приложението.</string>
+    <string name="will_never_turn_on_automatically">Никога няма да се включи автоматично</string>
+    <string name="will_turn_on_automatically_by_system">Ще се включи автоматично от системата</string>
+</resources>

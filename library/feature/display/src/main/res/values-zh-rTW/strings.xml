@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">應用程式行為</string>
+    <string name="appearance">外觀</string>
+    <string name="bounce_buttons">按鈕彈跳效果</string>
+    <string name="dark_theme">深色主題</string>
+    <string name="dynamic_colors">動態色彩</string>
+    <string name="language">語言</string>
+    <string name="navigation">導航</string>
+    <string name="show_labels_on_bottom_bar">在底栏上显示标签</string>
+    <string name="startup_page">啟動頁面</string>
+    <string name="summary_preference_settings_bounce_buttons">在點擊時對所有可點擊元素應用輕微彈跳動畫</string>
+    <string name="summary_preference_settings_dynamic_colors">將桌布的顏色應用到應用程式主題</string>
+    <string name="summary_preference_settings_language">變更應用程式的語言</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">在底部导航栏中的图标下方显示项目标题</string>
+    <string name="summary_preference_settings_startup_page">選擇應用程式啟動時要顯示的畫面。</string>
+    <string name="will_never_turn_on_automatically">永遠不會自動啟用</string>
+    <string name="will_turn_on_automatically_by_system">將由系統自動啟用</string>
+</resources>

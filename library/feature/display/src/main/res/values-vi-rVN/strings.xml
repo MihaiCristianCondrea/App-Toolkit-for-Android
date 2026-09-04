@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">Hành vi ứng dụng</string>
+    <string name="appearance">Giao diện</string>
+    <string name="bounce_buttons">Nhấp nảy</string>
+    <string name="dark_theme">Chủ đề tối</string>
+    <string name="dynamic_colors">Màu sắc động</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="navigation">Điều hướng</string>
+    <string name="show_labels_on_bottom_bar">Hiển thị nhãn trên thanh dưới cùng</string>
+    <string name="startup_page">Trang khởi động</string>
+    <string name="summary_preference_settings_bounce_buttons">Áp dụng hiệu ứng nảy tinh tế cho tất cả các yếu tố có thể nhấp khi được nhấp</string>
+    <string name="summary_preference_settings_dynamic_colors">Áp dụng màu từ hình nền vào chủ đề ứng dụng</string>
+    <string name="summary_preference_settings_language">Thay đổi ngôn ngữ được sử dụng trong ứng dụng</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Hiển thị các tiêu đề mục dưới các biểu tượng trong thanh điều hướng dưới cùng</string>
+    <string name="summary_preference_settings_startup_page">Chọn màn hình sẽ hiển thị khi ứng dụng khởi động.</string>
+    <string name="will_never_turn_on_automatically">Sẽ không bao giờ tự động bật</string>
+    <string name="will_turn_on_automatically_by_system">Sẽ tự động bật theo hệ thống</string>
+</resources>

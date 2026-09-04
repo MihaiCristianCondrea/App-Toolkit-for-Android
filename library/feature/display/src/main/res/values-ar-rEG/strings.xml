@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">سلوك التطبيق</string>
+    <string name="appearance">المظهر</string>
+    <string name="bounce_buttons">نقر مرن</string>
+    <string name="dark_theme">المظهر الداكن</string>
+    <string name="dynamic_colors">الألوان الديناميكية</string>
+    <string name="language">اللغة</string>
+    <string name="navigation">التنقل</string>
+    <string name="show_labels_on_bottom_bar">عرض الملصقات على الشريط السفلي</string>
+    <string name="startup_page">صفحة البدء</string>
+    <string name="summary_preference_settings_bounce_buttons">يطبق رسومًا متحركة مرنة خفية على جميع العناصر القابلة للنقر عند النقر عليها</string>
+    <string name="summary_preference_settings_dynamic_colors">تطبيق الألوان من الخلفيات على سمة التطبيق</string>
+    <string name="summary_preference_settings_language">يغير اللغة المستخدمة في التطبيق</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">عرض عناوين العناصر أدناه الرموز في شريط التنقل السفلي</string>
+    <string name="summary_preference_settings_startup_page">اختر الشاشة التي سيتم عرضها عند بدء تشغيل التطبيق.</string>
+    <string name="will_never_turn_on_automatically">لن يتم تشغيله تلقائيًا أبدًا</string>
+    <string name="will_turn_on_automatically_by_system">سيتم تشغيله تلقائيًا بواسطة النظام</string>
+</resources>

@@ -60,7 +60,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.se
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchCardItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.resources.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 

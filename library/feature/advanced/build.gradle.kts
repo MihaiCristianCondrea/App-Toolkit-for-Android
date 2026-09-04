@@ -30,6 +30,4 @@ dependencies {
     api(project(":library:core:network"))
     api(project(":library:core:ui"))
     api(project(":library:feature:issuereporter"))
-    api(project(":library:feature:settings:resources"))
 }
-

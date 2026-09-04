@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">Comportamento do aplicativo</string>
+    <string name="appearance">Aparência</string>
+    <string name="bounce_buttons">Animação de clique</string>
+    <string name="dark_theme">Tema escuro</string>
+    <string name="dynamic_colors">Cores dinâmicas</string>
+    <string name="language">Idioma</string>
+    <string name="navigation">Navegação</string>
+    <string name="show_labels_on_bottom_bar">Mostrar rótulos na barra inferior</string>
+    <string name="startup_page">Página inicial</string>
+    <string name="summary_preference_settings_bounce_buttons">Aplica uma leve animação de salto aos elementos clicáveis</string>
+    <string name="summary_preference_settings_dynamic_colors">Aplique cores do papel de parede ao tema do aplicativo</string>
+    <string name="summary_preference_settings_language">Altere o idioma usado no aplicativo</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Exibir títulos dos itens abaixo dos ícones na barra de navegação inferior</string>
+    <string name="summary_preference_settings_startup_page">Escolha a tela que será exibida ao iniciar o aplicativo.</string>
+    <string name="will_never_turn_on_automatically">Nunca será ativado automaticamente</string>
+    <string name="will_turn_on_automatically_by_system">Será ativado automaticamente pelo sistema</string>
+</resources>

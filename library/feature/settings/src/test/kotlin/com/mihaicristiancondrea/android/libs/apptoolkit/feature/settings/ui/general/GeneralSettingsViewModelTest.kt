@@ -27,7 +27,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebas
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.ScreenState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.resources.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle

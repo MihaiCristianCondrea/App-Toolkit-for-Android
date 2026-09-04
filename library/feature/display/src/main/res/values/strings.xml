@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">App behavior</string>
+    <string name="appearance">Appearance</string>
+    <string name="bounce_buttons">Bounce click</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="dynamic_colors">Dynamic colors</string>
+    <string name="language">Language</string>
+    <string name="navigation">Navigation</string>
+    <string name="show_labels_on_bottom_bar">Show labels on bottom bar</string>
+    <string name="startup_page">Startup page</string>
+    <string name="summary_preference_settings_bounce_buttons">Applies a subtle bounce animation to all clickable elements when clicked</string>
+    <string name="summary_preference_settings_dynamic_colors">Apply colors from wallpapers to the app theme</string>
+    <string name="summary_preference_settings_language">Changes the language used in the app</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Display item titles below icons in the bottom navigation bar</string>
+    <string name="summary_preference_settings_startup_page">Choose the screen to be displayed when the app starts.</string>
+    <string name="will_never_turn_on_automatically">Will never turn on automatically</string>
+    <string name="will_turn_on_automatically_by_system">Will turn on automatically by the system</string>
+</resources>

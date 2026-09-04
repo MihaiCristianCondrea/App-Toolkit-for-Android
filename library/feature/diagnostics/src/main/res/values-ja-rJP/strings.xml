@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">詳細なプライバシー設定</string>
+    <string name="consent_ad_personalization_description">Google のサービスやアプリ全体でのアクティビティや設定に基づいて、パーソナライズド広告を有効にします。</string>
+    <string name="consent_ad_personalization_title">パーソナライズド広告</string>
+    <string name="consent_ad_storage_description">広告のパフォーマンス測定や関連性の高い広告の表示のため、データ（デバイス ID や Cookie など）の保存を有効にします。</string>
+    <string name="consent_ad_storage_title">広告データを保存</string>
+    <string name="consent_ad_user_data_description">コンバージョンやキャンペーンの最適化など、広告関連機能をサポートするために、使用状況データとデバイスデータを Google に送信することを許可します。</string>
+    <string name="consent_ad_user_data_title">広告用のデータを送信</string>
+    <string name="consent_analytics_storage_description">アプリの使用状況やアクセス時間などのデータを保存して、アナリティクスとアプリのパフォーマンスを改善することを許可します。</string>
+    <string name="consent_analytics_storage_title">アナリティクス データを保存</string>
+    <string name="consent_category_advertising_title">パーソナライズド広告</string>
+    <string name="consent_category_analytics_title">アナリティクス</string>
+    <string name="icon_desc_consent_category">同意カテゴリのアイコン</string>
+    <string name="icon_desc_expand_less">折りたたむ</string>
+    <string name="icon_desc_expand_more">展開</string>
+    <string name="learn_more">詳しく見る</string>
+    <string name="summary_usage_and_diagnostics">診断、デバイス、およびアプリの使用データを自動的に送信することで、体験を向上させる手助けをしてください。</string>
+    <string name="usage_and_diagnostics">使用状況と診断</string>
+</resources>

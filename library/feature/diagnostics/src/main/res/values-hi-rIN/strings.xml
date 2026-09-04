@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">उन्नत गोपनीयता सेटिंग</string>
+    <string name="consent_ad_personalization_description">Google सेवाओं और ऐप्लिकेशन पर आपकी गतिविधि और प्राथमिकताओं के आधार पर निजीकृत विज्ञापन सक्षम करें।</string>
+    <string name="consent_ad_personalization_title">निजीकृत विज्ञापन</string>
+    <string name="consent_ad_storage_description">विज्ञापन प्रदर्शन को मापने और प्रासंगिक विज्ञापन दिखाने के लिए डेटा (जैसे डिवाइस पहचानकर्ता या कुकी) स्टोर करना सक्षम करें।</string>
+    <string name="consent_ad_storage_title">विज्ञापन डेटा स्टोर करें</string>
+    <string name="consent_ad_user_data_description">कन्वर्ज़न और कैंपेन ऑप्टिमाइज़ेशन जैसी विज्ञापन-संबंधी सुविधाओं का समर्थन करने के लिए Google को उपयोग और डिवाइस डेटा भेजने की अनुमति दें।</string>
+    <string name="consent_ad_user_data_title">विज्ञापनों के लिए डेटा भेजें</string>
+    <string name="consent_analytics_storage_description">ऐप के उपयोग और विज़िट की अवधि जैसे डेटा को स्टोर करने की अनुमति दें, ताकि एनालिटिक्स और ऐप के प्रदर्शन को बेहतर बनाया जा सके।</string>
+    <string name="consent_analytics_storage_title">एनालिटिक्स डेटा स्टोर करें</string>
+    <string name="consent_category_advertising_title">निजीकृत विज्ञापन</string>
+    <string name="consent_category_analytics_title">एनालिटिक्स</string>
+    <string name="icon_desc_consent_category">सहमति श्रेणी का आइकन</string>
+    <string name="icon_desc_expand_less">संक्षिप्त करें</string>
+    <string name="icon_desc_expand_more">और विस्तृत करें</string>
+    <string name="learn_more">अधिक जानें</string>
+    <string name="summary_usage_and_diagnostics">हमारे ऐप्स को बेहतर बनाने में मदद के लिए सामान्य जानकारी भेजें।</string>
+    <string name="usage_and_diagnostics">उपयोग और निदान</string>
+</resources>

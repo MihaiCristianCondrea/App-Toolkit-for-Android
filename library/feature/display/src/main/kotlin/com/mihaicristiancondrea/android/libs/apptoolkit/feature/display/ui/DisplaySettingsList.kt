@@ -59,7 +59,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SwitchPreferenceItemWithDivider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedPreferenceItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.resources.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.R
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 

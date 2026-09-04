@@ -33,7 +33,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.copyData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.dismissSnackbar
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.setLoading
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.updateData
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.resources.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.R
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn

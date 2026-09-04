@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">アプリの動作</string>
+    <string name="appearance">外観</string>
+    <string name="bounce_buttons">クリック時のバウンド</string>
+    <string name="dark_theme">ダークテーマ</string>
+    <string name="dynamic_colors">動的カラー</string>
+    <string name="language">言語</string>
+    <string name="navigation">ナビゲーション</string>
+    <string name="show_labels_on_bottom_bar">ボトムバーにラベルを表示します</string>
+    <string name="startup_page">スタートアップページ</string>
+    <string name="summary_preference_settings_bounce_buttons">クリック時にクリック可能な要素にさりげないバウンドアニメーションを適用する</string>
+    <string name="summary_preference_settings_dynamic_colors">壁紙からアプリテーマに色を適用する</string>
+    <string name="summary_preference_settings_language">アプリ内で使用される言語を変更する</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">下のナビゲーションバーの下にアイテムのタイトルを表示</string>
+    <string name="summary_preference_settings_startup_page">アプリ起動時に表示される画面を選択する</string>
+    <string name="will_never_turn_on_automatically">自動的にオンにはなりません</string>
+    <string name="will_turn_on_automatically_by_system">システムによって自動的にオンになります</string>
+</resources>

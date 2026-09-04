@@ -4,6 +4,8 @@
 
 # Unreleased
 
+## Library Changes
+
 ### Changed
 
 - Standardized library APIs under module-owned `feature.*`, `core.*`, and `integration.*` package roots; consumers must update imports to the new packages.
@@ -15,6 +17,9 @@
   `core.common.data.managers`, and `integration.firebase.data.repositories`.
 - Moved support donation product IDs to `feature.support.domain.models`; consumers importing
   `DonationProductIds` must update to the new package.
+- Settings, advanced, diagnostics, and display now expose their resources through their own `R`
+  classes. Direct consumers of the removed settings resource artifact must update dependencies and
+  imports; resource keys and translations are preserved.
 
 ### Improved
 

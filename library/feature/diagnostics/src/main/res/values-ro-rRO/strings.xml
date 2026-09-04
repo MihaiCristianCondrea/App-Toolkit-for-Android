@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Setări avansate de confidențialitate</string>
+    <string name="consent_ad_personalization_description">Activați anunțurile personalizate pe baza activității și preferințelor dvs. în serviciile și aplicațiile Google.</string>
+    <string name="consent_ad_personalization_title">Anunțuri personalizate</string>
+    <string name="consent_ad_storage_description">Activați stocarea datelor (cum ar fi identificatorii de dispozitiv sau modulele cookie) pentru măsurarea performanței anunțurilor și afișarea de anunțuri relevante.</string>
+    <string name="consent_ad_storage_title">Stocare date publicitare</string>
+    <string name="consent_ad_user_data_description">Permiteți trimiterea datelor de utilizare și despre dispozitiv către Google pentru a sprijini funcțiile legate de anunțuri, cum ar fi conversiile și optimizarea campaniilor.</string>
+    <string name="consent_ad_user_data_title">Trimitere date pentru anunțuri</string>
+    <string name="consent_analytics_storage_description">Permiteți stocarea datelor, cum ar fi utilizarea aplicației și durata vizitei, pentru a îmbunătăți analiza și performanța aplicației.</string>
+    <string name="consent_analytics_storage_title">Stocare date de analiză</string>
+    <string name="consent_category_advertising_title">Publicitate personalizată</string>
+    <string name="consent_category_analytics_title">Analiză</string>
+    <string name="icon_desc_consent_category">Pictogramă categorie consimțământ</string>
+    <string name="icon_desc_expand_less">Restrângeți</string>
+    <string name="icon_desc_expand_more">Extindeți</string>
+    <string name="learn_more">Află mai multe</string>
+    <string name="summary_usage_and_diagnostics">Ajută la îmbunătățirea experienței trimițând automat date de diagnosticare, utilizare a dispozitivului și a aplicației.</string>
+    <string name="usage_and_diagnostics">Utilizare și diagnoză</string>
+</resources>

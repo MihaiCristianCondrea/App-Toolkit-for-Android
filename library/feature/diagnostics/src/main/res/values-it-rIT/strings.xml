@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Impostazioni privacy avanzate</string>
+    <string name="consent_ad_personalization_description">Abilita annunci personalizzati in base alla tua attività e alle tue preferenze nei servizi e nelle app Google.</string>
+    <string name="consent_ad_personalization_title">Annunci personalizzati</string>
+    <string name="consent_ad_storage_description">Abilita la memorizzazione di dati (come identificatori di dispositivo o cookie) per misurare le prestazioni degli annunci e mostrare annunci pertinenti.</string>
+    <string name="consent_ad_storage_title">Memorizza dati pubblicitari</string>
+    <string name="consent_ad_user_data_description">Consenti l\'invio di dati di utilizzo e del dispositivo a Google per supportare funzionalità relative agli annunci come conversioni e ottimizzazione delle campagne.</string>
+    <string name="consent_ad_user_data_title">Invia dati per annunci</string>
+    <string name="consent_analytics_storage_description">Consenti la memorizzazione di dati come l\'utilizzo dell\'app e la durata della visita per migliorare l\'analisi e le prestazioni dell\'app.</string>
+    <string name="consent_analytics_storage_title">Memorizza dati di analisi</string>
+    <string name="consent_category_advertising_title">Pubblicità personalizzata</string>
+    <string name="consent_category_analytics_title">Analisi</string>
+    <string name="icon_desc_consent_category">Icona categoria consenso</string>
+    <string name="icon_desc_expand_less">Comprimi</string>
+    <string name="icon_desc_expand_more">Espandi</string>
+    <string name="learn_more">Scopri di più</string>
+    <string name="summary_usage_and_diagnostics">Aiuta a migliorare la tua esperienza inviando automaticamente dati diagnostici, di utilizzo e informazioni sul dispositivo.</string>
+    <string name="usage_and_diagnostics">Utilizzo e diagnostica</string>
+</resources>

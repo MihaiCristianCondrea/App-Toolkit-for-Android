@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">Gawi ng app</string>
+    <string name="appearance">Itsura</string>
+    <string name="bounce_buttons">Bounce click</string>
+    <string name="dark_theme">Madilim na tema</string>
+    <string name="dynamic_colors">Mga dinamikong kulay</string>
+    <string name="language">Wika</string>
+    <string name="navigation">Nabigasyon</string>
+    <string name="show_labels_on_bottom_bar">Ipakita ang mga label sa ilalim na bar</string>
+    <string name="startup_page">Startup page</string>
+    <string name="summary_preference_settings_bounce_buttons">Naglalapat ng banayad na bounce animation sa lahat ng naki-click na elemento kapag na-click</string>
+    <string name="summary_preference_settings_dynamic_colors">Ilapat ang mga kulay mula sa mga wallpaper sa tema ng app</string>
+    <string name="summary_preference_settings_language">Binabago ang wikang ginagamit sa app</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Ipakita ang mga pamagat ng item sa ibaba ng mga icon sa ilalim ng nabigasyon bar</string>
+    <string name="summary_preference_settings_startup_page">Piliin ang screen na ipapakita kapag nagsimula ang app.</string>
+    <string name="will_never_turn_on_automatically">Hindi kailanman awtomatikong mag-o-on</string>
+    <string name="will_turn_on_automatically_by_system">Awtomatikong mag-o-on sa pamamagitan ng system</string>
+</resources>

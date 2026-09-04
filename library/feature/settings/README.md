@@ -24,7 +24,8 @@ theme, advanced, and usage/diagnostics feature modules.
 
 - `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`,
   and `:library:navigation` for shared infrastructure.
-- `:library:feature:settings:resources` for settings resources.
+- Each settings feature owns its localized resources in `src/main/res`; no shared settings resource
+  subproject is required.
 - `:library:feature:advanced`, `:library:feature:diagnostics`, `:library:feature:display`, and
   `:library:feature:theme` for dedicated settings surfaces.
 - [`:library:integration:consent`](../../integration/consent/README.md) for diagnostics consent
@@ -45,10 +46,10 @@ flowchart TD
     Providers --> Root[SettingsScreen categories]
     Root --> General[GeneralSettingsActivity content key]
     General --> Help[Help & feedback top-app-bar action]
-    General --> Display[settings:display]
-    General --> Theme[settings:theme]
-    General --> Advanced[settings:advanced]
-    General --> Diagnostics[settings:diagnostics]
+    General --> Display[feature:display]
+    General --> Theme[feature:theme]
+    General --> Advanced[feature:advanced]
+    General --> Diagnostics[feature:diagnostics]
     Display --> DisplayRepo[DisplayPreferencesRepository]
     Theme --> ThemeRepo[ThemePreferencesRepository]
     DisplayRepo --> Store[Preferences DataStore]
@@ -61,6 +62,10 @@ flowchart TD
 
 ## Architectural decisions
 
+- `ui/general` is the explicit category-content route: the root settings screen lists categories,
+  and General Settings renders the selected content key, either embedded or in its own activity.
+- Layers follow ownership, as described in [the architecture rules](../../../docs/notes/module-structure.md).
+  Display and theme consume core preference repositories directly and do not duplicate data layers.
 - Host provider contracts describe categories and callbacks; each settings feature module owns its
   own state holders, repositories, UI, and Koin bindings.
 - Display and theme remain separate modules because they expose live preference state to more than

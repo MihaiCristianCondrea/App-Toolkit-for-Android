@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Configurações avançadas de privacidade</string>
+    <string name="consent_ad_personalization_description">Ativar anúncios personalizados com base na sua atividade e preferências nos serviços e aplicativos do Google.</string>
+    <string name="consent_ad_personalization_title">Anúncios personalizados</string>
+    <string name="consent_ad_storage_description">Ativar o armazenamento de dados (como identificadores de dispositivo ou cookies) para medir o desempenho de anúncios e exibir anúncios relevantes.</string>
+    <string name="consent_ad_storage_title">Armazenar dados de publicidade</string>
+    <string name="consent_ad_user_data_description">Permitir o envio de dados de uso e do dispositivo para o Google para apoiar recursos relacionados a anúncios, como conversões e otimização de campanhas.</string>
+    <string name="consent_ad_user_data_title">Enviar dados para anúncios</string>
+    <string name="consent_analytics_storage_description">Permitir o armazenamento de dados como uso do aplicativo e duração da visita para melhorar a análise e o desempenho do aplicativo.</string>
+    <string name="consent_analytics_storage_title">Armazenar dados de analytics</string>
+    <string name="consent_category_advertising_title">Publicidade personalizada</string>
+    <string name="consent_category_analytics_title">Analytics</string>
+    <string name="icon_desc_consent_category">Ícone da categoria de consentimento</string>
+    <string name="icon_desc_expand_less">Recolher</string>
+    <string name="icon_desc_expand_more">Expandir mais</string>
+    <string name="learn_more">Saiba mais</string>
+    <string name="summary_usage_and_diagnostics">Ajude a melhorar sua experiência enviando automaticamente dados de diagnóstico, uso de dispositivo e aplicativo.</string>
+    <string name="usage_and_diagnostics">Uso e diagnósticos</string>
+</resources>

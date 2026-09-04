@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Разширени настройки за поверителност</string>
+    <string name="consent_ad_personalization_description">Активиране на персонализирани реклами въз основа на вашата активност и предпочитания в услугите и приложенията на Google.</string>
+    <string name="consent_ad_personalization_title">Персонализирани реклами</string>
+    <string name="consent_ad_storage_description">Активиране на съхраняването на данни (като идентификатори на устройства или бисквитки) за измерване на ефективността на рекламите и показване на подходящи реклами.</string>
+    <string name="consent_ad_storage_title">Съхраняване на данни за реклама</string>
+    <string name="consent_ad_user_data_description">Разрешаване на изпращането на данни за употреба и устройство към Google за поддържане на функции, свързани с реклами, като конверсии и оптимизация на кампании.</string>
+    <string name="consent_ad_user_data_title">Изпращане на данни за реклами</string>
+    <string name="consent_analytics_storage_description">Разрешаване на съхраняването на данни, като например използване на приложението и продължителност на посещението, за подобряване на анализите и производителността на приложението.</string>
+    <string name="consent_analytics_storage_title">Съхраняване на данни за анализ</string>
+    <string name="consent_category_advertising_title">Персонализирана реклама</string>
+    <string name="consent_category_analytics_title">Анализи</string>
+    <string name="icon_desc_consent_category">Икона за категория на съгласие</string>
+    <string name="icon_desc_expand_less">Свиване</string>
+    <string name="icon_desc_expand_more">Разгъване</string>
+    <string name="learn_more">Научете повече</string>
+    <string name="summary_usage_and_diagnostics">Помогнете за подобряване на изживяването, като автоматично изпращате диагностични данни за устройството и приложението. Това ще помогне за подобряване на производителността и стабилността на приложението.</string>
+    <string name="usage_and_diagnostics">Използване и диагностика</string>
+</resources>

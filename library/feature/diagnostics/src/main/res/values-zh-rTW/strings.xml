@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">進階隱私權設定</string>
+    <string name="consent_ad_personalization_description">根據您在 Google 各項服務和應用程式中的活動和偏好設定，啟用個人化廣告。</string>
+    <string name="consent_ad_personalization_title">個人化廣告</string>
+    <string name="consent_ad_storage_description">啟用儲存資料 (例如裝置 ID 或 Cookie)，以便評估廣告成效並顯示相關廣告。</string>
+    <string name="consent_ad_storage_title">儲存廣告資料</string>
+    <string name="consent_ad_user_data_description">允許將使用情況和裝置資料傳送給 Google，以支援廣告相關功能 (例如轉換和廣告活動最佳化)。</string>
+    <string name="consent_ad_user_data_title">傳送廣告資料</string>
+    <string name="consent_analytics_storage_description">允許儲存應用程式使用情況和造訪持續時間等資料，以改善分析和應用程式效能。</string>
+    <string name="consent_analytics_storage_title">儲存分析資料</string>
+    <string name="consent_category_advertising_title">個人化廣告</string>
+    <string name="consent_category_analytics_title">分析</string>
+    <string name="icon_desc_consent_category">同意聲明類別圖示</string>
+    <string name="icon_desc_expand_less">收合</string>
+    <string name="icon_desc_expand_more">展開更多</string>
+    <string name="learn_more">了解更多</string>
+    <string name="summary_usage_and_diagnostics">通過自動發送診斷、設備和應用程式使用數據來改進您的體驗。</string>
+    <string name="usage_and_diagnostics">使用與診斷</string>
+</resources>

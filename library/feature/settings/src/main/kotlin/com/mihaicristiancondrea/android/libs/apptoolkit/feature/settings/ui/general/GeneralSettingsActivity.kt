@@ -63,7 +63,7 @@ class GeneralSettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         title = intent.getStringExtra(EXTRA_TITLE)
-            ?: getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.resources.R.string.settings)
+            ?: getString(com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R.string.settings)
         contentKey = intent.getStringExtra(EXTRA_CONTENT)
 
         setComposeContent()

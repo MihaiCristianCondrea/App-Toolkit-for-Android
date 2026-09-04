@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">Comportement de l\'application</string>
+    <string name="appearance">Apparence</string>
+    <string name="bounce_buttons">Animation de rebond</string>
+    <string name="dark_theme">Thème sombre</string>
+    <string name="dynamic_colors">Couleurs dynamiques</string>
+    <string name="language">Langue</string>
+    <string name="navigation">Navigation</string>
+    <string name="show_labels_on_bottom_bar">Afficher les étiquettes sur la barre inférieure</string>
+    <string name="startup_page">Page de démarrage</string>
+    <string name="summary_preference_settings_bounce_buttons">Ajoute une légère animation de rebond aux éléments cliquables lorsqu\'ils sont pressés</string>
+    <string name="summary_preference_settings_dynamic_colors">Appliquez les couleurs du fond d\'écran au thème de l\'application</string>
+    <string name="summary_preference_settings_language">Change la langue utilisée dans l\'application</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Afficher les titres des icônes ci-dessous dans la barre de navigation inférieure</string>
+    <string name="summary_preference_settings_startup_page">Choisissez l\'écran à afficher au démarrage de l\'application.</string>
+    <string name="will_never_turn_on_automatically">Ne sera jamais activé automatiquement</string>
+    <string name="will_turn_on_automatically_by_system">Sera activé automatiquement par le système</string>
+</resources>

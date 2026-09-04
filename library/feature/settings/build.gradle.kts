@@ -43,7 +43,6 @@ android {
 
 dependencies {
     testImplementation(project(":library:core:testing"))
-    api(project(":library:feature:settings:resources"))
     api(project(":library:feature:advanced"))
     api(project(":library:feature:diagnostics"))
     api(project(":library:feature:display"))

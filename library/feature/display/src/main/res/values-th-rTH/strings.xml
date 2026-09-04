@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">การทำงานของแอป</string>
+    <string name="appearance">ลักษณะ</string>
+    <string name="bounce_buttons">เอฟเฟกต์ปุ่ม</string>
+    <string name="dark_theme">ธีมมืด</string>
+    <string name="dynamic_colors">สีแบบไดนามิก</string>
+    <string name="language">ภาษา</string>
+    <string name="navigation">การนำทาง</string>
+    <string name="show_labels_on_bottom_bar">แสดงฉลากบนแถบด้านล่าง</string>
+    <string name="startup_page">หน้าจอเริ่มต้น</string>
+    <string name="summary_preference_settings_bounce_buttons">เพิ่มแอนิเมชันการเด้งเบา ๆ เมื่อคลิกปุ่มต่าง ๆ</string>
+    <string name="summary_preference_settings_dynamic_colors">ใช้สีจากภาพพื้นหลังกับธีมแอป</string>
+    <string name="summary_preference_settings_language">เปลี่ยนภาษาที่ใช้ในแอป</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">แสดงชื่อรายการด้านล่างไอคอนในแถบการนำทางด้านล่าง</string>
+    <string name="summary_preference_settings_startup_page">เลือกหน้าจอที่จะแสดงเมื่อเริ่มต้นแอป</string>
+    <string name="will_never_turn_on_automatically">จะไม่มีการเปิดใช้งานอัตโนมัติ</string>
+    <string name="will_turn_on_automatically_by_system">ระบบจะเปิดใช้งานโดยอัตโนมัติ</string>
+</resources>

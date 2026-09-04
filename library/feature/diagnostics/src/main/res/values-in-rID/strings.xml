@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">Pengaturan privasi lanjutan</string>
+    <string name="consent_ad_personalization_description">Aktifkan iklan yang dipersonalisasi berdasarkan aktivitas dan preferensi Anda di seluruh layanan dan aplikasi Google.</string>
+    <string name="consent_ad_personalization_title">Iklan yang dipersonalisasi</string>
+    <string name="consent_ad_storage_description">Aktifkan penyimpanan data (seperti ID perangkat atau cookie) untuk mengukur performa iklan dan menampilkan iklan yang relevan.</string>
+    <string name="consent_ad_storage_title">Simpan data iklan</string>
+    <string name="consent_ad_user_data_description">Izinkan pengiriman data penggunaan dan perangkat ke Google untuk mendukung fitur terkait iklan seperti konversi dan optimalisasi kampanye.</string>
+    <string name="consent_ad_user_data_title">Kirim data untuk iklan</string>
+    <string name="consent_analytics_storage_description">Izinkan penyimpanan data seperti penggunaan aplikasi dan durasi kunjungan untuk meningkatkan analitik dan performa aplikasi.</string>
+    <string name="consent_analytics_storage_title">Simpan data analitik</string>
+    <string name="consent_category_advertising_title">Iklan yang dipersonalisasi</string>
+    <string name="consent_category_analytics_title">Analitik</string>
+    <string name="icon_desc_consent_category">Ikon kategori izin</string>
+    <string name="icon_desc_expand_less">Ciutkan</string>
+    <string name="icon_desc_expand_more">Perluas</string>
+    <string name="learn_more">Pelajari lebih lanjut</string>
+    <string name="summary_usage_and_diagnostics">Bantu tingkatkan pengalaman Anda dengan mengirimkan data diagnostik, perangkat, dan penggunaan aplikasi secara otomatis kepada kami.</string>
+    <string name="usage_and_diagnostics">Penggunaan dan diagnostik</string>
+</resources>

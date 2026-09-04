@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">إعدادات الخصوصية المتقدمة</string>
+    <string name="consent_ad_personalization_description">تمكين الإعلانات المخصصة بناءً على نشاطك وتفضيلاتك عبر خدمات وتطبيقات Google.</string>
+    <string name="consent_ad_personalization_title">الإعلانات المخصصة</string>
+    <string name="consent_ad_storage_description">تمكين تخزين البيانات (مثل معرفات الجهاز أو ملفات تعريف الارتباط) لقياس أداء الإعلانات وعرض الإعلانات ذات الصلة.</string>
+    <string name="consent_ad_storage_title">تخزين بيانات الإعلانات</string>
+    <string name="consent_ad_user_data_description">السماح بإرسال بيانات الاستخدام والجهاز إلى Google لدعم الميزات المتعلقة بالإعلانات مثل التحويلات وتحسين الحملات.</string>
+    <string name="consent_ad_user_data_title">إرسال البيانات للإعلانات</string>
+    <string name="consent_analytics_storage_description">السماح بتخزين البيانات مثل استخدام التطبيق ومدة الزيارة لتحسين التحليلات وأداء التطبيق.</string>
+    <string name="consent_analytics_storage_title">تخزين بيانات التحليلات</string>
+    <string name="consent_category_advertising_title">الإعلانات المخصصة</string>
+    <string name="consent_category_analytics_title">التحليلات</string>
+    <string name="icon_desc_consent_category">أيقونة فئة الموافقة</string>
+    <string name="icon_desc_expand_less">طي</string>
+    <string name="icon_desc_expand_more">توسيع</string>
+    <string name="learn_more">اعرف المزيد</string>
+    <string name="summary_usage_and_diagnostics">ساعد في تحسين تجربتك عن طريق إرسال بيانات التشخيص والجهاز واستخدام التطبيق إلينا تلقائيًا. سيساعد هذا في تحسين أداء التطبيق واستقراره وتحسينات أخرى. ستساعد بعض البيانات المجمعة أيضًا تطبيقاتنا.\n\nهذه معلومات عامة حول جهازك وكيفية استخدامك لتطبيقاتنا (مثل مستوى البطارية ونشاط النظام والتطبيق والأخطاء). سيتم استخدام البيانات لتحسين تطبيقاتنا\n\nلا يؤثر إيقاف تشغيل هذه الميزة على قدرة جهازك على إرسال المعلومات اللازمة للخدمات الأساسية مثل تحديثات التطبيق والأمان.\n</string>
+    <string name="usage_and_diagnostics">الاستخدام والتشخيصات</string>
+</resources>

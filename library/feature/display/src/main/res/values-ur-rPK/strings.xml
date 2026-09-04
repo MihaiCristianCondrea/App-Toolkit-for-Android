@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">ایپ کا برتاؤ</string>
+    <string name="appearance">ظاہری شکل</string>
+    <string name="bounce_buttons">باؤنس کلک</string>
+    <string name="dark_theme">ڈارک تھیم</string>
+    <string name="dynamic_colors">متحرک رنگ</string>
+    <string name="language">زبان</string>
+    <string name="navigation">نیویگیشن</string>
+    <string name="show_labels_on_bottom_bar">نیچے بار پر لیبل دکھائیں</string>
+    <string name="startup_page">شروعاتی صفحہ</string>
+    <string name="summary_preference_settings_bounce_buttons">کلک کرنے پر تمام کلک کے قابل عناصر پر ایک لطیف باؤنس اینیمیشن لاگو کرتا ہے</string>
+    <string name="summary_preference_settings_dynamic_colors">وال پیپرز سے رنگ ایپ تھیم پر لاگو کریں</string>
+    <string name="summary_preference_settings_language">ایپ میں استعمال ہونے والی زبان کو تبدیل کرتا ہے</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">نیچے نیویگیشن بار میں شبیہیں کے نیچے آئٹم کے عنوانات دکھائیں</string>
+    <string name="summary_preference_settings_startup_page">ایپ شروع ہونے پر دکھائی جانے والی اسکرین منتخب کریں۔</string>
+    <string name="will_never_turn_on_automatically">کبھی خود بخود آن نہیں ہوگا</string>
+    <string name="will_turn_on_automatically_by_system">سسٹم کے ذریعے خود بخود آن ہو جائے گا</string>
+</resources>

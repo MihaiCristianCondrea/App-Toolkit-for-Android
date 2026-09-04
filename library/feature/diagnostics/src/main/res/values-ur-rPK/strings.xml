@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="advanced_privacy_settings">اعلیٰ رازداری کی ترتیبات</string>
+    <string name="consent_ad_personalization_description">Google سروسز اور ایپس پر آپ کی سرگرمی اور ترجیحات کی بنیاد پر ذاتی نوعیت کے اشتہارات فعال کریں۔</string>
+    <string name="consent_ad_personalization_title">ذاتی نوعیت کے اشتہارات</string>
+    <string name="consent_ad_storage_description">اشتہار کی کارکردگی کی پیمائش کرنے اور متعلقہ اشتہارات دکھانے کے لیے ڈیٹا (جیسے ڈیوائس شناخت کنندگان یا کوکیز) کو اسٹور کرنا فعال کریں۔</string>
+    <string name="consent_ad_storage_title">اشتہاری ڈیٹا اسٹور کریں</string>
+    <string name="consent_ad_user_data_description">استعمال اور ڈیوائس کا ڈیٹا Google کو بھیجنے کی اجازت دیں تاکہ اشتہار سے متعلق خصوصیات جیسے تبادلوں اور مہم کی اصلاح میں مدد مل سکے۔</string>
+    <string name="consent_ad_user_data_title">اشتہارات کے لیے ڈیٹا بھیجیں</string>
+    <string name="consent_analytics_storage_description">ایپ کے استعمال اور وزٹ کے دورانیے جیسے ڈیٹا کو اسٹور کرنے کی اجازت دیں تاکہ تجزیات اور ایپ کی کارکردگی کو بہتر بنایا جا سکے۔</string>
+    <string name="consent_analytics_storage_title">تجزیاتی ڈیٹا اسٹور کریں</string>
+    <string name="consent_category_advertising_title">ذاتی نوعیت کے اشتہارات</string>
+    <string name="consent_category_analytics_title">تجزیات</string>
+    <string name="icon_desc_consent_category">رضامندی کے زمرے کا آئیکن</string>
+    <string name="icon_desc_expand_less">سکیڑیں</string>
+    <string name="icon_desc_expand_more">مزید پھیلائیں</string>
+    <string name="learn_more">مزید جانیں</string>
+    <string name="summary_usage_and_diagnostics">تشخیصی، ڈیوائس، اور ایپ کے استعمال کا ڈیٹا خود بخود ہمیں بھیج کر اپنے تجربے کو بہتر بنانے میں مدد کریں۔ اس سے ایپ کی کارکردگی، استحکام، اور دیگر اضافہ جات کو بہتر بنانے میں مدد ملے گی۔ کچھ مجموعی ڈیٹا ہماری ایپس کی بھی مدد کرے گا۔\n\nیہ آپ کے ڈیوائس اور آپ ہماری ایپس کو کیسے استعمال کرتے ہیں (جیسے بیٹری لیول، سسٹم اور ایپ کی سرگرمی، اور خرابیاں) کے بارے میں عمومی معلومات ہیں۔ ڈیٹا ہماری ایپس کو بہتر بنانے کے لیے استعمال کیا جائے گا\n\nاس خصوصیت کو بند کرنے سے آپ کے ڈیوائس کی ضروری خدمات جیسے ایپ اپ ڈیٹس اور سیکیورٹی کے لیے درکار معلومات بھیجنے کی صلاحیت متاثر نہیں ہوتی۔\n</string>
+    <string name="usage_and_diagnostics">استعمال اور تشخیص</string>
+</resources>

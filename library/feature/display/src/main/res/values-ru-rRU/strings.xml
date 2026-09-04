@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">Поведение приложения</string>
+    <string name="appearance">Внешний вид</string>
+    <string name="bounce_buttons">Анимация нажатия</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="dynamic_colors">Динамические цвета</string>
+    <string name="language">Язык</string>
+    <string name="navigation">Навигация</string>
+    <string name="show_labels_on_bottom_bar">Показать этикетки на нижней панели</string>
+    <string name="startup_page">Стартовая страница</string>
+    <string name="summary_preference_settings_bounce_buttons">Применяет лёгкую анимацию отскока к кликабельным элементам</string>
+    <string name="summary_preference_settings_dynamic_colors">Применяйте цвета обоев к теме приложения</string>
+    <string name="summary_preference_settings_language">Измените язык, используемый в приложении</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Отображение заголовков элементов ниже значков в нижней навигационной панели</string>
+    <string name="summary_preference_settings_startup_page">Выберите экран, который будет отображаться при запуске приложения.</string>
+    <string name="will_never_turn_on_automatically">Никогда не будет включено автоматически</string>
+    <string name="will_turn_on_automatically_by_system">Будет включено автоматически системой</string>
+</resources>

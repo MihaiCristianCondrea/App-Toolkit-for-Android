@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_behavior">Comportamento app</string>
+    <string name="appearance">Aspetto</string>
+    <string name="bounce_buttons">Effetto rimbalzo</string>
+    <string name="dark_theme">Tema scuro</string>
+    <string name="dynamic_colors">Colori dinamici</string>
+    <string name="language">Lingua</string>
+    <string name="navigation">Navigazione</string>
+    <string name="show_labels_on_bottom_bar">Mostra etichette sulla barra inferiore</string>
+    <string name="startup_page">Pagina di avvio</string>
+    <string name="summary_preference_settings_bounce_buttons">Applica una lieve animazione di rimbalzo agli elementi cliccabili al tocco</string>
+    <string name="summary_preference_settings_dynamic_colors">Applica i colori dai wallpaper al tema dell\'app</string>
+    <string name="summary_preference_settings_language">Modifica la lingua utilizzata nell\'app</string>
+    <string name="summary_preference_settings_show_labels_on_bottom_bar">Visualizza i titoli degli elementi sotto le icone nella barra di navigazione in basso</string>
+    <string name="summary_preference_settings_startup_page">Scegli la schermata da visualizzare all\'avvio dell\'app.</string>
+    <string name="will_never_turn_on_automatically">Non si attiverà mai automaticamente</string>
+    <string name="will_turn_on_automatically_by_system">Si attiverà automaticamente dal sistema</string>
+</resources>
