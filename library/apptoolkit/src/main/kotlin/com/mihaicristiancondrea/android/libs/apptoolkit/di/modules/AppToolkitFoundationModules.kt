@@ -35,7 +35,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.AdMobAppIdProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.ManifestAdMobAppIdProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.di.dataStoreModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.di.dataStoreModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.data.remote.client.KtorClient
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.data.repositories.DefaultInAppUpdateRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.update.data.repositories.InAppUpdateRepository

@@ -7,6 +7,9 @@
 ### Changed
 
 - Standardized library APIs under module-owned `feature.*`, `core.*`, and `integration.*` package roots; consumers must update imports to the new packages.
+- Moved library dependency-injection bindings into the owning feature/integration modules and
+  exposed the datastore module from `core.datastore.di`; the toolkit facade now only composes those
+  modules.
 
 ### Improved
 

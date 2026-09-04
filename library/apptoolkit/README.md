@@ -67,8 +67,9 @@ flowchart TD
 
 ## Architectural decisions
 
-- The facade is a composition boundary, not an implementation layer: constructors and SDK behavior
-  remain owned by their source modules even when their Koin bindings are assembled here.
+- The facade is a composition boundary, not an implementation layer: constructors, SDK behavior,
+  and Koin bindings remain owned by their source modules; this module only assembles their public
+  DI modules.
 - The all-in-one `appToolkitModules` entry point includes every toolkit-owned binding. A host still
   supplies the documented settings/startup provider contracts; granular factories remain public
   for hosts intentionally building a partial graph.
@@ -106,8 +107,8 @@ their product identity by defining `app_name`, `app_full_name`, and `copyright` 
 
 ## Internal implementations
 
-- Koin binding details, qualifier wiring, default palette registration, and private destination
-  builders.
+- Koin module-list composition, qualifier wiring, and private destination builders. Individual
+  feature modules own their DI definitions and default palette registration.
 
 ## Publishing
 
@@ -116,8 +117,8 @@ App Toolkit is published through [JitPack](https://jitpack.io/#MihaiCristianCond
 ## Current risks
 
 The façade exports nearly the complete internal graph, so consumers can couple to implementation
-modules transitively. Its DI files also instantiate implementations owned by many other modules,
-making constructor changes ripple into this composition module.
+modules transitively. The facade's module-list functions must stay synchronized with the feature
+modules they compose.
 
 ## Architecture guards
 

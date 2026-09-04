@@ -13,7 +13,7 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 - `CommonDataStore`, which owns one instance of each source, exposes them, and keeps the flat
   pre-split API delegating to them.
 - Persisted theme, review, display-ads, reduce-ads, and consent-related values.
-- The Koin DataStore module, which is the single place `CommonDataStore` is registered;
+- The Koin DataStore module at `core.datastore.di`, which is the single place `CommonDataStore` is registered;
   `appToolkitFoundationModules` includes it rather than defining its own copy.
 
 ## Does not own
@@ -73,7 +73,7 @@ flowchart TD
 ## Public contracts
 
 - The preference data-source interfaces, their `Default*` implementations, `CommonDataStore`, and
-  `dataStoreModule`.
+  `core.datastore.di.dataStoreModule`.
 - New code should depend on the narrow contract it needs (`ThemePreferencesDataSource`,
   `ReviewPreferencesDataSource`, …), all of which `dataStoreModule` registers. `CommonDataStore`
   remains for callers written against the earlier single-class API.
