@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="amoled_mode">AMOLED mode</string>
+    <string name="color_palette">Paleta ng kulay</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="follow_system">Sundin ang system mode</string>
+    <string name="light_mode">Light mode</string>
+    <string name="onboarding_theme_dark_desc">Maginhawa sa mata.</string>
+    <string name="onboarding_theme_light_desc">Maliwanag at masigla.</string>
+    <string name="onboarding_theme_system_desc">Tumutugma sa iyong device.</string>
+    <string name="other_colors">Ibang mga kulay</string>
+    <string name="screen_and_display_settings">Mga Setting ng Screen at Display.</string>
+    <string name="summary_dark_theme">Ang madilim na tema ay gumagamit ng isang malalim na background upang makabuluhang mapalawak ang iyong buhay ng baterya. Upang maisaaktibo ito, mag -navigate lamang sa manager ng system ng iyong Android at piliin ang iyong ginustong tema sa</string>
+    <string name="theme_mode">Mode ng tema</string>
+    <string name="wallpaper_colors">Mga kulay ng wallpaper</string>
+</resources>

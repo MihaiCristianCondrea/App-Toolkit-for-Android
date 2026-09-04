@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="amoled_mode">Modo AMOLED</string>
+    <string name="color_palette">Paleta de cores</string>
+    <string name="dark_mode">Modo escuro</string>
+    <string name="follow_system">Seguir o sistema</string>
+    <string name="light_mode">Modo claro</string>
+    <string name="onboarding_theme_dark_desc">Suave para os olhos.</string>
+    <string name="onboarding_theme_light_desc">Brilhante e energético.</string>
+    <string name="onboarding_theme_system_desc">Corresponde ao seu dispositivo.</string>
+    <string name="other_colors">Outras cores</string>
+    <string name="screen_and_display_settings">Configurações de tela e exibição.</string>
+    <string name="summary_dark_theme">O tema escuro aproveita um fundo profundo para estender significativamente a vida útil da bateria. Para ativá -lo, simplesmente navegue para o gerente de sistema do seu Android e selecione seu tema preferido em</string>
+    <string name="theme_mode">Modo de tema</string>
+    <string name="wallpaper_colors">Cores do papel de parede</string>
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="amoled_mode">AMOLED mode</string>
+    <string name="color_palette">Color palette</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="follow_system">Follow system mode</string>
+    <string name="light_mode">Light mode</string>
+    <string name="onboarding_theme_dark_desc">Easy on the eyes.</string>
+    <string name="onboarding_theme_light_desc">Bright and energetic.</string>
+    <string name="onboarding_theme_system_desc">Matches your device.</string>
+    <string name="other_colors">Other colors</string>
+    <string name="screen_and_display_settings">screen and display settings.</string>
+    <string name="summary_dark_theme">Dark theme leverages a deep background to significantly extend your battery life. To activate it, simply navigate to your Android\'s system manager and select your preferred theme in</string>
+    <string name="theme_mode">Theme mode</string>
+    <string name="wallpaper_colors">Wallpaper colors</string>
+</resources>

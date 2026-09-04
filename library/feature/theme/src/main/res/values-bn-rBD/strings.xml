@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="amoled_mode">AMOLED মোড</string>
+    <string name="color_palette">রঙের প্যালেট</string>
+    <string name="dark_mode">ডার্ক মোড</string>
+    <string name="follow_system">সিস্টেম মোড অনুসরণ করুন</string>
+    <string name="light_mode">লাইট মোড</string>
+    <string name="onboarding_theme_dark_desc">চোখের জন্য আরামদায়ক।</string>
+    <string name="onboarding_theme_light_desc">উজ্জ্বল এবং প্রাণবন্ত।</string>
+    <string name="onboarding_theme_system_desc">আপনার ডিভাইসের সাথে মেলে।</string>
+    <string name="other_colors">অন্যান্য রং</string>
+    <string name="screen_and_display_settings">স্ক্রিন এবং প্রদর্শন সেটিংস।</string>
+    <string name="summary_dark_theme">গা dark ় থিম আপনার ব্যাটারির জীবনকে উল্লেখযোগ্যভাবে প্রসারিত করতে একটি গভীর পটভূমি উপার্জন করে। এটি সক্রিয় করতে, কেবল আপনার অ্যান্ড্রয়েডের সিস্টেম ম্যানেজারে নেভিগেট করুন এবং আপনার পছন্দসই থিমটি নির্বাচন করুন</string>
+    <string name="theme_mode">থিম মোড</string>
+    <string name="wallpaper_colors">ওয়ালপেপারের রং</string>
+</resources>

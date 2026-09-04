@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="amoled_mode">AMOLED modu</string>
+    <string name="color_palette">Renk paleti</string>
+    <string name="dark_mode">Koyu mod</string>
+    <string name="follow_system">Sistem modunu takip et</string>
+    <string name="light_mode">Aydınlık mod</string>
+    <string name="onboarding_theme_dark_desc">Gözleri yormaz.</string>
+    <string name="onboarding_theme_light_desc">Parlak ve enerjik.</string>
+    <string name="onboarding_theme_system_desc">Cihazınızla eşleşir.</string>
+    <string name="other_colors">Diğer renkler</string>
+    <string name="screen_and_display_settings">Ekran ve görüntüleme ayarları.</string>
+    <string name="summary_dark_theme">Karanlık tema, pil ömrünüzü önemli ölçüde uzatmak için derin bir arka plandan yararlanır. Etkinleştirmek için, Android\'in sistem yöneticisine gidin ve tercih ettiğiniz temayı seçin</string>
+    <string name="theme_mode">Tema modu</string>
+    <string name="wallpaper_colors">Duvar kâğıdı renkleri</string>
+</resources>

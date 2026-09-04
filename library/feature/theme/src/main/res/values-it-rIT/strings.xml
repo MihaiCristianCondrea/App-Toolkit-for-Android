@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="amoled_mode">Modalità AMOLED</string>
+    <string name="color_palette">Palette colori</string>
+    <string name="dark_mode">Modalità scura</string>
+    <string name="follow_system">Segui modalità sistema</string>
+    <string name="light_mode">Modalità chiara</string>
+    <string name="onboarding_theme_dark_desc">Delicato per gli occhi.</string>
+    <string name="onboarding_theme_light_desc">Luminoso ed energico.</string>
+    <string name="onboarding_theme_system_desc">Corrisponde al tuo dispositivo.</string>
+    <string name="other_colors">Altri colori</string>
+    <string name="screen_and_display_settings">Impostazioni di schermata e visualizzazione.</string>
+    <string name="summary_dark_theme">Il tema oscuro sfrutta uno sfondo profondo per prolungare significativamente la durata della batteria. Per attivarlo, basta passare al gestore di sistemi del tuo Android e selezionare il tema preferito in</string>
+    <string name="theme_mode">Modalità tema</string>
+    <string name="wallpaper_colors">Colori dello sfondo</string>
+</resources>

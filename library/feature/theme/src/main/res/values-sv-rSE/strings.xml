@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (©) 2026 Mihai-Cristian Condrea
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="amoled_mode">AMOLED-läge</string>
+    <string name="color_palette">Färgpalett</string>
+    <string name="dark_mode">Mörkt läge</string>
+    <string name="follow_system">Följ systeminställningar</string>
+    <string name="light_mode">Ljust läge</string>
+    <string name="onboarding_theme_dark_desc">Behagligt för ögonen.</string>
+    <string name="onboarding_theme_light_desc">Ljust och energiskt.</string>
+    <string name="onboarding_theme_system_desc">Matchar din enhet.</string>
+    <string name="other_colors">Andra färger</string>
+    <string name="screen_and_display_settings">Skärm- och visningsinställningar.</string>
+    <string name="summary_dark_theme">Dark Theme utnyttjar en djup bakgrund för att avsevärt förlänga batteritiden. För att aktivera det, navigera bara till din Androids systemhanterare och välj ditt föredragna tema i</string>
+    <string name="theme_mode">Temaläge</string>
+    <string name="wallpaper_colors">Bakgrundsfärger</string>
+</resources>
