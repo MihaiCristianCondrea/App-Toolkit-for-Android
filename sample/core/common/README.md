@@ -13,8 +13,8 @@ Host-wide constants and error types that carry no UI and no Android state.
 
 - Ad unit ids and placement qualifiers, owned by
   [`:sample:integration:ads`](../../integration/ads/README.md).
-- Anything that needs `R`. Error-to-text mapping lives in [`:sample:core:ui`](../ui/README.md),
-  because it returns `UiTextHelper` and resolves string resources.
+- Anything that needs `R`. Error-to-text mapping lives with the feature that owns the corresponding
+  user-facing resources; [`:sample:core:ui`](../ui/README.md) owns shared artwork only.
 
 ## Depends on
 
@@ -23,7 +23,8 @@ Host-wide constants and error types that carry no UI and no Android state.
 
 ## Used by
 
-- `:sample:core:ui`, `:sample:feature:apps`, `:sample:app`.
+- `:sample:feature:apps`, `:sample:app`, and other host features that consume shared constants or
+  errors.
 
 ## Flow chart
 

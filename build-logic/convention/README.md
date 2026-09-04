@@ -50,6 +50,9 @@ flowchart TD
 
 ## Architectural decisions
 
+- Convention plugins use the repository-neutral `com.mihaicristiancondrea.android.apptoolkit`
+  namespace. The `apps` and `libs` segments distinguish runtime sample and library code and do not
+  apply to build-time Gradle plugins.
 - `jvm-target` fails when applied before an Android plugin because AGP's compile options are the
   source of truth for Java compatibility; plugin order is therefore part of its contract.
 - Test dependencies and `useJUnitPlatform()` are installed together so a module cannot compile test
