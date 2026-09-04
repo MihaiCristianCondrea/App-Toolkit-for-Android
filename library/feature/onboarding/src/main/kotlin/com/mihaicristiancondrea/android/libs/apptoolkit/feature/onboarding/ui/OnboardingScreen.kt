@@ -50,7 +50,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.mo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.controls.OnboardingFooter
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.default.DefaultOnboardingPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.utils.interfaces.providers.OnboardingProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState

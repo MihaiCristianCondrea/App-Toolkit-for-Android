@@ -19,9 +19,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.di
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.repositories.ShowcaseUnlockRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.ui.views.AboutSettingsContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.general.data.repositories.GeneralSettingsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.general.ui.GeneralSettingsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.providers.GeneralSettingsContentProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.data.repositories.GeneralSettingsRepository
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.GeneralSettingsContentProvider
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module

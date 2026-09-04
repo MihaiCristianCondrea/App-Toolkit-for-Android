@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.mod
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.CopyDeviceInfoResult
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.usecases.CopyDeviceInfoUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.settings.utils.providers.AboutSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.providers.BuildInfoProvider

@@ -28,7 +28,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.mo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.finish.FinishOnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.firebase.FirebaseOnboardingPage
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.theme.ThemeOnboardingPageTab
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.utils.interfaces.providers.OnboardingProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 
 class AppOnboardingProvider : OnboardingProvider {
 

@@ -26,7 +26,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.domain.models.ConsentHost
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.utils.interfaces.providers.OnboardingProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.BaseActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
 import kotlinx.coroutines.launch

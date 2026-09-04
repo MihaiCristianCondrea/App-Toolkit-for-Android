@@ -27,12 +27,12 @@ import androidx.compose.material.icons.outlined.Security
 import androidx.compose.ui.graphics.Color
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.general.ui.GeneralSettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.domain.models.SettingsCategory
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.domain.models.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.domain.models.SettingsPreference
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.constants.SettingsContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.interfaces.SettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsPreference
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
 
 /**
  * Builds the sample's root settings categories using an application context.

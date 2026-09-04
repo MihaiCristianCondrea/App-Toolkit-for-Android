@@ -17,7 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.startup.utils.interfaces.providers.StartupProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.billing.di.billingModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.firebase.di.firebaseModule

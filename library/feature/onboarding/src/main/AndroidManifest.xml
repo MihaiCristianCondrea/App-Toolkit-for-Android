@@ -19,7 +19,7 @@
 
     <application>
         <activity
-            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.startup.ui.StartupActivity"
+            android:name="com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.startup.StartupActivity"
             android:exported="false"
             android:noHistory="true"
             android:windowSoftInputMode="adjustResize" />

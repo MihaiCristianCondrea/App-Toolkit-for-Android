@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.setting
 import android.content.Context
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openAppNotificationSettings
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.general.ui.GeneralSettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.constants.SettingsContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just

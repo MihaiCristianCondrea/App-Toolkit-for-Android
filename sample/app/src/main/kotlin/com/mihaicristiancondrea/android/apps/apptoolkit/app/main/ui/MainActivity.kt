@@ -44,10 +44,10 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.AppTheme
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.activity.observeActions
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.main.ui.factory.GmsHostFactory
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.factory.GmsHostFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.HelpActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.startup.ui.StartupActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.ui.SettingsActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.startup.StartupActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.SettingsActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.AdsSettingsRoute

@@ -23,7 +23,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.loca
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories.DefaultOnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.data.repositories.OnboardingRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.utils.interfaces.providers.OnboardingProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module

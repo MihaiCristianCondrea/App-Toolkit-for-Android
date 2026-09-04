@@ -1,0 +1,35 @@
+import com.mihaicristiancondrea.android.apptoolkit.buildlogic.VersioningExtension
+
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.compose)
+    id("com.mihaicristiancondrea.android.apptoolkit.versioning")
+    id("com.mihaicristiancondrea.android.apptoolkit.unit-test")
+    id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
+    id("com.mihaicristiancondrea.android.apptoolkit.library-publish")
+}
+
+val versioning = extensions.getByType<VersioningExtension>()
+
+android {
+    namespace = "com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced"
+    compileSdk = versioning.compileSdk
+
+    defaultConfig {
+        minSdk = versioning.minSdk
+    }
+
+    buildFeatures {
+        compose = true
+    }
+}
+
+dependencies {
+    testImplementation(project(":library:core:testing"))
+    api(project(":library:core:common"))
+    api(project(":library:core:network"))
+    api(project(":library:core:ui"))
+    api(project(":library:feature:issuereporter"))
+    api(project(":library:feature:settings:resources"))
+}
+

@@ -19,7 +19,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.setting
 
 import android.content.Context
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.github.GithubConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.providers.AdvancedSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.providers.AdvancedSettingsProvider
 
 /** Supplies the sample repository's GitHub issue URL to advanced settings. */
 class AppAdvancedSettingsProvider(val context: Context) : AdvancedSettingsProvider {

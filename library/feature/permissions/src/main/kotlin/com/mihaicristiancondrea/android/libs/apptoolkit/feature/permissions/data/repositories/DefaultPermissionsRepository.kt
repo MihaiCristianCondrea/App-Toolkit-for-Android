@@ -18,9 +18,9 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.data.repositories
 
 import android.content.Context
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.domain.models.SettingsCategory
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.domain.models.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.domain.models.SettingsPreference
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsPreference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.R

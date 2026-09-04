@@ -21,7 +21,7 @@ import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.data.repositories.PermissionsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsAction
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.domain.models.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper

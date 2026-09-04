@@ -36,7 +36,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.licenses.ui.LicensesActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.licenses.LicensesActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity

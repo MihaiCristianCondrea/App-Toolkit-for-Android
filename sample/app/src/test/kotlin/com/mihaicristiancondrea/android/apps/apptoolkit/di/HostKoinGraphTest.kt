@@ -23,9 +23,9 @@ import androidx.compose.material3.ColorScheme
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.di.appToolkitHostModules
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.models.AppToolkitHostBuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.settings.utils.providers.AboutSettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.interfaces.SettingsProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.providers.AdvancedSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.SettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.ui.providers.AdvancedSettingsProvider
 import io.ktor.client.engine.HttpClientEngine
 import org.junit.jupiter.api.Test
 import org.koin.core.module.Module

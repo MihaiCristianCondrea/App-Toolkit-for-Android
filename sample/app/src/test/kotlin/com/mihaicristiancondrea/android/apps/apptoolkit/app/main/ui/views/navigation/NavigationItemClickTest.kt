@@ -26,7 +26,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.shareApp
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.main.ui.navigation.handleNavigationItemClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.handleNavigationItemClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import io.mockk.Runs

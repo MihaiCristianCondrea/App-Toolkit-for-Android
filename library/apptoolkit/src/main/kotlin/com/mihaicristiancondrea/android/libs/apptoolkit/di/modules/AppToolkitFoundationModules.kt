@@ -26,7 +26,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.remote.datasource.UmpConsentRemoteDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.ConsentRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.consent.data.repositories.DefaultConsentRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.main.ui.factory.GmsHostFactory
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.factory.GmsHostFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.StandardDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants

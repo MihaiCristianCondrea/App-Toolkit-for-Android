@@ -31,15 +31,12 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.providers.DeviceInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.usecases.SendIssueReportUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.IssueReporterViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.main.data.repositories.ChangelogRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.main.data.repositories.DefaultChangelogRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.main.domain.usecases.GetChangelogUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.main.ui.ChangelogViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.di.aboutModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingThemeViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.ForceInAppReviewUseCase
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.review.domain.usecases.RequestInAppReviewUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.startup.ui.StartupViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.startup.utils.interfaces.providers.StartupProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.startup.StartupViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.StartupProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
@@ -79,7 +76,7 @@ fun appToolkitFeatureModules(
     onboardingModule(),
     supportModule(),
     helpModule(hostBuildConfig = hostBuildConfig),
-    changelogModule(),
+    aboutModule,
     issueReporterModule(hostBuildConfig = hostBuildConfig),
     reviewModule(),
 )
@@ -155,34 +152,6 @@ private fun helpModule(hostBuildConfig: AppToolkitHostBuildConfig): Module = mod
             getFaqUseCase = get(),
             forceInAppReviewUseCase = get<ForceInAppReviewUseCase>(),
             dispatchers = get<DispatcherProvider>(),
-            firebaseController = get(),
-        )
-    }
-}
-
-private fun changelogModule(): Module = module {
-    single<ChangelogRepository> {
-        DefaultChangelogRepository(
-            client = get(),
-            apiBaseUrl = get(
-                qualifier = named(AppToolkitDiConstants.ANDROID_APPS_METADATA_API_BASE_URL),
-            ),
-            legacyChangelogUrl = get(
-                qualifier = named(AppToolkitDiConstants.GITHUB_CHANGELOG),
-            ),
-            firebaseController = get(),
-        )
-    }
-    single<GetChangelogUseCase> {
-        GetChangelogUseCase(
-            repository = get(),
-            buildInfoProvider = get(),
-        )
-    }
-    viewModel {
-        ChangelogViewModel(
-            getChangelogUseCase = get(),
-            dispatchers = get(),
             firebaseController = get(),
         )
     }

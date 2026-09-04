@@ -20,8 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.data.repositories.PermissionsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.contracts.PermissionsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.domain.models.SettingsCategory
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.domain.models.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.FakeFirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension

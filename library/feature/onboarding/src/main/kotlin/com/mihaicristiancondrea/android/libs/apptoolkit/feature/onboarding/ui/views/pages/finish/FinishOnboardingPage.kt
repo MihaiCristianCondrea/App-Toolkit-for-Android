@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -43,7 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.utils.helpers.FinalOnboardingKonfettiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.utils.FinalOnboardingKonfettiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeIncreasedVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer

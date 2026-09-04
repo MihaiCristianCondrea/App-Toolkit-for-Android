@@ -22,7 +22,7 @@ import android.os.Build
 import android.util.Log
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.AboutInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.models.CopyDeviceInfoResult
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.settings.utils.providers.AboutSettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.providers.AboutSettingsProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.logging.CLIPBOARD_HELPER_LOG_TAG
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.copyTextToClipboard

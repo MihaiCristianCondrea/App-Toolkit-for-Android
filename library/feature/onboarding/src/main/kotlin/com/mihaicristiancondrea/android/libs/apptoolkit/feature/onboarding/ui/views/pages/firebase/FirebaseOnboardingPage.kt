@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (©) 2026 Mihai-Cristian Condrea
  *
  * This program is free software: you can redistribute it and/or modify
@@ -41,9 +41,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.diagnostics.ui.UsageAndDiagnosticsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.diagnostics.ui.states.UsageAndDiagnosticsUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.UsageAndDiagnosticsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.contracts.UsageAndDiagnosticsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.ui.states.UsageAndDiagnosticsUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.OnboardingViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState

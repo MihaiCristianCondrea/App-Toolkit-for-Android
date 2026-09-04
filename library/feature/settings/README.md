@@ -2,21 +2,15 @@
 
 ## Purpose
 
-Composes the toolkit's root, general, display, advanced, and usage/diagnostics settings experiences
-and exposes host provider extension points.
+Composes the toolkit's root and general settings experiences, and integrates the dedicated display,
+theme, advanced, and usage/diagnostics feature modules.
 
 ## Owns
 
 - Settings screen/activity/ViewModel and configurable category/preference models.
-- `DisplaySettingsViewModel`, which owns display-preference observation and persistence while the
-  display list and selection dialogs remain presentation-only.
-- `ThemeSettingsViewModel`, which owns theme preference observation and mutations for the dedicated
-  theme settings surface.
 - General settings repository/presentation flow, including the standalone screen's Help & feedback
   top-app-bar shortcut.
-- Advanced cache repository and settings flow.
-- Usage-and-diagnostics repository/model/presentation flow.
-- `SettingsProvider`, display/advanced provider contracts, and default content providers.
+- `SettingsProvider`, and default content providers that integrate the dedicated settings modules.
 
 ## Does not own
 
@@ -30,6 +24,9 @@ and exposes host provider extension points.
 
 - `:library:core:common`, `:library:core:datastore`, `:library:core:network`, `:library:core:ui`,
   and `:library:navigation` for shared infrastructure.
+- `:library:feature:settings:resources` for settings resources.
+- `:library:feature:advanced`, `:library:feature:diagnostics`, `:library:feature:display`, and
+  `:library:feature:theme` for dedicated settings surfaces.
 - [`:library:integration:consent`](../../integration/consent/README.md) for diagnostics consent
   updates.
 - `:library:feature:about`, `:library:feature:help`, and `:library:feature:issuereporter` to compose
@@ -48,10 +45,10 @@ flowchart TD
     Providers --> Root[SettingsScreen categories]
     Root --> General[GeneralSettingsActivity content key]
     General --> Help[Help & feedback top-app-bar action]
-    General --> Display[DisplaySettingsViewModel]
-    General --> Theme[ThemeSettingsViewModel]
-    General --> Advanced[Advanced settings repository]
-    General --> Diagnostics[UsageAndDiagnostics repository]
+    General --> Display[settings:display]
+    General --> Theme[settings:theme]
+    General --> Advanced[settings:advanced]
+    General --> Diagnostics[settings:diagnostics]
     Display --> DisplayRepo[DisplayPreferencesRepository]
     Theme --> ThemeRepo[ThemePreferencesRepository]
     DisplayRepo --> Store[Preferences DataStore]
@@ -64,10 +61,10 @@ flowchart TD
 
 ## Architectural decisions
 
-- Host provider contracts describe categories and callbacks; toolkit ViewModels remain the owners
-  of observable state and persistence.
-- Display and theme use dedicated state holders because they expose live preference state to more
-  than one presentation surface, including onboarding.
+- Host provider contracts describe categories and callbacks; each settings feature module owns its
+  own state holders, repositories, UI, and Koin bindings.
+- Display and theme remain separate modules because they expose live preference state to more than
+  one presentation surface, including onboarding.
 - Content keys select a known toolkit surface instead of allowing providers to reach into internal
   composables.
 - Cache work and consent application stay behind their repositories; settings UI coordinates them

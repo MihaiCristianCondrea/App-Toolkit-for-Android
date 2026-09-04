@@ -39,7 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.contracts.AboutEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.states.AboutUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.licenses.ui.LicensesActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.licenses.LicensesActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue

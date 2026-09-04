@@ -17,24 +17,16 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.di.modules
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.AboutRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories.DefaultAboutRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.domain.usecases.CopyDeviceInfoUseCase
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.AboutViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.advanced.data.repositories.CacheRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.advanced.data.repositories.DefaultCacheRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.advanced.ui.AdvancedSettingsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.diagnostics.data.repositories.DefaultUsageAndDiagnosticsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.diagnostics.data.repositories.UsageAndDiagnosticsRepository
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.diagnostics.ui.UsageAndDiagnosticsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.display.ui.DisplaySettingsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.di.aboutModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.data.repositories.DefaultPermissionsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.data.repositories.PermissionsRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.permissions.ui.PermissionsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.settings.ui.SettingsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.interfaces.SettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.advanced.di.advancedSettingsModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.di.settingsModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.di.diagnosticsSettingsModule
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.di.displaySettingsModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.ColorPalette
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.theme.ui.ThemeSettingsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.theme.di.themeSettingsModule
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.blue.bluePalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.green.greenPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.google.red.redPalette
@@ -44,7 +36,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.special.christmas.christmasPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.colors.special.skin.skinPalette
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.di.AppToolkitDiConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -59,71 +50,15 @@ import org.koin.dsl.module
  * constructor-only Koin verification cannot discover every requirement.
  */
 fun appToolkitSettingsModules(): List<Module> = listOf(
-    settingsRootModule(),
-    aboutModule(),
-    advancedSettingsModule(),
+    settingsModule,
+    aboutModule,
+    advancedSettingsModule,
     permissionsModule(),
-    usageAndDiagnosticsModule(),
-    displaySettingsModule(),
-    themeModule(),
+    diagnosticsSettingsModule,
+    displaySettingsModule,
+    themeSettingsModule,
+    themePaletteModule(),
 )
-
-private fun displaySettingsModule(): Module = module {
-    viewModel {
-        DisplaySettingsViewModel(
-            displayPreferences = get(),
-            themePreferences = get(),
-        )
-    }
-}
-
-private fun settingsRootModule(): Module = module {
-    viewModel {
-        SettingsViewModel(
-            settingsProvider = get<SettingsProvider>(),
-            dispatchers = get(),
-            firebaseController = get(),
-        )
-    }
-}
-
-private fun aboutModule(): Module = module {
-    single<AboutRepository> {
-        DefaultAboutRepository(
-            deviceProvider = get(),
-            buildInfoProvider = get(),
-            context = get(),
-            firebaseController = get(),
-        )
-    }
-    single<CopyDeviceInfoUseCase> {
-        CopyDeviceInfoUseCase(
-            repository = get(),
-            firebaseController = get(),
-        )
-    }
-
-    viewModel {
-        AboutViewModel(
-            aboutRepository = get(),
-            copyDeviceInfo = get(),
-            dispatchers = get(),
-            firebaseController = get(),
-        )
-    }
-}
-
-private fun advancedSettingsModule(): Module = module {
-    single<CacheRepository> { DefaultCacheRepository(context = get(), firebaseController = get()) }
-
-    viewModel {
-        AdvancedSettingsViewModel(
-            repository = get(),
-            dispatchers = get(),
-            firebaseController = get(),
-        )
-    }
-}
 
 private fun permissionsModule(): Module = module {
     single<PermissionsRepository> {
@@ -143,28 +78,7 @@ private fun permissionsModule(): Module = module {
     }
 }
 
-private fun usageAndDiagnosticsModule(): Module = module {
-    single<UsageAndDiagnosticsRepository> {
-        DefaultUsageAndDiagnosticsRepository(
-            dataSource = get<CommonDataStore>(),
-            configProvider = get(),
-            dispatchers = get(),
-            firebaseController = get(),
-        )
-    }
-
-    viewModel {
-        UsageAndDiagnosticsViewModel(
-            repository = get(),
-            firebaseController = get(),
-            dispatchers = get(),
-            consentRepository = get(),
-        )
-    }
-}
-
-private fun themeModule(): Module = module {
-    viewModel { ThemeSettingsViewModel(preferences = get()) }
+private fun themePaletteModule(): Module = module {
     single<ColorPalette>(named(AppToolkitDiConstants.MONOCHROME_THEME_PALETTE)) { monochromePalette }
     single<ColorPalette>(named(AppToolkitDiConstants.BLUE_THEME_PALETTE)) { bluePalette }
     single<ColorPalette>(named(AppToolkitDiConstants.GREEN_THEME_PALETTE)) { greenPalette }

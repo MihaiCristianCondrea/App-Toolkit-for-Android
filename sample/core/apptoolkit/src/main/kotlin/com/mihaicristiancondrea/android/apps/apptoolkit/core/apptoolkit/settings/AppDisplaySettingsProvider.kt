@@ -20,10 +20,10 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.setting
 import android.content.Context
 import androidx.compose.runtime.Composable
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.apptoolkit.R
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.display.ui.views.dialogs.SelectStartupScreenAlertDialog
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.general.ui.GeneralSettingsActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.constants.SettingsContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.utils.providers.DisplaySettingsProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.views.dialogs.SelectStartupScreenAlertDialog
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.constants.SettingsContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.display.ui.providers.DisplaySettingsProvider
 
 /**
  * Supplies the sample's theme route and startup-destination dialog to toolkit display settings.
