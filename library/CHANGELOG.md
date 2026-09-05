@@ -8,6 +8,7 @@
 
 ### Added
 
+- Added `NavigationDrawerSheet`, a reusable navigation drawer component that renders `ModalDrawerSheet` with navigation drawer items, selection state, click handling, and dividers.
 - Added core common's AppVersionMetadata and getVersionMetadata for package version lookup without
   a UI dependency, and core DataStore's startupValueFlow for caller-defined startup mapping.
 - Exposed toolkit destination builders from app.main.ui.navigation in the facade. The historical
@@ -15,6 +16,7 @@
 
 ### Changed
 
+- Updated `NavigationDrawerItem` so `selectedIcon` defaults to `icon`.
 - Standardized library APIs under module-owned `feature.*`, `core.*`, and `integration.*` package roots; consumers must update imports to the new packages.
 - Moved library dependency-injection bindings into the owning feature/integration modules and
   exposed the datastore module from `core.datastore.di`; the toolkit facade now only composes those
@@ -31,6 +33,10 @@
 ### Improved
 
 - Standardized changelog, alert-dialog, and date-picker actions with consistent button styling, haptic feedback, and press animations.
+
+### Fixed
+
+- Fixed icon-state handling in `NavigationDrawerItemContent` and `LeftNavigationRail` to display `selectedIcon` when selected and `icon` when unselected.
 
 ---
 

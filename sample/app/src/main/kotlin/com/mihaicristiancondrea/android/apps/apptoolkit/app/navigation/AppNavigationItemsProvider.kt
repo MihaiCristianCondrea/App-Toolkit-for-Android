@@ -23,7 +23,6 @@ import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Widgets
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
@@ -53,7 +52,7 @@ class AppNavigationItemsProvider(
             buildList {
                 if (BuildConfig.DEBUG || isShowcaseUnlocked) {
                     add(
-                        item(
+                        NavigationDrawerItem(
                             title = ComponentsR.string.components_title,
                             icon = Icons.Outlined.Widgets,
                             route = ComponentsRoute.ROUTE_ID,
@@ -61,31 +60,31 @@ class AppNavigationItemsProvider(
                     )
                 }
                 add(
-                    item(
-                        ToolkitR.string.settings,
-                        Icons.Outlined.Settings,
-                        NavigationDrawerRoutes.ROUTE_SETTINGS
+                    NavigationDrawerItem(
+                        title = ToolkitR.string.settings,
+                        icon = Icons.Outlined.Settings,
+                        route = NavigationDrawerRoutes.ROUTE_SETTINGS,
                     )
                 )
                 add(
-                    item(
-                        ToolkitR.string.help_and_feedback,
-                        Icons.AutoMirrored.Outlined.HelpOutline,
-                        NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK
+                    NavigationDrawerItem(
+                        title = ToolkitR.string.help_and_feedback,
+                        icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                        route = NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK,
                     )
                 )
                 add(
-                    item(
-                        ToolkitR.string.updates,
-                        Icons.AutoMirrored.Outlined.EventNote,
-                        NavigationDrawerRoutes.ROUTE_UPDATES
+                    NavigationDrawerItem(
+                        title = ToolkitR.string.updates,
+                        icon = Icons.AutoMirrored.Outlined.EventNote,
+                        route = NavigationDrawerRoutes.ROUTE_UPDATES,
                     )
                 )
                 add(
-                    item(
-                        ToolkitR.string.share,
-                        Icons.Outlined.Share,
-                        NavigationDrawerRoutes.ROUTE_SHARE
+                    NavigationDrawerItem(
+                        title = ToolkitR.string.share,
+                        icon = Icons.Outlined.Share,
+                        route = NavigationDrawerRoutes.ROUTE_SHARE,
                     )
                 )
             }
@@ -96,9 +95,3 @@ class AppNavigationItemsProvider(
             )
         }
 }
-
-private fun item(
-    title: Int,
-    icon: ImageVector,
-    route: String,
-) = NavigationDrawerItem(title = title, icon = icon, selectedIcon = icon, route = route)

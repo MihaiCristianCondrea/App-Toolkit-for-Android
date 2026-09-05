@@ -168,12 +168,13 @@ fun <T : StableNavKey> LeftNavigationRail(
             }
             Spacer(modifier = Modifier.weight(weight = 1f))
             drawerItems.forEach { item: NavigationDrawerItem ->
+                val isSelected = false
                 NavigationRailItem(
-                    selected = false,
+                    selected = isSelected,
                     onClick = { onDrawerItemClick(item) },
                     icon = {
                         Icon(
-                            imageVector = item.selectedIcon,
+                            imageVector = if (isSelected) item.selectedIcon else item.icon,
                             contentDescription = stringResource(id = item.title),
                             modifier = Modifier
                                 .size(size = SizeConstants.TwentyFourSize)

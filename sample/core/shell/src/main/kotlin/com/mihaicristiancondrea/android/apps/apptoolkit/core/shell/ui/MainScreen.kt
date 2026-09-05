@@ -33,7 +33,6 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -79,7 +78,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.remem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.hapticDrawerSwipe
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.handleNavigationItemClick
@@ -94,7 +92,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.Naviga
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.isTopLevel
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerItemContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerSheet
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
@@ -542,23 +540,18 @@ private fun MainShell(
             drawerState = drawerState,
             gesturesEnabled = true,
             drawerContent = {
-                ModalDrawerSheet(drawerState = drawerState) {
-                    LargeVerticalSpacer()
-                    uiState.navigationDrawerItems.forEach { item ->
-                        NavigationDrawerItemContent(
-                            item = item,
-                            selected = onIsSelected(item.route, currentRoute),
-                            dividerRoutes = persistentSetOf(),
-                            handleNavigationItemClick = {
-                                onNavigationDrawerItemClick(
-                                    item,
-                                    drawerState,
-                                    coroutineScope
-                                )
-                            },
+                NavigationDrawerSheet(
+                    items = uiState.navigationDrawerItems,
+                    drawerState = drawerState,
+                    isSelected = { item -> onIsSelected(item.route, currentRoute) },
+                    onItemClick = { item ->
+                        onNavigationDrawerItemClick(
+                            item,
+                            drawerState,
+                            coroutineScope
                         )
-                    }
-                }
+                    },
+                )
             },
             content = shellContent,
         )

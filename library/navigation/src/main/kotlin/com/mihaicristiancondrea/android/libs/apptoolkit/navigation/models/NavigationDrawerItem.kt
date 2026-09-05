@@ -24,7 +24,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * Represents an item in a navigation drawer.
  *
  * @property title The resource ID of the string to display as the title of the item.
- * @property selectedIcon The icon to display when the item is selected.
+ * @property icon The icon to display when the item is unselected.
+ * @property selectedIcon The icon to display when the item is selected, defaults to [icon].
  * @property route The unique identifier used for handling navigation actions.
  * @property badgeText An optional string to display as a badge on the item, defaults to an empty string.
  */
@@ -32,7 +33,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 data class NavigationDrawerItem(
     val title: Int,
     val icon: ImageVector,
-    val selectedIcon: ImageVector,
+    val selectedIcon: ImageVector = icon,
     val route: String,
     val badgeText: String = "",
 )

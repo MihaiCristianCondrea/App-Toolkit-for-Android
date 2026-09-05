@@ -74,7 +74,7 @@ flowchart TD
 - `NavigationDrawerRoutes` and `navigation.data.repositories.NavigationRepository`.
 - Back-stack action extensions and transition helpers.
 - `NavigationIcon`.
-- `BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerItemContent`, and
+- `BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerItemContent`, `NavigationDrawerSheet`, and
   `HideOnScrollBottomBar`.
 
 ## Internal implementations

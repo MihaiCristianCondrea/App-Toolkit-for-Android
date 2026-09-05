@@ -53,7 +53,7 @@ fun NavigationDrawerItemContent(
             handleNavigationItemClick()
         }, icon = {
             Icon(
-                imageVector = item.selectedIcon,
+                imageVector = if (selected) item.selectedIcon else item.icon,
                 contentDescription = title,
                 modifier = Modifier.size(size = SizeConstants.TwentyFourSize),
             )
