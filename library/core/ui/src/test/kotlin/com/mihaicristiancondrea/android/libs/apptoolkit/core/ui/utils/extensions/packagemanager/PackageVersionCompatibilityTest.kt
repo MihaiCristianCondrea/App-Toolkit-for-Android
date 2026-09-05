@@ -18,12 +18,30 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.packagemanager
 
 import android.content.pm.PackageManager
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.platform.AppVersionMetadata
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.getVersionMetadata
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
-/**
- * Returns version metadata for [packageName], or null when unavailable.
- * Retained for hosts using the UI model; platform consumers can use [getVersionMetadata] directly.
- */
-fun PackageManager.getVersionInfo(packageName: String): AppVersionInfo? =
-    getVersionMetadata(packageName)?.let { AppVersionInfo(it.versionName, it.versionCode) }
+class PackageVersionCompatibilityTest {
+    @Test
+    fun preservesNullableNameLongCodeAndAbsence() {
+        mockkStatic(PackageManager::getVersionMetadata)
+        try {
+            val manager = mockk<PackageManager>()
+            val code = Int.MAX_VALUE.toLong() + 10
+            every { manager.getVersionMetadata("example.app") } returns AppVersionMetadata(null, code)
+            assertEquals(AppVersionInfo(null, code), manager.getVersionInfo("example.app"))
+            every { manager.getVersionMetadata("example.app") } returns null
+            assertNull(manager.getVersionInfo("example.app"))
+        } finally {
+            unmockkStatic(PackageManager::getVersionMetadata)
+        }
+    }
+}

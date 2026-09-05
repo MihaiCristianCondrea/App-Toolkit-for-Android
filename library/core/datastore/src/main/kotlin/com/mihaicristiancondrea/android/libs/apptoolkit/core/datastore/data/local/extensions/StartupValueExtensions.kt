@@ -15,20 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.datastore
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.startupValueFlow
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 /**
- * Maps the stored startup page to a stable navigation key.
+ * Projects the stored startup route without depending on a navigation framework.
  *
- * The mapping function allows apps to convert persisted string routes into their
- * own navigation key implementations while keeping the lookup reusable.
+ * Blank routes use [defaultRoute]; callers decide how to handle unknown or legacy routes.
+ * Consecutive equal mapped values are emitted only once.
  */
-fun <T : StableNavKey> CommonDataStore.startupDestinationFlow(
+fun <T> CommonDataStore.startupValueFlow(
     defaultRoute: String,
-    mapToKey: (String) -> T,
-): Flow<T> = startupValueFlow(defaultRoute = defaultRoute, mapToValue = mapToKey)
+    mapToValue: (String) -> T,
+): Flow<T> = getStartupPage(default = defaultRoute)
+    .map { route -> mapToValue(route.ifBlank { defaultRoute }) }
+    .distinctUntilChanged()

@@ -23,7 +23,7 @@ import android.os.Build
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.DeviceInfo
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.providers.DeviceInfoProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.packagemanager.getVersionInfo
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.getVersionMetadata
 import kotlinx.coroutines.withContext
 
 /**
@@ -39,7 +39,7 @@ class DeviceInfoLocalDataSource(
 
     @SuppressLint("NewApi")
     override suspend fun capture(): DeviceInfo = withContext(dispatchers.io) {
-        val versionInfo = app.packageManager.getVersionInfo(app.packageName)
+        val versionInfo = app.packageManager.getVersionMetadata(app.packageName)
 
         DeviceInfo(
             appVersionName = versionInfo?.versionName,

@@ -6,6 +6,13 @@
 
 ## Library Changes
 
+### Added
+
+- Added core common's AppVersionMetadata and getVersionMetadata for package version lookup without
+  a UI dependency, and core DataStore's startupValueFlow for caller-defined startup mapping.
+- Exposed toolkit destination builders from app.main.ui.navigation in the facade. The historical
+  About-package entry point, UI helpers, and AppVersionInfo remain compatible.
+
 ### Changed
 
 - Standardized library APIs under module-owned `feature.*`, `core.*`, and `integration.*` package roots; consumers must update imports to the new packages.

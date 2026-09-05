@@ -67,6 +67,13 @@ flowchart TD
 - Global UI preferences arrive through the design-system root. Reusable components must not start
   their own persistence collectors unless a documented adapter still requires it.
 
+## Compatibility adapters
+
+The existing startupDestinationFlow extension delegates to core DataStore's generic startupValueFlow.
+The existing getVersionInfo extension delegates to core common's getVersionMetadata and returns the
+unchanged AppVersionInfo class. Their original packages, function signatures, and JVM file names
+remain available; data-layer callers should use the lower-level APIs.
+
 ## Public contracts
 
 - All new ViewModels must extend `ScreenViewModel`, or `LoggedScreenViewModel` when Firebase

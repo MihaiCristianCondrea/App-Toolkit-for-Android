@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.platform.AppVersionMetadata
 
 /**
  * Returns `true` when [packageName] is installed AND visible to the caller.
@@ -69,3 +70,20 @@ internal fun PackageManager.getPackageInfoCompat(packageName: String) =
         @Suppress("DEPRECATION")
         getPackageInfo(packageName, 0)
     }
+
+/**
+ * Returns package version metadata, or null when the package is unavailable, hidden, or unreadable.
+ * Package visibility rules are the same as for [hasPackageVisible].
+ */
+fun PackageManager.getVersionMetadata(packageName: String): AppVersionMetadata? = runCatching {
+    val info = getPackageInfoCompat(packageName)
+    AppVersionMetadata(
+        versionName = info.versionName,
+        versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            info.longVersionCode
+        } else {
+            @Suppress("DEPRECATION")
+            info.versionCode.toLong()
+        },
+    )
+}.getOrNull()

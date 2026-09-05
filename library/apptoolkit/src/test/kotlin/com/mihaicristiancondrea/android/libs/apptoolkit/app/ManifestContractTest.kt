@@ -158,6 +158,7 @@ class ManifestContractTest {
 
     private fun libraryManifests(): List<File> = File(repositoryRoot, LIBRARY_ROOT)
         .walkTopDown()
+        .onEnter { it.name != "build" && it.name != ".gradle" }
         .filter { it.isFile && it.name == MANIFEST_FILE }
         .filter { MAIN_SOURCE_SET in it.invariantPath() }
         .filterNot { BUILD_DIRECTORY in it.invariantPath() }
@@ -171,6 +172,7 @@ class ManifestContractTest {
         listOf(LIBRARY_ROOT, SAMPLE_ROOT).flatMap { sourceRoot ->
             File(repositoryRoot, sourceRoot)
                 .walkTopDown()
+                .onEnter { it.name != "build" && it.name != ".gradle" }
                 .filter { file ->
                     file.isFile &&
                         file.extension == "xml" &&

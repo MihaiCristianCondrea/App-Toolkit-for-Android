@@ -75,5 +75,4 @@ a Glance widget is instantiated by the framework. That hides the dependency from
 the
 widget compiles even if the binding is removed and fails at runtime instead.
 
-The receiver is still declared in the application manifest rather than this module's, so adding the
-widget to a host means editing `:sample:app` too.
+The receiver and widget provider XML are owned by this module and contributed through manifest merging. Hosts must still supply the repository binding used by the framework-created widget.

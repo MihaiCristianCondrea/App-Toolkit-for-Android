@@ -70,6 +70,13 @@ flowchart TD
 - Reduce ads defaults to `false` and suppresses only App Open ads; it does not alter SDK
   initialization or banner/native ad enablement.
 
+## Startup value projection
+
+CommonDataStore.startupValueFlow maps the stored startup string to a caller-selected type without
+depending on navigation or UI. Blank strings use the caller's default; unknown/legacy identifiers
+remain the caller's responsibility. Consecutive equal mapped values are suppressed. This does not
+change stored keys, defaults, or the shared preferences file.
+
 ## Public contracts
 
 - The preference data-source interfaces, their `Default*` implementations, `CommonDataStore`, and

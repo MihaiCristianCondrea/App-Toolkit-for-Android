@@ -83,11 +83,10 @@ flowchart TD
 
 ## Internal implementations
 
-- Default content providers, cache operations, DataStore-backed repositories, settings lists, and
-  consent-section UI.
+- Default content providers, the General Settings repository, category routing, and settings lists. Cache operations and consent UI belong to advanced and diagnostics respectively.
 
 ## Current risks
 
-This module directly depends on three other feature modules and is itself a dependency of onboarding
+This composition module directly depends on seven other feature modules and is itself a dependency of onboarding
 and permissions. The resulting feature-level coupling makes route/provider changes likely to ripple
 across the graph.

@@ -19,8 +19,7 @@ stores.
 ## Depends on
 
 - [`:library:core:datastore`](../../../library/core/datastore/README.md) for `CommonDataStore`.
-- [`:library:navigation`](../../../library/navigation/README.md) for `StableNavKey`, and
-  [`:library:core:ui`](../../../library/core/ui/README.md) for the startup-destination extension.
+- :library:navigation for StableNavKey. Startup projection uses core DataStore directly; this module has no direct core:ui dependency.
 
 ## Used by
 
@@ -51,6 +50,8 @@ flowchart TD
   a caller-supplied function, keeping host route knowledge out of the toolkit DataStore.
 - The contract groups sample-wide preference access because there is one implementation and one
   backing store; feature repositories still own the meaning of each value.
+
+Startup mapping delegates to core DataStore's generic startupValueFlow while retaining the host's StableNavKey contract and caller-supplied fallback mapping.
 
 ## Public contracts
 

@@ -15,20 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.datastore
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.startupValueFlow
+import androidx.compose.foundation.layout.PaddingValues
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
-import kotlinx.coroutines.flow.Flow
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.appToolkitNavigationEntryBuilders as facadeEntryBuilders
 
 /**
- * Maps the stored startup page to a stable navigation key.
- *
- * The mapping function allows apps to convert persisted string routes into their
- * own navigation key implementations while keeping the lookup reusable.
+ * Compatibility entry point for hosts using the historical About package.
+ * Destination composition is owned by the AppToolkit facade.
  */
-fun <T : StableNavKey> CommonDataStore.startupDestinationFlow(
-    defaultRoute: String,
-    mapToKey: (String) -> T,
-): Flow<T> = startupValueFlow(defaultRoute = defaultRoute, mapToValue = mapToKey)
+fun appToolkitNavigationEntryBuilders(
+    paddingValues: PaddingValues = PaddingValues(),
+): List<NavigationEntryBuilder<StableNavKey>> = facadeEntryBuilders(paddingValues)

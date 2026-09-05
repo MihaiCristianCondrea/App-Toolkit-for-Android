@@ -21,7 +21,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.m
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.appsListEntryBuilder
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.toolkitTilesEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.appToolkitNavigationEntryBuilders
+import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.appToolkitNavigationEntryBuilders
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 
 /**

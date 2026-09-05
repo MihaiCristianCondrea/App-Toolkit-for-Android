@@ -15,15 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.packagemanager
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.platform
 
-import android.content.pm.PackageManager
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.getVersionMetadata
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
-
-/**
- * Returns version metadata for [packageName], or null when unavailable.
- * Retained for hosts using the UI model; platform consumers can use [getVersionMetadata] directly.
- */
-fun PackageManager.getVersionInfo(packageName: String): AppVersionInfo? =
-    getVersionMetadata(packageName)?.let { AppVersionInfo(it.versionName, it.versionCode) }
+/** Platform version metadata shared by device inspection and presentation adapters. */
+data class AppVersionMetadata(
+    val versionName: String?,
+    val versionCode: Long,
+)

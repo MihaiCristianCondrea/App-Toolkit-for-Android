@@ -40,8 +40,7 @@ flowchart TD
 
 ## Architectural decisions
 
-- **Decentralized Configuration**: Ad Unit IDs are maintained in the sample's `core:common` and
-  mapped to library contracts in this integration module.
+- **Advertising ownership**: Ad unit IDs and placement qualifiers are maintained in this integration module and mapped to library contracts here.
 - **Qualifier-based Injection**: Uses Koin's `named` qualifiers to provide different ad
   configurations for different UI contexts.
 
