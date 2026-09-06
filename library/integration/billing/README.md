@@ -87,11 +87,11 @@ Each request attempt accepts its first callback atomically and ignores duplicate
 after cancellation. It preserves the first response and existing retry policy. Regression tests
 cover duplicate timeout responses, concurrent responses, cancellation, and isolation between retries.
 Consumers need a newly published Toolkit version containing this fix; an app version increase alone
-does not establish that it has shipped. See [the incident report](../../../docs/notes/billing-duplicate-callback.md).
+does not establish that it has shipped. See [the incident report](../../../docs/crashes/fixed/billing-duplicate-callback/README.md).
 
 Billing client and callback behavior is compatibility-sensitive to Play Billing Library upgrades.
 
 The reported `ProxyBillingActivity.onCreate` null-`PendingIntent` crash remains unresolved.
 Expanded `configChanges` overrides currently present in the working tree are an unverified
-proposal, not a demonstrated fix. See [SDK activity crash investigation](../../../docs/notes/sdk-activity-crashes.md)
+proposal, not a demonstrated fix. See [SDK activity crash investigation](../../../docs/crashes/open/billing-proxy-activity-null-intent/README.md)
 for the bytecode evidence, limits of existing safeguards, and consumer validation requirements.

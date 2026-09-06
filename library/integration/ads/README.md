@@ -290,5 +290,5 @@ not sufficient.
 
 The separately reported `HsdpShimActivity` failure (`targetPackageName is null`) is unresolved
 and is not covered by those initialization fixes. See the
-[SDK activity crash investigation](../../../docs/notes/sdk-activity-crashes.md) before applying
+[SDK activity crash investigation](../../../docs/crashes/open/billing-proxy-activity-null-intent/README.md) before applying
 workarounds or describing it as fixed in consuming apps.

@@ -1,0 +1,68 @@
+# Crashlytics -
+# Application: com.d4rk.netprobe
+# Platform: android
+# Version: 26.09.05 (137260905)
+# Issue: ab47e167269f091f3ffe0938df7bf5e9
+# Session: 6A9C041D0120000137162B1DA31C9D9C_DNE_0_v2
+# Date: Sat Sep 05 2026 14:59:25 GMT+0300 (Eastern European Summer Time)
+
+Fatal Exception: java.lang.RuntimeException: Unable to start activity ComponentInfo{com.d4rk.netprobe/com.android.billingclient.api.ProxyBillingActivity}: java.lang.NullPointerException: Attempt to invoke virtual method 'android.content.IntentSender android.app.PendingIntent.getIntentSender()' on a null object reference
+       at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3433)
+       at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:3607)
+       at android.app.servertransaction.LaunchActivityItem.execute(LaunchActivityItem.java:85)
+       at android.app.servertransaction.TransactionExecutor.executeCallbacks(TransactionExecutor.java:135)
+       at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:95)
+       at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2068)
+       at android.os.Handler.dispatchMessage(Handler.java:106)
+       at android.os.Looper.loop(Looper.java:223)
+       at android.app.ActivityThread.main(ActivityThread.java:7680)
+       at java.lang.reflect.Method.invokeNative(Method.java)
+       at java.lang.reflect.Method.invoke(Method.java:423)
+       at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:592)
+       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:947)
+
+Caused by java.lang.NullPointerException: Attempt to invoke virtual method 'android.content.IntentSender android.app.PendingIntent.getIntentSender()' on a null object reference
+       at com.android.billingclient.api.ProxyBillingActivity.onCreate(r8-map-id-424a4c24e171c35777b178dc620ac225c8ea3d7f8274f0016319e7631f111a3d:416)
+       at android.app.Activity.performCreate(Activity.java:7994)
+       at android.app.Activity.performCreate(Activity.java:7978)
+       at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1548)
+       at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3406)
+       at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:3607)
+       at android.app.servertransaction.LaunchActivityItem.execute(LaunchActivityItem.java:85)
+       at android.app.servertransaction.TransactionExecutor.executeCallbacks(TransactionExecutor.java:135)
+       at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:95)
+       at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2068)
+       at android.os.Handler.dispatchMessage(Handler.java:106)
+       at android.os.Looper.loop(Looper.java:223)
+       at android.app.ActivityThread.main(ActivityThread.java:7680)
+       at java.lang.reflect.Method.invokeNative(Method.java)
+       at java.lang.reflect.Method.invoke(Method.java:423)
+       at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:592)
+       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:947)
+
+FinalizerDaemon:
+       at java.lang.Object.wait(Object.java)
+       at java.lang.Object.wait(Object.java:442)
+       at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:190)
+       at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:211)
+       at java.lang.Daemons$FinalizerDaemon.runInternal(Daemons.java:273)
+       at java.lang.Daemons$Daemon.run(Daemons.java:139)
+       at java.lang.Thread.run(Thread.java:923)
+
+Firebase-Messaging-Init:
+       at sun.misc.Unsafe.park(Unsafe.java)
+       at java.util.concurrent.locks.LockSupport.park(LockSupport.java:190)
+       at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2067)
+       at java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1120)
+       at java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:849)
+       at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1092)
+       at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1152)
+       at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+       at gc3.run(r8-map-id-424a4c24e171c35777b178dc620ac225c8ea3d7f8274f0016319e7631f111a3d:25)
+       at java.lang.Thread.run(Thread.java:923)
+
+GoogleApiHandler:
+       at android.os.MessageQueue.nativePollOnce(MessageQueue.java)
+       at android.os.MessageQueue.next(MessageQueue.java:335)
+       at android.os.Looper.loop(Looper.java:183)
+       at android.os.HandlerThread.run(HandlerThread.java:67)
