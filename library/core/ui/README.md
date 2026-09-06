@@ -91,7 +91,7 @@ remain available; data-layer callers should use the lower-level APIs.
   analytics APIs are intentional cross-module contracts.
 - Every button takes its icon as a single `ToolkitIcon`, so a button can carry a Compose icon, a
   drawable resource, or an animated vector that plays on each click. See
-  [the icon guide](../../../docs/notes/icons.md).
+  [the design system README](../designsystem/README.md#toolkit-icon-api).
 
 ## Internal implementations
 

@@ -71,7 +71,7 @@ flowchart TD
 ## Public contracts
 
 - Navigation destination/item models, including `NavigationDrawerItem` and `BottomBarItem`, whose
-  `icon` and `selectedIcon` are `ToolkitIcon` values. See [the icon guide](../../docs/notes/icons.md).
+  `icon` and `selectedIcon` are `ToolkitIcon` values. See [the design system README](../core/designsystem/README.md#toolkit-icon-api).
 - `StableNavKey` and `AppToolkitNavKey` route implementations.
 - `NavigationDrawerRoutes` and `navigation.data.repositories.NavigationRepository`.
 - Back-stack action extensions and transition helpers.

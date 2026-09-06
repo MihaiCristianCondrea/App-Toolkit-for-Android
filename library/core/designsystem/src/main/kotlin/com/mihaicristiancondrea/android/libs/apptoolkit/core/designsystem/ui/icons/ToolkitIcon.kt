@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * - [Lottie], bundled Lottie JSON that plays once per interaction.
  *
  * Components that own a selected state take two of these, one per state, and both slots accept any
- * of the four sources. See `docs/notes/icons.md` for the accepted combinations and the
+ * of the four sources. See `:library:core:designsystem` README.md for the accepted combinations and the
  * behavior of each one.
  */
 @Immutable

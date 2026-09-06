@@ -16,7 +16,7 @@
   `ImageVector`, a drawable or vector resource, or an animated vector drawable that plays when the
   component is clicked. `ToolkitIconReplayMode` chooses whether a repeated click restarts the
   animation, the default, or plays it backwards. The accepted combinations are documented in
-  `docs/notes/icons.md`.
+  `:library:core:designsystem` README.md.
 - Added animated Settings and Share drawer icons, used by the standard drawer entries.
 - Added `NavigationDrawerSheet`, a reusable navigation drawer component that renders `ModalDrawerSheet` with navigation drawer items, selection state, click handling, and dividers.
 - Added core common's AppVersionMetadata and getVersionMetadata for package version lookup without
