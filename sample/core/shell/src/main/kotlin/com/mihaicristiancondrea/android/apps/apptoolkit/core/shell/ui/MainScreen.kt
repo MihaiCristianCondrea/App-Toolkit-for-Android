@@ -359,7 +359,7 @@ private fun MainShell(
     val bottomNavTransitions = rememberBottomNavTransitions()
     val currentRoute = navigator.state.currentBackStack.last()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val modalDrawerEnabled = windowWidthSizeClass == AppWindowWidthSizeClass.Compact
     val randomAppHandler = randomAppHandlerState.value
 
@@ -577,11 +577,11 @@ private fun MainShell(
                     drawerState = drawerState,
                     isSelected = { item -> onIsSelected(item.route, currentRoute) },
                     onItemClick = { item ->
-                       /* onNavigationDrawerItemClick(
+                        onNavigationDrawerItemClick(
                             item,
                             drawerState,
-                            coroutineScope
-                        )*/
+                            coroutineScope,
+                        )
                     },
                 )
             },
