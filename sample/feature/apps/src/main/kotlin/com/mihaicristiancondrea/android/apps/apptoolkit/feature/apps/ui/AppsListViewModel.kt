@@ -31,6 +31,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.A
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.toErrorMessage
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onSuccess
@@ -122,6 +123,10 @@ class AppsListViewModel(
 
             HomeEvent.OpenRandomApp -> {
                 val randomApp = screenData?.apps?.randomOrNull() ?: return
+                firebaseController.logSelectContent(
+                    contentType = "random_app",
+                    itemId = randomApp.packageName,
+                )
                 startOperation(
                     action = Actions.OPEN_RANDOM_APP,
                     extra = mapOf(ExtraKeys.PACKAGE_NAME to randomApp.packageName),
@@ -209,6 +214,10 @@ class AppsListViewModel(
     }
 
     private fun selectFilter(filter: AppsListFilter) {
+        firebaseController.logSelectContent(
+            contentType = "app_filter",
+            itemId = filter.name.lowercase(),
+        )
         screenState.update { current ->
             current.copy(data = (current.data ?: AppListUiState()).copy(selectedFilter = filter))
         }

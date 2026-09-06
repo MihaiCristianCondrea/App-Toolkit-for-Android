@@ -93,6 +93,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.Stable
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.isTopLevel
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerSheet
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationIconContent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
@@ -357,7 +358,7 @@ private fun MainShell(
     val bottomNavTransitions = rememberBottomNavTransitions()
     val currentRoute = navigator.state.currentBackStack.last()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
     val modalDrawerEnabled = windowWidthSizeClass == AppWindowWidthSizeClass.Compact
     val randomAppHandler = randomAppHandlerState.value
 
@@ -416,9 +417,10 @@ private fun MainShell(
                             selected = isSelected,
                             onClick = { navigator.navigate(item.route) },
                             icon = {
-                                Icon(
-                                    imageVector = if (isSelected) item.selectedIcon else item.icon,
+                                NavigationIconContent(
+                                    icon = if (isSelected) item.selectedIcon else item.icon,
                                     contentDescription = stringResource(item.title),
+                                    selected = isSelected,
                                 )
                             },
                             label = { Text(stringResource(item.title)) },
@@ -430,9 +432,10 @@ private fun MainShell(
                             selected = isSelected,
                             onClick = { onNavigationDrawerItemClick(item, null, null) },
                             icon = {
-                                Icon(
-                                    imageVector = if (isSelected) item.selectedIcon else item.icon,
+                                NavigationIconContent(
+                                    icon = if (isSelected) item.selectedIcon else item.icon,
                                     contentDescription = stringResource(item.title),
+                                    selected = isSelected,
                                 )
                             },
                             label = { Text(stringResource(item.title)) },
@@ -444,9 +447,10 @@ private fun MainShell(
                             selected = isSelected,
                             onClick = { onNavigationDrawerItemClick(item, null, null) },
                             icon = {
-                                Icon(
-                                    imageVector = if (isSelected) item.selectedIcon else item.icon,
+                                NavigationIconContent(
+                                    icon = if (isSelected) item.selectedIcon else item.icon,
                                     contentDescription = stringResource(item.title),
+                                    selected = isSelected,
                                 )
                             },
                             label = { Text(stringResource(item.title)) },
@@ -491,9 +495,10 @@ private fun MainShell(
                                     selected = isSelected,
                                     onClick = { navigator.navigate(item.route) },
                                     icon = {
-                                        Icon(
-                                            imageVector = if (isSelected) item.selectedIcon else item.icon,
+                                        NavigationIconContent(
+                                            icon = if (isSelected) item.selectedIcon else item.icon,
                                             contentDescription = stringResource(item.title),
+                                            selected = isSelected,
                                         )
                                     },
                                     label = { Text(stringResource(item.title)) },
@@ -545,11 +550,11 @@ private fun MainShell(
                     drawerState = drawerState,
                     isSelected = { item -> onIsSelected(item.route, currentRoute) },
                     onItemClick = { item ->
-                        onNavigationDrawerItemClick(
+                       /* onNavigationDrawerItemClick(
                             item,
                             drawerState,
                             coroutineScope
-                        )
+                        )*/
                     },
                 )
             },

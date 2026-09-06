@@ -20,16 +20,16 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repo
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.EventNote
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Share
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavR
 
 /**
  * Supplies the standard Settings, Help, Updates, and Share drawer entries.
@@ -46,7 +46,8 @@ class DefaultNavigationRepository(
                 listOf(
                     NavigationDrawerItem(
                         title = R.string.settings,
-                        icon = Icons.Outlined.Settings,
+                        icon = NavigationIcon.Resource(NavR.drawable.ic_settings),
+                        selectedIcon = NavigationIcon.AnimatedVector(NavR.drawable.anim_settings),
                         route = NavigationDrawerRoutes.ROUTE_SETTINGS,
                     ),
                     NavigationDrawerItem(
@@ -61,7 +62,8 @@ class DefaultNavigationRepository(
                     ),
                     NavigationDrawerItem(
                         title = R.string.share,
-                        icon = Icons.Outlined.Share,
+                        icon = NavigationIcon.Resource(NavR.drawable.ic_share),
+                        selectedIcon = NavigationIcon.AnimatedVector(NavR.drawable.anim_share),
                         route = NavigationDrawerRoutes.ROUTE_SHARE,
                     )
                 )

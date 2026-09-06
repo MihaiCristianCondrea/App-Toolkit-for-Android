@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -32,8 +33,42 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @Immutable
 data class NavigationDrawerItem(
     val title: Int,
-    val icon: ImageVector,
-    val selectedIcon: ImageVector = icon,
+    val icon: NavigationIcon,
+    val selectedIcon: NavigationIcon = icon,
     val route: String,
     val badgeText: String = "",
-)
+) {
+    /**
+     * Secondary constructor for Compose [ImageVector] icons.
+     */
+    constructor(
+        title: Int,
+        icon: ImageVector,
+        selectedIcon: ImageVector = icon,
+        route: String,
+        badgeText: String = "",
+    ) : this(
+        title = title,
+        icon = NavigationIcon.Vector(icon),
+        selectedIcon = NavigationIcon.Vector(selectedIcon),
+        route = route,
+        badgeText = badgeText,
+    )
+
+    /**
+     * Secondary constructor for drawable or vector resource ID icons.
+     */
+    constructor(
+        title: Int,
+        @DrawableRes iconResId: Int,
+        @DrawableRes selectedIconResId: Int = iconResId,
+        route: String,
+        badgeText: String = "",
+    ) : this(
+        title = title,
+        icon = NavigationIcon.Resource(iconResId),
+        selectedIcon = NavigationIcon.Resource(selectedIconResId),
+        route = route,
+        badgeText = badgeText,
+    )
+}

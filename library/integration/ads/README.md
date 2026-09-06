@@ -287,3 +287,8 @@ consumer app. The durable safeguards are documented at the modules that own them
 
 Changes to ads enablement must preserve all four boundaries; fixing only the settings repository is
 not sufficient.
+
+The separately reported `HsdpShimActivity` failure (`targetPackageName is null`) is unresolved
+and is not covered by those initialization fixes. See the
+[SDK activity crash investigation](../../../docs/notes/sdk-activity-crashes.md) before applying
+workarounds or describing it as fixed in consuming apps.

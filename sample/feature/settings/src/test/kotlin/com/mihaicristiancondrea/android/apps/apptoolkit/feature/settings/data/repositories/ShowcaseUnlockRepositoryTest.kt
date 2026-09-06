@@ -50,6 +50,7 @@ class ShowcaseUnlockRepositoryTest {
         repository.unlockAfterVersionTaps(tapCount = 8)
 
         coVerify(exactly = 1) { dataStore.saveComponentsShowcaseUnlocked(isUnlocked = true) }
+        coVerify(exactly = 1) { firebaseController.logEvent(match { it.name == "unlock_achievement" }) }
     }
 
     @Test

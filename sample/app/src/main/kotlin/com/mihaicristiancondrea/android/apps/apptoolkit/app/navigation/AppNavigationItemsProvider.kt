@@ -20,8 +20,6 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.EventNote
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Widgets
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
@@ -29,12 +27,14 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as ToolkitR
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavR
 
 /**
  * Builds the drawer for this app: the toolkit's own entries plus the destinations this app adds.
@@ -62,7 +62,8 @@ class AppNavigationItemsProvider(
                 add(
                     NavigationDrawerItem(
                         title = ToolkitR.string.settings,
-                        icon = Icons.Outlined.Settings,
+                        icon = NavigationIcon.Resource(NavR.drawable.ic_settings),
+                        selectedIcon = NavigationIcon.AnimatedVector(NavR.drawable.anim_settings),
                         route = NavigationDrawerRoutes.ROUTE_SETTINGS,
                     )
                 )
@@ -83,7 +84,8 @@ class AppNavigationItemsProvider(
                 add(
                     NavigationDrawerItem(
                         title = ToolkitR.string.share,
-                        icon = Icons.Outlined.Share,
+                        icon = NavigationIcon.Resource(NavR.drawable.ic_share),
+                        selectedIcon = NavigationIcon.AnimatedVector(NavR.drawable.anim_share),
                         route = NavigationDrawerRoutes.ROUTE_SHARE,
                     )
                 )

@@ -28,6 +28,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -120,12 +121,20 @@ class ToolkitTilesViewModel(
     }
 
     private fun selectFilter(filter: ToolkitTilesFilter) {
+        firebaseController.logSelectContent(
+            contentType = "tile_filter",
+            itemId = filter.name.lowercase(),
+        )
         screenState.update { current ->
             current.copy(data = current.data?.copy(selectedFilter = filter))
         }
     }
 
     private fun toggleCategory(categoryId: String) {
+        firebaseController.logSelectContent(
+            contentType = "tile_category",
+            itemId = categoryId,
+        )
         var updatedIds: Set<String>? = null
         screenState.update { current ->
             val data = current.data ?: return@update current
@@ -148,6 +157,10 @@ class ToolkitTilesViewModel(
     }
 
     private fun handleAddTile(requestKey: String?) {
+        firebaseController.logSelectContent(
+            contentType = "tile_request",
+            itemId = requestKey ?: "unknown",
+        )
         startOperation(action = Actions.ADD_TILE)
         if (requestKey == null) {
             showSetupMessage()
@@ -157,6 +170,10 @@ class ToolkitTilesViewModel(
     }
 
     private fun handleTileSetup(tileId: String) {
+        firebaseController.logSelectContent(
+            contentType = "tile_setup",
+            itemId = tileId,
+        )
         startOperation(
             action = Actions.OPEN_TILE_SETUP,
             extra = mapOf(ExtraKeys.TILE_ID to tileId),

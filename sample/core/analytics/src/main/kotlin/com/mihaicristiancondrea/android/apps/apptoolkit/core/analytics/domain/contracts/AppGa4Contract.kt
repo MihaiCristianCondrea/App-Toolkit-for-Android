@@ -22,6 +22,13 @@ object AppGa4Contract {
     object EventName {
         const val APP_CARD_INTERACTION = "app_card_interaction"
         const val COMPONENTS_CLICK = "components_click"
+        const val SELECT_CONTENT = "select_content"
+        const val SEARCH = "search"
+        const val SHARE = "share"
+        const val VIEW_ITEM = "view_item"
+        const val TUTORIAL_BEGIN = "tutorial_begin"
+        const val TUTORIAL_COMPLETE = "tutorial_complete"
+        const val UNLOCK_ACHIEVEMENT = "unlock_achievement"
     }
 
     object Param {
@@ -35,6 +42,13 @@ object AppGa4Contract {
         const val APP_CATEGORY_ID = "app_category_id"
         const val APP_CATEGORY_LABEL = "app_category_label"
         const val INTERACTION_CONTEXT = "interaction_context"
+        const val CONTENT_TYPE = "content_type"
+        const val ITEM_ID = "item_id"
+        const val ITEM_NAME = "item_name"
+        const val ITEM_CATEGORY = "item_category"
+        const val SEARCH_TERM = "search_term"
+        const val METHOD = "method"
+        const val ACHIEVEMENT_ID = "achievement_id"
     }
 
     val forbiddenParamKeys: Set<String> = setOf(
@@ -63,6 +77,27 @@ object AppGa4Contract {
             Param.SCREEN,
             Param.COMPONENT,
         ),
+        EventName.SELECT_CONTENT to setOf(
+            Param.CONTENT_TYPE,
+            Param.ITEM_ID,
+        ),
+        EventName.SEARCH to setOf(
+            Param.SEARCH_TERM,
+        ),
+        EventName.SHARE to setOf(
+            Param.METHOD,
+            Param.CONTENT_TYPE,
+            Param.ITEM_ID,
+        ),
+        EventName.VIEW_ITEM to setOf(
+            Param.ITEM_ID,
+            Param.ITEM_NAME,
+        ),
+        EventName.TUTORIAL_BEGIN to emptySet(),
+        EventName.TUTORIAL_COMPLETE to emptySet(),
+        EventName.UNLOCK_ACHIEVEMENT to setOf(
+            Param.ACHIEVEMENT_ID,
+        ),
     )
 
     fun allEventNames(): Set<String> = requiredParamsByEvent.keys
@@ -75,7 +110,7 @@ object AppGa4ContractValidator {
 
     fun isValidEventName(name: String): Boolean = eventNameRegex.matches(name)
 
-    fun missingRequiredParams(eventName: String, params: Set<String>): Set<String> = // FIXME: Function "missingRequiredParams" is never used
+    fun missingRequiredParams(eventName: String, params: Set<String>): Set<String> =
         AppGa4Contract.requiredParams(eventName) - params
 
     fun forbiddenParams(params: Set<String>): Set<String> =

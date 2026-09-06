@@ -15,7 +15,28 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="com.android.vending.BILLING" />
+
+    <application>
+        <!--
+            Expand ProxyBillingActivity configChanges to prevent destruction and recreation
+            on font scale, uiMode (dark theme), smallest screen size, density, and locale changes.
+            This mitigates NullPointerException crashes in ProxyBillingActivity.onCreate caused by
+            loss of PendingIntent extras during Activity recreation.
+        -->
+        <activity
+            android:name="com.android.billingclient.api.ProxyBillingActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|smallestScreenSize|orientation|uiMode|fontScale|layoutDirection|locale|density"
+            android:exported="false"
+            tools:replace="android:configChanges" />
+
+        <activity
+            android:name="com.android.billingclient.api.ProxyBillingActivityV2"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|smallestScreenSize|orientation|uiMode|fontScale|layoutDirection|locale|density"
+            android:exported="false"
+            tools:replace="android:configChanges" />
+    </application>
 </manifest>

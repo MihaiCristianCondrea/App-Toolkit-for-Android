@@ -23,17 +23,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Badge
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -46,24 +49,35 @@ fun NavigationDrawerItemContent(
 ) {
     val title: String = stringResource(id = item.title)
     val view: View = LocalView.current
+    var atEnd by remember(item.route) { mutableStateOf(false) }
+
+    val activeIcon = if (selected || atEnd) item.selectedIcon else item.icon
 
     NavigationDrawerItem(
-        label = { Text(text = title) }, selected = selected, onClick = {
+        label = { Text(text = title) },
+        selected = selected,
+        onClick = {
+            atEnd = true
             view.playSoundEffect(SoundEffectConstants.CLICK)
             handleNavigationItemClick()
-        }, icon = {
-            Icon(
-                imageVector = if (selected) item.selectedIcon else item.icon,
+        },
+        icon = {
+            NavigationIconContent(
+                icon = activeIcon,
                 contentDescription = title,
+                selected = selected,
+                atEnd = atEnd,
                 modifier = Modifier.size(size = SizeConstants.TwentyFourSize),
             )
-        }, badge = {
+        },
+        badge = {
             if (item.badgeText.isNotBlank()) {
                 Badge {
                     Text(text = item.badgeText)
                 }
             }
-        }, modifier = Modifier
+        },
+        modifier = Modifier
             .padding(paddingValues = NavigationDrawerItemDefaults.ItemPadding)
             .bounceClick()
     )

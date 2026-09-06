@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -32,9 +33,42 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @Immutable
 data class BottomBarItem<T : StableNavKey>(
     val route: T,
-    val icon: ImageVector,
-    val selectedIcon: ImageVector,
+    val icon: NavigationIcon,
+    val selectedIcon: NavigationIcon = icon,
     val title: Int,
     val badgeText: String = "",
-)
+) {
+    /**
+     * Secondary constructor for Compose [ImageVector] icons.
+     */
+    constructor(
+        route: T,
+        icon: ImageVector,
+        selectedIcon: ImageVector,
+        title: Int,
+        badgeText: String = "",
+    ) : this(
+        route = route,
+        icon = NavigationIcon.Vector(icon),
+        selectedIcon = NavigationIcon.Vector(selectedIcon),
+        title = title,
+        badgeText = badgeText,
+    )
 
+    /**
+     * Secondary constructor for drawable or vector resource ID icons.
+     */
+    constructor(
+        route: T,
+        @DrawableRes iconResId: Int,
+        @DrawableRes selectedIconResId: Int = iconResId,
+        title: Int,
+        badgeText: String = "",
+    ) : this(
+        route = route,
+        icon = NavigationIcon.Resource(iconResId),
+        selectedIcon = NavigationIcon.Resource(selectedIconResId),
+        title = title,
+        badgeText = badgeText,
+    )
+}

@@ -24,6 +24,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.co
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logTutorialBegin
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logTutorialComplete
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
@@ -57,6 +59,7 @@ class OnboardingViewModel(
     private var completeJob: Job? = null
 
     init {
+        firebaseController.logTutorialBegin()
         handleEvent(OnboardingEvent.ObserveCompletion)
     }
 
@@ -113,6 +116,8 @@ class OnboardingViewModel(
                     withContext(dispatchers.io) {
                         onboardingRepository.setOnboardingCompleted()
                     }
+
+                    firebaseController.logTutorialComplete()
 
                     updateStateThreadSafe {
                         screenState.copyData { copy(isOnboardingCompleted = true) }

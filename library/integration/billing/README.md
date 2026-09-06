@@ -76,3 +76,8 @@ flowchart TD
 ## Current risks
 
 Billing client and callback behavior is compatibility-sensitive to Play Billing Library upgrades.
+
+The reported `ProxyBillingActivity.onCreate` null-`PendingIntent` crash remains unresolved.
+Expanded `configChanges` overrides currently present in the working tree are an unverified
+proposal, not a demonstrated fix. See [SDK activity crash investigation](../../../docs/notes/sdk-activity-crashes.md)
+for the bytecode evidence, limits of existing safeguards, and consumer validation requirements.
