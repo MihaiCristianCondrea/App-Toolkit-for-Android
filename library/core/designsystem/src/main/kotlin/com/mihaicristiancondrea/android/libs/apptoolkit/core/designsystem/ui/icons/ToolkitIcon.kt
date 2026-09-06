@@ -18,23 +18,31 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.RawRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
  * One icon slot of a toolkit component, such as a navigation item or a button.
  *
- * Three sources are accepted:
+ * Four sources are accepted:
  * - [Vector], a Compose [ImageVector] like `Icons.Rounded.Share`.
  * - [Resource], a static drawable or vector XML resource, drawn through a painter.
  * - [AnimatedVector], an Animated Vector Drawable that plays when the component is clicked.
+ * - [Lottie], bundled Lottie JSON that plays once per interaction.
  *
  * Components that own a selected state take two of these, one per state, and both slots accept any
- * of the three sources. See `docs/notes/icons.md` for the accepted combinations and the
+ * of the four sources. See `docs/notes/icons.md` for the accepted combinations and the
  * behavior of each one.
  */
 @Immutable
 sealed interface ToolkitIcon {
+
+    /** Playback options shared by bundled animation sources; these are presentation values. */
+    sealed interface Animated : ToolkitIcon {
+        val atEnd: Boolean
+        val replayMode: ToolkitIconReplayMode
+    }
 
     /**
      * Icon backed by a Compose [ImageVector], for example a Material icon.
@@ -65,9 +73,22 @@ sealed interface ToolkitIcon {
     @Immutable
     data class AnimatedVector(
         @param:DrawableRes val resId: Int,
-        val atEnd: Boolean = false,
-        val replayMode: ToolkitIconReplayMode = ToolkitIconReplayMode.Restart,
-    ) : ToolkitIcon
+        override val atEnd: Boolean = false,
+        override val replayMode: ToolkitIconReplayMode = ToolkitIconReplayMode.Restart,
+    ) : Animated
+
+    /**
+     * Bundled Lottie JSON in `res/raw`. Plays once per interaction, never loops at rest.
+     * Artwork retains its authored colors; the renderer's tint applies only when [tintable] is true.
+     * Prefer small vector-only compositions for navigation and button icons.
+     */
+    @Immutable
+    data class Lottie(
+        @param:RawRes val resId: Int,
+        override val atEnd: Boolean = false,
+        override val replayMode: ToolkitIconReplayMode = ToolkitIconReplayMode.Restart,
+        val tintable: Boolean = false,
+    ) : Animated
 
     companion object {
         fun of(imageVector: ImageVector): ToolkitIcon = Vector(imageVector)

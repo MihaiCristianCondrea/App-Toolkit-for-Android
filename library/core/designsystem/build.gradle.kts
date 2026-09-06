@@ -55,4 +55,5 @@ dependencies {
     api(libs.androidx.compose.material.icons.extended)
     // Animated vector drawable playback for ToolkitIcon.AnimatedVector.
     api(libs.androidx.compose.animation.graphics)
+    implementation(libs.lottie.compose)
 }

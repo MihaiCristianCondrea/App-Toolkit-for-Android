@@ -8,6 +8,10 @@
 
 ### Added
 
+- Added bundled Lottie icons with forward restart by default, optional reverse replay, and optional
+  content-color tinting. All FAB wrappers now accept the shared `ToolkitIcon` API while retaining
+  their existing ImageVector/custom-content overloads.
+
 - Added `ToolkitIcon`, the icon slot shared by navigation items and buttons. It accepts a Compose
   `ImageVector`, a drawable or vector resource, or an animated vector drawable that plays when the
   component is clicked. `ToolkitIconReplayMode` chooses whether a repeated click restarts the
@@ -47,6 +51,12 @@
 - Standardized changelog, alert-dialog, and date-picker actions with consistent button styling, haptic feedback, and press animations.
 
 ### Fixed
+
+- Fixed Help and Settings menu buttons that still passed ImageVector values to the migrated icon API
+  and prevented the sample app from compiling.
+
+- Prevented duplicate or late Billing service responses from crashing purchase recovery, product
+  queries, and donation consumption with an `Already resumed` error.
 
 - Fixed icon-state handling in `NavigationDrawerItemContent` and `LeftNavigationRail` to display `selectedIcon` when selected and `icon` when unselected.
 - Fixed animated navigation icons never playing. They were swapped in already on their last frame,

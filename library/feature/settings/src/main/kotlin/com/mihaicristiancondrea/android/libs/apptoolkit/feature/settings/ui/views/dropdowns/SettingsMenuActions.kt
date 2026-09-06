@@ -59,7 +59,7 @@ fun SettingsMenuActions() {
         modifier = Modifier.graphicsLayer { rotationZ = rotation },
         fromRight = true,
         contentDescription = null,
-        icon = Icons.Default.MoreVert,
+        icon = com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon.Vector(Icons.Default.MoreVert),
         onClick = { showMenu.value = true },
     )
 

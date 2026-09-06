@@ -29,6 +29,10 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -64,6 +68,38 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
  * @param firebaseController Optional Firebase controller used to log GA4 events.
  * @param ga4Event Optional GA4 event data to log on click.
  */
+@Composable
+fun AnimatedExtendedFloatingActionButton(
+    modifier: Modifier = Modifier,
+    visible: Boolean = true,
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+    icon: ToolkitIcon,
+    contentDescription: String? = null,
+    text: (@Composable () -> Unit)? = null,
+    expanded: Boolean = true,
+    containerColor: Color = FloatingActionButtonDefaults.containerColor,
+    feedback: ButtonFeedback = ButtonFeedback(),
+    firebaseController: FirebaseController? = null,
+    ga4Event: Ga4EventData? = null,
+) {
+    var clickCount by remember { mutableIntStateOf(0) }
+    AnimatedExtendedFloatingActionButton(
+        modifier = modifier,
+        visible = visible,
+        enabled = enabled,
+        onClick = { clickCount++; onClick() },
+        icon = { AnimatedToolkitIcon(icon, clickCount, contentDescription) },
+        text = text,
+        expanded = expanded,
+        containerColor = containerColor,
+        feedback = feedback,
+        firebaseController = firebaseController,
+        ga4Event = ga4Event,
+    )
+}
+
+/** Content-slot overload for callers supplying a custom icon composition. */
 @Composable
 fun AnimatedExtendedFloatingActionButton(
     modifier: Modifier = Modifier,

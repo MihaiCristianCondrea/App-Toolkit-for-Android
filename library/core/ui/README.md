@@ -13,6 +13,9 @@ entry helpers, state handling, analytics hooks, and shared components.
   adaptive-window helpers.
 - Render models such as `AppVersionInfo` and `AdsConfig`.
 - The shared theme-mode preview composables used by both the onboarding and settings theme UI.
+- All General button and FAB icon slots accept `ToolkitIcon`, including bundled Lottie icons.
+  FAB ImageVector/custom-content overloads remain compatible; rendering and playback are delegated
+  to `core:designsystem`, while buttons retain feedback and analytics ownership.
 
 ## Does not own
 

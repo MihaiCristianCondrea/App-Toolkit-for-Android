@@ -5,37 +5,42 @@ items, bottom bar and rail items, and the `General*Button` family. It lives in
 `:library:core:designsystem`, package
 `com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons`.
 
-## The three sources
+## The four sources
 
-| Source | Declares | Animates |
-| --- | --- | --- |
-| `ToolkitIcon.Vector(imageVector)` | A Compose `ImageVector`, for example `Icons.Rounded.Share` | No |
-| `ToolkitIcon.Resource(resId)` | A drawable or vector XML resource, drawn through a painter | No |
-| `ToolkitIcon.AnimatedVector(resId)` | An `animated-vector` resource | Yes, on click and on selection |
+| Source                              | Declares                                                   | Animates                                |
+|-------------------------------------|------------------------------------------------------------|-----------------------------------------|
+| `ToolkitIcon.Vector(imageVector)`   | A Compose `ImageVector`, for example `Icons.Rounded.Share` | No                                      |
+| `ToolkitIcon.Resource(resId)`       | A drawable or vector XML resource, drawn through a painter | No                                      |
+| `ToolkitIcon.AnimatedVector(resId)` | An `animated-vector` resource                              | Yes, on click and on selection          |
+| `ToolkitIcon.Lottie(resId)`         | Lottie JSON in `res/raw`                                   | Yes, once per click or selection change |
 
-`ToolkitIcon.of(...)` and `ToolkitIcon.animated(...)` are shorthand factories for the same three
+`ToolkitIcon.of(...)` and `ToolkitIcon.animated(...)` are shorthand factories for the same
+static/AVD
 types.
 
 `AnimatedVector` requires a real `animated-vector` drawable, the kind
-`androidx.compose.animation.graphics` can read: one `vector` plus the `target` animators that move it
+`androidx.compose.animation.graphics` can read: one `vector` plus the `target` animators that move
+it
 from the first frame to the last one. A plain `vector` resource passed as `AnimatedVector` fails to
 inflate at runtime. Declare it as `Resource` instead.
 
-Anything else, such as a Coil `Painter` or a bitmap, is not accepted. Draw those with a plain
+Remote Lottie URLs and asset paths are not accepted by this icon API. Anything else, such as a Coil
+`Painter` or a bitmap, is not accepted. Draw those with a plain
 `Image` next to the component instead of through the icon slot.
 
 ## Components with a selected state
 
 Navigation items own two slots, `icon` for the unselected state and `selectedIcon` for the selected
-one. `selectedIcon` defaults to `icon`, so a single icon covers both. Any source is allowed in either
+one. `selectedIcon` defaults to `icon`, so a single icon covers both. Any source is allowed in
+either
 slot, which gives four combinations:
 
-| `icon` | `selectedIcon` | Result |
-| --- | --- | --- |
-| static | static | Plain swap when selection changes. Nothing animates. |
-| static | animated | The static icon is drawn at rest. The first click swaps in the animated one and plays it, and every later click plays it again. |
-| animated | animated (same or another) | The drawable rests on its first frame while unselected and on its last frame while selected, and replays on every click. |
-| animated | static | The animated icon plays while the item is unselected; the static one takes over once it is selected. |
+| `icon`   | `selectedIcon`             | Result                                                                                                                          |
+|----------|----------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| static   | static                     | Plain swap when selection changes. Nothing animates.                                                                            |
+| static   | animated                   | The static icon is drawn at rest. The first click swaps in the animated one and plays it, and every later click plays it again. |
+| animated | animated (same or another) | The drawable rests on its first frame while unselected and on its last frame while selected, and replays on every click.        |
+| animated | static                     | The animated icon plays while the item is unselected; the static one takes over once it is selected.                            |
 
 The static plus animated combination is the one to use for an action such as Share, which is clicked
 repeatedly and never becomes a selected destination. Draw the first frame of the animated vector
@@ -84,11 +89,13 @@ Two composables are public:
 - `ToolkitIconContent(icon, contentDescription, modifier, atEnd, tint)` draws exactly one icon and
   owns no state. `atEnd` picks the frame of an animated vector, and changing it animates between the
   two frames.
-- `AnimatedToolkitIcon(icon, clickCount, contentDescription, modifier, selectedIcon, selected, tint)`
-  is the stateful one the toolkit components use. The owner keeps a click counter and increments it
-  on every click; each increment replays the animation. Owners that never animate pass `0`.
+-
+`AnimatedToolkitIcon(icon, clickCount, contentDescription, modifier, selectedIcon, selected, tint)`
+is the stateful one the toolkit components use. The owner keeps a click counter and increments it
+on every click; each increment replays the animation. Owners that never animate pass `0`.
 
-`resolveToolkitIcon(icon, selectedIcon, selected, interacted)` returns the icon a component should be
+`resolveToolkitIcon(icon, selectedIcon, selected, interacted)` returns the icon a component should
+be
 drawing, and is useful when a host renders its own navigation surface from toolkit item models.
 
 ## Accessibility
@@ -96,3 +103,29 @@ drawing, and is useful when a host renders its own navigation surface from toolk
 The content description belongs to the component, not to the icon. Navigation items reuse their
 title, and buttons take `iconContentDescription`, which is required for an icon-only button because
 nothing else describes it.
+
+## Lottie icons and performance
+
+```kotlin
+ToolkitIcon.Lottie(R.raw.add_icon, tintable = true)
+ToolkitIcon.Lottie(R.raw.toggle_icon, replayMode = ToolkitIconReplayMode.Reverse)
+```
+
+Use bundled JSON from `res/raw`. Lottie compositions load asynchronously and remain remembered
+across clicks; playback does not reparse the JSON. The progress provider is read while drawing,
+so animation frames do not recompose the parent button or navigation surface. Animations run
+once per interaction, cancel when removed from composition, and use Compose duration scaling.
+Rapid clicks restart from zero by default. Reverse is opt-in. Icons do not loop while idle.
+
+Authored colors are preserved by default. Set `tintable = true` for monochrome artwork that should
+follow the component's content color, including its disabled state. `Color.Unspecified` preserves
+artwork colors even when tintable. Size defaults to 24 dp and caller constraints take precedence.
+Loading or invalid JSON renders an empty icon slot without starting an animation; provide valid,
+small vector-only artwork and a meaningful component label. Avoid embedded images, expensive
+masks, and large compositions in lists. No network requests are made by this icon API.
+
+The FAB wrappers also accept `ToolkitIcon`: `AnimatedFloatingActionButton`,
+`SmallFloatingActionButton`, and `AnimatedExtendedFloatingActionButton`. Existing ImageVector
+and custom-content overloads remain available. The sample FAB showcase uses a bundled Lottie
+plus icon to demonstrate replay. No repository, domain model, or persisted preference owns
+playback; it remains local presentation state in `core:designsystem`.

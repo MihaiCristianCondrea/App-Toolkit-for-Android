@@ -23,7 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material3.Icon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -63,14 +63,14 @@ fun FabShowcase(
                     onClick = {},
                     visible = true,
                     expanded = true,
-                    icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
+                    icon = ToolkitIcon.Lottie(R.raw.toolkit_add_icon, tintable = true),
                     text = { Text(text = stringResource(id = R.string.components_fab_extended)) },
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("fab", "extended"),
                 )
                 AnimatedFloatingActionButton(
                     isVisible = true,
-                    icon = Icons.Filled.Add,
+                    icon = ToolkitIcon.Lottie(R.raw.toolkit_add_icon, tintable = true),
                     contentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
@@ -79,7 +79,7 @@ fun FabShowcase(
                 SmallFloatingActionButton(
                     isVisible = true,
                     isExtended = true,
-                    icon = Icons.Filled.Add,
+                    icon = ToolkitIcon.Lottie(R.raw.toolkit_add_icon, tintable = true),
                     contentDescription = iconContentDescription,
                     onClick = {},
                     onLogClick = {

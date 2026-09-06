@@ -54,6 +54,13 @@ fun ToolkitIconContent(
     tint: Color = LocalContentColor.current,
 ) {
     when (icon) {
+        is ToolkitIcon.Lottie -> LottieToolkitIcon(
+            icon = icon,
+            contentDescription = contentDescription,
+            modifier = modifier,
+            atEnd = atEnd,
+            tint = tint,
+        )
         is ToolkitIcon.Vector -> {
             Icon(
                 imageVector = icon.imageVector,

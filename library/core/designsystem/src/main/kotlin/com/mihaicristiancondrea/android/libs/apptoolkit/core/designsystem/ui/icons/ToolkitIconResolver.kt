@@ -41,6 +41,6 @@ fun resolveToolkitIcon(
     interacted: Boolean = false,
 ): ToolkitIcon = when {
     selected -> selectedIcon
-    selectedIcon is ToolkitIcon.AnimatedVector && interacted -> selectedIcon
+    selectedIcon is ToolkitIcon.Animated && interacted -> selectedIcon
     else -> icon
 }

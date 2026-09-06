@@ -61,6 +61,10 @@ flowchart TD
   without creating a design-system-to-UI dependency cycle.
 - The icon slot is owned here for the same reason: `:library:navigation` and `:library:core:ui` both
   render icons, and this is the lowest module both already depend on.
+- Bundled Lottie icon loading and finite playback are presentation implementation details here.
+  The module uses the existing Lottie Compose dependency internally; public icon models expose
+  resource IDs and replay options, not Lottie SDK types. Compositions survive click replays and
+  progress is consumed while drawing to avoid recomposing host surfaces every frame.
 
 ## Public contracts
 

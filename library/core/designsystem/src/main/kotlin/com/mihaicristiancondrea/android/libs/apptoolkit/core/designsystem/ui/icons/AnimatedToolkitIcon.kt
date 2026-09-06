@@ -77,6 +77,18 @@ fun AnimatedToolkitIcon(
         interacted = clickCount > 0,
     )
 
+    if (displayedIcon is ToolkitIcon.Lottie) {
+        LottieToolkitIcon(
+            icon = displayedIcon,
+            contentDescription = contentDescription,
+            modifier = modifier,
+            atEnd = selected || displayedIcon.atEnd,
+            tint = tint,
+            clickCount = clickCount,
+        )
+        return
+    }
+
     if (displayedIcon !is ToolkitIcon.AnimatedVector) {
         ToolkitIconContent(
             icon = displayedIcon,
@@ -94,7 +106,7 @@ fun AnimatedToolkitIcon(
     val playbackKey: Int =
         if (displayedIcon.replayMode == ToolkitIconReplayMode.Restart) clickCount else 0
 
-    key(playbackKey) {
+    key(displayedIcon, playbackKey) {
         var atEnd: Boolean by remember(displayedIcon.resId) {
             mutableStateOf(value = playbackKey == 0 && restingAtEnd)
         }
