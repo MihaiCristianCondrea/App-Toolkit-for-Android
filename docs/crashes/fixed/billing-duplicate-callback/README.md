@@ -60,8 +60,8 @@ All four regression tests passed with zero failures. Billing production Kotlin s
 ## Timeline
 
 * **2026-07-31 18:02:02 EEST:** Crash incident reported on `com.d4rk.cleaner` version `26.07.8`.
-* **2026-08:** Root cause identified in `BillingRepository` continuation handling.
-* **2026-08:** `awaitBillingCallback` fix implemented and verified with unit tests in `:library:integration:billing`.
+* **2026-09-06:** Root cause confirmed in current source and the published `3.0.0-pre12` billing artifact.
+* **2026-09-06:** `awaitBillingCallback` fix implemented locally and verified with unit tests in `:library:integration:billing`. Publication and rollout to consuming apps require separate verification.
 
 ## References
 
