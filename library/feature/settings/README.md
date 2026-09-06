@@ -64,7 +64,7 @@ flowchart TD
 
 - `ui/general` is the explicit category-content route: the root settings screen lists categories,
   and General Settings renders the selected content key, either embedded or in its own activity.
-- Layers follow ownership, as described in [the architecture rules](../../../docs/notes/module-structure.md).
+- Layers follow ownership, as described in [the architecture rules](../../../.agents/skills/architecture/layered-tree-review/references/android-tree-rules.md).
   Display and theme consume core preference repositories directly and do not duplicate data layers.
 - Host provider contracts describe categories and callbacks; each settings feature module owns its
   own state holders, repositories, UI, and Koin bindings.

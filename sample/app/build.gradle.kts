@@ -71,7 +71,7 @@ if (hasMatchingGoogleServicesConfig) {
     logger.warn(
         "google-services.json has no client for '$releasedApplicationId', so Firebase " +
                 "(Analytics, Crashlytics, Performance) is disabled for this build. Add that package " +
-                "in the Firebase console and re-download the file. See docs/application-id.md."
+                "in the Firebase console and re-download the file. See build-logic/README.md#application-id."
     )
 }
 
@@ -87,7 +87,7 @@ gradle.taskGraph.whenReady {
     check(!hasMismatchedGoogleServicesConfig || !assemblesRelease) {
         "Refusing to build a release with a mismatched google-services.json: it has no client for " +
                 "'$releasedApplicationId', so Crashlytics would be silently disabled. " +
-                "See docs/application-id.md."
+                "See build-logic/README.md#application-id."
     }
 }
 
@@ -102,7 +102,7 @@ android {
         // The Play Store identity of an app that is already released. It must not follow the
         // `namespace` above: `namespace` names the generated R/BuildConfig classes and can be
         // renamed freely, while changing `applicationId` publishes a different app and strands
-        // every existing install. See docs/application-id.md.
+        // every existing install. See build-logic/README.md#application-id.
         applicationId = "com.d4rk.android.apps.apptoolkit"
         resValue("string", "app_package_name", releasedApplicationId)
         minSdk = appVersion.minSdk

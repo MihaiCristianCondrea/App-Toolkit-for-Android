@@ -9,7 +9,7 @@ Use the project architecture skills:
 Treat the skills, `AGENTS.md`, relevant project documentation, and existing module READMEs as the
 guidance for this review.
 
-Apply the [module structure rules](../notes/module-structure.md), including optional layers and
+Apply the [module structure rules](../../.agents/skills/architecture/layered-tree-review/references/android-tree-rules.md), including optional layers and
 resource-only modules, when assessing completeness.
 
 ## Goal
