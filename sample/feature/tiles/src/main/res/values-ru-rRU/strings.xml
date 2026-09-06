@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">Дышите</string>
     <string name="tile_bubble_level_summary">Выравнивание поверхности и обнаружение наклона</string>
     <string name="tile_bubble_level_title">Пузырьковый уровень</string>
-    <string name="tile_caffeine_summary">Временно держите экран включенным</string>
-    <string name="tile_caffeine_title">Кофеин</string>
     <string name="tile_coin_flip_summary">Мгновенно переверните орел или решку</string>
     <string name="tile_coin_flip_title">Подбрасывание монеты</string>
     <string name="tile_compass_summary">Кардинальные направления и азимут</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">Счетчик</string>
     <string name="tile_dice_roll_summary">Бросьте шестигранный кубик</string>
     <string name="tile_dice_roll_title">Бросок кубиков</string>
-    <string name="tile_music_search_summary">Определите музыку с помощью ярлыка</string>
-    <string name="tile_music_search_title">Поиск музыки</string>
     <string name="tile_preview_coin_result">Руководители</string>
     <string name="tile_preview_compass_result">СВ 45°</string>
     <string name="tile_preview_default_result">Предварительный просмотр скоро появится</string>

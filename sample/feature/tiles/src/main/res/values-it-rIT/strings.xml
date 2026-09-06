@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">Respira</string>
     <string name="tile_bubble_level_summary">Allineamento della superficie e rilevamento dell\'inclinazione</string>
     <string name="tile_bubble_level_title">Livella a bolla</string>
-    <string name="tile_caffeine_summary">Mantieni temporaneamente lo schermo attivo</string>
-    <string name="tile_caffeine_title">Caffeina</string>
     <string name="tile_coin_flip_summary">Capovolgi immediatamente testa o croce</string>
     <string name="tile_coin_flip_title">Lancio della moneta</string>
     <string name="tile_compass_summary">Direzioni cardinali e azimut</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">Contatore</string>
     <string name="tile_dice_roll_summary">Lancia un dado a sei facce</string>
     <string name="tile_dice_roll_title">Lancio dei dadi</string>
-    <string name="tile_music_search_summary">Identifica la musica con una scorciatoia</string>
-    <string name="tile_music_search_title">Ricerca musicale</string>
     <string name="tile_preview_coin_result">Teste</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Anteprima in arrivo</string>

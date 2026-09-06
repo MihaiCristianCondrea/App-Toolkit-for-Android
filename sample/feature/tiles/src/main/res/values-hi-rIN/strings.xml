@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">साँस लें</string>
     <string name="tile_bubble_level_summary">सतह संरेखण और झुकाव का पता लगाना</string>
     <string name="tile_bubble_level_title">बुलबुला स्तर</string>
-    <string name="tile_caffeine_summary">स्क्रीन को अस्थायी रूप से चालू रखें</string>
-    <string name="tile_caffeine_title">कैफीन</string>
     <string name="tile_coin_flip_summary">तुरंत सिर या पूंछ पलटें</string>
     <string name="tile_coin_flip_title">सिक्का पलटना</string>
     <string name="tile_compass_summary">कार्डिनल दिशाएँ और अज़ीमुथ</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">काउंटर</string>
     <string name="tile_dice_roll_summary">छह-तरफा पासा रोल करें</string>
     <string name="tile_dice_roll_title">पासा पलटना</string>
-    <string name="tile_music_search_summary">शॉर्टकट से संगीत को पहचानें</string>
-    <string name="tile_music_search_title">संगीत खोज</string>
     <string name="tile_preview_coin_result">प्रमुखों</string>
     <string name="tile_preview_compass_result">पूर्वोत्तर 45°</string>
     <string name="tile_preview_default_result">पूर्वावलोकन जल्द ही आ रहा है</string>

@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">呼吸</string>
     <string name="tile_bubble_level_summary">表面對準和傾斜檢測</string>
     <string name="tile_bubble_level_title">氣泡水平儀</string>
-    <string name="tile_caffeine_summary">暫時保持螢幕喚醒狀態</string>
-    <string name="tile_caffeine_title">咖啡因</string>
     <string name="tile_coin_flip_summary">立即翻轉正面或反面</string>
     <string name="tile_coin_flip_title">投擲硬幣</string>
     <string name="tile_compass_summary">主要方向和方位角</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">櫃檯</string>
     <string name="tile_dice_roll_summary">擲六面骰</string>
     <string name="tile_dice_roll_title">擲骰子</string>
-    <string name="tile_music_search_summary">用快捷方式辨識音樂</string>
-    <string name="tile_music_search_title">音樂搜尋</string>
     <string name="tile_preview_coin_result">頭</string>
     <string name="tile_preview_compass_result">東北45°</string>
     <string name="tile_preview_default_result">預覽即將推出</string>

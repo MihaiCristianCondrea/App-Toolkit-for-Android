@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-/** Exposes the toolkit's sound-mode and music-search platform operations. */
+/** Exposes the toolkit's sound-mode platform operations. */
 class AndroidSystemLocalDataSource(
     private val context: Context,
     private val dispatchers: DispatcherProvider,
@@ -64,17 +64,6 @@ class AndroidSystemLocalDataSource(
         }
     }
 
-    override fun launchMusicSearch() {
-        try {
-            val intent = Intent("com.google.android.googlequicksearchbox.MUSIC_SEARCH").apply {
-                setPackage("com.google.android.googlequicksearchbox")
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            context.startActivity(intent)
-        } catch (_: Exception) {
-            // Fallback
-        }
-    }
 
     private fun currentRingerMode(): RingerMode = when (audioManager.ringerMode) {
         AudioManager.RINGER_MODE_VIBRATE -> RingerMode.Vibrate

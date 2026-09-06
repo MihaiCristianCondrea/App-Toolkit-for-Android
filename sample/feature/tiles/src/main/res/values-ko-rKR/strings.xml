@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">숨을 쉬다</string>
     <string name="tile_bubble_level_summary">표면 정렬 및 기울기 감지</string>
     <string name="tile_bubble_level_title">버블 레벨</string>
-    <string name="tile_caffeine_summary">화면을 일시적으로 활성 상태로 유지</string>
-    <string name="tile_caffeine_title">카페인</string>
     <string name="tile_coin_flip_summary">즉시 머리 또는 꼬리 뒤집기</string>
     <string name="tile_coin_flip_title">동전 뒤집기</string>
     <string name="tile_compass_summary">기본 방위 및 방위각</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">카운터</string>
     <string name="tile_dice_roll_summary">6면체 주사위를 굴립니다.</string>
     <string name="tile_dice_roll_title">주사위 굴리기</string>
-    <string name="tile_music_search_summary">바로가기로 음악 식별</string>
-    <string name="tile_music_search_title">음악 검색</string>
     <string name="tile_preview_coin_result">머리</string>
     <string name="tile_preview_compass_result">북동 45°</string>
     <string name="tile_preview_default_result">미리보기가 곧 제공됩니다</string>

@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">Atme</string>
     <string name="tile_bubble_level_summary">Oberflächenausrichtung und Neigungserkennung</string>
     <string name="tile_bubble_level_title">Wasserwaage</string>
-    <string name="tile_caffeine_summary">Halten Sie den Bildschirm vorübergehend wach</string>
-    <string name="tile_caffeine_title">Koffein</string>
     <string name="tile_coin_flip_summary">Drehen Sie Kopf oder Zahl sofort um</string>
     <string name="tile_coin_flip_title">Münzwurf</string>
     <string name="tile_compass_summary">Himmelsrichtungen und Azimut</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">Zähler</string>
     <string name="tile_dice_roll_summary">Wirf einen sechsseitigen Würfel</string>
     <string name="tile_dice_roll_title">Würfeln</string>
-    <string name="tile_music_search_summary">Identifizieren Sie Musik mit einer Verknüpfung</string>
-    <string name="tile_music_search_title">Musiksuche</string>
     <string name="tile_preview_coin_result">Köpfe</string>
     <string name="tile_preview_compass_result">Nordost 45°</string>
     <string name="tile_preview_default_result">Vorschau folgt bald</string>

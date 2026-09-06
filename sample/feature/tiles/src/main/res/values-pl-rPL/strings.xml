@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">Oddychaj</string>
     <string name="tile_bubble_level_summary">Wyrównanie powierzchni i wykrywanie pochylenia</string>
     <string name="tile_bubble_level_title">Poziom bąbelkowy</string>
-    <string name="tile_caffeine_summary">Tymczasowo wyłącz ekran</string>
-    <string name="tile_caffeine_title">Kofeina</string>
     <string name="tile_coin_flip_summary">Natychmiast odwracaj głowy lub reszki</string>
     <string name="tile_coin_flip_title">Rzut monetą</string>
     <string name="tile_compass_summary">Kierunki kardynalne i azymut</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">Licznik</string>
     <string name="tile_dice_roll_summary">Rzuć sześciościenną kostką</string>
     <string name="tile_dice_roll_title">Rzut kostką</string>
-    <string name="tile_music_search_summary">Identyfikuj muzykę za pomocą skrótu</string>
-    <string name="tile_music_search_title">Wyszukiwanie muzyki</string>
     <string name="tile_preview_coin_result">Głowy</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Podgląd już wkrótce</string>

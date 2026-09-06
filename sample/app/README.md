@@ -130,8 +130,6 @@ feature modules leaves rather than a chain:
 - `MainScreen` imported `appNavigationEntryBuilders`, which would have made the shell depend on
   every
   feature it renders. It now takes the builders as a parameter, supplied here by `MainActivity`.
-- `CaffeineService` built its notification intent from `MainActivity::class.java`; it resolves the
-  launcher activity through the package manager instead.
 - `APPS_LIST_AD_FREQUENCY` was a `buildConfigField` here, which no library module can read. It is a
   fixed tuning value, so it became a constant in [`:sample:core:common`](../core/common/README.md).
 

@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">Lélegezz</string>
     <string name="tile_bubble_level_summary">Felület igazítás és dőlésérzékelés</string>
     <string name="tile_bubble_level_title">Buborék szint</string>
-    <string name="tile_caffeine_summary">Tartsa átmenetileg ébren a képernyőt</string>
-    <string name="tile_caffeine_title">Koffein</string>
     <string name="tile_coin_flip_summary">Azonnal fordítsa meg a fejét vagy a farkát</string>
     <string name="tile_coin_flip_title">Coin Flip</string>
     <string name="tile_compass_summary">Kardinális irányok és azimut</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">Számláló</string>
     <string name="tile_dice_roll_summary">Dobj egy hatoldalú kockával</string>
     <string name="tile_dice_roll_title">Kockadobás</string>
-    <string name="tile_music_search_summary">A zene azonosítása egy parancsikon segítségével</string>
-    <string name="tile_music_search_title">Zene keresése</string>
     <string name="tile_preview_coin_result">Fejek</string>
     <string name="tile_preview_compass_result">ÉK 45°</string>
     <string name="tile_preview_default_result">Előzetes hamarosan</string>

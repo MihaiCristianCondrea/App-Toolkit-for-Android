@@ -27,6 +27,4 @@ class SystemRepository(
     fun getRingerMode(): Flow<RingerMode> = localDataSource.getRingerMode()
 
     fun setRingerMode(mode: RingerMode) = localDataSource.setRingerMode(mode)
-
-    fun launchMusicSearch() = localDataSource.launchMusicSearch()
 }

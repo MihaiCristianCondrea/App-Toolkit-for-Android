@@ -99,22 +99,10 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
         ToolkitTileIcon.Palette
     )
 
-    ToolkitTileIds.MUSIC_SEARCH -> TileVisuals(
-        R.string.tile_music_search_title,
-        R.string.tile_music_search_summary,
-        ToolkitTileIcon.Music
-    )
-
     ToolkitTileIds.MORSE -> TileVisuals(
         R.string.tile_morse_title,
         R.string.tile_morse_summary,
         ToolkitTileIcon.Morse
-    )
-
-    ToolkitTileIds.CAFFEINE -> TileVisuals(
-        R.string.tile_caffeine_title,
-        R.string.tile_caffeine_summary,
-        ToolkitTileIcon.Caffeine
     )
 
     ToolkitTileIds.SOUND_MODE -> TileVisuals(

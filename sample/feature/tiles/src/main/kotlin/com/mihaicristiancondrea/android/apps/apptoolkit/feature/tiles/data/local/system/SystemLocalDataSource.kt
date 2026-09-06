@@ -20,11 +20,9 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.loca
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.RingerMode
 import kotlinx.coroutines.flow.Flow
 
-/** Android system source for ringer mode and music-search intents. */
+/** Android system source for the ringer mode. */
 interface SystemLocalDataSource {
     fun getRingerMode(): Flow<RingerMode>
 
     fun setRingerMode(mode: RingerMode)
-
-    fun launchMusicSearch()
 }

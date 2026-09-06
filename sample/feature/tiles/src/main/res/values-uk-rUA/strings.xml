@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">Дихайте</string>
     <string name="tile_bubble_level_summary">Вирівнювання поверхні та визначення нахилу</string>
     <string name="tile_bubble_level_title">Бульбашковий рівень</string>
-    <string name="tile_caffeine_summary">Тимчасово не активний екран</string>
-    <string name="tile_caffeine_title">Кофеїн</string>
     <string name="tile_coin_flip_summary">Миттєво змінюйте голови або решки</string>
     <string name="tile_coin_flip_title">Підкидання монети</string>
     <string name="tile_compass_summary">Свіжі сторони й азимут</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">Лічильник</string>
     <string name="tile_dice_roll_summary">Киньте шестигранний кубик</string>
     <string name="tile_dice_roll_title">Кидок кубика</string>
-    <string name="tile_music_search_summary">Визначайте музику за допомогою швидкого доступу</string>
-    <string name="tile_music_search_title">Пошук музики</string>
     <string name="tile_preview_coin_result">Голови</string>
     <string name="tile_preview_compass_result">СХ 45°</string>
     <string name="tile_preview_default_result">Попередній перегляд незабаром</string>

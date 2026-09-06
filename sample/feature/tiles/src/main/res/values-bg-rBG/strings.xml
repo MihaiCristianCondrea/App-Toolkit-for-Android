@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">Дишайте</string>
     <string name="tile_bubble_level_summary">Подравняване на повърхността и откриване на наклон</string>
     <string name="tile_bubble_level_title">Балонче ниво</string>
-    <string name="tile_caffeine_summary">Дръжте екрана буден временно</string>
-    <string name="tile_caffeine_title">Кофеин</string>
     <string name="tile_coin_flip_summary">Обърнете незабавно глави или опашки</string>
     <string name="tile_coin_flip_title">Хвърляне на монета</string>
     <string name="tile_compass_summary">Кардинални посоки и азимут</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">Брояч</string>
     <string name="tile_dice_roll_summary">Хвърлете шестстранен зар</string>
     <string name="tile_dice_roll_title">Хвърляне на зарове</string>
-    <string name="tile_music_search_summary">Идентифицирайте музика с пряк път</string>
-    <string name="tile_music_search_title">Търсене на музика</string>
     <string name="tile_preview_coin_result">Глави</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Предварителен преглед очаквайте скоро</string>

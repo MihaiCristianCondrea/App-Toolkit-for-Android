@@ -14,14 +14,14 @@ import kotlin.test.assertTrue
 
 class ToolkitTilesPinningTest {
     @Test
-    fun `only unpinned tile services need setup on supported Android versions`() {
+    fun `only unpinned tile services are marked not added on supported Android versions`() {
         val tiles = repository(supportsPinning = true).currentTileCategories().flatMap { it.tiles }
         assertEquals(4, tiles.count { it.status == ToolkitTileStatus.NotAdded })
         assertTrue(tiles.filter { it.requestKey == null }.all { it.status == ToolkitTileStatus.Available })
     }
 
     @Test
-    fun `older Android versions do not advertise setup`() {
+    fun `older Android versions do not advertise adding tiles`() {
         val tiles = repository(supportsPinning = false).currentTileCategories().flatMap { it.tiles }
         assertTrue(tiles.all { it.status == ToolkitTileStatus.Available })
     }

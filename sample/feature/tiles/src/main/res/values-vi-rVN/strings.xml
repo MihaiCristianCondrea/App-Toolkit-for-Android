@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">thở</string>
     <string name="tile_bubble_level_summary">Căn chỉnh bề mặt và phát hiện độ nghiêng</string>
     <string name="tile_bubble_level_title">Cấp độ bong bóng</string>
-    <string name="tile_caffeine_summary">Giữ màn hình ở chế độ tạm thời</string>
-    <string name="tile_caffeine_title">Caffein</string>
     <string name="tile_coin_flip_summary">Lật đầu hoặc đuôi ngay lập tức</string>
     <string name="tile_coin_flip_title">Lật xu</string>
     <string name="tile_compass_summary">Hướng chính và góc phương vị</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">quầy</string>
     <string name="tile_dice_roll_summary">Đổ xúc xắc sáu mặt</string>
     <string name="tile_dice_roll_title">cuộn xúc xắc</string>
-    <string name="tile_music_search_summary">Nhận dạng nhạc bằng phím tắt</string>
-    <string name="tile_music_search_title">Tìm kiếm âm nhạc</string>
     <string name="tile_preview_coin_result">đầu</string>
     <string name="tile_preview_compass_result">ĐB 45°</string>
     <string name="tile_preview_default_result">Sắp có bản xem trước</string>

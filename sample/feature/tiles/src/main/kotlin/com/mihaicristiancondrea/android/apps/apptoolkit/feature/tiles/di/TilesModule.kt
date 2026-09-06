@@ -17,8 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.di
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.caffeine.AndroidCaffeineServiceDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.caffeine.CaffeineServiceDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.haptics.AndroidBreathingHapticsDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.haptics.BreathingHapticsDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.preferences.DefaultToolkitTilesPreferencesDataSource
@@ -32,7 +30,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.torch.AndroidTorchDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.torch.TorchDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.BreathingRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.CaffeineRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.DefaultToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.DefaultTorchRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.MorseRepository
@@ -42,7 +39,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repos
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.TorchRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BreathingToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CaffeineToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CoinFlipToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CompassToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CounterToolViewModel
@@ -50,7 +46,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DiceRol
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.FlashDimmerToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MusicSearchToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SoundModeToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesViewModel
@@ -70,9 +65,6 @@ val tilesModule: Module = module {
     }
     single<BreathingHapticsDataSource> {
         AndroidBreathingHapticsDataSource(context = androidContext())
-    }
-    single<CaffeineServiceDataSource> {
-        AndroidCaffeineServiceDataSource(context = androidContext())
     }
     single<QuickSettingsTilesLocalDataSource> {
         AndroidQuickSettingsTilesLocalDataSource(context = androidContext())
@@ -103,11 +95,6 @@ val tilesModule: Module = module {
         )
     }
     single {
-        CaffeineRepository(
-            serviceDataSource = get(),
-        )
-    }
-    single {
         SosRepository(
             morseRepository = get(),
         )
@@ -130,9 +117,7 @@ val tilesModule: Module = module {
     viewModel { CompassToolViewModel(repository = get()) }
     viewModel { LevelToolViewModel(repository = get()) }
     viewModel { BreathingToolViewModel(repository = get()) }
-    viewModel { CaffeineToolViewModel(repository = get()) }
     viewModel { SoundModeToolViewModel(repository = get()) }
-    viewModel { MusicSearchToolViewModel(repository = get()) }
     viewModel { SosToolViewModel(repository = get()) }
     viewModel { MorseToolViewModel(repository = get()) }
     viewModel { FlashDimmerToolViewModel(torchRepository = get(), morseRepository = get()) }

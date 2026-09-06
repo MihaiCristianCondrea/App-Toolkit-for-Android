@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">শ্বাস নিন</string>
     <string name="tile_bubble_level_summary">পৃষ্ঠ প্রান্তিককরণ এবং কাত সনাক্তকরণ</string>
     <string name="tile_bubble_level_title">বুদবুদ স্তর</string>
-    <string name="tile_caffeine_summary">পর্দা সাময়িকভাবে জাগ্রত রাখুন</string>
-    <string name="tile_caffeine_title">ক্যাফেইন</string>
     <string name="tile_coin_flip_summary">অবিলম্বে মাথা বা লেজ উল্টানো</string>
     <string name="tile_coin_flip_title">মুদ্রা উল্টানো</string>
     <string name="tile_compass_summary">মূল দিকনির্দেশ এবং আজিমুথ</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">কাউন্টার</string>
     <string name="tile_dice_roll_summary">একটি ছয় পার্শ্বযুক্ত ডাই রোল</string>
     <string name="tile_dice_roll_title">ডাইস রোল</string>
-    <string name="tile_music_search_summary">একটি শর্টকাট দিয়ে সঙ্গীত সনাক্ত করুন</string>
-    <string name="tile_music_search_title">সঙ্গীত অনুসন্ধান</string>
     <string name="tile_preview_coin_result">মাথা</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">পূর্বরূপ শীঘ্রই আসছে</string>

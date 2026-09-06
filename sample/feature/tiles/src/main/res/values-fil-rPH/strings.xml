@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">huminga</string>
     <string name="tile_bubble_level_summary">Pag-align sa ibabaw at pagtuklas ng ikiling</string>
     <string name="tile_bubble_level_title">Antas ng Bubble</string>
-    <string name="tile_caffeine_summary">Panatilihing gising ang screen</string>
-    <string name="tile_caffeine_title">Caffeine</string>
     <string name="tile_coin_flip_summary">I-flip ang mga ulo o buntot kaagad</string>
     <string name="tile_coin_flip_title">Coin Flip</string>
     <string name="tile_compass_summary">Mga direksyon ng kardinal at azimuth</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">Kontra</string>
     <string name="tile_dice_roll_summary">Gumulong ng anim na panig na die</string>
     <string name="tile_dice_roll_title">Dice Roll</string>
-    <string name="tile_music_search_summary">Tukuyin ang musika gamit ang isang shortcut</string>
-    <string name="tile_music_search_title">Paghahanap ng Musika</string>
     <string name="tile_preview_coin_result">Mga ulo</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Paparating na ang preview</string>

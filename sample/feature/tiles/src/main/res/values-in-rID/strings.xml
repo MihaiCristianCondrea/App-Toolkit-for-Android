@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">Bernafas</string>
     <string name="tile_bubble_level_summary">Penjajaran permukaan dan deteksi kemiringan</string>
     <string name="tile_bubble_level_title">Tingkat Gelembung</string>
-    <string name="tile_caffeine_summary">Biarkan layar tetap aktif untuk sementara</string>
-    <string name="tile_caffeine_title">Kafein</string>
     <string name="tile_coin_flip_summary">Balikkan kepala atau ekor secara instan</string>
     <string name="tile_coin_flip_title">Balik Koin</string>
     <string name="tile_compass_summary">Arah mata angin dan azimuth</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">Penghitung</string>
     <string name="tile_dice_roll_summary">Pelemparan sebuah dadu bersisi enam</string>
     <string name="tile_dice_roll_title">Gulungan Dadu</string>
-    <string name="tile_music_search_summary">Identifikasi musik dengan pintasan</string>
-    <string name="tile_music_search_title">Pencarian Musik</string>
     <string name="tile_preview_coin_result">Kepala</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Pratinjau segera hadir</string>

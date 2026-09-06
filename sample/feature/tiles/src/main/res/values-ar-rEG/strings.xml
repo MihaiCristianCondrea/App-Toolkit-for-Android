@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">يتنفس</string>
     <string name="tile_bubble_level_summary">محاذاة السطح وكشف الميل</string>
     <string name="tile_bubble_level_title">مستوى الفقاعة</string>
-    <string name="tile_caffeine_summary">أبقِ الشاشة نشطة مؤقتًا</string>
-    <string name="tile_caffeine_title">الكافيين</string>
     <string name="tile_coin_flip_summary">اقلب الرؤوس أو الذيول على الفور</string>
     <string name="tile_coin_flip_title">عملة الوجه</string>
     <string name="tile_compass_summary">الاتجاهات الكاردينال والسمت</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">عداد</string>
     <string name="tile_dice_roll_summary">قم برمي حجر نرد ذو ستة جوانب</string>
     <string name="tile_dice_roll_title">لفة النرد</string>
-    <string name="tile_music_search_summary">التعرف على الموسيقى باستخدام الاختصار</string>
-    <string name="tile_music_search_title">بحث الموسيقى</string>
     <string name="tile_preview_coin_result">رؤساء</string>
     <string name="tile_preview_compass_result">شمال شرق 45 درجة</string>
     <string name="tile_preview_default_result">المعاينة قريبا</string>

@@ -15,15 +15,10 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="caffeine_notification_channel_description" translatable="false">Active when the Caffeine screen-on timer is running.</string>
-    <string name="caffeine_notification_channel_name" translatable="false">Caffeine Tool</string>
-    <string name="caffeine_notification_text" translatable="false">Keeping your screen awake…</string>
     <string name="tile_breathing_summary">Start a short guided breathing pause</string>
     <string name="tile_breathing_title">Breathe</string>
     <string name="tile_bubble_level_summary">Surface alignment and tilt detection</string>
     <string name="tile_bubble_level_title">Bubble Level</string>
-    <string name="tile_caffeine_summary">Keep the screen awake temporarily</string>
-    <string name="tile_caffeine_title">Caffeine</string>
     <string name="tile_coin_flip_summary">Flip heads or tails instantly</string>
     <string name="tile_coin_flip_title">Coin Flip</string>
     <string name="tile_compass_summary">Cardinal directions and azimuth</string>
@@ -34,8 +29,6 @@
     <string name="tile_dice_roll_title">Dice Roll</string>
     <string name="tile_flash_dimmer_summary">Adjust flashlight brightness and access it from Quick Settings</string>
     <string name="tile_flash_dimmer_title">Flash Dimmer</string>
-    <string name="tile_music_search_summary">Identify music with a shortcut</string>
-    <string name="tile_music_search_title">Music Search</string>
     <string name="tile_preview_coin_result">Heads</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Preview coming soon</string>
@@ -97,13 +90,6 @@
     <string name="tiles_status_available">Available</string>
     <string name="tiles_status_not_added">Not added</string>
     <string name="tiles_status_unsupported">Unsupported</string>
-    <string name="tool_caffeine_10m" translatable="false">10m</string>
-    <string name="tool_caffeine_1h" translatable="false">1h</string>
-    <string name="tool_caffeine_30m" translatable="false">30m</string>
-    <string name="tool_caffeine_5m" translatable="false">5m</string>
-    <string name="tool_caffeine_infinite" translatable="false">Infinite</string>
-    <string name="tool_caffeine_off" translatable="false">Off</string>
-    <string name="tool_caffeine_remaining" translatable="false">Active: %1$s</string>
     <string name="tool_coin_flip_action">Flip coin</string>
     <string name="tool_coin_flip_waiting">Ready?</string>
     <string name="tool_counter_increment">Increment</string>

@@ -22,14 +22,12 @@ import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchPreset
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.BreathingRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.CaffeineRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.MorseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SensorRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SosRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SystemRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.TorchRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.BreathingState
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.CaffeineState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.RingerMode
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CoinFlipToolState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.DiceRollToolState
@@ -124,11 +122,6 @@ class BreathingToolViewModel(private val repository: BreathingRepository) :
     }
 }
 
-class CaffeineToolViewModel(private val repository: CaffeineRepository) : ViewModel() {
-    val state: StateFlow<CaffeineState> = repository.currentState
-    fun cycle() = repository.cycleState()
-}
-
 class SoundModeToolViewModel(private val repository: SystemRepository) :
     FlowToolViewModel<RingerMode>(RingerMode.Normal) {
     fun open() {
@@ -143,10 +136,6 @@ class SoundModeToolViewModel(private val repository: SystemRepository) :
         }
         repository.setRingerMode(next)
     }
-}
-
-class MusicSearchToolViewModel(private val repository: SystemRepository) : ViewModel() {
-    fun launch() = repository.launchMusicSearch()
 }
 
 class SosToolViewModel(private val repository: SosRepository) : ViewModel() {

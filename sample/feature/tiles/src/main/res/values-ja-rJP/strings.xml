@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">呼吸する</string>
     <string name="tile_bubble_level_summary">面合わせと傾き検出</string>
     <string name="tile_bubble_level_title">バブルレベル</string>
-    <string name="tile_caffeine_summary">画面を一時的に起動したままにする</string>
-    <string name="tile_caffeine_title">カフェイン</string>
     <string name="tile_coin_flip_summary">表か裏を瞬時に反転します</string>
     <string name="tile_coin_flip_title">コイン投げ</string>
     <string name="tile_compass_summary">基本方位と方位</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">カウンター</string>
     <string name="tile_dice_roll_summary">6面サイコロを振る</string>
     <string name="tile_dice_roll_title">サイコロロール</string>
-    <string name="tile_music_search_summary">ショートカットで音楽を識別する</string>
-    <string name="tile_music_search_title">音楽検索</string>
     <string name="tile_preview_coin_result">ヘッズ</string>
     <string name="tile_preview_compass_result">北東45度</string>
     <string name="tile_preview_default_result">プレビューは近日公開予定</string>

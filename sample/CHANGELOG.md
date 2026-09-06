@@ -4,6 +4,13 @@
 
 **Version:** `Unknown` (`unknown`)
 
+### Removed
+
+- Removed the Caffeine tool and its Quick Settings service. Keeping the screen awake needed a
+  foreground service and a wake lock, and Android caps that service at about three minutes anyway.
+  The app no longer declares `WAKE_LOCK` or `FOREGROUND_SERVICE`.
+- Removed the Music Search tool. The feature moves to a different app.
+
 ### Improved
 
 - Quick Tools that offer a Quick Settings tile you have not added now read "Not added" with a
@@ -21,7 +28,6 @@
 
 - Prevented malformed home-screen widget action launches from crashing the Sample App.
 - Corrected Quick Tools setup status and Android-version support for adding Quick Settings tiles.
-- Fixed Caffeine startup permissions and cleanup when Android times out its foreground service.
 - Fixed Sample App startup graph verification and navigation composition after modularization.
 - Fixed missing ad-placement and analytics-contract verification.
 - Fixed missing `VIBRATE` permission declaration for Toolkit Tiles.

@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">Andas</string>
     <string name="tile_bubble_level_summary">Ytjustering och lutningsdetektering</string>
     <string name="tile_bubble_level_title">Bubbla nivå</string>
-    <string name="tile_caffeine_summary">Håll skärmen vaken tillfälligt</string>
-    <string name="tile_caffeine_title">Koffein</string>
     <string name="tile_coin_flip_summary">Vänd huvuden eller svansarna direkt</string>
     <string name="tile_coin_flip_title">Coin Flip</string>
     <string name="tile_compass_summary">Kardinalriktningar och azimut</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">Räknare</string>
     <string name="tile_dice_roll_summary">Slå en sexsidig tärning</string>
     <string name="tile_dice_roll_title">Tärningskast</string>
-    <string name="tile_music_search_summary">Identifiera musik med en genväg</string>
-    <string name="tile_music_search_title">Musiksökning</string>
     <string name="tile_preview_coin_result">Huvuden</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Förhandsvisning kommer snart</string>

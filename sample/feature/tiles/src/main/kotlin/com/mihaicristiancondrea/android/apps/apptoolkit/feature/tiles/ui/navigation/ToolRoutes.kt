@@ -23,7 +23,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BreathingToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CaffeineToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CoinFlipToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CompassToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.CounterToolViewModel
@@ -31,11 +30,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DiceRol
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.FlashDimmerToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MusicSearchToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SoundModeToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.BreathingTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CaffeineTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CoinFlipTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CompassTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CounterTool
@@ -43,7 +40,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.t
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.FlashDimmerTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.LevelTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.MorseTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.MusicSearchTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.SosTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.SoundModeTool
 import org.koin.compose.viewmodel.koinViewModel
@@ -99,21 +95,10 @@ internal fun BreathingToolRoute(viewModel: BreathingToolViewModel = koinViewMode
 }
 
 @Composable
-internal fun CaffeineToolRoute(viewModel: CaffeineToolViewModel = koinViewModel()) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    CaffeineTool(state, viewModel::cycle)
-}
-
-@Composable
 internal fun SoundModeToolRoute(viewModel: SoundModeToolViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(viewModel::open, viewModel::dismiss)
     SoundModeTool(state, viewModel::cycle)
-}
-
-@Composable
-internal fun MusicSearchToolRoute(viewModel: MusicSearchToolViewModel = koinViewModel()) {
-    MusicSearchTool(viewModel::launch)
 }
 
 @Composable

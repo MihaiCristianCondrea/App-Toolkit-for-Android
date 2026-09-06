@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">Respirer</string>
     <string name="tile_bubble_level_summary">Alignement de surface et détection d\'inclinaison</string>
     <string name="tile_bubble_level_title">Niveau à bulle</string>
-    <string name="tile_caffeine_summary">Garder l\'écran éveillé temporairement</string>
-    <string name="tile_caffeine_title">Caféine</string>
     <string name="tile_coin_flip_summary">Retournez instantanément tête ou queue</string>
     <string name="tile_coin_flip_title">Lancement de pièces</string>
     <string name="tile_compass_summary">Directions cardinales et azimut</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">Compteur</string>
     <string name="tile_dice_roll_summary">Lancez un dé à six faces</string>
     <string name="tile_dice_roll_title">Lancement de dés</string>
-    <string name="tile_music_search_summary">Identifiez la musique avec un raccourci</string>
-    <string name="tile_music_search_title">Recherche de musique</string>
     <string name="tile_preview_coin_result">Têtes</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Aperçu à venir</string>

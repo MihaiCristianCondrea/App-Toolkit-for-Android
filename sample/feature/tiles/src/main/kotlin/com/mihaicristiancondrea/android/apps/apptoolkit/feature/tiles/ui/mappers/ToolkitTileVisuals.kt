@@ -30,10 +30,8 @@ import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Straighten
-import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -65,9 +63,7 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Coin -> Icons.Outlined.MonetizationOn
     ToolkitTileIcon.Dice -> Icons.Outlined.Casino
     ToolkitTileIcon.Counter -> Icons.Outlined.Dehaze
-    ToolkitTileIcon.Caffeine -> Icons.Outlined.Timer
     ToolkitTileIcon.Sound -> Icons.Outlined.GraphicEq
-    ToolkitTileIcon.Music -> Icons.Outlined.MusicNote
     ToolkitTileIcon.Breathing -> Icons.Outlined.FavoriteBorder
     ToolkitTileIcon.Sos -> Icons.Outlined.WarningAmber
     ToolkitTileIcon.Morse -> Icons.Outlined.MoreHoriz
@@ -79,7 +75,6 @@ internal fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
     ToolkitTileIcon.Level,
     ToolkitTileIcon.Compass -> CoreUiR.drawable.background_8_sided_cookie
 
-    ToolkitTileIcon.Caffeine,
     ToolkitTileIcon.Breathing -> CoreUiR.drawable.background_soft_burst
 
     ToolkitTileIcon.Sound,
@@ -119,7 +114,6 @@ internal fun ToolkitTileIcon.iconColors(): StatusColors {
             content = if (isDark) Color(0xFF74DED1) else Color(0xFF006A60),
         )
 
-        ToolkitTileIcon.Caffeine,
         ToolkitTileIcon.Breathing -> StatusColors(
             container = if (isDark) Color(0xFF8B4100) else Color(0xFFFF8B26),
             content = if (isDark) Color(0xFFFFB88E) else Color(0xFF8B4100),

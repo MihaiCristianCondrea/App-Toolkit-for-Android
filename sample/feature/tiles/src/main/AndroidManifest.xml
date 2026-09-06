@@ -19,8 +19,6 @@
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application>
         <service
@@ -55,11 +53,6 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-
-        <service
-            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.CaffeineService"
-            android:exported="false"
-            android:foregroundServiceType="shortService" />
 
         <service
             android:name="com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.FlashDimmerTileService"

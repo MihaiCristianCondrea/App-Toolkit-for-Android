@@ -86,14 +86,12 @@ class DefaultToolkitTilesRepository(
                 tile(ToolkitTileIds.DICE_ROLL, requestKey = ToolkitTileIds.DICE_ROLL),
                 tile(ToolkitTileIds.COUNTER, requestKey = ToolkitTileIds.COUNTER),
                 tile("material_colors", quickTool = ToolkitQuickTool.MaterialColors),
-                tile(ToolkitTileIds.MUSIC_SEARCH),
                 tile(ToolkitTileIds.MORSE),
             ),
         ),
         ToolkitTileCategoryData(
             id = "system",
             tiles = persistentListOf(
-                tile(ToolkitTileIds.CAFFEINE),
                 tile(ToolkitTileIds.SOUND_MODE),
                 tile(ToolkitTileIds.FLASH_DIMMER, requestKey = ToolkitTileIds.FLASH_DIMMER),
             ),

@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">Respiră</string>
     <string name="tile_bubble_level_summary">Alinierea suprafeței și detectarea înclinării</string>
     <string name="tile_bubble_level_title">Nivel cu bule</string>
-    <string name="tile_caffeine_summary">Țineți ecranul treaz temporar</string>
-    <string name="tile_caffeine_title">Cofeina</string>
     <string name="tile_coin_flip_summary">Întoarceți capetele sau cozile instantaneu</string>
     <string name="tile_coin_flip_title">Coin Flip</string>
     <string name="tile_compass_summary">Direcții cardinale și azimut</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">Contor</string>
     <string name="tile_dice_roll_summary">Lansați un zar cu șase fețe</string>
     <string name="tile_dice_roll_title">Rol de zaruri</string>
-    <string name="tile_music_search_summary">Identificați muzica cu o comandă rapidă</string>
-    <string name="tile_music_search_title">Căutare de muzică</string>
     <string name="tile_preview_coin_result">Capete</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Previzualizare în curând</string>

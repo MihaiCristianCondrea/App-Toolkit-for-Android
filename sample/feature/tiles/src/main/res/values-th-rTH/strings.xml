@@ -19,8 +19,6 @@
     <string name="tile_breathing_title">หายใจเข้า</string>
     <string name="tile_bubble_level_summary">การจัดตำแหน่งพื้นผิวและการตรวจจับการเอียง</string>
     <string name="tile_bubble_level_title">ระดับฟอง</string>
-    <string name="tile_caffeine_summary">ให้หน้าจอตื่นอยู่ชั่วคราว</string>
-    <string name="tile_caffeine_title">คาเฟอีน</string>
     <string name="tile_coin_flip_summary">พลิกหัวหรือก้อยทันที</string>
     <string name="tile_coin_flip_title">พลิกเหรียญ</string>
     <string name="tile_compass_summary">ทิศทางสำคัญและราบ</string>
@@ -29,8 +27,6 @@
     <string name="tile_counter_title">เคาน์เตอร์</string>
     <string name="tile_dice_roll_summary">ทอยลูกเต๋าหกด้าน</string>
     <string name="tile_dice_roll_title">ทอยลูกเต๋า</string>
-    <string name="tile_music_search_summary">ระบุเพลงด้วยทางลัด</string>
-    <string name="tile_music_search_title">ค้นหาเพลง</string>
     <string name="tile_preview_coin_result">หัว</string>
     <string name="tile_preview_compass_result">ตะวันออกเฉียงเหนือ 45°</string>
     <string name="tile_preview_default_result">ดูตัวอย่างในเร็วๆ นี้</string>
