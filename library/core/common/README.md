@@ -29,7 +29,7 @@ No internal Gradle modules. This is the bottom shared runtime dependency for mos
 
 ## Used by
 
-- `:sample` and `:library:apptoolkit` for host and façade contracts.
+- `:sample` and `:library:apptoolkit` for host and toolkit contracts.
 - `:library:core:datastore`, `:library:core:network`, `:library:core:ui`, and
   `:library:core:designsystem`.
 - `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`,

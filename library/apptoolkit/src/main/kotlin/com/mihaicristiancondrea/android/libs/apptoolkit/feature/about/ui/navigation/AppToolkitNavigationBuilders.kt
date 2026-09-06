@@ -24,7 +24,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation.a
 
 /**
  * Compatibility entry point for hosts using the historical About package.
- * Destination composition is owned by the AppToolkit facade.
+ * Destination composition is owned by the AppToolkit module.
  */
 fun appToolkitNavigationEntryBuilders(
     paddingValues: PaddingValues = PaddingValues(),

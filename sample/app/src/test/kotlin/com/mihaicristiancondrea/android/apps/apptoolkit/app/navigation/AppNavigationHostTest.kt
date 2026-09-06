@@ -62,7 +62,7 @@ class AppNavigationHostTest {
     }
 
     @Test
-    fun legacyFacadeBuilderPreservesDestinationContentKeys() {
+    fun legacyNavigationBuilderPreservesDestinationContentKeys() {
         val canonical = entryProviderFor(appToolkitNavigationEntryBuilders())
         val legacy = entryProviderFor(legacyEntryBuilders())
         val routes: List<StableNavKey> = listOf(

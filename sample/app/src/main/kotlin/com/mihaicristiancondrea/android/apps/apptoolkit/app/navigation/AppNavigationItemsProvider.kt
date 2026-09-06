@@ -21,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.EventNote
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Widgets
-import androidx.compose.material.icons.rounded.Share
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
@@ -85,7 +84,7 @@ class AppNavigationItemsProvider(
                 add(
                     NavigationDrawerItem(
                         title = ToolkitR.string.share,
-                        icon = NavigationIcon.Vector(Icons.Rounded.Share),
+                        icon = NavigationIcon.Resource(NavR.drawable.ic_share),
                         selectedIcon = NavigationIcon.AnimatedVector(NavR.drawable.anim_share),
                         route = NavigationDrawerRoutes.ROUTE_SHARE,
                     )

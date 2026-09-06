@@ -57,8 +57,8 @@ flowchart TD
   source of truth for Java compatibility; plugin order is therefore part of its contract.
 - Test dependencies and `useJUnitPlatform()` are installed together so a module cannot compile test
   sources while silently omitting their engine.
-- Every published library produces its own artifact because the facade POM refers to sibling module
-  coordinates; publishing only the facade would leave those dependencies unresolved.
+- Every published library produces its own artifact because the apptoolkit POM refers to sibling module
+  coordinates; publishing only apptoolkit would leave those dependencies unresolved.
 - Version codes encode product family, target SDK, and upload counter, while version names use the
   Bucharest calendar month and upload counter. `release.properties` is the sole input.
 

@@ -4,7 +4,7 @@
 
 Owns usage/diagnostics preferences presentation, consent toggle cards, UsageAndDiagnosticsSettings,
 UsageAndDiagnosticsRepository and its default implementation, and diagnosticsSettingsModule.
-Settings embeds the list; onboarding also consumes the ViewModel and state. The facade assembles DI.
+Settings embeds the list; onboarding also consumes the ViewModel and state. The main toolkit module assembles DI.
 
 ## Dependencies and flow
 

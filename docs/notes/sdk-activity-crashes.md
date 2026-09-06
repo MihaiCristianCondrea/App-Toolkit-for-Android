@@ -26,8 +26,8 @@ verification of the historical crashing APK's dependency versions.
 Do not propagate expanded `android:configChanges` as a proven crash fix.
 
 The proposal adds `smallestScreenSize|uiMode|fontScale|layoutDirection|locale|density` to both
-Billing proxy activities, using `tools:replace`. The existing working trees in Toolkit's billing
-manifest and Net Probe's app manifest contain this proposal. Its presence is not validation;
+Billing proxy activities, using `tools:replace`. Toolkit's billing manifest working tree contains
+this proposal; Net Probe's app-side overrides have been removed after review. Its presence is not validation;
 the comments claiming lost extras during recreation describe an unproven cause. Recommendation:
 remove these speculative overrides before publishing unless a reproduction establishes benefit.
 
@@ -78,7 +78,7 @@ signatures. `ConsentSdkCrashGuard` must not be broadened to swallow these main-t
    regression check, publish a new immutable Toolkit version, and verify each host's resolved
    artifact
    and runtime flow. Local Toolkit source edits do not change an existing JitPack dependency.
-5. Apps with no widgets may exclude the facade's unused `androidx.glance` group after checking their
+5. Apps with no widgets may exclude the toolkit's unused `androidx.glance` group after checking their
    own source and resolved Toolkit classes for references. Net Probe did this and verified absence
    of Glance components in debug/release manifests. Do not apply that exclusion to widget-using
    apps.

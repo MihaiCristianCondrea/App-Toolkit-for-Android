@@ -42,8 +42,8 @@ used by onboarding, consent, ads, diagnostics, review, and theming.
 ```mermaid
 flowchart TD
     Caller[Feature repository or state holder] --> Narrow["Narrow preference contract"]
-    Legacy[Legacy caller] --> Facade[CommonDataStore facade]
-    Facade --> Narrow
+    Legacy[Legacy caller] --> Wrapper[CommonDataStore wrapper]
+    Wrapper --> Narrow
     Narrow --> Source[Default preference data source]
     Source -->|read| Store["settings Preferences DataStore"]
     Caller -->|suspend mutation| Narrow
@@ -53,7 +53,7 @@ flowchart TD
     Ads[DefaultAdsPreferencesDataSource] -->|eagerly shared| AdsState[adsEnabled StateFlow]
     Ads --> Reduce[reduceAds Flow]
     Store --> Ads
-    Module[dataStoreModule] -->|one process instance| Facade
+    Module[dataStoreModule] -->|one process instance| CommonDataStore
     Module --> Narrow
 ```
 
@@ -62,7 +62,7 @@ flowchart TD
 - Cohesive source interfaces split ownership without moving installed data: all keys deliberately
   remain in one `settings` file.
 - Repositories and state holders depend on the narrow source or repository they need. The broad
-  `CommonDataStore` facade remains only for source compatibility with older callers.
+  `CommonDataStore` wrapper remains only for source compatibility with older callers.
 - Reads are observable `Flow`s and mutations are suspend functions; the stored preferences are the
   source of truth except for explicitly documented UI mirrors.
 - Ads enablement is eagerly shared by one process-scoped instance because initialization and every

@@ -63,7 +63,7 @@ flowchart TD
 - Destination type is data on the route contract. Back-stack helpers validate top-level navigation
   and suppress duplicate single-top entries.
 - This module owns shell rendering and mutation primitives but not destination registration; only
-  the host/facade composition roots know the complete feature set.
+  the host/toolkit composition roots know the complete feature set.
 - The standard drawer repository contract is host-facing, while its default localized item list
   remains in the About feature that owns those labels and actions.
 

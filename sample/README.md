@@ -15,7 +15,7 @@ emergency flash and dimmer, Morse code messaging, music search, caffeine mode, a
 manager. All in one fast, battery-friendly package.
 
 Whether you need a quick tool on the go, a relaxing breathing exercise, or a way to keep your screen
-awake, App Toolkit provides a seamless, beautifully designed experience built with modern Material
+awake, App Toolkit provides a clean experience built with modern Material
 You theming.
 
 Our app is designed to be simple and easy to use, while also being fast and lightweight. Plus, it's

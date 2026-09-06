@@ -17,7 +17,7 @@ demonstrates the library in a real application.
 
 ## Repository structure
 
-- [`library/apptoolkit`](library/apptoolkit/README.md) is the host-facing façade. It exports the
+- [`library/apptoolkit`](library/apptoolkit/README.md) is the host-facing entry point. It exports the
   toolkit modules and assembles their Koin modules and Navigation 3 destinations.
 - [`library/core`](library/core/README.md) contains shared models, data, design-system, networking,
   testing, and UI foundations.
@@ -47,7 +47,7 @@ dependencyResolutionManagement {
 }
 ```
 
-Then add the façade artifact to the consuming module:
+Then add the toolkit artifact to the consuming module:
 
 ```kotlin
 dependencies {

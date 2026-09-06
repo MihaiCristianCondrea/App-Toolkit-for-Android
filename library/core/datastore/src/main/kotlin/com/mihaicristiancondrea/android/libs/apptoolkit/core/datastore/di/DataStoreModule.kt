@@ -60,7 +60,7 @@ fun dataStoreModule(): Module = module {
 
     single<CommonDataStoreCore> { get<CommonDataStore>() }
 
-    // Bound from the facade rather than constructed here so that exactly one instance of each
+    // Bound from CommonDataStore rather than constructed here so that exactly one instance of each
     // group exists per process. DefaultAdsPreferencesDataSource in particular starts an eager
     // collector, so a second copy would observe the same preference twice.
     single<ThemePreferencesDataSource> { get<CommonDataStore>().themePreferences }

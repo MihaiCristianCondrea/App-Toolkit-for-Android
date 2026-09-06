@@ -8,7 +8,7 @@ by architectural role but has no build script or runtime artifact of its own.
 ## Owns
 
 - The filesystem and Gradle hierarchy below `:library`.
-- Grouping for the façade, core, navigation contract/UI, feature, and integration projects.
+- Grouping for the main toolkit module, core, navigation contract/UI, feature, and integration projects.
 
 ## Does not own
 
@@ -28,7 +28,7 @@ directly.
 
 ```mermaid
 flowchart TD
-    Library[":library implicit parent"] --> Facade[":library:apptoolkit facade"]
+    Library[":library implicit parent"] --> AppToolkit[":library:apptoolkit"]
     Library --> Core[":library:core:*"]
     Library --> Navigation[":library:navigation"]
     Library --> Features[":library:feature:*"]
@@ -37,19 +37,19 @@ flowchart TD
     Core --> Testing["testing (test-only helpers)"]
     Features --> ReusableScreens["about / help / issue reporter / onboarding / permissions / settings / support"]
     Integrations --> SDKs["ads / billing / consent / Firebase / review / update"]
-    Facade -->|api dependencies| Foundations
-    Facade -->|api dependencies| Navigation
-    Facade -->|api dependencies| ReusableScreens
-    Facade -->|api dependencies| SDKs
+    AppToolkit -->|api dependencies| Foundations
+    AppToolkit -->|api dependencies| Navigation
+    AppToolkit -->|api dependencies| ReusableScreens
+    AppToolkit -->|api dependencies| SDKs
 ```
 
 ## Architectural decisions
 
-- The parent paths are organizational only; consumers select a child artifact or the facade.
+- The parent paths are organizational only; consumers select a child artifact or the main toolkit module.
 - `:library:apptoolkit` is the convenience boundary and intentionally re-exports production
   modules. `:library:core:testing` is excluded because it belongs on test classpaths only.
 - Feature modules own user flows, integration modules own SDK behavior, and core modules own shared
-  foundations. The facade composes them but does not absorb their implementations.
+  foundations. `:library:apptoolkit` composes them but does not absorb their implementations.
 
 ## Public contracts
 
@@ -63,13 +63,13 @@ Library manifests contribute the components and permissions owned by their modul
   intent filter makes it a genuine entry point;
 - the permissions and metadata its own code or wrapped SDK integration needs.
 
-`:library:apptoolkit` is the deliberate application-default facade. Its manifest contributes the
+`:library:apptoolkit` is the application-default entry point. Its manifest contributes the
 common theme, backup, RTL, resizing, back-navigation, cleartext, acceleration and soft-input
 defaults used by toolkit hosts. Its resources own `AppTheme`, `SplashScreenTheme`, shared colors,
 splash assets, and backup/data-extraction rules.
 
 `ManifestContractTest` in `:library:apptoolkit` keeps application attributes out of every other
-library module, pins the facade defaults/resources, and verifies component export declarations.
+library module, pins the toolkit defaults/resources, and verifies component export declarations.
 
 ### What a host declares
 
@@ -92,5 +92,5 @@ The container appears in Gradle project reports despite producing no artifact, s
 mistaken for an umbrella dependency.
 
 Manifest merging stays the quietest coupling between the toolkit and its hosts: it has no
-compile-time surface, so both adding and removing a facade default changes every host silently.
-`ManifestContractTest` therefore pins the defaults and their ownership in the facade.
+compile-time surface, so both adding and removing a toolkit default changes every host silently.
+`ManifestContractTest` therefore pins the defaults and their ownership in `:library:apptoolkit`.

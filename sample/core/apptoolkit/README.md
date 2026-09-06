@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Adapts the reusable AppToolkit facade to the sample product. It is the host-integration boundary for
+Adapts the reusable AppToolkit module to the sample product. It is the host-integration boundary for
 toolkit startup and settings providers, localized provider resources, and Koin override ordering.
 
 ## Owns

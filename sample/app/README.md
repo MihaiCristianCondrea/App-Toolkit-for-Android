@@ -55,7 +55,7 @@ flowchart TD
     Process[Android process] --> App[AppToolkit Application]
     App --> Koin[initializeKoin]
     Koin --> Adapter[":sample:core:apptoolkit host modules"]
-    Adapter --> Facade[AppToolkit module graph]
+    Adapter --> AppToolkit[AppToolkit module graph]
     Koin --> HostModules[App-specific data and feature bindings]
     App --> Lifecycle[Process/activity lifecycle]
     Lifecycle --> Ads[Ads initialization and app-open display]

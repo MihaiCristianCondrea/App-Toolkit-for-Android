@@ -31,7 +31,7 @@ import java.io.File
  * a toolkit release from silently dropping the AppCompat theme, RTL support or backup rules from
  * every consuming application.
  *
- * Other library modules contribute only the components and permissions they own. The facade is the
+ * Other library modules contribute only the components and permissions they own. `:library:apptoolkit` is the
  * single exception for common application attributes, themes, colors, locale resources and backup
  * rules. The host links the locale resource because Android does not merge `localeConfig` from a
  * library into the final application manifest.
@@ -39,9 +39,9 @@ import java.io.File
 class ManifestContractTest {
 
     @Test
-    fun `only app toolkit facade declares application attributes`() {
+    fun `only app toolkit module declares application attributes`() {
         val offenders = libraryManifests()
-            .filterNot { it.invariantPath().endsWith(FACADE_MANIFEST) }
+            .filterNot { it.invariantPath().endsWith(APPTOOLKIT_MANIFEST) }
             .mapNotNull { manifest ->
                 val attributes = APPLICATION_TAG.find(manifest.readText())
                     ?.groupValues
@@ -56,14 +56,14 @@ class ManifestContractTest {
     }
 
     @Test
-    fun `app toolkit facade declares the complete application defaults`() {
-        val attributes = APPLICATION_TAG.find(File(repositoryRoot, FACADE_MANIFEST).readText())
+    fun `app toolkit module declares the complete application defaults`() {
+        val attributes = APPLICATION_TAG.find(File(repositoryRoot, APPTOOLKIT_MANIFEST).readText())
             ?.groupValues
             ?.get(1)
             ?.let { ATTRIBUTE_NAME.findAll(it).map { match -> match.groupValues[1] }.toSet() }
             .orEmpty()
 
-        assertThat(attributes).containsExactlyElementsIn(FACADE_APPLICATION_ATTRIBUTES)
+        assertThat(attributes).containsExactlyElementsIn(APPTOOLKIT_APPLICATION_ATTRIBUTES)
     }
 
     @Test
@@ -190,7 +190,7 @@ class ManifestContractTest {
         const val MAIN_SOURCE_SET = "/src/main/"
         const val MAIN_RESOURCES = "/src/main/res/"
         const val BUILD_DIRECTORY = "/build/"
-        const val FACADE_MANIFEST = "library/apptoolkit/src/main/AndroidManifest.xml"
+        const val APPTOOLKIT_MANIFEST = "library/apptoolkit/src/main/AndroidManifest.xml"
         const val SAMPLE_MANIFEST = "sample/app/src/main/AndroidManifest.xml"
         const val INTENT_FILTER = "intent-filter"
         const val UNNAMED_COMPONENT = "<unnamed>"
@@ -205,7 +205,7 @@ class ManifestContractTest {
             "sample/app/src/main/kotlin/com/mihaicristiancondrea/android/apps/apptoolkit/" +
                 "app/main/ui/MainActivity.kt"
 
-        val FACADE_APPLICATION_ATTRIBUTES = setOf(
+        val APPTOOLKIT_APPLICATION_ATTRIBUTES = setOf(
             "android:allowBackup",
             "android:dataExtractionRules",
             "android:enableOnBackInvokedCallback",

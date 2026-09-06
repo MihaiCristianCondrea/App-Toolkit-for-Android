@@ -4,7 +4,7 @@
 
 Owns the advanced settings list, cache-clearing state and actions, AdvancedSettingsProvider,
 CacheRepository/DefaultCacheRepository, and advancedSettingsModule. Settings composes this content;
-the facade assembles its DI module. Hosts supply the advanced settings provider.
+the main toolkit module assembles its DI module. Hosts supply the advanced settings provider.
 
 ## Dependencies and flow
 

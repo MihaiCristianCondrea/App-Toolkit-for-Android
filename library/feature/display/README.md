@@ -4,7 +4,7 @@
 
 Owns DisplaySettingsList, DisplaySettingsViewModel, DisplaySettingsProvider, language/startup
 selection dialogs, displaySettingsModule, and localized display settings resources.
-Settings composes this content; the facade assembles DI and hosts supply DisplaySettingsProvider.
+Settings composes this content; the main toolkit module assembles DI and hosts supply DisplaySettingsProvider.
 
 ## Dependencies and flow
 

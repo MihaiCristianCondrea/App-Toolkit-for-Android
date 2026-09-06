@@ -3,7 +3,7 @@
 ## Responsibility and consumers
 
 Owns ThemeSettingsList, ThemeSettingsViewModel, themeSettingsModule, theme-selection presentation,
-and localized resources. Settings composes the list and the facade assembles DI.
+and localized resources. Settings composes the list and the main toolkit module assembles DI.
 
 ## Dependencies and flow
 

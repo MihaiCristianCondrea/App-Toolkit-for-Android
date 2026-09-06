@@ -11,7 +11,7 @@
 - Added `NavigationDrawerSheet`, a reusable navigation drawer component that renders `ModalDrawerSheet` with navigation drawer items, selection state, click handling, and dividers.
 - Added core common's AppVersionMetadata and getVersionMetadata for package version lookup without
   a UI dependency, and core DataStore's startupValueFlow for caller-defined startup mapping.
-- Exposed toolkit destination builders from app.main.ui.navigation in the facade. The historical
+- Exposed toolkit destination builders from app.main.ui.navigation in the main toolkit module. The historical
   About-package entry point, UI helpers, and AppVersionInfo remain compatible.
 
 ### Changed
@@ -19,7 +19,7 @@
 - Updated `NavigationDrawerItem` so `selectedIcon` defaults to `icon`.
 - Standardized library APIs under module-owned `feature.*`, `core.*`, and `integration.*` package roots; consumers must update imports to the new packages.
 - Moved library dependency-injection bindings into the owning feature/integration modules and
-  exposed the datastore module from `core.datastore.di`; the toolkit facade now only composes those
+  exposed the datastore module from `core.datastore.di`; the main toolkit module now only composes those
   modules.
 - Moved `ThemePreferencesState`, `BaseCoreManager`, and `FirebaseControllerImpl` into their
   layer-specific packages; consumers must update imports to `core.common.domain.models.theme`,

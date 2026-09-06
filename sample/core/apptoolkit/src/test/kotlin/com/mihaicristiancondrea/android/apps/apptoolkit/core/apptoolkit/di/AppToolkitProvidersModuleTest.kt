@@ -40,7 +40,7 @@ import org.koin.dsl.module
  * `HostKoinGraphTest` in `:sample:app` already verifies the assembled graph, but it verifies it by
  * reflection over declared types and it only runs when the app module is built. This one resolves
  * each provider from a live graph, so it also proves they can be constructed, and it fails in the
- * module that owns them — which is where someone editing them is looking.
+ * module that owns them, which is where someone editing them is looking.
  *
  * A missing Koin binding does not fail at startup. It fails the first time something asks for it,
  * which for these is inside a settings screen the user has just opened.

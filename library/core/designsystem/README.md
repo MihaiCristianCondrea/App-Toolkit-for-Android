@@ -27,7 +27,7 @@ theme-selection visuals.
 ## Used by
 
 - `:sample` for application theming.
-- `:library:apptoolkit` as part of the public toolkit façade.
+- `:library:apptoolkit` as part of the public toolkit API.
 - `:library:core:ui` for themed reusable components.
 
 ## Flow chart
