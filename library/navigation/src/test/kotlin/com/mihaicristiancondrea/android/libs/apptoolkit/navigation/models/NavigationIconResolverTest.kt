@@ -92,4 +92,20 @@ class NavigationIconResolverTest {
             )
         )
     }
+
+    @Test
+    fun `animated icons restart their animation on a repeated click by default`() {
+        assertEquals(NavigationIconReplayMode.Restart, shareAnimated.replayMode)
+        assertEquals(
+            NavigationIconReplayMode.Restart,
+            (NavigationIcon.animated(resId = 3) as NavigationIcon.AnimatedVector).replayMode,
+        )
+        assertEquals(
+            NavigationIconReplayMode.Reverse,
+            NavigationIcon.AnimatedVector(
+                resId = 3,
+                replayMode = NavigationIconReplayMode.Reverse,
+            ).replayMode,
+        )
+    }
 }

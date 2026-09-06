@@ -21,6 +21,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,6 +29,7 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationIconReplayMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.resolveNavigationIcon
 
 /**
@@ -37,10 +39,14 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.resolv
  * Behaviour, per icon combination:
  * - Two static icons (vector or drawable resource): the icon is swapped on selection, nothing animates.
  * - Static unselected icon + AVD selected icon: the static icon is shown at rest; the first click
- *   swaps in the AVD and plays it forward. Every further click replays it (forward, then backwards,
- *   alternating), so a repeatedly clicked action such as *Share* animates every single time.
+ *   swaps in the AVD and plays it forward, and every further click plays it again, so a repeatedly
+ *   clicked action such as *Share* animates every single time.
  * - A single AVD used for both states: the drawable rests on its first frame while unselected and on
  *   its last frame while selected, and still replays on every click.
+ *
+ * A repeated click restarts the animation from its first frame by default. Drawables that morph
+ * between two distinct shapes can instead travel back by declaring
+ * [NavigationIconReplayMode.Reverse] on the [NavigationIcon.AnimatedVector].
  *
  * @param icon Icon shown while the item is unselected.
  * @param selectedIcon Icon shown while the item is selected.
@@ -79,28 +85,45 @@ fun NavigationItemIcon(
     }
 
     val restingAtEnd: Boolean = selected || displayedIcon.atEnd
-    var atEnd: Boolean by remember(displayedIcon.resId) { mutableStateOf(value = restingAtEnd) }
-    var lastSelected: Boolean by remember(displayedIcon.resId) { mutableStateOf(value = selected) }
 
-    LaunchedEffect(selected, clickCount) {
-        // Let the painter draw the current frame once before flipping, otherwise the drawable is
-        // created already at its target state and jumps instead of animating.
-        withFrameNanos { }
-        when {
-            selected != lastSelected -> {
-                lastSelected = selected
-                atEnd = restingAtEnd
-            }
+    // Restarting the animation means dropping the running painter: a new one is created on its first
+    // frame, which is why the click count keys the composition instead of only flipping a flag.
+    val playbackKey: Int =
+        if (displayedIcon.replayMode == NavigationIconReplayMode.Restart) clickCount else 0
 
-            clickCount > 0 -> atEnd = !atEnd
+    key(playbackKey) {
+        var atEnd: Boolean by remember(displayedIcon.resId) {
+            mutableStateOf(value = playbackKey == 0 && restingAtEnd)
         }
-    }
+        var lastSelected: Boolean by remember(displayedIcon.resId) {
+            mutableStateOf(value = selected)
+        }
 
-    NavigationIconContent(
-        icon = displayedIcon,
-        contentDescription = contentDescription,
-        modifier = modifier,
-        atEnd = atEnd,
-        tint = tint,
-    )
+        LaunchedEffect(selected, clickCount) {
+            // Let the painter draw the current frame once before flipping, otherwise the drawable is
+            // created already at its target state and jumps instead of animating.
+            withFrameNanos { }
+            atEnd = when {
+                selected != lastSelected -> {
+                    lastSelected = selected
+                    restingAtEnd
+                }
+
+                displayedIcon.replayMode == NavigationIconReplayMode.Restart ->
+                    restingAtEnd || clickCount > 0
+
+                clickCount > 0 -> !atEnd
+
+                else -> atEnd
+            }
+        }
+
+        NavigationIconContent(
+            icon = displayedIcon,
+            contentDescription = contentDescription,
+            modifier = modifier,
+            atEnd = atEnd,
+            tint = tint,
+        )
+    }
 }

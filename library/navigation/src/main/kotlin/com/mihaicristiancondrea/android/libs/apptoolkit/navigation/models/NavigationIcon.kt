@@ -43,17 +43,27 @@ sealed interface NavigationIcon {
 
     /**
      * Icon backed by an Animated Vector Drawable (AVD) resource ID.
+     *
+     * @property resId The AVD resource.
+     * @property atEnd Frame the drawable rests on while the item is not selected. `false`, the
+     *   default, rests on the first frame.
+     * @property replayMode What a repeated click does once the animation already ran. Defaults to
+     *   [NavigationIconReplayMode.Restart].
      */
     @Immutable
     data class AnimatedVector(
         @param:DrawableRes val resId: Int,
         val atEnd: Boolean = false,
+        val replayMode: NavigationIconReplayMode = NavigationIconReplayMode.Restart,
     ) : NavigationIcon
 
     companion object {
         fun of(imageVector: ImageVector): NavigationIcon = Vector(imageVector)
         fun of(@DrawableRes resId: Int): NavigationIcon = Resource(resId)
-        fun animated(@DrawableRes resId: Int, atEnd: Boolean = false): NavigationIcon =
-            AnimatedVector(resId, atEnd)
+        fun animated(
+            @DrawableRes resId: Int,
+            atEnd: Boolean = false,
+            replayMode: NavigationIconReplayMode = NavigationIconReplayMode.Restart,
+        ): NavigationIcon = AnimatedVector(resId, atEnd, replayMode)
     }
 }
