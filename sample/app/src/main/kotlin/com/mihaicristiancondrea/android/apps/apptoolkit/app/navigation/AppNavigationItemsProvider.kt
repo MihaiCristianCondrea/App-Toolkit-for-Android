@@ -26,12 +26,13 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as ToolkitR
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavR
@@ -62,8 +63,8 @@ class AppNavigationItemsProvider(
                 add(
                     NavigationDrawerItem(
                         title = ToolkitR.string.settings,
-                        icon = NavigationIcon.Resource(NavR.drawable.ic_settings),
-                        selectedIcon = NavigationIcon.AnimatedVector(NavR.drawable.anim_settings),
+                        icon = ToolkitIcon.Resource(NavR.drawable.ic_settings),
+                        selectedIcon = ToolkitIcon.AnimatedVector(NavR.drawable.anim_settings),
                         route = NavigationDrawerRoutes.ROUTE_SETTINGS,
                     )
                 )
@@ -84,8 +85,8 @@ class AppNavigationItemsProvider(
                 add(
                     NavigationDrawerItem(
                         title = ToolkitR.string.share,
-                        icon = NavigationIcon.Resource(NavR.drawable.ic_share),
-                        selectedIcon = NavigationIcon.AnimatedVector(NavR.drawable.anim_share),
+                        icon = ToolkitIcon.Resource(NavR.drawable.ic_share),
+                        selectedIcon = ToolkitIcon.AnimatedVector(NavR.drawable.anim_share),
                         route = NavigationDrawerRoutes.ROUTE_SHARE,
                     )
                 )

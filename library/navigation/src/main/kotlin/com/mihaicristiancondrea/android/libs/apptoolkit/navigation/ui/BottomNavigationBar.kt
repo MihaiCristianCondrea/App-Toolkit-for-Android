@@ -41,6 +41,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.LocalShowBottomBarLabels
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.BottomBarItem
@@ -80,7 +81,7 @@ fun <T : StableNavKey> BottomNavigationBar(
                             }
                         }
                     ) {
-                        NavigationItemIcon(
+                        AnimatedToolkitIcon(
                             icon = item.icon,
                             selectedIcon = item.selectedIcon,
                             selected = selected,

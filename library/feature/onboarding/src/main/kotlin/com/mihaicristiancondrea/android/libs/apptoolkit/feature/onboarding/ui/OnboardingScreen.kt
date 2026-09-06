@@ -45,19 +45,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.models.OnboardingPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.controls.OnboardingFooter
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.default.DefaultOnboardingPage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.hapticPagerSwipe
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.contracts.OnboardingEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.models.OnboardingPage
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.providers.OnboardingProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.states.OnboardingUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.controls.OnboardingFooter
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.ui.views.pages.default.DefaultOnboardingPage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -134,7 +135,7 @@ fun OnboardingScreen() {
                         ) {
                             GeneralOutlinedButton(
                                 onClick = { onSkipRequested() },
-                                vectorIcon = Icons.Filled.SkipNext,
+                                icon = ToolkitIcon.Vector(imageVector = Icons.Filled.SkipNext),
                                 iconContentDescription = stringResource(id = R.string.skip_button_content_description),
                                 label = stringResource(id = R.string.skip_button_text)
                             )

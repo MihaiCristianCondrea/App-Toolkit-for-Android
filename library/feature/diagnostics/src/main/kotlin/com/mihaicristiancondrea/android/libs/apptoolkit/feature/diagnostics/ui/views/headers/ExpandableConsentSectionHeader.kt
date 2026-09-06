@@ -42,8 +42,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.diagnostics.R
 
 /**
@@ -91,7 +92,7 @@ fun ExpandableConsentSectionHeader(
         )
         GeneralTextButton(
             onClick = onToggle,
-            vectorIcon = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+            icon = ToolkitIcon.Vector(imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore),
             iconContentDescription = if (expanded) stringResource(id = R.string.icon_desc_expand_less) else stringResource(
                 id = R.string.icon_desc_expand_more
             ),

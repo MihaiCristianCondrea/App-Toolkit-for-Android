@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons
 
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.animation.graphics.res.animatedVectorResource
@@ -28,34 +28,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationIcon
 
 /**
- * Renders a single [NavigationIcon] exactly as described: a Compose [ImageVector],
+ * Renders a single [ToolkitIcon] exactly as described: a Compose [ImageVector],
  * a static drawable/vector resource, or one frame state of an Animated Vector Drawable.
  *
  * This composable is intentionally stateless. Deciding *which* icon a navigation item shows,
  * and whether an AVD currently rests on its first or last frame, is the job of
- * [NavigationItemIcon].
+ * [AnimatedToolkitIcon].
  *
- * @param icon The [NavigationIcon] to display.
+ * @param icon The [ToolkitIcon] to display.
  * @param contentDescription Optional description of the icon for accessibility.
  * @param modifier The [Modifier] to apply to the icon.
- * @param atEnd For [NavigationIcon.AnimatedVector] only: `true` renders the last frame of the
+ * @param atEnd For [ToolkitIcon.AnimatedVector] only: `true` renders the last frame of the
  *   animation, `false` the first one. Changing this value animates between the two.
  * @param tint Tint color to apply to the icon, defaults to [LocalContentColor].
  */
 @OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
-fun NavigationIconContent(
-    icon: NavigationIcon,
+fun ToolkitIconContent(
+    icon: ToolkitIcon,
     contentDescription: String?,
     modifier: Modifier = Modifier,
     atEnd: Boolean = false,
     tint: Color = LocalContentColor.current,
 ) {
     when (icon) {
-        is NavigationIcon.Vector -> {
+        is ToolkitIcon.Vector -> {
             Icon(
                 imageVector = icon.imageVector,
                 contentDescription = contentDescription,
@@ -64,7 +63,7 @@ fun NavigationIconContent(
             )
         }
 
-        is NavigationIcon.Resource -> {
+        is ToolkitIcon.Resource -> {
             Icon(
                 painter = painterResource(id = icon.resId),
                 contentDescription = contentDescription,
@@ -73,7 +72,7 @@ fun NavigationIconContent(
             )
         }
 
-        is NavigationIcon.AnimatedVector -> {
+        is ToolkitIcon.AnimatedVector -> {
             val image = AnimatedImageVector.animatedVectorResource(id = icon.resId)
             val painter = rememberAnimatedVectorPainter(
                 animatedImageVector = image,

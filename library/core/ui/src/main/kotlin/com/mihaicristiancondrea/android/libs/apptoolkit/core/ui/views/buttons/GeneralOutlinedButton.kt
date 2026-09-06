@@ -21,9 +21,11 @@ import android.view.View
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
@@ -31,9 +33,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ButtonIconSpacer
 
 /**
@@ -53,8 +56,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.Bu
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
  * @param iconContentDescription Text used by accessibility services to describe what the icon represents.
  * @param label The text to be displayed on the button, or `null` for icon-only usage.
- * @param vectorIcon The [ImageVector] to be displayed inside the button.
- * @param painterIcon The [Painter] to be displayed when no vector icon is provided.
+ * @param icon The icon rendered before the label, or on its own when [label] is null. An
+ *   animated icon plays every time the button is clicked.
  * @param iconSize The icon size used when this composable renders icon + text content.
  * @param feedback The feedback configuration for sound and haptics.
  * @param firebaseController Optional Firebase controller used to log GA4 events.
@@ -67,8 +70,7 @@ fun GeneralOutlinedButton(
     enabled: Boolean = true,
     iconContentDescription: String? = null,
     label: String? = null,
-    vectorIcon: ImageVector? = null,
-    painterIcon: Painter? = null,
+    icon: ToolkitIcon? = null,
     iconSize: Dp = SizeConstants.ButtonIconSize,
     feedback: ButtonFeedback = ButtonFeedback(),
     firebaseController: FirebaseController? = null,
@@ -76,7 +78,8 @@ fun GeneralOutlinedButton(
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
-    val hasIcon: Boolean = vectorIcon != null || painterIcon != null
+    var clickCount: Int by remember { mutableIntStateOf(value = 0) }
+    val hasIcon: Boolean = icon != null
     val hasLabel: Boolean = !label.isNullOrEmpty()
 
     require(hasIcon || hasLabel) { "GeneralOutlinedButton requires a label, an icon, or both." }
@@ -87,8 +90,7 @@ fun GeneralOutlinedButton(
             onClick = onClick,
             enabled = enabled,
             iconContentDescription = iconContentDescription,
-            vectorIcon = vectorIcon,
-            painterIcon = painterIcon,
+            icon = icon,
             feedback = feedback,
             firebaseController = firebaseController,
             ga4Event = ga4Event,
@@ -100,6 +102,7 @@ fun GeneralOutlinedButton(
 
     OutlinedButton(
         onClick = {
+            clickCount++
             feedback.performClick(view = view, hapticFeedback = hapticFeedback)
             firebaseController.logGa4Event(ga4Event)
             onClick()
@@ -109,8 +112,8 @@ fun GeneralOutlinedButton(
     ) {
         if (hasIcon) {
             IconContent(
-                icon = vectorIcon,
-                painter = painterIcon,
+                icon = icon,
+                clickCount = clickCount,
                 contentDescription = iconContentDescription,
                 size = iconSize,
             )

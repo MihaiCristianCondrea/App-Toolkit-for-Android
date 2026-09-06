@@ -58,6 +58,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.BottomBarItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
@@ -146,7 +147,7 @@ fun <T : StableNavKey> LeftNavigationRail(
                                 }
                             }
                         ) {
-                            NavigationItemIcon(
+                            AnimatedToolkitIcon(
                                 icon = item.icon,
                                 selectedIcon = item.selectedIcon,
                                 selected = isSelected,
@@ -186,7 +187,7 @@ fun <T : StableNavKey> LeftNavigationRail(
                         onDrawerItemClick(item)
                     },
                     icon = {
-                        NavigationItemIcon(
+                        AnimatedToolkitIcon(
                             icon = item.icon,
                             selectedIcon = item.selectedIcon,
                             selected = isSelected,

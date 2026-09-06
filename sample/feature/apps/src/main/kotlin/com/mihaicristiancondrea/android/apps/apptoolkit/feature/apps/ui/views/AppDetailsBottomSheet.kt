@@ -69,6 +69,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.mode
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.models.AppVersionInfo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.models.AppInfoChipUi
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AppDetailsNativeAd
@@ -77,6 +78,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.Ge
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -270,13 +272,13 @@ private fun AppDetailsActions(
             true -> {
                 GeneralOutlinedButton(
                     onClick = { actionLauncher.shareApp(appInfo.packageName, appInfo.name) },
-                    vectorIcon = Icons.Outlined.Share,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Share),
                     label = stringResource(id = R.string.app_details_share),
                     modifier = Modifier.weight(1f),
                 )
                 GeneralButton(
                     onClick = { actionLauncher.openApp(appInfo.packageName) },
-                    vectorIcon = Icons.AutoMirrored.Outlined.OpenInNew,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Outlined.OpenInNew),
                     label = stringResource(id = R.string.app_details_open_app),
                     modifier = Modifier.weight(1f),
                 )

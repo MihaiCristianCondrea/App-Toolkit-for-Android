@@ -45,8 +45,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
 
 /**
  * Full-screen dialog shell with a top app bar, close action, confirm action, and scrollable body.
@@ -86,7 +87,7 @@ fun BasicFullScreenDialog(
                 CenterAlignedTopAppBar(navigationIcon = {
                     GeneralTextButton(
                         onClick = onDismiss,
-                        vectorIcon = Icons.Filled.Close,
+                        icon = ToolkitIcon.Vector(imageVector = Icons.Filled.Close),
                         iconContentDescription = title
                     )
                 }, title = { Text(text = title) }, actions = {

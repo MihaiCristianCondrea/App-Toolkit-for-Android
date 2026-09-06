@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ads.AdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NoDataNativeAdCard
@@ -116,7 +117,7 @@ fun NoDataScreen(
             LargeVerticalSpacer()
             GeneralButton(
                 onClick = onRetry,
-                vectorIcon = Icons.Filled.Refresh,
+                icon = ToolkitIcon.Vector(imageVector = Icons.Filled.Refresh),
                 label = stringResource(id = text)
             )
         }

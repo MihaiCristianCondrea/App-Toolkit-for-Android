@@ -20,12 +20,13 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
-import kotlinx.parcelize.Parcelize
-import org.junit.jupiter.api.Test
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlinx.parcelize.Parcelize
+import org.junit.jupiter.api.Test
 
-class NavigationIconTest {
+class NavigationItemIconsTest {
 
     @Parcelize
     private data class TestNavKey(
@@ -33,17 +34,17 @@ class NavigationIconTest {
     ) : StableNavKey
 
     @Test
-    fun `NavigationIcon factory functions create correct instances`() {
-        val vectorIcon = NavigationIcon.of(Icons.Outlined.Home)
-        assertTrue(vectorIcon is NavigationIcon.Vector)
+    fun `ToolkitIcon factory functions create correct instances`() {
+        val vectorIcon = ToolkitIcon.of(Icons.Outlined.Home)
+        assertTrue(vectorIcon is ToolkitIcon.Vector)
         assertEquals(Icons.Outlined.Home, vectorIcon.imageVector)
 
-        val resourceIcon = NavigationIcon.of(123)
-        assertTrue(resourceIcon is NavigationIcon.Resource)
+        val resourceIcon = ToolkitIcon.of(123)
+        assertTrue(resourceIcon is ToolkitIcon.Resource)
         assertEquals(123, resourceIcon.resId)
 
-        val animatedIcon = NavigationIcon.animated(456)
-        assertTrue(animatedIcon is NavigationIcon.AnimatedVector)
+        val animatedIcon = ToolkitIcon.animated(456)
+        assertTrue(animatedIcon is ToolkitIcon.AnimatedVector)
         assertEquals(456, animatedIcon.resId)
     }
 
@@ -55,8 +56,8 @@ class NavigationIconTest {
             selectedIcon = Icons.Outlined.Settings,
             route = "home"
         )
-        assertEquals(NavigationIcon.Vector(Icons.Outlined.Home), itemVector.icon)
-        assertEquals(NavigationIcon.Vector(Icons.Outlined.Settings), itemVector.selectedIcon)
+        assertEquals(ToolkitIcon.Vector(Icons.Outlined.Home), itemVector.icon)
+        assertEquals(ToolkitIcon.Vector(Icons.Outlined.Settings), itemVector.selectedIcon)
 
         val itemRes = NavigationDrawerItem(
             title = 10,
@@ -64,15 +65,15 @@ class NavigationIconTest {
             selectedIconResId = 102,
             route = "settings"
         )
-        assertEquals(NavigationIcon.Resource(101), itemRes.icon)
-        assertEquals(NavigationIcon.Resource(102), itemRes.selectedIcon)
+        assertEquals(ToolkitIcon.Resource(101), itemRes.icon)
+        assertEquals(ToolkitIcon.Resource(102), itemRes.selectedIcon)
 
         val itemAnimated = NavigationDrawerItem(
             title = 10,
-            icon = NavigationIcon.AnimatedVector(201),
+            icon = ToolkitIcon.AnimatedVector(201),
             route = "animated"
         )
-        assertEquals(NavigationIcon.AnimatedVector(201), itemAnimated.icon)
+        assertEquals(ToolkitIcon.AnimatedVector(201), itemAnimated.icon)
     }
 
     @Test
@@ -85,8 +86,8 @@ class NavigationIconTest {
             selectedIcon = Icons.Outlined.Settings,
             title = 20
         )
-        assertEquals(NavigationIcon.Vector(Icons.Outlined.Home), itemVector.icon)
-        assertEquals(NavigationIcon.Vector(Icons.Outlined.Settings), itemVector.selectedIcon)
+        assertEquals(ToolkitIcon.Vector(Icons.Outlined.Home), itemVector.icon)
+        assertEquals(ToolkitIcon.Vector(Icons.Outlined.Settings), itemVector.selectedIcon)
 
         val itemRes = BottomBarItem(
             route = key,
@@ -94,7 +95,7 @@ class NavigationIconTest {
             selectedIconResId = 302,
             title = 20
         )
-        assertEquals(NavigationIcon.Resource(301), itemRes.icon)
-        assertEquals(NavigationIcon.Resource(302), itemRes.selectedIcon)
+        assertEquals(ToolkitIcon.Resource(301), itemRes.icon)
+        assertEquals(ToolkitIcon.Resource(302), itemRes.selectedIcon)
     }
 }

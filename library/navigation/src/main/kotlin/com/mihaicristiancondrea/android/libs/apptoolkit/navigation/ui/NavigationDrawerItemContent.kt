@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import kotlinx.collections.immutable.ImmutableSet
@@ -60,7 +61,7 @@ fun NavigationDrawerItemContent(
             handleNavigationItemClick()
         },
         icon = {
-            NavigationItemIcon(
+            AnimatedToolkitIcon(
                 icon = item.icon,
                 selectedIcon = item.selectedIcon,
                 selected = selected,

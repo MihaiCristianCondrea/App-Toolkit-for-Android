@@ -15,31 +15,32 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons
 
 /**
- * Picks which of the two icons of a navigation item has to be rendered.
+ * Picks which of the two icons of a component has to be rendered.
  *
  * The rules cover the three combinations the toolkit supports:
  * - **Static only** (vector and/or drawable resource): [selectedIcon] while [selected], [icon] otherwise.
- * - **Static normal icon + animated selected icon**: the static [icon] is shown until the item is
- *   either selected or clicked at least once ([interacted]); from then on the AVD is rendered so it
- *   can play. This is the "`Icons.Rounded.Share` at rest, animation on click" case.
+ * - **Static normal icon + animated selected icon**: the static [icon] is shown until the component
+ *   is either selected or clicked at least once ([interacted]); from then on the AVD is rendered so
+ *   it can play. This is the "`Icons.Rounded.Share` at rest, animation on click" case. The first
+ *   frame of the AVD should be drawn like the static icon, otherwise the swap is visible.
  * - **Animated only**: the AVD is always rendered, resting on its first or last frame depending on
  *   the selection state.
  *
  * @param icon Icon declared for the unselected state.
  * @param selectedIcon Icon declared for the selected state.
- * @param selected Whether the item is currently the selected destination.
- * @param interacted Whether the item has been clicked at least once while composed.
+ * @param selected Whether the component is currently selected.
+ * @param interacted Whether the component has been clicked at least once while composed.
  */
-fun resolveNavigationIcon(
-    icon: NavigationIcon,
-    selectedIcon: NavigationIcon,
+fun resolveToolkitIcon(
+    icon: ToolkitIcon,
+    selectedIcon: ToolkitIcon,
     selected: Boolean,
     interacted: Boolean = false,
-): NavigationIcon = when {
+): ToolkitIcon = when {
     selected -> selectedIcon
-    selectedIcon is NavigationIcon.AnimatedVector && interacted -> selectedIcon
+    selectedIcon is ToolkitIcon.AnimatedVector && interacted -> selectedIcon
     else -> icon
 }

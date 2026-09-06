@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons
 
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
@@ -28,54 +28,57 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationIconReplayMode
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.resolveNavigationIcon
 
 /**
- * Renders the icon of a navigation item, mixing the selected/unselected icons with the
+ * Renders the icon of a clickable component, mixing the unselected and selected icons with the
  * click driven playback of Animated Vector Drawables.
  *
- * Behaviour, per icon combination:
- * - Two static icons (vector or drawable resource): the icon is swapped on selection, nothing animates.
- * - Static unselected icon + AVD selected icon: the static icon is shown at rest; the first click
- *   swaps in the AVD and plays it forward, and every further click plays it again, so a repeatedly
- *   clicked action such as *Share* animates every single time.
+ * Behavior, per icon combination:
+ * - Two static icons (vector or drawable resource): the icon is swapped on selection, nothing
+ *   animates.
+ * - Static unselected icon + animated selected icon: the static icon is shown at rest; the first
+ *   click swaps in the AVD and plays it forward, and every further click plays it again, so a
+ *   repeatedly clicked action such as *Share* animates every single time.
  * - A single AVD used for both states: the drawable rests on its first frame while unselected and on
  *   its last frame while selected, and still replays on every click.
+ * - Animated unselected icon + static selected icon: the AVD plays while the component is
+ *   unselected, and the static icon takes over once it is selected.
  *
  * A repeated click restarts the animation from its first frame by default. Drawables that morph
  * between two distinct shapes can instead travel back by declaring
- * [NavigationIconReplayMode.Reverse] on the [NavigationIcon.AnimatedVector].
+ * [ToolkitIconReplayMode.Reverse] on the [ToolkitIcon.AnimatedVector].
  *
- * @param icon Icon shown while the item is unselected.
- * @param selectedIcon Icon shown while the item is selected.
- * @param selected Whether the item is the current destination.
- * @param clickCount Number of clicks the item received while composed. Incrementing it replays the
- *   animation; items that are never selected rely on this alone.
+ * Components without a selected state, such as buttons, pass only [icon] and [clickCount].
+ *
+ * @param icon Icon shown while the component is unselected.
+ * @param clickCount Number of clicks the component received while composed. Incrementing it replays
+ *   the animation; components that are never selected rely on this alone. Owners that never animate
+ *   can leave it at `0`.
  * @param contentDescription Accessibility description of the icon.
  * @param modifier The [Modifier] to apply to the icon.
+ * @param selectedIcon Icon shown while the component is selected. Defaults to [icon].
+ * @param selected Whether the component is currently selected. Defaults to `false`.
  * @param tint Tint color to apply to the icon, defaults to [LocalContentColor].
  */
 @Composable
-fun NavigationItemIcon(
-    icon: NavigationIcon,
-    selectedIcon: NavigationIcon,
-    selected: Boolean,
+fun AnimatedToolkitIcon(
+    icon: ToolkitIcon,
     clickCount: Int,
     contentDescription: String?,
     modifier: Modifier = Modifier,
+    selectedIcon: ToolkitIcon = icon,
+    selected: Boolean = false,
     tint: Color = LocalContentColor.current,
 ) {
-    val displayedIcon: NavigationIcon = resolveNavigationIcon(
+    val displayedIcon: ToolkitIcon = resolveToolkitIcon(
         icon = icon,
         selectedIcon = selectedIcon,
         selected = selected,
         interacted = clickCount > 0,
     )
 
-    if (displayedIcon !is NavigationIcon.AnimatedVector) {
-        NavigationIconContent(
+    if (displayedIcon !is ToolkitIcon.AnimatedVector) {
+        ToolkitIconContent(
             icon = displayedIcon,
             contentDescription = contentDescription,
             modifier = modifier,
@@ -89,7 +92,7 @@ fun NavigationItemIcon(
     // Restarting the animation means dropping the running painter: a new one is created on its first
     // frame, which is why the click count keys the composition instead of only flipping a flag.
     val playbackKey: Int =
-        if (displayedIcon.replayMode == NavigationIconReplayMode.Restart) clickCount else 0
+        if (displayedIcon.replayMode == ToolkitIconReplayMode.Restart) clickCount else 0
 
     key(playbackKey) {
         var atEnd: Boolean by remember(displayedIcon.resId) {
@@ -109,7 +112,7 @@ fun NavigationItemIcon(
                     restingAtEnd
                 }
 
-                displayedIcon.replayMode == NavigationIconReplayMode.Restart ->
+                displayedIcon.replayMode == ToolkitIconReplayMode.Restart ->
                     restingAtEnd || clickCount > 0
 
                 clickCount > 0 -> !atEnd
@@ -118,7 +121,7 @@ fun NavigationItemIcon(
             }
         }
 
-        NavigationIconContent(
+        ToolkitIconContent(
             icon = displayedIcon,
             contentDescription = contentDescription,
             modifier = modifier,

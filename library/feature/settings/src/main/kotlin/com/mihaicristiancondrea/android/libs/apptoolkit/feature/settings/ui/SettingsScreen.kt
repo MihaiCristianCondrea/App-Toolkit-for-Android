@@ -54,21 +54,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.HelpActivity
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsContent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsViewModel
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.contracts.GeneralSettingsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsCategory
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsConfig
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsPreference
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.contracts.SettingsEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.GeneralSettingsContentProvider
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
@@ -78,7 +69,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.No
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenState
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.TrackScreenView
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.views.dropdowns.SettingsMenuActions
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.SettingsPreferenceItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedItemPosition
@@ -87,9 +77,21 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.La
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.HelpActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsCategory
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsConfig
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.domain.models.SettingsPreference
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.contracts.SettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.GeneralSettingsViewModel
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.general.contracts.GeneralSettingsEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.providers.GeneralSettingsContentProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.views.dropdowns.SettingsMenuActions
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 
 private const val SETTINGS_SCREEN_NAME = "Settings"
 private const val SETTINGS_SCREEN_CLASS = "SettingsScreen"
@@ -294,7 +296,7 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
                             HelpActivity::class.java,
                         )
                     },
-                    vectorIcon = Icons.AutoMirrored.Outlined.ContactSupport,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Outlined.ContactSupport),
                     label = stringResource(id = R.string.get_help),
                     firebaseController = firebaseController,
                     ga4Event = settingsActionGa4Event(actionName = SettingsActionNames.OPEN_HELP),

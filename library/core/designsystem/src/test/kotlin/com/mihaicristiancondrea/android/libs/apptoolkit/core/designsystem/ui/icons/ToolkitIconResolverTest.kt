@@ -15,26 +15,26 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Share
-import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import org.junit.jupiter.api.Test
 
-class NavigationIconResolverTest {
+class ToolkitIconResolverTest {
 
-    private val shareVector = NavigationIcon.Vector(Icons.Rounded.Share)
-    private val shareAnimated = NavigationIcon.AnimatedVector(resId = 1)
-    private val settingsResource = NavigationIcon.Resource(resId = 2)
-    private val settingsVector = NavigationIcon.Vector(Icons.Outlined.Settings)
+    private val shareVector = ToolkitIcon.Vector(Icons.Rounded.Share)
+    private val shareAnimated = ToolkitIcon.AnimatedVector(resId = 1)
+    private val settingsResource = ToolkitIcon.Resource(resId = 2)
+    private val settingsVector = ToolkitIcon.Vector(Icons.Outlined.Settings)
 
     @Test
     fun `vector icon with animated selected icon stays static until it is clicked`() {
         assertEquals(
             shareVector,
-            resolveNavigationIcon(
+            resolveToolkitIcon(
                 icon = shareVector,
                 selectedIcon = shareAnimated,
                 selected = false,
@@ -43,7 +43,7 @@ class NavigationIconResolverTest {
         )
         assertEquals(
             shareAnimated,
-            resolveNavigationIcon(
+            resolveToolkitIcon(
                 icon = shareVector,
                 selectedIcon = shareAnimated,
                 selected = false,
@@ -56,7 +56,7 @@ class NavigationIconResolverTest {
     fun `animated only icon is used for both states`() {
         assertEquals(
             shareAnimated,
-            resolveNavigationIcon(
+            resolveToolkitIcon(
                 icon = shareAnimated,
                 selectedIcon = shareAnimated,
                 selected = false,
@@ -64,7 +64,7 @@ class NavigationIconResolverTest {
         )
         assertEquals(
             shareAnimated,
-            resolveNavigationIcon(
+            resolveToolkitIcon(
                 icon = shareAnimated,
                 selectedIcon = shareAnimated,
                 selected = true,
@@ -76,7 +76,7 @@ class NavigationIconResolverTest {
     fun `static icons are swapped on selection only`() {
         assertEquals(
             settingsResource,
-            resolveNavigationIcon(
+            resolveToolkitIcon(
                 icon = settingsResource,
                 selectedIcon = settingsVector,
                 selected = false,
@@ -85,7 +85,7 @@ class NavigationIconResolverTest {
         )
         assertEquals(
             settingsVector,
-            resolveNavigationIcon(
+            resolveToolkitIcon(
                 icon = settingsResource,
                 selectedIcon = settingsVector,
                 selected = true,
@@ -95,16 +95,16 @@ class NavigationIconResolverTest {
 
     @Test
     fun `animated icons restart their animation on a repeated click by default`() {
-        assertEquals(NavigationIconReplayMode.Restart, shareAnimated.replayMode)
+        assertEquals(ToolkitIconReplayMode.Restart, shareAnimated.replayMode)
         assertEquals(
-            NavigationIconReplayMode.Restart,
-            (NavigationIcon.animated(resId = 3) as NavigationIcon.AnimatedVector).replayMode,
+            ToolkitIconReplayMode.Restart,
+            (ToolkitIcon.animated(resId = 3) as ToolkitIcon.AnimatedVector).replayMode,
         )
         assertEquals(
-            NavigationIconReplayMode.Reverse,
-            NavigationIcon.AnimatedVector(
+            ToolkitIconReplayMode.Reverse,
+            ToolkitIcon.AnimatedVector(
                 resId = 3,
-                replayMode = NavigationIconReplayMode.Reverse,
+                replayMode = ToolkitIconReplayMode.Reverse,
             ).replayMode,
         )
     }

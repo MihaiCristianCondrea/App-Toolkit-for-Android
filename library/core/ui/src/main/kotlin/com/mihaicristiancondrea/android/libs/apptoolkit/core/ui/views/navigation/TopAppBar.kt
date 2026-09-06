@@ -35,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 
 /**
@@ -78,7 +79,7 @@ fun LargeTopAppBarWithScaffold(
                 title = { Text(modifier = Modifier.animateContentSize(), text = title) },
                 navigationIcon = {
                     AnimatedIconButtonDirection(
-                        icon = Icons.AutoMirrored.Filled.ArrowBack,
+                        icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Filled.ArrowBack),
                         contentDescription = stringResource(id = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R.string.go_back),
                         onClick = { onBackClicked() })
                 },

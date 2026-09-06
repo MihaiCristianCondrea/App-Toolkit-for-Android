@@ -37,6 +37,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.vi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
@@ -79,14 +80,14 @@ fun ButtonShowcase(
                 )
                 GeneralButton(
                     label = stringResource(id = R.string.components_button_primary),
-                    vectorIcon = Icons.Outlined.StarOutline,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
                     iconContentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "primary_icon"),
                 )
                 GeneralButton(
-                    vectorIcon = Icons.Outlined.StarOutline,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
                     iconContentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
@@ -115,14 +116,14 @@ fun ButtonShowcase(
                 )
                 GeneralTonalButton(
                     label = stringResource(id = R.string.components_button_tonal),
-                    vectorIcon = Icons.Outlined.Favorite,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
                     iconContentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "tonal_icon"),
                 )
                 GeneralTonalButton(
-                    vectorIcon = Icons.Outlined.Favorite,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
                     iconContentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
@@ -151,14 +152,14 @@ fun ButtonShowcase(
                 )
                 GeneralOutlinedButton(
                     label = stringResource(id = R.string.components_button_outlined),
-                    vectorIcon = Icons.Outlined.StarOutline,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
                     iconContentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "outlined_icon"),
                 )
                 GeneralOutlinedButton(
-                    vectorIcon = Icons.Outlined.StarOutline,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
                     iconContentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
@@ -187,21 +188,21 @@ fun ButtonShowcase(
                 )
                 GeneralTextButton(
                     label = stringResource(id = R.string.components_button_text),
-                    vectorIcon = Icons.Outlined.Favorite,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
                     iconContentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "text_icon"),
                 )
                 GeneralTextButton(
-                    vectorIcon = Icons.Outlined.Favorite,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
                     iconContentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "text_icon_only"),
                 )
                 AnimatedIconButtonDirection(
-                    icon = Icons.Filled.MoreVert,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Filled.MoreVert),
                     contentDescription = iconContentDescription,
                     onClick = {},
                     fromRight = true,

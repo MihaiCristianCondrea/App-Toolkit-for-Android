@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
@@ -90,7 +91,7 @@ fun OnboardingFooter(
             ) {
                 GeneralOutlinedButton(
                     onClick = onBackClicked,
-                    vectorIcon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft),
                     iconContentDescription = stringResource(id = R.string.back_button_content_description),
                     label = stringResource(id = R.string.back_button_text)
                 )
@@ -118,11 +119,13 @@ fun OnboardingFooter(
             GeneralButton(
                 onClick = onNextClicked,
                 modifier = Modifier.animateContentSize(),
-                vectorIcon = if (isLastPage) {
-                    Icons.Filled.Check
-                } else {
-                    Icons.AutoMirrored.Filled.KeyboardArrowRight
-                },
+                icon = ToolkitIcon.Vector(
+                    imageVector = if (isLastPage) {
+                        Icons.Filled.Check
+                    } else {
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight
+                    }
+                ),
                 iconContentDescription = if (isLastPage) {
                     stringResource(id = R.string.done_button_content_description)
                 } else {

@@ -44,6 +44,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.vi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
@@ -94,7 +95,7 @@ fun InputShowcase(
                 Box {
                     GeneralOutlinedButton(
                         label = menuLabel,
-                        vectorIcon = Icons.Filled.MoreVert,
+                        icon = ToolkitIcon.Vector(imageVector = Icons.Filled.MoreVert),
                         iconContentDescription = iconContentDescription,
                         onClick = { showMenu = true },
                         firebaseController = firebaseController,

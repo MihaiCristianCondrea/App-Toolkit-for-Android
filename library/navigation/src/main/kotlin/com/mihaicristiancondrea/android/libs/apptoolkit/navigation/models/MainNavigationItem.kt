@@ -17,8 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+
 data class MainNavigationItem<T : NavigationDestination>(
     val destination: T,
-    val icon: NavigationIcon,
+    val icon: ToolkitIcon,
     val label: String,
 )

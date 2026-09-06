@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 
 /**
  * Represents an item rendered in bottom navigation surfaces (bottom bar and navigation rail).
@@ -33,8 +34,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @Immutable
 data class BottomBarItem<T : StableNavKey>(
     val route: T,
-    val icon: NavigationIcon,
-    val selectedIcon: NavigationIcon = icon,
+    val icon: ToolkitIcon,
+    val selectedIcon: ToolkitIcon = icon,
     val title: Int,
     val badgeText: String = "",
 ) {
@@ -49,8 +50,8 @@ data class BottomBarItem<T : StableNavKey>(
         badgeText: String = "",
     ) : this(
         route = route,
-        icon = NavigationIcon.Vector(icon),
-        selectedIcon = NavigationIcon.Vector(selectedIcon),
+        icon = ToolkitIcon.Vector(icon),
+        selectedIcon = ToolkitIcon.Vector(selectedIcon),
         title = title,
         badgeText = badgeText,
     )
@@ -66,8 +67,8 @@ data class BottomBarItem<T : StableNavKey>(
         badgeText: String = "",
     ) : this(
         route = route,
-        icon = NavigationIcon.Resource(iconResId),
-        selectedIcon = NavigationIcon.Resource(selectedIconResId),
+        icon = ToolkitIcon.Resource(iconResId),
+        selectedIcon = ToolkitIcon.Resource(selectedIconResId),
         title = title,
         badgeText = badgeText,
     )

@@ -8,6 +8,12 @@
 
 ### Added
 
+- Added `ToolkitIcon`, the icon slot shared by navigation items and buttons. It accepts a Compose
+  `ImageVector`, a drawable or vector resource, or an animated vector drawable that plays when the
+  component is clicked. `ToolkitIconReplayMode` chooses whether a repeated click restarts the
+  animation, the default, or plays it backwards. The accepted combinations are documented in
+  `docs/notes/icons.md`.
+- Added animated Settings and Share drawer icons, used by the standard drawer entries.
 - Added `NavigationDrawerSheet`, a reusable navigation drawer component that renders `ModalDrawerSheet` with navigation drawer items, selection state, click handling, and dividers.
 - Added core common's AppVersionMetadata and getVersionMetadata for package version lookup without
   a UI dependency, and core DataStore's startupValueFlow for caller-defined startup mapping.
@@ -17,6 +23,12 @@
 ### Changed
 
 - Updated `NavigationDrawerItem` so `selectedIcon` defaults to `icon`.
+- Navigation item icons and every `General*Button` now take a single `ToolkitIcon` instead of
+  separate `ImageVector` and `Painter` parameters. Callers passing `vectorIcon = someIcon` to a
+  button must pass `icon = ToolkitIcon.Vector(someIcon)`, and `NavigationIcon` is now `ToolkitIcon`
+  from `core.designsystem.ui.icons`. `AnimatedIconButtonDirection` takes the same type.
+- The standard Settings and Share drawer entries declare their animated icon once, so it covers both
+  the unselected and the selected state.
 - Standardized library APIs under module-owned `feature.*`, `core.*`, and `integration.*` package roots; consumers must update imports to the new packages.
 - Moved library dependency-injection bindings into the owning feature/integration modules and
   exposed the datastore module from `core.datastore.di`; the main toolkit module now only composes those
@@ -37,6 +49,9 @@
 ### Fixed
 
 - Fixed icon-state handling in `NavigationDrawerItemContent` and `LeftNavigationRail` to display `selectedIcon` when selected and `icon` when unselected.
+- Fixed animated navigation icons never playing. They were swapped in already on their last frame,
+  and a second click did nothing. They now play on every click, in the drawer, the bottom bar, and
+  the navigation rail.
 
 ---
 

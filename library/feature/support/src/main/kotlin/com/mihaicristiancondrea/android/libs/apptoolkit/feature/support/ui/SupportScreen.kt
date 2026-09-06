@@ -46,11 +46,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.DonationOptionUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.SupportScreenUiState
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.domain.models.DonationProductIds
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.constants.ShortenLinkConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsEvent
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
@@ -58,6 +53,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.consta
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.analytics.SettingsAnalytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openUrl
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -71,6 +67,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.Tr
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHandler
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.R
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.domain.models.DonationProductIds
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.constants.ShortenLinkConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.contracts.SupportEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.DonationOptionUiState
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.states.SupportScreenUiState
 import kotlinx.collections.immutable.ImmutableMap
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -240,7 +241,7 @@ fun SupportScreenContent(
                                 productId = DonationProductIds.LOW_DONATION,
                             ),
                             enabled = lowDonation?.isEligible == true && !isBillingInProgress,
-                            vectorIcon = Icons.Outlined.Paid,
+                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Paid),
                             label = if (lowDonation?.isEligible == true) {
                                 lowDonation.formattedPrice.orEmpty()
                             } else {
@@ -257,7 +258,7 @@ fun SupportScreenContent(
                                 productId = DonationProductIds.NORMAL_DONATION,
                             ),
                             enabled = normalDonation?.isEligible == true && !isBillingInProgress,
-                            vectorIcon = Icons.Outlined.Paid,
+                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Paid),
                             label = if (normalDonation?.isEligible == true) {
                                 normalDonation.formattedPrice.orEmpty()
                             } else {
@@ -282,7 +283,7 @@ fun SupportScreenContent(
                                 productId = DonationProductIds.HIGH_DONATION,
                             ),
                             enabled = highDonation?.isEligible == true && !isBillingInProgress,
-                            vectorIcon = Icons.Outlined.Paid,
+                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Paid),
                             label = if (highDonation?.isEligible == true) {
                                 highDonation.formattedPrice.orEmpty()
                             } else {
@@ -299,7 +300,7 @@ fun SupportScreenContent(
                                 productId = DonationProductIds.EXTREME_DONATION,
                             ),
                             enabled = extremeDonation?.isEligible == true && !isBillingInProgress,
-                            vectorIcon = Icons.Outlined.Paid,
+                            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Paid),
                             label = if (extremeDonation?.isEligible == true) {
                                 extremeDonation.formattedPrice.orEmpty()
                             } else {
@@ -330,7 +331,7 @@ fun SupportScreenContent(
                     preferenceKey = SupportPreferenceKeys.WEB_AD,
                     destination = ShortenLinkConstants.LINKVERTISE_APP_DIRECT_LINK,
                 ),
-                vectorIcon = Icons.Outlined.Paid,
+                icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Paid),
                 label = stringResource(id = R.string.web_ad)
             )
         }

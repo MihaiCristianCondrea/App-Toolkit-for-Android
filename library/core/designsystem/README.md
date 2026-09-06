@@ -2,8 +2,8 @@
 
 ## Purpose
 
-Defines the AppToolkit Compose theme, typography, color palettes, dynamic wallpaper colors, and
-theme-selection visuals.
+Defines the AppToolkit Compose theme, typography, color palettes, dynamic wallpaper colors,
+theme-selection visuals, and the shared icon slot used by navigation items and buttons.
 
 ## Owns
 
@@ -11,6 +11,7 @@ theme-selection visuals.
 - Static, seasonal, monochrome, rose, and Material You color definitions.
 - `ColorPalette`, `ThemeSettingOption`, and wallpaper swatch models.
 - Theme option/swatch composables.
+- `ToolkitIcon` and its renderers, the icon slot shared by navigation items and buttons.
 
 ## Does not own
 
@@ -58,11 +59,15 @@ flowchart TD
   disabled devices fall back to the selected static/seasonal palette.
 - Bounce behavior is owned here through a CompositionLocal and modifier so `core:ui` can consume it
   without creating a design-system-to-UI dependency cycle.
+- The icon slot is owned here for the same reason: `:library:navigation` and `:library:core:ui` both
+  render icons, and this is the lowest module both already depend on.
 
 ## Public contracts
 
 - `AppTheme`, `AppThemeConfig`, `ColorPalette`, palette providers/values, theme models, and
   selection composables.
+- `ToolkitIcon`, `ToolkitIconReplayMode`, `resolveToolkitIcon`, `ToolkitIconContent`, and
+  `AnimatedToolkitIcon`. See [the icon guide](../../../docs/notes/icons.md).
 
 ## Internal implementations
 

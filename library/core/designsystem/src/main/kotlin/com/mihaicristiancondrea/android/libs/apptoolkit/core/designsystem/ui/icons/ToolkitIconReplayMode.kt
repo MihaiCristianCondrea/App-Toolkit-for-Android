@@ -15,13 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models
+package com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons
 
 /**
- * How a [NavigationIcon.AnimatedVector] behaves when its item is clicked again while the drawable
+ * How a [ToolkitIcon.AnimatedVector] behaves when its item is clicked again while the drawable
  * already rests on the last frame of the animation.
  */
-enum class NavigationIconReplayMode {
+enum class ToolkitIconReplayMode {
 
     /**
      * Play the animation forward again from its first frame. This is the default and fits the usual

@@ -65,11 +65,12 @@ import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
 import androidx.navigation3.ui.NavDisplay
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.AppNavigationEntryContext
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.data.managers.NavigationManager
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.AppNavigationEntryContext
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.states.MainUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.views.fab.MainFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.Navigator
@@ -94,7 +95,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.Stable
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.isTopLevel
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerSheet
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationItemIcon
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
@@ -422,7 +422,7 @@ private fun MainShell(
                                 navigator.navigate(item.route)
                             },
                             icon = {
-                                NavigationItemIcon(
+                                AnimatedToolkitIcon(
                                     icon = item.icon,
                                     selectedIcon = item.selectedIcon,
                                     selected = isSelected,
@@ -443,7 +443,7 @@ private fun MainShell(
                                 onNavigationDrawerItemClick(item, null, null)
                             },
                             icon = {
-                                NavigationItemIcon(
+                                AnimatedToolkitIcon(
                                     icon = item.icon,
                                     selectedIcon = item.selectedIcon,
                                     selected = isSelected,
@@ -464,7 +464,7 @@ private fun MainShell(
                                 onNavigationDrawerItemClick(item, null, null)
                             },
                             icon = {
-                                NavigationItemIcon(
+                                AnimatedToolkitIcon(
                                     icon = item.icon,
                                     selectedIcon = item.selectedIcon,
                                     selected = isSelected,
@@ -520,7 +520,7 @@ private fun MainShell(
                                         navigator.navigate(item.route)
                                     },
                                     icon = {
-                                        NavigationItemIcon(
+                                        AnimatedToolkitIcon(
                                             icon = item.icon,
                                             selectedIcon = item.selectedIcon,
                                             selected = isSelected,

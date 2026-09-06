@@ -38,6 +38,7 @@ import androidx.core.net.toUri
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.links.AppLinks
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.startActivitySafely
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
@@ -75,7 +76,7 @@ fun PrivacyPolicySection() {
                     Toast.makeText(appContext, errorText, Toast.LENGTH_SHORT).show()
                 }
             },
-            vectorIcon = Icons.AutoMirrored.Filled.Launch,
+            icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Filled.Launch),
             label = stringResource(id = R.string.learn_more_privacy_policy)
         )
     }

@@ -21,18 +21,21 @@ import android.view.View
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 
 internal enum class IconOnlyButtonStyle {
     Filled,
@@ -62,8 +65,7 @@ internal fun IconOnlyButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     iconContentDescription: String? = null,
-    vectorIcon: ImageVector? = null,
-    painterIcon: Painter? = null,
+    icon: ToolkitIcon,
     feedback: ButtonFeedback = ButtonFeedback(),
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
@@ -72,8 +74,10 @@ internal fun IconOnlyButton(
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
+    var clickCount: Int by remember { mutableIntStateOf(value = 0) }
 
     val onClickWithFeedback = {
+        clickCount++
         feedback.performClick(view = view, hapticFeedback = hapticFeedback)
         firebaseController.logGa4Event(ga4Event)
         onClick()
@@ -87,8 +91,8 @@ internal fun IconOnlyButton(
             shapes = IconButtonDefaults.shapes(),
         ) {
             IconContent(
-                icon = vectorIcon,
-                painter = painterIcon,
+                icon = icon,
+                clickCount = clickCount,
                 contentDescription = iconContentDescription,
                 size = iconSize,
             )
@@ -101,8 +105,8 @@ internal fun IconOnlyButton(
             shapes = IconButtonDefaults.shapes(),
         ) {
             IconContent(
-                icon = vectorIcon,
-                painter = painterIcon,
+                icon = icon,
+                clickCount = clickCount,
                 contentDescription = iconContentDescription,
                 size = iconSize,
             )
@@ -115,8 +119,8 @@ internal fun IconOnlyButton(
             shapes = IconButtonDefaults.shapes(),
         ) {
             IconContent(
-                icon = vectorIcon,
-                painter = painterIcon,
+                icon = icon,
+                clickCount = clickCount,
                 contentDescription = iconContentDescription,
                 size = iconSize,
             )
@@ -129,8 +133,8 @@ internal fun IconOnlyButton(
             shapes = IconButtonDefaults.shapes(),
         ) {
             IconContent(
-                icon = vectorIcon,
-                painter = painterIcon,
+                icon = icon,
+                clickCount = clickCount,
                 contentDescription = iconContentDescription,
                 size = iconSize,
             )

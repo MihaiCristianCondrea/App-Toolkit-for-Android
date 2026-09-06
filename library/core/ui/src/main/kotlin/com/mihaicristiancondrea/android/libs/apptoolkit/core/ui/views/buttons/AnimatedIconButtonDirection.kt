@@ -32,10 +32,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 
 /**
@@ -46,7 +46,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
  *
  * @param modifier Modifier to be applied to the button.
  * @param visible Controls the visibility of the button. If true, the button will be visible, otherwise it will be hidden.
- * @param icon The icon to display within the button.
+ * @param icon The icon to display within the button. An animated icon plays on every click.
  * @param contentDescription The content description for the icon, used for accessibility.
  * @param onClick The callback that will be invoked when the button is clicked.
  * @param durationMillis The duration of the animation in milliseconds. Defaults to 500ms.
@@ -65,7 +65,7 @@ fun AnimatedIconButtonDirection(
     modifier: Modifier = Modifier,
     visible: Boolean = true,
     enabled: Boolean = true,
-    icon: ImageVector,
+    icon: ToolkitIcon,
     contentDescription: String?,
     onClick: () -> Unit,
     durationMillis: Int = 500,
@@ -113,7 +113,7 @@ fun AnimatedIconButtonDirection(
             onClick = onClick,
             enabled = enabled,
             iconContentDescription = contentDescription,
-            vectorIcon = icon,
+            icon = icon,
             iconSize = iconSize,
             feedback = feedback,
             firebaseController = firebaseController,
