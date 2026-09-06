@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">Добавено</string>
     <string name="tiles_filter_all">Всички инструменти</string>
     <string name="tiles_filter_empty">Все още няма инструменти, които отговарят на този филтър.</string>
-    <string name="tiles_filter_needs_setup">Нуждае се от настройка</string>
+    <string name="tiles_filter_not_added">Не е добавено</string>
     <string name="tiles_filter_unsupported">Не се поддържа</string>
     <string name="tiles_how_to_add_summary">Инструменти с чип Tile могат да се добавят към Quick Settings. Докоснете Добавяне на Android 13 или по-нова версия или отворете режима за редактиране на Бързи настройки и плъзнете плочките на App Toolkit във вашия активен панел.</string>
     <string name="tiles_how_to_add_title">Готови за плочки инструменти</string>
+    <string name="tiles_no_tile_message">Този инструмент още няма плочка в бързите настройки.</string>
     <string name="tiles_setup">Настройка</string>
-    <string name="tiles_setup_required_message">Тази плочка се нуждае от допълнителна настройка, преди да може да бъде добавена.</string>
     <string name="tiles_status_added">Добавено</string>
     <string name="tiles_status_available">Наличен</string>
-    <string name="tiles_status_needs_setup">Нуждае се от настройка</string>
+    <string name="tiles_status_not_added">Не е добавено</string>
     <string name="tiles_status_unsupported">Не се поддържа</string>
     <string name="tool_coin_flip_action">Хвърлете монета</string>
     <string name="tool_coin_flip_waiting">готова</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">Готово в Бързи настройки</string>
     <string name="tool_status_available_summary">Опитайте визуализацията в приложението по-долу или добавете плочката към Бързи настройки, когато се покаже чипът на плочката.</string>
     <string name="tool_status_available_title">Готов за употреба</string>
-    <string name="tool_status_needs_setup_summary">Тази концепция се нуждае от разрешения, поддръжка на устройство или по-пълен работен процес, преди да може да работи като жива плочка.</string>
-    <string name="tool_status_needs_setup_title">Изисква се настройка</string>
     <string name="tool_status_unsupported_summary">Android все още не излага безопасен публичен API за това действие, така че този запис е документиран като предварителен преглед.</string>
     <string name="tool_status_unsupported_title">Само преглед</string>
     <string name="tile_flash_dimmer_title">Димер на фенерчето</string>

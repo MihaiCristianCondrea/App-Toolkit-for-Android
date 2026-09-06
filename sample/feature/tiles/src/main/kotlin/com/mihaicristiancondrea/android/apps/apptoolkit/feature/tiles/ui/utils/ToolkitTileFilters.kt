@@ -29,7 +29,7 @@ internal fun ImmutableList<ToolkitTileCategory>.filterFor(
 ): List<ToolkitTileCategory> = when (filter) {
     ToolkitTilesFilter.All -> this
     ToolkitTilesFilter.Added -> filterByStatus(ToolkitTileStatus.Added)
-    ToolkitTilesFilter.NeedsSetup -> filterByStatus(ToolkitTileStatus.NeedsSetup)
+    ToolkitTilesFilter.NotAdded -> filterByStatus(ToolkitTileStatus.NotAdded)
     ToolkitTilesFilter.Unsupported -> filterByStatus(ToolkitTileStatus.Unsupported)
 }
 

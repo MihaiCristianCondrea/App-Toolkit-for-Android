@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">Adicionado</string>
     <string name="tiles_filter_all">Todas as ferramentas</string>
     <string name="tiles_filter_empty">Nenhuma ferramenta corresponde a este filtro ainda.</string>
-    <string name="tiles_filter_needs_setup">Precisa de configuração</string>
+    <string name="tiles_filter_not_added">Não adicionado</string>
     <string name="tiles_filter_unsupported">Não compatível</string>
     <string name="tiles_how_to_add_summary">Ferramentas com o chip Tile podem ser adicionadas às Configurações rápidas. Toque em Adicionar no Android 13 ou mais recente ou abra o modo de edição de configurações rápidas e arraste os blocos do App Toolkit para o painel ativo.</string>
     <string name="tiles_how_to_add_title">Ferramentas prontas para blocos</string>
+    <string name="tiles_no_tile_message">Esta ferramenta ainda não tem um bloco nas Configurações rápidas.</string>
     <string name="tiles_setup">Configuração</string>
-    <string name="tiles_setup_required_message">Este bloco precisa de mais configuração antes de poder ser adicionado.</string>
     <string name="tiles_status_added">Adicionado</string>
     <string name="tiles_status_available">Disponível</string>
-    <string name="tiles_status_needs_setup">Precisa de configuração</string>
+    <string name="tiles_status_not_added">Não adicionado</string>
     <string name="tiles_status_unsupported">Não compatível</string>
     <string name="tool_coin_flip_action">Jogar moeda</string>
     <string name="tool_coin_flip_waiting">Preparar?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">Pronto em configurações rápidas</string>
     <string name="tool_status_available_summary">Experimente a visualização no aplicativo abaixo ou adicione o bloco às Configurações rápidas quando o chip Tile for exibido.</string>
     <string name="tool_status_available_title">Pronto para usar</string>
-    <string name="tool_status_needs_setup_summary">Este conceito precisa de permissões, suporte a dispositivos ou um fluxo de trabalho mais completo antes de poder ser executado como um bloco dinâmico.</string>
-    <string name="tool_status_needs_setup_title">Configuração necessária</string>
     <string name="tool_status_unsupported_summary">O Android ainda não expõe uma API pública segura para esta ação, portanto, esta entrada está documentada como uma visualização.</string>
     <string name="tool_status_unsupported_title">Somente visualização</string>
     <string name="tile_flash_dimmer_title">Dimmer da lanterna</string>

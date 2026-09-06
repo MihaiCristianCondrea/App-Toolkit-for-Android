@@ -99,7 +99,7 @@ internal fun TilesFilters(
             when (item.filter) {
                 ToolkitTilesFilter.All -> true
                 ToolkitTilesFilter.Added -> statuses.contains(ToolkitTileStatus.Added)
-                ToolkitTilesFilter.NeedsSetup -> statuses.contains(ToolkitTileStatus.NeedsSetup)
+                ToolkitTilesFilter.NotAdded -> statuses.contains(ToolkitTileStatus.NotAdded)
                 ToolkitTilesFilter.Unsupported -> statuses.contains(ToolkitTileStatus.Unsupported)
             }
         }.toImmutableList()

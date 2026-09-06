@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">Ditambahkan</string>
     <string name="tiles_filter_all">Semua alat</string>
     <string name="tiles_filter_empty">Belum ada alat yang cocok dengan filter ini.</string>
-    <string name="tiles_filter_needs_setup">Perlu pengaturan</string>
+    <string name="tiles_filter_not_added">Belum ditambahkan</string>
     <string name="tiles_filter_unsupported">Tidak didukung</string>
     <string name="tiles_how_to_add_summary">Alat dengan chip Tile dapat ditambahkan ke Pengaturan Cepat. Ketuk Tambah di Android 13 atau lebih baru, atau buka mode edit Pengaturan Cepat dan seret ubin App Toolkit ke panel aktif Anda.</string>
     <string name="tiles_how_to_add_title">Alat siap ubin</string>
+    <string name="tiles_no_tile_message">Alat ini belum memiliki tile Setelan Cepat.</string>
     <string name="tiles_setup">Pengaturan</string>
-    <string name="tiles_setup_required_message">Ubin ini memerlukan pengaturan lebih lanjut sebelum dapat ditambahkan.</string>
     <string name="tiles_status_added">Ditambahkan</string>
     <string name="tiles_status_available">Tersedia</string>
-    <string name="tiles_status_needs_setup">Perlu pengaturan</string>
+    <string name="tiles_status_not_added">Belum ditambahkan</string>
     <string name="tiles_status_unsupported">Tidak didukung</string>
     <string name="tool_coin_flip_action">Balik koin</string>
     <string name="tool_coin_flip_waiting">Siap?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">Siap di Pengaturan Cepat</string>
     <string name="tool_status_available_summary">Coba pratinjau dalam aplikasi di bawah atau tambahkan ubin ke Pengaturan Cepat saat chip Ubin ditampilkan.</string>
     <string name="tool_status_available_title">Siap digunakan</string>
-    <string name="tool_status_needs_setup_summary">Konsep ini memerlukan izin, dukungan perangkat, atau alur kerja yang lebih lengkap sebelum dapat dijalankan sebagai ubin langsung.</string>
-    <string name="tool_status_needs_setup_title">Diperlukan pengaturan</string>
     <string name="tool_status_unsupported_summary">Android belum mengekspos API publik yang aman untuk tindakan ini, jadi entri ini didokumentasikan sebagai pratinjau.</string>
     <string name="tool_status_unsupported_title">Hanya pratinjau</string>
     <string name="tile_flash_dimmer_title">Peredup senter</string>

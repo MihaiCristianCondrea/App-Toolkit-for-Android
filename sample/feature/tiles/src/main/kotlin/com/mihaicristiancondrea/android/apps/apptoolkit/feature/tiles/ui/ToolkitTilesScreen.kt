@@ -108,9 +108,9 @@ fun ToolkitTilesScreen(
                     onResult = { viewModel.onEvent(ToolkitTilesEvent.Refresh) },
                 )
 
-                ToolkitTilesAction.ShowSetupRequiredMessage -> Toast.makeText(
+                ToolkitTilesAction.ShowNoTileMessage -> Toast.makeText(
                     context,
-                    R.string.tiles_setup_required_message,
+                    R.string.tiles_no_tile_message,
                     Toast.LENGTH_SHORT,
                 ).show()
             }

@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">شامل کیا گیا۔</string>
     <string name="tiles_filter_all">تمام اوزار</string>
     <string name="tiles_filter_empty">ابھی تک کوئی ٹولز اس فلٹر سے مماثل نہیں ہیں۔</string>
-    <string name="tiles_filter_needs_setup">سیٹ اپ کی ضرورت ہے۔</string>
+    <string name="tiles_filter_not_added">شامل نہیں کیا گیا</string>
     <string name="tiles_filter_unsupported">غیر تعاون یافتہ</string>
     <string name="tiles_how_to_add_summary">ٹائل چپ والے ٹولز کو فوری سیٹنگز میں شامل کیا جا سکتا ہے۔ اینڈرائیڈ 13 یا جدید تر پر ایڈ پر ٹیپ کریں یا کوئیک سیٹنگز ایڈٹ موڈ کھولیں اور ایپ ٹول کٹ ٹائلز کو اپنے ایکٹو پینل میں گھسیٹیں۔</string>
     <string name="tiles_how_to_add_title">ٹائل کے لیے تیار ٹولز</string>
+    <string name="tiles_no_tile_message">اس ٹول کے لیے ابھی تک کوئی فوری ترتیبات ٹائل نہیں ہے۔</string>
     <string name="tiles_setup">سیٹ اپ</string>
-    <string name="tiles_setup_required_message">اس ٹائل کو شامل کرنے سے پہلے مزید سیٹ اپ کی ضرورت ہے۔</string>
     <string name="tiles_status_added">شامل کیا گیا۔</string>
     <string name="tiles_status_available">دستیاب ہے۔</string>
-    <string name="tiles_status_needs_setup">سیٹ اپ کی ضرورت ہے۔</string>
+    <string name="tiles_status_not_added">شامل نہیں کیا گیا</string>
     <string name="tiles_status_unsupported">غیر تعاون یافتہ</string>
     <string name="tool_coin_flip_action">سکہ پلٹائیں۔</string>
     <string name="tool_coin_flip_waiting">تیار ہیں؟</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">فوری ترتیبات میں تیار</string>
     <string name="tool_status_available_summary">ذیل میں ایپ کا پیش نظارہ آزمائیں یا ٹائل چپ دکھائی دینے پر ٹائل کو فوری ترتیبات میں شامل کریں۔</string>
     <string name="tool_status_available_title">استعمال کے لیے تیار ہے۔</string>
-    <string name="tool_status_needs_setup_summary">اس تصور کو لائیو ٹائل کے طور پر چلنے سے پہلے اجازت، ڈیوائس سپورٹ، یا مکمل ورک فلو کی ضرورت ہے۔</string>
-    <string name="tool_status_needs_setup_title">سیٹ اپ درکار ہے۔</string>
     <string name="tool_status_unsupported_summary">Android ابھی تک اس کارروائی کے لیے محفوظ عوامی API کو ظاہر نہیں کرتا ہے، اس لیے اس اندراج کو پیش نظارہ کے طور پر دستاویز کیا گیا ہے۔</string>
     <string name="tool_status_unsupported_title">صرف پیش نظارہ</string>
     <string name="tile_flash_dimmer_title">فلیش ڈمر</string>

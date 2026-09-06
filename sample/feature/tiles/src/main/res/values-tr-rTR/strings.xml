@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">Eklendi</string>
     <string name="tiles_filter_all">Tüm araçlar</string>
     <string name="tiles_filter_empty">Henüz bu filtreyle eşleşen araç yok.</string>
-    <string name="tiles_filter_needs_setup">Kurulum gerekiyor</string>
+    <string name="tiles_filter_not_added">Eklenmedi</string>
     <string name="tiles_filter_unsupported">Desteklenmiyor</string>
     <string name="tiles_how_to_add_summary">Döşeme çipine sahip araçlar Hızlı Ayarlar\'a eklenebilir. Android 13 veya daha yeni sürümlerde Ekle\'ye dokunun veya Hızlı Ayarlar düzenleme modunu açın ve Uygulama Araç Seti kutucuklarını etkin panelinize sürükleyin.</string>
     <string name="tiles_how_to_add_title">Döşemeye hazır araçlar</string>
+    <string name="tiles_no_tile_message">Bu aracın henüz bir Hızlı Ayarlar kutucuğu yok.</string>
     <string name="tiles_setup">Kurulum</string>
-    <string name="tiles_setup_required_message">Bu kutucuğun eklenebilmesi için daha fazla kurulum yapılması gerekiyor.</string>
     <string name="tiles_status_added">Eklendi</string>
     <string name="tiles_status_available">Mevcut</string>
-    <string name="tiles_status_needs_setup">Kurulum gerekiyor</string>
+    <string name="tiles_status_not_added">Eklenmedi</string>
     <string name="tiles_status_unsupported">Desteklenmiyor</string>
     <string name="tool_coin_flip_action">Yazı tura at</string>
     <string name="tool_coin_flip_waiting">Hazır?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">Hızlı Ayarlar\'da Hazır</string>
     <string name="tool_status_available_summary">Aşağıdaki uygulama içi önizlemeyi deneyin veya Döşeme çipi gösterildiğinde kutucuğu Hızlı Ayarlar\'a ekleyin.</string>
     <string name="tool_status_available_title">Kullanıma hazır</string>
-    <string name="tool_status_needs_setup_summary">Bu konseptin canlı kutucuk olarak çalıştırılabilmesi için izinlere, cihaz desteğine veya daha kapsamlı bir iş akışına ihtiyacı var.</string>
-    <string name="tool_status_needs_setup_title">Kurulum gerekli</string>
     <string name="tool_status_unsupported_summary">Android henüz bu eylem için güvenli bir genel API sunmadığından bu giriş bir önizleme olarak belgelenmiştir.</string>
     <string name="tool_status_unsupported_title">Yalnızca önizleme</string>
     <string name="tile_flash_dimmer_title">Fener karartıcı</string>

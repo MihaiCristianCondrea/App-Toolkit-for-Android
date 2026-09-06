@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">Añadido</string>
     <string name="tiles_filter_all">Todas las herramientas</string>
     <string name="tiles_filter_empty">Ninguna herramienta coincide con este filtro todavía.</string>
-    <string name="tiles_filter_needs_setup">Necesita configuración</string>
+    <string name="tiles_filter_not_added">No añadido</string>
     <string name="tiles_filter_unsupported">No compatible</string>
     <string name="tiles_how_to_add_summary">Las herramientas con el chip Tile se pueden agregar a la Configuración rápida. Toque Agregar en Android 13 o posterior, o abra el modo de edición de Configuración rápida y arrastre los mosaicos del App Toolkit a su panel activo.</string>
     <string name="tiles_how_to_add_title">Herramientas listas para colocar mosaicos</string>
+    <string name="tiles_no_tile_message">Esta herramienta aún no tiene un mosaico en los Ajustes rápidos.</string>
     <string name="tiles_setup">Configuración</string>
-    <string name="tiles_setup_required_message">Este mosaico necesita más configuración antes de poder agregarse.</string>
     <string name="tiles_status_added">Añadido</string>
     <string name="tiles_status_available">Disponible</string>
-    <string name="tiles_status_needs_setup">Necesita configuración</string>
+    <string name="tiles_status_not_added">No añadido</string>
     <string name="tiles_status_unsupported">No compatible</string>
     <string name="tool_coin_flip_action">lanzar moneda</string>
     <string name="tool_coin_flip_waiting">¿Listo?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">Listo en Configuración rápida</string>
     <string name="tool_status_available_summary">Pruebe la vista previa en la aplicación a continuación o agregue el mosaico a Configuración rápida cuando se muestre el chip Tile.</string>
     <string name="tool_status_available_title">Listo para usar</string>
-    <string name="tool_status_needs_setup_summary">Este concepto necesita permisos, compatibilidad con dispositivos o un flujo de trabajo más completo antes de poder ejecutarse como mosaico activo.</string>
-    <string name="tool_status_needs_setup_title">Configuración requerida</string>
     <string name="tool_status_unsupported_summary">Android aún no expone una API pública segura para esta acción, por lo que esta entrada está documentada como una vista previa.</string>
     <string name="tool_status_unsupported_title">Solo vista previa</string>
     <string name="tile_flash_dimmer_title">Atenuador de linterna</string>

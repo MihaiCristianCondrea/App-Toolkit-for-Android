@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">추가됨</string>
     <string name="tiles_filter_all">모든 도구</string>
     <string name="tiles_filter_empty">아직 이 필터와 일치하는 도구가 없습니다.</string>
-    <string name="tiles_filter_needs_setup">설정 필요</string>
+    <string name="tiles_filter_not_added">추가되지 않음</string>
     <string name="tiles_filter_unsupported">지원되지 않음</string>
     <string name="tiles_how_to_add_summary">타일 칩이 포함된 도구를 빠른 설정에 추가할 수 있습니다. Android 13 이상에서 추가를 탭하거나 빠른 설정 편집 모드를 열고 앱 툴킷 타일을 활성 패널로 드래그하세요.</string>
     <string name="tiles_how_to_add_title">타일 준비 도구</string>
+    <string name="tiles_no_tile_message">이 도구에는 아직 빠른 설정 타일이 없습니다.</string>
     <string name="tiles_setup">설정</string>
-    <string name="tiles_setup_required_message">이 타일을 추가하려면 추가 설정이 필요합니다.</string>
     <string name="tiles_status_added">추가됨</string>
     <string name="tiles_status_available">가능</string>
-    <string name="tiles_status_needs_setup">설정 필요</string>
+    <string name="tiles_status_not_added">추가되지 않음</string>
     <string name="tiles_status_unsupported">지원되지 않음</string>
     <string name="tool_coin_flip_action">동전 뒤집기</string>
     <string name="tool_coin_flip_waiting">준비가 된?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">빠른 설정에서 준비됨</string>
     <string name="tool_status_available_summary">아래의 인앱 미리보기를 시도하거나 타일 칩이 표시되면 빠른 설정에 타일을 추가하세요.</string>
     <string name="tool_status_available_title">사용 준비 완료</string>
-    <string name="tool_status_needs_setup_summary">이 개념을 라이브 타일로 실행하려면 권한, 장치 지원 또는 더 완전한 워크플로가 필요합니다.</string>
-    <string name="tool_status_needs_setup_title">설정 필요</string>
     <string name="tool_status_unsupported_summary">Android는 아직 이 작업에 대한 안전한 공개 API를 공개하지 않으므로 이 항목은 미리보기로 문서화되어 있습니다.</string>
     <string name="tool_status_unsupported_title">미리보기만 가능</string>
     <string name="tile_flash_dimmer_title">플래시 조광</string>

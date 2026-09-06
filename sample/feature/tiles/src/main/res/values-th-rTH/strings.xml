@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">เพิ่มแล้ว</string>
     <string name="tiles_filter_all">เครื่องมือทั้งหมด</string>
     <string name="tiles_filter_empty">ยังไม่มีเครื่องมือที่ตรงกับตัวกรองนี้</string>
-    <string name="tiles_filter_needs_setup">จำเป็นต้องตั้งค่า</string>
+    <string name="tiles_filter_not_added">ยังไม่ได้เพิ่ม</string>
     <string name="tiles_filter_unsupported">ไม่รองรับ</string>
     <string name="tiles_how_to_add_summary">สามารถเพิ่มเครื่องมือที่มีชิปไทล์ลงในการตั้งค่าด่วนได้ แตะเพิ่มใน Android 13 หรือใหม่กว่า หรือเปิดโหมดแก้ไขการตั้งค่าด่วนแล้วลากแถบเครื่องมือ App Toolkit ลงในแผงที่ใช้งานอยู่</string>
     <string name="tiles_how_to_add_title">เครื่องมือพร้อมกระเบื้อง</string>
+    <string name="tiles_no_tile_message">เครื่องมือนี้ยังไม่มีไทล์ในการตั้งค่าด่วน</string>
     <string name="tiles_setup">ตั้งค่า</string>
-    <string name="tiles_setup_required_message">การ์ดนี้ต้องมีการตั้งค่าเพิ่มเติมก่อนจึงจะเพิ่มได้</string>
     <string name="tiles_status_added">เพิ่มแล้ว</string>
     <string name="tiles_status_available">มีจำหน่าย</string>
-    <string name="tiles_status_needs_setup">จำเป็นต้องตั้งค่า</string>
+    <string name="tiles_status_not_added">ยังไม่ได้เพิ่ม</string>
     <string name="tiles_status_unsupported">ไม่รองรับ</string>
     <string name="tool_coin_flip_action">พลิกเหรียญ</string>
     <string name="tool_coin_flip_waiting">พร้อม?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">พร้อมในการตั้งค่าด่วน</string>
     <string name="tool_status_available_summary">ลองใช้การแสดงตัวอย่างในแอปด้านล่างหรือเพิ่มไทล์ลงในการตั้งค่าด่วนเมื่อชิปไทล์ปรากฏขึ้น</string>
     <string name="tool_status_available_title">พร้อมใช้งาน</string>
-    <string name="tool_status_needs_setup_summary">แนวคิดนี้ต้องการสิทธิ์ การสนับสนุนอุปกรณ์ หรือเวิร์กโฟลว์ที่สมบูรณ์กว่าก่อนจึงจะสามารถทำงานเป็นไทล์ถ่ายทอดสดได้</string>
-    <string name="tool_status_needs_setup_title">จำเป็นต้องตั้งค่า</string>
     <string name="tool_status_unsupported_summary">Android ยังไม่เปิดเผย API สาธารณะที่ปลอดภัยสำหรับการดำเนินการนี้ ดังนั้นรายการนี้จึงได้รับการบันทึกไว้เป็นตัวอย่าง</string>
     <string name="tool_status_unsupported_title">ดูตัวอย่างเท่านั้น</string>
     <string name="tile_flash_dimmer_title">ตัวหรี่ไฟฉาย</string>

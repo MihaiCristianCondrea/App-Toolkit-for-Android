@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">Добавлено</string>
     <string name="tiles_filter_all">Все инструменты</string>
     <string name="tiles_filter_empty">Пока нет инструментов, соответствующих этому фильтру.</string>
-    <string name="tiles_filter_needs_setup">Требуется настройка</string>
+    <string name="tiles_filter_not_added">Не добавлено</string>
     <string name="tiles_filter_unsupported">Не поддерживается</string>
     <string name="tiles_how_to_add_summary">Инструменты с чипом Tile можно добавить в быстрые настройки. Нажмите «Добавить» на Android 13 или более поздней версии или откройте режим редактирования быстрых настроек и перетащите плитки App Toolkit на активную панель.</string>
     <string name="tiles_how_to_add_title">Готовые инструменты для плитки</string>
+    <string name="tiles_no_tile_message">У этого инструмента пока нет плитки в быстрых настройках.</string>
     <string name="tiles_setup">Настройка</string>
-    <string name="tiles_setup_required_message">Перед добавлением этой плитки требуется дополнительная настройка.</string>
     <string name="tiles_status_added">Добавлено</string>
     <string name="tiles_status_available">Доступно</string>
-    <string name="tiles_status_needs_setup">Требуется настройка</string>
+    <string name="tiles_status_not_added">Не добавлено</string>
     <string name="tiles_status_unsupported">Не поддерживается</string>
     <string name="tool_coin_flip_action">Подбросить монету</string>
     <string name="tool_coin_flip_waiting">Готовый?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">Готово в быстрых настройках</string>
     <string name="tool_status_available_summary">Попробуйте предварительный просмотр в приложении ниже или добавьте плитку в быстрые настройки, когда отображается плитка.</string>
     <string name="tool_status_available_title">Готов к использованию</string>
-    <string name="tool_status_needs_setup_summary">Прежде чем эту концепцию можно будет запустить в виде живой плитки, необходимы разрешения, поддержка устройств или более полный рабочий процесс.</string>
-    <string name="tool_status_needs_setup_title">Требуется настройка</string>
     <string name="tool_status_unsupported_summary">Android пока не предоставляет безопасный общедоступный API для этого действия, поэтому эта запись задокументирована как предварительная версия.</string>
     <string name="tool_status_unsupported_title">Только предварительный просмотр</string>
     <string name="tile_flash_dimmer_title">Регулятор фонарика</string>

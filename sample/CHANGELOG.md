@@ -6,6 +6,11 @@
 
 ### Improved
 
+- Quick Tools that offer a Quick Settings tile you have not added now read "Not added" with a
+  neutral add icon, instead of "Needs setup" with a warning icon. Nothing about those tools needs
+  setting up: they run in the app, and adding their tile stays optional. The matching filter chip
+  reads "Not added" too.
+- Tools without a Quick Settings tile now say so plainly instead of claiming they need more setup.
 - Removed the Lux Meter tool and ambient light feature in favor to let Low Brightness have this feature.
 - Removed unused code from the app to have a smaller app.
 - Improved Components showcase labels and translations.

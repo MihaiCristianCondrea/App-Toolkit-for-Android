@@ -63,7 +63,7 @@ class DefaultToolkitTilesRepository(
                     if (componentName != null && componentName in activeTiles) {
                         tile.copy(status = ToolkitTileStatus.Added)
                     } else if (componentName != null && quickSettingsDataSource.supportsAddTileRequest) {
-                        tile.copy(status = ToolkitTileStatus.NeedsSetup)
+                        tile.copy(status = ToolkitTileStatus.NotAdded)
                     } else tile
                 }.toImmutableList(),
             )

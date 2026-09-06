@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">Додано</string>
     <string name="tiles_filter_all">Всі інструменти</string>
     <string name="tiles_filter_empty">Цей фільтр поки не відповідає жодному інструменту.</string>
-    <string name="tiles_filter_needs_setup">Потребує налаштування</string>
+    <string name="tiles_filter_not_added">Не додано</string>
     <string name="tiles_filter_unsupported">Не підтримується</string>
     <string name="tiles_how_to_add_summary">Інструменти з чіпом Tile можна додати до швидких налаштувань. Торкніться «Додати» на Android 13 або новішої версії або відкрийте режим редагування швидких налаштувань і перетягніть плитки App Toolkit на активну панель.</string>
     <string name="tiles_how_to_add_title">Готові інструменти для плитки</string>
+    <string name="tiles_no_tile_message">Цей інструмент ще не має плитки у швидких налаштуваннях.</string>
     <string name="tiles_setup">Налаштування</string>
-    <string name="tiles_setup_required_message">Цю плитку потрібно додатково налаштувати, перш ніж її можна буде додати.</string>
     <string name="tiles_status_added">Додано</string>
     <string name="tiles_status_available">в наявності</string>
-    <string name="tiles_status_needs_setup">Потребує налаштування</string>
+    <string name="tiles_status_not_added">Не додано</string>
     <string name="tiles_status_unsupported">Не підтримується</string>
     <string name="tool_coin_flip_action">Підкинути монету</string>
     <string name="tool_coin_flip_waiting">готовий</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">Готово в швидких налаштуваннях</string>
     <string name="tool_status_available_summary">Спробуйте попередній перегляд у додатку нижче або додайте плитку до швидких налаштувань, коли з’явиться фішка плитки.</string>
     <string name="tool_status_available_title">Готовий до використання</string>
-    <string name="tool_status_needs_setup_summary">Ця концепція потребує дозволів, підтримки пристрою або повнішого робочого процесу, перш ніж її можна буде запускати як живу плитку.</string>
-    <string name="tool_status_needs_setup_title">Потрібне налаштування</string>
     <string name="tool_status_unsupported_summary">Android ще не надає безпечного публічного API для цієї дії, тому цей запис задокументовано як попередній перегляд.</string>
     <string name="tool_status_unsupported_title">Тільки попередній перегляд</string>
     <string name="tile_flash_dimmer_title">Регулятор ліхтарика</string>

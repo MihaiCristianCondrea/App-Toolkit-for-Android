@@ -39,7 +39,7 @@ internal fun requestQuickSettingsTile(
 
     val request = getTileServiceRequests()[requestKey]
     if (request == null) {
-        Toast.makeText(context, R.string.tiles_setup_required_message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, R.string.tiles_no_tile_message, Toast.LENGTH_SHORT).show()
         return
     }
 

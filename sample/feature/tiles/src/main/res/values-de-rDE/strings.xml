@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">Hinzugefügt</string>
     <string name="tiles_filter_all">Alle Werkzeuge</string>
     <string name="tiles_filter_empty">Es gibt noch keine Tools, die diesem Filter entsprechen.</string>
-    <string name="tiles_filter_needs_setup">Muss eingerichtet werden</string>
+    <string name="tiles_filter_not_added">Nicht hinzugefügt</string>
     <string name="tiles_filter_unsupported">Nicht unterstützt</string>
     <string name="tiles_how_to_add_summary">Werkzeuge mit dem Tile-Chip können zu den Schnelleinstellungen hinzugefügt werden. Tippen Sie auf „Hinzufügen“ auf Android 13 oder neuer oder öffnen Sie den Bearbeitungsmodus „Schnelleinstellungen“ und ziehen Sie App Toolkit-Kacheln in Ihr aktives Bedienfeld.</string>
     <string name="tiles_how_to_add_title">Fliesenfertige Werkzeuge</string>
+    <string name="tiles_no_tile_message">Dieses Tool hat noch keine Kachel in den Schnelleinstellungen.</string>
     <string name="tiles_setup">Einrichtung</string>
-    <string name="tiles_setup_required_message">Diese Kachel muss noch mehr eingerichtet werden, bevor sie hinzugefügt werden kann.</string>
     <string name="tiles_status_added">Hinzugefügt</string>
     <string name="tiles_status_available">Verfügbar</string>
-    <string name="tiles_status_needs_setup">Muss eingerichtet werden</string>
+    <string name="tiles_status_not_added">Nicht hinzugefügt</string>
     <string name="tiles_status_unsupported">Nicht unterstützt</string>
     <string name="tool_coin_flip_action">Münze werfen</string>
     <string name="tool_coin_flip_waiting">Bereit?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">Bereit in den Schnelleinstellungen</string>
     <string name="tool_status_available_summary">Probieren Sie die In-App-Vorschau unten aus oder fügen Sie die Kachel zu den Schnelleinstellungen hinzu, wenn der Kachelchip angezeigt wird.</string>
     <string name="tool_status_available_title">Gebrauchsfertig</string>
-    <string name="tool_status_needs_setup_summary">Dieses Konzept benötigt Berechtigungen, Geräteunterstützung oder einen umfassenderen Workflow, bevor es als Live-Kachel ausgeführt werden kann.</string>
-    <string name="tool_status_needs_setup_title">Einrichtung erforderlich</string>
     <string name="tool_status_unsupported_summary">Android stellt für diese Aktion noch keine sichere öffentliche API zur Verfügung, daher wird dieser Eintrag als Vorschau dokumentiert.</string>
     <string name="tool_status_unsupported_title">Nur Vorschau</string>
     <string name="tile_flash_dimmer_title">Taschenlampen-Dimmer</string>

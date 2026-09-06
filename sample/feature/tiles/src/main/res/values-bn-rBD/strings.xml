@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">যোগ করা হয়েছে</string>
     <string name="tiles_filter_all">সমস্ত সরঞ্জাম</string>
     <string name="tiles_filter_empty">কোন টুল এখনও এই ফিল্টার মেলে না.</string>
-    <string name="tiles_filter_needs_setup">সেটআপ প্রয়োজন</string>
+    <string name="tiles_filter_not_added">যোগ করা হয়নি</string>
     <string name="tiles_filter_unsupported">অসমর্থিত</string>
     <string name="tiles_how_to_add_summary">টাইল চিপ সহ সরঞ্জামগুলি দ্রুত সেটিংসে যোগ করা যেতে পারে৷ অ্যান্ড্রয়েড 13 বা তার পরবর্তীতে যোগ করুন আলতো চাপুন, অথবা দ্রুত সেটিংস সম্পাদনা মোড খুলুন এবং আপনার সক্রিয় প্যানেলে অ্যাপ টুলকিট টাইলস টেনে আনুন।</string>
     <string name="tiles_how_to_add_title">টালি-প্রস্তুত সরঞ্জাম</string>
+    <string name="tiles_no_tile_message">এই টুলের জন্য এখনও কোনও দ্রুত সেটিংস টাইল নেই।</string>
     <string name="tiles_setup">সেটআপ</string>
-    <string name="tiles_setup_required_message">এই টাইলটি যোগ করার আগে আরও সেটআপ প্রয়োজন৷</string>
     <string name="tiles_status_added">যোগ করা হয়েছে</string>
     <string name="tiles_status_available">পাওয়া যায়</string>
-    <string name="tiles_status_needs_setup">সেটআপ প্রয়োজন</string>
+    <string name="tiles_status_not_added">যোগ করা হয়নি</string>
     <string name="tiles_status_unsupported">অসমর্থিত</string>
     <string name="tool_coin_flip_action">মুদ্রা উল্টান</string>
     <string name="tool_coin_flip_waiting">প্রস্তুত?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">দ্রুত সেটিংসে প্রস্তুত</string>
     <string name="tool_status_available_summary">নীচের অ্যাপ-মধ্যস্থ পূর্বরূপ চেষ্টা করুন বা টাইল চিপ দেখানো হলে দ্রুত সেটিংসে টাইল যোগ করুন।</string>
     <string name="tool_status_available_title">ব্যবহারের জন্য প্রস্তুত</string>
-    <string name="tool_status_needs_setup_summary">লাইভ টাইল হিসাবে চালানোর আগে এই ধারণাটির অনুমতি, ডিভাইস সমর্থন বা একটি পূর্ণাঙ্গ ওয়ার্কফ্লো প্রয়োজন।</string>
-    <string name="tool_status_needs_setup_title">সেটআপ প্রয়োজন</string>
     <string name="tool_status_unsupported_summary">Android এখনও এই ক্রিয়াকলাপের জন্য একটি নিরাপদ সর্বজনীন API প্রকাশ করে না, তাই এই এন্ট্রিটি একটি পূর্বরূপ হিসাবে নথিভুক্ত করা হয়েছে৷</string>
     <string name="tool_status_unsupported_title">শুধুমাত্র পূর্বরূপ</string>
     <string name="tile_flash_dimmer_title">ফ্ল্যাশ ডিমার</string>

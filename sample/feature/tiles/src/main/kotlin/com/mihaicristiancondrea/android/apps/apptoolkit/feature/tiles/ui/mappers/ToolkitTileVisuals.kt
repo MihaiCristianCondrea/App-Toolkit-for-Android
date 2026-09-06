@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Close
@@ -97,14 +98,14 @@ internal fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
 internal fun ToolkitTileStatus.labelResId(): Int = when (this) {
     ToolkitTileStatus.Added -> R.string.tiles_status_added
     ToolkitTileStatus.Available -> R.string.tiles_status_available
-    ToolkitTileStatus.NeedsSetup -> R.string.tiles_status_needs_setup
+    ToolkitTileStatus.NotAdded -> R.string.tiles_status_not_added
     ToolkitTileStatus.Unsupported -> R.string.tiles_status_unsupported
 }
 
 internal fun ToolkitTileStatus.icon(): ImageVector = when (this) {
     ToolkitTileStatus.Added -> Icons.Outlined.CheckCircle
     ToolkitTileStatus.Available -> Icons.Outlined.Info
-    ToolkitTileStatus.NeedsSetup -> Icons.Outlined.WarningAmber
+    ToolkitTileStatus.NotAdded -> Icons.Outlined.AddCircleOutline
     ToolkitTileStatus.Unsupported -> Icons.Outlined.Close
 }
 
@@ -167,9 +168,11 @@ internal fun ToolkitTileStatus.statusColors(): StatusColors = when (this) {
         content = MaterialTheme.colorScheme.onSecondaryContainer,
     )
 
-    ToolkitTileStatus.NeedsSetup -> StatusColors(
-        container = MaterialTheme.colorScheme.tertiaryContainer,
-        content = MaterialTheme.colorScheme.onTertiaryContainer,
+    // Neutral on purpose: adding the Quick Settings tile is optional, so the chip must not read
+    // like a warning or like work the tool is waiting for.
+    ToolkitTileStatus.NotAdded -> StatusColors(
+        container = MaterialTheme.colorScheme.surfaceContainerHighest,
+        content = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 
     ToolkitTileStatus.Unsupported -> StatusColors(

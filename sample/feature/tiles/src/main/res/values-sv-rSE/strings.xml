@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">Tillagd</string>
     <string name="tiles_filter_all">Alla verktyg</string>
     <string name="tiles_filter_empty">Inga verktyg matchar detta filter ännu.</string>
-    <string name="tiles_filter_needs_setup">Behöver installation</string>
+    <string name="tiles_filter_not_added">Inte tillagd</string>
     <string name="tiles_filter_unsupported">Stöds inte</string>
     <string name="tiles_how_to_add_summary">Verktyg med Tile chip kan läggas till i Snabbinställningar. Tryck på Lägg till på Android 13 eller senare, eller öppna redigeringsläget för snabbinställningar och dra App Toolkit-rutor till din aktiva panel.</string>
     <string name="tiles_how_to_add_title">Kakelfärdiga verktyg</string>
+    <string name="tiles_no_tile_message">Det här verktyget har ingen snabbinställningsruta än.</string>
     <string name="tiles_setup">Inställning</string>
-    <string name="tiles_setup_required_message">Den här brickan behöver mer konfigurering innan den kan läggas till.</string>
     <string name="tiles_status_added">Tillagd</string>
     <string name="tiles_status_available">Tillgänglig</string>
-    <string name="tiles_status_needs_setup">Behöver installation</string>
+    <string name="tiles_status_not_added">Inte tillagd</string>
     <string name="tiles_status_unsupported">Stöds inte</string>
     <string name="tool_coin_flip_action">Vänd mynt</string>
     <string name="tool_coin_flip_waiting">Redo?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">Klar i snabbinställningar</string>
     <string name="tool_status_available_summary">Prova förhandsgranskningen i appen nedan eller lägg till brickan i Snabbinställningar när tile-chipet visas.</string>
     <string name="tool_status_available_title">Färdig att använda</string>
-    <string name="tool_status_needs_setup_summary">Det här konceptet behöver behörigheter, enhetsstöd eller ett fullständigare arbetsflöde innan det kan köras som en live-bricka.</string>
-    <string name="tool_status_needs_setup_title">Installation krävs</string>
     <string name="tool_status_unsupported_summary">Android visar inte ett säkert offentligt API för den här åtgärden ännu, så det här inlägget dokumenteras som en förhandsgranskning.</string>
     <string name="tool_status_unsupported_title">Endast förhandsgranskning</string>
     <string name="tile_flash_dimmer_title">Ficklampsdimmer</string>

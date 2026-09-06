@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">Ajouté</string>
     <string name="tiles_filter_all">Tous les outils</string>
     <string name="tiles_filter_empty">Aucun outil ne correspond encore à ce filtre.</string>
-    <string name="tiles_filter_needs_setup">Nécessite une configuration</string>
+    <string name="tiles_filter_not_added">Non ajouté</string>
     <string name="tiles_filter_unsupported">Non pris en charge</string>
     <string name="tiles_how_to_add_summary">Les outils dotés de la puce Tile peuvent être ajoutés aux paramètres rapides. Appuyez sur Ajouter sur Android 13 ou version ultérieure, ou ouvrez le mode d\'édition des paramètres rapides et faites glisser les vignettes App Toolkit dans votre panneau actif.</string>
     <string name="tiles_how_to_add_title">Outils prêts à être carrelés</string>
+    <string name="tiles_no_tile_message">Cet outil n\'a pas encore de vignette dans les Réglages rapides.</string>
     <string name="tiles_setup">Configuration</string>
-    <string name="tiles_setup_required_message">Cette vignette nécessite davantage de configuration avant de pouvoir être ajoutée.</string>
     <string name="tiles_status_added">Ajouté</string>
     <string name="tiles_status_available">Disponible</string>
-    <string name="tiles_status_needs_setup">Nécessite une configuration</string>
+    <string name="tiles_status_not_added">Non ajouté</string>
     <string name="tiles_status_unsupported">Non pris en charge</string>
     <string name="tool_coin_flip_action">Lancer une pièce</string>
     <string name="tool_coin_flip_waiting">Prêt?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">Prêt dans les paramètres rapides</string>
     <string name="tool_status_available_summary">Essayez l\'aperçu dans l\'application ci-dessous ou ajoutez la vignette aux paramètres rapides lorsque la puce de vignette est affichée.</string>
     <string name="tool_status_available_title">Prêt à l\'emploi</string>
-    <string name="tool_status_needs_setup_summary">Ce concept nécessite des autorisations, la prise en charge des appareils ou un flux de travail plus complet avant de pouvoir s\'exécuter en tant que vignette dynamique.</string>
-    <string name="tool_status_needs_setup_title">Configuration requise</string>
     <string name="tool_status_unsupported_summary">Android n\'expose pas encore d\'API publique sécurisée pour cette action, cette entrée est donc documentée en tant qu\'aperçu.</string>
     <string name="tool_status_unsupported_title">Aperçu uniquement</string>
     <string name="tile_flash_dimmer_title">Variateur de lampe torche</string>

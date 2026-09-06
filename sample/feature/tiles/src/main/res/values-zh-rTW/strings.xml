@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">已新增</string>
     <string name="tiles_filter_all">所有工具</string>
     <string name="tiles_filter_empty">尚無與此過濾器相符的工具。</string>
-    <string name="tiles_filter_needs_setup">需要設定</string>
+    <string name="tiles_filter_not_added">未加入</string>
     <string name="tiles_filter_unsupported">不支援</string>
     <string name="tiles_how_to_add_summary">具有Tile晶片的工具可以添加到快速設定中。在 Android 13 或更高版本上點擊“新增”，或開啟“快速設定”編輯模式並將“App Toolkit”圖塊拖曳到活動面板中。</string>
     <string name="tiles_how_to_add_title">磁磚就緒工具</string>
+    <string name="tiles_no_tile_message">這個工具還沒有快速設定磚。</string>
     <string name="tiles_setup">設定</string>
-    <string name="tiles_setup_required_message">此圖塊需要更多設定才能新增。</string>
     <string name="tiles_status_added">已新增</string>
     <string name="tiles_status_available">可用</string>
-    <string name="tiles_status_needs_setup">需要設定</string>
+    <string name="tiles_status_not_added">未加入</string>
     <string name="tiles_status_unsupported">不支援</string>
     <string name="tool_coin_flip_action">翻轉硬幣</string>
     <string name="tool_coin_flip_waiting">準備好？</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">快速設定中準備就緒</string>
     <string name="tool_status_available_summary">嘗試下面的應用程式內預覽，或在顯示圖塊晶片時將圖塊新增至「快速設定」。</string>
     <string name="tool_status_available_title">準備使用</string>
-    <string name="tool_status_needs_setup_summary">此概念需要權限、設備支援或更完整的工作流程才能作為活動磁貼運作。</string>
-    <string name="tool_status_needs_setup_title">需要設定</string>
     <string name="tool_status_unsupported_summary">Android 尚未為此操作公開安全的公共 API，因此此條目記錄為預覽版。</string>
     <string name="tool_status_unsupported_title">僅預覽</string>
     <string name="tile_flash_dimmer_title">手電筒調光器</string>

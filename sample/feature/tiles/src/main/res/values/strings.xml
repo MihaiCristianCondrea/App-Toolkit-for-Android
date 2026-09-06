@@ -87,15 +87,15 @@
     <string name="tiles_filter_added">Added</string>
     <string name="tiles_filter_all">All tools</string>
     <string name="tiles_filter_empty">No tools match this filter yet.</string>
-    <string name="tiles_filter_needs_setup">Needs setup</string>
+    <string name="tiles_filter_not_added">Not added</string>
     <string name="tiles_filter_unsupported">Unsupported</string>
     <string name="tiles_how_to_add_summary">Tools with the Tile chip can be added to Quick Settings. Tap Add on Android 13 or newer, or open Quick Settings edit mode and drag App Toolkit tiles into your active panel.</string>
     <string name="tiles_how_to_add_title">Tile-ready tools</string>
+    <string name="tiles_no_tile_message">This tool has no Quick Settings tile yet.</string>
     <string name="tiles_setup">Setup</string>
-    <string name="tiles_setup_required_message">This tile needs more setup before it can be added.</string>
     <string name="tiles_status_added">Added</string>
     <string name="tiles_status_available">Available</string>
-    <string name="tiles_status_needs_setup">Needs setup</string>
+    <string name="tiles_status_not_added">Not added</string>
     <string name="tiles_status_unsupported">Unsupported</string>
     <string name="tool_caffeine_10m" translatable="false">10m</string>
     <string name="tool_caffeine_1h" translatable="false">1h</string>
@@ -127,8 +127,6 @@
     <string name="tool_status_added_title">Ready in Quick Settings</string>
     <string name="tool_status_available_summary">Try the in-app preview below or add the tile to Quick Settings when the Tile chip is shown.</string>
     <string name="tool_status_available_title">Ready to use</string>
-    <string name="tool_status_needs_setup_summary">This concept needs permissions, device support, or a fuller workflow before it can run as a live tile.</string>
-    <string name="tool_status_needs_setup_title">Setup required</string>
     <string name="tool_status_unsupported_summary">Android does not expose a safe public API for this action yet, so this entry is documented as a preview.</string>
     <string name="tool_status_unsupported_title">Preview only</string>
     <string name="tool_system_cycle_mode" translatable="false">Cycle Mode</string>

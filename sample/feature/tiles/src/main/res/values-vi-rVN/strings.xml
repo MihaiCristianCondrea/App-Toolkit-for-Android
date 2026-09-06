@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">Đã thêm</string>
     <string name="tiles_filter_all">Tất cả các công cụ</string>
     <string name="tiles_filter_empty">Chưa có công cụ nào phù hợp với bộ lọc này.</string>
-    <string name="tiles_filter_needs_setup">Cần thiết lập</string>
+    <string name="tiles_filter_not_added">Chưa thêm</string>
     <string name="tiles_filter_unsupported">Không được hỗ trợ</string>
     <string name="tiles_how_to_add_summary">Bạn có thể thêm các công cụ có chip Ngói vào Cài đặt nhanh. Nhấn vào Thêm trên Android 13 trở lên hoặc mở chế độ chỉnh sửa Cài đặt nhanh và kéo các ô Bộ công cụ ứng dụng vào bảng điều khiển hoạt động của bạn.</string>
     <string name="tiles_how_to_add_title">Công cụ sẵn sàng cho ô xếp</string>
+    <string name="tiles_no_tile_message">Công cụ này chưa có ô trong Cài đặt nhanh.</string>
     <string name="tiles_setup">thiết lập</string>
-    <string name="tiles_setup_required_message">Ô này cần thiết lập thêm trước khi có thể thêm nó.</string>
     <string name="tiles_status_added">Đã thêm</string>
     <string name="tiles_status_available">Có sẵn</string>
-    <string name="tiles_status_needs_setup">Cần thiết lập</string>
+    <string name="tiles_status_not_added">Chưa thêm</string>
     <string name="tiles_status_unsupported">Không được hỗ trợ</string>
     <string name="tool_coin_flip_action">Lật xu</string>
     <string name="tool_coin_flip_waiting">Sẵn sàng?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">Sẵn sàng trong Cài đặt nhanh</string>
     <string name="tool_status_available_summary">Hãy thử xem trước trong ứng dụng bên dưới hoặc thêm ô vào Cài đặt nhanh khi khối Ngói hiển thị.</string>
     <string name="tool_status_available_title">Sẵn sàng để sử dụng</string>
-    <string name="tool_status_needs_setup_summary">Khái niệm này cần có quyền, hỗ trợ thiết bị hoặc quy trình làm việc đầy đủ hơn trước khi có thể chạy dưới dạng ô xếp trực tiếp.</string>
-    <string name="tool_status_needs_setup_title">Yêu cầu thiết lập</string>
     <string name="tool_status_unsupported_summary">Android chưa hiển thị API công khai an toàn cho hành động này, vì vậy mục này được ghi lại dưới dạng bản xem trước.</string>
     <string name="tool_status_unsupported_title">Chỉ xem trước</string>
     <string name="tile_flash_dimmer_title">Bộ điều chỉnh đèn pin</string>

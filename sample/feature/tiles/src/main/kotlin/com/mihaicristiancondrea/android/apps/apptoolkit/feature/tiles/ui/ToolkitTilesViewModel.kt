@@ -163,7 +163,7 @@ class ToolkitTilesViewModel(
         )
         startOperation(action = Actions.ADD_TILE)
         if (requestKey == null) {
-            showSetupMessage()
+            showNoTileMessage()
         } else {
             sendAction(ToolkitTilesAction.RequestAddTile(requestKey))
         }
@@ -178,11 +178,11 @@ class ToolkitTilesViewModel(
             action = Actions.OPEN_TILE_SETUP,
             extra = mapOf(ExtraKeys.TILE_ID to tileId),
         )
-        showSetupMessage()
+        showNoTileMessage()
     }
 
-    private fun showSetupMessage() {
-        sendAction(ToolkitTilesAction.ShowSetupRequiredMessage)
+    private fun showNoTileMessage() {
+        sendAction(ToolkitTilesAction.ShowNoTileMessage)
     }
 
     private object Actions {

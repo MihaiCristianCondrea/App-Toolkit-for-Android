@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">जोड़ा गया</string>
     <string name="tiles_filter_all">सभी उपकरण</string>
     <string name="tiles_filter_empty">अभी तक कोई भी उपकरण इस फ़िल्टर से मेल नहीं खाता है।</string>
-    <string name="tiles_filter_needs_setup">सेटअप की आवश्यकता है</string>
+    <string name="tiles_filter_not_added">जोड़ा नहीं गया</string>
     <string name="tiles_filter_unsupported">असमर्थित</string>
     <string name="tiles_how_to_add_summary">टाइल चिप वाले टूल को त्वरित सेटिंग्स में जोड़ा जा सकता है। एंड्रॉइड 13 या नए पर जोड़ें टैप करें, या त्वरित सेटिंग्स संपादन मोड खोलें और ऐप टूलकिट टाइल्स को अपने सक्रिय पैनल में खींचें।</string>
     <string name="tiles_how_to_add_title">टाइल-तैयार उपकरण</string>
+    <string name="tiles_no_tile_message">इस टूल के लिए अभी तक कोई क्विक सेटिंग टाइल नहीं है।</string>
     <string name="tiles_setup">सेटअप</string>
-    <string name="tiles_setup_required_message">इस टाइल को जोड़ने से पहले अधिक सेटअप की आवश्यकता है।</string>
     <string name="tiles_status_added">जोड़ा गया</string>
     <string name="tiles_status_available">उपलब्ध</string>
-    <string name="tiles_status_needs_setup">सेटअप की आवश्यकता है</string>
+    <string name="tiles_status_not_added">जोड़ा नहीं गया</string>
     <string name="tiles_status_unsupported">असमर्थित</string>
     <string name="tool_coin_flip_action">सिक्का उछालो</string>
     <string name="tool_coin_flip_waiting">तैयार?</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">त्वरित सेटिंग्स में तैयार</string>
     <string name="tool_status_available_summary">नीचे इन-ऐप पूर्वावलोकन आज़माएं या टाइल चिप दिखाए जाने पर टाइल को त्वरित सेटिंग्स में जोड़ें।</string>
     <string name="tool_status_available_title">उपयोग के लिए तैयार</string>
-    <string name="tool_status_needs_setup_summary">इस अवधारणा को लाइव टाइल के रूप में चलाने से पहले अनुमतियों, डिवाइस समर्थन या पूर्ण वर्कफ़्लो की आवश्यकता होती है।</string>
-    <string name="tool_status_needs_setup_title">सेटअप आवश्यक है</string>
     <string name="tool_status_unsupported_summary">एंड्रॉइड ने अभी तक इस कार्रवाई के लिए एक सुरक्षित सार्वजनिक एपीआई का खुलासा नहीं किया है, इसलिए इस प्रविष्टि को पूर्वावलोकन के रूप में प्रलेखित किया गया है।</string>
     <string name="tool_status_unsupported_title">केवल पूर्वावलोकन करें</string>
     <string name="tile_flash_dimmer_title">फ़्लैश डिमर</string>

@@ -60,15 +60,15 @@
     <string name="tiles_filter_added">追加されました</string>
     <string name="tiles_filter_all">すべてのツール</string>
     <string name="tiles_filter_empty">このフィルターに一致するツールはまだありません。</string>
-    <string name="tiles_filter_needs_setup">セットアップが必要です</string>
+    <string name="tiles_filter_not_added">未追加</string>
     <string name="tiles_filter_unsupported">サポートされていません</string>
     <string name="tiles_how_to_add_summary">タイルチップを搭載したツールをクイック設定に追加できます。 Android 13 以降で [追加] をタップするか、クイック設定編集モードを開いて、App Toolkit タイルをアクティブなパネルにドラッグします。</string>
     <string name="tiles_how_to_add_title">タイル対応ツール</string>
+    <string name="tiles_no_tile_message">このツールにはまだクイック設定タイルがありません。</string>
     <string name="tiles_setup">セットアップ</string>
-    <string name="tiles_setup_required_message">このタイルを追加するには、さらにセットアップが必要です。</string>
     <string name="tiles_status_added">追加されました</string>
     <string name="tiles_status_available">利用可能</string>
-    <string name="tiles_status_needs_setup">セットアップが必要です</string>
+    <string name="tiles_status_not_added">未追加</string>
     <string name="tiles_status_unsupported">サポートされていません</string>
     <string name="tool_coin_flip_action">コインを投げる</string>
     <string name="tool_coin_flip_waiting">準備ができて？</string>
@@ -93,8 +93,6 @@
     <string name="tool_status_added_title">クイック設定で準備完了</string>
     <string name="tool_status_available_summary">以下のアプリ内プレビューを試すか、タイル チップが表示されたらクイック設定にタイルを追加してください。</string>
     <string name="tool_status_available_title">すぐに使用できます</string>
-    <string name="tool_status_needs_setup_summary">このコンセプトをライブ タイルとして実行するには、アクセス許可、デバイス サポート、またはより完全なワークフローが必要です。</string>
-    <string name="tool_status_needs_setup_title">セットアップが必要です</string>
     <string name="tool_status_unsupported_summary">Android はこのアクション用の安全なパブリック API をまだ公開していないため、このエントリはプレビューとして文書化されています。</string>
     <string name="tool_status_unsupported_title">プレビューのみ</string>
     <string name="tile_flash_dimmer_title">フラッシュ調光</string>
