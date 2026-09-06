@@ -47,9 +47,8 @@ import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -126,21 +125,13 @@ fun <T : StableNavKey> LeftNavigationRail(
         ) {
             bottomItems.forEach { item: BottomBarItem<T> ->
                 val isSelected: Boolean = currentRoute == item.route
-                var atEnd by remember(item.route) { mutableStateOf(false) }
-
-                LaunchedEffect(isSelected) {
-                    if (!isSelected) {
-                        atEnd = false
-                    }
-                }
-
-                val activeIcon = if (isSelected || atEnd) item.selectedIcon else item.icon
+                var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
 
                 NavigationRailItem(
                     modifier = Modifier.bounceClick(),
                     selected = isSelected,
                     onClick = {
-                        atEnd = true
+                        clickCount++
                         if (!isSelected) {
                             onBottomItemClick(item)
                         }
@@ -155,11 +146,12 @@ fun <T : StableNavKey> LeftNavigationRail(
                                 }
                             }
                         ) {
-                            NavigationIconContent(
-                                icon = activeIcon,
-                                contentDescription = stringResource(item.title),
+                            NavigationItemIcon(
+                                icon = item.icon,
+                                selectedIcon = item.selectedIcon,
                                 selected = isSelected,
-                                atEnd = atEnd,
+                                clickCount = clickCount,
+                                contentDescription = stringResource(item.title),
                                 modifier = Modifier
                                     .size(size = SizeConstants.TwentyFourSize)
                                     .bounceClick()
@@ -185,22 +177,21 @@ fun <T : StableNavKey> LeftNavigationRail(
             Spacer(modifier = Modifier.weight(weight = 1f))
             drawerItems.forEach { item: NavigationDrawerItem ->
                 val isSelected = false
-                var atEnd by remember(item.route) { mutableStateOf(false) }
-
-                val activeIcon = if (atEnd) item.selectedIcon else item.icon
+                var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
 
                 NavigationRailItem(
                     selected = isSelected,
                     onClick = {
-                        atEnd = true
+                        clickCount++
                         onDrawerItemClick(item)
                     },
                     icon = {
-                        NavigationIconContent(
-                            icon = activeIcon,
-                            contentDescription = stringResource(id = item.title),
+                        NavigationItemIcon(
+                            icon = item.icon,
+                            selectedIcon = item.selectedIcon,
                             selected = isSelected,
-                            atEnd = atEnd,
+                            clickCount = clickCount,
+                            contentDescription = stringResource(id = item.title),
                             modifier = Modifier
                                 .size(size = SizeConstants.TwentyFourSize)
                                 .bounceClick()

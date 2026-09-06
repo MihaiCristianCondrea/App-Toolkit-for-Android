@@ -73,7 +73,8 @@ flowchart TD
 - `StableNavKey` and `AppToolkitNavKey` route implementations.
 - `NavigationDrawerRoutes` and `navigation.data.repositories.NavigationRepository`.
 - Back-stack action extensions and transition helpers.
-- `NavigationIcon`.
+- `NavigationIcon` and `resolveNavigationIcon`, plus the `NavigationItemIcon` and
+  `NavigationIconContent` renderers.
 - `BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerItemContent`, `NavigationDrawerSheet`, and
   `HideOnScrollBottomBar`.
 

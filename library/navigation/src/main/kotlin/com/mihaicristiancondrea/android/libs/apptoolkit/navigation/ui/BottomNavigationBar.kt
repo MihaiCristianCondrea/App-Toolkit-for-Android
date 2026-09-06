@@ -28,9 +28,8 @@ import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -66,15 +65,7 @@ fun <T : StableNavKey> BottomNavigationBar(
     ) {
         items.forEach { item ->
             val selected = currentRoute == item.route
-            var atEnd by remember(item.route) { mutableStateOf(false) }
-
-            LaunchedEffect(selected) {
-                if (!selected) {
-                    atEnd = false
-                }
-            }
-
-            val activeIcon = if (selected || atEnd) item.selectedIcon else item.icon
+            var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
 
             NavigationBarItem(
                 selected = selected,
@@ -89,11 +80,12 @@ fun <T : StableNavKey> BottomNavigationBar(
                             }
                         }
                     ) {
-                        NavigationIconContent(
-                            icon = activeIcon,
-                            contentDescription = stringResource(id = item.title),
+                        NavigationItemIcon(
+                            icon = item.icon,
+                            selectedIcon = item.selectedIcon,
                             selected = selected,
-                            atEnd = atEnd,
+                            clickCount = clickCount,
+                            contentDescription = stringResource(id = item.title),
                             modifier = Modifier.bounceClick(),
                         )
                     }
@@ -107,7 +99,7 @@ fun <T : StableNavKey> BottomNavigationBar(
                     )
                 },
                 onClick = {
-                    atEnd = true
+                    clickCount++
                     view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(
                         hapticFeedbackType = HapticFeedbackType.ContextClick

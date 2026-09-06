@@ -31,14 +31,18 @@ import androidx.compose.ui.res.painterResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationIcon
 
 /**
- * Renders a [NavigationIcon] which can be a Compose [ImageVector],
- * a static drawable/vector resource ID, or an Animated Vector Drawable (AVD).
+ * Renders a single [NavigationIcon] exactly as described: a Compose [ImageVector],
+ * a static drawable/vector resource, or one frame state of an Animated Vector Drawable.
+ *
+ * This composable is intentionally stateless. Deciding *which* icon a navigation item shows,
+ * and whether an AVD currently rests on its first or last frame, is the job of
+ * [NavigationItemIcon].
  *
  * @param icon The [NavigationIcon] to display.
  * @param contentDescription Optional description of the icon for accessibility.
  * @param modifier The [Modifier] to apply to the icon.
- * @param selected Whether the item is currently selected, used to drive AVD animations.
- * @param atEnd Whether the click animation end state is active.
+ * @param atEnd For [NavigationIcon.AnimatedVector] only: `true` renders the last frame of the
+ *   animation, `false` the first one. Changing this value animates between the two.
  * @param tint Tint color to apply to the icon, defaults to [LocalContentColor].
  */
 @OptIn(ExperimentalAnimationGraphicsApi::class)
@@ -47,7 +51,6 @@ fun NavigationIconContent(
     icon: NavigationIcon,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    selected: Boolean = false,
     atEnd: Boolean = false,
     tint: Color = LocalContentColor.current,
 ) {
@@ -74,7 +77,7 @@ fun NavigationIconContent(
             val image = AnimatedImageVector.animatedVectorResource(id = icon.resId)
             val painter = rememberAnimatedVectorPainter(
                 animatedImageVector = image,
-                atEnd = atEnd || selected || icon.atEnd,
+                atEnd = atEnd,
             )
             Icon(
                 painter = painter,

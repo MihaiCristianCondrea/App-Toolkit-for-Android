@@ -48,6 +48,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -93,7 +94,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.Stable
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.isTopLevel
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerSheet
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationIconContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationItemIcon
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
@@ -413,14 +414,20 @@ private fun MainShell(
                 NavigationRail {
                     bottomBarItems.forEach { item ->
                         val isSelected = currentRoute == item.route
+                        var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
                         NavigationRailItem(
                             selected = isSelected,
-                            onClick = { navigator.navigate(item.route) },
+                            onClick = {
+                                clickCount++
+                                navigator.navigate(item.route)
+                            },
                             icon = {
-                                NavigationIconContent(
-                                    icon = if (isSelected) item.selectedIcon else item.icon,
-                                    contentDescription = stringResource(item.title),
+                                NavigationItemIcon(
+                                    icon = item.icon,
+                                    selectedIcon = item.selectedIcon,
                                     selected = isSelected,
+                                    clickCount = clickCount,
+                                    contentDescription = stringResource(item.title),
                                 )
                             },
                             label = { Text(stringResource(item.title)) },
@@ -428,14 +435,20 @@ private fun MainShell(
                     }
                     railDrawerItems.first.forEach { item ->
                         val isSelected = onIsSelected(item.route, currentRoute)
+                        var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
                         NavigationRailItem(
                             selected = isSelected,
-                            onClick = { onNavigationDrawerItemClick(item, null, null) },
+                            onClick = {
+                                clickCount++
+                                onNavigationDrawerItemClick(item, null, null)
+                            },
                             icon = {
-                                NavigationIconContent(
-                                    icon = if (isSelected) item.selectedIcon else item.icon,
-                                    contentDescription = stringResource(item.title),
+                                NavigationItemIcon(
+                                    icon = item.icon,
+                                    selectedIcon = item.selectedIcon,
                                     selected = isSelected,
+                                    clickCount = clickCount,
+                                    contentDescription = stringResource(item.title),
                                 )
                             },
                             label = { Text(stringResource(item.title)) },
@@ -443,14 +456,20 @@ private fun MainShell(
                     }
                     railDrawerItems.second.forEach { item ->
                         val isSelected = onIsSelected(item.route, currentRoute)
+                        var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
                         NavigationRailItem(
                             selected = isSelected,
-                            onClick = { onNavigationDrawerItemClick(item, null, null) },
+                            onClick = {
+                                clickCount++
+                                onNavigationDrawerItemClick(item, null, null)
+                            },
                             icon = {
-                                NavigationIconContent(
-                                    icon = if (isSelected) item.selectedIcon else item.icon,
-                                    contentDescription = stringResource(item.title),
+                                NavigationItemIcon(
+                                    icon = item.icon,
+                                    selectedIcon = item.selectedIcon,
                                     selected = isSelected,
+                                    clickCount = clickCount,
+                                    contentDescription = stringResource(item.title),
                                 )
                             },
                             label = { Text(stringResource(item.title)) },
@@ -491,14 +510,22 @@ private fun MainShell(
                         NavigationBar {
                             bottomBarItems.forEach { item ->
                                 val isSelected = currentRoute == item.route
+                                var clickCount: Int by remember(item.route) {
+                                    mutableIntStateOf(value = 0)
+                                }
                                 NavigationBarItem(
                                     selected = isSelected,
-                                    onClick = { navigator.navigate(item.route) },
+                                    onClick = {
+                                        clickCount++
+                                        navigator.navigate(item.route)
+                                    },
                                     icon = {
-                                        NavigationIconContent(
-                                            icon = if (isSelected) item.selectedIcon else item.icon,
-                                            contentDescription = stringResource(item.title),
+                                        NavigationItemIcon(
+                                            icon = item.icon,
+                                            selectedIcon = item.selectedIcon,
                                             selected = isSelected,
+                                            clickCount = clickCount,
+                                            contentDescription = stringResource(item.title),
                                         )
                                     },
                                     label = { Text(stringResource(item.title)) },

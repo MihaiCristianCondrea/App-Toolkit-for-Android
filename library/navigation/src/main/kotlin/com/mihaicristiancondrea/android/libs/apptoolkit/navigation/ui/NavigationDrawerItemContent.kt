@@ -28,7 +28,7 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -49,24 +49,23 @@ fun NavigationDrawerItemContent(
 ) {
     val title: String = stringResource(id = item.title)
     val view: View = LocalView.current
-    var atEnd by remember(item.route) { mutableStateOf(false) }
-
-    val activeIcon = if (selected || atEnd) item.selectedIcon else item.icon
+    var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
 
     NavigationDrawerItem(
         label = { Text(text = title) },
         selected = selected,
         onClick = {
-            atEnd = true
+            clickCount++
             view.playSoundEffect(SoundEffectConstants.CLICK)
             handleNavigationItemClick()
         },
         icon = {
-            NavigationIconContent(
-                icon = activeIcon,
-                contentDescription = title,
+            NavigationItemIcon(
+                icon = item.icon,
+                selectedIcon = item.selectedIcon,
                 selected = selected,
-                atEnd = atEnd,
+                clickCount = clickCount,
+                contentDescription = title,
                 modifier = Modifier.size(size = SizeConstants.TwentyFourSize),
             )
         },
