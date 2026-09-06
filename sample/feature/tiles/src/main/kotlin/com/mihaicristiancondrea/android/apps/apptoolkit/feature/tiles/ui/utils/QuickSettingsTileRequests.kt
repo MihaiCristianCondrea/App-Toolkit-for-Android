@@ -19,22 +19,21 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.utils
 
 import android.app.StatusBarManager
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.AndroidQuickSettingsTilesLocalDataSource
 import android.content.Context
 import android.graphics.drawable.Icon
 import android.os.Build
-import android.provider.Settings
 import android.widget.Toast
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.toNewTaskIntent
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
 
 internal fun requestQuickSettingsTile(
     context: Context,
     requestKey: String,
+    onResult: () -> Unit = {},
 ) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
         Toast.makeText(context, R.string.tiles_add_pre_android_13, Toast.LENGTH_LONG).show()
-        context.startActivity(Settings.ACTION_SETTINGS.toNewTaskIntent())
         return
     }
 
@@ -45,17 +44,34 @@ internal fun requestQuickSettingsTile(
     }
 
     val statusBarManager = context.getSystemService(StatusBarManager::class.java)
-    statusBarManager.requestAddTileService(
-        request.componentName(context),
-        context.getString(request.labelResId),
-        Icon.createWithResource(context, request.iconResId),
-        context.mainExecutor,
-    ) { result ->
-        val messageResId = when (result) {
-            StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED -> R.string.tiles_add_result_added
-            StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED -> R.string.tiles_add_result_already_added
-            else -> R.string.tiles_add_result_failed
+    try {
+        if (statusBarManager == null) {
+            Toast.makeText(context, R.string.tiles_add_result_failed, Toast.LENGTH_SHORT).show()
+            return
         }
-        Toast.makeText(context, messageResId, Toast.LENGTH_SHORT).show()
+        statusBarManager.requestAddTileService(
+            request.componentName(context),
+            context.getString(request.labelResId),
+            Icon.createWithResource(context, request.iconResId),
+            context.mainExecutor,
+        ) { result ->
+            if (result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED ||
+                result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED
+            ) {
+                AndroidQuickSettingsTilesLocalDataSource(context)
+                    .recordTileAdded(request.componentName(context), true)
+            }
+            onResult()
+            val messageResId = when (result) {
+                StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED -> R.string.tiles_add_result_added
+                StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED -> R.string.tiles_add_result_already_added
+                else -> R.string.tiles_add_result_failed
+            }
+            Toast.makeText(context, messageResId, Toast.LENGTH_SHORT).show()
+        }
+    } catch (_: SecurityException) {
+        Toast.makeText(context, R.string.tiles_add_result_failed, Toast.LENGTH_SHORT).show()
+    } catch (_: IllegalArgumentException) {
+        Toast.makeText(context, R.string.tiles_add_result_failed, Toast.LENGTH_SHORT).show()
     }
 }

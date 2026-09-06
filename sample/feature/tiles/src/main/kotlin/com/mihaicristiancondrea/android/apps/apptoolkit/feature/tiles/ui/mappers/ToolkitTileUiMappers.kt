@@ -148,7 +148,7 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
 internal fun ToolkitTileStatus.helperTitleResId(): Int = when (this) {
     ToolkitTileStatus.Added -> R.string.tool_status_added_title
     ToolkitTileStatus.Available -> R.string.tool_status_available_title
-    ToolkitTileStatus.NeedsSetup -> R.string.tool_status_needs_setup_title
+    ToolkitTileStatus.NeedsSetup -> R.string.tiles_how_to_add_title
     ToolkitTileStatus.Unsupported -> R.string.tool_status_unsupported_title
 }
 
@@ -156,7 +156,7 @@ internal fun ToolkitTileStatus.helperTitleResId(): Int = when (this) {
 internal fun ToolkitTileStatus.helperSummaryResId(): Int = when (this) {
     ToolkitTileStatus.Added -> R.string.tool_status_added_summary
     ToolkitTileStatus.Available -> R.string.tool_status_available_summary
-    ToolkitTileStatus.NeedsSetup -> R.string.tool_status_needs_setup_summary
+    ToolkitTileStatus.NeedsSetup -> R.string.tiles_how_to_add_summary
     ToolkitTileStatus.Unsupported -> R.string.tool_status_unsupported_summary
 }
 

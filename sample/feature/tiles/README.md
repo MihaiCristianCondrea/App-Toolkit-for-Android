@@ -106,3 +106,16 @@ The catalogue and status pass formerly lived in pass-through use cases. They rem
 work, while all Android resource and artwork mapping now happens in the UI layer. Stateful or
 platform-backed bottom-sheet tools retain dedicated ViewModels; the catalogue ViewModel owns only
 catalogue, filter, expansion, ad and add/setup state.
+
+### Quick Settings membership and Android versions
+
+`NeedsSetup` means an unpinned Quick Settings service on Android 13+, where the system add-tile
+request is supported. In-app sensor tools remain available. Older versions omit the add action and
+setup filter and retain the Tile-ready tools instructions for manually editing Quick Settings.
+The helper card reuses those localized instructions rather than describing missing tool functionality.
+
+Membership normalizes Android's custom tile component format. When secure settings are unavailable,
+system tile lifecycle callbacks and successful pin results supply locally recorded membership.
+The open tool sheet refreshes after pin requests. Caffeine declares its foreground-service and
+wake-lock permissions here and releases its resources on short-service timeout (Android 14+);
+longer requested durations cannot override that platform timeout.

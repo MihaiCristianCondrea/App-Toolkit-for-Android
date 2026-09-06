@@ -76,3 +76,12 @@ the
 widget compiles even if the binding is removed and fails at runtime instead.
 
 The receiver and widget provider XML are owned by this module and contributed through manifest merging. Hosts must still supply the repository binding used by the framework-created widget.
+
+### Malformed Glance launches
+
+The sample replaces Glance 1.2.0's invisible trampoline manifest entry with a private alias to
+`SampleInvisibleActionTrampolineActivity`. Existing widget PendingIntents retain their component
+address. The subclass delegates valid actions to Glance and finishes only for its two specific
+missing-action-envelope exceptions; errors from destinations are not swallowed. A standard launch
+mode gives each click its own lifecycle instead of dropping a second intent in a reused activity.
+Recheck the guard and alias whenever Glance is upgraded. This is sample-owned, not a library-wide fix.

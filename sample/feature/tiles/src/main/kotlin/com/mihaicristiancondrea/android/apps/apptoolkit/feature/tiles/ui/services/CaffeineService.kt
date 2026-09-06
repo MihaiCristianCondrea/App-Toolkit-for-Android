@@ -32,6 +32,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repos
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -132,10 +133,24 @@ class CaffeineService : Service() {
             .build()
     }
 
+    // Android 14+ stops short foreground services after approximately three minutes.
+    // Release both the wake lock and foreground notification within its grace period.
+    override fun onTimeout(startId: Int) {
+        repository.reset()
+        releaseWakeLock()
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        stopSelf()
+    }
+
+    override fun onTimeout(startId: Int, fgsType: Int) {
+        onTimeout(startId)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         releaseWakeLock()
-        timerJob?.cancel()
+        serviceScope.cancel()
+        repository.reset()
     }
 
     companion object {

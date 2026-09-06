@@ -105,6 +105,7 @@ fun ToolkitTilesScreen(
                 is ToolkitTilesAction.RequestAddTile -> requestQuickSettingsTile(
                     context = context,
                     requestKey = action.requestKey,
+                    onResult = { viewModel.onEvent(ToolkitTilesEvent.Refresh) },
                 )
 
                 ToolkitTilesAction.ShowSetupRequiredMessage -> Toast.makeText(
@@ -278,7 +279,9 @@ fun ToolkitTilesScreen(
         )
     }
 
-    selectedTile?.let { tile ->
+    selectedTile?.let { selected ->
+        val tile = state.categories.asSequence().flatMap { it.tiles }
+            .firstOrNull { it.id == selected.id } ?: selected
         ToolkitToolBottomSheet(
             tile = tile,
             onClose = { selectedTile = null },

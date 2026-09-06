@@ -15,9 +15,24 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application>
+        <activity
+            android:name="androidx.glance.appwidget.action.InvisibleActionTrampolineActivity"
+            tools:node="remove" />
+        <activity
+            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.SampleInvisibleActionTrampolineActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@style/Widget.Glance.AppWidget.CallbackTrampoline" />
+        <!-- Keep existing Glance PendingIntents valid after updating the app. -->
+        <activity-alias
+            android:name="androidx.glance.appwidget.action.InvisibleActionTrampolineActivity"
+            android:targetActivity="com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.SampleInvisibleActionTrampolineActivity"
+            android:exported="false" />
         <receiver
             android:name="com.mihaicristiancondrea.android.apps.apptoolkit.widget.ui.AppIconsWidgetReceiver"
             android:exported="false">

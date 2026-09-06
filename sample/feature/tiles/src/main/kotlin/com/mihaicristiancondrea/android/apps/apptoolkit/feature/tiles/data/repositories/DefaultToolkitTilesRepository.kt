@@ -62,6 +62,8 @@ class DefaultToolkitTilesRepository(
                     val componentName = tile.requestKey?.let(quickSettingsDataSource::componentName)
                     if (componentName != null && componentName in activeTiles) {
                         tile.copy(status = ToolkitTileStatus.Added)
+                    } else if (componentName != null && quickSettingsDataSource.supportsAddTileRequest) {
+                        tile.copy(status = ToolkitTileStatus.NeedsSetup)
                     } else tile
                 }.toImmutableList(),
             )
@@ -73,8 +75,8 @@ class DefaultToolkitTilesRepository(
             id = "sensors",
             initiallyExpanded = true,
             tiles = persistentListOf(
-                tile(ToolkitTileIds.BUBBLE_LEVEL, ToolkitTileStatus.NeedsSetup),
-                tile(ToolkitTileIds.COMPASS, ToolkitTileStatus.NeedsSetup),
+                tile(ToolkitTileIds.BUBBLE_LEVEL),
+                tile(ToolkitTileIds.COMPASS),
             ),
         ),
         ToolkitTileCategoryData(

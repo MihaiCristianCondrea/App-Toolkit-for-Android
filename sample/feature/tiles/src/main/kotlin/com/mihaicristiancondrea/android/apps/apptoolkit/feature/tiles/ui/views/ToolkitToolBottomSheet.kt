@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views
 
+import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -210,8 +211,8 @@ private fun ToolSheetActions(
     onAddTile: () -> Unit,
     onSetupTile: () -> Unit,
 ) {
-    val hasAddAction = tile.requestKey != null
-    val hasSetupAction = tile.status != ToolkitTileStatus.Available
+    val hasAddAction = tile.requestKey != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    val hasSetupAction = tile.status == ToolkitTileStatus.Unsupported
     if (!hasAddAction && !hasSetupAction) return
 
     Row(
@@ -222,7 +223,7 @@ private fun ToolSheetActions(
             FilledTonalButton(
                 modifier = Modifier.weight(1f),
                 onClick = onAddTile,
-                enabled = tile.status == ToolkitTileStatus.Available,
+                enabled = tile.status != ToolkitTileStatus.Added,
             ) {
                 Text(text = stringResource(id = R.string.tiles_add))
             }

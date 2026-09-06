@@ -14,6 +14,9 @@
 
 ### Fixed
 
+- Prevented malformed home-screen widget action launches from crashing the Sample App.
+- Corrected Quick Tools setup status and Android-version support for adding Quick Settings tiles.
+- Fixed Caffeine startup permissions and cleanup when Android times out its foreground service.
 - Fixed Sample App startup graph verification and navigation composition after modularization.
 - Fixed missing ad-placement and analytics-contract verification.
 - Fixed missing `VIBRATE` permission declaration for Toolkit Tiles.
