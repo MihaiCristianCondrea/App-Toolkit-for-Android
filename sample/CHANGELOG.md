@@ -4,6 +4,10 @@
 
 **Version:** `Unknown` (`unknown`)
 
+### Added
+
+- Added standard GA4 `view_item`, `view_item_list`, `share`, and `select_content` telemetry across Developer Apps and Quick Tools screens to support AdMob App Analytics Connection.
+
 ### Removed
 
 - Removed the Caffeine tool and its Quick Settings service. Keeping the screen awake needed a

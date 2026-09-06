@@ -63,7 +63,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.c
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileCategorySection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TilesFilters
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AdsConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.LocalNativeAdViewFactory
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
@@ -75,6 +78,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.NavigationBarSpacer
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 /** Route-level composable for the Toolkit Tiles catalog. */
@@ -144,6 +148,7 @@ fun ToolkitTilesScreen(
     onEvent: (ToolkitTilesEvent) -> Unit,
 ) {
     val showAds = rememberAdsEnabled()
+    val firebaseController: FirebaseController = koinInject()
     var selectedTile by remember { mutableStateOf<ToolkitTile?>(null) }
     var quickToolDialog by remember { mutableStateOf<ToolkitQuickTool?>(null) }
     val filteredCategories = remember(state.categories, state.selectedFilter) {
@@ -239,6 +244,15 @@ fun ToolkitTilesScreen(
                                 selectedFilter = state.selectedFilter,
                                 onToggle = { onEvent(ToolkitTilesEvent.CategoryToggled(category.id)) },
                                 onPreviewTile = { tile ->
+                                    firebaseController.logViewItem(
+                                        itemId = tile.id,
+                                        itemName = tile.id,
+                                        itemCategory = category.id,
+                                    )
+                                    firebaseController.logSelectContent(
+                                        contentType = "quick_tool_preview",
+                                        itemId = tile.id,
+                                    )
                                     if (tile.quickTool == ToolkitQuickTool.MaterialColors) {
                                         quickToolDialog = ToolkitQuickTool.MaterialColors
                                     } else {

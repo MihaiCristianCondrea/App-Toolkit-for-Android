@@ -133,11 +133,6 @@ internal fun ToolkitTileIcon.iconColors(): StatusColors {
             content = if (isDark) Color(0xFFFFB0D3) else Color(0xFF91005A),
         )
 
-        ToolkitTileIcon.Music -> StatusColors(
-            container = if (isDark) Color(0xFF3F0091) else Color(0xFF6F00FF),
-            content = if (isDark) Color(0xFFC8BFFF) else Color(0xFF3F0091),
-        )
-
         ToolkitTileIcon.Palette -> StatusColors(
             container = if (isDark) Color(0xFF7A4E00) else Color(0xFFFFB84D),
             content = if (isDark) Color(0xFFFFDDA8) else Color(0xFF7A4E00),

@@ -29,6 +29,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItemList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.LoggedScreenViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
@@ -101,6 +103,10 @@ class ToolkitTilesViewModel(
                     )
                 }
                 .onEach { (categories, expandedCategoryIds) ->
+                    firebaseController.logViewItemList(
+                        itemListId = "all",
+                        itemListName = "quick_tools_catalog",
+                    )
                     screenState.setSuccess(
                         data = (screenData ?: ToolkitTilesUiState()).copy(
                             categories = categories.toUiModels(),
@@ -124,6 +130,10 @@ class ToolkitTilesViewModel(
         firebaseController.logSelectContent(
             contentType = "tile_filter",
             itemId = filter.name.lowercase(),
+        )
+        firebaseController.logViewItemList(
+            itemListId = filter.name.lowercase(),
+            itemListName = "quick_tools_${filter.name.lowercase()}",
         )
         screenState.update { current ->
             current.copy(data = current.data?.copy(selectedFilter = filter))
@@ -173,6 +183,11 @@ class ToolkitTilesViewModel(
         firebaseController.logSelectContent(
             contentType = "tile_setup",
             itemId = tileId,
+        )
+        firebaseController.logViewItem(
+            itemId = tileId,
+            itemName = tileId,
+            itemCategory = "quick_tool_setup",
         )
         startOperation(
             action = Actions.OPEN_TILE_SETUP,

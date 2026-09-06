@@ -29,9 +29,13 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppsListFilter
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.utils.toErrorMessage
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.AppInteractionType
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.logAppInteraction
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logSelectContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItem
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logViewItemList
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onFailure
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.network.domain.models.network.onSuccess
@@ -178,6 +182,10 @@ class AppsListViewModel(
                                 if (list.isEmpty()) {
                                     screenState.setNoData(data = updated)
                                 } else {
+                                    firebaseController.logViewItemList(
+                                        itemListId = "all",
+                                        itemListName = "developer_apps_all",
+                                    )
                                     screenState.setSuccess(data = updated)
                                 }
                             }
@@ -218,6 +226,10 @@ class AppsListViewModel(
             contentType = "app_filter",
             itemId = filter.name.lowercase(),
         )
+        firebaseController.logViewItemList(
+            itemListId = filter.name.lowercase(),
+            itemListName = "developer_apps_${filter.name.lowercase()}",
+        )
         screenState.update { current ->
             current.copy(data = (current.data ?: AppListUiState()).copy(selectedFilter = filter))
         }
@@ -225,6 +237,16 @@ class AppsListViewModel(
 
     private fun selectApp(packageName: String) {
         val selectedApp = screenData?.apps?.firstOrNull { it.packageName == packageName } ?: return
+        firebaseController.logViewItem(
+            itemId = selectedApp.packageName,
+            itemName = selectedApp.name,
+            itemCategory = selectedApp.category?.label,
+        )
+        firebaseController.logAppInteraction(
+            source = "AppsListViewModel",
+            appInfo = selectedApp,
+            interaction = AppInteractionType.OpenDetailsBottomSheet,
+        )
         screenState.update { current ->
             current.copy(
                 data = current.data?.copy(

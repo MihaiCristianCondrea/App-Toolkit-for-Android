@@ -26,6 +26,7 @@ object AppGa4Contract {
         const val SEARCH = "search"
         const val SHARE = "share"
         const val VIEW_ITEM = "view_item"
+        const val VIEW_ITEM_LIST = "view_item_list"
         const val TUTORIAL_BEGIN = "tutorial_begin"
         const val TUTORIAL_COMPLETE = "tutorial_complete"
         const val UNLOCK_ACHIEVEMENT = "unlock_achievement"
@@ -46,6 +47,8 @@ object AppGa4Contract {
         const val ITEM_ID = "item_id"
         const val ITEM_NAME = "item_name"
         const val ITEM_CATEGORY = "item_category"
+        const val ITEM_LIST_ID = "item_list_id"
+        const val ITEM_LIST_NAME = "item_list_name"
         const val SEARCH_TERM = "search_term"
         const val METHOD = "method"
         const val ACHIEVEMENT_ID = "achievement_id"
@@ -93,6 +96,7 @@ object AppGa4Contract {
             Param.ITEM_ID,
             Param.ITEM_NAME,
         ),
+        EventName.VIEW_ITEM_LIST to emptySet(),
         EventName.TUTORIAL_BEGIN to emptySet(),
         EventName.TUTORIAL_COMPLETE to emptySet(),
         EventName.UNLOCK_ACHIEVEMENT to setOf(

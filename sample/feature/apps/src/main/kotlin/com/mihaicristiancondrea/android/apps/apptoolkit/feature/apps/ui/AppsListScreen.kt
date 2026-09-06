@@ -47,6 +47,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.sc
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.screens.loading.HomeLoadingScreen
 import com.mihaicristiancondrea.android.apps.apptoolkit.integration.ads.constants.AppAdsQualifiers
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logShare
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberAdsEnabled
@@ -123,6 +124,11 @@ fun AppsListScreen(
     val openApp: (AppInfo) -> Unit = remember { buildAppClick }
     val onShareClick: (AppInfo) -> Unit = remember(buildShareClick, firebaseController) {
         { app ->
+            firebaseController.logShare(
+                method = "system_share",
+                contentType = "app",
+                itemId = app.packageName,
+            )
             firebaseController.logAppInteraction(
                 source = "apps_list",
                 appInfo = app,
