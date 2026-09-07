@@ -18,6 +18,7 @@
     <string name="about">Névjegy</string>
     <string name="amoled_mode">AMOLED mód</string>
     <string name="color_palette">Színpaletta</string>
+    <string name="content_description_more_options">További lehetőségek</string>
     <string name="dark_mode">Sötét mód</string>
     <string name="dialog_info_language">Személyre szabhatod a tapasztalataidat a választott nyelveddel. A nyelvi változtatások azonnal érvénybe lépnek.</string>
     <string name="dialog_info_startup">Az indítóképernyő beállításai, amelyek befolyásolják a felhasználók első interakcióját az alkalmazással.</string>

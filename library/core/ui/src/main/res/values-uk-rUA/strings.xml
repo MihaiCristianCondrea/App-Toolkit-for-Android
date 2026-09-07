@@ -18,6 +18,7 @@
     <string name="about">Про додаток</string>
     <string name="amoled_mode">Режим AMOLED</string>
     <string name="color_palette">Палітра кольорів</string>
+    <string name="content_description_more_options">Більше варіантів</string>
     <string name="dark_mode">Темна тема</string>
     <string name="dialog_info_language">Персоналізуйте свій досвід, використовуючи бажану мову</string>
     <string name="dialog_info_startup">Налаштуйте початковий екран, який буде відображатися при запуску додатка.</string>

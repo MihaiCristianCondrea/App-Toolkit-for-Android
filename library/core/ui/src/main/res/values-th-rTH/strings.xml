@@ -18,6 +18,7 @@
     <string name="about">เกี่ยวกับแอป</string>
     <string name="amoled_mode">โหมด AMOLED</string>
     <string name="color_palette">พาเลตสี</string>
+    <string name="content_description_more_options">ตัวเลือกเพิ่มเติม</string>
     <string name="dark_mode">โหมดมืด</string>
     <string name="dialog_info_language">ปรับแต่งประสบการณ์ของคุณด้วยภาษาที่คุณต้องการ</string>
     <string name="dialog_info_startup">กำหนดหน้าจอแรกที่จะแสดงเมื่อเปิดแอปครั้งแรก</string>

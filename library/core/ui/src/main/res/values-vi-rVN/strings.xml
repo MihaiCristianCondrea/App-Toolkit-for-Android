@@ -18,6 +18,7 @@
     <string name="about">Giới thiệu</string>
     <string name="amoled_mode">Chế độ AMOLED</string>
     <string name="color_palette">Bảng màu</string>
+    <string name="content_description_more_options">Nhiều lựa chọn hơn</string>
     <string name="dark_mode">Chế độ tối</string>
     <string name="dialog_info_language">Cá nhân hóa trải nghiệm của bạn với ngôn ngữ ưa thích. Mọi thay đổi ngôn ngữ bạn thực hiện sẽ có hiệu lực ngay lập tức, đảm bảo trải nghiệm liền mạch bằng ngôn ngữ bạn đã chọn</string>
     <string name="dialog_info_startup">Cấu hình màn hình ban đầu được hiển thị cho người dùng khi khởi chạy ứng dụng. Cài đặt này ảnh hưởng đến tương tác đầu tiên của người dùng với ứng dụng và có thể được điều chỉnh cho các phân khúc người dùng cụ thể hoặc mục tiêu sản phẩm.</string>

@@ -63,8 +63,8 @@ enum class ButtonIconPosition { Start, End }
 
 /**
  * Adaptive action button. A nonblank label selects a content button; otherwise [icon] is required.
- * Icon-only actions require a nonblank [contentDescription]. A labelled action uses its visible
- * text unless an explicit description replaces it. Icons beside labels are decorative.
+ * [contentDescription] is optional; for icon-only actions, null marks the icon as decorative.
+ * A labelled action uses its visible text unless an explicit description replaces it. Icons beside labels are decorative.
  *
  * Feedback, analytics and icon replay run once per enabled click, before [onClick]. Do not add
  * click feedback at call sites. Null color overrides retain each Material style's defaults,
@@ -92,9 +92,6 @@ fun GeneralButton(
 ) {
     val hasLabel = !label.isNullOrBlank()
     require(hasLabel || icon != null) { "GeneralButton requires a nonblank label or an icon." }
-    require(hasLabel || !contentDescription.isNullOrBlank()) {
-        "Icon-only GeneralButton requires a nonblank contentDescription."
-    }
     val hapticFeedback = LocalHapticFeedback.current
     val view = LocalView.current
     var clickCount by remember { mutableIntStateOf(0) }

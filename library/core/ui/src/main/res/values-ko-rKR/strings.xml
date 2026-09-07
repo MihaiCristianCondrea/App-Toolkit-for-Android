@@ -18,6 +18,7 @@
     <string name="about">정보</string>
     <string name="amoled_mode">AMOLED 모드</string>
     <string name="color_palette">색상 팔레트</string>
+    <string name="content_description_more_options">더 많은 옵션</string>
     <string name="dark_mode">다크 모드</string>
     <string name="dialog_info_language">선호하는 언어로 환경을 맞춤 설정하세요. 변경한 언어는 즉시 적용되어 선택한 언어로 원활한 환경을 보장합니다.</string>
     <string name="dialog_info_startup">애플리케이션 실행 시 사용자에게 표시되는 초기 화면을 구성합니다. 이 설정은 사용자의 앱과의 첫 번째 상호 작용에 영향을 미치며 특정 사용자 세그먼트 또는 제품 목표에 맞게 조정할 수 있습니다.</string>

@@ -36,6 +36,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.licenses.LicensesActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
@@ -66,7 +67,7 @@ fun HelpScreenMenuActions(
     AnimatedIconButtonDirection(
         modifier = Modifier.graphicsLayer { rotationZ = rotation },
         fromRight = true,
-        contentDescription = null,
+        contentDescription = stringResource(id = com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R.string.content_description_more_options),
         icon = ToolkitIcon.Vector(Icons.Default.MoreVert),
         onClick = { showMenu.value = true }
     )

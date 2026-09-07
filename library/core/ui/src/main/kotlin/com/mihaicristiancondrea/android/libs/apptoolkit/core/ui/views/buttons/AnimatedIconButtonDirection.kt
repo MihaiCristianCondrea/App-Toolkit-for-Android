@@ -66,7 +66,7 @@ fun AnimatedIconButtonDirection(
     visible: Boolean = true,
     enabled: Boolean = true,
     icon: ToolkitIcon,
-    contentDescription: String?,
+    contentDescription: String? = null,
     onClick: () -> Unit,
     durationMillis: Int = 500,
     autoAnimate: Boolean = true,

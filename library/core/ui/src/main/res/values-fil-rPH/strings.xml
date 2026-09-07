@@ -18,6 +18,7 @@
     <string name="about">Tungkol sa</string>
     <string name="amoled_mode">AMOLED mode</string>
     <string name="color_palette">Paleta ng kulay</string>
+    <string name="content_description_more_options">Higit pang mga pagpipilian</string>
     <string name="dark_mode">Dark mode</string>
     <string name="dialog_info_language">I-personalize ang iyong karanasan gamit ang iyong gustong wika. Anumang pagbabago sa wika na gagawin mo ay agad na magkakabisa, na tinitiyak ang isang tuluy-tuloy na karanasan sa iyong napiling wika</string>
     <string name="dialog_info_startup">Kino-configure ang paunang screen na ipinapakita sa mga user sa paglunsad ng application. Nakakaimpluwensya ang setting na ito sa unang interaksyon ng user sa app at maaaring iakma sa mga partikular na segment ng user o layunin ng produkto.</string>

@@ -224,8 +224,8 @@ Import `GeneralButton`, `GeneralButtonStyle`, and `ButtonIconPosition` from
 `core:ui`, which owns feedback and analytics; this module owns its theme and ToolkitIcon rendering.
 
 One button API handles a nonblank label, an icon, or both. A null, empty, or whitespace-only label
-selects the icon-only form. Missing content fails fast. Icon-only actions require a nonblank,
-localized `contentDescription`. Labelled icons are decorative; the label names the action by default.
+selects the icon-only form. Missing content fails fast. `contentDescription` is optional; icon-only actions
+without a description are treated as decorative. Labelled icons are decorative; the label names the action by default.
 An explicit description replaces the visible label's accessibility text without announcing both.
 
 | Style | Label / icon + label | Icon only |
