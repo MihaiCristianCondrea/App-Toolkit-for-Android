@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">أندرويد محايد 2</string>
     <string name="tool_material_colors_android_unavailable">تتوفر لوحات نظام Android Material You على نظام التشغيل Android 12 والإصدارات الأحدث.</string>
     <string name="tool_material_colors_app_scheme">نظام ألوان التطبيق</string>
+    <string name="tool_material_colors_copied">تم نسخ %1$s</string>
     <string name="tool_material_colors_description">قارن نظام ألوان التطبيق الحالي مع لهجة نظام Android واللوحات المحايدة.</string>
     <string name="tool_material_colors_summary">قم بمعاينة لوحة التطبيق وألوان Android Material You</string>
     <string name="tool_material_colors_title">ألوان المواد</string>

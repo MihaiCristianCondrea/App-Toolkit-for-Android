@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">Android nötr 2</string>
     <string name="tool_material_colors_android_unavailable">Android Malzemesi Sistem paletleri Android 12 ve daha yeni sürümlerde mevcuttur.</string>
     <string name="tool_material_colors_app_scheme">Uygulama renk şeması</string>
+    <string name="tool_material_colors_copied">%1$s kopyalandı</string>
     <string name="tool_material_colors_description">Mevcut uygulama renk şemasını Android sistem vurgusu ve nötr paletlerle karşılaştırın.</string>
     <string name="tool_material_colors_summary">Uygulama paletini ve Android Material You ton renklerini önizleyin</string>
     <string name="tool_material_colors_title">Malzeme Renkleri</string>

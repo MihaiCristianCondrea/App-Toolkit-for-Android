@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">एंड्रॉइड न्यूट्रल 2</string>
     <string name="tool_material_colors_android_unavailable">एंड्रॉइड मटेरियल यू सिस्टम पैलेट एंड्रॉइड 12 और नए पर उपलब्ध हैं।</string>
     <string name="tool_material_colors_app_scheme">ऐप रंग योजना</string>
+    <string name="tool_material_colors_copied">%1$s कॉपी किया गया</string>
     <string name="tool_material_colors_description">एंड्रॉइड सिस्टम एक्सेंट और न्यूट्रल पैलेट के साथ वर्तमान एप्लिकेशन रंग योजना की तुलना करें।</string>
     <string name="tool_material_colors_summary">ऐप पैलेट और एंड्रॉइड मटेरियल यू टोनल रंगों का पूर्वावलोकन करें</string>
     <string name="tool_material_colors_title">सामग्री रंग</string>

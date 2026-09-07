@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">안드로이드 중립 2</string>
     <string name="tool_material_colors_android_unavailable">Android Material You 시스템 팔레트는 Android 12 이상에서 사용할 수 있습니다.</string>
     <string name="tool_material_colors_app_scheme">앱 색 구성표</string>
+    <string name="tool_material_colors_copied">%1$s 복사됨</string>
     <string name="tool_material_colors_description">현재 애플리케이션 색상 구성표를 Android 시스템 액센트 및 중립 팔레트와 비교하세요.</string>
     <string name="tool_material_colors_summary">앱 팔레트 및 Android 머티리얼 색조 색상 미리보기</string>
     <string name="tool_material_colors_title">재료 색상</string>

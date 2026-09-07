@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">Android trung lập 2</string>
     <string name="tool_material_colors_android_unavailable">Bảng màu hệ thống của Material You có sẵn trên Android 12 trở lên.</string>
     <string name="tool_material_colors_app_scheme">Phối màu ứng dụng</string>
+    <string name="tool_material_colors_copied">Đã sao chép %1$s</string>
     <string name="tool_material_colors_description">So sánh bảng màu của ứng dụng hiện tại với bảng màu trung tính và điểm nhấn của hệ thống Android.</string>
     <string name="tool_material_colors_summary">Xem trước bảng màu ứng dụng và tông màu của Android Material You</string>
     <string name="tool_material_colors_title">Màu sắc vật liệu</string>

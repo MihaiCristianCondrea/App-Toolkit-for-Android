@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">Android netral 2</string>
     <string name="tool_material_colors_android_unavailable">Palet sistem Android Material You tersedia di Android 12 dan yang lebih baru.</string>
     <string name="tool_material_colors_app_scheme">Skema warna aplikasi</string>
+    <string name="tool_material_colors_copied">%1$s disalin</string>
     <string name="tool_material_colors_description">Bandingkan skema warna aplikasi saat ini dengan aksen sistem Android dan palet netral.</string>
     <string name="tool_material_colors_summary">Pratinjau palet aplikasi dan warna tonal Android Material You</string>
     <string name="tool_material_colors_title">Warna Bahan</string>

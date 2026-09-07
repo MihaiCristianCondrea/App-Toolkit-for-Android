@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">Android semleges 2</string>
     <string name="tool_material_colors_android_unavailable">Az Android Material You rendszerpaletták Android 12 és újabb rendszereken érhetők el.</string>
     <string name="tool_material_colors_app_scheme">Alkalmazás színséma</string>
+    <string name="tool_material_colors_copied">%1$s másolva</string>
     <string name="tool_material_colors_description">Hasonlítsa össze a jelenlegi alkalmazás színsémáját az Android rendszer akcentusával és a semleges palettákkal.</string>
     <string name="tool_material_colors_summary">Tekintse meg az alkalmazáspaletta és az Android Material You tónusszíneinek előnézetét</string>
     <string name="tool_material_colors_title">Anyag színek</string>

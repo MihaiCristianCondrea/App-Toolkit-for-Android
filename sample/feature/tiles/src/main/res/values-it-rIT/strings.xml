@@ -96,6 +96,7 @@
     <string name="tool_material_colors_android_neutral_2">Android neutrale 2</string>
     <string name="tool_material_colors_android_unavailable">Le tavolozze di sistema Android Material You sono disponibili su Android 12 e versioni successive.</string>
     <string name="tool_material_colors_app_scheme">Combinazione di colori dell\'app</string>
+    <string name="tool_material_colors_copied">%1$s copiato</string>
     <string name="tool_material_colors_description">Confronta la combinazione di colori dell\'applicazione corrente con gli accenti del sistema Android e le tavolozze neutre.</string>
     <string name="tool_material_colors_summary">Visualizza l\'anteprima della tavolozza dell\'app e dei colori tonali di Android Material You</string>
     <string name="tool_material_colors_title">Colori dei materiali</string>

@@ -96,6 +96,7 @@
     <string name="tool_material_colors_android_neutral_2">Android neutre 2</string>
     <string name="tool_material_colors_android_unavailable">Les palettes système Android Material You sont disponibles sur Android 12 et versions ultérieures.</string>
     <string name="tool_material_colors_app_scheme">Schéma de couleurs de l\'application</string>
+    <string name="tool_material_colors_copied">%1$s copié</string>
     <string name="tool_material_colors_description">Comparez la palette de couleurs actuelle de l\'application avec les palettes d\'accentuation et neutres du système Android.</string>
     <string name="tool_material_colors_summary">Prévisualisez la palette de l\'application et les couleurs tonales d\'Android Material You</string>
     <string name="tool_material_colors_title">Couleurs des matériaux</string>

@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">اینڈرائیڈ نیوٹرل 2</string>
     <string name="tool_material_colors_android_unavailable">اینڈرائیڈ میٹریل یو سسٹم پیلیٹس اینڈرائیڈ 12 اور جدید تر پر دستیاب ہیں۔</string>
     <string name="tool_material_colors_app_scheme">ایپ رنگ سکیم</string>
+    <string name="tool_material_colors_copied">%1$s کاپی ہو گیا</string>
     <string name="tool_material_colors_description">اینڈرائیڈ سسٹم کے لہجے اور غیر جانبدار پیلیٹس کے ساتھ موجودہ ایپلیکیشن کلر سکیم کا موازنہ کریں۔</string>
     <string name="tool_material_colors_summary">ایپ پیلیٹ اور اینڈرائیڈ میٹریل یو ٹونل کلرز کا پیش نظارہ کریں۔</string>
     <string name="tool_material_colors_title">مواد کے رنگ</string>

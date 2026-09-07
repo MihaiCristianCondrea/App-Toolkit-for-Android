@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">Android เป็นกลาง 2</string>
     <string name="tool_material_colors_android_unavailable">จานสีระบบ Android Material You พร้อมใช้งานบน Android 12 และใหม่กว่า</string>
     <string name="tool_material_colors_app_scheme">โทนสีของแอป</string>
+    <string name="tool_material_colors_copied">คัดลอก %1$s แล้ว</string>
     <string name="tool_material_colors_description">เปรียบเทียบโทนสีของแอปพลิเคชันปัจจุบันกับสำเนียงของระบบ Android และชุดสีที่เป็นกลาง</string>
     <string name="tool_material_colors_summary">ดูตัวอย่างชุดแอพและวัสดุ Android โทนสีของคุณ</string>
     <string name="tool_material_colors_title">สีวัสดุ</string>

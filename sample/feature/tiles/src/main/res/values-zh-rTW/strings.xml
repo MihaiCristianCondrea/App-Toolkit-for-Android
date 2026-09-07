@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">安卓中立2</string>
     <string name="tool_material_colors_android_unavailable">Android Material You 系統調色盤可在 Android 12 及更高版本上使用。</string>
     <string name="tool_material_colors_app_scheme">應用配色方案</string>
+    <string name="tool_material_colors_copied">已複製 %1$s</string>
     <string name="tool_material_colors_description">將目前應用程式的配色方案與 Android 系統強調色和中性調色板進行比較。</string>
     <string name="tool_material_colors_summary">預覽應用程式調色板和 Android Material You 色調顏色</string>
     <string name="tool_material_colors_title">材質顏色</string>

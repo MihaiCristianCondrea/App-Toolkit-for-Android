@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">Android neutral 2</string>
     <string name="tool_material_colors_android_unavailable">Android Material Dina systempaletter är tillgängliga på Android 12 och senare.</string>
     <string name="tool_material_colors_app_scheme">Appens färgschema</string>
+    <string name="tool_material_colors_copied">Kopierade %1$s</string>
     <string name="tool_material_colors_description">Jämför det aktuella applikationens färgschema med Android-systemets accent och neutrala paletter.</string>
     <string name="tool_material_colors_summary">Förhandsgranska apppaletten och Android Material You tonala färger</string>
     <string name="tool_material_colors_title">Material färger</string>

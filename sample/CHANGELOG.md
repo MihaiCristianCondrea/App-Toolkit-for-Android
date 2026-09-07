@@ -24,6 +24,7 @@
 
 ### Improved
 
+- Added click-to-copy functionality to color swatches in the Material Colors tool.
 - Unified action-button behavior across dialogs, Quick Tools, and the component showcase, including
   consistent click feedback and an accessible snackbar dismiss action.
 - Quick Tools that offer a Quick Settings tile you have not added now read "Not added" with a

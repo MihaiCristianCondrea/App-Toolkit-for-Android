@@ -96,6 +96,7 @@
     <string name="tool_material_colors_android_neutral_2">Android neutru 2</string>
     <string name="tool_material_colors_android_unavailable">Material Android Paletele dvs. de sistem sunt disponibile pe Android 12 și mai nou.</string>
     <string name="tool_material_colors_app_scheme">Schema de culori a aplicației</string>
+    <string name="tool_material_colors_copied">S-a copiat %1$s</string>
     <string name="tool_material_colors_description">Comparați schema de culori actuală a aplicației cu accent de sistem Android și paletele neutre.</string>
     <string name="tool_material_colors_summary">Previzualizează paleta de aplicații și culorile tonale Android Material You</string>
     <string name="tool_material_colors_title">Culori materiale</string>

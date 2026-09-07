@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">Android ニュートラル 2</string>
     <string name="tool_material_colors_android_unavailable">Android マテリアル ユー システム パレットは、Android 12 以降で利用できます。</string>
     <string name="tool_material_colors_app_scheme">アプリの配色</string>
+    <string name="tool_material_colors_copied">%1$s をコピーしました</string>
     <string name="tool_material_colors_description">現在のアプリケーションの配色を Android システムのアクセントおよびニュートラル パレットと比較します。</string>
     <string name="tool_material_colors_summary">アプリパレットと Android マテリアルの色調をプレビューする</string>
     <string name="tool_material_colors_title">素材の色</string>

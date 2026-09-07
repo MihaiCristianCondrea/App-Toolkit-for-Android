@@ -96,6 +96,7 @@
     <string name="tool_material_colors_android_neutral_2">Андроид нейтральный 2</string>
     <string name="tool_material_colors_android_unavailable">Системные палитры Android Material You доступны на Android 12 и более поздних версиях.</string>
     <string name="tool_material_colors_app_scheme">Цветовая схема приложения</string>
+    <string name="tool_material_colors_copied">Скопировано %1$s</string>
     <string name="tool_material_colors_description">Сравните текущую цветовую схему приложения с акцентами системы Android и нейтральными палитрами.</string>
     <string name="tool_material_colors_summary">Предварительный просмотр палитры приложения и тональных цветов Android Material You.</string>
     <string name="tool_material_colors_title">Цвета материалов</string>

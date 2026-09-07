@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">অ্যান্ড্রয়েড নিরপেক্ষ 2</string>
     <string name="tool_material_colors_android_unavailable">Android Material You সিস্টেম প্যালেটগুলি Android 12 এবং নতুন সংস্করণে উপলব্ধ।</string>
     <string name="tool_material_colors_app_scheme">অ্যাপের রঙের স্কিম</string>
+    <string name="tool_material_colors_copied">%1$s অনুলিপি করা হয়েছে</string>
     <string name="tool_material_colors_description">অ্যান্ড্রয়েড সিস্টেম অ্যাকসেন্ট এবং নিরপেক্ষ প্যালেটের সাথে বর্তমান অ্যাপ্লিকেশন রঙের স্কিম তুলনা করুন।</string>
     <string name="tool_material_colors_summary">অ্যাপ প্যালেট এবং অ্যান্ড্রয়েড ম্যাটেরিয়াল ইউ টোনাল রঙের পূর্বরূপ দেখুন</string>
     <string name="tool_material_colors_title">উপাদান রং</string>

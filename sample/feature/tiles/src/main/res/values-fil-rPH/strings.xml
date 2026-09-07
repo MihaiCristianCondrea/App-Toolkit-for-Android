@@ -82,6 +82,7 @@
     <string name="tool_material_colors_android_neutral_2">Android neutral 2</string>
     <string name="tool_material_colors_android_unavailable">Available ang mga system palette ng Android Material You sa Android 12 at mas bago.</string>
     <string name="tool_material_colors_app_scheme">scheme ng kulay ng app</string>
+    <string name="tool_material_colors_copied">Kina-copy ang %1$s</string>
     <string name="tool_material_colors_description">Ihambing ang kasalukuyang scheme ng kulay ng application sa Android system accent at mga neutral na palette.</string>
     <string name="tool_material_colors_summary">I-preview ang palette ng app at mga kulay ng tono ng Android Material You</string>
     <string name="tool_material_colors_title">Mga Kulay ng Materyal</string>
