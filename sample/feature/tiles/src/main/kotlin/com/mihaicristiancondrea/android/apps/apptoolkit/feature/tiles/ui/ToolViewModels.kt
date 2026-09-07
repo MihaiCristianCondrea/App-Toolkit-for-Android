@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui
 
+import android.os.SystemClock
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.TorchPreset
@@ -34,12 +35,18 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.LevelToolState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseInputError
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.MorseToolState
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionRating
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestPhase
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ReactionTestToolState
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.random.Random
 
@@ -197,5 +204,79 @@ class FlashDimmerToolViewModel(
 
     fun dismiss() {
         morseRepository.stop(); torchRepository.turnOff()
+    }
+}
+
+class ReactionTestToolViewModel(
+    private val timeProvider: () -> Long = SystemClock::elapsedRealtime,
+) : ViewModel() {
+    private val mutableState = MutableStateFlow(ReactionTestToolState())
+    val state: StateFlow<ReactionTestToolState> = mutableState.asStateFlow()
+
+    private var waitingJob: Job? = null
+    private var signalTimeMs: Long = 0L
+
+    fun startTest(delayMs: Long? = null) {
+        if (state.value.phase == ReactionTestPhase.Waiting || state.value.phase == ReactionTestPhase.Signal) {
+            return
+        }
+        waitingJob?.cancel()
+        mutableState.value = state.value.copy(phase = ReactionTestPhase.Waiting)
+
+        val actualDelay = delayMs ?: Random.nextLong(1500L, 5000L)
+        waitingJob = viewModelScope.launch {
+            delay(actualDelay)
+            if (state.value.phase == ReactionTestPhase.Waiting) {
+                signalTimeMs = timeProvider()
+                mutableState.value = state.value.copy(phase = ReactionTestPhase.Signal)
+            }
+        }
+    }
+
+    fun handleTap() {
+        when (state.value.phase) {
+            ReactionTestPhase.Waiting -> {
+                waitingJob?.cancel()
+                mutableState.value = state.value.copy(phase = ReactionTestPhase.FalseStart)
+            }
+
+            ReactionTestPhase.Signal -> {
+                val reactionTime = timeProvider() - signalTimeMs
+                val updatedHistory = (state.value.history + reactionTime).takeLast(5).toImmutableList()
+                val updatedBest = state.value.bestTimeMs?.let { minOf(it, reactionTime) } ?: reactionTime
+                val updatedAverage = updatedHistory.average().toLong()
+                val rating = when {
+                    reactionTime < 200 -> ReactionRating.Lightning
+                    reactionTime in 200..250 -> ReactionRating.Fast
+                    reactionTime in 251..350 -> ReactionRating.Average
+                    else -> ReactionRating.Slow
+                }
+                val nextRound = minOf(state.value.roundCount + 1, state.value.totalRounds)
+
+                mutableState.value = state.value.copy(
+                    phase = ReactionTestPhase.Result,
+                    lastReactionTimeMs = reactionTime,
+                    bestTimeMs = updatedBest,
+                    averageTimeMs = updatedAverage,
+                    history = updatedHistory,
+                    roundCount = nextRound,
+                    rating = rating,
+                )
+            }
+
+            else -> {
+                // Do nothing if tapped in Idle, Result, or FalseStart
+            }
+        }
+    }
+
+    fun resetSession() {
+        waitingJob?.cancel()
+        mutableState.value = ReactionTestToolState()
+    }
+
+    fun dismiss() {
+        waitingJob?.cancel()
+        mutableState.value = state.value.copy(phase = ReactionTestPhase.Idle)
     }
 }

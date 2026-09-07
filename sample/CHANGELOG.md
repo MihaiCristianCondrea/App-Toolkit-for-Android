@@ -6,6 +6,7 @@
 
 ### Added
 
+- Added Reaction Test quick tool under Sensors & Measurement with randomized delays, false-start detection, session statistics, rating badges, and haptic feedback.
 - Added standard GA4 `view_item`, `view_item_list`, `share`, and `select_content` telemetry across Developer Apps and Quick Tools screens to support AdMob App Analytics Connection.
 
 ### Removed

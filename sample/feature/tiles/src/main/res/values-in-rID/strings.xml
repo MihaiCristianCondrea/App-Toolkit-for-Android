@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">Balik Koin</string>
     <string name="tile_compass_summary">Arah mata angin dan azimuth</string>
     <string name="tile_compass_title">Kompas</string>
+    <string name="tile_reaction_test_summary">Uji refleks visual Anda dengan penundaan acak</string>
+    <string name="tile_reaction_test_title">Tes Reaksi</string>
     <string name="tile_counter_summary">Tingkatkan hitungan lari cepat</string>
     <string name="tile_counter_title">Penghitung</string>
     <string name="tile_dice_roll_summary">Pelemparan sebuah dadu bersisi enam</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">Gunakan hanya huruf A–Z, angka, dan spasi</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">Alat Cepat</string>
+    <string name="tool_reaction_test_start">Mulai</string>
+    <string name="tool_reaction_test_in_progress">Sedang berlangsung…</string>
+    <string name="tool_reaction_test_try_again">Coba lagi</string>
+    <string name="tool_reaction_test_idle_prompt">Ketuk Mulai saat siap</string>
+    <string name="tool_reaction_test_waiting_prompt">Tunggu warna hijau…</string>
+    <string name="tool_reaction_test_signal_prompt">KETUK SEKARANG!</string>
+    <string name="tool_reaction_test_too_early">Terlalu cepat!</string>
+    <string name="tool_reaction_test_best">Terbaik: %1$d ms</string>
+    <string name="tool_reaction_test_average">Rata-rata: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">Ronde %1$d dari %2$d</string>
+    <string name="tool_reaction_rating_lightning">Kilat ⚡</string>
+    <string name="tool_reaction_rating_fast">Cepat 🚀</string>
+    <string name="tool_reaction_rating_average">Rata-rata 👍</string>
+    <string name="tool_reaction_rating_slow">Santai ☕</string>
 </resources>

@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">Coin Flip</string>
     <string name="tile_compass_summary">Cardinal directions and azimuth</string>
     <string name="tile_compass_title">Compass</string>
+    <string name="tile_reaction_test_summary">Test your visual reflexes with randomized delays</string>
+    <string name="tile_reaction_test_title">Reaction Test</string>
     <string name="tile_counter_summary">Increment a quick running count</string>
     <string name="tile_counter_title">Counter</string>
     <string name="tile_dice_roll_summary">Roll a six-sided die</string>
@@ -97,6 +99,21 @@
     <string name="tool_dialog_close_content_description">Close quick tool</string>
     <string name="tool_dice_roll_action">Roll die</string>
     <string name="tool_dice_roll_waiting">Roll</string>
+    <string name="tool_reaction_test_start">Start</string>
+    <string name="tool_reaction_test_in_progress">In progress…</string>
+    <string name="tool_reaction_test_try_again">Try again</string>
+    <string name="tool_reaction_test_idle_prompt">Tap Start when ready</string>
+    <string name="tool_reaction_test_waiting_prompt">Wait for green…</string>
+    <string name="tool_reaction_test_signal_prompt">TAP NOW!</string>
+    <string name="tool_reaction_test_too_early">Too early!</string>
+    <string name="tool_reaction_test_time_format" translatable="false">%1$d ms</string>
+    <string name="tool_reaction_test_best">Best: %1$d ms</string>
+    <string name="tool_reaction_test_average">Average: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">Round %1$d of %2$d</string>
+    <string name="tool_reaction_rating_lightning">Lightning ⚡</string>
+    <string name="tool_reaction_rating_fast">Fast 🚀</string>
+    <string name="tool_reaction_rating_average">Average 👍</string>
+    <string name="tool_reaction_rating_slow">Relaxed ☕</string>
     <string name="tool_generic_available_summary">This tool is ready for an expanded implementation and now has a Material preview so behavior can be validated before deeper integration.</string>
     <string name="tool_generic_setup_summary">This preview documents the intended behavior while keeping unavailable platform work clearly separated from live tile actions.</string>
     <string name="tool_material_colors_android_accent_1">Android accent 1</string>

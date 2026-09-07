@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">コイン投げ</string>
     <string name="tile_compass_summary">基本方位と方位</string>
     <string name="tile_compass_title">コンパス</string>
+    <string name="tile_reaction_test_summary">ランダムな遅延で視覚的な反射神経をテスト</string>
+    <string name="tile_reaction_test_title">反応速度テスト</string>
     <string name="tile_counter_summary">クイック実行カウントを増やす</string>
     <string name="tile_counter_title">カウンター</string>
     <string name="tile_dice_roll_summary">6面サイコロを振る</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">A～Zの英字、数字、スペースのみ使用できます</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">クイックツール</string>
+    <string name="tool_reaction_test_start">スタート</string>
+    <string name="tool_reaction_test_in_progress">進行中…</string>
+    <string name="tool_reaction_test_try_again">もう一度</string>
+    <string name="tool_reaction_test_idle_prompt">準備ができたらスタートをタップ</string>
+    <string name="tool_reaction_test_waiting_prompt">緑色になるまで待ってください…</string>
+    <string name="tool_reaction_test_signal_prompt">今すぐタップ！</string>
+    <string name="tool_reaction_test_too_early">早すぎます！</string>
+    <string name="tool_reaction_test_best">ベスト: %1$d ms</string>
+    <string name="tool_reaction_test_average">平均: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">ラウンド %1$d / %2$d</string>
+    <string name="tool_reaction_rating_lightning">神速 ⚡</string>
+    <string name="tool_reaction_rating_fast">高速 🚀</string>
+    <string name="tool_reaction_rating_average">標準 👍</string>
+    <string name="tool_reaction_rating_slow">マイペース ☕</string>
 </resources>

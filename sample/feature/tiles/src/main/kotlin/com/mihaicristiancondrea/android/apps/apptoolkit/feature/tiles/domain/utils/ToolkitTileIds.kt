@@ -23,6 +23,7 @@ object ToolkitTileIds {
     const val COUNTER = "counter"
     const val COMPASS = "compass"
     const val BUBBLE_LEVEL = "bubble_level"
+    const val REACTION_TEST = "reaction_test"
     const val SOUND_MODE = "sound_mode"
     const val SOS = "sos"
     const val MORSE = "morse"

@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">মুদ্রা উল্টানো</string>
     <string name="tile_compass_summary">মূল দিকনির্দেশ এবং আজিমুথ</string>
     <string name="tile_compass_title">কম্পাস</string>
+    <string name="tile_reaction_test_summary">যথেচ্ছ বিলম্বের সাথে আপনার চাক্ষুষ প্রতিবর্ত পরীক্ষা করুন</string>
+    <string name="tile_reaction_test_title">প্রতিক্রিয়া পরীক্ষা</string>
     <string name="tile_counter_summary">একটি দ্রুত চলমান গণনা বৃদ্ধি</string>
     <string name="tile_counter_title">কাউন্টার</string>
     <string name="tile_dice_roll_summary">একটি ছয় পার্শ্বযুক্ত ডাই রোল</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">শুধু A–Z অক্ষর, সংখ্যা ও স্পেস ব্যবহার করুন</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">দ্রুত সরঞ্জাম</string>
+    <string name="tool_reaction_test_start">শুরু করুন</string>
+    <string name="tool_reaction_test_in_progress">চলছে…</string>
+    <string name="tool_reaction_test_try_again">আবার চেষ্টা করুন</string>
+    <string name="tool_reaction_test_idle_prompt">প্রস্তুত হলে শুরু করুন ট্যাপ করুন</string>
+    <string name="tool_reaction_test_waiting_prompt">সবুজ রঙের অপেক্ষা করুন…</string>
+    <string name="tool_reaction_test_signal_prompt">এখনই ট্যাপ করুন!</string>
+    <string name="tool_reaction_test_too_early">অনেক তাড়াতাড়ি!</string>
+    <string name="tool_reaction_test_best">সেরা: %1$d ms</string>
+    <string name="tool_reaction_test_average">গড়: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">রাউন্ড %1$d / %2$d</string>
+    <string name="tool_reaction_rating_lightning">বিদ্যুৎ গতি ⚡</string>
+    <string name="tool_reaction_rating_fast">দ্রুত 🚀</string>
+    <string name="tool_reaction_rating_average">গড় 👍</string>
+    <string name="tool_reaction_rating_slow">ধীর ☕</string>
 </resources>

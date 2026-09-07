@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">Coin Flip</string>
     <string name="tile_compass_summary">Kardinális irányok és azimut</string>
     <string name="tile_compass_title">Iránytű</string>
+    <string name="tile_reaction_test_summary">Teszteld vizuális reflexeidet véletlenszerű késleltetéssel</string>
+    <string name="tile_reaction_test_title">Reakcióteszt</string>
     <string name="tile_counter_summary">Növelje a gyors futás számlálóját</string>
     <string name="tile_counter_title">Számláló</string>
     <string name="tile_dice_roll_summary">Dobj egy hatoldalú kockával</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">Csak A–Z betűket, számokat és szóközöket használjon</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">Gyors eszközök</string>
+    <string name="tool_reaction_test_start">Indítás</string>
+    <string name="tool_reaction_test_in_progress">Folyamatban…</string>
+    <string name="tool_reaction_test_try_again">Próbáld újra</string>
+    <string name="tool_reaction_test_idle_prompt">Koppints az Indítás gombra, ha készen állsz</string>
+    <string name="tool_reaction_test_waiting_prompt">Várj a zöldre…</string>
+    <string name="tool_reaction_test_signal_prompt">KOPPINTS MOST!</string>
+    <string name="tool_reaction_test_too_early">Túl korai!</string>
+    <string name="tool_reaction_test_best">Legjobb: %1$d ms</string>
+    <string name="tool_reaction_test_average">Átlag: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">%1$d. forduló / %2$d</string>
+    <string name="tool_reaction_rating_lightning">Villám ⚡</string>
+    <string name="tool_reaction_rating_fast">Gyors 🚀</string>
+    <string name="tool_reaction_rating_average">Átlagos 👍</string>
+    <string name="tool_reaction_rating_slow">Kényelmes ☕</string>
 </resources>

@@ -46,6 +46,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DiceRol
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.FlashDimmerToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SoundModeToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesViewModel
@@ -121,4 +122,5 @@ val tilesModule: Module = module {
     viewModel { SosToolViewModel(repository = get()) }
     viewModel { MorseToolViewModel(repository = get()) }
     viewModel { FlashDimmerToolViewModel(torchRepository = get(), morseRepository = get()) }
+    viewModel { ReactionTestToolViewModel() }
 }

@@ -77,6 +77,7 @@ class DefaultToolkitTilesRepository(
             tiles = persistentListOf(
                 tile(ToolkitTileIds.BUBBLE_LEVEL),
                 tile(ToolkitTileIds.COMPASS),
+                tile(ToolkitTileIds.REACTION_TEST),
             ),
         ),
         ToolkitTileCategoryData(

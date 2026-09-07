@@ -30,6 +30,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.DiceRol
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.FlashDimmerToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SoundModeToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.BreathingTool
@@ -40,6 +41,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.t
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.FlashDimmerTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.LevelTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.MorseTool
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.ReactionTestTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.SosTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.SoundModeTool
 import org.koin.compose.viewmodel.koinViewModel
@@ -120,6 +122,18 @@ internal fun FlashDimmerToolRoute(viewModel: FlashDimmerToolViewModel = koinView
     val state by viewModel.state.collectAsStateWithLifecycle()
     DisposeTool(viewModel::dismiss)
     FlashDimmerTool(state, viewModel::setLevel, viewModel::applyPreset)
+}
+
+@Composable
+internal fun ReactionTestToolRoute(viewModel: ReactionTestToolViewModel = koinViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    DisposeTool(viewModel::dismiss)
+    ReactionTestTool(
+        state = state,
+        onStart = { viewModel.startTest() },
+        onTap = viewModel::handleTap,
+        onReset = viewModel::resetSession,
+    )
 }
 
 @Composable

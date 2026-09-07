@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">Coin Flip</string>
     <string name="tile_compass_summary">Kardinalriktningar och azimut</string>
     <string name="tile_compass_title">Kompass</string>
+    <string name="tile_reaction_test_summary">Testa dina visuella reflexer med slumpmässig fördröjning</string>
+    <string name="tile_reaction_test_title">Reaktionstest</string>
     <string name="tile_counter_summary">Öka en snabb löpande räkning</string>
     <string name="tile_counter_title">Räknare</string>
     <string name="tile_dice_roll_summary">Slå en sexsidig tärning</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">Använd endast bokstäverna A–Z, siffror och mellanslag</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">Snabba verktyg</string>
+    <string name="tool_reaction_test_start">Starta</string>
+    <string name="tool_reaction_test_in_progress">Påragående…</string>
+    <string name="tool_reaction_test_try_again">Försök igen</string>
+    <string name="tool_reaction_test_idle_prompt">Tryck på Starta när du är redo</string>
+    <string name="tool_reaction_test_waiting_prompt">Vänta på grönt…</string>
+    <string name="tool_reaction_test_signal_prompt">TRYCK NU!</string>
+    <string name="tool_reaction_test_too_early">För tidigt!</string>
+    <string name="tool_reaction_test_best">Bäst: %1$d ms</string>
+    <string name="tool_reaction_test_average">Genomsnitt: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">Runda %1$d av %2$d</string>
+    <string name="tool_reaction_rating_lightning">Blixtsnabb ⚡</string>
+    <string name="tool_reaction_rating_fast">Snabb 🚀</string>
+    <string name="tool_reaction_rating_average">Medel 👍</string>
+    <string name="tool_reaction_rating_slow">Lugn ☕</string>
 </resources>

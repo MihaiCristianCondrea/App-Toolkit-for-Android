@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">Lật xu</string>
     <string name="tile_compass_summary">Hướng chính và góc phương vị</string>
     <string name="tile_compass_title">La bàn</string>
+    <string name="tile_reaction_test_summary">Kiểm tra phản xạ thị giác của bạn với độ trễ ngẫu nhiên</string>
+    <string name="tile_reaction_test_title">Kiểm tra phản xạ</string>
     <string name="tile_counter_summary">Tăng số lần chạy nhanh</string>
     <string name="tile_counter_title">quầy</string>
     <string name="tile_dice_roll_summary">Đổ xúc xắc sáu mặt</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">Chỉ sử dụng chữ cái A–Z, số và dấu cách</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">Công cụ nhanh</string>
+    <string name="tool_reaction_test_start">Bắt đầu</string>
+    <string name="tool_reaction_test_in_progress">Đang tiến hành…</string>
+    <string name="tool_reaction_test_try_again">Thử lại</string>
+    <string name="tool_reaction_test_idle_prompt">Nhấn Bắt đầu khi sẵn sàng</string>
+    <string name="tool_reaction_test_waiting_prompt">Chờ chuyển sang màu xanh…</string>
+    <string name="tool_reaction_test_signal_prompt">NHẤN NGAY!</string>
+    <string name="tool_reaction_test_too_early">Quá sớm!</string>
+    <string name="tool_reaction_test_best">Tốt nhất: %1$d ms</string>
+    <string name="tool_reaction_test_average">Trung bình: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">Vòng %1$d / %2$d</string>
+    <string name="tool_reaction_rating_lightning">Tia chớp ⚡</string>
+    <string name="tool_reaction_rating_fast">Nhanh 🚀</string>
+    <string name="tool_reaction_rating_average">Trung bình 👍</string>
+    <string name="tool_reaction_rating_slow">Thong thả ☕</string>
 </resources>

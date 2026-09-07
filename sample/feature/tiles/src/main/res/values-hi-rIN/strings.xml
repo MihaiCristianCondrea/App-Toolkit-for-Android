@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">सिक्का पलटना</string>
     <string name="tile_compass_summary">कार्डिनल दिशाएँ और अज़ीमुथ</string>
     <string name="tile_compass_title">दिशा सूचक यंत्र</string>
+    <string name="tile_reaction_test_summary">यादृच्छिक देरी के साथ अपनी दृश्य प्रतिक्रियाओं का परीक्षण करें</string>
+    <string name="tile_reaction_test_title">प्रतिक्रिया परीक्षण</string>
     <string name="tile_counter_summary">तेजी से चलने वाली गिनती बढ़ाएँ</string>
     <string name="tile_counter_title">काउंटर</string>
     <string name="tile_dice_roll_summary">छह-तरफा पासा रोल करें</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">सिर्फ़ A–Z अक्षर, संख्याएँ और स्पेस इस्तेमाल करें</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">त्वरित उपकरण</string>
+    <string name="tool_reaction_test_start">प्रारंभ</string>
+    <string name="tool_reaction_test_in_progress">प्रगति पर है…</string>
+    <string name="tool_reaction_test_try_again">पुनः प्रयास करें</string>
+    <string name="tool_reaction_test_idle_prompt">तैयार होने पर प्रारंभ पर टैप करें</string>
+    <string name="tool_reaction_test_waiting_prompt">हरे रंग का प्रतीक्षा करें…</string>
+    <string name="tool_reaction_test_signal_prompt">अब टैप करें!</string>
+    <string name="tool_reaction_test_too_early">बहुत जल्दबाजी!</string>
+    <string name="tool_reaction_test_best">सर्वश्रेष्ठ: %1$d ms</string>
+    <string name="tool_reaction_test_average">औसत: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">दौर %1$d / %2$d</string>
+    <string name="tool_reaction_rating_lightning">बिजली की गति ⚡</string>
+    <string name="tool_reaction_rating_fast">तेज 🚀</string>
+    <string name="tool_reaction_rating_average">सामान्य 👍</string>
+    <string name="tool_reaction_rating_slow">सहज ☕</string>
 </resources>

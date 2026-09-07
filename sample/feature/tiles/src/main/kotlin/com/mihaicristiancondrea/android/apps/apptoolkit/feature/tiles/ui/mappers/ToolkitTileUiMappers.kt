@@ -75,6 +75,12 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
         ToolkitTileIcon.Compass
     )
 
+    ToolkitTileIds.REACTION_TEST -> TileVisuals(
+        R.string.tile_reaction_test_title,
+        R.string.tile_reaction_test_summary,
+        ToolkitTileIcon.Timer
+    )
+
     ToolkitTileIds.COIN_FLIP -> TileVisuals(
         R.string.tile_coin_flip_title,
         R.string.tile_coin_flip_summary,

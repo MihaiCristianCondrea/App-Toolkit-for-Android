@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">Yazı-tura</string>
     <string name="tile_compass_summary">Ana yönler ve azimut</string>
     <string name="tile_compass_title">Pusula</string>
+    <string name="tile_reaction_test_summary">Rastgele gecikmelerle görsel reflekslerinizi test edin</string>
+    <string name="tile_reaction_test_title">Tepki Testi</string>
     <string name="tile_counter_summary">Hızlı koşu sayısını artırın</string>
     <string name="tile_counter_title">Sayaç</string>
     <string name="tile_dice_roll_summary">Altı yüzlü bir zar atın</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">Yalnızca A–Z harflerini, sayıları ve boşlukları kullanın</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">Hızlı Araçlar</string>
+    <string name="tool_reaction_test_start">Başlat</string>
+    <string name="tool_reaction_test_in_progress">Devam ediyor…</string>
+    <string name="tool_reaction_test_try_again">Tekrar dene</string>
+    <string name="tool_reaction_test_idle_prompt">Hazır olduğunuzda Başlat\'a dokunun</string>
+    <string name="tool_reaction_test_waiting_prompt">Yeşili bekleyin…</string>
+    <string name="tool_reaction_test_signal_prompt">ŞİMDİ DOKUNUN!</string>
+    <string name="tool_reaction_test_too_early">Çok erken!</string>
+    <string name="tool_reaction_test_best">En iyi: %1$d ms</string>
+    <string name="tool_reaction_test_average">Ortalama: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">Tur %1$d / %2$d</string>
+    <string name="tool_reaction_rating_lightning">Yıldırım ⚡</string>
+    <string name="tool_reaction_rating_fast">Hızlı 🚀</string>
+    <string name="tool_reaction_rating_average">Ortalama 👍</string>
+    <string name="tool_reaction_rating_slow">Rahat ☕</string>
 </resources>

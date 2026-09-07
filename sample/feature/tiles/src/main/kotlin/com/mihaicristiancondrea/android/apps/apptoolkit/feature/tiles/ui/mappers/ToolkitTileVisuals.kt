@@ -32,6 +32,7 @@ import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Straighten
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -69,11 +70,13 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Morse -> Icons.Outlined.MoreHoriz
     ToolkitTileIcon.FlashDimmer -> Icons.Outlined.FlashlightOn
     ToolkitTileIcon.Palette -> Icons.Outlined.Palette
+    ToolkitTileIcon.Timer -> Icons.Outlined.Timer
 }
 
 internal fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
     ToolkitTileIcon.Level,
-    ToolkitTileIcon.Compass -> CoreUiR.drawable.background_8_sided_cookie
+    ToolkitTileIcon.Compass,
+    ToolkitTileIcon.Timer -> CoreUiR.drawable.background_8_sided_cookie
 
     ToolkitTileIcon.Breathing -> CoreUiR.drawable.background_soft_burst
 
@@ -109,7 +112,8 @@ internal fun ToolkitTileIcon.iconColors(): StatusColors {
     val isDark = androidx.compose.foundation.isSystemInDarkTheme()
     return when (this) {
         ToolkitTileIcon.Level,
-        ToolkitTileIcon.Compass -> StatusColors(
+        ToolkitTileIcon.Compass,
+        ToolkitTileIcon.Timer -> StatusColors(
             container = if (isDark) Color(0xFF006A60) else Color(0xFF00A091),
             content = if (isDark) Color(0xFF74DED1) else Color(0xFF006A60),
         )

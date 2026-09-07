@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">Хвърляне на монета</string>
     <string name="tile_compass_summary">Кардинални посоки и азимут</string>
     <string name="tile_compass_title">Компас</string>
+    <string name="tile_reaction_test_summary">Тествайте зрителните си рефлекси със произволно закъснение</string>
+    <string name="tile_reaction_test_title">Тест за реакция</string>
     <string name="tile_counter_summary">Увеличаване на бързо отброяване</string>
     <string name="tile_counter_title">Брояч</string>
     <string name="tile_dice_roll_summary">Хвърлете шестстранен зар</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">Използвайте само букви A–Z, цифри и интервали</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">Бързи инструменти</string>
+    <string name="tool_reaction_test_start">Старт</string>
+    <string name="tool_reaction_test_in_progress">В ход…</string>
+    <string name="tool_reaction_test_try_again">Опитайте отново</string>
+    <string name="tool_reaction_test_idle_prompt">Натиснете Старт, когато сте готови</string>
+    <string name="tool_reaction_test_waiting_prompt">Изчакайте зеления цвят…</string>
+    <string name="tool_reaction_test_signal_prompt">НАТИСНЕТЕ СЕГА!</string>
+    <string name="tool_reaction_test_too_early">Твърде рано!</string>
+    <string name="tool_reaction_test_best">Най-добро: %1$d ms</string>
+    <string name="tool_reaction_test_average">Средно: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">Рунд %1$d от %2$d</string>
+    <string name="tool_reaction_rating_lightning">Светкавица ⚡</string>
+    <string name="tool_reaction_rating_fast">Бърз 🚀</string>
+    <string name="tool_reaction_rating_average">Среден 👍</string>
+    <string name="tool_reaction_rating_slow">Спокоен ☕</string>
 </resources>

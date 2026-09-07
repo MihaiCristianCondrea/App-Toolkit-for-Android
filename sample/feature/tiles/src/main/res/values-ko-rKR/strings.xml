@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">동전 뒤집기</string>
     <string name="tile_compass_summary">기본 방위 및 방위각</string>
     <string name="tile_compass_title">나침반</string>
+    <string name="tile_reaction_test_summary">무작위 지연을 통해 시각적 반사 신경을 테스트하세요</string>
+    <string name="tile_reaction_test_title">반응 속도 테스트</string>
     <string name="tile_counter_summary">빠른 실행 횟수 증가</string>
     <string name="tile_counter_title">카운터</string>
     <string name="tile_dice_roll_summary">6면체 주사위를 굴립니다.</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">A–Z 문자, 숫자, 공백만 사용하세요</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">빠른 도구</string>
+    <string name="tool_reaction_test_start">시작</string>
+    <string name="tool_reaction_test_in_progress">진행 중…</string>
+    <string name="tool_reaction_test_try_again">다시 시도</string>
+    <string name="tool_reaction_test_idle_prompt">준비되면 시작을 누르세요</string>
+    <string name="tool_reaction_test_waiting_prompt">초록색으로 바뀔 때까지 기다리세요…</string>
+    <string name="tool_reaction_test_signal_prompt">지금 탭하세요!</string>
+    <string name="tool_reaction_test_too_early">너무 빨라요!</string>
+    <string name="tool_reaction_test_best">최고: %1$d ms</string>
+    <string name="tool_reaction_test_average">평균: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">%1$d / %2$d 라운드</string>
+    <string name="tool_reaction_rating_lightning">번개 ⚡</string>
+    <string name="tool_reaction_rating_fast">빠름 🚀</string>
+    <string name="tool_reaction_rating_average">보통 👍</string>
+    <string name="tool_reaction_rating_slow">느긋함 ☕</string>
 </resources>

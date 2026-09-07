@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">عملة الوجه</string>
     <string name="tile_compass_summary">الاتجاهات الكاردينال والسمت</string>
     <string name="tile_compass_title">بوصلة</string>
+    <string name="tile_reaction_test_summary">اختبر ردود أفعالك البصرية مع تأخير عشوائي</string>
+    <string name="tile_reaction_test_title">اختبار سرعة البديهة</string>
     <string name="tile_counter_summary">زيادة عدد التشغيل السريع</string>
     <string name="tile_counter_title">عداد</string>
     <string name="tile_dice_roll_summary">قم برمي حجر نرد ذو ستة جوانب</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">استخدم الأحرف A–Z والأرقام والمسافات فقط</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">أدوات سريعة</string>
+    <string name="tool_reaction_test_start">بدء</string>
+    <string name="tool_reaction_test_in_progress">جاري الاختبار…</string>
+    <string name="tool_reaction_test_try_again">محاولة أخرى</string>
+    <string name="tool_reaction_test_idle_prompt">اضغط على بدء عندما تكون مستعداً</string>
+    <string name="tool_reaction_test_waiting_prompt">انتظر اللون الأخضر…</string>
+    <string name="tool_reaction_test_signal_prompt">اضغط الآن!</string>
+    <string name="tool_reaction_test_too_early">مبكر جداً!</string>
+    <string name="tool_reaction_test_best">الأفضل: %1$d مللي ثانية</string>
+    <string name="tool_reaction_test_average">المتوسط: %1$d مللي ثانية</string>
+    <string name="tool_reaction_test_round_progress">الجولة %1$d من %2$d</string>
+    <string name="tool_reaction_rating_lightning">خاطف ⚡</string>
+    <string name="tool_reaction_rating_fast">سريع 🚀</string>
+    <string name="tool_reaction_rating_average">متوسط 👍</string>
+    <string name="tool_reaction_rating_slow">هادئ ☕</string>
 </resources>

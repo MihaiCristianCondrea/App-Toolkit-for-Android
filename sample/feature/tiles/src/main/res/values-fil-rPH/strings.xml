@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">Coin Flip</string>
     <string name="tile_compass_summary">Mga direksyon ng kardinal at azimuth</string>
     <string name="tile_compass_title">Kumpas</string>
+    <string name="tile_reaction_test_summary">Subukan ang iyong visual reflexes gamit ang random na pagkaantala</string>
+    <string name="tile_reaction_test_title">Pagsusuri sa Reaksyon</string>
     <string name="tile_counter_summary">Dagdagan ang isang mabilis na bilang ng pagtakbo</string>
     <string name="tile_counter_title">Kontra</string>
     <string name="tile_dice_roll_summary">Gumulong ng anim na panig na die</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">Gumamit lang ng mga letrang A–Z, numero, at espasyo</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">Mga Mabilisang Tool</string>
+    <string name="tool_reaction_test_start">Simulan</string>
+    <string name="tool_reaction_test_in_progress">Kasalukuyang ginagawa…</string>
+    <string name="tool_reaction_test_try_again">Subukang muli</string>
+    <string name="tool_reaction_test_idle_prompt">I-tap ang Simulan kapag handa na</string>
+    <string name="tool_reaction_test_waiting_prompt">Maghintay para sa berde…</string>
+    <string name="tool_reaction_test_signal_prompt">I-TAP NA!</string>
+    <string name="tool_reaction_test_too_early">Masyadong maaga!</string>
+    <string name="tool_reaction_test_best">Pinakamahusay: %1$d ms</string>
+    <string name="tool_reaction_test_average">Grap: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">Round %1$d ng %2$d</string>
+    <string name="tool_reaction_rating_lightning">Kidlat ⚡</string>
+    <string name="tool_reaction_rating_fast">Mabilis 🚀</string>
+    <string name="tool_reaction_rating_average">Karaniwan 👍</string>
+    <string name="tool_reaction_rating_slow">Rilaks ☕</string>
 </resources>

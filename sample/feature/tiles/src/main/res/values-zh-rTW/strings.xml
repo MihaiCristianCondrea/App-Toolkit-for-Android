@@ -23,6 +23,8 @@
     <string name="tile_coin_flip_title">投擲硬幣</string>
     <string name="tile_compass_summary">主要方向和方位角</string>
     <string name="tile_compass_title">指南針</string>
+    <string name="tile_reaction_test_summary">透過隨機延遲測試您的視覺反射神經</string>
+    <string name="tile_reaction_test_title">反應速度測試</string>
     <string name="tile_counter_summary">增加快速運行計數</string>
     <string name="tile_counter_title">櫃檯</string>
     <string name="tile_dice_roll_summary">擲六面骰</string>
@@ -115,4 +117,18 @@
     <string name="morse_error_characters">僅可使用 A–Z 字母、數字和空格</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">快速工具</string>
+    <string name="tool_reaction_test_start">開始</string>
+    <string name="tool_reaction_test_in_progress">進行中…</string>
+    <string name="tool_reaction_test_try_again">再試一次</string>
+    <string name="tool_reaction_test_idle_prompt">準備好後點擊開始</string>
+    <string name="tool_reaction_test_waiting_prompt">等待變綠…</string>
+    <string name="tool_reaction_test_signal_prompt">現在點擊！</string>
+    <string name="tool_reaction_test_too_early">太早了！</string>
+    <string name="tool_reaction_test_best">最佳：%1$d 毫秒</string>
+    <string name="tool_reaction_test_average">平均：%1$d 毫秒</string>
+    <string name="tool_reaction_test_round_progress">第 %1$d / %2$d 回合</string>
+    <string name="tool_reaction_rating_lightning">閃電 ⚡</string>
+    <string name="tool_reaction_rating_fast">快速 🚀</string>
+    <string name="tool_reaction_rating_average">平均 👍</string>
+    <string name="tool_reaction_rating_slow">輕鬆 ☕</string>
 </resources>
