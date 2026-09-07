@@ -29,7 +29,7 @@ import kotlinx.coroutines.tasks.await
  * The helper ensures the app originates from the Play Store and that a lightweight review
  * request succeeds before reporting availability.
  */
-suspend fun Activity.isInAppReviewAvailable(): Boolean {
+suspend fun Activity.isInAppReviewAvailable(): Boolean { // FIXME: Function "isInAppReviewAvailable" is never used
     val context = applicationContext
 
     if (!context.hasPlayStore()) return false

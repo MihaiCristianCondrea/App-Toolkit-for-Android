@@ -22,7 +22,7 @@ import kotlinx.collections.immutable.ImmutableList
 /**
  * UI state holder for the components showcase screen.
  */
-data class ComponentsUiState(
+data class ComponentsUiState( // FIXME: Class "ComponentsUiState" is never used
     val dropdownOptions: ImmutableList<String>,
     val selectedDropdownOption: String,
     val dateMillis: Long,

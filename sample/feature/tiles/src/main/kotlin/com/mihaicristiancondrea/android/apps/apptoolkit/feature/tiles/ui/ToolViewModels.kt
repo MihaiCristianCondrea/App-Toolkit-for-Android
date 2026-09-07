@@ -47,6 +47,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
 
 class CoinFlipToolViewModel : ViewModel() {
     private val mutableState = MutableStateFlow(CoinFlipToolState())
@@ -207,7 +208,7 @@ class ReactionTestToolViewModel(
 
         val actualDelay = delayMs ?: Random.nextLong(1500L, 5000L)
         waitingJob = viewModelScope.launch {
-            delay(actualDelay)
+            delay(actualDelay.milliseconds)
             if (state.value.phase == ReactionTestPhase.Waiting) {
                 signalTimeMs = timeProvider()
                 mutableState.value = state.value.copy(phase = ReactionTestPhase.Signal)

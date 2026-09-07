@@ -30,7 +30,7 @@ class FavoritesChangedReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        const val ACTION_FAVORITES_CHANGED =
+        const val ACTION_FAVORITES_CHANGED = // FIXME: Property "ACTION_FAVORITES_CHANGED" is never used
             "com.mihaicristiancondrea.android.apps.apptoolkit.action.FAVORITES_CHANGED"
         const val EXTRA_PACKAGE_NAME = "extra_package_name"
     }

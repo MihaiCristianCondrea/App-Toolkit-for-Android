@@ -108,7 +108,7 @@ fun GeneralButton(
         val descriptionOverride = contentDescription?.takeIf { hasLabel && it != label }
         val text: @Composable () -> Unit = {
             if (hasLabel) Text(
-                text = requireNotNull(label), maxLines = 1, overflow = TextOverflow.Ellipsis,
+                text = requireNotNull(label), maxLines = 1, overflow = TextOverflow.Ellipsis, // FIXME: Redundant 'requireNotNull' call
                 modifier = if (descriptionOverride != null) Modifier.clearAndSetSemantics {
                     this.contentDescription = descriptionOverride
                 } else Modifier,
@@ -143,6 +143,7 @@ fun GeneralButton(
                 shapes = IconButtonDefaults.shapes(),
                 content = content,
             )
+
             GeneralButtonStyle.Tonal -> FilledTonalIconButton(
                 onClick = click,
                 modifier = buttonModifier,
@@ -151,6 +152,7 @@ fun GeneralButton(
                 shapes = IconButtonDefaults.shapes(),
                 content = content,
             )
+
             GeneralButtonStyle.Outlined -> OutlinedIconButton(
                 onClick = click,
                 modifier = buttonModifier,
@@ -159,6 +161,7 @@ fun GeneralButton(
                 shapes = IconButtonDefaults.shapes(),
                 content = content,
             )
+
             else -> IconButton(
                 onClick = click,
                 modifier = buttonModifier,
@@ -188,6 +191,7 @@ fun GeneralButton(
             shape = resolvedShape,
             content = rowContent,
         )
+
         GeneralButtonStyle.Tonal -> FilledTonalButton(
             onClick = click,
             modifier = buttonModifier,
@@ -196,6 +200,7 @@ fun GeneralButton(
             shape = resolvedShape,
             content = rowContent,
         )
+
         GeneralButtonStyle.Outlined -> OutlinedButton(
             onClick = click,
             modifier = buttonModifier,
@@ -204,6 +209,7 @@ fun GeneralButton(
             shape = resolvedShape,
             content = rowContent,
         )
+
         GeneralButtonStyle.Text -> TextButton(
             onClick = click,
             modifier = buttonModifier,
@@ -212,9 +218,12 @@ fun GeneralButton(
             shape = resolvedShape,
             content = rowContent,
         )
+
         GeneralButtonStyle.Elevated -> ElevatedButton(
-            onClick = click, modifier = if (hasLabel) buttonModifier else buttonModifier.size(40.dp),
-            enabled = enabled, colors = colors,
+            onClick = click,
+            modifier = if (hasLabel) buttonModifier else buttonModifier.size(40.dp),
+            enabled = enabled,
+            colors = colors,
             shape = resolvedShape,
             contentPadding = if (hasLabel) ButtonDefaults.ContentPadding else PaddingValues(0.dp),
             content = rowContent,

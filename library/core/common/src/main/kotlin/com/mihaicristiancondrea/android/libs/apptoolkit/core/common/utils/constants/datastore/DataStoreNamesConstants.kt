@@ -37,7 +37,7 @@ open class DataStoreNamesConstants {
         const val THEME_MODE_DARK = "dark_mode"
         const val THEME_MODE_LIGHT = "light_mode"
         const val DATA_STORE_AMOLED_MODE = "amoled_mode"
-        const val DATA_STORE_DYNAMIC_VARIANT_INDEX = "data_store_dynamic_variant_index"
+        const val DATA_STORE_DYNAMIC_VARIANT_INDEX = "data_store_dynamic_variant_index" // FIXME: Property "DATA_STORE_DYNAMIC_VARIANT_INDEX" is never used
         const val DATA_STORE_DYNAMIC_PALETTE_VARIANT = "data_store_dynamic_palette_variant"
         const val DATA_STORE_STATIC_PALETTE_ID = "data_store_static_palette_id"
         const val DATA_STORE_DYNAMIC_COLORS = "dynamic_colors"
@@ -52,7 +52,7 @@ open class DataStoreNamesConstants {
         const val DATA_STORE_AD_PERSONALIZATION_CONSENT = "consent_ad_personalization"
         const val DATA_STORE_ADS = "ads"
         const val DATA_STORE_REDUCE_ADS = "reduce_ads"
-        const val DATA_STORE_REVIEW_DONE = "review_done"
+        const val DATA_STORE_REVIEW_DONE = "review_done" // FIXME: Property "DATA_STORE_REVIEW_DONE" is never used
         const val DATA_STORE_SESSION_COUNT = "session_count"
         const val DATA_STORE_REVIEW_PROMPTED = "review_prompted"
         const val DATA_STORE_FAVORITE_APPS = "favorite_apps"

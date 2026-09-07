@@ -22,7 +22,7 @@ object GithubConstants {
     const val GITHUB_BASE: String = "https://github.com/$GITHUB_USER/"
     const val GITHUB_ISSUES_SUFFIX: String = "/issues/new"
     const val GITHUB_RAW: String = "https://raw.githubusercontent.com/$GITHUB_USER"
-    const val GITHUB_PAGES: String = "https://mihaicristiancondrea.github.io"
+    const val GITHUB_PAGES: String = "https://mihaicristiancondrea.github.io" // FIXME: Property "GITHUB_PAGES" is never used
     fun githubChangelog(repository: String): String =
         "$GITHUB_RAW/$repository/refs/heads/master/CHANGELOG.md"
 }

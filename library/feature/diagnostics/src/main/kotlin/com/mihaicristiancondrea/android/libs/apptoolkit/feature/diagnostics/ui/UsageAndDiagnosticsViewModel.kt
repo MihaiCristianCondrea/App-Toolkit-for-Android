@@ -209,7 +209,7 @@ class UsageAndDiagnosticsViewModel(
         }
     }
 
-    private suspend fun applyConsentSettings(settings: UsageAndDiagnosticsSettings) {
+    private suspend fun applyConsentSettings(settings: UsageAndDiagnosticsSettings) { // FIXME: Function "applyConsentSettings" is never used
         consentRepository.applyConsentSettings(
             ConsentSettings(
                 usageAndDiagnostics = settings.usageAndDiagnostics,

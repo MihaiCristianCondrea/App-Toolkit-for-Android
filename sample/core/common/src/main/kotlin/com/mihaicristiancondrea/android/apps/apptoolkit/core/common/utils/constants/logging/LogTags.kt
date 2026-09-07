@@ -17,6 +17,6 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.common.utils.constants.logging
 
-const val FAB_LOG_TAG = "MainFabState"
+const val FAB_LOG_TAG = "MainFabState" // FIXME: Property "FAB_LOG_TAG" is never used
 const val FAVORITES_CHANGED_LOG_TAG = "FavoritesChangedRcvr"
-const val APPS_LIST_LOG_TAG = "AppsListRoute"
+const val APPS_LIST_LOG_TAG = "AppsListRoute" // FIXME: Property "APPS_LIST_LOG_TAG" is never used

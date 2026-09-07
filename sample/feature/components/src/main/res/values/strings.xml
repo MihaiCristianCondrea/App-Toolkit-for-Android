@@ -55,7 +55,6 @@
     <string name="components_title">Components</string>
     <string name="components_filter_favorites">Favorites</string>
     <string name="components_section_animations">Animations</string>
-    <string name="components_animation_restart">Restart on tap</string>
     <string name="components_animation_reverse">Reverse on tap</string>
     <string name="components_animation_preview_helper">Tap an item to preview its animation.</string>
 </resources>

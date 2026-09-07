@@ -72,7 +72,7 @@ class TestGeneralSettingsRepository {
     }
 }
 
-private class TrackingDispatcher : CoroutineDispatcher() {
+private class TrackingDispatcher : CoroutineDispatcher() { // FIXME: Class "TrackingDispatcher" is never used
     var dispatchCount: Int = 0
         private set
 

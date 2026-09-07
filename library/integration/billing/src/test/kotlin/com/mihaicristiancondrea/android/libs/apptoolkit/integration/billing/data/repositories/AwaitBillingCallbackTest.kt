@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 class AwaitBillingCallbackTest {
     @Test
     fun `duplicate timeout response preserves first result`() = runTest {
-        val result = awaitBillingCallback<String> { complete ->
+        val result = awaitBillingCallback { complete ->
             complete("OK")
             complete("SERVICE_UNAVAILABLE: Timeout communicating with service")
         }
@@ -24,7 +24,7 @@ class AwaitBillingCallbackTest {
     fun `concurrent responses complete without double resume`() = runTest {
         lateinit var complete: (Int) -> Unit
         val result = async(start = CoroutineStart.UNDISPATCHED) {
-            awaitBillingCallback<Int> { complete = it }
+            awaitBillingCallback { complete = it }
         }
         val pool = Executors.newFixedThreadPool(2)
         val start = CountDownLatch(1)
@@ -44,7 +44,7 @@ class AwaitBillingCallbackTest {
     fun `callbacks after cancellation are ignored`() = runTest {
         lateinit var complete: (Int) -> Unit
         val result = async(start = CoroutineStart.UNDISPATCHED) {
-            awaitBillingCallback<Int> { complete = it }
+            awaitBillingCallback { complete = it }
         }
         result.cancel()
         complete(1)
@@ -60,7 +60,7 @@ class AwaitBillingCallbackTest {
             previous = it
             it("timeout")
         })
-        val retry = awaitBillingCallback<String> {
+        val retry = awaitBillingCallback {
             previous("late success")
             it("retry success")
         }

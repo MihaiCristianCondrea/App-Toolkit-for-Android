@@ -31,8 +31,8 @@ enum class AppInteractionType {
     RemoveFavorite,
     Share,
     OpenDetailsBottomSheet,
-    OpenInPlayStore,
-    OpenInstalledApp,
+    OpenInPlayStore, // FIXME: Class "OpenInPlayStore" is never used
+    OpenInstalledApp, // FIXME: Class "OpenInstalledApp" is never used
     CloseDetailsBottomSheet,
     GridAppImpression,
 }
