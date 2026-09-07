@@ -112,3 +112,4 @@ lint/tmp/
 .claude/
 .codex/
 references/
+resources/

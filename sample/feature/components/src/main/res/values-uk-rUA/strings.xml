@@ -54,4 +54,7 @@
     <string name="components_action_menus">Меню дій</string>
     <string name="components_action_menus_summary">Торкніться, щоб показати варіанти</string>
     <string name="components_data_selection">Вибір даних</string>
+    <string name="components_section_animations">Анімації</string>
+    <string name="components_animation_restart">Починати знову після натискання</string>
+    <string name="components_animation_reverse">Відтворювати навпаки після натискання</string>
 </resources>

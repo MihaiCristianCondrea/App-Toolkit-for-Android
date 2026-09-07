@@ -6,6 +6,13 @@
 
 ### Added
 
+- Added an `animatedIcon` constructor to bottom-bar and drawer items: one AVD or Lottie icon can
+  cover both navigation states, including reverse replay, without separate icon arguments.
+  Without `animatedIcon`, callers must now supply both `icon` and `selectedIcon` explicitly.
+- Added reusable Check, Clock, and Grid AVDs to DesignSystem and moved Settings/Share there.
+  Consumers must import these drawable resources from `core.designsystem.R`. Private animation
+  resources are now inline; the unused Success animation and imported dummy color were removed.
+
 - Added bundled Lottie icons with forward restart by default, optional reverse replay, and optional
   content-color tinting. All FAB wrappers now accept the shared `ToolkitIcon` API while retaining
   their existing ImageVector/custom-content overloads.
@@ -31,7 +38,6 @@
   Rename `iconContentDescription` to `contentDescription` and replace `ButtonColors` with
   `containerColor` / `contentColor`. `contentDescription` is optional, and icons
   beside labels no longer repeat the label. Migration is documented in the DesignSystem README.
-- Updated `NavigationDrawerItem` so `selectedIcon` defaults to `icon`.
 - Navigation item icons and every `General*Button` now take a single `ToolkitIcon` instead of
   separate `ImageVector` and `Painter` parameters. Callers passing `vectorIcon = someIcon` to a
   button must pass `icon = ToolkitIcon.Vector(someIcon)`, and `NavigationIcon` is now `ToolkitIcon`

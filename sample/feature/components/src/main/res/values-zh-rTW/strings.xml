@@ -54,4 +54,7 @@
     <string name="components_action_menus">操作選單</string>
     <string name="components_action_menus_summary">輕觸以顯示選項</string>
     <string name="components_data_selection">資料選擇</string>
+    <string name="components_section_animations">動畫</string>
+    <string name="components_animation_restart">輕觸以重新播放</string>
+    <string name="components_animation_reverse">輕觸以反向播放</string>
 </resources>

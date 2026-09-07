@@ -54,4 +54,7 @@
     <string name="components_action_menus">قوائم الإجراءات</string>
     <string name="components_action_menus_summary">انقر لإظهار الخيارات</string>
     <string name="components_data_selection">تحديد البيانات</string>
+    <string name="components_section_animations">الرسوم المتحركة</string>
+    <string name="components_animation_restart">إعادة البدء عند النقر</string>
+    <string name="components_animation_reverse">العكس عند النقر</string>
 </resources>

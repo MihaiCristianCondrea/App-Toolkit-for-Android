@@ -54,4 +54,7 @@
     <string name="components_action_menus">Menu tindakan</string>
     <string name="components_action_menus_summary">Ketuk untuk menampilkan opsi</string>
     <string name="components_data_selection">Pemilihan data</string>
+    <string name="components_section_animations">Animasi</string>
+    <string name="components_animation_restart">Mulai ulang saat diketuk</string>
+    <string name="components_animation_reverse">Balik saat diketuk</string>
 </resources>

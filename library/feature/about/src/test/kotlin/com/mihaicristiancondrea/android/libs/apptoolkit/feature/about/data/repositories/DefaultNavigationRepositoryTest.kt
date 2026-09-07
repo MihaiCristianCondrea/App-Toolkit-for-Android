@@ -29,7 +29,7 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DefaultNavigationRepositoryTest {
@@ -72,12 +72,12 @@ class DefaultNavigationRepositoryTest {
         val share = items.first { it.route == NavigationDrawerRoutes.ROUTE_SHARE }
 
         assertEquals(
-            ToolkitIcon.AnimatedVector(NavR.drawable.anim_settings),
+            ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_settings),
             settings.icon,
         )
         assertEquals(settings.icon, settings.selectedIcon)
         assertEquals(
-            ToolkitIcon.AnimatedVector(NavR.drawable.anim_share),
+            ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_share),
             share.icon,
         )
         assertEquals(share.icon, share.selectedIcon)

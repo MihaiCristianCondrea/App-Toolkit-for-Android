@@ -30,13 +30,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
 /**
  * Supplies the standard Settings, Help, Updates, and Share drawer entries.
  *
  * Settings and Share use animated vector drawables, which rest on their first frame and play when
- * the entry is clicked. They are declared once as `icon`, so the same drawable covers the
+ * the entry is clicked. They are declared once as `animatedIcon`, so the same drawable covers the
  * unselected and the selected state.
  *
  * Hosts can use this implementation as-is instead of duplicating the standard list, or implement
@@ -51,22 +51,24 @@ class DefaultNavigationRepository(
                 listOf(
                     NavigationDrawerItem(
                         title = R.string.settings,
-                        icon = ToolkitIcon.AnimatedVector(NavR.drawable.anim_settings),
+                        animatedIcon = ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_settings),
                         route = NavigationDrawerRoutes.ROUTE_SETTINGS,
                     ),
                     NavigationDrawerItem(
                         title = R.string.help_and_feedback,
                         icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                        selectedIcon = Icons.AutoMirrored.Outlined.HelpOutline,
                         route = NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK,
                     ),
                     NavigationDrawerItem(
                         title = R.string.updates,
                         icon = Icons.AutoMirrored.Outlined.EventNote,
+                        selectedIcon = Icons.AutoMirrored.Outlined.EventNote,
                         route = NavigationDrawerRoutes.ROUTE_UPDATES,
                     ),
                     NavigationDrawerItem(
                         title = R.string.share,
-                        icon = ToolkitIcon.AnimatedVector(NavR.drawable.anim_share),
+                        animatedIcon = ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_share),
                         route = NavigationDrawerRoutes.ROUTE_SHARE,
                     )
                 )

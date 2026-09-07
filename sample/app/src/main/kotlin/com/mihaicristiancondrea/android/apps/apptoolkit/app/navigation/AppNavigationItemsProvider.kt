@@ -35,7 +35,7 @@ import kotlinx.coroutines.flow.onStart
 
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as ToolkitR
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.R as NavR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
 /**
  * Builds the drawer for this app: the toolkit's own entries plus the destinations this app adds.
@@ -56,6 +56,7 @@ class AppNavigationItemsProvider(
                         NavigationDrawerItem(
                             title = ComponentsR.string.components_title,
                             icon = Icons.Outlined.Widgets,
+                            selectedIcon = Icons.Outlined.Widgets,
                             route = ComponentsRoute.ROUTE_ID,
                         )
                     )
@@ -63,8 +64,8 @@ class AppNavigationItemsProvider(
                 add(
                     NavigationDrawerItem(
                         title = ToolkitR.string.settings,
-                        icon = ToolkitIcon.Resource(NavR.drawable.ic_settings),
-                        selectedIcon = ToolkitIcon.AnimatedVector(NavR.drawable.anim_settings),
+                        icon = ToolkitIcon.Resource(DesignSystemR.drawable.ic_settings),
+                        selectedIcon = ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_settings),
                         route = NavigationDrawerRoutes.ROUTE_SETTINGS,
                     )
                 )
@@ -72,6 +73,7 @@ class AppNavigationItemsProvider(
                     NavigationDrawerItem(
                         title = ToolkitR.string.help_and_feedback,
                         icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                        selectedIcon = Icons.AutoMirrored.Outlined.HelpOutline,
                         route = NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK,
                     )
                 )
@@ -79,14 +81,15 @@ class AppNavigationItemsProvider(
                     NavigationDrawerItem(
                         title = ToolkitR.string.updates,
                         icon = Icons.AutoMirrored.Outlined.EventNote,
+                        selectedIcon = Icons.AutoMirrored.Outlined.EventNote,
                         route = NavigationDrawerRoutes.ROUTE_UPDATES,
                     )
                 )
                 add(
                     NavigationDrawerItem(
                         title = ToolkitR.string.share,
-                        icon = ToolkitIcon.Resource(NavR.drawable.ic_share),
-                        selectedIcon = ToolkitIcon.AnimatedVector(NavR.drawable.anim_share),
+                        icon = ToolkitIcon.Resource(DesignSystemR.drawable.ic_share),
+                        selectedIcon = ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_share),
                         route = NavigationDrawerRoutes.ROUTE_SHARE,
                     )
                 )

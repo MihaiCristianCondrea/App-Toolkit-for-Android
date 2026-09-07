@@ -54,4 +54,7 @@
     <string name="components_action_menus">Trình đơn thao tác</string>
     <string name="components_action_menus_summary">Nhấn để hiển thị các tùy chọn</string>
     <string name="components_data_selection">Chọn dữ liệu</string>
+    <string name="components_section_animations">Ảnh động</string>
+    <string name="components_animation_restart">Phát lại khi nhấn</string>
+    <string name="components_animation_reverse">Phát ngược khi nhấn</string>
 </resources>

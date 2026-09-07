@@ -54,4 +54,7 @@
     <string name="components_action_menus">Åtgärdsmenyer</string>
     <string name="components_action_menus_summary">Tryck för att visa alternativ</string>
     <string name="components_data_selection">Dataval</string>
+    <string name="components_section_animations">Animationer</string>
+    <string name="components_animation_restart">Starta om vid tryck</string>
+    <string name="components_animation_reverse">Spela baklänges vid tryck</string>
 </resources>

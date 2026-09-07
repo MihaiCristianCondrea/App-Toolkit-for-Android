@@ -97,6 +97,6 @@ sealed interface ToolkitIcon {
             @DrawableRes resId: Int,
             atEnd: Boolean = false,
             replayMode: ToolkitIconReplayMode = ToolkitIconReplayMode.Restart,
-        ): ToolkitIcon = AnimatedVector(resId, atEnd, replayMode)
+        ): AnimatedVector = AnimatedVector(resId, atEnd, replayMode)
     }
 }

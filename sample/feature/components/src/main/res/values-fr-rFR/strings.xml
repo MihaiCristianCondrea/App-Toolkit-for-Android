@@ -54,4 +54,7 @@
     <string name="components_action_menus">Menus d’action</string>
     <string name="components_action_menus_summary">Appuyez pour afficher les options</string>
     <string name="components_data_selection">Sélection des données</string>
+    <string name="components_section_animations">Animations</string>
+    <string name="components_animation_restart">Recommencer au toucher</string>
+    <string name="components_animation_reverse">Inverser au toucher</string>
 </resources>

@@ -70,7 +70,7 @@ class NavigationItemIconsTest {
 
         val itemAnimated = NavigationDrawerItem(
             title = 10,
-            icon = ToolkitIcon.AnimatedVector(201),
+            animatedIcon = ToolkitIcon.AnimatedVector(201),
             route = "animated"
         )
         assertEquals(ToolkitIcon.AnimatedVector(201), itemAnimated.icon)
@@ -98,4 +98,18 @@ class NavigationItemIconsTest {
         assertEquals(ToolkitIcon.Resource(301), itemRes.icon)
         assertEquals(ToolkitIcon.Resource(302), itemRes.selectedIcon)
     }
+    @Test
+    fun `single animated icon supplies both navigation states and keeps replay mode`() {
+        val animation = ToolkitIcon.animated(
+            401,
+            replayMode = com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconReplayMode.Reverse,
+        )
+        val bottom = BottomBarItem(route = TestNavKey(), animatedIcon = animation, title = 10)
+        val drawer = NavigationDrawerItem(title = 10, animatedIcon = animation, route = "tools")
+        assertEquals(animation, bottom.icon)
+        assertEquals(animation, bottom.selectedIcon)
+        assertEquals(animation, drawer.icon)
+        assertEquals(animation, drawer.selectedIcon)
+    }
+
 }

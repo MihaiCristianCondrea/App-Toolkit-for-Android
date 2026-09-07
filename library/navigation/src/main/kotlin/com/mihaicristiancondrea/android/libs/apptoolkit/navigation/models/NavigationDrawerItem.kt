@@ -27,7 +27,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
  *
  * @property title The resource ID of the string to display as the title of the item.
  * @property icon The icon to display when the item is unselected.
- * @property selectedIcon The icon to display when the item is selected, defaults to [icon].
+ * @property selectedIcon The icon to display when the item is selected.
  * @property route The unique identifier used for handling navigation actions.
  * @property badgeText An optional string to display as a badge on the item, defaults to an empty string.
  */
@@ -35,17 +35,31 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 data class NavigationDrawerItem(
     val title: Int,
     val icon: ToolkitIcon,
-    val selectedIcon: ToolkitIcon = icon,
+    val selectedIcon: ToolkitIcon,
     val route: String,
     val badgeText: String = "",
 ) {
+    /** Uses one animation for both states; its replay mode controls repeated clicks. */
+    constructor(
+        title: Int,
+        animatedIcon: ToolkitIcon.Animated,
+        route: String,
+        badgeText: String = "",
+    ) : this(
+        title = title,
+        icon = animatedIcon,
+        selectedIcon = animatedIcon,
+        route = route,
+        badgeText = badgeText,
+    )
+
     /**
      * Secondary constructor for Compose [ImageVector] icons.
      */
     constructor(
         title: Int,
         icon: ImageVector,
-        selectedIcon: ImageVector = icon,
+        selectedIcon: ImageVector,
         route: String,
         badgeText: String = "",
     ) : this(
@@ -62,7 +76,7 @@ data class NavigationDrawerItem(
     constructor(
         title: Int,
         @DrawableRes iconResId: Int,
-        @DrawableRes selectedIconResId: Int = iconResId,
+        @DrawableRes selectedIconResId: Int,
         route: String,
         badgeText: String = "",
     ) : this(

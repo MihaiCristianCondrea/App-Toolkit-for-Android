@@ -12,7 +12,7 @@ transition helpers shared by host and feature UI.
 - Drawer route identifiers and the repository contract hosts implement to supply items.
 - Back-stack mutation helpers.
 - Shared activity and bottom-navigation transitions.
-- The drawable resources and click state that drive the animated Settings and Share icons.
+- Click and selection state for navigation icons; reusable AVD resources live in DesignSystem.
 - Bottom navigation, navigation rail, drawer-item content, and hide-on-scroll shell rendering.
 
 ## Does not own
@@ -71,7 +71,8 @@ flowchart TD
 ## Public contracts
 
 - Navigation destination/item models, including `NavigationDrawerItem` and `BottomBarItem`, whose
-  `icon` and `selectedIcon` are `ToolkitIcon` values. See [the design system README](../core/designsystem/README.md#toolkit-icon-api).
+  `icon` and `selectedIcon` are `ToolkitIcon` values. The `animatedIcon` constructor accepts a single
+  `ToolkitIcon.Animated` and uses it for both states, preserving Restart/Reverse behavior. See [the design system README](../core/designsystem/README.md#toolkit-icon-api).
 - `StableNavKey` and `AppToolkitNavKey` route implementations.
 - `NavigationDrawerRoutes` and `navigation.data.repositories.NavigationRepository`.
 - Back-stack action extensions and transition helpers.

@@ -35,10 +35,24 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 data class BottomBarItem<T : StableNavKey>(
     val route: T,
     val icon: ToolkitIcon,
-    val selectedIcon: ToolkitIcon = icon,
+    val selectedIcon: ToolkitIcon,
     val title: Int,
     val badgeText: String = "",
 ) {
+    /** Uses one animation for both states; its replay mode controls repeated clicks. */
+    constructor(
+        route: T,
+        animatedIcon: ToolkitIcon.Animated,
+        title: Int,
+        badgeText: String = "",
+    ) : this(
+        route = route,
+        icon = animatedIcon,
+        selectedIcon = animatedIcon,
+        title = title,
+        badgeText = badgeText,
+    )
+
     /**
      * Secondary constructor for Compose [ImageVector] icons.
      */
@@ -62,7 +76,7 @@ data class BottomBarItem<T : StableNavKey>(
     constructor(
         route: T,
         @DrawableRes iconResId: Int,
-        @DrawableRes selectedIconResId: Int = iconResId,
+        @DrawableRes selectedIconResId: Int,
         title: Int,
         badgeText: String = "",
     ) : this(

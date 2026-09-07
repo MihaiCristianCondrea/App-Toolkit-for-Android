@@ -6,6 +6,10 @@
 
 ### Added
 
+- Added a Components animation playground with labelled and icon-only buttons for each bundled
+  animation, plus Restart and Reverse replay controls. Quick Tools now uses one reversible Grid
+  animation for both navigation states.
+
 - Added Reaction Test quick tool under Sensors & Measurement with randomized delays, false-start detection, session statistics, rating badges, and haptic feedback.
 - Added standard GA4 `view_item`, `view_item_list`, `share`, and `select_content` telemetry across Developer Apps and Quick Tools screens to support AdMob App Analytics Connection.
 

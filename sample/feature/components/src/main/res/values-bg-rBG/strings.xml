@@ -54,4 +54,7 @@
     <string name="components_action_menus">Менюта с действия</string>
     <string name="components_action_menus_summary">Докоснете, за да покажете опциите</string>
     <string name="components_data_selection">Избор на данни</string>
+    <string name="components_section_animations">Анимации</string>
+    <string name="components_animation_restart">Рестартиране при докосване</string>
+    <string name="components_animation_reverse">Обръщане при докосване</string>
 </resources>

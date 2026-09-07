@@ -1,0 +1,156 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+            <group android:name="main">
+                <group android:name="glob" android:translateX="12" android:translateY="12">
+                    <path
+                        android:name="glob_p"
+                        android:pathData="M -8.62 3.02 C -8.62 3.02 8.47 3.02 8.47 3.02 M -8.62 -3.03 C -8.62 -3.03 8.47 -3.03 8.47 -3.03 M 0 -9 C 4.97 -9 9 -4.97 9 0 C 9 4.97 4.97 9 0 9 C -4.97 9 -9 4.97 -9 0 C -9 -4.97 -4.97 -9 0 -9"
+                        android:strokeColor="#ffffff"
+                        android:strokeWidth="2" />
+                </group>
+                <group android:name="mer_1" android:translateX="10.137" android:translateY="12">
+                    <path
+                        android:name="mer_2_path"
+                        android:pathData="M 1.39 9 C 0.63 8.08 -1.63 4.94 -1.63 0.03 C -1.63 -4.87 0.61 -8.04 1.38 -8.98"
+                        android:strokeColor="#ffffff"
+                        android:strokeWidth="2" />
+                </group>
+                <group android:name="mer_2" android:translateX="13.84" android:translateY="12">
+                    <path
+                        android:name="mer_3_path"
+                        android:pathData="M -1.39 -9 C -0.63 -8.09 1.63 -4.95 1.63 -0.03 C 1.63 4.9 -0.64 8.08 -1.39 9"
+                        android:strokeColor="#ffffff"
+                        android:strokeWidth="2" />
+                </group>
+                <group android:name="mer_3" android:scaleY="0" android:translateX="13.84" android:translateY="12">
+                    <path
+                        android:name="mer_3_path_1"
+                        android:pathData="M -1.29 8.99 C 3.42 8.7 7.16 4.79 7.16 0 C 7.16 -4.79 3.41 -8.71 -1.32 -8.98"
+                        android:strokeColor="#ffffff"
+                        android:strokeWidth="2" />
+                </group>
+                <group android:name="mer_4" android:scaleY="0" android:translateX="13.84" android:translateY="12">
+                    <path
+                        android:name="mer_4_path"
+                        android:pathData="M -1.29 -8.98 C 3.42 -8.7 7.16 -4.78 7.16 0 C 7.16 4.8 3.41 8.72 -1.32 8.99"
+                        android:strokeColor="#ffffff"
+                        android:strokeWidth="2" />
+                </group>
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <target android:name="mer_2_path">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="pathData"
+                android:valueFrom="M 1.39 9 C 0.63 8.08 -1.63 4.94 -1.63 0.03 C -1.63 -4.87 0.61 -8.04 1.38 -8.98"
+                android:valueTo="M 1.33 8.98 C -3.39 8.7 -7.12 4.79 -7.12 0 C -7.12 -4.78 -3.4 -8.69 1.31 -8.98"
+                android:duration="160"
+                android:valueType="pathType" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="mer_3_path">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="pathData"
+                    android:valueFrom="M -1.39 -9 C -0.63 -8.09 1.63 -4.95 1.63 -0.03 C 1.63 4.9 -0.64 8.08 -1.39 9"
+                    android:valueTo="M -1.82 -9.04 C -1.82 -7.49 -1.82 -5.5 -1.82 -0.03 C -1.82 5.45 -1.82 7.79 -1.82 9.07"
+                    android:duration="80"
+                    android:valueType="pathType" />
+                <objectAnimator
+                    android:propertyName="pathData"
+                    android:valueFrom="M -1.82 -9.04 C -1.82 -7.49 -1.82 -5.5 -1.82 -0.03 C -1.82 5.45 -1.82 7.79 -1.82 9.07"
+                    android:valueTo="M -2.36 -8.98 C -7.07 -8.7 -10.81 -4.79 -10.81 0 C -10.81 4.79 -7.07 8.71 -2.35 8.98"
+                    android:duration="245"
+                    android:startOffset="80"
+                    android:valueType="pathType" />
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="mer_3">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="scaleY"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:duration="0"
+                android:startOffset="33"
+                android:valueType="floatType" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="mer_3_path_1">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="pathData"
+                    android:valueFrom="M -1.29 8.99 C 3.42 8.7 7.16 4.79 7.16 0 C 7.16 -4.79 3.41 -8.71 -1.32 -8.98"
+                    android:valueTo="M -1.86 8.81 C -1.86 7.29 -1.86 5.51 -1.86 0.03 C -1.86 -5.44 -1.86 -7.58 -1.86 -8.84"
+                    android:duration="212"
+                    android:startOffset="25"
+                    android:valueType="pathType" />
+                <objectAnimator
+                    android:propertyName="pathData"
+                    android:valueFrom="M -1.86 8.81 C -1.86 7.29 -1.86 5.51 -1.86 0.03 C -1.86 -5.44 -1.86 -7.58 -1.86 -8.84"
+                    android:valueTo="M -2.3 9 C -3.06 8.08 -5.82 4.94 -5.82 0.03 C -5.82 -4.87 -3.08 -8.04 -2.31 -8.98"
+                    android:duration="163"
+                    android:startOffset="237"
+                    android:valueType="pathType" />
+                <objectAnimator
+                    android:propertyName="pathData"
+                    android:valueFrom="M -2.3 9 C -3.06 8.08 -5.82 4.94 -5.82 0.03 C -5.82 -4.87 -3.08 -8.04 -2.31 -8.98"
+                    android:valueTo="M -2.3 9 C -3.06 8.08 -5.32 4.94 -5.32 0.03 C -5.32 -4.87 -3.08 -8.04 -2.31 -8.98"
+                    android:duration="100"
+                    android:startOffset="400"
+                    android:valueType="pathType" />
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="mer_4">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="scaleY"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:duration="0"
+                android:startOffset="50"
+                android:valueType="floatType" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="mer_4_path">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="pathData"
+                    android:valueFrom="M -1.29 -8.98 C 3.42 -8.7 7.16 -4.78 7.16 0 C 7.16 4.8 3.41 8.72 -1.32 8.99"
+                    android:valueTo="M -1.39 -9 C -0.63 -8.09 1.13 -4.95 1.13 -0.03 C 1.13 4.9 -0.64 8.08 -1.39 9"
+                    android:duration="320"
+                    android:startOffset="80"
+                    android:valueType="pathType" />
+                <objectAnimator
+                    android:propertyName="pathData"
+                    android:valueFrom="M -1.39 -9 C -0.63 -8.09 1.13 -4.95 1.13 -0.03 C 1.13 4.9 -0.64 8.08 -1.39 9"
+                    android:valueTo="M -1.39 -9 C -0.63 -8.09 1.63 -4.95 1.63 -0.03 C 1.63 4.9 -0.64 8.08 -1.39 9"
+                    android:duration="100"
+                    android:startOffset="400"
+                    android:valueType="pathType" />
+            </set>
+        </aapt:attr>
+    </target>
+
+</animated-vector>

@@ -54,4 +54,7 @@
     <string name="components_action_menus">İşlem menüleri</string>
     <string name="components_action_menus_summary">Seçenekleri göstermek için dokunun</string>
     <string name="components_data_selection">Veri seçimi</string>
+    <string name="components_section_animations">Animasyonlar</string>
+    <string name="components_animation_restart">Dokununca yeniden başlat</string>
+    <string name="components_animation_reverse">Dokununca tersine oynat</string>
 </resources>

@@ -12,6 +12,7 @@ theme-selection visuals, and the shared icon slot used by navigation items and b
 - `ColorPalette`, `ThemeSettingOption`, and wallpaper swatch models.
 - Theme option/swatch composables.
 - `ToolkitIcon` and its renderers, the icon slot shared by navigation items and buttons.
+- Reusable bundled AVD resources for Check, Clock, Grid, Settings, and Share.
 
 ## Does not own
 
@@ -76,7 +77,7 @@ flowchart TD
 ## Toolkit Icon API
 
 `ToolkitIcon` is the icon slot used by every toolkit component that draws an icon: navigation drawer
-items, bottom bar and rail items, and the `General*Button` family. It lives in
+items, bottom bar and rail items, and `GeneralButton`. It lives in
 `:library:core:designsystem`, package
 `com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons`.
 
@@ -104,8 +105,8 @@ Remote Lottie URLs and asset paths are not accepted by this icon API. Anything e
 ### Components with a selected state
 
 Navigation items own two slots, `icon` for the unselected state and `selectedIcon` for the selected
-one. `selectedIcon` defaults to `icon`, so a single icon covers both. Any source is allowed in
-either slot, which gives four combinations:
+one. Supply both slots explicitly, or use `animatedIcon` to share one animation across both states.
+Any source is allowed in either slot, which gives four combinations:
 
 | `icon`   | `selectedIcon`             | Result                                                                                                                          |
 |----------|----------------------------|---------------------------------------------------------------------------------------------------------------------------------|
@@ -117,7 +118,7 @@ either slot, which gives four combinations:
 The static plus animated combination is the one to use for an action such as Share, which is clicked
 repeatedly and never becomes a selected destination. Draw the first frame of the animated vector
 like the static icon, otherwise the swap on the first click is visible. When the first frame already
-matches, passing the animated vector alone as `icon` is simpler and behaves the same.
+matches, using the `animatedIcon` constructor is simpler and behaves the same.
 
 ### Components without a selected state
 
@@ -171,8 +172,8 @@ be drawing, and is useful when a host renders its own navigation surface from to
 ### Accessibility
 
 The content description belongs to the component, not to the icon. Navigation items reuse their
-title, and buttons take `contentDescription`, which is required for an icon-only button because
-nothing else describes it.
+title, and buttons accept an optional `contentDescription`. Provide a localized description for an
+icon-only action unless its meaning is supplied by surrounding semantics.
 
 ### Lottie icons and performance
 
@@ -224,8 +225,9 @@ Import `GeneralButton`, `GeneralButtonStyle`, and `ButtonIconPosition` from
 `core:ui`, which owns feedback and analytics; this module owns its theme and ToolkitIcon rendering.
 
 One button API handles a nonblank label, an icon, or both. A null, empty, or whitespace-only label
-selects the icon-only form. Missing content fails fast. `contentDescription` is optional; icon-only actions
-without a description are treated as decorative. Labelled icons are decorative; the label names the action by default.
+selects the icon-only form. Missing content fails fast. `contentDescription` is optional; a null value
+leaves the icon without a spoken description, so callers own any surrounding accessibility semantics.
+Labelled icons are decorative; the label names the action by default.
 An explicit description replaces the visible label's accessibility text without announcing both.
 
 | Style | Label / icon + label | Icon only |
@@ -279,3 +281,43 @@ the first parameter; prefer named arguments when migrating positional calls.
 
 `AnimatedIconButtonDirection` delegates its action to GeneralButton and only owns visibility
 transitions. FABs remain specialized floating action components.
+
+## Bundled animated icons
+
+Reusable AVDs belong in this module's `res/drawable`, alongside the shared icon renderer, rather
+than navigation. Import this module's `R` when selecting `anim_check`, `anim_clock`, `anim_grid`,
+`anim_settings`, or `anim_share`. These animations are still being evaluated in the sample's
+Components animation playground, which previews labelled, tonal icon-only, and plain icon buttons.
+Restart on tap plays forward each time; Reverse on tap alternates direction. Switching mode resets
+the previews. Check rests on its completed frame so the icon-only controls remain visible; its first
+Reverse tap erases the check. Playback is finite and click-driven, not an idle loop.
+
+Each animation contains its private vector, target animators, and interpolators through inline
+`aapt:attr` resources. Keep a separate resource only when it is actually reused. `ic_settings` and
+`ic_share` remain available because the sample drawer also uses those static assets. The unused
+Success animation and its private resources were removed. The imported dummy color was removed;
+monochrome artwork receives the current component tint through ToolkitIcon rather than defining
+another theme color.
+
+### One animation for a navigation item
+
+`BottomBarItem` and `NavigationDrawerItem` accept a dedicated `animatedIcon` constructor. It needs
+no `icon` or `selectedIcon` arguments and accepts only `ToolkitIcon.Animated` (AVD or Lottie).
+Internally both non-null icon states reference that same value, so existing custom navigation
+renderers can continue consuming `item.icon` and `item.selectedIcon`. Selection changes animate
+between the first and last frames; repeated clicks follow the chosen replay mode.
+
+```kotlin
+BottomBarItem(
+    route = ToolkitTilesRoute,
+    title = R.string.tiles_title,
+    animatedIcon = ToolkitIcon.AnimatedVector(
+        resId = DesignSystemR.drawable.anim_grid,
+        replayMode = ToolkitIconReplayMode.Reverse,
+    ),
+)
+```
+
+Use the `icon` / `selectedIcon` constructor when the two states need distinct artwork; both
+arguments are required. Pass the same static icon twice when it should not change on selection.
+Moved resources must now be imported from `core.designsystem.R`, not `navigation.R`.

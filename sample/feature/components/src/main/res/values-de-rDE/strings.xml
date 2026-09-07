@@ -54,4 +54,7 @@
     <string name="components_action_menus">Aktionsmenüs</string>
     <string name="components_action_menus_summary">Tippen, um Optionen anzuzeigen</string>
     <string name="components_data_selection">Datenauswahl</string>
+    <string name="components_section_animations">Animationen</string>
+    <string name="components_animation_restart">Bei Tippen neu starten</string>
+    <string name="components_animation_reverse">Bei Tippen umkehren</string>
 </resources>
