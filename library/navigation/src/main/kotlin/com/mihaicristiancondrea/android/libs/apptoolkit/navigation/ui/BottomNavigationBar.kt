@@ -23,12 +23,15 @@ import androidx.compose.foundation.basicMarquee
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -38,10 +41,11 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.LocalShowBottomBarLabels
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.BottomBarItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,6 +66,7 @@ fun <T : StableNavKey> BottomNavigationBar(
     ) {
         items.forEach { item ->
             val selected = currentRoute == item.route
+            var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
 
             NavigationBarItem(
                 selected = selected,
@@ -76,10 +81,13 @@ fun <T : StableNavKey> BottomNavigationBar(
                             }
                         }
                     ) {
-                        Icon(
-                            imageVector = if (selected) item.selectedIcon else item.icon,
+                        AnimatedToolkitIcon(
+                            icon = item.icon,
+                            selectedIcon = item.selectedIcon,
+                            selected = selected,
+                            clickCount = clickCount,
                             contentDescription = stringResource(id = item.title),
-                            modifier = Modifier.bounceClick()
+                            modifier = Modifier.bounceClick(),
                         )
                     }
                 },
@@ -92,6 +100,7 @@ fun <T : StableNavKey> BottomNavigationBar(
                     )
                 },
                 onClick = {
+                    clickCount++
                     view.playSoundEffect(SoundEffectConstants.CLICK)
                     hapticFeedback.performHapticFeedback(
                         hapticFeedbackType = HapticFeedbackType.ContextClick

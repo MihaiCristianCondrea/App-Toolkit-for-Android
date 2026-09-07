@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.contracts.AppGa4Contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.analytics.domain.models.AppScreenTracking
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.AnimationShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.ButtonShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.FabShowcase
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections.FilterShowcase
@@ -137,6 +138,7 @@ fun ComponentsScreen(
             contentPadding = innerPadding,
             verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         ) {
+            item(key = "animations") { AnimationShowcase() }
             item {
                 ButtonShowcase(
                     firebaseController = firebaseController,

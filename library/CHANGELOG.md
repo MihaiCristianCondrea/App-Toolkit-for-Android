@@ -4,13 +4,49 @@
 
 # Unreleased
 
-## Library Changes
+### Added
+
+- Added an `animatedIcon` constructor to bottom-bar and drawer items: one AVD or Lottie icon can
+  cover both navigation states, including reverse replay, without separate icon arguments.
+  Without `animatedIcon`, callers must now supply both `icon` and `selectedIcon` explicitly.
+- Added reusable Check, Clock, and Grid AVDs to DesignSystem and moved Settings/Share there.
+  Consumers must import these drawable resources from `core.designsystem.R`. Private animation
+  resources are now inline; the unused Success animation and imported dummy color were removed.
+
+- Added bundled Lottie icons with forward restart by default, optional reverse replay, and optional
+  content-color tinting. All FAB wrappers now accept the shared `ToolkitIcon` API while retaining
+  their existing ImageVector/custom-content overloads.
+
+- Added `ToolkitIcon`, the icon slot shared by navigation items and buttons. It accepts a Compose
+  `ImageVector`, a drawable or vector resource, or an animated vector drawable that plays when the
+  component is clicked. `ToolkitIconReplayMode` chooses whether a repeated click restarts the
+  animation, the default, or plays it backwards. The accepted combinations are documented in
+  `:library:core:designsystem` README.md.
+- Added animated Settings and Share drawer icons, used by the standard drawer entries.
+- Added `NavigationDrawerSheet`, a reusable navigation drawer component that renders `ModalDrawerSheet` with navigation drawer items, selection state, click handling, and dividers.
+- Added core common's AppVersionMetadata and getVersionMetadata for package version lookup without
+  a UI dependency, and core DataStore's startupValueFlow for caller-defined startup mapping.
+- Exposed toolkit destination builders from app.main.ui.navigation in the main toolkit module. The historical
+  About-package entry point, UI helpers, and AppVersionInfo remain compatible.
 
 ### Changed
 
+- **Breaking (3.0):** Consolidated text, tonal, outlined, and filled action buttons into one adaptive
+  `GeneralButton` with five styles, including Elevated. Removed the separate APIs without deprecated
+  aliases. Icon-only content uses the matching Material icon button (a compact elevated button for
+  Elevated); all forms share feedback, analytics, replay, icon position, and color overrides.
+  Rename `iconContentDescription` to `contentDescription` and replace `ButtonColors` with
+  `containerColor` / `contentColor`. `contentDescription` is optional, and icons
+  beside labels no longer repeat the label. Migration is documented in the DesignSystem README.
+- Navigation item icons and every `General*Button` now take a single `ToolkitIcon` instead of
+  separate `ImageVector` and `Painter` parameters. Callers passing `vectorIcon = someIcon` to a
+  button must pass `icon = ToolkitIcon.Vector(someIcon)`, and `NavigationIcon` is now `ToolkitIcon`
+  from `core.designsystem.ui.icons`. `AnimatedIconButtonDirection` takes the same type.
+- The standard Settings and Share drawer entries declare their animated icon once, so it covers both
+  the unselected and the selected state.
 - Standardized library APIs under module-owned `feature.*`, `core.*`, and `integration.*` package roots; consumers must update imports to the new packages.
 - Moved library dependency-injection bindings into the owning feature/integration modules and
-  exposed the datastore module from `core.datastore.di`; the toolkit facade now only composes those
+  exposed the datastore module from `core.datastore.di`; the main toolkit module now only composes those
   modules.
 - Moved `ThemePreferencesState`, `BaseCoreManager`, and `FirebaseControllerImpl` into their
   layer-specific packages; consumers must update imports to `core.common.domain.models.theme`,
@@ -24,6 +60,19 @@
 ### Improved
 
 - Standardized changelog, alert-dialog, and date-picker actions with consistent button styling, haptic feedback, and press animations.
+
+### Fixed
+
+- Fixed Help and Settings menu buttons that still passed ImageVector values to the migrated icon API
+  and prevented the sample app from compiling.
+
+- Prevented duplicate or late Billing service responses from crashing purchase recovery, product
+  queries, and donation consumption with an `Already resumed` error.
+
+- Fixed icon-state handling in `NavigationDrawerItemContent` and `LeftNavigationRail` to display `selectedIcon` when selected and `icon` when unselected.
+- Fixed animated navigation icons never playing. They were swapped in already on their last frame,
+  and a second click did nothing. They now play on every click, in the drawer, the bottom bar, and
+  the navigation rail.
 
 ---
 

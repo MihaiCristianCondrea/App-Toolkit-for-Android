@@ -60,6 +60,12 @@ flowchart TD
 - Credentials are supplied by the host and used only at the remote boundary; logs and error models
   must never include the token.
 
+## Platform metadata ownership
+
+DeviceInfoLocalDataSource reads package versions through core common's getVersionMetadata.
+It does not depend on UI models or UI helpers. Device capture remains on the injected IO dispatcher,
+and unavailable versions still produce a null name and version code -1.
+
 ## Public contracts
 
 - `IssueReporterRepository`, `SendIssueReportUseCase`, domain models, and presentation entry

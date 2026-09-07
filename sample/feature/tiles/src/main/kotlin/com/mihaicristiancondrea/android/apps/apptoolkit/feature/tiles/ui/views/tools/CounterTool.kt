@@ -27,8 +27,9 @@ import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
 @Composable
 fun CounterTool(count: Int, onIncrement: () -> Unit, onReset: () -> Unit) {
@@ -40,9 +41,10 @@ fun CounterTool(count: Int, onIncrement: () -> Unit, onReset: () -> Unit) {
                 onClick = onIncrement,
                 label = stringResource(id = R.string.tool_counter_increment),
             )
-            GeneralOutlinedButton(
+            GeneralButton(
+                style = GeneralButtonStyle.Outlined,
                 onClick = onReset,
-                vectorIcon = Icons.Outlined.Refresh,
+                icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Refresh),
                 label = stringResource(id = R.string.tool_counter_reset),
             )
         }

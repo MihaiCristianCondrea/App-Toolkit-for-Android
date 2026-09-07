@@ -19,17 +19,18 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Apps
-import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.rounded.Apps
-import androidx.compose.material.icons.rounded.GridView
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.navigation.AppsListRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ToolkitTilesRoute
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconReplayMode
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.BottomBarItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
 object MainNavigationDefaults {
     val fabSupportedRoutes: ImmutableSet<StableNavKey> = persistentSetOf(
@@ -39,8 +40,10 @@ object MainNavigationDefaults {
     val bottomBarItems: ImmutableList<BottomBarItem<StableNavKey>> = persistentListOf(
         BottomBarItem(
             route = ToolkitTilesRoute,
-            icon = Icons.Outlined.GridView,
-            selectedIcon = Icons.Rounded.GridView,
+            animatedIcon = ToolkitIcon.AnimatedVector(
+                resId = DesignSystemR.drawable.anim_grid_select,
+                replayMode = ToolkitIconReplayMode.Reverse
+            ),
             title = com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R.string.tiles_title
         ),
         BottomBarItem(

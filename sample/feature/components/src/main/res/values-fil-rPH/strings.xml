@@ -54,4 +54,8 @@
     <string name="components_action_menus">Mga menu ng pagkilos</string>
     <string name="components_action_menus_summary">I-tap para ipakita ang mga opsyon</string>
     <string name="components_data_selection">Pagpili ng data</string>
+    <string name="components_section_animations">Mga animation</string>
+    <string name="components_animation_restart">Magsimula muli sa pag-tap</string>
+    <string name="components_animation_reverse">Baligtarin sa pag-tap</string>
+    <string name="components_animation_preview_helper">I-tap ang isang item upang i-preview ang animation nito.</string>
 </resources>

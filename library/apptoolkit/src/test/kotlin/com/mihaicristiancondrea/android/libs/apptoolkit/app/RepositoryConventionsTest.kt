@@ -46,6 +46,32 @@ class RepositoryConventionsTest {
         assertThat(legacyNames).isEmpty()
     }
 
+    @Test
+    fun productionPackagesMatchSourceDirectories() {
+        val misplaced = productionSources().filter { source ->
+            val declaredPackage = Regex("(?m)^package\\s+([A-Za-z0-9_.]+)")
+                .find(source.readText())?.groupValues?.get(1)
+            declaredPackage == null ||
+                !source.parentPath().endsWith("/" + declaredPackage.replace('.', '/'))
+        }.map { it.relativePath() }
+        assertThat(misplaced).isEmpty()
+    }
+
+    @Test
+    fun storageAndDeviceInspectionDoNotImportUiHelpers() {
+        val consumers = productionSources().filter { source ->
+            val path = source.relativePath()
+            path.startsWith("sample/core/datastore/") ||
+                (path.startsWith("library/feature/issuereporter/") && "/data/" in path)
+        }
+        assertThat(consumers).isNotEmpty()
+        val violations = consumers.filter { source ->
+            Regex("(?m)^import\\s+[^\\r\\n]*\\.core\\.ui\\.")
+                .containsMatchIn(source.readText())
+        }.map { it.relativePath() }
+        assertThat(violations).isEmpty()
+    }
+
     private fun productionSources(): List<File> = ACTIVE_SOURCE_ROOTS
         .flatMap { directory ->
             File(repositoryRoot, directory)

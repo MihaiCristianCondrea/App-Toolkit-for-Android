@@ -48,14 +48,16 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.SupportActivity
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 
 /**
  * A top app bar for the main screen of the application.
@@ -110,7 +112,7 @@ fun MainTopAppBar(
         navigationIcon = {
             navigationIcon?.let {
                 AnimatedIconButtonDirection(
-                    icon = it,
+                    icon = ToolkitIcon.Vector(imageVector = it),
                     contentDescription = stringResource(id = R.string.go_back),
                     onClick = onNavigationIconClick,
                     feedback = ButtonFeedback(hapticFeedbackType = null),
@@ -143,7 +145,7 @@ fun SupportMenuAction(onSupportClick: (() -> Unit)?) {
     AnimatedIconButtonDirection(
         modifier = Modifier.graphicsLayer { rotationZ = rotation },
         fromRight = true,
-        icon = Icons.Outlined.MoreVert,
+        icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.MoreVert),
         contentDescription = stringResource(id = R.string.content_description_more_options),
         onClick = { setExpandedMenu(true) },
         iconSize = SizeConstants.TwentyFourSize,

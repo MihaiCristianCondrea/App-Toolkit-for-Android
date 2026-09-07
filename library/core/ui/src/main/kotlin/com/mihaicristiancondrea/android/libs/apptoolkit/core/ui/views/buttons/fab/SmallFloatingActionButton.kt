@@ -17,11 +17,16 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.fab
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableIntStateOf
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import android.view.View
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.material3.Icon
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -64,9 +69,27 @@ fun SmallFloatingActionButton(
     onClick: () -> Unit,
     feedback: ButtonFeedback = ButtonFeedback(),
     onLogClick: (() -> Unit)? = null,
+) = SmallFloatingActionButton(
+    modifier, isVisible, isExtended, ToolkitIcon.Vector(icon), contentDescription, onClick,
+    feedback, onLogClick,
+)
+
+/** Icon-source overload; playback state is local to the composed button. */
+@Composable
+fun SmallFloatingActionButton(
+    modifier: Modifier = Modifier,
+    isVisible: Boolean,
+    isExtended: Boolean,
+    icon: ToolkitIcon,
+    contentDescription: String? = null,
+    onClick: () -> Unit,
+    feedback: ButtonFeedback = ButtonFeedback(),
+    onLogClick: (() -> Unit)? = null,
 ) {
     val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
     val view: View = LocalView.current
+
+    var clickCount by remember { mutableIntStateOf(0) }
 
     AnimatedVisibility(
         visible = isVisible && isExtended,
@@ -74,11 +97,12 @@ fun SmallFloatingActionButton(
         exit = scaleOut(),
     ) {
         SmallFloatingActionButton(onClick = {
+            clickCount++
             feedback.performClick(view = view, hapticFeedback = hapticFeedback)
             onLogClick?.invoke()
             onClick()
         }, modifier = modifier.bounceClick()) {
-            Icon(imageVector = icon, contentDescription = contentDescription)
+            AnimatedToolkitIcon(icon = icon, clickCount = clickCount, contentDescription = contentDescription)
         }
     }
 }

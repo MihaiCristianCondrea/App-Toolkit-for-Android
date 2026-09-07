@@ -1,0 +1,164 @@
+{
+  "title": "Crashlytics - Custom logs",
+  "bundle_identifier": "com.d4rk.cleaner",
+  "platform": "android",
+  "display_version": "26.07.8",
+  "build_version": "137309008",
+  "issue_id": "05c41df9eee5b548ee99decabc40eb68",
+  "session_id": "6A6CB8A5003D0001253C9E2308A822CF_DNE_0_v2",
+  "event_timestamp": "Fri Jul 31 2026 18:02:02 GMT+0300 (Eastern European Summer Time)",
+  "logs_and_breadcrumbs": [
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_init | screen=Main, viewModel=w36, step=init",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | event=z26, screen=Main, viewModel=w36",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Main, viewModel=w36, action=applyInitialConsent, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | event=a36, screen=Main, viewModel=w36",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Main, viewModel=w36, action=loadNavigationItems, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | event=e36, screen=Main, viewModel=w36",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Main, viewModel=w36, action=resolveStartup, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Main, viewModel=w36, action=resolveStartup, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "Applying initial consent",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "Navigation drawer load started | source=GetNavigationDrawerItemsUseCase",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "Navigation drawer items requested | source=MainNavigationRepositoryImpl",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | event=b36, screen=Main, viewModel=w36",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | host=com.d4rk.cleaner.app.main.ui.MainActivity, screen=Main, viewModel=w36, action=requestConsent, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "Consent request started | host=com.d4rk.cleaner.app.main.ui.MainActivity, showIfRequired=true",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "consent_request_state | host=com.d4rk.cleaner.app.main.ui.MainActivity, screen=Main, viewModel=w36, stage=loading",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | event=d36, screen=Main, viewModel=w36",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | host=com.d4rk.cleaner.app.main.ui.MainActivity, screen=Main, viewModel=w36, action=requestReview, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | host=com.d4rk.cleaner.app.main.ui.MainActivity, screen=Main, viewModel=w36, action=requestReview, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_event | event=c36, screen=Main, viewModel=w36",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:00:53 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Main, viewModel=w36, action=requestInAppUpdate, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:01:43 GMT+0300 (Eastern European Summer Time)",
+      "name": "main_topbar_action",
+      "source": "analytics",
+      "params": {
+        "component": "overflow_menu",
+        "action": "open",
+        "screen": "main",
+        "firebase_screen_class": "MainActivity",
+        "value": "dashboard"
+      }
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:01:46 GMT+0300 (Eastern European Summer Time)",
+      "name": "main_topbar_action",
+      "source": "analytics",
+      "params": {
+        "component": "overflow_menu",
+        "action": "support_us",
+        "screen": "main",
+        "firebase_screen_class": "MainActivity",
+        "value": "dashboard"
+      }
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:01:46 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_init | screen=Support, viewModel=u99, step=init",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:01:46 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Support, viewModel=u99, action=observeProductDetails, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:01:46 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Support, viewModel=u99, action=observePurchaseResult, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:01:46 GMT+0300 (Eastern European Summer Time)",
+      "message": "vm_op_start | screen=Support, viewModel=u99, action=queryProductDetails, step=start",
+      "source": "crashlytics"
+    },
+    {
+      "timestamp": "Fri Jul 31 2026 18:01:46 GMT+0300 (Eastern European Summer Time)",
+      "name": "screen_view",
+      "source": "analytics",
+      "params": {
+        "firebase_screen_class": "SupportActivity"
+      }
+    }
+  ]
+}

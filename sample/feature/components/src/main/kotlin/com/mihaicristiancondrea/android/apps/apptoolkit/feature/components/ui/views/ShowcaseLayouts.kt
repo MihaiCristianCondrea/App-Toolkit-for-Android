@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -96,12 +97,23 @@ fun ShowcaseSection(
 @Composable
 fun ShowcaseSurface(
     position: GroupedItemPosition,
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val surfaceModifier = modifier
+        .fillMaxWidth()
+        .groupedCorners(position = position)
+        .then(
+            if (onClick != null) {
+                Modifier.clickable(onClick = onClick)
+            } else {
+                Modifier
+            },
+        )
+
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .groupedCorners(position = position),
+        modifier = surfaceModifier,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 1.dp,
     ) {

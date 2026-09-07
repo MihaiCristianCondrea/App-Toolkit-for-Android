@@ -62,6 +62,8 @@ class DefaultToolkitTilesRepository(
                     val componentName = tile.requestKey?.let(quickSettingsDataSource::componentName)
                     if (componentName != null && componentName in activeTiles) {
                         tile.copy(status = ToolkitTileStatus.Added)
+                    } else if (componentName != null && quickSettingsDataSource.supportsAddTileRequest) {
+                        tile.copy(status = ToolkitTileStatus.NotAdded)
                     } else tile
                 }.toImmutableList(),
             )
@@ -73,8 +75,9 @@ class DefaultToolkitTilesRepository(
             id = "sensors",
             initiallyExpanded = true,
             tiles = persistentListOf(
-                tile(ToolkitTileIds.BUBBLE_LEVEL, ToolkitTileStatus.NeedsSetup),
-                tile(ToolkitTileIds.COMPASS, ToolkitTileStatus.NeedsSetup),
+                tile(ToolkitTileIds.BUBBLE_LEVEL),
+                tile(ToolkitTileIds.COMPASS),
+                tile(ToolkitTileIds.REACTION_TEST),
             ),
         ),
         ToolkitTileCategoryData(
@@ -84,15 +87,12 @@ class DefaultToolkitTilesRepository(
                 tile(ToolkitTileIds.DICE_ROLL, requestKey = ToolkitTileIds.DICE_ROLL),
                 tile(ToolkitTileIds.COUNTER, requestKey = ToolkitTileIds.COUNTER),
                 tile("material_colors", quickTool = ToolkitQuickTool.MaterialColors),
-                tile(ToolkitTileIds.MUSIC_SEARCH),
                 tile(ToolkitTileIds.MORSE),
             ),
         ),
         ToolkitTileCategoryData(
             id = "system",
             tiles = persistentListOf(
-                tile(ToolkitTileIds.CAFFEINE),
-                tile(ToolkitTileIds.SOUND_MODE),
                 tile(ToolkitTileIds.FLASH_DIMMER, requestKey = ToolkitTileIds.FLASH_DIMMER),
             ),
         ),

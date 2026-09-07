@@ -29,7 +29,7 @@ No internal Gradle modules. This is the bottom shared runtime dependency for mos
 
 ## Used by
 
-- `:sample` and `:library:apptoolkit` for host and façade contracts.
+- `:sample` and `:library:apptoolkit` for host and toolkit contracts.
 - `:library:core:datastore`, `:library:core:network`, `:library:core:ui`, and
   `:library:core:designsystem`.
 - `:library:feature:about`, `:library:feature:help`, `:library:feature:issuereporter`,
@@ -66,6 +66,13 @@ flowchart TD
   presentation-specific representations remain in their owning modules.
 - The manifest AdMob ID is the only ads identity source; a library fallback would silently bind a
   host to the wrong publisher account.
+
+## Package version metadata
+
+AppVersionMetadata and PackageManager.getVersionMetadata expose nullable version names and long
+version codes without a UI model. Issue Reporter and the sample installed-app source share this
+lookup. Unavailable, hidden, or unreadable packages return null. The legacy UI getVersionInfo
+extension maps this result into its unchanged AppVersionInfo class.
 
 ## Public contracts
 

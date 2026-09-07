@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views
 
+import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,20 +26,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
@@ -52,7 +53,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.helperTitleResId
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.BreathingToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CaffeineToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CoinFlipToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CompassToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.CounterToolRoute
@@ -60,12 +60,14 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigat
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.FlashDimmerToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.LevelToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.MorseToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.MusicSearchToolRoute
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ReactionTestToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.SosToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.SoundModeToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.previews.GenericToolPreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
 /**
  * Animated bottom sheet host for previewing every Quick Tools catalog entry.
@@ -98,10 +100,8 @@ fun ToolkitToolBottomSheet(
             verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         ) {
             ToolSheetHeader(tile = tile, onClose = onClose)
-            ToolStatusSummary(tile = tile)
-            HorizontalDivider()
             ToolInteractiveContent(tile = tile)
-            ToolSheetActions(
+            ToolIntegrationSection(
                 tile = tile,
                 onAddTile = onAddTile,
                 onSetupTile = onSetupTile,
@@ -135,12 +135,12 @@ private fun ToolSheetHeader(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        IconButton(onClick = onClose) {
-            Icon(
-                imageVector = Icons.Outlined.Close,
-                contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
-            )
-        }
+        GeneralButton(
+                    style = GeneralButtonStyle.Text,
+                    onClick = onClose,
+                    icon = ToolkitIcon.Vector(Icons.Outlined.Close),
+                    contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
+                )
     }
 }
 
@@ -193,9 +193,7 @@ private fun ToolInteractiveContent(
         ToolkitTileIds.COUNTER -> CounterToolRoute()
         ToolkitTileIds.COMPASS -> CompassToolRoute()
         ToolkitTileIds.BUBBLE_LEVEL -> LevelToolRoute()
-        ToolkitTileIds.CAFFEINE -> CaffeineToolRoute()
-        ToolkitTileIds.SOUND_MODE -> SoundModeToolRoute()
-        ToolkitTileIds.MUSIC_SEARCH -> MusicSearchToolRoute()
+        ToolkitTileIds.REACTION_TEST -> ReactionTestToolRoute()
         ToolkitTileIds.SOS -> SosToolRoute()
         ToolkitTileIds.MORSE -> MorseToolRoute()
         ToolkitTileIds.BREATHING -> BreathingToolRoute()
@@ -205,35 +203,121 @@ private fun ToolInteractiveContent(
 }
 
 @Composable
-private fun ToolSheetActions(
+private fun ToolIntegrationSection(
     tile: ToolkitTile,
     onAddTile: () -> Unit,
     onSetupTile: () -> Unit,
 ) {
-    val hasAddAction = tile.requestKey != null
-    val hasSetupAction = tile.status != ToolkitTileStatus.Available
-    if (!hasAddAction && !hasSetupAction) return
+    val hasAddAction = tile.requestKey != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    val isUnsupported = tile.status == ToolkitTileStatus.Unsupported
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
+    if (isUnsupported) {
+        Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize)) {
+            ToolStatusSummary(tile = tile)
+            GeneralButton(
+                style = GeneralButtonStyle.Outlined,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onSetupTile,
+                label = stringResource(id = R.string.tiles_setup),
+            )
+        }
+        return
+    }
+
+    val canShowQsSection = tile.requestKey != null
+    if (canShowQsSection) {
+        QuickSettingsIntegrationCard(
+            tile = tile,
+            hasAddAction = hasAddAction,
+            onAddTile = onAddTile
+        )
+    }
+}
+
+@Composable
+private fun QuickSettingsIntegrationCard(
+    tile: ToolkitTile,
+    hasAddAction: Boolean,
+    onAddTile: () -> Unit,
+) {
+    val isAdded = tile.status == ToolkitTileStatus.Added
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
     ) {
-        if (hasAddAction) {
-            FilledTonalButton(
-                modifier = Modifier.weight(1f),
-                onClick = onAddTile,
-                enabled = tile.status == ToolkitTileStatus.Available,
+        val infoShape = RoundedCornerShape(
+            topStart = 28.dp,
+            topEnd = 28.dp,
+            bottomStart = 8.dp,
+            bottomEnd = 8.dp,
+        )
+
+        val actionShape = RoundedCornerShape(
+            topStart = 8.dp,
+            topEnd = 8.dp,
+            bottomStart = 28.dp,
+            bottomEnd = 28.dp,
+        )
+
+        val containerColor = MaterialTheme.colorScheme.secondaryContainer
+        val contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+
+        Surface(
+            shape = if (hasAddAction && !isAdded) infoShape else RoundedCornerShape(28.dp),
+            color = containerColor,
+            contentColor = contentColor,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SizeConstants.LargeSize),
+                horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = stringResource(id = R.string.tiles_add))
+                Icon(
+                    imageVector = Icons.Outlined.Widgets,
+                    contentDescription = null,
+                    tint = contentColor
+                )
+                Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
+                    val title = if (isAdded) {
+                        stringResource(id = R.string.tool_status_added_title)
+                    } else {
+                        stringResource(id = R.string.tiles_qs_integration_title)
+                    }
+
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+
+                    val description = if (isAdded) {
+                        stringResource(id = R.string.tool_status_added_summary)
+                    } else {
+                        stringResource(id = R.string.tiles_qs_integration_summary_format, stringResource(id = tile.titleResId))
+                    }
+
+                    Text(
+                        text = description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = contentColor.copy(alpha = 0.8f)
+                    )
+                }
             }
         }
-        if (hasSetupAction) {
-            OutlinedButton(
-                modifier = Modifier.weight(1f),
-                onClick = onSetupTile,
-            ) {
-                Text(text = stringResource(id = R.string.tiles_setup))
-            }
+
+        if (hasAddAction && !isAdded) {
+            GeneralButton(
+                style = GeneralButtonStyle.Tonal,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onAddTile,
+                label = stringResource(id = R.string.tiles_add_to_qs),
+                icon = ToolkitIcon.Vector(Icons.Outlined.Add),
+                shape = actionShape,
+                containerColor = containerColor,
+                contentColor = contentColor,
+            )
         }
     }
 }

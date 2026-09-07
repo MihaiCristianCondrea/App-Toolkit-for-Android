@@ -18,6 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Close
@@ -25,11 +26,9 @@ import androidx.compose.material.icons.outlined.Dehaze
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.FlashlightOn
-import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.Timer
@@ -64,24 +63,21 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Coin -> Icons.Outlined.MonetizationOn
     ToolkitTileIcon.Dice -> Icons.Outlined.Casino
     ToolkitTileIcon.Counter -> Icons.Outlined.Dehaze
-    ToolkitTileIcon.Caffeine -> Icons.Outlined.Timer
-    ToolkitTileIcon.Sound -> Icons.Outlined.GraphicEq
-    ToolkitTileIcon.Music -> Icons.Outlined.MusicNote
     ToolkitTileIcon.Breathing -> Icons.Outlined.FavoriteBorder
     ToolkitTileIcon.Sos -> Icons.Outlined.WarningAmber
     ToolkitTileIcon.Morse -> Icons.Outlined.MoreHoriz
     ToolkitTileIcon.FlashDimmer -> Icons.Outlined.FlashlightOn
     ToolkitTileIcon.Palette -> Icons.Outlined.Palette
+    ToolkitTileIcon.Timer -> Icons.Outlined.Timer
 }
 
 internal fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
     ToolkitTileIcon.Level,
-    ToolkitTileIcon.Compass -> CoreUiR.drawable.background_8_sided_cookie
+    ToolkitTileIcon.Compass,
+    ToolkitTileIcon.Timer -> CoreUiR.drawable.background_8_sided_cookie
 
-    ToolkitTileIcon.Caffeine,
     ToolkitTileIcon.Breathing -> CoreUiR.drawable.background_soft_burst
 
-    ToolkitTileIcon.Sound,
     ToolkitTileIcon.FlashDimmer -> CoreUiR.drawable.background_flower
 
     ToolkitTileIcon.Coin,
@@ -97,14 +93,14 @@ internal fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
 internal fun ToolkitTileStatus.labelResId(): Int = when (this) {
     ToolkitTileStatus.Added -> R.string.tiles_status_added
     ToolkitTileStatus.Available -> R.string.tiles_status_available
-    ToolkitTileStatus.NeedsSetup -> R.string.tiles_status_needs_setup
+    ToolkitTileStatus.NotAdded -> R.string.tiles_status_not_added
     ToolkitTileStatus.Unsupported -> R.string.tiles_status_unsupported
 }
 
 internal fun ToolkitTileStatus.icon(): ImageVector = when (this) {
     ToolkitTileStatus.Added -> Icons.Outlined.CheckCircle
     ToolkitTileStatus.Available -> Icons.Outlined.Info
-    ToolkitTileStatus.NeedsSetup -> Icons.Outlined.WarningAmber
+    ToolkitTileStatus.NotAdded -> Icons.Outlined.AddCircleOutline
     ToolkitTileStatus.Unsupported -> Icons.Outlined.Close
 }
 
@@ -113,12 +109,12 @@ internal fun ToolkitTileIcon.iconColors(): StatusColors {
     val isDark = androidx.compose.foundation.isSystemInDarkTheme()
     return when (this) {
         ToolkitTileIcon.Level,
-        ToolkitTileIcon.Compass -> StatusColors(
+        ToolkitTileIcon.Compass,
+        ToolkitTileIcon.Timer -> StatusColors(
             container = if (isDark) Color(0xFF006A60) else Color(0xFF00A091),
             content = if (isDark) Color(0xFF74DED1) else Color(0xFF006A60),
         )
 
-        ToolkitTileIcon.Caffeine,
         ToolkitTileIcon.Breathing -> StatusColors(
             container = if (isDark) Color(0xFF8B4100) else Color(0xFFFF8B26),
             content = if (isDark) Color(0xFFFFB88E) else Color(0xFF8B4100),
@@ -132,15 +128,9 @@ internal fun ToolkitTileIcon.iconColors(): StatusColors {
             content = if (isDark) Color(0xFFFBE44D) else Color(0xFF6B5E00),
         )
 
-        ToolkitTileIcon.Sound,
         ToolkitTileIcon.FlashDimmer -> StatusColors(
             container = if (isDark) Color(0xFF91005A) else Color(0xFFE2008E),
             content = if (isDark) Color(0xFFFFB0D3) else Color(0xFF91005A),
-        )
-
-        ToolkitTileIcon.Music -> StatusColors(
-            container = if (isDark) Color(0xFF3F0091) else Color(0xFF6F00FF),
-            content = if (isDark) Color(0xFFC8BFFF) else Color(0xFF3F0091),
         )
 
         ToolkitTileIcon.Palette -> StatusColors(
@@ -167,9 +157,11 @@ internal fun ToolkitTileStatus.statusColors(): StatusColors = when (this) {
         content = MaterialTheme.colorScheme.onSecondaryContainer,
     )
 
-    ToolkitTileStatus.NeedsSetup -> StatusColors(
-        container = MaterialTheme.colorScheme.tertiaryContainer,
-        content = MaterialTheme.colorScheme.onTertiaryContainer,
+    // Neutral on purpose: adding the Quick Settings tile is optional, so the chip must not read
+    // like a warning or like work the tool is waiting for.
+    ToolkitTileStatus.NotAdded -> StatusColors(
+        container = MaterialTheme.colorScheme.surfaceContainerHighest,
+        content = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 
     ToolkitTileStatus.Unsupported -> StatusColors(

@@ -18,6 +18,7 @@
     <string name="about">Om appen</string>
     <string name="amoled_mode">AMOLED-läge</string>
     <string name="color_palette">Färgpalett</string>
+    <string name="content_description_more_options">Fler alternativ</string>
     <string name="dark_mode">Mörkt läge</string>
     <string name="dialog_info_language">Anpassa din upplevelse med ditt föredragna språk. Ändringarna träder i kraft omedelbart.</string>
     <string name="dialog_info_startup">Konfigurerar den första skärmen som presenteras för användarna vid appstart.</string>

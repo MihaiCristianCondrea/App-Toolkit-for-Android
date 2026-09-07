@@ -18,6 +18,7 @@
     <string name="about">Über</string>
     <string name="amoled_mode">AMOLED-Modus</string>
     <string name="color_palette">Farbpalette</string>
+    <string name="content_description_more_options">Weitere Optionen</string>
     <string name="dark_mode">Dunkles thema</string>
     <string name="dialog_info_language">Passen Sie Ihre Erfahrung mit Ihrer bevorzugten Sprache an. Änderungen werden sofort wirksam.</string>
     <string name="dialog_info_startup">Konfiguriert den Startbildschirm, der Nutzern beim Starten der Anwendung präsentiert wird. Diese Einstellung beeinflusst die erste Benutzerinteraktion mit der App.</string>

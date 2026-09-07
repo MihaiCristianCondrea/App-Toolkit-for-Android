@@ -33,7 +33,6 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -49,6 +48,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -65,11 +65,12 @@ import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
 import androidx.navigation3.ui.NavDisplay
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.AppNavigationEntryContext
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.data.managers.NavigationManager
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.navigation.domain.models.AppNavigationEntryContext
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.states.MainUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.views.fab.MainFloatingActionButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationAnimations
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.NavigationEntryBuilder
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.Navigator
@@ -79,7 +80,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.navigation.remem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.modifiers.hapticDrawerSwipe
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.navigation.LargeTopAppBarWithScaffold
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar.DefaultSnackbarHost
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.AppWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.window.rememberWindowWidthSizeClass
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation.handleNavigationItemClick
@@ -94,7 +94,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.Naviga
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.isTopLevel
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
-import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerItemContent
+import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui.NavigationDrawerSheet
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
@@ -414,12 +414,19 @@ private fun MainShell(
                 NavigationRail {
                     bottomBarItems.forEach { item ->
                         val isSelected = currentRoute == item.route
+                        var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
                         NavigationRailItem(
                             selected = isSelected,
-                            onClick = { navigator.navigate(item.route) },
+                            onClick = {
+                                clickCount++
+                                navigator.navigate(item.route)
+                            },
                             icon = {
-                                Icon(
-                                    imageVector = if (isSelected) item.selectedIcon else item.icon,
+                                AnimatedToolkitIcon(
+                                    icon = item.icon,
+                                    selectedIcon = item.selectedIcon,
+                                    selected = isSelected,
+                                    clickCount = clickCount,
                                     contentDescription = stringResource(item.title),
                                 )
                             },
@@ -428,12 +435,19 @@ private fun MainShell(
                     }
                     railDrawerItems.first.forEach { item ->
                         val isSelected = onIsSelected(item.route, currentRoute)
+                        var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
                         NavigationRailItem(
                             selected = isSelected,
-                            onClick = { onNavigationDrawerItemClick(item, null, null) },
+                            onClick = {
+                                clickCount++
+                                onNavigationDrawerItemClick(item, null, null)
+                            },
                             icon = {
-                                Icon(
-                                    imageVector = if (isSelected) item.selectedIcon else item.icon,
+                                AnimatedToolkitIcon(
+                                    icon = item.icon,
+                                    selectedIcon = item.selectedIcon,
+                                    selected = isSelected,
+                                    clickCount = clickCount,
                                     contentDescription = stringResource(item.title),
                                 )
                             },
@@ -442,12 +456,19 @@ private fun MainShell(
                     }
                     railDrawerItems.second.forEach { item ->
                         val isSelected = onIsSelected(item.route, currentRoute)
+                        var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
                         NavigationRailItem(
                             selected = isSelected,
-                            onClick = { onNavigationDrawerItemClick(item, null, null) },
+                            onClick = {
+                                clickCount++
+                                onNavigationDrawerItemClick(item, null, null)
+                            },
                             icon = {
-                                Icon(
-                                    imageVector = if (isSelected) item.selectedIcon else item.icon,
+                                AnimatedToolkitIcon(
+                                    icon = item.icon,
+                                    selectedIcon = item.selectedIcon,
+                                    selected = isSelected,
+                                    clickCount = clickCount,
                                     contentDescription = stringResource(item.title),
                                 )
                             },
@@ -489,12 +510,21 @@ private fun MainShell(
                         NavigationBar {
                             bottomBarItems.forEach { item ->
                                 val isSelected = currentRoute == item.route
+                                var clickCount: Int by remember(item.route) {
+                                    mutableIntStateOf(value = 0)
+                                }
                                 NavigationBarItem(
                                     selected = isSelected,
-                                    onClick = { navigator.navigate(item.route) },
+                                    onClick = {
+                                        clickCount++
+                                        navigator.navigate(item.route)
+                                    },
                                     icon = {
-                                        Icon(
-                                            imageVector = if (isSelected) item.selectedIcon else item.icon,
+                                        AnimatedToolkitIcon(
+                                            icon = item.icon,
+                                            selectedIcon = item.selectedIcon,
+                                            selected = isSelected,
+                                            clickCount = clickCount,
                                             contentDescription = stringResource(item.title),
                                         )
                                     },
@@ -542,23 +572,18 @@ private fun MainShell(
             drawerState = drawerState,
             gesturesEnabled = true,
             drawerContent = {
-                ModalDrawerSheet(drawerState = drawerState) {
-                    LargeVerticalSpacer()
-                    uiState.navigationDrawerItems.forEach { item ->
-                        NavigationDrawerItemContent(
-                            item = item,
-                            selected = onIsSelected(item.route, currentRoute),
-                            dividerRoutes = persistentSetOf(),
-                            handleNavigationItemClick = {
-                                onNavigationDrawerItemClick(
-                                    item,
-                                    drawerState,
-                                    coroutineScope
-                                )
-                            },
+                NavigationDrawerSheet(
+                    items = uiState.navigationDrawerItems,
+                    drawerState = drawerState,
+                    isSelected = { item -> onIsSelected(item.route, currentRoute) },
+                    onItemClick = { item ->
+                        onNavigationDrawerItemClick(
+                            item,
+                            drawerState,
+                            coroutineScope,
                         )
-                    }
-                }
+                    },
+                )
             },
             content = shellContent,
         )

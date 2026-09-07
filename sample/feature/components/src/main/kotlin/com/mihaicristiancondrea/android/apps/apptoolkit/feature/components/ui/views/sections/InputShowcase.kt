@@ -44,8 +44,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.vi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.DatePickerTextField
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.fields.DropdownMenuBox
@@ -92,10 +94,11 @@ fun InputShowcase(
                 }
                 var showMenu by rememberSaveable { mutableStateOf(value = false) }
                 Box {
-                    GeneralOutlinedButton(
+                    GeneralButton(
+                        style = GeneralButtonStyle.Outlined,
                         label = menuLabel,
-                        vectorIcon = Icons.Filled.MoreVert,
-                        iconContentDescription = iconContentDescription,
+                        icon = ToolkitIcon.Vector(imageVector = Icons.Filled.MoreVert),
+                        contentDescription = iconContentDescription,
                         onClick = { showMenu = true },
                         firebaseController = firebaseController,
                         ga4Event = onLogEvent("dropdown", "menu_button"),

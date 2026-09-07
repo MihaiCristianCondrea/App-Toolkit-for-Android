@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.ui.navigation
+package com.mihaicristiancondrea.android.libs.apptoolkit.app.main.ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import com.mihaicristiancondrea.android.libs.apptoolkit.integration.ads.ui.AdsSettingsScreen

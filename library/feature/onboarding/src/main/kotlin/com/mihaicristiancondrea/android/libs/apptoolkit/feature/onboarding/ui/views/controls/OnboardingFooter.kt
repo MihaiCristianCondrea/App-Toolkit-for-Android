@@ -42,8 +42,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.onboarding.R
 
 @OptIn(
@@ -88,10 +89,11 @@ fun OnboardingFooter(
                     )
                 ) + fadeOut(animationSpec = spring(stiffness = Spring.StiffnessLow))
             ) {
-                GeneralOutlinedButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Outlined,
                     onClick = onBackClicked,
-                    vectorIcon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                    iconContentDescription = stringResource(id = R.string.back_button_content_description),
+                    icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft),
+                    contentDescription = stringResource(id = R.string.back_button_content_description),
                     label = stringResource(id = R.string.back_button_text)
                 )
             }
@@ -118,12 +120,14 @@ fun OnboardingFooter(
             GeneralButton(
                 onClick = onNextClicked,
                 modifier = Modifier.animateContentSize(),
-                vectorIcon = if (isLastPage) {
-                    Icons.Filled.Check
-                } else {
-                    Icons.AutoMirrored.Filled.KeyboardArrowRight
-                },
-                iconContentDescription = if (isLastPage) {
+                icon = ToolkitIcon.Vector(
+                    imageVector = if (isLastPage) {
+                        Icons.Filled.Check
+                    } else {
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight
+                    }
+                ),
+                contentDescription = if (isLastPage) {
                     stringResource(id = R.string.done_button_content_description)
                 } else {
                     stringResource(id = R.string.next_button_content_description)

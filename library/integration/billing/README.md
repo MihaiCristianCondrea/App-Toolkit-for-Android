@@ -75,4 +75,23 @@ flowchart TD
 
 ## Current risks
 
+### Duplicate purchase-query callbacks
+
+Cleaner issue `05c41df9eee5b548ee99decabc40eb68` reports `Already resumed` from
+`BillingRepository.processPastPurchases` after a `SERVICE_UNAVAILABLE` timeout. This is a Toolkit
+callback-to-coroutine defect, separate from the unresolved proxy-activity crash below. The
+published `3.0.0-pre12` billing AAR still contains the unguarded continuation resume.
+
+The local fix uses `awaitBillingCallback` for purchase queries, product queries, and consumption.
+Each request attempt accepts its first callback atomically and ignores duplicates and callbacks
+after cancellation. It preserves the first response and existing retry policy. Regression tests
+cover duplicate timeout responses, concurrent responses, cancellation, and isolation between retries.
+Consumers need a newly published Toolkit version containing this fix; an app version increase alone
+does not establish that it has shipped. See [the incident report](../../../docs/crashes/fixed/billing-duplicate-callback/README.md).
+
 Billing client and callback behavior is compatibility-sensitive to Play Billing Library upgrades.
+
+The reported `ProxyBillingActivity.onCreate` null-`PendingIntent` crash remains unresolved.
+Expanded `configChanges` overrides currently present in the working tree are an unverified
+proposal, not a demonstrated fix. See [SDK activity crash investigation](../../../docs/crashes/open/billing-proxy-activity-null-intent/README.md)
+for the bytecode evidence, limits of existing safeguards, and consumer validation requirements.

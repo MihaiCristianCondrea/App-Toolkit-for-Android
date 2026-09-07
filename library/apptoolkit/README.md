@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Acts as the host-facing façade and composition root for reusable AppToolkit features. It assembles
+Acts as the host-facing entry point and composition root for reusable AppToolkit features. It assembles
 Koin modules and Navigation 3 destinations while re-exporting the toolkit modules through Gradle
 `api` dependencies.
 
@@ -37,7 +37,7 @@ Koin modules and Navigation 3 destinations while re-exporting the toolkit module
   `:library:integration:firebase`, `:library:integration:review`, and `:library:integration:update`
   to connect SDK implementations.
 
-All dependencies are exported with `api`, making this a convenience façade rather than an isolation
+All dependencies are exported with `api`, making this a convenience module rather than an isolation
 boundary.
 
 ## Used by
@@ -62,12 +62,12 @@ flowchart TD
     Host --> NavBuilders[appToolkitNavigationEntryBuilders]
     NavBuilders --> Entries[Navigation 3 entries]
     Entries --> Screens[Embedded toolkit screens]
-    Manifest[Facade manifest and resources] -->|manifest/resource merge| Host
+    Manifest[AppToolkit manifest and resources] -->|manifest/resource merge| Host
 ```
 
 ## Architectural decisions
 
-- The facade is a composition boundary, not an implementation layer: constructors, SDK behavior,
+- This module is a composition boundary, not an implementation layer: constructors, SDK behavior,
   and Koin bindings remain owned by their source modules; this module only assembles their public
   DI modules.
 - The all-in-one `appToolkitModules` entry point includes every toolkit-owned binding. A host still
@@ -86,7 +86,7 @@ flowchart TD
 
 ### Manifest and resource defaults
 
-Depending on this facade contributes the common `<application>` defaults needed by toolkit
+Depending on this module contributes the common `<application>` defaults needed by toolkit
 activities, including `@style/AppTheme`, RTL support, resizable/window behavior, and the bundled
 backup/data-extraction rules. It also supplies `AppTheme`, `SplashScreenTheme`, their splash assets,
 the shared launcher/shortcut colors and shortcut artwork, `config_locales.xml`, plus `App Name`
@@ -116,9 +116,16 @@ App Toolkit is published through [JitPack](https://jitpack.io/#MihaiCristianCond
 
 ## Current risks
 
-The façade exports nearly the complete internal graph, so consumers can couple to implementation
-modules transitively. The facade's module-list functions must stay synchronized with the feature
+The module exports nearly the complete internal graph, so consumers can couple to implementation
+modules transitively. Its module-list functions must stay synchronized with the feature
 modules they compose.
+
+## Navigation compatibility
+
+The canonical appToolkitNavigationEntryBuilders function lives in app.main.ui.navigation in this
+module. The historical feature.about.ui.navigation function remains a forwarding entry point in the
+same artifact, with its original signature and JVM file name. Both register the same destinations;
+hosts can migrate imports without changing route keys or behavior.
 
 ## Architecture guards
 
@@ -126,10 +133,10 @@ modules they compose.
 only module that depends on every library module. It scans active production sources in `library`
 and `sample` and fails when a repository breaks the project-wide convention:
 
-- repository contracts and concrete repositories live in `data/repository`,
+- repository contracts and concrete repositories live in `data/repositories`,
 - concrete implementations do not use the ambiguous `Impl` suffix,
-- a retained `XRepository` interface uses `DefaultXRepository` for its general implementation,
-- a single implementation may be the concrete `XRepository` when an interface adds no boundary.
+
+It also checks production package/directory alignment and prevents sample storage and Issue Reporter data sources from importing core UI helpers.
 
 It replaces a hand-written list of interface/implementation pairs checked with `isAssignableFrom`,
 which the compiler already guaranteed and which had fallen six repositories behind.

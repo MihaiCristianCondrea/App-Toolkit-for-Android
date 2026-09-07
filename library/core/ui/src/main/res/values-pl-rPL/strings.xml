@@ -18,6 +18,7 @@
     <string name="about">O aplikacji</string>
     <string name="amoled_mode">Tryb AMOLED</string>
     <string name="color_palette">Paleta kolorów</string>
+    <string name="content_description_more_options">Więcej opcji</string>
     <string name="dark_mode">Tryb ciemny</string>
     <string name="dialog_info_language">Spersonalizuj swoje doświadczenie za pomocą preferowanego języka. Wszelkie zmiany języka zostaną zastosowane natychmiast.</string>
     <string name="dialog_info_startup">Konfiguruje ekran początkowy wyświetlany użytkownikom przy uruchamianiu aplikacji. To ustawienie wpływa na pierwszą interakcję użytkownika z aplikacją.</string>

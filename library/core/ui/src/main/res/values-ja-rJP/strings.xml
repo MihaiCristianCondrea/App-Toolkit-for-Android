@@ -18,6 +18,7 @@
     <string name="about">アプリについて</string>
     <string name="amoled_mode">AMOLEDモード</string>
     <string name="color_palette">カラーパレット</string>
+    <string name="content_description_more_options">その他のオプション</string>
     <string name="dark_mode">ダークモード</string>
     <string name="dialog_info_language">お好みの言語で体験をカスタマイズします。言語の変更はすぐに反映されます。</string>
     <string name="dialog_info_startup">アプリ起動時にユーザーに提示される初期画面を設定します。この設定は、アプリとの最初のインタラクションに影響を与えます。</string>

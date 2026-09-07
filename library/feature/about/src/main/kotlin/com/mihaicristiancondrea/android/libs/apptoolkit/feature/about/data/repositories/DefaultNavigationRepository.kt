@@ -20,9 +20,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repo
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.EventNote
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Share
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.coroutines.dispatchers.DispatcherProvider
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.data.repositories.NavigationRepository
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
@@ -31,8 +30,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
+
 /**
  * Supplies the standard Settings, Help, Updates, and Share drawer entries.
+ *
+ * Settings and Share use animated vector drawables, which rest on their first frame and play when
+ * the entry is clicked. They are declared once as `animatedIcon`, so the same drawable covers the
+ * unselected and the selected state.
  *
  * Hosts can use this implementation as-is instead of duplicating the standard list, or implement
  * [NavigationRepository] when they need to add, remove, or dynamically change entries.
@@ -46,26 +51,24 @@ class DefaultNavigationRepository(
                 listOf(
                     NavigationDrawerItem(
                         title = R.string.settings,
-                        selectedIcon = Icons.Outlined.Settings,
-                        icon = Icons.Outlined.Settings,
+                        animatedIcon = ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_settings),
                         route = NavigationDrawerRoutes.ROUTE_SETTINGS,
                     ),
                     NavigationDrawerItem(
                         title = R.string.help_and_feedback,
-                        selectedIcon = Icons.AutoMirrored.Outlined.HelpOutline,
                         icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                        selectedIcon = Icons.AutoMirrored.Outlined.HelpOutline,
                         route = NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK,
                     ),
                     NavigationDrawerItem(
                         title = R.string.updates,
-                        selectedIcon = Icons.AutoMirrored.Outlined.EventNote,
                         icon = Icons.AutoMirrored.Outlined.EventNote,
+                        selectedIcon = Icons.AutoMirrored.Outlined.EventNote,
                         route = NavigationDrawerRoutes.ROUTE_UPDATES,
                     ),
                     NavigationDrawerItem(
                         title = R.string.share,
-                        selectedIcon = Icons.Outlined.Share,
-                        icon = Icons.Outlined.Share,
+                        animatedIcon = ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_share),
                         route = NavigationDrawerRoutes.ROUTE_SHARE,
                     )
                 )

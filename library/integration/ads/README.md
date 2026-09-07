@@ -6,8 +6,8 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 
 ## Owns
 
-- `di.adsIntegrationModule()` binds the ads manager, settings repository, and ViewModel. The toolkit
-  facade composes it; hosts supply their placement configuration and foundation providers.
+- `di.adsIntegrationModule()` binds the ads manager, settings repository, and ViewModel. The main toolkit
+  module composes it; hosts supply their placement configuration and foundation providers.
 - Ads settings repository, ViewModel, screen, and activity.
 - `AdsCoreManager`, `AdsSdkInitializer`, and Google Mobile Ads SDK initialization.
 - App-open ad lifecycle; the `INTERNET`, `ACCESS_NETWORK_STATE`, and `AD_ID` permissions required by
@@ -287,3 +287,8 @@ consumer app. The durable safeguards are documented at the modules that own them
 
 Changes to ads enablement must preserve all four boundaries; fixing only the settings repository is
 not sufficient.
+
+The separately reported `HsdpShimActivity` failure (`targetPackageName is null`) is unresolved
+and is not covered by those initialization fixes. See the
+[SDK activity crash investigation](../../../docs/crashes/open/billing-proxy-activity-null-intent/README.md) before applying
+workarounds or describing it as fixed in consuming apps.

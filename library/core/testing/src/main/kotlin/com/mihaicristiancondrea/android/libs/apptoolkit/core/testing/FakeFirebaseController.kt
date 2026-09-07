@@ -24,6 +24,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.model
  * No-op Firebase controller for unit tests.
  */
 class FakeFirebaseController : FirebaseController {
+    val loggedEvents: MutableList<AnalyticsEvent> = mutableListOf()
+    val loggedScreenViews: MutableList<Pair<String, String?>> = mutableListOf()
+
     override fun updateConsent(
         analyticsGranted: Boolean,
         adStorageGranted: Boolean,
@@ -63,11 +66,11 @@ class FakeFirebaseController : FirebaseController {
     }
 
     override fun logEvent(event: AnalyticsEvent) {
-        // no-op
+        loggedEvents.add(event)
     }
 
     override fun logScreenView(screenName: String, screenClass: String?) {
-        // no-op
+        loggedScreenViews.add(screenName to screenClass)
     }
 
     override fun setUserProperty(name: String, value: String?) {

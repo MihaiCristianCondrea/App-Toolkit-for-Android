@@ -48,7 +48,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.groupedCorners
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeHorizontalSpacer
@@ -128,9 +130,11 @@ fun QuestionCard(
                     modifier = Modifier.weight(weight = 1f)
                 )
 
-                GeneralTextButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Text,
                     onClick = { onToggleExpand() },
-                    vectorIcon = Icons.Filled.ExpandMore,
+                    contentDescription = title,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Filled.ExpandMore),
                     modifier = Modifier.rotate(degrees = expandIconRotation),
                 )
             }

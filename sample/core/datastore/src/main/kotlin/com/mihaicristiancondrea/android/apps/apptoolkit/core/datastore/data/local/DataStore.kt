@@ -18,7 +18,7 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local
 
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.datastore.startupDestinationFlow
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.extensions.startupValueFlow
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
 import kotlinx.coroutines.flow.Flow
 
@@ -39,9 +39,9 @@ class DataStore(
         defaultRoute: String,
         mapToKey: (String) -> T
     ): Flow<T> =
-        commonDataStore.startupDestinationFlow(
+        commonDataStore.startupValueFlow(
             defaultRoute = defaultRoute,
-            mapToKey = mapToKey
+            mapToValue = mapToKey
         )
 
     override suspend fun saveComponentsShowcaseUnlocked(isUnlocked: Boolean) {

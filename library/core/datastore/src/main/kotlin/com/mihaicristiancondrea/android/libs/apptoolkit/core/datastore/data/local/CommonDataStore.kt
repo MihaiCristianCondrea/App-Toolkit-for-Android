@@ -62,7 +62,7 @@ val Context.commonDataStore: DataStore<Preferences> by preferencesDataStore(
 )
 
 /**
- * Facade over the toolkit's preference data sources.
+ * Unified wrapper over the toolkit's preference data sources.
  *
  * Every value lives in the single `settings` Preferences DataStore, which is what
  * [Context.commonDataStore] hands out; the preferences are grouped into cohesive data sources
@@ -132,7 +132,7 @@ open class CommonDataStore(
         private var instance: CommonDataStore? = null
 
         /**
-         * Returns the process-wide facade, capturing [defaultAdsEnabled] on first construction.
+         * Returns the process-wide instance, capturing [defaultAdsEnabled] on first construction.
          *
          * Prefer dependency injection in production. This cannot change the ads default after an
          * instance exists, so `dataStoreModule` calls it eagerly at Koin start with the host's real

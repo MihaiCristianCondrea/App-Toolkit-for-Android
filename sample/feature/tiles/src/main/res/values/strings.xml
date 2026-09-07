@@ -15,27 +15,22 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="caffeine_notification_channel_description" translatable="false">Active when the Caffeine screen-on timer is running.</string>
-    <string name="caffeine_notification_channel_name" translatable="false">Caffeine Tool</string>
-    <string name="caffeine_notification_text" translatable="false">Keeping your screen awake…</string>
     <string name="tile_breathing_summary">Start a short guided breathing pause</string>
     <string name="tile_breathing_title">Breathe</string>
     <string name="tile_bubble_level_summary">Surface alignment and tilt detection</string>
     <string name="tile_bubble_level_title">Bubble Level</string>
-    <string name="tile_caffeine_summary">Keep the screen awake temporarily</string>
-    <string name="tile_caffeine_title">Caffeine</string>
     <string name="tile_coin_flip_summary">Flip heads or tails instantly</string>
     <string name="tile_coin_flip_title">Coin Flip</string>
     <string name="tile_compass_summary">Cardinal directions and azimuth</string>
     <string name="tile_compass_title">Compass</string>
+    <string name="tile_reaction_test_summary">Test your visual reflexes with randomized delays</string>
+    <string name="tile_reaction_test_title">Reaction Test</string>
     <string name="tile_counter_summary">Increment a quick running count</string>
     <string name="tile_counter_title">Counter</string>
     <string name="tile_dice_roll_summary">Roll a six-sided die</string>
     <string name="tile_dice_roll_title">Dice Roll</string>
     <string name="tile_flash_dimmer_summary">Adjust flashlight brightness and access it from Quick Settings</string>
     <string name="tile_flash_dimmer_title">Flash Dimmer</string>
-    <string name="tile_music_search_summary">Identify music with a shortcut</string>
-    <string name="tile_music_search_title">Music Search</string>
     <string name="tile_preview_coin_result">Heads</string>
     <string name="tile_preview_compass_result">NE 45°</string>
     <string name="tile_preview_default_result">Preview coming soon</string>
@@ -67,8 +62,6 @@
     <string name="morse_error_empty">Enter a message</string>
     <string name="morse_error_length">Use 200 characters or fewer</string>
     <string name="morse_error_characters">Use letters A–Z, numbers, and spaces only</string>
-    <string name="tile_sound_mode_summary">Switch normal, vibrate, and silent modes</string>
-    <string name="tile_sound_mode_title">Sound Mode</string>
     <string name="tiles_add">Add</string>
     <string name="tiles_add_pre_android_13">Android 12 and older require adding tiles from Quick Settings edit mode.</string>
     <string name="tiles_add_result_added">Tile added to Quick Settings</string>
@@ -87,23 +80,16 @@
     <string name="tiles_filter_added">Added</string>
     <string name="tiles_filter_all">All tools</string>
     <string name="tiles_filter_empty">No tools match this filter yet.</string>
-    <string name="tiles_filter_needs_setup">Needs setup</string>
+    <string name="tiles_filter_not_added">Not added</string>
     <string name="tiles_filter_unsupported">Unsupported</string>
     <string name="tiles_how_to_add_summary">Tools with the Tile chip can be added to Quick Settings. Tap Add on Android 13 or newer, or open Quick Settings edit mode and drag App Toolkit tiles into your active panel.</string>
     <string name="tiles_how_to_add_title">Tile-ready tools</string>
+    <string name="tiles_no_tile_message">This tool has no Quick Settings tile yet.</string>
     <string name="tiles_setup">Setup</string>
-    <string name="tiles_setup_required_message">This tile needs more setup before it can be added.</string>
     <string name="tiles_status_added">Added</string>
     <string name="tiles_status_available">Available</string>
-    <string name="tiles_status_needs_setup">Needs setup</string>
+    <string name="tiles_status_not_added">Not added</string>
     <string name="tiles_status_unsupported">Unsupported</string>
-    <string name="tool_caffeine_10m" translatable="false">10m</string>
-    <string name="tool_caffeine_1h" translatable="false">1h</string>
-    <string name="tool_caffeine_30m" translatable="false">30m</string>
-    <string name="tool_caffeine_5m" translatable="false">5m</string>
-    <string name="tool_caffeine_infinite" translatable="false">Infinite</string>
-    <string name="tool_caffeine_off" translatable="false">Off</string>
-    <string name="tool_caffeine_remaining" translatable="false">Active: %1$s</string>
     <string name="tool_coin_flip_action">Flip coin</string>
     <string name="tool_coin_flip_waiting">Ready?</string>
     <string name="tool_counter_increment">Increment</string>
@@ -111,6 +97,21 @@
     <string name="tool_dialog_close_content_description">Close quick tool</string>
     <string name="tool_dice_roll_action">Roll die</string>
     <string name="tool_dice_roll_waiting">Roll</string>
+    <string name="tool_reaction_test_start">Start</string>
+    <string name="tool_reaction_test_in_progress">In progress…</string>
+    <string name="tool_reaction_test_try_again">Try again</string>
+    <string name="tool_reaction_test_idle_prompt">Tap Start when ready</string>
+    <string name="tool_reaction_test_waiting_prompt">Wait for green…</string>
+    <string name="tool_reaction_test_signal_prompt">TAP NOW!</string>
+    <string name="tool_reaction_test_too_early">Too early!</string>
+    <string name="tool_reaction_test_time_format" translatable="false">%1$d ms</string>
+    <string name="tool_reaction_test_best">Best: %1$d ms</string>
+    <string name="tool_reaction_test_average">Average: %1$d ms</string>
+    <string name="tool_reaction_test_round_progress">Round %1$d of %2$d</string>
+    <string name="tool_reaction_rating_lightning">Lightning ⚡</string>
+    <string name="tool_reaction_rating_fast">Fast 🚀</string>
+    <string name="tool_reaction_rating_average">Average 👍</string>
+    <string name="tool_reaction_rating_slow">Relaxed ☕</string>
     <string name="tool_generic_available_summary">This tool is ready for an expanded implementation and now has a Material preview so behavior can be validated before deeper integration.</string>
     <string name="tool_generic_setup_summary">This preview documents the intended behavior while keeping unavailable platform work clearly separated from live tile actions.</string>
     <string name="tool_material_colors_android_accent_1">Android accent 1</string>
@@ -120,6 +121,7 @@
     <string name="tool_material_colors_android_neutral_2">Android neutral 2</string>
     <string name="tool_material_colors_android_unavailable">Android Material You system palettes are available on Android 12 and newer.</string>
     <string name="tool_material_colors_app_scheme">App color scheme</string>
+    <string name="tool_material_colors_copied">Copied %1$s</string>
     <string name="tool_material_colors_description">Compare the current application color scheme with Android system accent and neutral palettes.</string>
     <string name="tool_material_colors_summary">Preview the app palette and Android Material You tonal colors</string>
     <string name="tool_material_colors_title">Material Colors</string>
@@ -127,12 +129,14 @@
     <string name="tool_status_added_title">Ready in Quick Settings</string>
     <string name="tool_status_available_summary">Try the in-app preview below or add the tile to Quick Settings when the Tile chip is shown.</string>
     <string name="tool_status_available_title">Ready to use</string>
-    <string name="tool_status_needs_setup_summary">This concept needs permissions, device support, or a fuller workflow before it can run as a live tile.</string>
-    <string name="tool_status_needs_setup_title">Setup required</string>
     <string name="tool_status_unsupported_summary">Android does not expose a safe public API for this action yet, so this entry is documented as a preview.</string>
     <string name="tool_status_unsupported_title">Preview only</string>
     <string name="tool_system_cycle_mode" translatable="false">Cycle Mode</string>
     <!-- Navigation -->
     <string name="tiles_title">Quick Tools</string>
+
+    <string name="tiles_qs_integration_title">Quick Settings tile</string>
+    <string name="tiles_qs_integration_summary_format">Use %1$s from your phone\'s Quick Settings without opening App Toolkit.</string>
+    <string name="tiles_add_to_qs">Add to Quick Settings</string>
 
 </resources>

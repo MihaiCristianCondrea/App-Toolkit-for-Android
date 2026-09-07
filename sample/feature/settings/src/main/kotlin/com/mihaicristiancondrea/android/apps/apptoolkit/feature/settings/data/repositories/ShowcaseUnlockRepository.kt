@@ -20,6 +20,7 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.data.r
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.datastore.data.local.DatastoreInterface
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.settings.BuildConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.analytics.logUnlockAchievement
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -51,6 +52,7 @@ class ShowcaseUnlockRepository(
                 message = "Components showcase unlocked",
                 attributes = mapOf("source" to "ShowcaseUnlockRepository"),
             )
+            firebaseController.logUnlockAchievement("showcase_unlocked")
             dataStore.saveComponentsShowcaseUnlocked(isUnlocked = true)
         }
     }

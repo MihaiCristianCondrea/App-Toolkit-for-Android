@@ -43,12 +43,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -56,10 +58,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.BottomBarItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.StableNavKey
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -123,10 +126,13 @@ fun <T : StableNavKey> LeftNavigationRail(
         ) {
             bottomItems.forEach { item: BottomBarItem<T> ->
                 val isSelected: Boolean = currentRoute == item.route
+                var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
+
                 NavigationRailItem(
                     modifier = Modifier.bounceClick(),
                     selected = isSelected,
                     onClick = {
+                        clickCount++
                         if (!isSelected) {
                             onBottomItemClick(item)
                         }
@@ -141,8 +147,11 @@ fun <T : StableNavKey> LeftNavigationRail(
                                 }
                             }
                         ) {
-                            Icon(
-                                imageVector = if (isSelected) item.selectedIcon else item.icon,
+                            AnimatedToolkitIcon(
+                                icon = item.icon,
+                                selectedIcon = item.selectedIcon,
+                                selected = isSelected,
+                                clickCount = clickCount,
                                 contentDescription = stringResource(item.title),
                                 modifier = Modifier
                                     .size(size = SizeConstants.TwentyFourSize)
@@ -168,12 +177,21 @@ fun <T : StableNavKey> LeftNavigationRail(
             }
             Spacer(modifier = Modifier.weight(weight = 1f))
             drawerItems.forEach { item: NavigationDrawerItem ->
+                val isSelected = false
+                var clickCount: Int by remember(item.route) { mutableIntStateOf(value = 0) }
+
                 NavigationRailItem(
-                    selected = false,
-                    onClick = { onDrawerItemClick(item) },
+                    selected = isSelected,
+                    onClick = {
+                        clickCount++
+                        onDrawerItemClick(item)
+                    },
                     icon = {
-                        Icon(
-                            imageVector = item.selectedIcon,
+                        AnimatedToolkitIcon(
+                            icon = item.icon,
+                            selectedIcon = item.selectedIcon,
+                            selected = isSelected,
+                            clickCount = clickCount,
                             contentDescription = stringResource(id = item.title),
                             modifier = Modifier
                                 .size(size = SizeConstants.TwentyFourSize)

@@ -54,11 +54,6 @@
         </service>
 
         <service
-            android:name="com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.CaffeineService"
-            android:exported="false"
-            android:foregroundServiceType="shortService" />
-
-        <service
             android:name="com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.FlashDimmerTileService"
             android:exported="true"
             android:icon="@drawable/ic_tile_flash_dimmer"

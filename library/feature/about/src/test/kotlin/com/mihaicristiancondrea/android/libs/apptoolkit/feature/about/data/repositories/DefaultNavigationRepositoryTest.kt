@@ -17,16 +17,19 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.data.repositories
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.TestDispatchers
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
+import kotlin.test.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
+
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DefaultNavigationRepositoryTest {
@@ -57,5 +60,26 @@ class DefaultNavigationRepositoryTest {
             ),
             items.map(NavigationDrawerItem::route)
         )
+    }
+
+    @Test
+    fun `settings and share entries use their animated icon for both states`() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        val repository = DefaultNavigationRepository(TestDispatchers(dispatcher))
+
+        val items = repository.getNavigationDrawerItems().first()
+        val settings = items.first { it.route == NavigationDrawerRoutes.ROUTE_SETTINGS }
+        val share = items.first { it.route == NavigationDrawerRoutes.ROUTE_SHARE }
+
+        assertEquals(
+            ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_settings),
+            settings.icon,
+        )
+        assertEquals(settings.icon, settings.selectedIcon)
+        assertEquals(
+            ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_share),
+            share.icon,
+        )
+        assertEquals(share.icon, share.selectedIcon)
     }
 }

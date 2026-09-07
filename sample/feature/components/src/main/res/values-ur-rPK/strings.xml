@@ -54,4 +54,8 @@
     <string name="components_action_menus">ایکشن مینیوز</string>
     <string name="components_action_menus_summary">اختیارات دکھانے کے لیے ٹیپ کریں</string>
     <string name="components_data_selection">ڈیٹا کا انتخاب</string>
+    <string name="components_section_animations">اینیمیشنز</string>
+    <string name="components_animation_restart">ٹیپ کرنے پر دوبارہ شروع کریں</string>
+    <string name="components_animation_reverse">ٹیپ کرنے پر الٹا چلائیں</string>
+    <string name="components_animation_preview_helper">اینیمیشن کا پیش نظارہ کرنے کے لیے کسی آئٹم پر ٹیپ کریں۔</string>
 </resources>

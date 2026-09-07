@@ -8,16 +8,15 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
 
 - `ToolkitTilesRepository`, which owns the source-neutral catalogue and coordinates current tile
   status with persisted category expansion preferences.
-- Local data sources for preferences, Quick Settings, sensors/display, ringer mode and music
-  search, haptics, caffeine-service control, and torch access.
-- `SensorRepository`, `BreathingRepository`, `CaffeineRepository`, `SystemRepository`,
-  `TorchRepository`, `MorseRepository`, and `SosRepository`, which remain the data-layer entry
-  points and own coordination or runtime state.
+- Local data sources for preferences, Quick Settings, sensors/display, haptics, and
+  torch access.
+- `SensorRepository`, `BreathingRepository`, `TorchRepository`, `MorseRepository`, and
+  `SosRepository`, which remain the data-layer entry points and own coordination or runtime state.
 - UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
   `toolkitTilesEntryBuilder`, and the Quick Settings services.
 - Localized Quick Tools strings and plurals.
-- Feature-owned manifest permissions for haptics, wake locks, flashlight access, and the caffeine
-  foreground service.
+- Feature-owned manifest permissions for haptics and flashlight access. The feature
+  declares no foreground service and no wake locks.
 
 ## Does not own
 
@@ -55,11 +54,11 @@ flowchart TD
     VM --> UiMap[Resource and artwork UI mappers]
     UiMap --> Screen
     Screen --> ToolVMs[Dedicated stateful tool ViewModels]
-    ToolVMs --> Repositories[Sensor / breathing / caffeine / system / torch repositories]
+    ToolVMs --> Repositories[Sensor / breathing / system / torch repositories]
     Repositories --> Sources[Feature-local Android data sources]
     Sos[SosRepository] --> Morse[MorseRepository single playback job]
     Morse --> Torch[TorchRepository shared state]
-    Services[Quick Settings and caffeine services] --> Repositories
+    Services[Quick Settings services] --> Repositories
 ```
 
 ## Architectural decisions
@@ -80,8 +79,8 @@ flowchart TD
 
 ## Internal implementations
 
-- Camera2 torch discovery/control, sensor sampling, haptics, caffeine-service control, Quick
-  Settings inspection, UI catalogue mapping, and tool composables.
+- Camera2 torch discovery/control, sensor sampling, haptics, Quick Settings inspection, UI
+  catalogue mapping, and tool composables.
 
 ## Source ownership and risks
 
@@ -106,3 +105,17 @@ The catalogue and status pass formerly lived in pass-through use cases. They rem
 work, while all Android resource and artwork mapping now happens in the UI layer. Stateful or
 platform-backed bottom-sheet tools retain dedicated ViewModels; the catalogue ViewModel owns only
 catalogue, filter, expansion, ad and add/setup state.
+
+### Quick Settings membership and Android versions
+
+`NotAdded` means an unpinned Quick Settings service on Android 13+, where the system add-tile
+request is supported. In-app sensor tools remain available. Older versions omit the add action and
+the filter, and retain the Tile-ready tools instructions for manually editing Quick Settings.
+The helper card reuses those localized instructions rather than describing missing tool functionality.
+
+Membership normalizes Android's custom tile component format. When secure settings are unavailable,
+system tile lifecycle callbacks and successful pin results supply locally recorded membership.
+The open tool sheet refreshes after pin requests.
+
+No tool here runs in the background. Every tool works while its sheet is open, which keeps the
+feature free of foreground services, wake locks, and the Play Console declarations they carry.

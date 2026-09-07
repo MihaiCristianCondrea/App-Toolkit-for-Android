@@ -4,8 +4,34 @@
 
 **Version:** `Unknown` (`unknown`)
 
+### Added
+
+- Added a Components animation playground with labelled and icon-only buttons for each bundled
+  animation, plus Restart and Reverse replay controls. Quick Tools now uses one reversible Grid
+  animation for both navigation states.
+
+- Added Reaction Test quick tool under Sensors & Measurement with randomized delays, false-start detection, session statistics, rating badges, and haptic feedback.
+- Added standard GA4 `view_item`, `view_item_list`, `share`, and `select_content` telemetry across Developer Apps and Quick Tools screens to support AdMob App Analytics Connection.
+
+### Removed
+
+- Removed the Sound Mode tool and its associated system repository, local ringer-mode data sources,
+  audio settings permission, and localized resources.
+- Removed the Caffeine tool and its Quick Settings service. Keeping the screen awake needed a
+  foreground service and a wake lock, and Android caps that service at about three minutes anyway.
+  The app no longer declares `WAKE_LOCK` or `FOREGROUND_SERVICE`.
+- Removed the Music Search tool. The feature moves to a different app.
+
 ### Improved
 
+- Added click-to-copy functionality to color swatches in the Material Colors tool.
+- Unified action-button behavior across dialogs, Quick Tools, and the component showcase, including
+  consistent click feedback and an accessible snackbar dismiss action.
+- Quick Tools that offer a Quick Settings tile you have not added now read "Not added" with a
+  neutral add icon, instead of "Needs setup" with a warning icon. Nothing about those tools needs
+  setting up: they run in the app, and adding their tile stays optional. The matching filter chip
+  reads "Not added" too.
+- Tools without a Quick Settings tile now say so plainly instead of claiming they need more setup.
 - Removed the Lux Meter tool and ambient light feature in favor to let Low Brightness have this feature.
 - Removed unused code from the app to have a smaller app.
 - Improved Components showcase labels and translations.
@@ -14,6 +40,8 @@
 
 ### Fixed
 
+- Prevented malformed home-screen widget action launches from crashing the Sample App.
+- Corrected Quick Tools setup status and Android-version support for adding Quick Settings tiles.
 - Fixed Sample App startup graph verification and navigation composition after modularization.
 - Fixed missing ad-placement and analytics-contract verification.
 - Fixed missing `VIBRATE` permission declaration for Toolkit Tiles.

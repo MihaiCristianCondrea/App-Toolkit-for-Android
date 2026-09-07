@@ -18,6 +18,7 @@
     <string name="about">সম্পর্কে</string>
     <string name="amoled_mode">AMOLED মোড</string>
     <string name="color_palette">রঙের প্যালেট</string>
+    <string name="content_description_more_options">আরও বিকল্প</string>
     <string name="dark_mode">ডার্ক মোড</string>
     <string name="dialog_info_language">আপনার পছন্দের ভাষার সাথে আপনার অভিজ্ঞতা ব্যক্তিগতকৃত করুন। আপনার করা যেকোনো ভাষা পরিবর্তন অবিলম্বে কার্যকর হয়, আপনার নির্বাচিত ভাষায় একটি নির্বিঘ্ন অভিজ্ঞতা নিশ্চিত করে।</string>
     <string name="dialog_info_startup">অ্যাপ্লিকেশন চালু করার পর ব্যবহারকারীদের কাছে উপস্থাপিত প্রাথমিক স্ক্রিনটি কনফিগার করে। এই সেটিংটি অ্যাপের সাথে ব্যবহারকারীর প্রথম মিথস্ক্রিয়াকে প্রভাবিত করে এবং নির্দিষ্ট ব্যবহারকারী গোষ্ঠী বা পণ্যের লক্ষ্যের সাথে সামঞ্জস্যপূর্ণ করা যেতে পারে।</string>

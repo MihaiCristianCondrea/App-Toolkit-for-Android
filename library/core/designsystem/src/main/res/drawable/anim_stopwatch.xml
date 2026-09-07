@@ -1,0 +1,65 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+            <path
+                android:name="40"
+                android:pathData="M 19.027 7.407 C 19.027 7.407 20.451 5.983 20.451 5.983 C 20.023 5.47 19.549 4.997 19.036 4.569 C 19.036 4.569 17.613 5.993 17.613 5.993 C 16.073 4.761 14.122 4.02 11.995 4.02 C 7.021 4.02 3 8.05 3 13.02 C 3 17.99 7.021 22.02 11.995 22.02 C 16.969 22.02 21 17.99 21 13.02 C 21 10.895 20.259 8.946 19.027 7.407 Z M 12 20.02 C 8.133 20.02 5 16.886 5 13.02 C 5 9.154 8.133 6.02 12 6.02 C 15.867 6.02 19 9.154 19 13.02 C 19 16.886 15.867 20.02 12 20.02 Z"
+                android:fillColor="#ffffff" />
+            <group android:name="stopwatch_hand" android:translateX="11.9688" android:translateY="13.1719">
+                <path
+                    android:name="42"
+                    android:pathData="M -1 0.848 C -1 0.848 1 0.848 1 0.848 C 1 0.848 1 -5.152 1 -5.152 C 1 -5.152 -1 -5.152 -1 -5.152 C -1 -5.152 -1 0.848 -1 0.848 Z"
+                    android:fillColor="#ffffff" />
+            </group>
+            <group android:name="stopwatch_button">
+                <path
+                    android:name="44"
+                    android:pathData="M 15 1.02 C 15 1.02 9 1.02 9 1.02 C 9 1.02 9 3.02 9 3.02 C 9 3.02 15 3.02 15 3.02 C 15 3.02 15 1.02 15 1.02 Z"
+                    android:fillColor="#ffffff" />
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <target android:name="stopwatch_hand">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="rotation"
+                android:valueFrom="0"
+                android:valueTo="360"
+                android:duration="1000"
+                android:valueType="floatType"
+                android:interpolator="@android:interpolator/fast_out_slow_in" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="stopwatch_button">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:duration="134"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:valueFrom="1"
+                    android:valueTo="0"
+                    android:duration="133"
+                    android:startOffset="134"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
+            </set>
+        </aapt:attr>
+    </target>
+
+</animated-vector>

@@ -18,10 +18,10 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.WarningAmber
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTilesFilterItem
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.ToolkitTilesFilter
@@ -41,9 +41,9 @@ fun ToolkitTilesFilter.Companion.items(): ImmutableList<ToolkitTilesFilterItem> 
         Icons.Outlined.CheckCircle
     ),
     ToolkitTilesFilterItem(
-        ToolkitTilesFilter.NeedsSetup,
-        R.string.tiles_filter_needs_setup,
-        Icons.Outlined.WarningAmber
+        ToolkitTilesFilter.NotAdded,
+        R.string.tiles_filter_not_added,
+        Icons.Outlined.AddCircleOutline
     ),
     ToolkitTilesFilterItem(
         ToolkitTilesFilter.Unsupported,

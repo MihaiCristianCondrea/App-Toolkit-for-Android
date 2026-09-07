@@ -57,7 +57,7 @@ private fun ToolkitTileData.toUiModel(): ToolkitTile {
 private fun String.categoryVisuals(): CategoryVisuals = when (this) {
     "sensors" -> CategoryVisuals(R.string.tiles_category_sensors, ToolkitTileIcon.Compass)
     "utilities" -> CategoryVisuals(R.string.tiles_category_utilities, ToolkitTileIcon.Dice)
-    "system" -> CategoryVisuals(R.string.tiles_category_system, ToolkitTileIcon.Sound)
+    "system" -> CategoryVisuals(R.string.tiles_category_system, ToolkitTileIcon.FlashDimmer)
     "wellbeing" -> CategoryVisuals(R.string.tiles_category_wellbeing, ToolkitTileIcon.Breathing)
     else -> error("Unknown Toolkit Tiles category: $this")
 }
@@ -73,6 +73,12 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
         R.string.tile_compass_title,
         R.string.tile_compass_summary,
         ToolkitTileIcon.Compass
+    )
+
+    ToolkitTileIds.REACTION_TEST -> TileVisuals(
+        R.string.tile_reaction_test_title,
+        R.string.tile_reaction_test_summary,
+        ToolkitTileIcon.Timer
     )
 
     ToolkitTileIds.COIN_FLIP -> TileVisuals(
@@ -99,28 +105,10 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
         ToolkitTileIcon.Palette
     )
 
-    ToolkitTileIds.MUSIC_SEARCH -> TileVisuals(
-        R.string.tile_music_search_title,
-        R.string.tile_music_search_summary,
-        ToolkitTileIcon.Music
-    )
-
     ToolkitTileIds.MORSE -> TileVisuals(
         R.string.tile_morse_title,
         R.string.tile_morse_summary,
         ToolkitTileIcon.Morse
-    )
-
-    ToolkitTileIds.CAFFEINE -> TileVisuals(
-        R.string.tile_caffeine_title,
-        R.string.tile_caffeine_summary,
-        ToolkitTileIcon.Caffeine
-    )
-
-    ToolkitTileIds.SOUND_MODE -> TileVisuals(
-        R.string.tile_sound_mode_title,
-        R.string.tile_sound_mode_summary,
-        ToolkitTileIcon.Sound
     )
 
     ToolkitTileIds.FLASH_DIMMER -> TileVisuals(
@@ -148,7 +136,7 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
 internal fun ToolkitTileStatus.helperTitleResId(): Int = when (this) {
     ToolkitTileStatus.Added -> R.string.tool_status_added_title
     ToolkitTileStatus.Available -> R.string.tool_status_available_title
-    ToolkitTileStatus.NeedsSetup -> R.string.tool_status_needs_setup_title
+    ToolkitTileStatus.NotAdded -> R.string.tiles_how_to_add_title
     ToolkitTileStatus.Unsupported -> R.string.tool_status_unsupported_title
 }
 
@@ -156,7 +144,7 @@ internal fun ToolkitTileStatus.helperTitleResId(): Int = when (this) {
 internal fun ToolkitTileStatus.helperSummaryResId(): Int = when (this) {
     ToolkitTileStatus.Added -> R.string.tool_status_added_summary
     ToolkitTileStatus.Available -> R.string.tool_status_available_summary
-    ToolkitTileStatus.NeedsSetup -> R.string.tool_status_needs_setup_summary
+    ToolkitTileStatus.NotAdded -> R.string.tiles_how_to_add_summary
     ToolkitTileStatus.Unsupported -> R.string.tool_status_unsupported_summary
 }
 

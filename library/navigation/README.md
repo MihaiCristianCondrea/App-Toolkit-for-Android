@@ -2,8 +2,8 @@
 
 ## Purpose
 
-Defines navigation models, route identifiers, repository contracts, back-stack operations, icons,
-and transition helpers shared by host and feature UI.
+Defines navigation models, route identifiers, repository contracts, back-stack operations, and
+transition helpers shared by host and feature UI.
 
 ## Owns
 
@@ -12,12 +12,13 @@ and transition helpers shared by host and feature UI.
 - Drawer route identifiers and the repository contract hosts implement to supply items.
 - Back-stack mutation helpers.
 - Shared activity and bottom-navigation transitions.
-- Navigation icon rendering.
+- Click and selection state for navigation icons; reusable AVD resources live in DesignSystem.
 - Bottom navigation, navigation rail, drawer-item content, and hide-on-scroll shell rendering.
 
 ## Does not own
 
 - Destination registration, owned by `:library:apptoolkit` and host composition roots.
+- The icon slot and its rendering, owned by [`:library:core:designsystem`](../core/designsystem/README.md).
 - The standard four-item drawer implementation, owned by `:library:feature:about` because its labels
   are feature resources.
 - Host-app routes and the root navigation graph, owned by `:sample`.
@@ -25,8 +26,8 @@ and transition helpers shared by host and feature UI.
 ## Depends on
 
 - [`:library:core:common`](../core/common/README.md) for shared sizing constants.
-- [`:library:core:designsystem`](../core/designsystem/README.md) for interaction feedback and global
-  UI preference values.
+- [`:library:core:designsystem`](../core/designsystem/README.md) for interaction feedback, global
+  UI preference values, and the `ToolkitIcon` slot navigation items expose.
 - Navigation 3, Compose, and immutable collections materially define the module's public role.
 
 ## Used by
@@ -63,18 +64,19 @@ flowchart TD
 - Destination type is data on the route contract. Back-stack helpers validate top-level navigation
   and suppress duplicate single-top entries.
 - This module owns shell rendering and mutation primitives but not destination registration; only
-  the host/facade composition roots know the complete feature set.
+  the host/toolkit composition roots know the complete feature set.
 - The standard drawer repository contract is host-facing, while its default localized item list
   remains in the About feature that owns those labels and actions.
 
 ## Public contracts
 
-- Navigation destination/item models, including `NavigationDrawerItem` and `BottomBarItem`.
+- Navigation destination/item models, including `NavigationDrawerItem` and `BottomBarItem`, whose
+  `icon` and `selectedIcon` are `ToolkitIcon` values. The `animatedIcon` constructor accepts a single
+  `ToolkitIcon.Animated` and uses it for both states, preserving Restart/Reverse behavior. See [the design system README](../core/designsystem/README.md#toolkit-icon-api).
 - `StableNavKey` and `AppToolkitNavKey` route implementations.
 - `NavigationDrawerRoutes` and `navigation.data.repositories.NavigationRepository`.
 - Back-stack action extensions and transition helpers.
-- `NavigationIcon`.
-- `BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerItemContent`, and
+- `BottomNavigationBar`, `LeftNavigationRail`, `NavigationDrawerItemContent`, `NavigationDrawerSheet`, and
   `HideOnScrollBottomBar`.
 
 ## Internal implementations

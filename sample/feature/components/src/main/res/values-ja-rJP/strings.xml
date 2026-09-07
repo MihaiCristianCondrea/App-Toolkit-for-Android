@@ -54,4 +54,8 @@
     <string name="components_action_menus">操作メニュー</string>
     <string name="components_action_menus_summary">タップしてオプションを表示</string>
     <string name="components_data_selection">データ選択</string>
+    <string name="components_section_animations">アニメーション</string>
+    <string name="components_animation_restart">タップで最初から再生</string>
+    <string name="components_animation_reverse">タップで逆再生</string>
+    <string name="components_animation_preview_helper">タップしてアニメーションをプレビューします。</string>
 </resources>

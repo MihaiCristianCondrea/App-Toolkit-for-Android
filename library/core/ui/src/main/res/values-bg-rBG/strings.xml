@@ -18,6 +18,7 @@
     <string name="about">Относно</string>
     <string name="amoled_mode">AMOLED режим</string>
     <string name="color_palette">Цветова палитра</string>
+    <string name="content_description_more_options">Още опции</string>
     <string name="dark_mode">Тъмен режим</string>
     <string name="dialog_info_language">Персонализирайте изживяването си с предпочитания език. Промените в езика се прилагат незабавно.</string>
     <string name="dialog_info_startup">Конфигурира началния екран, показван на потребителите при стартиране на приложението. Тази настройка може да се персонализира според специфични потребителски сегменти или продуктови цели.</string>

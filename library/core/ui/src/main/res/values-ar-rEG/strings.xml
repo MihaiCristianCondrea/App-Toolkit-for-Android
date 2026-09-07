@@ -18,6 +18,7 @@
     <string name="about">حول</string>
     <string name="amoled_mode">وضع AMOLED</string>
     <string name="color_palette">لوحة الألوان</string>
+    <string name="content_description_more_options">المزيد من الخيارات</string>
     <string name="dark_mode">الوضع الداكن</string>
     <string name="dialog_info_language">خصص تجربتك بلغتك المفضلة. أي تغييرات لغة تجريها تدخل حيز التنفيذ على الفور، مما يضمن تجربة سلسة بلغتك المختارة</string>
     <string name="dialog_info_startup">يقوم بتكوين الشاشة الأولية المقدمة للمستخدمين عند تشغيل التطبيق. يؤثر هذا الإعداد على التفاعل الأول للمستخدم مع التطبيق ويمكن تخصيصه لشرائح مستخدمين محددة أو أهداف المنتج.</string>

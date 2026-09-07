@@ -18,9 +18,11 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,8 +42,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
@@ -51,8 +51,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
@@ -63,6 +65,10 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ColorSwatchData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ColorTable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.copyTextToClipboard
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import java.util.Locale
 
 /** Full-height expanded tool that previews the current app and Android Material You palettes. */
@@ -107,12 +113,12 @@ fun MaterialColorsToolDialog(
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.weight(1f),
                 )
-                IconButton(onClick = onClose) {
-                    Icon(
-                        imageVector = Icons.Outlined.Close,
-                        contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
-                    )
-                }
+                GeneralButton(
+                    style = GeneralButtonStyle.Text,
+                    onClick = onClose,
+                    icon = ToolkitIcon.Vector(Icons.Outlined.Close),
+                    contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
+                )
             }
             LazyColumn(
                 modifier = Modifier.weight(1f),
@@ -123,7 +129,7 @@ fun MaterialColorsToolDialog(
                         text = stringResource(id = R.string.tool_material_colors_description),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+                )
                 }
                 item {
                     ColorTableCard(table = appColorTable)
@@ -203,11 +209,27 @@ private fun ColorSwatch(
     color: Color,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    val hexString = color.toHexString()
+    val copiedMessage = stringResource(id = R.string.tool_material_colors_copied, hexString)
     val contentColor = if (color.luminance() > 0.5f) Color.Black else Color.White
     Box(
         modifier = modifier
             .height(ColorSwatchHeight)
-            .background(color = color, shape = RoundedCornerShape(SizeConstants.SmallSize))
+            .clip(RoundedCornerShape(SizeConstants.SmallSize))
+            .background(color = color)
+            .clickable {
+                context.copyTextToClipboard(
+                    label = name,
+                    text = hexString,
+                ) {
+                    Toast.makeText(
+                        context,
+                        copiedMessage,
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
             .padding(SizeConstants.SmallSize),
         contentAlignment = Alignment.TopStart,
     ) {
@@ -218,7 +240,7 @@ private fun ColorSwatch(
                 color = contentColor,
             )
             Text(
-                text = color.toHexString(),
+                text = hexString,
                 style = MaterialTheme.typography.labelSmall,
                 color = contentColor,
             )

@@ -188,9 +188,9 @@ class DefaultBillingRepository private constructor(
                 .setPurchaseToken(purchase.purchaseToken)
                 .build()
             val result = retryBillingCall(RetryStrategy.Exponential()) {
-                suspendCancellableCoroutine { continuation ->
+                awaitBillingCallback { complete ->
                     billingClient.consumeAsync(params) { billingResult: BillingResult, _: String? ->
-                        continuation.resume(BillingCallResult(billingResult, Unit))
+                        complete(BillingCallResult(billingResult, Unit))
                     }
                 }
             }
@@ -212,9 +212,9 @@ class DefaultBillingRepository private constructor(
                 .setProductType(BillingClient.ProductType.INAPP)
                 .build()
             val result = retryBillingCall(RetryStrategy.Exponential()) {
-                suspendCancellableCoroutine { continuation ->
+                awaitBillingCallback { complete ->
                     billingClient.queryPurchasesAsync(params) { billingResult, purchasesList ->
-                        continuation.resume(BillingCallResult(billingResult, purchasesList))
+                        complete(BillingCallResult(billingResult, purchasesList))
                     }
                 }
             }
@@ -238,9 +238,9 @@ class DefaultBillingRepository private constructor(
                 .setProductList(products)
                 .build()
             val callResult = retryBillingCall(RetryStrategy.Simple()) {
-                suspendCancellableCoroutine { continuation ->
+                awaitBillingCallback { complete ->
                     billingClient.queryProductDetailsAsync(params) { billingResult, result ->
-                        continuation.resume(BillingCallResult(billingResult, result))
+                        complete(BillingCallResult(billingResult, result))
                     }
                 }
             }

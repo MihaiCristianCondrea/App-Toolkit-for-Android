@@ -37,12 +37,11 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.vi
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTonalButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 
@@ -79,15 +78,15 @@ fun ButtonShowcase(
                 )
                 GeneralButton(
                     label = stringResource(id = R.string.components_button_primary),
-                    vectorIcon = Icons.Outlined.StarOutline,
-                    iconContentDescription = iconContentDescription,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
+                    contentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "primary_icon"),
                 )
                 GeneralButton(
-                    vectorIcon = Icons.Outlined.StarOutline,
-                    iconContentDescription = iconContentDescription,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
+                    contentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "primary_icon_only"),
@@ -107,23 +106,26 @@ fun ButtonShowcase(
                 horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
                 verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
             ) {
-                GeneralTonalButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Tonal,
                     label = stringResource(id = R.string.components_button_tonal),
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "tonal"),
                 )
-                GeneralTonalButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Tonal,
                     label = stringResource(id = R.string.components_button_tonal),
-                    vectorIcon = Icons.Outlined.Favorite,
-                    iconContentDescription = iconContentDescription,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
+                    contentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "tonal_icon"),
                 )
-                GeneralTonalButton(
-                    vectorIcon = Icons.Outlined.Favorite,
-                    iconContentDescription = iconContentDescription,
+                GeneralButton(
+                    style = GeneralButtonStyle.Tonal,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
+                    contentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "tonal_icon_only"),
@@ -143,23 +145,26 @@ fun ButtonShowcase(
                 horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
                 verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
             ) {
-                GeneralOutlinedButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Outlined,
                     label = stringResource(id = R.string.components_button_outlined),
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "outlined"),
                 )
-                GeneralOutlinedButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Outlined,
                     label = stringResource(id = R.string.components_button_outlined),
-                    vectorIcon = Icons.Outlined.StarOutline,
-                    iconContentDescription = iconContentDescription,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
+                    contentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "outlined_icon"),
                 )
-                GeneralOutlinedButton(
-                    vectorIcon = Icons.Outlined.StarOutline,
-                    iconContentDescription = iconContentDescription,
+                GeneralButton(
+                    style = GeneralButtonStyle.Outlined,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.StarOutline),
+                    contentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "outlined_icon_only"),
@@ -179,29 +184,32 @@ fun ButtonShowcase(
                 horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
                 verticalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
             ) {
-                GeneralTextButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Text,
                     label = stringResource(id = R.string.components_button_text),
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "text"),
                 )
-                GeneralTextButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Text,
                     label = stringResource(id = R.string.components_button_text),
-                    vectorIcon = Icons.Outlined.Favorite,
-                    iconContentDescription = iconContentDescription,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
+                    contentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "text_icon"),
                 )
-                GeneralTextButton(
-                    vectorIcon = Icons.Outlined.Favorite,
-                    iconContentDescription = iconContentDescription,
+                GeneralButton(
+                    style = GeneralButtonStyle.Text,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Favorite),
+                    contentDescription = iconContentDescription,
                     onClick = {},
                     firebaseController = firebaseController,
                     ga4Event = onLogEvent("button", "text_icon_only"),
                 )
                 AnimatedIconButtonDirection(
-                    icon = Icons.Filled.MoreVert,
+                    icon = ToolkitIcon.Vector(imageVector = Icons.Filled.MoreVert),
                     contentDescription = iconContentDescription,
                     onClick = {},
                     fromRight = true,

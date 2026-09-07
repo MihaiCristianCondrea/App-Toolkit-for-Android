@@ -19,7 +19,17 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.mode
 
 import kotlinx.collections.immutable.ImmutableList
 
-enum class ToolkitTileStatus { Added, Available, NeedsSetup, Unsupported }
+/**
+ * How a tool relates to the Quick Settings panel.
+ *
+ * - [Added]: the tool's tile is already in the active panel.
+ * - [Available]: the tool runs in the app. It either has no Quick Settings tile, or this device
+ *   cannot be asked to add one.
+ * - [NotAdded]: the tool has a tile that is not in the panel. Adding it is optional; the tool works
+ *   in the app either way.
+ * - [Unsupported]: Android exposes no public API for the action, so the entry is documented only.
+ */
+enum class ToolkitTileStatus { Added, Available, NotAdded, Unsupported }
 
 enum class ToolkitToolKind { Quick, Expanded }
 

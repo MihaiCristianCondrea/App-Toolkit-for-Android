@@ -18,15 +18,11 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.states
 
 import androidx.compose.runtime.Immutable
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.platform.UiTextHelper
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class MainUiState(
-    val showSnackbar: Boolean = false,
-    val snackbarMessage: UiTextHelper = UiTextHelper.DynamicString(""),
-    val showDialog: Boolean = false,
-    val navigationDrawerItems: ImmutableList<NavigationDrawerItem> = persistentListOf()
+    val navigationDrawerItems: ImmutableList<NavigationDrawerItem> = persistentListOf(),
 )

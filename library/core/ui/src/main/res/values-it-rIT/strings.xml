@@ -18,6 +18,7 @@
     <string name="about">Informazioni</string>
     <string name="amoled_mode">Modalità AMOLED</string>
     <string name="color_palette">Palette colori</string>
+    <string name="content_description_more_options">Più opzioni</string>
     <string name="dark_mode">Modalità scura</string>
     <string name="dialog_info_language">Personalizza la tua esperienza con la lingua preferita. Le modifiche alla lingua avranno effetto immediato.</string>
     <string name="dialog_info_startup">Configura la schermata iniziale presentata agli utenti al momento dell\'apertura dell\'app. Questa impostazione influenza la prima interazione degli utenti con l\'app.</string>

@@ -17,8 +17,6 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dialogs
 
-import android.view.SoundEffectConstants
-import android.view.View
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -34,19 +32,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.hapticfeedback.HapticFeedback
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
 /**
  * Full-screen dialog shell with a top app bar, close action, confirm action, and scrollable body.
@@ -69,9 +63,6 @@ fun BasicFullScreenDialog(
     confirmButtonText: String = stringResource(id = android.R.string.ok),
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
-
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
@@ -84,19 +75,19 @@ fun BasicFullScreenDialog(
         Scaffold(
             modifier = Modifier.fillMaxSize(), topBar = {
                 CenterAlignedTopAppBar(navigationIcon = {
-                    GeneralTextButton(
+                    GeneralButton(
+                        style = GeneralButtonStyle.Text,
                         onClick = onDismiss,
-                        vectorIcon = Icons.Filled.Close,
-                        iconContentDescription = title
+                        icon = ToolkitIcon.Vector(imageVector = Icons.Filled.Close),
+                        contentDescription = title
                     )
                 }, title = { Text(text = title) }, actions = {
-                    TextButton(modifier = Modifier.bounceClick(), onClick = {
-                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                        hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                        onConfirm()
-                    }, enabled = confirmEnabled) {
-                        Text(confirmButtonText)
-                    }
+                    GeneralButton(
+                        style = GeneralButtonStyle.Text,
+                        onClick = onConfirm,
+                        enabled = confirmEnabled,
+                        label = confirmButtonText,
+                    )
                 })
             }) { innerPadding: PaddingValues ->
             Column(

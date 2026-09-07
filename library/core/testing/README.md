@@ -26,7 +26,7 @@ on production runtime classpaths.
 ## Used by
 
 Production modules add this module through `testImplementation`; it is intentionally absent from
-`:library:apptoolkit`'s runtime facade.
+`:library:apptoolkit`'s runtime dependencies.
 
 ## Flow chart
 

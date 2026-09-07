@@ -18,6 +18,7 @@
     <string name="about">Hakkında</string>
     <string name="amoled_mode">AMOLED modu</string>
     <string name="color_palette">Renk paleti</string>
+    <string name="content_description_more_options">Daha Fazla Seçenekler</string>
     <string name="dark_mode">Koyu mod</string>
     <string name="dialog_info_language">Tercih ettiğiniz dille deneyiminizi kişiselleştirin</string>
     <string name="dialog_info_startup">Uygulamanın açılışında kullanıcılara sunulan başlangıç ekranını yapılandırır.</string>

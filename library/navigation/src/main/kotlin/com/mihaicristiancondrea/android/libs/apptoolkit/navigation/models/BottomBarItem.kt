@@ -17,8 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 
 /**
  * Represents an item rendered in bottom navigation surfaces (bottom bar and navigation rail).
@@ -32,9 +34,56 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @Immutable
 data class BottomBarItem<T : StableNavKey>(
     val route: T,
-    val icon: ImageVector,
-    val selectedIcon: ImageVector,
+    val icon: ToolkitIcon,
+    val selectedIcon: ToolkitIcon,
     val title: Int,
     val badgeText: String = "",
-)
+) {
+    /** Uses one animation for both states; its replay mode controls repeated clicks. */
+    constructor(
+        route: T,
+        animatedIcon: ToolkitIcon.Animated,
+        title: Int,
+        badgeText: String = "",
+    ) : this(
+        route = route,
+        icon = animatedIcon,
+        selectedIcon = animatedIcon,
+        title = title,
+        badgeText = badgeText,
+    )
 
+    /**
+     * Secondary constructor for Compose [ImageVector] icons.
+     */
+    constructor(
+        route: T,
+        icon: ImageVector,
+        selectedIcon: ImageVector,
+        title: Int,
+        badgeText: String = "",
+    ) : this(
+        route = route,
+        icon = ToolkitIcon.Vector(icon),
+        selectedIcon = ToolkitIcon.Vector(selectedIcon),
+        title = title,
+        badgeText = badgeText,
+    )
+
+    /**
+     * Secondary constructor for drawable or vector resource ID icons.
+     */
+    constructor(
+        route: T,
+        @DrawableRes iconResId: Int,
+        @DrawableRes selectedIconResId: Int,
+        title: Int,
+        badgeText: String = "",
+    ) : this(
+        route = route,
+        icon = ToolkitIcon.Resource(iconResId),
+        selectedIcon = ToolkitIcon.Resource(selectedIconResId),
+        title = title,
+        badgeText = badgeText,
+    )
+}

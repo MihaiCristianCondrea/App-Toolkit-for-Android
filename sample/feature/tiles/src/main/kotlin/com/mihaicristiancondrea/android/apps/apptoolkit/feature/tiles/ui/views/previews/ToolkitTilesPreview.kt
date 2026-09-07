@@ -55,7 +55,7 @@ fun ToolkitTilesScreenPreview() {
                         titleResId = android.R.string.unknownName,
                         summaryResId = android.R.string.unknownName,
                         icon = ToolkitTileIcon.Compass,
-                        status = ToolkitTileStatus.NeedsSetup
+                        status = ToolkitTileStatus.NotAdded
                     )
                 ),
             )

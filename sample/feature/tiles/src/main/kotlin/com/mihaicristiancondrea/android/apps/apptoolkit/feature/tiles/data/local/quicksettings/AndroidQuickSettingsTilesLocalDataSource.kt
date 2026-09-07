@@ -18,19 +18,35 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings
 
 import android.content.Context
+import android.content.ComponentName
+import android.os.Build
 import android.provider.Settings
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
 
 class AndroidQuickSettingsTilesLocalDataSource(
     private val context: Context,
 ) : QuickSettingsTilesLocalDataSource {
-    override fun activeTileComponents(): Set<String> = try {
-        Settings.Secure.getString(context.contentResolver, SYSUI_QS_TILES)
-            .orEmpty()
-            .split(',')
-            .filterTo(mutableSetOf(), String::isNotBlank)
+    override val supportsAddTileRequest: Boolean
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+
+    private val addedTiles = context.getSharedPreferences("quick_settings_tiles", Context.MODE_PRIVATE)
+
+    fun recordTileAdded(component: ComponentName, added: Boolean) {
+        addedTiles.edit().putBoolean(component.flattenToString(), added).apply()
+    }
+
+    override fun activeTileComponents(): Set<String> = readSystemTiles()
+        ?: addedTiles.all.filterValues { it == true }.keys
+
+    private fun readSystemTiles(): Set<String>? = try {
+        Settings.Secure.getString(context.contentResolver, SYSUI_QS_TILES)?.let { specs ->
+            specs.split(',').mapNotNull { spec ->
+                val component = spec.trim().removePrefix("custom(").removeSuffix(")")
+                ComponentName.unflattenFromString(component)?.flattenToString()
+            }.toSet()
+        }
     } catch (_: SecurityException) {
-        emptySet()
+        null
     }
 
     override fun componentName(requestKey: String): String? =

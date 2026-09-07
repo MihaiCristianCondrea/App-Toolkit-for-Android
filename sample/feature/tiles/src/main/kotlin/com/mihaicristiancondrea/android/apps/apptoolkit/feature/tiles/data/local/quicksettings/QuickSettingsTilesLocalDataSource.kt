@@ -18,6 +18,8 @@
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings
 
 interface QuickSettingsTilesLocalDataSource {
+    val supportsAddTileRequest: Boolean
+
     fun activeTileComponents(): Set<String>
 
     fun componentName(requestKey: String): String?

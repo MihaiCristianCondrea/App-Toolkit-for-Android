@@ -25,7 +25,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -57,7 +57,8 @@ fun DatePickerDialog(onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
             }
         }, label = stringResource(id = android.R.string.ok))
     }, dismissButton = {
-        GeneralOutlinedButton(
+        GeneralButton(
+            style = GeneralButtonStyle.Outlined,
             onClick = onDismiss,
             label = stringResource(id = android.R.string.cancel),
         )

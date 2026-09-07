@@ -27,12 +27,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
 /**
  * Reusable alert dialog with optional icon, custom body content, and confirm/dismiss actions.
@@ -92,7 +91,8 @@ fun BasicAlertDialog(
         )
     }, dismissButton = {
         if (showDismissButton) {
-            GeneralOutlinedButton(
+            GeneralButton(
+                style = GeneralButtonStyle.Outlined,
                 onClick = onCancel,
                 enabled = dismissEnabled,
                 label = dismissButtonText ?: stringResource(id = android.R.string.cancel),

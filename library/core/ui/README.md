@@ -13,6 +13,9 @@ entry helpers, state handling, analytics hooks, and shared components.
   adaptive-window helpers.
 - Render models such as `AppVersionInfo` and `AdsConfig`.
 - The shared theme-mode preview composables used by both the onboarding and settings theme UI.
+- The single adaptive `GeneralButton` and FAB icon slots accept `ToolkitIcon`, including bundled Lottie icons.
+  FAB ImageVector/custom-content overloads remain compatible; rendering and playback are delegated
+  to `core:designsystem`, while buttons retain feedback and analytics ownership.
 
 ## Does not own
 
@@ -27,7 +30,8 @@ entry helpers, state handling, analytics hooks, and shared components.
   helpers.
 - [`:library:core:datastore`](../datastore/README.md) for remaining persistence-backed UI adapters;
   reusable modifiers and ad slots consume design-system-provided values rather than DataStore.
-- [`:library:core:designsystem`](../designsystem/README.md) for theme primitives.
+- [`:library:core:designsystem`](../designsystem/README.md) for theme primitives and the
+  `ToolkitIcon` slot the buttons render.
 - [`:library:navigation`](../../navigation/README.md) for shared navigation models and transitions.
 
 ## Used by
@@ -67,7 +71,18 @@ flowchart TD
 - Global UI preferences arrive through the design-system root. Reusable components must not start
   their own persistence collectors unless a documented adapter still requires it.
 
+## Compatibility adapters
+
+The existing startupDestinationFlow extension delegates to core DataStore's generic startupValueFlow.
+The existing getVersionInfo extension delegates to core common's getVersionMetadata and returns the
+unchanged AppVersionInfo class. Their original packages, function signatures, and JVM file names
+remain available; data-layer callers should use the lower-level APIs.
+
 ## Public contracts
+
+- `GeneralButton` is the action-button entry point for all five styles and labelled/icon-only content.
+  See the [3.0 button contract and migration](../designsystem/README.md#generalbutton-30).
+
 
 - All new ViewModels must extend `ScreenViewModel`, or `LoggedScreenViewModel` when Firebase
   breadcrumbs/error reporting are required.
@@ -78,6 +93,9 @@ flowchart TD
   `runCatching` in ViewModels.
 - Shared navigation types, state/render models, reusable composables, lifecycle effects, and
   analytics APIs are intentional cross-module contracts.
+- Every button takes its icon as a single `ToolkitIcon`, so a button can carry a Compose icon, a
+  drawable resource, or an animated vector that plays on each click. See
+  [the design system README](../designsystem/README.md#toolkit-icon-api).
 
 ## Internal implementations
 

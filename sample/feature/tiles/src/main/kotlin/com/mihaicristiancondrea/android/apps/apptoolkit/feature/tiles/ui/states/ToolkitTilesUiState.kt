@@ -36,7 +36,9 @@ data class ToolkitTilesUiState(
 enum class ToolkitTilesFilter {
     All,
     Added,
-    NeedsSetup,
+
+    /** Tools whose Quick Settings tile is not in the panel. Adding it is optional. */
+    NotAdded,
     Unsupported;
 
     // Not redundant despite reading as an empty body: `ToolkitTilesFilterMappers.items()` is

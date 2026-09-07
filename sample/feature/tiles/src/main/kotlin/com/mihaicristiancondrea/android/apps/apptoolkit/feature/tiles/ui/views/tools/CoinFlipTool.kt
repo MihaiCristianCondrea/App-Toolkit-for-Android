@@ -53,7 +53,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 
 @Composable
@@ -114,7 +116,7 @@ fun CoinFlipTool(isHeads: Boolean, flipRequest: Int, onFlip: () -> Unit) {
                 }
             },
             enabled = !flipping,
-            vectorIcon = Icons.Outlined.PlayArrow,
+            icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.PlayArrow),
             label = stringResource(id = R.string.tool_coin_flip_action),
         )
 

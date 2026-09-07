@@ -21,5 +21,5 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.base.handling.Ac
 
 sealed interface ToolkitTilesAction : ActionEvent {
     data class RequestAddTile(val requestKey: String) : ToolkitTilesAction
-    data object ShowSetupRequiredMessage : ToolkitTilesAction
+    data object ShowNoTileMessage : ToolkitTilesAction
 }

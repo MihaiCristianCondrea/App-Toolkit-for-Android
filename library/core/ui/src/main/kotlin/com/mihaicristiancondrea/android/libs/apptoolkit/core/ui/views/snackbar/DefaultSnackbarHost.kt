@@ -17,16 +17,10 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.snackbar
 
-import android.view.SoundEffectConstants
-import android.view.View
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
@@ -36,13 +30,12 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.hapticfeedback.HapticFeedback
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.CustomSnackbarVisuals
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
 /**
  * Material 3 [SnackbarHost] tailored for [CustomSnackbarVisuals].
@@ -56,8 +49,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun DefaultSnackbarHost(snackbarState: SnackbarHostState, modifier: Modifier = Modifier) {
-    val hapticFeedback: HapticFeedback = LocalHapticFeedback.current
-    val view: View = LocalView.current
     SnackbarHost(hostState = snackbarState, modifier = modifier) { snackbarData: SnackbarData ->
         (snackbarData.visuals as? CustomSnackbarVisuals)?.let { visuals: CustomSnackbarVisuals ->
             val isError: Boolean = visuals.isError
@@ -66,18 +57,13 @@ fun DefaultSnackbarHost(snackbarState: SnackbarHostState, modifier: Modifier = M
                 containerColor = if (isError) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.inverseSurface,
                 contentColor = if (isError) MaterialTheme.colorScheme.error else SnackbarDefaults.contentColor,
                 action = {
-                    IconButton(onClick = {
-                        view.playSoundEffect(SoundEffectConstants.CLICK)
-                        hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.ContextClick)
-                        snackbarData.dismiss()
-                    }, modifier = modifier.bounceClick(), shapes = IconButtonDefaults.shapes()) {
-                        Icon(
-                            modifier = Modifier.size(size = SizeConstants.ButtonIconSize),
-                            imageVector = Icons.Outlined.Close,
-                            contentDescription = null,
-                            tint = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                    GeneralButton(
+                        style = GeneralButtonStyle.Text,
+                        onClick = snackbarData::dismiss,
+                        icon = ToolkitIcon.Vector(Icons.Outlined.Close),
+                        contentDescription = stringResource(android.R.string.cancel),
+                        contentColor = if (isError) MaterialTheme.colorScheme.error else SnackbarDefaults.contentColor,
+                    )
                 }) {
                 Text(text = visuals.message)
             }

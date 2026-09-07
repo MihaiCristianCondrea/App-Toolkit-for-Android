@@ -72,6 +72,12 @@ flowchart TD
 - Ad interleaving and action/chip models are presentation transformations and remain outside the
   source-neutral repositories.
 
+## Installed-package metadata
+
+AndroidInstalledAppsLocalDataSource shares core common's getVersionMetadata lookup with Issue
+Reporter, then maps into the feature's existing AppVersionInfo. Blank names, package visibility,
+and unavailable version behavior are unchanged; the feature still owns install-state decisions.
+
 ## Public contracts
 
 - The three repositories, `AppsListViewModel`, `appsListEntryBuilder`, `AppInfo`/`AppSummary`/

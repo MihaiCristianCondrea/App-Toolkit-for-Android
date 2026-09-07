@@ -54,4 +54,8 @@
     <string name="components_action_menus">অ্যাকশন মেনু</string>
     <string name="components_action_menus_summary">বিকল্প দেখাতে ট্যাপ করুন</string>
     <string name="components_data_selection">ডেটা নির্বাচন</string>
+    <string name="components_section_animations">অ্যানিমেশন</string>
+    <string name="components_animation_restart">ট্যাপ করলে আবার শুরু</string>
+    <string name="components_animation_reverse">ট্যাপ করলে উল্টো চালান</string>
+    <string name="components_animation_preview_helper">অ্যানিমেশন প্রাকদর্শন করতে একটি আইটেমে ট্যাপ করুন।</string>
 </resources>

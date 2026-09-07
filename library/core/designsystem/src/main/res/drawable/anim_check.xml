@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:height="12.0dip"
+            android:width="12.0dip"
+            android:viewportWidth="12.0"
+            android:viewportHeight="12.0">
+            <group android:name="check">
+                <path
+                    android:name="tick"
+                    android:pathData="m0.6,7.1 l3.1,3.1 l8,-8"
+                    android:strokeColor="@android:color/white"
+                    android:strokeWidth="1.5" />
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="tick">
+        <aapt:attr name="android:animation">
+            <set
+                android:interpolator="@android:anim/accelerate_interpolator"
+                android:shareInterpolator="false"
+                android:ordering="sequentially">
+                <objectAnimator
+                    android:duration="250"
+                    android:valueFrom="m0.6,7.1 l0,0 l0,0"
+                    android:valueTo="m0.6,7.1 l3.1,3.1 l0,0"
+                    android:valueType="pathType"
+                    android:propertyName="pathData" />
+                <objectAnimator
+                    android:duration="350"
+                    android:valueFrom="m0.6,7.1 l3.1,3.1 l0,0"
+                    android:valueTo="m0.6,7.1 l3.1,3.1 l8,-8"
+                    android:valueType="pathType"
+                    android:propertyName="pathData" />
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>

@@ -137,15 +137,18 @@ class OnboardingViewModelTest {
         }
 
     @Test
-    fun `completeOnboarding sets completion state`() = runTest(dispatcherExtension.testDispatcher) {
+    fun `completeOnboarding sets completion state and logs tutorial_complete`() = runTest(dispatcherExtension.testDispatcher) {
         val repository = FakeOnboardingRepository()
         val viewModel = createViewModel(repository)
+
+        assertThat(firebaseController.loggedEvents.map { it.name }).contains("tutorial_begin")
 
         viewModel.onEvent(OnboardingEvent.CompleteOnboarding)
         advanceUntilIdle()
 
         assertThat(repository.completed).isTrue()
         assertThat(viewModel.uiState.value.data?.isOnboardingCompleted).isTrue()
+        assertThat(firebaseController.loggedEvents.map { it.name }).contains("tutorial_complete")
     }
 
     /** Finishing is the only way out of onboarding, so a failure has to say something. */

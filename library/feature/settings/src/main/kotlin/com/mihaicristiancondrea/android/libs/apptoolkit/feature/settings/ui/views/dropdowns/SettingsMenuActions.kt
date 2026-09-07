@@ -31,8 +31,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.HelpActivity
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.context.openActivity
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.AnimatedIconButtonDirection
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.dropdown.CommonDropdownMenuItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as AboutR
@@ -58,8 +60,8 @@ fun SettingsMenuActions() {
     AnimatedIconButtonDirection(
         modifier = Modifier.graphicsLayer { rotationZ = rotation },
         fromRight = true,
-        contentDescription = null,
-        icon = Icons.Default.MoreVert,
+        contentDescription = stringResource(id = R.string.content_description_more_options),
+        icon = com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon.Vector(Icons.Default.MoreVert),
         onClick = { showMenu.value = true },
     )
 

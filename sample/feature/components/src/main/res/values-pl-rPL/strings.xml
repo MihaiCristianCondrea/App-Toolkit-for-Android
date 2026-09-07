@@ -54,4 +54,8 @@
     <string name="components_action_menus">Menu działań</string>
     <string name="components_action_menus_summary">Dotknij, aby wyświetlić opcje</string>
     <string name="components_data_selection">Wybór danych</string>
+    <string name="components_section_animations">Animacje</string>
+    <string name="components_animation_restart">Uruchom ponownie po dotknięciu</string>
+    <string name="components_animation_reverse">Odwróć po dotknięciu</string>
+    <string name="components_animation_preview_helper">Dotknij elementu, aby wyświetlić podgląd jego animacji.</string>
 </resources>

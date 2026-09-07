@@ -21,6 +21,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.parcelize)
+    id("com.mihaicristiancondrea.android.apptoolkit.unit-test")
     id("com.mihaicristiancondrea.android.apptoolkit.versioning")
     id("com.mihaicristiancondrea.android.apptoolkit.jvm-target")
     id("com.mihaicristiancondrea.android.apptoolkit.library-publish")
@@ -42,6 +43,7 @@ android {
 }
 
 dependencies {
+    testImplementation(project(":library:core:testing"))
     api(project(":library:core:common"))
     api(project(":library:core:designsystem"))
 

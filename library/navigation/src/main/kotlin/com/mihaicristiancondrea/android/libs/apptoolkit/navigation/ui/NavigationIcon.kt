@@ -16,29 +16,3 @@
  */
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.navigation.ui
-
-import androidx.compose.material3.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-
-sealed class NavigationIcon {
-    data class Vector(val imageVector: ImageVector) : NavigationIcon()
-}
-
-@Composable
-fun NavigationIconView(
-    icon: NavigationIcon,
-    contentDescription: String?,
-    modifier: Modifier = Modifier,
-) {
-    when (icon) {
-        is NavigationIcon.Vector -> {
-            Icon(
-                imageVector = icon.imageVector,
-                contentDescription = contentDescription,
-                modifier = modifier,
-            )
-        }
-    }
-}

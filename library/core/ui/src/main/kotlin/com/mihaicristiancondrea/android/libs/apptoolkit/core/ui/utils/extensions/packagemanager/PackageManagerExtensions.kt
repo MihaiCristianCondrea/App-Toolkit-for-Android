@@ -18,33 +18,12 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.utils.extensions.packagemanager
 
 import android.content.pm.PackageManager
-import android.os.Build
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.extensions.packagemanager.getVersionMetadata
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.AppVersionInfo
 
 /**
- * Returns version metadata for [packageName], or `null` when unavailable (not installed, not visible, or error).
+ * Returns version metadata for [packageName], or null when unavailable.
+ * Retained for hosts using the UI model; platform consumers can use [getVersionMetadata] directly.
  */
 fun PackageManager.getVersionInfo(packageName: String): AppVersionInfo? =
-    runCatching {
-        val packageInfo = getPackageInfoCompat(packageName)
-
-        val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            packageInfo.longVersionCode
-        } else {
-            @Suppress("DEPRECATION")
-            packageInfo.versionCode.toLong()
-        }
-
-        AppVersionInfo(
-            versionName = packageInfo.versionName,
-            versionCode = versionCode,
-        )
-    }.getOrNull()
-
-private fun PackageManager.getPackageInfoCompat(packageName: String) =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0L))
-    } else {
-        @Suppress("DEPRECATION")
-        getPackageInfo(packageName, 0)
-    }
+    getVersionMetadata(packageName)?.let { AppVersionInfo(it.versionName, it.versionCode) }

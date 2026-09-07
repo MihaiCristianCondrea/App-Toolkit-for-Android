@@ -20,22 +20,22 @@ package com.mihaicristiancondrea.android.apps.apptoolkit.app.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.EventNote
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Widgets
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.mihaicristiancondrea.android.apps.apptoolkit.BuildConfig
 import com.mihaicristiancondrea.android.apps.apptoolkit.core.shell.ui.navigation.NavigationItemsProvider
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.data.repositories.ComponentsShowcaseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.navigation.ComponentsRoute
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.models.NavigationDrawerItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.navigation.routes.NavigationDrawerRoutes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R as ComponentsR
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.about.R as ToolkitR
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
 /**
  * Builds the drawer for this app: the toolkit's own entries plus the destinations this app adds.
@@ -53,39 +53,44 @@ class AppNavigationItemsProvider(
             buildList {
                 if (BuildConfig.DEBUG || isShowcaseUnlocked) {
                     add(
-                        item(
+                        NavigationDrawerItem(
                             title = ComponentsR.string.components_title,
                             icon = Icons.Outlined.Widgets,
+                            selectedIcon = Icons.Outlined.Widgets,
                             route = ComponentsRoute.ROUTE_ID,
                         )
                     )
                 }
                 add(
-                    item(
-                        ToolkitR.string.settings,
-                        Icons.Outlined.Settings,
-                        NavigationDrawerRoutes.ROUTE_SETTINGS
+                    NavigationDrawerItem(
+                        title = ToolkitR.string.settings,
+                        icon = ToolkitIcon.Resource(DesignSystemR.drawable.ic_settings),
+                        selectedIcon = ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_settings),
+                        route = NavigationDrawerRoutes.ROUTE_SETTINGS,
                     )
                 )
                 add(
-                    item(
-                        ToolkitR.string.help_and_feedback,
-                        Icons.AutoMirrored.Outlined.HelpOutline,
-                        NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK
+                    NavigationDrawerItem(
+                        title = ToolkitR.string.help_and_feedback,
+                        icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                        selectedIcon = Icons.AutoMirrored.Outlined.HelpOutline,
+                        route = NavigationDrawerRoutes.ROUTE_HELP_AND_FEEDBACK,
                     )
                 )
                 add(
-                    item(
-                        ToolkitR.string.updates,
-                        Icons.AutoMirrored.Outlined.EventNote,
-                        NavigationDrawerRoutes.ROUTE_UPDATES
+                    NavigationDrawerItem(
+                        title = ToolkitR.string.updates,
+                        icon = Icons.AutoMirrored.Outlined.EventNote,
+                        selectedIcon = Icons.AutoMirrored.Outlined.EventNote,
+                        route = NavigationDrawerRoutes.ROUTE_UPDATES,
                     )
                 )
                 add(
-                    item(
-                        ToolkitR.string.share,
-                        Icons.Outlined.Share,
-                        NavigationDrawerRoutes.ROUTE_SHARE
+                    NavigationDrawerItem(
+                        title = ToolkitR.string.share,
+                        icon = ToolkitIcon.Resource(DesignSystemR.drawable.ic_share),
+                        selectedIcon = ToolkitIcon.AnimatedVector(DesignSystemR.drawable.anim_share),
+                        route = NavigationDrawerRoutes.ROUTE_SHARE,
                     )
                 )
             }
@@ -96,9 +101,3 @@ class AppNavigationItemsProvider(
             )
         }
 }
-
-private fun item(
-    title: Int,
-    icon: ImageVector,
-    route: String,
-) = NavigationDrawerItem(title = title, icon = icon, selectedIcon = icon, route = route)

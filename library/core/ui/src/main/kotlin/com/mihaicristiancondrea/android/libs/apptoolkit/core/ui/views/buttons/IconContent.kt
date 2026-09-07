@@ -18,41 +18,39 @@
 package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 
-private const val IconRequirementMessage: String = "Either icon or painter must be provided"
-
+/**
+ * Icon renderer shared by every button in this package.
+ *
+ * It sizes the icon and hands it to [AnimatedToolkitIcon], so a [ToolkitIcon.AnimatedVector] plays
+ * whenever [clickCount] grows while a [ToolkitIcon.Vector] or [ToolkitIcon.Resource] simply draws.
+ *
+ * @param icon The icon to draw.
+ * @param clickCount Clicks the owning button received while composed.
+ * @param contentDescription Accessibility description of the icon.
+ * @param size Icon size.
+ */
 @Composable
 internal fun IconContent(
-    icon: ImageVector?,
-    painter: Painter?,
+    icon: ToolkitIcon,
+    clickCount: Int,
     contentDescription: String?,
     size: Dp = SizeConstants.ButtonIconSize,
+    tint: Color? = null,
 ) {
-    require(icon != null || painter != null) { IconRequirementMessage }
-
-    val iconModifier: Modifier = Modifier.size(size = size)
-    val stableIcon by rememberUpdatedState(newValue = icon)
-    val stablePainter by rememberUpdatedState(newValue = painter)
-    when {
-        stableIcon != null -> Icon(
-            modifier = iconModifier,
-            imageVector = stableIcon!!,
-            contentDescription = contentDescription
-        )
-
-        stablePainter != null -> Icon(
-            modifier = iconModifier,
-            painter = stablePainter!!,
-            contentDescription = contentDescription
-        )
-    }
+    AnimatedToolkitIcon(
+        icon = icon,
+        tint = tint ?: LocalContentColor.current,
+        clickCount = clickCount,
+        contentDescription = contentDescription,
+        modifier = Modifier.size(size = size),
+    )
 }

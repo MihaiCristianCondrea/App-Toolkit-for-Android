@@ -55,7 +55,7 @@ flowchart TD
     Process[Android process] --> App[AppToolkit Application]
     App --> Koin[initializeKoin]
     Koin --> Adapter[":sample:core:apptoolkit host modules"]
-    Adapter --> Facade[AppToolkit module graph]
+    Adapter --> AppToolkit[AppToolkit module graph]
     Koin --> HostModules[App-specific data and feature bindings]
     App --> Lifecycle[Process/activity lifecycle]
     Lifecycle --> Ads[Ads initialization and app-open display]
@@ -130,8 +130,6 @@ feature modules leaves rather than a chain:
 - `MainScreen` imported `appNavigationEntryBuilders`, which would have made the shell depend on
   every
   feature it renders. It now takes the builders as a parameter, supplied here by `MainActivity`.
-- `CaffeineService` built its notification intent from `MainActivity::class.java`; it resolves the
-  launcher activity through the package manager instead.
 - `APPS_LIST_AD_FREQUENCY` was a `buildConfigField` here, which no library module can read. It is a
   fixed tuning value, so it became a constant in [`:sample:core:common`](../core/common/README.md).
 

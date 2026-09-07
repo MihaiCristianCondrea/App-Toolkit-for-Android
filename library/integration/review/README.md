@@ -70,5 +70,4 @@ flowchart TD
 
 ## Current risks
 
-Repository packages retain the historical `playservices` name even though the active Gradle module
-is `:library:integration:review`, which can obscure current ownership.
+Repository and use-case packages follow integration.review. Prompting still requires a valid ReviewHost and Google Play availability; eligibility does not guarantee that Play displays a prompt.
