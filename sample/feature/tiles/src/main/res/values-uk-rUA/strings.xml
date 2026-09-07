@@ -38,8 +38,6 @@
     <string name="tile_service_tails">Хвости</string>
     <string name="tile_sos_summary">Тримайте екстрені дії поблизу</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tile_sound_mode_summary">Перемикайте звичайний, вібраційний і беззвучний режими</string>
-    <string name="tile_sound_mode_title">Режим звуку</string>
     <string name="tiles_add">додати</string>
     <string name="tiles_add_pre_android_13">Для Android 12 і старіших версій потрібно додавати плитки з режиму редагування швидких налаштувань.</string>
     <string name="tiles_add_result_added">Плитку додано до швидких налаштувань</string>

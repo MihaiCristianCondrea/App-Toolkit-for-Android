@@ -38,8 +38,6 @@
     <string name="tile_service_tails">Решка</string>
     <string name="tile_sos_summary">Держите под рукой экстренные действия</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tile_sound_mode_summary">Переключение обычного режима, режима вибрации и беззвучного режима.</string>
-    <string name="tile_sound_mode_title">Звуковой режим</string>
     <string name="tiles_add">Добавить</string>
     <string name="tiles_add_pre_android_13">Android 12 и старше требуют добавления плиток из режима редактирования быстрых настроек.</string>
     <string name="tiles_add_result_added">Плитка добавлена в быстрые настройки</string>

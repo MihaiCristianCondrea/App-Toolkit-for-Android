@@ -25,8 +25,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.quicksettings.QuickSettingsTilesLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.AndroidSensorLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.sensors.SensorLocalDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.system.AndroidSystemLocalDataSource
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.system.SystemLocalDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.torch.AndroidTorchDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.local.torch.TorchDataSource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.BreathingRepository
@@ -35,7 +33,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repos
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.MorseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SensorRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SosRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SystemRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.ToolkitTilesRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.TorchRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.BreathingToolViewModel
@@ -48,7 +45,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelTo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SoundModeToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ToolkitTilesViewModel
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.CommonDataStore
 import org.koin.android.ext.koin.androidContext
@@ -60,9 +56,6 @@ val tilesModule: Module = module {
     single<TorchDataSource> { AndroidTorchDataSource(context = androidContext()) }
     single<SensorLocalDataSource> {
         AndroidSensorLocalDataSource(context = androidContext(), dispatchers = get())
-    }
-    single<SystemLocalDataSource> {
-        AndroidSystemLocalDataSource(context = androidContext(), dispatchers = get())
     }
     single<BreathingHapticsDataSource> {
         AndroidBreathingHapticsDataSource(context = androidContext())
@@ -100,11 +93,6 @@ val tilesModule: Module = module {
             morseRepository = get(),
         )
     }
-    single {
-        SystemRepository(
-            localDataSource = get(),
-        )
-    }
     viewModel {
         ToolkitTilesViewModel(
             toolkitTilesRepository = get(),
@@ -118,7 +106,6 @@ val tilesModule: Module = module {
     viewModel { CompassToolViewModel(repository = get()) }
     viewModel { LevelToolViewModel(repository = get()) }
     viewModel { BreathingToolViewModel(repository = get()) }
-    viewModel { SoundModeToolViewModel(repository = get()) }
     viewModel { SosToolViewModel(repository = get()) }
     viewModel { MorseToolViewModel(repository = get()) }
     viewModel { FlashDimmerToolViewModel(torchRepository = get(), morseRepository = get()) }

@@ -26,7 +26,6 @@ import androidx.compose.material.icons.outlined.Dehaze
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.FlashlightOn
-import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.MoreHoriz
@@ -64,7 +63,6 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Coin -> Icons.Outlined.MonetizationOn
     ToolkitTileIcon.Dice -> Icons.Outlined.Casino
     ToolkitTileIcon.Counter -> Icons.Outlined.Dehaze
-    ToolkitTileIcon.Sound -> Icons.Outlined.GraphicEq
     ToolkitTileIcon.Breathing -> Icons.Outlined.FavoriteBorder
     ToolkitTileIcon.Sos -> Icons.Outlined.WarningAmber
     ToolkitTileIcon.Morse -> Icons.Outlined.MoreHoriz
@@ -80,7 +78,6 @@ internal fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
 
     ToolkitTileIcon.Breathing -> CoreUiR.drawable.background_soft_burst
 
-    ToolkitTileIcon.Sound,
     ToolkitTileIcon.FlashDimmer -> CoreUiR.drawable.background_flower
 
     ToolkitTileIcon.Coin,
@@ -131,7 +128,6 @@ internal fun ToolkitTileIcon.iconColors(): StatusColors {
             content = if (isDark) Color(0xFFFBE44D) else Color(0xFF6B5E00),
         )
 
-        ToolkitTileIcon.Sound,
         ToolkitTileIcon.FlashDimmer -> StatusColors(
             container = if (isDark) Color(0xFF91005A) else Color(0xFFE2008E),
             content = if (isDark) Color(0xFFFFB0D3) else Color(0xFF91005A),

@@ -8,15 +8,14 @@ Quick tools: the in-app tool catalogue and the Quick Settings tile services behi
 
 - `ToolkitTilesRepository`, which owns the source-neutral catalogue and coordinates current tile
   status with persisted category expansion preferences.
-- Local data sources for preferences, Quick Settings, sensors/display, ringer mode, haptics, and
+- Local data sources for preferences, Quick Settings, sensors/display, haptics, and
   torch access.
-- `SensorRepository`, `BreathingRepository`, `SystemRepository`,
-  `TorchRepository`, `MorseRepository`, and `SosRepository`, which remain the data-layer entry
-  points and own coordination or runtime state.
+- `SensorRepository`, `BreathingRepository`, `TorchRepository`, `MorseRepository`, and
+  `SosRepository`, which remain the data-layer entry points and own coordination or runtime state.
 - UI catalogue models and mappers, the screen and dedicated tool ViewModels, tool composables,
   `toolkitTilesEntryBuilder`, and the Quick Settings services.
 - Localized Quick Tools strings and plurals.
-- Feature-owned manifest permissions for haptics, ringer mode, and flashlight access. The feature
+- Feature-owned manifest permissions for haptics and flashlight access. The feature
   declares no foreground service and no wake locks.
 
 ## Does not own

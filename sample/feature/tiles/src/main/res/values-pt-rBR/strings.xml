@@ -38,8 +38,6 @@
     <string name="tile_service_tails">Caudas</string>
     <string name="tile_sos_summary">Mantenha as ações de emergência por perto</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tile_sound_mode_summary">Alterne os modos normal, vibratório e silencioso</string>
-    <string name="tile_sound_mode_title">Modo de som</string>
     <string name="tiles_add">Adicionar</string>
     <string name="tiles_add_pre_android_13">O Android 12 e versões anteriores exigem a adição de blocos no modo de edição de configurações rápidas.</string>
     <string name="tiles_add_result_added">Bloco adicionado às configurações rápidas</string>

@@ -38,8 +38,6 @@
     <string name="tile_service_tails">Опашки</string>
     <string name="tile_sos_summary">Дръжте аварийните действия наблизо</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tile_sound_mode_summary">Превключване на нормален, вибриращ и безшумен режим</string>
-    <string name="tile_sound_mode_title">Звуков режим</string>
     <string name="tiles_add">Добавете</string>
     <string name="tiles_add_pre_android_13">Android 12 и по-стари версии изискват добавяне на плочки от режима за редактиране на Бързи настройки.</string>
     <string name="tiles_add_result_added">Плочката е добавена към Бързи настройки</string>

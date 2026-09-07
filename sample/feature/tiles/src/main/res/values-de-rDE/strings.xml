@@ -38,8 +38,6 @@
     <string name="tile_service_tails">Schwänze</string>
     <string name="tile_sos_summary">Halten Sie Notfallmaßnahmen in der Nähe</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tile_sound_mode_summary">Wechseln Sie zwischen Normal-, Vibrations- und Lautlosmodus</string>
-    <string name="tile_sound_mode_title">Tonmodus</string>
     <string name="tiles_add">Hinzufügen</string>
     <string name="tiles_add_pre_android_13">Für Android 12 und älter ist das Hinzufügen von Kacheln aus dem Bearbeitungsmodus „Schnelleinstellungen“ erforderlich.</string>
     <string name="tiles_add_result_added">Kachel zu den Schnelleinstellungen hinzugefügt</string>

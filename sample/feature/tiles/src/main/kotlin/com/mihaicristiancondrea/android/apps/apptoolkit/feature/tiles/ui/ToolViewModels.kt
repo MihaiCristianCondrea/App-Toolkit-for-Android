@@ -26,10 +26,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repos
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.MorseRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SensorRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SosRepository
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.SystemRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.repositories.TorchRepository
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.BreathingState
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.models.RingerMode
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.CoinFlipToolState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.DiceRollToolState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.states.LevelToolState
@@ -126,22 +124,6 @@ class BreathingToolViewModel(private val repository: BreathingRepository) :
 
     fun close() {
         dismiss(); repository.stop(); mutableState.value = BreathingState()
-    }
-}
-
-class SoundModeToolViewModel(private val repository: SystemRepository) :
-    FlowToolViewModel<RingerMode>(RingerMode.Normal) {
-    fun open() {
-        observation?.cancel(); observation =
-            repository.getRingerMode().onEach { mutableState.value = it }.launchIn(viewModelScope)
-    }
-
-    fun cycle() {
-        val next = when (state.value) {
-            RingerMode.Normal -> RingerMode.Vibrate
-            RingerMode.Vibrate, RingerMode.Silent -> RingerMode.Normal
-        }
-        repository.setRingerMode(next)
     }
 }
 

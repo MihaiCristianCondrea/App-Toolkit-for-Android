@@ -93,7 +93,6 @@ class DefaultToolkitTilesRepository(
         ToolkitTileCategoryData(
             id = "system",
             tiles = persistentListOf(
-                tile(ToolkitTileIds.SOUND_MODE),
                 tile(ToolkitTileIds.FLASH_DIMMER, requestKey = ToolkitTileIds.FLASH_DIMMER),
             ),
         ),

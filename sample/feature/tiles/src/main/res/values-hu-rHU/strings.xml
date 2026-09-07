@@ -38,8 +38,6 @@
     <string name="tile_service_tails">Farok</string>
     <string name="tile_sos_summary">Tartsa közel a vészhelyzeti intézkedéseket</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tile_sound_mode_summary">Váltás normál, rezgő és néma üzemmódok között</string>
-    <string name="tile_sound_mode_title">Hang mód</string>
     <string name="tiles_add">Hozzáadás</string>
     <string name="tiles_add_pre_android_13">Az Android 12 és régebbi verzióihoz a Gyorsbeállítások szerkesztési módból csempék hozzáadása szükséges.</string>
     <string name="tiles_add_result_added">Csempe hozzáadva a Gyorsbeállításokhoz</string>

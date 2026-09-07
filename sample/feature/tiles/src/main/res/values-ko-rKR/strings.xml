@@ -38,8 +38,6 @@
     <string name="tile_service_tails">꼬리</string>
     <string name="tile_sos_summary">비상 조치를 가까이에 두십시오</string>
     <string name="tile_sos_title">조난 신호</string>
-    <string name="tile_sound_mode_summary">일반, 진동, 무음 모드 전환</string>
-    <string name="tile_sound_mode_title">사운드 모드</string>
     <string name="tiles_add">추가</string>
     <string name="tiles_add_pre_android_13">Android 12 이상에서는 빠른 설정 편집 모드에서 타일을 추가해야 합니다.</string>
     <string name="tiles_add_result_added">빠른 설정에 타일이 추가되었습니다.</string>

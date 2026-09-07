@@ -62,7 +62,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigat
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.MorseToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.ReactionTestToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.SosToolRoute
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigation.SoundModeToolRoute
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.previews.GenericToolPreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -195,7 +194,6 @@ private fun ToolInteractiveContent(
         ToolkitTileIds.COMPASS -> CompassToolRoute()
         ToolkitTileIds.BUBBLE_LEVEL -> LevelToolRoute()
         ToolkitTileIds.REACTION_TEST -> ReactionTestToolRoute()
-        ToolkitTileIds.SOUND_MODE -> SoundModeToolRoute()
         ToolkitTileIds.SOS -> SosToolRoute()
         ToolkitTileIds.MORSE -> MorseToolRoute()
         ToolkitTileIds.BREATHING -> BreathingToolRoute()

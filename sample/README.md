@@ -11,7 +11,7 @@ App Toolkit is a clean, lightweight, and versatile multi-tool app designed to si
 life with essential utilities, device insights, and wellness tools.
 
 It includes quick-access tools like decision makers, tally counters, a precise compass and level,
-emergency flash and dimmer, Morse code messaging, and a sound mode manager. All in one fast,
+emergency flash and dimmer, and Morse code messaging. All in one fast,
 battery-friendly package.
 
 Whether you need a quick tool on the go or a relaxing breathing exercise, App Toolkit provides a
@@ -34,7 +34,6 @@ free and open-source software!
 📱 Device & Design Insights
 
 - **Material Colors Explorer**: Preview and explore your device's unique Material You color palette.
-- **Sound Mode Manager**: Quickly toggle between Silent, Vibrate, and Ring modes.
 
 🧘 Wellness & Focus
 

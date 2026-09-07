@@ -57,7 +57,7 @@ private fun ToolkitTileData.toUiModel(): ToolkitTile {
 private fun String.categoryVisuals(): CategoryVisuals = when (this) {
     "sensors" -> CategoryVisuals(R.string.tiles_category_sensors, ToolkitTileIcon.Compass)
     "utilities" -> CategoryVisuals(R.string.tiles_category_utilities, ToolkitTileIcon.Dice)
-    "system" -> CategoryVisuals(R.string.tiles_category_system, ToolkitTileIcon.Sound)
+    "system" -> CategoryVisuals(R.string.tiles_category_system, ToolkitTileIcon.FlashDimmer)
     "wellbeing" -> CategoryVisuals(R.string.tiles_category_wellbeing, ToolkitTileIcon.Breathing)
     else -> error("Unknown Toolkit Tiles category: $this")
 }
@@ -109,12 +109,6 @@ private fun String.tileVisuals(): TileVisuals = when (this) {
         R.string.tile_morse_title,
         R.string.tile_morse_summary,
         ToolkitTileIcon.Morse
-    )
-
-    ToolkitTileIds.SOUND_MODE -> TileVisuals(
-        R.string.tile_sound_mode_title,
-        R.string.tile_sound_mode_summary,
-        ToolkitTileIcon.Sound
     )
 
     ToolkitTileIds.FLASH_DIMMER -> TileVisuals(

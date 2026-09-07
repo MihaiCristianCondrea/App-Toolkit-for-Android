@@ -38,8 +38,6 @@
     <string name="tile_service_tails">Colas</string>
     <string name="tile_sos_summary">Mantenga cerca las acciones de emergencia</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tile_sound_mode_summary">Cambia los modos normal, vibración y silencio</string>
-    <string name="tile_sound_mode_title">Modo de sonido</string>
     <string name="tiles_add">Añadir</string>
     <string name="tiles_add_pre_android_13">Android 12 y versiones anteriores requieren agregar mosaicos desde el modo de edición de Configuración rápida.</string>
     <string name="tiles_add_result_added">Mosaico agregado a Configuración rápida</string>

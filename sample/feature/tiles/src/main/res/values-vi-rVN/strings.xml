@@ -38,8 +38,6 @@
     <string name="tile_service_tails">Đuôi</string>
     <string name="tile_sos_summary">Giữ các hành động khẩn cấp ở gần</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tile_sound_mode_summary">Chuyển đổi chế độ bình thường, rung và im lặng</string>
-    <string name="tile_sound_mode_title">Chế độ âm thanh</string>
     <string name="tiles_add">Thêm</string>
     <string name="tiles_add_pre_android_13">Android 12 trở lên yêu cầu thêm ô từ chế độ chỉnh sửa Cài đặt nhanh.</string>
     <string name="tiles_add_result_added">Đã thêm ô vào Cài đặt nhanh</string>

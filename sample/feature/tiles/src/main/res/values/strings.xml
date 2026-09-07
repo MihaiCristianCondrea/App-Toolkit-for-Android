@@ -62,8 +62,6 @@
     <string name="morse_error_empty">Enter a message</string>
     <string name="morse_error_length">Use 200 characters or fewer</string>
     <string name="morse_error_characters">Use letters A–Z, numbers, and spaces only</string>
-    <string name="tile_sound_mode_summary">Switch normal, vibrate, and silent modes</string>
-    <string name="tile_sound_mode_title">Sound Mode</string>
     <string name="tiles_add">Add</string>
     <string name="tiles_add_pre_android_13">Android 12 and older require adding tiles from Quick Settings edit mode.</string>
     <string name="tiles_add_result_added">Tile added to Quick Settings</string>

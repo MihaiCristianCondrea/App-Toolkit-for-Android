@@ -15,6 +15,8 @@
 
 ### Removed
 
+- Removed the Sound Mode tool and its associated system repository, local ringer-mode data sources,
+  audio settings permission, and localized resources.
 - Removed the Caffeine tool and its Quick Settings service. Keeping the screen awake needed a
   foreground service and a wake lock, and Android caps that service at about three minutes anyway.
   The app no longer declares `WAKE_LOCK` or `FOREGROUND_SERVICE`.

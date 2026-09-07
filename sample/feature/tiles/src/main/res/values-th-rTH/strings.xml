@@ -38,8 +38,6 @@
     <string name="tile_service_tails">ก้อย</string>
     <string name="tile_sos_summary">ปิดการดำเนินการฉุกเฉินไว้</string>
     <string name="tile_sos_title">สัญญาณขอความช่วยเหลือ</string>
-    <string name="tile_sound_mode_summary">สลับโหมดปกติ สั่น และเงียบ</string>
-    <string name="tile_sound_mode_title">โหมดเสียง</string>
     <string name="tiles_add">เพิ่ม</string>
     <string name="tiles_add_pre_android_13">Android 12 และเก่ากว่าต้องเพิ่มไทล์จากโหมดแก้ไขการตั้งค่าด่วน</string>
     <string name="tiles_add_result_added">เพิ่มไทล์ในการตั้งค่าด่วน</string>

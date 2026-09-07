@@ -38,8 +38,6 @@
     <string name="tile_service_tails">ذيول</string>
     <string name="tile_sos_summary">إبقاء إجراءات الطوارئ قريبة</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tile_sound_mode_summary">قم بالتبديل بين الأوضاع العادية والاهتزازية والصامتة</string>
-    <string name="tile_sound_mode_title">وضع الصوت</string>
     <string name="tiles_add">يضيف</string>
     <string name="tiles_add_pre_android_13">يتطلب نظام التشغيل Android 12 والإصدارات الأقدم إضافة مربعات من وضع تحرير الإعدادات السريعة.</string>
     <string name="tiles_add_result_added">تمت إضافة البلاط إلى الإعدادات السريعة</string>

@@ -32,7 +32,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.LevelTo
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.MorseToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.ReactionTestToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SosToolViewModel
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.SoundModeToolViewModel
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.BreathingTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CoinFlipTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.CompassTool
@@ -43,7 +42,6 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.t
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.MorseTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.ReactionTestTool
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.SosTool
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.tools.SoundModeTool
 import org.koin.compose.viewmodel.koinViewModel
 
 /*
@@ -94,13 +92,6 @@ internal fun BreathingToolRoute(viewModel: BreathingToolViewModel = koinViewMode
     val state by viewModel.state.collectAsStateWithLifecycle()
     StartStopTool(viewModel::open, viewModel::close)
     BreathingTool(state)
-}
-
-@Composable
-internal fun SoundModeToolRoute(viewModel: SoundModeToolViewModel = koinViewModel()) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    StartStopTool(viewModel::open, viewModel::dismiss)
-    SoundModeTool(state, viewModel::cycle)
 }
 
 @Composable

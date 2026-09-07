@@ -38,8 +38,6 @@
     <string name="tile_service_tails">دم</string>
     <string name="tile_sos_summary">ہنگامی اقدامات کو قریب رکھیں</string>
     <string name="tile_sos_title">SOS</string>
-    <string name="tile_sound_mode_summary">نارمل، وائبریٹ، اور سائلنٹ موڈز کو سوئچ کریں۔</string>
-    <string name="tile_sound_mode_title">ساؤنڈ موڈ</string>
     <string name="tiles_add">شامل کریں۔</string>
     <string name="tiles_add_pre_android_13">Android 12 اور اس سے زیادہ کے لیے کوئیک سیٹنگز ایڈٹ موڈ سے ٹائلز شامل کرنے کی ضرورت ہے۔</string>
     <string name="tiles_add_result_added">ٹائل کو فوری ترتیبات میں شامل کر دیا گیا۔</string>
