@@ -33,6 +33,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -113,12 +114,14 @@ fun AnimationShowcase() {
             } else {
                 GroupedItemPosition.MIDDLE
             }
-            AnimationPreviewCard(
-                name = name,
-                resource = resource,
-                position = position,
-                replayMode = replayMode,
-            )
+            key(name, replayMode) {
+                AnimationPreviewCard(
+                    name = name,
+                    resource = resource,
+                    position = position,
+                    replayMode = replayMode,
+                )
+            }
         }
     }
 }
@@ -156,7 +159,7 @@ private fun AnimationPreviewCard(
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     val view = LocalView.current
-    var clickCount by rememberSaveable { mutableIntStateOf(0) }
+    var clickCount by rememberSaveable(replayMode) { mutableIntStateOf(0) }
 
     val icon = remember(resource, replayMode) {
         ToolkitIcon.AnimatedVector(
