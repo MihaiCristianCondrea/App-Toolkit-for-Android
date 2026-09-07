@@ -51,6 +51,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
@@ -89,7 +90,7 @@ fun GeneralButton(
     iconPosition: ButtonIconPosition = ButtonIconPosition.Start,
     contentDescription: String? = label,
     measurements: ButtonMeasurements = ButtonMeasurements.Small,
-    iconSize: Dp? = null,
+    iconSize: Dp? = SizeConstants.ButtonIconSize,
     iconTint: Color? = null,
     containerColor: Color? = null,
     contentColor: Color? = null,
