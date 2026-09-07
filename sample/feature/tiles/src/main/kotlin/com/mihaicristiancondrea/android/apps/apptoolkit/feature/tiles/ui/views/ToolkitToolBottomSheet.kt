@@ -245,8 +245,7 @@ private fun QuickSettingsIntegrationCard(
     val isAdded = tile.status == ToolkitTileStatus.Added
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        //verticalArrangement = Arrangement.spacedBy(2.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         val infoShape = RoundedCornerShape(
             topStart = 28.dp,
