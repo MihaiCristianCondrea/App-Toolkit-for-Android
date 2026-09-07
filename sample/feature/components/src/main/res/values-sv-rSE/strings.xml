@@ -57,4 +57,5 @@
     <string name="components_section_animations">Animationer</string>
     <string name="components_animation_restart">Starta om vid tryck</string>
     <string name="components_animation_reverse">Spela baklänges vid tryck</string>
+    <string name="components_animation_preview_helper">Tryck på ett objekt för att förhandsgranska dess animering.</string>
 </resources>

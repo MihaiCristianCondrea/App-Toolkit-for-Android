@@ -17,31 +17,45 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.sections
 
+import android.view.SoundEffectConstants
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Animation
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseHeader
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSection
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.components.ui.views.ShowcaseSurface
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.AnimatedToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIconReplayMode
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.switches.CustomSwitch
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.R as DesignSystemR
 
 private val animationSamples = listOf(
@@ -61,48 +75,131 @@ private val animationSamples = listOf(
 fun AnimationShowcase() {
     var reverse by rememberSaveable { mutableStateOf(false) }
     val replayMode = if (reverse) ToolkitIconReplayMode.Reverse else ToolkitIconReplayMode.Restart
+    val hapticFeedback = LocalHapticFeedback.current
+    val view = LocalView.current
+
     ShowcaseHeader(
         title = stringResource(R.string.components_section_animations),
         icon = Icons.Outlined.Animation,
     )
     ShowcaseSection {
-        ShowcaseSurface(position = GroupedItemPosition.FIRST) {
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize)) {
-                FilterChip(
-                    selected = !reverse,
-                    onClick = { reverse = false },
-                    label = { Text(stringResource(R.string.components_animation_restart)) },
+        Text(
+            text = stringResource(R.string.components_animation_preview_helper),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(
+                start = SizeConstants.SmallSize,
+                bottom = SizeConstants.ExtraSmallSize,
+            ),
+        )
+        ShowcaseSurface(
+            position = GroupedItemPosition.FIRST,
+            onClick = {
+                view.playSoundEffect(SoundEffectConstants.CLICK)
+                hapticFeedback.performHapticFeedback(
+                    if (reverse) HapticFeedbackType.ToggleOff else HapticFeedbackType.ToggleOn,
                 )
-                FilterChip(
-                    selected = reverse,
-                    onClick = { reverse = true },
-                    label = { Text(stringResource(R.string.components_animation_reverse)) },
-                )
-            }
+                reverse = !reverse
+            },
+        ) {
+            AnimationInteractionRow(
+                reverse = reverse,
+                onReverseChange = { reverse = it },
+            )
         }
         animationSamples.forEachIndexed { index, (name, resource) ->
-            ShowcaseSurface(
-                position = if (index == animationSamples.lastIndex) GroupedItemPosition.LAST else GroupedItemPosition.MIDDLE,
+            val position = if (index == animationSamples.lastIndex) {
+                GroupedItemPosition.LAST
+            } else {
+                GroupedItemPosition.MIDDLE
+            }
+            AnimationPreviewCard(
+                name = name,
+                resource = resource,
+                position = position,
+                replayMode = replayMode,
+            )
+        }
+    }
+}
+
+@Composable
+private fun AnimationInteractionRow(
+    reverse: Boolean,
+    onReverseChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(
+            text = stringResource(R.string.components_animation_reverse),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+        )
+        CustomSwitch(
+            checked = reverse,
+            onCheckedChange = onReverseChange,
+        )
+    }
+}
+
+@Composable
+private fun AnimationPreviewCard(
+    name: String,
+    @DrawableRes resource: Int,
+    position: GroupedItemPosition,
+    replayMode: ToolkitIconReplayMode,
+    modifier: Modifier = Modifier,
+) {
+    val hapticFeedback = LocalHapticFeedback.current
+    val view = LocalView.current
+    var clickCount by rememberSaveable { mutableIntStateOf(0) }
+
+    val icon = remember(resource, replayMode) {
+        ToolkitIcon.AnimatedVector(
+            resId = resource,
+            atEnd = resource == DesignSystemR.drawable.anim_check,
+            replayMode = replayMode,
+        )
+    }
+
+    ShowcaseSurface(
+        position = position,
+        modifier = modifier,
+        onClick = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
+            clickCount++
+        },
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = name,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.weight(1f),
+            )
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier = Modifier.size(52.dp),
             ) {
-                Text(text = name, style = MaterialTheme.typography.titleSmall)
-                SmallVerticalSpacer()
-                key(replayMode) {
-                    // Check starts with an empty path; show its completed frame so icon-only controls remain visible.
-                    val icon = ToolkitIcon.AnimatedVector(
-                        resource,
-                        atEnd = resource == DesignSystemR.drawable.anim_check,
-                        replayMode = replayMode,
+                Box(contentAlignment = Alignment.Center) {
+                    AnimatedToolkitIcon(
+                        icon = icon,
+                        clickCount = clickCount,
+                        contentDescription = name,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier.size(24.dp),
                     )
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
-                        verticalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-                    ) {
-                        GeneralButton(onClick = {}, label = name, icon = icon)
-                        GeneralButton(onClick = {}, style = GeneralButtonStyle.Tonal, icon = icon,
-                            contentDescription = name)
-                        GeneralButton(onClick = {}, style = GeneralButtonStyle.Text, icon = icon,
-                            contentDescription = name)
-                    }
                 }
             }
         }

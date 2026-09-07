@@ -57,4 +57,5 @@
     <string name="components_section_animations">애니메이션</string>
     <string name="components_animation_restart">탭하여 다시 시작</string>
     <string name="components_animation_reverse">탭하여 역재생</string>
+    <string name="components_animation_preview_helper">항목을 탭하여 애니메이션을 미리 봅니다.</string>
 </resources>

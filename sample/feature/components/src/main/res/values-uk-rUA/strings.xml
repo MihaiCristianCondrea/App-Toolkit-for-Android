@@ -57,4 +57,5 @@
     <string name="components_section_animations">Анімації</string>
     <string name="components_animation_restart">Починати знову після натискання</string>
     <string name="components_animation_reverse">Відтворювати навпаки після натискання</string>
+    <string name="components_animation_preview_helper">Натисніть на елемент, щоб переглянути його анімацію.</string>
 </resources>

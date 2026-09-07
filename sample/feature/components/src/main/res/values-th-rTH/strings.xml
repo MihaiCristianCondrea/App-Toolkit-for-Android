@@ -57,4 +57,5 @@
     <string name="components_section_animations">ภาพเคลื่อนไหว</string>
     <string name="components_animation_restart">เริ่มใหม่เมื่อแตะ</string>
     <string name="components_animation_reverse">เล่นย้อนกลับเมื่อแตะ</string>
+    <string name="components_animation_preview_helper">แตะที่รายการเพื่อดูตัวอย่างแอนิเมชัน</string>
 </resources>

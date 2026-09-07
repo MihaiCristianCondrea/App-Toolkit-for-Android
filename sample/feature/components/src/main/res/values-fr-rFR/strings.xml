@@ -57,4 +57,5 @@
     <string name="components_section_animations">Animations</string>
     <string name="components_animation_restart">Recommencer au toucher</string>
     <string name="components_animation_reverse">Inverser au toucher</string>
+    <string name="components_animation_preview_helper">Appuyez sur un élément pour prévisualiser son animation.</string>
 </resources>

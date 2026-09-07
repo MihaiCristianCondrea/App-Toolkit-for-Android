@@ -57,4 +57,5 @@
     <string name="components_section_animations">اینیمیشنز</string>
     <string name="components_animation_restart">ٹیپ کرنے پر دوبارہ شروع کریں</string>
     <string name="components_animation_reverse">ٹیپ کرنے پر الٹا چلائیں</string>
+    <string name="components_animation_preview_helper">اینیمیشن کا پیش نظارہ کرنے کے لیے کسی آئٹم پر ٹیپ کریں۔</string>
 </resources>

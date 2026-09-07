@@ -57,4 +57,5 @@
     <string name="components_section_animations">Animációk</string>
     <string name="components_animation_restart">Újraindítás koppintásra</string>
     <string name="components_animation_reverse">Megfordítás koppintásra</string>
+    <string name="components_animation_preview_helper">Koppintson egy elemre az animáció előnézetéhez.</string>
 </resources>
