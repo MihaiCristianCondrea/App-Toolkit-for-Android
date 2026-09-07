@@ -39,6 +39,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.contract
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.states.AppListUiState
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AndroidAppActionLauncher
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.AppDetailsBottomSheet
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.AnalyticsAppActionLauncher
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.AppInteractionType
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.analytics.logAppInteraction
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views.buildOnAppClick
@@ -150,6 +151,14 @@ fun AppsListScreen(
     val coroutineScope = rememberCoroutineScope()
 
     selectedApp?.let { app ->
+        val detailsActionLauncher = remember(appActionLauncher, firebaseController, app) {
+            AnalyticsAppActionLauncher(
+                delegate = appActionLauncher,
+                firebaseController = firebaseController,
+                appInfo = app,
+                source = "app_details",
+            )
+        }
         ModalBottomSheet(
             modifier = Modifier.fillMaxHeight(),
             sheetState = sheetState,
@@ -173,7 +182,7 @@ fun AppsListScreen(
                 isFavorite = favorites.contains(app.packageName),
                 isAppInstalled = selectedAppInstallInfo?.isInstalled,
                 installedVersionInfo = selectedAppInstallInfo?.versionInfo,
-                actionLauncher = appActionLauncher,
+                actionLauncher = detailsActionLauncher,
                 onFavoriteClick = { onFavoriteToggle(app.packageName) },
                 onRetryDetails = { viewModel.onEvent(HomeEvent.RetryAppDetails) },
                 adsConfig = appDetailsAdsConfig

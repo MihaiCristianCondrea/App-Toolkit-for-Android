@@ -32,8 +32,6 @@ object ApiHost {
     const val BASE_URL: String =
         "https://android-apps-metadata-backend.mihaicristiancondrea.workers.dev"
     const val APPS_PATH: String = "api/v1/apps"
-    const val DOCS_URL: String = "$BASE_URL/docs" // FIXME: Property "DOCS_URL" is never used
-    const val OPEN_API_URL: String = "$BASE_URL/openapi.json" // FIXME: Property "OPEN_API_URL" is never used
 
     /** Returns the compact, public application catalog endpoint. */
     fun appsUrl(baseUrl: String = BASE_URL): String =

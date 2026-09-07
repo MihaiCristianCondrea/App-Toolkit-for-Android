@@ -27,11 +27,37 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+import java.io.File
+import kotlin.test.assertTrue
 
 class FavoritesChangedReceiverTest {
 
     private val context = mockk<Context>(relaxed = true)
     private val receiver = FavoritesChangedReceiver()
+
+    /**
+     * The manifest can only name the action as a literal, so nothing in Kotlin references
+     * [FavoritesChangedReceiver.ACTION_FAVORITES_CHANGED] and the two can drift apart without any
+     * build failure: the receiver would simply stop being delivered to. This pins them together.
+     */
+    @Test
+    fun `manifest intent filter declares the receiver action constant`() {
+        val repositoryRoot = generateSequence(File("").absoluteFile) { it.parentFile }
+            .firstOrNull { File(it, "settings.gradle.kts").isFile }
+            ?: error("Could not locate settings.gradle.kts above ${File("").absolutePath}")
+        val manifest = File(repositoryRoot, MANIFEST).readText()
+
+        assertTrue(
+            manifest.contains(
+                "<action android:name=\"${FavoritesChangedReceiver.ACTION_FAVORITES_CHANGED}\" />"
+            ),
+            "$MANIFEST does not declare ${FavoritesChangedReceiver.ACTION_FAVORITES_CHANGED}",
+        )
+    }
+
+    private companion object {
+        const val MANIFEST = "sample/feature/apps/src/main/AndroidManifest.xml"
+    }
 
     @Test
     fun `onReceive reads package name extra when present`() {

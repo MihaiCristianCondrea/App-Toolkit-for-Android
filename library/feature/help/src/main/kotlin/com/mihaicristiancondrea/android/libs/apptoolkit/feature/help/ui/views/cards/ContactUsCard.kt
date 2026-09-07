@@ -19,6 +19,7 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.views.c
 
 import android.view.SoundEffectConstants
 import android.view.View
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,18 +33,21 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Support
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
@@ -58,6 +62,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.R
  * @param onClick Invoked when the card is selected.
  * @param groupedPosition Optional position in a grouped Help content section.
  */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ContactUsCard(
     onClick: () -> Unit,
@@ -101,11 +106,11 @@ fun ContactUsCard(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(size = SizeConstants.LauncherIconSize)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.shape_scalloped),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    tint = MaterialTheme.colorScheme.primaryContainer
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(shape = MaterialShapes.Cookie12Sided.toShape())
+                        .background(color = MaterialTheme.colorScheme.primaryContainer)
                 )
                 Icon(
                     imageVector = Icons.Outlined.Support,

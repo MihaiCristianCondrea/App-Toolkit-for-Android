@@ -19,15 +19,16 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.data.r
 
 import com.google.common.truth.Truth.assertThat
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.datastore.data.local.interfaces.AppStatePreferencesDataSource
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.testing.UnconfinedDispatcherExtension
+import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.CoroutineDispatcher
+import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.RegisterExtension
-import kotlin.coroutines.CoroutineContext
 
 class TestGeneralSettingsRepository {
 
@@ -64,20 +65,23 @@ class TestGeneralSettingsRepository {
     }
 
     @Test
-    fun `getContentKey uses provided dispatcher`() = runTest(dispatcherExtension.testDispatcher) {
-        val repository =
-            GeneralSettingsRepository(firebaseController = mockk<FirebaseController>(relaxed = true))
-        val result = repository.getContentKey("value").first()
-        assertThat(result).isEqualTo("value")
-    }
-}
+    fun `getContentKey records the access breadcrumb and settings interaction`() =
+        runTest(dispatcherExtension.testDispatcher) {
+            val firebaseController = mockk<FirebaseController>(relaxed = true)
+            val appStatePreferences = mockk<AppStatePreferencesDataSource>(relaxed = true)
+            val repository = GeneralSettingsRepository(
+                firebaseController = firebaseController,
+                appStatePreferences = appStatePreferences,
+            )
 
-private class TrackingDispatcher : CoroutineDispatcher() { // FIXME: Class "TrackingDispatcher" is never used
-    var dispatchCount: Int = 0
-        private set
+            repository.getContentKey("value").first()
 
-    override fun dispatch(context: CoroutineContext, block: Runnable) {
-        dispatchCount++
-        block.run()
-    }
+            coVerify(exactly = 1) { appStatePreferences.markSettingsInteracted() }
+            verify(exactly = 1) {
+                firebaseController.logBreadcrumb(
+                    message = "General settings content requested",
+                    attributes = mapOf("hasContentKey" to "true"),
+                )
+            }
+        }
 }

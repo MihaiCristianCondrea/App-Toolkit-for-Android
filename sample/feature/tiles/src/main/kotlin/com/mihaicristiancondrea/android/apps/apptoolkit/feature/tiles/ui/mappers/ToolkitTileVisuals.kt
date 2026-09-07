@@ -33,16 +33,19 @@ import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.WarningAmber
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.domain.utils.ToolkitTileIds
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTile
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ToolkitTileIcon
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 
 /** Container and content colors used by a tile badge or status chip. */
 internal data class StatusColors(
@@ -71,24 +74,33 @@ internal fun ToolkitTileIcon.imageVector(): ImageVector = when (this) {
     ToolkitTileIcon.Timer -> Icons.Outlined.Timer
 }
 
-internal fun ToolkitTileIcon.backgroundDrawableRes(): Int = when (this) {
+/**
+ * Decorative badge silhouette behind a tile icon.
+ *
+ * Change rationale: these were hand-authored vector drawables until Material 3 shipped the same
+ * silhouettes as [MaterialShapes], so the badges now resolve against the framework shape set. The
+ * eight-sided cookie has no Material equivalent and maps to the nearest one.
+ */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+internal fun ToolkitTileIcon.backgroundShape(): Shape = when (this) {
     ToolkitTileIcon.Level,
     ToolkitTileIcon.Compass,
-    ToolkitTileIcon.Timer -> CoreUiR.drawable.background_8_sided_cookie
+    ToolkitTileIcon.Timer -> MaterialShapes.Cookie9Sided
 
-    ToolkitTileIcon.Breathing -> CoreUiR.drawable.background_soft_burst
+    ToolkitTileIcon.Breathing -> MaterialShapes.SoftBurst
 
-    ToolkitTileIcon.FlashDimmer -> CoreUiR.drawable.background_flower
+    ToolkitTileIcon.FlashDimmer -> MaterialShapes.Flower
 
     ToolkitTileIcon.Coin,
     ToolkitTileIcon.Dice,
     ToolkitTileIcon.Counter,
-    ToolkitTileIcon.Morse -> CoreUiR.drawable.background_12_sided_cookie
+    ToolkitTileIcon.Morse -> MaterialShapes.Cookie12Sided
 
-    ToolkitTileIcon.Sos -> CoreUiR.drawable.background_gem
+    ToolkitTileIcon.Sos -> MaterialShapes.Gem
 
-    else -> CoreUiR.drawable.background_circle
-}
+    else -> MaterialShapes.Circle
+}.toShape()
 
 internal fun ToolkitTileStatus.labelResId(): Int = when (this) {
     ToolkitTileStatus.Added -> R.string.tiles_status_added

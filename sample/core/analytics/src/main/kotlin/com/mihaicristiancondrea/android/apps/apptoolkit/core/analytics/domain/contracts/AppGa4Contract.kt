@@ -46,9 +46,9 @@ object AppGa4Contract {
         const val CONTENT_TYPE = "content_type"
         const val ITEM_ID = "item_id"
         const val ITEM_NAME = "item_name"
-        const val ITEM_CATEGORY = "item_category" // FIXME: Property "ITEM_CATEGORY" is never used
-        const val ITEM_LIST_ID = "item_list_id" // FIXME: Property "ITEM_LIST_ID" is never used
-        const val ITEM_LIST_NAME = "item_list_name" // FIXME: Property "ITEM_LIST_NAME" is never used
+        const val ITEM_CATEGORY = "item_category"
+        const val ITEM_LIST_ID = "item_list_id"
+        const val ITEM_LIST_NAME = "item_list_name"
         const val SEARCH_TERM = "search_term"
         const val METHOD = "method"
         const val ACHIEVEMENT_ID = "achievement_id"
@@ -114,7 +114,7 @@ object AppGa4ContractValidator {
 
     fun isValidEventName(name: String): Boolean = eventNameRegex.matches(name)
 
-    fun missingRequiredParams(eventName: String, params: Set<String>): Set<String> = // FIXME: Function "missingRequiredParams" is never used
+    fun missingRequiredParams(eventName: String, params: Set<String>): Set<String> =
         AppGa4Contract.requiredParams(eventName) - params
 
     fun forbiddenParams(params: Set<String>): Set<String> =

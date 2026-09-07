@@ -21,14 +21,16 @@ import android.content.Context
 import android.content.ComponentName
 import android.os.Build
 import android.provider.Settings
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.content.edit
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.services.getTileServiceRequests
 
 class AndroidQuickSettingsTilesLocalDataSource(
     private val context: Context,
 ) : QuickSettingsTilesLocalDataSource {
+    @get:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
     override val supportsAddTileRequest: Boolean
-        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU // FIXME: This method should be annotated with @ChecksSdkIntAtLeast(api=Build.VERSION_CODES.TIRAMISU)
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 
     private val addedTiles = context.getSharedPreferences("quick_settings_tiles", Context.MODE_PRIVATE)
 

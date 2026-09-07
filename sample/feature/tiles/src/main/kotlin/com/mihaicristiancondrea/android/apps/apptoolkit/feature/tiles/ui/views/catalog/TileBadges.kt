@@ -18,7 +18,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,13 +36,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.R
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitTileStatus
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.models.ToolkitToolKind
-import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.backgroundDrawableRes
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.backgroundShape
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.icon
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.iconColors
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.mappers.imageVector
@@ -64,11 +63,11 @@ internal fun TileIconBadge(
         modifier = Modifier.size(size),
         contentAlignment = Alignment.Center,
     ) {
-        Image(
-            painter = painterResource(id = icon.backgroundDrawableRes()),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            colorFilter = ColorFilter.tint(colors.container.copy(alpha = 0.15f)),
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(shape = icon.backgroundShape())
+                .background(color = colors.container.copy(alpha = 0.15f)),
         )
         Icon(
             imageVector = icon.imageVector(),

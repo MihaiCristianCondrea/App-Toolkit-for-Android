@@ -27,8 +27,6 @@ object AppLinks {
     const val PLAY_STORE_DEVELOPER: String = "${PLAY_STORE_MAIN}store/apps/dev?id="
     const val DEFAULT_DEVELOPER_ID: String = "5390214922640123642"
 
-    const val DEVELOPER_PAGE = "${PLAY_STORE_DEVELOPER}${DEFAULT_DEVELOPER_ID}&hl=en" // FIXME: Property "DEVELOPER_PAGE" is never used
-
     // Legal & Policy
     private const val AUTHOR_WEBSITE_BASE: String =
         "https://mihaicristiancondrea.github.io/profile/"
@@ -40,6 +38,5 @@ object AppLinks {
     const val GPL_V3: String = "https://www.gnu.org/licenses/gpl-3.0"
 
     const val CONTACT_EMAIL: String = "contact.mihaicristiancondrea@gmail.com"
-    const val CONTACT_PAGE: String = AUTHOR_WEBSITE_BASE // FIXME: Property "CONTACT_PAGE" is never used
     const val FEATURE_REQUESTS_FORM: String = "https://forms.gle/RM5Ar8C6T3iWcjbCA"
 }

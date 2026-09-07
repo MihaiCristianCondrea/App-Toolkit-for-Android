@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 open class AppsListViewModelBaseTest {
 
     protected lateinit var viewModel: AppsListViewModel
-    private val firebaseController = FakeFirebaseController()
+    protected val firebaseController = FakeFirebaseController()
     protected fun setup(
         fetchApps: List<AppInfo>,
         initialFavorites: Set<String> = emptySet(),
