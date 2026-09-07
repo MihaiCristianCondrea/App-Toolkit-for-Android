@@ -84,12 +84,10 @@ class ManifestContractTest {
         val sampleResources = File(repositoryRoot, SAMPLE_IDENTITY_RESOURCES).readText()
 
         TOOLKIT_IDENTITY_DEFAULTS.forEach { (name, value) ->
-            assertThat(defaultResources)
-                .contains("<string name=\"$name\" translatable=\"false\">$value</string>")
+            assertThat(untranslatableStringValue(defaultResources, name)).isEqualTo(value)
         }
         SAMPLE_IDENTITY_OVERRIDES.forEach { (name, value) ->
-            assertThat(sampleResources)
-                .contains("<string name=\"$name\" translatable=\"false\">$value</string>")
+            assertThat(untranslatableStringValue(sampleResources, name)).isEqualTo(value)
             assertThat(resourceDefinitions(name))
                 .containsExactly(TOOLKIT_IDENTITY_RESOURCES, SAMPLE_IDENTITY_RESOURCES)
         }
@@ -167,6 +165,17 @@ class ManifestContractTest {
     private fun File.invariantPath(): String = path.replace(File.separatorChar, '/')
 
     private fun File.relativePath(): String = relativeTo(repositoryRoot).invariantPath()
+
+    /**
+     * Value of an untranslatable `<string>` declaration, or `null` when it is missing or
+     * translatable. Extra attributes such as a `tools:ignore` suppression are tolerated so the
+     * contract stays pinned to the name and value rather than to one attribute spelling.
+     */
+    private fun untranslatableStringValue(contents: String, resourceName: String): String? =
+        Regex("<string\\s+name=\"$resourceName\"[^>]*\\btranslatable=\"false\"[^>]*>(.*?)</string>")
+            .find(contents)
+            ?.groupValues
+            ?.get(1)
 
     private fun resourceDefinitions(resourceName: String): List<String> =
         listOf(LIBRARY_ROOT, SAMPLE_ROOT).flatMap { sourceRoot ->

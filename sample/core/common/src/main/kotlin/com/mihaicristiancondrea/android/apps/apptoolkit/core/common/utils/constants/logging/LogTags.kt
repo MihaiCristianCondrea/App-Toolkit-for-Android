@@ -17,6 +17,4 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.core.common.utils.constants.logging
 
-const val FAB_LOG_TAG = "MainFabState"
 const val FAVORITES_CHANGED_LOG_TAG = "FavoritesChangedRcvr"
-const val APPS_LIST_LOG_TAG = "AppsListRoute"

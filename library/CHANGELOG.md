@@ -6,6 +6,10 @@
 
 ### Added
 
+- Added `ButtonMeasurements`, the five Material 3 Expressive button size classes (extra small,
+  small, medium, large, extra large), accepted by `GeneralButton`. Container height, shape, content
+  padding, icon size, icon spacing, and label typography all follow the selected size, so callers
+  pick a size instead of restating the specification.
 - Added an `animatedIcon` constructor to bottom-bar and drawer items: one AVD or Lottie icon can
   cover both navigation states, including reverse replay, without separate icon arguments.
   Without `animatedIcon`, callers must now supply both `icon` and `selectedIcon` explicitly.
@@ -31,6 +35,13 @@
 
 ### Changed
 
+- `GeneralButton` now renders through the Material 3 Expressive button and icon-button overloads, so
+  every style picks up the expressive resting and pressed shapes. Buttons keep their previous height
+  by defaulting to `ButtonMeasurements.Small`; icon-only content now follows the expressive
+  icon-button container and icon metrics instead of a fixed 40dp box.
+- `GeneralButton`'s `iconSize` is now `Dp?` and defaults to `null`, meaning "use the size implied by
+  `measurements`". Callers passing an explicit `Dp` are unaffected. An explicit `shape` still
+  overrides the resting shape.
 - **Breaking (3.0):** Consolidated text, tonal, outlined, and filled action buttons into one adaptive
   `GeneralButton` with five styles, including Elevated. Removed the separate APIs without deprecated
   aliases. Icon-only content uses the matching Material icon button (a compact elevated button for
@@ -60,6 +71,22 @@
 ### Improved
 
 - Standardized changelog, alert-dialog, and date-picker actions with consistent button styling, haptic feedback, and press animations.
+
+### Removed
+
+- Removed the bundled `shape_scalloped` vector drawable from the Help feature. The Contact Us badge
+  now renders `MaterialShapes.Cookie12Sided`, so the toolkit no longer ships hand-authored shape
+  artwork that Material 3 already provides.
+- Removed `ButtonIconSpacer`, which `GeneralButton` no longer uses now that icon spacing comes from
+  the size class. Callers building their own button content should use `ButtonDefaults.IconSpacing`,
+  which is all it wrapped.
+- Removed `Activity.isInAppReviewAvailable`, an exact duplicate of the wired-up
+  `ReviewRepository.isReviewAvailable(activity)`. Call the repository instead.
+- Removed unused constants that no call site referenced: `ApiHost.DOCS_URL` and
+  `ApiHost.OPEN_API_URL` (both still documented in the `ApiHost` KDoc), `GithubConstants.GITHUB_PAGES`,
+  `AppLinks.DEVELOPER_PAGE` and `AppLinks.CONTACT_PAGE`, `SettingsAnalytics.Params.NAVIGATION_ROUTE`,
+  `DataStoreNamesConstants.DATA_STORE_DYNAMIC_VARIANT_INDEX` and `DATA_STORE_REVIEW_DONE`, and the
+  `DISPLAY_SETTINGS`, `FAQ`, `SELECT_STARTUP_DIALOG`, and `SELECT_LANGUAGE_DIALOG` log tags.
 
 ### Fixed
 

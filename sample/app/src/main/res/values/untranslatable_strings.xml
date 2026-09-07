@@ -15,7 +15,12 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <string name="app_full_name" translatable="false">App Toolkit for Android</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--
+      Overrides the :library:core:common placeholder that the toolkit's About and Help screens read
+      through resource merging. Nothing in :sample:app references it directly, which is why lint
+      reports it as unused.
+    -->
+    <string name="app_full_name" translatable="false" tools:ignore="UnusedResources">App Toolkit for Android</string>
     <string name="app_name" translatable="false">App Toolkit</string>
 </resources>

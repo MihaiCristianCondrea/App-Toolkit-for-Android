@@ -209,18 +209,6 @@ class UsageAndDiagnosticsViewModel(
         }
     }
 
-    private suspend fun applyConsentSettings(settings: UsageAndDiagnosticsSettings) {
-        consentRepository.applyConsentSettings(
-            ConsentSettings(
-                usageAndDiagnostics = settings.usageAndDiagnostics,
-                analyticsConsent = settings.analyticsConsent,
-                adStorageConsent = settings.adStorageConsent,
-                adUserDataConsent = settings.adUserDataConsent,
-                adPersonalizationConsent = settings.adPersonalizationConsent,
-            )
-        )
-    }
-
     private fun handleObservationError(message: UiTextHelper = UiTextHelper.StringResource(R.string.error_an_error_occurred)) {
         screenState.setErrors(errors = listOf(UiSnackbar(message = message, isError = true)))
         screenState.updateState(ScreenState.Error())

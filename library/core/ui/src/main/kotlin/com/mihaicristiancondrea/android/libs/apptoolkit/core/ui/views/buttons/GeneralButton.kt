@@ -19,6 +19,8 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -54,7 +56,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ButtonIconSpacer
 
 /** Visual treatment shared by labelled and icon-only buttons. */
 enum class GeneralButtonStyle { Filled, Tonal, Outlined, Elevated, Text }
@@ -71,6 +72,11 @@ enum class ButtonIconPosition { Start, End }
  * click feedback at call sites. Null color overrides retain each Material style's defaults,
  * including disabled colors. [iconTint] follows ToolkitIcon tinting rules (Lottie must be tintable).
  * Elevated icon-only buttons use a compact ElevatedButton with Material elevation and touch target.
+ *
+ * [measurements] picks one of the five Material 3 Expressive size classes. Container height, shape,
+ * content padding, icon size, icon spacing and label typography all follow it, so a caller chooses a
+ * size rather than restating the specification. [iconSize] overrides only the icon glyph, leaving
+ * the container on specification; [shape] still overrides the resting shape when set.
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -83,7 +89,8 @@ fun GeneralButton(
     icon: ToolkitIcon? = null,
     iconPosition: ButtonIconPosition = ButtonIconPosition.Start,
     contentDescription: String? = label,
-    iconSize: Dp = SizeConstants.ButtonIconSize,
+    measurements: ButtonMeasurements = ButtonMeasurements.Small,
+    iconSize: Dp? = SizeConstants.ButtonIconSize,
     iconTint: Color? = null,
     containerColor: Color? = null,
     contentColor: Color? = null,
@@ -108,7 +115,10 @@ fun GeneralButton(
         val descriptionOverride = contentDescription?.takeIf { hasLabel && it != label }
         val text: @Composable () -> Unit = {
             if (hasLabel) Text(
-                text = requireNotNull(label), maxLines = 1, overflow = TextOverflow.Ellipsis,
+                text = label,
+                style = measurements.labelTextStyle(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = if (descriptionOverride != null) Modifier.clearAndSetSemantics {
                     this.contentDescription = descriptionOverride
                 } else Modifier,
@@ -118,16 +128,22 @@ fun GeneralButton(
             if (icon != null) IconContent(
                 icon = icon, clickCount = clickCount,
                 contentDescription = if (hasLabel) null else contentDescription,
-                size = iconSize, tint = iconTint,
+                size = iconSize ?: if (hasLabel) measurements.labelIconSize
+                else measurements.iconButtonIconSize,
+                tint = iconTint,
             )
         }
         if (iconPosition == ButtonIconPosition.Start) image() else text()
-        if (hasLabel && icon != null) ButtonIconSpacer()
+        if (hasLabel && icon != null) Spacer(
+            modifier = Modifier.size(size = measurements.labelIconSpacing)
+        )
         if (iconPosition == ButtonIconPosition.Start) text() else image()
     }
     val container = containerColor ?: Color.Unspecified
     val foreground = contentColor ?: Color.Unspecified
     if (!hasLabel && style != GeneralButtonStyle.Elevated) {
+        val iconButtonModifier = buttonModifier.size(size = measurements.iconButtonContainerSize)
+        val iconButtonShapes = measurements.iconButtonShapes()
         val colors = when (style) {
             GeneralButtonStyle.Filled -> IconButtonDefaults.filledIconButtonColors()
             GeneralButtonStyle.Tonal -> IconButtonDefaults.filledTonalIconButtonColors()
@@ -137,34 +153,37 @@ fun GeneralButton(
         when (style) {
             GeneralButtonStyle.Filled -> FilledIconButton(
                 onClick = click,
-                modifier = buttonModifier,
+                modifier = iconButtonModifier,
                 enabled = enabled,
                 colors = colors,
-                shapes = IconButtonDefaults.shapes(),
+                shapes = iconButtonShapes,
                 content = content,
             )
+
             GeneralButtonStyle.Tonal -> FilledTonalIconButton(
                 onClick = click,
-                modifier = buttonModifier,
+                modifier = iconButtonModifier,
                 enabled = enabled,
                 colors = colors,
-                shapes = IconButtonDefaults.shapes(),
+                shapes = iconButtonShapes,
                 content = content,
             )
+
             GeneralButtonStyle.Outlined -> OutlinedIconButton(
                 onClick = click,
-                modifier = buttonModifier,
+                modifier = iconButtonModifier,
                 enabled = enabled,
                 colors = colors,
-                shapes = IconButtonDefaults.shapes(),
+                shapes = iconButtonShapes,
                 content = content,
             )
+
             else -> IconButton(
                 onClick = click,
-                modifier = buttonModifier,
+                modifier = iconButtonModifier,
                 enabled = enabled,
                 colors = colors,
-                shapes = IconButtonDefaults.shapes(),
+                shapes = iconButtonShapes,
                 content = content,
             )
         }
@@ -178,45 +197,62 @@ fun GeneralButton(
         GeneralButtonStyle.Text -> ButtonDefaults.textButtonColors()
     }.copy(containerColor = container, contentColor = foreground)
     val rowContent: @Composable RowScope.() -> Unit = { content() }
-    val resolvedShape = shape ?: ButtonDefaults.shape
+    val sizeShapes = measurements.buttonShapes()
+    val resolvedShapes = shape?.let { ButtonDefaults.shapes(shape = it) } ?: sizeShapes
+    val labelledModifier = buttonModifier.heightIn(min = measurements.containerHeight)
+    val labelledContentPadding = measurements.contentPadding(
+        hasLeadingIcon = icon != null && iconPosition == ButtonIconPosition.Start,
+        hasTrailingIcon = icon != null && iconPosition == ButtonIconPosition.End,
+    )
     when (style) {
         GeneralButtonStyle.Filled -> Button(
             onClick = click,
-            modifier = buttonModifier,
+            shapes = resolvedShapes,
+            modifier = labelledModifier,
             enabled = enabled,
             colors = colors,
-            shape = resolvedShape,
+            contentPadding = labelledContentPadding,
             content = rowContent,
         )
+
         GeneralButtonStyle.Tonal -> FilledTonalButton(
             onClick = click,
-            modifier = buttonModifier,
+            shapes = resolvedShapes,
+            modifier = labelledModifier,
             enabled = enabled,
             colors = colors,
-            shape = resolvedShape,
+            contentPadding = labelledContentPadding,
             content = rowContent,
         )
+
         GeneralButtonStyle.Outlined -> OutlinedButton(
             onClick = click,
-            modifier = buttonModifier,
+            shapes = resolvedShapes,
+            modifier = labelledModifier,
             enabled = enabled,
             colors = colors,
-            shape = resolvedShape,
+            contentPadding = labelledContentPadding,
             content = rowContent,
         )
+
         GeneralButtonStyle.Text -> TextButton(
             onClick = click,
-            modifier = buttonModifier,
+            shapes = resolvedShapes,
+            modifier = labelledModifier,
             enabled = enabled,
             colors = colors,
-            shape = resolvedShape,
+            contentPadding = labelledContentPadding,
             content = rowContent,
         )
+
         GeneralButtonStyle.Elevated -> ElevatedButton(
-            onClick = click, modifier = if (hasLabel) buttonModifier else buttonModifier.size(40.dp),
-            enabled = enabled, colors = colors,
-            shape = resolvedShape,
-            contentPadding = if (hasLabel) ButtonDefaults.ContentPadding else PaddingValues(0.dp),
+            onClick = click,
+            shapes = resolvedShapes,
+            modifier = if (hasLabel) labelledModifier
+            else buttonModifier.size(size = measurements.iconButtonContainerSize),
+            enabled = enabled,
+            colors = colors,
+            contentPadding = if (hasLabel) labelledContentPadding else PaddingValues(all = 0.dp),
             content = rowContent,
         )
     }

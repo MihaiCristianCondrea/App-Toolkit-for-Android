@@ -6,6 +6,8 @@
 
 ### Added
 
+- Opening an app or its Play Store page from app details now reports the same GA4 interaction the
+  list surfaces already report.
 - Added a Components animation playground with labelled and icon-only buttons for each bundled
   animation, plus Restart and Reverse replay controls. Quick Tools now uses one reversible Grid
   animation for both navigation states.
@@ -24,6 +26,9 @@
 
 ### Improved
 
+- Buttons across the app now follow the Material 3 Expressive shape and press behavior.
+- Quick Tools badges now draw their silhouettes from the Material 3 shape set instead of bundled
+  artwork, which removes seven vector drawables from the app.
 - Added click-to-copy functionality to color swatches in the Material Colors tool.
 - Unified action-button behavior across dialogs, Quick Tools, and the component showcase, including
   consistent click feedback and an accessible snackbar dismiss action.

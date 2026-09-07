@@ -31,6 +31,7 @@ plugins {
     // is not harmless: 6.7.9 resolves Kotlin 2.4.20-RC2 for the script compiler classpath, which is
     // the "different Kotlin than the embedded one" failure described above. Bump this only when the
     // Gradle wrapper moves and the warning names a new expected version.
+    //noinspection NewerVersionAvailable
     id("org.gradle.kotlin.kotlin-dsl") version "6.7.3"
 }
 

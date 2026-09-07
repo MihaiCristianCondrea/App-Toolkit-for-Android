@@ -31,6 +31,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ReactionTestToolViewModelTest {
@@ -88,7 +89,7 @@ class ReactionTestToolViewModelTest {
         viewModel.startTest(delayMs = 2000L)
 
         // Advance coroutine delay
-        advanceTimeBy(2000L)
+        advanceTimeBy(2000L.milliseconds)
         simulatedTimeMs = 3000L // Signal time recorded at 3000L
         testScheduler.advanceUntilIdle()
 
@@ -114,7 +115,7 @@ class ReactionTestToolViewModelTest {
         // Round 1: 300 ms
         simulatedTimeMs = 1000L
         viewModel.startTest(delayMs = 1000L)
-        advanceTimeBy(1000L)
+        advanceTimeBy(1000L.milliseconds)
         simulatedTimeMs = 2000L
         testScheduler.advanceUntilIdle()
         simulatedTimeMs = 2300L
@@ -126,7 +127,7 @@ class ReactionTestToolViewModelTest {
         // Round 2: 200 ms
         simulatedTimeMs = 3000L
         viewModel.startTest(delayMs = 1000L)
-        advanceTimeBy(1000L)
+        advanceTimeBy(1000L.milliseconds)
         simulatedTimeMs = 4000L
         testScheduler.advanceUntilIdle()
         simulatedTimeMs = 4200L
@@ -146,7 +147,7 @@ class ReactionTestToolViewModelTest {
 
         simulatedTimeMs = 1000L
         viewModel.startTest(delayMs = 1000L)
-        advanceTimeBy(1000L)
+        advanceTimeBy(1000L.milliseconds)
         simulatedTimeMs = 2000L
         testScheduler.advanceUntilIdle()
         simulatedTimeMs = 2200L

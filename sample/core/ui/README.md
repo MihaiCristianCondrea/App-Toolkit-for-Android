@@ -21,8 +21,8 @@ Shared host artwork used by the sample application and features.
 
 - [`:library:core:designsystem`](../../../library/core/designsystem/README.md) for shared visual
   contracts exposed transitively to sample features.
-- Google Material resources for the `colorPrimaryContainer` theme attribute used by the shared
-  shape drawables.
+- Google Material resources for the `colorControlNormal` theme attribute used by the shared quick
+  settings tile icons.
 
 ## Used by
 
@@ -33,12 +33,12 @@ Shared host artwork used by the sample application and features.
 
 ```mermaid
 flowchart TD
-    Sources[Shared vector / bitmap / shape resources] --> Resource[":sample:core:ui R class"]
+    Sources[Shared vector / bitmap resources] --> Resource[":sample:core:ui R class"]
     Resource --> App[":sample:app branding surfaces"]
     Resource --> Apps[":sample:feature:apps visuals"]
     Resource --> Tiles[":sample:feature:tiles visuals"]
-    ThemeAttrs[Material theme attributes] --> Shapes[Theme-aware shared drawables]
-    Shapes --> Resource
+    ThemeAttrs[Material theme attributes] --> Icons[Theme-aware tile icons]
+    Icons --> Resource
 ```
 
 ## Architectural decisions
