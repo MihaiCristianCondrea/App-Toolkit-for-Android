@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">Nhanh 🚀</string>
     <string name="tool_reaction_rating_average">Trung bình 👍</string>
     <string name="tool_reaction_rating_slow">Thong thả ☕</string>
+    <string name="tiles_qs_integration_title">Ô Cài đặt nhanh</string>
+    <string name="tiles_qs_integration_summary_format">Sử dụng %1$s từ Cài đặt nhanh của điện thoại mà không cần mở App Toolkit.</string>
+    <string name="tiles_add_to_qs">Thêm vào Cài đặt nhanh</string>
 </resources>

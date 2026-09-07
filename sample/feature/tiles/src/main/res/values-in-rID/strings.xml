@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">Cepat 🚀</string>
     <string name="tool_reaction_rating_average">Rata-rata 👍</string>
     <string name="tool_reaction_rating_slow">Santai ☕</string>
+    <string name="tiles_qs_integration_title">Kotak Setelan Cepat</string>
+    <string name="tiles_qs_integration_summary_format">Gunakan %1$s dari Setelan Cepat ponsel Anda tanpa membuka App Toolkit.</string>
+    <string name="tiles_add_to_qs">Tambahkan ke Setelan Cepat</string>
 </resources>

@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">高速 🚀</string>
     <string name="tool_reaction_rating_average">標準 👍</string>
     <string name="tool_reaction_rating_slow">マイペース ☕</string>
+    <string name="tiles_qs_integration_title">クイック設定タイル</string>
+    <string name="tiles_qs_integration_summary_format">App Toolkit を開かずに、スマートフォンのクイック設定から %1$s を使用します。</string>
+    <string name="tiles_add_to_qs">クイック設定に追加</string>
 </resources>

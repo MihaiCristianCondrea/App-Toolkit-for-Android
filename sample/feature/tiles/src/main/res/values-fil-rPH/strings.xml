@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">Mabilis 🚀</string>
     <string name="tool_reaction_rating_average">Karaniwan 👍</string>
     <string name="tool_reaction_rating_slow">Rilaks ☕</string>
+    <string name="tiles_qs_integration_title">Tile ng Mga Mabilisang Setting</string>
+    <string name="tiles_qs_integration_summary_format">Gamitin ang %1$s mula sa Mga Mabilisang Setting ng iyong telepono nang hindi binubuksan ang App Toolkit.</string>
+    <string name="tiles_add_to_qs">Idagdag sa Mga Mabilisang Setting</string>
 </resources>

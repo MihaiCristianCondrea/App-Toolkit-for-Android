@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">تیز 🚀</string>
     <string name="tool_reaction_rating_average">اوسط 👍</string>
     <string name="tool_reaction_rating_slow">پرسکون ☕</string>
+    <string name="tiles_qs_integration_title">فوری ترتیبات کی ٹائل</string>
+    <string name="tiles_qs_integration_summary_format">App Toolkit کھولے بغیر اپنے فون کی فوری ترتیبات سے %1$s استعمال کریں۔</string>
+    <string name="tiles_add_to_qs">فوری ترتیبات میں شامل کریں</string>
 </resources>

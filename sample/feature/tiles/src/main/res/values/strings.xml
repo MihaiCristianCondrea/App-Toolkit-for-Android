@@ -136,4 +136,8 @@
     <!-- Navigation -->
     <string name="tiles_title">Quick Tools</string>
 
+    <string name="tiles_qs_integration_title">Quick Settings tile</string>
+    <string name="tiles_qs_integration_summary_format">Use %1$s from your phone\'s Quick Settings without opening App Toolkit.</string>
+    <string name="tiles_add_to_qs">Add to Quick Settings</string>
+
 </resources>

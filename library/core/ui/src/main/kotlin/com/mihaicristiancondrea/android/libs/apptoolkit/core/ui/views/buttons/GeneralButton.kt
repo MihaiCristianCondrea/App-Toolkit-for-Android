@@ -40,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -86,6 +87,7 @@ fun GeneralButton(
     iconTint: Color? = null,
     containerColor: Color? = null,
     contentColor: Color? = null,
+    shape: Shape? = null,
     feedback: ButtonFeedback = ButtonFeedback(),
     firebaseController: FirebaseController? = null,
     ga4Event: Ga4EventData? = null,
@@ -176,12 +178,14 @@ fun GeneralButton(
         GeneralButtonStyle.Text -> ButtonDefaults.textButtonColors()
     }.copy(containerColor = container, contentColor = foreground)
     val rowContent: @Composable RowScope.() -> Unit = { content() }
+    val resolvedShape = shape ?: ButtonDefaults.shape
     when (style) {
         GeneralButtonStyle.Filled -> Button(
             onClick = click,
             modifier = buttonModifier,
             enabled = enabled,
             colors = colors,
+            shape = resolvedShape,
             content = rowContent,
         )
         GeneralButtonStyle.Tonal -> FilledTonalButton(
@@ -189,6 +193,7 @@ fun GeneralButton(
             modifier = buttonModifier,
             enabled = enabled,
             colors = colors,
+            shape = resolvedShape,
             content = rowContent,
         )
         GeneralButtonStyle.Outlined -> OutlinedButton(
@@ -196,6 +201,7 @@ fun GeneralButton(
             modifier = buttonModifier,
             enabled = enabled,
             colors = colors,
+            shape = resolvedShape,
             content = rowContent,
         )
         GeneralButtonStyle.Text -> TextButton(
@@ -203,11 +209,13 @@ fun GeneralButton(
             modifier = buttonModifier,
             enabled = enabled,
             colors = colors,
+            shape = resolvedShape,
             content = rowContent,
         )
         GeneralButtonStyle.Elevated -> ElevatedButton(
             onClick = click, modifier = if (hasLabel) buttonModifier else buttonModifier.size(40.dp),
             enabled = enabled, colors = colors,
+            shape = resolvedShape,
             contentPadding = if (hasLabel) ButtonDefaults.ContentPadding else PaddingValues(0.dp),
             content = rowContent,
         )

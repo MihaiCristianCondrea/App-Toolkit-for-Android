@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">快速 🚀</string>
     <string name="tool_reaction_rating_average">平均 👍</string>
     <string name="tool_reaction_rating_slow">輕鬆 ☕</string>
+    <string name="tiles_qs_integration_title">「快速設定」圖塊</string>
+    <string name="tiles_qs_integration_summary_format">不必開啟 App Toolkit，即可從手機的「快速設定」使用 %1$s。</string>
+    <string name="tiles_add_to_qs">新增至「快速設定」</string>
 </resources>

@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">तेज 🚀</string>
     <string name="tool_reaction_rating_average">सामान्य 👍</string>
     <string name="tool_reaction_rating_slow">सहज ☕</string>
+    <string name="tiles_qs_integration_title">क्विक सेटिंग टाइल</string>
+    <string name="tiles_qs_integration_summary_format">App Toolkit खोले बिना अपने फ़ोन की क्विक सेटिंग से %1$s का इस्तेमाल करें.</string>
+    <string name="tiles_add_to_qs">क्विक सेटिंग में जोड़ें</string>
 </resources>

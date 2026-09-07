@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">Бърз 🚀</string>
     <string name="tool_reaction_rating_average">Среден 👍</string>
     <string name="tool_reaction_rating_slow">Спокоен ☕</string>
+    <string name="tiles_qs_integration_title">Плочка за бързи настройки</string>
+    <string name="tiles_qs_integration_summary_format">Използвайте %1$s от бързите настройки на телефона си, без да отваряте App Toolkit.</string>
+    <string name="tiles_add_to_qs">Добавяне към бързите настройки</string>
 </resources>

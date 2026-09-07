@@ -131,4 +131,7 @@
     <string name="morse_error_characters">Utilisez uniquement les lettres A–Z, les chiffres et les espaces</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">Outils rapides</string>
+    <string name="tiles_qs_integration_title">Tuile de configuration rapide</string>
+    <string name="tiles_qs_integration_summary_format">Utilisez %1$s depuis les Paramètres rapides de votre téléphone sans ouvrir App Toolkit.</string>
+    <string name="tiles_add_to_qs">Ajouter aux Paramètres rapides</string>
 </resources>

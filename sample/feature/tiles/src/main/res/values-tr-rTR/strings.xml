@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">Hızlı 🚀</string>
     <string name="tool_reaction_rating_average">Ortalama 👍</string>
     <string name="tool_reaction_rating_slow">Rahat ☕</string>
+    <string name="tiles_qs_integration_title">Hızlı Ayarlar kutucuğu</string>
+    <string name="tiles_qs_integration_summary_format">App Toolkit\'i açmadan telefonunuzun Hızlı Ayarlarından %1$s kullanın.</string>
+    <string name="tiles_add_to_qs">Hızlı Ayarlara ekle</string>
 </resources>

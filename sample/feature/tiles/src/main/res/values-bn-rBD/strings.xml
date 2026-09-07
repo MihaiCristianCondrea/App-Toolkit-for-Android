@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">দ্রুত 🚀</string>
     <string name="tool_reaction_rating_average">গড় 👍</string>
     <string name="tool_reaction_rating_slow">ধীর ☕</string>
+    <string name="tiles_qs_integration_title">কুইক সেটিংস টাইল</string>
+    <string name="tiles_qs_integration_summary_format">App Toolkit না খুলেই আপনার ফোনের কুইক সেটিংস থেকে %1$s ব্যবহার করুন।</string>
+    <string name="tiles_add_to_qs">কুইক সেটিংসে যোগ করুন</string>
 </resources>

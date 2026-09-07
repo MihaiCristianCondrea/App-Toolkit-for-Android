@@ -26,17 +26,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
@@ -98,10 +101,8 @@ fun ToolkitToolBottomSheet(
             verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize),
         ) {
             ToolSheetHeader(tile = tile, onClose = onClose)
-            ToolStatusSummary(tile = tile)
-            HorizontalDivider()
             ToolInteractiveContent(tile = tile)
-            ToolSheetActions(
+            ToolIntegrationSection(
                 tile = tile,
                 onAddTile = onAddTile,
                 onSetupTile = onSetupTile,
@@ -204,34 +205,121 @@ private fun ToolInteractiveContent(
 }
 
 @Composable
-private fun ToolSheetActions(
+private fun ToolIntegrationSection(
     tile: ToolkitTile,
     onAddTile: () -> Unit,
     onSetupTile: () -> Unit,
 ) {
     val hasAddAction = tile.requestKey != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-    val hasSetupAction = tile.status == ToolkitTileStatus.Unsupported
-    if (!hasAddAction && !hasSetupAction) return
+    val isUnsupported = tile.status == ToolkitTileStatus.Unsupported
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
-    ) {
-        if (hasAddAction) {
-            GeneralButton(
-                style = GeneralButtonStyle.Tonal,
-                modifier = Modifier.weight(1f),
-                onClick = onAddTile,
-                enabled = tile.status != ToolkitTileStatus.Added,
-                label = stringResource(id = R.string.tiles_add),
-            )
-        }
-        if (hasSetupAction) {
+    if (isUnsupported) {
+        Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.LargeSize)) {
+            ToolStatusSummary(tile = tile)
             GeneralButton(
                 style = GeneralButtonStyle.Outlined,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
                 onClick = onSetupTile,
                 label = stringResource(id = R.string.tiles_setup),
+            )
+        }
+        return
+    }
+
+    val canShowQsSection = tile.requestKey != null
+    if (canShowQsSection) {
+        QuickSettingsIntegrationCard(
+            tile = tile,
+            hasAddAction = hasAddAction,
+            onAddTile = onAddTile
+        )
+    }
+}
+
+@Composable
+private fun QuickSettingsIntegrationCard(
+    tile: ToolkitTile,
+    hasAddAction: Boolean,
+    onAddTile: () -> Unit,
+) {
+    val isAdded = tile.status == ToolkitTileStatus.Added
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        //verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        val infoShape = RoundedCornerShape(
+            topStart = 28.dp,
+            topEnd = 28.dp,
+            bottomStart = 8.dp,
+            bottomEnd = 8.dp,
+        )
+
+        val actionShape = RoundedCornerShape(
+            topStart = 8.dp,
+            topEnd = 8.dp,
+            bottomStart = 28.dp,
+            bottomEnd = 28.dp,
+        )
+
+        val containerColor = MaterialTheme.colorScheme.secondaryContainer
+        val contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+
+        Surface(
+            shape = if (hasAddAction && !isAdded) infoShape else RoundedCornerShape(28.dp),
+            color = containerColor,
+            contentColor = contentColor,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SizeConstants.LargeSize),
+                horizontalArrangement = Arrangement.spacedBy(SizeConstants.MediumSize),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Widgets,
+                    contentDescription = null,
+                    tint = contentColor
+                )
+                Column(verticalArrangement = Arrangement.spacedBy(SizeConstants.ExtraTinySize)) {
+                    val title = if (isAdded) {
+                        stringResource(id = R.string.tool_status_added_title)
+                    } else {
+                        stringResource(id = R.string.tiles_qs_integration_title)
+                    }
+
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+
+                    val description = if (isAdded) {
+                        stringResource(id = R.string.tool_status_added_summary)
+                    } else {
+                        stringResource(id = R.string.tiles_qs_integration_summary_format, stringResource(id = tile.titleResId))
+                    }
+
+                    Text(
+                        text = description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = contentColor.copy(alpha = 0.8f)
+                    )
+                }
+            }
+        }
+
+        if (hasAddAction && !isAdded) {
+            GeneralButton(
+                style = GeneralButtonStyle.Tonal,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onAddTile,
+                label = stringResource(id = R.string.tiles_add_to_qs),
+                icon = ToolkitIcon.Vector(Icons.Outlined.Add),
+                shape = actionShape,
+                containerColor = containerColor,
+                contentColor = contentColor,
             )
         }
     }

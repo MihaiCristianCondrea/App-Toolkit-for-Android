@@ -131,4 +131,7 @@
     <string name="morse_error_characters">Используйте только буквы A–Z, цифры и пробелы</string>
     <string name="morse_current_character">%1$s  %2$s</string>
     <string name="tiles_title">Быстрые инструменты</string>
+    <string name="tiles_qs_integration_title">Плитка быстрых настроек</string>
+    <string name="tiles_qs_integration_summary_format">Используйте %1$s из быстрых настроек телефона, не открывая App Toolkit.</string>
+    <string name="tiles_add_to_qs">Добавить в быстрые настройки</string>
 </resources>

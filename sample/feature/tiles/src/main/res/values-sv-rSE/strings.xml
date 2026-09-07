@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">Snabb 🚀</string>
     <string name="tool_reaction_rating_average">Medel 👍</string>
     <string name="tool_reaction_rating_slow">Lugn ☕</string>
+    <string name="tiles_qs_integration_title">Ruta för Snabbinställningar</string>
+    <string name="tiles_qs_integration_summary_format">Använd %1$s från telefonens Snabbinställningar utan att öppna App Toolkit.</string>
+    <string name="tiles_add_to_qs">Lägg till i Snabbinställningar</string>
 </resources>

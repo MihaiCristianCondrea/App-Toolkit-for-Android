@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">Gyors 🚀</string>
     <string name="tool_reaction_rating_average">Átlagos 👍</string>
     <string name="tool_reaction_rating_slow">Kényelmes ☕</string>
+    <string name="tiles_qs_integration_title">Gyorsbeállítások csempe</string>
+    <string name="tiles_qs_integration_summary_format">Használja a(z) %1$s funkciót a telefon Gyorsbeállítások menüjéből anélkül, hogy megnyitná az App Toolkit alkalmazást.</string>
+    <string name="tiles_add_to_qs">Hozzáadás a Gyorsbeállításokhoz</string>
 </resources>

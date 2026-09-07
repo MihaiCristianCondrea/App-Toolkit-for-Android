@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">سريع 🚀</string>
     <string name="tool_reaction_rating_average">متوسط 👍</string>
     <string name="tool_reaction_rating_slow">هادئ ☕</string>
+    <string name="tiles_qs_integration_title">مربّع الإعدادات السريعة</string>
+    <string name="tiles_qs_integration_summary_format">استخدم %1$s من الإعدادات السريعة في هاتفك بدون فتح App Toolkit.</string>
+    <string name="tiles_add_to_qs">إضافة إلى الإعدادات السريعة</string>
 </resources>

@@ -131,4 +131,7 @@
     <string name="tool_reaction_rating_fast">เร็ว 🚀</string>
     <string name="tool_reaction_rating_average">ปานกลาง 👍</string>
     <string name="tool_reaction_rating_slow">ผ่อนคลาย ☕</string>
+    <string name="tiles_qs_integration_title">ไทล์การตั้งค่าด่วน</string>
+    <string name="tiles_qs_integration_summary_format">ใช้ %1$s จากการตั้งค่าด่วนของโทรศัพท์โดยไม่ต้องเปิด App Toolkit</string>
+    <string name="tiles_add_to_qs">เพิ่มในการตั้งค่าด่วน</string>
 </resources>
