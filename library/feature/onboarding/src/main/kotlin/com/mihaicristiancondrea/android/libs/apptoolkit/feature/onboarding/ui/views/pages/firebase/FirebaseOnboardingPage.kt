@@ -43,7 +43,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeIncreasedVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraLargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
@@ -129,13 +130,14 @@ fun FirebaseOnboardingPage(isSelected: Boolean) {
 
             LargeVerticalSpacer()
 
-            GeneralOutlinedButton(
+            GeneralButton(
+                style = GeneralButtonStyle.Outlined,
                 onClick = {
                     onboardingViewModel.onEvent(OnboardingEvent.ShowCrashlyticsDialog)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.PrivacyTip),
-                iconContentDescription = stringResource(id = R.string.onboarding_crashlytics_show_details_button_cd),
+                contentDescription = stringResource(id = R.string.onboarding_crashlytics_show_details_button_cd),
                 label = stringResource(id = R.string.onboarding_crashlytics_show_details_button)
             )
 

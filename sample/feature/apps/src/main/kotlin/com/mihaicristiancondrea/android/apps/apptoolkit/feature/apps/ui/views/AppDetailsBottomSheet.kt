@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views
 
+import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -74,12 +75,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.AppDetailsNativeAd
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.ExtraSmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.MediumHorizontalSpacer
 
-import com.mihaicristiancondrea.android.apps.apptoolkit.core.ui.R as CoreUiR
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -270,7 +270,8 @@ private fun AppDetailsActions(
     ) {
         when (isAppInstalled) {
             true -> {
-                GeneralOutlinedButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Outlined,
                     onClick = { actionLauncher.shareApp(appInfo.packageName, appInfo.name) },
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Share),
                     label = stringResource(id = R.string.app_details_share),

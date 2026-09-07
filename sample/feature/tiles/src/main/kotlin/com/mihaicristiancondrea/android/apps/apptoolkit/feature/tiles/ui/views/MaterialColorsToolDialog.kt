@@ -40,8 +40,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
@@ -63,6 +61,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ColorSwatchData
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.models.ColorTable
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import java.util.Locale
 
 /** Full-height expanded tool that previews the current app and Android Material You palettes. */
@@ -107,12 +108,12 @@ fun MaterialColorsToolDialog(
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.weight(1f),
                 )
-                IconButton(onClick = onClose) {
-                    Icon(
-                        imageVector = Icons.Outlined.Close,
-                        contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
-                    )
-                }
+                GeneralButton(
+                    style = GeneralButtonStyle.Text,
+                    onClick = onClose,
+                    icon = ToolkitIcon.Vector(Icons.Outlined.Close),
+                    contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
+                )
             }
             LazyColumn(
                 modifier = Modifier.weight(1f),
@@ -123,7 +124,7 @@ fun MaterialColorsToolDialog(
                         text = stringResource(id = R.string.tool_material_colors_description),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+                )
                 }
                 item {
                     ColorTableCard(table = appColorTable)

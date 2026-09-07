@@ -17,6 +17,10 @@
 
 package com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.ui.views
 
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
+import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.R
 import android.view.SoundEffectConstants
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
@@ -52,7 +56,8 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.apps.domain.mode
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.style.bounceClick
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTextButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.LargeVerticalSpacer
 
 @Composable
@@ -87,8 +92,11 @@ fun AppCard(
                     alignment = Alignment.End
                 )
             ) {
-                GeneralTextButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Text,
                     onClick = onFavoriteToggle,
+                    contentDescription = stringResource(R.string.favorite_apps),
+                    modifier = Modifier.semantics { selected = isFavorite },
                     icon = ToolkitIcon.Vector(
                         imageVector = if (isFavorite) {
                             Icons.Filled.Star
@@ -97,8 +105,10 @@ fun AppCard(
                         }
                     ),
                 )
-                GeneralTextButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Text,
                     onClick = { onShareClick(appInfo) },
+                    contentDescription = stringResource(R.string.app_details_share_title),
                     icon = ToolkitIcon.Vector(imageVector = Icons.Outlined.Share),
                 )
             }

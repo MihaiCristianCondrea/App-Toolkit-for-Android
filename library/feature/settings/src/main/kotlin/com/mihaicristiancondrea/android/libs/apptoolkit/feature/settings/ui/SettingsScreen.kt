@@ -17,6 +17,7 @@
 
 package com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui
 
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 import android.content.Context
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
@@ -63,7 +64,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.analytics.logGa4Event
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
@@ -91,7 +93,6 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.settings.ui.view
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.R as CommonR
 
 private const val SETTINGS_SCREEN_NAME = "Settings"
 private const val SETTINGS_SCREEN_CLASS = "SettingsScreen"
@@ -287,7 +288,8 @@ fun SettingsDetailPlaceholder(paddingValues: PaddingValues) {
                         textAlign = TextAlign.Center,
                     )
                 }
-                GeneralOutlinedButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Outlined,
                     modifier = Modifier
                         .padding(all = SizeConstants.MediumSize * 2)
                         .align(alignment = Alignment.Start),

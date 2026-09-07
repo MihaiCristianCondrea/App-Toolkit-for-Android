@@ -171,7 +171,7 @@ be drawing, and is useful when a host renders its own navigation surface from to
 ### Accessibility
 
 The content description belongs to the component, not to the icon. Navigation items reuse their
-title, and buttons take `iconContentDescription`, which is required for an icon-only button because
+title, and buttons take `contentDescription`, which is required for an icon-only button because
 nothing else describes it.
 
 ### Lottie icons and performance
@@ -216,3 +216,66 @@ playback; it remains local presentation state in `core:designsystem`.
 The module still depends directly on the preference contracts needed by `AppTheme`. The persisted
 model and non-Compose flow combination remain outside this module so presentation-specific
 collection does not leak back into `:library:core:datastore`.
+
+## GeneralButton (3.0)
+
+Import `GeneralButton`, `GeneralButtonStyle`, and `ButtonIconPosition` from
+`com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons`. The component lives in
+`core:ui`, which owns feedback and analytics; this module owns its theme and ToolkitIcon rendering.
+
+One button API handles a nonblank label, an icon, or both. A null, empty, or whitespace-only label
+selects the icon-only form. Missing content fails fast. Icon-only actions require a nonblank,
+localized `contentDescription`. Labelled icons are decorative; the label names the action by default.
+An explicit description replaces the visible label's accessibility text without announcing both.
+
+| Style | Label / icon + label | Icon only |
+|---|---|---|
+| `Filled` (default) | Material Button | FilledIconButton |
+| `Tonal` | FilledTonalButton | FilledTonalIconButton |
+| `Outlined` | OutlinedButton | OutlinedIconButton |
+| `Elevated` | ElevatedButton | Compact 40 dp ElevatedButton with zero content padding |
+| `Text` | TextButton | IconButton |
+
+The elevated icon form retains Material elevation, disabled behavior, shape, and minimum interactive
+target; it does not fall back to a filled style. Caller size constraints take precedence.
+`iconPosition = ButtonIconPosition.End` places the icon after the label in logical reading order;
+`Start` is the default and both follow RTL. `iconSize` applies to either form.
+
+`containerColor` and `contentColor` are optional enabled-state overrides shared by both forms;
+null retains style defaults. Disabled colors remain Material defaults. `iconTint` overrides icon
+color through the shared renderer; null follows the button content color. Lottie retains authored
+colors unless `tintable = true`; `Color.Unspecified` preserves artwork even for tintable Lottie.
+Vectors, resources, AVD and bundled Lottie all use the same `ToolkitIcon` slot and existing
+`Restart` / `Reverse` replay contract described above.
+
+Every enabled click replays the icon, performs `ButtonFeedback`, logs the optional `ga4Event`
+through `firebaseController`, then invokes `onClick`. Disabled buttons do none of these.
+Do not add `bounceClick()`, manual sounds, haptics, or duplicate analytics at call sites.
+
+```kotlin
+GeneralButton(onClick = ::save, label = stringResource(R.string.save))
+GeneralButton(
+    onClick = ::showMenu,
+    style = GeneralButtonStyle.Text,
+    icon = ToolkitIcon.Vector(Icons.Rounded.MoreVert),
+    contentDescription = stringResource(R.string.more_options),
+)
+GeneralButton(
+    onClick = ::continueFlow,
+    style = GeneralButtonStyle.Elevated,
+    label = stringResource(R.string.continue_label),
+    icon = ToolkitIcon.Vector(Icons.AutoMirrored.Rounded.ArrowForward),
+    iconPosition = ButtonIconPosition.End,
+)
+```
+
+### Breaking migration
+
+`GeneralTextButton`, `GeneralTonalButton`, and `GeneralOutlinedButton` have been removed, with no
+deprecated aliases. Replace them with `GeneralButton` and the corresponding `Text`, `Tonal`, or
+`Outlined` style. Rename `iconContentDescription` to `contentDescription`. Replace `colors =
+ButtonDefaults.buttonColors(...)` with `containerColor` / `contentColor` overrides. `onClick` is now
+the first parameter; prefer named arguments when migrating positional calls.
+
+`AnimatedIconButtonDirection` delegates its action to GeneralButton and only owns visibility
+transitions. FABs remain specialized floating action components.

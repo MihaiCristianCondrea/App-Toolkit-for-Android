@@ -58,7 +58,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsCo
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.SupportNativeAdCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTonalButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.NoDataScreen
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.ScreenStateHandler
@@ -232,7 +233,8 @@ fun SupportScreenContent(
                     ) {
                         val lowDonation = donationOptions[DonationProductIds.LOW_DONATION]
                         val normalDonation = donationOptions[DonationProductIds.NORMAL_DONATION]
-                        GeneralTonalButton(
+                        GeneralButton(
+                            style = GeneralButtonStyle.Tonal,
                             modifier = Modifier.weight(1f),
                             onClick = { onDonateClick(DonationProductIds.LOW_DONATION) },
                             firebaseController = firebaseController,
@@ -249,7 +251,8 @@ fun SupportScreenContent(
                             }
                         )
                         Spacer(modifier = Modifier.width(SizeConstants.MediumSize))
-                        GeneralTonalButton(
+                        GeneralButton(
+                            style = GeneralButtonStyle.Tonal,
                             modifier = Modifier.weight(1f),
                             onClick = { onDonateClick(DonationProductIds.NORMAL_DONATION) },
                             firebaseController = firebaseController,
@@ -274,7 +277,8 @@ fun SupportScreenContent(
                     ) {
                         val highDonation = donationOptions[DonationProductIds.HIGH_DONATION]
                         val extremeDonation = donationOptions[DonationProductIds.EXTREME_DONATION]
-                        GeneralTonalButton(
+                        GeneralButton(
+                            style = GeneralButtonStyle.Tonal,
                             modifier = Modifier.weight(1f),
                             onClick = { onDonateClick(DonationProductIds.HIGH_DONATION) },
                             firebaseController = firebaseController,
@@ -291,7 +295,8 @@ fun SupportScreenContent(
                             }
                         )
                         Spacer(modifier = Modifier.width(SizeConstants.MediumSize))
-                        GeneralTonalButton(
+                        GeneralButton(
+                            style = GeneralButtonStyle.Tonal,
                             modifier = Modifier.weight(1f),
                             onClick = { onDonateClick(DonationProductIds.EXTREME_DONATION) },
                             firebaseController = firebaseController,
@@ -319,7 +324,8 @@ fun SupportScreenContent(
             )
         }
         item {
-            GeneralTonalButton(
+            GeneralButton(
+                style = GeneralButtonStyle.Tonal,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(all = SizeConstants.LargeSize),

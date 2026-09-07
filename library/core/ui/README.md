@@ -13,7 +13,7 @@ entry helpers, state handling, analytics hooks, and shared components.
   adaptive-window helpers.
 - Render models such as `AppVersionInfo` and `AdsConfig`.
 - The shared theme-mode preview composables used by both the onboarding and settings theme UI.
-- All General button and FAB icon slots accept `ToolkitIcon`, including bundled Lottie icons.
+- The single adaptive `GeneralButton` and FAB icon slots accept `ToolkitIcon`, including bundled Lottie icons.
   FAB ImageVector/custom-content overloads remain compatible; rendering and playback are delegated
   to `core:designsystem`, while buttons retain feedback and analytics ownership.
 
@@ -79,6 +79,10 @@ unchanged AppVersionInfo class. Their original packages, function signatures, an
 remain available; data-layer callers should use the lower-level APIs.
 
 ## Public contracts
+
+- `GeneralButton` is the action-button entry point for all five styles and labelled/icon-only content.
+  See the [3.0 button contract and migration](../designsystem/README.md#generalbutton-30).
+
 
 - All new ViewModels must extend `ScreenViewModel`, or `LoggedScreenViewModel` when Firebase
   breadcrumbs/error reporting are required.

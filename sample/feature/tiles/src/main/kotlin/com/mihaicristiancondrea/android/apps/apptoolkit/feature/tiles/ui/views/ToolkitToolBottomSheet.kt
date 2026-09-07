@@ -32,13 +32,10 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
@@ -65,6 +62,9 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.navigat
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.catalog.TileIconBadge
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.previews.GenericToolPreview
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 
 /**
  * Animated bottom sheet host for previewing every Quick Tools catalog entry.
@@ -134,12 +134,12 @@ private fun ToolSheetHeader(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        IconButton(onClick = onClose) {
-            Icon(
-                imageVector = Icons.Outlined.Close,
-                contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
-            )
-        }
+        GeneralButton(
+                    style = GeneralButtonStyle.Text,
+                    onClick = onClose,
+                    icon = ToolkitIcon.Vector(Icons.Outlined.Close),
+                    contentDescription = stringResource(id = R.string.tool_dialog_close_content_description),
+                )
     }
 }
 
@@ -216,21 +216,21 @@ private fun ToolSheetActions(
         horizontalArrangement = Arrangement.spacedBy(SizeConstants.SmallSize),
     ) {
         if (hasAddAction) {
-            FilledTonalButton(
+            GeneralButton(
+                style = GeneralButtonStyle.Tonal,
                 modifier = Modifier.weight(1f),
                 onClick = onAddTile,
                 enabled = tile.status != ToolkitTileStatus.Added,
-            ) {
-                Text(text = stringResource(id = R.string.tiles_add))
-            }
+                label = stringResource(id = R.string.tiles_add),
+            )
         }
         if (hasSetupAction) {
-            OutlinedButton(
+            GeneralButton(
+                style = GeneralButtonStyle.Outlined,
                 modifier = Modifier.weight(1f),
                 onClick = onSetupTile,
-            ) {
-                Text(text = stringResource(id = R.string.tiles_setup))
-            }
+                label = stringResource(id = R.string.tiles_setup),
+            )
         }
     }
 }

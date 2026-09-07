@@ -108,17 +108,17 @@ fun AnimatedIconButtonDirection(
                     animationSpec = tween(durationMillis = durationMillis)
                 )
     ) {
-        IconOnlyButton(
+        GeneralButton(
             modifier = modifier,
             onClick = onClick,
             enabled = enabled,
-            iconContentDescription = contentDescription,
+            contentDescription = contentDescription,
             icon = icon,
             iconSize = iconSize,
             feedback = feedback,
             firebaseController = firebaseController,
             ga4Event = ga4Event,
-            style = IconOnlyButtonStyle.Standard,
+            style = GeneralButtonStyle.Text,
         )
     }
 }

@@ -17,6 +17,8 @@
 
 ### Improved
 
+- Unified action-button behavior across dialogs, Quick Tools, and the component showcase, including
+  consistent click feedback and an accessible snackbar dismiss action.
 - Quick Tools that offer a Quick Settings tile you have not added now read "Not added" with a
   neutral add icon, instead of "Needs setup" with a warning icon. Nothing about those tools needs
   setting up: they run in the app, and adding their tile stays optional. The matching filter chip

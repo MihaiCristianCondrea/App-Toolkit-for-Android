@@ -41,7 +41,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.reposit
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.icons.ToolkitIcon
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralOutlinedButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.spacers.SmallVerticalSpacer
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.R
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterActionNames
@@ -85,7 +86,8 @@ internal fun IssueSubmittedCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
             ) {
-                GeneralOutlinedButton(
+                GeneralButton(
+                    style = GeneralButtonStyle.Outlined,
                     onClick = {
                         firebaseController.logEvent(
                             issueReporterActionEvent(
@@ -98,7 +100,7 @@ internal fun IssueSubmittedCard(
                         uriHandler.openUri(issueUrl)
                     },
                     icon = ToolkitIcon.Vector(imageVector = Icons.AutoMirrored.Outlined.OpenInNew),
-                    iconContentDescription = stringResource(R.string.open_issue_in_browser),
+                    contentDescription = stringResource(R.string.open_issue_in_browser),
                     label = stringResource(R.string.open_button_label),
                 )
             }

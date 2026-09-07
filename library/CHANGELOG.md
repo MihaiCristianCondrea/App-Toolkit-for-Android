@@ -4,8 +4,6 @@
 
 # Unreleased
 
-## Library Changes
-
 ### Added
 
 - Added bundled Lottie icons with forward restart by default, optional reverse replay, and optional
@@ -26,6 +24,13 @@
 
 ### Changed
 
+- **Breaking (3.0):** Consolidated text, tonal, outlined, and filled action buttons into one adaptive
+  `GeneralButton` with five styles, including Elevated. Removed the separate APIs without deprecated
+  aliases. Icon-only content uses the matching Material icon button (a compact elevated button for
+  Elevated); all forms share feedback, analytics, replay, icon position, and color overrides.
+  Rename `iconContentDescription` to `contentDescription` and replace `ButtonColors` with
+  `containerColor` / `contentColor`. Icon-only actions require an accessible description, and icons
+  beside labels no longer repeat the label. Migration is documented in the DesignSystem README.
 - Updated `NavigationDrawerItem` so `selectedIcon` defaults to `icon`.
 - Navigation item icons and every `General*Button` now take a single `ToolkitIcon` instead of
   separate `ImageVector` and `Painter` parameters. Callers passing `vectorIcon = someIcon` to a

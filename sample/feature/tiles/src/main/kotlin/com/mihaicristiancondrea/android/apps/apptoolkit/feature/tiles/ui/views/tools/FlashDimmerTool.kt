@@ -49,7 +49,7 @@ import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.data.model
 import com.mihaicristiancondrea.android.apps.apptoolkit.feature.tiles.ui.views.ResultPill
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralTonalButton
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import kotlin.math.roundToInt
 
 @Composable
@@ -173,7 +173,8 @@ private fun PresetButton(
             label = label,
         )
     } else {
-        GeneralTonalButton(
+        GeneralButton(
+            style = GeneralButtonStyle.Tonal,
             onClick = onClick,
             modifier = modifier.fillMaxWidth(),
             label = label,
