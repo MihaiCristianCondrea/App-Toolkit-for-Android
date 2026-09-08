@@ -114,6 +114,13 @@ remain available; data-layer callers should use the lower-level APIs.
 Feature-specific theme, onboarding-preview, and display-dialog code lives in this generic core
 module. The native-ad UI also exposes an advertising concern from the shared UI foundation.
 
+`views/ads` holds only primitives now — the slot, the renderer, the palette, the presentations, and
+the two generic containers a host can place anywhere. Single-screen cards moved to the features that
+draw them, and the sample's to the sample. Do not add a one-screen wrapper back here: write it next
+to its screen, or add a `NativeAdPresentation` if the shape itself is new. The primitives themselves
+belong in `:library:integration:ads`; the reason they have not moved is recorded in
+[that module's README](../../integration/ads/README.md#current-risks).
+
 ## Migration notes
 
 ### Ad surfaces must fail closed and remain host-styleable

@@ -57,7 +57,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.ico
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.ads.AdsConfig
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics.Ga4EventData
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.states.UiStateScreen
-import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.SupportNativeAdCard
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.support.ui.views.ads.SupportNativeAdCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButton
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.GeneralButtonStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.LoadingScreen

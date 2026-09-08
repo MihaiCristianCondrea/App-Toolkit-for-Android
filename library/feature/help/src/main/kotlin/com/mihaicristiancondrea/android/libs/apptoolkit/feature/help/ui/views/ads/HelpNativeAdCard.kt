@@ -15,12 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads
+package com.mihaicristiancondrea.android.libs.apptoolkit.feature.help.ui.views.ads
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 
 /**
@@ -28,8 +30,11 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
  *
  * Change rationale: this used to inflate `R.layout.native_ad_help_card` through `NativeAdViewHost`
  * and bind it with `findViewById`. It is now a thin wrapper over [NativeAdSlot], which builds the
- * same `NativeAdView` in Kotlin, see [SupportNativeAdCard] for the behaviour changes that come
- * with the shared renderer.
+ * same `NativeAdView` in Kotlin. The behaviour changes that came with the shared renderer are
+ * listed in the `:library:integration:ads` README.
+ *
+ * It lives here rather than in the toolkit's shared UI because it is a Help screen placement, not a
+ * reusable primitive: only this feature's content list draws it.
  *
  * Integration and compliance notes:
  * - Render this composable only after consent/ads settings allow ad serving.

@@ -16,7 +16,9 @@ Owns ad enablement settings and Google Mobile Ads integration UI used by AppTool
 ## Does not own
 
 - Consent acquisition, owned by `:library:integration:consent`.
-- Generic native-ad rendering primitives, currently owned by `:library:core:ui`.
+- Generic native-ad rendering primitives, currently owned by `:library:core:ui`. See
+  [Where an ad placement lives](#where-an-ad-placement-lives) for the split, and
+  [Current risks](#current-risks) for why the primitives are still there.
 - Host ad-unit IDs and host-specific ad policies, owned by the host/common configuration.
 
 ## Depends on
@@ -160,6 +162,60 @@ MyOwnCard {
 ```
 
 That is the entire integration. Nothing below this line is something a host should be writing.
+
+### Where an ad placement lives
+
+The toolkit owns *primitives*; a feature owns its *placements*. The rule:
+
+| Kind                                                    | Lives in                                | Example                          |
+|---------------------------------------------------------|-----------------------------------------|----------------------------------|
+| Loading, lifecycle, view tree, palette, disclosure       | `:library:core:ui`, `views/ads`         | `NativeAdSlot`, `NativeAdRenderer` |
+| A shape an ad can take                                   | `NativeAdPresentation`                   | `Featured`, `Compact`, `GridRow`  |
+| A card only one screen draws                             | that feature's own `ui/views/ads`        | `HelpNativeAdCard`                |
+| A card only the sample draws                             | the sample feature's `ui/views/ads`      | `AppsListNativeAdCard`            |
+
+A one-screen wrapper in shared UI looks harmless and is not: it makes the toolkit carry a layout
+decision that belongs to a screen, and it teaches hosts to look for their placement in the library
+rather than to compose one. If a new placement is only a `NativeAdSlot` call with a presentation
+and a container colour, write it next to the screen. Add a `NativeAdPresentation` instead when the
+*shape* is new, so every surface keeps rendering through the same view tree.
+
+The sample is where a host reads how these APIs are meant to be used, so its placements live in the
+sample, not in the library.
+
+### `NativeAdRenderer`, the view tree every ad is drawn in
+
+One renderer builds every native ad in the toolkit, programmatically, in Kotlin. There are no ad
+layout XML files and no `findViewById`, and adding a surface must not reintroduce either.
+
+**Why it exists.** Each surface used to inflate its own `R.layout.native_ad_*` and bind it by id,
+which meant six copies of the same "render nothing until loaded" logic, six chances to forget to
+register an asset with the `NativeAdView`, and a disclosure label that was an English literal in
+some of them. `NativeAdRenderer` is that logic, once.
+
+**How it is put together:**
+
+- `DefaultNativeAdViewFactory` maps a `NativeAdPresentation` to a `NativeAdViewHolder`, built by one
+  `create*` function per presentation out of the shared `headlineView`/`bodyView`/`iconFrameView`/
+  `callToActionView` builders. A new shape is a new entry there, not a new component.
+- `NativeAdViewHolder` holds strong references to every bound view, so `bind` never searches for
+  one. It also assigns the SDK's asset slots (`root.headlineView = …`) and makes the single
+  `registerNativeAd(nativeAd, mediaView)` call that attributes impressions and clicks.
+- The tree is created once per presentation in the `AndroidView` **factory**, keyed on the
+  presentation. `applyPalette` and `bind` run in **update**, so a theme change or a new ad repaints
+  the existing views instead of rebuilding them — rebuilding would discard the loaded ad.
+- `LocalNativeAdViewFactory` lets a host swap the whole factory for its own view trees while keeping
+  the toolkit's loading, lifecycle, and reporting.
+
+**What it deliberately does not do.** It does not decide whether an ad may be requested, own the ad
+object's lifetime, or report failures. Those are `NativeAdSlot`, `rememberNativeAd`, and
+`AdLoadReporter` respectively. The renderer is handed a loaded `NativeAd` and draws it.
+
+**If you are adding a presentation:** add the entry to `NativeAdPresentation`, a `create*` function
+to the renderer, and, if the shape needs a container of its own, a branch in `NativeAdSurface`.
+Reuse the view builders rather than constructing `TextView`s by hand, so text sizes, the disclosure
+chip, and the CTA stay consistent. `GridRow` is the one presentation that takes metrics from its
+caller, because it has to match the grid it is interleaved with.
 
 ### What the toolkit is doing for you
 
@@ -345,6 +401,26 @@ so none of them need a `NativeAdView`.
 
 Ad rendering is split between this integration and `:library:core:ui`, which weakens the integration
 boundary and makes the generic UI module depend conceptually on an optional SDK concern.
+
+The rendering primitives belong here, not in `:library:core:ui`. Two things pin them where they are:
+
+1. **The dependency runs the wrong way.** This module has `api(project(":library:core:ui"))`, for
+   the settings screen's contracts and components. Moving `NativeAdSlot` and friends here while two
+   composables in `:library:core:ui` still call them — `NoDataScreen` and `GroupedGrid`'s ad row —
+   makes the graph circular.
+2. **The SDK is on everyone's classpath already.** `:library:core:common` declares
+   `api(libs.google.ads.mobile.sdk)`, so every module in the library can see `NativeAd`. That is
+   what let ad code drift into the shared UI module in the first place, and moving the primitives
+   without demoting that dependency to the modules that need it only hides the problem.
+
+Untangling it means inverting both call sites so the layout takes the ad as a slot rather than an
+ad unit id — `NoDataScreen(adContent = { … })` instead of `showAd`, and the same for `GroupedGrid` —
+after which the primitives can move here and `:library:core:ui` can drop the SDK entirely. Both are
+breaking changes to published APIs, so they are worth doing in one deliberate pass rather than
+alongside a feature.
+
+Placements are already where they belong: the Help and Support cards live in their features, and the
+sample's cards live in the sample.
 
 ## Migration notes
 

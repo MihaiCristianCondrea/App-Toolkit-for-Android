@@ -61,6 +61,12 @@
 
 ### Changed
 
+- **Breaking:** Single-screen native ad cards moved out of `:library:core:ui` to the code that draws
+  them. `HelpNativeAdCard` is now in `:library:feature:help`, `SupportNativeAdCard` in
+  `:library:feature:support`, and `AppsListNativeAdCard` moved to the sample app, whose screen is
+  its only caller. Consumers importing them from `core.ui.views.ads` must update the import, or
+  compose their own with `NativeAdSlot`, which is what a placement is. `AppDetailsNativeAd` is
+  removed; it had no call site left.
 - The issue reporter form is one grouped block of fields. The fields state themselves through a
   placeholder and a leading icon instead of a floating label, whose animation reserved the space
   that kept the two-dp grouping from reading as a group, and the description field grows to twelve
