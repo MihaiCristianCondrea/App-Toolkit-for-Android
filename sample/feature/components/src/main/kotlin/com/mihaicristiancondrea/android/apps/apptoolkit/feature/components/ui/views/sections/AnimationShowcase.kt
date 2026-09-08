@@ -70,6 +70,9 @@ private val animationSamples = listOf(
     "anim_language" to DesignSystemR.drawable.anim_language,
     "anim_alarm" to DesignSystemR.drawable.anim_alarm,
     "anim_stopwatch" to DesignSystemR.drawable.anim_stopwatch,
+    "anim_timer" to DesignSystemR.drawable.anim_timer,
+    "anim_queue_music" to DesignSystemR.drawable.anim_queue_music,
+    "anim_visibility_strike" to DesignSystemR.drawable.anim_visibility_strike,
 )
 
 /** Finite, click-driven previews. Changing replay mode resets the preview to its initial frame. */
