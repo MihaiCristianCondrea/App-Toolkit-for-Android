@@ -95,7 +95,7 @@ internal fun NativeAdRenderer(
     modifier: Modifier = Modifier,
 ) {
     val factory = LocalNativeAdViewFactory.current
-    val sponsoredLabel: String = stringResource(id = R.string.sponsored_ad_label)
+    val sponsoredLabel: String = stringResource(id = R.string.sponsored_ad_label_plain)
 
     // Grid cells are square and their content is centred, so the ad view has to fill the cell;
     // every other presentation wraps its own height.
