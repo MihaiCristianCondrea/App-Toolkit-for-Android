@@ -51,10 +51,10 @@
         </aapt:attr>
     </target>
 
-    <target android:name="visibilitystrike">
+    <target android:name="eye_path">
         <aapt:attr name="android:animation">
             <objectAnimator
-                android:propertyName="alpha"
+                android:propertyName="fillAlpha"
                 android:valueFrom="1"
                 android:valueTo="0.333"
                 android:duration="1271"
