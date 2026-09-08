@@ -235,6 +235,103 @@ The validator is the SDK's own debug overlay, configured at initialization:
 `initializeAds(appOpenUnitId, disableNativeValidator = true)` turns it off. It is left on by
 default.
 
+## FAQ: are the ads written in Compose?
+
+Short answer: **no, and they cannot be.** They are Compose-*hosted* Android views. This trips
+everyone up once, so it is worth writing down.
+
+### Why an ad cannot be pure Compose
+
+`ads-mobile-sdk` ships no Compose API at all — not one of its ~4,900 classes references
+`androidx.compose`. The types an ad is rendered through are views:
+
+- `NativeAdView` extends `BaseAdAssetViewContainer`, which extends `android.widget.FrameLayout`.
+- Every asset slot on it — `headlineView`, `bodyView`, `iconView`, `callToActionView`,
+  `advertiserView`, `priceView`, `starRatingView` — is typed `android.view.View`.
+- `MediaView` is a view too, and `registerNativeAd(nativeAd, mediaView)` takes those views.
+
+That registration is what attributes impressions and clicks, so it is not optional decoration: an
+"ad" drawn with Compose `Text` and `Image` and no registered `NativeAdView` reports nothing and
+breaks AdMob's native ad policy. Whatever the UI toolkit, the assets end up inside a view tree the
+SDK owns.
+
+### So how do Google's own Compose samples do it?
+
+Exactly as you would guess — Compose on the outside, views underneath. In
+[gma-next-gen-sdk-android-examples](https://github.com/googleads/gma-next-gen-sdk-android-examples),
+`NativeComposeUtility.kt` nests them:
+
+```
+AndroidView                       ← Compose hosts a view
+└── NativeAdView (FrameLayout)    ← the SDK's container, registered
+    └── ComposeView               ← a view hosting Compose again
+        ├── NativeAdHeadlineView  ← AndroidView { ComposeView } → nativeAdView.headlineView = it
+        ├── NativeAdIconView      ← AndroidView { ComposeView } → nativeAdView.iconView = it
+        └── NativeAdMediaView     ← the SDK's real MediaView, never Compose
+```
+
+Each asset wrapper creates a `ComposeView`, assigns **that view** to the SDK slot, and calls
+`setContent { }` on it. So Compose draws the pixels while an Android view remains the registered
+asset. Your instinct was right: written in Compose, still based on Android views.
+
+### What this library does instead, and why
+
+The toolkit builds the view tree in Kotlin once per `NativeAdPresentation` and skips the per-asset
+`ComposeView` layer entirely. See `NativeAdRenderer` in `:library:core:ui`.
+
+|                  | Google's sample                        | This toolkit                            |
+|------------------|----------------------------------------|-----------------------------------------|
+| Asset containers | one `ComposeView` per asset            | one `TextView`/`ImageView` per asset     |
+| Compositions     | one per asset, nested                  | none below the slot                      |
+| Asset content    | Compose, with Material styling         | view properties: sp sizes, `Typeface`    |
+| Theme            | see the trap below                     | pushed in as a palette, see below        |
+
+The trade is deliberate. One view tree per presentation costs less than a nested composition per
+asset, and it keeps ad policy, lifecycle and disclosure in one place. The price is that Compose
+niceties do not reach inside an ad: no `MaterialTheme.typography`, no `Shape`, no `basicMarquee`.
+That is why `NativeAdPresentation.GridRow` takes explicit sp and dp metrics, and why a badge
+silhouette has to be flattened by `rememberNativeAdBadgeShape` before a view can be drawn with it.
+
+### Then how does an ad follow a custom color scheme?
+
+**It never reads the theme. The theme is pushed into it.**
+
+`nativeAdPalette()` is a `@Composable` function, so it runs in the composition where `MaterialTheme`
+*is* in scope. It snapshots the handful of roles an ad needs into ARGB ints with `toArgb()`,
+`remember`ed against the `colorScheme`, and hands them to the renderer as a plain `NativeAdPalette`
+data class. The views are then coloured with `setTextColor` and drawables built from those ints.
+
+The important half is *where* it is applied: in the `AndroidView` **update** block, never the
+factory. So a theme change — dynamic colour, light/dark, or an in-app switch that does not recreate
+the activity — repaints the existing ad view instead of rebuilding it. Rebuilding would throw away
+the loaded ad and restart the request.
+
+Compose owns the colour decision; the view only ever receives integers.
+
+### The trap, if you do reach for a `ComposeView`
+
+A `ComposeView` created inside an `AndroidView` factory starts its **own** composition, rooted at
+the window recomposer. It does not inherit `CompositionLocal`s from the composition around it, and
+`MaterialTheme` is a `CompositionLocal` — so `MaterialTheme.colorScheme` inside it resolves to
+Material's *default* scheme, not your app's. The ad quietly comes out purple.
+
+Three ways out, in order of preference:
+
+1. `composeView.setParentCompositionContext(rememberCompositionContext())`, which links the
+   compositions so locals flow through.
+2. Re-apply the app theme inside `setContent { AppTheme { … } }`.
+3. Resolve the colours in the outer composition and pass them in — which, generalised, is exactly
+   what `NativeAdPalette` is.
+
+Google's sample does none of the three because its host applies no custom theme, so copying it into
+a themed app is where the purple comes from.
+
+### What *is* pure Compose
+
+The parts that are not ads: `NativeAdSurface`, the card around a slot; `NativeAdPlaceholder`, what a
+slot draws under `LocalInspectionMode`; and `AdSlotDebugPlaceholder`. None of them render ad assets,
+so none of them need a `NativeAdView`.
+
 ## Public contracts
 
 - Ads settings screen/activity, repository contract, and UI event/action/state contracts.
