@@ -35,7 +35,7 @@ internal object IssueReporterActionNames {
     const val SEND_ISSUE: String = "send_issue"
     const val OPEN_CREATED_ISSUE: String = "open_created_issue"
     const val TOGGLE_DEVICE_INFO: String = "toggle_device_info"
-    const val SET_ANONYMOUS_MODE: String = "set_anonymous_mode"
+    const val FORMAT_DESCRIPTION: String = "format_description"
 }
 
 internal fun issueReporterActionEvent(

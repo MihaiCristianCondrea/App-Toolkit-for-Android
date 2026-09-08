@@ -28,15 +28,19 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.do
  * not just disappear.
  */
 
-/** The HTML table embedded in the GitHub issue body. */
+/**
+ * The Markdown table embedded in the GitHub issue body.
+ *
+ * A Markdown table rather than the HTML one this used to emit: GitHub renders both, but only the
+ * Markdown form stays readable in the plain issue body, in notification emails, and in the API
+ * payload. Headings and the surrounding `<details>` belong to the report, not here.
+ */
 fun DeviceInfo.toMarkdown(): String = buildString {
-    append("Device info:\n")
-    append("---\n")
-    append("<table>\n")
+    append("| Item | Value |\n")
+    append("| --- | --- |\n")
     rows().forEach { (label, value) ->
-        append("<tr><td>$label</td><td>$value</td></tr>\n")
+        append("| ${label.escapeTableCell()} | ${value.escapeTableCell()} |\n")
     }
-    append("</table>\n")
 }
 
 /** The plain listing shown in the collapsible device-info panel on the report screen. */
@@ -64,3 +68,6 @@ private fun DeviceInfo.rows(): List<Pair<String, String>> = listOf(
     "ABIs (32bit)" to abis32Bit.toString(),
     "ABIs (64bit)" to abis64Bit.toString(),
 )
+
+/** Keeps a value containing a pipe from splitting the row it is rendered in. */
+private fun String.escapeTableCell(): String = replace(oldValue = "|", newValue = "\\|")

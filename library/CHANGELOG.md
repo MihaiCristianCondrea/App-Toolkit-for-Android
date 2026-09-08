@@ -6,6 +6,10 @@
 
 ### Added
 
+- Added Markdown authoring to the issue reporter's description field: a formatting bar for bold,
+  italic, inline code, code blocks, bulleted and numbered lists, quotes and links, and Markdown
+  syntax highlighted as it is typed.
+
 - `CommonFilterChip` accepts an `icon` shown while the chip is unselected, and `hasAnimation` to
   turn off the crossfade into the selected checkmark.
 - `CommonDropdownMenuItem` takes an optional `icon` and a plain `text` alongside the existing
@@ -38,6 +42,13 @@
   About-package entry point, UI helpers, and AppVersionInfo remain compatible.
 
 ### Changed
+
+- The issue reporter form is one grouped block of fields. The fields state themselves through a
+  placeholder and a leading icon instead of a floating label, whose animation reserved the space
+  that kept the two-dp grouping from reading as a group, and the description field grows to twelve
+  rows before scrolling its own content.
+- Filed issues now use a Markdown body with Description, Device info and Extra info sections; the
+  device and extra tables are Markdown tables inside a collapsible block instead of raw HTML.
 
 - **Breaking:** `TopListFilters` now takes `FilterChipItem` entries instead of plain strings, so a
   chip row carries a per-chip icon and label. Callers must map their filters to `FilterChipItem`.
@@ -89,6 +100,10 @@
 
 ### Removed
 
+- Removed the issue reporter's login section. Reports are always filed anonymously, so the
+  `login_section_label`, `send_anonymously`, `use_github_account` and `optional_placeholder`
+  resources are gone.
+
 - Removed the bundled `shape_scalloped` vector drawable from the Help feature. The Contact Us badge
   now renders `MaterialShapes.Cookie12Sided`, so the toolkit no longer ships hand-authored shape
   artwork that Material 3 already provides.
@@ -104,6 +119,12 @@
   `DISPLAY_SETTINGS`, `FAQ`, `SELECT_STARTUP_DIALOG`, and `SELECT_LANGUAGE_DIALOG` log tags.
 
 ### Fixed
+
+- Fixed the issue reporter's device-info section. Its expansion was held in a process-wide
+  property shared by every instance, so the panel reopened by itself on a later visit; it is now
+  per-instance state that survives configuration changes. The section expands vertically instead of
+  also unfolding sideways, the header no longer reacts to taps anywhere along the row, and only its
+  arrow, now a `GeneralButton`, toggles it.
 
 - Fixed Help and Settings menu buttons that still passed ImageVector values to the migrated icon API
   and prevented the sample app from compiling.

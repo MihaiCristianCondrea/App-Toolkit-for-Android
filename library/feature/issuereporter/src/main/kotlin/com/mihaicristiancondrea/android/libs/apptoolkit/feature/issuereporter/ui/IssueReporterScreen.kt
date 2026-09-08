@@ -27,7 +27,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BugReport
-import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -39,9 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.contracts.IssueReporterEvent
@@ -49,9 +46,8 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.ISSUE_REPORTER_SCREEN_NAME
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.IssueReporterActionNames
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.utils.issueReporterActionEvent
+import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.DeviceInfoSection
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.IssueReportForm
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.DeviceInfoContentCard
-import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.DeviceInfoHeaderCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.ui.views.IssueSubmittedCard
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.data.repositories.FirebaseController
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.domain.models.analytics.AnalyticsValue
@@ -200,17 +196,20 @@ fun IssueReporterScreenContent(
             )
         }
 
-        IssueReportForm(data = data, onEvent = onEvent)
+        IssueReportForm(
+            data = data,
+            firebaseController = firebaseController,
+            onEvent = onEvent,
+            modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
+        )
 
         LargeVerticalSpacer()
 
-        DeviceInfoHeaderCard(
+        DeviceInfoSection(
+            deviceInfoText = data.deviceInfoText,
             firebaseController = firebaseController,
             onExpandRequested = { onEvent(IssueReporterEvent.RequestDeviceInfo) },
-        )
-
-        DeviceInfoContentCard(
-            deviceInfoText = data.deviceInfoText,
+            modifier = Modifier.padding(horizontal = SizeConstants.LargeSize),
         )
 
         repeat(2) {

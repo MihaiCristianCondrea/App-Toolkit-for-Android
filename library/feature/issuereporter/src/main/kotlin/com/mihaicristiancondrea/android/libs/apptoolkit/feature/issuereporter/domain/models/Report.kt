@@ -20,6 +20,15 @@ package com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.d
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.mappers.toMarkdown
 import com.mihaicristiancondrea.android.libs.apptoolkit.feature.issuereporter.domain.models.github.ExtraInfo
 
+/**
+ * A report as it will be filed: the title becomes the issue title, and [getDescription] renders the
+ * issue body.
+ *
+ * The body is Markdown because that is what GitHub renders. The author's description is inserted
+ * verbatim — it is written in a Markdown editor, so their formatting is intentional — and everything
+ * this class adds around it is structured so a maintainer can read the report without expanding
+ * anything, and expand the device table only when it matters.
+ */
 class Report(
     val title: String,
     private val description: String,
@@ -27,30 +36,43 @@ class Report(
     private val extraInfo: ExtraInfo,
     private val email: String?
 ) {
-    fun getDescription(): String {
-        val builder = StringBuilder()
-        if (!email.isNullOrEmpty()) {
-            builder.append("*Sent by [**")
-                .append(email)
-                .append("**](mailto:")
-                .append(email)
-                .append(")*")
-                .append(PARAGRAPH_BREAK)
+    /** Renders the GitHub issue body. */
+    fun getDescription(): String = buildString {
+        append(DESCRIPTION_HEADING)
+        append(PARAGRAPH_BREAK)
+        append(description.trim())
+        append(PARAGRAPH_BREAK)
+
+        append(DEVICE_INFO_HEADING)
+        append(PARAGRAPH_BREAK)
+        append(DETAILS_OPEN)
+        append(PARAGRAPH_BREAK)
+        append(deviceInfo.toMarkdown())
+        append(PARAGRAPH_BREAK)
+        append(DETAILS_CLOSE)
+
+        if (!extraInfo.isEmpty()) {
+            append(PARAGRAPH_BREAK)
+            append(EXTRA_INFO_HEADING)
+            append(PARAGRAPH_BREAK)
+            append(extraInfo.toMarkdown())
         }
-        builder.append("Description:\n")
-            .append(HORIZONTAL_RULE)
-            .append(PARAGRAPH_BREAK)
-            .append(description)
-            .append(PARAGRAPH_BREAK)
-            .append(deviceInfo.toMarkdown())
-            .append(PARAGRAPH_BREAK)
-            .append(extraInfo.toMarkdown())
-        return builder.toString()
+
+        if (!email.isNullOrBlank()) {
+            append(PARAGRAPH_BREAK)
+            append(HORIZONTAL_RULE)
+            append(PARAGRAPH_BREAK)
+            append("*Reported by [$email](mailto:$email)*")
+        }
     }
 
     companion object {
         private const val PARAGRAPH_BREAK = "\n\n"
         private const val HORIZONTAL_RULE = "---"
+        private const val DESCRIPTION_HEADING = "## Description"
+        private const val DEVICE_INFO_HEADING = "## Device info"
+        private const val EXTRA_INFO_HEADING = "## Extra info"
+        private const val DETAILS_OPEN = "<details>\n<summary>Device and app details</summary>"
+        private const val DETAILS_CLOSE = "</details>"
     }
 }
-
