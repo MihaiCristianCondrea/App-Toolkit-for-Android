@@ -61,9 +61,17 @@
 
 ### Changed
 
-- `headlineView`, the shared builder a host ad factory composes its own row out of, takes a `bold`
-  flag. A headline heavier than the titles on the screen around it reads as an intruder, so a screen
-  whose own rows are not bold can now match.
+- Added `NativeAdStyle`, which gives a native ad the finish of the screen it is on without a view
+  tree of its own: badge silhouette, badge colour, headline and body size and colour, body line cap,
+  and whether the call to action is a filled pill or a text button. `NativeAdSlot` takes one. A
+  style overrides only what it names, and is applied to views that already exist, so changing one
+  repaints the ad rather than rebuilding it and losing the loaded ad.
+- The Help screen's ad now matches the rows it sits between: a `Cookie12Sided` badge on
+  `primaryContainer` like Contact Us, `titleMedium` and `bodyMedium` text at the weight the question
+  rows use, and a text button instead of a filled pill.
+- **Breaking:** `NativeAdPresentation.GridRow` no longer carries `iconCornerRadiusDp`,
+  `headlineTextSizeSp`, or `iconShape`. A presentation now describes the arrangement only, and those
+  three moved to `NativeAdStyle`, which is where the rest of an ad's finish lives.
 - **Breaking:** Single-screen native ad cards moved out of `:library:core:ui` to the code that draws
   them. `HelpNativeAdCard` is now in `:library:feature:help`, `SupportNativeAdCard` in
   `:library:feature:support`, and `AppsListNativeAdCard` moved to the sample app, whose screen is

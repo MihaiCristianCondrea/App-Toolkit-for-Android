@@ -53,6 +53,9 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preference
  * @param containerColor overrides the card container. The default is an unstyled card, so the ad
  * matches ordinary content; pass a colour on screens that build their cards differently, and in
  * consumer apps whose surfaces are their own. Ignored when [showContainer] is `false`.
+ * @param style the ad's finish on this screen: badge silhouette and colour, text sizes and colours,
+ * and whether the call to action is a filled pill or a text button. It overrides only what it names,
+ * so the default leaves the presentation exactly as it was built.
  * @param onAdLoaded invoked with whether an ad is currently displayed.
  */
 @Composable
@@ -64,6 +67,7 @@ fun NativeAdSlot(
     showContainer: Boolean = true,
     cornerRadius: Dp = SizeConstants.ExtraLargeSize,
     containerColor: Color = Color.Unspecified,
+    style: NativeAdStyle = NativeAdStyle(),
     onAdLoaded: (Boolean) -> Unit = {},
 ) {
     val currentOnAdLoaded: (Boolean) -> Unit by rememberUpdatedState(newValue = onAdLoaded)
@@ -119,6 +123,7 @@ fun NativeAdSlot(
             presentation = presentation,
             nativeAd = nativeAd,
             palette = nativeAdPalette(),
+            style = style,
         )
     }
 }

@@ -25,7 +25,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnitType
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.common.utils.constants.ui.SizeConstants
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdBadgeShape
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCallToActionStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdStyle
 import kotlin.math.roundToInt
 
 /**
@@ -129,31 +131,42 @@ internal fun GroupedGridMeasurements.subtitleTextStyle(): TextStyle = when (this
 /**
  * The ad row that belongs in a grid drawn at this size class.
  *
- * The row is measured against the cells rather than against the other ad surfaces: same badge and
- * badge silhouette, same icon size, padding and gap, and the headline at [titleTextStyle]'s size, so
- * a sponsored row lines up with the titles above and below it instead of announcing itself by being
- * bigger. Passing no [badgeShape] falls the badge back to a rounded square at a quarter of its own
- * size.
+ * The row is measured against the cells rather than against the other ad surfaces: same badge size,
+ * same icon inset, same padding and gap, so a sponsored row lines up with the rows above and below
+ * it instead of announcing itself by being bigger. Its colours and text come from
+ * [nativeAdStyle].
  */
-internal fun GroupedGridMeasurements.nativeAdPresentation(
-    titleTextStyle: TextStyle,
-    badgeShape: NativeAdBadgeShape?,
-): NativeAdPresentation.GridRow {
-    val headlineSizeSp: Float = titleTextStyle.fontSize
-        .takeIf { it.type == TextUnitType.Sp }
-        ?.value
-        ?: DEFAULT_AD_HEADLINE_TEXT_SIZE_SP
-
-    return NativeAdPresentation.GridRow(
+internal fun GroupedGridMeasurements.nativeAdPresentation(): NativeAdPresentation.GridRow =
+    NativeAdPresentation.GridRow(
         iconSizeDp = iconContainerSize.value.roundToInt(),
         iconInsetDp = ((iconContainerSize - iconSize) / 2f).value.roundToInt(),
-        iconCornerRadiusDp = (iconContainerSize / AD_BADGE_RADIUS_DIVISOR).value.roundToInt(),
-        headlineTextSizeSp = headlineSizeSp,
         contentPaddingDp = contentPadding.calculateTopPadding().value.roundToInt(),
         iconSpacingDp = iconSpacing.value.roundToInt(),
-        iconShape = badgeShape,
     )
-}
+
+/**
+ * How the ad row is finished so it reads as one of the cells.
+ *
+ * The badge takes the grid's silhouette and its icon colour rather than the neutral surface an ad
+ * gets on its own, the headline takes the cells' title size, and the call to action is a text
+ * button, because a filled pill inside a block of quiet rows is the loudest thing on the screen.
+ */
+internal fun GroupedGridMeasurements.nativeAdStyle(
+    titleTextStyle: TextStyle,
+    colors: GroupedGridColors,
+    badgeShape: NativeAdBadgeShape?,
+): NativeAdStyle = NativeAdStyle(
+    badgeShape = badgeShape,
+    badgeCornerRadiusDp = (iconContainerSize / AD_BADGE_RADIUS_DIVISOR).value.roundToInt(),
+    badgeColor = colors.iconContainerColor,
+    headlineTextSizeSp = titleTextStyle.fontSize
+        .takeIf { it.type == TextUnitType.Sp }
+        ?.value
+        ?: DEFAULT_AD_HEADLINE_TEXT_SIZE_SP,
+    headlineColor = colors.contentColor,
+    bodyColor = colors.subtitleColor,
+    callToAction = NativeAdCallToActionStyle.Text,
+)
 
 private const val AD_BADGE_RADIUS_DIVISOR: Float = 4f
 private const val DEFAULT_AD_HEADLINE_TEXT_SIZE_SP: Float = 16f

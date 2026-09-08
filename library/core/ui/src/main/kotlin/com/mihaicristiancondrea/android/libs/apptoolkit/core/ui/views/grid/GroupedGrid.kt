@@ -74,6 +74,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.designsystem.ui.sty
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.rememberNativeAdBadgeShape
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.buttons.ButtonFeedback
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -140,10 +141,13 @@ fun GroupedGrid(
     val rows: ImmutableList<GroupedGridRow> = remember(items.size, columns, adRow) {
         groupedGridRows(itemCount = items.size, columns = columns, adRow = adRow)
     }
+    val adPresentation: NativeAdPresentation.GridRow =
+        remember(measurements) { measurements.nativeAdPresentation() }
     // The ad badge is filled with the same silhouette the cells cut theirs from, flattened to a
     // path because the ad's icon lives in a real `NativeAdView` rather than in Compose.
-    val adPresentation: NativeAdPresentation.GridRow = measurements.nativeAdPresentation(
+    val adStyle: NativeAdStyle = measurements.nativeAdStyle(
         titleTextStyle = measurements.titleTextStyle(),
+        colors = colors,
         badgeShape = rememberNativeAdBadgeShape(
             shape = iconShape,
             size = measurements.iconContainerSize,
@@ -183,6 +187,7 @@ fun GroupedGrid(
                                 shape = shape,
                                 visible = !row.collapsed,
                                 presentation = adPresentation,
+                                adStyle = adStyle,
                                 colors = colors,
                                 onAdLoaded = { adLoaded = it },
                             )
@@ -304,6 +309,7 @@ private fun RowScope.GroupedGridAdCell(
     shape: Shape,
     visible: Boolean,
     presentation: NativeAdPresentation.GridRow,
+    adStyle: NativeAdStyle,
     colors: GroupedGridColors,
     onAdLoaded: (Boolean) -> Unit,
 ) {
@@ -318,6 +324,7 @@ private fun RowScope.GroupedGridAdCell(
             presentation = presentation,
             modifier = Modifier.fillMaxWidth(),
             showContainer = false,
+            style = adStyle,
             onAdLoaded = onAdLoaded,
         )
     }

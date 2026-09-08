@@ -95,11 +95,10 @@ class ToolkitTilesNativeAdViewFactory : NativeAdViewFactory {
                     marginEnd = context.dp(SMALL_SPACING_DP)
                 }
         }
-        // The screen's own rows use titleMedium at its default weight, so a bold headline would
-        // read as heavier than everything around it. Two body lines keep the row from growing
-        // taller than the tile rows it sits between when an ad has a long description.
-        val headline = headlineView(context = context, maxLines = 2, bold = false)
-        val body = bodyView(context = context, maxLines = 2)
+        // The weight, the body's line cap and the call to action are set by the card's
+        // NativeAdStyle, because they are properties of views rather than of the arrangement.
+        val headline = headlineView(context = context, maxLines = 2)
+        val body = bodyView(context = context, maxLines = 3)
             .withTopMargin(context.dp(ICON_PADDING_DP))
         val advertiser = advertiserView(context = context)
             .withTopMargin(context.dp(ICON_PADDING_DP))

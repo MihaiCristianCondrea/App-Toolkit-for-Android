@@ -159,12 +159,50 @@ NativeAdSlot(
 )
 ```
 
-What you can change here: which shape the ad takes, where it sits in a grouped list, its corner
-radius, its container colour, and whether it draws a container at all. That covers a card that has
-to match surfaces your app already uses.
+That gets you a correct ad. It does not yet get you an ad that looks like it belongs on your screen,
+which is the whole point of a native ad. That is Level 1b.
 
-What you cannot change here: the arrangement inside the ad. If the headline is heavier than your
-screen's titles, or the row is taller than the rows beside it, Level 1 has run out. Go to Level 2.
+### Level 1b: `NativeAdStyle`, the finish
+
+An ad on a screen whose icons are all `primaryContainer` should not have a grey badge. An ad between
+rows whose titles are `titleMedium` should not have a bold headline. An ad on a screen whose actions
+are text buttons should not have a filled pill. `NativeAdStyle` sets those, per placement, without a
+view tree of your own:
+
+```kotlin
+NativeAdSlot(
+    adUnitId = adUnitId,
+    presentation = NativeAdPresentation.Compact,
+    style = NativeAdStyle(
+        badgeShape = rememberNativeAdBadgeShape(
+            shape = MaterialShapes.Cookie12Sided.toShape(),
+            size = SizeConstants.LauncherIconSize,
+        ),
+        badgeColor = MaterialTheme.colorScheme.primaryContainer,
+        headlineTextSizeSp = MaterialTheme.typography.titleMedium.fontSize.value,
+        headlineBold = false,
+        bodyTextSizeSp = MaterialTheme.typography.bodyMedium.fontSize.value,
+        callToAction = NativeAdCallToActionStyle.Text,
+    ),
+)
+```
+
+| Property                                    | Use it when                                             |
+|---------------------------------------------|---------------------------------------------------------|
+| `badgeShape`, `badgeCornerRadiusDp`         | the screen's own icons are cut from a shape             |
+| `badgeColor`                                | the screen's own icons are not on a neutral surface     |
+| `headlineTextSizeSp`, `headlineBold`        | the headline is heavier or larger than the titles near it |
+| `bodyTextSizeSp`, `bodyMaxLines`            | the body is a different size, or grows the row too tall |
+| `headlineColor`, `bodyColor`                | the screen's text colours are not the default pair      |
+| `callToAction`                              | the screen's own actions are text buttons               |
+
+Two things worth knowing. **A style overrides only what it names**, so setting one property changes
+one property and everything else stays as the presentation built it. And **a style is applied to
+views that already exist**, in the same pass as the palette, so changing one repaints the ad instead
+of rebuilding it and losing the loaded ad.
+
+What a style cannot change is the arrangement: which views exist, in what order, at what size. If
+you need a 44dp badge instead of a 48dp one, or the disclosure chip somewhere else, that is Level 2.
 
 ### Level 2: your own view tree, the toolkit's loading
 

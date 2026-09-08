@@ -25,8 +25,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdCallToActionStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdPresentation
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdSlot
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.ads.NativeAdStyle
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
 
 /**
@@ -55,12 +57,22 @@ fun QuickToolsNativeAdCard(
 ) {
     var isFirstReport: Boolean by remember(adUnitId) { mutableStateOf(value = true) }
 
+    // The screen's own rows use titleMedium at its default weight and their actions are text
+    // buttons, so a bold headline and a filled pill would both be heavier than anything around
+    // them. Two body lines stop a long description making the row taller than the tile rows.
+    val style = NativeAdStyle(
+        headlineBold = false,
+        bodyMaxLines = 2,
+        callToAction = NativeAdCallToActionStyle.Text,
+    )
+
     NativeAdSlot(
         adUnitId = adUnitId,
         presentation = NativeAdPresentation.Compact,
         modifier = modifier.fillMaxWidth(),
         position = position,
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        style = style,
         onAdLoaded = { isLoaded ->
             val suppressTransientReset: Boolean = isFirstReport && initiallyLoaded && !isLoaded
             isFirstReport = false
