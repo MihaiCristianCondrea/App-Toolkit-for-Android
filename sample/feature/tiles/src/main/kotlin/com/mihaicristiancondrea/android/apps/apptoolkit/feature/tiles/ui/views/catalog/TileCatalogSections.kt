@@ -119,7 +119,6 @@ internal fun TilesFilters(
             filters = chips,
             selectedFilter = selectedFilter,
             onFilterSelected = onFilterSelected,
-            label = null,
             // The surrounding list already insets this row.
             contentPadding = PaddingValues(),
         )

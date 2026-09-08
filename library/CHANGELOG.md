@@ -41,9 +41,12 @@
 
 - **Breaking:** `TopListFilters` now takes `FilterChipItem` entries instead of plain strings, so a
   chip row carries a per-chip icon and label. Callers must map their filters to `FilterChipItem`.
-  `hasAnimation` turns the chip and row animations off, `label` accepts `null` for a row without a
-  leading caption, and `contentPadding` lets a caller that already insets the row stop it from
-  insetting itself.
+  `hasAnimation` turns the chip and row animations off, and `contentPadding` lets a caller that
+  already insets the row stop it from insetting itself.
+- **Breaking:** `TopListFilters`'s `label` is now `leadingLabel`, the caption before the chips, and
+  it defaults to `null` rather than "Sort by". A null, empty, or blank value renders neither the
+  caption nor the gap after it, so the chips start where they would in a row that never had one.
+  Rows that want the old caption must pass it explicitly.
 - `GeneralButton` now renders through the Material 3 Expressive button and icon-button overloads, so
   every style picks up the expressive resting and pressed shapes. Buttons keep their previous height
   by defaulting to `ButtonMeasurements.Small`; icon-only content now follows the expressive

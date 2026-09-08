@@ -35,6 +35,7 @@ import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.models.analytics
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.FilterChipItem
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.layouts.sections.TopListFilters
 import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.views.preferences.GroupedItemPosition
+import com.mihaicristiancondrea.android.libs.apptoolkit.core.ui.R as CoreUiR
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -70,6 +71,7 @@ fun FilterShowcase(
                 filters = chips,
                 selectedFilter = selectedFilter,
                 onFilterSelected = onFilterSelected,
+                leadingLabel = stringResource(id = CoreUiR.string.sort_by),
                 firebaseController = firebaseController,
                 ga4EventProvider = { filter ->
                     onLogEvent("filter", filter)
